@@ -10,14 +10,14 @@ import store from './store.test';
 import templates from './templates.test';
 
 export default () => {
-  describe('GET /api/admin/survey-schemes', browse);
-  describe('POST /api/admin/survey-schemes', store);
-  describe('GET /api/admin/survey-schemes/refs', refs);
-  describe('POST /api/admin/survey-schemes/copy', copy);
-  describe('GET /api/admin/survey-schemes/:surveySchemeId', read);
-  describe('GET /api/admin/survey-schemes/:surveySchemeId/edit', edit);
-  describe('PATCH /api/admin/survey-schemes/:surveySchemeId', patch);
-  describe('DELETE /api/admin/survey-schemes/:surveySchemeId', destroy);
-  describe('GET /api/admin/survey-schemes/:surveySchemeId/templates', templates);
-  describe('GET /api/admin/survey-schemes/:surveySchemeId/data-export', dataExport);
+  describe('get /api/admin/survey-schemes', browse);
+  describe('pOST /api/admin/survey-schemes', store);
+  describe('get /api/admin/survey-schemes/refs', refs);
+  describe('pOST /api/admin/survey-schemes/copy', copy);
+  describe('get /api/admin/survey-schemes/:surveySchemeId', read);
+  describe('get /api/admin/survey-schemes/:surveySchemeId/edit', edit);
+  describe('patch /api/admin/survey-schemes/:surveySchemeId', patch);
+  describe('delete /api/admin/survey-schemes/:surveySchemeId', destroy);
+  describe('get /api/admin/survey-schemes/:surveySchemeId/templates', templates);
+  describe('get /api/admin/survey-schemes/:surveySchemeId/data-export', dataExport);
 };

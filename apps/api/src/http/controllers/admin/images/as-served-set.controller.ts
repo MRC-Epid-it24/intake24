@@ -9,28 +9,29 @@ import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { AsServedSet } from '@intake24/db';
 
-const asServedSetController = ({
+function asServedSetController({
   imagesBaseUrl,
   asServedService,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'asServedService' | 'portionSizeService'>) => {
+}: Pick<IoC, 'imagesBaseUrl' | 'asServedService' | 'portionSizeService'>) {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
     req: Request<{ asServedSetId: string }>,
-    res: Response<AsServedSetEntry>
+    res: Response<AsServedSetEntry>,
   ): Promise<void> => {
     const { asServedSetId } = req.params;
 
     const asServedSet = await portionSizeService.getAsServedSet(asServedSetId);
-    if (!asServedSet) throw new NotFoundError();
+    if (!asServedSet)
+      throw new NotFoundError();
 
     res.json(responseCollection.asServedSetEntryResponse(asServedSet));
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<AsServedSetsResponse>
+    res: Response<AsServedSetsResponse>,
   ): Promise<void> => {
     const asServedSets = await AsServedSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -50,7 +51,8 @@ const asServedSetController = ({
     } = req;
     const { userId } = req.scope.cradle.user;
 
-    if (!file) throw new ValidationError('File not found.', { path: 'image' });
+    if (!file)
+      throw new ValidationError('File not found.', { path: 'image' });
 
     let asServedSet = await asServedService.createSet({ id, description, file, uploader: userId });
     asServedSet = await portionSizeService.getAsServedSet(asServedSet.id);
@@ -60,17 +62,17 @@ const asServedSetController = ({
 
   const read = async (
     req: Request<{ asServedSetId: string }>,
-    res: Response<AsServedSetEntry>
+    res: Response<AsServedSetEntry>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ asServedSetId: string }>,
-    res: Response<AsServedSetEntry>
+    res: Response<AsServedSetEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ asServedSetId: string }>,
-    res: Response<AsServedSetEntry>
+    res: Response<AsServedSetEntry>,
   ): Promise<void> => {
     const { asServedSetId } = req.params;
     const { description, images } = req.body;
@@ -82,7 +84,7 @@ const asServedSetController = ({
 
   const destroy = async (
     req: Request<{ asServedSetId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { asServedSetId } = req.params;
 
@@ -104,7 +106,7 @@ const asServedSetController = ({
     destroy,
     refs,
   };
-};
+}
 
 export default asServedSetController;
 

@@ -13,112 +13,112 @@ export default () => {
     '/as-served-sets',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.asServedSets)
+    wrapAsync(referenceController.asServedSets),
   );
 
   router.get(
     '/categories',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.categories)
+    wrapAsync(referenceController.categories),
   );
 
   router.get(
     '/drinkware-sets',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.drinkwareSets)
+    wrapAsync(referenceController.drinkwareSets),
   );
 
   router.get(
     '/feedback-schemes',
     anyPermission(['feedback-schemes', 'surveys']),
     validation.browse,
-    wrapAsync(referenceController.feedbackSchemes)
+    wrapAsync(referenceController.feedbackSchemes),
   );
 
   router.get(
     '/food-groups',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.foodGroups)
+    wrapAsync(referenceController.foodGroups),
   );
 
   router.get(
     '/foods',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.foods)
+    wrapAsync(referenceController.foods),
   );
 
   router.get(
     '/guide-images',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.guideImages)
+    wrapAsync(referenceController.guideImages),
   );
 
   router.get(
     '/image-maps',
     anyPermission(['locales', 'guide-images']),
     validation.browse,
-    wrapAsync(referenceController.imageMaps)
+    wrapAsync(referenceController.imageMaps),
   );
 
   router.get(
     '/languages',
     anyPermission(['locales', 'feedback-schemes', 'survey-schemes']),
     validation.browse,
-    wrapAsync(referenceController.languages)
+    wrapAsync(referenceController.languages),
   );
 
   router.get(
     '/locales',
     anyPermission(['surveys', 'tasks']),
     validation.browse,
-    wrapAsync(referenceController.locales)
+    wrapAsync(referenceController.locales),
   );
 
   router.get(
     '/nutrient-tables',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.nutrientTables)
+    wrapAsync(referenceController.nutrientTables),
   );
 
   router.get(
     '/nutrient-tables/:nutrientTableId/records',
     anyPermission(['locales']),
     validation.browse,
-    wrapAsync(referenceController.nutrientTableRecords)
+    wrapAsync(referenceController.nutrientTableRecords),
   );
 
   router.get(
     '/nutrient-types',
     anyPermission(['feedback-schemes', 'survey-schemes']),
     validation.nutrientTypes,
-    wrapAsync(referenceController.nutrientTypes)
+    wrapAsync(referenceController.nutrientTypes),
   );
 
   router.get(
     '/standard-units',
     anyPermission(['locales', 'survey-schemes']),
     validation.browse,
-    wrapAsync(referenceController.standardUnits)
+    wrapAsync(referenceController.standardUnits),
   );
 
   router.get(
     '/surveys',
     anyPermission(['tasks']),
     validation.browse,
-    wrapAsync(referenceController.surveys)
+    wrapAsync(referenceController.surveys),
   );
 
   router.get(
     '/survey-schemes',
     anyPermission(['survey-schemes', 'surveys']),
     validation.browse,
-    wrapAsync(referenceController.surveySchemes)
+    wrapAsync(referenceController.surveySchemes),
   );
 
   return router;

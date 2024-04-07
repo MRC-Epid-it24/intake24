@@ -9,7 +9,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="bowlValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="bowlValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -24,19 +24,19 @@
             }"
             @confirm="confirmBowl"
             @select="selectBowl"
-          ></image-map-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.milk`"></i18n>
+          <i18n :path="`prompts.${type}.milk`" />
           <template #actions>
             <expansion-panel-actions :valid="milkLevelValid">
               <quantity-badge
                 v-if="prompt.badges"
                 :amount="milkLevelWeight"
                 :valid="milkLevelValid"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
@@ -52,15 +52,15 @@
             }"
             @confirm="confirmMilk"
             @select="selectMilk"
-          ></image-map-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -134,7 +134,8 @@ export default defineComponent({
     },
 
     bowlLabels() {
-      if (!this.labelsEnabled || !this.bowlImageMap) return [];
+      if (!this.labelsEnabled || !this.bowlImageMap)
+        return [];
 
       return this.bowlImageMap.objects.map(({ label }) => this.translate(label));
     },
@@ -145,40 +146,43 @@ export default defineComponent({
 
     milkLevelImageMapId(): string | undefined {
       const { bowl, milkLevelImageMapPrefix } = this;
-      if (bowl === undefined) return undefined;
+      if (bowl === undefined)
+        return undefined;
 
       return `${milkLevelImageMapPrefix}${bowl}`;
     },
 
     milkLevelLabels() {
-      if (!this.labelsEnabled || !this.milkLevelImageMap) return [];
+      if (!this.labelsEnabled || !this.milkLevelImageMap)
+        return [];
 
       return this.milkLevelImageMap.objects.map(({ label }) => this.translate(label));
     },
 
     bowlValid() {
       return !!(
-        this.portionSize.bowlId !== undefined &&
-        this.portionSize.bowlIndex !== undefined &&
-        this.portionSize.bowl &&
-        this.bowlConfirmed
+        this.portionSize.bowlId !== undefined
+        && this.portionSize.bowlIndex !== undefined
+        && this.portionSize.bowl
+        && this.bowlConfirmed
       );
     },
 
     milkLevelWeight() {
-      if (!this.portionSize.bowl || this.portionSize.milkLevelIndex === undefined) return undefined;
+      if (!this.portionSize.bowl || this.portionSize.milkLevelIndex === undefined)
+        return undefined;
 
       return (
-        volumeDefs[this.portionSize.bowl as Bowl][this.portionSize.milkLevelIndex] *
-        this.milkDensity
+        volumeDefs[this.portionSize.bowl as Bowl][this.portionSize.milkLevelIndex]
+        * this.milkDensity
       );
     },
 
     milkLevelValid() {
       return (
-        this.portionSize.milkLevelId !== undefined &&
-        this.portionSize.milkLevelIndex !== undefined &&
-        this.milkLevelConfirmed
+        this.portionSize.milkLevelId !== undefined
+        && this.portionSize.milkLevelIndex !== undefined
+        && this.milkLevelConfirmed
       );
     },
 
@@ -189,7 +193,8 @@ export default defineComponent({
 
   watch: {
     async milkLevelImageMapId(val) {
-      if (!val) return;
+      if (!val)
+        return;
 
       await this.fetchMilkLevelImageMap();
     },
@@ -198,8 +203,8 @@ export default defineComponent({
   async mounted() {
     await Promise.all([this.fetchBowlImageMap(), this.fetchMilkLevelImageMap()]);
     if (
-      this.parentFood?.type !== 'encoded-food' ||
-      this.parentFood?.portionSize?.method !== 'cereal'
+      this.parentFood?.type !== 'encoded-food'
+      || this.parentFood?.portionSize?.method !== 'cereal'
     )
       return;
 
@@ -214,7 +219,7 @@ export default defineComponent({
   methods: {
     async fetchBowlImageMap() {
       const { data } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.bowlImageMapId}`
+        `portion-sizes/image-maps/${this.bowlImageMapId}`,
       );
 
       this.bowlImageMap = { ...data };
@@ -222,10 +227,11 @@ export default defineComponent({
     },
 
     async fetchMilkLevelImageMap() {
-      if (!this.milkLevelImageMapId) return;
+      if (!this.milkLevelImageMapId)
+        return;
 
       const { data } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.milkLevelImageMapId}`
+        `portion-sizes/image-maps/${this.milkLevelImageMapId}`,
       );
 
       this.milkLevelImageMap = { ...data };
@@ -270,7 +276,8 @@ export default defineComponent({
     update() {
       const { milkLevelWeight } = this;
 
-      if (milkLevelWeight !== undefined) this.portionSize.servingWeight = milkLevelWeight;
+      if (milkLevelWeight !== undefined)
+        this.portionSize.servingWeight = milkLevelWeight;
 
       const state: PromptStates['milk-on-cereal-prompt'] = {
         portionSize: this.portionSize,

@@ -6,19 +6,20 @@ import type { PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { FoodGroup } from '@intake24/db';
 
-const adminFoodGroupController = () => {
+function adminFoodGroupController() {
   const entry = async (req: Request, res: Response<FoodGroupEntry>): Promise<void> => {
     const { foodGroupId } = req.params;
 
     const foodGroup = await FoodGroup.findByPk(foodGroupId);
-    if (!foodGroup) throw new NotFoundError();
+    if (!foodGroup)
+      throw new NotFoundError();
 
     res.json(foodGroup);
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<FoodGroupsResponse>
+    res: Response<FoodGroupsResponse>,
   ): Promise<void> => {
     const foodGroups = await FoodGroup.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -39,17 +40,17 @@ const adminFoodGroupController = () => {
 
   const read = async (
     req: Request<{ foodGroupId: string }>,
-    res: Response<FoodGroupEntry>
+    res: Response<FoodGroupEntry>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ foodGroupId: string }>,
-    res: Response<FoodGroupEntry>
+    res: Response<FoodGroupEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ foodGroupId: string }>,
-    res: Response<FoodGroupEntry>
+    res: Response<FoodGroupEntry>,
   ): Promise<void> => {
     const {
       params: { foodGroupId },
@@ -57,7 +58,8 @@ const adminFoodGroupController = () => {
     } = req;
 
     const foodGroup = await FoodGroup.findByPk(foodGroupId);
-    if (!foodGroup) throw new NotFoundError();
+    if (!foodGroup)
+      throw new NotFoundError();
 
     await foodGroup.update({ name });
 
@@ -66,7 +68,7 @@ const adminFoodGroupController = () => {
 
   const destroy = async (
     req: Request<{ foodGroupId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { foodGroupId } = req.params;
 
@@ -74,12 +76,14 @@ const adminFoodGroupController = () => {
       attributes: ['id'],
       include: [{ association: 'foods', attributes: ['code'] }],
     });
-    if (!foodGroup) throw new NotFoundError();
+    if (!foodGroup)
+      throw new NotFoundError();
 
-    if (!foodGroup.foods || foodGroup.foods.length)
+    if (!foodGroup.foods || foodGroup.foods.length) {
       throw new ForbiddenError(
-        'Food group cannot be deleted. There are foods using this food group.'
+        'Food group cannot be deleted. There are foods using this food group.',
       );
+    }
 
     await foodGroup.destroy();
     res.status(204).json();
@@ -98,7 +102,7 @@ const adminFoodGroupController = () => {
     destroy,
     refs,
   };
-};
+}
 
 export default adminFoodGroupController;
 

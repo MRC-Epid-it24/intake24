@@ -7,7 +7,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE synonym_sets_id_seq RENAME TO v3_synonym_sets_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -27,7 +27,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('synonym_sets', {
@@ -51,7 +51,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO synonym_sets (id, locale_id, synonyms) SELECT id, locale_id, synonyms FROM v3_synonym_sets',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('synonym_sets', 'id', { queryInterface, transaction });
@@ -60,7 +60,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE split_words_id_seq RENAME TO v3_split_words_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -80,7 +80,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('split_words', {
@@ -104,7 +104,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO split_words (id, locale_id, words) SELECT id, locale_id, words FROM v3_split_words',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('split_words', 'id', { queryInterface, transaction });
@@ -132,7 +132,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('split_lists', {
@@ -156,7 +156,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO split_lists (id, locale_id, first_word, words) SELECT id, locale_id, first_word, words FROM v3_split_list',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('split_lists', 'id', { queryInterface, transaction });

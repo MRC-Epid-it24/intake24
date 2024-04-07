@@ -18,30 +18,29 @@ export type Tokens = {
   refreshToken: string;
 };
 
-const jwtService = ({
+function jwtService({
   jwtRotationService,
   securityConfig,
-}: Pick<IoC, 'jwtRotationService' | 'securityConfig'>) => {
+}: Pick<IoC, 'jwtRotationService' | 'securityConfig'>) {
   /**
    * Sign a token
    *
    * @param {(string | Buffer | object)} payload
    * @param {Secret} secret
-   * @param {SignOptions} [options={}]
+   * @param {SignOptions} [options]
    * @returns {Promise<string>}
    */
   const sign = async (
     payload: object,
     secret: Secret,
-    options: SignOptions = {}
+    options: SignOptions = {},
   ): Promise<string> =>
     new Promise((resolve, reject) => {
       const jwtid = randomString(64);
       const { issuer } = securityConfig.jwt;
 
       jwt.sign(payload, secret, { jwtid, issuer, ...options }, (err, encoded) =>
-        err || !encoded ? reject(err ?? new Error('Unable to sign token.')) : resolve(encoded)
-      );
+        err || !encoded ? reject(err ?? new Error('Unable to sign token.')) : resolve(encoded));
     });
 
   /**
@@ -49,13 +48,13 @@ const jwtService = ({
    *
    * @param {string} token
    * @param {Secret} secret
-   * @param {SignOptions} [options={}]
+   * @param {SignOptions} [options]
    * @returns {Promise<TokenPayload>}
    */
   const verify = async <T = TokenPayload>(
     token: string,
     secret: Secret,
-    options: SignOptions = {}
+    options: SignOptions = {},
   ): Promise<T> =>
     new Promise((resolve, reject) => {
       const { issuer } = securityConfig.jwt;
@@ -63,8 +62,7 @@ const jwtService = ({
       jwt.verify(token, secret, { issuer, ...options }, (err, decoded) =>
         err || !decoded
           ? reject(err ?? new Error('Unable to verify refresh token.'))
-          : resolve(decoded as T)
-      );
+          : resolve(decoded as T));
     });
 
   /**
@@ -72,13 +70,13 @@ const jwtService = ({
    *
    * @param {SignPayload} payload
    * @param {FrontEnd} frontEnd
-   * @param {SignOptions} [options={}]
+   * @param {SignOptions} [options]
    * @returns {Promise<string>}
    */
   const signAccessToken = async (
     payload: SignPayload,
     frontEnd: FrontEnd,
-    options: SignOptions = {}
+    options: SignOptions = {},
   ): Promise<string> => {
     const {
       secret,
@@ -87,7 +85,8 @@ const jwtService = ({
       },
     } = securityConfig.jwt;
 
-    if (!secret) throw new InternalServerError('No access token secret defined.');
+    if (!secret)
+      throw new InternalServerError('No access token secret defined.');
 
     return sign(payload, secret, { audience, expiresIn: lifetime, ...options });
   };
@@ -97,17 +96,18 @@ const jwtService = ({
    *
    * @param {SignPayload} payload
    * @param {FrontEnd} frontEnd
-   * @param {SignOptions} [options={}]
+   * @param {SignOptions} [options]
    * @returns {Promise<string>}
    */
   const signRefreshToken = async (
     payload: SignPayload,
     frontEnd: FrontEnd,
-    options: SignOptions = {}
+    options: SignOptions = {},
   ): Promise<string> => {
     const { secret, lifetime, audience } = securityConfig.jwt[frontEnd].refresh;
 
-    if (!secret) throw new InternalServerError('No refresh token secret defined.');
+    if (!secret)
+      throw new InternalServerError('No refresh token secret defined.');
 
     return sign(payload, secret, { audience, expiresIn: lifetime, ...options });
   };
@@ -136,13 +136,13 @@ const jwtService = ({
    *
    * @param {SignPayload} payload
    * @param {FrontEnd} frontEnd
-   * @param {SignOptions} [options={}]
+   * @param {SignOptions} [options]
    * @returns {Promise<Tokens>}
    */
   const issueTokens = async (
     payload: SignPayload,
     frontEnd: FrontEnd,
-    options: SignOptions = {}
+    options: SignOptions = {},
   ): Promise<Tokens> => {
     const { permissions, verified, ...refreshPayload } = payload;
 
@@ -164,13 +164,13 @@ const jwtService = ({
    *
    * @param {SignPayload} payload
    * @param {FrontEnd} frontEnd
-   * @param {SignOptions} [options={}]
+   * @param {SignOptions} [options]
    * @returns {Promise<string>}
    */
   const issueRefreshToken = async (
     payload: SignPayload,
     frontEnd: FrontEnd,
-    options: SignOptions = {}
+    options: SignOptions = {},
   ): Promise<string> => {
     const refreshToken = await signRefreshToken(payload, frontEnd, options);
     await jwtRotationService.store(refreshToken, payload.userId);
@@ -181,7 +181,7 @@ const jwtService = ({
   const issuePersonalAccessToken = async (
     name: string,
     payload: AdminSignPayload,
-    expiresAt: Date
+    expiresAt: Date,
   ) => {
     const { userId } = payload;
 
@@ -199,7 +199,8 @@ const jwtService = ({
 
   const revokePersonalAccessToken = async (id: string, userId: string) => {
     const token = await PersonalAccessToken.findOne({ where: { id, userId } });
-    if (!token) throw new NotFoundError();
+    if (!token)
+      throw new NotFoundError();
 
     await token.update({ revoked: true });
   };
@@ -216,7 +217,7 @@ const jwtService = ({
     issuePersonalAccessToken,
     revokePersonalAccessToken,
   };
-};
+}
 
 export default jwtService;
 

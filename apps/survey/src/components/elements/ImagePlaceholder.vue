@@ -4,7 +4,7 @@
       v-bind="{ color, size, width }"
       class="ma-auto"
       indeterminate
-    ></v-progress-circular>
+    />
   </div>
 </template>
 

@@ -4,9 +4,9 @@ import FrenchLanguageBackend from './fr/french-language-backend';
 
 export type LanguagesBackend = Record<string, LanguageBackend>;
 
-const LanguagesBackend: LanguagesBackend = {
+const languagesBackend: LanguagesBackend = {
   en: EnglishLanguageBackend,
   fr: FrenchLanguageBackend,
 };
 
-export default LanguagesBackend;
+export default languagesBackend;

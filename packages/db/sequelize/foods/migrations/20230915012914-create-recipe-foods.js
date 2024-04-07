@@ -43,7 +43,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -102,7 +102,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       // Add Indexes and FKs
@@ -185,7 +185,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('recipe_foods_steps', { transaction });
       await queryInterface.dropTable('recipe_foods', { transaction });

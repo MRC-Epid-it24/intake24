@@ -16,7 +16,7 @@ export default () => {
     output = { ...input };
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 
@@ -58,7 +58,7 @@ export default () => {
             csvMappingFields: [{ invalidField: 'fieldname' }],
             csvMappingNutrients: [{ invalidField: 'fieldname' }],
           },
-        }
+        },
       );
     });
 
@@ -94,7 +94,7 @@ export default () => {
           ({ fieldName, columnOffset }: NutrientTableRequest['csvMappingFields'][number]) => ({
             fieldName,
             columnOffset,
-          })
+          }),
         );
         expect(fields).toIncludeSameMembers(outputCsvMappingFields);
       }
@@ -107,7 +107,7 @@ export default () => {
           }: NutrientTableRequest['csvMappingNutrients'][number]) => ({
             nutrientTypeId,
             columnOffset,
-          })
+          }),
         );
         expect(nutrients).toIncludeSameMembers(outputCsvMappingNutrients);
       }

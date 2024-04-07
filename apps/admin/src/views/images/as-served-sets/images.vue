@@ -4,8 +4,8 @@
     <v-row>
       <v-col v-for="image in images" :key="image.id" cols="12" md="4" sm="6">
         <v-card flat min-height="200px" outlined>
-          <v-img :src="image.mainImageUrl"></v-img>
-          <v-divider></v-divider>
+          <v-img :src="image.mainImageUrl" />
+          <v-divider />
           <v-card-text>
             <v-row>
               <v-col cols="9">
@@ -17,7 +17,7 @@
                   name="description"
                   outlined
                   @input="updateImages"
-                ></v-text-field>
+                />
               </v-col>
               <v-col align-self="center" class="d-flex justify-end" cols="3">
                 <confirm-dialog
@@ -31,7 +31,9 @@
                   {{ $t('common.action.confirm.delete', { name: 'selected image' }) }}
                   <template #activator="{ attrs, on }">
                     <v-btn class="ml-auto" icon large v-bind="attrs" v-on="on">
-                      <v-icon color="error">$delete</v-icon>
+                      <v-icon color="error">
+                        $delete
+                      </v-icon>
                     </v-btn>
                   </template>
                 </confirm-dialog>
@@ -64,7 +66,7 @@
             class="d-none"
             type="file"
             @change="onFileChanged"
-          />
+          >
         </label>
       </v-col>
     </v-row>
@@ -121,7 +123,7 @@ export default defineComponent({
           image: null as File | null,
           weight: 0,
         },
-        { multipart: true }
+        { multipart: true },
       ),
       loading: false,
     };
@@ -140,7 +142,7 @@ export default defineComponent({
         () => {
           this.loading = false;
         },
-        { once: true }
+        { once: true },
       );
 
       this.fileInput?.click();
@@ -152,18 +154,20 @@ export default defineComponent({
 
       try {
         const data = await this.form.post<AsServedImageEntry>(
-          `admin/images/as-served-sets/${this.setId}/images`
+          `admin/images/as-served-sets/${this.setId}/images`,
         );
         this.images.push(data);
-      } finally {
+      }
+      finally {
         this.loading = false;
-        if (this.fileInput) this.fileInput.value = '';
+        if (this.fileInput)
+          this.fileInput.value = '';
       }
     },
 
     async removeImage(imageId: string) {
       await this.$http.delete(`admin/images/as-served-sets/${this.setId}/images/${imageId}`);
-      this.images = this.images.filter((image) => image.id !== imageId);
+      this.images = this.images.filter(image => image.id !== imageId);
     },
   },
 });

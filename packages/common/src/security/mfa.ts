@@ -4,8 +4,9 @@ export const mfaProviders = ['duo', 'fido', 'otp'] as const;
 
 export type MFAProvider = (typeof mfaProviders)[number];
 
-export const isMFAProvider = (provider: any): provider is MFAProvider =>
-  mfaProviders.includes(provider);
+export function isMFAProvider(provider: any): provider is MFAProvider {
+  return mfaProviders.includes(provider);
+}
 
 export type MFAVerifyCredentials = {
   deviceId: string;

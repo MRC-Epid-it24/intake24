@@ -11,28 +11,28 @@ export default (app: Express, { config }: Ops): void => {
       helmet({
         contentSecurityPolicy: {
           directives: {
-            defaultSrc: ["'self'"],
+            defaultSrc: ['\'self\''],
             connectSrc: [
-              "'self'",
+              '\'self\'',
               'https://*.google-analytics.com',
               'https://*.analytics.google.com',
               'https://*.googletagmanager.com',
             ],
             frameSrc: [
-              "'self'",
+              '\'self\'',
               'https://www.google.com',
               'https://youtube.com',
               'https://www.youtube.com',
             ],
             imgSrc: [
-              "'self'",
+              '\'self\'',
               'blob:',
               'data:',
               'https://*.google-analytics.com',
               'https://*.googletagmanager.com',
             ],
             scriptSrc: [
-              "'self'",
+              '\'self\'',
               'https://storage.googleapis.com',
               'https://*.googletagmanager.com',
             ],
@@ -41,7 +41,7 @@ export default (app: Express, { config }: Ops): void => {
         crossOriginEmbedderPolicy: false,
         crossOriginOpenerPolicy: false,
         crossOriginResourcePolicy: false,
-      })
+      }),
     );
   }
 

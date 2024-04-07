@@ -22,7 +22,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999/data-export`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
@@ -57,9 +57,8 @@ export default () => {
         'portionSizes',
       ]);
 
-      for (const field of Object.values(body)) {
+      for (const field of Object.values(body))
         expect(field).toBeArray();
-      }
     });
   });
 };

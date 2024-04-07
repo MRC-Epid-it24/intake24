@@ -1,21 +1,19 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <review-meal-list
-      v-if="!$vuetify.breakpoint.mobile && prompt.review['desktop']"
-      v-bind="{ meals, review: prompt.review['desktop'] }"
+      v-if="!$vuetify.breakpoint.mobile && prompt.review.desktop"
+      v-bind="{ meals, review: prompt.review.desktop }"
       @action="action"
       @bottom-reached="updateBottomReached('desktop', $event)"
       @reviewed="updateReviewed('desktop', $event)"
-    >
-    </review-meal-list>
+    />
     <review-meal-list-mobile
-      v-if="$vuetify.breakpoint.mobile && prompt.review['mobile']"
-      v-bind="{ meals, review: prompt.review['mobile'] }"
+      v-if="$vuetify.breakpoint.mobile && prompt.review.mobile"
+      v-bind="{ meals, review: prompt.review.mobile }"
       @action="action"
       @bottom-reached="updateBottomReached('mobile', $event)"
       @reviewed="updateReviewed('mobile', $event)"
-    >
-    </review-meal-list-mobile>
+    />
     <template #actions>
       <next :disabled="!isValid" @click="action('next')">
         {{ $t('recall.actions.submit') }}
@@ -26,9 +24,11 @@
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.addMeal') }}
         </span>
-        <v-icon class="pb-1">$add</v-icon>
+        <v-icon class="pb-1">
+          $add
+        </v-icon>
       </v-btn>
-      <v-divider vertical></v-divider>
+      <v-divider vertical />
       <next-mobile :disabled="!isValidMobile" @click="action('next')">
         {{ $t('recall.actions.nav.submit') }}
       </next-mobile>
@@ -79,23 +79,27 @@ export default defineComponent({
     };
 
     const isValid = computed(() => {
-      if (props.prompt.review.desktop === 'scroll') return bottomReached.value.desktop;
+      if (props.prompt.review.desktop === 'scroll')
+        return bottomReached.value.desktop;
 
       if (props.prompt.review.desktop === 'checkbox')
         return props.meals.length === reviewed.value.desktop.length;
 
-      if (props.prompt.review.desktop === 'onecheckbox') return reviewed.value.desktop.length === 1;
+      if (props.prompt.review.desktop === 'onecheckbox')
+        return reviewed.value.desktop.length === 1;
 
       return true;
     });
 
     const isValidMobile = computed(() => {
-      if (props.prompt.review.mobile === 'scroll') return bottomReached.value.mobile;
+      if (props.prompt.review.mobile === 'scroll')
+        return bottomReached.value.mobile;
 
       if (props.prompt.review.mobile === 'checkbox')
         return props.meals.length === reviewed.value.mobile.length;
 
-      if (props.prompt.review.desktop === 'onecheckbox') return reviewed.value.mobile.length === 1;
+      if (props.prompt.review.desktop === 'onecheckbox')
+        return reviewed.value.mobile.length === 1;
 
       return true;
     });

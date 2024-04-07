@@ -18,7 +18,7 @@ export default () => {
     .post(
       permission('feedback-schemes|create'),
       validation.store,
-      wrapAsync(feedbackSchemeController.store)
+      wrapAsync(feedbackSchemeController.store),
     )
     .get(validation.browse, wrapAsync(feedbackSchemeController.browse));
 
@@ -33,7 +33,7 @@ export default () => {
     .put(
       permission('feedback-schemes|edit'),
       validation.put,
-      wrapAsync(feedbackSchemeController.put)
+      wrapAsync(feedbackSchemeController.put),
     )
     .delete(wrapAsync(feedbackSchemeController.destroy));
 
@@ -42,7 +42,7 @@ export default () => {
 
   router.use(
     '/:feedbackSchemeId/securables',
-    securables('FeedbackScheme', feedbackSchemeController.securables)
+    securables('FeedbackScheme', feedbackSchemeController.securables),
   );
 
   return router;

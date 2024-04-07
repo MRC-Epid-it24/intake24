@@ -1,6 +1,7 @@
 <template>
-  <v-col cols="12"> </v-col>
+  <v-col cols="12" />
 </template>
+
 <script lang="ts">
 import { defineComponent } from 'vue';
 

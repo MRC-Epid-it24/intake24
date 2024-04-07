@@ -37,14 +37,14 @@ export default validate(
       errorMessage: typeErrorMessage('date._'),
       isDate: true,
       optional: true,
-      customSanitizer: { options: (value) => startOfDay(new Date(value)) },
+      customSanitizer: { options: value => startOfDay(new Date(value)) },
     },
     'params.endDate': {
       in: ['body'],
       errorMessage: typeErrorMessage('date._'),
       isDate: true,
       optional: true,
-      customSanitizer: { options: (value) => endOfDay(new Date(value)) },
+      customSanitizer: { options: value => endOfDay(new Date(value)) },
     },
     'params.file': {
       in: ['body'],
@@ -52,14 +52,16 @@ export default validate(
         if: (value: any, { req }: Meta) => req.body.type && jobRequiresFile(req.body.type),
         options: async (value, meta): Promise<void> => {
           const { file } = meta.req;
-          if (!file) throw new Error(customTypeErrorMessage('file._', meta));
+          if (!file)
+            throw new Error(customTypeErrorMessage('file._', meta));
 
-          if (path.extname(file.originalname).toLowerCase() !== '.csv')
+          if (path.extname(file.originalname).toLowerCase() !== '.csv') {
             throw new Error(
-              customTypeErrorMessage('file.ext', meta, { ext: 'CSV (comma-delimited)' })
+              customTypeErrorMessage('file.ext', meta, { ext: 'CSV (comma-delimited)' }),
             );
+          }
         },
       },
     },
-  })
+  }),
 );

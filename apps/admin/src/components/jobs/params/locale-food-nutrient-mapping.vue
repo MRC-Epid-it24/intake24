@@ -11,8 +11,7 @@
             :label="$t('jobs.types.LocaleFoodNutrientMapping.localeId')"
             name="localeId"
             resource="locales"
-          >
-          </select-resource>
+          />
         </v-col>
       </v-row>
     </v-card-text>

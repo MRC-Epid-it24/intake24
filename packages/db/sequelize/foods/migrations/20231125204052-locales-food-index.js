@@ -11,7 +11,7 @@ module.exports = {
           allowNull: false,
           defaultValue: false,
         },
-        { transaction }
+        { transaction },
       );
 
       const { QueryTypes } = queryInterface.sequelize;
@@ -22,7 +22,7 @@ module.exports = {
 
       const locales = await system.query(
         `SELECT l.code FROM locales l JOIN surveys s ON l.id = s.locale_id WHERE s.state = 'active';`,
-        { type: QueryTypes.SELECT }
+        { type: QueryTypes.SELECT },
       );
 
       const codes = locales.map(({ code }) => code);
@@ -33,11 +33,11 @@ module.exports = {
           type: QueryTypes.UPDATE,
           replacements: { codes },
           transaction,
-        }
+        },
       );
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('locales', 'food_index_enabled', { transaction });
     }),

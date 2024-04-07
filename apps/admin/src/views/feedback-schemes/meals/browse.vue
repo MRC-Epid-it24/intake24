@@ -6,32 +6,38 @@
     @save="submit"
   >
     <template #actions>
-      <preview :feedback-scheme="currentFeedbackScheme"></preview>
+      <preview :feedback-scheme="currentFeedbackScheme" />
     </template>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>fas fa-sort-amount-down</v-icon>
+      <v-icon color="secondary" left>
+        fas fa-sort-amount-down
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.meals.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <options-menu>
         <select-resource resource="feedback-schemes" return-object="meals" @input="load">
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.meals"></json-editor-dialog>
+        <json-editor-dialog v-model="form.meals" />
       </options-menu>
     </v-toolbar>
 
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-toolbar color="grey lighten-5" flat tile>
-        <v-icon color="secondary" left>fas fa-chart-pie</v-icon>
+        <v-icon color="secondary" left>
+          fas fa-chart-pie
+        </v-icon>
         <v-toolbar-title class="font-weight-medium">
           {{ $t('feedback-schemes.meals.chart') }}
         </v-toolbar-title>
@@ -40,11 +46,13 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="secondary" left>fas fa-palette</v-icon>
+              <v-icon color="secondary" left>
+                fas fa-palette
+              </v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.meals.colors.title') }}
               </v-toolbar-title>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-text-field
                 v-model.number="colorMax"
                 background-color="grey lighten-5"
@@ -56,18 +64,18 @@
                 :rules="maxRules"
                 single-line
                 :style="{ maxWidth: '75px' }"
-              ></v-text-field>
+              />
             </v-toolbar>
-            <error-list :errors="nonInputErrors"></error-list>
-            <color-list v-model="form.meals.chart.colors"></color-list>
+            <error-list :errors="nonInputErrors" />
+            <color-list v-model="form.meals.chart.colors" />
           </v-col>
-          <v-divider vertical></v-divider>
+          <v-divider vertical />
           <v-col cols="12" md="6">
             <nutrient-list
               v-model="form.meals.chart.nutrients"
               :defaults="defaultMeals.chart.nutrients"
               :nutrient-types="refs.nutrientTypes"
-            ></nutrient-list>
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -75,9 +83,9 @@
         v-model="form.meals.table.fields"
         :defaults="defaultMeals.table.fields"
         :nutrient-types="refs.nutrientTypes"
-      ></table-field-list>
+      />
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()"></submit-footer>
+        <submit-footer :disabled="form.errors.any()" />
       </v-card-text>
     </v-form>
   </layout>
@@ -152,7 +160,8 @@ export default defineComponent({
     const updateColorList = () => {
       if (colorMax.value < form.meals.chart.colors.length) {
         form.meals.chart.colors = [...form.meals.chart.colors.slice(0, colorMax.value)];
-      } else if (colorMax.value > form.meals.chart.colors.length) {
+      }
+      else if (colorMax.value > form.meals.chart.colors.length) {
         const newColors = Array.from<string>({
           length: colorMax.value - form.meals.chart.colors.length,
         }).fill(colors.primary);

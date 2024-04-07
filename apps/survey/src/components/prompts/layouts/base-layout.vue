@@ -1,20 +1,20 @@
 <template>
   <div>
     <v-card class="mb-4" :tile="isMobile">
-      <breadcrumbs v-bind="{ food, meal, promptName: i18n.name }"></breadcrumbs>
+      <breadcrumbs v-bind="{ food, meal, promptName: i18n.name }" />
       <slot name="prompt-text">
         <v-card-text v-if="i18n.text" class="pt-0">
-          <v-divider class="mb-2"></v-divider>
+          <v-divider class="mb-2" />
           <h3>{{ i18n.text }}</h3>
         </v-card-text>
       </slot>
     </v-card>
     <slot name="prompt-description">
       <v-card v-if="!isInMultiPrompt && i18n.description" class="mb-4" :tile="isMobile">
-        <div class="pa-4" v-html="i18n.description"></div>
+        <div class="pa-4" v-html="i18n.description" />
       </v-card>
     </slot>
-    <slot></slot>
+    <slot />
     <div
       v-if="!isMobile || prompt.actions?.both"
       id="actions"
@@ -37,12 +37,12 @@
         </v-btn>
       </template>
       <template v-else>
-        <slot name="actions"></slot>
+        <slot name="actions" />
       </template>
     </div>
     <div v-if="isMobile" id="actions" class="bottom-navigation">
       <div v-if="showSummary" class="bottom-navigation__summary">
-        <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action"></meal-list-mobile>
+        <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action" />
       </div>
       <div v-if="mobileActions.length || hasNavActionsSlot" class="bottom-navigation__actions">
         <template v-if="mobileActions.length">
@@ -59,17 +59,19 @@
               <span class="text-overline font-weight-medium">
                 {{ translate(item.text) }}
               </span>
-              <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
+              <v-icon v-if="item.icon" class="pb-1">
+                {{ item.icon }}
+              </v-icon>
             </v-btn>
             <v-divider
               v-if="idx + 1 < mobileActions.length"
               :key="`div-${item.type}`"
               vertical
-            ></v-divider>
+            />
           </template>
         </template>
         <template v-else>
-          <slot name="nav-actions"></slot>
+          <slot name="nav-actions" />
         </template>
       </div>
     </div>

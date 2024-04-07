@@ -8,17 +8,17 @@ import type { IoC } from '@intake24/api/ioc';
 import type { SourceImageType, UploadSourceImageInput } from '@intake24/common/types/http/admin';
 import { SourceImage } from '@intake24/db';
 
-const sourceImageService = ({
+function sourceImageService({
   fsConfig,
   imageProcessorConfig,
   logger: globalLogger,
-}: Pick<IoC, 'fsConfig' | 'logger' | 'imageProcessorConfig'>) => {
+}: Pick<IoC, 'fsConfig' | 'logger' | 'imageProcessorConfig'>) {
   const { images: imagesPath } = fsConfig.local;
   const logger = globalLogger.child({ service: 'SourceImageService' });
 
   const uploadSourceImage = async (
     input: UploadSourceImageInput,
-    type: SourceImageType
+    type: SourceImageType,
   ): Promise<SourceImage> => {
     const { id, file, uploader } = input;
 
@@ -30,16 +30,15 @@ const sourceImageService = ({
     const sourcePath = path.posix.join(sourceDir, filename);
     const sourceThumbPath = path.posix.join(sourceThumbDir, filename);
 
-    for (const dir of [sourceDir, sourceThumbDir]) {
+    for (const dir of [sourceDir, sourceThumbDir])
       await fs.ensureDir(path.join(imagesPath, dir));
-    }
 
     await fs.copy(file.path, path.join(imagesPath, sourcePath));
 
     await sharp(path.join(imagesPath, sourcePath))
       .resize(
         imageProcessorConfig.source.thumbnailWidth,
-        imageProcessorConfig.source.thumbnailHeight
+        imageProcessorConfig.source.thumbnailHeight,
       )
       .jpeg({ mozjpeg: true })
       .toFile(path.join(imagesPath, sourceThumbPath));
@@ -64,7 +63,8 @@ const sourceImageService = ({
       try {
         await fs.unlink(path.join(imagesPath, sourceImage.path));
         await fs.unlink(path.join(imagesPath, sourceImage.thumbnailPath));
-      } catch (err) {
+      }
+      catch (err) {
         if (err instanceof Error) {
           const { message, name, stack } = err;
           logger.error(`${name}: ${message}`, { stack });
@@ -80,7 +80,7 @@ const sourceImageService = ({
     uploadSourceImage,
     destroy,
   };
-};
+}
 
 export default sourceImageService;
 

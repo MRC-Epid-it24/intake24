@@ -7,9 +7,9 @@ import { contract } from '@intake24/common/contracts';
 
 import { attachRefreshToken } from './util';
 
-export const authentication = () => {
+export function authentication() {
   const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    keyGenerator: (req) => `login:${req.body.email ?? req.ip}`,
+    keyGenerator: req => `login:${req.body.email ?? req.ip}`,
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
     skipSuccessfulRequests: true,
   });
@@ -22,14 +22,15 @@ export const authentication = () => {
 
         const result = await req.scope.cradle.authenticationService.emailLogin(
           { email, password, survey, captcha: captcha ?? undefined },
-          { req }
+          { req },
         );
-        if ('provider' in result) return { status: 200, body: result };
+        if ('provider' in result)
+          return { status: 200, body: result };
 
         attachRefreshToken(
           result.refreshToken,
           res,
-          req.scope.cradle.securityConfig.jwt.survey.cookie
+          req.scope.cradle.securityConfig.jwt.survey.cookie,
         );
         return { status: 200, body: { accessToken: result.accessToken } };
       },
@@ -41,14 +42,15 @@ export const authentication = () => {
 
         const result = await req.scope.cradle.authenticationService.aliasLogin(
           { username, password, survey, captcha: captcha ?? undefined },
-          { req }
+          { req },
         );
-        if ('provider' in result) return { status: 200, body: result };
+        if ('provider' in result)
+          return { status: 200, body: result };
 
         attachRefreshToken(
           result.refreshToken,
           res,
-          req.scope.cradle.securityConfig.jwt.survey.cookie
+          req.scope.cradle.securityConfig.jwt.survey.cookie,
         );
         return { status: 200, body: { accessToken: result.accessToken } };
       },
@@ -60,14 +62,15 @@ export const authentication = () => {
 
         const result = await req.scope.cradle.authenticationService.tokenLogin(
           { token, captcha: captcha ?? undefined },
-          { req }
+          { req },
         );
-        if ('provider' in result) return { status: 200, body: result };
+        if ('provider' in result)
+          return { status: 200, body: result };
 
         attachRefreshToken(
           result.refreshToken,
           res,
-          req.scope.cradle.securityConfig.jwt.survey.cookie
+          req.scope.cradle.securityConfig.jwt.survey.cookie,
         );
 
         return { status: 200, body: { accessToken: result.accessToken } };
@@ -76,27 +79,29 @@ export const authentication = () => {
     refresh: async ({ req, res }) => {
       const { name } = req.scope.cradle.securityConfig.jwt.survey.cookie;
       const refreshToken = req.cookies[name];
-      if (!refreshToken) throw new UnauthorizedError();
+      if (!refreshToken)
+        throw new UnauthorizedError();
 
       const tokens = await req.scope.cradle.authenticationService.refresh(refreshToken, 'survey');
       attachRefreshToken(
         tokens.refreshToken,
         res,
-        req.scope.cradle.securityConfig.jwt.survey.cookie
+        req.scope.cradle.securityConfig.jwt.survey.cookie,
       );
 
       return { status: 200, body: { accessToken: tokens.accessToken } };
     },
     logout: async ({ req, res }) => {
-      const { name, httpOnly, path, secure, sameSite } =
-        req.scope.cradle.securityConfig.jwt.survey.cookie;
+      const { name, httpOnly, path, secure, sameSite }
+        = req.scope.cradle.securityConfig.jwt.survey.cookie;
 
       const refreshToken = req.cookies[name];
-      if (refreshToken) await req.scope.cradle.jwtRotationService.revoke(refreshToken);
+      if (refreshToken)
+        await req.scope.cradle.jwtRotationService.revoke(refreshToken);
 
       res.cookie(name, '', { maxAge: -1, httpOnly, path, secure, sameSite });
 
       return { status: 200, body: undefined };
     },
   });
-};
+}

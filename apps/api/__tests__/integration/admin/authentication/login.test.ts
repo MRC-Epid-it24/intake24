@@ -7,7 +7,7 @@ import { User } from '@intake24/db';
 export default () => {
   const url = '/api/admin/auth/login';
 
-  it('Missing credentials should return 400 with errors', async () => {
+  it('missing credentials should return 400 with errors', async () => {
     const { status, body } = await request(suite.app).post(url).set('Accept', 'application/json');
 
     expect(status).toBe(400);
@@ -15,7 +15,7 @@ export default () => {
     expect(body.errors).toContainAllKeys(['email', 'password']);
   });
 
-  it('Invalid credentials should return 401', async () => {
+  it('invalid credentials should return 401', async () => {
     const { status } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
@@ -24,7 +24,7 @@ export default () => {
     expect(status).toBe(401);
   });
 
-  it('Valid credentials should return 200, access token & refresh cookie', async () => {
+  it('valid credentials should return 200, access token & refresh cookie', async () => {
     const res = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
@@ -36,12 +36,12 @@ export default () => {
     expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
     expect(
       (res.get('Set-Cookie') ?? []).some(
-        (cookie) => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name
-      )
+        cookie => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name,
+      ),
     ).toBeTrue();
   });
 
-  describe('User disabled', () => {
+  describe('user disabled', () => {
     beforeAll(async () => {
       await User.update({ disabledAt: new Date() }, { where: { email: 'testUser@example.com' } });
     });

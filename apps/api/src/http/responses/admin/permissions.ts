@@ -1,7 +1,7 @@
 import type { PermissionListEntry } from '@intake24/common/types/http/admin';
 import type { Permission } from '@intake24/db';
 
-export const permissionListResponse = (permission: Permission): PermissionListEntry => {
+export function permissionListResponse(permission: Permission): PermissionListEntry {
   const { id, name, displayName } = permission;
   return { id, name, displayName };
-};
+}

@@ -48,7 +48,7 @@
     "@types/decompress": "^4.2.7",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.0",
-    "@types/node": "^20.12.4",
+    "@types/node": "^20.12.5",
     "@types/uuid": "^9.0.8",
     "@types/validator": "^13.11.9",
     "@types/web-push": "^3.6.3",

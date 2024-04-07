@@ -3,7 +3,7 @@ import type { JobEntry } from '@intake24/common/types/http/admin';
 import type { BaseClientV4 } from './base-client-v4';
 
 async function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export class JobsApiV4 {
@@ -28,12 +28,15 @@ export class JobsApiV4 {
 
       const status = await this.get(jobId);
 
-      if (status === null) throw new Error(`Job ${jobId} not found`);
+      if (status === null)
+        throw new Error(`Job ${jobId} not found`);
 
       if (status.successful !== null) {
-        if (status.successful) return status;
+        if (status.successful)
+          return status;
         else throw new Error(`Job ${jobId} failed: ${status.message}`);
-      } else await delay(100);
+      }
+      else { await delay(100); }
     }
   }
 }

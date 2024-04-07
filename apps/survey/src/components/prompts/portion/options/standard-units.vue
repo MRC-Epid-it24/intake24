@@ -67,18 +67,20 @@ export default defineComponent({
     const standardUnits = computed(() => {
       return ('units' in props.method.parameters ? props.method.parameters.units : []).slice(
         0,
-        props.max
+        props.max,
       );
     });
 
     const selectNextStandardUnit = () => {
-      if (typeof selectedIndex.value === 'undefined') return;
+      if (typeof selectedIndex.value === 'undefined')
+        return;
 
       selectedIndex.value = (selectedIndex.value + 1) % standardUnits.value.length;
     };
 
     const startTimer = () => {
-      if (!props.timer) return;
+      if (!props.timer)
+        return;
 
       interval.value = setInterval(() => {
         selectNextStandardUnit();
@@ -90,17 +92,17 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      if (!standardUnits.value.length) return;
+      if (!standardUnits.value.length)
+        return;
 
       const namesToTranslate = standardUnits.value
-        .filter((unit) => unit.inlineEstimateIn === undefined)
-        .map((unit) => unit.name);
+        .filter(unit => unit.inlineEstimateIn === undefined)
+        .map(unit => unit.name);
 
-      if (namesToTranslate.length > 0) {
+      if (namesToTranslate.length > 0)
         await fetchStandardUnits(namesToTranslate);
-      } else {
+      else
         usingStandardTranslations.value = false;
-      }
 
       selectNextStandardUnit();
       startTimer();

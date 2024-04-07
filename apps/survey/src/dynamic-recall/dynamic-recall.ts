@@ -56,9 +56,8 @@ export default class DynamicRecall {
       context.after(() => {
         const completeAfter = surveyFreeEntryComplete(survey);
 
-        if (!completeBefore && completeAfter) {
+        if (!completeBefore && completeAfter)
           store.setSelection(this.selectionManager.firstAvailableSelection());
-        }
       });
     });
   }
@@ -70,34 +69,40 @@ export default class DynamicRecall {
       const store = context.store;
       const survey = store.$state.data;
 
-      if (survey.selection.element === null || survey.selection.element.type === 'meal') return;
+      if (survey.selection.element === null || survey.selection.element.type === 'meal')
+        return;
 
       const selectionBefore = getFoodIndexRequired(survey.meals, survey.selection.element.foodId);
       const mealIdBefore = survey.meals[selectionBefore.mealIndex].id;
       const completeBefore = mealPortionSizeComplete(survey.meals[selectionBefore.mealIndex]);
 
       context.after(() => {
-        if (survey.selection.element === null || survey.selection.element.type === 'meal') return;
+        if (survey.selection.element === null || survey.selection.element.type === 'meal')
+          return;
         const selectionAfter = getFoodIndexRequired(survey.meals, survey.selection.element.foodId);
         const mealIdAfter = survey.meals[selectionAfter.mealIndex].id;
 
-        if (mealIdBefore !== mealIdAfter) return;
+        if (mealIdBefore !== mealIdAfter)
+          return;
 
         const completeAfter = mealPortionSizeComplete(survey.meals[selectionAfter.mealIndex]);
 
         if (!completeBefore && completeAfter) {
           const newSelection = this.selectionManager.tryAnyFoodInMeal(mealIdAfter);
-          if (newSelection !== undefined) store.setSelection(newSelection);
+          if (newSelection !== undefined)
+            store.setSelection(newSelection);
         }
       });
     });
   }
 
   private registerStoreUserSession() {
-    if (!this.store.parameters?.storeUserSessionOnServer) return;
+    if (!this.store.parameters?.storeUserSessionOnServer)
+      return;
 
     this.store.$onAction((context) => {
-      if (context.name === 'storeUserSession') return;
+      if (context.name === 'storeUserSession')
+        return;
 
       context.after(async () => {
         await context.store.storeUserSession();
@@ -108,7 +113,7 @@ export default class DynamicRecall {
   foodPromptsComplete(surveyState: SurveyState, mealId: string): boolean {
     const foods = findMeal(surveyState.data.meals, mealId).foods;
 
-    return foods.every((food) => this.promptManager.nextFoodsPrompt(food.id, null) === undefined);
+    return foods.every(food => this.promptManager.nextFoodsPrompt(food.id, null) === undefined);
   }
 
   getNextPromptForCurrentSelection(): PromptInstance | undefined {
@@ -121,12 +126,14 @@ export default class DynamicRecall {
           const { mealId } = recallState.selection.element;
           const mealPrompt = this.promptManager.nextMealSectionPrompt('preFoods', mealId, null);
 
-          if (mealPrompt) return { prompt: mealPrompt, section: 'preFoods' };
+          if (mealPrompt)
+            return { prompt: mealPrompt, section: 'preFoods' };
 
           if (this.foodPromptsComplete(surveyState, mealId)) {
             const mealPrompt = this.promptManager.nextMealSectionPrompt('postFoods', mealId, null);
 
-            if (mealPrompt) return { prompt: mealPrompt, section: 'postFoods' };
+            if (mealPrompt)
+              return { prompt: mealPrompt, section: 'postFoods' };
           }
           break;
         }
@@ -151,7 +158,8 @@ export default class DynamicRecall {
 
   getNextSurveySectionPrompt(section: SurveyPromptSection): PromptInstance | undefined {
     const nextPrompt = this.promptManager.nextSurveySectionPrompt(section);
-    if (nextPrompt) return { prompt: nextPrompt, section };
+    if (nextPrompt)
+      return { prompt: nextPrompt, section };
 
     return undefined;
   }
@@ -204,7 +212,8 @@ export default class DynamicRecall {
     // layout in the desktop version.
 
     // If finished, do not allow any other manual selections
-    if (this.store.hasFinished) return this.getNextSurveySectionPrompt('submission');
+    if (this.store.hasFinished)
+      return this.getNextSurveySectionPrompt('submission');
 
     let nextPrompt = this.getNextSurveySectionPrompt('preMeals');
     if (nextPrompt) {
@@ -237,7 +246,8 @@ export default class DynamicRecall {
 
     // Make sure post meals prompts are complete
     nextPrompt = this.getNextSurveySectionPrompt('postMeals');
-    if (nextPrompt) return nextPrompt;
+    if (nextPrompt)
+      return nextPrompt;
 
     console.debug('Post-meals prompts complete');
 

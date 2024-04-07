@@ -25,15 +25,16 @@ import {
 } from '@intake24/common/util';
 import { Op, User, UserSecurable } from '@intake24/db';
 
-export const securableController = ({
+export function securableController({
   securable,
   ioc: { adminUserService },
 }: {
   ioc: IoC;
   securable: ModelStatic<Securable>;
-}) => {
+}) {
   const securableType = securable.name;
-  if (!isSecurableType(securableType)) throw Error('Invalid securable type');
+  if (!isSecurableType(securableType))
+    throw new Error('Invalid securable type');
 
   const resource = getResourceFromSecurable(securableType);
   const paramId = getRequestParamFromSecurable(securableType);
@@ -42,9 +43,10 @@ export const securableController = ({
     user: User,
     resource: string,
     records: UserSecurableCreationAttributes[],
-    removeSecurable?: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>
+    removeSecurable?: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>,
   ) => {
-    if (removeSecurable) await UserSecurable.destroy({ where: removeSecurable });
+    if (removeSecurable)
+      await UserSecurable.destroy({ where: removeSecurable });
 
     await Promise.all([
       UserSecurable.bulkCreate(records),
@@ -55,7 +57,7 @@ export const securableController = ({
   const removeSecurableAccess = async (
     user: User,
     resource: string,
-    securable: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>
+    securable: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>,
   ) => {
     const { userId, securableType, securableId } = securable;
     const otherSecurables = await UserSecurable.findAll({
@@ -67,13 +69,13 @@ export const securableController = ({
       [
         UserSecurable.destroy({ where: securable }),
         otherSecurables.length ? null : adminUserService.removePermissionByName(user, resource),
-      ].filter(Boolean)
+      ].filter(Boolean),
     );
   };
 
   const browse = async (
     req: Request<Record<string, string>, any, any, PaginateQuery>,
-    res: Response<UsersWithSecurablesResponse>
+    res: Response<UsersWithSecurablesResponse>,
   ): Promise<void> => {
     const { [paramId]: securableId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -97,7 +99,7 @@ export const securableController = ({
 
   const store = async (
     req: Request<Record<string, string>, any, CreateUserWithSecurables>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const {
       params: { [paramId]: securableId },
@@ -119,7 +121,7 @@ export const securableController = ({
     });
 
     if (actions.length) {
-      const records = actions.map((action) => ({
+      const records = actions.map(action => ({
         userId: user.id,
         securableId,
         securableType,
@@ -134,7 +136,7 @@ export const securableController = ({
 
   const update = async (
     req: Request<Record<string, string>, any, Pick<CreateUserWithSecurables, 'actions'>>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const {
       params: { [paramId]: securableId, userId },
@@ -155,21 +157,23 @@ export const securableController = ({
         ],
       }),
     ]);
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     const securableInput = { userId, securableId, securableType };
 
     if (actions.length) {
-      const currentActions = user.securables?.map((sec) => sec.action).sort() ?? [];
-      const actionsMatch =
-        actions.length === currentActions.length &&
-        actions.sort().every((action, idx) => action === currentActions[idx]);
+      const currentActions = user.securables?.map(sec => sec.action).sort() ?? [];
+      const actionsMatch
+        = actions.length === currentActions.length
+        && actions.sort().every((action, idx) => action === currentActions[idx]);
 
       if (!actionsMatch) {
-        const records = actions.map((action) => ({ ...securableInput, action }));
+        const records = actions.map(action => ({ ...securableInput, action }));
         await addSecurableAccess(user, resource, records, securableInput);
       }
-    } else {
+    }
+    else {
       await removeSecurableAccess(user, resource, securableInput);
     }
 
@@ -189,7 +193,8 @@ export const securableController = ({
       }),
       User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } }),
     ]);
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     await removeSecurableAccess(user, resource, { userId, securableId, securableType });
 
@@ -198,7 +203,7 @@ export const securableController = ({
 
   const availableUsers = async (
     req: Request<Record<string, string>, any, any, PaginateQuery>,
-    res: Response<AvailableUsersWithSecurablesResponse>
+    res: Response<AvailableUsersWithSecurablesResponse>,
   ): Promise<void> => {
     const {
       params: { [paramId]: securableId },
@@ -216,8 +221,8 @@ export const securableController = ({
       return;
     }
 
-    const op =
-      User.sequelize?.getDialect() === 'postgres'
+    const op
+      = User.sequelize?.getDialect() === 'postgres'
         ? { [Op.iLike]: `%${search}%` }
         : { [Op.substring]: search };
 
@@ -246,7 +251,7 @@ export const securableController = ({
 
   const owner = async (
     req: Request<Record<string, string>, any, UpdateSecurableOwnerRequest>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const {
       params: { [paramId]: securableId },
@@ -272,6 +277,6 @@ export const securableController = ({
     availableUsers,
     owner,
   };
-};
+}
 
 export type SecurableController = ReturnType<typeof securableController>;

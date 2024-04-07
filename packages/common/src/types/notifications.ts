@@ -8,7 +8,7 @@ export const eventTypes = [
 
 export type EventType = (typeof eventTypes)[number];
 
-export const notificationChannels = [/*'email', 'slack',*/ 'webhook'] as const;
+export const notificationChannels = ['webhook'] as const;
 
 export type NotificationChannel = (typeof notificationChannels)[number];
 

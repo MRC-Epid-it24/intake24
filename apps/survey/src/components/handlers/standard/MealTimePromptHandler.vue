@@ -3,7 +3,7 @@
     v-model="state"
     v-bind="{ meal, prompt, section }"
     @action="action"
-  ></meal-time-prompt>
+  />
 </template>
 
 <script lang="ts">

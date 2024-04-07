@@ -35,8 +35,10 @@
               name="name"
               outlined
               @input="form.errors.clear('name')"
-            ></v-text-field>
-            <p class="my-2 text-subtitle-2">{{ $t('user.mfa.devices.qr.text') }}</p>
+            />
+            <p class="my-2 text-subtitle-2">
+              {{ $t('user.mfa.devices.qr.text') }}
+            </p>
             <v-otp-input
               v-model="form.token"
               :error-messages="form.errors.get('token')"
@@ -44,14 +46,14 @@
               length="6"
               name="token"
               @input="form.errors.clear('token')"
-            ></v-otp-input>
+            />
             <v-btn block class="my-4" color="secondary" rounded type="submit">
               {{ $t('user.mfa.devices.verify') }}
             </v-btn>
           </v-form>
         </v-col>
         <v-col cols="12" order="first" order-sm="last" sm="6">
-          <v-img v-if="regChallenge" :aspect-ratio="1 / 1" :src="regChallenge?.qrCode"></v-img>
+          <v-img v-if="regChallenge" :aspect-ratio="1 / 1" :src="regChallenge?.qrCode" />
         </v-col>
       </v-row>
     </v-stepper-content>

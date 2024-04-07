@@ -11,7 +11,7 @@
       surveyId,
     }"
     @action="action"
-  ></component>
+  />
 </template>
 
 <script lang="ts">

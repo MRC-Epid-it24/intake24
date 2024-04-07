@@ -1,45 +1,45 @@
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameColumn(
         'pairwise_associations_co_occurrences',
         'locale',
         'locale_id',
-        { transaction }
+        { transaction },
       );
       await queryInterface.renameColumn(
         'pairwise_associations_occurrences',
         'locale',
         'locale_id',
-        { transaction }
+        { transaction },
       );
       await queryInterface.renameColumn(
         'pairwise_associations_transactions_count',
         'locale',
         'locale_id',
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameColumn(
         'pairwise_associations_co_occurrences',
         'locale_id',
         'locale',
-        { transaction }
+        { transaction },
       );
       await queryInterface.renameColumn(
         'pairwise_associations_occurrences',
         'locale_id',
         'locale',
-        { transaction }
+        { transaction },
       );
       await queryInterface.renameColumn(
         'pairwise_associations_transactions_count',
         'locale_id',
         'locale',
-        { transaction }
+        { transaction },
       );
     }),
 };

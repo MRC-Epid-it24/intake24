@@ -55,7 +55,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.bulkInsert(
@@ -79,7 +79,7 @@ module.exports = {
             updated_at,
           },
         ],
-        { transaction }
+        { transaction },
       );
 
       const feedbackScheme = await queryInterface.sequelize.query(
@@ -88,14 +88,14 @@ module.exports = {
           type: queryInterface.sequelize.QueryTypes.SELECT,
           replacements: { name: 'Default feedback' },
           transaction,
-        }
+        },
       );
 
       await queryInterface.addColumn(
         'surveys',
         'feedback_scheme_id',
         { type: Sequelize.BIGINT, allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -104,7 +104,7 @@ module.exports = {
           type: queryInterface.sequelize.QueryTypes.UPDATE,
           replacements: { id: feedbackScheme[0].id },
           transaction,
-        }
+        },
       );
 
       await queryInterface.addConstraint('surveys', {
@@ -132,14 +132,14 @@ module.exports = {
         'surveys',
         'feedback_enabled',
         { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'surveys',
         'feedback_style',
         { type: Sequelize.STRING(50), allowNull: false, defaultValue: 'default' },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeColumn('surveys', 'feedback_scheme_id', { transaction });

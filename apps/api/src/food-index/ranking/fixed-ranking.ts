@@ -8,11 +8,11 @@ import { FixedFoodRanking } from '@intake24/db';
 const cache = new NodeCache({ stdTTL: 600, checkperiod: 600 });
 
 export async function getFixedRanking(localeId: string, foods: string[]): Promise<RankingData> {
-  const keys = foods.map((code) => toCacheKey(localeId, code));
+  const keys = foods.map(code => toCacheKey(localeId, code));
 
-  const ranking = mapKeys(cache.mget<number>(keys), (k) => toFoodCode(localeId, k));
+  const ranking = mapKeys(cache.mget<number>(keys), k => toFoodCode(localeId, k));
 
-  const codesToFetch = foods.filter((code) => !ranking[code]);
+  const codesToFetch = foods.filter(code => !ranking[code]);
 
   if (codesToFetch.length > 0) {
     const rows = await FixedFoodRanking.findAll({
@@ -20,7 +20,7 @@ export async function getFixedRanking(localeId: string, foods: string[]): Promis
       where: { localeId, foodCode: codesToFetch },
     });
 
-    const newCacheEntries = rows.map((row) => ({
+    const newCacheEntries = rows.map(row => ({
       key: toCacheKey(localeId, row.foodCode),
       val: row.rank,
     }));

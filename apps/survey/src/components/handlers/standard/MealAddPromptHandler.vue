@@ -3,7 +3,7 @@
     v-model="state"
     v-bind="{ defaultMeals, hasMeals, prompt, section }"
     @action="action"
-  ></meal-add-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -45,11 +45,12 @@ export default defineComponent({
 
     const hasMeals = computed(() => survey.hasMeals);
     const defaultMeals = computed(
-      () => survey.defaultSchemeMeals?.map((meal) => meal.name[i18n.locale] ?? meal.name.en) ?? []
+      () => survey.defaultSchemeMeals?.map(meal => meal.name[i18n.locale] ?? meal.name.en) ?? [],
     );
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commitAnswer();
+      if (type === 'next')
+        commitAnswer();
 
       if (type === 'cancel') {
         survey.setAutoSelection();

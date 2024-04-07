@@ -2,8 +2,7 @@
   <split-food-prompt
     v-bind="{ food: freeTextFood(), meal, prompt, section, suggestions }"
     @action="action"
-  >
-  </split-food-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -45,7 +44,7 @@ export default defineComponent({
     const suggestions = computed(() =>
       freeTextFood()
         .description.split(/(?:,| and | with )+/)
-        .map((item) => item.trim())
+        .map(item => item.trim()),
     );
 
     const single = () => {
@@ -91,7 +90,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      if (suggestions.value.length === 1) single();
+      if (suggestions.value.length === 1)
+        single();
     });
 
     return { action, freeTextFood, meal, separate, single, suggestions };

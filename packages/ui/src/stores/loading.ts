@@ -7,14 +7,14 @@ export type LoadingState = {
 export const useLoading = defineStore('loading', {
   state: (): LoadingState => ({ items: [] }),
   getters: {
-    isLoading: (state) => !!state.items.length,
+    isLoading: state => !!state.items.length,
   },
   actions: {
     addItem(item: string) {
       this.items.push(item);
     },
     removeItem(item: string) {
-      this.items = this.items.filter((i) => i !== item);
+      this.items = this.items.filter(i => i !== item);
     },
     reset() {
       this.$reset();

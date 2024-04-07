@@ -7,11 +7,11 @@ import store from './store.test';
 import update from './update.test';
 
 export default () => {
-  describe('GET /api/admin/tasks', browse);
-  describe('POST /api/admin/tasks', store);
-  describe('GET /api/admin/tasks/:taskId', read);
-  describe('GET /api/admin/tasks/:taskId/edit', edit);
-  describe('PUT /api/admin/tasks/:taskId', update);
-  describe('DELETE /api/admin/tasks/:taskId', destroy);
-  describe('POST /api/admin/tasks/:taskId/run', run);
+  describe('get /api/admin/tasks', browse);
+  describe('pOST /api/admin/tasks', store);
+  describe('get /api/admin/tasks/:taskId', read);
+  describe('get /api/admin/tasks/:taskId/edit', edit);
+  describe('put /api/admin/tasks/:taskId', update);
+  describe('delete /api/admin/tasks/:taskId', destroy);
+  describe('pOST /api/admin/tasks/:taskId/run', run);
 };

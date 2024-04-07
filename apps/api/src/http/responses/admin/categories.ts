@@ -7,7 +7,7 @@ import { InternalServerError } from '@intake24/api/http/errors';
 
 import { foodsResponse } from './foods';
 
-export const categoryResponse = (category: CategoryLocal): CategoryListEntry => {
+export function categoryResponse(category: CategoryLocal): CategoryListEntry {
   const { id, categoryCode: code, localeId, name, main } = category;
 
   if (!main)
@@ -16,15 +16,17 @@ export const categoryResponse = (category: CategoryLocal): CategoryListEntry => 
   const { name: englishName, isHidden } = main;
 
   return { id, code, localeId, name, englishName, isHidden };
-};
+}
 
-export const categoryContentsResponse = ({
+export function categoryContentsResponse({
   categories,
   foods,
 }: {
   categories: CategoryLocal[];
   foods: FoodLocal[];
-}): CategoryContentsResponse => ({
-  categories: categories.map(categoryResponse),
-  foods: foods.map(foodsResponse),
-});
+}): CategoryContentsResponse {
+  return {
+    categories: categories.map(categoryResponse),
+    foods: foods.map(foodsResponse),
+  };
+}

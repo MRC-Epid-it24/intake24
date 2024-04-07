@@ -1,8 +1,6 @@
+import fs from 'node:fs/promises';
 import os from 'node:os';
-
-import fs from 'fs/promises';
-import path from 'path';
-import * as process from 'process';
+import path from 'node:path';
 
 import type { CredentialsV3 } from '@intake24/api-client-v3';
 import { ApiClientV3 } from '@intake24/api-client-v3';
@@ -22,9 +20,8 @@ const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;
 function getRequiredEnv(key: string): string {
   const value = process.env[key];
 
-  if (value === undefined) {
+  if (value === undefined)
     throw new Error(`Required environment variable ${key} is missing.`);
-  }
 
   return value;
 }
@@ -32,8 +29,8 @@ function getRequiredEnv(key: string): string {
 export default async (version: string, options: PackageExportOptions): Promise<void> => {
   let credentials: CredentialsV3 | undefined;
 
-  const username = process.env['V3_API_USERNAME'];
-  const password = process.env['V3_API_PASSWORD'];
+  const username = process.env.V3_API_USERNAME;
+  const password = process.env.V3_API_PASSWORD;
 
   if (username !== undefined && password !== undefined) {
     credentials = {
@@ -43,11 +40,11 @@ export default async (version: string, options: PackageExportOptions): Promise<v
   }
 
   const apiBaseUrl = getRequiredEnv('V3_API_BASE_URL');
-  const refreshToken = process.env['V3_API_REFRESH_TOKEN'];
-  const maxConcurrentRequestsEnv = process.env['V3_API_MAX_CONCURRENT_REQUESTS'];
-  const maxConcurrentRequests =
-    maxConcurrentRequestsEnv !== undefined
-      ? parseInt(maxConcurrentRequestsEnv)
+  const refreshToken = process.env.V3_API_REFRESH_TOKEN;
+  const maxConcurrentRequestsEnv = process.env.V3_API_MAX_CONCURRENT_REQUESTS;
+  const maxConcurrentRequests
+    = maxConcurrentRequestsEnv !== undefined
+      ? Number.parseInt(maxConcurrentRequestsEnv)
       : DEFAULT_MAX_CONCURRENT_REQUESTS;
 
   const logger = mainLogger.child({ service: 'V3 packager' });
@@ -57,7 +54,7 @@ export default async (version: string, options: PackageExportOptions): Promise<v
     logger,
     maxConcurrentRequests,
     refreshToken,
-    credentials
+    credentials,
   );
 
   const tempDirPath = await fs.mkdtemp(path.join(os.tmpdir(), TEMP_DIR_PREFIX));
@@ -66,17 +63,14 @@ export default async (version: string, options: PackageExportOptions): Promise<v
 
   const exporter = new ExporterV3(apiClient, logger, tempDirPath);
 
-  if (options.skipFoods !== undefined) {
+  if (options.skipFoods !== undefined)
     exporter.skipFoods(options.skipFoods);
-  }
 
-  if (options.locale !== undefined) {
+  if (options.locale !== undefined)
     await exporter.addLocales(options.locale);
-  }
 
-  if (options.asServed !== undefined) {
+  if (options.asServed !== undefined)
     await exporter.addAsServedSets(options.asServed);
-  }
 
   await exporter.export();
 };

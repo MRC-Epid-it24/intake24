@@ -14,10 +14,12 @@
         <v-toolbar-title>
           {{ $t(`survey-schemes.data-export.sections.${section?.id}`) }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-toolbar-items>
           <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-            <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+            <v-icon left>
+              $success
+            </v-icon>{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -40,9 +42,7 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-subtitle class="mb-1">
-                        <span class="text--secondary"
-                          >{{ $t('survey-schemes.data-export.fields.id') }}:</span
-                        >
+                        <span class="text--secondary">{{ $t('survey-schemes.data-export.fields.id') }}:</span>
                         {{ field.id }}
                       </v-list-item-subtitle>
                       <v-list-item-subtitle>
@@ -58,12 +58,16 @@
                         :title="$t('common.action.edit')"
                         @click.stop="editOpen(index, field)"
                       >
-                        <v-icon color="secondary lighten-2">$edit</v-icon>
+                        <v-icon color="secondary lighten-2">
+                          $edit
+                        </v-icon>
                       </v-btn>
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-btn icon :title="$t('common.action.remove')" @click.stop="remove(index)">
-                        <v-icon color="error">$delete</v-icon>
+                        <v-icon color="error">
+                          $delete
+                        </v-icon>
                       </v-btn>
                     </v-list-item-action>
                   </v-list-item>
@@ -71,13 +75,13 @@
               </draggable>
             </v-list>
           </v-col>
-          <v-divider vertical></v-divider>
+          <v-divider vertical />
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('survey-schemes.data-export.available') }}</v-card-title>
             <data-export-nutrients
               v-if="section?.id === 'foodNutrients'"
               v-model="fetchedRefFields"
-            ></data-export-nutrients>
+            />
             <v-text-field
               v-model="search"
               clearable
@@ -85,7 +89,7 @@
               :label="$t('survey-schemes.data-export.fields.label')"
               outlined
               prepend-inner-icon="$search"
-            ></v-text-field>
+            />
             <v-list two-line>
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
@@ -96,9 +100,7 @@
                 >
                   <v-list-item-content>
                     <v-list-item-subtitle class="mb-1">
-                      <span class="text--secondary"
-                        >{{ $t('survey-schemes.data-export.fields.id') }}:</span
-                      >
+                      <span class="text--secondary">{{ $t('survey-schemes.data-export.fields.id') }}:</span>
                       {{ field.id }}
                     </v-list-item-subtitle>
                     <v-list-item-subtitle>
@@ -110,7 +112,9 @@
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn icon :title="$t('common.action.add')" @click.stop="add(field)">
-                      <v-icon color="info">$add</v-icon>
+                      <v-icon color="info">
+                        $add
+                      </v-icon>
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
@@ -137,7 +141,7 @@
                   :label="$t('survey-schemes.data-export.fields.id')"
                   name="id"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -146,17 +150,21 @@
                   :label="$t('survey-schemes.data-export.fields.label')"
                   name="label"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
           </v-card-text>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="editReset">
-              <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+              <v-icon left>
+                $cancel
+              </v-icon>{{ $t('common.action.cancel') }}
             </v-btn>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn class="font-weight-bold" color="info" text @click.stop="editConfirm">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -177,7 +185,7 @@ import { DataExportNutrients } from '@intake24/admin/components/schemes';
 export default defineComponent({
   name: 'DataExportSection',
 
-  components: { draggable, DataExportNutrients },
+  components: { Draggable: draggable, DataExportNutrients },
 
   props: {
     section: {
@@ -204,31 +212,16 @@ export default defineComponent({
     const fetchedRefFields = ref<ExportField[]>([]);
 
     const availableFields = computed(() => {
-      const fieldIds = fields.value.map((field) => field.id);
+      const fieldIds = fields.value.map(field => field.id);
       return (
         props.section?.id === 'foodNutrients' ? fetchedRefFields.value : props.refFields
-      ).filter((field) => !fieldIds.includes(field.id));
+      ).filter(field => !fieldIds.includes(field.id));
     });
-
-    const loadFilteredFields = () => {
-      filteredFields.value = search.value
-        ? availableFields.value.filter(
-            (field) => !!field.label.match(new RegExp(search.value, 'i'))
-          )
-        : [...availableFields.value];
-
-      visibleFields.value = [];
-      loadMoreFields();
-    };
-
-    const fieldsAvailableToLoad = computed(
-      () => visibleFields.value.length < filteredFields.value.length
-    );
 
     const loadMoreFields = () => {
       const startIndex = visibleFields.value.length;
-      const endIndex =
-        startIndex + 15 > filteredFields.value.length
+      const endIndex
+        = startIndex + 15 > filteredFields.value.length
           ? filteredFields.value.length
           : startIndex + 15;
 
@@ -236,8 +229,24 @@ export default defineComponent({
       visibleFields.value.push(...items);
     };
 
+    const loadFilteredFields = () => {
+      filteredFields.value = search.value
+        ? availableFields.value.filter(
+          field => !!field.label.match(new RegExp(search.value, 'i')),
+        )
+        : [...availableFields.value];
+
+      visibleFields.value = [];
+      loadMoreFields();
+    };
+
+    const fieldsAvailableToLoad = computed(
+      () => visibleFields.value.length < filteredFields.value.length,
+    );
+
     const tryLoadMoreFields = (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && fieldsAvailableToLoad) loadMoreFields();
+      if (entries[0].isIntersecting && fieldsAvailableToLoad)
+        loadMoreFields();
     };
 
     watch(
@@ -245,7 +254,7 @@ export default defineComponent({
       () => {
         loadFilteredFields();
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     watchDebounced(
@@ -253,7 +262,7 @@ export default defineComponent({
       () => {
         loadFilteredFields();
       },
-      { debounce: 500, maxWait: 1000 }
+      { debounce: 500, maxWait: 1000 },
     );
 
     return {
@@ -274,10 +283,12 @@ export default defineComponent({
 
   watch: {
     dialog(val: boolean) {
-      if (!val) this.$emit('close');
+      if (!val)
+        this.$emit('close');
     },
     section(val) {
-      if (!val) return;
+      if (!val)
+        return;
 
       this.fields = [...val.fields];
       this.dialog = true;
@@ -296,7 +307,8 @@ export default defineComponent({
     editConfirm() {
       const { index, field } = this.editDialog;
 
-      if (index !== -1) this.fields.splice(index, 1, field);
+      if (index !== -1)
+        this.fields.splice(index, 1, field);
 
       this.editReset();
     },
@@ -318,7 +330,8 @@ export default defineComponent({
     },
 
     save() {
-      if (!this.section) return;
+      if (!this.section)
+        return;
 
       this.$emit('update', { id: this.section.id, fields: this.fields });
       this.close();

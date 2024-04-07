@@ -5,7 +5,7 @@ describe('cron rule', () => {
     expect(cron('* * * * *')).toBeTrue();
   });
 
-  it('should return true for valid cron', () => {
+  it('should return false for invalid cron', () => {
     expect(cron('this is not a cron entry')).toBeFalse();
   });
 });

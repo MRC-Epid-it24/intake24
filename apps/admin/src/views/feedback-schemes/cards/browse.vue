@@ -1,9 +1,9 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <template #actions>
-      <preview :feedback-scheme="currentFeedbackScheme"></preview>
+      <preview :feedback-scheme="currentFeedbackScheme" />
     </template>
-    <card-list v-model="form.cards" :nutrient-types="refs?.nutrientTypes"></card-list>
+    <card-list v-model="form.cards" :nutrient-types="refs?.nutrientTypes" />
   </layout>
 </template>
 

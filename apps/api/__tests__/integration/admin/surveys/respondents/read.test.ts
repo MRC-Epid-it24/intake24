@@ -9,10 +9,7 @@ import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-const assertRespondentResponse = async (
-  url: string,
-  output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>
-) => {
+async function assertRespondentResponse(url: string, output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>) {
   const { status, body } = await request(suite.app)
     .get(url)
     .set('Accept', 'application/json')
@@ -35,7 +32,7 @@ const assertRespondentResponse = async (
     }));
     expect(fields).toIncludeSameMembers(outputCustomFields);
   }
-};
+}
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
@@ -75,7 +72,7 @@ export default () => {
     invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

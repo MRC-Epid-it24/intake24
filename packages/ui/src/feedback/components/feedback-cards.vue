@@ -2,11 +2,11 @@
   <v-container class="container-max">
     <v-row class="d-print-none" justify="center">
       <v-col v-for="card in cards" :key="`screen-${card.id}`" cols="12" md="4" sm="6">
-        <screen-card :parameters="card"></screen-card>
+        <screen-card :parameters="card" />
       </v-col>
     </v-row>
     <div v-for="card in cards" :key="`print-${card.id}`" class="d-none d-print-block">
-      <print-card :parameters="card"></print-card>
+      <print-card :parameters="card" />
     </div>
   </v-container>
 </template>

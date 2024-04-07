@@ -1,4 +1,4 @@
-export const copyPairwiseAssociationsQueries = () => {
+export function copyPairwiseAssociationsQueries() {
   const occurrences = `INSERT INTO pairwise_associations_occurrences (locale_id, food_code, occurrences) \
 SELECT :localeCode, food_code, occurrences FROM pairwise_associations_occurrences WHERE locale_id = :sourceLocaleCode;`;
 
@@ -13,4 +13,4 @@ SELECT :localeCode, transactions_count FROM pairwise_associations_transactions_c
     coOccurrences,
     transactionsCount,
   };
-};
+}

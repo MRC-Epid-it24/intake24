@@ -5,21 +5,21 @@ module.exports = {
         'survey_submission_foods',
         'brand',
         { allowNull: true, type: Sequelize.STRING(128) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'survey_submission_foods',
         'barcode',
         { allowNull: true, type: Sequelize.STRING(128) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'survey_submission_missing_foods',
         'barcode',
         { allowNull: true, type: Sequelize.STRING(128) },
-        { transaction }
+        { transaction },
       );
     }),
 
@@ -27,14 +27,14 @@ module.exports = {
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_foods SET brand = '' WHERE brand IS NULL;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'survey_submission_foods',
         'brand',
         { allowNull: false, type: Sequelize.STRING(128) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeColumn('survey_submission_foods', 'barcode', { transaction });

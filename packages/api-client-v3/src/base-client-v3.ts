@@ -1,7 +1,8 @@
+import fs from 'node:fs';
+
 import type { AxiosResponse } from 'axios';
 import type { Logger } from 'winston';
 import axios, { Axios, HttpStatusCode } from 'axios';
-import fs from 'fs';
 import pLimit from 'p-limit';
 
 import type { CredentialsV3, RefreshResponseV3, SignInRequestV3, SignInResponseV3 } from './types';
@@ -27,7 +28,7 @@ export class BaseClientV3 {
     logger: Logger,
     maxConcurrentRequests: number,
     refreshToken?: string,
-    credentials?: CredentialsV3
+    credentials?: CredentialsV3,
   ) {
     this.apiBaseUrl = apiBaseUrl;
     this.credentials = credentials;
@@ -65,14 +66,14 @@ export class BaseClientV3 {
       },
       (error) => {
         throw error;
-      }
+      },
     );
 
     this.accessClient.interceptors.response.use(
       async (response) => {
         if (response.status === HttpStatusCode.Unauthorized) {
           this.logger.debug(
-            `Access token rejected for request: ${response.config.method} ${response.config.url}`
+            `Access token rejected for request: ${response.config.method} ${response.config.url}`,
           );
 
           await this.refresh();
@@ -81,19 +82,19 @@ export class BaseClientV3 {
             this.rawClient.request({
               ...response.config,
               headers: { ...response.config.headers, 'X-Auth-Token': this.accessToken },
-            })
+            }),
           );
 
-          if (response2.status === HttpStatusCode.Unauthorized) {
+          if (response2.status === HttpStatusCode.Unauthorized)
             throw new Error('Access token rejected by the API server again after refreshing.');
-          }
 
           return response2;
-        } else return response;
+        }
+        else { return response; }
       },
       (error) => {
         throw error;
-      }
+      },
     );
   }
 
@@ -112,9 +113,10 @@ export class BaseClientV3 {
 
     if (response.status === HttpStatusCode.Ok) {
       this.accessToken = response.data.accessToken;
-    } else if (response.status === HttpStatusCode.Unauthorized) {
+    }
+    else if (response.status === HttpStatusCode.Unauthorized) {
       this.logger.debug(
-        'Refresh token rejected by the API server. Trying to sign in to get a new one.'
+        'Refresh token rejected by the API server. Trying to sign in to get a new one.',
       );
 
       await this.signIn();
@@ -122,17 +124,17 @@ export class BaseClientV3 {
       const response2 = await this.requestLimit(() =>
         this.rawClient.post<RefreshResponseV3>('/refresh', undefined, {
           headers: { 'X-Auth-Token': this.refreshToken },
-        })
+        }),
       );
 
-      if (response2.status === HttpStatusCode.Ok) {
+      if (response2.status === HttpStatusCode.Ok)
         this.accessToken = response2.data.accessToken;
-      } else if (response2.status === HttpStatusCode.Unauthorized) {
+      else if (response2.status === HttpStatusCode.Unauthorized)
         throw new Error('Received a new refresh token, but the API server still rejected it.');
-      } else {
+      else
         throw new Error(`Unexpected status code: ${response2.status}`);
-      }
-    } else {
+    }
+    else {
       throw new Error(`Unexpected status code: ${response.status}`);
     }
 
@@ -145,7 +147,8 @@ export class BaseClientV3 {
       const response = await this.refreshRequest;
       this.refreshRequest = undefined;
       return response;
-    } else {
+    }
+    else {
       return this.refreshRequest;
     }
   }
@@ -153,7 +156,7 @@ export class BaseClientV3 {
   private async signInImpl(): Promise<void> {
     if (this.credentials === undefined) {
       throw new Error(
-        'Cannot sign in because the Intake24 user name or password is not defined. Check for missing environment or configuration variables.'
+        'Cannot sign in because the Intake24 user name or password is not defined. Check for missing environment or configuration variables.',
       );
     }
 
@@ -174,7 +177,7 @@ export class BaseClientV3 {
         break;
       case HttpStatusCode.Unauthorized:
         throw new Error(
-          'Authentication credentials (user name and password) rejected by the API server.'
+          'Authentication credentials (user name and password) rejected by the API server.',
         );
       default:
         throw new Error(`Unexpected status code: ${response.status}`);
@@ -186,7 +189,8 @@ export class BaseClientV3 {
       this.signInRequest = this.signInImpl();
       await this.signInRequest;
       this.signInRequest = undefined;
-    } else {
+    }
+    else {
       return this.signInRequest;
     }
   }
@@ -196,15 +200,15 @@ export class BaseClientV3 {
 
     this.logger.error(message);
 
-    if (response.data !== undefined) {
+    if (response.data !== undefined)
       this.logger.error(`Response body: ${JSON.stringify(response.data)}`);
-    }
 
     return new Error(message);
   }
 
   private checkStatus<T>(response: AxiosResponse<T>, expectedStatus: number[]): void {
-    if (!expectedStatus.includes(response.status)) throw this.onUnexpectedStatus(response);
+    if (!expectedStatus.includes(response.status))
+      throw this.onUnexpectedStatus(response);
   }
 
   private acceptNotFound<T>(response: AxiosResponse<T>): T | null {
@@ -221,10 +225,10 @@ export class BaseClientV3 {
   public async get<Res, Req = any>(
     endpoint: string,
     body?: Req,
-    expectedStatus: number[] = [HttpStatusCode.Ok]
+    expectedStatus: number[] = [HttpStatusCode.Ok],
   ): Promise<Res> {
     const response = await this.requestLimit(() =>
-      this.accessClient.get<Res>(endpoint, { data: body })
+      this.accessClient.get<Res>(endpoint, { data: body }),
     );
     this.checkStatus(response, expectedStatus);
     return response.data;
@@ -232,18 +236,19 @@ export class BaseClientV3 {
 
   public async getOptional<Res, Req = any>(endpoint: string, body?: Req): Promise<Res | null> {
     const response = await this.requestLimit(() =>
-      this.accessClient.get<Res>(endpoint, { data: body })
+      this.accessClient.get<Res>(endpoint, { data: body }),
     );
     this.checkStatus(response, [HttpStatusCode.Ok, HttpStatusCode.NotFound]);
-    if (response.status === HttpStatusCode.NotFound) return null;
+    if (response.status === HttpStatusCode.NotFound)
+      return null;
     return response.data;
   }
 
-  public async getFile<Req = any>(endpoint: string, destPath: string, body?: Req): Promise<void> {
+  public async getFile<Req = any>(endpoint: string, destPath: string, _body?: Req): Promise<void> {
     const response = await this.requestLimit(() =>
       this.accessClient.get(endpoint, {
         responseType: 'stream',
-      })
+      }),
     );
 
     this.checkStatus(response, [HttpStatusCode.Ok]);

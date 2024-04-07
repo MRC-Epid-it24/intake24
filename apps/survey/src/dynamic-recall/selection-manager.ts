@@ -4,15 +4,19 @@ import { getFoodIndexRequired, getMealIndexRequired } from '@intake24/survey/uti
 
 import type { SurveyStore } from '../stores';
 
-const makeMealSelection = (mealId: string): Selection => ({
-  element: { type: 'meal', mealId },
-  mode: 'auto',
-});
+function makeMealSelection(mealId: string): Selection {
+  return {
+    element: { type: 'meal', mealId },
+    mode: 'auto',
+  };
+}
 
-const makeFoodSelection = (foodId: string): Selection => ({
-  element: { type: 'food', foodId },
-  mode: 'auto',
-});
+function makeFoodSelection(foodId: string): Selection {
+  return {
+    element: { type: 'food', foodId },
+    mode: 'auto',
+  };
+}
 
 export default class SelectionManager {
   private store;
@@ -26,8 +30,8 @@ export default class SelectionManager {
 
   private mealPromptsAvailable(mealId: string, withSelection: Selection): boolean {
     return !!(
-      this.promptManager.nextMealSectionPrompt('preFoods', mealId, withSelection) ||
-      this.promptManager.nextMealSectionPrompt('postFoods', mealId, withSelection)
+      this.promptManager.nextMealSectionPrompt('preFoods', mealId, withSelection)
+      || this.promptManager.nextMealSectionPrompt('postFoods', mealId, withSelection)
     );
   }
 
@@ -59,11 +63,13 @@ export default class SelectionManager {
       ) {
         const linkedFoodId = meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex].id;
         const selection = makeFoodSelection(linkedFoodId);
-        if (this.foodPromptsAvailable(linkedFoodId, selection)) return selection;
+        if (this.foodPromptsAvailable(linkedFoodId, selection))
+          return selection;
       }
 
       const selection = makeFoodSelection(foodId);
-      if (this.foodPromptsAvailable(foodId, selection)) return selection;
+      if (this.foodPromptsAvailable(foodId, selection))
+        return selection;
     }
 
     return undefined;
@@ -75,7 +81,8 @@ export default class SelectionManager {
 
     for (let i = mealIndex + 1; i < meals.length; ++i) {
       const selection = this.tryAnyFoodInMeal(meals[i].id);
-      if (selection !== undefined) return selection;
+      if (selection !== undefined)
+        return selection;
     }
   }
 
@@ -85,7 +92,8 @@ export default class SelectionManager {
     for (let mealIndex = 0; mealIndex < meals.length; mealIndex++) {
       const selection = this.tryAnyFoodInMeal(meals[mealIndex].id);
 
-      if (selection !== undefined) return selection;
+      if (selection !== undefined)
+        return selection;
     }
     return undefined;
   }
@@ -97,7 +105,8 @@ export default class SelectionManager {
       const mealId = meals[mealIndex].id;
       const selection = makeMealSelection(mealId);
 
-      if (this.mealPromptsAvailable(mealId, selection)) return selection;
+      if (this.mealPromptsAvailable(mealId, selection))
+        return selection;
     }
     return undefined;
   }
@@ -117,7 +126,8 @@ export default class SelectionManager {
       for (let i = foodIndex.linkedFoodIndex + 1; i < parentFood.linkedFoods.length; ++i) {
         const nextLinkedFoodId = parentFood.linkedFoods[i].id;
         const selection = makeFoodSelection(nextLinkedFoodId);
-        if (this.foodPromptsAvailable(nextLinkedFoodId, selection)) selection;
+        if (this.foodPromptsAvailable(nextLinkedFoodId, selection))
+          return selection;
       }
     }
 
@@ -129,10 +139,11 @@ export default class SelectionManager {
     const foodIndex = getFoodIndexRequired(meals, foodId);
     const meal = meals[foodIndex.mealIndex];
 
-    const nextLinkedOrParentSelection =
-      this.trySubsequentLinkedFood(foodId) ?? this.tryParentFood(foodId);
+    const nextLinkedOrParentSelection
+      = this.trySubsequentLinkedFood(foodId) ?? this.tryParentFood(foodId);
 
-    if (nextLinkedOrParentSelection !== undefined) return nextLinkedOrParentSelection;
+    if (nextLinkedOrParentSelection !== undefined)
+      return nextLinkedOrParentSelection;
 
     for (let i = 0; i < foodIndex.foodIndex + 1; ++i) {
       const nextFood = meal.foods[i];
@@ -141,11 +152,13 @@ export default class SelectionManager {
       for (let li = 0; li < nextFood.linkedFoods.length; ++li) {
         const linkedFoodId = nextFood.linkedFoods[li].id;
         const selection = makeFoodSelection(linkedFoodId);
-        if (this.foodPromptsAvailable(linkedFoodId, selection)) return selection;
+        if (this.foodPromptsAvailable(linkedFoodId, selection))
+          return selection;
       }
 
       const selection = makeFoodSelection(nextFoodId);
-      if (this.foodPromptsAvailable(nextFoodId, selection)) return selection;
+      if (this.foodPromptsAvailable(nextFoodId, selection))
+        return selection;
     }
 
     return undefined;
@@ -167,29 +180,30 @@ export default class SelectionManager {
 
     if (selection.element === null) {
       return this.firstAvailableSelection();
-    } else {
+    }
+    else {
       switch (selection.element.type) {
         case 'meal': {
           const mealId = selection.element.mealId;
 
           return (
-            this.tryAnyFoodInMeal(mealId) ??
-            this.tryAnyFoodInSubsequentMeals(mealId) ??
-            this.firstAvailableSelection()
+            this.tryAnyFoodInMeal(mealId)
+            ?? this.tryAnyFoodInSubsequentMeals(mealId)
+            ?? this.firstAvailableSelection()
           );
         }
 
         case 'food': {
           const foodId = selection.element.foodId;
-          const mealId =
-            this.store.meals[getFoodIndexRequired(this.store.meals, foodId).mealIndex].id;
+          const mealId
+            = this.store.meals[getFoodIndexRequired(this.store.meals, foodId).mealIndex].id;
 
           return (
-            this.trySubsequentFoodInMeal(foodId) ??
-            this.tryAnyFoodInMeal(mealId) ??
-            this.selectMealIfPromptsAvailable(mealId) ??
-            this.tryAnyFoodInSubsequentMeals(mealId) ??
-            this.firstAvailableSelection()
+            this.trySubsequentFoodInMeal(foodId)
+            ?? this.tryAnyFoodInMeal(mealId)
+            ?? this.selectMealIfPromptsAvailable(mealId)
+            ?? this.tryAnyFoodInSubsequentMeals(mealId)
+            ?? this.firstAvailableSelection()
           );
         }
       }

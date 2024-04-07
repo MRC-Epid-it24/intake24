@@ -1,7 +1,6 @@
 import './bootstrap';
 
 import { Argument, Command, Option } from 'commander';
-import * as process from 'process';
 
 import buildFrLocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
@@ -22,7 +21,7 @@ import {
   importerSpecificModulesExecutionOptions,
 } from './commands/packager/importer-v4';
 
-const run = async () => {
+async function run() {
   const program = new Command();
 
   program.name('Intake24 CLI');
@@ -54,7 +53,7 @@ const run = async () => {
   program
     .command('hash-password')
     .description(
-      'Generate a BCrypt password hash to create/update user passwords manually in the database.'
+      'Generate a BCrypt password hash to create/update user passwords manually in the database.',
     )
     .argument('<password>', 'Plain text password to hash.')
     .action(async (pwd) => {
@@ -64,7 +63,7 @@ const run = async () => {
   program
     .command('find-portion-images')
     .description(
-      'Find portion size images that represent the amount of food having energy value closest to the specified target value'
+      'Find portion size images that represent the amount of food having energy value closest to the specified target value',
     )
     .requiredOption('-c, --config [path]', 'config file path')
     .requiredOption('-o, --output [path]', 'output file path')
@@ -74,7 +73,7 @@ const run = async () => {
 
   const skipFoodsOption = new Option(
     '-sf, --skip-foods [food-ids...]',
-    'Skip foods having these codes (typically for debug purposes)'
+    'Skip foods having these codes (typically for debug purposes)',
   );
 
   skipFoodsOption.required = true;
@@ -85,7 +84,7 @@ const run = async () => {
     .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
     .option(
       '-as, --as-served [set-ids...]',
-      'Export as served portion size images for given set identifiers'
+      'Export as served portion size images for given set identifiers',
     )
     .addOption(skipFoodsOption)
     .requiredOption('-l, --locale <locale-ids...>', 'Export all data for the given locale ids')
@@ -102,12 +101,12 @@ const run = async () => {
 
   const conflictResolutionOption = new Option(
     '-c, --on-conflict [on-conflict-option]',
-    'Conflict resolution strategy'
+    'Conflict resolution strategy',
   ).choices(conflictResolutionOptions);
 
   const specificModulesExecutionOption = new Option(
     '-m, --modules-for-execution [modules-for-execution-option...]',
-    'Specific modules to execute'
+    'Specific modules to execute',
   ).choices(importerSpecificModulesExecutionOptions);
 
   conflictResolutionOption.required = true;
@@ -158,21 +157,21 @@ const run = async () => {
     .requiredOption('-svg, --selection-svg [selection-svg]', 'Selection image map SVG')
     .requiredOption(
       '-img, --selection-base-image [selection-base-image]',
-      'Selection image map base image'
+      'Selection image map base image',
     )
     .requiredOption('-s, --scales-csv [scales-csv]', 'Drink scales description CSV')
     .requiredOption('-o, --output-dir [output-dir]', 'Output package directory')
     .option(
       '-ow, --overwrite',
       'Overwrite existing records in destination package directory',
-      false
+      false,
     )
     .action(async (options) => {
       await convertDrinkScale(options);
     });
 
   await program.parseAsync(process.argv);
-};
+}
 
 run()
   .catch((err) => {

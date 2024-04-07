@@ -14,7 +14,7 @@ import type {
 import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
-export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
+export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   const survey = useSurvey();
 
   const localeId = computed(() => survey.localeId);
@@ -23,7 +23,8 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   const foodOptional = computed(() => survey.selectedFoodOptional);
   const parentFoodOptional = computed(() => {
     const food = survey.selectedParentFood;
-    if (!food) return undefined;
+    if (!food)
+      return undefined;
 
     if (food.type !== 'encoded-food' && food.type !== 'recipe-builder') {
       console.log(food);
@@ -120,22 +121,23 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   const conversionFactor = computed(() => portionSize().conversionFactor);
 
   const parameters = computed(
-    () => portionSize().parameters as unknown as PortionSizeParameters[T]
+    () => portionSize().parameters as unknown as PortionSizeParameters[T],
   );
 
   const linkedQuantityCategories = (data: UserFoodData) =>
-    survey.linkedQuantity?.parent.filter((cat) => data.categories.includes(cat.code)) ?? [];
+    survey.linkedQuantity?.parent.filter(cat => data.categories.includes(cat.code)) ?? [];
 
   const linkedParent = computed(() => {
-    const source = encodedFood().data.categories.find((cat) =>
-      survey.linkedQuantity?.source.includes(cat)
+    const source = encodedFood().data.categories.find(cat =>
+      survey.linkedQuantity?.source.includes(cat),
     );
-    if (!source) return undefined;
+    if (!source)
+      return undefined;
 
     if (
-      parentFoodOptional.value?.type === 'encoded-food' &&
-      parentFoodOptional.value.portionSize?.method === 'guide-image' &&
-      parentFoodOptional.value.portionSize.quantity > 1
+      parentFoodOptional.value?.type === 'encoded-food'
+      && parentFoodOptional.value.portionSize?.method === 'guide-image'
+      && parentFoodOptional.value.portionSize.quantity > 1
     ) {
       return {
         food: parentFoodOptional.value,
@@ -145,20 +147,21 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
 
     if (parentFoodOptional.value?.type === 'recipe-builder') {
       const food = parentFoodOptional.value.linkedFoods.find(
-        (food) =>
-          food.type === 'encoded-food' &&
-          food.portionSize?.method === 'guide-image' &&
-          food.portionSize.quantity > 1
+        food =>
+          food.type === 'encoded-food'
+          && food.portionSize?.method === 'guide-image'
+          && food.portionSize.quantity > 1,
       ) as EncodedFood | undefined;
 
-      if (food) return { food, categories: linkedQuantityCategories(food.data) };
+      if (food)
+        return { food, categories: linkedQuantityCategories(food.data) };
     }
 
     return undefined;
   });
 
   const initializeRecipeComponents = (steps: number[]) =>
-    steps.map((step) => ({ ingredients: [], order: step }));
+    steps.map(step => ({ ingredients: [], order: step }));
 
   return {
     food,
@@ -182,4 +185,4 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     conversionFactor,
     parameters,
   };
-};
+}

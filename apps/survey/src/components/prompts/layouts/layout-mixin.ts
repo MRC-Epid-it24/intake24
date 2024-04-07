@@ -50,10 +50,11 @@ export default defineComponent({
 
     const meals = computed(() => survey.data.meals);
     const showSummary = computed(() => {
-      if (props.prompt.component === 'submit-prompt' && props.prompt.review['mobile'] !== false)
+      if (props.prompt.component === 'submit-prompt' && props.prompt.review.mobile !== false)
         return false;
 
-      if (survey.hasFinished) return false;
+      if (survey.hasFinished)
+        return false;
 
       return !['preMeals'].includes(props.section);
     });
@@ -63,7 +64,7 @@ export default defineComponent({
       const messages = i18n.getLocaleMessage(locale);
       const defaultPromptMessages = get(
         defaultMessages.getMessages(locale),
-        `prompts.${type.value}`
+        `prompts.${type.value}`,
       );
 
       Object.entries(defaultPromptMessages).forEach(([key, value]) => {
@@ -99,7 +100,7 @@ export default defineComponent({
     },
 
     desktopActions(): ActionItem[] {
-      return this.prompt.actions?.items.filter((action) => action.layout.includes('desktop')) ?? [];
+      return this.prompt.actions?.items.filter(action => action.layout.includes('desktop')) ?? [];
     },
 
     hasDefaultSlot(): boolean {
@@ -115,7 +116,7 @@ export default defineComponent({
     },
 
     mobileActions(): ActionItem[] {
-      return this.prompt.actions?.items.filter((action) => action.layout.includes('mobile')) ?? [];
+      return this.prompt.actions?.items.filter(action => action.layout.includes('mobile')) ?? [];
     },
 
     i18n() {

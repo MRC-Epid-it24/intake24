@@ -20,7 +20,8 @@ export default class Metaphone3Encoder implements PhoneticEncoder {
 
     result.push(this.metaphone3.GetMetaph());
 
-    if (this.metaphone3.GetAlternateMetaph()) result.push(this.metaphone3.GetAlternateMetaph());
+    if (this.metaphone3.GetAlternateMetaph())
+      result.push(this.metaphone3.GetAlternateMetaph());
 
     return result;
   }

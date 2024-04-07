@@ -28,7 +28,7 @@
                 name="name"
                 outlined
                 @input="form.errors.clear('name')"
-              ></v-text-field>
+              />
               <v-btn block class="my-4" color="secondary" rounded type="submit">
                 {{ $t('user.mfa.devices.verify') }}
               </v-btn>
@@ -70,7 +70,8 @@ export default defineComponent({
   methods: {
     async loadDuoRegistration() {
       const { state: challengeId, code: token } = this.$route.query;
-      if (typeof challengeId !== 'string' || typeof token !== 'string') return;
+      if (typeof challengeId !== 'string' || typeof token !== 'string')
+        return;
 
       this.form.challengeId = challengeId;
       this.form.token = token;

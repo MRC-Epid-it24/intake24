@@ -1,17 +1,23 @@
 <template>
   <v-tabs vertical>
     <v-btn class="my-4" color="secondary" @click="add">
-      <v-icon left>$add</v-icon>
+      <v-icon left>
+        $add
+      </v-icon>
       {{ $t(`feedback-schemes.demographic-groups.sectors.add`) }}
     </v-btn>
     <v-tab v-for="(sector, index) in sectors" :key="index">
-      <v-icon left>fas fa-scale-balanced</v-icon>
+      <v-icon left>
+        fas fa-scale-balanced
+      </v-icon>
       {{ `${$t(`feedback-schemes.demographic-groups.sectors._`)} ${index + 1}` }}
     </v-tab>
     <v-tab-item v-for="(sector, index) in sectors" :key="index">
       <v-card tile>
         <v-card-title>
-          <v-icon left>fas fa-scale-balanced</v-icon>
+          <v-icon left>
+            fas fa-scale-balanced
+          </v-icon>
           {{ `${$t(`feedback-schemes.demographic-groups.sectors._`)} ${index + 1}` }}
         </v-card-title>
         <v-container fluid>
@@ -23,11 +29,13 @@
                 :items="sentiments"
                 :label="$t('feedback-schemes.sentiments._')"
                 outlined
-              ></v-select>
+              />
             </v-col>
             <v-col class="d-flex justify-end" cols="12" md="6">
               <div class="mr-4 subtitle-1">
-                <v-icon left>fas fa-left-right</v-icon>
+                <v-icon left>
+                  fas fa-left-right
+                </v-icon>
                 {{ $t('feedback-schemes.ranges._') }}
               </div>
               <div>
@@ -38,14 +46,14 @@
                   hide-details="auto"
                   :label="$t('feedback-schemes.ranges.start')"
                   outlined
-                ></v-text-field>
+                />
                 <v-text-field
                   v-model.number="sector.range.end"
                   dense
                   hide-details="auto"
                   :label="$t('feedback-schemes.ranges.end')"
                   outlined
-                ></v-text-field>
+                />
               </div>
             </v-col>
             <v-col cols="12">
@@ -61,7 +69,7 @@
                     :label="$t('feedback-schemes.cards.name')"
                     outlined
                     :rules="nameRules"
-                  ></v-text-field>
+                  />
                 </template>
               </language-selector>
             </v-col>
@@ -71,7 +79,7 @@
                 :label="$t('feedback-schemes.cards.summary').toString()"
               >
                 <template v-for="lang in Object.keys(sector.summary)" #[`lang.${lang}`]>
-                  <html-editor :key="lang" v-model="sector.summary[lang]"></html-editor>
+                  <html-editor :key="lang" v-model="sector.summary[lang]" />
                 </template>
               </language-selector>
             </v-col>
@@ -81,7 +89,7 @@
                 :label="$t('feedback-schemes.cards.description').toString()"
               >
                 <template v-for="lang in Object.keys(sector.description)" #[`lang.${lang}`]>
-                  <html-editor :key="lang" v-model="sector.description[lang]"></html-editor>
+                  <html-editor :key="lang" v-model="sector.description[lang]" />
                 </template>
               </language-selector>
             </v-col>
@@ -94,7 +102,9 @@
                 :title="$t(`feedback-schemes.demographic-groups.sectors.remove`)"
                 @click.stop="remove"
               >
-                <v-icon left>$delete</v-icon>
+                <v-icon left>
+                  $delete
+                </v-icon>
                 {{ $t(`feedback-schemes.demographic-groups.sectors.remove`) }}
               </v-btn>
             </v-col>
@@ -135,7 +145,7 @@ export default defineComponent({
     return {
       demographicGroupScaleSectorDefaults,
       sectors: this.value,
-      sentiments: sentiments.map((value) => ({
+      sentiments: sentiments.map(value => ({
         text: this.$t(`feedback-schemes.sentiments.${value}`),
         value,
       })),
@@ -153,7 +163,8 @@ export default defineComponent({
 
   watch: {
     value(val) {
-      if (deepEqual(val, this.sectors)) return;
+      if (deepEqual(val, this.sectors))
+        return;
 
       this.sectors = [...val];
     },

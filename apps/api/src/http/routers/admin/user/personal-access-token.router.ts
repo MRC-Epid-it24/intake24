@@ -3,7 +3,7 @@ import { initServer } from '@ts-rest/express';
 import { contract } from '@intake24/common/contracts';
 import { PersonalAccessToken } from '@intake24/db';
 
-export const personalAccessToken = () => {
+export function personalAccessToken() {
   return initServer().router(contract.admin.user.personalAccessToken, {
     browse: async ({ query, req }) => {
       const { userId } = req.scope.cradle.user;
@@ -25,7 +25,7 @@ export const personalAccessToken = () => {
       const { jwt, token } = await req.scope.cradle.jwtService.issuePersonalAccessToken(
         name,
         { aal, amr, verified, userId },
-        expiresAt
+        expiresAt,
       );
 
       return { status: 201, body: { jwt, token } };
@@ -37,4 +37,4 @@ export const personalAccessToken = () => {
       return { status: 204, body: undefined };
     },
   });
-};
+}

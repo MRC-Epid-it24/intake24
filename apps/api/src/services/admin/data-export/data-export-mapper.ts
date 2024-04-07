@@ -11,48 +11,48 @@ export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField
 ) => ExportFieldTransform<T>;
 
-export const userCustomFieldValue: ExportFieldTransformCallback =
-  (field: ExportField): ExportFieldTransform =>
-  ({ food }) =>
-    food.meal?.submission?.user?.customFields?.find((item) => field.id === item.name)?.value;
+export const userCustomFieldValue: ExportFieldTransformCallback
+  = (field: ExportField): ExportFieldTransform =>
+    ({ food }) =>
+      food.meal?.submission?.user?.customFields?.find(item => field.id === item.name)?.value;
 
-export const submissionCustomFieldValue: ExportFieldTransformCallback =
-  (field: ExportField): ExportFieldTransform =>
-  ({ food }) =>
-    food.meal?.submission?.customFields?.find((item) => field.id === item.name)?.value;
+export const submissionCustomFieldValue: ExportFieldTransformCallback
+  = (field: ExportField): ExportFieldTransform =>
+    ({ food }) =>
+      food.meal?.submission?.customFields?.find(item => field.id === item.name)?.value;
 
-export const mealCustomFieldValue: ExportFieldTransformCallback =
-  (field: ExportField): ExportFieldTransform =>
-  ({ food }) =>
-    food.meal?.customFields?.find((item) => field.id === item.name)?.value;
+export const mealCustomFieldValue: ExportFieldTransformCallback
+  = (field: ExportField): ExportFieldTransform =>
+    ({ food }) =>
+      food.meal?.customFields?.find(item => field.id === item.name)?.value;
 
-export const foodCustomFieldValue: ExportFieldTransformCallback =
-  (field: ExportField): ExportFieldTransform =>
-  ({ food }) =>
-    'customFields' in food
-      ? food.customFields?.find((item) => field.id === item.name)?.value
-      : undefined;
+export const foodCustomFieldValue: ExportFieldTransformCallback
+  = (field: ExportField): ExportFieldTransform =>
+    ({ food }) =>
+      'customFields' in food
+        ? food.customFields?.find(item => field.id === item.name)?.value
+        : undefined;
 
-export const foodFieldValue =
-  (field: ExportField): ExportFieldTransform =>
-  ({ food }) =>
-    'fields' in food ? food.fields?.find((item) => field.id === item.fieldName)?.value : undefined;
+export function foodFieldValue(field: ExportField): ExportFieldTransform {
+  return ({ food }) =>
+    'fields' in food ? food.fields?.find(item => field.id === item.fieldName)?.value : undefined;
+}
 
-export const foodNutrientValue =
-  (field: ExportField): ExportFieldTransform =>
-  ({ food }) =>
+export function foodNutrientValue(field: ExportField): ExportFieldTransform {
+  return ({ food }) =>
     'nutrients' in food
-      ? food.nutrients?.find((item) => field.id === item.nutrientTypeId)?.amount
+      ? food.nutrients?.find(item => field.id === item.nutrientTypeId)?.amount
       : undefined;
+}
 
-export const portionSizeValue =
-  (field: ExportField): ExportFieldTransform =>
-  ({ food }) =>
+export function portionSizeValue(field: ExportField): ExportFieldTransform {
+  return ({ food }) =>
     'portionSizes' in food
-      ? food.portionSizes?.find((item) => field.id === item.name)?.value
+      ? food.portionSizes?.find(item => field.id === item.name)?.value
       : undefined;
+}
 
-const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) => {
+function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
   /**
    * Map record based fields (Survey submission / meal / food)
    *
@@ -62,10 +62,10 @@ const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) =
    */
   const getRecordFields = async (
     fields: ExportField[],
-    referenceFields: ExportField[]
+    referenceFields: ExportField[],
   ): Promise<ExportFieldInfo[]> =>
     fields.map((field) => {
-      const match = referenceFields.find((refField) => refField.id === field.id);
+      const match = referenceFields.find(refField => refField.id === field.id);
 
       const { id, label } = field;
 
@@ -81,9 +81,9 @@ const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) =
    */
   const getCustomRecordFields = async (
     fields: ExportField[],
-    value: ExportFieldTransformCallback
+    value: ExportFieldTransformCallback,
   ): Promise<ExportFieldInfo[]> =>
-    fields.map((field) => ({ label: field.label, value: value(field) }));
+    fields.map(field => ({ label: field.label, value: value(field) }));
 
   /**
    * User fields
@@ -195,13 +195,14 @@ const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) =
 
     const psfMap = portionSizeFields.reduce<Record<string, ExportField['value']>>(
       (acc, { id, value }) => {
-        if (value) acc[id] = value;
+        if (value)
+          acc[id] = value;
         return acc;
       },
-      {}
+      {},
     );
 
-    return fields.map((field) => ({
+    return fields.map(field => ({
       label: field.label,
       value: psfMap[field.id] ?? portionSizeValue(field),
     }));
@@ -221,7 +222,7 @@ const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) =
     foodNutrients,
     portionSizes,
   };
-};
+}
 
 export default dataExportMapper;
 

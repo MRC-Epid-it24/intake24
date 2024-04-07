@@ -4,41 +4,47 @@
     <v-card-text>
       <!-- Legacy sliding scale version, cannot be edited unless converted to v2 -->
       <v-card v-if="scale.version !== 2" flat>
-        <v-card-title
-          ><v-icon class="mx-2">fas fa-exclamation-circle</v-icon>
-          {{ $t('drinkware-sets.slidingScale.obsolete') }}</v-card-title
-        >
+        <v-card-title>
+          <v-icon class="mx-2">
+            fas fa-exclamation-circle
+          </v-icon>
+          {{ $t('drinkware-sets.slidingScale.obsolete') }}
+        </v-card-title>
         <v-card-text>
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p1')"></p>
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p2')"></p>
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p3')"></p>
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p4')"></p>
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p1')" />
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p2')" />
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p3')" />
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p4')" />
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="primary" @click="onConvertScaleVersion"
-            ><v-icon class="mx-2">fas fa-rotate</v-icon>
-            {{ $t('drinkware-sets.slidingScale.legacy.convert') }}</v-btn
-          >
+          <v-btn color="primary" @click="onConvertScaleVersion">
+            <v-icon class="mx-2">
+              fas fa-rotate
+            </v-icon>
+            {{ $t('drinkware-sets.slidingScale.legacy.convert') }}
+          </v-btn>
         </v-card-actions>
       </v-card>
       <v-card v-if="scale.version === 2" flat>
         <v-card-subtitle class="pa-0">
-          <v-alert class="pa-2" color="#ddd" dense icon="fas fa-info-circle"
-            ><span v-html="$t('drinkware-sets.slidingScale.editInstructions')"></span> </v-alert
-        ></v-card-subtitle>
+          <v-alert class="pa-2" color="#ddd" dense icon="fas fa-info-circle">
+            <span v-html="$t('drinkware-sets.slidingScale.editInstructions')" />
+          </v-alert>
+        </v-card-subtitle>
         <v-switch
           v-if="overlayImageUrl"
           v-model="showOverlayImage"
           dense
           :label="$t('drinkware-sets.slidingScale.fillableAreaToggle')"
-        ></v-switch>
+        />
         <v-card-actions class="wrap-actions">
-          <v-btn :disabled="selectedVertexIndex == -1" @click="deleteSelected"
-            ><v-icon class="mr-2">fas fa-trash</v-icon
-            >{{ $t('drinkware-sets.slidingScale.deleteSelected') }}</v-btn
-          >
-          <v-spacer></v-spacer>
+          <v-btn :disabled="selectedVertexIndex === -1" @click="deleteSelected">
+            <v-icon class="mr-2">
+              fas fa-trash
+            </v-icon>{{ $t('drinkware-sets.slidingScale.deleteSelected') }}
+          </v-btn>
+          <v-spacer />
           <v-dialog v-model="clearScaleDialog" width="500px">
             <template #activator="{ on, attrs }">
               <v-btn
@@ -46,9 +52,11 @@
                 color="error"
                 :disabled="outlineCoordinates.length === 0"
                 v-on="on"
-                ><v-icon class="mr-2">fas fa-x</v-icon
-                >{{ $t('drinkware-sets.slidingScale.deleteAll') }}</v-btn
               >
+                <v-icon class="mr-2">
+                  fas fa-x
+                </v-icon>{{ $t('drinkware-sets.slidingScale.deleteAll') }}
+              </v-btn>
             </template>
 
             <template #default>
@@ -92,7 +100,7 @@
         <div class="sliding-scale">
           <v-img ref="img" :src="scale.baseImageUrl">
             <template #placeholder>
-              <image-placeholder></image-placeholder>
+              <image-placeholder />
             </template>
           </v-img>
           <v-img
@@ -101,7 +109,7 @@
             :src="overlayImageUrl"
           >
             <template #placeholder>
-              <image-placeholder></image-placeholder>
+              <image-placeholder />
             </template>
           </v-img>
 
@@ -112,19 +120,19 @@
             @mousemove="onScaleMouseMove"
             @mouseup="endVertexDrag"
           >
-            <polygon class="sliding-scale-polygon" :points="svgPolygonPoints"></polygon>
+            <polygon class="sliding-scale-polygon" :points="svgPolygonPoints" />
             <!-- ESLint complains about key not coming from the v-for iterator" -->
             <!-- eslint-disable vue/valid-v-for -->
             <circle
               v-for="(vertex, index) in outlineCoordinates"
               :key="uniqueId()"
               class="sliding-scale-vertex"
-              :class="{ selected: index == selectedVertexIndex }"
+              :class="{ selected: index === selectedVertexIndex }"
               :cx="vertex[0] * width"
               :cy="vertex[1] * height"
               r="8"
               @mousedown="onVertexMouseDown(index)"
-            ></circle>
+            />
           </svg>
         </div>
       </v-card>
@@ -133,8 +141,8 @@
     <v-expansion-panels v-if="scale.version === 2" flat>
       <v-expansion-panel>
         <v-expansion-panel-header>
-          {{ $t('drinkware-sets.slidingScale.replaceBaseImage') }}</v-expansion-panel-header
-        >
+          {{ $t('drinkware-sets.slidingScale.replaceBaseImage') }}
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-file-input
             v-model="newBaseImageFile"
@@ -144,11 +152,13 @@
             outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
-          ></v-file-input>
-          <v-btn class="mt-4" :disabled="!newBaseImageFile" @click="replaceBaseImage"
-            ><v-icon class="mr-2">fas fa-rotate</v-icon>
-            {{ $t('drinkware-sets.slidingScale.replaceButtonLabel') }}</v-btn
-          >
+          />
+          <v-btn class="mt-4" :disabled="!newBaseImageFile" @click="replaceBaseImage">
+            <v-icon class="mr-2">
+              fas fa-rotate
+            </v-icon>
+            {{ $t('drinkware-sets.slidingScale.replaceButtonLabel') }}
+          </v-btn>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -186,7 +196,7 @@ export default defineComponent({
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    //@ts-expect-error should allow vue instance?
+    // @ts-expect-error should allow vue instance?
     const { height, width } = useElementSize(img);
 
     const screenHeight = ref(0);
@@ -220,9 +230,9 @@ export default defineComponent({
     });
 
     const outlineCoordinates = ref<[number, number][]>(
-      scale.value.version == 2
+      scale.value.version === 2
         ? (chunk(scale.value.outlineCoordinates, 2) as [number, number][])
-        : []
+        : [],
     );
 
     const svgPolygonPoints = computed(() => {
@@ -236,7 +246,7 @@ export default defineComponent({
 
       if (v1.version !== 1) {
         console.warn(
-          `Attempted to convert a scale of version ${v1.version}: can only convert version 1`
+          `Attempted to convert a scale of version ${v1.version}: can only convert version 1`,
         );
         return;
       }
@@ -315,16 +325,15 @@ export default defineComponent({
     watch(
       outlineCoordinates,
       (newValue) => {
-        if (scale.value.version === 2) {
+        if (scale.value.version === 2)
           scale.value.outlineCoordinates = flatten(newValue);
-        }
       },
-      { deep: true }
+      { deep: true },
     );
 
     watch(scale, (newValue) => {
-      outlineCoordinates.value =
-        newValue.version == 2 ? (chunk(newValue.outlineCoordinates, 2) as [number, number][]) : [];
+      outlineCoordinates.value
+        = newValue.version === 2 ? (chunk(newValue.outlineCoordinates, 2) as [number, number][]) : [];
     });
 
     return {

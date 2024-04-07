@@ -10,16 +10,16 @@ import setSession from './set-session.test';
 import userInfo from './user-info.test';
 
 export default () => {
-  describe('GET /api/surveys', browse);
-  describe('GET /api/surveys/:slug', read);
-  describe('POST /api/surveys/:slug/generate-user', generateUser);
-  describe('POST /api/surveys/:slug/create-user', createUser);
+  describe('get /api/surveys', browse);
+  describe('get /api/surveys/:slug', read);
+  describe('pOST /api/surveys/:slug/generate-user', generateUser);
+  describe('pOST /api/surveys/:slug/create-user', createUser);
 
-  describe('GET /api/surveys/:slug/parameters', parameters);
-  describe('GET /api/surveys/:slug/user-info', userInfo);
-  describe('GET /api/surveys/:slug/session', getSession);
-  describe('POST /api/surveys/:slug/session', setSession);
+  describe('get /api/surveys/:slug/parameters', parameters);
+  describe('get /api/surveys/:slug/user-info', userInfo);
+  describe('get /api/surveys/:slug/session', getSession);
+  describe('pOST /api/surveys/:slug/session', setSession);
   // describe('POST /api/surveys/:slug/submission', submission);
-  describe('POST /api/surveys/:slug/rating', rating);
-  describe('POST /api/surveys/:slug/request-help', requestHelp);
+  describe('pOST /api/surveys/:slug/rating', rating);
+  describe('pOST /api/surveys/:slug/request-help', requestHelp);
 };

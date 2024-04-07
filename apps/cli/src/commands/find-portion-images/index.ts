@@ -52,7 +52,8 @@ class AsServedHelper {
   private getSetById(id: string): AsServedSet | undefined {
     if (this.sets) {
       for (const set of this.sets) {
-        if (set.id === id) return set;
+        if (set.id === id)
+          return set;
       }
     }
     return undefined;
@@ -66,8 +67,8 @@ class AsServedHelper {
 
       for (let i = 1; i < set.asServedImages.length; ++i) {
         if (
-          Math.abs(weight - set.asServedImages[i].weight) <
-          Math.abs(weight - set.asServedImages[best].weight)
+          Math.abs(weight - set.asServedImages[i].weight)
+          < Math.abs(weight - set.asServedImages[best].weight)
         )
           best = i;
       }
@@ -118,9 +119,9 @@ class GuideImageHelper {
   }
 
   getImageById(id: string): GuideImage | undefined {
-    if (this.guideImages) {
-      return this.guideImages.find((gi) => gi.id === id);
-    }
+    if (this.guideImages)
+      return this.guideImages.find(gi => gi.id === id);
+
     return undefined;
   }
 
@@ -128,18 +129,18 @@ class GuideImageHelper {
     const guideImage = this.getImageById(guideImageId);
 
     if (
-      guideImage &&
-      guideImage.objects &&
-      guideImage.objects.length > 0 &&
-      guideImage.imageMap &&
-      guideImage.imageMap.objects
+      guideImage
+      && guideImage.objects
+      && guideImage.objects.length > 0
+      && guideImage.imageMap
+      && guideImage.imageMap.objects
     ) {
       let best = 0;
 
       for (let i = 1; i < guideImage.objects.length; ++i) {
         if (
-          Math.abs(weight - guideImage.objects[i].weight) <
-          Math.abs(weight - guideImage.objects[best].weight)
+          Math.abs(weight - guideImage.objects[i].weight)
+          < Math.abs(weight - guideImage.objects[best].weight)
         )
           best = i;
       }
@@ -150,7 +151,7 @@ class GuideImageHelper {
       console.log(JSON.stringify(guideImageObject));
 
       const imageMapObject = guideImage.imageMap.objects.find(
-        (obj) => obj.id === guideImageObject.imageMapObjectId
+        obj => obj.id === guideImageObject.imageMapObjectId,
       );
 
       console.log('image map object:');
@@ -165,7 +166,7 @@ class GuideImageHelper {
           overlayImagePath: imageMapObject.overlayImage?.path,
           coordinates: GuideImageHelper.calculateObjectRect(
             imageMapObject.outlineCoordinates,
-            this.guideImageWidth
+            this.guideImageWidth,
           ),
         };
       }
@@ -176,7 +177,7 @@ class GuideImageHelper {
 
   static calculateObjectRect(
     coordinates: number[],
-    width: number
+    width: number,
   ): [number, number, number, number] {
     let maxX = coordinates[0];
     let maxY = coordinates[1];
@@ -228,11 +229,10 @@ async function getNutrientLabels(ids: string[]): Promise<Map<string, string>> {
   });
 
   for (const id of ids) {
-    const record = records.find((r) => r.id === id);
+    const record = records.find(r => r.id === id);
 
-    if (!record) {
+    if (!record)
       throw new Error(`Nutrient type ${id} is not in the database`);
-    }
 
     nutrientLabels.set(id, `${record.description}, ${record.unit?.symbol}`);
   }
@@ -243,15 +243,15 @@ async function getNutrientLabels(ids: string[]): Promise<Map<string, string>> {
 function calculateNutrients(
   weight: number,
   nutrientIds: string[],
-  databaseRecord: NutrientTableRecord
+  databaseRecord: NutrientTableRecord,
 ): (number | undefined)[] {
   return nutrientIds.map((id) => {
-    const nutrientData = databaseRecord.nutrients?.find((n) => n.nutrientTypeId === id);
-    if (nutrientData) {
+    const nutrientData = databaseRecord.nutrients?.find(n => n.nutrientTypeId === id);
+    if (nutrientData)
       return (nutrientData.unitsPer100g / 100.0) * weight;
-    }
+
     console.log(
-      `Nutrient data missing for nutrient ${id} in ${databaseRecord.nutrientTableId}, record id ${databaseRecord.nutrientTableRecordId}`
+      `Nutrient data missing for nutrient ${id} in ${databaseRecord.nutrientTableId}, record id ${databaseRecord.nutrientTableRecordId}`,
     );
     return undefined;
   });
@@ -259,7 +259,7 @@ function calculateNutrients(
 
 async function findPortionSizeImages(
   config: Config,
-  nutrientIds: string[]
+  nutrientIds: string[],
 ): Promise<PortionSizeImages[]> {
   const asServedHelper = new AsServedHelper();
   await asServedHelper.init();
@@ -271,7 +271,6 @@ async function findPortionSizeImages(
 
   let offset = 0;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const currentBatch = await Food.findAll({
       include: [
@@ -324,13 +323,13 @@ async function findPortionSizeImages(
 
         if (!local.portionSizeMethods) {
           console.log(
-            `Portion size methods are undefined for food ${currentBatch[i].code}, skipping`
+            `Portion size methods are undefined for food ${currentBatch[i].code}, skipping`,
           );
           continue;
         }
 
-        const energyKcalRecord =
-          nutrientMapping.nutrientTableRecord?.getNutrientByType(energyKcalNutrientType);
+        const energyKcalRecord
+          = nutrientMapping.nutrientTableRecord?.getNutrientByType(energyKcalNutrientType);
 
         if (!energyKcalRecord) {
           console.log(`No energy (kcal) available for food ${currentBatch[i].code}, skipping`);
@@ -339,7 +338,7 @@ async function findPortionSizeImages(
 
         console.log(
           nutrientMapping.nutrientTableRecord?.nutrientTableId,
-          nutrientMapping.nutrientTableRecord?.nutrientTableRecordId
+          nutrientMapping.nutrientTableRecord?.nutrientTableRecordId,
         );
         console.log(`${energyKcalRecord.unitsPer100g} calories per 100g`);
 
@@ -355,32 +354,33 @@ async function findPortionSizeImages(
 
             if (!asServedSetId) {
               console.log(
-                `Portion size method ${psm.id} for ${local.foodCode} has no "serving-image-set" parameter`
+                `Portion size method ${psm.id} for ${local.foodCode} has no "serving-image-set" parameter`,
               );
               continue;
             }
 
             if (
-              config.portionSizeFilter.length > 0 &&
-              !config.portionSizeFilter.includes(asServedSetId)
+              config.portionSizeFilter.length > 0
+              && !config.portionSizeFilter.includes(asServedSetId)
             )
               continue;
 
             const asServedImageData = asServedHelper.findClosestPortionSize(
               asServedSetId,
-              targetWeight / psm.conversionFactor
+              targetWeight / psm.conversionFactor,
             );
 
-            if (asServedImageData)
+            if (asServedImageData) {
               asServedImages.push({
                 imageData: asServedImageData,
                 adjustedWeight: asServedImageData.imageWeight * psm.conversionFactor,
                 nutrients: calculateNutrients(
                   asServedImageData.imageWeight * psm.conversionFactor,
                   nutrientIds,
-                  nutrientMapping.nutrientTableRecord!
+                  nutrientMapping.nutrientTableRecord!,
                 ),
               });
+            }
           }
 
           if (psm.method === 'guide-image') {
@@ -389,32 +389,33 @@ async function findPortionSizeImages(
 
             if (!guideImageId) {
               console.log(
-                `Portion size method ${psm.id} for ${local.foodCode} has no "guide-image-id" parameter`
+                `Portion size method ${psm.id} for ${local.foodCode} has no "guide-image-id" parameter`,
               );
               continue;
             }
 
             if (
-              config.portionSizeFilter.length > 0 &&
-              !config.portionSizeFilter.includes(guideImageId)
+              config.portionSizeFilter.length > 0
+              && !config.portionSizeFilter.includes(guideImageId)
             )
               continue;
 
             const guideImageData = guideHelper.findClosestPortionSize(
               guideImageId,
-              targetWeight / psm.conversionFactor
+              targetWeight / psm.conversionFactor,
             );
 
-            if (guideImageData)
+            if (guideImageData) {
               guideImages.push({
                 imageData: guideImageData,
                 adjustedWeight: guideImageData.imageWeight * psm.conversionFactor,
                 nutrients: calculateNutrients(
                   guideImageData.imageWeight * psm.conversionFactor,
                   nutrientIds,
-                  nutrientMapping.nutrientTableRecord!
+                  nutrientMapping.nutrientTableRecord!,
                 ),
               });
+            }
           }
         }
 
@@ -434,7 +435,8 @@ async function findPortionSizeImages(
       }
     }
 
-    if (currentBatch.length === 0) break;
+    if (currentBatch.length === 0)
+      break;
 
     offset += currentBatch.length;
   }
@@ -451,7 +453,7 @@ async function main(config: Config, outputFilePath: string) {
 
   await db.init();
 
-  const nutrientIds = (await FoodsNutrientType.findAll({ order: ['id'] })).map((r) => r.id);
+  const nutrientIds = (await FoodsNutrientType.findAll({ order: ['id'] })).map(r => r.id);
 
   const [nutrientLabels, portionSizeImages] = await Promise.all([
     getNutrientLabels(nutrientIds),
@@ -530,7 +532,8 @@ async function main(config: Config, outputFilePath: string) {
       rows.push(columns);
     }
 
-    if (rows.length) await writer.writeRecords(rows);
+    if (rows.length)
+      await writer.writeRecords(rows);
   }
 
   await db.close();
@@ -546,8 +549,8 @@ export default async (cmd: FindPortionImagesArgs): Promise<void> => {
   const timeStamp = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth() + 1)
     .toString()
     .padStart(2, '0')}${now.getFullYear()}`;
-  const outputFilePath =
-    cmd.output || `${config.energyValueKcal}kcal-${config.locale}-${timeStamp}.csv`;
+  const outputFilePath
+    = cmd.output || `${config.energyValueKcal}kcal-${config.locale}-${timeStamp}.csv`;
 
   await main(config, outputFilePath);
 };

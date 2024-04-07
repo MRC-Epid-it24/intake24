@@ -7,7 +7,7 @@
           :input-value="futureDates"
           :label="$t('survey-schemes.prompts.date-picker-prompt.futureDates')"
           @change="update('futureDates', $event)"
-        ></v-switch>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

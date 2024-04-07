@@ -3,10 +3,7 @@ import jsFileDownload from 'js-file-download';
 
 export const fileUrl = (file: string, path?: string) => new URL(file, path ?? import.meta.url).href;
 
-export const downloadFile = (
-  { data, headers }: AxiosResponse<any>,
-  filename?: string | null
-): void => {
+export function downloadFile({ data, headers }: AxiosResponse<any>, filename?: string | null): void {
   let finalFilename = filename;
   if (!finalFilename && headers['content-disposition']) {
     finalFilename = headers['content-disposition']
@@ -21,9 +18,9 @@ export const downloadFile = (
   // TODO: read mime type
 
   jsFileDownload(data, finalFilename);
-};
+}
 
-export const readFile = async (file: Blob): Promise<string | ArrayBuffer | null> => {
+export async function readFile(file: Blob): Promise<string | ArrayBuffer | null> {
   const fileReader = new FileReader();
 
   return new Promise((resolve, reject) => {
@@ -38,7 +35,7 @@ export const readFile = async (file: Blob): Promise<string | ArrayBuffer | null>
 
     fileReader.readAsText(file);
   });
-};
+}
 
 export default {
   downloadFile,

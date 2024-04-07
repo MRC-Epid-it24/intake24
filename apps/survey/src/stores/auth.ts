@@ -25,7 +25,7 @@ export const useAuth = defineStore('auth', {
     challenge: null,
   }),
   getters: {
-    loggedIn: (state) => !!state.accessToken,
+    loggedIn: state => !!state.accessToken,
   },
   actions: {
     setAccessToken(token: string) {
@@ -48,12 +48,14 @@ export const useAuth = defineStore('auth', {
       loading.addItem('login');
 
       try {
-        const data =
-          type === 'login' ? await authService.login(payload) : await authService.token(payload);
+        const data
+          = type === 'login' ? await authService.login(payload) : await authService.token(payload);
 
-        if ('accessToken' in data) this.successfulLogin(data.accessToken);
+        if ('accessToken' in data)
+          this.successfulLogin(data.accessToken);
         else this.challengeRequest(data);
-      } finally {
+      }
+      finally {
         loading.removeItem('login');
       }
     },
@@ -70,13 +72,16 @@ export const useAuth = defineStore('auth', {
       try {
         const accessToken = await authService.refresh();
         this.successfulLogin(accessToken);
-      } catch (err) {
-        if (withErr) throw err;
+      }
+      catch (err) {
+        if (withErr)
+          throw err;
       }
     },
 
     async logout(invalidate?: boolean) {
-      if (invalidate) await authService.logout();
+      if (invalidate)
+        await authService.logout();
 
       useLoading().$reset();
       useUser().$reset();

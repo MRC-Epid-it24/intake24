@@ -13,7 +13,9 @@
           :title="$t(`prompts.asServed.${type}.more`)"
           @click="update(1)"
         >
-          <v-icon aria-hidden="false">$increment</v-icon>
+          <v-icon aria-hidden="false">
+            $increment
+          </v-icon>
         </v-btn>
         <v-chip color="grey lighten-1">
           <i18n
@@ -44,7 +46,9 @@
             :title="$t(`prompts.asServed.${type}.less`)"
             @click="update(-1)"
           >
-            <v-icon aria-hidden="false">$decrement</v-icon>
+            <v-icon aria-hidden="false">
+              $decrement
+            </v-icon>
           </v-btn>
           <v-btn
             v-if="isMobile"
@@ -57,7 +61,9 @@
             :title="$t(`prompts.asServed.${type}.more`)"
             @click="update(1)"
           >
-            <v-icon aria-hidden="false">$increment</v-icon>
+            <v-icon aria-hidden="false">
+              $increment
+            </v-icon>
           </v-btn>
         </div>
       </v-card-text>
@@ -154,7 +160,8 @@ export default defineComponent({
 
   watch: {
     show(val: boolean) {
-      if (!val) return;
+      if (!val)
+        return;
 
       this.numerator = this.value;
     },
@@ -162,8 +169,8 @@ export default defineComponent({
 
   methods: {
     update(value: number) {
-      this.numerator =
-        value > 0
+      this.numerator
+        = value > 0
           ? Math.min(this.maxNumerator, this.numerator + value)
           : Math.max(this.minNumerator, this.numerator + value);
 

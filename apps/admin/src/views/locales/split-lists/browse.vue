@@ -4,7 +4,7 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.split-lists.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         class="ml-3"
         color="primary"
@@ -30,7 +30,7 @@
                 :label="$t('locales.split-lists.firstWord')"
                 name="firstWord"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md>
               <v-text-field
@@ -39,7 +39,7 @@
                 :label="$t('locales.split-lists.words')"
                 name="words"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-list-item-content>
@@ -97,7 +97,7 @@ export default defineComponent({
 
   async mounted() {
     const { data: items } = await this.$http.get<LocaleSplitList[]>(
-      `admin/locales/${this.id}/split-lists`
+      `admin/locales/${this.id}/split-lists`,
     );
 
     this.toForm({ items });

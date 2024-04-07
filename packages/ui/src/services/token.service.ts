@@ -11,9 +11,11 @@ export default {
     if (!aud.includes('access') || !aud.includes(frontEnd))
       throw new Error('JWT: invalid audience claims');
 
-    if (!userId) throw new Error('JWT: Missing userId claim');
+    if (!userId)
+      throw new Error('JWT: Missing userId claim');
 
-    if (new Date().getTime() > exp * 1000) throw new Error('JWT: expired token');
+    if (new Date().getTime() > exp * 1000)
+      throw new Error('JWT: expired token');
 
     return payload;
   },

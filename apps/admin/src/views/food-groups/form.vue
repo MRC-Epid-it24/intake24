@@ -12,10 +12,10 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -46,7 +46,7 @@ export default defineComponent({
       props,
       {
         data: { id: null, name: null },
-      }
+      },
     );
 
     return { entry, entryLoaded, clearError, form, routeLeave, submit };

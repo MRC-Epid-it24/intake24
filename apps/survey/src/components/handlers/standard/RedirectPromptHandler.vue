@@ -12,7 +12,7 @@
       surveyId,
     }"
     @action="action"
-  ></component>
+  />
 </template>
 
 <script lang="ts">
@@ -51,7 +51,8 @@ export default defineComponent({
     const feedbackEnabled = computed(() => survey.feedbackEnabled);
     const followUpUrl = computed(() => {
       const followUpUrl = survey.user?.followUpUrl ?? undefined;
-      if (!followUpUrl || typeof followUpUrl === 'string') return followUpUrl;
+      if (!followUpUrl || typeof followUpUrl === 'string')
+        return followUpUrl;
 
       return followUpUrl[props.prompt.id];
     });

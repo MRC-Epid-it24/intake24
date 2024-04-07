@@ -22,7 +22,7 @@ export class NutrientTablesApiV4 {
   async update(nutrientTableId: string, nutrientTableData: NutrientTableRequest) {
     await this.baseClient.put(
       `${NutrientTablesApiV4.apiPath}/${nutrientTableId}`,
-      nutrientTableData
+      nutrientTableData,
     );
   }
 

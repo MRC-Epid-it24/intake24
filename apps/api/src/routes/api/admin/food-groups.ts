@@ -16,12 +16,12 @@ export default () => {
     .post(
       permission('food-groups|create'),
       validation.store,
-      wrapAsync(adminFoodGroupController.store)
+      wrapAsync(adminFoodGroupController.store),
     )
     .get(
       permission('food-groups|browse'),
       validation.browse,
-      wrapAsync(adminFoodGroupController.browse)
+      wrapAsync(adminFoodGroupController.browse),
     );
 
   router.get('/refs', wrapAsync(adminFoodGroupController.refs));
@@ -34,14 +34,14 @@ export default () => {
     .put(
       permission('food-groups|edit'),
       validation.update,
-      wrapAsync(adminFoodGroupController.update)
+      wrapAsync(adminFoodGroupController.update),
     )
     .delete(permission('food-groups|delete'), wrapAsync(adminFoodGroupController.destroy));
 
   router.get(
     '/:foodGroupId/edit',
     permission('food-groups|edit'),
-    wrapAsync(adminFoodGroupController.edit)
+    wrapAsync(adminFoodGroupController.edit),
   );
 
   return router;

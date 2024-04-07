@@ -1,61 +1,70 @@
 import type { Prompts } from '@intake24/common/prompts';
 import type { MealState, MealTime } from '@intake24/common/types';
 
-export const fromMealTime = (time: MealTime, doubleDigit = true): string => {
+export function fromMealTime(time: MealTime, doubleDigit = true): string {
   const { hours, minutes } = time;
 
-  if (!doubleDigit) return `${hours}:${minutes}`;
+  if (!doubleDigit)
+    return `${hours}:${minutes}`;
 
   return [hours, minutes]
-    .map((item) => (item.toString().length === 1 ? `0${item}` : item.toString()))
+    .map(item => (item.toString().length === 1 ? `0${item}` : item.toString()))
     .join(':');
-};
+}
 
-export const toMealTime = (time: string): MealTime => {
-  const [hours, minutes] = time.split(':').map((item) => parseInt(item, 10));
+export function toMealTime(time: string): MealTime {
+  const [hours, minutes] = time.split(':').map(item => Number.parseInt(item, 10));
 
   return { hours, minutes };
-};
+}
 
 export const toMinutes = (time: MealTime) => time.hours * 60 + time.minutes;
 
-export const sortMeals = (a: MealState, b: MealState) => {
-  if (!a.time || !b.time) return 0;
+export function sortMeals(a: MealState, b: MealState) {
+  if (!a.time || !b.time)
+    return 0;
 
   return toMinutes(a.time) - toMinutes(b.time);
-};
+}
 
 export const minutesWrapAround = (minutes: number) => (minutes < 0 ? 1440 + minutes : minutes);
 
-export const isMealAfter = (time: MealTime, after: MealTime) =>
-  time.hours === after.hours ? time.minutes > after.minutes : time.hours > after.hours;
+export function isMealAfter(time: MealTime, after: MealTime) {
+  return time.hours === after.hours ? time.minutes > after.minutes : time.hours > after.hours;
+}
 
-export const minutesAfterMeal = (time: MealTime, after: MealTime) =>
-  minutesWrapAround(toMinutes(time) - toMinutes(after));
+export function minutesAfterMeal(time: MealTime, after: MealTime) {
+  return minutesWrapAround(toMinutes(time) - toMinutes(after));
+}
 
-export const mealWithStartGap = (meal: MealState, startTime: string, gap: number) =>
-  meal.time &&
-  isMealAfter(meal.time, toMealTime(startTime)) &&
-  minutesAfterMeal(meal.time, toMealTime(startTime)) > gap
+export function mealWithStartGap(meal: MealState, startTime: string, gap: number) {
+  return meal.time
+    && isMealAfter(meal.time, toMealTime(startTime))
+    && minutesAfterMeal(meal.time, toMealTime(startTime)) > gap
     ? meal
     : undefined;
+}
 
-export const isMealBefore = (time: MealTime, before: MealTime) =>
-  time.hours === before.hours ? time.minutes < before.minutes : time.hours < before.hours;
+export function isMealBefore(time: MealTime, before: MealTime) {
+  return time.hours === before.hours ? time.minutes < before.minutes : time.hours < before.hours;
+}
 
-export const minutesBeforeMeal = (time: MealTime, before: MealTime) =>
-  minutesWrapAround(toMinutes(before) - toMinutes(time));
+export function minutesBeforeMeal(time: MealTime, before: MealTime) {
+  return minutesWrapAround(toMinutes(before) - toMinutes(time));
+}
 
-export const mealWithEndGap = (meal: MealState, endTime: string, gap: number) =>
-  meal.time &&
-  isMealBefore(meal.time, toMealTime(endTime)) &&
-  minutesBeforeMeal(meal.time, toMealTime(endTime)) > gap
+export function mealWithEndGap(meal: MealState, endTime: string, gap: number) {
+  return meal.time
+    && isMealBefore(meal.time, toMealTime(endTime))
+    && minutesBeforeMeal(meal.time, toMealTime(endTime)) > gap
     ? meal
     : undefined;
+}
 
-export const resolveMealGaps = (meals: MealState[], prompt: Prompts['meal-gap-prompt']) => {
+export function resolveMealGaps(meals: MealState[], prompt: Prompts['meal-gap-prompt']) {
   const mealSize = meals.length;
-  if (!mealSize) return [undefined, undefined];
+  if (!mealSize)
+    return [undefined, undefined];
 
   const firstMeal = meals[0];
   const lastMeal = meals[mealSize - 1];
@@ -69,18 +78,20 @@ export const resolveMealGaps = (meals: MealState[], prompt: Prompts['meal-gap-pr
     for (let i = 0; i < mealSize - 1; i++) {
       const meal = meals[i];
       const nextMeal = meals[i + 1];
-      if (!meal.time || !nextMeal.time) return [undefined, undefined];
+      if (!meal.time || !nextMeal.time)
+        return [undefined, undefined];
 
       if (
-        minutesBeforeMeal(meal.time, nextMeal.time) > gap &&
-        !meal.flags.includes('no-meals-between')
+        minutesBeforeMeal(meal.time, nextMeal.time) > gap
+        && !meal.flags.includes('no-meals-between')
       )
         return [meal, nextMeal];
     }
   }
 
   const mealEndGap = mealWithEndGap(lastMeal, endTime, gap);
-  if (mealEndGap && !mealEndGap.flags.includes('no-meals-after')) return [undefined, mealEndGap];
+  if (mealEndGap && !mealEndGap.flags.includes('no-meals-after'))
+    return [undefined, mealEndGap];
 
   return [undefined, undefined];
-};
+}

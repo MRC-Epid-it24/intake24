@@ -13,13 +13,13 @@
           md="6"
           xl="4"
         >
-          <chart autoresize class="chart" :option="chart"></chart>
+          <chart autoresize class="chart" :option="chart" />
         </v-col>
       </v-row>
     </v-container>
     <div class="d-none d-print-block">
       <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
-        <chart autoresize class="chart-print" :option="chart"></chart>
+        <chart autoresize class="chart-print" :option="chart" />
       </div>
     </div>
   </div>
@@ -87,7 +87,7 @@ export default defineComponent({
             ],
             formatter: ({ seriesName, name: itemName, value, percent }: any) =>
               `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
-                value
+                value,
               )} ${unit} (${Math.round(percent ?? 0)}%)`,
           },
           series: [
@@ -114,7 +114,7 @@ export default defineComponent({
                 alignTo: 'edge',
                 formatter: ({ name: itemName, value, percent }) =>
                   `${itemName} \n {times|${round(
-                    typeof value === 'number' ? value : 0
+                    typeof value === 'number' ? value : 0,
                   )} ${unit} (${Math.round(percent ?? 0)}%)}`,
                 minMargin: 5,
                 edgeDistance: 10,

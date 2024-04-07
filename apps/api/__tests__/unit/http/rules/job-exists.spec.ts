@@ -5,7 +5,7 @@ describe('jobExists rule', () => {
     expect(isValidJob(jobTypes[0])).toBeTrue();
   });
 
-  it('should return true for valid job', () => {
+  it('should return false for invalid job', () => {
     expect(isValidJob('InvalidJob')).toBeFalse();
   });
 });

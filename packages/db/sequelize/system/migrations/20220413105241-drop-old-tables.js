@@ -1,6 +1,5 @@
-/* eslint-disable camelcase */
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('v3_client_error_reports', { transaction });
       await queryInterface.dropTable('v3_flyway_migrations', { transaction });

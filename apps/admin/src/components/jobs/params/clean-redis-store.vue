@@ -11,7 +11,7 @@
             :label="$t('jobs.types.CleanRedisStore.stores._')"
             name="store"
             outlined
-          ></v-select>
+          />
         </v-col>
       </v-row>
     </v-card-text>
@@ -32,7 +32,7 @@ export default defineComponent({
 
   data() {
     return {
-      stores: ['cache', 'session'].map((value) => ({
+      stores: ['cache', 'session'].map(value => ({
         value,
         text: this.$t(`jobs.types.CleanRedisStore.stores.${value}`).toString(),
       })),

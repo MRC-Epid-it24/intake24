@@ -39,8 +39,7 @@ import { Survey, User, UserSecurable } from '.';
 })
 export default class SurveyScheme
   extends BaseModel<InferAttributes<SurveyScheme>, InferCreationAttributes<SurveyScheme>>
-  implements HasVisibility
-{
+  implements HasVisibility {
   @Column({
     autoIncrement: true,
     primaryKey: true,

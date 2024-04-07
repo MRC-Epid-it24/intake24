@@ -1,12 +1,12 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <template #actions>
-      <preview :feedback-scheme="currentFeedbackScheme"></preview>
+      <preview :feedback-scheme="currentFeedbackScheme" />
     </template>
     <demographic-group-list
       v-model="form.demographicGroups"
       :nutrient-types="refs?.nutrientTypes"
-    ></demographic-group-list>
+    />
   </layout>
 </template>
 

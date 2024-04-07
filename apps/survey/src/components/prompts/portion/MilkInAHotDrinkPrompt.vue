@@ -12,8 +12,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="!!portionSize.milkVolumePercentage">
-            </expansion-panel-actions>
+            <expansion-panel-actions :valid="!!portionSize.milkVolumePercentage" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -29,25 +28,25 @@
               <template #label>
                 {{ option.label }}
                 <template v-if="prompt.badges">
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <quantity-badge
                     :amount="option.value * parentServing"
                     unit="ml"
                     :valid="portionSize.milkVolumePercentage === option.value"
-                  ></quantity-badge>
+                  />
                 </template>
               </template>
             </v-radio>
           </v-radio-group>
-          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -99,7 +98,7 @@ export default defineComponent({
   computed: {
     localeOptions() {
       return (this.parameters.options[this.$i18n.locale] ?? this.parameters.options.en)
-        .map((item) => ({ ...item, value: Number(item.value) }))
+        .map(item => ({ ...item, value: Number(item.value) }))
         .filter(({ value }) => !Number.isNaN(value));
     },
 
@@ -119,9 +118,9 @@ export default defineComponent({
   },
 
   watch: {
-    'portionSize.milkVolumePercentage'(val) {
-      this.portionSize.milkPartIndex =
-        this.localeOptions.findIndex((option) => option.value === val) ?? null;
+    'portionSize.milkVolumePercentage': function (val) {
+      this.portionSize.milkPartIndex
+        = this.localeOptions.findIndex(option => option.value === val) ?? null;
 
       this.updatePanel();
       this.update();

@@ -7,7 +7,7 @@ export type UpdatePasswordInput = {
   confirmPassword: string;
 };
 
-const userService = () => {
+function userService() {
   /**
    * Get user physical data
    *
@@ -24,7 +24,7 @@ const userService = () => {
    */
   const setPhysicalData = async (
     userId: string,
-    input: Omit<UserPhysicalDataAttributes, 'userId'>
+    input: Omit<UserPhysicalDataAttributes, 'userId'>,
   ): Promise<UserPhysicalData> => {
     const [data] = await UserPhysicalData.upsert({ ...input, userId });
 
@@ -35,7 +35,7 @@ const userService = () => {
     getPhysicalData,
     setPhysicalData,
   };
-};
+}
 
 export default userService;
 

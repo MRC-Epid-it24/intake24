@@ -1,12 +1,12 @@
 <template>
   <v-bottom-sheet v-model="dialog" persistent>
     <template #activator="{ on, attrs }">
-      <slot name="activator" v-bind="{ on, attrs }"></slot>
+      <slot name="activator" v-bind="{ on, attrs }" />
     </template>
     <v-sheet class="text-center pa-3">
       <v-row dense no-gutter>
         <v-col cols="12">
-          <PinchScrollZoom
+          <pinch-scroll-zoom
             ref="zoomer"
             class="guide-drawer"
             :height="height * 0.6"
@@ -21,8 +21,8 @@
                 {{ label }}
               </v-chip>
             </div>
-            <img :src="imageMapData.baseImageUrl" :width="width" />
-            <svg ref="svg" v-bind="{ height, width }">
+            <img :src="imageMapData.baseImageUrl" :width="width">
+            <svg v-bind="{ height, width }">
               <polygon
                 v-for="(object, idx) in objects"
                 :key="idx"
@@ -31,9 +31,9 @@
                 :points="object.polygon"
                 @click.stop="select(idx, object.id)"
                 @keypress.stop="select(idx, object.id)"
-              ></polygon>
+              />
             </svg>
-          </PinchScrollZoom>
+          </pinch-scroll-zoom>
         </v-col>
         <v-col cols="12">
           <v-btn :block="isMobile" color="primary" @click="confirm">

@@ -13,35 +13,33 @@ export interface GenerateRoutesOps extends Resource {
   parent?: string;
 }
 
-const isVueComponent = (object: any) => {
-  if (typeof object === 'function') return true;
+function isVueComponent(object: any) {
+  if (typeof object === 'function')
+    return true;
 
   const { render } = object;
-  if (render && typeof render === 'function') return true;
+  if (render && typeof render === 'function')
+    return true;
 
   return false;
-};
+}
 
-const generateResourceRoutes = (
-  resourceName: string,
-  pathSegments: string[],
-  viewsPath: any,
-  options: GenerateRoutesOps
-) => {
+function generateResourceRoutes(resourceName: string, pathSegments: string[], viewsPath: any, options: GenerateRoutesOps) {
   const { parent, securable } = options;
   const routerRoutes: RouteConfig[] = [];
 
   const resourceRoutes = Object.keys(viewsPath);
   const name = parent ? `${parent}-${resourceName}` : resourceName;
-  const title =
-    parent && resourceName !== 'securables' ? `${parent}.${resourceName}` : resourceName;
+  const title
+    = parent && resourceName !== 'securables' ? `${parent}.${resourceName}` : resourceName;
   const identifier = parent ? `${singular(resourceName)}Id` : 'id';
 
   const meta = { module: { current: resourceName, parent } };
 
   resourceRoutes.forEach((action) => {
     let perm = parent ? `${parent}|${resourceName}` : `${resourceName}|${action}`;
-    if (securable) perm = options.name;
+    if (securable)
+      perm = options.name;
 
     if (action === 'browse') {
       routerRoutes.push({
@@ -83,13 +81,13 @@ const generateResourceRoutes = (
         ...generateResourceRoutes(action, [...pathSegments, ':id', action], viewsPath[action], {
           ...options,
           parent: name,
-        })
+        }),
       );
     }
   });
 
   return routerRoutes;
-};
+}
 
 Vue.use(VueRouter);
 
@@ -213,7 +211,8 @@ if (import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true') {
 
 resources.forEach((item) => {
   const { name, path = name, generateRoutes } = item;
-  if (!generateRoutes) return;
+  if (!generateRoutes)
+    return;
 
   const pathSegments = path.split('/');
   const resourceViews = pathSegments.reduce((acc, seg) => acc[seg], views);

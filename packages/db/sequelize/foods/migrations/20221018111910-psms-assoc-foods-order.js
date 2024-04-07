@@ -5,7 +5,7 @@ module.exports = {
         'associated_foods',
         'order_by',
         { allowNull: true, type: Sequelize.BIGINT },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE associated_foods SET order_by = id;`, {
@@ -16,33 +16,33 @@ module.exports = {
         'associated_foods',
         'order_by',
         { allowNull: false, type: Sequelize.BIGINT },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'category_portion_size_methods',
         'order_by',
         { allowNull: true, type: Sequelize.BIGINT },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE category_portion_size_methods SET order_by = id;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'category_portion_size_methods',
         'order_by',
         { allowNull: false, type: Sequelize.BIGINT },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'food_portion_size_methods',
         'order_by',
         { allowNull: true, type: Sequelize.BIGINT },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE food_portion_size_methods SET order_by = id;`, {
@@ -53,7 +53,7 @@ module.exports = {
         'food_portion_size_methods',
         'order_by',
         { allowNull: false, type: Sequelize.BIGINT },
-        { transaction }
+        { transaction },
       );
     }),
 

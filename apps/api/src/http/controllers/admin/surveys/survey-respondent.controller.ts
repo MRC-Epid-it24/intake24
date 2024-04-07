@@ -14,15 +14,15 @@ import { respondentResponse } from '@intake24/api/http/responses/admin';
 import { atob } from '@intake24/api/util';
 import { Survey, UserSurveyAlias } from '@intake24/db';
 
-const adminSurveyRespondentController = ({
+function adminSurveyRespondentController({
   appConfig,
   adminSurveyService,
   feedbackService,
   scheduler,
-}: Pick<IoC, 'appConfig' | 'adminSurveyService' | 'feedbackService' | 'scheduler'>) => {
+}: Pick<IoC, 'appConfig' | 'adminSurveyService' | 'feedbackService' | 'scheduler'>) {
   const entry = async (
     req: Request<{ surveyId: string; username: string }>,
-    res: Response<SurveyRespondentEntry>
+    res: Response<SurveyRespondentEntry>,
   ): Promise<void> => {
     const { surveyId, username } = req.params;
     const { aclService } = req.scope.cradle;
@@ -30,14 +30,15 @@ const adminSurveyRespondentController = ({
     const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
       Survey,
       'respondents',
-      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
     );
 
     const respondent = await UserSurveyAlias.findOne({
       where: { surveyId, username },
       include: [{ association: 'user', include: [{ association: 'customFields' }] }],
     });
-    if (!respondent) throw new NotFoundError();
+    if (!respondent)
+      throw new NotFoundError();
 
     const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
 
@@ -46,7 +47,7 @@ const adminSurveyRespondentController = ({
 
   const browse = async (
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
-    res: Response<SurveyRespondentsResponse>
+    res: Response<SurveyRespondentsResponse>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -54,7 +55,7 @@ const adminSurveyRespondentController = ({
     const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
       Survey,
       'respondents',
-      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
     );
 
     const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
@@ -72,7 +73,7 @@ const adminSurveyRespondentController = ({
 
   const store = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyRespondentEntry>
+    res: Response<SurveyRespondentEntry>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -80,12 +81,12 @@ const adminSurveyRespondentController = ({
     const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
       Survey,
       'respondents',
-      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
     );
 
     const respondent = await adminSurveyService.createRespondent(
       surveyId,
-      pick(req.body, ['name', 'email', 'phone', 'username', 'password', 'customFields'])
+      pick(req.body, ['name', 'email', 'phone', 'username', 'password', 'customFields']),
     );
 
     await respondent.reload({
@@ -99,17 +100,17 @@ const adminSurveyRespondentController = ({
 
   const read = async (
     req: Request<{ surveyId: string; username: string }>,
-    res: Response<SurveyRespondentEntry>
+    res: Response<SurveyRespondentEntry>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ surveyId: string; username: string }>,
-    res: Response<SurveyRespondentEntry>
+    res: Response<SurveyRespondentEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ surveyId: string; username: string }>,
-    res: Response<SurveyRespondentEntry>
+    res: Response<SurveyRespondentEntry>,
   ): Promise<void> => {
     const { surveyId, username } = req.params;
     const { aclService } = req.scope.cradle;
@@ -117,13 +118,13 @@ const adminSurveyRespondentController = ({
     const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
       Survey,
       'respondents',
-      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
     );
 
     const respondent = await adminSurveyService.updateRespondent(
       surveyId,
       username,
-      pick(req.body, ['name', 'email', 'phone', 'username', 'password', 'customFields'])
+      pick(req.body, ['name', 'email', 'phone', 'username', 'password', 'customFields']),
     );
 
     await respondent.reload({
@@ -137,7 +138,7 @@ const adminSurveyRespondentController = ({
 
   const destroy = async (
     req: Request<{ surveyId: string; username: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { surveyId, username } = req.params;
     const { aclService } = req.scope.cradle;
@@ -154,7 +155,7 @@ const adminSurveyRespondentController = ({
 
   const upload = async (
     req: Request<{ surveyId: string }>,
-    res: Response<JobAttributes>
+    res: Response<JobAttributes>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const {
@@ -169,7 +170,8 @@ const adminSurveyRespondentController = ({
 
     const { file } = req;
 
-    if (!file) throw new ValidationError('File not found.', { path: 'file' });
+    if (!file)
+      throw new ValidationError('File not found.', { path: 'file' });
 
     const job = await adminSurveyService.importRespondents(surveyId, userId, file);
 
@@ -178,7 +180,7 @@ const adminSurveyRespondentController = ({
 
   const exportAuthUrls = async (
     req: Request<{ surveyId: string }>,
-    res: Response<JobAttributes>
+    res: Response<JobAttributes>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const {
@@ -198,7 +200,7 @@ const adminSurveyRespondentController = ({
 
   const downloadFeedback = async (
     req: Request<{ surveyId: string; username: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { surveyId, username } = req.params;
     const { aclService } = req.scope.cradle;
@@ -218,7 +220,7 @@ const adminSurveyRespondentController = ({
 
   const emailFeedback = async (
     req: Request<{ surveyId: string; username: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const {
       params: { surveyId, username },
@@ -264,7 +266,7 @@ const adminSurveyRespondentController = ({
     downloadFeedback,
     emailFeedback,
   };
-};
+}
 
 export default adminSurveyRespondentController;
 

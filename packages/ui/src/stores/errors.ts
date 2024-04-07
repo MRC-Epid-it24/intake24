@@ -32,7 +32,8 @@ export const useErrors = defineStore('errors', {
 
           const { data: { message } = {} } = response;
           useMessages().error(message ?? err.message);
-        } else useMessages().error(err.message);
+        }
+        else { useMessages().error(err.message); }
 
         return;
       }

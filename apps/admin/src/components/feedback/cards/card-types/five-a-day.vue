@@ -1,11 +1,11 @@
 <template>
   <div>
-    <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
+    <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)" />
     <card-thresholds
       :thresholds="{ high, low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
-    ></card-thresholds>
+    />
   </div>
 </template>
 

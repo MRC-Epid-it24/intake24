@@ -18,7 +18,7 @@ import { ApplicationError, NotFoundError } from '@intake24/api/http/errors';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
 import { DrinkwareSet, executeWithPagination } from '@intake24/db';
 
-const drinkwareSetService = ({
+function drinkwareSetService({
   kyselyDb,
   imagesBaseUrl,
   logger,
@@ -33,7 +33,7 @@ const drinkwareSetService = ({
   | 'sourceImageService'
   | 'processedImageService'
   | 'fsConfig'
->) => {
+>) {
   const { images: imagesPath } = fsConfig.local;
 
   function getImageUrl(relativeUrl: string): string {
@@ -41,11 +41,13 @@ const drinkwareSetService = ({
   }
 
   function parseLocaleTranslation(text: string | null): LocaleTranslation {
-    if (text == null) return {};
+    if (text == null)
+      return {};
 
     try {
       return JSON.parse(text); // should validate the result
-    } catch (e) {
+    }
+    catch (e) {
       logger.warn(`Failed to parse "${text}" as JSON string (expected LocaleTranslation)`);
       return {};
     }
@@ -54,15 +56,16 @@ const drinkwareSetService = ({
   function parseFloatArray(text: string, sourceFieldName: string): number[] {
     const jsonObject = JSON.parse(text);
 
-    if (!Array.isArray(jsonObject))
-      throw new Error(
-        `Expected a JSON array in field ${sourceFieldName}, but received ${typeof jsonObject}`
+    if (!Array.isArray(jsonObject)) {
+      throw new TypeError(
+        `Expected a JSON array in field ${sourceFieldName}, but received ${typeof jsonObject}`,
       );
+    }
 
     for (const v of jsonObject) {
       if (typeof v !== 'number') {
-        throw new Error(
-          `Expected an array of numbers in field ${sourceFieldName}, but encountered element of type ${typeof v}`
+        throw new TypeError(
+          `Expected an array of numbers in field ${sourceFieldName}, but encountered element of type ${typeof v}`,
         );
       }
     }
@@ -77,7 +80,8 @@ const drinkwareSetService = ({
       .where('drinkwareSets.id', '=', setId)
       .execute();
 
-    if (records.length === 0) throw new NotFoundError(`Drinkware set "${setId}" not found`);
+    if (records.length === 0)
+      throw new NotFoundError(`Drinkware set "${setId}" not found`);
   }
 
   const create = async (input: CreateDrinkwareSetInput): Promise<void> => {
@@ -87,23 +91,23 @@ const drinkwareSetService = ({
       .selectFrom('imageMaps')
       .where('id', '=', input.imageMapId)
       .executeTakeFirstOrThrow(
-        (_) => new ApplicationError(`Image map ${input.imageMapId} does not exist.`)
+        _ => new ApplicationError(`Image map ${input.imageMapId} does not exist.`),
       );
 
     await translateSqlErrors(() =>
-      kyselyDb.foods.insertInto('drinkwareSets').values(input).execute()
+      kyselyDb.foods.insertInto('drinkwareSets').values(input).execute(),
     );
   };
 
   async function convertV1BaseImage(
     drinkwareSetId: string,
     imageUploaderId: string,
-    imagePath: string
+    imagePath: string,
   ): Promise<string> {
     const image = await processDrinkScaleImage(
       drinkwareSetId,
       imageUploaderId,
-      path.join(imagesPath, imagePath)
+      path.join(imagesPath, imagePath),
     );
     return image.id;
   }
@@ -123,7 +127,7 @@ const drinkwareSetService = ({
   const update = async (
     drinkwareSetId: string,
     imageUploaderId: string,
-    input: UpdateDrinkwareSetInputWithFiles
+    input: UpdateDrinkwareSetInputWithFiles,
   ): Promise<void> => {
     await kyselyDb.foods.transaction().execute(async (tx) => {
       // Update the drinkware set record
@@ -131,7 +135,7 @@ const drinkwareSetService = ({
         .selectFrom('imageMaps')
         .where('id', '=', input.imageMapId)
         .executeTakeFirstOrThrow(
-          () => new ApplicationError(`Image map ${input.imageMapId} does not exist.`)
+          () => new ApplicationError(`Image map ${input.imageMapId} does not exist.`),
         );
 
       const { numUpdatedRows } = await tx
@@ -166,24 +170,26 @@ const drinkwareSetService = ({
               scaleInput.label,
               scaleInput.outlineCoordinates,
               scaleInput.volumeSamples,
-              tx
+              tx,
             );
-          } else {
+          }
+          else {
             // If V1 scale exists, use its values as defaults
-            const v1 = legacyScales.find((scale) => scale.choiceId.toString() === choiceId);
+            const v1 = legacyScales.find(scale => scale.choiceId.toString() === choiceId);
 
             // If new base image was not uploaded, run the legacy base image through the standard
             // image processing pipeline
-            const baseImage =
-              input.baseImageFiles[choiceId] ??
-              (v1
+            const baseImage
+              = input.baseImageFiles[choiceId]
+              ?? (v1
                 ? await convertV1BaseImage(drinkwareSetId, imageUploaderId, v1.baseImageUrl)
                 : undefined);
 
-            if (baseImage === undefined)
+            if (baseImage === undefined) {
               throw new ApplicationError(
-                `Drink scale for choice id ${choiceId} does not exist; an image is required to create a new scale record and it is missing from input.`
+                `Drink scale for choice id ${choiceId} does not exist; an image is required to create a new scale record and it is missing from input.`,
               );
+            }
 
             const volumeSamples = scaleInput.volumeSamples ?? (v1 ? v1.volumeSamples : []);
 
@@ -198,7 +204,7 @@ const drinkwareSetService = ({
               scaleInput.outlineCoordinates || [], // V1 does not store outline coordinates, so default to empty
               volumeSamples,
               false,
-              tx
+              tx,
             );
           }
         }
@@ -208,17 +214,18 @@ const drinkwareSetService = ({
 
   const destroy = async (drinkwareSetId: string): Promise<void> => {
     const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, { attributes: ['id'] });
-    if (!drinkwareSet) throw new NotFoundError();
+    if (!drinkwareSet)
+      throw new NotFoundError();
 
     await drinkwareSet.destroy();
   };
 
-  //#region Legacy drink scale format with pre-rendered overlays
+  // #region Legacy drink scale format with pre-rendered overlays
 
   const fetchDrinkScaleRecords = async (
     drinkwareSetId: string,
     choiceId?: string,
-    transaction?: Kysely<FoodsDB>
+    transaction?: Kysely<FoodsDB>,
   ) => {
     const db = transaction ?? kyselyDb.foods;
 
@@ -240,9 +247,8 @@ const drinkwareSetService = ({
 
         terms.push(eb('drinkwareSetId', '=', drinkwareSetId));
 
-        if (choiceId !== undefined) {
+        if (choiceId !== undefined)
           terms.push(eb('choiceId', '=', choiceId));
-        }
 
         return eb.and(terms);
       })
@@ -253,7 +259,8 @@ const drinkwareSetService = ({
   };
 
   const fetchVolumeSampleRecords = async (scaleId: string[], transaction?: Kysely<FoodsDB>) => {
-    if (scaleId.length === 0) return [];
+    if (scaleId.length === 0)
+      return [];
 
     return await (transaction ?? kyselyDb.foods)
       .selectFrom('drinkwareVolumeSamples')
@@ -264,23 +271,24 @@ const drinkwareSetService = ({
 
   const getDrinkScaleV1 = async (
     drinkwareSetId: string,
-    choiceId: string
+    choiceId: string,
   ): Promise<DrinkwareScaleEntry | undefined> => {
     await checkSetId(drinkwareSetId);
 
     const records = await fetchDrinkScaleRecords(drinkwareSetId, choiceId);
 
-    if (records.length === 0) return undefined;
+    if (records.length === 0)
+      return undefined;
 
     const record = records[0];
 
     const volumeSampleRecords = await fetchVolumeSampleRecords([record.id]);
-    const volumeSamples = volumeSampleRecords.flatMap((r) => [r.fill, r.volume]);
+    const volumeSamples = volumeSampleRecords.flatMap(r => [r.fill, r.volume]);
 
     return {
       version: 1,
       label: parseLocaleTranslation(record.label),
-      choiceId: parseInt(record.choiceId),
+      choiceId: Number.parseInt(record.choiceId),
       width: record.width,
       height: record.height,
       fullLevel: record.fullLevel,
@@ -294,28 +302,28 @@ const drinkwareSetService = ({
   const getDrinkScalesV1 = async (
     drinkwareSetId: string,
     getRelativePaths: boolean = false,
-    transaction?: Kysely<FoodsDB>
+    transaction?: Kysely<FoodsDB>,
   ): Promise<DrinkwareScaleEntry[]> => {
     await checkSetId(drinkwareSetId, transaction);
 
     const records = await fetchDrinkScaleRecords(drinkwareSetId, undefined, transaction);
     const volumeSampleRecords = await fetchVolumeSampleRecords(
-      records.map((r) => r.id),
-      transaction
+      records.map(r => r.id),
+      transaction,
     );
 
     // Convert from a list of records (scale_id, fill, volume) to a map scale_id -> number[],
     // where the numbers are a flattened list of (fill, volume) pairs
 
     const volumeSamples = mapValues(
-      groupBy(volumeSampleRecords, (r) => r.drinkwareScaleId),
-      (grouped) => grouped.flatMap((r) => [r.fill, r.volume])
+      groupBy(volumeSampleRecords, r => r.drinkwareScaleId),
+      grouped => grouped.flatMap(r => [r.fill, r.volume]),
     );
 
-    return records.map((record) => ({
+    return records.map(record => ({
       version: 1,
       label: parseLocaleTranslation(record.label),
-      choiceId: parseInt(record.choiceId),
+      choiceId: Number.parseInt(record.choiceId),
       width: record.width,
       height: record.height,
       fullLevel: record.fullLevel,
@@ -326,9 +334,9 @@ const drinkwareSetService = ({
     }));
   };
 
-  //#endregion
+  // #endregion
 
-  //#region V2 drink scale format with client-rendered overlays
+  // #region V2 drink scale format with client-rendered overlays
 
   const fetchDrinkScaleV2Records = async (drinkwareSetId: string, choiceId?: string) => {
     const scaleRecords = await kyselyDb.foods
@@ -349,9 +357,8 @@ const drinkwareSetService = ({
 
         terms.push(eb('drinkwareSetId', '=', drinkwareSetId));
 
-        if (choiceId !== undefined) {
+        if (choiceId !== undefined)
           terms.push(eb('choiceId', '=', choiceId));
-        }
 
         return eb.and(terms);
       })
@@ -374,22 +381,23 @@ const drinkwareSetService = ({
 
   function formatDrinkScaleV2(
     drinkwareSetId: string,
-    record: DrinkScaleV2Record
+    record: DrinkScaleV2Record,
   ): DrinkwareScaleV2Entry {
-    if (record.baseImagePath === null)
+    if (record.baseImagePath === null) {
       throw new Error(
-        `Drink scale image missing for drinkware set ${drinkwareSetId}, object id ${record.choiceId}, image id ${record.baseImageId}`
+        `Drink scale image missing for drinkware set ${drinkwareSetId}, object id ${record.choiceId}, image id ${record.baseImageId}`,
       );
+    }
 
     return {
       version: 2,
-      choiceId: parseInt(record.choiceId),
+      choiceId: Number.parseInt(record.choiceId),
       label: parseLocaleTranslation(record.label),
       outlineCoordinates: parseFloatArray(record.outlineCoordinates, 'outline_coordinates'),
       volumeSamples: parseFloatArray(record.volumeSamples, 'volume_samples'),
       volumeSamplesNormalised: parseFloatArray(
         record.volumeSamplesNormalised,
-        'volume_samples_normalised'
+        'volume_samples_normalised',
       ),
       baseImageUrl: getImageUrl(record.baseImagePath),
     };
@@ -397,7 +405,7 @@ const drinkwareSetService = ({
 
   const getDrinkScaleV2ChoiceIds = async (
     drinkwareSetId: string,
-    transaction?: Kysely<FoodsDB>
+    transaction?: Kysely<FoodsDB>,
   ): Promise<string[]> => {
     const db = transaction || kyselyDb.foods;
 
@@ -407,7 +415,7 @@ const drinkwareSetService = ({
       .where('drinkwareSetId', '=', drinkwareSetId)
       .execute();
 
-    return rows.map((row) => row.choiceId);
+    return rows.map(row => row.choiceId);
   };
 
   const getDrinkScalesV2 = async (drinkwareSetId: string): Promise<DrinkwareScaleV2Entry[]> => {
@@ -415,45 +423,48 @@ const drinkwareSetService = ({
 
     const records = await fetchDrinkScaleV2Records(drinkwareSetId);
 
-    return records.map((record) => formatDrinkScaleV2(drinkwareSetId, record));
+    return records.map(record => formatDrinkScaleV2(drinkwareSetId, record));
   };
 
   const getDrinkScaleV2 = async (
     drinkwareSetId: string,
-    choiceId: string
+    choiceId: string,
   ): Promise<DrinkwareScaleV2Entry | undefined> => {
     await checkSetId(drinkwareSetId);
 
     const records = await fetchDrinkScaleV2Records(drinkwareSetId, choiceId);
 
-    if (records.length === 0) return undefined;
+    if (records.length === 0)
+      return undefined;
 
     return formatDrinkScaleV2(drinkwareSetId, records[0]);
   };
 
-  //#endregion
+  // #endregion
 
   const getDrinkScale = async (
     drinkwareSetId: string,
-    choiceId: string
+    choiceId: string,
   ): Promise<DrinkwareScaleEntry | DrinkwareScaleV2Entry> => {
     await checkSetId(drinkwareSetId);
 
     const recordV2 = await getDrinkScaleV2(drinkwareSetId, choiceId);
 
-    if (recordV2 !== undefined) return recordV2;
+    if (recordV2 !== undefined)
+      return recordV2;
 
     const recordV1 = await getDrinkScaleV1(drinkwareSetId, choiceId);
 
-    if (recordV1 !== undefined) return recordV1;
+    if (recordV1 !== undefined)
+      return recordV1;
 
     throw new NotFoundError(
-      `Drinkware set ${drinkwareSetId} has no drink scale for object ${choiceId}`
+      `Drinkware set ${drinkwareSetId} has no drink scale for object ${choiceId}`,
     );
   };
 
   const getDrinkScales = async (
-    drinkwareSetId: string
+    drinkwareSetId: string,
   ): Promise<(DrinkwareScaleEntry | DrinkwareScaleV2Entry)[]> => {
     await checkSetId(drinkwareSetId);
 
@@ -466,7 +477,7 @@ const drinkwareSetService = ({
   const processDrinkScaleImage = async (
     id: string,
     uploader: string,
-    fileOrPath: Express.Multer.File | string
+    fileOrPath: Express.Multer.File | string,
   ): Promise<ProcessedImage> => {
     const sourceImage = await sourceImageService.uploadSourceImage(
       {
@@ -480,7 +491,7 @@ const drinkwareSetService = ({
             : fileOrPath,
         uploader,
       },
-      'drink_scale'
+      'drink_scale',
     );
 
     const processedImage = await processedImageService.createDrinkScaleBaseImage(id, sourceImage);
@@ -494,7 +505,8 @@ const drinkwareSetService = ({
     let maxFillLevel = 0;
 
     for (let i = 0; i < sampleCount; i++) {
-      if (volumeSamples[i * 2] > maxFillLevel) maxFillLevel = volumeSamples[i * 2];
+      if (volumeSamples[i * 2] > maxFillLevel)
+        maxFillLevel = volumeSamples[i * 2];
     }
 
     if (maxFillLevel === 0) {
@@ -521,10 +533,10 @@ const drinkwareSetService = ({
     outlineCoordinates: number[],
     volumeSamples: number[],
     updateOnConflict: boolean,
-    transaction?: Kysely<FoodsDB>
+    transaction?: Kysely<FoodsDB>,
   ) => {
-    const processedImageId =
-      typeof baseImageFile === 'string'
+    const processedImageId
+      = typeof baseImageFile === 'string'
         ? baseImageFile
         : (await processDrinkScaleImage(drinkwareSetId, uploaderId, baseImageFile)).id;
 
@@ -557,8 +569,9 @@ const drinkwareSetService = ({
     }
 
     await translateSqlErrors(async () => {
-      if (transaction) await executeQueries(transaction);
-      else await kyselyDb.foods.transaction().execute(async (tx) => executeQueries(tx));
+      if (transaction)
+        await executeQueries(transaction);
+      else await kyselyDb.foods.transaction().execute(async tx => executeQueries(tx));
     });
   };
 
@@ -570,7 +583,7 @@ const drinkwareSetService = ({
     label?: LocaleTranslation,
     outlineCoordinates?: number[],
     volumeSamples?: number[],
-    transaction?: Kysely<FoodsDB>
+    transaction?: Kysely<FoodsDB>,
   ) => {
     const db = transaction || kyselyDb.foods;
 
@@ -583,7 +596,7 @@ const drinkwareSetService = ({
       const processedImage = await processDrinkScaleImage(
         drinkwareSetId,
         imageUploaderId,
-        baseImageFile
+        baseImageFile,
       );
       query = query.set('baseImageId', processedImage.id);
     }
@@ -606,7 +619,8 @@ const drinkwareSetService = ({
     }
 
     const updateResult = await query.executeTakeFirstOrThrow();
-    if (updateResult.numUpdatedRows === 0n) throw new NotFoundError();
+    if (updateResult.numUpdatedRows === 0n)
+      throw new NotFoundError();
   };
 
   const createDrinkScaleV1 = async (
@@ -621,7 +635,7 @@ const drinkwareSetService = ({
     fullLevel: string,
     emptyLevel: string,
     volumeSamplesJson: string,
-    update: boolean
+    update: boolean,
   ) => {
     // Hacky but an easy way to handle legacy unprocessed drink scale images
 
@@ -631,7 +645,7 @@ const drinkwareSetService = ({
         file: baseImageFile,
         uploader: uploaderId,
       },
-      'drink_scale'
+      'drink_scale',
     );
 
     const overlayImage = await sourceImageService.uploadSourceImage(
@@ -640,7 +654,7 @@ const drinkwareSetService = ({
         file: overlayImageFile,
         uploader: uploaderId,
       },
-      'drink_scale'
+      'drink_scale',
     );
 
     const volumeSamples = JSON.parse(volumeSamplesJson) as { fill: number; volume: number }[];
@@ -661,39 +675,38 @@ const drinkwareSetService = ({
             label: labelJson,
             choiceId,
             drinkwareSetId,
-            width: parseInt(width),
-            height: parseInt(height),
-            emptyLevel: parseInt(emptyLevel),
-            fullLevel: parseInt(fullLevel),
+            width: Number.parseInt(width),
+            height: Number.parseInt(height),
+            emptyLevel: Number.parseInt(emptyLevel),
+            fullLevel: Number.parseInt(fullLevel),
             baseImageUrl: baseImage.path,
             overlayImageUrl: overlayImage.path,
           })
           .returning('id')
           .executeTakeFirstOrThrow();
 
-        const volumeSamplesRows = volumeSamples.map((sample) => ({
+        const volumeSamplesRows = volumeSamples.map(sample => ({
           drinkwareScaleId: id,
           ...sample,
         }));
 
         await tx.insertInto('drinkwareVolumeSamples').values(volumeSamplesRows).execute();
-      })
+      }),
     );
   };
 
   const getDrinkwareSet = async (
-    drinkwareSetId: string
+    drinkwareSetId: string,
   ): Promise<DrinkwareSetEntry | undefined> => {
     // Only return V1 scale if V2 scale does not exist for the same object
     function mergeScales(
       scalesV1: DrinkwareScaleEntry[],
-      scalesV2: DrinkwareScaleV2Entry[]
+      scalesV2: DrinkwareScaleV2Entry[],
     ): (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[] {
       const merged: (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[] = [...scalesV2];
       for (const scale of scalesV1) {
-        if (merged.find((s) => s.choiceId === scale.choiceId) === undefined) {
+        if (merged.find(s => s.choiceId === scale.choiceId) === undefined)
           merged.push(scale);
-        }
       }
       return merged;
     }
@@ -704,7 +717,8 @@ const drinkwareSetService = ({
       .where('drinkwareSets.id', '=', drinkwareSetId)
       .execute();
 
-    if (sets.length === 0) return undefined;
+    if (sets.length === 0)
+      return undefined;
 
     const recordsV2 = await getDrinkScalesV2(drinkwareSetId);
     const recordsV1 = await getDrinkScalesV1(drinkwareSetId);
@@ -720,10 +734,11 @@ const drinkwareSetService = ({
   const getDrinkwareSetOrThrow = async (drinkwareSetId: string): Promise<DrinkwareSetEntry> => {
     const set = await getDrinkwareSet(drinkwareSetId);
 
-    if (set === undefined)
+    if (set === undefined) {
       throw new Error(
-        `Couldn't find drinkware set "${drinkwareSetId}" which was unexpected at this point`
+        `Couldn't find drinkware set "${drinkwareSetId}" which was unexpected at this point`,
       );
+    }
 
     return set;
   };
@@ -743,16 +758,17 @@ const drinkwareSetService = ({
       query,
       ['drinkwareSets.description', 'drinkwareSets.id'],
       ['drinkwareSets.description'],
-      pagination
+      pagination,
     );
 
     return {
       meta,
       data: data.map((record) => {
-        if (record.imagePath === null)
+        if (record.imagePath === null) {
           throw new Error(
-            `Drinkware set ${record.id} is broken: either the image map id is invalid, or the base image is missing`
+            `Drinkware set ${record.id} is broken: either the image map id is invalid, or the base image is missing`,
           );
+        }
         return {
           id: record.id,
           description: record.description,
@@ -812,7 +828,7 @@ const drinkwareSetService = ({
     update,
     destroy,
   };
-};
+}
 
 export default drinkwareSetService;
 

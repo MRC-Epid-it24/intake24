@@ -13,22 +13,28 @@ export interface HasVisibility extends Securable {
   visibility: RecordVisibility;
 }
 
-export const securableScope = (userId: string): FindOptions => ({
-  include: [
+export function securableScope(userId: string): FindOptions {
+  return {
+    include: [
+      { association: 'securables', required: false, where: { userId } },
+      { association: 'owner', required: false, attributes: ['id', 'name', 'email'] },
+    ],
+  };
+}
+
+export function securableIncludes(userId: string): Includeable[] {
+  return [
     { association: 'securables', required: false, where: { userId } },
     { association: 'owner', required: false, attributes: ['id', 'name', 'email'] },
-  ],
-});
+  ];
+}
 
-export const securableIncludes = (userId: string): Includeable[] => [
-  { association: 'securables', required: false, where: { userId } },
-  { association: 'owner', required: false, attributes: ['id', 'name', 'email'] },
-];
-
-export const visibilityScope = (userId: string, where: WhereOptions = {}): FindOptions => ({
-  where: {
-    ...where,
-    [Op.or]: { visibility: 'public', ownerId: userId, '$securables.action$': ['use'] },
-  },
-  ...securableScope(userId),
-});
+export function visibilityScope(userId: string, where: WhereOptions = {}): FindOptions {
+  return {
+    where: {
+      ...where,
+      [Op.or]: { visibility: 'public', ownerId: userId, '$securables.action$': ['use'] },
+    },
+    ...securableScope(userId),
+  };
+}

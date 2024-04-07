@@ -65,7 +65,7 @@ export default () => {
           physicalActivityLevelId: false,
           weightTarget: 2020,
         },
-      }
+      },
     );
   });
 
@@ -103,7 +103,7 @@ export default () => {
           physicalActivityLevelId: null,
           weightTarget: null,
         },
-      }
+      },
     );
   });
 
@@ -112,7 +112,7 @@ export default () => {
       'post',
       `${url}?survey=${survey.slug}`,
       createUserPhysicalData,
-      { bearer: 'respondent' }
+      { bearer: 'respondent' },
     );
   });
 
@@ -121,7 +121,7 @@ export default () => {
       'post',
       `${url}?survey=${survey.slug}`,
       updateUserPhysicalData,
-      { bearer: 'respondent' }
+      { bearer: 'respondent' },
     );
   });
 };

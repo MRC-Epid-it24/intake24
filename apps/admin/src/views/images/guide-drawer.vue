@@ -1,6 +1,6 @@
 <template>
   <div class="guides-drawer">
-    <v-img ref="img" :src="entry.baseImageUrl"></v-img>
+    <v-img ref="img" :src="entry.baseImageUrl" />
     <svg
       ref="svg"
       :style="svgCursor"
@@ -13,7 +13,7 @@
           :points="object.polygon"
           @click.stop="selectObject(objectIdx)"
           @keypress.stop="selectObject(objectIdx)"
-        ></polygon>
+        />
         <g v-if="isImageMap && !disabled" class="guides-drawer-node-group">
           <circle
             v-for="([x, y], nodeIdx) in object.coords"
@@ -25,7 +25,7 @@
             @dblclick.stop="removeNode(nodeIdx)"
             @mousedown="dragNode($event, nodeIdx)"
             @mouseup="dropNode()"
-          ></circle>
+          />
         </g>
       </g>
     </svg>
@@ -42,9 +42,11 @@
                   :style="{ cursor: 'pointer' }"
                   @click="selectObject(idx)"
                 >
-                  <v-icon left>fas fa-draw-polygon</v-icon>{{ $t('guide-images.objects.id') }}:
+                  <v-icon left>
+                    fas fa-draw-polygon
+                  </v-icon>{{ $t('guide-images.objects.id') }}:
                   {{ object.id }}
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <confirm-dialog
                     v-if="isImageMap && !disabled"
                     color="error"
@@ -57,7 +59,7 @@
                     {{ $t('common.action.confirm.delete', { name: entry.id }) }}
                   </confirm-dialog>
                 </v-toolbar>
-                <v-divider></v-divider>
+                <v-divider />
                 <v-card-text>
                   <v-row>
                     <v-col cols="12">
@@ -68,7 +70,7 @@
                         :label="$t('common.description')"
                         name="description"
                         outlined
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col v-if="isGuideImage" cols="12">
                       <v-text-field
@@ -79,7 +81,7 @@
                         name="weight"
                         outlined
                         prepend-inner-icon="fas fa-scale-balanced"
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col cols="12">
                       <language-selector
@@ -98,7 +100,7 @@
                             outlined
                             :persistent-hint="isGuideImage"
                             @input="updateObjects"
-                          ></v-text-field>
+                          />
                         </template>
                       </language-selector>
                     </v-col>
@@ -153,8 +155,9 @@ interface Objects extends Omit<GuideImageEntryObject, 'id' | 'outlineCoordinates
 
 type PathCoords = number[][][];
 
-const distance = ([sourceX, sourceY]: number[], [targetX, targetY]: number[]) =>
-  Math.sqrt((sourceX - targetX) ** 2 + (sourceY - targetY) ** 2);
+function distance([sourceX, sourceY]: number[], [targetX, targetY]: number[]) {
+  return Math.sqrt((sourceX - targetX) ** 2 + (sourceY - targetY) ** 2);
+}
 
 export default defineComponent({
   name: 'GuideDrawer',
@@ -182,7 +185,7 @@ export default defineComponent({
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    //@ts-expect-error should allow vue instance?
+    // @ts-expect-error should allow vue instance?
     const { height, width } = useElementSize(img);
 
     const objects = ref<Objects[]>([]);
@@ -193,24 +196,24 @@ export default defineComponent({
 
     props.entry.objects.forEach(({ id, outlineCoordinates, ...rest }) => {
       coords.value.push(chunk(outlineCoordinates, 2));
-      objects.value.push({ weight: 0, id: parseInt(id, 10), ...rest });
+      objects.value.push({ weight: 0, id: Number.parseInt(id, 10), ...rest });
     });
 
     const isImageMap = computed(() => props.resource === 'image-maps');
     const isGuideImage = computed(() => props.resource === 'guide-images');
 
     const svgCursor = computed(
-      () => `cursor: ${props.disabled || selectedObjectIdx.value === null ? 'no-drop' : 'pointer'}`
+      () => `cursor: ${props.disabled || selectedObjectIdx.value === null ? 'no-drop' : 'pointer'}`,
     );
 
     const nodeCursor = computed(
-      () => `cursor: ${selectedNodeIdx.value === null ? 'grab' : 'grabbing'}`
+      () => `cursor: ${selectedNodeIdx.value === null ? 'grab' : 'grabbing'}`,
     );
 
     const scaled = computed(() => {
       return coords.value.map((node) => {
         const coords = node.map(([x, y]) => [x * width.value, y * width.value]);
-        const polygon = coords.map((scaledNode) => scaledNode.join(',')).join(' ');
+        const polygon = coords.map(scaledNode => scaledNode.join(',')).join(' ');
 
         return { coords, polygon };
       });
@@ -221,7 +224,7 @@ export default defineComponent({
         ...rest,
         id: id.toString(),
         outlineCoordinates: coords.value[index].flat(),
-      }))
+      })),
     );
 
     const guideImageObjects = computed<GuideImageEntryObject[]>(() =>
@@ -229,7 +232,7 @@ export default defineComponent({
         ...rest,
         id: id.toString(),
         outlineCoordinates: coords.value[index].flat(),
-      }))
+      })),
     );
 
     const updateImageMapObjects = () => {
@@ -250,7 +253,7 @@ export default defineComponent({
       () => {
         updateImageMapObjects();
       },
-      { debounce: 500, maxWait: 2000 }
+      { debounce: 500, maxWait: 2000 },
     );
 
     watchDebounced(
@@ -258,7 +261,7 @@ export default defineComponent({
       () => {
         updateGuideImageObjects();
       },
-      { debounce: 500, maxWait: 2000 }
+      { debounce: 500, maxWait: 2000 },
     );
 
     return {
@@ -304,16 +307,18 @@ export default defineComponent({
     },
 
     getClosestPointIndex(source: number[], targets: number[][]): number {
-      if (!targets.length) return 0;
+      if (!targets.length)
+        return 0;
 
       const closest = targets.reduce((a, b) => (distance(source, a) < distance(source, b) ? a : b));
 
-      return targets.findIndex((coords) => coords === closest);
+      return targets.findIndex(coords => coords === closest);
     },
 
     addNode(event: any) {
       const { selectedObjectIdx } = this;
-      if (selectedObjectIdx === null) return;
+      if (selectedObjectIdx === null)
+        return;
 
       const { width } = this;
       const { offsetX, offsetY } = event;
@@ -334,14 +339,16 @@ export default defineComponent({
 
     removeNode(nodeIdx: number) {
       const { selectedObjectIdx } = this;
-      if (selectedObjectIdx === null) return;
+      if (selectedObjectIdx === null)
+        return;
 
       this.coords[selectedObjectIdx].splice(nodeIdx, 1);
     },
 
     dragNode(event: any, index: number) {
       const { selectedObjectIdx } = this;
-      if (selectedObjectIdx === null) return;
+      if (selectedObjectIdx === null)
+        return;
 
       this.selectedNodeIdx = index;
 

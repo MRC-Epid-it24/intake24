@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h2 class="mb-4">{{ $t('user.profile') }}</h2>
+    <h2 class="mb-4">
+      {{ $t('user.profile') }}
+    </h2>
     <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
       <v-toolbar flat>
         <v-toolbar-title class="font-weight-medium text-h6">
@@ -8,7 +10,7 @@
             {{ $t('user.personalAccessTokens.title') }}
           </slot>
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <template #activator="{ attrs, on }">
             <v-btn
@@ -42,9 +44,11 @@
                   outlined
                   readonly
                   :value="jwt"
-                ></v-textarea>
+                />
                 <v-btn block color="info" large @click="toClipboard(jwt)">
-                  <v-icon left>fas fa-clipboard</v-icon>
+                  <v-icon left>
+                    fas fa-clipboard
+                  </v-icon>
                   {{ $t('common.clipboard._') }}
                 </v-btn>
               </template>
@@ -57,7 +61,7 @@
                   :label="$t('common.name')"
                   name="name"
                   outlined
-                ></v-text-field>
+                />
                 <v-text-field
                   append-icon="fas fa-calendar-alt"
                   class="mb-4"
@@ -70,7 +74,7 @@
                   :value="formatDate(form.expiresAt, 'dd/MM/yyyy')"
                   @click:append="datePicker = !datePicker"
                   @focusin="datePicker = true"
-                ></v-text-field>
+                />
                 <v-expand-transition>
                   <v-date-picker
                     v-show="datePicker"
@@ -81,7 +85,7 @@
                     scrollable
                     width="auto"
                     @input="datePicker = false"
-                  ></v-date-picker>
+                  />
                 </v-expand-transition>
                 <v-btn
                   block
@@ -106,7 +110,9 @@
           link
         >
           <v-list-item-avatar>
-            <v-icon class="secondary" dark>fas fa-key</v-icon>
+            <v-icon class="secondary" dark>
+              fas fa-key
+            </v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ token.name }}</v-list-item-title>
@@ -184,7 +190,7 @@ export default defineComponent({
 
     const submit = async () => {
       const data = await form.post<{ jwt: string; token: PersonalAccessTokenResponse }>(
-        'admin/user/personal-access-tokens'
+        'admin/user/personal-access-tokens',
       );
       jwt.value = data.jwt;
       tokens.value.unshift(data.token);

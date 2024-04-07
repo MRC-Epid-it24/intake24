@@ -34,7 +34,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('put', url, { permissions });
   });
 
@@ -56,7 +56,7 @@ export default () => {
         'put',
         url,
         ['name', 'displayName', 'permissions'],
-        { input: { name: '', displayName: '', permissions: [1, 'invalidId', 2] } }
+        { input: { name: '', displayName: '', permissions: [1, 'invalidId', 2] } },
       );
     });
 

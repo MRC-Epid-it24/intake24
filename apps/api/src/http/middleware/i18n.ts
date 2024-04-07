@@ -5,7 +5,7 @@ import Negotiator from 'negotiator';
 /*
  * Register client language preferences
  */
-export const registerI18nScope = (req: Request, res: Response, next: NextFunction): void => {
+export function registerI18nScope(req: Request, res: Response, next: NextFunction): void {
   const negotiator = new Negotiator(req);
 
   req.scope.register({
@@ -13,4 +13,4 @@ export const registerI18nScope = (req: Request, res: Response, next: NextFunctio
   });
 
   next();
-};
+}

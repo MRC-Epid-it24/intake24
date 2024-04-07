@@ -11,7 +11,7 @@ describe('toSimpleName', () => {
     expect(toSimpleName('Kateřina Nováková')).toEqual('katerina novakova');
 
     expect(toSimpleName('ěš čř žý áíé úů ĚŠ ČŘ ŽÝ ÁÍÉ ÚŮ')).toEqual(
-      'es cr zy aie uu es cr zy aie uu'
+      'es cr zy aie uu es cr zy aie uu',
     );
   });
 });

@@ -1,17 +1,23 @@
 <template>
   <v-tabs vertical>
     <v-btn class="my-4" color="secondary" @click="add">
-      <v-icon left>$add</v-icon>
+      <v-icon left>
+        $add
+      </v-icon>
       {{ $t(`feedback-schemes.sentiments.add`) }}
     </v-btn>
     <v-tab v-for="(sentiment, index) in sentiments" :key="index">
-      <v-icon left>fas fa-face-smile</v-icon>
+      <v-icon left>
+        fas fa-face-smile
+      </v-icon>
       {{ `${$t(`feedback-schemes.sentiments._`)} ${index + 1}` }}
     </v-tab>
     <v-tab-item v-for="(sentiment, index) in sentiments" :key="index">
       <v-card tile>
         <v-card-title>
-          <v-icon left>fas fa-face-smile</v-icon>
+          <v-icon left>
+            fas fa-face-smile
+          </v-icon>
           {{ `${$t(`feedback-schemes.sentiments._`)} ${index + 1}` }}
         </v-card-title>
         <v-container fluid>
@@ -24,7 +30,7 @@
                 :label="$t('feedback-schemes.sentiments._')"
                 multiple
                 outlined
-              ></v-select>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -33,7 +39,7 @@
                 :items="availableCharacterSentimentTypes"
                 :label="$t('feedback-schemes.characterSentimentTypes._')"
                 outlined
-              ></v-select>
+              />
             </v-col>
             <v-col cols="12">
               <language-selector v-model="sentiment.name" :label="$t('common.name').toString()">
@@ -44,7 +50,7 @@
                     hide-details="auto"
                     :label="$t('common.name')"
                     outlined
-                  ></v-text-field>
+                  />
                 </template>
               </language-selector>
             </v-col>
@@ -56,7 +62,9 @@
                 :title="$t(`feedback-schemes.sentiments.remove`)"
                 @click.stop="remove"
               >
-                <v-icon left>$delete</v-icon>
+                <v-icon left>
+                  $delete
+                </v-icon>
                 {{ $t(`feedback-schemes.sentiments.remove`) }}
               </v-btn>
             </v-col>
@@ -102,11 +110,11 @@ export default defineComponent({
     return {
       characterSentimentDefaults,
       sentiments: [...this.value],
-      availableSentiments: sentiments.map((value) => ({
+      availableSentiments: sentiments.map(value => ({
         text: this.$t(`feedback-schemes.sentiments.${value}`),
         value,
       })),
-      availableCharacterSentimentTypes: characterSentimentTypes.map((value) => ({
+      availableCharacterSentimentTypes: characterSentimentTypes.map(value => ({
         text: this.$t(`feedback-schemes.characterSentimentTypes.${value}`),
         value,
       })),
@@ -115,7 +123,8 @@ export default defineComponent({
 
   watch: {
     value(val) {
-      if (deepEqual(val, this.sentiments)) return;
+      if (deepEqual(val, this.sentiments))
+        return;
 
       this.sentiments = [...val];
     },

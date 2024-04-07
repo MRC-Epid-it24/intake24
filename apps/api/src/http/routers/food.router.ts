@@ -6,12 +6,11 @@ import { contract } from '@intake24/common/contracts';
 
 import { NotFoundError } from '../errors';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ATTR_USE_ANYWHERE = 0;
+// const ATTR_USE_ANYWHERE = 0;
 const ATTR_AS_REGULAR_FOOD_ONLY = 1;
 const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
 
-export const food = () => {
+export function food() {
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -38,24 +37,26 @@ export const food = () => {
             const data = await req.scope.cradle.foodDataService.getFoodData(localeId, code);
 
             for (let i = 0; i < data.portionSizeMethods.length; ++i) {
-              data.portionSizeMethods[i].imageUrl =
-                `${imagesBaseUrl}/${data.portionSizeMethods[i].imageUrl}`;
+              data.portionSizeMethods[i].imageUrl
+                = `${imagesBaseUrl}/${data.portionSizeMethods[i].imageUrl}`;
             }
 
             return data;
-          }
+          },
         );
 
         return { status: 200, body: response };
-      } catch (err) {
-        if (err instanceof InvalidIdError) throw new NotFoundError(err.message);
+      }
+      catch (err) {
+        if (err instanceof InvalidIdError)
+          throw new NotFoundError(err.message);
         throw err;
       }
     },
     categories: async ({ params, req }) => {
       const { code } = params;
-      const categories =
-        await req.scope.cradle.cachedParentCategoriesService.getFoodAllCategories(code);
+      const categories
+        = await req.scope.cradle.cachedParentCategoriesService.getFoodAllCategories(code);
 
       return { status: 200, body: categories };
     },
@@ -68,17 +69,17 @@ export const food = () => {
         rankingAlgorithm ?? 'popularity',
         matchScoreWeight ?? 20,
         hidden === 'true',
-        category
+        category,
       );
 
-      const attrs =
-        await req.scope.cradle.cachedInheritableAttributesService.getInheritableAttributes(
-          results.foods.map((r) => r.code)
+      const attrs
+        = await req.scope.cradle.cachedInheritableAttributesService.getInheritableAttributes(
+          results.foods.map(r => r.code),
         );
 
       const withFilteredIngredients = {
-        foods: results.foods.filter((header) =>
-          acceptForQuery(req.query.recipe === 'true', attrs[header.code]?.useInRecipes)
+        foods: results.foods.filter(header =>
+          acceptForQuery(req.query.recipe === 'true', attrs[header.code]?.useInRecipes),
         ),
         categories: results.categories,
       };
@@ -93,4 +94,4 @@ export const food = () => {
       return { status: 200, body: result };
     },
   });
-};
+}

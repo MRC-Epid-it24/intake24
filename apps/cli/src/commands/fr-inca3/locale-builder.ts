@@ -1,10 +1,10 @@
 import { createReadStream } from 'node:fs';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 import type csvParser from 'csv-parser';
 import parseCsv from 'csv-parser';
-import fs from 'fs/promises';
 import { groupBy } from 'lodash';
-import path from 'path';
 import removeBOM from 'remove-bom-stream';
 import { v4 as randomUUID } from 'uuid';
 
@@ -121,7 +121,7 @@ export class FrenchAnsesLocaleBuilder {
   private async readCSV(
     relativePath: string,
     onRowData: (data: any) => void,
-    optionsOrHeaders?: csvParser.Options | ReadonlyArray<string>
+    optionsOrHeaders?: csvParser.Options | ReadonlyArray<string>,
   ): Promise<void> {
     return new Promise((resolve) => {
       createReadStream(path.join(this.sourceDirPath, relativePath))
@@ -136,30 +136,11 @@ export class FrenchAnsesLocaleBuilder {
     });
   }
 
-  // eslint-disable @typescript-eslint/no-unused-vars
-  private getIntake24Categories(
-    gpe: string,
-    sgpe: string | undefined,
-    ssgpe: string | undefined
-  ): string[] {
-    return [];
-  }
-
-  // eslint-disable @typescript-eslint/no-unused-vars
-  private getRecipeIntake24Categories(
-    gpe: string,
-    sgpe: string | undefined,
-    ssgpe: string | undefined
-  ): string[] {
-    return [];
-  }
-
   private getFoodEnglishDescription(code: string): string {
     const description = this.foodEnglishDescriptions![code];
 
-    if (description === undefined) {
+    if (description === undefined)
       throw new Error(`Missing English description for food ${code}`);
-    }
 
     return description;
   }
@@ -167,9 +148,8 @@ export class FrenchAnsesLocaleBuilder {
   private getRecipeEnglishDescription(code: string): string {
     const description = this.recipeEnglishDescriptions![code];
 
-    if (description === undefined) {
+    if (description === undefined)
       throw new Error(`Missing English description for recipe ${code}`);
-    }
 
     return description;
   }
@@ -195,12 +175,15 @@ export class FrenchAnsesLocaleBuilder {
           const cat2 = data[11] as string;
           const cat3 = data[13] as string;
 
-          if (cat1) categories.push(cat1);
-          if (cat2) categories.push(cat2);
-          if (cat3) categories.push(cat3);
+          if (cat1)
+            categories.push(cat1);
+          if (cat2)
+            categories.push(cat2);
+          if (cat3)
+            categories.push(cat3);
         }
       },
-      { headers: false, skipLines: 1 }
+      { headers: false, skipLines: 1 },
     );
   }
 
@@ -225,12 +208,15 @@ export class FrenchAnsesLocaleBuilder {
           const cat2 = data[7];
           const cat3 = data[9];
 
-          if (cat1) categories.push(cat1);
-          if (cat2) categories.push(cat2);
-          if (cat3) categories.push(cat3);
+          if (cat1)
+            categories.push(cat1);
+          if (cat2)
+            categories.push(cat2);
+          if (cat3)
+            categories.push(cat3);
         }
       },
-      { headers: false, skipLines: 1 }
+      { headers: false, skipLines: 1 },
     );
   }
 
@@ -239,45 +225,44 @@ export class FrenchAnsesLocaleBuilder {
       const synonyms: string[] = [];
       for (let i = 1; i <= 8; i++) {
         const synonymValue = row[`${prefix}SYNONYME${i}`];
-        if (synonymValue !== undefined) {
+        if (synonymValue !== undefined)
           synonyms.push(capitalize(synonymValue));
-        }
       }
       return synonyms;
     }
 
     this.sourceRecords = await this.readJSON<INCA3FoodListRow[]>('ALIMENTS_FDLIST.json');
-    this.sourceFoodRecords = this.sourceRecords.filter((record) => isFoodCode(record.A_CODE));
+    this.sourceFoodRecords = this.sourceRecords.filter(record => isFoodCode(record.A_CODE));
 
-    const englishDescriptionRecords =
-      await this.readJSON<INCA3EnglishDescription[]>('EN_DESC.json');
+    const englishDescriptionRecords
+      = await this.readJSON<INCA3EnglishDescription[]>('EN_DESC.json');
 
     const foodSynonymRecords = await this.readJSON<INCA3FoodShadowsRow[]>('ALIMENTS_SHADOWS.json');
 
     this.foodSynonyms = Object.fromEntries(
-      foodSynonymRecords.map((r) => [r.A_CODE, getSynonyms(r, 'A_')]).filter((a) => a[1].length > 0)
+      foodSynonymRecords.map(r => [r.A_CODE, getSynonyms(r, 'A_')]).filter(a => a[1].length > 0),
     );
 
     this.foodEnglishDescriptions = Object.fromEntries(
-      englishDescriptionRecords.map((r) => [r.code, r.englishDescription])
+      englishDescriptionRecords.map(r => [r.code, r.englishDescription]),
     );
 
     this.sourceRecipeRecords = await this.readJSON<INCA3RecipeListRow[]>('RECETTES_RCPLIST.json');
 
-    const recipeDescriptionsRecords =
-      await this.readJSON<INCA3EnglishDescription[]>('EN_DESC_RCP.json');
+    const recipeDescriptionsRecords
+      = await this.readJSON<INCA3EnglishDescription[]>('EN_DESC_RCP.json');
 
-    const recipeSynonymRecords =
-      await this.readJSON<INCA3RecipeShadowsRow[]>('RECETTES_SHADOWS.json');
+    const recipeSynonymRecords
+      = await this.readJSON<INCA3RecipeShadowsRow[]>('RECETTES_SHADOWS.json');
 
     this.recipeSynonyms = Object.fromEntries(
       recipeSynonymRecords
-        .map((r) => [r.R_CODE, getSynonyms(r, 'R_')])
-        .filter((a) => a[1].length > 0)
+        .map(r => [r.R_CODE, getSynonyms(r, 'R_')])
+        .filter(a => a[1].length > 0),
     );
 
     this.recipeEnglishDescriptions = Object.fromEntries(
-      recipeDescriptionsRecords.map((r) => [r.code, r.englishDescription])
+      recipeDescriptionsRecords.map(r => [r.code, r.englishDescription]),
     );
   }
 
@@ -296,19 +281,18 @@ export class FrenchAnsesLocaleBuilder {
         if (catCode) {
           const translatedName = trCol1 || trCol2 || trCol3;
 
-          if (translatedName) {
+          if (translatedName)
             this.categoryNames![catCode] = translatedName;
-          } else {
+          else
             missingTranslations.push(catCode);
-          }
         }
       },
-      { headers: false, skipLines: 1 }
+      { headers: false, skipLines: 1 },
     );
 
     if (missingTranslations.length > 0) {
       this.logger.warn(
-        'Translations are missing for the following category codes (likely intentional because these categories are not used in the ANSES locale)'
+        'Translations are missing for the following category codes (likely intentional because these categories are not used in the ANSES locale)',
       );
 
       this.logger.warn(`${missingTranslations.join(', ')}`);
@@ -318,12 +302,12 @@ export class FrenchAnsesLocaleBuilder {
   private async readQuantificationData(): Promise<void> {
     const fdQuantRows = await this.readJSON<INCA3FoodQuantRow[]>('ALIMENTS_FDQUANT.json');
 
-    this.foodPortionSizeRecords = Object.fromEntries(fdQuantRows.map((row) => [row.A_CODE, row]));
+    this.foodPortionSizeRecords = Object.fromEntries(fdQuantRows.map(row => [row.A_CODE, row]));
 
     const rcpQuantRows = await this.readJSON<INCA3RecipeQuantRow[]>('RECETTES_RCPQUANT.json');
 
     this.recipePortionSizeRecords = Object.fromEntries(
-      rcpQuantRows.map((row) => [row.R_CODE, row])
+      rcpQuantRows.map(row => [row.R_CODE, row]),
     );
   }
 
@@ -333,7 +317,8 @@ export class FrenchAnsesLocaleBuilder {
     await this.readCSV(
       path.join('portion-size', 'photo_portions.csv'),
       (data) => {
-        if (data['fileName'] && data['pictureId']) this.portionSizeImages!.push(data);
+        if (data.fileName && data.pictureId)
+          this.portionSizeImages!.push(data);
       },
       {
         headers: [
@@ -351,18 +336,18 @@ export class FrenchAnsesLocaleBuilder {
           'comment',
         ],
         skipLines: 1,
-      }
+      },
     );
   }
 
   private async readFoodStandardUnits(): Promise<void> {
     const rows = await this.readJSON<INCA3FoodStandardUnitRow[]>('ALIMENTS_FDSTD.json');
-    this.foodStandardUnits = groupBy(rows, (row) => row.A_CODE);
+    this.foodStandardUnits = groupBy(rows, row => row.A_CODE);
   }
 
   private async readRecipeStandardUnits(): Promise<void> {
     const rows = await this.readJSON<INCA3RecipeStandardUnitRow[]>('RECETTES_RCPSTD.json');
-    this.recipeStandardUnits = groupBy(rows, (row) => row.R_CODE);
+    this.recipeStandardUnits = groupBy(rows, row => row.R_CODE);
   }
 
   private buildGlobalFoods(): PkgGlobalFood[] {
@@ -371,7 +356,8 @@ export class FrenchAnsesLocaleBuilder {
     for (const row of this.sourceFoodRecords!) {
       const categories = this.foodCategories![row.A_CODE];
 
-      if (!categories) console.warn(`Food ${row.A_CODE} is not assigned to any categories`);
+      if (!categories)
+        console.warn(`Food ${row.A_CODE} is not assigned to any categories`);
 
       globalFoods.push({
         version: randomUUID(),
@@ -386,7 +372,8 @@ export class FrenchAnsesLocaleBuilder {
     for (const row of this.sourceRecipeRecords!) {
       const categories = this.recipeCategories![row.R_CODE];
 
-      if (!categories) console.warn(`Recipe ${row.R_CODE} is not assigned to any categories`);
+      if (!categories)
+        console.warn(`Recipe ${row.R_CODE} is not assigned to any categories`);
 
       globalFoods.push({
         version: randomUUID(),
@@ -421,9 +408,8 @@ export class FrenchAnsesLocaleBuilder {
   }
 
   private getFoodPortionSizeMethods(foodCode: string): PkgPortionSizeMethod[] {
-    if (this.foodPortionSizeRecords === undefined) {
+    if (this.foodPortionSizeRecords === undefined)
       throw new Error('Portion size data not loaded');
-    }
 
     const portionSizeMethods: PkgPortionSizeMethod[] = [];
 
@@ -431,16 +417,15 @@ export class FrenchAnsesLocaleBuilder {
 
     if (portionSizeRow !== undefined) {
       if (
-        portionSizeRow.LISTE_PHOTOS !== undefined &&
-        portionSizeRow.LISTE_PHOTOS.length > 0 &&
-        portionSizeRow.LISTE_PHOTOS !== '.'
-      ) {
+        portionSizeRow.LISTE_PHOTOS !== undefined
+        && portionSizeRow.LISTE_PHOTOS.length > 0
+        && portionSizeRow.LISTE_PHOTOS !== '.'
+      )
         portionSizeMethods.push(...this.photoListToAsServed(portionSizeRow.LISTE_PHOTOS));
-      }
 
       if (
-        portionSizeRow.METHODE_unite_standard !== undefined &&
-        portionSizeRow.METHODE_unite_standard !== '.'
+        portionSizeRow.METHODE_unite_standard !== undefined
+        && portionSizeRow.METHODE_unite_standard !== '.'
       ) {
         const standardUnitRows = this.foodStandardUnits![foodCode];
 
@@ -450,7 +435,7 @@ export class FrenchAnsesLocaleBuilder {
 
             if (row.A_US_UNITE !== 'G' && row.A_US_UNITE !== 'V') {
               logger.warn(
-                `Unexpected weight unit for a standard unit option: "${row.A_US_UNITE}", for food id ${foodCode}, standard unit number ${row.A_US_NUM} `
+                `Unexpected weight unit for a standard unit option: "${row.A_US_UNITE}", for food id ${foodCode}, standard unit number ${row.A_US_NUM} `,
               );
             }
 
@@ -470,11 +455,13 @@ export class FrenchAnsesLocaleBuilder {
             conversionFactor: 1,
             units,
           });
-        } else {
+        }
+        else {
           logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDSTD table`);
         }
       }
-    } else {
+    }
+    else {
       logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDQUANT table`);
     }
 
@@ -500,9 +487,8 @@ export class FrenchAnsesLocaleBuilder {
   }
 
   private getRecipePortionSizeMethods(recipeCode: string): PkgPortionSizeMethod[] {
-    if (this.recipePortionSizeRecords === undefined) {
+    if (this.recipePortionSizeRecords === undefined)
       throw new Error('Recipe portion size data not loaded');
-    }
 
     const portionSizeMethods: PkgPortionSizeMethod[] = [];
 
@@ -510,16 +496,15 @@ export class FrenchAnsesLocaleBuilder {
 
     if (portionSizeRow !== undefined) {
       if (
-        portionSizeRow.LISTE_PHOTOS !== undefined &&
-        portionSizeRow.LISTE_PHOTOS.length > 0 &&
-        portionSizeRow.LISTE_PHOTOS !== '.'
-      ) {
+        portionSizeRow.LISTE_PHOTOS !== undefined
+        && portionSizeRow.LISTE_PHOTOS.length > 0
+        && portionSizeRow.LISTE_PHOTOS !== '.'
+      )
         portionSizeMethods.push(...this.photoListToAsServed(portionSizeRow.LISTE_PHOTOS));
-      }
 
       if (
-        portionSizeRow.METHODE_unite_standard !== undefined &&
-        portionSizeRow.METHODE_unite_standard !== '.'
+        portionSizeRow.METHODE_unite_standard !== undefined
+        && portionSizeRow.METHODE_unite_standard !== '.'
       ) {
         const standardUnitRows = this.recipeStandardUnits![recipeCode];
 
@@ -543,15 +528,17 @@ export class FrenchAnsesLocaleBuilder {
             conversionFactor: 1,
             units,
           });
-        } else {
+        }
+        else {
           logger.warn(
-            `Recipe ${recipeCode} has no corresponding record in the RECETTES_RCPSTD table`
+            `Recipe ${recipeCode} has no corresponding record in the RECETTES_RCPSTD table`,
           );
         }
       }
-    } else {
+    }
+    else {
       logger.warn(
-        `Recipe ${recipeCode} has no corresponding record in the RECETTES_RCPQUANT table`
+        `Recipe ${recipeCode} has no corresponding record in the RECETTES_RCPQUANT table`,
       );
     }
 
@@ -717,16 +704,16 @@ export class FrenchAnsesLocaleBuilder {
   }
 
   private buildAsServed(): PkgAsServedSet[] {
-    const imagesById = groupBy(this.portionSizeImages, (record) => record.pictureId);
+    const imagesById = groupBy(this.portionSizeImages, record => record.pictureId);
 
     return Object.entries(imagesById).map(([imageId, images]) => {
       return {
         id: `INCA3_${imageId}`,
         description: images[0].name,
         selectionImagePath: '',
-        images: images.map((image) => ({
+        images: images.map(image => ({
           imagePath: `INCA3/${image.fileName}`,
-          weight: parseFloat(image.weight),
+          weight: Number.parseFloat(image.weight),
           imageKeywords: [],
         })),
       };
@@ -754,7 +741,7 @@ export class FrenchAnsesLocaleBuilder {
     };
 
     const enabledLocalFoods = {
-      [locale.id]: localFoods.map((f) => f.code),
+      [locale.id]: localFoods.map(f => f.code),
     };
 
     const localCategoriesRecord = {

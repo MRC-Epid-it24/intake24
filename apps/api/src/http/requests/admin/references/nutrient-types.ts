@@ -13,5 +13,5 @@ export default validate(
       optional: true,
       escape: true,
     },
-  })
+  }),
 );

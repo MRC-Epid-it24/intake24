@@ -1,11 +1,11 @@
 const { nanoid } = require('nanoid');
 
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const schemes = await queryInterface.sequelize.query(
         `SELECT id, cards, demographic_groups FROM feedback_schemes;`,
-        { type: queryInterface.sequelize.QueryTypes.SELECT, transaction }
+        { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
       );
 
       for (const scheme of schemes) {
@@ -14,10 +14,11 @@ module.exports = {
         let cards = JSON.parse(scheme.cards);
         let demographicGroups = JSON.parse(scheme.demographic_groups);
 
-        demographicGroups = demographicGroups.map((group) => ({ ...group, type: 'character' }));
+        demographicGroups = demographicGroups.map(group => ({ ...group, type: 'character' }));
         cards = cards.map((card) => {
           const { characterType: image, ...rest } = card;
-          if (card.type === 'character') return { image, ...rest };
+          if (card.type === 'character')
+            return { image, ...rest };
 
           const { name, summary, description, ...rest2 } = rest;
 
@@ -49,7 +50,7 @@ module.exports = {
               demographicGroups: JSON.stringify(demographicGroups),
             },
             transaction,
-          }
+          },
         );
       }
     }),

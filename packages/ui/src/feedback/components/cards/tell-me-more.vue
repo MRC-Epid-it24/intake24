@@ -27,7 +27,9 @@
           <v-btn dark icon :title="$t('common.action.ok')" @click.stop="close">
             <v-icon>$close</v-icon>
           </v-btn>
-          <v-toolbar-title class="pl-2">{{ detail.name }}</v-toolbar-title>
+          <v-toolbar-title class="pl-2">
+            {{ detail.name }}
+          </v-toolbar-title>
         </v-toolbar>
         <v-card-text class="flex-grow-0 flex-shrink-0 pt-2 pb-1">
           <div class="text-subtitle-1">
@@ -41,11 +43,11 @@
           </div>
         </v-card-text>
         <v-card-text class="flex-grow-0 flex-shrink-0 pt-1 pb-2">
-          <div v-html="detail.unitDescription"></div>
+          <div v-html="detail.unitDescription" />
         </v-card-text>
-        <v-divider class="mx-4 mb-4"></v-divider>
+        <v-divider class="mx-4 mb-4" />
         <v-card-text class="overflow-y-auto">
-          <div v-html="detail.description"></div>
+          <div v-html="detail.description" />
         </v-card-text>
         <v-btn
           block
@@ -55,7 +57,9 @@
           :title="$t('common.action.ok')"
           @click.stop="close"
         >
-          <v-icon left>fas fa-thumbs-up</v-icon>
+          <v-icon left>
+            fas fa-thumbs-up
+          </v-icon>
           {{ $t('feedback.intake.gotIt') }}
         </v-btn>
       </v-card>

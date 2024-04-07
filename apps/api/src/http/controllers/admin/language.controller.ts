@@ -11,12 +11,12 @@ import { Language, Op, securableScope } from '@intake24/db';
 
 import { securableController } from './securable.controller';
 
-const languageController = (ioc: IoC) => {
+function languageController(ioc: IoC) {
   const { languageService } = ioc;
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<LanguagesResponse>
+    res: Response<LanguagesResponse>,
   ): Promise<void> => {
     const {
       aclService,
@@ -65,7 +65,7 @@ const languageController = (ioc: IoC) => {
 
   const read = async (
     req: Request<{ languageId: string }>,
-    res: Response<LanguageEntry>
+    res: Response<LanguageEntry>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -79,7 +79,7 @@ const languageController = (ioc: IoC) => {
 
   const edit = async (
     req: Request<{ languageId: string }>,
-    res: Response<LanguageEntry>
+    res: Response<LanguageEntry>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -93,7 +93,7 @@ const languageController = (ioc: IoC) => {
 
   const update = async (
     req: Request<{ languageId: string }>,
-    res: Response<LanguageEntry>
+    res: Response<LanguageEntry>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -104,7 +104,7 @@ const languageController = (ioc: IoC) => {
 
     await languageService.updateLanguage(
       language,
-      pick(req.body, ['englishName', 'localName', 'countryFlagCode', 'textDirection', 'visibility'])
+      pick(req.body, ['englishName', 'localName', 'countryFlagCode', 'textDirection', 'visibility']),
     );
 
     res.json(languageResponse(language));
@@ -112,7 +112,7 @@ const languageController = (ioc: IoC) => {
 
   const destroy = async (
     req: Request<{ languageId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -140,7 +140,7 @@ const languageController = (ioc: IoC) => {
     refs,
     securables: securableController({ ioc, securable: Language }),
   };
-};
+}
 
 export default languageController;
 

@@ -9,12 +9,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_demographic_group RENAME CONSTRAINT demographic_group_pkey TO v3_demographic_group_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE demographic_group_id_seq RENAME TO v3_demographic_group_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -66,7 +66,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('demographic_groups', {
@@ -109,7 +109,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO demographic_groups (id, min_age, max_age, min_height, max_height, min_weight, max_weight, sex, physical_activity_level_id, nutrient_type_id, nutrient_rule_type) SELECT id, lower(age), upper(age), lower(height), upper(height), lower(weight), upper(weight), sex, physical_activity_level_id, nutrient_type_id, nutrient_rule_type FROM v3_demographic_group',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('demographic_groups', 'id', { queryInterface, transaction });
@@ -117,17 +117,17 @@ module.exports = {
       await queryInterface.renameTable(
         'demographic_group_scale_sector',
         'v3_demographic_group_scale_sector',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_demographic_group_scale_sector RENAME CONSTRAINT demographic_group_scale_sector_pkey TO v3_demographic_group_scale_sector_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE demographic_group_scale_sector_id_seq RENAME TO v3_demographic_group_scale_sector_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -163,7 +163,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('demographic_group_scale_sectors', {
@@ -187,7 +187,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO demographic_group_scale_sectors (id, demographic_group_id, name, description, sentiment, min_range, max_range) SELECT id, demographic_group_id, name, description, sentiment, lower(range), upper(range) FROM v3_demographic_group_scale_sector',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('demographic_group_scale_sectors', 'id', {

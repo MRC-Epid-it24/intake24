@@ -9,7 +9,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE drinkware_scales_id_seq RENAME TO v3_drinkware_scales_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -53,7 +53,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('drinkware_scales', {
@@ -77,7 +77,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO drinkware_scales (id, drinkware_set_id, width, height, empty_level, full_level, choice_id, base_image_url, overlay_image_url) SELECT id, drinkware_set_id, width, height, empty_level, full_level, choice_id, base_image_url, overlay_image_url FROM v3_drinkware_scales',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('drinkware_scales', 'id', { queryInterface, transaction });
@@ -88,7 +88,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE drinkware_volume_samples_id_seq RENAME TO v3_drinkware_volume_samples_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -112,7 +112,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('drinkware_volume_samples', {
@@ -136,7 +136,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO drinkware_volume_samples (id, drinkware_scale_id, fill, volume) SELECT id, drinkware_scale_id, fill, volume FROM v3_drinkware_volume_samples',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('drinkware_volume_samples', 'id', { queryInterface, transaction });

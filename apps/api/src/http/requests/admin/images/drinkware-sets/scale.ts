@@ -9,37 +9,43 @@ import {
 } from '@intake24/api/http/requests/util';
 import { identifierSafeChars } from '@intake24/common/rules';
 
-const validateJSON =
-  (next: (value: any, meta: Meta) => boolean) =>
-  (value: any, meta: Meta): boolean => {
+function validateJSON(next: (value: any, meta: Meta) => boolean) {
+  return (value: any, meta: Meta): boolean => {
     try {
       const parsed = JSON.parse(value);
       return next(parsed, meta);
-    } catch (e) {
-      if (e instanceof SyntaxError) throw new Error(customTypeErrorMessage('json._', meta));
+    }
+    catch (e) {
+      if (e instanceof SyntaxError)
+        throw new Error(customTypeErrorMessage('json._', meta));
       else throw e;
     }
   };
+}
 
-const validateJSONPromise =
-  (next: (value: any, meta: Meta) => Promise<void>) =>
-  (value: any, meta: Meta): Promise<void> => {
+function validateJSONPromise(next: (value: any, meta: Meta) => Promise<void>) {
+  return (value: any, meta: Meta): Promise<void> => {
     try {
       const parsed = JSON.parse(value);
       return next(parsed, meta);
-    } catch (e) {
-      if (e instanceof SyntaxError) throw new Error(customTypeErrorMessage('json._', meta));
+    }
+    catch (e) {
+      if (e instanceof SyntaxError)
+        throw new Error(customTypeErrorMessage('json._', meta));
       else throw e;
     }
   };
+}
 
-const isArrayOfNumberPairs = (value: any, meta: Meta): boolean => {
-  if (!Array.isArray(value)) throw new Error(customTypeErrorMessage('array._', meta));
-  if (value.length % 2 !== 0) throw new Error(customTypeErrorMessage('array.even', meta));
-  if (value.some((v) => typeof v !== 'number'))
+function isArrayOfNumberPairs(value: any, meta: Meta): boolean {
+  if (!Array.isArray(value))
+    throw new Error(customTypeErrorMessage('array._', meta));
+  if (value.length % 2 !== 0)
+    throw new Error(customTypeErrorMessage('array.even', meta));
+  if (value.some(v => typeof v !== 'number'))
     throw new Error(customTypeErrorMessage('array.number', meta));
   return true;
-};
+}
 
 const scaleCommon: Schema = {
   drinkwareSetId: {
@@ -87,7 +93,7 @@ export default {
         in: ['params'],
         isInt: { errorMessage: typeErrorMessage('int._') },
       },
-    })
+    }),
   ),
   storeV1: validate(
     checkSchema({
@@ -110,13 +116,13 @@ export default {
         in: ['body'],
         isInt: { errorMessage: typeErrorMessage('int._') },
       },
-    })
+    }),
   ),
   storeV2: validate(
     checkSchema({
       ...scaleCommon,
       image: imageFile,
       outlineCoordinates: { custom: { options: validateJSON(isArrayOfNumberPairs) } },
-    })
+    }),
   ),
 };

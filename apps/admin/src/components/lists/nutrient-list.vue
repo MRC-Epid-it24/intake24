@@ -1,13 +1,17 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey lighten-2" flat tile>
-      <v-icon color="secondary" left>$nutrient-types</v-icon>
+      <v-icon color="secondary" left>
+        $nutrient-types
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('nutrient-types.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn color="primary" fab small :title="$t('nutrient-types.create')" @click.stop="add">
-        <v-icon small>$add</v-icon>
+        <v-icon small>
+          $add
+        </v-icon>
       </v-btn>
       <confirm-dialog
         color="error"
@@ -24,7 +28,9 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon small>$sync</v-icon>
+            <v-icon small>
+              $sync
+            </v-icon>
           </v-btn>
         </template>
         {{ $t('nutrient-types.reset.text') }}
@@ -48,7 +54,9 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('nutrient-types.edit')" @click.stop="edit(idx, nutrientType)">
-                <v-icon color="secondary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -74,12 +82,14 @@
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar color="secondary" dark flat>
-          <v-icon dark left>$nutrient-types</v-icon>
+          <v-icon dark left>
+            $nutrient-types
+          </v-icon>
           <v-toolbar-title>
             {{ $t(`nutrient-types.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
         </v-toolbar>
-        <v-divider></v-divider>
+        <v-divider />
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>
             <v-autocomplete
@@ -95,8 +105,7 @@
               prepend-inner-icon="$nutrient-types"
               :rules="rules"
               @change="updateNutrientLabel"
-            >
-            </v-autocomplete>
+            />
           </v-card-text>
           <language-selector
             v-model="dialog.item.name"
@@ -112,16 +121,20 @@
                 hide-details="auto"
                 :label="$t('nutrient-types.label')"
                 outlined
-              ></v-text-field>
+              />
             </template>
           </language-selector>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+              <v-icon left>
+                $cancel
+              </v-icon>{{ $t('common.action.cancel') }}
             </v-btn>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -145,7 +158,7 @@ import { LanguageSelector } from '../forms';
 export default defineComponent({
   name: 'NutrientTypeList',
 
-  components: { ConfirmDialog, draggable, LanguageSelector },
+  components: { ConfirmDialog, Draggable: draggable, LanguageSelector },
 
   props: {
     nutrientTypes: {
@@ -184,8 +197,9 @@ export default defineComponent({
     } = useListWithDialog(props, context, { newItem: defaultItem });
 
     const updateNutrientLabel = (nutrientTypeId: string) => {
-      const match = props.nutrientTypes.find((nutrient) => nutrient.id === nutrientTypeId);
-      if (!match) return;
+      const match = props.nutrientTypes.find(nutrient => nutrient.id === nutrientTypeId);
+      if (!match)
+        return;
 
       dialog.value.item.name.en = match.description;
     };
@@ -211,12 +225,13 @@ export default defineComponent({
     rules() {
       return [
         (value: string[]): boolean | string => {
-          if (!value.length) return this.$t('nutrient-types.validation.required').toString();
+          if (!value.length)
+            return this.$t('nutrient-types.validation.required').toString();
 
           const { index } = this.dialog;
           const match = this.items.find(
             (nutrientType, idx) =>
-              [...value].sort().join(':') === [...nutrientType.id].sort().join(':') && index !== idx
+              [...value].sort().join(':') === [...nutrientType.id].sort().join(':') && index !== idx,
           );
 
           return match ? this.$t('nutrient-types.validation.unique').toString() : true;

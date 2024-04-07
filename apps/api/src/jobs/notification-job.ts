@@ -19,7 +19,7 @@ export default abstract class Notification<T extends JobType> extends BaseJob<T>
 
   protected async getSignatureHeaders(
     url: string,
-    signOptions?: { payload: object; secret: string }
+    signOptions?: { payload: object; secret: string },
   ) {
     const headers: RawAxiosRequestHeaders = {
       'content-type': 'application/json',

@@ -355,7 +355,7 @@ export default class Survey extends BaseModel<
 
   @AfterCreate
   static async createSurveyPermissions(instance: Survey): Promise<void> {
-    const permissions = surveyPermissions(instance.slug).map((item) => ({
+    const permissions = surveyPermissions(instance.slug).map(item => ({
       name: item,
       displayName: item,
       description: `Survey-specific permission (${item})`,
@@ -371,7 +371,7 @@ export default class Survey extends BaseModel<
 
   public static async findBySlug(
     slug: string,
-    options: FindOptions<SurveyAttributes> = {}
+    options: FindOptions<SurveyAttributes> = {},
   ): Promise<Survey | null> {
     const { where, ...rest } = options;
     const op = Survey.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;

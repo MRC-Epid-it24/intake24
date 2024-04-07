@@ -4,7 +4,7 @@
       <v-card flat outlined width="100%">
         <v-list class="px-4" color="grey lighten-4">
           <v-subheader>{{ translate(sabFood.food.data.localName) }}</v-subheader>
-          <v-divider></v-divider>
+          <v-divider />
           <v-list-item class="pl-0" dense>
             <v-list-item-avatar class="my-auto mr-2">
               <v-icon>fas fa-caret-right</v-icon>
@@ -32,7 +32,7 @@
         </v-list>
         <v-list v-if="linkedFoods.length" class="px-4" color="grey lighten-4">
           <v-subheader>{{ promptI18n.hadWith }}</v-subheader>
-          <v-divider></v-divider>
+          <v-divider />
           <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="pl-0" dense>
             <v-list-item-avatar class="my-auto mr-2">
               <v-icon>fas fa-caret-right</v-icon>
@@ -53,7 +53,9 @@
         :title="promptI18n.notSame"
         @click.stop="action('notSame')"
       >
-        <v-icon left>$no</v-icon>
+        <v-icon left>
+          $no
+        </v-icon>
         {{ promptI18n.notSame }}
       </v-btn>
       <v-btn
@@ -64,7 +66,9 @@
         :title="promptI18n.same"
         @click.stop="action('same')"
       >
-        <v-icon left>$yes</v-icon>
+        <v-icon left>
+          $yes
+        </v-icon>
         {{ promptI18n.same }}
       </v-btn>
     </template>
@@ -73,14 +77,18 @@
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
-        <v-icon class="pb-1">$no</v-icon>
+        <v-icon class="pb-1">
+          $no
+        </v-icon>
       </v-btn>
-      <v-divider vertical></v-divider>
+      <v-divider vertical />
       <v-btn color="primary" text title="$t('common.action.yes')" @click.stop="action('same')">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>
-        <v-icon class="pb-1">$yes</v-icon>
+        <v-icon class="pb-1">
+          $yes
+        </v-icon>
       </v-btn>
     </template>
   </card-layout>
@@ -122,15 +130,16 @@ export default defineComponent({
       if (food.portionSize?.method === 'milk-in-a-hot-drink')
         return (food.portionSize?.milkVolumePercentage ?? 0) * 100;
 
-      if (food.portionSize?.method === 'standard-portion') return food.portionSize?.quantity;
+      if (food.portionSize?.method === 'standard-portion')
+        return food.portionSize?.quantity;
 
       const servingWeight = food.portionSize?.servingWeight ?? 0;
-      const linkedServingWeight =
-        (
+      const linkedServingWeight
+        = (
           food.linkedFoods.find(
-            (linkedFood) =>
-              linkedFood.type === 'encoded-food' &&
-              linkedFood.portionSize?.method === 'milk-in-a-hot-drink'
+            linkedFood =>
+              linkedFood.type === 'encoded-food'
+              && linkedFood.portionSize?.method === 'milk-in-a-hot-drink',
           ) as EncodedFood | undefined
         )?.portionSize?.servingWeight ?? 0;
 
@@ -138,12 +147,15 @@ export default defineComponent({
     };
 
     const foodUnit = (food: EncodedFood) => {
-      if (food.portionSize?.method === 'drink-scale') return 'ml';
-      if (food.portionSize?.method === 'milk-in-a-hot-drink') return '%';
+      if (food.portionSize?.method === 'drink-scale')
+        return 'ml';
+      if (food.portionSize?.method === 'milk-in-a-hot-drink')
+        return '%';
 
       if (food.portionSize?.method === 'standard-portion' && food.portionSize?.unit) {
         const unit = standardUnitRefs.value[food.portionSize.unit.name]?.estimateIn;
-        if (unit) return translate(unit);
+        if (unit)
+          return translate(unit);
       }
 
       return 'g';
@@ -152,13 +164,15 @@ export default defineComponent({
     const linkedFoods = computed(() =>
       props.sabFood.food.linkedFoods.map((food) => {
         const { id } = food;
-        if (food.type === 'free-text') return { id, text: food.description };
-        if (food.type === 'missing-food') return { id, text: food.info?.name ?? food.searchTerm };
+        if (food.type === 'free-text')
+          return { id, text: food.description };
+        if (food.type === 'missing-food')
+          return { id, text: food.info?.name ?? food.searchTerm };
 
         const amount = Math.round(foodAmount(food));
         const unit = foodUnit(food);
         return { id, text: `${translate(food.data.localName)} (${amount} ${unit})` };
-      })
+      }),
     );
 
     const serving = computed(() => {
@@ -188,20 +202,21 @@ export default defineComponent({
       const names = [props.sabFood.food, ...props.sabFood.food.linkedFoods].reduce<string[]>(
         (acc, food) => {
           if (
-            food.type !== 'encoded-food' ||
-            !food.portionSize ||
-            food.portionSize?.method !== 'standard-portion' ||
-            !food.portionSize.unit
+            food.type !== 'encoded-food'
+            || !food.portionSize
+            || food.portionSize?.method !== 'standard-portion'
+            || !food.portionSize.unit
           )
             return acc;
 
           acc.push(food.portionSize.unit.name);
           return acc;
         },
-        []
+        [],
       );
 
-      if (!names.length) return;
+      if (!names.length)
+        return;
 
       await fetchStandardUnits(names);
     });

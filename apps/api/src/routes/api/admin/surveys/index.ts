@@ -41,7 +41,7 @@ export default () => {
     '/:surveyId/tasks',
     upload.single('params[file]'),
     validation.tasks,
-    wrapAsync(adminSurveyController.tasks)
+    wrapAsync(adminSurveyController.tasks),
   );
 
   router.use('/:surveyId/securables', securables('Survey', adminSurveyController.securables));

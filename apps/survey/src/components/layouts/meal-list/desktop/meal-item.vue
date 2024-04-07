@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-list-item
-      :class="{ selected: isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
+      :class="{ 'selected': isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
       @click="action('selectMeal', meal.id)"
     >
       <v-list-item-title class="font-weight-bold text-wrap">
@@ -13,24 +13,26 @@
         </v-list-item-action-text>
         <v-tooltip v-else bottom>
           <template #activator="{ on, attrs }">
-            <v-icon v-bind="attrs" small v-on="on">$question</v-icon>
+            <v-icon v-bind="attrs" small v-on="on">
+              $question
+            </v-icon>
           </template>
           <span>{{ $t('recall.menu.mealSuggested') }}</span>
         </v-tooltip>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <context-menu v-bind="{ meal, menu }" @action="action"></context-menu>
+        <context-menu v-bind="{ meal, menu }" @action="action" />
       </v-list-item-action>
     </v-list-item>
-    <v-divider></v-divider>
+    <v-divider />
     <template v-if="meal.foods.length">
       <food-item
         v-for="food in meal.foods"
         :key="food.id"
         v-bind="{ food, meal, selectedFoodId }"
         @action="action"
-      ></food-item>
-      <v-divider></v-divider>
+      />
+      <v-divider />
     </template>
   </div>
 </template>

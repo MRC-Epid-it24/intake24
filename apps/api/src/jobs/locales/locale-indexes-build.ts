@@ -16,7 +16,7 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
   constructor({
     cache,
     logger,
-    reindexingPublisherService: reindexingPublisherService,
+    reindexingPublisherService,
   }: Pick<IoC, 'cache' | 'logger' | 'reindexingPublisherService'>) {
     super({ logger });
 
@@ -25,15 +25,16 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
   }
 
   private isLocaleIdOrCode(value: string): boolean {
-    return !isNaN(Number(value));
+    return !Number.isNaN(Number(value));
   }
 
   private async resolveLocale(localeId: string): Promise<string> {
-    const locale =
-      typeof localeId === 'string'
+    const locale
+      = typeof localeId === 'string'
         ? await SystemLocale.findByPk(localeId, { attributes: ['code'] })
         : localeId;
-    if (!locale) throw new NotFoundError();
+    if (!locale)
+      throw new NotFoundError();
 
     return locale.code;
   }
@@ -64,11 +65,11 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
     if (!locales.includes('all')) {
       locales = await Promise.all(
         locales.map((locale) => {
-          if (this.isLocaleIdOrCode(locale)) {
+          if (this.isLocaleIdOrCode(locale))
             return this.resolveLocale(locale);
-          }
+
           return locale;
-        })
+        }),
       );
     }
 

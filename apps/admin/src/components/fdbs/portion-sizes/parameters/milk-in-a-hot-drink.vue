@@ -13,7 +13,7 @@
             :options="parameters.options[lang]"
             :rules="rules"
             @update:options="updateOption(lang, $event)"
-          ></options-list>
+          />
         </template>
       </language-selector>
     </v-col>
@@ -49,14 +49,15 @@ export default defineComponent({
       (value: any): boolean | string => {
         const msg = 'Value must be greater than 0';
         const number = Number.parseFloat(value);
-        if (Number.isNaN(number)) return msg;
+        if (Number.isNaN(number))
+          return msg;
 
         return number > 0 || msg;
       },
     ];
 
     const updateOption = (lang: string, value: ListOption[]) => {
-      parameters.value.options[lang] = value.map((item) => ({
+      parameters.value.options[lang] = value.map(item => ({
         ...item,
         value: Number.parseFloat(item.value),
       }));

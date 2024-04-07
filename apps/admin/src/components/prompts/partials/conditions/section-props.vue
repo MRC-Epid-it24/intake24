@@ -8,7 +8,7 @@
         outlined
         :value="section"
         @change="update('section', $event)"
-      ></v-select>
+      />
     </v-col>
   </v-row>
 </template>

@@ -36,24 +36,24 @@ import {
 import { jobTypes } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
 
-const permission = (): PermissionRequest => {
+function permission(): PermissionRequest {
   const displayName = faker.word.words(2);
   const name = slugify(displayName, { strict: true });
   const description = faker.lorem.words(10);
 
   return { name, displayName, description };
-};
+}
 
-const role = (): RoleRequest => {
+function role(): RoleRequest {
   const displayName = faker.word.words(2);
   const name = slugify(displayName, { strict: true });
   const description = faker.lorem.words(10);
   const permissions: string[] = [];
 
   return { name, displayName, description, permissions };
-};
+}
 
-const user = (): CreateUserRequest => {
+function user(): CreateUserRequest {
   const name = faker.person.firstName();
   const email = faker.internet.email();
   const password = 'sUpErStRoNgPaSwOrD-123467890';
@@ -83,9 +83,9 @@ const user = (): CreateUserRequest => {
     permissions,
     roles,
   };
-};
+}
 
-const respondent = (): CreateRespondentRequest => {
+function respondent(): CreateRespondentRequest {
   const username = faker.internet.userName();
   const name = faker.person.firstName();
   const email = faker.internet.email();
@@ -106,9 +106,9 @@ const respondent = (): CreateRespondentRequest => {
     phone,
     customFields,
   };
-};
+}
 
-const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
+function feedbackScheme(): FeedbackSchemeCreationAttributes {
   const name = faker.word.words(3);
   const type = 'default';
 
@@ -157,9 +157,9 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
       },
     ],
   };
-};
+}
 
-const language = (): CreateLanguageRequest => {
+function language(): CreateLanguageRequest {
   const code = faker.location.countryCode();
   const englishName = faker.location.country();
   const localName = faker.location.country();
@@ -175,12 +175,9 @@ const language = (): CreateLanguageRequest => {
     textDirection,
     visibility,
   };
-};
+}
 
-const locale = (
-  respLangId: string | undefined,
-  adminLangId: string | undefined
-): CreateLocaleRequest => {
+function locale(respLangId: string | undefined, adminLangId: string | undefined): CreateLocaleRequest {
   const code = faker.location.countryCode();
   const englishName = faker.location.country();
   const localName = faker.location.country();
@@ -206,9 +203,9 @@ const locale = (
     foodIndexLanguageBackendId,
     visibility,
   };
-};
+}
 
-const personalAccessToken = () => {
+function personalAccessToken() {
   const name = faker.word.words(3);
   const expiresAt = faker.date.future({ years: 1 });
   const verified = true;
@@ -222,9 +219,9 @@ const personalAccessToken = () => {
     aal,
     amr,
   };
-};
+}
 
-const surveyScheme = (): SurveySchemeCreationAttributes => {
+function surveyScheme(): SurveySchemeCreationAttributes {
   const name = faker.word.words(3);
   const type = 'default';
   const visibility = recordVisibilities[faker.number.int({ min: 0, max: 1 })];
@@ -237,9 +234,9 @@ const surveyScheme = (): SurveySchemeCreationAttributes => {
     meals: defaultMeals,
     dataExport: defaultExport,
   };
-};
+}
 
-const surveySchemePrompt = (): SurveySchemePromptCreationAttributes => {
+function surveySchemePrompt(): SurveySchemePromptCreationAttributes {
   const prompt = {
     ...customPrompts[faker.number.int({ min: 0, max: customPrompts.length - 1 })],
     id: slugify(faker.word.words(6), { strict: true }),
@@ -251,13 +248,9 @@ const surveySchemePrompt = (): SurveySchemePromptCreationAttributes => {
     name: prompt.name,
     prompt,
   };
-};
+}
 
-const survey = (
-  surveySchemeId = '1',
-  localeId = '1',
-  feedbackSchemeId = null
-): CreateSurveyRequest => {
+function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): CreateSurveyRequest {
   const slug = slugify(randomString(16), { strict: true });
   const name = faker.word.words(6);
   const state = 'notStarted';
@@ -283,8 +276,8 @@ const survey = (
 
   const searchCollectData = faker.datatype.boolean();
   const searchMatchScoreWeight = faker.number.int({ min: 0, max: 100 });
-  const searchSortingAlgorithm =
-    searchSortingAlgorithms[faker.number.int({ min: 0, max: searchSortingAlgorithms.length - 1 })];
+  const searchSortingAlgorithm
+    = searchSortingAlgorithms[faker.number.int({ min: 0, max: searchSortingAlgorithms.length - 1 })];
 
   const surveySchemeOverrides = {
     meals: [{ name: { en: faker.word.words(3) }, time: '8:00' }],
@@ -323,9 +316,9 @@ const survey = (
     userPersonalIdentifiers,
     userCustomFields,
   };
-};
+}
 
-const submission = (surveyId: string, userId: string) => {
+function submission(surveyId: string, userId: string) {
   return {
     id: randomUUID(),
     surveyId,
@@ -335,9 +328,9 @@ const submission = (surveyId: string, userId: string) => {
     submissionTime: faker.date.soon({ days: 1 }),
     sessionId: randomUUID(),
   };
-};
+}
 
-const task = (): TaskRequest => {
+function task(): TaskRequest {
   const name = faker.word.words(3);
   const job = jobTypes[0];
   const cron = '0 * * * *';
@@ -353,7 +346,7 @@ const task = (): TaskRequest => {
     description,
     params,
   };
-};
+}
 
 export default {
   feedbackScheme,

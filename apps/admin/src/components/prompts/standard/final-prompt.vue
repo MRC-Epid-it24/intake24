@@ -3,7 +3,9 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-card-title>
-          <v-icon left>fas fa-star-half-stroke</v-icon>
+          <v-icon left>
+            fas fa-star-half-stroke
+          </v-icon>
           {{ $t('survey-schemes.prompts.final-prompt.rating.title') }}
         </v-card-title>
         <v-card-text>
@@ -12,7 +14,7 @@
             :input-value="rating"
             :label="$t('survey-schemes.prompts.final-prompt.rating._')"
             @change="update('rating', $event)"
-          ></v-switch>
+          />
         </v-card-text>
       </v-col>
     </v-row>

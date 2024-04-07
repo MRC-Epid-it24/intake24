@@ -21,11 +21,11 @@
                     @change="errors.clear('sex')"
                   >
                     <template #item="{ item }">
-                      <span :class="`${item.icon} mr-3`"></span>
+                      <span :class="`${item.icon} mr-3`" />
                       {{ item.text }}
                     </template>
                     <template #selection="{ item }">
-                      <span :class="`${item.icon} mr-3`"></span>
+                      <span :class="`${item.icon} mr-3`" />
                       {{ item.text }}
                     </template>
                   </v-select>
@@ -39,7 +39,7 @@
                     name="birthdate"
                     outlined
                     prepend-inner-icon="fa-birthday-cake"
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('heightCm')" cols="12" lg="6">
                   <v-text-field
@@ -50,7 +50,7 @@
                     name="heightCm"
                     outlined
                     prepend-inner-icon="fa-arrows-alt-v"
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('weightKg')" cols="12" lg="6">
                   <v-text-field
@@ -61,7 +61,7 @@
                     name="weightKg"
                     outlined
                     prepend-inner-icon="fa-weight"
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('physicalActivityLevelId')" cols="12" lg="6">
                   <v-select
@@ -76,7 +76,7 @@
                     outlined
                     prepend-inner-icon="fa-running"
                     @change="errors.clear('physicalActivityLevelId')"
-                  ></v-select>
+                  />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('weightTarget')" cols="12" lg="6">
                   <v-select
@@ -89,7 +89,7 @@
                     outlined
                     prepend-inner-icon="fa-crosshairs"
                     @change="errors.clear('weightTarget')"
-                  ></v-select>
+                  />
                 </v-col>
               </v-row>
               <v-row class="mt-3" justify="center">
@@ -166,7 +166,7 @@ export default defineComponent({
       errors: new Errors(),
       sexes: [
         { text: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
-        ...sexes.map((value) => ({
+        ...sexes.map(value => ({
           text: this.$t(`feedback.physicalData.sexes.${value}`),
           value,
           icon: genderIcon(value),
@@ -177,7 +177,7 @@ export default defineComponent({
       ] as NullablePhysicalActivityLevel[],
       weightTargets: [
         { text: this.$t('common.not.selected'), value: null },
-        ...weightTargets.map((value) => ({
+        ...weightTargets.map(value => ({
           text: this.$t(`feedback.physicalData.weightTargets.${value}`),
           value,
         })),
@@ -211,9 +211,11 @@ export default defineComponent({
         { id: null, name: this.$t('common.not.selected').toString(), coefficient: 0 },
         ...feedbackData.physicalActivityLevels,
       ];
-    } catch (err) {
+    }
+    catch (err) {
       this.$router.push({ name: 'feedback-error', params: { surveyId } });
-    } finally {
+    }
+    finally {
       loading.removeItem('feedback-physical-data');
     }
   },
@@ -229,11 +231,12 @@ export default defineComponent({
       try {
         await userService.savePhysicalData(surveyId, this.form);
         this.$router.push({ name: 'feedback-home', params: { surveyId } });
-      } catch (err) {
+      }
+      catch (err) {
         if (
-          axios.isAxiosError(err) &&
-          err.response?.status === HttpStatusCode.BadRequest &&
-          'errors' in err.response.data
+          axios.isAxiosError(err)
+          && err.response?.status === HttpStatusCode.BadRequest
+          && 'errors' in err.response.data
         ) {
           this.errors.record(err.response.data.errors);
           return;

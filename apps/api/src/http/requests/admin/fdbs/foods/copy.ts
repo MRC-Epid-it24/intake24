@@ -30,7 +30,8 @@ export default validate(
           const { localeId } = (meta.req as Request).params;
 
           const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
-          if (!locale) throw new Error(customTypeErrorMessage('unique._', meta));
+          if (!locale)
+            throw new Error(customTypeErrorMessage('unique._', meta));
 
           const options: FindOptions<FoodLocal> = {
             where: { localeId: locale.code },
@@ -44,5 +45,5 @@ export default validate(
         },
       },
     },
-  })
+  }),
 );

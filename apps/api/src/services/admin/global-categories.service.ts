@@ -12,11 +12,11 @@ import type {
 import type { FoodsDB } from '@intake24/db';
 import { ApplicationError, ConflictError, NotFoundError } from '@intake24/api/http/errors';
 
-const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
+function globalCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
   async function updateParentCategories(
     categoryCode: string,
     parentCategoryCodes: string[],
-    transaction: Kysely<FoodsDB>
+    transaction: Kysely<FoodsDB>,
   ) {
     await transaction
       .deleteFrom('categoriesCategories')
@@ -24,17 +24,18 @@ const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
       .execute();
 
     if (parentCategoryCodes.length > 0) {
-      const catCatRecords = parentCategoryCodes.map((parentCode) => ({
+      const catCatRecords = parentCategoryCodes.map(parentCode => ({
         categoryCode: parentCode,
         subcategoryCode: categoryCode,
       }));
 
       try {
         await transaction.insertInto('categoriesCategories').values(catCatRecords).execute();
-      } catch (e: any) {
-        if (e.code === '23503') {
+      }
+      catch (e: any) {
+        if (e.code === '23503')
           throw new ApplicationError(e.detail);
-        }
+
         throw e;
       }
     }
@@ -52,15 +53,15 @@ const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
             isHidden: input.isHidden,
           })
           .execute();
-      } catch (e: any) {
-        if (e.code === '23505') {
+      }
+      catch (e: any) {
+        if (e.code === '23505')
           throw new ConflictError();
-        } else throw e;
+        else throw e;
       }
 
-      if (input.parentCategories) {
+      if (input.parentCategories)
         await updateParentCategories(input.code, input.parentCategories, t);
-      }
 
       await t
         .insertInto('categoryAttributes')
@@ -78,7 +79,7 @@ const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
   const update = async (
     categoryCode: string,
     version: string,
-    input: UpdateGlobalCategoryRequest
+    input: UpdateGlobalCategoryRequest,
   ): Promise<void> => {
     await kyselyDb.foods.transaction().execute(async (t) => {
       const result = await t
@@ -92,17 +93,17 @@ const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
         .where('version', '=', version)
         .executeTakeFirst();
 
-      if (result.numUpdatedRows !== 1n) throw new NotFoundError();
+      if (result.numUpdatedRows !== 1n)
+        throw new NotFoundError();
 
-      if (input.parentCategories) {
+      if (input.parentCategories)
         await updateParentCategories(categoryCode, input.parentCategories, t);
-      }
 
       if (
-        input.attributes.sameAsBeforeOption ||
-        input.attributes.readyMealOption ||
-        input.attributes.reasonableAmount ||
-        input.attributes.useInRecipes
+        input.attributes.sameAsBeforeOption
+        || input.attributes.readyMealOption
+        || input.attributes.reasonableAmount
+        || input.attributes.useInRecipes
       ) {
         await t
           .updateTable('categoryAttributes')
@@ -122,9 +123,8 @@ const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
     return await kyselyDb.foods.transaction().execute(async (t) => {
       const categoryRow = await t
         .selectFrom('categories')
-        .leftJoin('categoryAttributes', (jb) =>
-          jb.onRef('categories.code', '=', 'categoryAttributes.categoryCode')
-        )
+        .leftJoin('categoryAttributes', jb =>
+          jb.onRef('categories.code', '=', 'categoryAttributes.categoryCode'))
         .select([
           'code',
           'name',
@@ -150,7 +150,7 @@ const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
         name: categoryRow.name,
         version: categoryRow.version,
         isHidden: categoryRow.isHidden,
-        parentCategories: parentCategoryRows.map((r) => r.categoryCode),
+        parentCategories: parentCategoryRows.map(r => r.categoryCode),
         attributes: {
           sameAsBeforeOption: categoryRow.sameAsBeforeOption ?? undefined,
           readyMealOption: categoryRow.readyMealOption ?? undefined,
@@ -166,7 +166,7 @@ const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
     read,
     update,
   };
-};
+}
 
 export default globalCategoriesService;
 

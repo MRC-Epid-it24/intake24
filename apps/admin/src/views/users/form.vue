@@ -13,7 +13,7 @@
                 name="name"
                 outlined
                 prepend-inner-icon="fas fa-signature"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -25,7 +25,7 @@
                 name="email"
                 outlined
                 prepend-inner-icon="fas fa-envelope"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -36,7 +36,7 @@
                 name="phone"
                 outlined
                 prepend-inner-icon="fas fa-phone"
-              ></v-text-field>
+              />
             </v-col>
             <template v-if="isCreate">
               <v-col cols="12" md="6">
@@ -50,7 +50,7 @@
                   outlined
                   prepend-inner-icon="fas fa-key"
                   type="password"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
@@ -63,7 +63,7 @@
                   outlined
                   prepend-inner-icon="fas fa-key"
                   type="password"
-                ></v-text-field>
+                />
               </v-col>
             </template>
             <v-col cols="12" md="6">
@@ -108,8 +108,7 @@
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
                     <span v-if="form.permissions.length === 1">{{ item.displayName }}</span>
-                    <span v-if="form.permissions.length > 1"
-                      >{{ form.permissions.length }} selected
+                    <span v-if="form.permissions.length > 1">{{ form.permissions.length }} selected
                     </span>
                   </template>
                 </template>
@@ -123,7 +122,7 @@
                 :label="$t('users.mfa._')"
                 name="multiFactorAuthentication"
                 @change="form.errors.clear('multiFactorAuthentication')"
-              ></v-switch>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
@@ -133,7 +132,7 @@
                 :label="$t('users.verified')"
                 name="verifiedAt"
                 @change="toggle('verifiedAt')"
-              ></v-switch>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
@@ -143,7 +142,7 @@
                 :label="$t('users.disabled')"
                 name="disabledAt"
                 @change="toggle('disabledAt')"
-              ></v-switch>
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -155,7 +154,7 @@
                 :label="$t('users.notifications.email')"
                 name="emailNotifications"
                 @change="form.errors.clear('emailNotifications')"
-              ></v-switch>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
@@ -165,10 +164,10 @@
                 :label="$t('users.notifications.sms')"
                 name="smsNotifications"
                 @change="form.errors.clear('smsNotifications')"
-              ></v-switch>
+              />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -215,8 +214,8 @@ export default defineComponent({
       const { customFields = [], permissions = [], roles = [], ...rest } = data;
       return {
         ...rest,
-        permissions: permissions.map((item) => item.id),
-        roles: roles.map((item) => item.id),
+        permissions: permissions.map(item => item.id),
+        roles: roles.map(item => item.id),
         customFields: customFields.map(({ name, value }) => ({ name, value })),
       };
     };

@@ -2,7 +2,9 @@
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ attrs, on }">
       <v-btn class="ml-3" link text v-bind="attrs" v-on="on">
-        <v-icon class="mr-2">fas fa-user-shield</v-icon>
+        <v-icon class="mr-2">
+          fas fa-user-shield
+        </v-icon>
         {{ owner ? owner.name : $t('common.none') }}
       </v-btn>
     </template>
@@ -15,7 +17,11 @@
           {{ $t('securables.owner.title') }}
         </v-toolbar-title>
         <template #extension>
-          <div class="mx-auto"><v-icon left>$search</v-icon>{{ $t('securables.search') }}</div>
+          <div class="mx-auto">
+            <v-icon left>
+              $search
+            </v-icon>{{ $t('securables.search') }}
+          </div>
         </template>
       </v-toolbar>
       <v-form @submit.prevent="save">
@@ -38,16 +44,18 @@
                   :selected="owner"
                   @input="form.errors.clear('userId')"
                   @update:object="internalOwner = $event"
-                ></auto-complete>
+                />
               </v-col>
             </v-row>
           </v-card-text>
         </v-container>
         <v-card-actions>
           <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-            <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+            <v-icon left>
+              $cancel
+            </v-icon>{{ $t('common.action.cancel') }}
           </v-btn>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             class="font-weight-bold"
             color="info"
@@ -55,7 +63,9 @@
             text
             type="submit"
           >
-            <v-icon left>$save</v-icon>{{ $t('common.action.save') }}
+            <v-icon left>
+              $save
+            </v-icon>{{ $t('common.action.save') }}
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -108,7 +118,8 @@ export default defineComponent({
 
   watch: {
     dialog(val: boolean) {
-      if (!val) return;
+      if (!val)
+        return;
 
       this.form.userId = this.owner?.id ?? null;
     },

@@ -6,8 +6,7 @@
           class="mt-4"
           :model-value="slider"
           @update:model-value="update('slider', $event)"
-        >
-        </slider-settings>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

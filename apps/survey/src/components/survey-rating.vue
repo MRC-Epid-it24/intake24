@@ -13,8 +13,7 @@
         :readonly="sent"
         :size="$vuetify.breakpoint.smAndDown ? 32 : 48"
         @input="dialog = true"
-      >
-      </v-rating>
+      />
     </div>
     <v-dialog
       v-model="dialog"
@@ -44,8 +43,7 @@
                     hover
                     length="5"
                     :size="$vuetify.breakpoint.smAndDown ? 32 : 48"
-                  >
-                  </v-rating>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-textarea
@@ -57,7 +55,7 @@
                     name="comment"
                     outlined
                     prepend-inner-icon="fas fa-message"
-                  ></v-textarea>
+                  />
                 </v-col>
               </v-row>
               <v-row justify="center">
@@ -147,24 +145,27 @@ export default defineComponent({
         useMessages().success(i18n.t(`${props.type}.rating.sent`).toString());
         sent.value = true;
         close();
-      } catch (err) {
+      }
+      catch (err) {
         if (
-          axios.isAxiosError(err) &&
-          err.response?.status === HttpStatusCode.BadRequest &&
-          'errors' in err.response.data
+          axios.isAxiosError(err)
+          && err.response?.status === HttpStatusCode.BadRequest
+          && 'errors' in err.response.data
         ) {
           errors.value.record(err.response.data.errors);
           return;
         }
 
         throw err;
-      } finally {
+      }
+      finally {
         loading.removeItem(`${props.type}-rating`);
       }
     };
 
     watch(dialog, (value) => {
-      if (!value && !sent.value) reset();
+      if (!value && !sent.value)
+        reset();
     });
 
     return {

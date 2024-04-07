@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-globals */
 self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
+  if (event.data && event.data.type === 'SKIP_WAITING')
     self.skipWaiting();
-  }
 });
 
 self.addEventListener('push', async (event) => {
@@ -16,7 +15,7 @@ self.addEventListener('push', async (event) => {
       icon: `${url}icons/pwa-192x192.png`,
       body,
       data: { url, ...rest },
-    })
+    }),
   );
 });
 
@@ -26,14 +25,15 @@ self.addEventListener('notificationclick', async (event) => {
 
   const focusClient = async () => {
     const wClients = await self.clients.matchAll();
-    const wClient = wClients.find((client) =>
-      ['visible', 'hidden'].includes(client.visibilityState)
+    const wClient = wClients.find(client =>
+      ['visible', 'hidden'].includes(client.visibilityState),
     );
 
     if (wClient) {
       wClient.navigate(url);
       wClient.focus();
-    } else self.clients.openWindow(url);
+    }
+    else { self.clients.openWindow(url); }
 
     notification.close();
   };

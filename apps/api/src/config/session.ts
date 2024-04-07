@@ -11,7 +11,7 @@ export type SessionConfig = {
 const sessionConfig: SessionConfig = {
   redis: {
     host: process.env.SESSION_REDIS_HOST || 'localhost',
-    port: parseInt(process.env.SESSION_REDIS_PORT || '6379', 10),
+    port: Number.parseInt(process.env.SESSION_REDIS_PORT || '6379', 10),
     keyPrefix: process.env.SESSION_REDIS_PREFIX || 'it24:session:',
   },
   cookie: {

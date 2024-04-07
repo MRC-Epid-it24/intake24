@@ -17,5 +17,5 @@ export default validate(
       ...passwordConfirm,
       optional: { options: { nullable: true } },
     },
-  })
+  }),
 );

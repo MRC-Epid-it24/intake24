@@ -7,7 +7,7 @@ import { Op, PersonalAccessToken, RefreshToken } from '@intake24/db';
 
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 
-const jwtRotationService = (ops: Pick<IoC, 'logger'>) => {
+function jwtRotationService(ops: Pick<IoC, 'logger'>) {
   const logger = ops.logger.child({ service: 'JwtRotationService' });
 
   /**
@@ -135,7 +135,7 @@ const jwtRotationService = (ops: Pick<IoC, 'logger'>) => {
     purgeRefreshTokens,
     purgePersonalAccessTokens,
   };
-};
+}
 
 export default jwtRotationService;
 

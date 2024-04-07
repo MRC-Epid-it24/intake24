@@ -18,7 +18,7 @@
                 outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -32,7 +32,7 @@
                 prepend-inner-icon="fas fa-key"
                 required
                 type="password"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -46,9 +46,9 @@
                 prepend-inner-icon="fas fa-key"
                 required
                 type="password"
-              ></v-text-field>
+              />
             </v-col>
-            <error-list :errors="nonInputErrors" tag="v-col"></error-list>
+            <error-list :errors="nonInputErrors" tag="v-col" />
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
@@ -62,7 +62,9 @@
     </v-form>
     <v-card-actions>
       <v-btn color="info" exact text :to="{ name: 'login' }">
-        <v-icon left>fas fa-angles-left</v-icon>
+        <v-icon left>
+          fas fa-angles-left
+        </v-icon>
         {{ $t('common.login.back') }}
       </v-btn>
     </v-card-actions>
@@ -108,7 +110,8 @@ export default defineComponent({
       const allErrors = this.form.errors.all();
 
       const errors = Object.keys(allErrors).reduce<ValidationError[]>((acc, error) => {
-        if (!keys.includes(error) || error === 'token') acc.push({ ...allErrors[error] });
+        if (!keys.includes(error) || error === 'token')
+          acc.push({ ...allErrors[error] });
 
         return acc;
       }, []);

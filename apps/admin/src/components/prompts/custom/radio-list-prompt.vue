@@ -9,7 +9,7 @@
           outlined
           :value="orientation"
           @change="update('orientation', $event)"
-        ></v-select>
+        />
       </v-col>
       <v-col cols="12">
         <v-switch
@@ -17,7 +17,7 @@
           :input-value="other"
           :label="$t('survey-schemes.prompts.other')"
           @change="update('other', $event)"
-        ></v-switch>
+        />
       </v-col>
     </v-row>
     <language-selector
@@ -32,7 +32,7 @@
           :key="lang"
           :options="options[lang]"
           @update:options="updateLanguage('options', lang, $event)"
-        ></options-list>
+        />
       </template>
     </language-selector>
   </v-tab-item>

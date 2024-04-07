@@ -12,7 +12,7 @@
     @action="action"
     @add-food="addingIngredientsAsALinkedFood"
     @input="update"
-  ></recipe-builder-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -37,16 +37,18 @@ import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
-const initialPromptState = (step: RecipeFoodStepsType): RecipeBuilderStepState => ({
-  confirmed: undefined,
-  repeat: step.repeatable,
-  foods: [],
-  order: step.order - 1,
-  description: step.description,
-  name: step.name,
-  categoryCode: step.categoryCode,
-  required: step.required,
-});
+function initialPromptState(step: RecipeFoodStepsType): RecipeBuilderStepState {
+  return {
+    confirmed: undefined,
+    repeat: step.repeatable,
+    foods: [],
+    order: step.order - 1,
+    description: step.description,
+    name: step.name,
+    categoryCode: step.categoryCode,
+    required: step.required,
+  };
+}
 
 export default defineComponent({
   name: 'RecipeBuilderPromptHandler',
@@ -77,7 +79,7 @@ export default defineComponent({
     const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
       recipe: recipeFood,
       activeStep: 0,
-      recipeSteps: recipeFood.steps.map((step) => initialPromptState(step)),
+      recipeSteps: recipeFood.steps.map(step => initialPromptState(step)),
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
@@ -103,10 +105,12 @@ export default defineComponent({
           flags: [],
           linkedFoods: [],
         };
-      } else {
+      }
+      else {
         const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
         const flags: FoodFlag[] = ['associated-foods-complete'];
-        if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
+        if (hasOnePortionSizeMethod)
+          flags.push('portion-size-option-complete');
 
         ingredientToAdd = {
           id: data.id,
@@ -129,13 +133,12 @@ export default defineComponent({
         linkedFood.push(...recipeParent.linkedFoods);
       }
 
-      //adding the new ingredient to existing component or creating a new one.
+      // adding the new ingredient to existing component or creating a new one.
       const componentIndex = newComponents[data.idx] !== undefined ? data.idx : -1;
-      if (componentIndex !== -1 && newComponents.length > 0) {
+      if (componentIndex !== -1 && newComponents.length > 0)
         newComponents[componentIndex].ingredients.push(data.id);
-      } else {
+      else
         newComponents.push({ order: data.idx, ingredients: [data.id] });
-      }
 
       survey.updateFood({
         foodId,
@@ -154,7 +157,8 @@ export default defineComponent({
     };
 
     const action = async (type: string) => {
-      if (type === 'next') commitAnswer();
+      if (type === 'next')
+        commitAnswer();
       else console.log('Unhandled action', type);
     };
 

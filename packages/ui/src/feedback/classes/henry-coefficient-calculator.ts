@@ -7,19 +7,19 @@ export default class HenryCoefficientsCalculator {
   private readonly coefficients: HenryCoefficient[];
 
   constructor(henryCoefficients: HenryCoefficient[]) {
-    this.coefficients = henryCoefficients.map((hc) => hc.clone());
+    this.coefficients = henryCoefficients.map(hc => hc.clone());
   }
 
   static fromJson(coefficients: HenryCoefficientRecord[]): HenryCoefficientsCalculator {
     return new HenryCoefficientsCalculator(
-      coefficients.map((coefficient) => HenryCoefficient.fromJson(coefficient))
+      coefficients.map(coefficient => HenryCoefficient.fromJson(coefficient)),
     );
   }
 
   getBMR(userDemographic: UserDemographic): number {
     const { heightCm, weightKg, sex } = userDemographic.physicalData;
     const age = userDemographic.getAge();
-    const coefficients = this.coefficients.filter((c) => c.matchesUserDemographic(sex, age));
+    const coefficients = this.coefficients.filter(c => c.matchesUserDemographic(sex, age));
 
     if (heightCm === null || weightKg === null)
       throw new Error('Cannot calculate BMR without heightCm or weightKg.');

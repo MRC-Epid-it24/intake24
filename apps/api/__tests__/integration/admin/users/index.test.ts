@@ -9,13 +9,13 @@ import store from './store.test';
 import update from './update.test';
 
 export default () => {
-  describe('GET /api/admin/users', browse);
-  describe('POST /api/admin/users', store);
-  describe('GET /api/admin/users/refs', refs);
-  describe('GET /api/admin/users/:userId', read);
-  describe('GET /api/admin/users/:userId/edit', edit);
-  describe('PUT /api/admin/users/:userId', update);
-  describe('DELETE /api/admin/users/:userId', destroy);
-  describe('GET /api/admin/users/:userId/permissions', permissions);
-  describe('GET /api/admin/users/:userId/roles', roles);
+  describe('get /api/admin/users', browse);
+  describe('pOST /api/admin/users', store);
+  describe('get /api/admin/users/refs', refs);
+  describe('get /api/admin/users/:userId', read);
+  describe('get /api/admin/users/:userId/edit', edit);
+  describe('put /api/admin/users/:userId', update);
+  describe('delete /api/admin/users/:userId', destroy);
+  describe('get /api/admin/users/:userId/permissions', permissions);
+  describe('get /api/admin/users/:userId/roles', roles);
 };

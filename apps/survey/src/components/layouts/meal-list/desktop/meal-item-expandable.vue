@@ -1,12 +1,14 @@
 <template>
   <v-list-group
-    :class="{ selected: isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
+    :class="{ 'selected': isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
     :sub-group="true"
     :value="true"
     @click="action('selectMeal', meal.id)"
   >
     <template #prependIcon>
-      <v-icon :class="{ rotate: isSelected || selectedFoodInMeal }">$expand</v-icon>
+      <v-icon :class="{ rotate: isSelected || selectedFoodInMeal }">
+        $expand
+      </v-icon>
     </template>
     <template #activator>
       <v-list-item-title class="font-weight-bold text-wrap">
@@ -16,21 +18,23 @@
         <v-list-item-action-text v-if="mealTime?.length">
           {{ mealTime }}
         </v-list-item-action-text>
-        <v-icon v-else small>$question</v-icon>
+        <v-icon v-else small>
+          $question
+        </v-icon>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <context-menu v-bind="{ meal, menu }" @action="action"></context-menu>
+        <context-menu v-bind="{ meal, menu }" @action="action" />
       </v-list-item-action>
     </template>
-    <v-divider></v-divider>
+    <v-divider />
     <template v-if="meal.foods.length">
       <food-item
         v-for="food in meal.foods"
         :key="food.id"
         v-bind="{ food, meal, selectedFoodId }"
         @action="action"
-      ></food-item>
-      <v-divider></v-divider>
+      />
+      <v-divider />
     </template>
   </v-list-group>
 </template>

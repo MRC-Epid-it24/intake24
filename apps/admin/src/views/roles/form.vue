@@ -13,7 +13,7 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -23,7 +23,7 @@
                 :label="$t('common.displayName')"
                 name="displayName"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -34,7 +34,7 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-textarea>
+              />
             </v-col>
           </v-row>
           <v-card-title>{{ $t('permissions.title') }}</v-card-title>
@@ -52,7 +52,7 @@
                     :disabled="!can(perm.name)"
                     :label="perm.displayName"
                     :value="perm.id"
-                  ></v-switch>
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
@@ -65,8 +65,12 @@
               <v-col v-for="(pModule, key) in permissions[group]" :key="key" cols="4">
                 <v-card height="100%">
                   <v-card-title>
-                    <h6 v-if="group === 'resources'">{{ $t(`${key}.title`) }}</h6>
-                    <h6 v-else>{{ $t(`${group}._`) }} {{ key }}</h6>
+                    <h6 v-if="group === 'resources'">
+                      {{ $t(`${key}.title`) }}
+                    </h6>
+                    <h6 v-else>
+                      {{ $t(`${group}._`) }} {{ key }}
+                    </h6>
                   </v-card-title>
                   <v-card-text>
                     <v-switch
@@ -76,13 +80,13 @@
                       :disabled="!can(perm.name)"
                       :label="perm.displayName"
                       :value="perm.id"
-                    ></v-switch>
+                    />
                   </v-card-text>
                 </v-card>
               </v-col>
             </v-row>
           </template>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -123,7 +127,7 @@ export default defineComponent({
   setup(props) {
     const loadCallback = (data: Partial<RoleEntry>) => {
       const { permissions = [], ...rest } = data;
-      return { ...rest, permissions: permissions.map((item) => item.id) };
+      return { ...rest, permissions: permissions.map(item => item.id) };
     };
 
     const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<RoleEntry, RoleRefs>(props);
@@ -156,14 +160,16 @@ export default defineComponent({
       };
 
       const { permissions } = this.refs;
-      if (!permissions) return groups;
+      if (!permissions)
+        return groups;
 
       const resourceNames = resources.map(({ name }) => name);
 
       return orderBy(permissions, 'name').reduce((acc, permission) => {
         if (permission.name.includes('|') || resourceNames.includes(permission.name)) {
           const key = permission.name.split('|')[0];
-          if (!(key in acc.resources)) acc.resources[key] = [];
+          if (!(key in acc.resources))
+            acc.resources[key] = [];
 
           acc.resources[key].push(permission);
           return acc;
@@ -177,12 +183,14 @@ export default defineComponent({
           if (permission.name.startsWith('fdbm/')) {
             key = second;
             section = 'fdbs';
-          } else {
+          }
+          else {
             key = first;
             section = 'surveys';
           }
 
-          if (!(key in acc[section])) acc[section][key] = [];
+          if (!(key in acc[section]))
+            acc[section][key] = [];
 
           acc[section][key].push(permission);
           return acc;

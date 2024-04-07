@@ -1,15 +1,16 @@
-const mapper = (items) =>
-  items.map((item) => {
-    const { localName, props, ...rest } = item;
+function mapper(items) {
+  return items.map((item) => {
+    const { _localName, props, ...rest } = item;
     const { name, text, description, label, hint, ...restProps } = props;
 
     const i18n = { name, text, description, label, hint };
 
     return { ...rest, ...restProps, i18n };
   });
+}
 
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const { QueryTypes } = queryInterface.sequelize;
 
@@ -22,7 +23,8 @@ module.exports = {
         const { id } = scheme;
         const questions = JSON.parse(scheme.questions);
 
-        if (!questions) continue;
+        if (!questions)
+          continue;
 
         const {
           preMeals,
@@ -44,7 +46,7 @@ module.exports = {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
             replacements: { id, questions: JSON.stringify(newQuestions) },
             transaction,
-          }
+          },
         );
       }
     }),

@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 export type CorrectionMethod = 'phonetic' | 'lev1' | 'lev2';
 
 interface InterpretationBase {
@@ -56,17 +55,17 @@ export class InterpretedWord {
   dropInterpretation() {
     // first try dropping some synonym
 
-    const synIndex = this.interpretations.findIndex((i) => i.kind === 'synonym');
+    const synIndex = this.interpretations.findIndex(i => i.kind === 'synonym');
 
     if (synIndex > -1) {
       this.interpretations.splice(synIndex, 1);
-    } else {
+    }
+    else {
       // no synonyms, try dropping alternative spelling
-      const altSpellingIndex = this.interpretations.findIndex((i) => i.kind === 'alt-spelling');
+      const altSpellingIndex = this.interpretations.findIndex(i => i.kind === 'alt-spelling');
 
-      if (altSpellingIndex > -1) {
+      if (altSpellingIndex > -1)
         this.interpretations.splice(altSpellingIndex, 1);
-      }
 
       if (this.interpretations.length === 0)
         throw new Error('Cannot drop the only remaining word interpretation');

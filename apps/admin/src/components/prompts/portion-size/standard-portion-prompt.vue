@@ -7,8 +7,7 @@
           :input-value="badges"
           :label="$t('survey-schemes.prompts.badges')"
           @change="update('badges', $event)"
-        >
-        </v-switch>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

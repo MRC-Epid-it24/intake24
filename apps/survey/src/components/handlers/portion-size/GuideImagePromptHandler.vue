@@ -13,8 +13,7 @@
     }"
     @action="action"
     @input="update"
-  >
-  </guide-image-prompt>
+  />
 </template>
 
 <script lang="ts">

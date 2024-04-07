@@ -14,7 +14,7 @@
                 name="id"
                 outlined
                 prepend-inner-icon="$nutrient-types"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -25,7 +25,7 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -40,8 +40,7 @@
                 outlined
                 prepend-inner-icon="$nutrient-units"
                 @change="form.errors.clear('unitId')"
-              >
-              </v-select>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -52,10 +51,10 @@
                 name="kcalPerUnit"
                 outlined
                 prepend-inner-icon="fas fa-bolt"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -111,7 +110,8 @@ export default defineComponent({
     nutrientUnits() {
       const nutrientUnits = [{ id: null, description: this.$t('common.none').toString() }];
 
-      if (!this.refs.units) return nutrientUnits;
+      if (!this.refs.units)
+        return nutrientUnits;
 
       return [...nutrientUnits, ...this.refs.units];
     },

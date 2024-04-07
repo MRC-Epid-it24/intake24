@@ -19,7 +19,7 @@
                   :label="$t('fdbs.categories.global.code')"
                   name="main.code"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -30,7 +30,7 @@
                   :label="$t('fdbs.categories.global.name')"
                   name="main.name"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
               <v-col align-self="center" cols="12" md="6">
                 <v-switch
@@ -42,7 +42,7 @@
                   :label="$t('fdbs.categories.global.isHidden')"
                   name="main.isHidden"
                   @change="form.errors.clear('allowGenUsers')"
-                ></v-switch>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -63,7 +63,7 @@
                   :label="$t('fdbs.categories.local.name')"
                   name="name"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -73,7 +73,7 @@
           class="mb-6"
           :disabled="!globalEdit"
           :errors="form.errors"
-        ></attribute-list>
+        />
         <category-list
           v-model="form.main.parentCategories"
           class="mb-6"
@@ -81,27 +81,29 @@
           :errors="form.errors"
           :locale-id="id"
           outlined
-        ></category-list>
+        />
         <portion-size-method-list
           v-model="form.portionSizeMethods"
           class="mb-6"
           :errors="form.errors"
           :locale-id="id"
-        ></portion-size-method-list>
+        />
       </v-form>
       <div class="d-flex">
         <v-btn color="secondary" outlined @click="submit">
-          <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
+          <v-icon left>
+            $save
+          </v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
-        <copy-entry-dialog v-bind="{ entryId, localeId: id, type }"></copy-entry-dialog>
-        <v-spacer></v-spacer>
+        <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
+        <v-spacer />
       </div>
     </div>
     <v-skeleton-loader
       v-else
       type="card-heading, list-item-three-line@3, actions"
-    ></v-skeleton-loader>
-    <confirm-leave-dialog v-model="routeLeave"></confirm-leave-dialog>
+    />
+    <confirm-leave-dialog v-model="routeLeave" />
   </div>
 </template>
 
@@ -188,26 +190,28 @@ export default defineComponent({
     });
 
     const fetchCategoryOrFood = async (entryId: string) => {
-      if (!entryId || entryId === 'no-category') return;
+      if (!entryId || entryId === 'no-category')
+        return;
 
       loading.value = true;
       entry.value = null;
 
       try {
         const { data } = await http.get<CategoryLocalEntry>(
-          `admin/fdbs/${props.id}/${type}/${entryId}`
+          `admin/fdbs/${props.id}/${type}/${entryId}`,
         );
 
         toForm(data);
         entry.value = data;
-      } finally {
+      }
+      finally {
         loading.value = false;
       }
     };
 
     const submit = async () => {
       const data = await form.put<CategoryLocalEntry>(
-        `admin/fdbs/${props.id}/${type}/${props.entryId}`
+        `admin/fdbs/${props.id}/${type}/${props.entryId}`,
       );
       toForm(data);
 
@@ -221,9 +225,8 @@ export default defineComponent({
     });
 
     onBeforeRouteUpdate(async (to, from, next) => {
-      if (to.params.entryId !== from.params.entryId) {
+      if (to.params.entryId !== from.params.entryId)
         await fetchCategoryOrFood(to.params.entryId);
-      }
 
       next();
     });

@@ -4,7 +4,7 @@ import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 
 import Metaphone3Encoder from './metaphone-encoder';
 
-const sanitiseRegexp = new RegExp(/[.`,/\\\-+)(]|e\.g\.|e\.g|'s/g);
+const sanitiseRegexp = /[.`,/\\\-+)(]|e\.g\.|e\.g|'s/g;
 
 export default {
   name: 'English',
@@ -13,7 +13,7 @@ export default {
   phoneticEncoder: new Metaphone3Encoder(),
 
   splitCompound(word: string): Array<string> {
-    return new Array<string>(word);
+    return [word];
   },
 
   stem(word: string): string {

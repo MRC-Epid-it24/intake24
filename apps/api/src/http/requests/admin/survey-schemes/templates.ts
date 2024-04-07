@@ -18,5 +18,5 @@ export default validate(
       toInt: true,
       optional: { options: { nullable: true } },
     },
-  })
+  }),
 );

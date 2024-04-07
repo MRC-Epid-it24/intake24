@@ -5,8 +5,7 @@
         <food-browser-settings
           :categories-first="categoriesFirst"
           @update:categoriesFirst="update('categoriesFirst', $event)"
-        >
-        </food-browser-settings>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

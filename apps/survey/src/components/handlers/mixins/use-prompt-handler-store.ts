@@ -9,37 +9,33 @@ import { findMeal, mealPortionSizeComplete } from '@intake24/survey/util';
 export type UsePromptHandlerStoreProps<P extends keyof PromptStates> = {
   prompt: Prompts[P];
 };
-
-export const usePromptHandlerStore = <P extends keyof PromptStates, S extends PromptStates[P]>(
-  props: UsePromptHandlerStoreProps<P>,
-  { emit }: SetupContext<any>, // fix any - infer from component
-  getInitialState: () => S,
-  commitAnswer?: () => void
-) => {
+export function usePromptHandlerStore<P extends keyof PromptStates, S extends PromptStates[P]>(props: UsePromptHandlerStoreProps<P>, { emit }: SetupContext<any>, getInitialState: () => S, commitAnswer?: () => void) {
   const promptStore = getOrCreatePromptStateStore<S>(props.prompt.component)();
   const survey = useSurvey();
 
   const getFoodId = () => {
     const foodId = survey.selectedFoodOptional?.id;
-    if (foodId === undefined) throw new Error('This prompt requires a food to be selected');
+    if (foodId === undefined)
+      throw new Error('This prompt requires a food to be selected');
 
     return foodId;
   };
 
   const getMealId = () => {
     const mealId = survey.selectedMealOptional?.id;
-    if (mealId === undefined) throw new Error('This prompt requires a meal to be selected');
+    if (mealId === undefined)
+      throw new Error('This prompt requires a meal to be selected');
 
     return mealId;
   };
 
   const getFoodOrMealId = props.prompt.component === 'edit-meal-prompt' ? getMealId : getFoodId;
 
-  const storedState: S | undefined =
-    promptStore.prompts[getFoodOrMealId()]?.[props.prompt.component];
+  const storedState: S | undefined
+    = promptStore.prompts[getFoodOrMealId()]?.[props.prompt.component];
 
   const state = ref(
-    storedState ? merge<S>(getInitialState(), storedState) : getInitialState()
+    storedState ? merge<S>(getInitialState(), storedState) : getInitialState(),
   ) as Ref<S>;
 
   const update = (data: S) => {
@@ -51,7 +47,8 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
   };
 
   const action = (type: string, ...args: [id?: string, params?: object]) => {
-    if (type === 'next' && commitAnswer) commitAnswer();
+    if (type === 'next' && commitAnswer)
+      commitAnswer();
 
     emit('action', type, ...args);
   };
@@ -74,13 +71,13 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
     // If this was the last remaining portion size, reset the selection to
     // the first food of the meal for the associated food prompts second pass
 
-    if (portionSizeCompleteAfter && !portionSizeCompleteBefore) {
+    if (portionSizeCompleteAfter && !portionSizeCompleteBefore)
       survey.setSelection({ mode: 'auto', element: { type: 'food', foodId: meal.foods[0].id } });
-    }
   };
 
   const actionPortionSize = (type: string, ...args: [id?: string, params?: object]) => {
-    if (type === 'next') commitPortionSize();
+    if (type === 'next')
+      commitPortionSize();
 
     emit('action', type, ...args);
   };
@@ -97,4 +94,4 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
     actionPortionSize,
     commitPortionSize,
   };
-};
+}

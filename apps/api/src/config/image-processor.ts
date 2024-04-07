@@ -31,22 +31,22 @@ export type ImageProcessorConfig = {
 
 const imageProcessorConfig: ImageProcessorConfig = {
   source: {
-    thumbnailWidth: parseInt(process.env.IMAGE_SOURCE_THUMB_WIDTH || '768', 10),
-    thumbnailHeight: parseInt(process.env.IMAGE_SOURCE_THUMB_HEIGHT || '432', 10),
+    thumbnailWidth: Number.parseInt(process.env.IMAGE_SOURCE_THUMB_WIDTH || '768', 10),
+    thumbnailHeight: Number.parseInt(process.env.IMAGE_SOURCE_THUMB_HEIGHT || '432', 10),
   },
   asServed: {
-    width: parseInt(process.env.IMAGE_AS_SERVED_WIDTH || '1000', 10),
-    thumbnailWidth: parseInt(process.env.IMAGE_AS_SERVED_THUMB_WIDTH || '200', 10),
+    width: Number.parseInt(process.env.IMAGE_AS_SERVED_WIDTH || '1000', 10),
+    thumbnailWidth: Number.parseInt(process.env.IMAGE_AS_SERVED_THUMB_WIDTH || '200', 10),
   },
   imageMaps: {
-    width: parseInt(process.env.IMAGE_MAP_WIDTH || '1000', 10),
+    width: Number.parseInt(process.env.IMAGE_MAP_WIDTH || '1000', 10),
   },
   drinkScale: {
-    width: parseInt(process.env.IMAGE_DRINK_SCALE_WIDTH || '1000', 10),
+    width: Number.parseInt(process.env.IMAGE_DRINK_SCALE_WIDTH || '1000', 10),
   },
   optionSelection: {
-    width: parseInt(process.env.IMAGE_OPTION_SELECTION_WIDTH || '300', 10),
-    height: parseInt(process.env.IMAGE_OPTION_SELECTION_HEIGHT || '200', 10),
+    width: Number.parseInt(process.env.IMAGE_OPTION_SELECTION_WIDTH || '300', 10),
+    height: Number.parseInt(process.env.IMAGE_OPTION_SELECTION_HEIGHT || '200', 10),
   },
 };
 

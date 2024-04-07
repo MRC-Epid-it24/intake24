@@ -9,7 +9,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="objectValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="objectValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -24,7 +24,7 @@
             }"
             @confirm="confirmObject"
             @select="selectObject"
-          ></image-map-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
@@ -45,7 +45,7 @@
                 "
                 unit="ml"
                 :valid="quantityConfirmed"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
@@ -58,8 +58,7 @@
             :scale="scale"
             @confirm="confirmQuantity"
             @input="updateQuantity"
-          >
-          </component>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel v-if="leftoversEnabled" :disabled="!quantityConfirmed">
@@ -80,12 +79,12 @@
                 "
                 unit="ml"
                 :valid="leftoversConfirmed"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory />
           <template v-if="leftoversPrompt">
             <i18n class="mb-4" :path="`prompts.${type}.leftovers.label`" tag="div">
               <template #food>
@@ -102,8 +101,7 @@
               type="leftovers"
               @confirm="confirmLeftovers"
               @input="updateLeftovers"
-            >
-            </component>
+            />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -121,7 +119,7 @@
                 :amount="portionSize.count ?? undefined"
                 unit=""
                 :valid="leftoversConfirmed"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
@@ -131,15 +129,15 @@
             :slider="prompt.multiple"
             @confirm="confirmCount"
             @input="updateCount"
-          ></quantity-slider>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -217,30 +215,33 @@ export default defineComponent({
     },
 
     labels() {
-      if (!this.labelsEnabled || !this.imageMapData) return [];
+      if (!this.labelsEnabled || !this.imageMapData)
+        return [];
 
       return this.imageMapData.objects.map((object) => {
         const scale = this.drinkwareSetData?.scales.find(
-          ({ choiceId }) => choiceId.toString() === object.id
+          ({ choiceId }) => choiceId.toString() === object.id,
         );
 
-        if (!scale) return '';
+        if (!scale)
+          return '';
 
         const volume = scale.volumeSamples[scale.volumeSamples.length - 1];
 
         return (
-          this.translate(scale.label, { params: { volume } }) ||
-          this.translate(object.label, { params: { volume } })
+          this.translate(scale.label, { params: { volume } })
+          || this.translate(object.label, { params: { volume } })
         );
       });
     },
 
     scale() {
       const { containerId } = this.portionSize;
-      if (containerId === undefined) return undefined;
+      if (containerId === undefined)
+        return undefined;
 
       return this.drinkwareSetData?.scales.find(
-        (scale) => scale.choiceId.toString() === containerId
+        scale => scale.choiceId.toString() === containerId,
       );
     },
 
@@ -254,9 +255,9 @@ export default defineComponent({
 
     objectValid() {
       return (
-        this.portionSize.containerId !== undefined &&
-        this.portionSize.containerIndex !== undefined &&
-        this.objectConfirmed
+        this.portionSize.containerId !== undefined
+        && this.portionSize.containerIndex !== undefined
+        && this.objectConfirmed
       );
     },
 
@@ -278,7 +279,8 @@ export default defineComponent({
       if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      if (this.multipleEnabled) conditions.push(this.countValid);
+      if (this.multipleEnabled)
+        conditions.push(this.countValid);
 
       return conditions;
     },
@@ -301,13 +303,13 @@ export default defineComponent({
   methods: {
     async fetchDrinkScaleData() {
       const { data: drinkwareSetData } = await this.$http.get<DrinkwareSetResponse>(
-        `portion-sizes/drinkware-sets/${this.parameters.drinkwareId}`
+        `portion-sizes/drinkware-sets/${this.parameters.drinkwareId}`,
       );
 
       this.drinkwareSetData = { ...drinkwareSetData };
 
       const { data: imageMapData } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.drinkwareSetData.imageMapId}`
+        `portion-sizes/image-maps/${this.drinkwareSetData.imageMapId}`,
       );
 
       this.imageMapData = { ...imageMapData };
@@ -315,7 +317,8 @@ export default defineComponent({
 
     selectObject(idx: number, id: string) {
       const { drinkwareSetData } = this;
-      if (!drinkwareSetData) return;
+      if (!drinkwareSetData)
+        return;
 
       this.objectConfirmed = false;
 
@@ -335,7 +338,8 @@ export default defineComponent({
     confirmObject() {
       this.objectConfirmed = true;
 
-      if (this.skipFillLevel) this.quantityConfirmed = true;
+      if (this.skipFillLevel)
+        this.quantityConfirmed = true;
 
       this.updatePanel();
       this.update();
@@ -389,10 +393,10 @@ export default defineComponent({
     update() {
       const { volumes } = this;
       if (volumes) {
-        this.portionSize.servingWeight =
-          calculateVolume(volumes, this.portionSize.fillLevel) * this.portionSize.count;
-        this.portionSize.leftoversWeight =
-          calculateVolume(volumes, this.portionSize.leftoversLevel) * this.portionSize.count;
+        this.portionSize.servingWeight
+          = calculateVolume(volumes, this.portionSize.fillLevel) * this.portionSize.count;
+        this.portionSize.leftoversWeight
+          = calculateVolume(volumes, this.portionSize.leftoversLevel) * this.portionSize.count;
       }
 
       const state: PromptStates['drink-scale-prompt'] = {

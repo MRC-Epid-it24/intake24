@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form @submit.prevent="action('next')">
         <v-slider
           class="quantity-slider__slider px-8"
           color="secondary"
@@ -26,7 +26,9 @@
                 {{ translate(prompt.slider.current.label) }}
               </span>
             </div>
-            <v-icon v-else class="fa-beat" color="white">fas fa-circle</v-icon>
+            <v-icon v-else class="fa-beat" color="white">
+              fas fa-circle
+            </v-icon>
           </template>
           <template #prepend>
             <div v-if="prompt.slider.min.label" class="d-flex flex-column align-center">
@@ -48,10 +50,10 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </component>
 </template>
@@ -96,11 +98,12 @@ export default defineComponent({
     });
 
     const isInitialized = computed(
-      () => typeof state.value !== 'undefined' && state.value !== null
+      () => typeof state.value !== 'undefined' && state.value !== null,
     );
 
     const initialize = (value: number) => {
-      if (isInitialized.value) return;
+      if (isInitialized.value)
+        return;
 
       state.value = value;
     };

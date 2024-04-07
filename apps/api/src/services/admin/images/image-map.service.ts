@@ -7,18 +7,18 @@ import type {
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { GuideImage, GuideImageObject, ImageMap, ImageMapObject, Op } from '@intake24/db';
 
-const imageMapService = ({
+function imageMapService({
   portionSizeService,
   processedImageService,
   sourceImageService,
   db,
-}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService' | 'db'>) => {
+}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService' | 'db'>) {
   const create = async (input: CreateImageMapInput): Promise<ImageMap> => {
     const { id, baseImage, description, objects, uploader } = input;
 
     const sourceImage = await sourceImageService.uploadSourceImage(
       { id, uploader, file: baseImage },
-      'image_maps'
+      'image_maps',
     );
 
     const processedBaseImage = await processedImageService.createImageMapBaseImage(id, sourceImage);
@@ -30,15 +30,15 @@ const imageMapService = ({
           description,
           baseImageId: processedBaseImage.id,
         },
-        { transaction }
+        { transaction },
       );
 
       await ImageMapObject.bulkCreate(
-        objects.map((object) => ({
+        objects.map(object => ({
           ...object,
           imageMapId: imageMap.id,
         })),
-        { transaction }
+        { transaction },
       );
 
       return imageMap;
@@ -49,18 +49,19 @@ const imageMapService = ({
     const { description, objects } = input;
 
     const imageMap = await portionSizeService.getImageMap(imageMapId);
-    if (!imageMap.objects) throw new NotFoundError();
+    if (!imageMap.objects)
+      throw new NotFoundError();
 
     const guideImages = await GuideImage.findAll({ attributes: ['id'], where: { imageMapId } });
     const guideImageIds = guideImages.map(({ id }) => id);
 
     await imageMap.update({ description });
 
-    const objectIds = objects.map((object) => object.id);
+    const objectIds = objects.map(object => object.id);
     await ImageMapObject.destroy({ where: { imageMapId, id: { [Op.notIn]: objectIds } } });
 
     for (const object of objects) {
-      const match = imageMap.objects.find((imageMapObject) => imageMapObject.id === object.id);
+      const match = imageMap.objects.find(imageMapObject => imageMapObject.id === object.id);
 
       if (!match) {
         await ImageMapObject.create({
@@ -74,12 +75,12 @@ const imageMapService = ({
 
         if (guideImageIds.length) {
           await GuideImageObject.bulkCreate(
-            guideImageIds.map((guideImageId) => ({
+            guideImageIds.map(guideImageId => ({
               guideImageId,
               weight: 0,
               imageMapObjectId: object.id,
               label: object.label,
-            }))
+            })),
           );
         }
 
@@ -102,12 +103,14 @@ const imageMapService = ({
       attributes: ['id', 'baseImageId'],
       include: [{ association: 'guideImages', attributes: ['id'] }],
     });
-    if (!imageMap || !imageMap.guideImages) throw new NotFoundError();
+    if (!imageMap || !imageMap.guideImages)
+      throw new NotFoundError();
 
-    if (imageMap.guideImages.length)
+    if (imageMap.guideImages.length) {
       throw new ForbiddenError(
-        'Image map cannot be deleted. There are guide images using this image map.'
+        'Image map cannot be deleted. There are guide images using this image map.',
       );
+    }
 
     await imageMap.destroy();
     await processedImageService.destroy(imageMap.baseImageId, { includeSources: true });
@@ -116,11 +119,11 @@ const imageMapService = ({
   const updateImage = async (
     id: string,
     baseImage: SourceFileInput,
-    uploader: string
+    uploader: string,
   ): Promise<void> => {
     const sourceImage = await sourceImageService.uploadSourceImage(
       { id, uploader, file: baseImage },
-      'image_maps'
+      'image_maps',
     );
 
     const processedBaseImage = await processedImageService.createImageMapBaseImage(id, sourceImage);
@@ -129,10 +132,11 @@ const imageMapService = ({
       {
         baseImageId: processedBaseImage.id,
       },
-      { where: { id } }
+      { where: { id } },
     );
 
-    if (affected[0] !== 1) throw new NotFoundError();
+    if (affected[0] !== 1)
+      throw new NotFoundError();
   };
 
   return {
@@ -141,7 +145,7 @@ const imageMapService = ({
     updateImage,
     destroy,
   };
-};
+}
 
 export default imageMapService;
 

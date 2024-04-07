@@ -12,7 +12,7 @@
     }"
     @action="action"
     @input="update"
-  ></pizza-v2-prompt>
+  />
 </template>
 
 <script lang="ts">

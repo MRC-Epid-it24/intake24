@@ -4,7 +4,7 @@ module.exports = {
       await queryInterface.renameTable(
         'foods_portion_size_methods',
         'v3_foods_portion_size_methods',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -47,7 +47,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('food_portion_size_methods', ['food_local_id'], {
@@ -71,12 +71,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO food_portion_size_methods (id, food_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor) SELECT id, food_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor FROM v3_foods_portion_size_methods',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'UPDATE food_portion_size_methods SET food_local_id = food_locals.id from food_locals WHERE food_portion_size_methods.food_code = food_locals.food_code AND food_portion_size_methods.locale_id = food_locals.locale_id',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -88,7 +88,7 @@ module.exports = {
         },
         {
           transaction,
-        }
+        },
       );
 
       await queryInterface.removeColumn('food_portion_size_methods', 'food_code', { transaction });
@@ -98,7 +98,7 @@ module.exports = {
       await queryInterface.removeConstraint(
         'foods_portion_size_method_params',
         'foods_portion_size_method_params_portion_size_method_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('foods_portion_size_method_params', {

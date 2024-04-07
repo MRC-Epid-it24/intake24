@@ -4,7 +4,7 @@ export default () => {
   const url = '/api/admin/nutrient-units';
   const permissions = ['nutrient-units', 'nutrient-units|browse'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

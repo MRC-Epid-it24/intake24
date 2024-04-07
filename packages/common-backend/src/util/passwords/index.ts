@@ -12,9 +12,9 @@ export interface HashedPassword {
 export interface PasswordAlgorithm {
   readonly id: string;
 
-  hash(password: string): Promise<HashedPassword>;
+  hash: (password: string) => Promise<HashedPassword>;
 
-  verify(input: string, hashedPassword: HashedPassword): Promise<boolean>;
+  verify: (input: string, hashedPassword: HashedPassword) => Promise<boolean>;
 }
 
 // FIXME: Should be configurable using dependency injection, not sure how to do that properly

@@ -7,12 +7,12 @@
   >
     <v-sheet class="food-browser-dialog-wrapper" color="secondary">
       <v-card-title class="flex-grow-0" dark>
-        <v-icon color="white" :title="$t('common.action.cancel')" @click="toggle(false)"
-          >$cancel</v-icon
-        >
+        <v-icon color="white" :title="$t('common.action.cancel')" @click="toggle(false)">
+          $cancel
+        </v-icon>
       </v-card-title>
       <v-card class="food-browser-dialog-content">
-        <slot></slot>
+        <slot />
       </v-card>
     </v-sheet>
   </v-dialog>

@@ -39,7 +39,10 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
   private getPromptMap() {
     return [...standardPrompts, ...portionSizePrompts, ...customPrompts].reduce<
       Record<string, Prompt>
-    >((acc, prompt) => ((acc[prompt.component] = prompt), acc), {});
+    >((acc, prompt) => {
+      acc[prompt.component] = prompt;
+      return acc;
+    }, {});
   }
 
   private async synchronizeSchemes(): Promise<void> {

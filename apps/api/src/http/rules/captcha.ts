@@ -9,7 +9,7 @@ import { ValidationError } from '../errors';
 
 export type CaptchaResponse = {
   success: boolean;
-  // eslint-disable-next-line camelcase
+
   challenge_ts: string;
   hostname: string;
   'error-codes': string[];
@@ -24,10 +24,12 @@ const hCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     const { data: { success } = {} } = await axios.post<CaptchaResponse>(
       'https://hcaptcha.com/siteverify',
       new URLSearchParams({ secret, response }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     );
-    if (!success) throw new Error();
-  } catch (err) {
+    if (!success)
+      throw new Error('Invalid hCaptcha challenge.');
+  }
+  catch (err) {
     throw new Error('Invalid hCaptcha challenge.');
   }
 };
@@ -37,10 +39,12 @@ const reCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     const { data: { success } = {} } = await axios.post<CaptchaResponse>(
       'https://www.google.com/recaptcha/api/siteverify',
       new URLSearchParams({ secret, response }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     );
-    if (!success) throw new Error();
-  } catch (err) {
+    if (!success)
+      throw new Error('Invalid reCAPTCHA challenge.');
+  }
+  catch (err) {
     throw new Error('Invalid reCAPTCHA challenge.');
   }
 };
@@ -50,24 +54,26 @@ const captchaProviders: Record<CaptchaProvider, CaptchaCallback> = {
   're-captcha': reCaptcha,
 };
 
-export const captcha = async (response: string | undefined, options: Captcha): Promise<void> => {
+export async function captcha(response: string | undefined, options: Captcha): Promise<void> {
   const { provider, secret } = options;
-  if (!provider) return;
+  if (!provider)
+    return;
 
   if (typeof response !== 'string' || !response)
     throw new Error('Missing reCAPTCHA challenge response token.');
 
   await captchaProviders[provider](secret, response);
-};
+}
 
 export default captcha;
 
-export const captchaCheck = async (token: string | undefined, options: Captcha) => {
+export async function captchaCheck(token: string | undefined, options: Captcha) {
   try {
     await captcha(token, options);
-  } catch (err) {
+  }
+  catch (err) {
     throw new ValidationError(err instanceof Error ? err.message : 'Invalid reCAPTCHA', {
       path: 'captcha',
     });
   }
-};
+}

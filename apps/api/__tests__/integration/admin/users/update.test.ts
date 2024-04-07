@@ -29,11 +29,11 @@ export default () => {
 
     const permissionInput = times(3, () => mocker.system.permission());
     const permissionsRecords = await Permission.bulkCreate(permissionInput);
-    updateInput.permissions = permissionsRecords.map((item) => item.id);
+    updateInput.permissions = permissionsRecords.map(item => item.id);
 
     const roleInput = times(2, () => mocker.system.role());
     const roles = await Role.bulkCreate(roleInput);
-    updateInput.roles = roles.map((item) => item.id);
+    updateInput.roles = roles.map(item => item.id);
 
     user = await ioc.cradle.adminUserService.create(input);
 
@@ -41,7 +41,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('put', url, { permissions });
   });
 
@@ -81,7 +81,7 @@ export default () => {
             disabledAt: 'invalidDate',
             verifiedAt: [false],
           },
-        }
+        },
       );
     });
 

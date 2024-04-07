@@ -11,7 +11,7 @@
     }"
     @action="action"
     @input="update"
-  ></parent-food-portion-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -74,12 +74,13 @@ export default defineComponent({
         return;
       }
 
-      if (!parentFood.value) throw new Error('Parent food portion prompt: parent food not found.');
+      if (!parentFood.value)
+        throw new Error('Parent food portion prompt: parent food not found.');
 
       if (
-        !parentFood.value.portionSize ||
-        parentFood.value.portionSize.servingWeight === null ||
-        parentFood.value.portionSize.leftoversWeight === null
+        !parentFood.value.portionSize
+        || parentFood.value.portionSize.servingWeight === null
+        || parentFood.value.portionSize.leftoversWeight === null
       )
         throw new Error('Parent food portion prompt: Parent food missing portion size data');
 
@@ -103,7 +104,7 @@ export default defineComponent({
       props,
       ctx,
       getInitialState,
-      commitAnswer
+      commitAnswer,
     );
 
     return {

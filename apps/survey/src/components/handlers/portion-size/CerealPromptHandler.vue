@@ -11,7 +11,7 @@
     }"
     @action="action"
     @input="update"
-  ></cereal-prompt>
+  />
 </template>
 
 <script lang="ts">

@@ -5,7 +5,7 @@ export default () => {
   const invalidUrl = '/api/admin/images/as-served-sets/InvalidAsServedSetForImages/images';
   const permissions = ['as-served-sets', 'as-served-sets|browse'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

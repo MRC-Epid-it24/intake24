@@ -8,7 +8,7 @@
         :label="$t(`feedback-schemes.${type}._`)"
         :prepend-inner-icon="getIcon(type)"
         @change="toggleRange($event)"
-      ></v-switch>
+      />
     </v-col>
     <v-col v-if="value" cols="12" md="6">
       <v-text-field
@@ -20,7 +20,7 @@
         outlined
         :value="value.start"
         @input="updateRange('start', $event)"
-      ></v-text-field>
+      />
       <v-text-field
         dense
         hide-details="auto"
@@ -29,7 +29,7 @@
         outlined
         :value="value.end"
         @input="updateRange('end', $event)"
-      ></v-text-field>
+      />
     </v-col>
   </v-row>
 </template>
@@ -80,7 +80,7 @@ export default defineComponent({
     },
 
     updateRange(field: keyof Range, value: string) {
-      const range = { ...(this.value ?? this.defaultRange), [field]: parseFloat(value) };
+      const range = { ...(this.value ?? this.defaultRange), [field]: Number.parseFloat(value) };
 
       this.$emit('input', range);
     },

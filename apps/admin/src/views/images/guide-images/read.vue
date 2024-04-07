@@ -20,7 +20,7 @@
         </v-simple-table>
       </v-col>
     </v-row>
-    <guide-drawer v-bind="{ entry, disabled: true, resource: 'guide-images' }"></guide-drawer>
+    <guide-drawer v-bind="{ entry, disabled: true, resource: 'guide-images' }" />
   </layout>
 </template>
 

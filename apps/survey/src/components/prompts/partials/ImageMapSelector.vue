@@ -4,7 +4,7 @@
       <div class="guide-drawer">
         <v-img ref="img" :src="imageMapData.baseImageUrl">
           <template #placeholder>
-            <image-placeholder></image-placeholder>
+            <image-placeholder />
           </template>
         </v-img>
         <div class="pinch-zoom-activator">
@@ -40,7 +40,7 @@
           </pinch-zoom-image-map-selector>
         </div>
         <div class="label">
-          <slot name="label"></slot>
+          <slot name="label" />
           <v-chip
             v-if="label"
             class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
@@ -50,7 +50,7 @@
         </div>
         <svg ref="svg">
           <filter id="polygon-blur">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4"></feGaussianBlur>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
           </filter>
           <polygon
             v-for="(object, idx) in objects"
@@ -62,7 +62,7 @@
             @keypress.stop="select(idx, object.id)"
             @mouseleave="hoverIndex = undefined"
             @mouseover="hoverIndex = idx"
-          ></polygon>
+          />
         </svg>
       </div>
     </v-col>
@@ -128,7 +128,7 @@ export default defineComponent({
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    //@ts-expect-error should allow vue instance?
+    // @ts-expect-error should allow vue instance?
     const { height, width } = useElementSize(img);
 
     const screenHeight = ref(0);
@@ -137,7 +137,7 @@ export default defineComponent({
     const { hoverIndex, label, objects } = useImageMap(props, width);
 
     const isDisabled = computed(() =>
-      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled
+      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled,
     );
 
     const getScreenDimensions = () => {
@@ -172,7 +172,8 @@ export default defineComponent({
     select(idx: number, id: string) {
       this.$emit('select', idx, id);
 
-      if (!this.isMobile) this.confirm();
+      if (!this.isMobile)
+        this.confirm();
     },
   },
 });

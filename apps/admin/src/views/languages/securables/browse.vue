@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <securables :owner="entry.owner" :resource-id="id" securable-type="Language"></securables>
+    <securables :owner="entry.owner" :resource-id="id" securable-type="Language" />
   </layout>
 </template>
 

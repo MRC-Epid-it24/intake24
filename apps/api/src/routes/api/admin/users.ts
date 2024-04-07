@@ -32,14 +32,14 @@ export default () => {
     '/:userId/permissions',
     permission('users|permissions'),
     validation.browse,
-    wrapAsync(adminUserController.permissions)
+    wrapAsync(adminUserController.permissions),
   );
 
   router.get(
     '/:userId/roles',
     permission('users|roles'),
     validation.browse,
-    wrapAsync(adminUserController.roles)
+    wrapAsync(adminUserController.roles),
   );
 
   return router;

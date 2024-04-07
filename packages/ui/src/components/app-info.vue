@@ -3,7 +3,9 @@
     <v-subheader>{{ $t('common.app.info') }}</v-subheader>
     <v-list-item>
       <v-list-item-avatar>
-        <v-icon class="secondary" dark>fas fa-code-branch</v-icon>
+        <v-icon class="secondary" dark>
+          fas fa-code-branch
+        </v-icon>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title> {{ $t('common.app._') }}: {{ app.name }} </v-list-item-title>
@@ -13,7 +15,9 @@
       </v-list-item-content>
       <v-list-item-action v-if="clipboardAvailable">
         <v-btn icon :title="$t('common.clipboard._')" @click="copyInfoToClipboard">
-          <v-icon color="secondary">far fa-clipboard</v-icon>
+          <v-icon color="secondary">
+            far fa-clipboard
+          </v-icon>
         </v-btn>
       </v-list-item-action>
     </v-list-item>

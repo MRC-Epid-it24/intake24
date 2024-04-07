@@ -40,7 +40,8 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     this.init(job);
 
     const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
+    if (!dbJob)
+      throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
 
     this.dbJob = dbJob;
 
@@ -106,7 +107,7 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
           withBOM: true,
         },
         {},
-        { objectMode: true }
+        { objectMode: true },
       );
       const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
         encoding: 'utf-8',

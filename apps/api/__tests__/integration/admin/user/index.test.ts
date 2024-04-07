@@ -4,14 +4,14 @@ import profile from './profile.test';
 import verify from './verify.test';
 
 export default () => {
-  describe('GET /api/admin/user', profile);
-  describe('GET /api/admin/user/verify', verify);
+  describe('get /api/admin/user', profile);
+  describe('get /api/admin/user/verify', verify);
 
-  describe('GET /api/admin/user/jobs', jobs.browse);
-  describe('GET /api/admin/user/jobs/:jobId', jobs.read);
-  describe('GET /api/admin/user/jobs/:jobId/download', jobs.download);
+  describe('get /api/admin/user/jobs', jobs.browse);
+  describe('get /api/admin/user/jobs/:jobId', jobs.read);
+  describe('get /api/admin/user/jobs/:jobId/download', jobs.download);
 
-  describe('GET /api/admin/user/personal-access-tokens', personalAccessTokens.browse);
-  describe('POST /api/admin/user/personal-access-tokens', personalAccessTokens.issue);
-  describe('DELETE /api/admin/user/personal-access-tokens/:tokenId', personalAccessTokens.revoke);
+  describe('get /api/admin/user/personal-access-tokens', personalAccessTokens.browse);
+  describe('pOST /api/admin/user/personal-access-tokens', personalAccessTokens.issue);
+  describe('delete /api/admin/user/personal-access-tokens/:tokenId', personalAccessTokens.revoke);
 };

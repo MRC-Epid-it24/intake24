@@ -5,21 +5,21 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form @submit.prevent="action('next')">
         <v-date-picker
           v-model="state"
           full-width
           :landscape="!isMobile"
           v-bind="{ max }"
-        ></v-date-picker>
-        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+        />
+        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </component>
 </template>
@@ -52,7 +52,7 @@ export default defineComponent({
 
     const isValid = computed(() => !props.prompt.validation.required || !!state.value);
     const max = computed(() =>
-      props.prompt.futureDates ? undefined : new Date().toISOString().substring(0, 10)
+      props.prompt.futureDates ? undefined : new Date().toISOString().substring(0, 10),
     );
     const state = computed({
       get() {
@@ -65,7 +65,8 @@ export default defineComponent({
     });
 
     const confirm = () => {
-      if (isValid.value) return true;
+      if (isValid.value)
+        return true;
 
       errors.value = [i18n.t(`prompts.${type}.validation.required`).toString()];
 
@@ -75,7 +76,7 @@ export default defineComponent({
     const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
       props,
       ctx,
-      confirm
+      confirm,
     );
 
     return {

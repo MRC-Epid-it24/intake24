@@ -6,7 +6,7 @@ import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import type { FeedbackCardParameters, FeedbackDictionaries } from '@intake24/ui/feedback';
 import { buildTopFoods } from '@intake24/ui/feedback';
 
-export const useFeedback = (scheme: ComputedRef<FeedbackSchemeEntry | undefined>) => {
+export function useFeedback(scheme: ComputedRef<FeedbackSchemeEntry | undefined>) {
   const feedbackDicts = ref<FeedbackDictionaries | null>(null);
   const cards = ref<FeedbackCardParameters[]>([]);
 
@@ -15,7 +15,8 @@ export const useFeedback = (scheme: ComputedRef<FeedbackSchemeEntry | undefined>
   const showCards = computed(() => scheme.value?.sections.includes('cards') && cards.value.length);
 
   const showMeals = computed(() => {
-    if (!scheme.value?.sections.includes('meals')) return false;
+    if (!scheme.value?.sections.includes('meals'))
+      return false;
 
     return !!(scheme.value.meals.chart.nutrients.length || scheme.value.meals.table.fields.length);
   });
@@ -23,7 +24,8 @@ export const useFeedback = (scheme: ComputedRef<FeedbackSchemeEntry | undefined>
   const showRating = computed(() => scheme.value?.sections.includes('rating'));
 
   const showTopFoods = computed(() => {
-    if (!scheme.value?.sections.includes('topFoods')) return false;
+    if (!scheme.value?.sections.includes('topFoods'))
+      return false;
 
     return !!topFoods.value.chartData.length;
   });
@@ -40,4 +42,4 @@ export const useFeedback = (scheme: ComputedRef<FeedbackSchemeEntry | undefined>
     showRating,
     getSectionOrder,
   };
-};
+}

@@ -16,7 +16,7 @@
       </slot>
     </template>
     <v-list>
-      <slot></slot>
+      <slot />
     </v-list>
   </v-menu>
 </template>

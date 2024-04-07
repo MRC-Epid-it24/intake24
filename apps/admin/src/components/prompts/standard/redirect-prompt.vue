@@ -17,7 +17,7 @@
             persistent-hint
             :value="url"
             @input="update('url', $event)"
-          ></v-text-field>
+          />
           <v-combobox
             class="mb-4"
             hide-details="auto"
@@ -28,7 +28,7 @@
             persistent-hint
             :value="identifier"
             @change="updateIdentifier"
-          ></v-combobox>
+          />
           <v-text-field
             class="mb-4"
             hide-details="auto"
@@ -38,7 +38,7 @@
             :rules="timerRules"
             :value="timer"
             @input="updateTimerValue"
-          ></v-text-field>
+          />
           <v-select
             :items="targets"
             :label="$t('survey-schemes.prompts.redirect-prompt.target._')"
@@ -46,13 +46,14 @@
             prepend-inner-icon="fa-solid fa-arrow-up-right-from-square"
             :value="target"
             @change="update('target', $event)"
-          >
-          </v-select>
+          />
         </v-card-text>
       </v-col>
       <v-col cols="12" md="6">
         <v-card-title>
-          <v-icon left>fas fa-star-half-stroke</v-icon>
+          <v-icon left>
+            fas fa-star-half-stroke
+          </v-icon>
           {{ $t('survey-schemes.prompts.final-prompt.rating.title') }}
         </v-card-title>
         <v-card-text>
@@ -61,7 +62,7 @@
             :input-value="rating"
             :label="$t('survey-schemes.prompts.final-prompt.rating._')"
             @change="update('rating', $event)"
-          ></v-switch>
+          />
         </v-card-text>
       </v-col>
     </v-row>
@@ -108,11 +109,11 @@ export default defineComponent({
 
   setup() {
     const { i18n } = useI18n();
-    const identifiers = ['userId', 'username', 'urlAuthToken'].map((value) => ({
+    const identifiers = ['userId', 'username', 'urlAuthToken'].map(value => ({
       text: i18n.t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
       value,
     }));
-    const targets = ['_self', '_blank'].map((value) => ({
+    const targets = ['_self', '_blank'].map(value => ({
       text: i18n.t(`survey-schemes.prompts.redirect-prompt.target.${value}`),
       value,
     }));
@@ -131,7 +132,7 @@ export default defineComponent({
 
   methods: {
     updateTimerValue(value: any) {
-      const timerValue = parseInt(value, 10);
+      const timerValue = Number.parseInt(value, 10);
       this.update('timer', Number.isNaN(timerValue) ? 0 : timerValue);
     },
 

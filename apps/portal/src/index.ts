@@ -6,7 +6,7 @@ import type { Ops } from './app';
 import app from './app';
 import config from './config';
 
-const startApp = (ops: Ops) => {
+function startApp(ops: Ops) {
   const {
     config: {
       app: { name, host, port },
@@ -20,7 +20,7 @@ const startApp = (ops: Ops) => {
   server.listen(port, host, () => {
     globalLogger.child({ service: 'Application' }).info(`${name} is listening on ${host}:${port}!`);
   });
-};
+}
 
 (() => {
   startApp({ config, logger });

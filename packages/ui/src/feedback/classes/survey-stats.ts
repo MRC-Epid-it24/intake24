@@ -23,7 +23,7 @@ export default class SurveyStats {
   readonly submissions;
 
   constructor(submissions: SurveySubmission[]) {
-    this.submissions = submissions.map((ss) => ss.clone());
+    this.submissions = submissions.map(ss => ss.clone());
   }
 
   clone() {
@@ -31,19 +31,19 @@ export default class SurveyStats {
   }
 
   static fromJson(jsonList: SurveySubmissionEntry[]) {
-    return new SurveyStats(jsonList.map((js) => SurveySubmission.fromJson(js)));
+    return new SurveyStats(jsonList.map(js => SurveySubmission.fromJson(js)));
   }
 
   // Returns a flat array of all food records for the selected day or for all days
   // if no day is selected
   private getFoods(selected: string[]) {
     return this.submissions
-      .filter((submission) => selected.includes(submission.id))
-      .flatMap((submission) => submission.getFoods());
+      .filter(submission => selected.includes(submission.id))
+      .flatMap(submission => submission.getFoods());
   }
 
   private getMeals(selected: string) {
-    return this.submissions.find((submission) => submission.id === selected)?.meals ?? [];
+    return this.submissions.find(submission => submission.id === selected)?.meals ?? [];
   }
 
   private readonly JUICE_NUTRIENT_IDS = ['254', '255'];
@@ -60,9 +60,8 @@ export default class SurveyStats {
     let total = 0;
 
     nutrientIntake.forEach((weight, groupId) => {
-      if (nutrientIds.indexOf(groupId) !== -1) {
+      if (nutrientIds.includes(groupId))
         total += weight;
-      }
     });
 
     return total;
@@ -74,7 +73,7 @@ export default class SurveyStats {
     const juicesTotal = SurveyStats.getTotalForSubset(averages, this.JUICE_NUTRIENT_IDS);
     const beansAndPulsesTotal = SurveyStats.getTotalForSubset(
       averages,
-      this.BEANS_PULSES_NUTRIENT_IDS
+      this.BEANS_PULSES_NUTRIENT_IDS,
     );
     const fruitTotal = SurveyStats.getTotalForSubset(averages, this.FRUIT_NUTRIENT_IDS);
     const driedFruitTotal = SurveyStats.getTotalForSubset(averages, this.DRIED_FRUIT_NUTRIENT_IDS);
@@ -101,17 +100,18 @@ export default class SurveyStats {
 
     (foods ?? this.getFoods(selected)).forEach((food) => {
       for (const [key, value] of food.nutrientIdConsumptionMap.entries()) {
-        if (!averageIntake.has(key)) averageIntake.set(key, 0);
+        if (!averageIntake.has(key))
+          averageIntake.set(key, 0);
 
         averageIntake.set(key, (averageIntake.get(key) as number) + value);
       }
     });
 
-    if (selected.length === 1) return averageIntake;
+    if (selected.length === 1)
+      return averageIntake;
 
-    for (const [key, value] of averageIntake.entries()) {
+    for (const [key, value] of averageIntake.entries())
       averageIntake.set(key, value / selected.length);
-    }
 
     return averageIntake;
   }
@@ -131,22 +131,22 @@ export default class SurveyStats {
   getReducedFoods(selected: string[]) {
     const foods = this.getFoods(selected);
 
-    return [...new Set(foods.map((f) => f.code))].map((code) => {
+    return [...new Set(foods.map(f => f.code))].map((code) => {
       const totalConsumptionMap: Map<string, number> = new Map();
-      const matchingFoods = foods.filter((f) => f.code === code);
+      const matchingFoods = foods.filter(f => f.code === code);
 
       matchingFoods.forEach((f) => {
         for (const [key, value] of f.nutrientIdConsumptionMap.entries()) {
-          if (!totalConsumptionMap.has(key)) totalConsumptionMap.set(key, 0);
+          if (!totalConsumptionMap.has(key))
+            totalConsumptionMap.set(key, 0);
 
           totalConsumptionMap.set(key, (totalConsumptionMap.get(key) as number) + value);
         }
       });
       // We need to get average consumption per day.
       // At the moment we do that by getting average consumption of nutrient per one submission
-      for (const [key, value] of totalConsumptionMap.entries()) {
+      for (const [key, value] of totalConsumptionMap.entries())
         totalConsumptionMap.set(key, value / selected.length);
-      }
 
       const firstFood = matchingFoods[0];
       return new AggregateFoodStats(firstFood.localName, totalConsumptionMap);

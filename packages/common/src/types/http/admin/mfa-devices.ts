@@ -56,7 +56,7 @@ export const fidoRegistrationChallenge = z.object({
     z.object({
       type: z.literal('public-key'),
       alg: z.number(),
-    })
+    }),
   ),
   timeout: z.number().optional(),
   excludeCredentials: z
@@ -74,10 +74,10 @@ export const fidoRegistrationChallenge = z.object({
               z.literal('nfc'),
               z.literal('smart-card'),
               z.literal('usb'),
-            ])
+            ]),
           )
           .optional(),
-      })
+      }),
     )
     .optional(),
   authenticatorSelection: z
@@ -125,7 +125,7 @@ export const registrationResponseJSON = z.object({
           z.literal('nfc'),
           z.literal('smart-card'),
           z.literal('usb'),
-        ])
+        ]),
       )
       .optional(),
     publicKeyAlgorithm: z.number().optional(),

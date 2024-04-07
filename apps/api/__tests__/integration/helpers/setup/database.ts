@@ -44,22 +44,22 @@ export type MockData = {
   };
 };
 
-export const wipeRedis = async (): Promise<void> => {
+export async function wipeRedis(): Promise<void> {
   const redis = new Redis(ioc.cradle.config.queue.redis);
   await redis.flushall();
   redis.disconnect();
-};
+}
 
 /**
  * Fill database with all available permissions
  *
  * @returns {Promise<void>}
  */
-export const setupPermissions = async (): Promise<void> => {
+export async function setupPermissions(): Promise<void> {
   await Permission.bulkCreate(permissions);
-};
+}
 
-export const initDatabase = async (): Promise<MockData> => {
+export async function initDatabase(): Promise<MockData> {
   const language = await Language.create({
     code: 'en',
     englishName: 'United Kingdom',
@@ -234,14 +234,12 @@ export const initDatabase = async (): Promise<MockData> => {
       respondent,
     },
   };
-};
+}
 
-export const wipeDatabase = async (): Promise<void> => {
-  for (const model of Object.values(ioc.cradle.db.foods.models)) {
+export async function wipeDatabase(): Promise<void> {
+  for (const model of Object.values(ioc.cradle.db.foods.models))
     await model.truncate({ cascade: true });
-  }
 
-  for (const model of Object.values(ioc.cradle.db.system.models)) {
+  for (const model of Object.values(ioc.cradle.db.system.models))
     await model.truncate({ cascade: true });
-  }
-};
+}

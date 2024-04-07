@@ -4,10 +4,10 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LocaleSplitList, LocaleSplitListInput } from '@intake24/common/types/http/admin';
 import { SystemLocale } from '@intake24/db';
 
-const localeSplitListController = ({ localeService }: Pick<IoC, 'localeService'>) => {
+function localeSplitListController({ localeService }: Pick<IoC, 'localeService'>) {
   const get = async (
     req: Request<{ localeId: string }>,
-    res: Response<LocaleSplitList[]>
+    res: Response<LocaleSplitList[]>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -24,7 +24,7 @@ const localeSplitListController = ({ localeService }: Pick<IoC, 'localeService'>
 
   const set = async (
     req: Request<{ localeId: string }, any, LocaleSplitListInput[]>,
-    res: Response<LocaleSplitList[]>
+    res: Response<LocaleSplitList[]>,
   ): Promise<void> => {
     const { body } = req;
     const { localeId } = req.params;
@@ -44,7 +44,7 @@ const localeSplitListController = ({ localeService }: Pick<IoC, 'localeService'>
     get,
     set,
   };
-};
+}
 
 export default localeSplitListController;
 

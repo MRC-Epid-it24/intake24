@@ -16,13 +16,13 @@
           section,
         }"
         @action="updatePanel(item, idx)"
-      ></component>
+      />
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -61,24 +61,26 @@ export default defineComponent({
     const isValid = computed(
       () =>
         !props.value.some(
-          (answer, idx) => answer === undefined && isAnswerRequired(props.prompt.prompts[idx])
-        )
+          (answer, idx) => answer === undefined && isAnswerRequired(props.prompt.prompts[idx]),
+        ),
     );
     const panel = ref<number | undefined>(0);
 
     const state = computed({
       get: () => props.value,
-      set: (value) => ctx.emit('input', value),
+      set: value => ctx.emit('input', value),
     });
 
     const confirm = () => {
-      if (isValid.value) return true;
+      if (isValid.value)
+        return true;
 
       return false;
     };
 
     const updatePanel = (prompt: Prompt, idx: number) => {
-      if (state.value[idx] === undefined && !isAnswerRequired(prompt)) state.value[idx] = null;
+      if (state.value[idx] === undefined && !isAnswerRequired(prompt))
+        state.value[idx] = null;
 
       for (const [index, answer] of Object.entries(props.value)) {
         if (answer === undefined) {

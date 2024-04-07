@@ -13,7 +13,7 @@ export type UseLoginProps = {
   surveyId: string;
 };
 
-export const useLogin = (props: UseLoginProps) => {
+export function useLogin(props: UseLoginProps) {
   const auth = useAuth();
   const { i18n } = useI18n();
   const router = useRouter();
@@ -35,7 +35,8 @@ export const useLogin = (props: UseLoginProps) => {
   const fetchSurveyPublicInfo = async () => {
     try {
       survey.value = await surveyService.surveyPublicInfo(props.surveyId);
-    } catch (err) {
+    }
+    catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === HttpStatusCode.NotFound) {
         status.value = err.response?.status;
         return;
@@ -72,10 +73,11 @@ export const useLogin = (props: UseLoginProps) => {
   const login = async (provider: 'alias' | 'token') => {
     try {
       await providers[provider]();
-    } catch (err) {
+    }
+    catch (err) {
       if (
-        axios.isAxiosError(err) &&
-        [HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized].includes(err.response?.status ?? 0)
+        axios.isAxiosError(err)
+        && [HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized].includes(err.response?.status ?? 0)
       ) {
         const { response: { status: statusCode = 0, data = {} } = {} } = err;
 
@@ -91,7 +93,8 @@ export const useLogin = (props: UseLoginProps) => {
       }
 
       throw err;
-    } finally {
+    }
+    finally {
       resetCaptcha();
     }
   };
@@ -111,4 +114,4 @@ export const useLogin = (props: UseLoginProps) => {
     fetchSurveyPublicInfo,
     login,
   };
-};
+}

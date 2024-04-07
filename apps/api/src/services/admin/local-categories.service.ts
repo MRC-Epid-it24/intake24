@@ -13,11 +13,11 @@ import type { FoodsDB } from '@intake24/db';
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 
-const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
+function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
   async function updatePortionSizeMethods(
     categoryLocalId: string,
     portionSizeMethods: PortionSizeMethod[],
-    transaction: Kysely<FoodsDB>
+    transaction: Kysely<FoodsDB>,
   ): Promise<void> {
     await transaction
       .deleteFrom('categoryPortionSizeMethods')
@@ -27,8 +27,8 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
     if (portionSizeMethods.length > 0) {
       await transaction
         .insertInto('categoryPortionSizeMethods')
-        .values((eb) =>
-          portionSizeMethods.map((m) => ({
+        .values(eb =>
+          portionSizeMethods.map(m => ({
             categoryLocalId,
             method: m.method,
             description: m.description,
@@ -36,7 +36,7 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
             conversionFactor: m.conversionFactor,
             orderBy: eb.ref('id'),
             parameters: JSON.stringify(m.parameters),
-          }))
+          })),
         )
         .execute();
     }
@@ -58,10 +58,11 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
           .executeTakeFirstOrThrow();
 
         await updatePortionSizeMethods(categoryLocalId, request.portionSizeMethods, t);
-      } catch (e: any) {
-        if (e.code === '23505') {
+      }
+      catch (e: any) {
+        if (e.code === '23505')
           throw new ConflictError();
-        } else throw e;
+        else throw e;
       }
     });
   };
@@ -70,7 +71,7 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
     categoryCode: string,
     localeId: string,
     version: string,
-    request: UpdateLocalCategoryRequest
+    request: UpdateLocalCategoryRequest,
   ): Promise<void> => {
     await kyselyDb.foods.transaction().execute(async (t) => {
       const result = await t
@@ -87,7 +88,8 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
         .returning('id')
         .executeTakeFirst();
 
-      if (result === undefined) throw new NotFoundError();
+      if (result === undefined)
+        throw new NotFoundError();
 
       await updatePortionSizeMethods(result.id, request.portionSizeMethods, t);
     });
@@ -102,7 +104,8 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
         .where('categoryCode', '=', categoryCode)
         .executeTakeFirst();
 
-      if (categoryLocalsRow === undefined) throw new NotFoundError();
+      if (categoryLocalsRow === undefined)
+        throw new NotFoundError();
 
       const portionSizeRows = await t
         .selectFrom('categoryPortionSizeMethods')
@@ -110,7 +113,7 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
         .where('categoryLocalId', '=', categoryLocalsRow.id)
         .execute();
 
-      const portionSizeMethods: PortionSizeMethod[] = portionSizeRows.map((row) => ({
+      const portionSizeMethods: PortionSizeMethod[] = portionSizeRows.map(row => ({
         method: row.method as PortionSizeMethodId /* unsafe! */,
         conversionFactor: row.conversionFactor,
         description: row.description,
@@ -133,7 +136,7 @@ const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
     update,
     read,
   };
-};
+}
 
 export default localCategoriesService;
 

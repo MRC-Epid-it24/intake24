@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form @submit.prevent="action('next')">
         <v-radio-group
           v-model="selected"
           :column="prompt.orientation === 'column'"
@@ -20,9 +20,9 @@
             :key="option.value"
             :label="option.label"
             :value="option.value"
-          ></v-radio>
+          />
           <v-row v-if="prompt.other" align="center" no-gutters>
-            <v-radio class="my-auto" hide-details value="other"></v-radio>
+            <v-radio class="my-auto" hide-details value="other" />
             <v-text-field
               v-model.trim="otherValue"
               :error="hasErrors"
@@ -31,17 +31,17 @@
               outlined
               @focus="selected = 'other'"
               @input="update"
-            ></v-text-field>
+            />
           </v-row>
         </v-radio-group>
-        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </component>
 </template>
@@ -74,19 +74,20 @@ export default defineComponent({
     const selected = ref(props.value);
 
     const state = computed(() =>
-      selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value
+      selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value,
     );
     const isValid = computed(
       () =>
-        !props.prompt.validation.required ||
-        (!!state.value && (selected.value !== 'other' || !!otherValue.value))
+        !props.prompt.validation.required
+        || (!!state.value && (selected.value !== 'other' || !!otherValue.value)),
     );
     const localeOptions = computed(
-      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en
+      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
     );
 
     const confirm = () => {
-      if (isValid.value) return true;
+      if (isValid.value)
+        return true;
 
       errors.value = [i18n.t(`prompts.${type.value}.validation.required`).toString()];
       return false;
@@ -95,7 +96,7 @@ export default defineComponent({
     const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
       props,
       ctx,
-      confirm
+      confirm,
     );
 
     const update = () => {

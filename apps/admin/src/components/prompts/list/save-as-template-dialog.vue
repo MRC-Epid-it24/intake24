@@ -3,7 +3,9 @@
     <template #activator="{ attrs, on }">
       <v-list-item v-bind="attrs" :disabled="disabled" link v-on="on">
         <v-list-item-title>
-          <v-icon :disabled="disabled" left>$save</v-icon>
+          <v-icon :disabled="disabled" left>
+            $save
+          </v-icon>
           {{ $t('survey-schemes.prompts.templates.saveAs._') }}
         </v-list-item-title>
       </v-list-item>
@@ -28,8 +30,7 @@
               :messages="$t('survey-schemes.prompts.internal.id.hint')"
               name="id"
               outlined
-            >
-            </v-text-field>
+            />
           </v-col>
           <v-col cols="12">
             <v-text-field
@@ -40,21 +41,25 @@
               :messages="$t('survey-schemes.prompts.internal.name.hint')"
               name="name"
               outlined
-            ></v-text-field>
+            />
           </v-col>
           <v-col cols="12">
-            <v-checkbox v-model="redirect" :label="$t('common.redirect')"></v-checkbox>
+            <v-checkbox v-model="redirect" :label="$t('common.redirect')" />
           </v-col>
         </v-row>
       </v-card-text>
-      <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
+      <error-list :errors="nonInputErrors" tag="v-card-text" />
       <v-card-actions class="pb-4">
         <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
-          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+          <v-icon left>
+            $cancel
+          </v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn class="font-weight-bold" color="info" text @click.stop="confirm">
-          <v-icon left>$success</v-icon>{{ $t('survey-schemes.prompts.templates.saveAs._') }}
+          <v-icon left>
+            $success
+          </v-icon>{{ $t('survey-schemes.prompts.templates.saveAs._') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -126,7 +131,7 @@ export default defineComponent({
 
     async confirm() {
       const { id, prompt } = await this.form.post<SurveySchemePromptEntry>(
-        'admin/survey-scheme-prompts'
+        'admin/survey-scheme-prompts',
       );
 
       const templates = copy(this.refs.templates);

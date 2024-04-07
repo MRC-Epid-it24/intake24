@@ -9,7 +9,9 @@
         v-on="on"
         @click.stop="add"
       >
-        <v-icon left>fas fa-user-plus</v-icon>{{ $t('securables.add') }}
+        <v-icon left>
+          fas fa-user-plus
+        </v-icon>{{ $t('securables.add') }}
       </v-btn>
     </template>
     <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
@@ -23,11 +25,15 @@
         <template v-if="!isEdit" #extension>
           <v-tabs v-model="tab" grow>
             <v-tab key="search">
-              <v-icon left>$search</v-icon>
+              <v-icon left>
+                $search
+              </v-icon>
               {{ $t('securables.search') }}
             </v-tab>
             <v-tab key="create">
-              <v-icon left>fas fa-user-plus</v-icon>
+              <v-icon left>
+                fas fa-user-plus
+              </v-icon>
               {{ $t('securables.create') }}
             </v-tab>
           </v-tabs>
@@ -49,7 +55,7 @@
                       outlined
                       prepend-inner-icon="fas fa-user"
                       :value="`${selected.email} / ${selected.name}`"
-                    ></v-text-field>
+                    />
                   </template>
                   <template v-else>
                     <auto-complete
@@ -65,7 +71,7 @@
                       name="userId"
                       prepend-inner-icon="fas fa-users"
                       @input="form.errors.clear('userId')"
-                    ></auto-complete>
+                    />
                   </template>
                 </v-col>
               </v-row>
@@ -84,7 +90,7 @@
                       name="email"
                       outlined
                       prepend-inner-icon="fas fa-at"
-                    ></v-text-field>
+                    />
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
@@ -95,7 +101,7 @@
                       name="name"
                       outlined
                       prepend-inner-icon="fas fa-user"
-                    ></v-text-field>
+                    />
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
@@ -106,7 +112,7 @@
                       name="phone"
                       outlined
                       prepend-inner-icon="fas fa-phone"
-                    ></v-text-field>
+                    />
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -126,17 +132,18 @@
                 "
                 :value="action"
                 @change="form.errors.clear('actions')"
-              >
-              </v-checkbox>
+              />
             </v-col>
           </v-row>
-          <error-list :errors="nonInputErrors"></error-list>
+          <error-list :errors="nonInputErrors" />
         </v-card-text>
         <v-card-actions>
           <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-            <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+            <v-icon left>
+              $cancel
+            </v-icon>{{ $t('common.action.cancel') }}
           </v-btn>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             class="font-weight-bold"
             color="info"
@@ -144,7 +151,9 @@
             text
             type="submit"
           >
-            <v-icon left>$save</v-icon>{{ $t('common.action.save') }}
+            <v-icon left>
+              $save
+            </v-icon>{{ $t('common.action.save') }}
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -245,11 +254,13 @@ export default defineComponent({
     clearError(event: KeyboardEvent) {
       const { name } = event.target as HTMLInputElement;
 
-      if (name) this.form.errors.clear(name);
+      if (name)
+        this.form.errors.clear(name);
     },
 
     async save() {
-      if (this.isNew) await this.form.post(this.api);
+      if (this.isNew)
+        await this.form.post(this.api);
       else await this.form.patch(`${this.api}/${this.form.userId}`);
 
       this.reset();

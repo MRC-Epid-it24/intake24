@@ -7,13 +7,10 @@ export type UserParametersProps<T extends PortionSizeMethodId> = {
   value: PortionSizeParameters[T];
 };
 
-export const useParameters = <T extends PortionSizeMethodId>(
-  props: UserParametersProps<T>,
-  { emit }: SetupContext
-) => {
+export function useParameters<T extends PortionSizeMethodId>(props: UserParametersProps<T>, { emit }: SetupContext) {
   const parameters = useVModel(props, 'value', emit, { eventName: 'input' });
 
   return {
     parameters,
   };
-};
+}

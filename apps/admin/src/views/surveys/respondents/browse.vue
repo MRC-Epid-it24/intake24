@@ -10,7 +10,9 @@
         <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
           <template #activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="secondary" text v-bind="attrs" v-on="on">
-              <v-icon left>fas fa-user-plus</v-icon>{{ $t('surveys.respondents.add') }}
+              <v-icon left>
+                fas fa-user-plus
+              </v-icon>{{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
           <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
@@ -37,7 +39,7 @@
                         name="username"
                         outlined
                         prepend-inner-icon="fas fa-user-secret"
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -50,7 +52,7 @@
                         outlined
                         prepend-inner-icon="fas fa-unlock"
                         type="password"
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -63,7 +65,7 @@
                         outlined
                         prepend-inner-icon="fas fa-unlock"
                         type="password"
-                      ></v-text-field>
+                      />
                     </v-col>
                     <template v-if="entry.userPersonalIdentifiers">
                       <v-col cols="12">
@@ -75,7 +77,7 @@
                           name="name"
                           outlined
                           prepend-inner-icon="fas fa-user"
-                        ></v-text-field>
+                        />
                       </v-col>
                       <v-col cols="12">
                         <v-text-field
@@ -86,7 +88,7 @@
                           name="email"
                           outlined
                           prepend-inner-icon="fas fa-at"
-                        ></v-text-field>
+                        />
                       </v-col>
                       <v-col cols="12">
                         <v-text-field
@@ -97,7 +99,7 @@
                           name="phone"
                           outlined
                           prepend-inner-icon="fas fa-phone"
-                        ></v-text-field>
+                        />
                       </v-col>
                     </template>
                   </v-row>
@@ -105,11 +107,15 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                  <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+                  <v-icon left>
+                    $cancel
+                  </v-icon>{{ $t('common.action.cancel') }}
                 </v-btn>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn class="font-weight-bold" color="info" text type="submit">
-                  <v-icon left>$save</v-icon>{{ $t('common.action.save') }}
+                  <v-icon left>
+                    $save
+                  </v-icon>{{ $t('common.action.save') }}
                 </v-btn>
               </v-card-actions>
             </v-form>
@@ -122,8 +128,8 @@
             </v-btn>
           </template>
           <v-list>
-            <respondents-upload :survey-id="id"></respondents-upload>
-            <respondents-auth-url-export :survey-id="id"></respondents-auth-url-export>
+            <respondents-upload :survey-id="id" />
+            <respondents-auth-url-export :survey-id="id" />
           </v-list>
         </v-menu>
       </template>
@@ -151,11 +157,13 @@
             </v-btn>
           </template>
           <v-list>
-            <respondent-feedback :survey-id="id" :user="item"></respondent-feedback>
+            <respondent-feedback :survey-id="id" :user="item" />
           </v-list>
         </v-menu>
         <v-btn color="secondary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
-          <v-icon dark>$edit</v-icon>
+          <v-icon dark>
+            $edit
+          </v-icon>
         </v-btn>
         <confirm-dialog
           color="error"
@@ -223,7 +231,7 @@ export default defineComponent({
     async function toClipboard(data: string) {
       await clipboard.toClipboard(
         data,
-        i18n.t('surveys.respondents.authUrls.copiedToClipboard').toString()
+        i18n.t('surveys.respondents.authUrls.copiedToClipboard').toString(),
       );
     }
 
@@ -288,7 +296,7 @@ export default defineComponent({
   methods: {
     async fetchUser(username: string) {
       const { data } = await this.$http.get<SurveyRespondentEntry>(
-        `admin/surveys/${this.id}/respondents/${username}`
+        `admin/surveys/${this.id}/respondents/${username}`,
       );
 
       return data;
@@ -306,7 +314,8 @@ export default defineComponent({
       try {
         const user = await this.fetchUser(item.username);
         this.form.load(user);
-      } finally {
+      }
+      finally {
         this.loading = false;
       }
     },
@@ -323,13 +332,14 @@ export default defineComponent({
     async save() {
       if (this.form.userId) {
         const { username: name } = await this.form.patch<SurveyRespondentEntry>(
-          `admin/surveys/${this.id}/respondents/${this.form.username}`
+          `admin/surveys/${this.id}/respondents/${this.form.username}`,
         );
 
         useMessages().success(this.$t('common.msg.updated', { name }).toString());
-      } else {
+      }
+      else {
         const { username: name } = await this.form.post<SurveyRespondentEntry>(
-          `admin/surveys/${this.id}/respondents`
+          `admin/surveys/${this.id}/respondents`,
         );
 
         useMessages().success(this.$t('common.msg.created', { name }).toString());

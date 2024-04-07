@@ -3,7 +3,9 @@
     <template v-for="(job, idx) in jobs">
       <v-list-item :key="job.id">
         <v-list-item-avatar>
-          <v-icon class="grey" dark>$jobs</v-icon>
+          <v-icon class="grey" dark>
+            $jobs
+          </v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>{{ $t(`jobs.types.${job.type}._`) }}</v-list-item-title>
@@ -30,7 +32,9 @@
             :title="$t('common.action.download')"
             @click="download(job)"
           >
-            <v-icon color="secondary">$download</v-icon>
+            <v-icon color="secondary">
+              $download
+            </v-icon>
           </v-btn>
         </v-list-item-action>
         <v-list-item-action>
@@ -47,12 +51,16 @@
             </span>
           </v-progress-circular>
           <template v-else>
-            <v-icon v-if="job.successful" color="success" large>$check</v-icon>
-            <v-icon v-if="!job.successful" color="error" large>$times</v-icon>
+            <v-icon v-if="job.successful" color="success" large>
+              $check
+            </v-icon>
+            <v-icon v-if="!job.successful" color="error" large>
+              $times
+            </v-icon>
           </template>
         </v-list-item-action>
       </v-list-item>
-      <v-divider v-if="idx + 1 < jobs.length" :key="`div-${job.id}`"></v-divider>
+      <v-divider v-if="idx + 1 < jobs.length" :key="`div-${job.id}`" />
     </template>
   </v-list>
 </template>

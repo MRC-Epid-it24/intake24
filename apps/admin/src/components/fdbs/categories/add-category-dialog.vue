@@ -25,8 +25,7 @@
           outlined
           prepend-inner-icon="$search"
           @click:clear="clear"
-        >
-        </v-text-field>
+        />
         <v-alert v-if="isAlreadyIncluded" text type="error">
           {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItems[0].code }) }}
         </v-alert>
@@ -37,7 +36,7 @@
                 <v-list-item :key="item.code" :value="item.code">
                   <template #default="{ active }">
                     <v-list-item-action>
-                      <v-checkbox :input-value="active"></v-checkbox>
+                      <v-checkbox :input-value="active" />
                     </v-list-item-action>
                     <v-list-item-avatar>
                       <v-icon>fas fa-list</v-icon>
@@ -47,12 +46,12 @@
                     </v-list-item-content>
                   </template>
                 </v-list-item>
-                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`" />
               </template>
             </v-list-item-group>
           </v-list>
           <div class="text-center">
-            <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
+            <v-pagination v-model="page" circle :length="lastPage" />
           </div>
         </template>
         <v-alert v-else color="secondary" text type="info">
@@ -61,9 +60,11 @@
       </v-card-text>
       <v-card-actions>
         <v-btn class="font-weight-bold" color="error" text @click.stop="close">
-          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+          <v-icon left>
+            $cancel
+          </v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
@@ -71,7 +72,9 @@
           text
           @click.stop="confirm"
         >
-          <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+          <v-icon left>
+            $success
+          </v-icon>{{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -108,8 +111,8 @@ export default defineComponent({
     const selected = ref<string[]>([]);
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
-      (CategoriesResponse | MainCategoriesResponse)['data'][number]
-    >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
+    (CategoriesResponse | MainCategoriesResponse)['data'][number]
+      >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
 
     return { dialog, loading, items, page, lastPage, search, selected, clear };
   },
@@ -117,15 +120,17 @@ export default defineComponent({
   computed: {
     selectedItems() {
       const { selected } = this;
-      if (!selected.length) return [];
+      if (!selected.length)
+        return [];
 
-      return this.items.filter((item) => selected.includes(item.code));
+      return this.items.filter(item => selected.includes(item.code));
     },
     isAlreadyIncluded() {
-      if (!this.currentItems.length || !this.selectedItems.length) return false;
-      const codes = this.currentItems.map((item) => item.code);
+      if (!this.currentItems.length || !this.selectedItems.length)
+        return false;
+      const codes = this.currentItems.map(item => item.code);
 
-      return this.selectedItems.some((item) => codes.includes(item.code));
+      return this.selectedItems.some(item => codes.includes(item.code));
     },
   },
 
@@ -136,7 +141,8 @@ export default defineComponent({
     },
 
     confirm() {
-      if (!this.selectedItems.length) return;
+      if (!this.selectedItems.length)
+        return;
 
       this.$emit('add', copy(this.selectedItems));
       this.close();

@@ -4,31 +4,35 @@ import slugify from 'slugify';
 
 import { isSecurableType } from '../security';
 
-export const capitalize = (string: string): string =>
-  string ? string[0].toUpperCase() + string.substring(1) : '';
+export function capitalize(string: string): string {
+  return string ? string[0].toUpperCase() + string.substring(1) : '';
+}
 
 /**
  * Convert string to kebab case
  *
  * @param {string} string
  */
-export const kebabCase = (string: string): string =>
-  string
+export function kebabCase(string: string): string {
+  return string
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .replace(/[\s_]+/g, '-')
     .toLowerCase();
+}
 
-export const getResourceFromSecurable = (securableType: any): string => {
-  if (!isSecurableType(securableType)) throw Error('Invalid securable type');
+export function getResourceFromSecurable(securableType: any): string {
+  if (!isSecurableType(securableType))
+    throw new Error('Invalid securable type');
 
   return kebabCase(plural(securableType));
-};
+}
 
-export const getRequestParamFromSecurable = (securableType: any): string => {
-  if (!isSecurableType(securableType)) throw Error('Invalid securable type');
+export function getRequestParamFromSecurable(securableType: any): string {
+  if (!isSecurableType(securableType))
+    throw new Error('Invalid securable type');
 
   return `${securableType[0].toLowerCase()}${securableType.substring(1)}Id`;
-};
+}
 
 /**
  * Generate random string with optional custom size / alphabet
@@ -37,14 +41,16 @@ export const getRequestParamFromSecurable = (securableType: any): string => {
  * @param {(string | null)} [alphabet]
  * @returns {string}
  */
-export const randomString = (size: number, alphabet?: string | null): string => {
-  if (!alphabet) return nanoid(size);
+export function randomString(size: number, alphabet?: string | null): string {
+  if (!alphabet)
+    return nanoid(size);
 
   return customAlphabet(alphabet, size)();
-};
+}
 
-export const offsetToExcelColumn = (offset: number | null): string | null => {
-  if (offset === null) return null;
+export function offsetToExcelColumn(offset: number | null): string | null {
+  if (offset === null)
+    return null;
 
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let result = '';
@@ -59,9 +65,9 @@ export const offsetToExcelColumn = (offset: number | null): string | null => {
   }
 
   return letters.charAt(currOffset) + result;
-};
+}
 
-export const excelColumnToOffset = (column: string): number => {
+export function excelColumnToOffset(column: string): number {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const currColumn = column.toUpperCase();
   let result = 0;
@@ -73,7 +79,7 @@ export const excelColumnToOffset = (column: string): number => {
   }
 
   return result - 1;
-};
+}
 
 /**
  * Convention helper for standard unit id
@@ -81,5 +87,6 @@ export const excelColumnToOffset = (column: string): number => {
  * @param {string} name
  * @returns {string}
  */
-export const toStandardUnitId = (name: string): string =>
-  slugify(name, { replacement: '_', lower: true, strict: true });
+export function toStandardUnitId(name: string): string {
+  return slugify(name, { replacement: '_', lower: true, strict: true });
+}

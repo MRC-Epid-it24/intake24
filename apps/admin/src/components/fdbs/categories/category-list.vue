@@ -6,13 +6,13 @@
           {{ $t('fdbs.categories.title') }}
         </slot>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <add-category-dialog
         v-if="!disabled"
         :current-items="items"
         :locale-id="localeId"
         @add="add"
-      ></add-category-dialog>
+      />
     </v-toolbar>
     <v-list class="py-0">
       <template v-for="(item, idx) in items">
@@ -25,7 +25,7 @@
               <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
             </v-list-item-content>
           </slot>
-          <slot name="item.action" v-bind="{ item }"></slot>
+          <slot name="item.action" v-bind="{ item }" />
           <v-list-item-action v-if="!disabled">
             <confirm-dialog
               color="error"
@@ -38,7 +38,7 @@
             </confirm-dialog>
           </v-list-item-action>
         </v-list-item>
-        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
+        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`" />
       </template>
     </v-list>
     <v-messages
@@ -46,7 +46,7 @@
       class="px-4 pb-2"
       color="error"
       :value="errors.get('main.parentCategories')"
-    ></v-messages>
+    />
   </v-card>
 </template>
 
@@ -107,7 +107,7 @@ export default defineComponent({
     };
 
     const remove = (code: string) => {
-      items.value = items.value.filter((item) => item.code !== code);
+      items.value = items.value.filter(item => item.code !== code);
     };
 
     return { add, items, remove };

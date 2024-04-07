@@ -3,7 +3,9 @@
     <v-col cols="auto">
       <div class="d-flex flex-column">
         <div v-if="showAll" class="pa-2">
-          <v-btn block @click.stop="setAll">{{ $t('prompts.linkedAmount.all') }}</v-btn>
+          <v-btn block @click.stop="setAll">
+            {{ $t('prompts.linkedAmount.all') }}
+          </v-btn>
         </div>
         <div class="pa-2 d-flex flex-row">
           <div v-if="whole" class="d-flex flex-column align-center">
@@ -16,7 +18,9 @@
                 x-large
                 @click="update(1)"
               >
-                <v-icon aria-hidden="false">$increment</v-icon>
+                <v-icon aria-hidden="false">
+                  $increment
+                </v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h4">{{ wholeLabel }}</span>
               <v-btn
@@ -27,7 +31,9 @@
                 x-large
                 @click="update(-1)"
               >
-                <v-icon aria-hidden="false">$decrement</v-icon>
+                <v-icon aria-hidden="false">
+                  $decrement
+                </v-icon>
               </v-btn>
             </v-card>
           </div>
@@ -44,7 +50,9 @@
                 x-large
                 @click="update(0.25)"
               >
-                <v-icon aria-hidden="false">$increment</v-icon>
+                <v-icon aria-hidden="false">
+                  $increment
+                </v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h4">{{ fractionLabel }}</span>
               <v-btn
@@ -55,7 +63,9 @@
                 x-large
                 @click="update(-0.25)"
               >
-                <v-icon aria-hidden="false">$decrement</v-icon>
+                <v-icon aria-hidden="false">
+                  $decrement
+                </v-icon>
               </v-btn>
             </v-card>
           </div>
@@ -154,7 +164,8 @@ export default defineComponent({
 
   watch: {
     value(val: number) {
-      if (val === this.currentValue) return;
+      if (val === this.currentValue)
+        return;
 
       this.currentValue = Math.min(this.max, Math.max(this.min, val));
     },
@@ -171,7 +182,8 @@ export default defineComponent({
 
       this.updateValue();
 
-      if (this.confirm) this.updateConfirm(false);
+      if (this.confirm)
+        this.updateConfirm(false);
     },
 
     updateConfirm(value: boolean) {

@@ -2,7 +2,7 @@ import type { AsServedImageResponse, AsServedSetResponse } from '@intake24/commo
 import type { AsServedImage, AsServedSet } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 
-export const asServedResponse = (baseUrl: string) => {
+export function asServedResponse(baseUrl: string) {
   const imageResponse = (item: AsServedImage): AsServedImageResponse => {
     const { image, thumbnailImage, weight } = item;
 
@@ -31,7 +31,7 @@ export const asServedResponse = (baseUrl: string) => {
   };
 
   return { imageResponse, setResponse };
-};
+}
 
 export default asServedResponse;
 

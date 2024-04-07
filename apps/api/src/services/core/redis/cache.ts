@@ -55,10 +55,11 @@ export default class Cache extends HasRedisClient {
    * @memberof Cache
    */
   async mget<T>(keys: CacheKey[]): Promise<(T | null)[]> {
-    if (!keys.length) return [];
+    if (!keys.length)
+      return [];
 
     const cached = await this.redis.mget(keys);
-    return cached.map((item) => (item ? (JSON.parse(item) as T) : null));
+    return cached.map(item => (item ? (JSON.parse(item) as T) : null));
   }
 
   /**
@@ -91,7 +92,7 @@ export default class Cache extends HasRedisClient {
       key,
       stringify(value),
       'PX',
-      typeof ttl === 'string' ? ms(ttl) : ttl * 1000
+      typeof ttl === 'string' ? ms(ttl) : ttl * 1000,
     );
 
     return !!result;
@@ -108,7 +109,8 @@ export default class Cache extends HasRedisClient {
     const newValues: CacheValue[] = [value];
     if (value !== 'all') {
       const existingValues = await this.get<CacheValue[]>(key);
-      if (existingValues && existingValues.length > 0) newValues.push(...existingValues);
+      if (existingValues && existingValues.length > 0)
+        newValues.push(...existingValues);
     }
     const result = await this.set(key, newValues);
     return result;
@@ -126,7 +128,7 @@ export default class Cache extends HasRedisClient {
    * @memberof Cache
    */
   async mset(keyValues: Record<string, CacheValue>, ttl?: number | string): Promise<boolean> {
-    const serialised = mapValues(keyValues, (v) => stringify(v));
+    const serialised = mapValues(keyValues, v => stringify(v));
 
     if (!ttl) {
       const result = await this.redis.mset(keyValues);
@@ -135,9 +137,8 @@ export default class Cache extends HasRedisClient {
 
     const tx = this.redis.multi();
 
-    for (const kv of Object.entries(serialised)) {
+    for (const kv of Object.entries(serialised))
       tx.set(kv[0], kv[1], 'PX', typeof ttl === 'string' ? ms(ttl) : ttl * 1000);
-    }
 
     const result = await tx.exec();
 
@@ -172,10 +173,11 @@ export default class Cache extends HasRedisClient {
   async remember<T extends {}>(
     key: CacheKey,
     ttl: number | string,
-    getData: () => Promise<T>
+    getData: () => Promise<T>,
   ): Promise<T> {
     const cachedData = await this.get<T>(key);
-    if (cachedData !== null) return cachedData;
+    if (cachedData !== null)
+      return cachedData;
 
     const freshData = await getData();
     await this.set(key, freshData, ttl);
@@ -199,11 +201,12 @@ export default class Cache extends HasRedisClient {
     keys: string[],
     cacheKeyPrefix: CacheKeyPrefix,
     ttl: number | string,
-    getData: (keys: string[]) => Promise<Record<string, T | null>>
+    getData: (keys: string[]) => Promise<Record<string, T | null>>,
   ): Promise<Record<string, T | null>> {
-    if (!keys.length) return {};
+    if (!keys.length)
+      return {};
 
-    const cacheKeys = keys.map((k) => `${cacheKeyPrefix}:${k}`) as CacheKey[];
+    const cacheKeys = keys.map(k => `${cacheKeyPrefix}:${k}`) as CacheKey[];
 
     const cached = await this.mget<T>(cacheKeys);
 
@@ -212,8 +215,8 @@ export default class Cache extends HasRedisClient {
     const data = await getData(keysToFetch);
 
     await this.mset(
-      mapKeys(data, (k) => `${cacheKeyPrefix}:${k}`) as Record<CacheKey, CacheValue>,
-      ttl
+      mapKeys(data, k => `${cacheKeyPrefix}:${k}`) as Record<CacheKey, CacheValue>,
+      ttl,
     );
 
     return Object.fromEntries(keys.map((k, i) => [k, cached[i] ?? data[k]]));
@@ -231,7 +234,8 @@ export default class Cache extends HasRedisClient {
    */
   async rememberForever<T extends {}>(key: CacheKey, getData: () => Promise<T>): Promise<T> {
     const cachedData = await this.get<T>(key);
-    if (cachedData !== null) return cachedData;
+    if (cachedData !== null)
+      return cachedData;
 
     const freshData = await getData();
     await this.set(key, freshData);

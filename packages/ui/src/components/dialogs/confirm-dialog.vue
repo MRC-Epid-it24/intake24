@@ -14,8 +14,12 @@
           :title="label"
           v-on="on"
         >
-          <v-icon :left="!icon && !!iconLeft">{{ iconLeft }}</v-icon>
-          <template v-if="!icon">{{ label }}</template>
+          <v-icon :left="!icon && !!iconLeft">
+            {{ iconLeft }}
+          </v-icon>
+          <template v-if="!icon">
+            {{ label }}
+          </template>
         </v-btn>
       </slot>
     </template>
@@ -27,11 +31,11 @@
       </v-card-title>
       <v-card-text class="px-6 py-4">
         <div class="text-subtitle-1 d-flex justify-center">
-          <slot></slot>
+          <slot />
         </div>
       </v-card-text>
       <template v-if="typedConfirm">
-        <v-divider></v-divider>
+        <v-divider />
         <v-card-text class="px-6 py-4">
           <i18n class="text-subtitle-1 mb-2" path="common.action.confirm.typed" tag="p">
             <template #name>
@@ -45,8 +49,7 @@
             dense
             hide-details="auto"
             outlined
-          >
-          </v-text-field>
+          />
         </v-card-text>
       </template>
       <v-container class="pa-6">
@@ -60,14 +63,16 @@
             :title="confirmLabel"
             @click.stop="confirm"
           >
-            <v-icon v-if="confirmIcon" left>{{ confirmIcon }}</v-icon
-            >{{ confirmLabel }}
+            <v-icon v-if="confirmIcon" left>
+              {{ confirmIcon }}
+            </v-icon>{{ confirmLabel }}
           </v-btn>
         </v-expand-transition>
 
         <v-btn block :color="color" large outlined :title="cancelLabel" @click.stop="cancel">
-          <v-icon v-if="cancelIcon" left>{{ cancelIcon }}</v-icon
-          >{{ cancelLabel }}
+          <v-icon v-if="cancelIcon" left>
+            {{ cancelIcon }}
+          </v-icon>{{ cancelLabel }}
         </v-btn>
       </v-container>
     </v-card>
@@ -165,16 +170,16 @@ export default defineComponent({
     const dialog = ref(props.value);
 
     const cancelLabel = computed(
-      () => props.cancelText ?? i18n.t('common.action.cancel').toString()
+      () => props.cancelText ?? i18n.t('common.action.cancel').toString(),
     );
     const confirmLabel = computed(() => props.confirmText ?? props.label);
     const titleLabel = computed(
-      () => props.titleText ?? i18n.t('common.action.confirm.title').toString()
+      () => props.titleText ?? i18n.t('common.action.confirm.title').toString(),
     );
 
     const confirmInput = ref('');
     const canConfirm = computed(
-      () => !props.typedConfirm || `DELETE ${props.typedConfirm}` === confirmInput.value
+      () => !props.typedConfirm || `DELETE ${props.typedConfirm}` === confirmInput.value,
     );
 
     const close = () => {
@@ -195,11 +200,12 @@ export default defineComponent({
       () => props.value,
       (val) => {
         dialog.value = val;
-      }
+      },
     );
 
     watch(dialog, (val) => {
-      if (!val) emit('close');
+      if (!val)
+        emit('close');
     });
 
     return {

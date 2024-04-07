@@ -27,7 +27,7 @@ export class CategoriesApiV4 {
     return this.baseClient.get<MainCategoriesResponse>(
       `${CategoriesApiV4.adminApiPath}`,
       undefined,
-      pagination
+      pagination,
     );
   }
 
@@ -37,19 +37,19 @@ export class CategoriesApiV4 {
 
   public async getCategoryContents(
     categoryCode: string,
-    localeId: string
+    localeId: string,
   ): Promise<CategoryContents> {
     return this.baseClient.get<CategoryContents>(
-      `${CategoriesApiV4.apiPath}/${localeId}/${categoryCode}`
+      `${CategoriesApiV4.apiPath}/${localeId}/${categoryCode}`,
     );
   }
 
   public async createCategory(
-    request: CreateGlobalCategoryRequest
+    request: CreateGlobalCategoryRequest,
   ): Promise<CreateResult<any, GlobalCategoryEntry>> {
     const response = await this.baseClient.postResponse(
       `${CategoriesApiV4.adminApiPath}/global`,
-      request
+      request,
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
@@ -58,7 +58,7 @@ export class CategoriesApiV4 {
   public async updateCategory(
     categoryCode: string,
     version: string,
-    request: UpdateGlobalCategoryRequest
+    request: UpdateGlobalCategoryRequest,
   ): Promise<void> {
     await this.baseClient.put(`${CategoriesApiV4.adminApiPath}/global/${categoryCode}`, request, {
       version,
@@ -67,11 +67,11 @@ export class CategoriesApiV4 {
 
   public async createCategoryLocal(
     localeId: string,
-    request: CreateLocalCategoryRequest
+    request: CreateLocalCategoryRequest,
   ): Promise<CreateResult<any, GlobalCategoryEntry>> {
     const response = await this.baseClient.postResponse(
       `${CategoriesApiV4.adminApiPath}/local/${localeId}`,
-      request
+      request,
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
@@ -81,14 +81,14 @@ export class CategoriesApiV4 {
     localeId: string,
     categoryCode: string,
     version: string,
-    request: UpdateLocalCategoryRequest
+    request: UpdateLocalCategoryRequest,
   ): Promise<void> {
     await this.baseClient.put(
       `${CategoriesApiV4.adminApiPath}/local/${localeId}/${categoryCode}`,
       request,
       {
         version,
-      }
+      },
     );
   }
 }

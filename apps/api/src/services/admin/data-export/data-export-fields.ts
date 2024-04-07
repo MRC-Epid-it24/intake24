@@ -31,7 +31,7 @@ export type ExportField = BaseExportField & Partial<Pick<ExportFieldInfo, 'value
 
 export const EMPTY = 'N/A';
 
-const dataExportFields = () => {
+function dataExportFields() {
   /**
    * Helper to map custom Prompt to ExportField
    *
@@ -94,7 +94,7 @@ const dataExportFields = () => {
     const records: UserCustomFieldDistinctValue[] = await UserCustomField.aggregate(
       'name',
       'DISTINCT',
-      { plain: false }
+      { plain: false },
     );
     const fields = records.map(({ DISTINCT }) => ({ id: DISTINCT, label: DISTINCT }));
 
@@ -153,7 +153,8 @@ const dataExportFields = () => {
       label: 'Recall Duration (mins)',
       value: ({ food }: ExportRow) => {
         const { startTime, endTime } = food.meal?.submission ?? {};
-        if (!startTime || !endTime) return undefined;
+        if (!startTime || !endTime)
+          return undefined;
 
         return differenceInMinutes(endTime, startTime);
       },
@@ -350,7 +351,7 @@ const dataExportFields = () => {
 
     const fieldNames = fields.map(({ fieldName }) => fieldName);
 
-    return [...new Set(fieldNames)].map((name) => ({ id: name, label: name }));
+    return [...new Set(fieldNames)].map(name => ({ id: name, label: name }));
   };
 
   /**
@@ -377,7 +378,8 @@ const dataExportFields = () => {
       id: 'portion',
       label: 'Portion',
       value: ({ food }: ExportRow) => {
-        if (!('portionSizes' in food)) return undefined;
+        if (!('portionSizes' in food))
+          return undefined;
 
         return stringify(
           food.portionSizes?.reduce(
@@ -385,8 +387,8 @@ const dataExportFields = () => {
               acc[item.name] = item.value;
               return acc;
             },
-            {} as Record<string, string>
-          )
+            {} as Record<string, string>,
+          ),
         );
       },
     },
@@ -395,19 +397,22 @@ const dataExportFields = () => {
       id: 'portionWeight',
       label: 'Portion Weight',
       value: ({ food }: ExportRow) => {
-        if (!('portionSizes' in food)) return undefined;
+        if (!('portionSizes' in food))
+          return undefined;
 
         const servingWeightVal = food.portionSizes?.find(
-          (item) => item.name === 'servingWeight'
+          item => item.name === 'servingWeight',
         )?.value;
         const leftoversWeightVal = food.portionSizes?.find(
-          (item) => item.name === 'leftoversWeight'
+          item => item.name === 'leftoversWeight',
         )?.value;
-        if (!servingWeightVal || !leftoversWeightVal) return undefined;
+        if (!servingWeightVal || !leftoversWeightVal)
+          return undefined;
 
-        const servingWeight = parseFloat(servingWeightVal);
-        const leftoversWeight = parseFloat(leftoversWeightVal);
-        if (Number.isNaN(servingWeight) || Number.isNaN(leftoversWeight)) return undefined;
+        const servingWeight = Number.parseFloat(servingWeightVal);
+        const leftoversWeight = Number.parseFloat(leftoversWeightVal);
+        if (Number.isNaN(servingWeight) || Number.isNaN(leftoversWeight))
+          return undefined;
 
         return servingWeight - leftoversWeight;
       },
@@ -496,7 +501,7 @@ const dataExportFields = () => {
     foodNutrients,
     portionSizes,
   };
-};
+}
 
 export default dataExportFields;
 

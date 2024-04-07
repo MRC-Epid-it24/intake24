@@ -21,12 +21,12 @@ export type CreateRefreshCookie = {
   userId: string;
 };
 
-const feedbackService = ({
+function feedbackService({
   appConfig,
   fsConfig,
   securityConfig,
   jwtService,
-}: Pick<IoC, 'appConfig' | 'fsConfig' | 'securityConfig' | 'jwtService'>) => {
+}: Pick<IoC, 'appConfig' | 'fsConfig' | 'securityConfig' | 'jwtService'>) {
   const getNutrientTypes = async (): Promise<NutrientType[]> => {
     const nutrients = await FoodsNutrientType.findAll({
       include: [
@@ -38,7 +38,8 @@ const feedbackService = ({
 
     return nutrients.map((nutrient) => {
       const { id, description, unit, inKcal } = nutrient;
-      if (!unit) throw new NotFoundError();
+      if (!unit)
+        throw new NotFoundError();
 
       return { id, description, unit: unit.symbol, kcalPerUnit: inKcal?.kcalPerUnit ?? null };
     });
@@ -52,13 +53,14 @@ const feedbackService = ({
   const getFeedbackLinks = async (
     surveyId: string,
     username: string,
-    submissions: string[] = []
+    submissions: string[] = [],
   ) => {
     const alias = await UserSurveyAlias.findOne({
       where: { surveyId, username },
       include: [{ association: 'survey', attributes: ['id', 'slug'] }],
     });
-    if (!alias || !alias.survey) throw new NotFoundError();
+    if (!alias || !alias.survey)
+      throw new NotFoundError();
 
     const {
       survey: { slug },
@@ -68,7 +70,7 @@ const feedbackService = ({
     const { base, survey } = appConfig.urls;
     const baseUrl = getFrontEndUrl(base, survey);
     const query = new URLSearchParams(
-      submissions.map<[string, string]>((submission) => ['submissions', submission])
+      submissions.map<[string, string]>(submission => ['submissions', submission]),
     ).toString();
 
     const url = `${baseUrl}/${slug}/feedback?${query}`;
@@ -80,7 +82,7 @@ const feedbackService = ({
   };
 
   const createRefreshCookie = async (
-    options: CreateRefreshCookie
+    options: CreateRefreshCookie,
   ): Promise<Protocol.Network.CookieParam> => {
     const { slug, username, userId } = options;
     const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.survey.cookie;
@@ -106,7 +108,7 @@ const feedbackService = ({
   const getFeedbackStream = async (
     surveyId: string,
     username: string,
-    submissions: string[] = []
+    submissions: string[] = [],
   ) => {
     const { url, filename, slug, userId } = await getFeedbackLinks(surveyId, username, submissions);
     const cookie = await createRefreshCookie({ slug, username, userId });
@@ -119,7 +121,7 @@ const feedbackService = ({
   const getFeedbackFile = async (
     surveyId: string,
     username: string,
-    submissions: string[] = []
+    submissions: string[] = [],
   ) => {
     const { url, filename, slug, userId } = await getFeedbackLinks(surveyId, username, submissions);
     const cookie = await createRefreshCookie({ slug, username, userId });
@@ -138,7 +140,7 @@ const feedbackService = ({
     getFeedbackStream,
     getFeedbackFile,
   };
-};
+}
 
 export default feedbackService;
 

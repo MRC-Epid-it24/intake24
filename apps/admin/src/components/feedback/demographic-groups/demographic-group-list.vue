@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>fas fa-people-arrows</v-icon>
+      <v-icon color="secondary" left>
+        fas fa-people-arrows
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.demographic-groups.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         color="primary"
         fab
@@ -13,7 +15,9 @@
         :title="$t('feedback-schemes.demographic-groups.create')"
         @click.stop="add"
       >
-        <v-icon small>$add</v-icon>
+        <v-icon small>
+          $add
+        </v-icon>
       </v-btn>
       <options-menu>
         <select-resource
@@ -24,13 +28,15 @@
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="items" @input="update"></json-editor-dialog>
+        <json-editor-dialog v-model="items" @input="update" />
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -57,7 +63,9 @@
                 :title="$t('feedback-schemes.demographic-groups.edit')"
                 @click.stop="edit(index, group)"
               >
-                <v-icon color="secondary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -88,15 +96,19 @@
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>
-            <v-icon dark left>fas fa-people-arrows</v-icon>
+            <v-icon dark left>
+              fas fa-people-arrows
+            </v-icon>
             {{
               $t(`feedback-schemes.demographic-groups.${dialog.index === -1 ? 'create' : 'edit'}`)
             }}
           </v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-toolbar-items>
             <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
           <template #extension>
@@ -123,7 +135,7 @@
                         :label="$t('feedback-schemes.cards.type')"
                         name="type"
                         outlined
-                      ></v-select>
+                      />
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-autocomplete
@@ -136,7 +148,7 @@
                         name="nutrientTypeId"
                         outlined
                         prepend-inner-icon="$nutrient-types"
-                      ></v-autocomplete>
+                      />
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-select
@@ -147,7 +159,7 @@
                         name="nutrientRuleType"
                         outlined
                         prepend-inner-icon="fas fa-divide"
-                      ></v-select>
+                      />
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-select
@@ -160,11 +172,11 @@
                         prepend-inner-icon="fas fa-genderless"
                       >
                         <template #item="{ item }">
-                          <span :class="`${item.icon} mr-3`"></span>
+                          <span :class="`${item.icon} mr-3`" />
                           {{ item.text }}
                         </template>
                         <template #selection="{ item }">
-                          <span :class="`${item.icon} mr-3`"></span>
+                          <span :class="`${item.icon} mr-3`" />
                           {{ item.text }}
                         </template>
                       </v-select>
@@ -180,13 +192,13 @@
                         name="physicalActivityLevelId"
                         outlined
                         prepend-inner-icon="fas fa-running"
-                      ></v-select>
+                      />
                     </v-col>
                     <v-col v-for="item in ['age', 'height', 'weight']" :key="item" cols="12" md="6">
                       <demographic-group-range
                         v-model="dialog.item[item]"
                         :type="item"
-                      ></demographic-group-range>
+                      />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -195,17 +207,21 @@
                 <v-container>
                   <demographic-group-sectors
                     v-model="dialog.item.scaleSectors"
-                  ></demographic-group-sectors>
+                  />
                 </v-container>
               </v-tab-item>
             </v-tabs-items>
             <v-card-actions>
               <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+                <v-icon left>
+                  $cancel
+                </v-icon>{{ $t('common.action.cancel') }}
               </v-btn>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn class="font-weight-bold" color="info" text type="submit">
-                <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+                <v-icon left>
+                  $success
+                </v-icon>{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>
@@ -240,7 +256,7 @@ export default defineComponent({
 
   components: {
     ConfirmDialog,
-    draggable,
+    Draggable: draggable,
     DemographicGroupRange,
     DemographicGroupSectors,
     JsonEditorDialog,
@@ -261,16 +277,16 @@ export default defineComponent({
 
   setup(props, context) {
     const { i18n } = useI18n();
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
-      useListWithDialog(props, context, { newItem: getDemographicGroupDefaults });
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update }
+      = useListWithDialog(props, context, { newItem: getDemographicGroupDefaults });
 
     const tab = ref(0);
 
     const cardTypes = computed(() =>
-      cardTypesRef.map((value) => ({
+      cardTypesRef.map(value => ({
         text: i18n.t(`feedback-schemes.cards.${value}.title`).toString(),
         value,
-      }))
+      })),
     );
 
     return {
@@ -292,13 +308,13 @@ export default defineComponent({
 
   data() {
     return {
-      nutrientRuleTypes: nutrientRuleTypes.map((value) => ({
+      nutrientRuleTypes: nutrientRuleTypes.map(value => ({
         text: this.$t(`feedback-schemes.nutrientRuleTypes.${value}`),
         value,
       })),
       sexes: [
         { text: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
-        ...sexes.map((value) => ({
+        ...sexes.map(value => ({
           text: this.$t(`feedback-schemes.sexes.${value}`),
           value,
           icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',

@@ -30,14 +30,14 @@ export default () => {
         userId: suite.data.system.user.id,
         ...rest,
       },
-      expiresAt
+      expiresAt,
     );
 
     url = `${baseUrl}/${pat.token.id}`;
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assertMissingAuthentication('delete', url);
   });
 

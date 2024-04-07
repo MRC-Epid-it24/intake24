@@ -11,13 +11,13 @@
           <v-icon>$close</v-icon>
         </v-btn>
         <v-toolbar-title>Scan barcode</v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-switch v-model="locate" class="mt-0" hide-details name="locate">
           <template #label>
             <v-icon>fas fa-crosshairs</v-icon>
           </template>
         </v-switch>
-        <v-divider class="ml-2" vertical></v-divider>
+        <v-divider class="ml-2" vertical />
         <v-btn
           color="white"
           :disabled="!deviceCapabilities.torch"
@@ -29,8 +29,8 @@
         </v-btn>
       </v-toolbar>
       <div ref="reader" class="barcode-reader">
-        <canvas class="drawingBuffer"></canvas>
-        <video :style="{ height: `${height - 56}px` }"></video>
+        <canvas class="drawingBuffer" />
+        <video :style="{ height: `${height - 56}px` }" />
       </div>
     </v-card>
   </v-dialog>
@@ -80,7 +80,7 @@ const dialog = useVModel(props, 'dialog', emit);
 const card = ref<InstanceType<typeof VCard>>();
 const reader = ref<InstanceType<typeof HTMLFormElement>>();
 
-//@ts-expect-error should allow vue instance?
+// @ts-expect-error should allow vue instance?
 const { height, width } = useElementSize(card);
 
 const initializing = ref(false);
@@ -89,21 +89,22 @@ const deviceCapabilities = ref<{ torch: boolean }>({ torch: false });
 const results = ref<QuaggaJSResultObject[]>([]);
 const locate = ref(true);
 
-const initCapabilities = () => {
+function initCapabilities() {
   const track = Quagga.CameraAccess.getActiveTrack();
-  if (!track) return;
+  if (!track)
+    return;
 
   capabilities.value = track.getCapabilities();
 
   if ('torch' in capabilities.value && typeof capabilities.value.torch === 'boolean')
     deviceCapabilities.value.torch = true;
-};
+}
 
-const drawScanBox = () => {
+function drawScanBox() {
   const ctx = Quagga.canvas.ctx.overlay;
   const canvas = Quagga.canvas.dom.overlay;
-  const canvasWidth = parseInt(canvas.getAttribute('width') ?? '0');
-  const canvasHeight = parseInt(canvas.getAttribute('height') ?? '0');
+  const canvasWidth = Number.parseInt(canvas.getAttribute('width') ?? '0');
+  const canvasHeight = Number.parseInt(canvas.getAttribute('height') ?? '0');
 
   const boxHeight = canvasHeight * 0.3;
   const boxWidth = canvasWidth * 0.8;
@@ -120,18 +121,18 @@ const drawScanBox = () => {
   ctx.moveTo(canvasWidth * 0.15, canvasHeight * 0.5);
   ctx.lineTo(canvasWidth * 0.85, canvasHeight * 0.5);
   ctx.stroke();
-};
+}
 
-const clearCanvas = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+function clearCanvas(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
   ctx.clearRect(
     0,
     0,
-    parseInt(canvas.getAttribute('width') ?? '0'),
-    parseInt(canvas.getAttribute('height') ?? '0')
+    Number.parseInt(canvas.getAttribute('width') ?? '0'),
+    Number.parseInt(canvas.getAttribute('height') ?? '0'),
   );
-};
+}
 
-const drawResult = (result: QuaggaJSResultObject) => {
+function drawResult(result: QuaggaJSResultObject) {
   const ctx = Quagga.canvas.ctx.overlay;
   const canvas = Quagga.canvas.dom.overlay;
 
@@ -139,7 +140,7 @@ const drawResult = (result: QuaggaJSResultObject) => {
     clearCanvas(ctx, canvas);
 
     result.boxes
-      .filter((box) => box !== result.box)
+      .filter(box => box !== result.box)
       .forEach((box) => {
         Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, ctx, { color: '#FAFAFA', lineWidth: 2 });
       });
@@ -151,50 +152,53 @@ const drawResult = (result: QuaggaJSResultObject) => {
       lineWidth: 2,
     });
   }
-};
+}
 
-const toggleTorch = async () => {
+async function toggleTorch() {
   const track = Quagga.CameraAccess.getActiveTrack();
 
-  //@ts-expect-error torch is not in the types ?
+  // @ts-expect-error torch is not in the types ?
   await track?.applyConstraints({ advanced: [{ torch: !track.getSettings().torch }] });
-};
+}
 
-const getMedian = (numbers: number[]) => {
+function getMedian(numbers: number[]) {
   const sorted = [...numbers].sort((a, b) => a - b);
   const half = Math.floor(sorted.length / 2);
 
-  if (sorted.length % 2 === 1) return sorted[half];
+  if (sorted.length % 2 === 1)
+    return sorted[half];
 
   return (sorted[half - 1] + sorted[half]) / 2;
-};
+}
 
-const getMedianOfCodeErrors = (codes: QuaggaJSResultObject['codeResult']['decodedCodes']) => {
+function getMedianOfCodeErrors(codes: QuaggaJSResultObject['codeResult']['decodedCodes']) {
   const errors = codes
     .filter(({ error }) => error !== undefined)
     .map(({ error }) => error) as number[];
 
   return getMedian(errors);
-};
+}
 
-const stop = async () => {
+async function stop() {
   // Quagga.offProcessed();
   Quagga.offDetected();
   await Quagga.stop();
-};
+}
 
-const close = () => {
+function close() {
   emit('update:dialog', false);
-};
+}
 
-const start = async () => {
-  if (initializing.value) return;
+async function start() {
+  if (initializing.value)
+    return;
 
   initializing.value = true;
   await stop();
   results.value = [];
 
-  if (!reader.value) return;
+  if (!reader.value)
+    return;
 
   await Quagga.init(
     {
@@ -226,14 +230,15 @@ const start = async () => {
       Quagga.onDetected(onDetected);
       initCapabilities();
 
-      if (!locate.value) drawScanBox();
+      if (!locate.value)
+        drawScanBox();
 
       console.log('Initialization finished. Ready to start');
       Quagga.start();
       initializing.value = false;
-    }
+    },
   );
-};
+}
 
 watch(locate, async () => {
   await start();
@@ -242,19 +247,21 @@ watch(locate, async () => {
 watch(
   () => props.dialog,
   async (val) => {
-    if (val) await start();
+    if (val)
+      await start();
     else await stop();
-  }
+  },
 );
 
 watchDebounced(
   [height, width],
   async () => {
-    if (!props.dialog) return;
+    if (!props.dialog)
+      return;
 
     await start();
   },
-  { debounce: 500, maxWait: 2000 }
+  { debounce: 500, maxWait: 2000 },
 );
 
 onBeforeUnmount(async () => {
@@ -263,23 +270,27 @@ onBeforeUnmount(async () => {
 
 /* onProcessed(result: QuaggaJSResultObject) {}, */
 
-const onDetected = (result: QuaggaJSResultObject) => {
+function onDetected(result: QuaggaJSResultObject) {
   const err = getMedianOfCodeErrors(result.codeResult.decodedCodes);
 
-  if (err > props.errorThreshold) return;
+  if (err > props.errorThreshold)
+    return;
 
-  if (locate.value) drawResult(result);
+  if (locate.value)
+    drawResult(result);
 
   results.value.push(result);
   checkResults();
-};
+}
 
-const checkResults = () => {
-  if (results.value.length < props.successfulReads) return;
+function checkResults() {
+  if (results.value.length < props.successfulReads)
+    return;
 
   const occurrences = results.value.reduce<Record<string, number>>((acc, curr) => {
     const { code } = curr.codeResult;
-    if (!code) return acc;
+    if (!code)
+      return acc;
 
     acc[code] ? ++acc[code] : (acc[code] = 1);
 
@@ -287,17 +298,19 @@ const checkResults = () => {
   }, {});
 
   const match = Object.entries(occurrences).find(([code, count]) => count >= props.successfulReads);
-  if (!match) return;
+  if (!match)
+    return;
 
   successfulRead(match[0]);
-};
+}
 
-const successfulRead = (barcode: string) => {
-  if (props.vibrateOnRead) navigator.vibrate(200);
+function successfulRead(barcode: string) {
+  if (props.vibrateOnRead)
+    navigator.vibrate(200);
 
   emit('update:model-value', barcode);
   close();
-};
+}
 </script>
 
 <script lang="ts">

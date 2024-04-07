@@ -10,7 +10,7 @@
             {{ translate(step.name) }}
           </div>
           <template #actions>
-            <expansion-panel-actions :valid="isStepValid(step)"></expansion-panel-actions>
+            <expansion-panel-actions :valid="isStepValid(step)" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -27,14 +27,14 @@
                 :label="$t('prompts.recipeBuilder.addMore')"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
-                :value="'no'"
-              ></v-radio>
+                value="no"
+              />
               <v-radio
                 :label="$t('prompts.recipeBuilder.noMore')"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
-                :value="'yes'"
-              ></v-radio>
+                value="yes"
+              />
             </v-radio-group>
           </v-container>
           <v-expand-transition>
@@ -42,7 +42,7 @@
               v-bind="{ index, meal, prompt, step }"
               :show="!!step.foods.length"
               @remove="removeFood"
-            ></selected-food-list>
+            />
           </v-expand-transition>
           <v-expand-transition>
             <v-card
@@ -61,7 +61,7 @@
                 @food-missing="(searchTerm) => foodMissing(index, searchTerm)"
                 @food-selected="(food) => foodSelected(index, food)"
                 @food-skipped="foodSkipped(index)"
-              ></food-browser>
+              />
             </v-card>
           </v-expand-transition>
         </v-expansion-panel-content>
@@ -73,12 +73,12 @@
         message: $t('prompts.recipeBuilder.missingAllIngredients'),
       }"
       :class="{ 'mt-4': isMobile }"
-    ></missing-all-recipe-ingredients>
+    />
     <template #actions>
-      <next :disabled="!isValid" @click="updateStepsIngredients"></next>
+      <next :disabled="!isValid" @click="updateStepsIngredients" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="updateStepsIngredients"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="updateStepsIngredients" />
     </template>
   </base-layout>
 </template>
@@ -109,11 +109,13 @@ import { getEntityId } from '@intake24/survey/util';
 import type { FoodSearchPromptParameters } from '../standard';
 import createBasePrompt from '../createBasePrompt';
 
-const isStepValid = (step: RecipeBuilderStepState): boolean =>
-  step.confirmed !== undefined && step.confirmed === 'yes';
+function isStepValid(step: RecipeBuilderStepState): boolean {
+  return step.confirmed !== undefined && step.confirmed === 'yes';
+}
 
-const getNextStep = (steps: RecipeBuilderStepState[]) =>
-  steps.findIndex((step) => !isStepValid(step));
+function getNextStep(steps: RecipeBuilderStepState[]) {
+  return steps.findIndex(step => !isStepValid(step));
+}
 
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
@@ -171,14 +173,16 @@ export default defineComponent({
   methods: {
     confirm() {
       console.log('Update Panel');
-      //this.updatePanel();
+      // this.updatePanel();
     },
 
     removeFood({ foodIndex, index }: { foodIndex: number; index: number }) {
       const foodToRemove = this.recipeSteps[index].foods.splice(foodIndex, 1);
-      if (!this.recipeSteps[index].foods.length) this.recipeSteps[index].confirmed = undefined;
+      if (!this.recipeSteps[index].foods.length)
+        this.recipeSteps[index].confirmed = undefined;
 
-      if (foodToRemove === undefined) return;
+      if (foodToRemove === undefined)
+        return;
       this.update();
     },
 
@@ -210,7 +214,7 @@ export default defineComponent({
       item:
         | { type: 'selected'; selectedFood: FoodHeader }
         | { type: 'missing'; searchTerm?: string | null },
-      idx: number
+      idx: number,
     ): Promise<void> {
       const step = this.recipeSteps[idx];
       const id = getEntityId();
@@ -223,7 +227,8 @@ export default defineComponent({
           idx,
           name: `${step.categoryCode}: ${item.searchTerm ? item.searchTerm : step.name.en}`,
         };
-      } else {
+      }
+      else {
         const { selectedFood, type } = item;
         const ingredient = await foodsService.getData(this.localeId, selectedFood.code);
         food = {
@@ -252,7 +257,8 @@ export default defineComponent({
     },
 
     goToNextIfCan(index: number) {
-      if (!isStepValid(this.recipeSteps[index])) return;
+      if (!isStepValid(this.recipeSteps[index]))
+        return;
 
       this.activeStep = getNextStep(this.recipeSteps);
     },

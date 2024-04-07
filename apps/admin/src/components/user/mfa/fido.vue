@@ -36,7 +36,7 @@
                 name="name"
                 outlined
                 @input="form.errors.clear('name')"
-              ></v-text-field>
+              />
               <v-btn block class="my-4" color="secondary" rounded type="submit">
                 {{ $t('user.mfa.devices.verify') }}
               </v-btn>
@@ -99,12 +99,14 @@ export default defineComponent({
     },
 
     async startLocalRegistration() {
-      if (!this.regChallenge) return;
+      if (!this.regChallenge)
+        return;
 
       try {
         this.form.response = await startRegistration(this.regChallenge);
         this.progress = 2;
-      } catch {
+      }
+      catch {
         this.regChallenge = null;
       }
     },

@@ -21,7 +21,7 @@ export const useAuth = defineStore('auth', {
     mfa: null,
   }),
   getters: {
-    loggedIn: (state) => !!state.accessToken,
+    loggedIn: state => !!state.accessToken,
   },
   actions: {
     setAccessToken(token: string) {
@@ -34,7 +34,8 @@ export const useAuth = defineStore('auth', {
       this.mfa = null;
 
       const userState = useUser();
-      if (!userState.loaded) await userState.request();
+      if (!userState.loaded)
+        await userState.request();
     },
 
     mfaRequest(challenge: MFAAuthResponse) {
@@ -45,7 +46,8 @@ export const useAuth = defineStore('auth', {
     async login(payload: LoginRequest) {
       const data = await authService.login(payload);
 
-      if ('accessToken' in data) await this.successfulLogin(data.accessToken);
+      if ('accessToken' in data)
+        await this.successfulLogin(data.accessToken);
       else this.mfaRequest(data);
     },
 
@@ -58,13 +60,16 @@ export const useAuth = defineStore('auth', {
       try {
         const accessToken = await authService.refresh();
         await this.successfulLogin(accessToken);
-      } catch (err) {
-        if (withErr) throw err;
+      }
+      catch (err) {
+        if (withErr)
+          throw err;
       }
     },
 
     async logout(invalidate?: boolean) {
-      if (invalidate) await authService.logout();
+      if (invalidate)
+        await authService.logout();
 
       useLoading().$reset();
       useUser().$reset();

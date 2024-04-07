@@ -48,7 +48,8 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
     this.logger.debug('Job started.');
 
     const fileExists = await fs.pathExists(this.file);
-    if (!fileExists) throw new Error(`Missing file (${this.file}).`);
+    if (!fileExists)
+      throw new Error(`Missing file (${this.file}).`);
 
     const locale = await SystemLocale.findByPk(this.params.localeId, { attributes: ['code'] });
     if (!locale)
@@ -94,12 +95,13 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
               await this.validateChunk(chunkRows);
               await this.importChunk(chunkRows, tx);
               chunkResolve?.();
-            } catch (err) {
-              if (err instanceof Error) {
+            }
+            catch (err) {
+              if (err instanceof Error)
                 stream.destroy(err);
-              } else {
+              else
                 stream.destroy();
-              }
+
               reject(err);
             }
           }
@@ -110,52 +112,55 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
             await this.importChunk(parsedRows, tx);
             await Promise.all(chunkOps);
             resolve();
-          } catch (err) {
-            if (err instanceof Error) {
+          }
+          catch (err) {
+            if (err instanceof Error)
               stream.destroy(err);
-            } else {
+            else
               stream.destroy();
-            }
+
             reject(err);
           }
         })
-        .on('error', (err) => reject(err));
+        .on('error', err => reject(err));
     });
   }
 
   private async validateChunk(chunk: CSVRow[]): Promise<void> {
-    if (!chunk.length) return;
+    if (!chunk.length)
+      return;
 
     const csvFields = Object.keys(chunk[0]);
 
     // Check for presence of required fields
-    if (requiredFields.some((field) => !csvFields.includes(field)))
+    if (requiredFields.some(field => !csvFields.includes(field)))
       throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
 
-    const foodCodes = chunk.map((item) => item.foodCode);
+    const foodCodes = chunk.map(item => item.foodCode);
     const { localeId } = this.params;
 
     const validFoodCodes = (
       await FoodLocalList.findAll({
         where: { localeId: this.localeCode, foodCode: foodCodes },
       })
-    ).map((row) => row.foodCode);
+    ).map(row => row.foodCode);
 
-    const invalidFoodCodes = foodCodes.filter((code) => !validFoodCodes.includes(code));
+    const invalidFoodCodes = foodCodes.filter(code => !validFoodCodes.includes(code));
 
     if (invalidFoodCodes.length > 0) {
       throw new Error(
         `Following food codes are not valid for locale ${localeId} (${
           this.localeCode
-        }): ${invalidFoodCodes.join(', ')} `
+        }): ${invalidFoodCodes.join(', ')} `,
       );
     }
   }
 
   private async importChunk(rows: CSVRow[], transaction: Transaction): Promise<void> {
-    if (!rows.length) return;
+    if (!rows.length)
+      return;
 
-    const records = rows.map((row) => ({
+    const records = rows.map(row => ({
       localeId: this.localeCode,
       foodCode: row.foodCode,
       rank: row.sortingPriority,

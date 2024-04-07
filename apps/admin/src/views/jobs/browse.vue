@@ -4,8 +4,12 @@
       {{ item.user?.email ?? item.userId }}
     </template>
     <template #[`item.successful`]="{ item }">
-      <v-icon v-if="item.successful" color="success">$check</v-icon>
-      <v-icon v-else color="error">$times</v-icon>
+      <v-icon v-if="item.successful" color="success">
+        $check
+      </v-icon>
+      <v-icon v-else color="error">
+        $times
+      </v-icon>
     </template>
     <template #[`item.startedAt`]="{ item }">
       {{ formatDateTime(item.startedAt) }}

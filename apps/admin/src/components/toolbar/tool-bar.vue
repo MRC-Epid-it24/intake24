@@ -10,9 +10,9 @@
           class="mr-2"
           :disabled="selected.length !== 1"
           @action="onAction"
-        ></component>
+        />
       </template>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <confirm-dialog
         v-if="currentActions.includes('delete')"
         color="error"
@@ -72,7 +72,7 @@ export default defineComponent({
 
   computed: {
     currentActions(): string[] {
-      return this.actions.filter((action) => this.can({ action }));
+      return this.actions.filter(action => this.can({ action }));
     },
     route(): string | null | undefined {
       return this.routePrefix ?? this.$route.name;
@@ -81,27 +81,30 @@ export default defineComponent({
 
   methods: {
     async onAction(action: string) {
-      //@ts-expect-error types
+      // @ts-expect-error types
       await this[`on${upperFirst(action)}`]();
     },
 
     async onRead() {
       const id = this.getOneSelected();
-      if (!id) return;
+      if (!id)
+        return;
 
       await this.$router.push({ name: `${this.route}-read`, params: { id } } as Location);
     },
 
     async onEdit() {
       const id = this.getOneSelected();
-      if (!id) return;
+      if (!id)
+        return;
 
       await this.$router.push({ name: `${this.route}-edit`, params: { id } } as Location);
     },
 
     async onDelete() {
       const id = this.getAtLeastOneSelected();
-      if (!id) return;
+      if (!id)
+        return;
 
       await this.$http.delete(this.api, { params: { id } });
       useMessages().success(this.$t('common.msg.multi.deleted').toString());

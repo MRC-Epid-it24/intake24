@@ -2,10 +2,12 @@
   <v-container class="print-card pa-0" fluid>
     <v-row class="print-card-header mt-2" no-gutters>
       <v-col cols="4">
-        <v-img :aspect-ratio="4 / 3" class="ml-4" eager :src="backgroundImage"></v-img>
+        <v-img :aspect-ratio="4 / 3" class="ml-4" eager :src="backgroundImage" />
       </v-col>
       <v-col class="d-flex flex-column" cols>
-        <v-card-title class="font-weight-medium py-0">{{ detail.name }}</v-card-title>
+        <v-card-title class="font-weight-medium py-0">
+          {{ detail.name }}
+        </v-card-title>
         <v-card-text class="d-flex flex-column py-0 font-weight-medium">
           <i18n class="mb-2" path="feedback.intake.your" tag="div">
             <template #nutrient>
@@ -16,17 +18,19 @@
             </template>
           </i18n>
           <div v-if="detail.recommendedIntake" :class="detail.textClass">
-            <v-icon left>{{ detail.iconClass }}</v-icon>
+            <v-icon left>
+              {{ detail.iconClass }}
+            </v-icon>
             <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
           </div>
-          <div class="mt-auto" v-html="detail.unitDescription"></div>
+          <div class="mt-auto" v-html="detail.unitDescription" />
         </v-card-text>
       </v-col>
     </v-row>
     <v-row no-gutters>
       <v-col cols="12">
         <v-card-text>
-          <div v-html="detail.description"></div>
+          <div v-html="detail.description" />
         </v-card-text>
       </v-col>
     </v-row>

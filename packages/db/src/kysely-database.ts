@@ -8,11 +8,10 @@ import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
 import type { DatabaseType } from './config';
 
 function databaseLogQuery(sql: string, logger: Logger, limit: number) {
-  if (limit > 0 && sql.length > limit) {
-    logger.debug(sql.substring(0, limit) + '...');
-  } else {
+  if (limit > 0 && sql.length > limit)
+    logger.debug(`${sql.substring(0, limit)}...`);
+  else
     logger.debug(sql);
-  }
 }
 
 export class KyselyDatabases {
@@ -54,19 +53,19 @@ export class KyselyDatabases {
   }
 
   configLogger(database: DatabaseType): KyselyLogFunc {
-    if (this.env === 'development')
+    if (this.env === 'development') {
       return (event: LogEvent): void => {
         switch (event.level) {
           case 'query':
             databaseLogQuery(
               `Query [${event.queryDurationMillis.toFixed(1)} ms]: ${event.query.sql}`,
               this.dbLogger,
-              this.config[this.env][database].debugQueryLimit
+              this.config[this.env][database].debugQueryLimit,
             );
             databaseLogQuery(
               `└ Parameters: ${event.query.parameters.join(', ')}`,
               this.dbLogger,
-              this.config[this.env][database].debugQueryLimit
+              this.config[this.env][database].debugQueryLimit,
             );
             break;
           case 'error':
@@ -74,7 +73,8 @@ export class KyselyDatabases {
             break;
         }
       };
-    else
+    }
+    else {
       return (event: LogEvent): void => {
         switch (event.level) {
           case 'query':
@@ -84,6 +84,7 @@ export class KyselyDatabases {
             break;
         }
       };
+    }
   }
 
   init() {

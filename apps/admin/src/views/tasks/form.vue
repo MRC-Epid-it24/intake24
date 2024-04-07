@@ -24,7 +24,7 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -37,7 +37,7 @@
                 outlined
                 prepend-inner-icon="$jobs"
                 @change="jobChanged"
-              ></v-select>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -68,7 +68,7 @@
                 hide-details="auto"
                 :label="$t('common.action.active')"
                 name="active"
-              ></v-switch>
+              />
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -79,7 +79,7 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-textarea>
+              />
             </v-col>
           </v-row>
           <component
@@ -89,8 +89,8 @@
             :errors="form.errors"
             name="params"
             @input="form.errors.clear(paramErrors)"
-          ></component>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          />
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -141,7 +141,7 @@ export default defineComponent({
     useEntryFetch(props);
 
     const jobs = computed(() =>
-      jobTypes.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`).toString() }))
+      jobTypes.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`).toString() })),
     );
 
     const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskResponse>(props, {
@@ -157,7 +157,7 @@ export default defineComponent({
       loadCallback,
     });
 
-    const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
+    const paramErrors = computed(() => Object.keys(form.params).map(key => `params.${key}`));
 
     return {
       defaultJobsParams,
@@ -177,11 +177,13 @@ export default defineComponent({
 
   computed: {
     readableCron(): string {
-      if (!this.form.cron) return '';
+      if (!this.form.cron)
+        return '';
 
       try {
         return cronstrue.toString(this.form.cron, { use24HourTimeFormat: true });
-      } catch (err) {
+      }
+      catch (err) {
         return this.$t('tasks.invalidCron').toString();
       }
     },

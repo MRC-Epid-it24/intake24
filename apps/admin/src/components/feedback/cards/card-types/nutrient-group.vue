@@ -1,11 +1,11 @@
 <template>
   <div>
-    <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
+    <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)" />
     <card-thresholds
       :thresholds="{ high, low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
-    ></card-thresholds>
+    />
     <v-tab-item key="nutrients">
       <v-container>
         <v-row>
@@ -27,14 +27,16 @@
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn icon :title="$t('nutrient-types.remove')" @click.stop="remove(idx)">
-                      <v-icon color="error">$delete</v-icon>
+                      <v-icon color="error">
+                        $delete
+                      </v-icon>
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
               </transition-group>
             </v-list>
           </v-col>
-          <v-divider vertical></v-divider>
+          <v-divider vertical />
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('nutrient-types.available') }}</v-card-title>
             <v-text-field
@@ -44,7 +46,7 @@
               :label="$t('nutrient-types._')"
               outlined
               prepend-inner-icon="$search"
-            ></v-text-field>
+            />
             <v-list>
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
@@ -65,7 +67,9 @@
                       :title="$t('nutrient-types.add')"
                       @click.stop="add(nutrientType.id)"
                     >
-                      <v-icon color="info">$add</v-icon>
+                      <v-icon color="info">
+                        $add
+                      </v-icon>
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
@@ -125,44 +129,30 @@ export default defineComponent({
     const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
 
     const allNutrientTypes = computed<NutrientTypeResponse[]>(
-      () => useEntry().refs.nutrientTypes ?? []
+      () => useEntry().refs.nutrientTypes ?? [],
     );
 
     const availableNutrientTypes = computed(() =>
       allNutrientTypes.value.filter(
-        (nutrient) => !currentNutrientTypeIds.value.includes(nutrient.id)
-      )
+        nutrient => !currentNutrientTypeIds.value.includes(nutrient.id),
+      ),
     );
 
     const currentNutrientTypes = computed(() =>
-      currentNutrientTypeIds.value.reduce<NutrientTypeEntry[]>((acc, nutrientId) => {
-        const match = allNutrientTypes.value.find((nutrient) => nutrient.id === nutrientId);
+      currentNutrientTypeIds.value.reduce<NutrientTypeResponse[]>((acc, nutrientId) => {
+        const match = allNutrientTypes.value.find(nutrient => nutrient.id === nutrientId);
 
-        if (match) acc.push(match);
+        if (match)
+          acc.push(match);
 
         return acc;
-      }, [])
-    );
-
-    const loadFilteredNutrientTypes = () => {
-      filteredNutrientTypes.value = search.value
-        ? availableNutrientTypes.value.filter(
-            (nutrient) => !!nutrient.description.match(new RegExp(search.value, 'i'))
-          )
-        : [...availableNutrientTypes.value];
-
-      visibleNutrientTypes.value = [];
-      loadMoreNutrientTypes();
-    };
-
-    const nutrientTypesAvailableToLoad = computed(
-      () => visibleNutrientTypes.value.length < filteredNutrientTypes.value.length
+      }, []),
     );
 
     const loadMoreNutrientTypes = () => {
       const startIndex = visibleNutrientTypes.value.length;
-      const endIndex =
-        startIndex + 15 > filteredNutrientTypes.value.length
+      const endIndex
+        = startIndex + 15 > filteredNutrientTypes.value.length
           ? filteredNutrientTypes.value.length
           : startIndex + 15;
 
@@ -170,8 +160,24 @@ export default defineComponent({
       visibleNutrientTypes.value.push(...items);
     };
 
+    const loadFilteredNutrientTypes = () => {
+      filteredNutrientTypes.value = search.value
+        ? availableNutrientTypes.value.filter(
+          nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
+        )
+        : [...availableNutrientTypes.value];
+
+      visibleNutrientTypes.value = [];
+      loadMoreNutrientTypes();
+    };
+
+    const nutrientTypesAvailableToLoad = computed(
+      () => visibleNutrientTypes.value.length < filteredNutrientTypes.value.length,
+    );
+
     const tryLoadMoreNutrientTypes = (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && nutrientTypesAvailableToLoad) loadMoreNutrientTypes();
+      if (entries[0].isIntersecting && nutrientTypesAvailableToLoad)
+        loadMoreNutrientTypes();
     };
 
     watch(
@@ -179,7 +185,7 @@ export default defineComponent({
       () => {
         loadFilteredNutrientTypes();
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     watchDebounced(
@@ -187,7 +193,7 @@ export default defineComponent({
       () => {
         loadFilteredNutrientTypes();
       },
-      { debounce: 500, maxWait: 1000 }
+      { debounce: 500, maxWait: 1000 },
     );
 
     return {

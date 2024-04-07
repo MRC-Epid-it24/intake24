@@ -12,7 +12,7 @@
           :label="$t('feedback-schemes.cards.unit.name')"
           outlined
           :rules="nameRules"
-        ></v-text-field>
+        />
       </template>
     </language-selector>
     <language-selector
@@ -20,7 +20,7 @@
       :label="$t('feedback-schemes.cards.unit.description').toString()"
     >
       <template v-for="lang in Object.keys(internalUnit.description)" #[`lang.${lang}`]>
-        <html-editor :key="lang" v-model="internalUnit.description[lang]"></html-editor>
+        <html-editor :key="lang" v-model="internalUnit.description[lang]" />
       </template>
     </language-selector>
   </v-tab-item>
@@ -74,7 +74,8 @@ export default defineComponent({
 
   watch: {
     unit(val: CustomCard['unit']) {
-      if (deepEqual(val, this.internalUnit)) return;
+      if (deepEqual(val, this.internalUnit))
+        return;
 
       this.internalUnit = copy(val);
     },

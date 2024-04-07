@@ -10,5 +10,6 @@ export const henryCoefficientDefaults: HenryCoefficient = {
   weightCoefficient: 0,
 };
 
-export const getHenryCoefficientDefaults = (): HenryCoefficient =>
-  copy({ ...henryCoefficientDefaults, id: randomString(6) });
+export function getHenryCoefficientDefaults(): HenryCoefficient {
+  return copy({ ...henryCoefficientDefaults, id: randomString(6) });
+}

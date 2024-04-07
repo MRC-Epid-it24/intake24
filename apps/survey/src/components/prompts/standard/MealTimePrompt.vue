@@ -1,14 +1,14 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 meal-time-prompt">
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form @submit.prevent="action('next')">
         <v-time-picker
           v-model="state"
           :allowed-minutes="allowedMinutes"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.breakpoint.smAndUp"
-        ></v-time-picker>
+        />
       </v-form>
     </v-card-text>
     <template #actions>
@@ -37,9 +37,11 @@
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>
-        <v-icon class="pb-1">$cancel</v-icon>
+        <v-icon class="pb-1">
+          $cancel
+        </v-icon>
       </v-btn>
-      <v-divider vertical></v-divider>
+      <v-divider vertical />
       <v-btn
         color="primary"
         :disabled="!isValid"
@@ -49,7 +51,9 @@
         <span class="text-overline font-weight-medium">
           {{ promptI18n.yes }}
         </span>
-        <v-icon class="pb-1">$next</v-icon>
+        <v-icon class="pb-1">
+          $next
+        </v-icon>
       </v-btn>
     </template>
   </card-layout>
@@ -87,7 +91,7 @@ export default defineComponent({
     const { action, translatePrompt } = usePromptUtils(props, ctx);
 
     const allowedMinutes = computed(
-      () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0
+      () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
     );
     const promptI18n = computed(() => translatePrompt(['no', 'yes']));
     const state = computed({

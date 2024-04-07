@@ -6,7 +6,9 @@
         <v-list>
           <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
             <v-list-item-avatar>
-              <v-icon color="info" large>fas fa-circle-user</v-icon>
+              <v-icon color="info" large>
+                fas fa-circle-user
+              </v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium text-h6">
@@ -15,7 +17,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-        <v-divider></v-divider>
+        <v-divider />
       </template>
       <v-list dense nav>
         <v-list-item-group>
@@ -64,8 +66,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app color="primary" dark flat hide-on-scroll>
-      <v-app-bar-nav-icon :title="$t('common.navigation')" @click.stop="toggleSidebar">
-      </v-app-bar-nav-icon>
+      <v-app-bar-nav-icon :title="$t('common.navigation')" @click.stop="toggleSidebar" />
       <template v-if="loggedIn">
         <div v-if="surveyName" class="app-bar-survey-info">
           <i18n path="recall.survey" tag="span">
@@ -74,7 +75,7 @@
             </template>
           </i18n>
           <template v-if="recallAllowed">
-            <v-divider v-if="$vuetify.breakpoint.smAndUp" class="grey mx-4" vertical></v-divider>
+            <v-divider v-if="$vuetify.breakpoint.smAndUp" class="grey mx-4" vertical />
             <i18n path="recall.submissions.count" tag="span">
               <template #count>
                 <span class="font-weight-medium">{{ recallNumber }}</span>
@@ -82,7 +83,7 @@
             </i18n>
           </template>
         </div>
-        <v-spacer v-if="$vuetify.breakpoint.smAndUp"></v-spacer>
+        <v-spacer v-if="$vuetify.breakpoint.smAndUp" />
         <v-btn
           v-if="surveyId"
           :icon="isMobile"
@@ -102,7 +103,9 @@
           <template #activator="{ attrs, on }">
             <v-btn text v-bind="attrs" v-on="on">
               <span v-if="!isMobile" class="mr-2">{{ $t('common.logout._') }}</span>
-              <v-icon right>$logout</v-icon>
+              <v-icon right>
+                $logout
+              </v-icon>
             </v-btn>
           </template>
           {{ $t('common.logout.text') }}
@@ -113,14 +116,14 @@
       </template>
     </v-app-bar>
     <v-main>
-      <router-view></router-view>
+      <router-view />
     </v-main>
     <navigation
       v-if="showNav"
       v-bind="{ surveyId, recall: recallAllowed, feedback: feedbackAllowed }"
-    ></navigation>
-    <service-worker></service-worker>
-    <message-box></message-box>
+    />
+    <service-worker />
+    <message-box />
     <!-- <v-footer app> </v-footer> -->
   </v-app>
 </template>
@@ -154,8 +157,8 @@ export default defineComponent({
       feedbackAllowed: 'feedbackAllowed',
       recallAllowed: 'recallAllowed',
       recallNumber: 'recallNumber',
-      surveyName: (state) => state.parameters?.name,
-      userName: (state) => state.user?.name,
+      surveyName: state => state.parameters?.name,
+      userName: state => state.user?.name,
     }),
 
     surveyId(): string {
@@ -163,7 +166,8 @@ export default defineComponent({
     },
 
     title(): TranslateResult {
-      if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
+      if (this.$route.meta?.title)
+        return this.$t(this.$route.meta.title);
 
       return this.$t('common._');
     },
@@ -195,7 +199,7 @@ export default defineComponent({
       await useAuth().logout(true);
       const { surveyId } = this;
       await this.$router.push(
-        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' }
+        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' },
       );
     },
   },

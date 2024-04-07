@@ -19,13 +19,14 @@ import {
   SystemLocale,
 } from '@intake24/db';
 
-const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) => {
+function localeService({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
-    const locale =
-      typeof localeId === 'string'
+    const locale
+      = typeof localeId === 'string'
         ? await SystemLocale.findByPk(localeId, { attributes: ['id', 'code'] })
         : localeId;
-    if (!locale) throw new NotFoundError();
+    if (!locale)
+      throw new NotFoundError();
 
     return locale;
   };
@@ -37,14 +38,15 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
 
   const setSplitLists = async (
     localeId: string | SystemLocale,
-    splitLists: LocaleSplitListInput[]
+    splitLists: LocaleSplitListInput[],
   ) => {
     const { code } = await resolveLocale(localeId);
 
     const ids = splitLists.map(({ id }) => id) as string[];
     await SplitList.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
 
-    if (!splitLists.length) return [];
+    if (!splitLists.length)
+      return [];
 
     const records = await SplitList.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
     const newRecords: SplitList[] = [];
@@ -53,7 +55,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
       const { id, firstWord, words } = splitList;
 
       if (id) {
-        const match = records.find((record) => record.id === id);
+        const match = records.find(record => record.id === id);
         if (match) {
           await match.update({ firstWord, words });
           continue;
@@ -75,14 +77,15 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
 
   const setSplitWords = async (
     localeId: string | SystemLocale,
-    splitWords: LocaleSplitWordInput[]
+    splitWords: LocaleSplitWordInput[],
   ) => {
     const { code } = await resolveLocale(localeId);
 
     const ids = splitWords.map(({ id }) => id) as string[];
     await SplitWord.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
 
-    if (!splitWords.length) return [];
+    if (!splitWords.length)
+      return [];
 
     const records = await SplitWord.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
     const newRecords: SplitWord[] = [];
@@ -91,7 +94,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
       const { id, words } = splitWord;
 
       if (id) {
-        const match = records.find((record) => record.id === id);
+        const match = records.find(record => record.id === id);
         if (match) {
           await match.update({ words });
           continue;
@@ -113,14 +116,15 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
 
   const setSynonymSets = async (
     localeId: string | SystemLocale,
-    synonymSets: LocaleSynonymSetInput[]
+    synonymSets: LocaleSynonymSetInput[],
   ) => {
     const { code } = await resolveLocale(localeId);
 
     const ids = synonymSets.map(({ id }) => id) as string[];
     await SynonymSet.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
 
-    if (!synonymSets.length) return [];
+    if (!synonymSets.length)
+      return [];
 
     const records = await SynonymSet.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
     const newRecords: SynonymSet[] = [];
@@ -129,7 +133,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
       const { id, synonyms } = synonymSet;
 
       if (id) {
-        const match = records.find((record) => record.id === id);
+        const match = records.find(record => record.id === id);
         if (match) {
           await match.update({ synonyms });
           continue;
@@ -165,7 +169,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
   // Get existing recipe food steps for the specific recipe food for the specified Locale ID
   const getRecipeFoodSteps = async (
     localeId: string | SystemLocale,
-    recipeFoodId: string
+    recipeFoodId: string,
   ): Promise<RecipeFoodsSteps[]> => {
     const { code } = await resolveLocale(localeId);
 
@@ -178,14 +182,15 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
   // Add/modify/delete new or existing recipe foods for the specified Locale ID
   const setRecipeFoods = async (
     localeId: string | SystemLocale,
-    recipeFoods: LocaleRecipeFoodsInput[]
+    recipeFoods: LocaleRecipeFoodsInput[],
   ) => {
     const { code: localeCode } = await resolveLocale(localeId);
 
     const ids = recipeFoods.map(({ id }) => id) as string[];
     await RecipeFoods.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
 
-    if (!recipeFoods.length) return [];
+    if (!recipeFoods.length)
+      return [];
 
     const records = await RecipeFoods.findAll({
       where: { localeId: localeCode },
@@ -199,7 +204,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
       const recipeFoodCode = addDollarSign(code);
 
       if (id) {
-        const match = records.find((record) => record.id === id);
+        const match = records.find(record => record.id === id);
         if (match) {
           await match.update({ code: recipeFoodCode, name, recipeWord, synonyms_id });
           continue;
@@ -224,7 +229,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
   const setRecipeFoodSteps = async (
     localeId: string | SystemLocale,
     recipeFoodId: string,
-    recipeFoodSteps: LocaleRecipeFoodStepsInput[]
+    recipeFoodSteps: LocaleRecipeFoodStepsInput[],
   ) => {
     const { code: localeCode } = await resolveLocale(localeId);
     const ids = recipeFoodSteps.map(({ id }) => id) as string[];
@@ -232,7 +237,8 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
       where: { localeId: localeCode, recipeFoodsId: recipeFoodId, id: { [Op.notIn]: ids } },
     });
 
-    if (!recipeFoodSteps.length) return [];
+    if (!recipeFoodSteps.length)
+      return [];
 
     const records = await RecipeFoodsSteps.findAll({
       where: { localeId: localeCode, recipeFoodsId: recipeFoodId },
@@ -241,11 +247,11 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
     const newRecords: RecipeFoodsSteps[] = [];
 
     for (const recipeFoodStep of recipeFoodSteps) {
-      const { id, code, name, description, categoryCode, order, repeatable, required } =
-        recipeFoodStep;
+      const { id, code, name, description, categoryCode, order, repeatable, required }
+        = recipeFoodStep;
 
       if (id) {
-        const match = records.find((record) => record.id === id);
+        const match = records.find(record => record.id === id);
         if (match) {
           await match.update({
             code,
@@ -263,7 +269,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
 
       const newRecord = await RecipeFoodsSteps.create({
         localeId: localeCode,
-        recipeFoodsId: parseInt(recipeFoodId),
+        recipeFoodsId: Number.parseInt(recipeFoodId),
         code,
         name,
         description,
@@ -299,7 +305,7 @@ const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) =
     setSynonymSets,
     queueTask,
   };
-};
+}
 
 export default localeService;
 

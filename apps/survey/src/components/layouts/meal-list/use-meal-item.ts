@@ -15,7 +15,7 @@ export type UseMealItemProps = {
   selectedMealId?: string;
 };
 
-export const useMealItem = (props: UseMealItemProps, { emit }: SetupContext) => {
+export function useMealItem(props: UseMealItemProps, { emit }: SetupContext) {
   const { i18n, translate } = useI18n();
   const { mealName, mealTime } = useMealUtils(props);
 
@@ -42,7 +42,7 @@ export const useMealItem = (props: UseMealItemProps, { emit }: SetupContext) => 
           icon: '$delete',
         },
       ] satisfies MenuItem[]
-    ).filter((item) => !item.if || item.if(props.meal))
+    ).filter(item => !item.if || item.if(props.meal)),
   );
 
   const action = (type: FoodActionType | MealActionType, id?: string) => {
@@ -50,4 +50,4 @@ export const useMealItem = (props: UseMealItemProps, { emit }: SetupContext) => 
   };
 
   return { action, isSelected, translate, menu, mealName, mealTime };
-};
+}

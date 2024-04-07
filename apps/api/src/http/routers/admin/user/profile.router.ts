@@ -6,7 +6,7 @@ import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { User } from '@intake24/db';
 
-export const profile = () => {
+export function profile() {
   const verifyRateLimiter = ioc.cradle.rateLimiter.createMiddleware('verify', {
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.verify'),
     skipFailedRequests: true,
@@ -22,7 +22,8 @@ export const profile = () => {
       const user = await User.findByPk(userId, {
         attributes: ['id', 'name', 'email', 'phone', 'verifiedAt'],
       });
-      if (!user) throw new NotFoundError();
+      if (!user)
+        throw new NotFoundError();
 
       const { id, name, email, phone, verifiedAt } = user;
       const [permissions, roles] = await Promise.all([
@@ -46,7 +47,8 @@ export const profile = () => {
 
         const user = await User.findByPk(userId, { attributes: ['id', 'email', 'verifiedAt'] });
 
-        if (!user?.email || user.isVerified()) return { status: 200, body: undefined };
+        if (!user?.email || user.isVerified())
+          return { status: 200, body: undefined };
 
         const {
           headers: { 'user-agent': userAgent },
@@ -61,4 +63,4 @@ export const profile = () => {
       },
     },
   });
-};
+}

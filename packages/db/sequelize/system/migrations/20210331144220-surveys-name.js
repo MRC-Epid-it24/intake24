@@ -9,7 +9,7 @@ module.exports = {
           unique: true,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE surveys SET name = id;`, { transaction });
@@ -22,11 +22,11 @@ module.exports = {
           unique: true,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('surveys', 'name', { transaction });
     }),

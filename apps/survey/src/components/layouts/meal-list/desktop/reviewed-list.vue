@@ -3,7 +3,7 @@
     <v-card-title>
       {{ $t('recall.menu.title') }}
     </v-card-title>
-    <v-divider></v-divider>
+    <v-divider />
     <v-card-actions>
       <v-hover v-slot="{ hover }">
         <v-btn
@@ -13,7 +13,9 @@
           :title="$t('recall.menu.meal.add')"
           @click="action('addMeal')"
         >
-          <v-icon left>$add</v-icon>
+          <v-icon left>
+            $add
+          </v-icon>
           {{ $t('recall.menu.meal.add') }}
         </v-btn>
       </v-hover>
@@ -25,7 +27,7 @@
           v-bind="{ meal, selectedMealId, selectedFoodId }"
           :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
           @action="action"
-        ></component>
+        />
         <div class="d-flex flex-row pa-4 ga-4">
           <v-checkbox
             v-if="review === 'checkbox'"
@@ -34,7 +36,7 @@
             hide-details
             :label="$t('recall.actions.reviewed')"
             :value="meal.id"
-          ></v-checkbox>
+          />
           <v-hover v-slot="{ hover }">
             <v-btn
               :color="hover ? 'primary' : 'inherit'"
@@ -55,7 +57,7 @@
         class="review-checkbox__checkbox font-weight-medium mt-0"
         hide-details
         :label="$t('recall.actions.reviewed')"
-      ></v-checkbox>
+      />
     </v-card-text>
     <v-card-actions v-if="!bottomReached" v-intersect="bottomIntersect">
       <v-hover v-slot="{ hover }">
@@ -66,7 +68,9 @@
           :title="$t('recall.menu.meal.add')"
           @click="action('addMeal')"
         >
-          <v-icon left>$add</v-icon>
+          <v-icon left>
+            $add
+          </v-icon>
           {{ $t('recall.menu.meal.add') }}
         </v-btn>
       </v-hover>
@@ -110,7 +114,7 @@ export default defineComponent({
     const { bottomIntersect, bottomReached, reviewed } = useReviewList(props, ctx);
     const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
       props,
-      ctx
+      ctx,
     );
 
     return {

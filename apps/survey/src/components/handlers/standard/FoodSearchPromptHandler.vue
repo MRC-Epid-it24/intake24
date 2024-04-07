@@ -6,7 +6,7 @@
     @food-missing="foodMissing"
     @food-selected="foodSelected"
     @recipe-builder="recipeBuilder"
-  ></food-search-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -77,13 +77,12 @@ export default defineComponent({
     //       by invalidating custom prompt answers or associated food links.
 
     if (
-      currentState.type === 'encoded-food' &&
-      (currentState.portionSizeMethodIndex !== null || currentState.portionSize !== null)
-    ) {
+      currentState.type === 'encoded-food'
+      && (currentState.portionSizeMethodIndex !== null || currentState.portionSize !== null)
+    )
       discardedFoodName.value = currentState.data.localName;
-    } else {
+    else
       discardedFoodName.value = null;
-    }
 
     const getFoodToReplace = () => {
       const { id, customPromptAnswers, flags } = food();
@@ -93,7 +92,7 @@ export default defineComponent({
         id,
         customPromptAnswers,
         flags: flags.filter(
-          (flag) =>
+          flag =>
             ![
               'associated-foods-complete',
               'missing-food-complete',
@@ -101,7 +100,7 @@ export default defineComponent({
               'portion-size-option-complete',
               'recipe-builder-complete',
               'same-as-before-complete',
-            ].includes(flag)
+            ].includes(flag),
         ),
       };
     };
@@ -141,7 +140,7 @@ export default defineComponent({
         id,
         type: 'missing-food',
         info: null,
-        searchTerm: searchTerm,
+        searchTerm,
         customPromptAnswers,
         flags,
         linkedFoods: [],
@@ -156,14 +155,14 @@ export default defineComponent({
       const { searchTerm } = this;
       const { id, customPromptAnswers, flags } = this.getFoodToReplace();
       const components = this.initializeRecipeComponents(
-        recipeFood.steps.map((step) => step.order - 1)
+        recipeFood.steps.map(step => step.order - 1),
       );
 
       const newState: RecipeBuilder = {
         id,
         type: 'recipe-builder',
         description: recipeFood.recipeWord,
-        searchTerm: searchTerm,
+        searchTerm,
         customPromptAnswers,
         flags,
         linkedFoods: [],
@@ -189,13 +188,14 @@ export default defineComponent({
 
       // Assign portion size method if only one is available
       const hasOnePortionSizeMethod = foodData.portionSizeMethods.length === 1;
-      if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
+      if (hasOnePortionSizeMethod)
+        flags.push('portion-size-option-complete');
 
       const newState: EncodedFood = {
         id,
         type: 'encoded-food',
         data: foodData,
-        searchTerm: searchTerm ? searchTerm : '',
+        searchTerm: searchTerm || '',
         portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
         portionSize: null,
         customPromptAnswers,

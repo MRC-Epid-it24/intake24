@@ -1,5 +1,5 @@
 import data from './data.test';
 
 export default () => {
-  describe('GET /api/feedback', data);
+  describe('get /api/feedback', data);
 };

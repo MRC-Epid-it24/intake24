@@ -14,7 +14,8 @@ const dirname = path.resolve(config.dir);
 const logFormat = format.printf(({ level, message, timestamp, service, ...rest }) => {
   let msg = `${timestamp} ${level} ${service ? `${service}` : ''}: ${message}`;
 
-  if (Object.keys(rest).length) msg = `${msg} ${JSON.stringify(rest)}`;
+  if (Object.keys(rest).length)
+    msg = `${msg} ${JSON.stringify(rest)}`;
 
   return msg;
 });
@@ -45,7 +46,7 @@ export const logger = createLogger({
         format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss',
         }),
-        logFormat
+        logFormat,
       ),
     }),
   ],
@@ -58,8 +59,8 @@ export const httpLogger = {
   },
 };
 
-export const dbLogger = (sql: string): void => {
+export function dbLogger(sql: string): void {
   logger.child({ service: 'Database' }).debug(sql);
-};
+}
 
 export default logger;

@@ -80,10 +80,10 @@ export const customFields: ParamSchema = {
   custom: {
     options: async (value: any): Promise<void> => {
       if (
-        !Array.isArray(value) ||
-        value.some((item) => !isPlainObject(item) || !has(item, 'name') || !has(item, 'value'))
+        !Array.isArray(value)
+        || value.some(item => !isPlainObject(item) || !has(item, 'name') || !has(item, 'value'))
       )
-        throw new Error();
+        throw new Error('Invalid custom fields structure');
     },
   },
 };

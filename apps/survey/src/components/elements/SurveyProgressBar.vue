@@ -38,13 +38,16 @@ export default defineComponent({
     const { translate } = useI18n();
 
     const stringTime = (time: MealTime | undefined): string => {
-      if (time === undefined) return '?';
+      if (time === undefined)
+        return '?';
       return fromMealTime(time);
     };
 
     const color = (item: MealState) => {
-      if (!item.time) return 'secondary';
-      if (item.foods.length === 0) return 'primary';
+      if (!item.time)
+        return 'secondary';
+      if (item.foods.length === 0)
+        return 'primary';
       //   const finishedRecall = item.foods.reduce();
       return 'success';
     };

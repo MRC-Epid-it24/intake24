@@ -18,12 +18,16 @@
                 <v-list-item-title>{{ suggestion }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider v-if="idx + 1 < suggestions.length" :key="`div-${suggestion}`"></v-divider>
+            <v-divider v-if="idx + 1 < suggestions.length" :key="`div-${suggestion}`" />
           </template>
         </v-list>
       </v-card>
-      <p class="font-italic">{{ promptI18n.separateSuggestion }}</p>
-      <p class="font-italic">{{ promptI18n.singleSuggestion }}</p>
+      <p class="font-italic">
+        {{ promptI18n.separateSuggestion }}
+      </p>
+      <p class="font-italic">
+        {{ promptI18n.singleSuggestion }}
+      </p>
     </v-card-text>
     <template #actions>
       <v-btn
@@ -34,7 +38,9 @@
         :title="promptI18n.separate"
         @click.stop="action('separate')"
       >
-        <v-icon left>fas fa-arrows-left-right-to-line</v-icon>
+        <v-icon left>
+          fas fa-arrows-left-right-to-line
+        </v-icon>
         {{ promptI18n.separate }}
       </v-btn>
       <v-btn
@@ -45,7 +51,9 @@
         :title="promptI18n.single"
         @click.stop="action('single')"
       >
-        <v-icon left>fas fa-arrow-up-long</v-icon>
+        <v-icon left>
+          fas fa-arrow-up-long
+        </v-icon>
         {{ promptI18n.single }}
       </v-btn>
     </template>
@@ -54,14 +62,18 @@
         <span class="text-overline font-weight-medium">
           {{ promptI18n.separate }}
         </span>
-        <v-icon class="pb-1">fas fa-arrows-left-right-to-line</v-icon>
+        <v-icon class="pb-1">
+          fas fa-arrows-left-right-to-line
+        </v-icon>
       </v-btn>
-      <v-divider vertical></v-divider>
+      <v-divider vertical />
       <v-btn color="primary" text :title="promptI18n.single" @click.stop="action('single')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.single }}
         </span>
-        <v-icon class="pb-1">fas fa-arrow-up-long</v-icon>
+        <v-icon class="pb-1">
+          fas fa-arrow-up-long
+        </v-icon>
       </v-btn>
     </template>
   </card-layout>
@@ -106,7 +118,7 @@ export default defineComponent({
         'separateSuggestionEx',
         'separate',
         'single',
-      ])
+      ]),
     );
 
     return {

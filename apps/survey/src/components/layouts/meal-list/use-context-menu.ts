@@ -11,7 +11,7 @@ export type UseContextMenuProps = {
   meal: MealState;
 };
 
-export const useContextMenu = (props: UseContextMenuProps, { emit }: SetupContext) => {
+export function useContextMenu(props: UseContextMenuProps, { emit }: SetupContext) {
   const { foodName } = useFoodUtils(props);
   const { mealName } = useMealUtils(props);
 
@@ -27,7 +27,8 @@ export const useContextMenu = (props: UseContextMenuProps, { emit }: SetupContex
   };
 
   const openDialog = (type: FoodActionType | MealActionType) => {
-    if (!['deleteFood', 'deleteMeal'].includes(type)) return;
+    if (!['deleteFood', 'deleteMeal'].includes(type))
+      return;
 
     dialog.value = true;
   };
@@ -41,4 +42,4 @@ export const useContextMenu = (props: UseContextMenuProps, { emit }: SetupContex
     entity,
     entityName,
   };
-};
+}

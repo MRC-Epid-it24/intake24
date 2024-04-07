@@ -12,7 +12,7 @@ export default () => {
       'post',
       url,
       ['password', 'passwordConfirm', 'passwordCurrent'],
-      { bearer: 'respondent' }
+      { bearer: 'respondent' },
     );
   });
 

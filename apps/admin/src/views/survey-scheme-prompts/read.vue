@@ -21,7 +21,7 @@
       </tbody>
     </v-simple-table>
     <v-container fluid>
-      <json-editor v-bind="{ readOnly: true, value: entry.prompt }"></json-editor>
+      <json-editor v-bind="{ readOnly: true, value: entry.prompt }" />
     </v-container>
   </layout>
 </template>

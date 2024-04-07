@@ -9,7 +9,8 @@ export const csvFile: ParamSchema = {
   custom: {
     options: async (value, meta): Promise<void> => {
       const { file } = meta.req;
-      if (!file) throw new Error(customTypeErrorMessage('file._', meta));
+      if (!file)
+        throw new Error(customTypeErrorMessage('file._', meta));
 
       if (path.extname(file.originalname).toLowerCase() !== '.csv')
         throw new Error(customTypeErrorMessage('file.ext', meta, { ext: 'CSV (comma-delimited)' }));
@@ -24,12 +25,14 @@ export const imageFile: ParamSchema = {
   custom: {
     options: async (value, meta): Promise<void> => {
       const { file } = meta.req;
-      if (!file) throw new Error(customTypeErrorMessage('file._', meta));
+      if (!file)
+        throw new Error(customTypeErrorMessage('file._', meta));
 
-      if (file.mimetype.toLowerCase() in allowedImageTypes)
+      if (file.mimetype.toLowerCase() in allowedImageTypes) {
         throw new Error(
-          customTypeErrorMessage('file.mime', meta, { mime: allowedImageTypes.join(', ') })
+          customTypeErrorMessage('file.mime', meta, { mime: allowedImageTypes.join(', ') }),
         );
+      }
     },
   },
 };

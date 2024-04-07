@@ -2,13 +2,17 @@
   <v-tab-item key="conditions" value="conditions">
     <v-tabs vertical>
       <v-btn class="my-4" color="primary" @click="add">
-        <v-icon left>$add</v-icon>
+        <v-icon left>
+          $add
+        </v-icon>
         {{ $t(`survey-schemes.conditions.add`) }}
       </v-btn>
       <draggable v-model="currentConditions" @end="update">
         <transition-group name="drag-and-drop" type="transition">
           <v-tab v-for="condition in currentConditions" :key="condition.id">
-            <v-icon left>fas fa-location-arrow</v-icon>
+            <v-icon left>
+              fas fa-location-arrow
+            </v-icon>
             {{ $t(`survey-schemes.conditions.types.${condition.type}`) }}
           </v-tab>
         </transition-group>
@@ -16,7 +20,9 @@
       <v-tab-item v-for="(condition, idx) in currentConditions" :key="condition.id">
         <v-card class="mx-4" outlined>
           <v-card-title>
-            <v-icon left>fas fa-location-arrow</v-icon>
+            <v-icon left>
+              fas fa-location-arrow
+            </v-icon>
             {{ $t(`survey-schemes.conditions.types.${condition.type}`) }}
           </v-card-title>
           <v-card-text class="px-0">
@@ -42,7 +48,7 @@
                   :label="$t('survey-schemes.conditions.types._')"
                   outlined
                   @change="updatePromptCondition(idx, $event)"
-                ></v-select>
+                />
               </v-col>
               <v-col cols="12" md="6">
                 <v-select
@@ -55,11 +61,15 @@
                   @change="updateValueType(idx)"
                 >
                   <template #item="{ item }">
-                    <v-icon left>{{ opToIconMap[item.op] }}</v-icon>
+                    <v-icon left>
+                      {{ opToIconMap[item.op] }}
+                    </v-icon>
                     {{ item.text }}
                   </template>
                   <template #selection="{ item }">
-                    <v-icon left>{{ opToIconMap[item.op] }}</v-icon>
+                    <v-icon left>
+                      {{ opToIconMap[item.op] }}
+                    </v-icon>
                     {{ item.text }}
                   </template>
                 </v-select>
@@ -72,15 +82,17 @@
                   :label="$t('survey-schemes.conditions.value')"
                   multiple
                   outlined
-                ></component>
+                />
               </v-col>
             </v-row>
-            <component :is="condition.type" v-bind.sync="condition.props"></component>
+            <component :is="condition.type" v-bind.sync="condition.props" />
           </v-container>
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
-              <v-icon left>$delete</v-icon>{{ $t('survey-schemes.conditions.remove') }}
+              <v-icon left>
+                $delete
+              </v-icon>{{ $t('survey-schemes.conditions.remove') }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -179,7 +191,7 @@ const promptConditions: Condition[] = [
 export default defineComponent({
   name: 'PromptConditions',
 
-  components: { VTextField, VCombobox, draggable, ...conditionProps },
+  components: { VTextField, VCombobox, Draggable: draggable, ...conditionProps },
 
   props: {
     conditions: {
@@ -207,7 +219,7 @@ export default defineComponent({
       }));
     },
     operationSelectList(): { op: string; text: string }[] {
-      return Object.keys(conditionOps).map((op) => ({
+      return Object.keys(conditionOps).map(op => ({
         op,
         text: this.$t(`survey-schemes.conditions.ops.${op}`).toString(),
       }));
@@ -219,7 +231,8 @@ export default defineComponent({
 
   watch: {
     conditions(val) {
-      if (deepEqual(val, this.outputConditions)) return;
+      if (deepEqual(val, this.outputConditions))
+        return;
 
       this.currentConditions = withIdList(val);
     },
@@ -233,13 +246,14 @@ export default defineComponent({
 
   methods: {
     updatePromptCondition(idx: number, type: ConditionType) {
-      const condition = this.promptConditions.find((item) => item.type === type);
-      if (!condition) return;
+      const condition = this.promptConditions.find(item => item.type === type);
+      if (!condition)
+        return;
 
       this.currentConditions.splice(
         idx,
         1,
-        copy({ ...condition, id: this.currentConditions[idx].id })
+        copy({ ...condition, id: this.currentConditions[idx].id }),
       );
     },
 
@@ -263,10 +277,8 @@ export default defineComponent({
         return;
       }
 
-      if (!this.comboOps.includes(condition.op) && typeof condition.value !== 'string') {
+      if (!this.comboOps.includes(condition.op) && typeof condition.value !== 'string')
         this.currentConditions[idx].value = condition.value.toString();
-        return;
-      }
     },
   },
 });

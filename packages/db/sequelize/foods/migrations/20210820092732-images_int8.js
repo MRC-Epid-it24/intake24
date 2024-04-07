@@ -7,7 +7,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE source_images_id_seq RENAME TO v3_source_images_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -35,7 +35,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('source_images', ['path'], {
@@ -46,7 +46,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO source_images (id, path, thumbnail_path, uploader, uploaded_at) SELECT id, path, thumbnail_path, uploader, uploaded_at FROM v3_source_images',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('source_images', 'id', { queryInterface, transaction });
@@ -58,13 +58,13 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'source_image_keywords',
         'source_image_keywords_source_image_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('source_image_keywords', {
@@ -84,7 +84,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE processed_images_id_seq RENAME TO v3_processed_images_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -112,12 +112,12 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO processed_images (id, source_id, path, purpose, created_at) SELECT id, source_id, path, purpose, created_at FROM v3_processed_images',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('processed_images', 'id', { queryInterface, transaction });
@@ -129,7 +129,7 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('image_maps', 'image_maps_base_image_id_fkey', {
@@ -187,7 +187,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('image_map_objects', {
@@ -211,7 +211,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO image_map_objects (id, image_map_id, description, navigation_index, outline_coordinates, overlay_image_id) SELECT id, image_map_id, description, navigation_index, outline_coordinates, overlay_image_id FROM v3_image_map_objects',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -221,7 +221,7 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('guide_images', 'guide_selection_image_id_fk', {
@@ -289,7 +289,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('guide_image_objects', {
@@ -313,7 +313,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO guide_image_objects (id, guide_image_id, weight, image_map_object_id) SELECT id, guide_image_id, weight, image_map_object_id FROM v3_guide_image_objects',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('guide_image_objects', 'id', { queryInterface, transaction });
@@ -325,7 +325,7 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('as_served_sets', 'as_served_sets_selection_image_fk', {
@@ -357,7 +357,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE as_served_images_id_seq RENAME TO v3_as_served_images_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -385,7 +385,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('as_served_images', {
@@ -447,7 +447,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO as_served_images (id, as_served_set_id, weight, image_id, thumbnail_image_id) SELECT id, as_served_set_id, weight, image_id, thumbnail_image_id FROM v3_as_served_images',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('as_served_images', 'id', { queryInterface, transaction });

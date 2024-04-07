@@ -9,9 +9,9 @@ describe('arrayToObject', () => {
     ];
 
     const output = {
-      '1': { id: '1', a: 'aa', b: 'bb' },
-      '2': { id: '2', a: 'aaa', b: 'bbb' },
-      '3': { id: '3', a: 'aaaa', b: 'bbbb' },
+      1: { id: '1', a: 'aa', b: 'bb' },
+      2: { id: '2', a: 'aaa', b: 'bbb' },
+      3: { id: '3', a: 'aaaa', b: 'bbbb' },
     };
 
     expect(arrayToObject(input, 'id')).toEqual(output);

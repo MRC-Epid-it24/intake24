@@ -20,12 +20,12 @@ export type CreateUserOptions = {
   userAgent?: string;
 };
 
-const adminUserService = ({
+function adminUserService({
   aclConfig,
   cache,
   db,
   scheduler,
-}: Pick<IoC, 'aclConfig' | 'cache' | 'db' | 'scheduler'>) => {
+}: Pick<IoC, 'aclConfig' | 'cache' | 'db' | 'scheduler'>) {
   /**
    * Flush user ACL cache by user ID
    *
@@ -79,7 +79,7 @@ const adminUserService = ({
    */
   const createPassword = async (
     { userId, password }: UserPasswordInput,
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<UserPassword> => {
     const { salt, hash } = await defaultAlgorithm.hash(password);
 
@@ -90,7 +90,7 @@ const adminUserService = ({
         passwordHash: hash,
         passwordHasher: defaultAlgorithm.id,
       },
-      { transaction }
+      { transaction },
     );
   };
 
@@ -103,7 +103,7 @@ const adminUserService = ({
    */
   const createPasswords = async (
     inputs: UserPasswordInput[],
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<UserPassword[]> => {
     const records: UserPasswordAttributes[] = [];
 
@@ -138,21 +138,22 @@ const adminUserService = ({
     userId: string,
     userCustomFields: UserCustomField[],
     customFields: CustomField[],
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<void> => {
     // 1) remove fields that are not present
-    const customFieldNames = customFields.map((field) => field.name);
+    const customFieldNames = customFields.map(field => field.name);
     await UserCustomField.destroy({
       where: { userId, name: { [Op.notIn]: customFieldNames } },
       transaction,
     });
 
-    if (!customFields.length) return;
+    if (!customFields.length)
+      return;
 
     for (const customField of customFields) {
       const { name, value } = customField;
 
-      const matchIdx = userCustomFields.findIndex((field) => field.name === name);
+      const matchIdx = userCustomFields.findIndex(field => field.name === name);
 
       // 2) add new field
       if (matchIdx === -1) {
@@ -176,10 +177,11 @@ const adminUserService = ({
   const updatePassword = async (
     userId: string,
     password: string,
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<UserPassword> => {
     const userPassword = await UserPassword.findByPk(userId);
-    if (!userPassword) throw new NotFoundError();
+    if (!userPassword)
+      throw new NotFoundError();
 
     const { salt, hash } = await defaultAlgorithm.hash(password);
 
@@ -189,7 +191,7 @@ const adminUserService = ({
         passwordHash: hash,
         passwordHasher: defaultAlgorithm.id,
       },
-      { transaction }
+      { transaction },
     );
   };
 
@@ -202,7 +204,7 @@ const adminUserService = ({
    * - user roles
    *
    * @param {CreateUserInput} input
-   * @param {CreateUserOptions} [options={}]
+   * @param {CreateUserOptions} [options]
    * @returns {Promise<User>}
    */
   const create = async (input: CreateUserInput, options: CreateUserOptions = {}): Promise<User> => {
@@ -212,7 +214,7 @@ const adminUserService = ({
     const user = await db.system.transaction(async (transaction) => {
       const user = await User.create(
         { ...rest, simpleName: toSimpleName(rest.name) },
-        { include: [UserCustomField], transaction }
+        { include: [UserCustomField], transaction },
       );
 
       await Promise.all([
@@ -249,7 +251,8 @@ const adminUserService = ({
   const update = async (userId: string, input: UpdateUserInput): Promise<User> => {
     const user = await User.scope('customFields').findByPk(userId);
 
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     const { customFields, permissions = [], roles = [], ...rest } = input;
 
@@ -278,7 +281,8 @@ const adminUserService = ({
    */
   const destroy = async (userId: string): Promise<void> => {
     const user = await User.scope('submissions').findByPk(userId, { attributes: ['id'] });
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     if (user.submissions?.length)
       throw new ForbiddenError('User cannot be deleted. It already contains submission data.');
@@ -293,15 +297,17 @@ const adminUserService = ({
    * @param {(string | string[])} permissionName
    */
   const addPermissionByName = async (userId: string | User, permissionName: string | string[]) => {
-    const user =
-      typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
-    if (!user) throw new NotFoundError();
+    const user
+      = typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
+    if (!user)
+      throw new NotFoundError();
 
     const permission = await Permission.findOne({
       attributes: ['id'],
       where: { name: permissionName },
     });
-    if (!permission) throw new NotFoundError();
+    if (!permission)
+      throw new NotFoundError();
 
     await Promise.all([user.$add('permissions', permission), flushACLCacheByUserId(user.id)]);
   };
@@ -314,17 +320,19 @@ const adminUserService = ({
    */
   const removePermissionByName = async (
     userId: string | User,
-    permissionName: string | string[]
+    permissionName: string | string[],
   ) => {
-    const user =
-      typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
-    if (!user) throw new NotFoundError();
+    const user
+      = typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
+    if (!user)
+      throw new NotFoundError();
 
     const permission = await Permission.findOne({
       attributes: ['id'],
       where: { name: permissionName },
     });
-    if (!permission) throw new NotFoundError();
+    if (!permission)
+      throw new NotFoundError();
 
     await Promise.all([user.$remove('permissions', permission), flushACLCacheByUserId(user.id)]);
   };
@@ -405,7 +413,7 @@ const adminUserService = ({
     getSurveySupportUsers,
     getGlobalSupportUsers,
   };
-};
+}
 
 export default adminUserService;
 

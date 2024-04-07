@@ -13,13 +13,15 @@ export default (router: Router): void => {
     // Login page
     if (unrestricted) {
       const name = user.isVerified ? 'dashboard' : 'verify';
-      if (auth.loggedIn && name !== to.name) next({ name });
+      if (auth.loggedIn && name !== to.name)
+        next({ name });
       else next();
       return;
     }
 
     // Get logged-in user information if not yet loaded
-    if (!auth.loggedIn) await auth.refresh(false);
+    if (!auth.loggedIn)
+      await auth.refresh(false);
 
     // Any other page (requires to be logged in)
     if (!auth.loggedIn) {
@@ -46,7 +48,7 @@ export default (router: Router): void => {
 
     // Update module/resource name
     const name = module.parent ?? module.current;
-    const resource = resources.find((item) => item.name === name);
+    const resource = resources.find(item => item.name === name);
 
     const resourceStore = useResource();
 

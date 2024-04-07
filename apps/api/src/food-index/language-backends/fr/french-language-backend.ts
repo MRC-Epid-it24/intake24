@@ -4,7 +4,7 @@ import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 
 import FrenchPhoneticEncoder from './phonetic';
 
-const sanitiseRegexp = new RegExp(/[.`,/\\\-+)(]|e\.g\.|e\.g|n\.s\.'s/g);
+const sanitiseRegexp = /[.`,/\\\-+)(]|e\.g\.|e\.g|n\.s\.'s/g;
 
 export default {
   name: 'French',
@@ -13,7 +13,7 @@ export default {
   phoneticEncoder: new FrenchPhoneticEncoder(),
 
   splitCompound(word: string): Array<string> {
-    return new Array<string>(word);
+    return [word];
   },
 
   stem(word: string): string {

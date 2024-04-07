@@ -58,7 +58,9 @@
       </tbody>
       <tbody v-else>
         <tr>
-          <td colspan="2">{{ $t('users.customFields.none') }}</td>
+          <td colspan="2">
+            {{ $t('users.customFields.none') }}
+          </td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -82,7 +84,9 @@
       </tbody>
       <tbody v-else>
         <tr>
-          <td colspan="2">{{ $t('users.aliases.none') }}</td>
+          <td colspan="2">
+            {{ $t('users.aliases.none') }}
+          </td>
         </tr>
       </tbody>
     </v-simple-table>

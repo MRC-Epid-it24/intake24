@@ -34,7 +34,8 @@ const defaults: Schema = {
         const { localeId, foodId } = (meta.req as Request).params;
 
         const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
-        if (!locale) throw new Error(customTypeErrorMessage('unique._', meta));
+        if (!locale)
+          throw new Error(customTypeErrorMessage('unique._', meta));
 
         const options: FindOptions<FoodLocal> = {
           where: foodId
@@ -57,7 +58,8 @@ const defaults: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const foodGroup = await FoodGroup.findByPk(value, { attributes: ['id'] });
-        if (!foodGroup) throw new Error(customTypeErrorMessage('exists._', meta));
+        if (!foodGroup)
+          throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },

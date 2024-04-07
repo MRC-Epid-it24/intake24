@@ -7,18 +7,18 @@ import type {
 import { NotFoundError } from '@intake24/api/http/errors';
 import { AsServedImage, AsServedSet } from '@intake24/db';
 
-const asServedService = ({
+function asServedService({
   portionSizeService,
   processedImageService,
   sourceImageService,
-}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService'>) => {
+}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService'>) {
   const createImage = async (input: CreateAsServedImageInput): Promise<AsServedImage> => {
     const { id, weight } = input;
 
     const sourceImage = await sourceImageService.uploadSourceImage(input, 'as_served');
     const [image, thumbnailImage] = await processedImageService.createAsServedImages(
       id,
-      sourceImage
+      sourceImage,
     );
 
     return AsServedImage.create({
@@ -53,7 +53,7 @@ const asServedService = ({
     const selectionImage = await processedImageService.createSelectionImage(
       id,
       sourceImage,
-      'as_served'
+      'as_served',
     );
 
     return AsServedSet.create({ id, description, selectionImageId: selectionImage.id });
@@ -61,18 +61,20 @@ const asServedService = ({
 
   const updateSet = async (
     asServedSetId: string,
-    input: UpdateAsServedSetInput
+    input: UpdateAsServedSetInput,
   ): Promise<AsServedSet> => {
     const { description, images } = input;
 
     const asServedSet = await portionSizeService.getAsServedSet(asServedSetId);
-    if (!asServedSet || !asServedSet.asServedImages) throw new NotFoundError();
+    if (!asServedSet || !asServedSet.asServedImages)
+      throw new NotFoundError();
 
     await asServedSet.update({ description });
 
     for (const image of images) {
-      const match = asServedSet.asServedImages.find((item) => item.id === image.id);
-      if (!match) continue;
+      const match = asServedSet.asServedImages.find(item => item.id === image.id);
+      if (!match)
+        continue;
 
       await match.update({ weight: image.weight });
     }
@@ -84,7 +86,8 @@ const asServedService = ({
     const asServedSet = await AsServedSet.findByPk(asServedSetId, {
       attributes: ['id', 'selectionImageId'],
     });
-    if (!asServedSet) throw new NotFoundError();
+    if (!asServedSet)
+      throw new NotFoundError();
 
     await destroyImage(asServedSetId);
     await asServedSet.destroy();
@@ -98,7 +101,7 @@ const asServedService = ({
     updateSet,
     destroySet,
   };
-};
+}
 
 export default asServedService;
 

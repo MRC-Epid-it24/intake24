@@ -2,7 +2,7 @@ import type { NutrientTypeRequest } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { FoodsNutrientType, NutrientTypeInKcal, SystemNutrientType } from '@intake24/db';
 
-const nutrientTypeService = () => {
+function nutrientTypeService() {
   /**
    * Get nutrient type record
    *
@@ -15,7 +15,8 @@ const nutrientTypeService = () => {
       }),
       SystemNutrientType.findByPk(nutrientTypeId),
     ]);
-    if (!foodsNutrientType || !systemNutrientType) throw new NotFoundError();
+    if (!foodsNutrientType || !systemNutrientType)
+      throw new NotFoundError();
 
     return foodsNutrientType;
   };
@@ -33,9 +34,8 @@ const nutrientTypeService = () => {
       SystemNutrientType.create(rest),
     ]);
 
-    if (kcalPerUnit) {
+    if (kcalPerUnit)
       await NutrientTypeInKcal.create({ nutrientTypeId: foodsNutrientType.id, kcalPerUnit });
-    }
 
     return foodsNutrientType.reload({
       include: [{ association: 'unit' }, { association: 'inKcal' }],
@@ -51,7 +51,7 @@ const nutrientTypeService = () => {
    */
   const updateNutrientType = async (
     nutrientTypeId: string,
-    input: Omit<NutrientTypeRequest, 'id'>
+    input: Omit<NutrientTypeRequest, 'id'>,
   ) => {
     const { kcalPerUnit, ...rest } = input;
 
@@ -61,15 +61,19 @@ const nutrientTypeService = () => {
       }),
       SystemNutrientType.findByPk(nutrientTypeId, { include: [{ association: 'unit' }] }),
     ]);
-    if (!foodsNutrientType || !systemNutrientType) throw new NotFoundError();
+    if (!foodsNutrientType || !systemNutrientType)
+      throw new NotFoundError();
 
     await Promise.all([foodsNutrientType.update(rest), systemNutrientType.update(rest)]);
 
     if (kcalPerUnit) {
-      if (foodsNutrientType.inKcal) await foodsNutrientType.inKcal.update({ kcalPerUnit });
+      if (foodsNutrientType.inKcal)
+        await foodsNutrientType.inKcal.update({ kcalPerUnit });
       else await NutrientTypeInKcal.create({ nutrientTypeId: foodsNutrientType.id, kcalPerUnit });
-    } else if (kcalPerUnit === null)
+    }
+    else if (kcalPerUnit === null) {
       await NutrientTypeInKcal.destroy({ where: { nutrientTypeId: foodsNutrientType.id } });
+    }
 
     return foodsNutrientType.reload({
       include: [{ association: 'unit' }, { association: 'inKcal' }],
@@ -86,7 +90,8 @@ const nutrientTypeService = () => {
       FoodsNutrientType.findByPk(nutrientTypeId, { attributes: ['id'] }),
       SystemNutrientType.findByPk(nutrientTypeId, { attributes: ['id'] }),
     ]);
-    if (!foodsNutrientType || !systemNutrientType) throw new NotFoundError();
+    if (!foodsNutrientType || !systemNutrientType)
+      throw new NotFoundError();
 
     throw new ForbiddenError('Nutrient type cannot be deleted.');
     // TODO: Revive all foreign keys, some are not on cascade, also nutrient types are in both databases
@@ -99,7 +104,7 @@ const nutrientTypeService = () => {
     updateNutrientType,
     deleteNutrientType,
   };
-};
+}
 
 export default nutrientTypeService;
 

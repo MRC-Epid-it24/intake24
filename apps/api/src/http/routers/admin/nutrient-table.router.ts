@@ -15,17 +15,15 @@ import { contract } from '@intake24/common/contracts';
 import { multerFile } from '@intake24/common/types/http';
 import { FoodsNutrientType, NutrientTable } from '@intake24/db';
 
-const uniqueMiddleware = async <T extends AppRoute | AppRouter>(
-  value: string,
-  req: TsRestRequest<T>
-) => {
-  if (!(await unique({ model: NutrientTable, condition: { field: 'id', value } })))
+async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: string, req: TsRestRequest<T>) {
+  if (!(await unique({ model: NutrientTable, condition: { field: 'id', value } }))) {
     throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
       path: 'id',
     });
-};
+  }
+}
 
-export const nutrientTable = () => {
+export function nutrientTable() {
   const upload = multer({ dest: ioc.cradle.fsConfig.local.uploads });
 
   return initServer().router(contract.admin.nutrientTable, {
@@ -80,7 +78,7 @@ export const nutrientTable = () => {
       handler: async ({ body, params: { nutrientTableId }, req }) => {
         const nutrientTable = await req.scope.cradle.nutrientTableService.updateTable(
           nutrientTableId,
-          body
+          body,
         );
 
         return { status: 200, body: nutrientTable };
@@ -102,27 +100,31 @@ export const nutrientTable = () => {
       handler: async ({ file, params: { nutrientTableId }, body: { params, type }, req }) => {
         const { userId } = req.scope.cradle.user;
 
-        if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
+        if (!file)
+          throw new ValidationError('Missing file.', { path: 'params.file' });
 
         const res = multerFile.safeParse(file);
-        if (!res.success)
+        if (!res.success) {
           throw new ValidationError(
             customTypeValidationMessage('file._', { req, path: 'params.file' }),
-            { path: 'params.file' }
+            { path: 'params.file' },
           );
+        }
 
-        if (path.extname(res.data.originalname).toLowerCase() !== '.csv')
+        if (path.extname(res.data.originalname).toLowerCase() !== '.csv') {
           throw new ValidationError(
             customTypeValidationMessage(
               'file.ext',
               { req, path: 'params.file' },
-              { ext: 'CSV (comma-delimited)' }
+              { ext: 'CSV (comma-delimited)' },
             ),
-            { path: 'params.file' }
+            { path: 'params.file' },
           );
+        }
 
         const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
-        if (!nutrientTable) throw new NotFoundError();
+        if (!nutrientTable)
+          throw new NotFoundError();
 
         const job = await req.scope.cradle.nutrientTableService.queueTask({
           userId,
@@ -142,4 +144,4 @@ export const nutrientTable = () => {
       },
     },
   });
-};
+}

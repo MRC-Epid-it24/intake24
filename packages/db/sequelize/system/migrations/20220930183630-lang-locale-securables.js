@@ -23,7 +23,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE old_languages RENAME CONSTRAINT languages_pkey TO old_languages_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -72,12 +72,12 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO languages (code, english_name, local_name, country_flag_code, text_direction, created_at, updated_at) SELECT id, english_name, local_name, country_flag_code, text_direction, created_at, updated_at FROM old_languages',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('languages', {
@@ -102,32 +102,32 @@ module.exports = {
       await queryInterface.removeConstraint(
         'language_translations',
         'language_translations_language_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'language_translations',
         'language_translations_unique',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'language_translations',
         'old_language_id',
         { allowNull: true, type: Sequelize.STRING(8) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE language_translations SET old_language_id = language_id;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'language_translations',
         'language_id',
         { type: Sequelize.STRING(8), allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE language_translations SET language_id = NULL;`, {
@@ -136,12 +136,12 @@ module.exports = {
 
       queryInterface.sequelize.query(
         `ALTER TABLE language_translations ALTER COLUMN language_id TYPE bigint USING language_id::bigint;`,
-        { transaction }
+        { transaction },
       );
 
       queryInterface.sequelize.query(
         'UPDATE language_translations SET language_id = languages.id FROM languages WHERE language_translations.old_language_id = languages.code;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('language_translations', {
@@ -172,7 +172,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE old_locales RENAME CONSTRAINT locales_pk TO old_locales_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -238,12 +238,12 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO locales (code, english_name, local_name, respondent_language_id, admin_language_id, country_flag_code, prototype_locale_id, text_direction, food_index_language_backend_id, created_at, updated_at) SELECT id, english_name, local_name, respondent_language_id, admin_language_id, country_flag_code, prototype_locale_id, text_direction, food_index_language_backend_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP FROM old_locales',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('locales', {
@@ -306,7 +306,7 @@ module.exports = {
         'surveys',
         'old_locale_id',
         { allowNull: true, type: Sequelize.STRING(16) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE surveys SET old_locale_id = locale_id;`, {
@@ -317,7 +317,7 @@ module.exports = {
         'surveys',
         'locale_id',
         { type: Sequelize.STRING(16), allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE surveys SET locale_id = NULL;`, {
@@ -326,12 +326,12 @@ module.exports = {
 
       queryInterface.sequelize.query(
         `ALTER TABLE surveys ALTER COLUMN locale_id TYPE bigint USING locale_id::bigint;`,
-        { transaction }
+        { transaction },
       );
 
       queryInterface.sequelize.query(
         'UPDATE surveys SET locale_id = locales.id FROM locales WHERE surveys.old_locale_id = locales.code;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('surveys', {
@@ -378,7 +378,7 @@ module.exports = {
           JOIN permission_user pu on p.id = pu.permission_id
           CROSS JOIN (select id from permissions p2 WHERE p2."name" = 'locales') as pp
           WHERE p."name" like 'fdbm/%';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -391,7 +391,7 @@ module.exports = {
             AS a (old_action, new_action, fields)
             on split_part(p."name", '/', 1) = a.old_action
           WHERE p."name" like 'fdbm/%';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -400,7 +400,7 @@ module.exports = {
           type: queryInterface.sequelize.QueryTypes.DELETE,
           replacements: { permissions: permissionToDelete },
           transaction,
-        }
+        },
       );
     }),
 

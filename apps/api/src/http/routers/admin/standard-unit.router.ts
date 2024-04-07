@@ -17,27 +17,26 @@ import {
   SystemLocale,
 } from '@intake24/db';
 
-const getLocaleMap = async (code: string[]) => {
-  if (!code.length) return {};
+async function getLocaleMap(code: string[]) {
+  if (!code.length)
+    return {};
 
   const locales = await SystemLocale.findAll({ attributes: ['id', 'code'], where: { code } });
   return locales.reduce<Record<string, string>>((acc, locale) => {
     acc[locale.code] = locale.id;
     return acc;
   }, {});
-};
+}
 
-const uniqueMiddleware = async <T extends AppRoute | AppRouter>(
-  value: any,
-  { req }: { req: TsRestRequest<T> }
-) => {
-  if (!(await unique({ model: StandardUnit, condition: { field: 'id', value } })))
+async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { req }: { req: TsRestRequest<T> }) {
+  if (!(await unique({ model: StandardUnit, condition: { field: 'id', value } }))) {
     throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
       path: 'id',
     });
-};
+  }
+}
 
-export const standardUnit = () => {
+export function standardUnit() {
   return initServer().router(contract.admin.standardUnit, {
     browse: {
       middleware: [permission('standard-units', 'standard-units|browse')],
@@ -65,7 +64,8 @@ export const standardUnit = () => {
       middleware: [permission('standard-units', 'standard-units|read')],
       handler: async ({ params: { standardUnitId } }) => {
         const standardUnit = await StandardUnit.findByPk(standardUnitId);
-        if (!standardUnit) throw new NotFoundError();
+        if (!standardUnit)
+          throw new NotFoundError();
 
         return { status: 200, body: standardUnit };
       },
@@ -74,7 +74,8 @@ export const standardUnit = () => {
       middleware: [permission('standard-units', 'standard-units|edit')],
       handler: async ({ params: { standardUnitId } }) => {
         const standardUnit = await StandardUnit.findByPk(standardUnitId);
-        if (!standardUnit) throw new NotFoundError();
+        if (!standardUnit)
+          throw new NotFoundError();
 
         return { status: 200, body: standardUnit };
       },
@@ -83,7 +84,8 @@ export const standardUnit = () => {
       middleware: [permission('standard-units', 'standard-units|edit')],
       handler: async ({ body, params: { standardUnitId } }) => {
         const standardUnit = await StandardUnit.findByPk(standardUnitId);
-        if (!standardUnit) throw new NotFoundError();
+        if (!standardUnit)
+          throw new NotFoundError();
 
         await standardUnit.update(body);
 
@@ -94,7 +96,8 @@ export const standardUnit = () => {
       middleware: [permission('standard-units', 'standard-units|delete')],
       handler: async ({ params: { standardUnitId } }) => {
         const standardUnit = await StandardUnit.findByPk(standardUnitId);
-        if (!standardUnit) throw new NotFoundError();
+        if (!standardUnit)
+          throw new NotFoundError();
 
         const [categoryPsm, foodPsm] = await Promise.all([
           CategoryPortionSizeMethod.findOne({
@@ -102,7 +105,7 @@ export const standardUnit = () => {
             where: where(
               literal(`parameters::jsonb`),
               '@>',
-              `{"units":[{"name": "${standardUnitId}"}]}`
+              `{"units":[{"name": "${standardUnitId}"}]}`,
             ),
           }),
           FoodPortionSizeMethod.findOne({
@@ -110,15 +113,16 @@ export const standardUnit = () => {
             where: where(
               literal(`parameters::jsonb`),
               '@>',
-              `{"units":[{"name": "${standardUnitId}"}]}`
+              `{"units":[{"name": "${standardUnitId}"}]}`,
             ),
           }),
         ]);
 
-        if (categoryPsm || foodPsm)
+        if (categoryPsm || foodPsm) {
           throw new ForbiddenError(
-            'Standard unit cannot be deleted. There are categories/foods using this standard unit.'
+            'Standard unit cannot be deleted. There are categories/foods using this standard unit.',
           );
+        }
 
         await standardUnit.destroy();
 
@@ -131,7 +135,8 @@ export const standardUnit = () => {
         const { standardUnitId } = params;
 
         const standardUnit = await StandardUnit.findByPk(standardUnitId, { attributes: ['id'] });
-        if (!standardUnit) throw new NotFoundError();
+        if (!standardUnit)
+          throw new NotFoundError();
 
         const categories = await CategoryLocal.paginate({
           query,
@@ -144,7 +149,7 @@ export const standardUnit = () => {
               where: where(
                 literal(`parameters::jsonb`),
                 '@>',
-                `{"units":[{"name": "${standardUnitId}"}]}`
+                `{"units":[{"name": "${standardUnitId}"}]}`,
               ),
               required: true,
             },
@@ -156,7 +161,7 @@ export const standardUnit = () => {
           ...new Set(categories.data.map(({ localeId }) => localeId)),
         ]);
 
-        categories.data = categories.data.map((item) => ({
+        categories.data = categories.data.map(item => ({
           ...item.get(),
           localeCode: item.localeId,
           localeId: localeMap[item.localeId],
@@ -171,7 +176,8 @@ export const standardUnit = () => {
         const { standardUnitId } = params;
 
         const standardUnit = await StandardUnit.findByPk(standardUnitId, { attributes: ['id'] });
-        if (!standardUnit) throw new NotFoundError();
+        if (!standardUnit)
+          throw new NotFoundError();
 
         const foods = await FoodLocal.paginate({
           query,
@@ -184,7 +190,7 @@ export const standardUnit = () => {
               where: where(
                 literal(`parameters::jsonb`),
                 '@>',
-                `{"units":[{"name": "${standardUnitId}"}]}`
+                `{"units":[{"name": "${standardUnitId}"}]}`,
               ),
               required: true,
             },
@@ -196,7 +202,7 @@ export const standardUnit = () => {
           ...new Set(foods.data.map(({ localeId }) => localeId)),
         ]);
 
-        foods.data = foods.data.map((item) => ({
+        foods.data = foods.data.map(item => ({
           ...item.get(),
           localeCode: item.localeId,
           localeId: localeMap[item.localeId],
@@ -206,4 +212,4 @@ export const standardUnit = () => {
       },
     },
   });
-};
+}

@@ -24,7 +24,8 @@ export default () => {
     });
 
     const { id, email: userEmail } = user;
-    if (!userEmail) throw Error('User email not found.');
+    if (!userEmail)
+      throw new Error('User email not found.');
 
     userId = id;
     email = userEmail;
@@ -38,7 +39,8 @@ export default () => {
 
     await sleep(2000); // TODO: this should wait until the job is done
     const reset = await UserPasswordReset.findOne({ where: { userId } });
-    if (!reset) throw Error('Password reset not created.');
+    if (!reset)
+      throw new Error('Password reset not created.');
 
     token = reset.token;
   });
@@ -48,7 +50,7 @@ export default () => {
       'post',
       url,
       ['email', 'token', 'password', 'passwordConfirm'],
-      { bearer: undefined }
+      { bearer: undefined },
     );
   });
 

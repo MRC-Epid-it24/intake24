@@ -1,34 +1,56 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "jsx": "preserve",
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "webworker"
+    ],
+    "useDefineForClassFields": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
     "module": "esnext",
     "moduleResolution": "node",
+    "paths": {
+      "@intake24/common/*": [
+        "../common/src/*"
+      ],
+      "@intake24/ui/*": [
+        "src/*"
+      ],
+      "@intake24/*": [
+        "../*/src"
+      ]
+    },
     "resolveJsonModule": true,
-    "useDefineForClassFields": true,
-    "noImplicitThis": true,
+    "types": [
+      "jest",
+      "jest-extended",
+      "vite/client",
+      "vite-plugin-pwa/client",
+      "vuetify"
+    ],
     "strict": true,
-    "jsx": "preserve",
-    "isolatedModules": true,
-    // "verbatimModuleSyntax": true,
+    "noImplicitThis": true,
     "importHelpers": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "types": ["jest", "jest-extended", "vite/client", "vite-plugin-pwa/client", "vuetify"],
-    "paths": {
-      "@intake24/common/*": ["../common/src/*"],
-      "@intake24/ui/*": ["src/*"],
-      "@intake24/*": ["../*/src"]
-    },
-    "lib": ["esnext", "dom", "dom.iterable", "webworker"]
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
   },
   "vueCompilerOptions": {
     "target": 2.7
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ]
 }

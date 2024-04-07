@@ -5,25 +5,25 @@
       :api="resource.api"
       :selected="tracked"
       @refresh="refresh"
-    ></tool-bar>
+    />
     <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
       <v-card-text>
         <data-table-filter
           :count="meta.total"
           @filter-reset="resetFilter"
           @filter-set="setFilter"
-        ></data-table-filter>
+        />
       </v-card-text>
     </v-card>
     <div v-show="meta.total" class="py-4 text-center">
-      <v-pagination v-model="page" circle :length="meta.lastPage"></v-pagination>
+      <v-pagination v-model="page" circle :length="meta.lastPage" />
     </div>
     <v-container class="px-0">
       <v-row>
         <v-col v-for="item in items" :key="item.id" cols="12" lg="3" md="4" sm="6">
           <v-card :flat="isMobile" height="100%" :outlined="!isMobile" :tile="isMobile">
             <router-link :to="{ name: `${module}-read`, params: { id: item.id } }">
-              <v-img :src="item[imageUrl]"></v-img>
+              <v-img :src="item[imageUrl]" />
             </router-link>
             <v-card-title>
               <slot name="title">
@@ -36,7 +36,7 @@
               </slot>
             </v-card-subtitle>
 
-            <v-divider class="mx-4"></v-divider>
+            <v-divider class="mx-4" />
             <v-card-actions>
               <v-btn
                 v-if="can({ action: 'edit' })"
@@ -45,9 +45,11 @@
                 text
                 :to="{ name: `${module}-edit`, params: { id: item.id } }"
               >
-                <v-icon left>$edit</v-icon>{{ $t(`common.action.edit`) }}
+                <v-icon left>
+                  $edit
+                </v-icon>{{ $t(`common.action.edit`) }}
               </v-btn>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <confirm-dialog
                 v-if="can({ action: 'delete' })"
                 color="error"
@@ -63,7 +65,7 @@
         </v-col>
       </v-row>
       <div v-show="meta.total" class="py-4 text-center">
-        <v-pagination v-model="page" circle :length="meta.lastPage"></v-pagination>
+        <v-pagination v-model="page" circle :length="meta.lastPage" />
       </div>
     </v-container>
   </div>
@@ -125,13 +127,14 @@ export default defineComponent({
   computed: {
     ...mapState(useResource, { filter: 'getFilter' }),
     tracked(): string[] | number[] {
-      return this.selected.map((item) => item[this.trackBy]);
+      return this.selected.map(item => item[this.trackBy]);
     },
   },
 
   watch: {
     async page(val, oldVal) {
-      if (val !== oldVal) await this.fetch();
+      if (val !== oldVal)
+        await this.fetch();
     },
   },
 

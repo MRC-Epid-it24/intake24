@@ -19,7 +19,7 @@
                   :label="$t('fdbs.foods.global.code')"
                   name="main.code"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -30,7 +30,7 @@
                   :label="$t('fdbs.foods.global.name')"
                   name="main.name"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <select-resource
@@ -42,8 +42,7 @@
                   name="main.foodGroup"
                   resource="food-groups"
                   @input="form.errors.clear('main.foodGroupId')"
-                >
-                </select-resource>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -64,7 +63,7 @@
                   :label="$t('fdbs.foods.local.name')"
                   name="name"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -74,13 +73,13 @@
           class="mb-6"
           :disabled="!globalEdit"
           :errors="form.errors"
-        ></locale-list>
+        />
         <attribute-list
           v-model="form.main.attributes"
           class="mb-6"
           :disabled="!globalEdit"
           :errors="form.errors"
-        ></attribute-list>
+        />
         <category-list
           v-model="form.main.parentCategories"
           class="mb-6"
@@ -88,33 +87,35 @@
           :errors="form.errors"
           :locale-id="id"
           outlined
-        ></category-list>
+        />
         <nutrient-list
           v-model="form.nutrientRecords"
           class="mb-6"
           :errors="form.errors"
           :nutrient-tables="refs?.nutrientTables ?? []"
-        ></nutrient-list>
+        />
         <portion-size-method-list
           v-model="form.portionSizeMethods"
           class="mb-6"
           :errors="form.errors"
           :locale-id="id"
-        ></portion-size-method-list>
+        />
         <associated-food-list
           v-model="form.associatedFoods"
           class="mb-6"
           :errors="form.errors"
           :food-code="form.main.code"
           :locale-id="id"
-        ></associated-food-list>
+        />
       </v-form>
       <div class="d-flex">
         <v-btn color="secondary" outlined type="submit" @click="submit">
-          <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
+          <v-icon left>
+            $save
+          </v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
-        <copy-entry-dialog v-bind="{ entryId, localeId: id, type }"></copy-entry-dialog>
-        <v-spacer></v-spacer>
+        <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
+        <v-spacer />
         <confirm-dialog
           color="error"
           icon-left="$delete"
@@ -128,8 +129,8 @@
     <v-skeleton-loader
       v-else
       type="card-heading, list-item-three-line@3, actions"
-    ></v-skeleton-loader>
-    <confirm-leave-dialog v-model="routeLeave"></confirm-leave-dialog>
+    />
+    <confirm-leave-dialog v-model="routeLeave" />
   </div>
 </template>
 
@@ -201,7 +202,7 @@ export default defineComponent({
     const type = 'foods' as const;
     const entry = ref<FoodLocalEntry | null>(null);
     const globalEdit = computed(
-      () => user.can('locales|food-list') || entry.value?.main?.locales?.length === 1
+      () => user.can('locales|food-list') || entry.value?.main?.locales?.length === 1,
     );
     const isEntryLoaded = computed(() => !!entry.value);
 
@@ -233,26 +234,28 @@ export default defineComponent({
     });
 
     const fetchCategoryOrFood = async (entryId: string) => {
-      if (!entryId || entryId === 'no-category') return;
+      if (!entryId || entryId === 'no-category')
+        return;
 
       loading.value = true;
       entry.value = null;
 
       try {
         const { data } = await http.get<FoodLocalEntry>(
-          `admin/fdbs/${props.id}/${type}/${entryId}`
+          `admin/fdbs/${props.id}/${type}/${entryId}`,
         );
 
         toForm(data);
         entry.value = data;
-      } finally {
+      }
+      finally {
         loading.value = false;
       }
     };
 
     const submit = async () => {
       const data = await form.put<FoodLocalEntry>(
-        `admin/fdbs/${props.id}/${type}/${props.entryId}`
+        `admin/fdbs/${props.id}/${type}/${props.entryId}`,
       );
       toForm(data);
 
@@ -265,14 +268,14 @@ export default defineComponent({
       await http.delete(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
 
       useMessages().success(
-        i18n.t('common.msg.deleted', { name: entry.value?.main?.name }).toString()
+        i18n.t('common.msg.deleted', { name: entry.value?.main?.name }).toString(),
       );
 
       await router.push({
         name: `fdbs-categories`,
         params: {
           id: props.id,
-          //@ts-expect-error missing typed locals
+          // @ts-expect-error missing typed locals
           entryId: entry.value?.main?.parentCategories?.at(0)?.locals?.at(0)?.id ?? 'no-category',
         },
       });
@@ -283,9 +286,8 @@ export default defineComponent({
     });
 
     onBeforeRouteUpdate(async (to, from, next) => {
-      if (to.params.entryId !== from.params.entryId) {
+      if (to.params.entryId !== from.params.entryId)
         await fetchCategoryOrFood(to.params.entryId);
-      }
 
       next();
     });

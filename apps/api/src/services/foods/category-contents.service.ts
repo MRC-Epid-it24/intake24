@@ -17,14 +17,14 @@ import {
   QueryTypes,
 } from '@intake24/db';
 
-const categoryContentsService = ({
+function categoryContentsService({
   adminCategoryService,
   db,
-}: Pick<IoC, 'db' | 'adminCategoryService'>) => {
+}: Pick<IoC, 'db' | 'adminCategoryService'>) {
   const filterUndefined = (
-    headers: { code: string; name: string | undefined }[]
+    headers: { code: string; name: string | undefined }[],
   ): (CategoryHeader | FoodHeader)[] =>
-    headers.filter((h) => h.name !== undefined).map((h) => ({ code: h.code, name: h.name! }));
+    headers.filter(h => h.name !== undefined).map(h => ({ code: h.code, name: h.name! }));
 
   const getLocaleInfo = async (localeId: string): Promise<Locale> => {
     const locale = await Locale.findOne({
@@ -32,7 +32,8 @@ const categoryContentsService = ({
       attributes: ['prototypeLocaleId'],
     });
 
-    if (!locale) throw new NotFoundError(`Locale ${localeId} not found`);
+    if (!locale)
+      throw new NotFoundError(`Locale ${localeId} not found`);
 
     return locale;
   };
@@ -52,7 +53,7 @@ const categoryContentsService = ({
   const getCategoryHeader = async (
     localeId: string,
     prototypeLocaleId: string | null,
-    categoryCode: string
+    categoryCode: string,
   ): Promise<CategoryHeader> => {
     const category = await Category.findOne({
       where: { code: categoryCode },
@@ -71,9 +72,8 @@ const categoryContentsService = ({
       ],
     });
 
-    if (category === null) {
+    if (category === null)
       throw new NotFoundError(`Category ${categoryCode} not found`);
-    }
 
     return {
       code: categoryCode,
@@ -83,11 +83,11 @@ const categoryContentsService = ({
 
   const getCategoryContents = async (
     localeId: string,
-    categoryCode: string
+    categoryCode: string,
   ): Promise<CategoryContents> => {
     /*
         v3 implementation
-  
+
         SELECT code, description, coalesce(fl.local_description, flp.local_description) as local_description
           FROM foods_categories
              INNER JOIN foods_local_lists ON foods_categories.food_code = foods_local_lists.food_code AND foods_local_lists.locale_id = {locale_id}
@@ -175,7 +175,7 @@ const categoryContentsService = ({
   const searchCategory = async (
     localeId: string,
     category: string,
-    query: PaginateQuery
+    query: PaginateQuery,
   ): Promise<CategorySearch> => {
     const categories = await db.foods.query<{ code: string }>(getAllChildCategories, {
       type: QueryTypes.SELECT,
@@ -206,12 +206,12 @@ const categoryContentsService = ({
     const { search } = query;
 
     if (search) {
-      const op =
-        FoodLocal.sequelize?.getDialect() === 'postgres'
+      const op
+        = FoodLocal.sequelize?.getDialect() === 'postgres'
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const ops = ['name'].map((column) => ({ [column]: op }));
+      const ops = ['name'].map(column => ({ [column]: op }));
 
       options.where = { ...options.where, [Op.or]: ops };
     }
@@ -219,7 +219,7 @@ const categoryContentsService = ({
     return FoodLocal.paginate({
       query,
       ...options,
-      transform: (food) => ({ code: food.foodCode, name: food.name }),
+      transform: food => ({ code: food.foodCode, name: food.name }),
     });
   };
 
@@ -228,7 +228,7 @@ const categoryContentsService = ({
     getRootCategories,
     searchCategory,
   };
-};
+}
 
 export default categoryContentsService;
 

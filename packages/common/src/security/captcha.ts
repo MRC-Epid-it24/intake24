@@ -2,10 +2,11 @@ export const captchaProviders = ['h-captcha', 're-captcha'] as const;
 
 export type CaptchaProvider = (typeof captchaProviders)[number];
 
-export const isCaptchaProvider = (provider: any): provider is CaptchaProvider =>
-  captchaProviders.includes(provider);
+export function isCaptchaProvider(provider: any): provider is CaptchaProvider {
+  return captchaProviders.includes(provider);
+}
 
-export const resolveCaptchaScript = (provider: CaptchaProvider) => {
+export function resolveCaptchaScript(provider: CaptchaProvider) {
   switch (provider) {
     case 'h-captcha':
       return `<script type="text/javascript" src="https://js.hcaptcha.com/1/api.js" async defer></script>`;
@@ -14,4 +15,4 @@ export const resolveCaptchaScript = (provider: CaptchaProvider) => {
     default:
       return '';
   }
-};
+}

@@ -39,10 +39,12 @@ export default validate(
         if: (value: any, { req }: Meta) =>
           req.body.type && req.body.type === 'LocalePopularitySearchCopy',
         options: async (value, meta): Promise<void> => {
-          if (!value || typeof value !== 'string') throw new Error();
+          if (!value || typeof value !== 'string')
+            throw new Error('Invalid source locale ID');
 
           const locale = await SystemLocale.findByPk(value, { attributes: ['code'] });
-          if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
+          if (!locale)
+            throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },
     },
@@ -52,14 +54,16 @@ export default validate(
         if: (value: any, { req }: Meta) => req.body.type && jobRequiresFile(req.body.type),
         options: async (value, meta): Promise<void> => {
           const { file } = meta.req;
-          if (!file) throw new Error(customTypeErrorMessage('file._', meta));
+          if (!file)
+            throw new Error(customTypeErrorMessage('file._', meta));
 
-          if (path.extname(file.originalname).toLowerCase() !== '.csv')
+          if (path.extname(file.originalname).toLowerCase() !== '.csv') {
             throw new Error(
-              customTypeErrorMessage('file.ext', meta, { ext: 'CSV (comma-delimited)' })
+              customTypeErrorMessage('file.ext', meta, { ext: 'CSV (comma-delimited)' }),
             );
+          }
         },
       },
     },
-  })
+  }),
 );

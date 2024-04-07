@@ -10,7 +10,7 @@
       section,
     }"
     @action="action"
-  ></component>
+  />
 </template>
 
 <script lang="ts">
@@ -44,20 +44,14 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional } =
-      useCustomPromptHandler(props);
+    const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional }
+      = useCustomPromptHandler(props);
     const survey = useSurvey();
 
     const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
     const state = ref<CustomPromptAnswer | undefined>(
-      isInfoPrompt.value ? 'next' : getPromptAnswer(props.prompt.id)
+      isInfoPrompt.value ? 'next' : getPromptAnswer(props.prompt.id),
     );
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next' || isInfoPrompt.value) commitAnswer();
-
-      emit('action', type, ...args);
-    };
 
     const commitAnswer = () => {
       if (props.prompt.component === 'no-more-information-prompt') {
@@ -67,6 +61,13 @@ export default defineComponent({
       }
 
       commitPromptAnswer(props.prompt, state.value);
+    };
+
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      if (type === 'next' || isInfoPrompt.value)
+        commitAnswer();
+
+      emit('action', type, ...args);
     };
 
     return {

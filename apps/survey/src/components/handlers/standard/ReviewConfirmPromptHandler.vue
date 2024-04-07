@@ -4,7 +4,7 @@
     @action="action"
     @food-selected="onFoodClick"
     @meal-selected="onMealClick"
-  ></review-confirm-prompt>
+  />
 </template>
 
 <script lang="ts">

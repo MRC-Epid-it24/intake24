@@ -9,7 +9,7 @@ module.exports = {
           allowNull: false,
           defaultValue: Sequelize.fn('now'),
         },
-        { transaction }
+        { transaction },
       );
       await queryInterface.changeColumn(
         'surveys',
@@ -19,7 +19,7 @@ module.exports = {
           allowNull: false,
           defaultValue: Sequelize.fn('now'),
         },
-        { transaction }
+        { transaction },
       );
     }),
 

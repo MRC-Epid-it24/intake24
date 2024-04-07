@@ -60,17 +60,19 @@ export default defineComponent({
       }) as LocaleOptionList<ZodNumber>;
     });
     const localeOptions = computed(() =>
-      (options.value[i18n.locale] ?? options.value.en).slice(0, props.max)
+      (options.value[i18n.locale] ?? options.value.en).slice(0, props.max),
     );
 
     const selectNext = () => {
-      if (typeof selected.value === 'undefined') return;
+      if (typeof selected.value === 'undefined')
+        return;
 
       selected.value = selected.value === localeOptions.value.length - 1 ? 0 : selected.value + 1;
     };
 
     const startTimer = () => {
-      if (!props.timer) return;
+      if (!props.timer)
+        return;
 
       interval.value = setInterval(() => {
         selectNext();
@@ -82,7 +84,8 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      if (!localeOptions.value.length) return;
+      if (!localeOptions.value.length)
+        return;
 
       selectNext();
       startTimer();

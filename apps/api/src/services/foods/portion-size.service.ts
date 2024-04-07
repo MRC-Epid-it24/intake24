@@ -9,7 +9,7 @@ import {
   StandardUnit,
 } from '@intake24/db';
 
-const portionSizeService = () => {
+function portionSizeService() {
   /**
    * Get multiple records of as-served-images data
    *
@@ -19,7 +19,7 @@ const portionSizeService = () => {
    */
   const getAsServedImages = async (
     asServedSetId: string,
-    id: string | string[]
+    id: string | string[],
   ): Promise<AsServedImage[]> =>
     AsServedImage.findAll({
       where: { asServedSetId, id },
@@ -40,7 +40,8 @@ const portionSizeService = () => {
   const getAsServedImage = async (asServedSetId: string, id: string): Promise<AsServedImage> => {
     const [asServedImage] = await getAsServedImages(asServedSetId, id);
 
-    if (!asServedImage) throw new NotFoundError('As served image not found.');
+    if (!asServedImage)
+      throw new NotFoundError('As served image not found.');
 
     return asServedImage;
   };
@@ -76,7 +77,8 @@ const portionSizeService = () => {
   const getAsServedSet = async (id: string): Promise<AsServedSet> => {
     const [asServedSet] = await getAsServedSets(id);
 
-    if (!asServedSet) throw new NotFoundError('As served set not found.');
+    if (!asServedSet)
+      throw new NotFoundError('As served set not found.');
 
     return asServedSet;
   };
@@ -112,7 +114,8 @@ const portionSizeService = () => {
   const getGuideImage = async (id: string): Promise<GuideImage> => {
     const [guideImage] = await getGuideImages(id);
 
-    if (!guideImage) throw new NotFoundError('Guide image not found.');
+    if (!guideImage)
+      throw new NotFoundError('Guide image not found.');
 
     return guideImage;
   };
@@ -139,7 +142,8 @@ const portionSizeService = () => {
   const getImageMap = async (id: string): Promise<ImageMap> => {
     const [imageMap] = await getImageMaps(id);
 
-    if (!imageMap) throw new NotFoundError('Image map not found.');
+    if (!imageMap)
+      throw new NotFoundError('Image map not found.');
 
     return imageMap;
   };
@@ -172,7 +176,8 @@ const portionSizeService = () => {
   const getDrinkwareSet = async (id: string): Promise<DrinkwareSet> => {
     const [drinkwareSet] = await getDrinkwareSets(id);
 
-    if (!drinkwareSet) throw new NotFoundError('Drinkware set not found.');
+    if (!drinkwareSet)
+      throw new NotFoundError('Drinkware set not found.');
 
     return drinkwareSet;
   };
@@ -199,7 +204,8 @@ const portionSizeService = () => {
   const getStandardUnit = async (id: string): Promise<StandardUnit> => {
     const [standardUnit] = await getStandardUnits(id);
 
-    if (!standardUnit) throw new NotFoundError('Standard unit not found.');
+    if (!standardUnit)
+      throw new NotFoundError('Standard unit not found.');
 
     return standardUnit;
   };
@@ -218,7 +224,7 @@ const portionSizeService = () => {
     getStandardUnit,
     getStandardUnits,
   };
-};
+}
 
 export default portionSizeService;
 

@@ -25,15 +25,11 @@ export type UsePromptProps<
   FP extends EncodedFood | RecipeBuilder | undefined,
 > = UsePromptPropsBase<P> & UseFoodUtilsProps<F, FP> & UseMealUtilsProps;
 
-export const usePromptUtils = <
+export function usePromptUtils<
   P extends keyof Prompts,
   F extends FoodState | undefined,
   FP extends EncodedFood | RecipeBuilder | undefined,
->(
-  props: UsePromptProps<P, F, FP>,
-  { emit }: SetupContext<any>,
-  confirmCallback?: () => boolean
-) => {
+>(props: UsePromptProps<P, F, FP>, { emit }: SetupContext<any>, confirmCallback?: () => boolean) {
   const { i18n } = useI18n();
   const survey = useSurvey();
   const { mealName, mealTime } = useMealUtils(props);
@@ -43,7 +39,7 @@ export const usePromptUtils = <
   const isMeal = computed(() => !!props.meal && !props.food);
   const isInMultiPrompt = computed(() => !!(props.prompt.type === 'custom' && props.prompt.group));
   const customPromptLayout = computed(() =>
-    isInMultiPrompt.value ? 'panel-layout' : 'card-layout'
+    isInMultiPrompt.value ? 'panel-layout' : 'card-layout',
   );
   const foodOrMealName = computed(() => foodName.value ?? mealName.value ?? '');
 
@@ -56,7 +52,7 @@ export const usePromptUtils = <
   const type = computed(() => promptType(props.prompt.component));
 
   const recipeBuilderEnabled = computed(() =>
-    survey.registeredPortionSizeMethods.includes('recipe-builder')
+    survey.registeredPortionSizeMethods.includes('recipe-builder'),
   );
 
   const params = computed(() => {
@@ -66,7 +62,8 @@ export const usePromptUtils = <
     };
 
     if (foodName.value) {
-      if (isFood.value) build.item = foodName.value;
+      if (isFood.value)
+        build.item = foodName.value;
 
       build.food = foodName.value;
     }
@@ -78,11 +75,14 @@ export const usePromptUtils = <
         build.mealTime = mealTime.value;
 
         const meal = `${mealName.value} (${mealTime.value})`;
-        if (isMeal.value) build.item = meal;
+        if (isMeal.value)
+          build.item = meal;
 
         build.meal = meal;
-      } else {
-        if (isMeal.value) build.item = mealName.value;
+      }
+      else {
+        if (isMeal.value)
+          build.item = mealName.value;
         build.meal = mealName.value;
       }
     }
@@ -92,14 +92,14 @@ export const usePromptUtils = <
 
   const translatePrompt = <T extends string>(
     keys: T[],
-    params: PartialRecord<T, LocaleContentOptions['params']> = {}
+    params: PartialRecord<T, LocaleContentOptions['params']> = {},
   ) => {
     return keys.reduce(
       (acc, key) => {
         acc[key] = i18n.t(`prompts.${type.value}.${key}`, params[key] ?? {}).toString();
         return acc;
       },
-      {} as Record<T, string>
+      {} as Record<T, string>,
     );
   };
 
@@ -109,7 +109,8 @@ export const usePromptUtils = <
       return;
     }
 
-    if (confirmCallback && !confirmCallback()) return;
+    if (confirmCallback && !confirmCallback())
+      return;
 
     emit('action', type, ...args);
   };
@@ -131,4 +132,4 @@ export const usePromptUtils = <
     translatePrompt,
     type,
   };
-};
+}

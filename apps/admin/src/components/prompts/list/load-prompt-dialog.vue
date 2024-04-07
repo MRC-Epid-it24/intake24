@@ -4,7 +4,9 @@
       <slot name="activator" v-bind="{ on, attrs }">
         <v-list-item v-bind="attrs" link v-on="on">
           <v-list-item-title>
-            <v-icon left>$download</v-icon>
+            <v-icon left>
+              $download
+            </v-icon>
             {{ $t('survey-schemes.prompts.templates.add') }}
           </v-list-item-title>
         </v-list-item>
@@ -32,8 +34,7 @@
           @click:append="fetch"
           @click:clear="clear"
           @keyup.enter="fetch"
-        >
-        </v-text-field>
+        />
         <v-alert v-if="promptAlreadyExists" text type="error">
           {{
             $t('survey-schemes.prompts.templates.alreadyExists', {
@@ -48,7 +49,7 @@
                 <v-list-item :key="prompt.id" :value="prompt.id">
                   <template #default="{ active }">
                     <v-list-item-action>
-                      <v-checkbox :input-value="active"></v-checkbox>
+                      <v-checkbox :input-value="active" />
                     </v-list-item-action>
                     <v-list-item-avatar>
                       <v-icon>fas fa-question-circle</v-icon>
@@ -61,12 +62,12 @@
                     </v-list-item-content>
                   </template>
                 </v-list-item>
-                <v-divider v-if="idx + 1 < prompts.length" :key="`div-${prompt.id}`"></v-divider>
+                <v-divider v-if="idx + 1 < prompts.length" :key="`div-${prompt.id}`" />
               </template>
             </v-list-item-group>
           </v-list>
           <div class="text-center">
-            <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
+            <v-pagination v-model="page" circle :length="lastPage" />
           </div>
         </template>
         <v-alert v-else color="secondary" text type="info">
@@ -75,9 +76,11 @@
       </v-card-text>
       <v-card-actions>
         <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
-          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+          <v-icon left>
+            $cancel
+          </v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
@@ -85,7 +88,9 @@
           text
           @click.stop="confirm"
         >
-          <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+          <v-icon left>
+            $success
+          </v-icon>{{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -135,21 +140,22 @@ export default defineComponent({
     const selectedId = ref<string | undefined>();
 
     const selectedPrompt = computed(() => {
-      if (!selectedId.value) return undefined;
+      if (!selectedId.value)
+        return undefined;
 
-      return prompts.value.find((prompt) => prompt.id === selectedId.value);
+      return prompts.value.find(prompt => prompt.id === selectedId.value);
     });
 
     const promptAlreadyExists = computed(() => {
-      const match = props.promptIds.find((id) => id === selectedPrompt.value?.id);
+      const match = props.promptIds.find(id => id === selectedPrompt.value?.id);
       return !!match;
     });
 
     const fetchLocally = async (search: string | null, page: number, limit = 5) => {
       const currentPage = page - 1;
 
-      const filtered = (props.items ?? []).filter((currentItem) =>
-        search ? currentItem.name.match(new RegExp(search, 'i')) : true
+      const filtered = (props.items ?? []).filter(currentItem =>
+        search ? currentItem.name.match(new RegExp(search, 'i')) : true,
       );
 
       const items = filtered.slice(currentPage * limit, currentPage * limit + limit);
@@ -166,7 +172,7 @@ export default defineComponent({
         },
       } = await http.get<SurveySchemeTemplates>(
         `admin/survey-schemes/${props.schemeId}/templates`,
-        { params: { search, page, limit } }
+        { params: { search, page, limit } },
       );
 
       return { items, lastPage };
@@ -182,7 +188,8 @@ export default defineComponent({
 
         prompts.value = result.items;
         lastPage.value = result.lastPage;
-      } finally {
+      }
+      finally {
         loading.value = false;
       }
     };
@@ -193,7 +200,8 @@ export default defineComponent({
     };
 
     watch(dialog, async (val) => {
-      if (val && !prompts.value.length) await fetch();
+      if (val && !prompts.value.length)
+        await fetch();
     });
 
     watch(page, async () => {
@@ -206,7 +214,7 @@ export default defineComponent({
         page.value = 1;
         fetch();
       },
-      { debounce: 500, maxWait: 2000 }
+      { debounce: 500, maxWait: 2000 },
     );
 
     return {
@@ -235,7 +243,8 @@ export default defineComponent({
     },
 
     confirm() {
-      if (!this.selectedPrompt) return;
+      if (!this.selectedPrompt)
+        return;
 
       this.$emit('load', copy(this.selectedPrompt));
       this.close();

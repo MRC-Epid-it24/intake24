@@ -1,7 +1,7 @@
 <template>
   <v-tab-item key="options" value="options">
     <v-row class="mb-3">
-      <v-col cols="12"> </v-col>
+      <v-col cols="12" />
     </v-row>
   </v-tab-item>
 </template>

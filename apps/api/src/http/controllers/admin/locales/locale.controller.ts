@@ -13,12 +13,12 @@ import { FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
 
 import { securableController } from '../securable.controller';
 
-const localeController = (ioc: IoC) => {
+function localeController(ioc: IoC) {
   const { localeService } = ioc;
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<LocalesResponse>
+    res: Response<LocalesResponse>,
   ): Promise<void> => {
     const {
       aclService,
@@ -77,7 +77,7 @@ const localeController = (ioc: IoC) => {
 
   const read = async (
     req: Request<{ localeId: string }>,
-    res: Response<LocaleEntry>
+    res: Response<LocaleEntry>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -96,7 +96,7 @@ const localeController = (ioc: IoC) => {
 
   const getByCode = async (
     req: Request<{ code: string }>,
-    res: Response<LocaleEntry>
+    res: Response<LocaleEntry>,
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
@@ -109,7 +109,7 @@ const localeController = (ioc: IoC) => {
 
   const edit = async (
     req: Request<{ localeId: string }>,
-    res: Response<LocaleEntry>
+    res: Response<LocaleEntry>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -128,7 +128,7 @@ const localeController = (ioc: IoC) => {
 
   const update = async (
     req: Request<{ localeId: string }>,
-    res: Response<LocaleEntry>
+    res: Response<LocaleEntry>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -142,7 +142,8 @@ const localeController = (ioc: IoC) => {
       ],
     });
     const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
-    if (!foodsLocale) throw new NotFoundError();
+    if (!foodsLocale)
+      throw new NotFoundError();
 
     const input = pick(req.body, [
       'englishName',
@@ -164,7 +165,7 @@ const localeController = (ioc: IoC) => {
   };
 
   const destroy = async (
-    req: Request<{ localeId: string }> /* , res: Response<undefined> */
+    req: Request<{ localeId: string }>, /* , res: Response<undefined> */
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -175,7 +176,8 @@ const localeController = (ioc: IoC) => {
       include: [{ association: 'surveys', attributes: ['id'] }],
     });
     const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
-    if (!systemLocale.surveys || !foodsLocale) throw new NotFoundError();
+    if (!systemLocale.surveys || !foodsLocale)
+      throw new NotFoundError();
 
     if (systemLocale.surveys.length)
       throw new ForbiddenError('Locale cannot be deleted. There are surveys using this locale.');
@@ -217,7 +219,8 @@ const localeController = (ioc: IoC) => {
 
     const params = { ...pickJobParams(req.body.params, type), localeId };
     if (jobRequiresFile(type)) {
-      if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
+      if (!file)
+        throw new ValidationError('Missing file.', { path: 'params.file' });
 
       params.file = file.path;
     }
@@ -241,7 +244,7 @@ const localeController = (ioc: IoC) => {
     tasks,
     securables: securableController({ ioc, securable: SystemLocale }),
   };
-};
+}
 
 export default localeController;
 

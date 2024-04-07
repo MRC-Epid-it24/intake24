@@ -8,7 +8,7 @@
             {{ $t('survey.welcome._') }}
           </v-card-title>
           <v-card-subtitle>{{ $t('survey.welcome.subtitle') }}</v-card-subtitle>
-          <v-divider></v-divider>
+          <v-divider />
           <v-list class="list-no-wrap" subheader two-line>
             <v-subheader>{{ $t('survey.info') }}</v-subheader>
             <v-list-item>
@@ -28,7 +28,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-divider></v-divider>
+          <v-divider />
           <!-- Recall info -->
           <template v-if="recallAllowed">
             <v-list class="list__no-wrap" subheader>
@@ -36,7 +36,9 @@
               <template v-if="limitReached">
                 <v-list-item>
                   <v-list-item-avatar>
-                    <v-icon color="error" large>fas fa-ban</v-icon>
+                    <v-icon color="error" large>
+                      fas fa-ban
+                    </v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>
@@ -48,7 +50,9 @@
               <template v-else-if="hasFinished">
                 <v-list-item link>
                   <v-list-item-avatar>
-                    <v-icon color="info" large>$check</v-icon>
+                    <v-icon color="info" large>
+                      $check
+                    </v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>
@@ -64,7 +68,9 @@
                       :title="$t('recall.start.another')"
                       @click.stop="startRecall"
                     >
-                      <v-icon left>fas fa-beat fa-play</v-icon>
+                      <v-icon left>
+                        fas fa-beat fa-play
+                      </v-icon>
                       {{ $t('recall.start.another') }}
                     </v-btn>
                   </v-list-item-action>
@@ -78,7 +84,9 @@
                     :title="$t('recall.start.another')"
                     @click.stop="startRecall"
                   >
-                    <v-icon left>fas fa-beat fa-play</v-icon>
+                    <v-icon left>
+                      fas fa-beat fa-play
+                    </v-icon>
                     {{ $t('recall.start.another') }}
                   </v-btn>
                 </v-list-item>
@@ -86,7 +94,9 @@
               <template v-else-if="hasStarted">
                 <v-list-item link>
                   <v-list-item-avatar>
-                    <v-icon color="info" large>$pause</v-icon>
+                    <v-icon color="info" large>
+                      $pause
+                    </v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>
@@ -102,7 +112,9 @@
                       :title="$t('recall.continue')"
                       :to="{ name: 'survey-recall', params: { surveyId } }"
                     >
-                      <v-icon class="fa-beat" left>$pause</v-icon>
+                      <v-icon class="fa-beat" left>
+                        $pause
+                      </v-icon>
                       {{ $t('recall.continue') }}
                     </v-btn>
                     <confirm-dialog
@@ -118,7 +130,9 @@
                           :title="$t('recall.abort.label')"
                           v-on="on"
                         >
-                          <v-icon left>$cancel</v-icon>
+                          <v-icon left>
+                            $cancel
+                          </v-icon>
                           {{ $t('recall.abort._') }}
                         </v-btn>
                       </template>
@@ -142,7 +156,9 @@
                         :title="$t('recall.abort.label')"
                         v-on="on"
                       >
-                        <v-icon left>$cancel</v-icon>
+                        <v-icon left>
+                          $cancel
+                        </v-icon>
                         {{ $t('recall.abort._') }}
                       </v-btn>
                     </template>
@@ -157,7 +173,9 @@
                     :title="$t('recall.continue')"
                     :to="{ name: 'survey-recall', params: { surveyId } }"
                   >
-                    <v-icon class="fa-beat" left>$pause</v-icon>
+                    <v-icon class="fa-beat" left>
+                      $pause
+                    </v-icon>
                     {{ $t('recall.continue') }}
                   </v-btn>
                 </v-list-item>
@@ -165,7 +183,9 @@
               <template v-else>
                 <v-list-item link>
                   <v-list-item-avatar>
-                    <v-icon color="info" large>$start</v-icon>
+                    <v-icon color="info" large>
+                      $start
+                    </v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{ $t('recall.none') }}</v-list-item-title>
@@ -178,7 +198,9 @@
                       :title="$t('recall.start._')"
                       :to="{ name: 'survey-recall', params: { surveyId } }"
                     >
-                      <v-icon class="fa-beat" left>$start</v-icon>
+                      <v-icon class="fa-beat" left>
+                        $start
+                      </v-icon>
                       {{ $t('recall.start._') }}
                     </v-btn>
                   </v-list-item-action>
@@ -192,13 +214,15 @@
                     :title="$t('recall.start._')"
                     :to="{ name: 'survey-recall', params: { surveyId } }"
                   >
-                    <v-icon class="fa-beat" left>$start</v-icon>
+                    <v-icon class="fa-beat" left>
+                      $start
+                    </v-icon>
                     {{ $t('recall.start._') }}
                   </v-btn>
                 </v-list-item>
               </template>
             </v-list>
-            <v-divider></v-divider>
+            <v-divider />
           </template>
           <!-- Feedback info -->
           <template v-if="feedbackAllowed">
@@ -207,7 +231,9 @@
               <template v-if="feedbackAvailable">
                 <v-list-item link>
                   <v-list-item-avatar>
-                    <v-icon color="info" large>$feedback</v-icon>
+                    <v-icon color="info" large>
+                      $feedback
+                    </v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{ $t('feedback.status.available') }}</v-list-item-title>
@@ -219,7 +245,9 @@
                       rounded
                       :to="{ name: 'feedback-home', params: { surveyId } }"
                     >
-                      <v-icon left>$feedback</v-icon>
+                      <v-icon left>
+                        $feedback
+                      </v-icon>
                       {{ $t(`feedback._`) }}
                     </v-btn>
                   </v-list-item-action>
@@ -232,25 +260,31 @@
                     rounded
                     :to="{ name: 'feedback-home', params: { surveyId } }"
                   >
-                    <v-icon left>$feedback</v-icon>
+                    <v-icon left>
+                      $feedback
+                    </v-icon>
                     {{ $t(`feedback._`) }}
                   </v-btn>
                 </v-list-item>
               </template>
               <v-list-item v-else link>
                 <v-list-item-avatar>
-                  <v-icon color="info" large>$info</v-icon>
+                  <v-icon color="info" large>
+                    $info
+                  </v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{
-                    $t('feedback.status.lowRecalls', {
-                      minRecalls: parameters?.numberOfSubmissionsForFeedback,
-                    })
-                  }}</v-list-item-title>
+                  <v-list-item-title>
+                    {{
+                      $t('feedback.status.lowRecalls', {
+                        minRecalls: parameters?.numberOfSubmissionsForFeedback,
+                      })
+                    }}
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
-            <v-divider></v-divider>
+            <v-divider />
           </template>
           <!-- Past recalls -->
           <v-card-subtitle>
@@ -279,7 +313,9 @@
             <v-list v-else class="list-no-wrap">
               <v-list-item>
                 <v-list-item-avatar>
-                  <v-icon large>$survey</v-icon>
+                  <v-icon large>
+                    $survey
+                  </v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>

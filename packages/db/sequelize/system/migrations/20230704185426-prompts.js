@@ -1,14 +1,14 @@
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       queryInterface.sequelize.query(
         `UPDATE permissions SET name = 'survey-schemes|prompts', display_name = 'Survey scheme prompts' WHERE name = 'survey-schemes|questions';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE permissions SET name = replace(name, 'survey-scheme-questions', 'survey-scheme-prompts'), display_name = replace(display_name, 'questions', 'prompts') WHERE "name" ilike 'survey-scheme-questions%';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameColumn('survey_schemes', 'questions', 'prompts', { transaction });
@@ -25,17 +25,17 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_scheme_prompts RENAME CONSTRAINT scheme_questions_pkey TO scheme_prompts_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_scheme_prompts RENAME CONSTRAINT scheme_questions_question_id_key TO scheme_prompts_prompt_id_key;`,
-        { transaction }
+        { transaction },
       );
 
       const surveys = await queryInterface.sequelize.query(
         `SELECT id, survey_scheme_overrides FROM surveys;`,
-        { type: queryInterface.sequelize.QueryTypes.SELECT, transaction }
+        { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
       );
 
       for (const survey of surveys) {
@@ -49,33 +49,33 @@ module.exports = {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
             replacements: { id, survey_scheme_overrides: JSON.stringify({ meals, prompts }) },
             transaction,
-          }
+          },
         );
       }
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `UPDATE permissions SET name = 'survey-schemes|questions', display_name = 'Survey scheme questions' WHERE name = 'survey-schemes|prompts';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE permissions SET name = replace(name, 'survey-scheme-prompts', 'survey-scheme-questions'), display_name = replace(display_name, 'prompts', 'questions') WHERE "name" ilike 'survey-scheme-prompts%';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameColumn('survey_schemes', 'prompts', 'questions', { transaction });
 
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_scheme_prompts RENAME CONSTRAINT scheme_prompts_prompt_id_key TO scheme_questions_question_id_key;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_scheme_prompts RENAME CONSTRAINT scheme_prompts_pkey TO scheme_questions_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameColumn('survey_scheme_prompts', 'prompt', 'question', {
@@ -92,7 +92,7 @@ module.exports = {
 
       const surveys = await queryInterface.sequelize.query(
         `SELECT id, survey_scheme_overrides FROM surveys;`,
-        { type: queryInterface.sequelize.QueryTypes.SELECT, transaction }
+        { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
       );
 
       for (const survey of surveys) {
@@ -106,7 +106,7 @@ module.exports = {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
             replacements: { id, survey_scheme_overrides: JSON.stringify({ meals, questions }) },
             transaction,
-          }
+          },
         );
       }
     }),

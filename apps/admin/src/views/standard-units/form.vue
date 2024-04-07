@@ -14,7 +14,7 @@
                 name="id"
                 outlined
                 prepend-inner-icon="$standard-units"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -24,7 +24,7 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <language-selector
@@ -41,7 +41,7 @@
                     :name="`estimateIn.${lang}`"
                     outlined
                     @input="form.errors.clear(`estimateIn.${lang}`)"
-                  ></v-text-field>
+                  />
                 </template>
               </language-selector>
             </v-col>
@@ -60,12 +60,12 @@
                     :name="`howMany.${lang}`"
                     outlined
                     @input="form.errors.clear(`howMany.${lang}`)"
-                  ></v-text-field>
+                  />
                 </template>
               </language-selector>
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>

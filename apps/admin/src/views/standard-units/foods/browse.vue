@@ -10,8 +10,7 @@
           action="read"
           :item="item"
           :to="{ name: 'fdbs-foods', params: { id: item.localeId, entryId: item.id } }"
-        >
-        </read>
+        />
       </template>
     </embedded-data-table>
   </layout>

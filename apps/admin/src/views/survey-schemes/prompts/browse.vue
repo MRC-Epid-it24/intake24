@@ -4,19 +4,21 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.prompts.title`) }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <options-menu>
         <select-resource resource="survey-schemes" return-object="prompts" @input="load">
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('survey-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.prompts"></json-editor-dialog>
+        <json-editor-dialog v-model="form.prompts" />
       </options-menu>
     </v-toolbar>
     <prompt-list
@@ -31,7 +33,7 @@
       }"
       @move="move"
       @update:items="updateItems(section, $event)"
-    ></prompt-list>
+    />
   </layout>
 </template>
 
@@ -68,7 +70,7 @@ export default defineComponent({
     };
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveySchemeEntry, SurveySchemeRefs>(
-      props
+      props,
     );
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
@@ -98,9 +100,10 @@ export default defineComponent({
       return flattenScheme(this.form.prompts).map(({ id }) => id);
     },
     templates(): Prompt[] {
-      if (!this.refsLoaded) return [];
+      if (!this.refsLoaded)
+        return [];
 
-      return this.refs.templates.filter((template) => this.promptIds.includes(template.id));
+      return this.refs.templates.filter(template => this.promptIds.includes(template.id));
     },
   },
 

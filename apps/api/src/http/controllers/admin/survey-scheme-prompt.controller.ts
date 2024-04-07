@@ -13,22 +13,23 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { isMealSection } from '@intake24/common/surveys';
 import { SurveyScheme, SurveySchemePrompt } from '@intake24/db';
 
-const SurveySchemePromptController = () => {
+function surveySchemePromptController() {
   const entry = async (
     req: Request<{ surveySchemePromptId: string }>,
-    res: Response<SurveySchemePromptEntry>
+    res: Response<SurveySchemePromptEntry>,
   ): Promise<void> => {
     const { surveySchemePromptId } = req.params;
 
     const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
-    if (!schemePrompt) throw new NotFoundError();
+    if (!schemePrompt)
+      throw new NotFoundError();
 
     res.json(schemePrompt);
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveySchemePromptsResponse>
+    res: Response<SurveySchemePromptsResponse>,
   ): Promise<void> => {
     const schemePrompts = await SurveySchemePrompt.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -50,17 +51,17 @@ const SurveySchemePromptController = () => {
 
   const read = async (
     req: Request<{ surveySchemePromptId: string }>,
-    res: Response<SurveySchemePromptEntry>
+    res: Response<SurveySchemePromptEntry>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ surveySchemePromptId: string }>,
-    res: Response<SurveySchemePromptEntry>
+    res: Response<SurveySchemePromptEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ surveySchemePromptId: string }>,
-    res: Response<SurveySchemePromptEntry>
+    res: Response<SurveySchemePromptEntry>,
   ): Promise<void> => {
     const {
       params: { surveySchemePromptId },
@@ -69,7 +70,8 @@ const SurveySchemePromptController = () => {
     const { id: promptId, name } = prompt;
 
     const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
-    if (!schemePrompt) throw new NotFoundError();
+    if (!schemePrompt)
+      throw new NotFoundError();
 
     await schemePrompt.update({ promptId, name, prompt });
 
@@ -78,14 +80,15 @@ const SurveySchemePromptController = () => {
 
   const destroy = async (
     req: Request<{ surveySchemePromptId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { surveySchemePromptId } = req.params;
 
     const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId, {
       attributes: ['id'],
     });
-    if (!schemePrompt) throw new NotFoundError();
+    if (!schemePrompt)
+      throw new NotFoundError();
 
     await schemePrompt.destroy();
     res.status(204).json();
@@ -97,14 +100,14 @@ const SurveySchemePromptController = () => {
       SurveySchemePrompt.findAll({ attributes: ['prompt'] }),
     ]);
 
-    const promptIds = prompts.map((p) => p.prompt.id);
+    const promptIds = prompts.map(p => p.prompt.id);
 
     res.json({ schemes, promptIds });
   };
 
   const sync = async (
     req: Request<{ surveySchemePromptId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const {
       params: { surveySchemePromptId },
@@ -115,20 +118,24 @@ const SurveySchemePromptController = () => {
     const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId, {
       attributes: ['id'],
     });
-    if (!schemePrompt) throw new NotFoundError();
+    if (!schemePrompt)
+      throw new NotFoundError();
 
     const scheme = await SurveyScheme.findByPk(surveySchemeId, { attributes: ['id', 'prompts'] });
-    if (!scheme) throw new NotFoundError();
+    if (!scheme)
+      throw new NotFoundError();
 
     const { prompts } = scheme;
     const sectionPrompts = isMealSection(section) ? prompts.meals[section] : prompts[section];
 
-    const match = sectionPrompts.findIndex((p) => p.id === prompt.id);
-    if (match === -1) throw new NotFoundError();
+    const match = sectionPrompts.findIndex(p => p.id === prompt.id);
+    if (match === -1)
+      throw new NotFoundError();
 
     sectionPrompts.splice(match, 1, prompt);
 
-    if (isMealSection(section)) prompts.meals[section] = sectionPrompts;
+    if (isMealSection(section))
+      prompts.meals[section] = sectionPrompts;
     else prompts[section] = sectionPrompts;
 
     await scheme.update({ prompts });
@@ -146,8 +153,8 @@ const SurveySchemePromptController = () => {
     refs,
     sync,
   };
-};
+}
 
-export default SurveySchemePromptController;
+export default surveySchemePromptController;
 
-export type SurveySchemePromptController = ReturnType<typeof SurveySchemePromptController>;
+export type SurveySchemePromptController = ReturnType<typeof surveySchemePromptController>;

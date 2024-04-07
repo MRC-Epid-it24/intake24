@@ -8,8 +8,7 @@
       :item="item"
       :route="route"
       @action="onAction"
-    >
-    </component>
+    />
   </div>
 </template>
 
@@ -58,7 +57,7 @@ export default defineComponent({
   computed: {
     currentActions(): string[] {
       const { ownerId, securables } = this.item;
-      return this.actions.filter((action) => this.can({ action, ownerId, securables }));
+      return this.actions.filter(action => this.can({ action, ownerId, securables }));
     },
     route(): string | null | undefined {
       return this.routePrefix ?? this.$route.name;
@@ -67,7 +66,7 @@ export default defineComponent({
 
   methods: {
     async onAction(action: string): Promise<void> {
-      //@ts-expect-error types
+      // @ts-expect-error types
       await this[`on${upperFirst(action)}`]();
     },
 

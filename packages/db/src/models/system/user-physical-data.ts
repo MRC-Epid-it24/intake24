@@ -61,7 +61,8 @@ export default class UserPhysicalData extends BaseModel<
   })
   get birthdate(): number | null {
     const birthdate = this.getDataValue('birthdate') as unknown;
-    if (typeof birthdate === 'string') return parseInt(birthdate.slice(0, 4), 10);
+    if (typeof birthdate === 'string')
+      return Number.parseInt(birthdate.slice(0, 4), 10);
 
     return null;
   }

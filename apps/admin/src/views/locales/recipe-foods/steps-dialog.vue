@@ -13,7 +13,7 @@
         <v-toolbar-title>
           {{ $t('locales.recipe-foods.steps') }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn color="primary" :title="$t('common.action.save')" @click.stop="saveSteps">
           {{ $t('common.action.save') }}
         </v-btn>
@@ -37,7 +37,7 @@
                     name="special"
                     outlined
                     readonly
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -47,7 +47,7 @@
                     name="code"
                     outlined
                     readonly
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <language-selector
@@ -64,7 +64,7 @@
                         :name="`estimateIn.${lang}`"
                         outlined
                         @input="form.errors.clear(`estimateIn.${lang}`)"
-                      ></v-text-field>
+                      />
                     </template>
                   </language-selector>
                 </v-col>
@@ -83,7 +83,7 @@
                         :name="`recipe-foods.${lang}`"
                         outlined
                         @input="form.errors.clear(`recipe-foods.${lang}`)"
-                      ></v-text-field>
+                      />
                     </template>
                   </language-selector>
                 </v-col>
@@ -95,13 +95,13 @@
                     hide-details="auto"
                     :label="$t('locales.recipe-foods.repeat')"
                     name="repeatable"
-                  ></v-switch>
+                  />
                   <v-switch
                     v-model="item.required"
                     hide-details="auto"
                     :label="$t('locales.recipe-foods.require')"
                     name="required"
-                  ></v-switch>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <select-resource
@@ -112,7 +112,9 @@
                     name="ingredientsCategoryCode"
                     resource="categories"
                   >
-                    <template #title>{{ $t(`fdbs.categories.title`) }}</template>
+                    <template #title>
+                      {{ $t(`fdbs.categories.title`) }}
+                    </template>
                     <template #item="{ item: resItem }">
                       <v-list-item-title>{{ resItem.code }}</v-list-item-title>
                       <v-list-item-subtitle>{{ resItem.name }}</v-list-item-subtitle>
@@ -130,11 +132,13 @@
               :title="$t('locales.recipe-foods.remove')"
               @click.stop="removeStep(idx)"
             >
-              <v-icon color="error">$delete</v-icon>
+              <v-icon color="error">
+                $delete
+              </v-icon>
             </v-btn>
           </v-list-item-action>
         </v-list-item>
-        <v-spacer class="pa-2"></v-spacer>
+        <v-spacer class="pa-2" />
         <div class="justify-center d-flex">
           <v-btn
             class="display-1"
@@ -214,7 +218,7 @@ export default defineComponent({
         });
 
       const items = await form.post<LocaleRecipeFoodSteps[]>(
-        `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`
+        `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`,
       );
 
       emit('update-steps', items);
@@ -224,7 +228,7 @@ export default defineComponent({
       form.items.push({
         id: undefined,
         code: `${props.activeRecipeFoodCode.substring(1)}_STP-${form.items.length + 1}`,
-        recipeFoodsId: parseInt(props.activeRecipeFoodId),
+        recipeFoodsId: Number.parseInt(props.activeRecipeFoodId),
         name: { en: 'Name' },
         description: { en: 'Description' },
         order: form.items.length + 1,

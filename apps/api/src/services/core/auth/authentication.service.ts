@@ -64,7 +64,7 @@ export type OTPVerification = {
 
 export type MFAVerification = DuoVerification | FIDOVerification | OTPVerification;
 
-const authenticationService = ({
+function authenticationService({
   aclCache,
   jwtRotationService,
   jwtService,
@@ -85,7 +85,7 @@ const authenticationService = ({
   | 'otpProvider'
   | 'fidoProvider'
   | 'servicesConfig'
->) => {
+>) {
   const logger = globalLogger.child({ service: 'AuthenticationService' });
 
   /**
@@ -101,14 +101,16 @@ const authenticationService = ({
    */
   const verifyPassword = async (
     password: string,
-    userPassword?: UserPassword
+    userPassword?: UserPassword,
   ): Promise<boolean> => {
-    if (!userPassword) throw new Error('Password login not enabled for this user.');
+    if (!userPassword)
+      throw new Error('Password login not enabled for this user.');
 
     const { passwordHasher, passwordSalt, passwordHash } = userPassword;
 
-    const algorithm = supportedAlgorithms.find((a) => a.id === passwordHasher);
-    if (!algorithm) throw new Error(`Password algorithm '${passwordHasher}' not supported.`);
+    const algorithm = supportedAlgorithms.find(a => a.id === passwordHasher);
+    if (!algorithm)
+      throw new Error(`Password algorithm '${passwordHasher}' not supported.`);
 
     return algorithm.verify(password, { salt: passwordSalt, hash: passwordHash });
   };
@@ -122,7 +124,7 @@ const authenticationService = ({
    */
   const processMFA = async (
     credentials: { userId: string; email: string },
-    meta: LoginMeta
+    meta: LoginMeta,
   ): Promise<MFAAuthResponse> => {
     const { userId, email } = credentials;
     const {
@@ -182,7 +184,7 @@ const authenticationService = ({
    */
   const processLogin = async <T extends FrontEnd>(
     credentials: LoginCredentials<T>,
-    meta: LoginMeta
+    meta: LoginMeta,
   ): Promise<T extends 'survey' ? ChallengeResponse | Tokens : MFAAuthResponse | Tokens> => {
     const { user, password, captcha, subject, frontEnd, survey } = credentials;
     const {
@@ -233,17 +235,18 @@ const authenticationService = ({
       if (authCaptcha) {
         try {
           if (typeof captcha === 'undefined')
-            //@ts-expect-error fix type
+            // @ts-expect-error fix type
             return { surveyId, provider: 'captcha' };
           else await captchaCheck(captcha, servicesConfig.captcha);
-        } catch (err) {
+        }
+        catch (err) {
           throw new UnauthorizedError('Invalid CAPTCHA challenge.');
         }
       }
     }
 
     if (frontEnd === 'admin' && user.multiFactorAuthentication && email)
-      //@ts-expect-error fix type
+      // @ts-expect-error fix type
       return processMFA({ email, userId }, meta);
 
     await signInService.log({ ...signInAttempt, successful: true });
@@ -251,7 +254,7 @@ const authenticationService = ({
     return jwtService.issueTokens(
       { surveyId, userId, verified: !!verifiedAt, permissions },
       frontEnd,
-      { subject: btoa(subject) }
+      { subject: btoa(subject) },
     );
   };
 
@@ -264,7 +267,7 @@ const authenticationService = ({
    */
   const adminLogin = async (
     credentials: LoginRequest,
-    meta: LoginMeta
+    meta: LoginMeta,
   ): Promise<Tokens | MFAAuthResponse> => {
     const { email, password } = credentials;
 
@@ -288,7 +291,7 @@ const authenticationService = ({
    */
   const emailLogin = async (
     credentials: EmailLoginRequest,
-    meta: LoginMeta
+    meta: LoginMeta,
   ): Promise<ChallengeResponse | Tokens> => {
     const { email, password, survey: slug, captcha } = credentials;
 
@@ -313,7 +316,7 @@ const authenticationService = ({
 
     return processLogin(
       { user, password, captcha, subject, frontEnd: 'survey', survey: survey ?? undefined },
-      meta
+      meta,
     );
   };
 
@@ -326,7 +329,7 @@ const authenticationService = ({
    */
   const aliasLogin = async (
     credentials: AliasLoginRequest,
-    meta: LoginMeta
+    meta: LoginMeta,
   ): Promise<ChallengeResponse | Tokens> => {
     const { username, password, survey: slug, captcha } = credentials;
 
@@ -354,7 +357,7 @@ const authenticationService = ({
 
     return processLogin(
       { user, password, captcha, subject, frontEnd: 'survey', survey: user?.aliases?.[0]?.survey },
-      meta
+      meta,
     );
   };
 
@@ -367,7 +370,7 @@ const authenticationService = ({
    */
   const tokenLogin = async (
     { token, captcha }: TokenLoginRequest,
-    meta: LoginMeta
+    meta: LoginMeta,
   ): Promise<ChallengeResponse | Tokens> => {
     const user = await User.findOne({
       subQuery: false,
@@ -397,7 +400,7 @@ const authenticationService = ({
         frontEnd: 'survey',
         survey: user?.aliases?.[0]?.survey,
       },
-      meta
+      meta,
     );
   };
 
@@ -423,10 +426,12 @@ const authenticationService = ({
         attributes: ['id', 'verifiedAt'],
         where: { id: userId, disabledAt: null },
       });
-      if (!user) throw new UnauthorizedError();
+      if (!user)
+        throw new UnauthorizedError();
 
       const valid = await jwtRotationService.verifyAndRevoke(token);
-      if (!valid) throw new UnauthorizedError();
+      if (!valid)
+        throw new UnauthorizedError();
 
       // Packing only permissions for survey front-end -> extend to admin (consider jwt payload size)
       const permissions = frontEnd === 'survey' ? await aclCache.getPermissions(userId) : undefined;
@@ -434,13 +439,15 @@ const authenticationService = ({
       return await jwtService.issueTokens(
         { surveyId, userId, verified: !!user.verifiedAt, permissions, aal, amr },
         frontEnd,
-        { subject }
+        { subject },
       );
-    } catch (err) {
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.error(`${name}: ${message}`, { stack });
-      } else logger.error(err);
+      }
+      else { logger.error(err); }
 
       throw new UnauthorizedError();
     }
@@ -517,7 +524,8 @@ const authenticationService = ({
           await duoProvider.authenticationVerification({ email, token: verification.token });
           break;
         case 'fido':
-          if (!authenticator) throw new UnauthorizedError();
+          if (!authenticator)
+            throw new UnauthorizedError();
 
           await fidoProvider.authenticationVerification({
             authenticator,
@@ -546,7 +554,8 @@ const authenticationService = ({
       ]);
 
       return tokens;
-    } catch (err) {
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.debug(`${name}: ${message}`, { stack });
@@ -555,7 +564,8 @@ const authenticationService = ({
       }
 
       throw new UnauthorizedError();
-    } finally {
+    }
+    finally {
       delete meta.req.session.mfaAuthChallenge;
     }
   };
@@ -569,7 +579,7 @@ const authenticationService = ({
     refresh,
     verify,
   };
-};
+}
 
 export default authenticationService;
 

@@ -18,10 +18,10 @@ function toExpressValidationError(item: ValidationErrorItem): ValidationError {
 // Convert Sequelize errors into a format compatible with express-validation
 function toExpressValidationErrors(error: SequelizeValidationError) {
   const errors = Object.fromEntries(
-    error.errors.map((sequelizeError) => [
+    error.errors.map(sequelizeError => [
       sequelizeError.path ?? '$',
       toExpressValidationError(sequelizeError),
-    ])
+    ]),
   );
 
   return {
@@ -34,7 +34,7 @@ export const handleSequelizeErrors: ErrorRequestHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   switch (err.name) {
     case 'SequelizeUniqueConstraintError':
@@ -46,11 +46,13 @@ export const handleSequelizeErrors: ErrorRequestHandler = (
   }
 };
 
-export const translateSqlErrors = async <T>(action: () => Promise<T>) => {
+export async function translateSqlErrors<T>(action: () => Promise<T>) {
   try {
     return await action();
-  } catch (e: any) {
-    if (e.code === '23505') throw new ConflictError();
+  }
+  catch (e: any) {
+    if (e.code === '23505')
+      throw new ConflictError();
     else throw e;
   }
-};
+}

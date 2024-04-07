@@ -7,7 +7,7 @@ export type UseStoreEntryProps = {
   id: string;
 };
 
-export const useEntry = <T = Dictionary, R = Dictionary>(props: UseStoreEntryProps) => {
+export function useEntry<T = Dictionary, R = Dictionary>(props: UseStoreEntryProps) {
   const { id } = toRefs(props);
   const entryStore = useStoreEntry();
 
@@ -21,7 +21,8 @@ export const useEntry = <T = Dictionary, R = Dictionary>(props: UseStoreEntryPro
   const isEdit = computed(() => !isCreate.value);
 
   const canHandleEntry = (action: string) => {
-    if (isCreate.value) return false;
+    if (isCreate.value)
+      return false;
 
     const { securables, ownerId } = entryStore.data;
 
@@ -37,4 +38,4 @@ export const useEntry = <T = Dictionary, R = Dictionary>(props: UseStoreEntryPro
     refsLoaded,
     canHandleEntry,
   };
-};
+}

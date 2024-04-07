@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
@@ -6,13 +5,13 @@ const env = dotenv.config();
 dotenvExpand.expand(env);
 
 const express = require('express');
-const fs = require('fs');
+const fs = require('node:fs');
 const helmet = require('helmet');
-const path = require('path');
+const path = require('node:path');
 
 const config = require('./config');
 
-const startApp = async () => {
+async function startApp() {
   const app = express();
 
   app.disable('x-powered-by');
@@ -21,9 +20,9 @@ const startApp = async () => {
     helmet({
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: ["'self'"],
+          defaultSrc: ['\'self\''],
           connectSrc: [
-            "'self'",
+            '\'self\'',
             'https://hcaptcha.com',
             'https://*.hcaptcha.com',
             'https://*.google-analytics.com',
@@ -32,7 +31,7 @@ const startApp = async () => {
             config.api.host,
           ],
           frameSrc: [
-            "'self'",
+            '\'self\'',
             'https://hcaptcha.com',
             'https://*.hcaptcha.com',
             'https://www.google.com/recaptcha/',
@@ -41,7 +40,7 @@ const startApp = async () => {
             'https://www.youtube.com',
           ],
           imgSrc: [
-            "'self'",
+            '\'self\'',
             'blob:',
             'data:',
             'https://*.google-analytics.com',
@@ -50,7 +49,7 @@ const startApp = async () => {
             config.api.cdn,
           ],
           scriptSrc: [
-            "'self'",
+            '\'self\'',
             'https://hcaptcha.com',
             'https://*.hcaptcha.com',
             'https://www.google.com/recaptcha/',
@@ -59,17 +58,17 @@ const startApp = async () => {
             'https://*.googletagmanager.com',
           ],
           styleSrc: [
-            "'self'",
+            '\'self\'',
             'https://hcaptcha.com',
             'https://*.hcaptcha.com',
-            "'unsafe-inline'", // TODO: review for Vuetify theming
+            '\'unsafe-inline\'', // TODO: review for Vuetify theming
           ],
         },
       },
       crossOriginEmbedderPolicy: false,
       crossOriginOpenerPolicy: false,
       crossOriginResourcePolicy: false,
-    })
+    }),
   );
 
   app.use(express.static(config.static, { index: false }));
@@ -95,7 +94,7 @@ const startApp = async () => {
     }
     console.log(`${config.name} is listening on port ${config.port}!`);
   });
-};
+}
 
 (async () => {
   await startApp();

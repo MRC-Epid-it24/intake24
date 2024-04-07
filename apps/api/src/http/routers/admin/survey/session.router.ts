@@ -9,7 +9,7 @@ import { permission } from '@intake24/api/http/middleware';
 import { contract } from '@intake24/common/contracts';
 import { Survey, UserSurveySession } from '@intake24/db';
 
-export const session = () => {
+export function session() {
   return initServer().router(contract.admin.survey.session, {
     browse: {
       middleware: [permission('surveys')],
@@ -23,12 +23,15 @@ export const session = () => {
 
         const where: WhereOptions<UserSurveySessionAttributes> = { surveyId };
         if (typeof search === 'string' && search) {
-          if (isUUID(search)) where.id = search;
-          else
+          if (isUUID(search)) {
+            where.id = search;
+          }
+          else {
             where['$user.aliases.username$'] = {
               [UserSurveySession.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.substring]:
                 `%${search}%`,
             };
+          }
         }
 
         const sessions = await UserSurveySession.paginate({
@@ -56,7 +59,8 @@ export const session = () => {
         });
 
         const session = await UserSurveySession.findOne({ where: { id: sessionId, surveyId } });
-        if (!session) throw new NotFoundError();
+        if (!session)
+          throw new NotFoundError();
 
         return { status: 200, body: session };
       },
@@ -70,7 +74,8 @@ export const session = () => {
         });
 
         const session = await UserSurveySession.findOne({ where: { id: sessionId, surveyId } });
-        if (!session) throw new NotFoundError();
+        if (!session)
+          throw new NotFoundError();
 
         await session.destroy();
 
@@ -78,4 +83,4 @@ export const session = () => {
       },
     },
   });
-};
+}

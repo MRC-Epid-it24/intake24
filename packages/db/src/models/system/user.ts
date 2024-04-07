@@ -242,27 +242,30 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
   }
 
   hasRole(role: string | string[], key: 'id' | 'name' = 'name'): boolean {
-    if (!this.roles || !this.roles.length) return false;
+    if (!this.roles || !this.roles.length)
+      return false;
 
     if (Array.isArray(role)) {
-      const currentRoleKeys = this.roles.map((item) => item[key]);
-      return role.every((item) => currentRoleKeys.includes(item));
+      const currentRoleKeys = this.roles.map(item => item[key]);
+      return role.every(item => currentRoleKeys.includes(item));
     }
 
-    return !!this.roles.find((item) => item[key] === role);
+    return !!this.roles.find(item => item[key] === role);
   }
 
   hasAnyRole(roles: string[], key: 'id' | 'name' = 'name'): boolean {
-    if (!this.roles || !this.roles.length) return false;
+    if (!this.roles || !this.roles.length)
+      return false;
 
-    return this.roles.some((item) => roles.includes(item[key]));
+    return this.roles.some(item => roles.includes(item[key]));
   }
 
   allPermissions(): Permission[] {
     const { permissions = [], roles = [] } = this;
 
     roles.forEach((item) => {
-      if (item.permissions) permissions.push(...item.permissions);
+      if (item.permissions)
+        permissions.push(...item.permissions);
     });
 
     return uniqBy(permissions, 'name');
@@ -270,14 +273,15 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
 
   hasPermission(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
     const permissions = this.allPermissions();
-    if (!permissions.length) return false;
+    if (!permissions.length)
+      return false;
 
     if (Array.isArray(permission)) {
-      const currentPermissionKeys = permissions.map((item) => item[key]);
-      return permission.every((item) => currentPermissionKeys.includes(item));
+      const currentPermissionKeys = permissions.map(item => item[key]);
+      return permission.every(item => currentPermissionKeys.includes(item));
     }
 
-    return !!permissions.find((item) => item[key] === permission);
+    return !!permissions.find(item => item[key] === permission);
   }
 
   can(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
@@ -286,9 +290,10 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
 
   hasAnyPermission(permission: string[], key: 'id' | 'name' = 'name'): boolean {
     const permissions = this.allPermissions();
-    if (!permissions.length) return false;
+    if (!permissions.length)
+      return false;
 
-    return permissions.some((item) => permission.includes(item[key]));
+    return permissions.some(item => permission.includes(item[key]));
   }
 
   isVerified(): boolean {

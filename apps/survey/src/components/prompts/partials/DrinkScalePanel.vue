@@ -8,10 +8,10 @@
     >
       <v-img ref="imgDrink" class="drink-scale-image" :src="scale.baseImageUrl" :style="imgVars">
         <template #placeholder>
-          <image-placeholder></image-placeholder>
+          <image-placeholder />
         </template>
       </v-img>
-      <v-img class="drink-scale-overlay" :src="scale.overlayImageUrl" :style="overlayVars"> </v-img>
+      <v-img class="drink-scale-overlay" :src="scale.overlayImageUrl" :style="overlayVars" />
       <div class="drink-scale-slider mr-6" :style="{ bottom: sliderBottom }">
         <v-slider
           v-model="sliderValue"
@@ -23,7 +23,7 @@
           :min="sliderMin"
           thumb-color="secondary"
           vertical
-        ></v-slider>
+        />
       </div>
       <div class="drink-scale-label">
         <v-chip
@@ -42,7 +42,9 @@
           outlined
           @click="updateSlider(-sliderStep)"
         >
-          <v-icon left>fas fa-circle-down</v-icon>
+          <v-icon left>
+            fas fa-circle-down
+          </v-icon>
           {{ $t(`prompts.drinkScale.${type}.less`) }}
         </v-btn>
       </v-col>
@@ -54,13 +56,17 @@
           outlined
           @click="updateSlider(sliderStep)"
         >
-          <v-icon left>fas fa-circle-up</v-icon>
+          <v-icon left>
+            fas fa-circle-up
+          </v-icon>
           {{ $t(`prompts.drinkScale.${type}.more`) }}
         </v-btn>
       </v-col>
       <v-col cols="12" sm>
         <v-btn block color="primary" @click="confirm">
-          <v-icon left>$yes</v-icon>
+          <v-icon left>
+            $yes
+          </v-icon>
           {{ $t(`prompts.drinkScale.${type}.confirm`) }}
         </v-btn>
       </v-col>
@@ -113,7 +119,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const wrapper = ref<InstanceType<typeof HTMLFormElement>>();
     const imgDrink = ref<InstanceType<typeof VImg>>();
-    //@ts-expect-error should allow vue instance?
+    // @ts-expect-error should allow vue instance?
     const { height, width } = useElementSize(imgDrink);
 
     const imgScale = computed(() => height.value / props.scale.height);
@@ -127,21 +133,23 @@ export default defineComponent({
     const sliderHeight = computed(() => sliderMax.value * imgScale.value);
 
     const isInScale = (y: number) =>
-      y >= sliderMin.value + props.scale.emptyLevel &&
-      y <= sliderMax.value + props.scale.emptyLevel;
+      y >= sliderMin.value + props.scale.emptyLevel
+      && y <= sliderMax.value + props.scale.emptyLevel;
 
     const updateSlider = (value: number) => {
       sliderValue.value = Math.min(
         sliderMax.value,
-        Math.max(sliderMin.value, sliderValue.value + value)
+        Math.max(sliderMin.value, sliderValue.value + value),
       );
     };
 
     const touchUpdateSlider = (event: MouseEvent) => {
-      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__')) return;
+      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__'))
+        return;
 
       const position = props.scale.height - event.offsetY / imgScale.value;
-      if (!isInScale(position)) return;
+      if (!isInScale(position))
+        return;
 
       sliderValue.value = Math.round(position - props.scale.emptyLevel);
     };
@@ -158,13 +166,13 @@ export default defineComponent({
     const fillLevel = computed(() => (sliderValue.value / sliderMax.value) * props.maxFillLevel);
 
     const fillVolume = computed(() =>
-      Math.round(calculateVolume(props.scale.volumeSamples, fillLevel.value))
+      Math.round(calculateVolume(props.scale.volumeSamples, fillLevel.value)),
     );
 
     const label = computed(() => `${fillVolume.value} ml`);
 
     const imgClip = computed(
-      () => (props.scale.height - props.scale.fullLevel) * 0.75 * imgScale.value
+      () => (props.scale.height - props.scale.fullLevel) * 0.75 * imgScale.value,
     );
 
     const imgVars = computed(() => ({ '--img-clip': `${imgClip.value}px` }));
@@ -180,7 +188,8 @@ export default defineComponent({
     };
 
     watch(fillLevel, (val) => {
-      if (!props.open) return;
+      if (!props.open)
+        return;
 
       emit('input', val);
     });
@@ -190,7 +199,7 @@ export default defineComponent({
       () => {
         sliderMax.value = props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel);
         sliderValue.value = sliderMax.value * props.value;
-      }
+      },
     );
 
     return {
@@ -219,14 +228,16 @@ export default defineComponent({
 
   watch: {
     height() {
-      if (this.open) this.scrollTo();
+      if (this.open)
+        this.scrollTo();
     },
   },
 
   methods: {
     scrollTo() {
       setTimeout(async () => {
-        if (!this.wrapper) return;
+        if (!this.wrapper)
+          return;
 
         await this.$vuetify.goTo(this.wrapper);
       }, 100);

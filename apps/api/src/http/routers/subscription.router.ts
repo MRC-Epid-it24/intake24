@@ -3,7 +3,7 @@ import { initServer } from '@ts-rest/express';
 import { contract } from '@intake24/common/contracts';
 import { UserSubscription } from '@intake24/db';
 
-export const subscription = () => {
+export function subscription() {
   return initServer().router(contract.subscription, {
     subscribe: async ({ body, req }) => {
       const { userId } = req.scope.cradle.user;
@@ -16,7 +16,8 @@ export const subscription = () => {
         where: { userId, type, subscription: JSON.stringify(subscription) },
       });
 
-      if (!subscriptions.length) await UserSubscription.create({ userId, type, subscription });
+      if (!subscriptions.length)
+        await UserSubscription.create({ userId, type, subscription });
 
       return { status: 200, body: undefined };
     },
@@ -41,4 +42,4 @@ export const subscription = () => {
       return { status: 200, body: undefined };
     },
   });
-};
+}

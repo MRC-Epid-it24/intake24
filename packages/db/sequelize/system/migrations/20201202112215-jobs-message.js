@@ -8,11 +8,11 @@ module.exports = {
           type: Sequelize.STRING(512),
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('tools_tasks', 'message', { transaction });
     }),

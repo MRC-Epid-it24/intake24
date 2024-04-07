@@ -4,7 +4,7 @@ export default () => {
   const url = '/api/admin/users/refs';
   const permissions = ['acl', 'users'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

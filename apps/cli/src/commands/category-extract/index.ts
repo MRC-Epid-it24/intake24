@@ -38,12 +38,11 @@ class CategoryExtract {
 
     const contents = await this.apiClient.categories.getCategoryContents(
       header.code,
-      this.localeId
+      this.localeId,
     );
 
-    for (const subheader of contents.subcategories) {
+    for (const subheader of contents.subcategories)
       await this.processCategory(level + 1, subheader);
-    }
   }
 }
 
@@ -56,7 +55,6 @@ export default async (localeId: string, options: ExtractCategoriesOptions): Prom
 
   const extract = new CategoryExtract(localeId, options.outputPath, apiClient);
 
-  for (const header of categories.subcategories) {
+  for (const header of categories.subcategories)
     await extract.processCategory(0, header);
-  }
 };

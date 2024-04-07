@@ -46,8 +46,7 @@ import SystemLocale from './locale';
 })
 export default class Language
   extends BaseModel<InferAttributes<Language>, InferCreationAttributes<Language>>
-  implements HasVisibility
-{
+  implements HasVisibility {
   @Column({
     autoIncrement: true,
     primaryKey: true,

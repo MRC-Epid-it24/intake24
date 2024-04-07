@@ -29,7 +29,7 @@ export default () => {
     ]);
   });
 
-  it('should return 400 for invalid input data', async () => {
+  it('should return 400 for invalid input data #1', async () => {
     const invalidInput = {
       name: ['name should be string'],
       phone: { value: 'phone should be string' },
@@ -44,11 +44,11 @@ export default () => {
       'post',
       url,
       ['name', 'phone', 'email', 'emailConfirm', 'password', 'passwordConfirm', 'terms'],
-      { input: invalidInput }
+      { input: invalidInput },
     );
   });
 
-  it('should return 400 for invalid input data', async () => {
+  it('should return 400 for invalid input data #2', async () => {
     const invalidInput = {
       name: 'name',
       phone: '123456789',
@@ -75,7 +75,7 @@ export default () => {
     expect(status).toBe(403);
   });
 
-  describe('Sign-ups enabled', () => {
+  describe('sign-ups enabled', () => {
     beforeAll(async () => {
       ioc.cradle.aclConfig.signup.enabled = true;
     });
@@ -89,8 +89,8 @@ export default () => {
       expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
       expect(
         (res.get('Set-Cookie') ?? []).some(
-          (cookie) => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name
-        )
+          cookie => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name,
+        ),
       ).toBeTrue();
     });
   });

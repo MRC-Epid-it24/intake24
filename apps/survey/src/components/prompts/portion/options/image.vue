@@ -1,7 +1,7 @@
 <template>
   <v-img :aspect-ratio="3 / 2" :src="method.imageUrl">
     <template #placeholder>
-      <image-placeholder></image-placeholder>
+      <image-placeholder />
     </template>
   </v-img>
 </template>

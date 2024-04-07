@@ -26,13 +26,13 @@ export default () => {
       .attach(
         'baseImage',
         fs.createReadStream(suite.files.images.jpg),
-        'imageMapForDrinkwareSet.jpg'
+        'imageMapForDrinkwareSet.jpg',
       );
 
     output = { ...input, scales: [] };
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 

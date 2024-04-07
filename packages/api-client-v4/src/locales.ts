@@ -29,18 +29,18 @@ export class LocalesApiV4 {
 
   public async findByCode(localeCode: string): Promise<LocaleEntry | null> {
     return this.baseClient.getOptional<LocaleEntry>(
-      `${LocalesApiV4.apiPath}/by-code/${localeCode}`
+      `${LocalesApiV4.apiPath}/by-code/${localeCode}`,
     );
   }
 
   public async create(
     localeId: string,
-    locale: CreateLocaleRequest
+    locale: CreateLocaleRequest,
   ): Promise<CreateResult<LocaleEntry>> {
     const response = await this.baseClient.postResponse<LocaleEntry>(
       `${LocalesApiV4.apiPath}`,
       locale,
-      {}
+      {},
     );
 
     return parseCreateResponse(response, this.baseClient.logger);

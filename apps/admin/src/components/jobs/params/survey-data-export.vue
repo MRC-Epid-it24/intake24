@@ -10,8 +10,7 @@
             :label="$t('surveys.id')"
             name="surveyId"
             resource="surveys"
-          >
-          </select-resource>
+          />
         </v-col>
         <v-col cols="12">
           <date-picker
@@ -19,7 +18,7 @@
             clearable
             :error-messages="errors.get('startDate')"
             :label="$t('surveys.startDate').toString()"
-          ></date-picker>
+          />
         </v-col>
         <v-col cols="12">
           <date-picker
@@ -27,7 +26,7 @@
             clearable
             :error-messages="errors.get('endDate')"
             :label="$t('surveys.endDate').toString()"
-          ></date-picker>
+          />
         </v-col>
       </v-row>
     </v-card-text>

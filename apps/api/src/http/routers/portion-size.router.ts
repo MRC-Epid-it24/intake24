@@ -8,7 +8,7 @@ import { asServedResponse, imageMapsResponse } from '@intake24/api/http/response
 import { contract } from '@intake24/common/contracts';
 
 // Omit fields unnecessary for the survey app
-const toSurveyResponse = (entry: DrinkwareSetEntry): DrinkwareSetResponse => {
+function toSurveyResponse(entry: DrinkwareSetEntry): DrinkwareSetResponse {
   return {
     // description intentionally omitted
     id: entry.id,
@@ -19,13 +19,15 @@ const toSurveyResponse = (entry: DrinkwareSetEntry): DrinkwareSetResponse => {
           return scale;
         case 2:
           return omit(scale, 'volumeSamples');
+        default:
+          return scale;
       }
     }),
   };
-};
+}
 
-export const portionSize = () =>
-  initServer().router(contract.portionSize, {
+export function portionSize() {
+  return initServer().router(contract.portionSize, {
     asServedSets: async ({ query: { id }, req }) => {
       const { imagesBaseUrl } = req.scope.cradle;
       const records = await req.scope.cradle.portionSizeService.getAsServedSets(id);
@@ -48,7 +50,8 @@ export const portionSize = () =>
       switch (typeof id) {
         case 'string': {
           const drinkwareSetEntry = await req.scope.cradle.drinkwareSetService.getDrinkwareSet(id);
-          if (drinkwareSetEntry === undefined) throw new NotFoundError();
+          if (drinkwareSetEntry === undefined)
+            throw new NotFoundError();
           return {
             status: 200,
             body: [toSurveyResponse(drinkwareSetEntry)],
@@ -57,10 +60,10 @@ export const portionSize = () =>
         case 'object':
           if (Array.isArray(id)) {
             const lookupResults = await Promise.all(
-              id.map((setId) => req.scope.cradle.drinkwareSetService.getDrinkwareSet(setId))
+              id.map(setId => req.scope.cradle.drinkwareSetService.getDrinkwareSet(setId)),
             );
             const successfulResults = lookupResults.filter(
-              (entry): entry is DrinkwareSetEntry => entry !== undefined
+              (entry): entry is DrinkwareSetEntry => entry !== undefined,
             );
             return {
               status: 200,
@@ -75,7 +78,8 @@ export const portionSize = () =>
     drinkwareSet: async ({ params: { id }, req }) => {
       const drinkwareSetEntry = await req.scope.cradle.drinkwareSetService.getDrinkwareSet(id);
 
-      if (drinkwareSetEntry === undefined) throw new NotFoundError();
+      if (drinkwareSetEntry === undefined)
+        throw new NotFoundError();
 
       return {
         status: 200,
@@ -150,3 +154,4 @@ export const portionSize = () =>
       };
     },
   });
+}

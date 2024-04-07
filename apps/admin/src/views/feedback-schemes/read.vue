@@ -5,8 +5,8 @@
         v-if="canHandleEntry('copy')"
         resource="feedback-schemes"
         :scheme-id="id"
-      ></copy-scheme-dialog>
-      <preview :feedback-scheme="entry"></preview>
+      />
+      <preview :feedback-scheme="entry" />
     </template>
     <v-simple-table>
       <tbody>

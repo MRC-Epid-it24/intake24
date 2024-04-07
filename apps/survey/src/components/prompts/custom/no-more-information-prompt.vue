@@ -20,7 +20,9 @@
               v-bind="attrs"
               v-on="on"
             >
-              <v-icon left>$delete</v-icon>
+              <v-icon left>
+                $delete
+              </v-icon>
               {{ $t('recall.actions.deleteFood') }}
             </v-btn>
           </template>
@@ -38,7 +40,9 @@
           :title="$t('recall.actions.editFood')"
           @click.stop="action('editFood', food?.id)"
         >
-          <v-icon left>$edit</v-icon>
+          <v-icon left>
+            $edit
+          </v-icon>
           {{ $t('recall.actions.editFood') }}
         </v-btn>
       </template>
@@ -57,7 +61,9 @@
               v-bind="attrs"
               v-on="on"
             >
-              <v-icon left>$delete</v-icon>
+              <v-icon left>
+                $delete
+              </v-icon>
               {{ $t('recall.actions.deleteMeal') }}
             </v-btn>
           </template>
@@ -75,11 +81,13 @@
           :title="$t('recall.actions.editMeal')"
           @click.stop="action('editMeal', meal?.id)"
         >
-          <v-icon left>$add</v-icon>
+          <v-icon left>
+            $add
+          </v-icon>
           {{ $t('recall.actions.editMeal') }}
         </v-btn>
       </template>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
       <template v-if="isFood">
@@ -92,7 +100,9 @@
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteFood') }}
               </span>
-              <v-icon class="pb-1">$delete</v-icon>
+              <v-icon class="pb-1">
+                $delete
+              </v-icon>
             </v-btn>
           </template>
           <i18n path="recall.menu.food.deleteConfirm">
@@ -101,14 +111,16 @@
             </template>
           </i18n>
         </confirm-dialog>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
         <v-btn color="primary" text @click.stop="action('editFood', food?.id)">
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.editFood') }}
           </span>
-          <v-icon class="pb-1">$edit</v-icon>
+          <v-icon class="pb-1">
+            $edit
+          </v-icon>
         </v-btn>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
       </template>
       <template v-if="isMeal">
         <confirm-dialog
@@ -120,7 +132,9 @@
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteMeal') }}
               </span>
-              <v-icon class="pb-1">$delete</v-icon>
+              <v-icon class="pb-1">
+                $delete
+              </v-icon>
             </v-btn>
           </template>
           <i18n path="recall.menu.meal.deleteConfirm">
@@ -129,16 +143,18 @@
             </template>
           </i18n>
         </confirm-dialog>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
         <v-btn color="primary" text @click.stop="action('editMeal', meal?.id)">
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.editMeal') }}
           </span>
-          <v-icon class="pb-1">$add</v-icon>
+          <v-icon class="pb-1">
+            $add
+          </v-icon>
         </v-btn>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
       </template>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </component>
 </template>
@@ -170,7 +186,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { action, customPromptLayout, foodName, isFood, isMeal, mealName } = usePromptUtils(
       props,
-      ctx
+      ctx,
     );
 
     const isValid = true;

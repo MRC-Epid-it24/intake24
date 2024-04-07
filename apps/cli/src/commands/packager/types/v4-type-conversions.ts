@@ -27,7 +27,7 @@ import type { AssociatedFood } from '@intake24/common/types/http/admin/associate
 import { useInRecipeTypes } from '@intake24/common/types';
 
 function fromPackageImageMapObjects(
-  objects: Record<string, PkgImageMapObject>
+  objects: Record<string, PkgImageMapObject>,
 ): ImageMapEntryObject[] {
   return Object.entries(objects).map(([objId, obj]) => ({
     id: objId,
@@ -53,9 +53,11 @@ function fromPackageLocale(locale: PkgLocale): LocaleRequest {
 }
 
 function validateUseInRecipes(useInRecipes: number | undefined): UseInRecipeType | undefined {
-  if (useInRecipes === undefined) return undefined;
-  const value = Object.entries(useInRecipeTypes).find((type) => type[1] === useInRecipes);
-  if (value === undefined) throw new Error(`Invalid useInRecipes value: ${useInRecipes}`);
+  if (useInRecipes === undefined)
+    return undefined;
+  const value = Object.entries(useInRecipeTypes).find(type => type[1] === useInRecipes);
+  if (value === undefined)
+    throw new Error(`Invalid useInRecipes value: ${useInRecipes}`);
   return value[1];
 }
 
@@ -142,7 +144,7 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod): PortionSizeMet
         ...baseFields,
         method: 'standard-portion',
         parameters: {
-          units: psm.units.map((pkgUnit) => ({
+          units: psm.units.map(pkgUnit => ({
             name: pkgUnit.name,
             weight: pkgUnit.weight,
             omitFoodDescription: pkgUnit.omitFoodDescription,
@@ -187,8 +189,8 @@ function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
     code: localFood.code,
     name: localFood.localDescription ?? 'Missing local description!',
     altNames: localFood.alternativeNames,
-    associatedFoods: localFood.associatedFoods.map((af) => fromPackageAssociatedFood(af)),
-    portionSizeMethods: localFood.portionSize.map((psm) => fromPackagePortionSizeMethod(psm)),
+    associatedFoods: localFood.associatedFoods.map(af => fromPackageAssociatedFood(af)),
+    portionSizeMethods: localFood.portionSize.map(psm => fromPackagePortionSizeMethod(psm)),
     nutrientTableCodes: localFood.nutrientTableCodes,
   };
 }
@@ -198,7 +200,7 @@ function fromPackageLocalCategory(localCategory: PkgLocalCategory): CreateLocalC
     code: localCategory.code,
     version: localCategory.version,
     name: localCategory.localDescription ?? 'Missing description!',
-    portionSizeMethods: localCategory.portionSize.map((psm) => fromPackagePortionSizeMethod(psm)),
+    portionSizeMethods: localCategory.portionSize.map(psm => fromPackagePortionSizeMethod(psm)),
   };
 }
 

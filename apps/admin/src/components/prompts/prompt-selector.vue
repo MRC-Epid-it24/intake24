@@ -15,10 +15,12 @@
         <v-toolbar-title>
           {{ $t(`survey-schemes.prompts.${dialog.index === -1 ? 'create' : 'edit'}`) }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-toolbar-items>
           <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-            <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+            <v-icon left>
+              $success
+            </v-icon>{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
         <template #extension>
@@ -44,7 +46,9 @@
                   <v-card outlined>
                     <v-toolbar color="grey lighten-4" flat>
                       <v-toolbar-title>
-                        <v-icon left>fas fa-fingerprint</v-icon>
+                        <v-icon left>
+                          fas fa-fingerprint
+                        </v-icon>
                         {{ $t('survey-schemes.prompts.internal._') }}
                       </v-toolbar-title>
                     </v-toolbar>
@@ -58,7 +62,7 @@
                             :label="$t('survey-schemes.prompts.internal.id._')"
                             :messages="$t('survey-schemes.prompts.internal.id.hint')"
                             outlined
-                          ></v-text-field>
+                          />
                         </v-col>
                         <v-col cols="12" md="6">
                           <v-text-field
@@ -68,7 +72,7 @@
                             :label="$t('survey-schemes.prompts.internal.name._')"
                             :messages="$t('survey-schemes.prompts.internal.name.hint')"
                             outlined
-                          ></v-text-field>
+                          />
                         </v-col>
                         <v-col v-if="dialog.prompt.type === 'custom'" cols="12" md="6">
                           <v-text-field
@@ -78,7 +82,7 @@
                             :label="$t('survey-schemes.prompts.internal.group._')"
                             :messages="$t('survey-schemes.prompts.internal.group.hint')"
                             outlined
-                          ></v-text-field>
+                          />
                         </v-col>
                       </v-row>
                     </v-container>
@@ -88,7 +92,9 @@
                   <v-card outlined>
                     <v-toolbar color="grey lighten-4" flat>
                       <v-toolbar-title>
-                        <v-icon left>fas fa-circle-question</v-icon>
+                        <v-icon left>
+                          fas fa-circle-question
+                        </v-icon>
                         {{ $t(`survey-schemes.prompts.type`) }}
                       </v-toolbar-title>
                       <template #extension>
@@ -113,7 +119,7 @@
                           v-for="(items, type) in availableGroupedPrompts"
                           :key="type"
                           v-bind="{ prompts: items, type }"
-                        ></prompt-type-selector>
+                        />
                       </v-tabs-items>
                     </v-item-group>
                   </v-card>
@@ -123,30 +129,34 @@
             <prompt-content
               :component="dialog.prompt.component"
               :i18n.sync="dialog.prompt.i18n"
-            ></prompt-content>
-            <prompt-actions :actions.sync="dialog.prompt.actions"></prompt-actions>
-            <prompt-conditions :conditions.sync="dialog.prompt.conditions"></prompt-conditions>
+            />
+            <prompt-actions :actions.sync="dialog.prompt.actions" />
+            <prompt-conditions :conditions.sync="dialog.prompt.conditions" />
             <prompt-validation
               v-if="
-                'validation' in dialog.prompt &&
-                promptSettings[dialog.prompt.component].tabs.includes('validation')
+                'validation' in dialog.prompt
+                  && promptSettings[dialog.prompt.component].tabs.includes('validation')
               "
               v-bind.sync="dialog.prompt.validation"
-            ></prompt-validation>
+            />
             <component
               :is="dialog.prompt.component"
               v-bind.sync="dialog.prompt"
               @validate="validate"
-            ></component>
-            <prompt-json v-model="dialog.prompt"></prompt-json>
+            />
+            <prompt-json v-model="dialog.prompt" />
           </v-tabs-items>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+              <v-icon left>
+                $cancel
+              </v-icon>{{ $t('common.action.cancel') }}
             </v-btn>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -261,24 +271,26 @@ export default defineComponent({
     },
     availablePrompts(): Prompt[] {
       const { section } = this;
-      if (!section) return this.prompts;
+      if (!section)
+        return this.prompts;
 
-      return this.prompts.filter((prompt) =>
-        this.promptSettings[prompt.component].sections.includes(section)
+      return this.prompts.filter(prompt =>
+        this.promptSettings[prompt.component].sections.includes(section),
       );
     },
     availableGroupedPrompts(): Record<PromptType, Prompt[]> {
       const { section } = this;
-      if (!section) return this.groupedPrompts;
+      if (!section)
+        return this.groupedPrompts;
 
       return Object.entries(this.groupedPrompts).reduce(
         (acc, [key, value]) => {
-          acc[key as PromptType] = value.filter((prompt) =>
-            this.promptSettings[prompt.component].sections.includes(section)
+          acc[key as PromptType] = value.filter(prompt =>
+            this.promptSettings[prompt.component].sections.includes(section),
           );
           return acc;
         },
-        {} as Record<PromptType, Prompt[]>
+        {} as Record<PromptType, Prompt[]>,
       );
     },
   },
@@ -302,7 +314,8 @@ export default defineComponent({
 
     focusInTox(event: FocusEvent) {
       const toxDialog = (event.target as HTMLElement).closest('.tox-dialog');
-      if (!toxDialog) return;
+      if (!toxDialog)
+        return;
 
       event.stopImmediatePropagation();
     },
@@ -311,10 +324,11 @@ export default defineComponent({
       const { show, index, prompt } = this.dialog;
       const { component } = prompt;
 
-      const newPrompt =
-        this.availablePrompts.find((item) => item.component === component) ??
-        this.availablePrompts[0];
-      if (!newPrompt) return;
+      const newPrompt
+        = this.availablePrompts.find(item => item.component === component)
+        ?? this.availablePrompts[0];
+      if (!newPrompt)
+        return;
 
       this.dialog = {
         show,
@@ -342,7 +356,7 @@ export default defineComponent({
     },
 
     edit(index: number, prompt: Prompt) {
-      const promptDefaults = this.prompts.find((p) => p.component === prompt.component);
+      const promptDefaults = this.prompts.find(p => p.component === prompt.component);
       if (!promptDefaults) {
         console.warn(`Prompt defaults for prompt type '${prompt.component}' not found.`);
         return;
@@ -359,7 +373,8 @@ export default defineComponent({
 
     save() {
       const isValid = this.form?.validate();
-      if (!isValid) return;
+      if (!isValid)
+        return;
 
       const {
         index,
@@ -367,7 +382,8 @@ export default defineComponent({
       } = this.dialog;
 
       for (const [key, value] of Object.entries(i18n)) {
-        if (!Object.keys(value).length) delete i18n[key];
+        if (!Object.keys(value).length)
+          delete i18n[key];
       }
 
       this.$emit('save', { prompt: { i18n, ...rest }, index });

@@ -5,7 +5,7 @@
         v-model="parameters.imageMapLabels"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.pizza.imageMapLabels')"
-      ></v-switch>
+      />
     </v-col>
   </v-row>
 </template>

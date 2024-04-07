@@ -8,7 +8,7 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
@@ -21,7 +21,7 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
     }),
 };

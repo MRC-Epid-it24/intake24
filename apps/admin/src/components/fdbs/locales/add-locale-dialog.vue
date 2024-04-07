@@ -25,8 +25,7 @@
           outlined
           prepend-inner-icon="$search"
           @click:clear="clear"
-        >
-        </v-text-field>
+        />
         <v-alert v-if="isAlreadyIncluded" text type="error">
           {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItems[0].code }) }}
         </v-alert>
@@ -37,24 +36,24 @@
                 <v-list-item :key="item.id" :value="item.id">
                   <template #default="{ active }">
                     <v-list-item-action>
-                      <v-checkbox :input-value="active"></v-checkbox>
+                      <v-checkbox :input-value="active" />
                     </v-list-item-action>
                     <v-list-item-avatar>
                       <v-icon>$locales</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title
-                        >{{ item.code }} | {{ item.englishName }}</v-list-item-title
-                      >
+                      <v-list-item-title>
+                        {{ item.code }} | {{ item.englishName }}
+                      </v-list-item-title>
                     </v-list-item-content>
                   </template>
                 </v-list-item>
-                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`" />
               </template>
             </v-list-item-group>
           </v-list>
           <div class="text-center">
-            <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
+            <v-pagination v-model="page" circle :length="lastPage" />
           </div>
         </template>
         <v-alert v-else color="secondary" text type="info">
@@ -63,9 +62,11 @@
       </v-card-text>
       <v-card-actions>
         <v-btn class="font-weight-bold" color="error" text @click.stop="close">
-          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+          <v-icon left>
+            $cancel
+          </v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
@@ -73,7 +74,9 @@
           text
           @click.stop="confirm"
         >
-          <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+          <v-icon left>
+            $success
+          </v-icon>{{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -113,15 +116,17 @@ export default defineComponent({
   computed: {
     selectedItems() {
       const { selected } = this;
-      if (!selected.length) return [];
+      if (!selected.length)
+        return [];
 
-      return this.items.filter((item) => selected.includes(item.id));
+      return this.items.filter(item => selected.includes(item.id));
     },
     isAlreadyIncluded() {
-      if (!this.currentItems.length || !this.selectedItems.length) return false;
+      if (!this.currentItems.length || !this.selectedItems.length)
+        return false;
       const codes = this.currentItems.map(({ id }) => id);
 
-      return this.selectedItems.some((item) => codes.includes(item.code));
+      return this.selectedItems.some(item => codes.includes(item.code));
     },
   },
 
@@ -132,11 +137,12 @@ export default defineComponent({
     },
 
     confirm() {
-      if (!this.selectedItems.length) return;
+      if (!this.selectedItems.length)
+        return;
 
       this.$emit(
         'add',
-        this.selectedItems.map(({ id, code, ...rest }) => ({ id: code, ...rest }))
+        this.selectedItems.map(({ id, code, ...rest }) => ({ id: code, ...rest })),
       );
       this.close();
     },

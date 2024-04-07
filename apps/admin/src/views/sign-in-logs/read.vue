@@ -11,7 +11,9 @@
               {{ entry.userId }}
             </router-link>
           </td>
-          <td v-else>{{ entry.userId }}</td>
+          <td v-else>
+            {{ entry.userId }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.provider') }}</th>
@@ -24,21 +26,31 @@
           <td>{{ entry.remoteAddress }}</td>
           <th>{{ $t('sign-in-logs.successful') }}</th>
           <td>
-            <v-icon v-if="entry.successful" color="success">$check</v-icon>
-            <v-icon v-else color="error">$times</v-icon>
+            <v-icon v-if="entry.successful" color="success">
+              $check
+            </v-icon>
+            <v-icon v-else color="error">
+              $times
+            </v-icon>
           </td>
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.userAgent') }}</th>
-          <td colspan="3">{{ entry.userAgent }}</td>
+          <td colspan="3">
+            {{ entry.userAgent }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.message') }}</th>
-          <td colspan="3">{{ entry.message }}</td>
+          <td colspan="3">
+            {{ entry.message }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.date') }}</th>
-          <td colspan="3">{{ formatDateTime(entry.date) }}</td>
+          <td colspan="3">
+            {{ formatDateTime(entry.date) }}
+          </td>
         </tr>
       </tbody>
     </v-simple-table>

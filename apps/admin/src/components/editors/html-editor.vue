@@ -1,7 +1,7 @@
 <template>
   <div>
-    <editor v-bind="{ init, value }" @input="$emit('input', $event)"></editor>
-    <v-messages v-show="hasErrors" class="mt-3 mx-2" color="error" :value="errors"></v-messages>
+    <editor v-bind="{ init, value }" @input="$emit('input', $event)" />
+    <v-messages v-show="hasErrors" class="mt-3 mx-2" color="error" :value="errors" />
   </div>
 </template>
 

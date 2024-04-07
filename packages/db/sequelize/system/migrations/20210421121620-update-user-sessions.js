@@ -29,7 +29,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_sessions', {
@@ -58,11 +58,11 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO user_sessions (user_id, survey_id, session_data, created_at, updated_at) SELECT user_id, survey_id, session_data, created, created FROM v3_user_sessions',
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('user_sessions', { transaction });
       await queryInterface.renameTable('v3_user_sessions', 'user_sessions', { transaction });

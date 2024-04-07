@@ -1,5 +1,6 @@
 {
   "name": "@intake24/ui",
+  "type": "module",
   "version": "2024.1.0",
   "private": true,
   "description": "Intake24 UI shared code",
@@ -10,7 +11,6 @@
     "url": "https://github.com/MRC-Epid-it24/intake24.git",
     "directory": "packages/ui"
   },
-  "type": "module",
   "engines": {
     "node": ">=18.17.0"
   },
@@ -37,10 +37,10 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.17.0",
-    "@types/node": "^20.12.4",
+    "@types/node": "^20.12.5",
     "typescript": "^5.4.4",
     "vite": "^5.2.8",
-    "vite-plugin-pwa": "^0.19.7",
+    "vite-plugin-pwa": "^0.19.8",
     "workbox-window": "^7.0.0"
   },
   "bundledDependencies": [

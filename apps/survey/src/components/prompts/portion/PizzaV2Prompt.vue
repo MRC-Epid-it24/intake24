@@ -5,7 +5,7 @@
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.sizes.label`) }}
           <template #actions>
-            <expansion-panel-actions :valid="sizeValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="sizeValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -20,7 +20,7 @@
                 :key="option.value"
                 :label="option.label"
                 :value="option.value"
-              ></v-radio>
+              />
             </v-radio-group>
             <v-btn
               :block="isMobile"
@@ -38,7 +38,7 @@
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.crusts.label`) }}
           <template #actions>
-            <expansion-panel-actions :valid="crustValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="crustValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -53,7 +53,7 @@
                 :key="option.value"
                 :label="option.label"
                 :value="option.value"
-              ></v-radio>
+              />
             </v-radio-group>
             <v-btn
               :block="isMobile"
@@ -71,7 +71,7 @@
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.units.label`) }}
           <template #actions>
-            <expansion-panel-actions :valid="unitValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="unitValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -100,7 +100,7 @@
                           <component
                             :is="`pizza-${unit.value}`"
                             class="pizza-unit__svg"
-                          ></component>
+                          />
                         </span>
                         <span class="font-weight-bold text-uppercase">
                           {{ $t(`prompts.${type}.units.${unit.value}`) }}
@@ -118,7 +118,7 @@
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.quantity.${state.portionSize.unit ?? 'slice'}`) }}
           <template #actions>
-            <expansion-panel-actions :valid="quantityValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="quantityValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -128,13 +128,13 @@
                 <component
                   :is="`pizza-${state.portionSize.unit}`"
                   class="pizza-unit__svg"
-                ></component>
+                />
               </v-col>
               <v-col cols="12" sm="6">
                 <quantity-card
                   v-model="state.portionSize.quantity"
                   @update:confirm="confirmType('quantity', $event)"
-                ></quantity-card>
+                />
               </v-col>
             </v-row>
           </v-container>
@@ -142,19 +142,19 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-//@ts-expect-error - virtual types
+// @ts-expect-error - virtual types
 import PizzaSlice from 'virtual:icons/fluent/food-pizza-24-filled';
-//@ts-expect-error - virtual types
+// @ts-expect-error - virtual types
 import PizzaWhole from 'virtual:icons/game-icons/full-pizza';
 import { computed, defineComponent, ref } from 'vue';
 
@@ -224,39 +224,39 @@ export default defineComponent({
       unitValid.value,
       quantityValid.value,
     ]);
-    const isValid = computed(() => validConditions.value.every((condition) => condition));
+    const isValid = computed(() => validConditions.value.every(condition => condition));
 
     const { updatePanel } = usePanel(state, validConditions);
 
     const sizeOptions = computed(() =>
-      pizzaSizes.map((value) => ({
+      pizzaSizes.map(value => ({
         label: i18n.t(`prompts.${type.value}.sizes.${value}`).toString(),
         value,
-      }))
+      })),
     );
 
     const crustOptions = computed(() =>
-      pizzaCrusts.map((value) => ({
+      pizzaCrusts.map(value => ({
         label: i18n.t(`prompts.${type.value}.crusts.${value}`),
         value,
-      }))
+      })),
     );
 
     const unitOptions = computed(() =>
-      pizzaUnits.map((value) => ({
+      pizzaUnits.map(value => ({
         label: i18n.t(`prompts.${type.value}.units.${value}`),
         value,
-      }))
+      })),
     );
 
     const update = () => {
       const { size, crust, unit, quantity } = state.value.portionSize;
-      if ([size, crust, unit, quantity].every((item) => item)) {
-        state.value.portionSize.servingWeight =
-          ((baseWeight * pizzaDefs[size!].multiplier * crustDefs[crust!]) /
-            (unit === 'slice' ? pizzaDefs[size!].slices : 1)) *
-          quantity *
-          props.conversionFactor;
+      if ([size, crust, unit, quantity].every(item => item)) {
+        state.value.portionSize.servingWeight
+          = ((baseWeight * pizzaDefs[size!].multiplier * crustDefs[crust!])
+          / (unit === 'slice' ? pizzaDefs[size!].slices : 1))
+          * quantity
+          * props.conversionFactor;
       }
 
       ctx.emit('input', state.value);

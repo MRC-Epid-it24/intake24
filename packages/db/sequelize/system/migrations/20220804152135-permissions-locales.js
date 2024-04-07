@@ -1,7 +1,7 @@
 const { createPermissions } = require('../../utils.js');
 
 module.exports = {
-  up: async (queryInterface) =>
+  up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const permissions = [
         { name: 'locales|split-lists', display_name: 'Locale split lists' },
@@ -11,11 +11,11 @@ module.exports = {
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `DELETE FROM permissions WHERE name IN ('locales|split-lists', 'locales|split-words', 'locales|synonym-sets');`,
-        { transaction }
+        { transaction },
       );
     }),
 };

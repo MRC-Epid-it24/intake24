@@ -26,7 +26,7 @@ export type UploadCsvFileInput = {
   userId?: string;
 };
 
-const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) => {
+function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) {
   /**
    * Get nutrient table record with all CSV mappings
    *
@@ -46,7 +46,8 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
       ],
     });
 
-    if (!nutrientTable || !nutrientTable.csvMapping) throw new NotFoundError();
+    if (!nutrientTable || !nutrientTable.csvMapping)
+      throw new NotFoundError();
 
     const { csvMapping, csvMappingFields = [], csvMappingNutrients = [] } = nutrientTable;
 
@@ -71,15 +72,15 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
       const nutrientTable = await NutrientTable.create({ id, description }, { transaction });
       const csvMapping = await NutrientTableCsvMapping.create(
         { nutrientTableId: id, ...input.csvMapping },
-        { transaction }
+        { transaction },
       );
 
-      const csvMappingFieldsInput = input.csvMappingFields.map((field) => ({
+      const csvMappingFieldsInput = input.csvMappingFields.map(field => ({
         nutrientTableId: id,
         ...field,
       }));
 
-      const csvMappingNutrientsInput = input.csvMappingNutrients.map((field) => ({
+      const csvMappingNutrientsInput = input.csvMappingNutrients.map(field => ({
         nutrientTableId: id,
         ...field,
       }));
@@ -101,15 +102,16 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   const updateCsvMappingFields = async (
     nutrientTableId: string,
     fields: NutrientTableRequest['csvMappingFields'],
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<NutrientTableCsvMappingField[]> => {
-    const fieldNames = fields.map((field) => field.fieldName);
+    const fieldNames = fields.map(field => field.fieldName);
     await NutrientTableCsvMappingField.destroy({
       where: { nutrientTableId, fieldName: { [Op.notIn]: fieldNames } },
       transaction,
     });
 
-    if (!fields.length) return [];
+    if (!fields.length)
+      return [];
 
     const csvMappingFields = await NutrientTableCsvMappingField.findAll({
       where: { nutrientTableId },
@@ -120,7 +122,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
     for (const field of fields) {
       const { fieldName, columnOffset } = field;
 
-      const matchIdx = csvMappingFields.findIndex((item) => item.fieldName === fieldName);
+      const matchIdx = csvMappingFields.findIndex(item => item.fieldName === fieldName);
 
       if (matchIdx === -1) {
         const newField = await NutrientTableCsvMappingField.create(
@@ -129,7 +131,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
             fieldName,
             columnOffset,
           },
-          { transaction }
+          { transaction },
         );
         csvMappingFields.push(newField);
         continue;
@@ -144,15 +146,16 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   const updateCsvMappingNutrients = async (
     nutrientTableId: string,
     nutrients: NutrientTableRequest['csvMappingNutrients'],
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<NutrientTableCsvMappingNutrient[]> => {
-    const nutrientTypes = nutrients.map((nutrient) => nutrient.nutrientTypeId);
+    const nutrientTypes = nutrients.map(nutrient => nutrient.nutrientTypeId);
     await NutrientTableCsvMappingNutrient.destroy({
       where: { nutrientTableId, nutrientTypeId: { [Op.notIn]: nutrientTypes } },
       transaction,
     });
 
-    if (!nutrients.length) return [];
+    if (!nutrients.length)
+      return [];
 
     const csvMappingNutrients = await NutrientTableCsvMappingNutrient.findAll({
       where: { nutrientTableId },
@@ -164,7 +167,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
       const { nutrientTypeId, columnOffset } = nutrient;
 
       const matchIdx = csvMappingNutrients.findIndex(
-        (item) => item.nutrientTypeId === nutrientTypeId
+        item => item.nutrientTypeId === nutrientTypeId,
       );
 
       if (matchIdx === -1) {
@@ -174,7 +177,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
             nutrientTypeId,
             columnOffset,
           },
-          { transaction }
+          { transaction },
         );
         csvMappingNutrients.push(newNutrient);
         continue;
@@ -195,14 +198,15 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
    */
   const updateTable = async (
     nutrientTableId: string,
-    input: Omit<NutrientTableRequest, 'id'>
+    input: Omit<NutrientTableRequest, 'id'>,
   ): Promise<NutrientTableEntry> => {
     const { description } = input;
 
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId, {
       include: [{ association: 'csvMapping', required: true }],
     });
-    if (!nutrientTable || !nutrientTable.csvMapping) throw new NotFoundError();
+    if (!nutrientTable || !nutrientTable.csvMapping)
+      throw new NotFoundError();
 
     const { csvMapping } = nutrientTable;
 
@@ -213,13 +217,13 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
       const csvMappingFields = await updateCsvMappingFields(
         nutrientTableId,
         input.csvMappingFields,
-        transaction
+        transaction,
       );
 
       const csvMappingNutrients = await updateCsvMappingNutrients(
         nutrientTableId,
         input.csvMappingNutrients,
-        transaction
+        transaction,
       );
 
       return {
@@ -239,7 +243,8 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
    */
   const deleteTable = async (nutrientTableId: string): Promise<void> => {
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
-    if (!nutrientTable) throw new NotFoundError();
+    if (!nutrientTable)
+      throw new NotFoundError();
 
     await nutrientTable.destroy();
   };
@@ -254,7 +259,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
 
   const updateRecords = async (nutrientTableId: string, records: ApiNutrientTableRecord[]) => {
     await db.foods.transaction(async (transaction) => {
-      const recordIds = records.map((record) => record.recordId);
+      const recordIds = records.map(record => record.recordId);
 
       // Find existing records ids matching nutrientTableId/nutrientTableRecordId
       const existingRecords = await NutrientTableRecord.findAll({
@@ -265,17 +270,17 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
       });
 
       const recordCreateAttribs: CreationAttributes<NutrientTableRecord>[] = records.map(
-        (record) => ({
+        record => ({
           id: existingRecords.find(
-            (existing) =>
-              existing.nutrientTableId === nutrientTableId &&
-              existing.nutrientTableRecordId === record.recordId
+            existing =>
+              existing.nutrientTableId === nutrientTableId
+              && existing.nutrientTableRecordId === record.recordId,
           )?.id,
           nutrientTableId,
           nutrientTableRecordId: record.recordId,
           name: record.name,
           localName: record.localName,
-        })
+        }),
       );
 
       await NutrientTableRecord.bulkCreate(recordCreateAttribs, {
@@ -289,28 +294,28 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
         transaction,
       });
 
-      const recordIdList = affectedRecords.map((record) => record.id);
+      const recordIdList = affectedRecords.map(record => record.id);
 
       const recordIdMap = Object.fromEntries(
-        affectedRecords.map((record) => [record.nutrientTableRecordId, record.id])
+        affectedRecords.map(record => [record.nutrientTableRecordId, record.id]),
       );
 
-      const recordNutrientCreateAttribs: CreationAttributes<NutrientTableRecordNutrient>[] =
-        records.flatMap((record) =>
-          record.nutrients.map((nutrientRow) => ({
+      const recordNutrientCreateAttribs: CreationAttributes<NutrientTableRecordNutrient>[]
+        = records.flatMap(record =>
+          record.nutrients.map(nutrientRow => ({
             nutrientTableRecordId: recordIdMap[record.recordId],
             nutrientTypeId: nutrientRow[0],
             unitsPer100g: nutrientRow[1],
-          }))
+          })),
         );
 
-      const recordFieldCreateAttribs: CreationAttributes<NutrientTableRecordField>[] =
-        records.flatMap((record) =>
-          record.fields.map((fieldRow) => ({
+      const recordFieldCreateAttribs: CreationAttributes<NutrientTableRecordField>[]
+        = records.flatMap(record =>
+          record.fields.map(fieldRow => ({
             nutrientTableRecordId: recordIdMap[record.recordId],
             name: fieldRow[0],
             value: fieldRow[1],
-          }))
+          })),
         );
 
       await NutrientTableRecordField.destroy({
@@ -337,7 +342,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
     queueTask,
     updateRecords,
   };
-};
+}
 
 export default nutrientTableService;
 

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <tool-bar v-bind="{ actions, api, selected: tracked }" @refresh="onRefresh"></tool-bar>
+    <tool-bar v-bind="{ actions, api, selected: tracked }" @refresh="onRefresh" />
     <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
       <v-card-text>
         <data-table-filter
           :count="meta.total"
           @filter-reset="resetFilter"
           @filter-set="setFilter"
-        ></data-table-filter>
+        />
         <v-data-table
           v-model="selected"
           :footer-props="{
@@ -35,7 +35,7 @@
               class="text-right"
               :item="item"
               @refresh="onRefresh"
-            ></action-bar>
+            />
           </template>
         </v-data-table>
       </v-card-text>

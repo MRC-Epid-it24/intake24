@@ -6,13 +6,13 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 export default () => {
   const url = '/api/auth/refresh';
 
-  it('Missing refresh token cookie should should return 401', async () => {
+  it('missing refresh token cookie should should return 401', async () => {
     const { status } = await request(suite.app).post(url).set('Accept', 'application/json');
 
     expect(status).toBe(401);
   });
 
-  it('Invalid refresh token cookie should should return 401', async () => {
+  it('invalid refresh token cookie should should return 401', async () => {
     const { status } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
@@ -21,7 +21,7 @@ export default () => {
     expect(status).toBe(401);
   });
 
-  it('Valid refresh token should return 200, access token & refresh cookie', async () => {
+  it('valid refresh token should return 200, access token & refresh cookie', async () => {
     const loginRes = await request(suite.app)
       .post('/api/auth/login/alias')
       .set('Accept', 'application/json')
@@ -57,8 +57,8 @@ export default () => {
     expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
     expect(
       (res.get('Set-Cookie') ?? []).some(
-        (cookie) => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name
-      )
+        cookie => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name,
+      ),
     ).toBeTrue();
   });
 };

@@ -3,7 +3,9 @@
     <v-card class="mb-4" outlined>
       <v-toolbar flat>
         <v-btn color="white" :title="$t(`common.action.back`)" :to="{ name: resource.name }">
-          <v-icon left>$back</v-icon>{{ $t(`common.action.back`) }}
+          <v-icon left>
+            $back
+          </v-icon>{{ $t(`common.action.back`) }}
         </v-btn>
         <v-btn
           v-if="editsResource"
@@ -12,10 +14,12 @@
           :title="$t(`common.action.save`)"
           @click="$emit('save')"
         >
-          <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
+          <v-icon left>
+            $save
+          </v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
-        <slot name="actions"></slot>
-        <v-spacer></v-spacer>
+        <slot name="actions" />
+        <v-spacer />
         <confirm-dialog
           v-if="canHandleEntry('delete')"
           color="error"
@@ -39,13 +43,13 @@
           {{ tabTitle(tab) }}
         </v-tab>
       </v-tabs>
-      <slot></slot>
+      <slot />
     </v-card>
-    <slot name="addons"></slot>
+    <slot name="addons" />
     <confirm-leave-dialog
       :value="routeLeave"
       @input="$emit('update:routeLeave', $event)"
-    ></confirm-leave-dialog>
+    />
   </div>
 </template>
 
@@ -99,22 +103,24 @@ export default defineComponent({
       return this.id === 'create';
     },
     tabs(): string[] {
-      if (this.isCreate) return ['create'];
+      if (this.isCreate)
+        return ['create'];
 
       const { securables, ownerId } = this.entry;
       const { name, module } = this.resource;
 
       return this.resource.routes.filter(
-        (item) =>
-          item !== 'create' &&
-          this.can({ resource: module ?? name, action: item, securables, ownerId })
+        item =>
+          item !== 'create'
+          && this.can({ resource: module ?? name, action: item, securables, ownerId }),
       );
     },
   },
 
   methods: {
     canHandleEntry(action: string) {
-      if (this.isCreate) return false;
+      if (this.isCreate)
+        return false;
 
       const { securables, ownerId } = this.entry;
       return this.can({ action, securables, ownerId });

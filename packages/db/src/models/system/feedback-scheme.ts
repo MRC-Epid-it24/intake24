@@ -47,8 +47,7 @@ import { Survey, User, UserSecurable } from '.';
 })
 export default class FeedbackScheme
   extends BaseModel<InferAttributes<FeedbackScheme>, InferCreationAttributes<FeedbackScheme>>
-  implements Securable
-{
+  implements Securable {
   @Column({
     autoIncrement: true,
     primaryKey: true,

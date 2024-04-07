@@ -1,7 +1,8 @@
 import { defineConfig } from 'vitepress';
-import { sidebar } from './sidebar';
-import { nav } from './nav';
+
 import { description } from '../../package.json';
+import { nav } from './nav';
+import { sidebar } from './sidebar';
 
 export default defineConfig({
   title: 'Intake24',
@@ -20,15 +21,15 @@ export default defineConfig({
   vite: { server: { port: 8400 } },
 
   themeConfig: {
-    logo: '/icons/pwa-512x512.png' ,
+    logo: '/icons/pwa-512x512.png',
     nav,
     search: {
       provider: 'algolia',
       options: {
         appId: 'JUDZMF6GV1',
         apiKey: 'b0cf60473c8b77d46acd0862161c7a15',
-        indexName: 'intake24'
-      }
+        indexName: 'intake24',
+      },
     },
     sidebar,
     socialLinks: [
@@ -38,6 +39,6 @@ export default defineConfig({
 
   cleanUrls: true,
   sitemap: {
-    hostname: 'https://docs.intake24.org'
-  }
+    hostname: 'https://docs.intake24.org',
+  },
 });

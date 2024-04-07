@@ -6,7 +6,7 @@ import type {
 import type { GuideImage, ImageMap, ImageMapObject } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 
-export const imageMapsResponse = (baseUrl: string) => {
+export function imageMapsResponse(baseUrl: string) {
   /**
    * Response for image map objects
    *
@@ -66,13 +66,13 @@ export const imageMapsResponse = (baseUrl: string) => {
           acc[imageMapObjectId] = { label, weight };
           return acc;
         },
-        {}
+        {},
       ),
     };
   };
 
   return { guideResponse, imageResponse, objectResponse };
-};
+}
 
 export default imageMapsResponse;
 

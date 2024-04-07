@@ -12,15 +12,15 @@ interface InheritableAttributesTemp {
   useInRecipes: number | null;
 }
 
-const inheritableAttributesService = () => {
+function inheritableAttributesService() {
   const completeAttributes = (
-    attributes: InheritableAttributesTemp
+    attributes: InheritableAttributesTemp,
   ): InheritableAttributes | undefined => {
     if (
-      attributes.readyMealOption == null ||
-      attributes.reasonableAmount == null ||
-      attributes.sameAsBeforeOption == null ||
-      attributes.useInRecipes == null
+      attributes.readyMealOption == null
+      || attributes.reasonableAmount == null
+      || attributes.sameAsBeforeOption == null
+      || attributes.useInRecipes == null
     )
       return undefined;
 
@@ -33,28 +33,30 @@ const inheritableAttributesService = () => {
   };
 
   const completeAttributesWithDefaults = async (
-    attributes: InheritableAttributesTemp
+    attributes: InheritableAttributesTemp,
   ): Promise<InheritableAttributes> => {
     const defaults = await AttributeDefaults.findAll({ limit: 1 });
 
-    if (defaults.length)
+    if (defaults.length) {
       return {
         readyMealOption: attributes.readyMealOption ?? defaults[0].readyMealOption,
         sameAsBeforeOption: attributes.sameAsBeforeOption ?? defaults[0].sameAsBeforeOption,
         reasonableAmount: attributes.reasonableAmount ?? defaults[0].reasonableAmount,
         useInRecipes: attributes.useInRecipes ?? defaults[0].useInRecipes,
       };
+    }
 
     throw new Error(
-      "Cannot resolve default inheritable attributes because the 'attributes_defaults' table is empty"
+      'Cannot resolve default inheritable attributes because the \'attributes_defaults\' table is empty',
     );
   };
 
   const resolveInheritableAttributesRec = async (
     parentCategories: string[],
-    attributes: InheritableAttributesTemp
+    attributes: InheritableAttributesTemp,
   ): Promise<InheritableAttributes> => {
-    if (!parentCategories.length) return completeAttributesWithDefaults(attributes);
+    if (!parentCategories.length)
+      return completeAttributesWithDefaults(attributes);
 
     const parentAttributesRows = await CategoryAttribute.findAll({
       where: { categoryCode: parentCategories },
@@ -69,18 +71,19 @@ const inheritableAttributesService = () => {
     };
 
     for (let i = 0; i < parentAttributesRows.length; ++i) {
-      newAttributes.readyMealOption =
-        attributes.readyMealOption ?? parentAttributesRows[i].readyMealOption;
-      newAttributes.reasonableAmount =
-        attributes.reasonableAmount ?? parentAttributesRows[i].reasonableAmount;
-      newAttributes.sameAsBeforeOption =
-        attributes.sameAsBeforeOption ?? parentAttributesRows[i].sameAsBeforeOption;
+      newAttributes.readyMealOption
+        = attributes.readyMealOption ?? parentAttributesRows[i].readyMealOption;
+      newAttributes.reasonableAmount
+        = attributes.reasonableAmount ?? parentAttributesRows[i].reasonableAmount;
+      newAttributes.sameAsBeforeOption
+        = attributes.sameAsBeforeOption ?? parentAttributesRows[i].sameAsBeforeOption;
       newAttributes.useInRecipes = attributes.useInRecipes ?? parentAttributesRows[i].useInRecipes;
     }
 
     const maybeComplete = completeAttributes(newAttributes);
 
-    if (maybeComplete) return maybeComplete;
+    if (maybeComplete)
+      return maybeComplete;
 
     const nextParents = await getCategoryParentCategories(parentCategories);
 
@@ -108,7 +111,8 @@ const inheritableAttributesService = () => {
 
     const maybeComplete = completeAttributes(attributes);
 
-    if (maybeComplete) return maybeComplete;
+    if (maybeComplete)
+      return maybeComplete;
 
     const parentCategories = await getFoodParentCategories(foodCode);
 
@@ -118,7 +122,7 @@ const inheritableAttributesService = () => {
   return {
     resolveInheritableAttributes,
   };
-};
+}
 
 export default inheritableAttributesService;
 

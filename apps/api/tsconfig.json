@@ -12,10 +12,10 @@
        * - code also needs exported to level - this actually helps with package organization
        * - VS Code intellisense doesn't auto-import, it offers the option but does not inject the import line
        */
-      "@intake24/*": ["../../packages/*/src"],
+      "@intake24/*": ["../../packages/*/src"]
     },
-    "types": ["node", "jest", "jest-extended", "webpack-env"],
+    "types": ["node", "jest", "jest-extended", "webpack-env"]
   },
   "include": ["src/**/*.ts", "__tests__/**/*.ts"],
-  "exclude": ["node_modules", "packages/common/src/theme/assets/**/*"],
+  "exclude": ["node_modules", "packages/common/src/theme/assets/**/*"]
 }

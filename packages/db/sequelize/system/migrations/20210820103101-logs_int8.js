@@ -41,12 +41,12 @@ module.exports = {
             defaultValue: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `INSERT INTO client_error_reports (id, user_id, survey_id, reported_at, stack_trace, survey_state_json, "new") SELECT id, user_id, survey_id, reported_at, array_to_string(stack_trace, E'\n'), survey_state_json, "new" FROM v3_client_error_reports`,
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('client_error_reports', 'id', { queryInterface, transaction });
@@ -112,7 +112,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('jobs', {
@@ -136,14 +136,14 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO jobs (id, type, user_id, download_url, download_url_expires_at, progress, successful, message, stack_trace, started_at, completed_at, created_at, updated_at) SELECT id, type, user_id, download_url, download_url_expires_at, progress, successful, message, stack_trace, started_at, completed_at, created_at, updated_at FROM v3_jobs',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('jobs', 'id', { queryInterface, transaction });
 
       await queryInterface.sequelize.query(
         `DELETE FROM signin_log WHERE user_id not in (SELECT id FROM users);`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('signin_log', 'v3_signin_log', {
@@ -152,12 +152,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_signin_log RENAME CONSTRAINT signin_log_pkey TO v3_signin_log_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE signin_log_id_seq RENAME TO v3_signin_log_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -201,7 +201,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('signin_log', {
@@ -225,7 +225,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO signin_log (id, user_id, date, remote_address, provider, provider_key, successful, message, user_agent) SELECT id, user_id, date, remote_address, provider, provider_key, successful, message, user_agent FROM v3_signin_log',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('signin_log', 'id', { queryInterface, transaction });

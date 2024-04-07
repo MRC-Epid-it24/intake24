@@ -52,11 +52,11 @@ export const useMessages = defineStore('messages', {
     },
 
     remove(id: string) {
-      this.items = this.items.filter((message) => message.id !== id);
+      this.items = this.items.filter(message => message.id !== id);
     },
 
     clean() {
-      this.items = this.items.filter((message) => message.show);
+      this.items = this.items.filter(message => message.show);
     },
   },
 });

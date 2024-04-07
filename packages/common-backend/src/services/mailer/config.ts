@@ -41,7 +41,7 @@ export const mailConfig: MailConfig = {
     smtp: {
       transport: 'smtp',
       host: process.env.MAIL_HOST || 'localhost',
-      port: parseInt(process.env.MAIL_PORT || '25', 10),
+      port: Number.parseInt(process.env.MAIL_PORT || '25', 10),
       secure: process.env.MAIL_SECURE === 'true',
       ignoreTLS: process.env.MAIL_IGNORE_TLS === 'true',
       auth,

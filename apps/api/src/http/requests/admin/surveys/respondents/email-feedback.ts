@@ -20,5 +20,5 @@ export default validate(
         errorMessage: typeErrorMessage('string.options', { options: emailCopy }),
       },
     },
-  })
+  }),
 );

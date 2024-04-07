@@ -3,7 +3,7 @@
     <v-list-item
       :key="meal.id"
       :class="{
-        selected: contextId ? meal.id === contextId : isSelected || selectedFoodInMeal,
+        'selected': contextId ? meal.id === contextId : isSelected || selectedFoodInMeal,
         'selected-food': !contextId && selectedFoodInMeal,
       }"
       @click="updateContextId(meal.id)"
@@ -19,11 +19,13 @@
         </v-list-item-action-text>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <v-icon :class="{ 'fa-rotate-180': meal.id === contextId }">$expand</v-icon>
+        <v-icon :class="{ 'fa-rotate-180': meal.id === contextId }">
+          $expand
+        </v-icon>
       </v-list-item-action>
     </v-list-item>
-    <context-menu v-bind="{ contextId, meal, menu }" @action="action"></context-menu>
-    <v-divider></v-divider>
+    <context-menu v-bind="{ contextId, meal, menu }" @action="action" />
+    <v-divider />
     <template v-if="meal.foods.length">
       <food-item
         v-for="food in meal.foods"
@@ -31,8 +33,8 @@
         v-bind="{ contextId, food, meal, selectedFoodId }"
         @action="action"
         @update:context-id="updateContextId"
-      ></food-item>
-      <v-divider></v-divider>
+      />
+      <v-divider />
     </template>
   </div>
 </template>

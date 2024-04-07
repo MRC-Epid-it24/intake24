@@ -6,7 +6,7 @@ module.exports = {
       await queryInterface.renameTable(
         'food_portion_size_method_params',
         'v3_food_portion_size_method_params',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -30,7 +30,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('food_portion_size_method_params', {
@@ -54,7 +54,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO food_portion_size_method_params (id, portion_size_method_id, "name", value) SELECT id, portion_size_method_id, "name", value FROM v3_food_portion_size_method_params',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('food_portion_size_method_params', 'id', {

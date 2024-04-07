@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('local_fields', 'v3_local_fields', { transaction });
       await queryInterface.renameTable('local_nutrient_types', 'v3_local_nutrient_types', {
@@ -12,7 +12,7 @@ module.exports = {
       await queryInterface.renameTable('schema_version', 'v3_schema_version', { transaction });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('v3_local_fields', 'local_fields', { transaction });
       await queryInterface.renameTable('v3_local_nutrient_types', 'local_nutrient_types', {

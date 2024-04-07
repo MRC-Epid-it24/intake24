@@ -46,7 +46,7 @@ export default class SurveyFeedbackNotification extends BaseJob<'SurveyFeedbackN
     const { path, url } = await this.feedbackService.getFeedbackFile(
       surveyId,
       username,
-      submissions
+      submissions,
     );
     const html = nunjucks.render('mail/surveys/feedback.njk', {
       title: subject,

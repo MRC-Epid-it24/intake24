@@ -1,20 +1,56 @@
 {
   "folders": [
-    { "path": "apps/admin" },
-    { "path": "packages/common" },
-    { "path": "packages/i18n" },
-    { "path": "packages/ui" }
+    {
+      "path": "apps/admin"
+    },
+    {
+      "path": "packages/common"
+    },
+    {
+      "path": "packages/i18n"
+    },
+    {
+      "path": "packages/ui"
+    }
   ],
   "settings": {
+    // Enable the ESlint flat config support
+    "eslint.experimental.useFlatConfig": true,
+    // Disable the default formatter, use eslint instead
+    "prettier.enable": false,
+    "editor.formatOnSave": false,
+    // Auto fix
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     },
-    "eslint.validate": ["vue", "vue-html", "html", "javascript", "javascriptreact", "typescript"],
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "vue",
+      "html",
+      "markdown",
+      "json",
+      "jsonc",
+      "yaml",
+      "toml",
+      "gql",
+      "graphql"
+    ],
     "eslint.workingDirectories": [
-      { "directory": "apps/admin" },
-      { "directory": "packages/common" },
-      { "directory": "packages/i18n" },
-      { "directory": "packages/ui" }
+      {
+        "directory": "apps/admin"
+      },
+      {
+        "directory": "packages/common"
+      },
+      {
+        "directory": "packages/i18n"
+      },
+      {
+        "directory": "packages/ui"
+      }
     ],
     "files.eol": "\n",
     "search.exclude": {
@@ -28,8 +64,7 @@
     "recommendations": [
       "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode",
-      "vue.volar",
-      "vue.vscode-typescript-vue-plugin"
+      "vue.volar"
     ]
   }
 }

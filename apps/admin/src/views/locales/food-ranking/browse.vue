@@ -14,7 +14,7 @@
           job-type="LocaleFoodRankingUpload"
           :label="$t('locales.food-ranking.upload').toString()"
           :survey-id="id"
-        ></csv-upload>
+        />
       </v-card-actions>
     </v-card>
   </layout>

@@ -21,7 +21,7 @@ export type OTPAuthenticationVerificationOps = {
   secret: string;
 };
 
-const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
+function optProvider({ securityConfig }: Pick<IoC, 'securityConfig'>) {
   const provider = 'otp';
   const { issuer } = securityConfig.mfa.providers[provider];
   const algorithm = 'SHA1';
@@ -42,7 +42,8 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
     const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
 
     const delta = totp.validate({ token });
-    if (delta === null) throw new ValidationError('Invalid OTP token.', { path: 'token' });
+    if (delta === null)
+      throw new ValidationError('Invalid OTP token.', { path: 'token' });
 
     return MFADevice.create({ userId, provider: 'otp', name, secret });
   };
@@ -71,7 +72,8 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
     const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
 
     const delta = totp.validate({ token });
-    if (delta === null) throw new Error('Invalid OTP token');
+    if (delta === null)
+      throw new Error('Invalid OTP token');
 
     return delta;
   };
@@ -82,7 +84,7 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
     authenticationChallenge,
     authenticationVerification,
   };
-};
+}
 
 export default optProvider;
 

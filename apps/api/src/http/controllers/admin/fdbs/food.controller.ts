@@ -12,14 +12,14 @@ import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { FoodLocal, SystemLocale } from '@intake24/db';
 
-const adminFoodController = ({
+function adminFoodController({
   adminFoodService,
   cachedParentCategoriesService,
   cache,
-}: Pick<IoC, 'adminFoodService' | 'cachedParentCategoriesService' | 'cache'>) => {
+}: Pick<IoC, 'adminFoodService' | 'cachedParentCategoriesService' | 'cache'>) {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
-    res: Response<FoodsResponse>
+    res: Response<FoodsResponse>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -31,7 +31,7 @@ const adminFoodController = ({
 
     const foods = await adminFoodService.browseFoods(
       code,
-      pick(req.query, ['page', 'limit', 'sort', 'search'])
+      pick(req.query, ['page', 'limit', 'sort', 'search']),
     );
 
     res.json(foods);
@@ -39,7 +39,7 @@ const adminFoodController = ({
 
   const store = async (
     req: Request<{ localeId: string }, any, FoodInput>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -57,7 +57,7 @@ const adminFoodController = ({
 
   const read = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response<FoodLocalEntry>
+    res: Response<FoodLocalEntry>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -68,14 +68,15 @@ const adminFoodController = ({
     });
 
     const foodLocal = await adminFoodService.getFood(foodId, code);
-    if (!foodLocal) throw new NotFoundError();
+    if (!foodLocal)
+      throw new NotFoundError();
 
     res.json(foodLocal);
   };
 
   const update = async (
     req: Request<{ foodId: string; localeId: string }, any, FoodLocalInput>,
-    res: Response<FoodLocalEntry>
+    res: Response<FoodLocalEntry>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -88,15 +89,15 @@ const adminFoodController = ({
     const { main, ...rest } = req.body;
 
     const canUpdateMain = !!(
-      main?.code &&
-      ((await aclService.hasPermission('locales|food-list')) ||
-        (await FoodLocal.count({ where: { foodCode: main.code } })) === 1)
+      main?.code
+      && ((await aclService.hasPermission('locales|food-list'))
+      || (await FoodLocal.count({ where: { foodCode: main.code } })) === 1)
     );
 
     const foodLocal = await adminFoodService.updateFood(
       foodId,
       code,
-      canUpdateMain ? req.body : rest
+      canUpdateMain ? req.body : rest,
     );
 
     await cache.push('indexing-locales', localeId);
@@ -106,7 +107,7 @@ const adminFoodController = ({
 
   const destroy = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -123,7 +124,7 @@ const adminFoodController = ({
 
   const copy = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response<FoodLocalEntry>
+    res: Response<FoodLocalEntry>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -140,7 +141,7 @@ const adminFoodController = ({
 
   const categories = async (
     req: Request,
-    res: Response<{ categories: string[] }>
+    res: Response<{ categories: string[] }>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -154,7 +155,8 @@ const adminFoodController = ({
       attributes: ['id', 'foodCode'],
       where: { id: foodId, localeId: code },
     });
-    if (!foodLocal) throw new NotFoundError();
+    if (!foodLocal)
+      throw new NotFoundError();
 
     const categories = await cachedParentCategoriesService.getFoodAllCategories(foodLocal.foodCode);
 
@@ -170,7 +172,7 @@ const adminFoodController = ({
     copy,
     categories,
   };
-};
+}
 
 export default adminFoodController;
 

@@ -9,21 +9,11 @@ export type TranslationStore = {
   [key: string]: TranslationObject;
 };
 
-const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'models'>) => {
+function i18nStore({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'models'>) {
   const logger = globalLogger.child({ service: 'I18nStore' });
 
   let store = api as TranslationStore;
   let availableLanguages = Object.keys(shared);
-
-  /**
-   * Initialize i18n store
-   * - load built-in & database translations
-   */
-  const init = async () => {
-    await reload();
-
-    logger.info(`Store has been loaded.`);
-  };
 
   /**
    * Reload i18n store
@@ -37,12 +27,15 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
 
     const dbStore = translations.reduce<{ [key: string]: any }>((acc, item) => {
       const { section, messages, language } = item;
-      if (!language) return acc;
+      if (!language)
+        return acc;
       const code = language.code;
 
-      if (!acc[code]) acc[code] = {};
+      if (!acc[code])
+        acc[code] = {};
 
-      if (!acc[code][section]) acc[code][section] = {};
+      if (!acc[code][section])
+        acc[code][section] = {};
 
       acc[code][section] = messages;
 
@@ -53,10 +46,20 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
     availableLanguages = [...new Set([...Object.keys(dbStore), ...Object.keys(shared)])];
   };
 
+  /**
+   * Initialize i18n store
+   * - load built-in & database translations
+   */
+  const init = async () => {
+    await reload();
+
+    logger.info(`Store has been loaded.`);
+  };
+
   const getAvailableLanguages = () => availableLanguages;
   const hasExactLanguage = (locale: string) => availableLanguages.includes(locale.toLowerCase());
   const hasLanguageWithSomeDialect = (locale: string) =>
-    availableLanguages.find((l) => l.toLowerCase().startsWith(locale.toLowerCase()));
+    availableLanguages.find(l => l.toLowerCase().startsWith(locale.toLowerCase()));
 
   /**
    * Resolve dot-notation i18n object path
@@ -69,9 +72,11 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
     const messages = store[locale] ?? store.en;
 
     const message = key.split('.').reduce((acc, seg) => {
-      if (typeof acc === 'string') return acc;
+      if (typeof acc === 'string')
+        return acc;
 
-      if (!acc[seg]) return key;
+      if (!acc[seg])
+        return key;
 
       return acc[seg];
     }, messages);
@@ -93,7 +98,7 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
     hasExactLanguage,
     hasLanguageWithSomeDialect,
   };
-};
+}
 
 export default i18nStore;
 

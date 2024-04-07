@@ -9,7 +9,7 @@ import { Op, User, UserPasswordReset } from '@intake24/db';
 
 import { captchaCheck } from '../rules';
 
-export const password = () => {
+export function password() {
   return initServer().router(contract.public.password, {
     request: {
       middleware: [
@@ -37,7 +37,7 @@ export const password = () => {
       const { email, password, token } = body;
 
       const expiredAt = new Date(
-        Date.now() - ms(req.scope.cradle.securityConfig.passwords.expiresIn)
+        Date.now() - ms(req.scope.cradle.securityConfig.passwords.expiresIn),
       );
       const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
@@ -47,11 +47,12 @@ export const password = () => {
         include: [{ association: 'user', where: { email: { [op]: email } } }],
       });
 
-      if (!passwordReset)
+      if (!passwordReset) {
         throw new ValidationError(
           `It looks like this link is invalid / expired. Please check your email or request another link.`,
-          { path: 'token' }
+          { path: 'token' },
         );
+      }
 
       const { userId } = passwordReset;
 
@@ -63,4 +64,4 @@ export const password = () => {
       return { status: 200, body: undefined };
     },
   });
-};
+}

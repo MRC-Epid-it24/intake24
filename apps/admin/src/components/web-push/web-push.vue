@@ -10,13 +10,15 @@
     prominent
     type="info"
   >
-    <p class="subtitle-1">Application can send you push notifications.</p>
+    <p class="subtitle-1">
+      Application can send you push notifications.
+    </p>
     <p class="caption">
       Push notifications can let you know when result is ready so you don't have to manually check
       for it. E.g. if you submit a job, which runs in background and is finished later. You don't
       have to re-check the status as you will get notified with push notification.
     </p>
-    <v-divider class="my-4 primary" style="opacity: 0.5"></v-divider>
+    <v-divider class="my-4 primary" style="opacity: 0.5" />
     <v-row v-if="isPermissionGranted" align="center" no-gutters>
       <v-col class="grow">
         <div class="subtitle-2">
@@ -24,7 +26,9 @@
         </div>
       </v-col>
       <v-col class="shrink">
-        <v-btn color="secondary" @click="testWebPush">Test PUSH</v-btn>
+        <v-btn color="secondary" @click="testWebPush">
+          Test PUSH
+        </v-btn>
       </v-col>
     </v-row>
     <v-row v-else align="center" no-gutters>
@@ -34,7 +38,9 @@
         </div>
       </v-col>
       <v-col class="shrink">
-        <v-btn color="secondary" @click="requestPermission">Allow PUSH</v-btn>
+        <v-btn color="secondary" @click="requestPermission">
+          Allow PUSH
+        </v-btn>
       </v-col>
     </v-row>
   </v-alert>
@@ -52,11 +58,13 @@ export default defineComponent({
 
   methods: {
     async requestPermission() {
-      if (!this.isWebPushSupported) return;
+      if (!this.isWebPushSupported)
+        return;
 
       this.permission = await Notification.requestPermission();
 
-      if (this.isPermissionGranted) await this.subscribe();
+      if (this.isPermissionGranted)
+        await this.subscribe();
     },
 
     async testWebPush() {

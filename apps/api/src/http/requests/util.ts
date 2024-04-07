@@ -14,18 +14,15 @@ type TsMeta<T extends AppRoute | AppRouter> = {
   path: string;
 };
 
-export const validate = (
-  rules: ValidationMiddleware | ValidationMiddleware[]
-): ValidationMiddleware[] => {
+export function validate(rules: ValidationMiddleware | ValidationMiddleware[]): ValidationMiddleware[] {
   const items = Array.isArray(rules) ? rules : [rules];
 
   items.push(validation);
   return items;
-};
+}
 
-export const errorMessage =
-  (key: string, params: I18nParams = {}) =>
-  (value: any, { path, req }: Meta) => {
+export function errorMessage(key: string, params: I18nParams = {}) {
+  return (value: any, { path, req }: Meta) => {
     const { i18nService } = req.scope.cradle;
     const { attributePath = path } = params;
 
@@ -34,8 +31,9 @@ export const errorMessage =
       ...params,
     });
   };
+}
 
-export const customErrorMessage = (key: string, { path, req }: Meta, params: I18nParams = {}) => {
+export function customErrorMessage(key: string, { path, req }: Meta, params: I18nParams = {}) {
   const { i18nService } = req.scope.cradle;
   const { attributePath = path } = params;
 
@@ -43,11 +41,10 @@ export const customErrorMessage = (key: string, { path, req }: Meta, params: I18
     attribute: i18nService.translate(`validation.attributes.${attributePath}`),
     ...params,
   });
-};
+}
 
-export const typeErrorMessage =
-  (type: string, params: I18nParams = {}) =>
-  (value: any, { path, req }: Meta) => {
+export function typeErrorMessage(type: string, params: I18nParams = {}) {
+  return (value: any, { path, req }: Meta) => {
     const { i18nService } = req.scope.cradle;
     const { attributePath = path } = params;
 
@@ -56,12 +53,9 @@ export const typeErrorMessage =
       ...params,
     });
   };
+}
 
-export const customTypeErrorMessage = (
-  type: string,
-  { path, req }: Meta,
-  params: I18nParams = {}
-) => {
+export function customTypeErrorMessage(type: string, { path, req }: Meta, params: I18nParams = {}) {
   const { i18nService } = req.scope.cradle;
   const { attributePath = path } = params;
 
@@ -69,7 +63,7 @@ export const customTypeErrorMessage = (
     attribute: i18nService.translate(`validation.attributes.${attributePath}`),
     ...params,
   });
-};
+}
 
 /* export const customValidationMessage = <T extends AppRoute | AppRouter>(
   key: string,
@@ -81,11 +75,7 @@ export const customTypeErrorMessage = (
   return i18nService.translate(key, { ...params });
 }; */
 
-export const customTypeValidationMessage = <T extends AppRoute | AppRouter>(
-  type: string,
-  { path, req }: TsMeta<T>,
-  params: I18nParams = {}
-) => {
+export function customTypeValidationMessage<T extends AppRoute | AppRouter>(type: string, { path, req }: TsMeta<T>, params: I18nParams = {}) {
   const { i18nService } = req.scope.cradle;
   const { attributePath = path } = params;
 
@@ -93,9 +83,10 @@ export const customTypeValidationMessage = <T extends AppRoute | AppRouter>(
     attribute: i18nService.translate(`validation.attributes.${attributePath}`),
     ...params,
   });
-};
+}
 
 export const localeIdValidator: CustomValidator = async (localeId: string, meta: Meta) => {
   const row = await FoodsLocale.findOne({ attributes: ['id'], where: { id: localeId } });
-  if (!row) return Promise.reject(typeErrorMessage('locale._')(localeId, meta));
+  if (!row)
+    return Promise.reject(typeErrorMessage('locale._')(localeId, meta));
 };

@@ -18,10 +18,12 @@ export class Errors {
   }
 
   get(field: string, index?: number): string[] {
-    if (typeof index === 'undefined') return [this.errors[field]?.msg].filter(Boolean);
+    if (typeof index === 'undefined')
+      return [this.errors[field]?.msg].filter(Boolean);
 
     return Object.entries(this.errors).reduce<string[]>((acc, [key, value]) => {
-      if (key.startsWith(`${field}[${index}]`)) acc.push(value.msg);
+      if (key.startsWith(`${field}[${index}]`))
+        acc.push(value.msg);
 
       return acc;
     }, []);
@@ -32,7 +34,7 @@ export class Errors {
       return Object.prototype.hasOwnProperty.call(this.errors, field);
 
     return Object.keys(this.errors).some(
-      (key) => key === field || key.startsWith(`${field}[${index}]`)
+      key => key === field || key.startsWith(`${field}[${index}]`),
     );
   }
 
@@ -41,18 +43,20 @@ export class Errors {
   }
 
   getErrors(field?: string[]): ValidationError[] {
-    if (!field) return Object.values(this.errors);
+    if (!field)
+      return Object.values(this.errors);
 
     return Object.values(pick(this.errors, field));
   }
 
   record(errors?: ValidationErrors): void {
-    if (typeof errors !== 'undefined') this.errors = errors;
+    if (typeof errors !== 'undefined')
+      this.errors = errors;
   }
 
   clear(field?: string | string[]): void {
     if (Array.isArray(field)) {
-      field.forEach((item) => delete this.errors[item]);
+      field.forEach(item => delete this.errors[item]);
       return;
     }
 

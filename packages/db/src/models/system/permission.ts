@@ -24,10 +24,11 @@ import { aclConfig } from '@intake24/common-backend';
 import BaseModel from '../model';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 
-export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<void> => {
+export async function addPermissionsToAdmin(permissions: Permission[]): Promise<void> {
   const admin = await Role.findOne({ where: { name: aclConfig.roles.superuser } });
-  if (admin) await admin.$add('permissions', permissions);
-};
+  if (admin)
+    await admin.$add('permissions', permissions);
+}
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name', 'displayName'], order: [['name', 'ASC']] },

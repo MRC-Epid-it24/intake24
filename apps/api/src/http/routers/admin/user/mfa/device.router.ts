@@ -5,7 +5,7 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import { MFADevice, User } from '@intake24/db';
 
-export const device = () => {
+export function device() {
   return initServer().router(contract.admin.user.mfa.device, {
     browse: async ({ req }) => {
       const { userId } = req.scope.cradle.user;
@@ -17,7 +17,8 @@ export const device = () => {
           ['mfaDevices', 'id', 'ASC'],
         ],
       });
-      if (!user) throw new NotFoundError();
+      if (!user)
+        throw new NotFoundError();
 
       return {
         status: 200,
@@ -28,7 +29,8 @@ export const device = () => {
       const { userId } = req.scope.cradle.user;
 
       const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
-      if (!devices.length) throw new ForbiddenError();
+      if (!devices.length)
+        throw new ForbiddenError();
 
       await User.update({ multiFactorAuthentication: status }, { where: { id: userId } });
 
@@ -38,7 +40,8 @@ export const device = () => {
       const { userId } = req.scope.cradle.user;
 
       const device = await MFADevice.findOne({ where: { id: deviceId, userId } });
-      if (!device) throw new NotFoundError();
+      if (!device)
+        throw new NotFoundError();
 
       return { status: 200, body: device };
     },
@@ -46,15 +49,17 @@ export const device = () => {
       const { userId } = req.scope.cradle.user;
 
       const device = await MFADevice.findOne({ where: { id: deviceId, userId } });
-      if (!device) throw new NotFoundError();
+      if (!device)
+        throw new NotFoundError();
 
       await device.update({ preferred });
 
-      if (req.body.preferred === true)
+      if (req.body.preferred === true) {
         await MFADevice.update(
           { preferred: false },
-          { where: { id: { [Op.ne]: deviceId }, userId } }
+          { where: { id: { [Op.ne]: deviceId }, userId } },
         );
+      }
 
       return { status: 200, body: device };
     },
@@ -65,7 +70,8 @@ export const device = () => {
         attributes: ['id'],
         where: { id: deviceId, userId },
       });
-      if (!device) throw new NotFoundError();
+      if (!device)
+        throw new NotFoundError();
 
       await device.destroy();
 
@@ -76,4 +82,4 @@ export const device = () => {
       return { status: 204, body: undefined };
     },
   });
-};
+}

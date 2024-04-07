@@ -8,9 +8,9 @@ export type QueueConfig = {
 const queueConfig: QueueConfig = {
   redis: {
     host: process.env.QUEUE_REDIS_HOST || 'localhost',
-    port: parseInt(process.env.QUEUE_REDIS_PORT || '6379', 10),
+    port: Number.parseInt(process.env.QUEUE_REDIS_PORT || '6379', 10),
   },
-  workers: parseInt(process.env.QUEUE_WORKERS || '3', 10),
+  workers: Number.parseInt(process.env.QUEUE_WORKERS || '3', 10),
 };
 
 export default queueConfig;

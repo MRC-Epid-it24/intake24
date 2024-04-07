@@ -5,15 +5,17 @@ export default class ValidationError extends Error {
 
   constructor(
     msg: string,
-    error?: Partial<FieldValidationError> | Partial<FieldValidationError>[]
+    error?: Partial<FieldValidationError> | Partial<FieldValidationError>[],
   ) {
     super(msg);
 
-    if (!error) return;
+    if (!error)
+      return;
 
     (Array.isArray(error) ? error : [error]).forEach((item) => {
       const { path } = item;
-      if (!path) return;
+      if (!path)
+        return;
 
       this.errors[path] = {
         type: 'field',

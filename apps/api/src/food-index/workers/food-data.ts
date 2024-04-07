@@ -29,11 +29,11 @@ export async function fetchGlobalCategoryData(): Promise<GlobalCategoryData> {
     },
   });
 
-  const entries: [string, GlobalCategoryEntry][] = categories.map((row) => [
+  const entries: [string, GlobalCategoryEntry][] = categories.map(row => [
     row.code,
     {
       isHidden: row.isHidden,
-      parentCategories: new Set(row.parentCategories!.map((row2) => row2.code)),
+      parentCategories: new Set(row.parentCategories!.map(row2 => row2.code)),
     },
   ]);
 
@@ -66,7 +66,7 @@ export async function fetchLocalFoods(localeId: string): Promise<LocalFoodData[]
   });
 
   return localFoods.map((row) => {
-    const parentCategories = new Set(row.foodLocal!.main!.parentCategories!.map((row) => row.code));
+    const parentCategories = new Set(row.foodLocal!.main!.parentCategories!.map(row => row.code));
     return {
       code: row.foodCode,
       name: row.foodLocal!.name,
@@ -83,7 +83,7 @@ export async function fetchLocalCategories(localeId: string): Promise<CategoryHe
     include: { required: true, association: 'main', attributes: [], where: { isHidden: false } },
   });
 
-  return localCategories.map((row) => ({
+  return localCategories.map(row => ({
     code: row.categoryCode,
     name: row.name,
   }));
@@ -113,11 +113,11 @@ export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFood
           recipeFoodEntry.recipeWord
             .concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
             .trim()
-            .split(/\s+/)
+            .split(/\s+/),
         ),
         description: recipeFoodEntry.name.toLocaleLowerCase(),
       },
-    ])
+    ]),
   );
   return recipeFoodsList;
 }

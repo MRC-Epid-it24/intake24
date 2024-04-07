@@ -6,10 +6,10 @@ import type { DrinkwareScaleEntry, DrinkwareScaleV2Entry } from '@intake24/commo
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 
-const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetService'>) => {
+function drinkScaleController({ drinkwareSetService }: Pick<IoC, 'drinkwareSetService'>) {
   const browse = async (
     req: Request<{ drinkwareSetId: string }, any, any, PaginateQuery>,
-    res: Response<(DrinkwareScaleEntry | DrinkwareScaleV2Entry)[]>
+    res: Response<(DrinkwareScaleEntry | DrinkwareScaleV2Entry)[]>,
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
@@ -20,7 +20,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
 
   const read = async (
     req: Request<{ drinkwareSetId: string; choiceId: string }>,
-    res: Response<DrinkwareScaleEntry | DrinkwareScaleV2Entry>
+    res: Response<DrinkwareScaleEntry | DrinkwareScaleV2Entry>,
   ): Promise<void> => {
     const { drinkwareSetId, choiceId } = req.params;
 
@@ -35,13 +35,13 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
       any,
       { updateOnConflict: string; return: string }
     >,
-    res: Response<DrinkwareScaleEntry | undefined>
+    res: Response<DrinkwareScaleEntry | undefined>,
   ): Promise<void> => {
     const { userId } = req.scope.cradle.user;
 
     const { drinkwareSetId, choiceId } = req.params;
     const updateOnConflict = req.query.updateOnConflict === 'true';
-    const returning = req.query['return'] === 'true';
+    const returning = req.query.return === 'true';
 
     if (req.files === undefined)
       throw new ValidationError('Drink scale image files are missing.', { path: 'baseImage' });
@@ -64,7 +64,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
       fullLevel,
       emptyLevel,
       volumeSamples,
-      updateOnConflict
+      updateOnConflict,
     );
 
     res.status(HttpStatusCode.Created);
@@ -72,7 +72,8 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     if (returning) {
       const scale = await drinkwareSetService.getDrinkScaleV1(drinkwareSetId, choiceId);
       res.json(scale);
-    } else {
+    }
+    else {
       res.end();
     }
   };
@@ -84,17 +85,18 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
       any,
       { updateOnConflict: string; return: string }
     >,
-    res: Response<DrinkwareScaleV2Entry | undefined>
+    res: Response<DrinkwareScaleV2Entry | undefined>,
   ): Promise<void> => {
     const { userId } = req.scope.cradle.user;
 
     const { drinkwareSetId, choiceId } = req.params;
     const updateOnConflict = req.query.updateOnConflict === 'true';
-    const returning = req.query['return'] === 'true';
+    const returning = req.query.return === 'true';
     const file = req.file;
     const { label, outlineCoordinates, volumeSamples } = req.body;
 
-    if (!file) throw new ValidationError('Drink scale base image file missing.', { path: 'image' });
+    if (!file)
+      throw new ValidationError('Drink scale base image file missing.', { path: 'image' });
 
     await drinkwareSetService.createDrinkScaleV2(
       drinkwareSetId,
@@ -104,7 +106,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
       label,
       outlineCoordinates,
       volumeSamples,
-      updateOnConflict
+      updateOnConflict,
     );
 
     res.status(HttpStatusCode.Created);
@@ -112,30 +114,32 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     if (returning) {
       const scale = await drinkwareSetService.getDrinkScaleV2(drinkwareSetId, choiceId);
       res.json(scale);
-    } else {
+    }
+    else {
       res.end();
     }
   };
 
   const destroy = async (
     req: Request<{ drinkwareSetId: string; choiceId: string }>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const { drinkwareSetId, choiceId } = req.params;
 
     const destroyed = await drinkwareSetService.destroyDrinkScale(drinkwareSetId, choiceId);
 
-    if (destroyed === 0n)
+    if (destroyed === 0n) {
       throw new NotFoundError(
-        `Drinkware set ${drinkwareSetId} has no drink scale for object ${choiceId}`
+        `Drinkware set ${drinkwareSetId} has no drink scale for object ${choiceId}`,
       );
+    }
 
     res.status(HttpStatusCode.Ok).end();
   };
 
   const destroyAll = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
@@ -157,7 +161,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     destroyAll,
     refs,
   };
-};
+}
 
 export default drinkScaleController;
 

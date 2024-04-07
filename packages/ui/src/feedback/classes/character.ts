@@ -41,7 +41,7 @@ export class CharacterRules implements Character {
 
   constructor(
     { id, image, nutrientTypeIds, sentiments, color, showRecommendations }: Character,
-    demographicGroups: DemographicGroup[]
+    demographicGroups: DemographicGroup[],
   ) {
     this.id = id;
     this.image = image;
@@ -55,17 +55,18 @@ export class CharacterRules implements Character {
 
   getSentiment(
     userDemographic: UserDemographic,
-    foods: AggregateFoodStats[]
+    foods: AggregateFoodStats[],
   ): CharacterParameters | undefined {
     const { image, id, color, showRecommendations } = this;
 
     const results = this.getDemographicsGroups(userDemographic, foods);
 
     const scaleSectors = results
-      .map((dg) => dg.resultedDemographicGroup.scaleSectors)
+      .map(dg => dg.resultedDemographicGroup.scaleSectors)
       .reduce((a, b) => a.slice().concat(b), []);
 
-    if (!scaleSectors.length) return undefined;
+    if (!scaleSectors.length)
+      return undefined;
 
     const sentiment = this.pickAverageSentiment(scaleSectors);
 
@@ -74,35 +75,37 @@ export class CharacterRules implements Character {
 
   private getDemographicsGroups(
     userDemographic: UserDemographic,
-    foods: AggregateFoodStats[]
+    foods: AggregateFoodStats[],
   ): DemographicResult[] {
-    const demographicGroups = this.demographicGroups.filter((dg) =>
-      dg.matchesUserDemographic(userDemographic)
+    const demographicGroups = this.demographicGroups.filter(dg =>
+      dg.matchesUserDemographic(userDemographic),
     );
     return demographicGroups
-      .map((dg) => dg.getResult(userDemographic, foods))
-      .filter((dg) => !!dg.resultedDemographicGroup.scaleSectors.length);
+      .map(dg => dg.getResult(userDemographic, foods))
+      .filter(dg => !!dg.resultedDemographicGroup.scaleSectors.length);
   }
 
   private pickAverageSentiment(scaleSectors: DemographicScaleSector[]): CharacterSentiment | null {
-    if (!scaleSectors.length) return null;
+    if (!scaleSectors.length)
+      return null;
 
-    const dgSenEnums = scaleSectors.map((ss) => ss.sentiment);
-    const presentEnums = defaultSentiments.filter((en) => dgSenEnums.includes(en));
+    const dgSenEnums = scaleSectors.map(ss => ss.sentiment);
+    const presentEnums = defaultSentiments.filter(en => dgSenEnums.includes(en));
     const averageEnumIndex = Math.round(
-      presentEnums.map((e) => defaultSentiments.indexOf(e)).reduce((a, b) => a + b) /
-        presentEnums.length
+      presentEnums.map(e => defaultSentiments.indexOf(e)).reduce((a, b) => a + b)
+      / presentEnums.length,
     );
 
-    if (!presentEnums.length) return null;
+    if (!presentEnums.length)
+      return null;
 
     return this.getCharacterSentimentByDemographicSentiment(defaultSentiments[averageEnumIndex]);
   }
 
   private getCharacterSentimentByDemographicSentiment(
-    dSentiment: Sentiment
+    dSentiment: Sentiment,
   ): CharacterSentiment | null {
-    const charSentiments = this.sentiments.filter((s) => s.sentiment.includes(dSentiment));
+    const charSentiments = this.sentiments.filter(s => s.sentiment.includes(dSentiment));
     return charSentiments.length ? charSentiments[0] : null;
   }
 }

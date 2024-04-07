@@ -4,7 +4,7 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.split-words.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         class="ml-3"
         color="primary"
@@ -28,7 +28,7 @@
             :label="$t('locales.split-words.words')"
             name="words"
             outlined
-          ></v-text-field>
+          />
         </v-list-item-content>
         <v-list-item-action>
           <confirm-dialog
@@ -84,7 +84,7 @@ export default defineComponent({
 
   async mounted() {
     const { data: items } = await this.$http.get<LocaleSplitWord[]>(
-      `admin/locales/${this.id}/split-words`
+      `admin/locales/${this.id}/split-words`,
     );
 
     this.toForm({ items });

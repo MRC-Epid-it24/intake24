@@ -49,25 +49,23 @@ export type BuildCardOps = {
   fruitAndVegPortions: FruitAndVegPortions;
 };
 
-export const buildCharacterParams = (
-  characterRule: CharacterRules,
-  { foods, userDemographic }: BuildCardOps
-): FeedbackCardParameters | undefined => characterRule.getSentiment(userDemographic, foods);
+export function buildCharacterParams(characterRule: CharacterRules, { foods, userDemographic }: BuildCardOps): FeedbackCardParameters | undefined {
+  return characterRule.getSentiment(userDemographic, foods);
+}
 
-export const buildNutrientGroupParams = (
-  card: NutrientGroupCardWithDemGroups,
-  { averageIntake, userDemographic }: BuildCardOps
-): NutrientGroupParameters | undefined => {
+export function buildNutrientGroupParams(card: NutrientGroupCardWithDemGroups, { averageIntake, userDemographic }: BuildCardOps): NutrientGroupParameters | undefined {
   const scaleSector = card.demographicGroups
-    .filter((dg) => dg.matchesUserDemographic(userDemographic))
+    .filter(dg => dg.matchesUserDemographic(userDemographic))
     .at(0)?.scaleSectors[0];
-  if (!scaleSector) return undefined;
+  if (!scaleSector)
+    return undefined;
 
   const { low, high } = card;
 
   let intake = card.nutrientTypes.reduce((total, nutrientTypeId) => {
     const nutrientIntake = averageIntake.get(nutrientTypeId);
-    if (nutrientIntake !== undefined) return total + nutrientIntake;
+    if (nutrientIntake !== undefined)
+      return total + nutrientIntake;
 
     return total;
   }, 0);
@@ -76,20 +74,18 @@ export const buildNutrientGroupParams = (
   const recommendedIntake = new DemographicRange(low?.threshold ?? 0, high?.threshold ?? 1000);
 
   return { ...card, intake, recommendedIntake, scaleSector };
-};
+}
 
-export const buildFiveADayParams = (
-  card: FiveADayCardWithDemGroups,
-  { fruitAndVegPortions, userDemographic }: BuildCardOps
-): FiveADayParameters | undefined => {
+export function buildFiveADayParams(card: FiveADayCardWithDemGroups, { fruitAndVegPortions, userDemographic }: BuildCardOps): FiveADayParameters | undefined {
   const scaleSector = card.demographicGroups
-    .filter((dg) => dg.matchesUserDemographic(userDemographic))
+    .filter(dg => dg.matchesUserDemographic(userDemographic))
     .at(0)?.scaleSectors[0];
 
-  if (!scaleSector) return undefined;
+  if (!scaleSector)
+    return undefined;
 
   return { ...card, portions: round(fruitAndVegPortions.total), scaleSector };
-};
+}
 
 export const mappers: Record<
   CardType,
@@ -100,16 +96,14 @@ export const mappers: Record<
   'nutrient-group': buildNutrientGroupParams,
 };
 
-export const buildCardParams = (
-  cards: CardWithDemGroups[],
-  ops: BuildCardOps
-): FeedbackCardParameters[] => {
+export function buildCardParams(cards: CardWithDemGroups[], ops: BuildCardOps): FeedbackCardParameters[] {
   const cardParameters = cards.reduce<FeedbackCardParameters[]>((acc, card) => {
     const cardParams = mappers[card.type](card, ops);
-    if (cardParams) acc.push(cardParams);
+    if (cardParams)
+      acc.push(cardParams);
 
     return acc;
   }, []);
 
   return cardParameters;
-};
+}

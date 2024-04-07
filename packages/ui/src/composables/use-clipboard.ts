@@ -4,7 +4,7 @@ import { useI18n } from '@intake24/i18n';
 
 import { useMessages } from '../stores';
 
-export const useClipboard = () => {
+export function useClipboard() {
   const { i18n } = useI18n();
   const messages = useMessages();
 
@@ -26,4 +26,4 @@ export const useClipboard = () => {
     clipboardAvailable,
     toClipboard,
   };
-};
+}

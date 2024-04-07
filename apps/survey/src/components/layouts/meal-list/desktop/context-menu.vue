@@ -3,7 +3,9 @@
     <v-menu :close-delay="250" close-on-click close-on-content-click offset-x open-on-hover>
       <template #activator="{ on, attrs }">
         <v-btn icon v-bind="attrs" v-on="on" @click.stop>
-          <v-icon small>$edit</v-icon>
+          <v-icon small>
+            $edit
+          </v-icon>
         </v-btn>
       </template>
       <v-list dense>
@@ -13,13 +15,15 @@
             @click="item.dialog ? openDialog(item.action) : action(item.action)"
           >
             <v-list-item-icon v-if="item.icon">
-              <v-icon small>{{ item.icon }}</v-icon>
+              <v-icon small>
+                {{ item.icon }}
+              </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>{{ item.name }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-divider v-if="idx + 1 < menu.length" :key="`div-${item.name}`"></v-divider>
+          <v-divider v-if="idx + 1 < menu.length" :key="`div-${item.name}`" />
         </template>
       </v-list>
     </v-menu>

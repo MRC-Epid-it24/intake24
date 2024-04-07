@@ -25,8 +25,8 @@ export const opts: Record<FrontEnd, StrategyOptionsWithoutRequest> = {
   },
 };
 
-export const buildJwtStrategy = (frontEnd: FrontEnd): Strategy =>
-  new Strategy(opts[frontEnd], async (payload, done) => {
+export function buildJwtStrategy(frontEnd: FrontEnd): Strategy {
+  return new Strategy(opts[frontEnd], async (payload, done) => {
     const { userId, jti, aud } = payload as TokenPayload;
 
     try {
@@ -48,10 +48,12 @@ export const buildJwtStrategy = (frontEnd: FrontEnd): Strategy =>
       });
 
       done(null, user ? payload : false);
-    } catch (err) {
+    }
+    catch (err) {
       done(err, false);
     }
   });
+}
 
 export default (passport: PassportStatic): void => {
   passport.use('survey', buildJwtStrategy('survey'));

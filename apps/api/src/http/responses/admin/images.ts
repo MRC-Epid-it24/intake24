@@ -23,7 +23,7 @@ import { InternalServerError } from '@intake24/api/http/errors';
 
 type GuideObjects = { [index: string]: { label: LocaleTranslation; weight: number } };
 
-const imageResponseCollection = (baseUrl: string) => {
+function imageResponseCollection(baseUrl: string) {
   /**
    * As served image entry
    *
@@ -33,10 +33,11 @@ const imageResponseCollection = (baseUrl: string) => {
   const asServedImageEntryResponse = (item: AsServedImage): AsServedImageEntry => {
     const { id, image, thumbnailImage, weight } = item;
 
-    if (!image || !thumbnailImage)
+    if (!image || !thumbnailImage) {
       throw new InternalServerError(
-        'ImageResponseCollection|asServedImages: not loaded relationships.'
+        'ImageResponseCollection|asServedImages: not loaded relationships.',
       );
+    }
 
     return {
       id,
@@ -55,10 +56,11 @@ const imageResponseCollection = (baseUrl: string) => {
   const asServedSetListResponse = (item: AsServedSet): AsServedSetListEntry => {
     const { id, description, selectionImage } = item;
 
-    if (!selectionImage)
+    if (!selectionImage) {
       throw new InternalServerError(
-        'ImageResponseCollection|asServedSetListResponse: not loaded relationships.'
+        'ImageResponseCollection|asServedSetListResponse: not loaded relationships.',
       );
+    }
 
     return {
       id,
@@ -76,10 +78,11 @@ const imageResponseCollection = (baseUrl: string) => {
   const asServedSetEntryResponse = (item: AsServedSet): AsServedSetEntry => {
     const { id, description, asServedImages: images, selectionImage } = item;
 
-    if (!selectionImage || !images)
+    if (!selectionImage || !images) {
       throw new InternalServerError(
-        'ImageResponseCollection|asServedSetEntryResponse: not loaded relationships.'
+        'ImageResponseCollection|asServedSetEntryResponse: not loaded relationships.',
       );
+    }
 
     return {
       id,
@@ -98,10 +101,11 @@ const imageResponseCollection = (baseUrl: string) => {
   const drinkwareListResponse = (item: DrinkwareSet): DrinkwareSetListEntry => {
     const { id, description, imageMap } = item;
 
-    if (!imageMap || !imageMap.baseImage)
+    if (!imageMap || !imageMap.baseImage) {
       throw new InternalServerError(
-        'ImageResponseCollection|drinkwareListResponse: not loaded relationships.'
+        'ImageResponseCollection|drinkwareListResponse: not loaded relationships.',
       );
+    }
 
     return {
       id,
@@ -132,7 +136,7 @@ const imageResponseCollection = (baseUrl: string) => {
    */
   const guideObjects = (
     mapObjects: ImageMapObject[],
-    guideObjects: GuideObjects
+    guideObjects: GuideObjects,
   ): GuideImageEntryObject[] =>
     mapObjects.map((object) => {
       const { id, description, outlineCoordinates, navigationIndex } = object;
@@ -150,10 +154,11 @@ const imageResponseCollection = (baseUrl: string) => {
   const guideListResponse = (item: GuideImage): GuideImageListEntry => {
     const { id, description, selectionImage } = item;
 
-    if (!selectionImage)
+    if (!selectionImage) {
       throw new InternalServerError(
-        'ImageResponseCollection|guideListResponse: not loaded relationships.'
+        'ImageResponseCollection|guideListResponse: not loaded relationships.',
       );
+    }
 
     return {
       id,
@@ -171,24 +176,26 @@ const imageResponseCollection = (baseUrl: string) => {
   const guideEntryResponse = (item: GuideImage): GuideImageEntry => {
     const { id, description, imageMapId, imageMap, objects: guideImageObjects } = item;
 
-    if (!imageMap || !guideImageObjects)
+    if (!imageMap || !guideImageObjects) {
       throw new InternalServerError(
-        'ImageResponseCollection|guideEntryResponse: not loaded relationships.'
+        'ImageResponseCollection|guideEntryResponse: not loaded relationships.',
       );
+    }
 
     const { baseImage, objects: imageMapObjects } = imageMap;
 
-    if (!baseImage || !imageMapObjects)
+    if (!baseImage || !imageMapObjects) {
       throw new InternalServerError(
-        'ImageResponseCollection|guideEntryResponse: not loaded relationships.'
+        'ImageResponseCollection|guideEntryResponse: not loaded relationships.',
       );
+    }
 
     const objects = guideImageObjects.reduce<GuideObjects>(
       (acc, { imageMapObjectId, label, weight }) => {
         acc[imageMapObjectId] = { label, weight };
         return acc;
       },
-      {}
+      {},
     );
 
     return {
@@ -209,10 +216,11 @@ const imageResponseCollection = (baseUrl: string) => {
   const mapListResponse = (item: ImageMap): ImageMapListEntry => {
     const { id, description, baseImage } = item;
 
-    if (!baseImage)
+    if (!baseImage) {
       throw new InternalServerError(
-        'ImageResponseCollection|mapListResponse: not loaded relationships.'
+        'ImageResponseCollection|mapListResponse: not loaded relationships.',
       );
+    }
 
     return {
       id,
@@ -230,10 +238,11 @@ const imageResponseCollection = (baseUrl: string) => {
   const mapEntryResponse = (item: ImageMap): ImageMapEntry => {
     const { id, description, baseImage, objects } = item;
 
-    if (!baseImage || !objects)
+    if (!baseImage || !objects) {
       throw new InternalServerError(
-        'ImageResponseCollection|mapEntryResponse: not loaded relationships.'
+        'ImageResponseCollection|mapEntryResponse: not loaded relationships.',
       );
+    }
 
     return {
       id,
@@ -253,7 +262,7 @@ const imageResponseCollection = (baseUrl: string) => {
     mapListResponse,
     mapEntryResponse,
   };
-};
+}
 
 export default imageResponseCollection;
 

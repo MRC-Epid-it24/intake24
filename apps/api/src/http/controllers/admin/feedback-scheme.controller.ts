@@ -30,10 +30,10 @@ import {
 
 import { securableController } from './securable.controller';
 
-const feedbackSchemeController = (ioc: IoC) => {
+function feedbackSchemeController(ioc: IoC) {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<FeedbackSchemesResponse>
+    res: Response<FeedbackSchemesResponse>,
   ): Promise<void> => {
     const {
       aclService,
@@ -64,7 +64,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
   const store = async (
     req: Request<any, any, FeedbackSchemeCreationAttributes>,
-    res: Response<FeedbackSchemeEntry>
+    res: Response<FeedbackSchemeEntry>,
   ): Promise<void> => {
     const { userId } = req.scope.cradle.user;
 
@@ -78,7 +78,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
   const read = async (
     req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
+    res: Response<FeedbackSchemeEntry>,
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -92,7 +92,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
   const edit = async (
     req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
+    res: Response<FeedbackSchemeEntry>,
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -106,7 +106,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
   const update = async (
     req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
+    res: Response<FeedbackSchemeEntry>,
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -122,7 +122,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
   const patch = async (
     req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
+    res: Response<FeedbackSchemeEntry>,
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
     const {
@@ -142,16 +142,20 @@ const feedbackSchemeController = (ioc: IoC) => {
 
     if (resourceActions.includes('edit') || feedbackScheme.ownerId === userId) {
       keysToUpdate.push(...createFeedbackSchemeFields);
-    } else {
-      if (securableActions.includes('edit')) keysToUpdate.push(...updateFeedbackSchemeFields);
+    }
+    else {
+      if (securableActions.includes('edit'))
+        keysToUpdate.push(...updateFeedbackSchemeFields);
 
       perCardFeedbackSchemeFields.forEach((item) => {
-        if (securableActions.includes(kebabCase(item))) keysToUpdate.push(item);
+        if (securableActions.includes(kebabCase(item)))
+          keysToUpdate.push(item);
       });
     }
 
     const updateInput = pick(req.body, keysToUpdate);
-    if (!Object.keys(updateInput).length) throw new ValidationError('Missing body');
+    if (!Object.keys(updateInput).length)
+      throw new ValidationError('Missing body');
 
     await feedbackScheme.update(updateInput);
 
@@ -160,12 +164,12 @@ const feedbackSchemeController = (ioc: IoC) => {
 
   const put = async (
     req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
+    res: Response<FeedbackSchemeEntry>,
   ): Promise<void> => update(req, res);
 
   const destroy = async (
     req: Request<{ feedbackSchemeId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -178,10 +182,11 @@ const feedbackSchemeController = (ioc: IoC) => {
 
     const { id: securableId, surveys } = feedbackScheme;
 
-    if (!surveys || surveys.length)
+    if (!surveys || surveys.length) {
       throw new ForbiddenError(
-        'Feedback scheme cannot be deleted. There are surveys using this feedback scheme.'
+        'Feedback scheme cannot be deleted. There are surveys using this feedback scheme.',
       );
+    }
 
     await Promise.all([
       UserSecurable.destroy({ where: { securableId, securableType: 'FeedbackScheme' } }),
@@ -193,7 +198,7 @@ const feedbackSchemeController = (ioc: IoC) => {
 
   const copy = async (
     req: Request<{ feedbackSchemeId: string }>,
-    res: Response<FeedbackSchemeEntry>
+    res: Response<FeedbackSchemeEntry>,
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
     const {
@@ -259,7 +264,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     refs,
     securables: securableController({ ioc, securable: FeedbackScheme }),
   };
-};
+}
 
 export default feedbackSchemeController;
 

@@ -23,7 +23,7 @@ export default (app: Express, { config }: Ops) => {
   // Templates
   const nunjucksFileLoader = new FileSystemLoader(
     [resolve(local.public), resolve('resources/views')],
-    { noCache: isDev }
+    { noCache: isDev },
   );
 
   const nunjucksEnv = new Environment(nunjucksFileLoader, {

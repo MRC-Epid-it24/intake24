@@ -18,7 +18,7 @@
                 outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -34,7 +34,7 @@
                 required
                 :type="showPassword ? 'text' : 'password'"
                 @click:append="showPassword = !showPassword"
-              ></v-text-field>
+              />
               <v-btn
                 class="mt-2 font-weight-bold"
                 color="info"
@@ -56,7 +56,7 @@
       </v-card-text>
     </v-form>
     <template v-if="signupEnabled">
-      <v-divider class="mx-6"></v-divider>
+      <v-divider class="mx-6" />
       <v-card-title class="text-h3 font-weight-medium justify-center pt-6">
         {{ $t('common.signup.noAccount') }}
       </v-card-title>
@@ -77,7 +77,7 @@
       :auth-data="auth.mfa"
       :value="!!auth.mfa"
       @close="clearMFAChallenge"
-    ></mfa-dialog>
+    />
   </app-entry-screen>
 </template>
 
@@ -118,12 +118,14 @@ export default defineComponent({
   async mounted() {
     // Check for Duo MFA response
     const { state: challengeId, code: token } = this.$route.query;
-    if (typeof challengeId !== 'string' || typeof token !== 'string') return;
+    if (typeof challengeId !== 'string' || typeof token !== 'string')
+      return;
 
     try {
       await this.auth.verify({ challengeId, token, provider: 'duo' });
       await this.finalizeLogin();
-    } catch (err) {
+    }
+    catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === HttpStatusCode.Unauthorized) {
         useMessages().error('Invalid MFA authentication.');
         return;
@@ -139,7 +141,8 @@ export default defineComponent({
     },
 
     async finalizeLogin() {
-      if (!this.auth.loggedIn) return;
+      if (!this.auth.loggedIn)
+        return;
 
       await this.$router.push({ name: 'dashboard' });
     },
@@ -152,7 +155,8 @@ export default defineComponent({
         this.password = '';
 
         await this.finalizeLogin();
-      } catch (err) {
+      }
+      catch (err) {
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {} } = {} } = err;
 

@@ -11,9 +11,9 @@ export const models = { foods, system };
 export type BaseDatabasesInterface = Record<DatabaseType, Sequelize>;
 
 export interface DatabasesInterface extends BaseDatabasesInterface {
-  init(): void;
-  close(): Promise<void>;
-  sync(force: boolean): Promise<void>;
+  init: () => void;
+  close: () => Promise<void>;
+  sync: (force: boolean) => Promise<void>;
 }
 
 export type DatabaseOptions = {
@@ -23,11 +23,10 @@ export type DatabaseOptions = {
 };
 
 export function databaseLogQuery(sql: string, logger: Logger, limit: number) {
-  if (limit > 0 && sql.length > limit) {
-    logger.debug(sql.substring(0, limit) + '...');
-  } else {
+  if (limit > 0 && sql.length > limit)
+    logger.debug(`${sql.substring(0, limit)}...`);
+  else
     logger.debug(sql);
-  }
 }
 
 export class Database implements DatabasesInterface {

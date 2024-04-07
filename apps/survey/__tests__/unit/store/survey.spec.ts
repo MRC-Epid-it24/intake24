@@ -18,9 +18,8 @@ function dummyMeal(name: string): MealState {
 function dummyMeals(count: number): MealState[] {
   const result = [];
 
-  for (let i = 1; i <= count; ++i) {
+  for (let i = 1; i <= count; ++i)
     result.push(dummyMeal(`Meal ${i}`));
-  }
 
   return result;
 }
@@ -37,7 +36,7 @@ function initialState(): SurveyState {
   };
 }
 
-describe('Survey store', () => {
+describe('survey store', () => {
   describe('deleteMeal', () => {
     it('should keep the same selected meal index if the selected meal comes before the deleted meal', () => {
       store.setState(initialState());
@@ -125,7 +124,8 @@ describe('Survey store', () => {
 
       const { selection } = store;
 
-      if (selection.element === null) fail('selection should be null');
+      if (selection.element === null)
+        fail('selection should be null');
 
       expect(selection.element.type).toBe('meal');
       expect(store.selectedMeal?.name).toBe('Meal 2');

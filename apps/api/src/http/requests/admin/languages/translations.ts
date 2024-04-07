@@ -17,7 +17,7 @@ export default validate(
             const { id, application, section, messages } = translation;
             const base = 'validation.attributes.i18n';
 
-            if ([id, application, section].some((item) => !item || typeof item !== 'string'))
+            if ([id, application, section].some(item => !item || typeof item !== 'string'))
               throw new Error(customErrorMessage('validation.attributes.structure', meta));
 
             if (!isApplication(application))
@@ -30,7 +30,8 @@ export default validate(
               throw new Error(customErrorMessage(`${base}.messages`, meta));
 
             const defMessages = defaultI18nMessages[application][section];
-            if (!defMessages) throw new Error(customErrorMessage(`${base}.defaults`, meta));
+            if (!defMessages)
+              throw new Error(customErrorMessage(`${base}.defaults`, meta));
 
             if (!compareMessageKeys(defMessages, messages))
               throw new Error(customErrorMessage(`${base}.keys`, meta));
@@ -38,5 +39,5 @@ export default validate(
         },
       },
     },
-  })
+  }),
 );

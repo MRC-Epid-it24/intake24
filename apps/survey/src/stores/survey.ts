@@ -74,28 +74,33 @@ export interface FoodIndex {
   linkedFoodIndex: number | undefined;
 }
 
-export const surveyInitialState = (): CurrentSurveyState => ({
-  schemeId: null,
-  startTime: null,
-  endTime: null,
-  submissionTime: null,
-  uxSessionId: v4(),
-  flags: [],
-  customPromptAnswers: {},
-  selection: {
-    element: null,
-    mode: 'auto',
-  },
-  meals: [],
-});
+export function surveyInitialState(): CurrentSurveyState {
+  return {
+    schemeId: null,
+    startTime: null,
+    endTime: null,
+    submissionTime: null,
+    uxSessionId: v4(),
+    flags: [],
+    customPromptAnswers: {},
+    selection: {
+      element: null,
+      mode: 'auto',
+    },
+    meals: [],
+  };
+}
 
-const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
-  if (!parameters?.storeUserSessionOnServer) return false;
+function canUseUserSession(state: CurrentSurveyState, parameters?: SurveyEntryResponse) {
+  if (!parameters?.storeUserSessionOnServer)
+    return false;
 
   const { startTime, submissionTime } = state;
-  if (!startTime) return false;
+  if (!startTime)
+    return false;
 
-  if (submissionTime) return true;
+  if (submissionTime)
+    return true;
 
   const now = new Date();
   const startDt = new Date(startTime);
@@ -107,7 +112,7 @@ const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryRe
     return false;
 
   return true;
-};
+}
 
 export const useSurvey = defineStore('survey', {
   state: (): SurveyState => ({
@@ -126,15 +131,16 @@ export const useSurvey = defineStore('survey', {
     afterRestore(context) {
       context.store.reCreateStoreAfterDeserialization();
 
-      if (!canUseUserSession(context.store.$state.data)) context.store.clearState();
+      if (!canUseUserSession(context.store.$state.data))
+        context.store.clearState();
     },
   },
   getters: {
-    parametersLoaded: (state) => !!state.parameters && !!state.user,
-    currentState: (state) => state.data,
-    surveyEnabled: (state) => state.parameters?.state === 'active',
-    dailyLimitReached: (state) => !!state.user?.maximumDailySubmissionsReached,
-    totalLimitReached: (state) => !!state.user?.maximumTotalSubmissionsReached,
+    parametersLoaded: state => !!state.parameters && !!state.user,
+    currentState: state => state.data,
+    surveyEnabled: state => state.parameters?.state === 'active',
+    dailyLimitReached: state => !!state.user?.maximumDailySubmissionsReached,
+    totalLimitReached: state => !!state.user?.maximumTotalSubmissionsReached,
     limitReached(): boolean {
       return !!(
         this.user?.maximumDailySubmissionsReached || this.user?.maximumTotalSubmissionsReached
@@ -146,85 +152,91 @@ export const useSurvey = defineStore('survey', {
     recallNumber(): number {
       return (this.user?.submissions ?? 1) + (this.isSubmitted ? 0 : 1);
     },
-    feedbackEnabled: (state) => !!state.parameters?.feedbackScheme,
-    feedbackAvailable: (state) => !!state.user?.showFeedback,
+    feedbackEnabled: state => !!state.parameters?.feedbackScheme,
+    feedbackAvailable: state => !!state.user?.showFeedback,
     feedbackAllowed(): boolean {
       return this.feedbackEnabled && this.feedbackAvailable;
     },
-    hasStarted: (state) => !!state.data.startTime,
-    hasFinished: (state) => !!state.data.endTime,
-    isSubmitted: (state) => !!state.data.submissionTime,
-    localeId: (state) => state.parameters?.locale.code ?? 'en_GB',
-    meals: (state) => state.data.meals,
-    hasMeals: (state) => !!state.data.meals.length,
-    defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
+    hasStarted: state => !!state.data.startTime,
+    hasFinished: state => !!state.data.endTime,
+    isSubmitted: state => !!state.data.submissionTime,
+    localeId: state => state.parameters?.locale.code ?? 'en_GB',
+    meals: state => state.data.meals,
+    hasMeals: state => !!state.data.meals.length,
+    defaultSchemeMeals: state => state.parameters?.surveyScheme.meals,
     searchParameters: (state) => {
-      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
-        state.parameters ?? {};
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight }
+        = state.parameters ?? {};
 
       return { matchScoreWeight, rankingAlgorithm };
     },
-    surveySchemeFoodPrompts: (state) => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
+    surveySchemeFoodPrompts: state => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
     registeredPortionSizeMethods(): string[] {
       return (
         this.surveySchemeFoodPrompts
-          .filter((item) => item.type === 'portion-size')
-          .map((item) => item.component.replace('-prompt', '')) ?? []
+          .filter(item => item.type === 'portion-size')
+          .map(item => item.component.replace('-prompt', '')) ?? []
       );
     },
     linkedQuantity(): LinkedQuantity | undefined {
       const prompt = this.surveySchemeFoodPrompts.find(
-        (prompt) => prompt.component === 'guide-image-prompt'
+        prompt => prompt.component === 'guide-image-prompt',
       ) as Prompts['guide-image-prompt'] | undefined;
 
       return prompt?.linkedQuantity;
     },
     sameAsBeforeAllowed(): boolean {
       return !!this.surveySchemeFoodPrompts.find(
-        (item) => item.component === 'same-as-before-prompt'
+        item => item.component === 'same-as-before-prompt',
       );
     },
-    selection: (state) => state.data.selection,
-    freeEntryComplete: (state) =>
-      !!state.data.meals.length &&
-      state.data.meals.every((meal) => meal.flags.includes('free-entry-complete')),
+    selection: state => state.data.selection,
+    freeEntryComplete: state =>
+      !!state.data.meals.length
+      && state.data.meals.every(meal => meal.flags.includes('free-entry-complete')),
     selectedMealIndex(): number | undefined {
       const { element } = this.data.selection;
 
-      if (element === null) return undefined;
-      if (element.type !== 'meal') {
+      if (element === null)
+        return undefined;
+      if (element.type !== 'meal')
         return getMealIndexForSelection(this.data.meals, this.data.selection);
-      }
 
       return getMealIndex(this.data.meals, element.mealId);
     },
     selectedMealOptional(): MealState | undefined {
       const mealIndex = this.selectedMealIndex;
-      if (mealIndex === undefined) return undefined;
+      if (mealIndex === undefined)
+        return undefined;
 
       return this.data.meals[mealIndex];
     },
     selectedFoodIndex(): MealFoodIndex | undefined {
       const { element } = this.data.selection;
 
-      if (element === null || element.type !== 'food') return undefined;
+      if (element === null || element.type !== 'food')
+        return undefined;
 
       return getFoodIndex(this.data.meals, element.foodId);
     },
     selectedFoodOptional(): FoodState | undefined {
       const foodIndex = this.selectedFoodIndex;
-      if (foodIndex === undefined) return undefined;
+      if (foodIndex === undefined)
+        return undefined;
 
-      if (foodIndex.linkedFoodIndex === undefined)
+      if (foodIndex.linkedFoodIndex === undefined) {
         return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
-      else
+      }
+      else {
         return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods[
           foodIndex.linkedFoodIndex
         ];
+      }
     },
     selectedParentFood(): FoodState | undefined {
       const foodIndex = this.selectedFoodIndex;
-      if (foodIndex?.linkedFoodIndex === undefined) return undefined;
+      if (foodIndex?.linkedFoodIndex === undefined)
+        return undefined;
 
       return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
     },
@@ -243,11 +255,14 @@ export const useSurvey = defineStore('survey', {
         this.setParameters(surveyInfo);
         this.setUserInfo(userInfo);
 
-        if (!surveyInfo.storeUserSessionOnServer) return;
+        if (!surveyInfo.storeUserSessionOnServer)
+          return;
 
         const userSession = await surveyService.getUserSession(surveyId);
-        if (userSession) this.loadUserSession(userSession.sessionData);
-      } finally {
+        if (userSession)
+          this.loadUserSession(userSession.sessionData);
+      }
+      finally {
         loading.removeItem('loadParameters');
       }
     },
@@ -265,13 +280,14 @@ export const useSurvey = defineStore('survey', {
 
       const isSubmitted = !!this.data.submissionTime;
       this.clearState();
-      if (isSubmitted) await this.clearUserSession();
+      if (isSubmitted)
+        await this.clearUserSession();
 
       const initialState: CurrentSurveyState = {
         ...surveyInitialState(),
         schemeId: this.parameters.surveyScheme.id,
         startTime: new Date(),
-        meals: this.parameters.surveyScheme.meals.map((meal) => ({
+        meals: this.parameters.surveyScheme.meals.map(meal => ({
           id: getEntityId(),
           name: meal.name,
           defaultTime: toMealTime(meal.time),
@@ -327,13 +343,14 @@ export const useSurvey = defineStore('survey', {
         >;
 
         const currentValue = this.data[key];
-        if (typeof currentValue === 'string') this.data[key] = new Date(currentValue);
+        if (typeof currentValue === 'string')
+          this.data[key] = new Date(currentValue);
       });
 
       // Pinia plugin rehydrates the store without reactive getters/setters on undefined -> investigate
       this.data = {
         ...this.data,
-        meals: this.data.meals.map((meal) => ({ ...meal, time: meal.time ?? undefined })),
+        meals: this.data.meals.map(meal => ({ ...meal, time: meal.time ?? undefined })),
       };
     },
 
@@ -348,7 +365,8 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (!canUseUserSession(state, this.parameters)) return;
+      if (!canUseUserSession(state, this.parameters))
+        return;
 
       this.loadState(state);
     },
@@ -359,7 +377,8 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (!this.parameters.storeUserSessionOnServer) return;
+      if (!this.parameters.storeUserSessionOnServer)
+        return;
 
       await surveyService.clearUserSession(this.parameters.slug);
     },
@@ -370,7 +389,8 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (this.isSubmitting || !canUseUserSession(this.data, this.parameters)) return;
+      if (this.isSubmitting || !canUseUserSession(this.data, this.parameters))
+        return;
 
       await surveyService.setUserSession(this.parameters.slug, this.data);
     },
@@ -395,7 +415,8 @@ export const useSurvey = defineStore('survey', {
         this.data.id = submission.id;
         this.data.submissionTime = submission.submissionTime;
         clearPromptStores();
-      } finally {
+      }
+      finally {
         this.isSubmitting = false;
       }
     },
@@ -423,17 +444,19 @@ export const useSurvey = defineStore('survey', {
     addFlag(flag: SurveyFlag | SurveyFlag[]) {
       let flags = Array.isArray(flag) ? flag : [flag];
 
-      flags = flags.filter((flag) => !this.data.flags.includes(flag));
-      if (!flags.length) return;
+      flags = flags.filter(flag => !this.data.flags.includes(flag));
+      if (!flags.length)
+        return;
 
       this.data.flags.push(...flags);
     },
 
     removeFlag(flag: SurveyFlag | SurveyFlag[]) {
       const flags = Array.isArray(flag) ? flag : [flag];
-      if (!flags.length) return;
+      if (!flags.length)
+        return;
 
-      this.data.flags = this.data.flags.filter((flag) => !flags.includes(flag as SurveyFlag));
+      this.data.flags = this.data.flags.filter(flag => !flags.includes(flag as SurveyFlag));
     },
 
     sortMeals() {
@@ -460,7 +483,7 @@ export const useSurvey = defineStore('survey', {
        const mealUndo: MealState[] = this.data.meals.splice(mealIndex, 1);
        if (mealUndo.length !== 0) {
         this.undo = { type: 'meal', index: mealIndex, value: mealUndo[0] };
-      }*/
+      } */
 
       function getAlternativeMealSelection(meals: MealState[], mealIndex: number): Selection {
         // Try selecting next meal first
@@ -496,14 +519,14 @@ export const useSurvey = defineStore('survey', {
 
       const mealIndex = getMealIndexRequired(this.data.meals, mealId);
 
-      if (selectionMealIndex === mealIndex) {
+      if (selectionMealIndex === mealIndex)
         this.data.selection = getAlternativeMealSelection(this.data.meals, mealIndex);
-      }
 
       const collectEntityIdCallback = (acc: string[], { id, linkedFoods }: FoodState) => {
         acc.push(id);
 
-        if (linkedFoods.length) linkedFoods.reduce(collectEntityIdCallback, acc);
+        if (linkedFoods.length)
+          linkedFoods.reduce(collectEntityIdCallback, acc);
 
         return acc;
       };
@@ -521,8 +544,8 @@ export const useSurvey = defineStore('survey', {
     addMeal(meal: MealCreationState, locale: string) {
       const id = getEntityId();
       const defaultTime = toMealTime(
-        this.defaultSchemeMeals?.find((item) => item.name[locale] === meal.name[locale])?.time ??
-          '8:00'
+        this.defaultSchemeMeals?.find(item => item.name[locale] === meal.name[locale])?.time
+        ?? '8:00',
       );
 
       this.data.meals.push({
@@ -553,19 +576,21 @@ export const useSurvey = defineStore('survey', {
       const meal = findMeal(this.data.meals, mealId);
       let flags = Array.isArray(flag) ? flag : [flag];
 
-      flags = flags.filter((flag) => !meal.flags.includes(flag));
-      if (!flags.length) return;
+      flags = flags.filter(flag => !meal.flags.includes(flag));
+      if (!flags.length)
+        return;
 
       meal.flags.push(...flags);
     },
 
     removeMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
       const flags = Array.isArray(flag) ? flag : [flag];
-      if (!flags.length) return;
+      if (!flags.length)
+        return;
 
       const meal = findMeal(this.data.meals, mealId);
 
-      meal.flags = meal.flags.filter((flag) => !flags.includes(flag as MealFlag));
+      meal.flags = meal.flags.filter(flag => !flags.includes(flag as MealFlag));
     },
 
     setMealCustomPromptAnswer(data: {
@@ -598,25 +623,27 @@ export const useSurvey = defineStore('survey', {
       const food = findFood(this.data.meals, foodId);
       let flags = Array.isArray(flag) ? flag : [flag];
 
-      flags = flags.filter((flag) => !food.flags.includes(flag));
-      if (!flags.length) return;
+      flags = flags.filter(flag => !food.flags.includes(flag));
+      if (!flags.length)
+        return;
 
       food.flags.push(...flags);
 
       if (
-        flags.includes('portion-size-method-complete') ||
-        flags.includes('associated-foods-complete')
+        flags.includes('portion-size-method-complete')
+        || flags.includes('associated-foods-complete')
       )
         this.saveSameAsBefore(foodId);
     },
 
     removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
       const flags = Array.isArray(flag) ? flag : [flag];
-      if (!flags.length) return;
+      if (!flags.length)
+        return;
 
       const food = findFood(this.data.meals, foodId);
 
-      food.flags = food.flags.filter((flag) => !flags.includes(flag as FoodFlag));
+      food.flags = food.flags.filter(flag => !flags.includes(flag as FoodFlag));
     },
 
     setFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[], state: boolean) {
@@ -631,29 +658,27 @@ export const useSurvey = defineStore('survey', {
     replaceFood({ foodId, food }: { foodId: string; food: FoodState }) {
       const { foodIndex, mealIndex, linkedFoodIndex } = getFoodIndexRequired(
         this.data.meals,
-        foodId
+        foodId,
       );
 
-      const originalFood =
-        linkedFoodIndex === undefined
+      const originalFood
+        = linkedFoodIndex === undefined
           ? this.data.meals[mealIndex].foods[foodIndex]
           : this.data.meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex];
 
-      if (linkedFoodIndex === undefined) {
+      if (linkedFoodIndex === undefined)
         this.data.meals[mealIndex].foods.splice(foodIndex, 1, food);
-      } else {
+      else
         this.data.meals[mealIndex].foods[foodIndex].linkedFoods.splice(linkedFoodIndex, 1, food);
-      }
 
       // Clear food prompt stores if replacing food with different type or different code
       if (
-        originalFood.type !== food.type ||
-        (originalFood.type === 'encoded-food' &&
-          food.type === 'encoded-food' &&
-          originalFood.data.code !== food.data.code)
-      ) {
+        originalFood.type !== food.type
+        || (originalFood.type === 'encoded-food'
+        && food.type === 'encoded-food'
+        && originalFood.data.code !== food.data.code)
+      )
         this.clearEntityPromptStores(foodId);
-      }
     },
 
     /*
@@ -662,21 +687,22 @@ export const useSurvey = defineStore('survey', {
      */
     saveSameAsBefore(foodId: string) {
       // TODO: check associated foods ?
-      if (!this.sameAsBeforeAllowed) return;
+      if (!this.sameAsBeforeAllowed)
+        return;
 
       const { foodIndex, mealIndex } = getFoodIndexRequired(this.data.meals, foodId);
       const mainFood = this.data.meals[mealIndex].foods[foodIndex];
 
       if (
         // 1) food is not encoded
-        mainFood.type !== 'encoded-food' ||
+        mainFood.type !== 'encoded-food'
         // 2) food portion size estimation is not finished
-        !portionSizeComplete(mainFood) ||
+        || !portionSizeComplete(mainFood)
         // 3) associated food prompts are not finished
-        !associatedFoodPromptsComplete(mainFood) ||
+        || !associatedFoodPromptsComplete(mainFood)
         // 4) associated foods portion size estimations are not finished
-        (mainFood.linkedFoods.length &&
-          mainFood.linkedFoods.some((item) => !portionSizeComplete(item)))
+        || (mainFood.linkedFoods.length
+        && mainFood.linkedFoods.some(item => !portionSizeComplete(item)))
       )
         return;
 
@@ -685,33 +711,39 @@ export const useSurvey = defineStore('survey', {
 
     editFood(foodId: string) {
       const food = findFood(this.data.meals, foodId);
-      if (food.type === 'free-text') return;
+      if (food.type === 'free-text')
+        return;
 
       const flags: FoodFlag[] = [];
 
       if (food.type === 'encoded-food') {
-        if (!food.flags.includes('portion-size-option-complete')) return;
+        if (!food.flags.includes('portion-size-option-complete'))
+          return;
 
         flags.push('portion-size-method-complete');
 
-        if (food.data.portionSizeMethods.length > 1) flags.push('portion-size-option-complete');
+        if (food.data.portionSizeMethods.length > 1)
+          flags.push('portion-size-option-complete');
 
         if (food.portionSize) {
           const component: PortionSizeComponentType = `${food.portionSize.method}-prompt`;
           const store = getOrCreatePromptStateStore(component)();
-          const prompt = this.surveySchemeFoodPrompts.find((item) => item.component === component);
+          const prompt = this.surveySchemeFoodPrompts.find(item => item.component === component);
 
-          if (store && prompt) store.clearState(food.id, prompt.id);
+          if (store && prompt)
+            store.clearState(food.id, prompt.id);
         }
       }
 
       if (food.type === 'missing-food') {
-        if (!food.flags.includes('missing-food-complete')) return;
+        if (!food.flags.includes('missing-food-complete'))
+          return;
 
         flags.push('missing-food-complete');
       }
 
-      if (!flags.length) return;
+      if (!flags.length)
+        return;
 
       this.removeFoodFlag(foodId, flags);
     },
@@ -740,16 +772,17 @@ export const useSurvey = defineStore('survey', {
           mealIndex: data.mealIndex,
           value: foodUndo[0],
         };
-      }*/
+      } */
 
       const foodIndex = getFoodIndexRequired(this.data.meals, foodId);
 
       if (foodIndex.linkedFoodIndex === undefined) {
         this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1);
-      } else {
+      }
+      else {
         this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods.splice(
           foodIndex.linkedFoodIndex,
-          1
+          1,
         );
 
         const parentFood = this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
@@ -766,7 +799,8 @@ export const useSurvey = defineStore('survey', {
     addFood({ mealId, food, at }: { mealId: string; food: FoodState; at?: number }) {
       const mealIndex = getMealIndexRequired(this.data.meals, mealId);
 
-      if (at !== undefined) this.data.meals[mealIndex].foods.splice(at, 0, food);
+      if (at !== undefined)
+        this.data.meals[mealIndex].foods.splice(at, 0, food);
       else this.data.meals[mealIndex].foods.push(food);
     },
 

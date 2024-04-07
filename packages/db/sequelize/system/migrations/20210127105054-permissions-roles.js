@@ -8,7 +8,7 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
       await queryInterface.changeColumn(
         'roles',
@@ -17,7 +17,7 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
@@ -30,7 +30,7 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
       await queryInterface.changeColumn(
         'roles',
@@ -39,7 +39,7 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
     }),
 };

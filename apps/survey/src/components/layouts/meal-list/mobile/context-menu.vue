@@ -12,7 +12,9 @@
           @click="item.dialog ? openDialog(item.action) : action(item.action)"
         >
           <v-card-text class="d-flex flex-column justify-center align-center ga-2">
-            <v-icon large>{{ item.icon }}</v-icon>
+            <v-icon large>
+              {{ item.icon }}
+            </v-icon>
             <span class="text-center font-weight-medium">{{ item.name }}</span>
           </v-card-text>
         </v-card>

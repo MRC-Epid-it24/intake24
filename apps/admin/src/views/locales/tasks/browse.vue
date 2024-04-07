@@ -15,7 +15,7 @@
                 outlined
                 prepend-inner-icon="$jobs"
                 @change="updateJob"
-              ></v-select>
+              />
             </v-card-text>
           </v-col>
           <v-col cols="12" md="6">
@@ -28,7 +28,7 @@
               name="params"
               :refs="refs"
               @input="form.errors.clear(paramErrors)"
-            ></component>
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -41,11 +41,13 @@
               type="submit"
               x-large
             >
-              <v-icon left>fas fa-play</v-icon>{{ $t('common.action.submit') }}
+              <v-icon left>
+                fas fa-play
+              </v-icon>{{ $t('common.action.submit') }}
             </v-btn>
           </v-col>
         </v-row>
-        <polls-job-list v-bind="{ jobs }"></polls-job-list>
+        <polls-job-list v-bind="{ jobs }" />
       </v-form>
     </v-container>
   </layout>
@@ -78,7 +80,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const jobTypeList = computed(() =>
-      localeJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
+      localeJobs.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`) })),
     );
     const jobQuery = computed(() => ({ localeId: props.id }));
 
@@ -104,7 +106,7 @@ export default defineComponent({
     });
     const { jobs, jobInProgress, startPolling } = usePollsForJobs(localeJobs, jobQuery);
 
-    const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
+    const paramErrors = computed(() => Object.keys(form.params).map(key => `params.${key}`));
 
     onMounted(async () => {
       await startPolling(true);
@@ -116,7 +118,8 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      if (jobInProgress.value) return;
+      if (jobInProgress.value)
+        return;
 
       const job = await form.post<JobAttributes>(`admin/locales/${props.id}/tasks`);
 

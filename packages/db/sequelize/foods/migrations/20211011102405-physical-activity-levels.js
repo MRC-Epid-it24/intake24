@@ -9,12 +9,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_physical_activity_levels RENAME CONSTRAINT physical_activity_levels_pkey TO v3_physical_activity_levels_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE physical_activity_levels_id_seq RENAME TO v3_physical_activity_levels_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -34,12 +34,12 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO physical_activity_levels (id, name, coefficient) SELECT id, name, coefficient FROM v3_physical_activity_levels',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('physical_activity_levels', 'id', { queryInterface, transaction });

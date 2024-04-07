@@ -32,7 +32,7 @@ export default () => {
       'get',
       `${url}?tzOffset=invalidTzOffset`,
       ['tzOffset'],
-      { bearer: 'respondent' }
+      { bearer: 'respondent' },
     );
   });
 

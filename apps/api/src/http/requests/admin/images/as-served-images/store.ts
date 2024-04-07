@@ -13,5 +13,5 @@ export default validate(
       isFloat: true,
       toFloat: true,
     },
-  })
+  }),
 );

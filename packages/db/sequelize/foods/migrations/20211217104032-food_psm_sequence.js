@@ -1,7 +1,7 @@
 const { updateSequence } = require('../../utils.js');
 
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await updateSequence('food_portion_size_methods', 'id', {
         queryInterface,

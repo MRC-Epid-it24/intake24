@@ -11,8 +11,7 @@
     }"
     @action="action"
     @input="update"
-  >
-  </drink-scale-prompt>
+  />
 </template>
 
 <script lang="ts">

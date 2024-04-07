@@ -25,7 +25,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999/synonym-sets`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('post', url, { input: synonymSets, permissions });
   });
 

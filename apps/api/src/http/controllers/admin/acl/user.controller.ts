@@ -15,24 +15,25 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { userEntryResponse } from '@intake24/api/http/responses/admin';
 import { Permission, Role, User } from '@intake24/db';
 
-const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>) => {
+function adminUserController({ adminUserService }: Pick<IoC, 'adminUserService'>) {
   const entry = async (
     req: Request<{ userId: string }>,
-    res: Response<UserEntry>
+    res: Response<UserEntry>,
   ): Promise<void> => {
     const { userId } = req.params;
 
     const user = await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
-      userId
+      userId,
     );
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     res.json(userEntryResponse(user));
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<UsersResponse>
+    res: Response<UsersResponse>,
   ): Promise<void> => {
     const users = await User.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -59,13 +60,13 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
         'customFields',
         'permissions',
         'roles',
-      ])
+      ]),
     );
 
     const data = userEntryResponse(
       (await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
-        user.id
-      )) as User
+        user.id,
+      )) as User,
     );
 
     res.status(201).json(data);
@@ -79,7 +80,7 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
 
   const update = async (
     req: Request<{ userId: string }>,
-    res: Response<UserEntry>
+    res: Response<UserEntry>,
   ): Promise<void> => {
     const { userId } = req.params;
 
@@ -97,13 +98,13 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
         'customFields',
         'permissions',
         'roles',
-      ])
+      ]),
     );
 
     const data = userEntryResponse(
       (await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
-        userId
-      )) as User
+        userId,
+      )) as User,
     );
 
     res.json(data);
@@ -111,7 +112,7 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
 
   const destroy = async (
     req: Request<{ userId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { userId } = req.params;
 
@@ -130,12 +131,13 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
 
   const permissions = async (
     req: Request<{ userId: string }, any, any, PaginateQuery>,
-    res: Response<PermissionsResponse>
+    res: Response<PermissionsResponse>,
   ): Promise<void> => {
     const { userId } = req.params;
 
     const user = await User.findByPk(userId, { attributes: ['id'] });
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     const permissions = await Permission.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -149,12 +151,13 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
 
   const roles = async (
     req: Request<{ userId: string }, any, any, PaginateQuery>,
-    res: Response<RolesResponse>
+    res: Response<RolesResponse>,
   ): Promise<void> => {
     const { userId } = req.params;
 
     const user = await User.findByPk(userId, { attributes: ['id'] });
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     const roles = await Role.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -177,7 +180,7 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
     permissions,
     roles,
   };
-};
+}
 
 export default adminUserController;
 

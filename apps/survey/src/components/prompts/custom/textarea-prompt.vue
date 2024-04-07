@@ -13,14 +13,14 @@
           :label="translate(prompt.i18n.label)"
           outlined
           :rules="rules"
-        ></v-textarea>
+        />
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </component>
 </template>
@@ -62,7 +62,7 @@ export default defineComponent({
     });
 
     const confirm = () => {
-      //@ts-expect-error - not typed vuetify component
+      // @ts-expect-error - not typed vuetify component
       const isValid = form.value?.validate();
       return isValid;
     };
@@ -73,11 +73,11 @@ export default defineComponent({
       props.prompt.validation.required
         ? [
             (v: string | null) =>
-              !!v ||
-              (translate(props.prompt.validation.message) ??
-                i18n.t(`prompts.${type.value}.validation.required`)),
+              !!v
+              || (translate(props.prompt.validation.message)
+              ?? i18n.t(`prompts.${type.value}.validation.required`)),
           ]
-        : []
+        : [],
     );
 
     return { action, customPromptLayout, form, isValid, rules, state, translate };

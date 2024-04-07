@@ -5,11 +5,12 @@ import type { IoC } from '@intake24/api/ioc';
 import type { FoodEntry, UpdateGlobalFoodRequest } from '@intake24/common/types/http/admin';
 import { ForbiddenError } from '@intake24/api/http/errors';
 
-const globalFoodsController = ({ globalFoodsService }: Pick<IoC, 'globalFoodsService'>) => {
+function globalFoodsController({ globalFoodsService }: Pick<IoC, 'globalFoodsService'>) {
   const store = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
 
     const entry = await globalFoodsService.create(req.body);
     res.json(entry);
@@ -17,11 +18,12 @@ const globalFoodsController = ({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
 
   const update = async (
     req: Request<{ foodId: string; version: string }, any, UpdateGlobalFoodRequest>,
-    res: Response<FoodEntry>
+    res: Response<FoodEntry>,
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
 
     const { foodId } = req.params;
     const { version } = req.query;
@@ -32,7 +34,8 @@ const globalFoodsController = ({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
     if (entry === null) {
       res.status(HttpStatusCode.NotFound);
       res.end();
-    } else {
+    }
+    else {
       res.status(HttpStatusCode.Ok);
       res.json(entry);
     }
@@ -40,11 +43,12 @@ const globalFoodsController = ({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
 
   const read = async (
     req: Request<{ foodId: string }>,
-    res: Response<FoodEntry>
+    res: Response<FoodEntry>,
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|read')))
+      throw new ForbiddenError();
 
     const { foodId } = req.params;
 
@@ -53,7 +57,8 @@ const globalFoodsController = ({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
     if (entry === null) {
       res.status(HttpStatusCode.NotFound);
       res.end();
-    } else {
+    }
+    else {
       res.json(entry);
     }
   };
@@ -63,7 +68,7 @@ const globalFoodsController = ({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
     update,
     read,
   };
-};
+}
 
 export default globalFoodsController;
 

@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeConstraint('foods', 'food_group_id_fk', { transaction });
 

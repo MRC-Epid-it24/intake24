@@ -7,7 +7,7 @@ export default () => {
   const permissions = ['locales', 'locales|recipe-foods'];
 
   let url: string;
-  let invalidUrl: string;
+  // let invalidUrl: string;
 
   let recipeFoods: LocaleRecipeFoodsInput[];
 
@@ -16,14 +16,14 @@ export default () => {
 
     recipeFoods = [
       {
-        localeId: localeId,
+        localeId,
         code: 'RF-TST-1',
         name: 'recipe-food-test1',
         recipeWord: 'test-food-1',
         synonyms_id: null,
       },
       {
-        localeId: localeId,
+        localeId,
         code: 'RF-TST-2',
         name: 'recipe-food-test2',
         recipeWord: 'test-food-2',
@@ -34,10 +34,10 @@ export default () => {
     await ioc.cradle.localeService.setRecipeFoods(localeId, recipeFoods);
 
     url = `${baseUrl}/${id}/recipe-foods`;
-    invalidUrl = `${baseUrl}/999999/recipe-foods`;
+    // invalidUrl = `${baseUrl}/999999/recipe-foods`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

@@ -8,33 +8,35 @@ import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { AsServedImage, AsServedSet } from '@intake24/db';
 
-const asServedImageController = ({
+function asServedImageController({
   imagesBaseUrl,
   asServedService,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'asServedService' | 'portionSizeService'>) => {
+}: Pick<IoC, 'imagesBaseUrl' | 'asServedService' | 'portionSizeService'>) {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
     req: Request<{ asServedSetId: string; asServedImageId: string }>,
-    res: Response<AsServedImageEntry>
+    res: Response<AsServedImageEntry>,
   ): Promise<void> => {
     const { asServedSetId, asServedImageId } = req.params;
 
     const asServedImage = await portionSizeService.getAsServedImage(asServedSetId, asServedImageId);
-    if (!asServedImage) throw new NotFoundError();
+    if (!asServedImage)
+      throw new NotFoundError();
 
     res.json(responseCollection.asServedImageEntryResponse(asServedImage));
   };
 
   const browse = async (
     req: Request<{ asServedSetId: string }, any, any, PaginateQuery>,
-    res: Response<AsServedImagesResponse>
+    res: Response<AsServedImagesResponse>,
   ): Promise<void> => {
     const { asServedSetId } = req.params;
 
     const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
-    if (!asServedSet) throw new NotFoundError();
+    if (!asServedSet)
+      throw new NotFoundError();
 
     const asServedImages = await AsServedImage.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -50,7 +52,7 @@ const asServedImageController = ({
 
   const store = async (
     req: Request<{ asServedSetId: string }>,
-    res: Response<AsServedImageEntry>
+    res: Response<AsServedImageEntry>,
   ): Promise<void> => {
     const {
       file,
@@ -59,10 +61,12 @@ const asServedImageController = ({
     } = req;
     const { userId } = req.scope.cradle.user;
 
-    if (!file) throw new ValidationError('File not found.', { path: 'image' });
+    if (!file)
+      throw new ValidationError('File not found.', { path: 'image' });
 
     const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
-    if (!asServedSet) throw new NotFoundError();
+    if (!asServedSet)
+      throw new NotFoundError();
 
     let asServedImage = await asServedService.createImage({
       id: asServedSetId,
@@ -77,24 +81,25 @@ const asServedImageController = ({
 
   const read = async (
     req: Request<{ asServedSetId: string; asServedImageId: string }>,
-    res: Response<AsServedImageEntry>
+    res: Response<AsServedImageEntry>,
   ): Promise<void> => entry(req, res);
 
   const destroy = async (
     req: Request<{ asServedSetId: string; asServedImageId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { asServedSetId, asServedImageId } = req.params;
 
     const result = await asServedService.destroyImage(asServedSetId, asServedImageId);
-    if (!result) throw new NotFoundError();
+    if (!result)
+      throw new NotFoundError();
 
     res.status(204).json();
   };
 
   const destroyAll = async (
     req: Request<{ asServedSetId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { asServedSetId } = req.params;
 
@@ -110,7 +115,7 @@ const asServedImageController = ({
     destroy,
     destroyAll,
   };
-};
+}
 
 export default asServedImageController;
 

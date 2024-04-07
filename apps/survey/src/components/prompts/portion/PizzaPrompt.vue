@@ -5,7 +5,7 @@
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.typeLabel`) }}
           <template #actions>
-            <expansion-panel-actions :valid="confirmed.type"></expansion-panel-actions>
+            <expansion-panel-actions :valid="confirmed.type" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -20,14 +20,14 @@
             }"
             @confirm="confirmType('type')"
             @select="(idx, id) => selectType('type', idx, id)"
-          ></image-map-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.thicknessLabel`) }}
           <template #actions>
-            <expansion-panel-actions :valid="confirmed.thickness"></expansion-panel-actions>
+            <expansion-panel-actions :valid="confirmed.thickness" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -42,14 +42,14 @@
             }"
             @confirm="confirmType('thickness')"
             @select="(idx, id) => selectType('thickness', idx, id)"
-          ></image-map-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.type">
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.sizeLabel`) }}
           <template #actions>
-            <expansion-panel-actions :valid="confirmed.slice"></expansion-panel-actions>
+            <expansion-panel-actions :valid="confirmed.slice" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -86,7 +86,7 @@
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
           <template #actions>
-            <expansion-panel-actions :valid="confirmed.quantity"></expansion-panel-actions>
+            <expansion-panel-actions :valid="confirmed.quantity" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -95,15 +95,15 @@
             :confirm.sync="confirmed.quantity"
             @input="selectQuantity"
             @update:confirm="confirmType('quantity', $event)"
-          ></quantity-card>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -203,11 +203,11 @@ export default defineComponent({
         (acc, key) => {
           const pizzaType = key as PizzaImageMap;
 
-          acc[pizzaType] =
-            this.imageMaps[pizzaType]?.objects.map(({ label }) => this.translate(label)) ?? [];
+          acc[pizzaType]
+            = this.imageMaps[pizzaType]?.objects.map(({ label }) => this.translate(label)) ?? [];
           return acc;
         },
-        {} as Record<PizzaImageMap, string[]>
+        {} as Record<PizzaImageMap, string[]>,
       );
     },
 
@@ -223,32 +223,33 @@ export default defineComponent({
         },
       } = this;
 
-      if (id === undefined) return '';
+      if (id === undefined)
+        return '';
 
       return `${sliceImageMapPrefix}${id}`;
     },
 
     typeValid() {
       return (
-        this.portionSize.type.id !== undefined &&
-        this.portionSize.type.index !== undefined &&
-        this.confirmed.type
+        this.portionSize.type.id !== undefined
+        && this.portionSize.type.index !== undefined
+        && this.confirmed.type
       );
     },
 
     thicknessValid() {
       return (
-        this.portionSize.thickness.id !== undefined &&
-        this.portionSize.thickness.index !== undefined &&
-        this.confirmed.thickness
+        this.portionSize.thickness.id !== undefined
+        && this.portionSize.thickness.index !== undefined
+        && this.confirmed.thickness
       );
     },
 
     sliceValid() {
       return (
-        this.portionSize.slice.id !== undefined &&
-        this.portionSize.slice.index !== undefined &&
-        this.confirmed.slice
+        this.portionSize.slice.id !== undefined
+        && this.portionSize.slice.index !== undefined
+        && this.confirmed.slice
       );
     },
 
@@ -263,7 +264,8 @@ export default defineComponent({
 
   watch: {
     async sliceImageMapId(val) {
-      if (!val) return;
+      if (!val)
+        return;
 
       await this.fetchPizzaImageMap('slice');
     },
@@ -271,17 +273,18 @@ export default defineComponent({
 
   async mounted() {
     await Promise.all(
-      Object.keys(this.imageMapIds).map((key) => this.fetchPizzaImageMap(key as PizzaImageMap))
+      Object.keys(this.imageMapIds).map(key => this.fetchPizzaImageMap(key as PizzaImageMap)),
     );
   },
 
   methods: {
     async fetchPizzaImageMap(type: PizzaImageMap) {
       const imageMapId = this.imageMapIds[type];
-      if (!imageMapId) return;
+      if (!imageMapId)
+        return;
 
       const { data } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${imageMapId}`
+        `portion-sizes/image-maps/${imageMapId}`,
       );
 
       this.imageMaps[type] = { ...data };
@@ -310,7 +313,8 @@ export default defineComponent({
       if (type === 'slice') {
         this.confirmType('quantity', false);
 
-        if (!this.isMobile) this.confirmType(type);
+        if (!this.isMobile)
+          this.confirmType(type);
       }
     },
 
@@ -325,7 +329,8 @@ export default defineComponent({
     },
 
     sliceWeight(type?: number, slice?: number, thickness?: number) {
-      if (type === undefined || slice === undefined || thickness === undefined) return 0;
+      if (type === undefined || slice === undefined || thickness === undefined)
+        return 0;
 
       return sliceWeights[type][slice] * thicknessFactors[type][thickness];
     },
@@ -333,11 +338,11 @@ export default defineComponent({
     update() {
       const { portionSize } = this;
 
-      this.portionSize.servingWeight =
-        this.sliceWeight(
+      this.portionSize.servingWeight
+        = this.sliceWeight(
           Number(portionSize.type.id) - 1,
           Number(portionSize.slice.id),
-          Number(portionSize.thickness.id) - 1
+          Number(portionSize.thickness.id) - 1,
         ) * portionSize.slice.quantity;
 
       const state: PromptStates['pizza-prompt'] = {

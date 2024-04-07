@@ -41,9 +41,8 @@ export class Subscriber extends HasRedisClient {
   async subscribeToChannel() {
     this.redis
       .on('message', (channel, message) => {
-        if (channel === this.channelName) {
+        if (channel === this.channelName)
           this.onMessageReceive(message);
-        }
       })
       .subscribe(this.channelName, (error, count) => {
         if (error) {
@@ -52,19 +51,20 @@ export class Subscriber extends HasRedisClient {
           return;
         }
         this.logger.info(
-          `Subscribed to ${count} channel(s). Waiting for updates on the '${this.channelName}' channel.`
+          `Subscribed to ${count} channel(s). Waiting for updates on the '${this.channelName}' channel.`,
         );
       });
   }
 
   private async onMessageReceive(message: string): Promise<string[]> {
     const localeIds = JSON.parse(message);
-    if (localeIds.length === 0) return localeIds;
-    if (localeIds.includes('all')) {
+    if (localeIds.length === 0)
+      return localeIds;
+    if (localeIds.includes('all'))
       await this.foodIndex.rebuild();
-    } else {
+    else
       await this.foodIndex.rebuildSpecificLocales(localeIds);
-    }
+
     return localeIds;
   }
 }

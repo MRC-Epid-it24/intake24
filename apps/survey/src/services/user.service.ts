@@ -21,7 +21,7 @@ export default {
 
   savePhysicalData: async (
     survey: string,
-    input: UserPhysicalData
+    input: UserPhysicalData,
   ): Promise<UserPhysicalDataResponse> => {
     const { data } = await http.post<UserPhysicalDataResponse>(`user/physical-data`, input, {
       params: { survey },

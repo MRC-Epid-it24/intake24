@@ -26,7 +26,8 @@ export default validate(
       in: ['body'],
       custom: {
         options: async (value, meta): Promise<void> => {
-          if (!isPlainObject(value)) throw new Error(customTypeErrorMessage('object._', meta));
+          if (!isPlainObject(value))
+            throw new Error(customTypeErrorMessage('object._', meta));
         },
       },
     },
@@ -41,5 +42,5 @@ export default validate(
       errorMessage: typeErrorMessage('float._', { attributePath: 'weight' }),
       isFloat: true,
     },
-  })
+  }),
 );

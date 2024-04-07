@@ -13,22 +13,23 @@ import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Permission, Role, User } from '@intake24/db';
 
-const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'>) => {
+function permissionController({ adminUserService }: Pick<IoC, 'adminUserService'>) {
   const entry = async (
     req: Request<{ permissionId: string }>,
-    res: Response<PermissionEntry>
+    res: Response<PermissionEntry>,
   ): Promise<void> => {
     const { permissionId } = req.params;
 
     const permission = await Permission.findByPk(permissionId);
-    if (!permission) throw new NotFoundError();
+    if (!permission)
+      throw new NotFoundError();
 
     res.json(permission);
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<PermissionsResponse>
+    res: Response<PermissionsResponse>,
   ): Promise<void> => {
     const permissions = await Permission.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -52,22 +53,23 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
 
   const read = async (
     req: Request<{ permissionId: string }>,
-    res: Response<PermissionEntry>
+    res: Response<PermissionEntry>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ permissionId: string }>,
-    res: Response<PermissionEntry>
+    res: Response<PermissionEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ permissionId: string }>,
-    res: Response<PermissionEntry>
+    res: Response<PermissionEntry>,
   ): Promise<void> => {
     const { permissionId } = req.params;
 
     const permission = await Permission.findByPk(permissionId);
-    if (!permission) throw new NotFoundError();
+    if (!permission)
+      throw new NotFoundError();
 
     const { displayName, description } = req.body;
     await permission.update({ displayName, description });
@@ -77,12 +79,13 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
 
   const destroy = async (
     req: Request<{ permissionId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { permissionId } = req.params;
 
     const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
-    if (!permission) throw new NotFoundError();
+    if (!permission)
+      throw new NotFoundError();
 
     await permission.destroy();
     res.status(204).json();
@@ -94,12 +97,13 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
 
   const roles = async (
     req: Request<{ permissionId: string }, any, any, PaginateQuery>,
-    res: Response<RolesResponse>
+    res: Response<RolesResponse>,
   ): Promise<void> => {
     const { permissionId } = req.params;
 
     const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
-    if (!permission) throw new NotFoundError();
+    if (!permission)
+      throw new NotFoundError();
 
     const roles = await Role.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -115,12 +119,13 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
 
   const users = async (
     req: Request<{ permissionId: string }, any, any, PaginateQuery>,
-    res: Response<UsersResponse>
+    res: Response<UsersResponse>,
   ): Promise<void> => {
     const { permissionId } = req.params;
 
     const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
-    if (!permission) throw new NotFoundError();
+    if (!permission)
+      throw new NotFoundError();
 
     const users = await User.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -145,7 +150,7 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
     roles,
     users,
   };
-};
+}
 
 export default permissionController;
 

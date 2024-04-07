@@ -14,14 +14,14 @@ export class FoodsApiV3 {
 
   public async getLocalFoodCodes(localeId: string): Promise<string[]> {
     const response = await this.baseClient.get<LocalFoodCodesResponse>(
-      `/v2/foods/admin/${localeId}/local-food-codes`
+      `/v2/foods/admin/${localeId}/local-food-codes`,
     );
     return response.localFoodCodes;
   }
 
   public async getEnabledLocalFoodCodes(localeId: string): Promise<string[]> {
     const response = await this.baseClient.get<LocalFoodCodesResponse>(
-      `/v2/foods/admin/${localeId}/enabled-local-food-codes`
+      `/v2/foods/admin/${localeId}/enabled-local-food-codes`,
     );
     return response.localFoodCodes;
   }

@@ -23,14 +23,14 @@ export class ApiClientV3 {
     logger: Logger,
     maxConcurrentRequests: number,
     refreshToken?: string,
-    credentials?: CredentialsV3
+    credentials?: CredentialsV3,
   ) {
     this.baseClient = new BaseClientV3(
       apiBaseUrl,
       logger,
       maxConcurrentRequests,
       refreshToken,
-      credentials
+      credentials,
     );
     this.locales = new LocalesApiV3(this.baseClient);
     this.images = new ImageApiV3(this.baseClient);

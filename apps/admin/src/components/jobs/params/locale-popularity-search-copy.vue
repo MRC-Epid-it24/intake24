@@ -11,8 +11,7 @@
             :label="$t('jobs.types.LocalePopularitySearchCopy.localeId')"
             name="localeId"
             resource="locales"
-          >
-          </select-resource>
+          />
         </v-col>
         <v-col cols="12">
           <select-resource
@@ -23,8 +22,7 @@
             :label="$t('jobs.types.LocalePopularitySearchCopy.sourceLocaleId')"
             name="sourceLocaleId"
             resource="locales"
-          >
-          </select-resource>
+          />
         </v-col>
       </v-row>
     </v-card-text>

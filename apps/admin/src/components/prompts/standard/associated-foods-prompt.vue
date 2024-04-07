@@ -7,14 +7,13 @@
           :input-value="multiple"
           :label="$t('survey-schemes.prompts.associated-foods-prompt.multiple')"
           @change="update('multiple', $event)"
-        ></v-switch>
+        />
       </v-col>
       <v-col cols="12" md="6">
         <food-browser-settings
           :categories-first="categoriesFirst"
           @update:categoriesFirst="update('categoriesFirst', $event)"
-        >
-        </food-browser-settings>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

@@ -6,8 +6,8 @@
           {{ $t('fdbs.locales.title') }}
         </slot>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <add-locale-dialog v-if="!disabled" :current-items="items" @add="add"></add-locale-dialog>
+      <v-spacer />
+      <add-locale-dialog v-if="!disabled" :current-items="items" @add="add" />
     </v-toolbar>
     <v-expansion-panels flat>
       <v-expansion-panel>
@@ -37,7 +37,7 @@
                   </confirm-dialog>
                 </v-list-item-action>
               </v-list-item>
-              <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
+              <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`" />
             </template>
           </v-list>
         </v-expansion-panel-content>
@@ -48,7 +48,7 @@
       class="px-4 pb-2"
       color="error"
       :value="errors.get('main.locales')"
-    ></v-messages>
+    />
   </v-card>
 </template>
 
@@ -99,7 +99,7 @@ export default defineComponent({
     };
 
     const remove = (id: string) => {
-      items.value = items.value.filter((item) => item.id !== id);
+      items.value = items.value.filter(item => item.id !== id);
     };
 
     return { add, items, remove };

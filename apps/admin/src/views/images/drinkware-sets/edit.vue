@@ -14,7 +14,7 @@
                 name="id"
                 outlined
                 prepend-inner-icon="$drinkware-sets"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -26,7 +26,7 @@
                 name="imageMapId"
                 outlined
                 prepend-inner-icon="$image-maps"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -37,7 +37,7 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -46,7 +46,7 @@
                 <v-card-title>{{ $t('drinkware-sets.imageMapTitle') }}</v-card-title>
                 <v-card-subtitle> {{ $t('drinkware-sets.imageMapSubtitle') }} </v-card-subtitle>
                 <v-card-text>
-                  <image-placeholder v-if="imageMapLoading"></image-placeholder>
+                  <image-placeholder v-if="imageMapLoading" />
                   <drinkware-object-chooser
                     v-if="imageMapData"
                     :id="selectedObjectId"
@@ -58,8 +58,7 @@
                     :index="selectedObjectIndex"
                     @confirm="onObjectConfirmed"
                     @select="onObjectSelected"
-                  >
-                  </drinkware-object-chooser>
+                  />
                 </v-card-text>
               </v-card>
               <v-card v-if="selectedScale" class="mt-4" flat>
@@ -77,7 +76,7 @@
                         hide-details="auto"
                         :label="$t('guide-images.objects.label._')"
                         outlined
-                      ></v-text-field>
+                      />
                     </template>
                   </language-selector>
                 </v-card-text>
@@ -91,25 +90,28 @@
               </v-card>
 
               <!-- Object selected, but scale data is undefined -->
-              <v-card v-if="selectedObjectId !== undefined && selectedScaleIndex == -1" flat>
-                <v-card-title
-                  ><v-icon class="mx-2">fas fa-exclamation-circle</v-icon
-                  >{{ $t('drinkware-sets.slidingScale.missing.title') }}
+              <v-card v-if="selectedObjectId !== undefined && selectedScaleIndex === -1" flat>
+                <v-card-title>
+                  <v-icon class="mx-2">
+                    fas fa-exclamation-circle
+                  </v-icon>{{ $t('drinkware-sets.slidingScale.missing.title') }}
                 </v-card-title>
 
                 <v-card-text>{{ $t('drinkware-sets.slidingScale.missing.text') }}</v-card-text>
 
                 <v-expand-transition>
                   <v-card v-if="baseImagePreviewUrls[selectedObjectId]" flat>
-                    <v-card-title>{{
-                      $t('drinkware-sets.slidingScale.imagePreview')
-                    }}</v-card-title>
-                    <v-card-text
-                      ><v-img
+                    <v-card-title>
+                      {{
+                        $t('drinkware-sets.slidingScale.imagePreview')
+                      }}
+                    </v-card-title>
+                    <v-card-text>
+                      <v-img
                         :src="baseImagePreviewUrls[selectedObjectId]"
                         style="width: 50%"
-                      ></v-img
-                    ></v-card-text>
+                      />
+                    </v-card-text>
                   </v-card>
                 </v-expand-transition>
 
@@ -124,7 +126,7 @@
                       outlined
                       prepend-icon=""
                       prepend-inner-icon="fas fa-paperclip"
-                    ></v-file-input>
+                    />
                   </v-card-text>
                   <v-card-actions>
                     <v-btn
@@ -132,9 +134,11 @@
                       :disabled="!baseImageFiles[selectedObjectId]"
                       large
                       @click="createSlidingScale(selectedObjectId)"
-                      ><v-icon class="mr-2">fas fa-file-circle-plus</v-icon
-                      >{{ $t('drinkware-sets.slidingScale.createButtonLabel') }}</v-btn
                     >
+                      <v-icon class="mr-2">
+                        fas fa-file-circle-plus
+                      </v-icon>{{ $t('drinkware-sets.slidingScale.createButtonLabel') }}
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-card>
@@ -144,18 +148,18 @@
                 <sliding-scale-editor
                   :scale-index="selectedScaleIndex"
                   @baseImageChanged="onBaseImageChanged"
-                ></sliding-scale-editor>
+                />
 
                 <volume-samples-table
                   class="mt-4"
                   :scale-index="selectedScaleIndex"
-                ></volume-samples-table>
+                />
               </div>
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -166,7 +170,6 @@
 import { mapValues } from 'lodash';
 import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 
-import type { LocaleTranslation } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { DrinkwareScaleV2Entry, DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
@@ -179,14 +182,6 @@ import SlidingScaleEditor from '@intake24/admin/views/images/drinkware-sets/comp
 import VolumeSamplesTable from '@intake24/admin/views/images/drinkware-sets/components/VolumeSamplesTable.vue';
 
 import DrinkwareObjectChooser from './components/DrinkwareObjectChooser.vue';
-
-type DrinkwareSetFormScale = {
-  choiceId: number;
-  label: LocaleTranslation;
-  outlineCoordinates: number[];
-  volumeSamples: number[];
-  baseImageFile: File | null;
-};
 
 type EditDrinkwareSetForm = {
   id: string | null;
@@ -222,7 +217,7 @@ export default defineComponent({
       data: { id: null, imageMapId: null, description: null, scales: null, baseImage: {} },
     });
 
-    const imageMapEntryUrl = resources.find((r) => r.name === 'image-maps')?.api;
+    const imageMapEntryUrl = resources.find(r => r.name === 'image-maps')?.api;
 
     const imageMapData = ref<ImageMapResponse | undefined>(undefined);
     const imageMapLoading = ref(false);
@@ -231,17 +226,19 @@ export default defineComponent({
     const selectedObjectIndex = ref<number | undefined>(undefined);
 
     const selectedScaleIndex = computed(() => {
-      if (selectedObjectId.value === undefined) return -1;
+      if (selectedObjectId.value === undefined)
+        return -1;
 
       const index = entry.value.scales.findIndex(
-        (scale) => scale.choiceId.toString() === selectedObjectId.value
+        scale => scale.choiceId.toString() === selectedObjectId.value,
       );
 
       return index;
     });
 
     const selectedScale = computed(() => {
-      if (selectedScaleIndex.value === -1) return undefined;
+      if (selectedScaleIndex.value === -1)
+        return undefined;
       return entry.value.scales[selectedScaleIndex.value];
     });
 
@@ -250,9 +247,8 @@ export default defineComponent({
     const baseImagePreviewUrls = ref<Record<string, string>>({});
 
     function releasePreviewObjectURLs() {
-      for (const url of Object.values(baseImagePreviewUrls.value)) {
+      for (const url of Object.values(baseImagePreviewUrls.value))
         URL.revokeObjectURL(url);
-      }
     }
 
     watch(baseImageFiles.value, (newValue) => {
@@ -265,9 +261,8 @@ export default defineComponent({
     onUnmounted(() => {
       releasePreviewObjectURLs();
 
-      for (const scale of entry.value.scales) {
+      for (const scale of entry.value.scales)
         URL.revokeObjectURL(scale.baseImageUrl);
-      }
     });
 
     let loadedImageMapId: string | undefined;
@@ -282,7 +277,8 @@ export default defineComponent({
             .data as ImageMapResponse;
           imageMapLoading.value = false;
           loadedImageMapId = newEntry.imageMapId;
-        } else {
+        }
+        else {
           console.error(`Couldn't find API configuration for resource 'image-maps'`);
         }
       }
@@ -291,7 +287,7 @@ export default defineComponent({
     const createSlidingScale = (objectId: string) => {
       entry.value.scales.push({
         version: 2,
-        choiceId: parseInt(objectId),
+        choiceId: Number.parseInt(objectId),
         baseImageUrl: baseImagePreviewUrls.value[objectId] || '',
         label: {},
         volumeSamples: [],
@@ -307,14 +303,15 @@ export default defineComponent({
     const onObjectConfirmed = () => {};
 
     const toUrl = (file: File) => {
-      if (file) return URL.createObjectURL(file);
+      if (file)
+        return URL.createObjectURL(file);
       return undefined;
     };
 
     const submit = () => {
       const scaleFields = Object.fromEntries(
         entry.value.scales
-          .filter((s) => s.version === 2)
+          .filter(s => s.version === 2)
           .map((s) => {
             const v2 = s as DrinkwareScaleV2Entry;
 
@@ -326,12 +323,11 @@ export default defineComponent({
                 volumeSamples: v2.volumeSamples,
               },
             ];
-          })
+          }),
       );
 
-      for (const [objectId, baseImageFile] of Object.entries(baseImageFiles.value)) {
+      for (const [objectId, baseImageFile] of Object.entries(baseImageFiles.value))
         form.data.baseImage[objectId] = baseImageFile;
-      }
 
       form.data.scales = JSON.stringify(scaleFields);
 

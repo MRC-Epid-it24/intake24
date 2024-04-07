@@ -1,6 +1,6 @@
 import { surveyUrlService } from '@intake24/api/services';
 
-describe('Survey Url service', () => {
+describe('survey Url service', () => {
   const urls = {
     base: 'https://example.com',
     admin: '/admin',

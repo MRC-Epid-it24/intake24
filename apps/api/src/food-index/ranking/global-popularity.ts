@@ -8,7 +8,7 @@ const cache = new NodeCache({ stdTTL: 600, checkperiod: 600 });
 export async function getGlobalPopularityRanking(foodCodes: string[]): Promise<RankingData> {
   const ranking = cache.mget<number>(foodCodes);
 
-  const codesToFetch = foodCodes.filter((code) => !ranking[code]);
+  const codesToFetch = foodCodes.filter(code => !ranking[code]);
 
   if (codesToFetch.length > 0) {
     const rows = await PopularityCounter.findAll({
@@ -16,7 +16,7 @@ export async function getGlobalPopularityRanking(foodCodes: string[]): Promise<R
       where: { foodCode: codesToFetch },
     });
 
-    const newCacheEntries = rows.map((row) => ({
+    const newCacheEntries = rows.map(row => ({
       key: row.foodCode,
       val: row.counter,
     }));

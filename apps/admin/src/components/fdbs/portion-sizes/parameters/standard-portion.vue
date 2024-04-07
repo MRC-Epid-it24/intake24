@@ -9,29 +9,35 @@
         :title="$t('standard-units.add')"
         @click="add"
       >
-        <v-icon left>$add</v-icon>
+        <v-icon left>
+          $add
+        </v-icon>
         {{ $t('standard-units.add') }}
       </v-btn>
       <v-simple-table>
         <thead>
           <tr>
-            <th></th>
+            <th />
             <th>{{ $t('fdbs.portionSizes.methods.standard-portion.unit') }}</th>
             <th>{{ $t('fdbs.portionSizes.methods.standard-portion.weight') }}</th>
             <th>{{ $t('fdbs.portionSizes.methods.standard-portion.omitFoodDescription') }}</th>
-            <th></th>
+            <th />
           </tr>
         </thead>
         <draggable v-model="parameters.units" handle=".drag-and-drop__handle" tag="tbody">
           <tr v-for="(unit, idx) in parameters.units" :key="unit.name" class="drag-and-drop__item">
             <td>
-              <v-icon class="drag-and-drop__handle">$handle</v-icon>
+              <v-icon class="drag-and-drop__handle">
+                $handle
+              </v-icon>
             </td>
             <td>
               <select-resource v-model="unit.name" resource="standard-units">
                 <template #activator="{ attrs, on }">
                   <v-btn v-bind="attrs" text :title="$t('standard-units.add')" v-on="on">
-                    <v-icon left>$standard-units</v-icon>
+                    <v-icon left>
+                      $standard-units
+                    </v-icon>
                     {{ unit.name }}
                   </v-btn>
                 </template>
@@ -44,14 +50,14 @@
                 hide-details="auto"
                 :name="`unit${idx}-weight`"
                 :rules="weightRules"
-              ></v-text-field>
+              />
             </td>
             <td>
               <v-switch
                 v-model="unit.omitFoodDescription"
                 class="mt-0"
                 hide-details="auto"
-              ></v-switch>
+              />
             </td>
             <td>
               <confirm-dialog
@@ -85,7 +91,7 @@ import { useParameters } from './use-parameters';
 export default defineComponent({
   name: 'StandardPortionParameters',
 
-  components: { ConfirmDialog, draggable, SelectResource },
+  components: { ConfirmDialog, Draggable: draggable, SelectResource },
 
   props: {
     value: {
@@ -113,7 +119,8 @@ export default defineComponent({
       (value: any): boolean | string => {
         const msg = 'Value must be greater than 0';
         const number = Number.parseFloat(value);
-        if (Number.isNaN(number)) return msg;
+        if (Number.isNaN(number))
+          return msg;
 
         return number > 0 || msg;
       },

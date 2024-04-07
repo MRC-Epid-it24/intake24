@@ -1,58 +1,58 @@
 {
-  extends: ['config:base', 'schedule:earlyMondays'],
-  labels: ['dependencies'],
-  pin: false,
-  packageRules: [
+  "extends": ["config:base", "schedule:earlyMondays"],
+  "labels": ["dependencies"],
+  "pin": false,
+  "packageRules": [
     // Ignore major
     {
-      matchPackageNames: [
+      "matchPackageNames": [
         // Breaking changes
-        'execa', // ESM-only since 6.x.x
-        'formdata-node', // ESM-only since 5.x.x
-        'nanoid', // ESM-only since 4.x.x
-        'p-limit', // ESM-only since 4.x.x
-        'p-queue', // ESM-only since 7.x.x
+        "execa", // ESM-only since 6.x.x
+        "formdata-node", // ESM-only since 5.x.x
+        "nanoid", // ESM-only since 4.x.x
+        "p-limit", // ESM-only since 4.x.x
+        "p-queue", // ESM-only since 7.x.x
 
         // Bump after Vue.js v3 upgrade
-        '@tinymce/tinymce-vue',
-        '@vue/compiler-sfc',
-        'vue',
-        'vue-gtag',
-        'vue-i18n',
-        'vue-router',
-        'vue-recaptcha',
-        'vuetify',
+        "@tinymce/tinymce-vue",
+        "@vue/compiler-sfc",
+        "vue",
+        "vue-gtag",
+        "vue-i18n",
+        "vue-router",
+        "vue-recaptcha",
+        "vuetify"
       ],
-      matchUpdateTypes: ['major'],
-      enabled: false,
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     },
     // Ignore major/minor
     {
-      matchPackageNames: [
+      "matchPackageNames": [
         // Bump with Vuetify3
-        'sass',
+        "sass"
       ],
-      matchUpdateTypes: ['major', 'minor'],
-      enabled: false,
+      "matchUpdateTypes": ["major", "minor"],
+      "enabled": false
     },
     // Typescript (major/minor)
     {
-      matchPackageNames: ['typescript'],
-      matchUpdateTypes: ['major', 'minor'],
-      groupName: 'typescript',
-      groupSlug: 'typescript',
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["major", "minor"],
+      "groupName": "typescript",
+      "groupSlug": "typescript"
     },
     // Rest of non-major dependencies
     {
-      matchPackagePatterns: ['*'],
-      matchUpdateTypes: ['minor', 'patch'],
-      groupName: 'all non-major dependencies',
-      groupSlug: 'all-minor-patch',
-    },
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    }
   ],
-  rangeStrategy: 'bump',
-  ignoreDeps: [
+  "rangeStrategy": "bump",
+  "ignoreDeps": [
     // Manual
-    'node',
-  ],
+    "node"
+  ]
 }

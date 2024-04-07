@@ -11,7 +11,8 @@ describe('jsonwebtoken promisified wrappers', () => {
     const token = jsonwebtoken.sign(payload, secret);
     const decoded = await jwt.verify(token, secret);
 
-    if (!decoded) throw new Error();
+    if (!decoded)
+      throw new Error('Token is not verified');
 
     const { iat, ...rest } = decoded;
 

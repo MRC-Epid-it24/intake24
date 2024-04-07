@@ -1,5 +1,5 @@
 import browse from './browse.test';
 
 export default () => {
-  describe('GET /api/admin/categories', browse);
+  describe('get /api/admin/categories', browse);
 };

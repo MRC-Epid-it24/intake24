@@ -10,8 +10,7 @@
             :label="$t('surveys.id')"
             name="surveyId"
             resource="surveys"
-          >
-          </select-resource>
+          />
         </v-col>
       </v-row>
     </v-card-text>

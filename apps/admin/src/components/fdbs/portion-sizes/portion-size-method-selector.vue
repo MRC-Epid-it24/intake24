@@ -14,10 +14,12 @@
         <v-toolbar-title>
           {{ $t(`fdbs.portionSizes.${dialog.index === -1 ? 'add' : 'edit'}`) }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-toolbar-items>
           <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-            <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+            <v-icon left>
+              $success
+            </v-icon>{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -38,8 +40,7 @@
                     name="method"
                     outlined
                     @change="updateItemProps"
-                  >
-                  </v-select>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-select
@@ -49,8 +50,7 @@
                     :label="$t('fdbs.portionSizes.description')"
                     name="description"
                     outlined
-                  >
-                  </v-select>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-switch
@@ -58,7 +58,7 @@
                     hide-details="auto"
                     :label="$t('fdbs.portionSizes.useForRecipes')"
                     name="useForRecipes"
-                  ></v-switch>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-slider
@@ -70,11 +70,11 @@
                     name="conversionFactor"
                     :step="0.1"
                     thumb-label="always"
-                  ></v-slider>
+                  />
                 </v-col>
               </v-row>
             </v-col>
-            <v-divider vertical></v-divider>
+            <v-divider vertical />
             <v-col cols="12" md>
               <v-card-title class="px-0">
                 {{ $t(`fdbs.portionSizes.methods.${dialog.item.method}._`) }}
@@ -84,16 +84,20 @@
                 :is="dialog.item.method"
                 v-model="dialog.item.parameters"
                 @validate="validate"
-              ></component>
+              />
             </v-col>
           </v-row>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+              <v-icon left>
+                $cancel
+              </v-icon>{{ $t('common.action.cancel') }}
             </v-btn>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -148,8 +152,9 @@ export default defineComponent({
         item: { method },
       } = this.dialog;
 
-      const item = this.psmDefaults.find((item) => item.method === method);
-      if (!item) return;
+      const item = this.psmDefaults.find(item => item.method === method);
+      if (!item)
+        return;
 
       this.dialog = { show, index, item: copy({ ...item, _id: randomString(6) }) };
     },
@@ -159,7 +164,7 @@ export default defineComponent({
     },
 
     edit(index: number, item: InternalPortionSizeMethodItem) {
-      const defaults = this.psmDefaults.find((d) => d.method === item.method);
+      const defaults = this.psmDefaults.find(d => d.method === item.method);
       if (!defaults) {
         console.warn(`Portion size method defaults for method '${item.method}' not found.`);
         return;
@@ -170,7 +175,8 @@ export default defineComponent({
 
     save() {
       const isValid = this.form?.validate();
-      if (!isValid) return;
+      if (!isValid)
+        return;
 
       const { index, item } = this.dialog;
 

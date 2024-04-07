@@ -5,8 +5,9 @@ import uaParser from 'ua-parser-js';
 import validator from 'validator';
 
 export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');
-export const atob = <T>(object: string): T =>
-  JSON.parse(Buffer.from(object, 'base64').toString('utf-8'));
+export function atob<T>(object: string): T {
+  return JSON.parse(Buffer.from(object, 'base64').toString('utf-8'));
+}
 
 /**
  * Convention helper for user simple name
@@ -14,8 +15,9 @@ export const atob = <T>(object: string): T =>
  * @param {(string | null)} [name]
  * @returns {(string | null)}
  */
-export const toSimpleName = (name?: string | null): string | null =>
-  name ? slugify(name, { replacement: ' ', lower: true }) : null;
+export function toSimpleName(name?: string | null): string | null {
+  return name ? slugify(name, { replacement: ' ', lower: true }) : null;
+}
 
 /**
  * Check whether string is a BigInt
@@ -23,18 +25,21 @@ export const toSimpleName = (name?: string | null): string | null =>
  * @param {*} value
  * @returns {boolean}
  */
-export const isStringBigInt = (value: any): boolean => {
-  if (typeof value === 'number' || typeof value === 'bigint') return true;
+export function isStringBigInt(value: any): boolean {
+  if (typeof value === 'number' || typeof value === 'bigint')
+    return true;
 
-  if (typeof value !== 'string') return false;
+  if (typeof value !== 'string')
+    return false;
 
   try {
     BigInt(value);
     return true;
-  } catch (err) {
+  }
+  catch (err) {
     throw new Error('Value is not BigInt.');
   }
-};
+}
 
 /**
  * Determine if URL is external (not relative)
@@ -44,8 +49,9 @@ export const isStringBigInt = (value: any): boolean => {
  * @param {validator.IsURLOptions} options
  * @returns {boolean}
  */
-export const isUrlAbsolute = (url: string, options?: validator.IsURLOptions): boolean =>
-  validator.isURL(url, { require_protocol: true, require_tld: false, ...options });
+export function isUrlAbsolute(url: string, options?: validator.IsURLOptions): boolean {
+  return validator.isURL(url, { require_protocol: true, require_tld: false, ...options });
+}
 
 /**
  * Get frontend URL
@@ -55,30 +61,28 @@ export const isUrlAbsolute = (url: string, options?: validator.IsURLOptions): bo
  * @param {string} [override]
  * @returns {string}
  */
-export const getFrontEndUrl = (
-  base: string,
-  frontend: string,
-  override?: string | null
-): string => {
-  if (override) return trimEnd(override, '/');
+export function getFrontEndUrl(base: string, frontend: string, override?: string | null): string {
+  if (override)
+    return trimEnd(override, '/');
 
-  if (isUrlAbsolute(frontend)) return trimEnd(frontend, '/');
+  if (isUrlAbsolute(frontend))
+    return trimEnd(frontend, '/');
 
-  return [base, frontend].map((item) => trim(item, '/')).join('/');
-};
+  return [base, frontend].map(item => trim(item, '/')).join('/');
+}
 
-export const getAgentInfo = (agent: { name?: string; version?: string }): string | undefined => {
+export function getAgentInfo(agent: { name?: string; version?: string }): string | undefined {
   return agent.name && agent.version ? `${agent.name} (${agent.version})` : undefined;
-};
+}
 
-export const getUAInfo = (userAgent?: string): string | undefined => {
+export function getUAInfo(userAgent?: string): string | undefined {
   const { browser, os } = uaParser(userAgent);
   return [browser, os].map(getAgentInfo).filter(Boolean).join(', ');
-};
+}
 
-export const addDollarSign = (str: string): string => {
-  if (str.charAt(0) !== '$') {
-    return '$' + str;
-  }
+export function addDollarSign(str: string): string {
+  if (str.charAt(0) !== '$')
+    return `$${str}`;
+
   return str;
-};
+}

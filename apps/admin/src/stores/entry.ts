@@ -24,9 +24,9 @@ export const useEntry = defineStore('entry', {
   }),
   getters: {
     getEntry: <T>(state: EntryState): T => state.data as T,
-    dataLoaded: (state) => !!Object.keys(state.data).length,
+    dataLoaded: state => !!Object.keys(state.data).length,
     getRefs: <T>(state: EntryState): T => state.refs as T,
-    refsLoaded: (state) => !!Object.keys(state.refs).length,
+    refsLoaded: state => !!Object.keys(state.refs).length,
   },
   actions: {
     async requestEntry({
@@ -58,15 +58,18 @@ export const useEntry = defineStore('entry', {
 
     async requestRefs() {
       const { api, refs } = useResource();
-      if (!refs) return;
+      if (!refs)
+        return;
 
       this.clearRefs();
 
       try {
         const { data } = await httpService.get(`${api}/refs`, { withLoading: true });
         this.setRefs(data);
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status !== HttpStatusCode.NotFound) throw err;
+      }
+      catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status !== HttpStatusCode.NotFound)
+          throw err;
       }
     },
 
@@ -79,7 +82,8 @@ export const useEntry = defineStore('entry', {
     },
 
     setEntry(data?: Dictionary) {
-      if (data) this.data = { ...(data ?? { id: null }) };
+      if (data)
+        this.data = { ...(data ?? { id: null }) };
     },
 
     updateEntry(data: Partial<Dictionary>) {
@@ -91,7 +95,8 @@ export const useEntry = defineStore('entry', {
     },
 
     setRefs(refs?: Dictionary) {
-      if (refs) this.refs = { ...refs };
+      if (refs)
+        this.refs = { ...refs };
     },
   },
 });

@@ -2,14 +2,16 @@
   <div>
     <v-list-item
       :class="{
-        selected: contextId ? food.id === contextId : food.id === selectedFoodId,
+        'selected': contextId ? food.id === contextId : food.id === selectedFoodId,
         'pl-4': !linked,
         'pl-8': linked,
       }"
       link
       @click="updateContextId(food.id)"
     >
-      <v-list-item-title class="text-wrap">{{ foodName }}</v-list-item-title>
+      <v-list-item-title class="text-wrap">
+        {{ foodName }}
+      </v-list-item-title>
       <v-list-item-action class="d-flex flex-row">
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
@@ -43,21 +45,21 @@
           <span>
             {{
               $t(
-                `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`
+                `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`,
               )
             }}
           </span>
         </v-tooltip>
       </v-list-item-action>
     </v-list-item>
-    <context-menu v-bind="{ contextId, food, meal, menu }" @action="action"></context-menu>
+    <context-menu v-bind="{ contextId, food, meal, menu }" @action="action" />
     <food-item
       v-for="linkedFood in food.linkedFoods"
       :key="linkedFood.id"
       v-bind="{ contextId, food: linkedFood, linked: true, meal, selectedFoodId }"
       @action="action"
       @update:context-id="updateContextId"
-    ></food-item>
+    />
   </div>
 </template>
 

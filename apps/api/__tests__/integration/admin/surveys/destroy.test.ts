@@ -2,14 +2,14 @@ import type { CreateSurveyRequest, SurveyRequest } from '@intake24/common/types/
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-const refreshSurveyRecord = async (input?: CreateSurveyRequest): Promise<Survey> => {
+async function refreshSurveyRecord(input?: CreateSurveyRequest): Promise<Survey> {
   const mock = input ?? mocker.system.survey();
   return Survey.create({
     ...mock,
     startDate: new Date(mock.startDate),
     endDate: new Date(mock.endDate),
   });
-};
+}
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
@@ -29,7 +29,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 

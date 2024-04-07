@@ -1,14 +1,16 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>fas fa-shield-halved</v-icon>
+      <v-icon color="secondary" left>
+        fas fa-shield-halved
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('securables.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <div class="d-flex align-center font-weight-medium text-button">
         {{ $t('securables.owner._') }}:
-        <owner-dialog v-bind="{ api, owner, resource }" ref="ownerDialog"></owner-dialog>
+        <owner-dialog v-bind="{ api, owner, resource }" ref="ownerDialog" />
       </div>
     </v-toolbar>
     <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
@@ -17,7 +19,7 @@
           v-bind="{ api, actions, resource }"
           ref="userDialog"
           @update:table="updateTable"
-        ></user-dialog>
+        />
       </template>
       <template #[`item.securables`]="{ item }">
         {{
@@ -34,7 +36,9 @@
           :title="$t('common.action.edit')"
           @click.stop="editUser(item)"
         >
-          <v-icon dark>$edit</v-icon>
+          <v-icon dark>
+            $edit
+          </v-icon>
         </v-btn>
         <confirm-dialog
           color="error"

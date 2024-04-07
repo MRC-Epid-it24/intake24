@@ -2,8 +2,8 @@
   <div>
     <div class="d-flex flex-row justify-space-between">
       <div class="d-flex ga-2">
-        <food-search v-bind="{ localeId }"></food-search>
-        <add-food-dialog v-bind="{ localeId }"></add-food-dialog>
+        <food-search v-bind="{ localeId }" />
+        <add-food-dialog v-bind="{ localeId }" />
       </div>
       <v-menu bottom :close-on-content-click="false" left :nudge-width="200" offset-y>
         <template #activator="{ on, attrs }">
@@ -14,14 +14,14 @@
         <v-list>
           <v-list-item>
             <v-list-item-action>
-              <v-switch v-model="showGlobalName"></v-switch>
+              <v-switch v-model="showGlobalName" />
             </v-list-item-action>
             <v-list-item-title>{{ $t('fdbs.showGlobalName') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </div>
-    <v-divider class="my-3"></v-divider>
+    <v-divider class="my-3" />
     <v-treeview
       activatable
       :active.sync="active"
@@ -34,7 +34,9 @@
       transition
     >
       <template #label="{ item }">
-        <v-icon v-if="!item.children" left>$foods</v-icon>
+        <v-icon v-if="!item.children" left>
+          $foods
+        </v-icon>
         <a @click="openItem(item)">{{ item[itemText] }}</a>
       </template>
     </v-treeview>
@@ -92,7 +94,7 @@ export default defineComponent({
 
     const fetchRootCategories = async () => {
       const { data } = await http.get<RootCategoriesResponse>(
-        `admin/fdbs/${props.localeId}/categories/root`
+        `admin/fdbs/${props.localeId}/categories/root`,
       );
 
       const noCategory: TreeItem = {
@@ -109,7 +111,7 @@ export default defineComponent({
 
       items.value = [
         noCategory,
-        ...data.map((category) => ({
+        ...data.map(category => ({
           ...category,
           key: randomString(8),
           type: 'categories',
@@ -122,24 +124,26 @@ export default defineComponent({
       const {
         data: { categories, foods },
       } = await http.get<CategoryContentsResponse>(
-        `admin/fdbs/${props.localeId}/categories/${category.id}/contents`
+        `admin/fdbs/${props.localeId}/categories/${category.id}/contents`,
       );
 
-      if (!('children' in category)) return;
+      if (!('children' in category))
+        return;
 
       category.children.push(
-        ...categories.map((item) => ({
+        ...categories.map(item => ({
           ...item,
           key: randomString(8),
           type: 'categories',
           children: [],
         })),
-        ...foods.map((item) => ({ ...item, key: randomString(8), type: 'foods' }))
+        ...foods.map(item => ({ ...item, key: randomString(8), type: 'foods' })),
       );
     };
 
     const openItem = async (item: TreeItem) => {
-      if (selectedEntryId.value === item.id) return;
+      if (selectedEntryId.value === item.id)
+        return;
 
       selectedEntryId.value = item.id;
       selectedEntryCategories.value = [];
@@ -151,7 +155,8 @@ export default defineComponent({
     };
 
     const findActiveInChildren = async (children: TreeItem[]) => {
-      if (!children.length) return;
+      if (!children.length)
+        return;
 
       for (const child of children) {
         if (selectedEntryId.value === child.id) {
@@ -163,19 +168,22 @@ export default defineComponent({
           await fetchCategoryContent(child);
           open.value.push(child.key);
 
-          if (!('children' in child) || !child.children.length) continue;
+          if (!('children' in child) || !child.children.length)
+            continue;
 
           const found = await findActiveInChildren(child.children);
-          if (found) return true;
+          if (found)
+            return true;
         }
       }
     };
 
     const findActiveInTree = async (entryId: string, type: string) => {
-      if (!['categories', 'foods'].includes(type)) return;
+      if (!['categories', 'foods'].includes(type))
+        return;
 
       const { data } = await http.get<{ categories: string[] }>(
-        `admin/fdbs/${props.localeId}/${type}/${entryId}/categories`
+        `admin/fdbs/${props.localeId}/${type}/${entryId}/categories`,
       );
 
       selectedEntryId.value = entryId;

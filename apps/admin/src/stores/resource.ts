@@ -43,7 +43,7 @@ export const useResource = defineStore('resource', {
     },
 
     async resetFilter() {
-      const { [this.name]: remove, ...rest } = this.filter;
+      const { [this.name]: _remove, ...rest } = this.filter;
 
       this.filter = { ...rest };
     },

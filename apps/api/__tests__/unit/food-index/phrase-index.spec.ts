@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-expressions */
 import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
 import EnglishLanguageBackend from '@intake24/api/food-index/language-backends/en/english-language-backend';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 
-describe('Phrase index', () => {
+describe('phrase index', () => {
   const phrases: Array<PhraseWithKey<string>> = [
     {
       phrase: 'banana with banana tea',
@@ -21,7 +20,7 @@ describe('Phrase index', () => {
     },
   ];
 
-  const indexFilter: Array<string> = ['with'];
+  const _indexFilter: Array<string> = ['with'];
 
   const synonyms: Array<Set<string>> = [];
   const specialFoodsSynonyms: Array<Set<string>> = [];
@@ -32,16 +31,16 @@ describe('Phrase index', () => {
     EnglishLanguageBackend,
     synonyms,
     specialFoodsSynonyms,
-    specialFoodsList
+    specialFoodsList,
   );
 
-  describe('Interpretation combinations', () => {
-    it('Empty interpretations list', () => {
+  describe('interpretation combinations', () => {
+    it('empty interpretations list', () => {
       const t = new InterpretedPhrase('bleh', []);
       expect(t.generateCombinations(100)).toBeEmpty();
     });
 
-    it('Cut combinations', () => {
+    it('cut combinations', () => {
       const t = new InterpretedPhrase('bleh', [
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
@@ -60,7 +59,7 @@ describe('Phrase index', () => {
       expect(cut[2].interpretations[0].kind).toBe('alt-spelling');
     });
 
-    it('Generate combinations', () => {
+    it('generate combinations', () => {
       const t1 = new InterpretedPhrase('bleh', [
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
         new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
@@ -129,7 +128,7 @@ describe('Phrase index', () => {
       ]);
     });
 
-    it('Match', () => {
+    it('match', () => {
       const t = index.interpretPhrase('banana with coffee', 'match-fewer');
 
       console.log(JSON.stringify(index.findMatches(t, 10, 100)));

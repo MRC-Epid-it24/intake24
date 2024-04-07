@@ -19,7 +19,7 @@
                 outlined
                 prepend-inner-icon="fas fa-user"
                 required
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -32,7 +32,7 @@
                 outlined
                 prepend-inner-icon="fas fa-phone"
                 required
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -45,7 +45,7 @@
                 outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -58,7 +58,7 @@
                 outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -74,7 +74,7 @@
                 required
                 :type="show.password ? 'text' : 'password'"
                 @click:append="show.password = !show.password"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
@@ -90,7 +90,7 @@
                 required
                 :type="show.passwordConfirm ? 'text' : 'password'"
                 @click:append="show.passwordConfirm = !show.passwordConfirm"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-checkbox
@@ -127,11 +127,13 @@
           </v-row>
         </v-container>
       </v-card-text>
-      <captcha ref="captchaEl" @expired="expired" @verified="verified"></captcha>
+      <captcha ref="captchaEl" @expired="expired" @verified="verified" />
     </v-form>
     <v-card-actions>
       <v-btn color="info" exact text :to="{ name: 'login' }">
-        <v-icon left>fas fa-angles-left</v-icon>
+        <v-icon left>
+          fas fa-angles-left
+        </v-icon>
         {{ $t('common.login.back') }}
       </v-btn>
     </v-card-actions>
@@ -206,12 +208,15 @@ export default defineComponent({
         });
         await useAuth().successfulLogin(accessToken);
         await this.$router.push({ name: 'verify' });
-      } catch (err) {
+      }
+      catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
           useMessages().error(this.$t('common.password.request.captcha').toString());
-        } else throw err;
-      } finally {
+        }
+        else { throw err; }
+      }
+      finally {
         this.resetCaptcha();
       }
     },

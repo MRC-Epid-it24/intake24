@@ -12,8 +12,7 @@
     outlined
     prepend-inner-icon="$nutrient-tables"
     @change="fetchNutrientTypes"
-  >
-  </v-select>
+  />
 </template>
 
 <script lang="ts">

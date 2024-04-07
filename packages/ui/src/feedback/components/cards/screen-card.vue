@@ -1,6 +1,6 @@
 <template>
   <v-card class="card-screen d-flex flex-column" :color="detail.color" height="100%">
-    <v-img :aspect-ratio="16 / 9" :src="backgroundImage"></v-img>
+    <v-img :aspect-ratio="16 / 9" :src="backgroundImage" />
     <!-- <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div> -->
     <v-card-subtitle class="font-weight-medium" :class="textColor">
       <i18n class="mb-2" path="feedback.intake.your" tag="div">
@@ -14,14 +14,16 @@
         </template>
       </i18n>
       <div v-if="detail.recommendedIntake" :class="textColor ?? detail.textClass">
-        <v-icon left>{{ detail.iconClass }}</v-icon>
+        <v-icon left>
+          {{ detail.iconClass }}
+        </v-icon>
         <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
       </div>
     </v-card-subtitle>
     <v-card-text class="flex-grow-1" :class="textColor">
-      <div class="card-screen__summary" v-html="detail.summary"></div>
+      <div class="card-screen__summary" v-html="detail.summary" />
     </v-card-text>
-    <tell-me-more v-bind="{ detail, textColor }"></tell-me-more>
+    <tell-me-more v-bind="{ detail, textColor }" />
   </v-card>
 </template>
 
@@ -56,7 +58,7 @@ export default defineComponent({
     const { backgroundImage, detail, formatOutput } = useCard(props);
 
     const textColor = computed(() =>
-      getContrastYIQ(detail.value.color) < 128 ? 'white--text' : undefined
+      getContrastYIQ(detail.value.color) < 128 ? 'white--text' : undefined,
     );
 
     /* const colorMap = computed(() => [

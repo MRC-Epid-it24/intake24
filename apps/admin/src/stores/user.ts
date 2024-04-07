@@ -26,32 +26,36 @@ export const useUser = defineStore('user', {
     roles: [],
   }),
   getters: {
-    isVerified: (state) => !!state.profile?.verifiedAt,
-    loaded: (state) => !!state.profile,
+    isVerified: state => !!state.profile?.verifiedAt,
+    loaded: state => !!state.profile,
   },
   actions: {
     can(permission: string | string[] | Permission, strict = false) {
-      if (!this.isVerified) return false;
+      if (!this.isVerified)
+        return false;
 
-      if (typeof permission === 'string') return this.permissions.includes(permission);
+      if (typeof permission === 'string')
+        return this.permissions.includes(permission);
 
       if (Array.isArray(permission)) {
         return strict
-          ? permission.every((item) => this.permissions.includes(item))
-          : permission.some((item) => this.permissions.includes(item));
+          ? permission.every(item => this.permissions.includes(item))
+          : permission.some(item => this.permissions.includes(item));
       }
 
       const { name } = useResource();
       const { resource = name, action, ownerId, securables = [] } = permission;
 
       if (action) {
-        if (this.permissions.includes(`${resource}|${action}`)) return true;
+        if (this.permissions.includes(`${resource}|${action}`))
+          return true;
 
-        if (securables.length && !!securables.find((securable) => securable.action === action))
+        if (securables.length && !!securables.find(securable => securable.action === action))
           return true;
       }
 
-      if (ownerId && ownerId === this.profile?.id) return true;
+      if (ownerId && ownerId === this.profile?.id)
+        return true;
 
       return false;
     },
@@ -69,7 +73,7 @@ export const useUser = defineStore('user', {
     loadPayload(accessToken: string) {
       const { userId, sub } = tokenService.decodeAccessToken<AdminTokenPayload>(
         accessToken,
-        'admin'
+        'admin',
       );
 
       const subject: Subject = JSON.parse(atob(sub));

@@ -11,7 +11,7 @@
     }"
     @action="action"
     @input="update"
-  ></milk-in-a-hot-drink-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -74,12 +74,13 @@ export default defineComponent({
         return;
       }
 
-      if (!parentFood.value) throw new Error('Milk in a hot drink prompt: parent food not found.');
+      if (!parentFood.value)
+        throw new Error('Milk in a hot drink prompt: parent food not found.');
 
       if (
-        !parentFood.value.portionSize ||
-        parentFood.value.portionSize.servingWeight === null ||
-        parentFood.value.portionSize.leftoversWeight === null
+        !parentFood.value.portionSize
+        || parentFood.value.portionSize.servingWeight === null
+        || parentFood.value.portionSize.leftoversWeight === null
       )
         throw new Error('Milk in a hot drink prompt: Parent food missing portion size data');
 
@@ -113,7 +114,7 @@ export default defineComponent({
       props,
       ctx,
       getInitialState,
-      commitAnswer
+      commitAnswer,
     );
 
     return {

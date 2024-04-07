@@ -15,7 +15,7 @@ import {
   GuideImage,
 } from '@intake24/db';
 
-const portionSizeMethodsService = () => {
+function portionSizeMethodsService() {
   /**
    *
    * Get Portion Size Methods and their Parameters associated with the supplied category and locale.
@@ -39,17 +39,19 @@ const portionSizeMethodsService = () => {
 
   const getNearestLocalCategoryPortionSizeMethods = async (
     localeId: string,
-    categoryCodes: string[]
+    categoryCodes: string[],
   ): Promise<CategoryPortionSizeMethod[]> => {
     for (let i = 0; i < categoryCodes.length; ++i) {
       const methods = await getCategoryPortionSizeMethods(localeId, categoryCodes[i]);
 
-      if (methods.length) return methods;
+      if (methods.length)
+        return methods;
     }
 
     const parents = await getCategoryParentCategories(categoryCodes);
 
-    if (parents.length) return getNearestLocalCategoryPortionSizeMethods(localeId, parents);
+    if (parents.length)
+      return getNearestLocalCategoryPortionSizeMethods(localeId, parents);
 
     return [];
   };
@@ -84,19 +86,21 @@ const portionSizeMethodsService = () => {
 
   const resolvePortionSizeMethods = async (
     localeId: string,
-    foodCode: string
+    foodCode: string,
   ): Promise<(CategoryPortionSizeMethod | FoodPortionSizeMethod)[]> => {
     const foodLocal = await getFoodLocal(localeId, foodCode);
-    if (foodLocal?.portionSizeMethods?.length) return foodLocal.portionSizeMethods;
+    if (foodLocal?.portionSizeMethods?.length)
+      return foodLocal.portionSizeMethods;
 
     const parentCategories = await getFoodParentCategories(foodCode);
 
     if (parentCategories.length) {
       const categoryPortionSizeMethods = await getNearestLocalCategoryPortionSizeMethods(
         localeId,
-        parentCategories
+        parentCategories,
       );
-      if (categoryPortionSizeMethods.length) return categoryPortionSizeMethods;
+      if (categoryPortionSizeMethods.length)
+        return categoryPortionSizeMethods;
     }
 
     const prototypeLocale = await getParentLocale(localeId);
@@ -115,10 +119,11 @@ const portionSizeMethodsService = () => {
         if (!set)
           throw new NotFoundError(`As served set ${psm.parameters.servingImageSet} not found`);
 
-        if (!set.selectionImage)
+        if (!set.selectionImage) {
           throw new NotFoundError(
-            `Selection screen image for as served set ${psm.parameters.servingImageSet} is undefined`
+            `Selection screen image for as served set ${psm.parameters.servingImageSet} is undefined`,
           );
+        }
 
         return set.selectionImage.path;
       }
@@ -132,10 +137,11 @@ const portionSizeMethodsService = () => {
         if (!guideImage)
           throw new NotFoundError(`Guide image ${psm.parameters.guideImageId} not found`);
 
-        if (!guideImage.selectionImage)
+        if (!guideImage.selectionImage) {
           throw new NotFoundError(
-            `Selection screen image for guide image ${psm.parameters.guideImageId} is undefined`
+            `Selection screen image for guide image ${psm.parameters.guideImageId} is undefined`,
           );
+        }
 
         return guideImage.selectionImage.path;
       }
@@ -152,12 +158,14 @@ const portionSizeMethodsService = () => {
           ],
         });
 
-        if (!set) throw new NotFoundError(`Drinkware set ${psm.parameters.drinkwareId} not found`);
+        if (!set)
+          throw new NotFoundError(`Drinkware set ${psm.parameters.drinkwareId} not found`);
 
-        if (!set.imageMap?.baseImage)
+        if (!set.imageMap?.baseImage) {
           throw new NotFoundError(
-            `Drink scale image map for drinkware set ${psm.parameters.drinkwareId} is undefined`
+            `Drink scale image map for drinkware set ${psm.parameters.drinkwareId} is undefined`,
           );
+        }
 
         return set.imageMap.baseImage.path;
       }
@@ -179,22 +187,22 @@ const portionSizeMethodsService = () => {
 
       default:
         throw new Error(
-          `Unexpected portion size method type: ${(psm as PortionSizeMethod).method}`
+          `Unexpected portion size method type: ${(psm as PortionSizeMethod).method}`,
         );
     }
   }
 
   const resolveUserPortionSizeMethods = async (
     localeId: string,
-    foodCode: string
+    foodCode: string,
   ): Promise<UserPortionSizeMethod[]> => {
     const psms = await resolvePortionSizeMethods(localeId, foodCode);
 
     return Promise.all(
-      psms.map(async (psm) => ({
+      psms.map(async psm => ({
         ...psm.get(),
         imageUrl: await getPortionSizeImageUrl(psm as PortionSizeMethod),
-      }))
+      })),
     );
   };
 
@@ -203,7 +211,7 @@ const portionSizeMethodsService = () => {
     resolvePortionSizeMethods,
     resolveUserPortionSizeMethods,
   };
-};
+}
 
 export default portionSizeMethodsService;
 

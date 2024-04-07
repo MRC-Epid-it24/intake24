@@ -15,5 +15,5 @@ export default (securable: SecurableType): ValidationMiddleware[] =>
         isInt: true,
       },
       ...defaults(securable),
-    })
+    }),
   );

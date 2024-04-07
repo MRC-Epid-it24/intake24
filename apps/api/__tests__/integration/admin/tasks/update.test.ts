@@ -23,7 +23,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('put', url, { permissions });
   });
 
@@ -56,7 +56,7 @@ export default () => {
             description: ['should just be string', 'should just be string'],
             params: ['invalidObject'],
           },
-        }
+        },
       );
     });
 

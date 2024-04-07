@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 export default () => {
   const url = '/api/admin/auth/logout';
 
-  it('Should return 200 and empty refresh cookie', async () => {
+  it('should return 200 and empty refresh cookie', async () => {
     const res = await request(suite.app).post(url).set('Accept', 'application/json');
 
     expect(res.status).toBe(200);
@@ -15,8 +15,8 @@ export default () => {
     expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
     expect(
       (res.get('Set-Cookie') ?? []).some(
-        (cookie) => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name
-      )
+        cookie => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name,
+      ),
     ).toBeTrue();
   });
 };

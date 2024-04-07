@@ -5,11 +5,11 @@ module.exports = {
         'recipe_foods_steps',
         'required',
         { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('recipe_foods_steps', 'required', { transaction });
     }),

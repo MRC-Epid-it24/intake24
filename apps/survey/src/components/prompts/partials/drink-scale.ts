@@ -16,16 +16,10 @@
  *
  * @returns liquid volume in ml corresponding to the normalised linear fillLevel.
  */
-export const interpolate = (
-  fillLevel: number,
-  f0: number,
-  v0: number,
-  f1: number,
-  v1: number
-): number => {
+export function interpolate(fillLevel: number, f0: number, v0: number, f1: number, v1: number): number {
   const a = (fillLevel - f0) / (f1 - f0);
   return v0 + (v1 - v0) * a;
-};
+}
 
 /**
  * Liquid volume estimation using the sliding scale.
@@ -42,12 +36,13 @@ export const interpolate = (
  *
  * @returns liquid volume in ml corresponding to the normalised linear fillLevel.
  */
-export const calculateVolume = (volumes: number[], fillLevel: number) => {
-  if (fillLevel < 0) return 0;
+export function calculateVolume(volumes: number[], fillLevel: number) {
+  if (fillLevel < 0)
+    return 0;
 
   if (volumes.length % 2 !== 0) {
     console.warn(
-      `Expected volume samples array to have even length but its length is ${volumes.length}. Check the drink scale data.`
+      `Expected volume samples array to have even length but its length is ${volumes.length}. Check the drink scale data.`,
     );
   }
 
@@ -56,21 +51,24 @@ export const calculateVolume = (volumes: number[], fillLevel: number) => {
   let i: number;
 
   for (i = 0; i < samplesCount; i++) {
-    if (volumes[i * 2] >= fillLevel) break;
+    if (volumes[i * 2] >= fillLevel)
+      break;
   }
 
-  if (i === 0) return interpolate(fillLevel, 0, 0, volumes[0], volumes[1]);
+  if (i === 0)
+    return interpolate(fillLevel, 0, 0, volumes[0], volumes[1]);
 
-  if (i === samplesCount) return volumes[i * 2 - 1];
+  if (i === samplesCount)
+    return volumes[i * 2 - 1];
 
   return interpolate(
     fillLevel,
     volumes[(i - 1) * 2],
     volumes[(i - 1) * 2 + 1],
     volumes[i * 2],
-    volumes[i * 2 + 1]
+    volumes[i * 2 + 1],
   );
-};
+}
 
 /**
  * Calculates the bounding box of the drink scale's fillable volume shape.
@@ -81,7 +79,7 @@ export const calculateVolume = (volumes: number[], fillLevel: number) => {
  *
  * @returns  { minX, maxX, minY, maxY }
  */
-export const getScaleBounds = (outlineCoordinates: number[]) => {
+export function getScaleBounds(outlineCoordinates: number[]) {
   const coordinatesCount = Math.floor(outlineCoordinates.length);
 
   let minY = Number.MAX_VALUE;
@@ -92,28 +90,29 @@ export const getScaleBounds = (outlineCoordinates: number[]) => {
   for (let i = 0; i < coordinatesCount; ++i) {
     const x = outlineCoordinates[i * 2];
     const y = outlineCoordinates[i * 2 + 1];
-    if (x < minX) minX = x;
-    if (x > maxX) maxX = x;
-    if (y < minY) minY = y;
-    if (y > maxY) maxY = y;
+    if (x < minX)
+      minX = x;
+    if (x > maxX)
+      maxX = x;
+    if (y < minY)
+      minY = y;
+    if (y > maxY)
+      maxY = y;
   }
 
   return { minX, maxX, minY, maxY };
-};
+}
 
-export const toSvgPolygonPoints = (
-  outlineCoordinates: number[],
-  widthPx: number,
-  heightPx: number
-): string => {
+export function toSvgPolygonPoints(outlineCoordinates: number[], widthPx: number, heightPx: number): string {
   const pointCount = Math.floor(outlineCoordinates.length / 2);
 
   // String concatenation seems to be OK performance-wise
   // https://josephmate.github.io/java/javascript/stringbuilder/2020/07/27/javascript-does-not-need-stringbuilder.html
   let pointsStr = '';
   for (let i = 0; i < pointCount; ++i) {
-    if (i !== 0) pointsStr += ' ';
+    if (i !== 0)
+      pointsStr += ' ';
     pointsStr += `${outlineCoordinates[i * 2] * widthPx},${outlineCoordinates[i * 2 + 1] * heightPx}`;
   }
   return pointsStr;
-};
+}

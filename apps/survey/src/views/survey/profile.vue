@@ -7,7 +7,9 @@
             <v-subheader>{{ $t('profile.info') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="secondary" dark>fas fa-user</v-icon>
+                <v-icon class="secondary" dark>
+                  fas fa-user
+                </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('common.name') }}</v-list-item-title>
@@ -18,7 +20,9 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="secondary" dark>fas fa-id-badge</v-icon>
+                <v-icon class="secondary" dark>
+                  fas fa-id-badge
+                </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.provider') }}</v-list-item-title>
@@ -29,7 +33,9 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="secondary" dark>fas fa-key</v-icon>
+                <v-icon class="secondary" dark>
+                  fas fa-key
+                </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.providerId') }}</v-list-item-title>
@@ -39,12 +45,14 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-divider></v-divider>
+          <v-divider />
           <v-list flat subheader two-line>
             <v-subheader>{{ $t('profile.settings') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="secondary" dark>fas fa-language</v-icon>
+                <v-icon class="secondary" dark>
+                  fas fa-language
+                </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-select
@@ -58,19 +66,19 @@
                   @change="updateLanguage"
                 >
                   <template #item="{ item }">
-                    <span :class="`fi fi-${item.countryFlagCode} mr-3`"> </span>
+                    <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
                     {{ item.englishName }}
                   </template>
                   <template #selection="{ item }">
-                    <span :class="`fi fi-${item.countryFlagCode} mr-3`"> </span>
+                    <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
                     {{ item.englishName }}
                   </template>
                 </v-select>
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-divider></v-divider>
-          <app-info></app-info>
+          <v-divider />
+          <app-info />
           <v-card-text class="mt-6 d-flex justify-center">
             <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
               <template #activator="{ attrs, on }">
@@ -85,7 +93,9 @@
                   v-on="on"
                 >
                   <span class="mr-2">{{ $t('common.logout._') }}</span>
-                  <v-icon right>$logout</v-icon>
+                  <v-icon right>
+                    $logout
+                  </v-icon>
                 </v-btn>
               </template>
               {{ $t('common.logout.text') }}
@@ -132,7 +142,7 @@ export default defineComponent({
       await useAuth().logout(true);
       const { surveyId } = this;
       await this.$router.push(
-        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' }
+        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' },
       );
     },
   },

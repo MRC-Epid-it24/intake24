@@ -21,5 +21,5 @@ export default validate(
     ...nutrients,
     ...portionSizeMethods,
     ...associatedFoods,
-  })
+  }),
 );

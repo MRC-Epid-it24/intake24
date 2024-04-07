@@ -21,8 +21,7 @@
                 readonly
                 required
                 :value="username"
-              >
-              </v-text-field>
+              />
               <v-text-field
                 :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
                 autocomplete="current-password"
@@ -38,7 +37,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 :value="password"
                 @click:append="showPassword = !showPassword"
-              ></v-text-field>
+              />
             </v-card>
             <v-alert v-else dark type="error">
               {{ $t(`survey.generateUser.${status}`, { surveyId: survey?.name ?? surveyId }) }}
@@ -58,10 +57,12 @@
           </v-btn>
         </v-card-actions>
       </v-form>
-      <captcha ref="captchaEl" @expired="expired" @verified="verified"></captcha>
+      <captcha ref="captchaEl" @expired="expired" @verified="verified" />
       <v-card-actions>
         <v-btn color="info" exact text :to="{ name: 'survey-login', params: { surveyId } }">
-          <v-icon left>fas fa-angles-left</v-icon>
+          <v-icon left>
+            fas fa-angles-left
+          </v-icon>
           {{ $t('common.login.back') }}
         </v-btn>
       </v-card-actions>
@@ -113,15 +114,6 @@ export default defineComponent({
 
     const canContinue = computed(() => status.value === 200);
 
-    const verified = async (token?: string) => {
-      captchaToken.value = token;
-      await generateUser();
-    };
-
-    const expired = () => {
-      resetCaptcha();
-    };
-
     const generateUser = async () => {
       loading.value = true;
 
@@ -133,13 +125,25 @@ export default defineComponent({
         status.value = 200;
         username.value = data.username;
         password.value = data.password;
-      } catch (err) {
-        if (axios.isAxiosError(err)) status.value = err.response?.status ?? 0;
-      } finally {
+      }
+      catch (err) {
+        if (axios.isAxiosError(err))
+          status.value = err.response?.status ?? 0;
+      }
+      finally {
         loading.value = false;
 
         resetCaptcha();
       }
+    };
+
+    const verified = async (token?: string) => {
+      captchaToken.value = token;
+      await generateUser();
+    };
+
+    const expired = () => {
+      resetCaptcha();
     };
 
     const submit = async () => {
@@ -153,7 +157,8 @@ export default defineComponent({
 
     onMounted(async () => {
       await fetchSurveyPublicInfo();
-      if (survey.value?.openAccess !== true) await router.push({ name: 'home' });
+      if (survey.value?.openAccess !== true)
+        await router.push({ name: 'home' });
     });
 
     return {

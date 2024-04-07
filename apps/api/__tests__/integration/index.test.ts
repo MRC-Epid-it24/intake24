@@ -15,7 +15,7 @@ import subscriptions from './subscriptions/index.test';
 import surveys from './surveys/index.test';
 import user from './user/index.test';
 
-describe('API', () => {
+describe('aPI', () => {
   beforeAll(async () => {
     await suite.init();
 

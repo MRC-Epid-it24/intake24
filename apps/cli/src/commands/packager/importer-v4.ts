@@ -1,9 +1,9 @@
+import fs from 'node:fs/promises';
 import os from 'node:os';
+import path from 'node:path';
 
 import decompress from 'decompress';
-import fs from 'fs/promises';
 import { omit } from 'lodash';
-import path from 'path';
 
 import type { ApiClientV4 } from '@intake24/api-client-v4';
 import type {
@@ -89,7 +89,7 @@ export class ImporterV4 {
     apiClient: ApiClientV4,
     logger: Logger,
     inputFilePath: string,
-    options?: Partial<ImporterOptions>
+    options?: Partial<ImporterOptions>,
   ) {
     this.apiClient = apiClient;
     this.logger = logger;
@@ -97,9 +97,9 @@ export class ImporterV4 {
     this.options = {
       onConflict: options?.onConflict ?? defaultOptions.onConflict,
       modulesForExecution:
-        options &&
-        options.modulesForExecution !== undefined &&
-        options.modulesForExecution.length !== 0
+        options
+        && options.modulesForExecution !== undefined
+        && options.modulesForExecution.length !== 0
           ? options.modulesForExecution
           : defaultOptions.modulesForExecution,
     };
@@ -166,7 +166,7 @@ export class ImporterV4 {
     objects: T[],
     objectName: string,
     batchSize: number,
-    importFn: (object: T) => Promise<void>
+    importFn: (object: T) => Promise<void>,
   ) {
     const objectCount = objects.length;
 
@@ -176,13 +176,14 @@ export class ImporterV4 {
 
     for (let i = 0; i < objectCount; i += batchSize) {
       const batch = objects.slice(i, i + batchSize);
-      const ops = batch.map((obj) => importFn(obj));
+      const ops = batch.map(obj => importFn(obj));
 
       await Promise.all(ops);
 
       importedCount += batch.length;
 
-      if (importedCount < objectCount) logger.info(`  ${importedCount}/${objectCount} imported...`);
+      if (importedCount < objectCount)
+        logger.info(`  ${importedCount}/${objectCount} imported...`);
     }
 
     logger.info(`Finished importing ${objectName}(s).`);
@@ -192,7 +193,7 @@ export class ImporterV4 {
     objects: Record<string, T>,
     objectName: string,
     batchSize: number,
-    importFn: (id: string, object: T) => Promise<void>
+    importFn: (id: string, object: T) => Promise<void>,
   ) {
     const entries = Object.entries(objects);
     const objectCount = entries.length;
@@ -209,7 +210,8 @@ export class ImporterV4 {
 
       importedCount += batch.length;
 
-      if (importedCount < objectCount) logger.info(`  ${importedCount}/${objectCount} imported...`);
+      if (importedCount < objectCount)
+        logger.info(`  ${importedCount}/${objectCount} imported...`);
     }
 
     logger.info(`Finished importing ${objectName}(s).`);
@@ -235,18 +237,19 @@ export class ImporterV4 {
           await this.apiClient.portionSize.imageMaps.update(
             imageMapId,
             imageMap.description,
-            objects
+            objects,
           );
 
           await this.apiClient.portionSize.imageMaps.updateImage(
             imageMapId,
-            path.join(this.imageDirPath!, imageMap.baseImagePath)
+            path.join(this.imageDirPath!, imageMap.baseImagePath),
           );
 
           break;
         }
       }
-    } else {
+    }
+    else {
       logger.info(`Creating new image map: ${imageMapId}`);
       const objects = typeConverters.fromPackageImageMapObjects(imageMap.objects);
 
@@ -254,7 +257,7 @@ export class ImporterV4 {
         imageMapId,
         imageMap.description,
         path.join(this.imageDirPath!, imageMap.baseImagePath),
-        objects
+        objects,
       );
     }
   }
@@ -262,8 +265,7 @@ export class ImporterV4 {
   private async importImageMaps(): Promise<void> {
     if (this.imageMaps !== undefined) {
       await this.batchImportRecord(this.imageMaps, 'image map', 10, (id, obj) =>
-        this.importImageMap(id, obj)
-      );
+        this.importImageMap(id, obj));
     }
   }
 
@@ -275,12 +277,12 @@ export class ImporterV4 {
 
     logger.debug(`Uploading ${images.length} new images`);
 
-    const ops = images.map((image) =>
+    const ops = images.map(image =>
       this.apiClient.portionSize.asServed.uploadImage(
         setId,
         image.weight,
-        path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, image.imagePath)
-      )
+        path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, image.imagePath),
+      ),
     );
 
     await Promise.all(ops);
@@ -292,7 +294,8 @@ export class ImporterV4 {
     if (pkgSet.images.length === 0) {
       logger.warn(`As served set ${setId} has no images, skipping`);
       return;
-    } else {
+    }
+    else {
       logger.info(`Importing as served set: ${setId}`);
     }
 
@@ -307,7 +310,7 @@ export class ImporterV4 {
       const createResult = await this.apiClient.portionSize.asServed.create(
         setId,
         pkgSet.description,
-        path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, selectionImagePath)
+        path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, selectionImagePath),
       );
 
       switch (createResult.type) {
@@ -316,7 +319,8 @@ export class ImporterV4 {
         case 'conflict':
           throw new Error(`Failed to create as served set ${setId} due to a race condition`);
       }
-    } else {
+    }
+    else {
       switch (this.options.onConflict) {
         case 'skip':
           logger.debug(`As served set already exists, skipping: ${setId}`);
@@ -339,7 +343,7 @@ export class ImporterV4 {
 
   private async updateDrinkwareScales(
     setId: string,
-    scales: Record<number, PkgDrinkScale>
+    scales: Record<number, PkgDrinkScale>,
   ): Promise<void> {
     logger.debug(`Updating sliding scales for drinkware set ${setId}`);
 
@@ -364,10 +368,10 @@ export class ImporterV4 {
             path.join(
               this.packageDirPath!,
               PkgConstants.IMAGE_DIRECTORY_NAME,
-              scale.overlayImagePath
+              scale.overlayImagePath,
             ),
             scale.label,
-            scale.volumeSamples
+            scale.volumeSamples,
           );
         case 2:
           return this.apiClient.portionSize.drinkware.createScaleV2(
@@ -376,8 +380,10 @@ export class ImporterV4 {
             path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, scale.baseImagePath),
             scale.label,
             scale.outlineCoordinates,
-            scale.volumeSamples
+            scale.volumeSamples,
           );
+        default:
+          throw new Error(`Unknown drink scale version`);
       }
     });
 
@@ -421,17 +427,15 @@ export class ImporterV4 {
 
   private async importAsServedSets(): Promise<void> {
     if (this.asServedSets !== undefined) {
-      await this.batchImport(this.asServedSets, 'as served image set', 10, (obj) =>
-        this.importAsServedSet(obj)
-      );
+      await this.batchImport(this.asServedSets, 'as served image set', 10, obj =>
+        this.importAsServedSet(obj));
     }
   }
 
   private async importDrinkwareSets(): Promise<void> {
     if (this.drinkwareSets !== undefined) {
       await this.batchImportRecord(this.drinkwareSets, 'drinkware set', 10, (id, obj) =>
-        this.importDrinkwareSet(id, obj)
-      );
+        this.importDrinkwareSet(id, obj));
     }
   }
 
@@ -466,9 +470,8 @@ export class ImporterV4 {
 
   private async importLocales(): Promise<void> {
     if (this.locales !== undefined) {
-      await this.batchImport(this.locales, 'locale record', 50, (locale) =>
-        this.importLocale(locale)
-      );
+      await this.batchImport(this.locales, 'locale record', 50, locale =>
+        this.importLocale(locale));
     }
   }
 
@@ -495,7 +498,7 @@ export class ImporterV4 {
             await this.apiClient.categories.updateCategory(
               category.code,
               existing.version,
-              omit(request, 'code')
+              omit(request, 'code'),
             );
           }
         }
@@ -505,9 +508,8 @@ export class ImporterV4 {
 
   private async importGlobalCategories(): Promise<void> {
     if (this.globalCategories !== undefined) {
-      await this.batchImport(this.globalCategories, 'global category record', 50, (category) =>
-        this.importGlobalCategory(category)
-      );
+      await this.batchImport(this.globalCategories, 'global category record', 50, category =>
+        this.importGlobalCategory(category));
     }
   }
 
@@ -535,7 +537,7 @@ export class ImporterV4 {
               localeId,
               category.code,
               existing.version,
-              omit(request, 'code')
+              omit(request, 'code'),
             );
           }
         }
@@ -547,9 +549,8 @@ export class ImporterV4 {
     if (this.localCategories !== undefined) {
       for (const [localeId, localCategories] of Object.entries(this.localCategories)) {
         logger.info(`Importing local category record(s) for locale ${localeId}...`);
-        await this.batchImport(localCategories, 'local category record', 50, (category) =>
-          this.importLocalCategory(localeId, category)
-        );
+        await this.batchImport(localCategories, 'local category record', 50, category =>
+          this.importLocalCategory(localeId, category));
       }
     }
   }
@@ -578,7 +579,7 @@ export class ImporterV4 {
             await this.apiClient.foods.updateGlobalFood(
               food.code,
               existing.version,
-              omit(foodEntry, 'code')
+              omit(foodEntry, 'code'),
             );
           }
         }
@@ -588,9 +589,8 @@ export class ImporterV4 {
 
   private async importGlobalFoods(): Promise<void> {
     if (this.globalFoods !== undefined) {
-      await this.batchImport(this.globalFoods, 'global food record', 50, (food) =>
-        this.importGlobalFood(food)
-      );
+      await this.batchImport(this.globalFoods, 'global food record', 50, food =>
+        this.importGlobalFood(food));
     }
   }
 
@@ -606,14 +606,16 @@ export class ImporterV4 {
       if (result.type === 'conflict') {
         if (this.options.onConflict === 'skip') {
           logger.info(`Skipping local food "${food.code}" due to a conflict`);
-        } else {
+        }
+        else {
           const message = `Failed to import local food "${food.code}" due to a conflict`;
           logger.error(message);
           logger.error(JSON.stringify(result.details, null, 2));
           throw new Error(message);
         }
       }
-    } else {
+    }
+    else {
       const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
         update: true,
         return: false,
@@ -632,9 +634,8 @@ export class ImporterV4 {
     if (this.localFoods !== undefined) {
       for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
         logger.info(`Importing local food record(s) for locale ${localeId}...`);
-        await this.batchImport(localFoods, 'local food record', 50, (food) =>
-          this.importLocalFood(localeId, food)
-        );
+        await this.batchImport(localFoods, 'local food record', 50, food =>
+          this.importLocalFood(localeId, food));
       }
     }
   }
@@ -658,14 +659,15 @@ export class ImporterV4 {
 
         if (existing === null) {
           await this.apiClient.nutrientTables.create(record);
-        } else {
+        }
+        else {
           switch (this.options.onConflict) {
             case 'skip':
               logger.info(`Skipping nutrient table "${nutrientTable.id}" due to a conflict`);
               continue;
             case 'abort':
               throw new Error(
-                `Failed to import nutrient table ${nutrientTable.id} due to a conflict`
+                `Failed to import nutrient table ${nutrientTable.id} due to a conflict`,
               );
             case 'overwrite':
               await this.apiClient.nutrientTables.update(nutrientTable.id, record);
@@ -674,7 +676,7 @@ export class ImporterV4 {
 
         const nutrientRecords = typeConverters.fromPackageNutrientTableRecords(nutrientTable);
         logger.info(
-          `Updating ${nutrientRecords.length} nutrient record(s) in table ${nutrientTable.id}`
+          `Updating ${nutrientRecords.length} nutrient record(s) in table ${nutrientTable.id}`,
         );
         await this.apiClient.nutrientTables.updateRecords(nutrientTable.id, nutrientRecords);
       }
@@ -687,7 +689,8 @@ export class ImporterV4 {
 
     try {
       await fs.access(filePath);
-    } catch (e) {
+    }
+    catch (e) {
       logger.debug(`File ${filePath} does not exist or is not accessible, skipping`);
       return undefined;
     }
@@ -733,21 +736,21 @@ export class ImporterV4 {
   private async readImageMaps(): Promise<void> {
     logger.info('Loading image maps');
     this.imageMaps = await this.readJSON(
-      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.IMAGE_MAP_FILE_NAME)
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.IMAGE_MAP_FILE_NAME),
     );
   }
 
   private async readAsServedSets(): Promise<void> {
     logger.info('Loading as served sets');
     this.asServedSets = await this.readJSON(
-      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.AS_SERVED_FILE_NAME)
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.AS_SERVED_FILE_NAME),
     );
   }
 
   private async readDrinkwareSets(): Promise<void> {
     logger.info('Loading drinkware sets');
     this.drinkwareSets = await this.readJSON(
-      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.DRINKWARE_FILE_NAME)
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.DRINKWARE_FILE_NAME),
     );
   }
 
@@ -776,7 +779,8 @@ export class ImporterV4 {
 
     if (stat.isDirectory()) {
       this.packageDirPath = this.inputFilePath;
-    } else {
+    }
+    else {
       this.packageDirPath = await fs.mkdtemp(path.join(os.tmpdir(), 'i24pkg-'));
       this.compressedPackage = true;
       logger.info(`Extracting package: ${this.inputFilePath}`);
@@ -794,10 +798,11 @@ export class ImporterV4 {
     // If the only option is "all", execute all modules in order
     if (moduleKeys.length === 1 && moduleKeys[0] === 'all') {
       moduleKeys = Object.keys(this.availableModules) as ImporterSpecificModulesExecutionStrategy[];
-    } else {
+    }
+    else {
       // Verify if all the supplied options are valid
       const invalidKeys = moduleKeys.filter(
-        (key) => !(key in this.availableModules) || key === 'all'
+        key => !(key in this.availableModules) || key === 'all',
       );
 
       if (invalidKeys.length > 0) {
@@ -809,11 +814,10 @@ export class ImporterV4 {
     // Execute the modules in order
     for (const key of moduleKeys) {
       const module = this.availableModules[key];
-      if (module) {
+      if (module)
         await module();
-      } else {
+      else
         console.error(`No module found for key: ${key}`);
-      }
     }
   }
 
@@ -821,14 +825,15 @@ export class ImporterV4 {
     await this.unzipPackage();
 
     if (
-      this.options.modulesForExecution === undefined ||
-      this.options.modulesForExecution.length === 0
-    ) {
+      this.options.modulesForExecution === undefined
+      || this.options.modulesForExecution.length === 0
+    )
       this.options.modulesForExecution = ['all'];
-    }
+
     try {
       await this.specificModuleExecution(this.options.modulesForExecution);
-    } finally {
+    }
+    finally {
       await this.cleanUpPackage();
     }
 

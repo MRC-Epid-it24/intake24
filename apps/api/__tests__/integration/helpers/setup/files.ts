@@ -9,7 +9,7 @@ export type MockFiles = {
   };
 };
 
-export const initFiles = async (): Promise<MockFiles> => {
+export async function initFiles(): Promise<MockFiles> {
   const jpg = await downloadImage('https://picsum.photos/1200/800.jpg', 'mockImage.jpg');
   const csv = await generateCSV('uploadRespondents.csv');
 
@@ -17,4 +17,4 @@ export const initFiles = async (): Promise<MockFiles> => {
     data: { csv },
     images: { jpg },
   };
-};
+}

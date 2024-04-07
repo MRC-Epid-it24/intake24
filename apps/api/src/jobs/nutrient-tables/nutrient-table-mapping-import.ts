@@ -43,12 +43,14 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
     this.logger.debug('Job started.');
 
     const fileExists = await fs.pathExists(this.file);
-    if (!fileExists) throw new Error(`Missing file (${this.file}).`);
+    if (!fileExists)
+      throw new Error(`Missing file (${this.file}).`);
 
     const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId, {
       attributes: ['id'],
     });
-    if (!nutrientTable) throw new Error(`Nutrient table record not found.`);
+    if (!nutrientTable)
+      throw new Error(`Nutrient table record not found.`);
 
     await this.validate();
 
@@ -61,7 +63,7 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
    * Read CSV file and validate in chunks
    *
    * @private
-   * @param {number} [chunk=100]
+   * @param {number} [chunk]
    * @returns {Promise<void>}
    * @memberof NutrientTableMappingImport
    */
@@ -96,7 +98,7 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
               reject(err);
             });
         })
-        .on('error', (err) => reject(err));
+        .on('error', err => reject(err));
     });
   }
 
@@ -111,17 +113,18 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
    * @memberof NutrientTableMappingImport
    */
   private async validateChunk(): Promise<void> {
-    if (!this.content.length) return;
+    if (!this.content.length)
+      return;
 
     this.lock();
 
     const csvFields = Object.keys(this.content[0]);
 
     // Check for presence of required fields
-    if (requiredFields.some((field) => !csvFields.includes(field)))
+    if (requiredFields.some(field => !csvFields.includes(field)))
       throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
 
-    const nutrientIds = this.content.map((item) => item['Intake24 nutrient ID']);
+    const nutrientIds = this.content.map(item => item['Intake24 nutrient ID']);
     const count = await FoodsNutrientType.count({ where: { id: nutrientIds } });
 
     if (nutrientIds.length !== count)
@@ -135,7 +138,7 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
    * Read CSV file and import in chunks
    *
    * @private
-   * @param {number} [chunk=100]
+   * @param {number} [chunk]
    * @returns {Promise<void>}
    * @memberof NutrientTableMappingImport
    */
@@ -174,7 +177,7 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
               reject(err);
             });
         })
-        .on('error', (err) => reject(err));
+        .on('error', err => reject(err));
     });
   }
 
@@ -186,7 +189,8 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
    * @memberof NutrientTableMappingImport
    */
   private async importChunk(): Promise<void> {
-    if (!this.content.length) return;
+    if (!this.content.length)
+      return;
 
     this.lock();
 

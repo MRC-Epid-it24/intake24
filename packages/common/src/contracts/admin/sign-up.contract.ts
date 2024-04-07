@@ -20,7 +20,7 @@ export const signUp = initContract().router({
         emailConfirm: z.string().email().toLowerCase(),
         name: z.string().min(3).max(512),
         phone: z.string().max(32).nullish(),
-        terms: z.boolean().refine((value) => value === true),
+        terms: z.boolean().refine(value => value === true),
         captcha: z
           .string()
           .nullish()
@@ -53,7 +53,7 @@ export const signUp = initContract().router({
     method: 'POST',
     path: '/admin/sign-up/verify',
     body: z.object({
-      token: z.string().refine((value) => isJWT(value)),
+      token: z.string().refine(value => isJWT(value)),
     }),
     responses: {
       200: z.undefined(),

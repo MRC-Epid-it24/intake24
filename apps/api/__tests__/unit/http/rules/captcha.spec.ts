@@ -1,7 +1,7 @@
 import type { Captcha } from '@intake24/api/config';
 import { captcha } from '@intake24/api/http/rules';
 
-describe('Captcha middleware', () => {
+describe('captcha middleware', () => {
   it('should pass when re-captcha disabled', async () => {
     const config: Captcha = {
       provider: null,
@@ -22,7 +22,8 @@ describe('Captcha middleware', () => {
 
     try {
       await captcha(undefined, config);
-    } catch (err) {
+    }
+    catch (err) {
       expect(err).toBeInstanceOf(Error);
     }
   });
@@ -37,7 +38,8 @@ describe('Captcha middleware', () => {
 
     try {
       await captcha('', config);
-    } catch (err) {
+    }
+    catch (err) {
       expect(err).toBeInstanceOf(Error);
     }
   });
@@ -52,7 +54,8 @@ describe('Captcha middleware', () => {
 
     try {
       await captcha('CaptchaChallengeToken', config);
-    } catch (err) {
+    }
+    catch (err) {
       expect(err).toBeInstanceOf(Error);
     }
   });

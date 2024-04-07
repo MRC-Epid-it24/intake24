@@ -8,12 +8,12 @@ import store from './store.test';
 import update from './update.test';
 
 export default () => {
-  describe('GET /api/admin/standard-units', browse);
-  describe('POST /api/admin/standard-units', store);
-  describe('GET /api/admin/standard-units/:standardUnitId', read);
-  describe('GET /api/admin/standard-units/:standardUnitId/edit', edit);
-  describe('PUT /api/admin/standard-units/:standardUnitId', update);
-  describe('DELETE /api/admin/standard-units/:standardUnitId', destroy);
-  describe('GET /api/admin/standard-units/:standardUnitId/categories', categories);
-  describe('GET /api/admin/standard-units/:standardUnitId/foods', foods);
+  describe('get /api/admin/standard-units', browse);
+  describe('pOST /api/admin/standard-units', store);
+  describe('get /api/admin/standard-units/:standardUnitId', read);
+  describe('get /api/admin/standard-units/:standardUnitId/edit', edit);
+  describe('put /api/admin/standard-units/:standardUnitId', update);
+  describe('delete /api/admin/standard-units/:standardUnitId', destroy);
+  describe('get /api/admin/standard-units/:standardUnitId/categories', categories);
+  describe('get /api/admin/standard-units/:standardUnitId/foods', foods);
 };

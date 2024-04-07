@@ -1,6 +1,6 @@
 import { trimStrings } from '@intake24/common/rules';
 
-describe('Input trim string middleware', () => {
+describe('input trim string middleware', () => {
   it('should trim string and replace empty with nulls', () => {
     expect(trimStrings(' to be trimmed ')).toEqual('to be trimmed');
   });

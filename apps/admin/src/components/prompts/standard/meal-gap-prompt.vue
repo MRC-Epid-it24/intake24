@@ -13,7 +13,7 @@
             :landscape="$vuetify.breakpoint.smAndUp"
             :value="startTime"
             @input="update('startTime', $event)"
-          ></v-time-picker>
+          />
         </v-col>
         <v-col cols="12" md="6">
           <v-card-title>
@@ -26,7 +26,7 @@
             :landscape="$vuetify.breakpoint.smAndUp"
             :value="endTime"
             @input="update('endTime', $event)"
-          ></v-time-picker>
+          />
         </v-col>
         <v-col cols="12" md="6">
           <v-card-title>{{ $t('survey-schemes.prompts.meal-gap-prompt.gap') }}</v-card-title>
@@ -38,7 +38,7 @@
             :rules="gapRules"
             :value="gap"
             @input="updateGapValue"
-          ></v-text-field>
+          />
         </v-col>
       </v-row>
     </v-card-text>
@@ -85,7 +85,7 @@ export default defineComponent({
 
   methods: {
     updateGapValue(value: any) {
-      const gapValue = parseInt(value, 10);
+      const gapValue = Number.parseInt(value, 10);
       this.update('gap', Number.isNaN(gapValue) ? 180 : gapValue);
     },
   },

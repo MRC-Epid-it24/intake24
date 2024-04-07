@@ -30,7 +30,7 @@
                 </v-list-item-content>
               </template>
             </category-list>
-            <v-divider></v-divider>
+            <v-divider />
             <category-list
               flat
               tile
@@ -68,8 +68,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="6">
-          <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)">
-          </image-map-settings>
+          <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)" />
         </v-col>
         <v-col cols="12" md="6">
           <v-switch
@@ -77,8 +76,7 @@
             :input-value="badges"
             :label="$t('survey-schemes.prompts.badges')"
             @change="update('badges', $event)"
-          >
-          </v-switch>
+          />
         </v-col>
       </v-row>
     </v-tab-item>
@@ -138,7 +136,7 @@ export default defineComponent({
 
     updateLQUnit(code: string, unit: string) {
       const parent = copy(this.linkedQuantity.parent);
-      const idx = this.linkedQuantity.parent.findIndex((cat) => cat.code === code);
+      const idx = this.linkedQuantity.parent.findIndex(cat => cat.code === code);
       parent.splice(idx, 1, { code, unit });
 
       const linkedQuantity = { ...this.linkedQuantity, parent };

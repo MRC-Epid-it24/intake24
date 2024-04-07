@@ -11,5 +11,5 @@ export default validate(
     ...attributes,
     'main.parentCategories': categories,
     ...portionSizeMethods,
-  })
+  }),
 );

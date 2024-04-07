@@ -5,7 +5,7 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router/composables'
 
 import { copy } from '@intake24/common/util';
 
-export const useEntryWatch = (originalEntry: Ref<object>, changed?: ComputedRef<boolean>) => {
+export function useEntryWatch(originalEntry: Ref<object>, changed?: ComputedRef<boolean>) {
   const routeLeave = ref({
     dialog: false,
     to: null as Route | null,
@@ -42,4 +42,4 @@ export const useEntryWatch = (originalEntry: Ref<object>, changed?: ComputedRef<
   });
 
   return { originalEntry, routeLeave, entryChanged, setOriginalEntry };
-};
+}

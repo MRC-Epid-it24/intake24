@@ -11,7 +11,8 @@ dotenvExpand.expand(env);
 
 try {
   const hostname = process.env.APP_URL;
-  if (!hostname) throw new Error('Missing hostname');
+  if (!hostname)
+    throw new Error('Missing hostname');
 
   const publicPath = process.env.FS_PUBLIC || 'public';
   await fs.ensureDir(resolve(publicPath));
@@ -39,6 +40,7 @@ try {
     .on('error', (err) => {
       throw err;
     });
-} catch (err) {
+}
+catch (err) {
   console.error(err);
 }

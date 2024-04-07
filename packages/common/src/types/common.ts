@@ -31,7 +31,7 @@ export type OmitAndOptional<T, KOmit extends keyof T, KOptional extends keyof T>
   T,
   KOmit | KOptional
 > &
-  Partial<Pick<T, KOptional>>;
+Partial<Pick<T, KOptional>>;
 
 export type WithKey<K extends string | number | symbol> = {
   [k in K]: string;
@@ -49,41 +49,44 @@ export type LocaleTranslation = z.infer<typeof localeTranslation>;
 
 export const requiredLocaleTranslation = z.intersection(
   z.object({ en: z.string() }),
-  z.record(z.string().nullable())
+  z.record(z.string().nullable()),
 );
 
 export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
 
-export const listOption = <T extends z.ZodTypeAny = z.ZodString>(schema: T) =>
-  z.object({
+export function listOption<T extends z.ZodTypeAny = z.ZodString>(schema: T) {
+  return z.object({
     id: z.number().optional(),
     label: z.string(),
     value: schema,
   });
+}
 
 export type ListOption<T extends z.ZodTypeAny = z.ZodString> = z.infer<
   ReturnType<typeof listOption<T>>
 >;
 
-export const localeOptionList = <T extends z.ZodTypeAny = z.ZodString>(schema: T) =>
-  z.intersection(
+export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>(schema: T) {
+  return z.intersection(
     z.object({
       en: z.array(listOption(schema)),
     }),
-    z.record(z.array(listOption(schema)))
+    z.record(z.array(listOption(schema))),
   );
+}
 
 export type LocaleOptionList<T extends z.ZodTypeAny = z.ZodString> = z.infer<
   ReturnType<typeof localeOptionList<T>>
 >;
 
-export const categoryLocaleOptionList = <T extends z.ZodTypeAny = z.ZodNumber>(schema: T) =>
-  z.intersection(
+export function categoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber>(schema: T) {
+  return z.intersection(
     z.object({
       _default: localeOptionList(schema),
     }),
-    z.record(localeOptionList(schema))
+    z.record(localeOptionList(schema)),
   );
+}
 
 export type CategoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber> = z.infer<
   ReturnType<typeof categoryLocaleOptionList<T>>

@@ -13,7 +13,7 @@
                 name="id"
                 outlined
                 prepend-inner-icon="$as-served-sets"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-file-input
@@ -26,7 +26,7 @@
                 prepend-icon=""
                 prepend-inner-icon="fas fa-paperclip"
                 @change="form.errors.clear('selectionImage')"
-              ></v-file-input>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -37,10 +37,10 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>

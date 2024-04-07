@@ -23,13 +23,13 @@ export type ImageMapObject = {
 };
 
 function getTransform(node: ElementNode): string | undefined {
-  return node.properties?.['transform']?.toString();
+  return node.properties?.transform?.toString();
 }
 
 function convertToNormalisedCoordinates(
   viewBox: number[],
   pathWithTx: PathWithTransform,
-  useWidthForBothAxes: boolean = false
+  useWidthForBothAxes: boolean = false,
 ): number[] {
   const [minX, minY, width, height] = viewBox;
 
@@ -37,9 +37,8 @@ function convertToNormalisedCoordinates(
 
   let path = svgpath.from(pathWithTx.pathData);
 
-  for (const tx of pathWithTx.transformStack) {
+  for (const tx of pathWithTx.transformStack)
     path = path.transform(tx);
-  }
 
   path.iterate((segment, index, x, y) => {
     if (!supportedSegmentTypes.includes(segment[0]))
@@ -55,16 +54,16 @@ function convertToNormalisedCoordinates(
 
 function findOutlinePath(current: Node, transformStack: string[]): PathWithTransform | undefined {
   if (current.type === 'element' && current.properties !== undefined) {
-    const id = current.properties['id'];
+    const id = current.properties.id;
     const tx = getTransform(current);
-    const elementTxStack = tx != undefined ? transformStack.concat(tx) : transformStack;
+    const elementTxStack = tx !== undefined ? transformStack.concat(tx) : transformStack;
 
     if (current.tagName === 'path' && id === 'outline') {
-      const pathData = current.properties['d'];
+      const pathData = current.properties.d;
 
       if (typeof pathData !== 'string') {
-        throw new Error(
-          'Found a path node with the id "outline" but it has no path data attribute'
+        throw new TypeError(
+          'Found a path node with the id "outline" but it has no path data attribute',
         );
       }
 
@@ -76,11 +75,13 @@ function findOutlinePath(current: Node, transformStack: string[]): PathWithTrans
     }
 
     for (const child of current.children) {
-      if (typeof child === 'string') continue;
+      if (typeof child === 'string')
+        continue;
 
       const outlinePath = findOutlinePath(child, elementTxStack);
 
-      if (outlinePath != undefined) return outlinePath;
+      if (outlinePath !== undefined)
+        return outlinePath;
     }
   }
 
@@ -89,16 +90,15 @@ function findOutlinePath(current: Node, transformStack: string[]): PathWithTrans
 
 function findAreaPaths(current: Node, transformStack: string[], paths: PathWithTransform[]): void {
   if (current.type === 'element' && current.properties !== undefined) {
-    const id = current.properties['id'];
+    const id = current.properties.id;
     const tx = getTransform(current);
-    const elementTxStack = tx != undefined ? transformStack.concat(tx) : transformStack;
+    const elementTxStack = tx !== undefined ? transformStack.concat(tx) : transformStack;
 
     if (current.tagName === 'path' && typeof id === 'string' && id.startsWith('area_')) {
-      const pathData = current.properties['d'];
+      const pathData = current.properties.d;
 
-      if (typeof pathData !== 'string') {
+      if (typeof pathData !== 'string')
         throw new Error('Found a path node with the id "area_*" but it has no path data attribute');
-      }
 
       paths.push({
         id,
@@ -108,7 +108,8 @@ function findAreaPaths(current: Node, transformStack: string[], paths: PathWithT
     }
 
     for (const child of current.children) {
-      if (typeof child === 'string') continue;
+      if (typeof child === 'string')
+        continue;
 
       findAreaPaths(child, elementTxStack, paths);
     }
@@ -118,10 +119,12 @@ function findAreaPaths(current: Node, transformStack: string[], paths: PathWithT
 function collectTextParts(current: Node, parts: string[]): void {
   if (current.type === 'element') {
     for (const child of current.children) {
-      if (typeof child === 'string') parts.push(child);
+      if (typeof child === 'string')
+        parts.push(child);
       else collectTextParts(child, parts);
     }
-  } else if (current.value !== undefined) {
+  }
+  else if (current.value !== undefined) {
     parts.push(current.value.toString());
   }
 }
@@ -129,24 +132,26 @@ function collectTextParts(current: Node, parts: string[]): void {
 function getText(current: Node): string | undefined {
   const parts: string[] = [];
   collectTextParts(current, parts);
-  if (parts.length === 0) return undefined;
+  if (parts.length === 0)
+    return undefined;
   return parts.join();
 }
 
 function findNavigation(current: Node): string | undefined {
   if (current.type === 'element' && current.properties !== undefined) {
-    const id = current.properties['id'];
+    const id = current.properties.id;
 
-    if (current.tagName === 'text' && id === 'navigation') {
+    if (current.tagName === 'text' && id === 'navigation')
       return getText(current);
-    }
 
     for (const child of current.children) {
-      if (typeof child === 'string') continue;
+      if (typeof child === 'string')
+        continue;
 
       const navText = findNavigation(child);
 
-      if (navText !== undefined) return navText;
+      if (navText !== undefined)
+        return navText;
     }
   }
 
@@ -156,11 +161,10 @@ function findNavigation(current: Node): string | undefined {
 function getViewBox(root: RootNode): number[] {
   for (const node of root.children) {
     if (node.type === 'element' && node.tagName === 'svg') {
-      const viewBox = node.properties?.['viewBox'];
+      const viewBox = node.properties?.viewBox;
 
-      if (viewBox != undefined && typeof viewBox === 'string') {
-        return viewBox.split(' ').map((s) => parseFloat(s));
-      }
+      if (viewBox !== undefined && typeof viewBox === 'string')
+        return viewBox.split(' ').map(s => Number.parseFloat(s));
     }
   }
 
@@ -173,11 +177,10 @@ export async function getDrinkScaleOutline(svgPath: string): Promise<number[]> {
 
   const outline = findOutlinePath(root.children[0], []);
 
-  if (outline != undefined) {
+  if (outline !== undefined)
     return convertToNormalisedCoordinates(getViewBox(root), outline);
-  } else {
+  else
     throw new Error('Failed to find the outline node in the SVG file');
-  }
 }
 
 export async function getImageMapData(svgPath: string): Promise<ImageMapData> {
@@ -190,19 +193,18 @@ export async function getImageMapData(svgPath: string): Promise<ImageMapData> {
 
   if (objectPaths.length === 0) {
     throw new Error(
-      'Could not find any path objects with ids starting with "area_" in the SVG file'
+      'Could not find any path objects with ids starting with "area_" in the SVG file',
     );
   }
 
   const navigation = findNavigation(root.children[0]);
 
-  if (navigation === undefined) {
+  if (navigation === undefined)
     throw new Error('Could not find a text element with the id "navigation"');
-  }
 
   const viewBox = getViewBox(root);
 
-  const objects: ImageMapObject[] = objectPaths.map((objectPath) => ({
+  const objects: ImageMapObject[] = objectPaths.map(objectPath => ({
     objectId: objectPath.id.substring(5), // drop "area_"
     coords: convertToNormalisedCoordinates(viewBox, objectPath, true),
   }));

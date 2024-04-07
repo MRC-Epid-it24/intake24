@@ -22,7 +22,7 @@ import {
   Op,
 } from '@intake24/db';
 
-const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
+function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<FoodLocalAttributes> = {
       where: { localeId },
@@ -31,12 +31,12 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     const { search } = query;
 
     if (search) {
-      const op =
-        FoodLocal.sequelize?.getDialect() === 'postgres'
+      const op
+        = FoodLocal.sequelize?.getDialect() === 'postgres'
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const ops = ['foodCode', 'name', '$main.name$'].map((column) => ({ [column]: op }));
+      const ops = ['foodCode', 'name', '$main.name$'].map(column => ({ [column]: op }));
 
       options.where = { ...options.where, [Op.or]: ops };
     }
@@ -87,7 +87,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     foodLocalId: string,
     methods: FoodPortionSizeMethod[],
     inputs: FoodLocalInput['portionSizeMethods'],
-    { transaction }: { transaction: Transaction }
+    { transaction }: { transaction: Transaction },
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
@@ -96,7 +96,8 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       transaction,
     });
 
-    if (!inputs.length) return [];
+    if (!inputs.length)
+      return [];
 
     const newMethods: FoodPortionSizeMethod[] = [];
 
@@ -104,7 +105,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       const { id, ...rest } = input;
 
       if (id) {
-        const match = methods.find((method) => method.id === id);
+        const match = methods.find(method => method.id === id);
         if (match) {
           await match.update(rest, { transaction });
           continue;
@@ -113,7 +114,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
 
       const newMethod = await FoodPortionSizeMethod.create(
         { ...rest, foodLocalId },
-        { transaction }
+        { transaction },
       );
       newMethods.push(newMethod);
     }
@@ -126,7 +127,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     localeId: string,
     foods: AssociatedFood[],
     inputs: FoodLocalInput['associatedFoods'],
-    { transaction }: { transaction: Transaction }
+    { transaction }: { transaction: Transaction },
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
@@ -135,7 +136,8 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       transaction,
     });
 
-    if (!inputs.length) return [];
+    if (!inputs.length)
+      return [];
 
     const newFoods: AssociatedFood[] = [];
 
@@ -143,7 +145,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       const { id, ...rest } = input;
 
       if (id) {
-        const match = foods.find((food) => food.id === id);
+        const match = foods.find(food => food.id === id);
         if (match) {
           await match.update(rest, { transaction });
           continue;
@@ -179,7 +181,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
             simpleName: toSimpleName(main.name),
             version: randomUUID(),
           },
-          { transaction }
+          { transaction },
         ),
         main.$add('locales', localeCode, { transaction }),
       ]);
@@ -192,13 +194,16 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
 
   const updateFood = async (foodLocalId: string, localeCode: string, input: FoodLocalInput) => {
     const foodLocal = await getFood(foodLocalId, localeCode);
-    if (!foodLocal) throw new NotFoundError();
+    if (!foodLocal)
+      throw new NotFoundError();
 
     const { main, portionSizeMethods, associatedFoods } = foodLocal;
-    if (!main || !associatedFoods || !portionSizeMethods) throw new NotFoundError();
+    if (!main || !associatedFoods || !portionSizeMethods)
+      throw new NotFoundError();
 
     const { attributes } = main;
-    if (!attributes) throw new NotFoundError();
+    if (!attributes)
+      throw new NotFoundError();
 
     await db.foods.transaction(async (transaction) => {
       const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
@@ -235,8 +240,8 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
                 'reasonableAmount',
                 'useInRecipes',
               ]),
-              { transaction }
-            )
+              { transaction },
+            ),
           );
         }
       }
@@ -259,7 +264,8 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
 
   const copyFood = async (foodLocalId: string, localeCode: string, input: FoodLocalCopyInput) => {
     const sourceFoodLocal = await getFood(foodLocalId, localeCode);
-    if (!sourceFoodLocal) throw new NotFoundError();
+    if (!sourceFoodLocal)
+      throw new NotFoundError();
 
     const foodLocal = await db.foods.transaction(async (transaction) => {
       const food = await Food.create(
@@ -268,7 +274,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
           ...input,
           version: randomUUID(),
         },
-        { transaction }
+        { transaction },
       );
       const foodLocal = await FoodLocal.create(
         {
@@ -277,7 +283,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
           name: input.name,
           version: randomUUID(),
         },
-        { transaction }
+        { transaction },
       );
 
       const promises: Promise<any>[] = [
@@ -291,7 +297,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
             ]),
             foodCode: food.code,
           },
-          { transaction }
+          { transaction },
         ),
       ];
 
@@ -311,7 +317,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       }
 
       if (sourceFoodLocal.associatedFoods?.length) {
-        const associatedFoods = sourceFoodLocal.associatedFoods!.map((psm) => ({
+        const associatedFoods = sourceFoodLocal.associatedFoods!.map(psm => ({
           ...pick(psm, [
             'associatedFoodCode',
             'associatedCategoryCode',
@@ -329,7 +335,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
 
       if (sourceFoodLocal.portionSizeMethods?.length) {
         promises.push(
-          ...sourceFoodLocal.portionSizeMethods.map((psm) =>
+          ...sourceFoodLocal.portionSizeMethods.map(psm =>
             FoodPortionSizeMethod.create(
               {
                 ...pick(psm, [
@@ -342,9 +348,9 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
                 ]),
                 foodLocalId: foodLocal.id,
               },
-              { transaction }
-            )
-          )
+              { transaction },
+            ),
+          ),
         );
       }
 
@@ -361,7 +367,8 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       attributes: ['id', 'foodCode'],
       where: { id: foodLocalId, localeId: localeCode },
     });
-    if (!foodLocal) throw new NotFoundError();
+    if (!foodLocal)
+      throw new NotFoundError();
 
     await Promise.all([
       foodLocal.destroy(),
@@ -377,7 +384,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     copyFood,
     deleteFood,
   };
-};
+}
 
 export default adminFoodService;
 

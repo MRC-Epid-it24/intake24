@@ -7,17 +7,17 @@
     <prompt-list
       v-bind="{ mode: 'override', promptIds, templates: prompts }"
       :items.sync="form.surveySchemeOverrides.prompts"
-    ></prompt-list>
+    />
     <meal-list
       v-model="form.surveySchemeOverrides.meals"
       class="mt-4"
       mode="override"
       :scheme-id="entry.surveySchemeId"
-    ></meal-list>
+    />
     <v-container fluid>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -50,7 +50,7 @@ export default defineComponent({
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<SurveyOverridesForm, SurveyEntry>(
       props,
-      { data: { surveySchemeOverrides: defaultOverrides }, editMethod: 'patch' }
+      { data: { surveySchemeOverrides: defaultOverrides }, editMethod: 'patch' },
     );
 
     return {
@@ -65,7 +65,8 @@ export default defineComponent({
 
   computed: {
     prompts(): Prompt[] {
-      if (!this.entryLoaded) return [];
+      if (!this.entryLoaded)
+        return [];
 
       return flattenScheme(this.entry.surveyScheme.prompts);
     },

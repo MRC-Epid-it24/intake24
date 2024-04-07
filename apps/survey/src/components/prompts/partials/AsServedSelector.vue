@@ -3,7 +3,7 @@
     <v-row>
       <v-img :aspect-ratio="16 / 9" class="align-end" :src="image">
         <template #placeholder>
-          <image-placeholder></image-placeholder>
+          <image-placeholder />
         </template>
         <v-row>
           <v-col class="d-flex justify-end mr-auto">
@@ -17,13 +17,13 @@
         <as-served-weight-factor
           v-bind="weightFactorProps"
           @input="updateWeightFactor"
-        ></as-served-weight-factor>
+        />
       </v-img>
     </v-row>
     <v-row v-if="asServedData" class="mt-4">
       <v-col class="pa-1 rounded-lg" cols="3" lg="auto" sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
-          <v-img :src="firstThumbnail"></v-img>
+          <v-img :src="firstThumbnail" />
           <v-overlay absolute>
             <v-btn
               :disabled="isLessWeightFactorActive"
@@ -46,13 +46,13 @@
           sm="2"
         >
           <v-card @click="setSelection(idx)">
-            <v-img :src="images.thumbnailUrl"></v-img>
+            <v-img :src="images.thumbnailUrl" />
           </v-card>
         </v-col>
       </template>
       <v-col v-if="showMoreWeightFactor" class="pa-1 rounded-lg" cols="3" lg="auto" sm="2">
         <v-card :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
-          <v-img :src="lastThumbnail"></v-img>
+          <v-img :src="lastThumbnail" />
           <v-overlay absolute>
             <v-btn
               :disabled="isMoreWeightFactorActive"
@@ -131,7 +131,7 @@ export default defineComponent({
     const lessWeightFactor = (
       show: boolean,
       weight: number,
-      value?: number
+      value?: number,
     ): WeightFactorProps => ({
       show,
       type: props.type,
@@ -152,15 +152,15 @@ export default defineComponent({
           minNumerator = denominator;
           maxNumerator = denominator;
           value = denominator;
-        } else {
+        }
+        else {
           maxNumerator = denominator;
 
           while (
-            ((maxNumerator + 1) / denominator) * weight < props.maxWeight &&
-            maxNumerator <= denominator * 5
-          ) {
+            ((maxNumerator + 1) / denominator) * weight < props.maxWeight
+            && maxNumerator <= denominator * 5
+          )
             maxNumerator += 1;
-          }
         }
       }
 
@@ -191,7 +191,8 @@ export default defineComponent({
 
   computed: {
     image(): string {
-      if (this.objectIdx === undefined) return '';
+      if (this.objectIdx === undefined)
+        return '';
 
       return this.asServedData?.images[this.objectIdx].mainImageUrl ?? '';
     },
@@ -202,22 +203,26 @@ export default defineComponent({
       return this.weightFactorProps.show && this.weightFactorProps.subType === 'more';
     },
     thumbnailWeight(): string | null {
-      if (this.objectIdx === undefined || !this.asServedData) return null;
+      if (this.objectIdx === undefined || !this.asServedData)
+        return null;
 
       return `${Math.round(this.asServedData.images[this.objectIdx].weight)}g`;
     },
     firstThumbnail(): string {
-      if (this.objectIdx === undefined) return '';
+      if (this.objectIdx === undefined)
+        return '';
 
       return this.asServedData?.images[0].thumbnailUrl ?? '';
     },
     lastThumbnail(): string {
-      if (this.objectIdx === undefined || !this.asServedData) return '';
+      if (this.objectIdx === undefined || !this.asServedData)
+        return '';
 
       return this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl;
     },
     showMoreWeightFactor(): boolean {
-      if (this.maxWeight === undefined) return true;
+      if (this.maxWeight === undefined)
+        return true;
 
       if (this.objectIdx === undefined || !this.asServedData || !this.asServedData.images.length)
         return false;
@@ -236,7 +241,8 @@ export default defineComponent({
       await this.fetchAsServedImageData();
     },
     async maxWeight(val) {
-      if (!val) return;
+      if (!val)
+        return;
 
       await this.fetchAsServedImageData();
     },
@@ -249,24 +255,26 @@ export default defineComponent({
   methods: {
     async fetchAsServedImageData() {
       const { data } = await this.$http.get<AsServedSetResponse>(
-        `portion-sizes/as-served-sets/${this.asServedSetId}`
+        `portion-sizes/as-served-sets/${this.asServedSetId}`,
       );
       this.asServedData = { ...data };
       this.initSelection();
     },
 
     initSelection() {
-      if (!this.asServedData || this.objectIdx !== undefined) return;
+      if (!this.asServedData || this.objectIdx !== undefined)
+        return;
 
       const { maxWeight } = this;
 
       if (maxWeight) {
         this.asServedData.images = this.asServedData.images.filter(
-          (image) => image.weight <= maxWeight
+          image => image.weight <= maxWeight,
         );
       }
 
-      if (this.value?.index !== undefined) this.setSelection(this.value.index, true);
+      if (this.value?.index !== undefined)
+        this.setSelection(this.value.index, true);
       else this.setSelection(Math.floor(this.asServedData.images.length / 2));
     },
 
@@ -274,7 +282,8 @@ export default defineComponent({
       const objectWeight = asServedData.images[objectIdx].weight;
       const initWeight = this.value?.weight;
 
-      if (initWeight === undefined) return;
+      if (initWeight === undefined)
+        return;
 
       const value = Math.round((initWeight / objectWeight) * this.denominator);
 
@@ -282,7 +291,7 @@ export default defineComponent({
         this.weightFactorProps = this.moreWeightFactor(
           true,
           asServedData.images[objectIdx].weight,
-          value
+          value,
         );
 
         return;
@@ -292,7 +301,7 @@ export default defineComponent({
         this.weightFactorProps = this.lessWeightFactor(
           true,
           asServedData.images[objectIdx].weight,
-          value
+          value,
         );
 
         return;
@@ -303,12 +312,13 @@ export default defineComponent({
 
     setSelection(objectIdx: number, init = false) {
       const { asServedData } = this;
-      if (!asServedData) return;
+      if (!asServedData)
+        return;
 
       if (objectIdx >= asServedData.images.length) {
         this.weightFactorProps = this.moreWeightFactor(
           true,
-          asServedData.images[asServedData.images.length - 1].weight
+          asServedData.images[asServedData.images.length - 1].weight,
         );
         this.update();
         return;
@@ -322,14 +332,16 @@ export default defineComponent({
 
       this.objectIdx = objectIdx;
 
-      if (init) this.initWeightFactor(asServedData, objectIdx);
+      if (init)
+        this.initWeightFactor(asServedData, objectIdx);
       else this.weightFactorProps = this.noWeightFactor(asServedData.images[objectIdx].weight);
       this.update();
     },
 
     updateSelection(value: number) {
       const { objectIdx } = this;
-      if (objectIdx === undefined) return;
+      if (objectIdx === undefined)
+        return;
 
       this.setSelection(objectIdx + value);
     },
@@ -345,7 +357,8 @@ export default defineComponent({
 
     update() {
       const { objectIdx, asServedData, asServedSetId } = this;
-      if (objectIdx === undefined || !asServedData) return;
+      if (objectIdx === undefined || !asServedData)
+        return;
 
       const state: SelectedAsServedImage = {
         asServedSetId,
@@ -358,7 +371,8 @@ export default defineComponent({
     },
 
     confirm() {
-      if (this.objectIdx === undefined) return;
+      if (this.objectIdx === undefined)
+        return;
 
       this.$emit('confirm');
     },

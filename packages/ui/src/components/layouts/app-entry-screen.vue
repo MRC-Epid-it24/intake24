@@ -8,7 +8,7 @@
       <div class="d-flex justify-center align-center py-4">
         <slot name="logo">
           <v-avatar v-if="hasIcon" tile>
-            <img alt="logo" :src="iconFile" />
+            <img alt="logo" :src="iconFile">
           </v-avatar>
         </slot>
         <slot name="title">
@@ -22,7 +22,7 @@
           {{ subtitle }}
         </v-card-subtitle>
       </slot>
-      <slot></slot>
+      <slot />
     </v-card>
   </div>
 </template>

@@ -18,20 +18,21 @@ export const useUser = defineStore('user', {
     profile: null,
   }),
   getters: {
-    userId: (state) => state.profile?.userId,
-    loaded: (state) => !!state.profile,
+    userId: state => state.profile?.userId,
+    loaded: state => !!state.profile,
   },
   actions: {
     load(accessToken: string) {
       const { surveyId, userId, sub } = tokenService.decodeAccessToken<SurveyTokenPayload>(
         accessToken,
-        'survey'
+        'survey',
       );
 
       this.profile = { surveyId, userId, subject: JSON.parse(atob(sub)) };
 
       const survey = useSurvey();
-      if (userId !== survey.user?.userId) survey.clearState();
+      if (userId !== survey.user?.userId)
+        survey.clearState();
     },
   },
 });

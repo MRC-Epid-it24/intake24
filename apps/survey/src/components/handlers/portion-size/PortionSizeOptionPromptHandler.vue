@@ -11,8 +11,7 @@
     }"
     @action="action"
     @input="update"
-  >
-  </portion-size-option-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -66,11 +65,10 @@ export default defineComponent({
       };
 
       if (
-        food.portionSizeMethodIndex !== null &&
-        food.portionSizeMethodIndex !== state.value.option
-      ) {
+        food.portionSizeMethodIndex !== null
+        && food.portionSizeMethodIndex !== state.value.option
+      )
         update.portionSize = null;
-      }
 
       survey.updateFood({ foodId: food.id, update });
       survey.addFoodFlag(food.id, 'portion-size-option-complete');
@@ -82,17 +80,17 @@ export default defineComponent({
       props,
       ctx,
       getInitialState,
-      commitAnswer
+      commitAnswer,
     );
 
     const survey = useSurvey();
 
     const availableMethods = computed(() =>
       food.data.portionSizeMethods.filter(
-        (item) =>
-          survey.registeredPortionSizeMethods.includes(item.method) &&
-          (!parentFoodRequiredPSMs.includes(item.method) || parentFood.value)
-      )
+        item =>
+          survey.registeredPortionSizeMethods.includes(item.method)
+          && (!parentFoodRequiredPSMs.includes(item.method) || parentFood.value),
+      ),
     );
 
     return {

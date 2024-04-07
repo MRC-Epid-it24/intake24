@@ -10,21 +10,24 @@ export type UseMealListProps = {
   meals: MealState[];
 };
 
-export const useMealList = (props: UseMealListProps, { emit }: SetupContext) => {
+export function useMealList(props: UseMealListProps, { emit }: SetupContext) {
   const survey = useSurvey();
 
   const selectedMealId = computed(() => {
-    if (survey.selection.element?.type !== 'meal') return undefined;
+    if (survey.selection.element?.type !== 'meal')
+      return undefined;
     return survey.selection.element.mealId;
   });
 
   const selectedFoodId = computed(() => {
-    if (survey.selection.element?.type !== 'food') return undefined;
+    if (survey.selection.element?.type !== 'food')
+      return undefined;
     return survey.selection.element.foodId;
   });
 
   const isSelectedFoodInMeal = (mealId: string) => {
-    if (survey.selection.element?.type !== 'food') return false;
+    if (survey.selection.element?.type !== 'food')
+      return false;
 
     const foodIndex = getFoodIndexRequired(props.meals, survey.selection.element.foodId);
 
@@ -41,4 +44,4 @@ export const useMealList = (props: UseMealListProps, { emit }: SetupContext) => 
     isSelectedFoodInMeal,
     action,
   };
-};
+}

@@ -9,7 +9,9 @@
           outlined
           :to="{ name: 'survey-home', params: { surveyId } }"
         >
-          <v-icon left>$home</v-icon>
+          <v-icon left>
+            $home
+          </v-icon>
           {{ $t('common.home') }}
         </v-btn>
         <v-btn
@@ -21,16 +23,20 @@
           outlined
           :to="{ name: 'feedback-home', params: { surveyId } }"
         >
-          <v-icon left>$feedback</v-icon>
+          <v-icon left>
+            $feedback
+          </v-icon>
           {{ $t('recall.actions.feedback') }}
         </v-btn>
       </template>
       <template #nav-actions>
         <v-btn color="primary" text :to="{ name: 'survey-home', params: { surveyId } }">
           <span class="text-overline font-weight-medium">{{ $t('common.home') }}</span>
-          <v-icon class="pb-1">$home</v-icon>
+          <v-icon class="pb-1">
+            $home
+          </v-icon>
         </v-btn>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
         <v-btn
           v-if="feedbackEnabled"
           color="primary"
@@ -41,7 +47,9 @@
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.feedback') }}
           </span>
-          <v-icon class="pb-1">$feedback</v-icon>
+          <v-icon class="pb-1">
+            $feedback
+          </v-icon>
         </v-btn>
       </template>
     </card-layout>
@@ -49,7 +57,7 @@
       v-if="prompt.rating"
       v-bind="{ submissionId, surveyId, type: 'recall' }"
       class="grey lighten-4 pt-6"
-    ></survey-rating>
+    />
   </div>
 </template>
 

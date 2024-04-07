@@ -17,7 +17,7 @@ export default () => {
     .get(
       permission('permissions|browse'),
       validation.browse,
-      wrapAsync(permissionController.browse)
+      wrapAsync(permissionController.browse),
     );
 
   router.get('/refs', wrapAsync(permissionController.refs));
@@ -33,21 +33,21 @@ export default () => {
   router.get(
     '/:permissionId/edit',
     permission('permissions|edit'),
-    wrapAsync(permissionController.edit)
+    wrapAsync(permissionController.edit),
   );
 
   router.get(
     '/:permissionId/roles',
     permission('permissions|roles'),
     validation.browse,
-    wrapAsync(permissionController.roles)
+    wrapAsync(permissionController.roles),
   );
 
   router.get(
     '/:permissionId/users',
     permission('permissions|users'),
     validation.browse,
-    wrapAsync(permissionController.users)
+    wrapAsync(permissionController.users),
   );
 
   return router;

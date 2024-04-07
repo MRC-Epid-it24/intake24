@@ -1,12 +1,14 @@
 <template>
   <v-text-field ref="inputRef" v-model="barcode" v-bind="{ label, name }" outlined>
     <template #append>
-      <v-icon @click.stop.prevent="open">fas fa-barcode</v-icon>
+      <v-icon @click.stop.prevent="open">
+        fas fa-barcode
+      </v-icon>
       <barcode-reader
         :dialog.sync="dialog"
         :model-value.sync="barcode"
         v-bind="{ errorThreshold, readers, successfulReads }"
-      ></barcode-reader>
+      />
     </template>
   </v-text-field>
 </template>
@@ -49,12 +51,12 @@ const barcode = useVModel(props, 'modelValue', emit);
 const dialog = ref(false);
 const inputRef = ref<InstanceType<typeof HTMLFormElement>>();
 
-const open = (event: Event) => {
+function open(event: Event) {
   event.preventDefault();
   inputRef.value?.blur();
 
   dialog.value = true;
-};
+}
 </script>
 
 <script lang="ts">

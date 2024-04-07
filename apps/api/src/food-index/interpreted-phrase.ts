@@ -25,12 +25,13 @@ function maxInterpretationsIndex(words: Array<InterpretedWord>): number {
  */
 export function cutCombinations(
   words: Array<InterpretedWord>,
-  maxCombinations: number
+  maxCombinations: number,
 ): Array<InterpretedWord> {
-  if (words.length === 0) return [];
+  if (words.length === 0)
+    return [];
 
   const max = Math.max(1, maxCombinations);
-  const cutWords = new Array<InterpretedWord>(...words);
+  const cutWords = [...words];
   let combinations = countCombinations(words);
 
   while (combinations > max) {
@@ -66,9 +67,8 @@ function product<T>(tuples: Array<Array<T>>, values: Array<T>): Array<Array<T>> 
   const result = new Array<Array<T>>();
 
   for (const tuple of tuples) {
-    for (const value of values) {
+    for (const value of values)
       result.push(tuple.concat(value));
-    }
   }
 
   return result;
@@ -85,11 +85,12 @@ export default class InterpretedPhrase {
   }
 
   generateCombinations(maxCombinations: number): Array<Array<number>> {
-    if (this.words.length === 0) return [];
+    if (this.words.length === 0)
+      return [];
 
     const workingSet = cutCombinations(this.words, maxCombinations);
 
-    const combinations = indices(workingSet[0].interpretations).map((i) => [i]);
+    const combinations = indices(workingSet[0].interpretations).map(i => [i]);
 
     return workingSet
       .splice(1)

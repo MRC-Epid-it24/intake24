@@ -18,7 +18,7 @@ export default () => {
     .post(
       permission('survey-schemes|create'),
       validation.store,
-      wrapAsync(surveySchemeController.store)
+      wrapAsync(surveySchemeController.store),
     )
     .get(validation.browse, wrapAsync(surveySchemeController.browse));
 
@@ -38,13 +38,13 @@ export default () => {
   router.get(
     '/:surveySchemeId/templates',
     validation.templates,
-    wrapAsync(surveySchemeController.templates)
+    wrapAsync(surveySchemeController.templates),
   );
   router.get('/:surveySchemeId/data-export', wrapAsync(surveySchemeController.dataExportRefs));
 
   router.use(
     '/:surveySchemeId/securables',
-    securables('SurveyScheme', surveySchemeController.securables)
+    securables('SurveyScheme', surveySchemeController.securables),
   );
 
   return router;

@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addConstraint('language_translations', {
         fields: ['language_id', 'application', 'section'],
@@ -9,12 +9,12 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeConstraint(
         'language_translations',
         'language_translations_unique',
-        { transaction }
+        { transaction },
       );
     }),
 };

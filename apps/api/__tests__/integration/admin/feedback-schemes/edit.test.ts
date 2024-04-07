@@ -27,7 +27,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999/edit`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

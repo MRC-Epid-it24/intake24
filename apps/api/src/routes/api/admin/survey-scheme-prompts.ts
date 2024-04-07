@@ -16,12 +16,12 @@ export default () => {
     .post(
       permission('survey-scheme-prompts|create'),
       validation.store,
-      wrapAsync(surveySchemePromptController.store)
+      wrapAsync(surveySchemePromptController.store),
     )
     .get(
       permission('survey-scheme-prompts|browse'),
       validation.browse,
-      wrapAsync(surveySchemePromptController.browse)
+      wrapAsync(surveySchemePromptController.browse),
     );
 
   router.get('/refs', wrapAsync(surveySchemePromptController.refs));
@@ -34,24 +34,24 @@ export default () => {
     .put(
       permission('survey-scheme-prompts|edit'),
       validation.update,
-      wrapAsync(surveySchemePromptController.update)
+      wrapAsync(surveySchemePromptController.update),
     )
     .delete(
       permission('survey-scheme-prompts|delete'),
-      wrapAsync(surveySchemePromptController.destroy)
+      wrapAsync(surveySchemePromptController.destroy),
     );
 
   router.get(
     '/:surveySchemePromptId/edit',
     permission('survey-scheme-prompts|edit'),
-    wrapAsync(surveySchemePromptController.edit)
+    wrapAsync(surveySchemePromptController.edit),
   );
 
   router.post(
     '/:surveySchemePromptId/sync',
     permission('survey-scheme-prompts|sync'),
     validation.sync,
-    wrapAsync(surveySchemePromptController.sync)
+    wrapAsync(surveySchemePromptController.sync),
   );
 
   return router;

@@ -4,17 +4,18 @@ import { ApplicationError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import { User } from '@intake24/db';
 
-export const fido = () => {
+export function fido() {
   return initServer().router(contract.admin.user.mfa.fido, {
     challenge: async ({ req }) => {
       const { userId } = req.scope.cradle.user;
       const user = await User.findByPk(userId, { attributes: ['email', 'name'] });
-      if (!user?.email) throw new ApplicationError('Invalid user - missing email.');
+      if (!user?.email)
+        throw new ApplicationError('Invalid user - missing email.');
 
       const options = await req.scope.cradle.fidoProvider.registrationChallenge(
         userId,
         user.email,
-        user.name ?? undefined
+        user.name ?? undefined,
       );
 
       req.session.fidoRegChallenge = { challengeId: options.challenge };
@@ -42,4 +43,4 @@ export const fido = () => {
       return { status: 200, body: device };
     },
   });
-};
+}

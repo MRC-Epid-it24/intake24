@@ -9,7 +9,7 @@ import { NotFoundError } from '../errors';
 import { publicSurveyEntryResponse } from '../responses';
 import { captchaCheck } from '../rules';
 
-export const survey = () => {
+export function survey() {
   const generateUserLimiter = ioc.cradle.rateLimiter.createMiddleware('generateUser', {
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generateUser'),
     skipFailedRequests: true,
@@ -52,7 +52,8 @@ export const survey = () => {
           'authCaptcha',
         ],
       });
-      if (!survey) throw new NotFoundError();
+      if (!survey)
+        throw new NotFoundError();
 
       return { status: 200, body: publicSurveyEntryResponse(survey) };
     },
@@ -75,4 +76,4 @@ export const survey = () => {
       return { status: 200, body: data };
     },
   });
-};
+}

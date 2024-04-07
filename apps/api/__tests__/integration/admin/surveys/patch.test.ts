@@ -42,7 +42,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('patch', url, { permissions });
   });
 
@@ -148,7 +148,7 @@ export default () => {
         'patch',
         url,
         { ...updateInput2, ...guarded },
-        { input: updateInput2 }
+        { input: updateInput2 },
       );
     });
 
@@ -163,7 +163,7 @@ export default () => {
         'patch',
         url,
         { ...updateInput3, ...guarded },
-        { input: updateInput3 }
+        { input: updateInput3 },
       );
     });
   });

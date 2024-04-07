@@ -42,8 +42,7 @@ import { Language, Survey, User, UserSecurable } from '.';
 })
 export default class SystemLocale
   extends BaseModel<InferAttributes<SystemLocale>, InferCreationAttributes<SystemLocale>>
-  implements HasVisibility
-{
+  implements HasVisibility {
   @Column({
     autoIncrement: true,
     primaryKey: true,

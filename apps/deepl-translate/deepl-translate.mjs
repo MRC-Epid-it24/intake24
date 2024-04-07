@@ -1,11 +1,11 @@
-import fs from 'fs/promises';
-import https from 'https';
-import path from 'path';
-import process from 'process';
+import fs from 'node:fs/promises';
+import https from 'node:https';
+import path from 'node:path';
 
-const apiKey = process.env['DEEPL_AUTH_KEY'];
+const apiKey = process.env.DEEPL_AUTH_KEY;
 
-if (apiKey === undefined) throw new Error('Please set the DEEPL_AUTH_KEY environment variable');
+if (apiKey === undefined)
+  throw new Error('Please set the DEEPL_AUTH_KEY environment variable');
 
 const deepLRequestOptions = {
   host: 'api-free.deepl.com',
@@ -25,27 +25,28 @@ function restoreMessageTags(str) {
 
 async function deepLTranslate(text, source_lang, target_lang) {
   return new Promise((resolve, reject) => {
-    const req = https.request(deepLRequestOptions, function (res) {
+    const req = https.request(deepLRequestOptions, (res) => {
       const chunks = [];
 
       res.setEncoding('utf8');
 
-      res.on('data', function (chunk) {
+      res.on('data', (chunk) => {
         chunks.push(chunk);
       });
 
-      res.on('end', function () {
+      res.on('end', () => {
         if (res.statusCode === 200) {
           const response = JSON.parse(chunks.join(''));
           resolve(response.translations);
-        } else {
-          reject(`Unexpected HTTP status code: ${res.statusCode}`);
+        }
+        else {
+          reject(new Error(`Unexpected HTTP status code: ${res.statusCode}`));
           console.error(chunks.join(''));
         }
       });
     });
 
-    req.on('error', function (e) {
+    req.on('error', (e) => {
       reject(e);
     });
 
@@ -71,10 +72,12 @@ async function translateObject(obj, sourceLang, destLang) {
       const tr = await deepLTranslate([replaceMessageTags(value)], sourceLang, destLang);
       console.debug(restoreMessageTags(tr[0].text));
       result[key] = restoreMessageTags(tr[0].text);
-    } else if (typeof value === 'object') {
+    }
+    else if (typeof value === 'object') {
       result[key] = await translateObject(value, sourceLang, destLang);
-    } else {
-      throw Error(`Unexpected field type: ${key} has type ${typeof value}`);
+    }
+    else {
+      throw new TypeError(`Unexpected field type: ${key} has type ${typeof value}`);
     }
   }
 
@@ -84,7 +87,8 @@ async function translateObject(obj, sourceLang, destLang) {
 async function translateFile(sourcePath, destPath, sourceLang, destLang) {
   const json = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
 
-  if (typeof json !== 'object') throw new Error(`Expected a single object in file ${sourcePath}`);
+  if (typeof json !== 'object')
+    throw new Error(`Expected a single object in file ${sourcePath}`);
 
   const translated = await translateObject(json, sourceLang, destLang);
 
@@ -98,12 +102,14 @@ async function translateFiles(sourceDir, destDir, sourceLang, destLang) {
   if (!sourceStat.isDirectory())
     throw new Error(`${sourceDir} does not exist or is not a directory`);
 
-  if (!destStat.isDirectory()) throw new Error(`${destDir} does not exist or is not a directory`);
+  if (!destStat.isDirectory())
+    throw new Error(`${destDir} does not exist or is not a directory`);
 
   const files = await fs.readdir(sourceDir);
 
   for (const fileName of files) {
-    if (!fileName.endsWith('.json')) continue;
+    if (!fileName.endsWith('.json'))
+      continue;
 
     const sourcePath = path.join(sourceDir, fileName);
     const destPath = path.join(destDir, fileName);

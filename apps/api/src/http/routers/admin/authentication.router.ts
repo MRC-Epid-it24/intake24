@@ -7,9 +7,9 @@ import { contract } from '@intake24/common/contracts';
 import { UnauthorizedError } from '../../errors';
 import { attachRefreshToken } from '../util';
 
-export const authentication = () => {
+export function authentication() {
   const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    keyGenerator: (req) => `login:${req.body.email ?? req.ip}`,
+    keyGenerator: req => `login:${req.body.email ?? req.ip}`,
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
     skipSuccessfulRequests: true,
   });
@@ -22,14 +22,15 @@ export const authentication = () => {
 
         const result = await req.scope.cradle.authenticationService.adminLogin(
           { email, password },
-          { req }
+          { req },
         );
-        if ('devices' in result) return { status: 200, body: result };
+        if ('devices' in result)
+          return { status: 200, body: result };
 
         attachRefreshToken(
           result.refreshToken,
           res,
-          req.scope.cradle.securityConfig.jwt.admin.cookie
+          req.scope.cradle.securityConfig.jwt.admin.cookie,
         );
 
         return { status: 200, body: { accessToken: result.accessToken } };
@@ -40,13 +41,13 @@ export const authentication = () => {
 
       const tokens = await req.scope.cradle.authenticationService.verify(
         { provider: 'duo', token },
-        { req }
+        { req },
       );
 
       attachRefreshToken(
         tokens.refreshToken,
         res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie
+        req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
       return { status: 200, body: { accessToken: tokens.accessToken } };
@@ -56,13 +57,13 @@ export const authentication = () => {
 
       const tokens = await req.scope.cradle.authenticationService.verify(
         { provider: 'fido', response },
-        { req }
+        { req },
       );
 
       attachRefreshToken(
         tokens.refreshToken,
         res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie
+        req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
       return { status: 200, body: { accessToken: tokens.accessToken } };
@@ -72,13 +73,13 @@ export const authentication = () => {
 
       const tokens = await req.scope.cradle.authenticationService.verify(
         { provider: 'otp', token },
-        { req }
+        { req },
       );
 
       attachRefreshToken(
         tokens.refreshToken,
         res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie
+        req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
       return { status: 200, body: { accessToken: tokens.accessToken } };
@@ -86,13 +87,14 @@ export const authentication = () => {
     refresh: async ({ req, res }) => {
       const { name } = ioc.cradle.securityConfig.jwt.admin.cookie;
       const refreshToken = req.cookies[name];
-      if (!refreshToken) throw new UnauthorizedError();
+      if (!refreshToken)
+        throw new UnauthorizedError();
 
       const tokens = await req.scope.cradle.authenticationService.refresh(refreshToken, 'admin');
       attachRefreshToken(
         tokens.refreshToken,
         res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie
+        req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
       return { status: 200, body: { accessToken: tokens.accessToken } };
@@ -101,11 +103,12 @@ export const authentication = () => {
       const { name, httpOnly, path, secure, sameSite } = ioc.cradle.securityConfig.jwt.admin.cookie;
 
       const refreshToken = req.cookies[name];
-      if (refreshToken) await req.scope.cradle.jwtRotationService.revoke(refreshToken);
+      if (refreshToken)
+        await req.scope.cradle.jwtRotationService.revoke(refreshToken);
 
       res.cookie(name, '', { maxAge: -1, httpOnly, path, secure, sameSite }).json();
 
       return { status: 200, body: undefined };
     },
   });
-};
+}

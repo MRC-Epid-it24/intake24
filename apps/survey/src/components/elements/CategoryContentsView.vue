@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <div v-if="contents.subcategories.length == 0 && contents.foods.length == 0" class="py-4">
+    <div v-if="!contents.subcategories.length && !contents.foods.length" class="py-4">
       <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
         {{ i18n.none }}
       </v-alert>
@@ -27,7 +27,9 @@
         {{ i18n.refine }}
       </v-alert>
     </div>
-    <v-subheader v-if="contents.subcategories.length">Related Categories/Subcategories</v-subheader>
+    <v-subheader v-if="contents.subcategories.length">
+      Related Categories/Subcategories
+    </v-subheader>
     <v-chip-group v-if="contents.subcategories.length" column>
       <v-chip
         v-for="category in showAll ? contents.subcategories : firstCategories"

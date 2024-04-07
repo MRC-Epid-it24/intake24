@@ -7,7 +7,7 @@
           :input-value="required"
           :label="$t('survey-schemes.prompts.validation.required')"
           @change="update('required', $event)"
-        ></v-switch>
+        />
       </v-col>
       <v-col cols="12">
         <language-selector
@@ -25,7 +25,7 @@
               outlined
               :value="message[lang]"
               @input="updateLanguage('message', lang, $event)"
-            ></v-text-field>
+            />
           </template>
         </language-selector>
       </v-col>

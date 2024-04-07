@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>fas fa-table-list</v-icon>
+      <v-icon color="secondary" left>
+        fas fa-table-list
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.meals.table') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         color="primary"
         fab
@@ -13,7 +15,9 @@
         :title="$t('feedback-schemes.meals.fields.create')"
         @click.stop="add"
       >
-        <v-icon small>$add</v-icon>
+        <v-icon small>
+          $add
+        </v-icon>
       </v-btn>
       <confirm-dialog
         color="error"
@@ -30,7 +34,9 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon small>$sync</v-icon>
+            <v-icon small>
+              $sync
+            </v-icon>
           </v-btn>
         </template>
         {{ $t('feedback-schemes.meals.fields.reset.text') }}
@@ -60,7 +66,9 @@
                 :title="$t('feedback-schemes.meals.fields.edit')"
                 @click.stop="edit(index, item)"
               >
-                <v-icon color="secondary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -91,13 +99,17 @@
             <v-icon>$cancel</v-icon>
           </v-btn>
           <v-toolbar-title>
-            <v-icon dark left>fas fa-table-list</v-icon>
+            <v-icon dark left>
+              fas fa-table-list
+            </v-icon>
             {{ $t(`feedback-schemes.meals.fields.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-toolbar-items>
             <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
@@ -114,7 +126,7 @@
                     name="type"
                     outlined
                     @change="updateProps"
-                  ></v-select>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <template v-if="dialog.item.type === 'nutrient'">
@@ -131,8 +143,7 @@
                       prepend-inner-icon="$nutrient-types"
                       :rules="nutrientRules"
                       @change="updateNutrientFields"
-                    >
-                    </v-autocomplete>
+                    />
                   </template>
                   <v-select
                     v-if="dialog.item.type === 'standard'"
@@ -143,8 +154,7 @@
                     name="fieldId"
                     outlined
                     :rules="fieldIdRules"
-                  >
-                  </v-select>
+                  />
                   <v-text-field
                     v-else
                     v-model="dialog.item.fieldId"
@@ -153,7 +163,7 @@
                     :label="$t('feedback-schemes.meals.fields.id')"
                     outlined
                     :rules="fieldIdRules"
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-card outlined>
@@ -171,7 +181,7 @@
                           hide-details="auto"
                           :label="$t('feedback-schemes.meals.fields.header')"
                           outlined
-                        ></v-text-field>
+                        />
                       </template>
                     </language-selector>
                   </v-card>
@@ -192,7 +202,7 @@
                           hide-details="auto"
                           :label="$t('feedback-schemes.meals.fields.value')"
                           outlined
-                        ></v-text-field>
+                        />
                       </template>
                     </language-selector>
                   </v-card>
@@ -201,11 +211,15 @@
             </v-container>
             <v-card-actions>
               <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+                <v-icon left>
+                  $cancel
+                </v-icon>{{ $t('common.action.cancel') }}
               </v-btn>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn class="font-weight-bold" color="info" text type="submit">
-                <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+                <v-icon left>
+                  $success
+                </v-icon>{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>
@@ -233,7 +247,7 @@ import { getTableFieldDefaults } from './table-field';
 export default defineComponent({
   name: 'TableFieldList',
 
-  components: { ConfirmDialog, draggable, LanguageSelector },
+  components: { ConfirmDialog, Draggable: draggable, LanguageSelector },
 
   props: {
     nutrientTypes: {
@@ -270,26 +284,27 @@ export default defineComponent({
 
     const tab = ref(0);
 
-    const tableFieldTypes = mealTableFieldTypes.map((value) => ({
+    const tableFieldTypes = mealTableFieldTypes.map(value => ({
       text: i18n.t(`feedback-schemes.meals.fields.types.${value}`),
       value,
     }));
 
-    const tableFieldStandardIds = mealTableFieldStandardIds.map((value) => ({
+    const tableFieldStandardIds = mealTableFieldStandardIds.map(value => ({
       text: i18n.t(`feedback-schemes.meals.fields.types.${value}`),
       value,
     }));
 
     const fieldIdRules = computed(() => [
       (value: string | null): boolean | string => {
-        if (!value) return i18n.t('feedback-schemes.meals.fields.validation.required').toString();
+        if (!value)
+          return i18n.t('feedback-schemes.meals.fields.validation.required').toString();
 
         const {
           index,
           item: { type, fieldId },
         } = dialog.value;
         const match = items.value.find(
-          (item, idx) => item.type === type && item.fieldId === fieldId && index !== idx
+          (item, idx) => item.type === type && item.fieldId === fieldId && index !== idx,
         );
 
         return match ? i18n.t('feedback-schemes.meals.fields.validation.unique').toString() : true;
@@ -298,14 +313,15 @@ export default defineComponent({
 
     const nutrientRules = computed(() => [
       (value: string[]): boolean | string => {
-        if (!value.length) return i18n.t('nutrient-types.validation.required').toString();
+        if (!value.length)
+          return i18n.t('nutrient-types.validation.required').toString();
 
         const { index } = dialog.value;
         const match = items.value.find(
           (item, idx) =>
-            item.type === 'nutrient' &&
-            [...value].sort().join(':') === [...item.types].sort().join(':') &&
-            index !== idx
+            item.type === 'nutrient'
+            && [...value].sort().join(':') === [...item.types].sort().join(':')
+            && index !== idx,
         );
 
         return match ? i18n.t('nutrient-types.validation.unique').toString() : true;
@@ -313,16 +329,19 @@ export default defineComponent({
     ]);
 
     const updateNutrientFieldId = (nutrientTypeId: string[]) => {
-      if (!nutrientTypeId.length || dialog.value.item.type !== 'nutrient') return;
+      if (!nutrientTypeId.length || dialog.value.item.type !== 'nutrient')
+        return;
 
       dialog.value.item.fieldId = `nutrient-${dialog.value.item.types.sort().join(':')}`;
     };
 
     const updateNutrientLabel = (nutrientTypeId: string[]) => {
-      if (!nutrientTypeId.length || dialog.value.item.type !== 'nutrient') return;
+      if (!nutrientTypeId.length || dialog.value.item.type !== 'nutrient')
+        return;
 
-      const match = props.nutrientTypes.find((nutrient) => nutrient.id === nutrientTypeId[0]);
-      if (!match) return;
+      const match = props.nutrientTypes.find(nutrient => nutrient.id === nutrientTypeId[0]);
+      if (!match)
+        return;
 
       dialog.value.item.header.en = match.description;
     };

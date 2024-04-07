@@ -12,19 +12,21 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <options-menu>
         <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('survey-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.dataExport"></json-editor-dialog>
+        <json-editor-dialog v-model="form.dataExport" />
       </options-menu>
     </v-toolbar>
     <data-export-section
@@ -32,7 +34,7 @@
       :section="selected"
       @close="close"
       @update="update"
-    ></data-export-section>
+    />
     <v-list two-line>
       <draggable v-model="form.dataExport" handle=".drag-and-drop__handle">
         <transition-group name="drag-and-drop" type="transition">
@@ -57,7 +59,9 @@
                 :title="$t('survey-schemes.data-export.edit')"
                 @click.stop="edit(section)"
               >
-                <v-icon color="secondary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -90,7 +94,7 @@ export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 export default defineComponent({
   name: 'SurveySchemeDataExport',
 
-  components: { draggable, DataExportSection, JsonEditorDialog, OptionsMenu, SelectResource },
+  components: { Draggable: draggable, DataExportSection, JsonEditorDialog, OptionsMenu, SelectResource },
 
   mixins: [formMixin],
 
@@ -123,7 +127,8 @@ export default defineComponent({
 
   computed: {
     sectionRefFields(): ExportField[] {
-      if (!this.selected || !this.exportRefs) return [];
+      if (!this.selected || !this.exportRefs)
+        return [];
 
       return this.exportRefs[this.selected.id];
     },
@@ -142,7 +147,7 @@ export default defineComponent({
   methods: {
     async fetchExportRefs(): Promise<void> {
       const { data } = await this.$http.get<SurveySchemeExportRefsResponse>(
-        `admin/survey-schemes/${this.id}/data-export`
+        `admin/survey-schemes/${this.id}/data-export`,
       );
       this.exportRefs = data;
     },
@@ -152,9 +157,10 @@ export default defineComponent({
     },
 
     update(section: ExportSection) {
-      const match = this.form.dataExport.find((field) => field.id === section.id);
+      const match = this.form.dataExport.find(field => field.id === section.id);
 
-      if (match) match.fields = [...section.fields];
+      if (match)
+        match.fields = [...section.fields];
     },
 
     close() {

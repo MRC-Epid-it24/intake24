@@ -2,7 +2,9 @@
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="1000px">
     <template #activator="{ attrs, on }">
       <v-btn v-bind="attrs" color="primary" rounded :title="$t('fdbs.search._')" v-on="on">
-        <v-icon left>$search</v-icon> {{ $t('fdbs.search._') }}
+        <v-icon left>
+          $search
+        </v-icon> {{ $t('fdbs.search._') }}
       </v-btn>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
@@ -26,8 +28,7 @@
           outlined
           prepend-inner-icon="$search"
           @click:clear="clear"
-        >
-        </v-text-field>
+        />
         <v-data-table
           :headers="headers"
           item-key="_id"
@@ -91,15 +92,15 @@ const headers = [
   { text: i18n.t('fdbs.foods.local.name'), value: 'name' },
 ];
 
-const clear = async () => {
+async function clear() {
   search.value = '';
-};
+}
 
-const close = () => {
+function close() {
   dialog.value = false;
-};
+}
 
-const fetchCategories = async () => {
+async function fetchCategories() {
   const {
     data: { data },
   } = await http.get<CategoriesResponse>(`admin/fdbs/${props.localeId}/categories`, {
@@ -109,9 +110,9 @@ const fetchCategories = async () => {
   categories.value = data;
 
   return data;
-};
+}
 
-const fetchFoods = async () => {
+async function fetchFoods() {
   const {
     data: { data },
   } = await http.get<FoodsResponse>(`admin/fdbs/${props.localeId}/foods`, {
@@ -121,51 +122,54 @@ const fetchFoods = async () => {
   foods.value = data;
 
   return data;
-};
+}
 
-const fetchItems = async () => {
+async function fetchItems() {
   loading.value = true;
 
   try {
     const [categories, foods] = await Promise.all([fetchCategories(), fetchFoods()]);
 
-    //@ts-expect-error volar issue ?
+    // @ts-expect-error volar issue ?
     items.value = [
-      ...categories.map((cat) => ({ ...cat, resource: 'categories', _id: `cat:${cat.id}` })),
-      ...foods.map((food) => ({ ...food, resource: 'foods', _id: `food:${food.id}` })),
+      ...categories.map(cat => ({ ...cat, resource: 'categories', _id: `cat:${cat.id}` })),
+      ...foods.map(food => ({ ...food, resource: 'foods', _id: `food:${food.id}` })),
     ].sort((a, b) => a.name.localeCompare(b.name));
-  } finally {
+  }
+  finally {
     loading.value = false;
   }
-};
+}
 
-const selectItem = async (item: FoodSearchItem) => {
+async function selectItem(item: FoodSearchItem) {
   dialog.value = false;
 
   const name = `fdbs-${item.resource}`;
   const entryId = item.id;
 
-  if (route.name === name && route.params.entryId === entryId) return;
+  if (route.name === name && route.params.entryId === entryId)
+    return;
 
   await router.push({
     name: `fdbs-${item.resource}`,
     params: { id: props.localeId, entryId: item.id },
   });
-};
+}
 
 watchDebounced(
   search,
   async () => {
     await fetchItems();
   },
-  { debounce: 500, maxWait: 2000 }
+  { debounce: 500, maxWait: 2000 },
 );
 
 watch(dialog, async (val) => {
-  if (!val) return;
+  if (!val)
+    return;
 
   await nextTick();
-  //@ts-expect-error - vuetify types
+  // @ts-expect-error - vuetify types
   searchRef.value?.focus();
 });
 </script>

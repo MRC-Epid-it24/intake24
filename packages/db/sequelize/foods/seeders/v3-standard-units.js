@@ -1,22 +1,21 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
 
-const fs = require('fs');
-const https = require('https');
-const path = require('path');
+const fs = require('node:fs');
+const https = require('node:https');
+const path = require('node:path');
 
-const adminUrl =
-  'https://raw.githubusercontent.com/MRC-Epid-it24/admin-frontend/master/src/js/explorer/constants/standard-units-en.js';
+const adminUrl
+  = 'https://raw.githubusercontent.com/MRC-Epid-it24/admin-frontend/master/src/js/explorer/constants/standard-units-en.js';
 
-const baseUrl =
-  'https://raw.githubusercontent.com/MRC-Epid-it24/survey-frontend/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize';
+const baseUrl
+  = 'https://raw.githubusercontent.com/MRC-Epid-it24/survey-frontend/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize';
 const baseFilename = 'StandardUnits_{locale}.properties';
 
 const locales = ['en', 'en_AU', 'en_NZ', 'ar', 'da', 'pt'];
-const addonLocales = locales.filter((locale) => locale !== 'en');
+const addonLocales = locales.filter(locale => locale !== 'en');
 
-const fetchAdminStandardUnits = async () =>
-  new Promise((resolve, reject) => {
+async function fetchAdminStandardUnits() {
+  return new Promise((resolve, reject) => {
     const filename = path.resolve('standard-units-en.js');
 
     const file = fs.createWriteStream(filename);
@@ -38,9 +37,10 @@ const fetchAdminStandardUnits = async () =>
         });
     });
   });
+}
 
-const fetchSurveyStandardUnits = async (locale) =>
-  new Promise((resolve, reject) => {
+async function fetchSurveyStandardUnits(locale) {
+  return new Promise((resolve, reject) => {
     const filename = baseFilename.replace('{locale}', locale);
     const url = `${baseUrl}/${filename}`;
 
@@ -57,7 +57,7 @@ const fetchSurveyStandardUnits = async (locale) =>
             .split(/\r?\n/)
             .filter(Boolean)
             .reduce((acc, line) => {
-              const [keyType, value] = line.split('=').map((s) => s.trim());
+              const [keyType, value] = line.split('=').map(s => s.trim());
 
               const res = keyType.match(/^(?<key>.*?)_(?<type>estimate_in|how_many)$/);
               const { key, type } = res?.groups || {};
@@ -67,7 +67,8 @@ const fetchSurveyStandardUnits = async (locale) =>
                 return acc;
               }
 
-              if (!acc[key]) acc[key] = {};
+              if (!acc[key])
+                acc[key] = {};
 
               acc[key][type] = value;
               return acc;
@@ -82,12 +83,13 @@ const fetchSurveyStandardUnits = async (locale) =>
         });
     });
   });
+}
 
 module.exports = {
-  up: async (queryInterface) =>
+  up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const adminUnits = await fetchAdminStandardUnits();
-      const fileMaps = await Promise.all(locales.map((locale) => fetchSurveyStandardUnits(locale)));
+      const fileMaps = await Promise.all(locales.map(locale => fetchSurveyStandardUnits(locale)));
       const localeFileMap = fileMaps.reduce((acc, fileMap, index) => {
         const locale = locales[index];
         acc[locale] = fileMap;
@@ -122,12 +124,12 @@ module.exports = {
 
       await queryInterface.bulkInsert(
         'standard_units',
-        standardUnits.map((standardUnit) => ({ ...standardUnit, ...timestamps })),
-        { transaction }
+        standardUnits.map(standardUnit => ({ ...standardUnit, ...timestamps })),
+        { transaction },
       );
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const standardUnits = await fetchSurveyStandardUnits('en');
       const id = Object.entries(standardUnits).map(([id]) => id);

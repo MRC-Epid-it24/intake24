@@ -2,7 +2,7 @@ import type { NutrientUnitRequest } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { FoodsNutrientUnit, SystemNutrientUnit } from '@intake24/db';
 
-const nutrientUnitService = () => {
+function nutrientUnitService() {
   /**
    * Get nutrient unit record
    *
@@ -13,7 +13,8 @@ const nutrientUnitService = () => {
       FoodsNutrientUnit.findByPk(nutrientUnitId),
       SystemNutrientUnit.findByPk(nutrientUnitId),
     ]);
-    if (!foodsNutrientUnit || !systemNutrientUnit) throw new NotFoundError();
+    if (!foodsNutrientUnit || !systemNutrientUnit)
+      throw new NotFoundError();
 
     return foodsNutrientUnit;
   };
@@ -41,13 +42,14 @@ const nutrientUnitService = () => {
    */
   const updateNutrientUnit = async (
     nutrientUnitId: string,
-    input: Omit<NutrientUnitRequest, 'id'>
+    input: Omit<NutrientUnitRequest, 'id'>,
   ) => {
     const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
       FoodsNutrientUnit.findByPk(nutrientUnitId),
       SystemNutrientUnit.findByPk(nutrientUnitId),
     ]);
-    if (!foodsNutrientUnit || !systemNutrientUnit) throw new NotFoundError();
+    if (!foodsNutrientUnit || !systemNutrientUnit)
+      throw new NotFoundError();
 
     await Promise.all([foodsNutrientUnit.update(input), systemNutrientUnit.update(input)]);
 
@@ -72,17 +74,18 @@ const nutrientUnitService = () => {
     ]);
 
     if (
-      !foodsNutrientUnit ||
-      !foodsNutrientUnit.nutrientTypes ||
-      !systemNutrientUnit ||
-      !systemNutrientUnit.nutrientTypes
+      !foodsNutrientUnit
+      || !foodsNutrientUnit.nutrientTypes
+      || !systemNutrientUnit
+      || !systemNutrientUnit.nutrientTypes
     )
       throw new NotFoundError();
 
-    if (foodsNutrientUnit.nutrientTypes.length || systemNutrientUnit.nutrientTypes.length)
+    if (foodsNutrientUnit.nutrientTypes.length || systemNutrientUnit.nutrientTypes.length) {
       throw new ForbiddenError(
-        'Nutrient unit cannot be deleted. There are nutrient types using this nutrient unit.'
+        'Nutrient unit cannot be deleted. There are nutrient types using this nutrient unit.',
       );
+    }
 
     await Promise.all([foodsNutrientUnit.destroy(), systemNutrientUnit.destroy()]);
   };
@@ -93,7 +96,7 @@ const nutrientUnitService = () => {
     updateNutrientUnit,
     deleteNutrientUnit,
   };
-};
+}
 
 export default nutrientUnitService;
 

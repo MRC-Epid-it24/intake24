@@ -11,12 +11,12 @@ export default validate(
       if (
         value.some(
           ({ id, synonyms }) =>
-            (typeof id !== 'undefined' && typeof id !== 'string') || typeof synonyms !== 'string'
+            (typeof id !== 'undefined' && typeof id !== 'string') || typeof synonyms !== 'string',
         )
       )
         return false;
 
       return true;
     })
-    .withMessage('Invalid synonym sets')
+    .withMessage('Invalid synonym sets'),
 );

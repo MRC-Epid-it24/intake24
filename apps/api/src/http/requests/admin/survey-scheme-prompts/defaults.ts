@@ -17,9 +17,9 @@ const defaults: Schema = {
           : {};
 
         if (
-          !isPlainObject(value) ||
-          ['id', 'name', 'type', 'component'].some(
-            (key) => !(key in value) || typeof value[key] !== 'string'
+          !isPlainObject(value)
+          || ['id', 'name', 'type', 'component'].some(
+            key => !(key in value) || typeof value[key] !== 'string',
           )
         )
           throw new Error(customTypeErrorMessage('structure._', meta));
@@ -28,8 +28,9 @@ const defaults: Schema = {
           attributes: ['id', 'prompt'],
           where: except,
         });
-        const match = prompts.find((p) => p.prompt.id === value.id);
-        if (match) throw new Error(`Scheme prompt ID (${value.id}) already used.`);
+        const match = prompts.find(p => p.prompt.id === value.id);
+        if (match)
+          throw new Error(`Scheme prompt ID (${value.id}) already used.`);
       },
     },
   },

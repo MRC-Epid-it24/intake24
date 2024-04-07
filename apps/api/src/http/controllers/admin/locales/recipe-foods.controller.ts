@@ -9,11 +9,11 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { SystemLocale } from '@intake24/db';
 
-const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService'>) => {
+function localeRecipeFoodsController({ localeService }: Pick<IoC, 'localeService'>) {
   // getting existing recipe foods for the specified Locale ID
   const get = async (
     req: Request<{ localeId: string }>,
-    res: Response<LocaleRecipeFoods[]>
+    res: Response<LocaleRecipeFoods[]>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -31,7 +31,7 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
   // adding/modifying/deleting new or existing recipe foods for the specified Locale ID
   const set = async (
     req: Request<{ localeId: string }, any, LocaleRecipeFoodsInput[]>,
-    res: Response<LocaleRecipeFoods[]>
+    res: Response<LocaleRecipeFoods[]>,
   ): Promise<void> => {
     const { body } = req;
     const { localeId } = req.params;
@@ -46,10 +46,10 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
     res.json(recipeFoods);
   };
 
-  //getting existing recipe food steps for the specific recipe food for the specified Locale ID
+  // getting existing recipe food steps for the specific recipe food for the specified Locale ID
   const getSteps = async (
     req: Request<{ localeId: string; recipeFoodId: string }>,
-    res: Response<LocaleRecipeFoodSteps[]>
+    res: Response<LocaleRecipeFoodSteps[]>,
   ): Promise<void> => {
     const { localeId, recipeFoodId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -70,7 +70,7 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
       any,
       { items: LocaleRecipeFoodStepsInput[] }
     >,
-    res: Response<LocaleRecipeFoodSteps[]>
+    res: Response<LocaleRecipeFoodSteps[]>,
   ): Promise<void> => {
     const { body } = req;
     const { localeId, recipeFoodId } = req.params;
@@ -84,7 +84,7 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
     const recipeFoodSteps = await localeService.setRecipeFoodSteps(
       locale,
       recipeFoodId,
-      body.items
+      body.items,
     );
 
     res.json(recipeFoodSteps);
@@ -96,7 +96,7 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
     set,
     setSteps,
   };
-};
+}
 
 export default localeRecipeFoodsController;
 
