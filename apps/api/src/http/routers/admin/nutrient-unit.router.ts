@@ -9,22 +9,20 @@ import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { FoodsNutrientUnit, SystemNutrientUnit } from '@intake24/db';
 
-const uniqueMiddleware = async <T extends AppRoute | AppRouter>(
-  value: string,
-  req: TsRestRequest<T>
-) => {
+async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: string, req: TsRestRequest<T>) {
   const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
     unique({ model: FoodsNutrientUnit, condition: { field: 'id', value, ci: false } }),
     unique({ model: SystemNutrientUnit, condition: { field: 'id', value, ci: false } }),
   ]);
 
-  if (!foodsNutrientUnit || !systemNutrientUnit)
+  if (!foodsNutrientUnit || !systemNutrientUnit) {
     throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
       path: 'id',
     });
-};
+  }
+}
 
-export const nutrientUnit = () => {
+export function nutrientUnit() {
   return initServer().router(contract.admin.nutrientUnit, {
     browse: {
       middleware: [permission('nutrient-units', 'nutrient-units|browse')],
@@ -51,8 +49,8 @@ export const nutrientUnit = () => {
     read: {
       middleware: [permission('nutrient-units', 'nutrient-units|read')],
       handler: async ({ params: { nutrientUnitId }, req }) => {
-        const nutrientUnit =
-          await req.scope.cradle.nutrientUnitService.getNutrientUnit(nutrientUnitId);
+        const nutrientUnit
+          = await req.scope.cradle.nutrientUnitService.getNutrientUnit(nutrientUnitId);
 
         return { status: 200, body: nutrientUnit };
       },
@@ -60,8 +58,8 @@ export const nutrientUnit = () => {
     edit: {
       middleware: [permission('nutrient-units', 'nutrient-units|edit')],
       handler: async ({ params: { nutrientUnitId }, req }) => {
-        const nutrientUnit =
-          await req.scope.cradle.nutrientUnitService.getNutrientUnit(nutrientUnitId);
+        const nutrientUnit
+          = await req.scope.cradle.nutrientUnitService.getNutrientUnit(nutrientUnitId);
 
         return { status: 200, body: nutrientUnit };
       },
@@ -71,7 +69,7 @@ export const nutrientUnit = () => {
       handler: async ({ body, params: { nutrientUnitId }, req }) => {
         const nutrientUnit = await req.scope.cradle.nutrientUnitService.updateNutrientUnit(
           nutrientUnitId,
-          body
+          body,
         );
 
         return { status: 200, body: nutrientUnit };
@@ -86,4 +84,4 @@ export const nutrientUnit = () => {
       },
     },
   });
-};
+}

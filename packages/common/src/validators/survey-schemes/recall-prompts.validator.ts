@@ -1,6 +1,7 @@
+import { inspect } from 'node:util';
+
 import type { ValidateFunction as AjvValidateFunction } from 'ajv';
 import Ajv from 'ajv';
-import { inspect } from 'util';
 
 import type { RecallPrompts } from '../../surveys';
 
@@ -10,10 +11,10 @@ export const ajv = new Ajv({
   useDefaults: true,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line ts/no-var-requires, ts/no-require-imports
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 
-export { RecallPrompts };
+export type { RecallPrompts };
 export const RecallPromptsSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   definitions: {
@@ -191,13 +192,13 @@ export type ValidateFunction<T> = ((data: unknown) => data is T) &
   Pick<AjvValidateFunction, 'errors'>;
 export const isRecallPrompts = ajv.compile(RecallPromptsSchema) as ValidateFunction<RecallPrompts>;
 export default function validate(value: unknown): RecallPrompts {
-  if (isRecallPrompts(value)) {
+  if (isRecallPrompts(value))
     return value;
-  }
+
   throw new Error(
     `${ajv.errorsText(
       isRecallPrompts.errors!.filter((e: any) => e.keyword !== 'if'),
-      { dataVar: 'RecallPrompts' }
-    )}\n\n${inspect(value)}`
+      { dataVar: 'RecallPrompts' },
+    )}\n\n${inspect(value)}`,
   );
 }

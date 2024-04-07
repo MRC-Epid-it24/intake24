@@ -1,7 +1,7 @@
 <template>
   <data-table :headers="headers">
     <template #[`item.code`]="{ item }">
-      <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
+      <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
       {{ item.code }}
     </template>
   </data-table>

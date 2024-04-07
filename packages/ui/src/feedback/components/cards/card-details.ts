@@ -23,17 +23,20 @@ export type FeedbackDetails = {
   warning?: string | null;
 };
 
-export const getTextClass = (sentiment: Sentiment | null): string | undefined => {
-  if (!sentiment) return undefined;
+export function getTextClass(sentiment: Sentiment | null): string | undefined {
+  if (!sentiment)
+    return undefined;
 
-  if (['too_low', 'low', 'high', 'too_high'].includes(sentiment)) return 'danger--text';
+  if (['too_low', 'low', 'high', 'too_high'].includes(sentiment))
+    return 'danger--text';
 
-  if (['bit_low', 'bit_high'].includes(sentiment)) return 'warning--text';
+  if (['bit_low', 'bit_high'].includes(sentiment))
+    return 'warning--text';
 
   return 'success--text';
-};
+}
 
-export const getIconClass = (sentiment: Sentiment | null): string => {
+export function getIconClass(sentiment: Sentiment | null): string {
   const defaultIcon = 'fas fa-crosshairs';
 
   const icons: Record<Sentiment, string> = {
@@ -48,12 +51,9 @@ export const getIconClass = (sentiment: Sentiment | null): string => {
   };
 
   return sentiment ? icons[sentiment] : defaultIcon;
-};
+}
 
-export const getUnitFromNutrientRule = (
-  nutrientRule: NutrientRuleType,
-  defaultUnit: string
-): string => {
+export function getUnitFromNutrientRule(nutrientRule: NutrientRuleType, defaultUnit: string): string {
   switch (nutrientRule) {
     case 'energy_divided_by_bmr':
       return '%';
@@ -65,9 +65,9 @@ export const getUnitFromNutrientRule = (
     default:
       return defaultUnit;
   }
-};
+}
 
-const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails => {
+function getCharacterDetail(parameters: CharacterParameters): FeedbackDetails {
   const { translate, i18n } = useI18n();
 
   const { sentiment: charSentiment, results, color, showRecommendations } = parameters;
@@ -98,9 +98,9 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
   });
 
   return details[0];
-};
+}
 
-const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
+function getFiveADayDetail(parameters: FiveADayParameters): FeedbackDetails {
   const { translate } = useI18n();
 
   const {
@@ -129,9 +129,9 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
     iconClass: getIconClass(sentiment),
     warning: low && portions < low.threshold ? translate(low.message) : undefined,
   };
-};
+}
 
-const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDetails => {
+function getNutrientGroupDetail(parameters: NutrientGroupParameters): FeedbackDetails {
   const { translate } = useI18n();
 
   const {
@@ -148,8 +148,10 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
 
   let warning;
 
-  if (low && intake < low.threshold) warning = translate(low.message);
-  else if (high && intake > high.threshold) warning = translate(high.message);
+  if (low && intake < low.threshold)
+    warning = translate(low.message);
+  else if (high && intake > high.threshold)
+    warning = translate(high.message);
 
   return {
     name: translate(name),
@@ -166,7 +168,7 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
     iconClass: getIconClass(sentiment),
     warning,
   };
-};
+}
 
 export const getDetails: Record<CardType, (...args: any[]) => FeedbackDetails> = {
   character: getCharacterDetail,

@@ -1,6 +1,6 @@
 import '@intake24/api/bootstrap';
 
-import { default as cacheConfig } from '@intake24/api/config/cache';
+import cacheConfig from '@intake24/api/config/cache';
 import { Cache } from '@intake24/api/services';
 import { logger } from '@intake24/common-backend';
 

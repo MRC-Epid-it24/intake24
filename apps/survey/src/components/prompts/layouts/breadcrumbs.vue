@@ -5,7 +5,7 @@
         <v-icon>{{ forwardIcon }}</v-icon>
       </template>
     </v-breadcrumbs>
-    <v-spacer></v-spacer>
+    <v-spacer />
     <request-help :survey-id="$route.params.surveyId">
       <template v-if="isMobile" #activator="{ attrs, on }">
         <v-btn
@@ -68,7 +68,7 @@ export default defineComponent({
 
   computed: {
     items() {
-      return this.getBreadCrumbs.filter((el) => !el.disabled);
+      return this.getBreadCrumbs.filter(el => !el.disabled);
     },
 
     getFoodElement() {
@@ -85,9 +85,10 @@ export default defineComponent({
       const promptElement = { text: this.promptName, disabled: false };
 
       elements.push(
-        this.getMealElement ?? { text: this.$t('recall._').toString(), disabled: false }
+        this.getMealElement ?? { text: this.$t('recall._').toString(), disabled: false },
       );
-      if (this.getFoodElement) elements.push(this.getFoodElement);
+      if (this.getFoodElement)
+        elements.push(this.getFoodElement);
 
       elements.push(promptElement);
 
@@ -110,7 +111,7 @@ export default defineComponent({
   }
 }
 
-/* 
+/*
 * TODO
 * sticky won't work within component and does not trigger correctly when top panel hides -> leave space gap
 * - turned into fixed position

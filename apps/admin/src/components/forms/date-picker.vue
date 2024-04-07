@@ -12,13 +12,13 @@
         prepend-inner-icon="fas fa-calendar-days"
         readonly
         v-on="on"
-      ></v-text-field>
+      />
     </template>
     <v-date-picker v-model="internalValue" scrollable>
       <v-btn class="font-weight-medium" color="error" text @click="dialog = false">
         {{ $t('common.action.cancel') }}
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         class="font-weight-medium"
         color="secondary"
@@ -78,12 +78,14 @@ export default defineComponent({
 
   watch: {
     value(val) {
-      if (val === this.internalValue) return;
+      if (val === this.internalValue)
+        return;
 
       this.internalValue = val;
     },
     internalValue(val) {
-      if (val === this.value) return;
+      if (val === this.value)
+        return;
 
       this.$emit('input', this.internalValue);
       this.$emit('change');

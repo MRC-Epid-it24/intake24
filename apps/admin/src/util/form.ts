@@ -22,18 +22,18 @@ export interface FormDef<T = Dictionary> {
   allKeys: string[];
   errors: Errors;
   config: FormConfig<T>;
-  assign(source: Dictionary): void;
-  load(input: Dictionary): void;
-  hasErrors(): boolean;
-  reset(): void;
-  getData(object?: boolean): T | FormData;
-  submit<R>(config: HttpRequestConfig): Promise<R>;
-  post<R>(url: string, config?: HttpRequestConfig): Promise<R>;
-  get<R>(url: string, config?: HttpRequestConfig): Promise<R>;
-  patch<R>(url: string, config?: HttpRequestConfig): Promise<R>;
-  put<R>(url: string, config?: HttpRequestConfig): Promise<R>;
-  onSuccess(): void;
-  onFail(err: unknown): void;
+  assign: (source: Dictionary) => void;
+  load: (input: Dictionary) => void;
+  hasErrors: () => boolean;
+  reset: () => void;
+  getData: (object?: boolean) => T | FormData;
+  submit: <R>(config: HttpRequestConfig) => Promise<R>;
+  post: <R>(url: string, config?: HttpRequestConfig) => Promise<R>;
+  get: <R>(url: string, config?: HttpRequestConfig) => Promise<R>;
+  patch: <R>(url: string, config?: HttpRequestConfig) => Promise<R>;
+  put: <R>(url: string, config?: HttpRequestConfig) => Promise<R>;
+  onSuccess: () => void;
+  onFail: (err: unknown) => void;
 }
 
 export type FormFields<T = Dictionary> = { [P in keyof T]: T[P] };
@@ -44,7 +44,7 @@ const expectedFailStatusCodes = [HttpStatusCode.BadRequest, HttpStatusCode.Confl
 
 export default <T extends object = Dictionary>(
   initData: T,
-  formConfig: FormConfig<T> = {}
+  formConfig: FormConfig<T> = {},
 ): Form<T> => {
   const keys = Object.keys(initData) as (keyof T)[];
   const allKeys = formConfig.extractNestedKeys
@@ -81,15 +81,16 @@ export default <T extends object = Dictionary>(
     },
 
     getData(object = false): T | FormData {
-      if (object) return this.data;
+      if (object)
+        return this.data;
 
       return this.config.multipart ? serialize<T>(this.data) : this.data;
     },
 
     async submit<R>(config: HttpRequestConfig): Promise<R> {
       const { transform } = this.config;
-      const output =
-        transform && !this.config.multipart ? transform(this.getData() as T) : this.getData();
+      const output
+        = transform && !this.config.multipart ? transform(this.getData() as T) : this.getData();
 
       try {
         const { data } = await httpService.request<R>({
@@ -100,7 +101,8 @@ export default <T extends object = Dictionary>(
 
         this.onSuccess();
         return data;
-      } catch (err) {
+      }
+      catch (err) {
         this.onFail(err);
 
         throw err;
@@ -124,7 +126,8 @@ export default <T extends object = Dictionary>(
     },
 
     onSuccess(): void {
-      if (this.config.resetOnSubmit === true) this.reset();
+      if (this.config.resetOnSubmit === true)
+        this.reset();
     },
 
     onFail(err): void {
@@ -142,7 +145,8 @@ export default <T extends object = Dictionary>(
     Object.defineProperty(formFields, key, {
       get: () => formFields.data[key],
       set: (value: any) => {
-        if (formFields.data[key] === value) return;
+        if (formFields.data[key] === value)
+          return;
 
         formFields.data[key] = value;
       },

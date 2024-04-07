@@ -7,7 +7,7 @@
           :input-value="custom"
           :label="$t('survey-schemes.prompts.meal-add-prompt.custom')"
           @change="update('custom', $event)"
-        ></v-switch>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

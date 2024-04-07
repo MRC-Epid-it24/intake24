@@ -18,7 +18,7 @@
           prepend-inner-icon="$search"
           :rounded="dialog"
           @focus="openInDialog"
-        ></v-text-field>
+        />
       </div>
       <div v-if="recipeBuilderToggle" :class="isMobile ? 'pa-4' : 'py-2'">
         <v-btn
@@ -27,7 +27,6 @@
           :disabled="!recipeBuilderToggle"
           large
           outlined
-          :v-model="recipeBuilderFood?.name"
           @click.stop="recipeBuilder"
         >
           {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
@@ -37,20 +36,26 @@
         <v-tab-item key="browse">
           <v-card v-if="requestFailed" flat>
             <v-card-text>
-              <v-alert type="error">Something went wrong :(</v-alert>
+              <v-alert type="error">
+                Something went wrong :(
+              </v-alert>
             </v-card-text>
             <v-card-actions>
-              <v-btn large @click="browseCategory(retryCode, false)">Try again</v-btn>
+              <v-btn large @click="browseCategory(retryCode, false)">
+                Try again
+              </v-btn>
             </v-card-actions>
           </v-card>
           <v-btn v-if="navigationHistory.length" large text @click="navigateBack">
-            <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
+            <v-icon left>
+              fas fa-turn-up fa-flip-horizontal
+            </v-icon>
             {{ promptI18n.back }}
           </v-btn>
           <v-subheader v-else class="font-weight-bold">
             {{ promptI18n.browse }}
           </v-subheader>
-          <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
+          <image-placeholder v-if="requestInProgress" class="my-6" />
           <category-contents-view
             v-if="currentCategoryContents && !requestInProgress"
             :categories-first="prompt.categoriesFirst.browse"
@@ -59,20 +64,20 @@
             :i18n="promptI18n"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
-          ></category-contents-view>
+          />
         </v-tab-item>
         <v-tab-item key="search">
-          <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
+          <image-placeholder v-if="requestInProgress" class="my-6" />
           <category-contents-view
             v-if="!requestInProgress"
             :categories-first="prompt.categoriesFirst.search"
             :class="{ 'px-4': dialog }"
             :contents="searchContents"
             :i18n="promptI18n"
-            :search-term="searchTerm"
+            :search-term="searchTerm ?? undefined"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
-          ></category-contents-view>
+          />
         </v-tab-item>
       </v-tabs-items>
       <div
@@ -122,7 +127,7 @@
       :i18n="promptI18n"
       @cancel="closeMissingDialog"
       @confirm="foodMissing"
-    ></missing-food-panel>
+    />
   </div>
 </template>
 
@@ -207,17 +212,40 @@ export default defineComponent({
   setup(props, ctx) {
     const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, ctx);
 
+    const searchTerm = ref(props.value);
+    const searchRef = ref<InstanceType<typeof VTextField>>();
+    const searchResults = ref<FoodSearchResponse>({ foods: [], categories: [] });
+
+    const navigationHistory = ref<('search' | CategoryHeader)[]>([]);
+    const retryCode = ref(props.rootCategory);
+    const currentCategoryContents = ref<CategoryContents | undefined>(undefined);
+
+    const requestInProgress = ref(true);
+    const requestFailed = ref(false);
+    const recipeBuilderFood = ref<FoodHeader | null>(null);
+    const recipeFood = ref<RecipeFood | null>(null);
+    const recipeBuilderToggle = ref(false);
+    const tab = ref(0);
+
+    const showInDialog = computed(
+      () => props.inDialog && searchRef.value?.$vuetify.breakpoint.mobile,
+    );
+
+    const dialog = ref(false);
+
     const promptI18n = computed(() => {
       function backCategoryLabel(): string {
-        if (navigationHistory.value.length === 0) return '??';
+        if (navigationHistory.value.length === 0)
+          return '??';
 
         const last = navigationHistory.value[navigationHistory.value.length - 1];
 
-        if (last === 'search') return 'Search results';
+        if (last === 'search')
+          return 'Search results';
 
         return last.name;
       }
-      //add conditional browse
+      // add conditional browse
 
       return {
         ...translatePrompt(
@@ -239,24 +267,30 @@ export default defineComponent({
             back: { category: backCategoryLabel() },
             'missing.irrelevantIngredient': { ingredient: props.stepName },
             browse: { category: props.stepName },
-          }
+          },
         ),
       };
     });
 
-    const showInDialog = computed(
-      () => props.inDialog && searchRef.value?.$vuetify.breakpoint.mobile
-    );
+    const rootHeader = computed(() => ({
+      code: props.rootCategory ?? '',
+      name: props.rootCategory ?? promptI18n.value.root,
+    }));
 
-    const dialog = ref(false);
+    const searchContents = computed<CategoryContents>(() => ({
+      header: rootHeader.value,
+      foods: searchResults.value.foods,
+      subcategories: searchResults.value.categories,
+    }));
 
     const openInDialog = async () => {
-      if (!showInDialog.value || dialog.value) return;
+      if (!showInDialog.value || dialog.value)
+        return;
 
       dialog.value = true;
 
       await nextTick();
-      //@ts-expect-error - vuetify types
+      // @ts-expect-error - vuetify types
       searchRef.value?.focus();
     };
 
@@ -272,49 +306,22 @@ export default defineComponent({
     };
 
     const closeMissingDialog = async () => {
-      if (!searchRef.value) return;
+      if (!searchRef.value)
+        return;
 
       missingDialog.value = false;
 
       setTimeout(async () => {
-        if (!searchRef.value) return;
+        if (!searchRef.value)
+          return;
 
         await searchRef.value.$vuetify.goTo(searchRef.value.$el as HTMLElement, {
           duration: 500,
         });
 
-        //@ts-expect-error - vuetify types
+        // @ts-expect-error - vuetify types
         searchRef.value.focus();
       }, 100);
-    };
-
-    const searchTerm = ref(props.value);
-    const searchRef = ref<InstanceType<typeof VTextField>>();
-    const searchResults = ref<FoodSearchResponse>({ foods: [], categories: [] });
-    const rootHeader = computed(() => ({
-      code: props.rootCategory ?? '',
-      name: props.rootCategory ?? promptI18n.value.root,
-    }));
-
-    const searchContents = computed<CategoryContents>(() => ({
-      header: rootHeader.value,
-      foods: searchResults.value.foods,
-      subcategories: searchResults.value.categories,
-    }));
-
-    const navigationHistory = ref<('search' | CategoryHeader)[]>([]);
-    const retryCode = ref(props.rootCategory);
-    const currentCategoryContents = ref<CategoryContents | undefined>(undefined);
-
-    const requestInProgress = ref(true);
-    const requestFailed = ref(false);
-    const recipeBuilderFood = ref<FoodHeader | null>(null);
-    const recipeFood = ref<RecipeFood | null>(null);
-    const recipeBuilderToggle = ref(false);
-    const tab = ref(0);
-
-    const browseRootCategory = () => {
-      browseCategory(props.rootCategory, true);
     };
 
     const browseCategory = async (categoryCode: string | undefined, makeHistoryEntry: boolean) => {
@@ -331,18 +338,22 @@ export default defineComponent({
         const header = contents.header.code ? contents.header : rootHeader.value;
 
         if (makeHistoryEntry) {
-          if (currentCategoryContents.value !== undefined) {
+          if (currentCategoryContents.value !== undefined)
             navigationHistory.value.push(currentCategoryContents.value.header);
-          } else {
+          else
             navigationHistory.value.push('search');
-          }
         }
 
         currentCategoryContents.value = { ...contents, header };
-      } catch (err) {
+      }
+      catch (err) {
         requestInProgress.value = false;
         requestFailed.value = true;
       }
+    };
+
+    const browseRootCategory = () => {
+      browseCategory(props.rootCategory, true);
     };
 
     const recipeBuilderDetected = async (food: FoodHeader) => {
@@ -351,7 +362,8 @@ export default defineComponent({
     };
 
     const search = async () => {
-      if (!searchTerm.value) return;
+      if (!searchTerm.value)
+        return;
 
       requestInProgress.value = true;
       recipeBuilderToggle.value = false;
@@ -369,12 +381,15 @@ export default defineComponent({
         if (searchResults.value.foods[0].code.charAt(0) === '$') {
           recipeBuilderFood.value = searchResults.value.foods.splice(0, 1)[0];
 
-          if (recipeBuilderEnabled.value) await recipeBuilderDetected(recipeBuilderFood.value);
+          if (recipeBuilderEnabled.value)
+            await recipeBuilderDetected(recipeBuilderFood.value);
         }
         requestFailed.value = false;
-      } catch (e) {
+      }
+      catch (e) {
         requestFailed.value = true;
-      } finally {
+      }
+      finally {
         requestInProgress.value = false;
       }
     };
@@ -412,13 +427,14 @@ export default defineComponent({
       const lastItem = navigationHistory.value[navigationHistory.value.length - 1];
       navigationHistory.value = navigationHistory.value.slice(
         0,
-        navigationHistory.value.length - 1
+        navigationHistory.value.length - 1,
       );
 
       if (lastItem === 'search') {
         tab.value = 1;
         currentCategoryContents.value = undefined;
-      } else {
+      }
+      else {
         tab.value = 0;
         browseCategory(lastItem.code, false);
       }
@@ -448,12 +464,12 @@ export default defineComponent({
         }
 
         if (
-          !currentCategoryContents.value ||
-          props.rootCategory !== currentCategoryContents.value.header.code
+          !currentCategoryContents.value
+          || props.rootCategory !== currentCategoryContents.value.header.code
         )
           await browseCategory(props.rootCategory, true);
       },
-      { debounce: 500, maxWait: 2000 }
+      { debounce: 500, maxWait: 2000 },
     );
 
     return {

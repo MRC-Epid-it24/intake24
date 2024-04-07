@@ -4,8 +4,7 @@
     v-bind="{ meal, prompt, section }"
     @action="action"
     @input="update"
-  >
-  </edit-meal-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -56,7 +55,7 @@ export default defineComponent({
       props,
       ctx,
       getInitialState,
-      commitAnswer
+      commitAnswer,
     );
 
     return {

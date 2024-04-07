@@ -36,7 +36,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999/tasks`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assertMissingAuthentication('post', url);
   });
 

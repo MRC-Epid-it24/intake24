@@ -5,7 +5,7 @@
         <v-list-item-title>{{ $t(`common.${name}`) }}</v-list-item-title>
       </template>
       <v-list-item-group>
-        <menu-item v-for="item in items" :key="item.name" :item="item"></menu-item>
+        <menu-item v-for="item in items" :key="item.name" :item="item" />
       </v-list-item-group>
     </v-list-group>
   </v-list>
@@ -51,7 +51,7 @@ export default defineComponent({
 
   computed: {
     items(): Resource[] {
-      return this.resources.filter((item) => this.can(item.module ?? item.name));
+      return this.resources.filter(item => this.can(item.module ?? item.name));
     },
   },
 });

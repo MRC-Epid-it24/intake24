@@ -15,7 +15,7 @@ export default () => {
     output = omit(input, 'permissions');
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 
@@ -37,7 +37,7 @@ export default () => {
         'post',
         url,
         ['name', 'displayName', 'permissions'],
-        { input: { name: '', displayName: '', permissions: [1, 'invalidId', 2] } }
+        { input: { name: '', displayName: '', permissions: [1, 'invalidId', 2] } },
       );
     });
 

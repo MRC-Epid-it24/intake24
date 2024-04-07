@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>fas fa-square-root-alt</v-icon>
+      <v-icon color="secondary" left>
+        fas fa-square-root-alt
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.henry-coefficients.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         color="primary"
         fab
@@ -13,7 +15,9 @@
         :title="$t('feedback-schemes.henry-coefficients.create')"
         @click.stop="add"
       >
-        <v-icon small>$add</v-icon>
+        <v-icon small>
+          $add
+        </v-icon>
       </v-btn>
       <options-menu>
         <select-resource
@@ -24,13 +28,15 @@
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="items" @input="update"></json-editor-dialog>
+        <json-editor-dialog v-model="items" @input="update" />
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -60,7 +66,9 @@
                 :title="$t('feedback-schemes.henry-coefficients.edit')"
                 @click.stop="edit(index, coefficient)"
               >
-                <v-icon color="secondary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -86,14 +94,16 @@
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar color="secondary" dark flat>
-          <v-icon dark left>fas fa-square-root-alt</v-icon>
+          <v-icon dark left>
+            fas fa-square-root-alt
+          </v-icon>
           <v-toolbar-title>
             {{
               $t(`feedback-schemes.henry-coefficients.${dialog.index === -1 ? 'create' : 'edit'}`)
             }}
           </v-toolbar-title>
         </v-toolbar>
-        <v-divider></v-divider>
+        <v-divider />
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>
             <v-container>
@@ -108,11 +118,11 @@
                     outlined
                   >
                     <template #item="{ item }">
-                      <span :class="`${item.icon} mr-3`"></span>
+                      <span :class="`${item.icon} mr-3`" />
                       {{ item.text }}
                     </template>
                     <template #selection="{ item }">
-                      <span :class="`${item.icon} mr-3`"></span>
+                      <span :class="`${item.icon} mr-3`" />
                       {{ item.text }}
                     </template>
                   </v-select>
@@ -129,7 +139,7 @@
                     :label="$t('feedback-schemes.age.start')"
                     name="age.start"
                     outlined
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -138,7 +148,7 @@
                     :label="$t('feedback-schemes.age.end')"
                     name="age.end"
                     outlined
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -147,7 +157,7 @@
                     :label="$t('feedback-schemes.henry-coefficients.weightCoefficient')"
                     name="weightCoefficient"
                     outlined
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -156,7 +166,7 @@
                     :label="$t('feedback-schemes.henry-coefficients.heightCoefficient')"
                     name="heightCoefficient"
                     outlined
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -165,18 +175,22 @@
                     :label="$t('feedback-schemes.henry-coefficients.constant')"
                     name="constant"
                     outlined
-                  ></v-text-field>
+                  />
                 </v-col>
               </v-row>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+              <v-icon left>
+                $cancel
+              </v-icon>{{ $t('common.action.cancel') }}
             </v-btn>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -202,7 +216,7 @@ import { getHenryCoefficientDefaults } from './henry-coefficient';
 export default defineComponent({
   name: 'HenryCoefficientList',
 
-  components: { ConfirmDialog, draggable, JsonEditorDialog, OptionsMenu, SelectResource },
+  components: { ConfirmDialog, Draggable: draggable, JsonEditorDialog, OptionsMenu, SelectResource },
 
   props: {
     value: {
@@ -212,15 +226,15 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
-      useListWithDialog(props, context, { newItem: getHenryCoefficientDefaults });
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update }
+      = useListWithDialog(props, context, { newItem: getHenryCoefficientDefaults });
 
     return { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update };
   },
 
   data() {
     return {
-      sexes: sexes.map((value) => ({
+      sexes: sexes.map(value => ({
         text: this.$t(`feedback-schemes.sexes.${value}`),
         value,
         icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',

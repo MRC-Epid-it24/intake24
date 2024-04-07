@@ -1,8 +1,12 @@
 <template>
   <data-table :actions="['read', 'delete']" :headers="headers">
     <template #[`item.successful`]="{ item }">
-      <v-icon v-if="item.successful" color="success">$check</v-icon>
-      <v-icon v-else color="error">$times</v-icon>
+      <v-icon v-if="item.successful" color="success">
+        $check
+      </v-icon>
+      <v-icon v-else color="error">
+        $times
+      </v-icon>
     </template>
     <template #[`item.date`]="{ item }">
       {{ formatDateTime(item.date) }}

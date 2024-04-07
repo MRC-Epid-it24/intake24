@@ -43,7 +43,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_survey_ratings', {
@@ -104,7 +104,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('user_survey_ratings', { transaction });
     }),

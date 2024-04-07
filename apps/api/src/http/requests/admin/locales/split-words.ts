@@ -11,12 +11,12 @@ export default validate(
       if (
         value.some(
           ({ id, words }) =>
-            (typeof id !== 'undefined' && typeof id !== 'string') || typeof words !== 'string'
+            (typeof id !== 'undefined' && typeof id !== 'string') || typeof words !== 'string',
         )
       )
         return false;
 
       return true;
     })
-    .withMessage('Invalid split words')
+    .withMessage('Invalid split words'),
 );

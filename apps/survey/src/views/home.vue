@@ -4,11 +4,11 @@
       :subtitle="$t('common.welcome.subtitle').toString()"
       :title="$t('common._').toString()"
     >
-      <v-divider class="mt-4"></v-divider>
+      <v-divider class="mt-4" />
       <v-card-title class="font-weight-medium">
         {{ $t('survey.openAccess._') }}
       </v-card-title>
-      <image-placeholder v-if="isLoading" class="pa-8"></image-placeholder>
+      <image-placeholder v-if="isLoading" class="pa-8" />
       <v-list v-else-if="surveys.length">
         <template v-for="(survey, idx) in surveys">
           <v-list-item
@@ -25,7 +25,7 @@
               <v-icon>fas fa-arrow-up-right-from-square</v-icon>
             </v-list-item-icon>
           </v-list-item>
-          <v-divider v-if="idx + 1 < surveys.length" :key="`div-${survey.id}`"></v-divider>
+          <v-divider v-if="idx + 1 < surveys.length" :key="`div-${survey.id}`" />
         </template>
       </v-list>
       <v-list v-else disabled>
@@ -72,17 +72,21 @@ export default defineComponent({
 
       try {
         surveys.value = await surveyService.surveyPublicList();
-      } finally {
+      }
+      finally {
         isLoading.value = false;
       }
     };
 
     const tryLoggingIn = async () => {
-      if (!auth.loggedIn) await auth.refresh(false);
-      if (!auth.loggedIn) return;
+      if (!auth.loggedIn)
+        await auth.refresh(false);
+      if (!auth.loggedIn)
+        return;
 
       const surveyId = useUser().profile?.surveyId;
-      if (!surveyId) return;
+      if (!surveyId)
+        return;
 
       await router.push({ name: 'survey-home', params: { surveyId } });
     };

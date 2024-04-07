@@ -18,7 +18,7 @@
     }"
     :search-input.sync="search"
     @input="input($event)"
-  ></v-autocomplete>
+  />
 </template>
 
 <script lang="ts">
@@ -92,7 +92,8 @@ export default defineComponent({
   data() {
     const items: Dictionary[] = [];
 
-    if (this.selected) items.push(this.selected);
+    if (this.selected)
+      items.push(this.selected);
 
     return {
       isLoading: false,
@@ -103,13 +104,15 @@ export default defineComponent({
 
   watch: {
     search(val) {
-      if (!val) return;
+      if (!val)
+        return;
 
-      //@ts-expect-error debounced
+      // @ts-expect-error debounced
       this.debouncedFetchItems();
     },
     selected(val) {
-      if (!val) return;
+      if (!val)
+        return;
 
       this.items = [val];
     },
@@ -123,7 +126,8 @@ export default defineComponent({
 
   methods: {
     async fetchItems() {
-      if (this.isLoading) return;
+      if (this.isLoading)
+        return;
 
       this.isLoading = true;
       const { search } = this;
@@ -132,19 +136,21 @@ export default defineComponent({
         const { data } = await this.$http.get(this.api, { params: { search } });
 
         this.items = this.resolveResponseObject(data);
-      } finally {
+      }
+      finally {
         this.isLoading = false;
       }
     },
 
     input(value: any) {
-      const object = this.items.find((item) => item[this.itemValue] === value);
+      const object = this.items.find(item => item[this.itemValue] === value);
       this.$emit('input', value);
       this.$emit('update:object', object);
     },
 
     resolveResponseObject(data: any) {
-      if (!this.responseObject) return data;
+      if (!this.responseObject)
+        return data;
 
       const segments = this.responseObject.split('.');
       return segments.reduce((acc, segment) => acc[segment], data);

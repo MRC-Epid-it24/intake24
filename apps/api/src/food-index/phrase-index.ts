@@ -15,9 +15,9 @@ import type { InterpretedWord } from './interpreted-word';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;
-const MAX_PHRASE_COMBINATIONS = 1000;
-const MAX_MATCHES_FOR_MATCH_MORE = 3;
-const MAX_PHRASE_MATCHES = 6;
+const _MAX_PHRASE_COMBINATIONS = 1000;
+const _MAX_MATCHES_FOR_MATCH_MORE = 3;
+const _MAX_PHRASE_MATCHES = 6;
 const DISTANCE_COST = 1;
 const ORDER_COST = 4;
 const UNMATCHED_WORD_COST = 8;
@@ -35,9 +35,9 @@ export interface LanguageBackend {
   indexIgnore: string[];
   phoneticEncoder: PhoneticEncoder | undefined;
 
-  sanitiseDescription(description: string): string;
-  stem(word: string): string;
-  splitCompound(word: string): Array<string>;
+  sanitiseDescription: (description: string) => string;
+  stem: (word: string) => string;
+  splitCompound: (word: string) => Array<string>;
 }
 
 export interface DictionaryPhrase<K> {
@@ -88,18 +88,18 @@ export class PhraseIndex<K> {
     return (
       sanitised
         .split(/\s+/)
-        .filter((s) => s.length > 1)
-        .filter((s) => !this.languageBackend.indexIgnore.includes(s))
+        .filter(s => s.length > 1)
+        .filter(s => !this.languageBackend.indexIgnore.includes(s))
         // split compound words (e.g. for German and Nordic languages)
-        .flatMap((s) => this.languageBackend.splitCompound(s))
-        .map((s) => this.languageBackend.stem(s))
+        .flatMap(s => this.languageBackend.splitCompound(s))
+        .map(s => this.languageBackend.stem(s))
     );
   }
 
   interpretPhrase(
     phrase: string,
     strategy: MatchStrategy,
-    dictionaryType: DictionaryType = 'foods'
+    dictionaryType: DictionaryType = 'foods',
   ): InterpretedPhrase {
     const words = this.getWordList(phrase).slice(0, MAX_WORDS_PER_PHRASE);
     let interpretedWords: Array<InterpretedWord>;
@@ -109,15 +109,15 @@ export class PhraseIndex<K> {
       case 'foods':
       case 'categories':
         interpretedWords = words
-          .map((w) => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
-          .filter((w) => w.interpretations.length > 0);
+          .map(w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
+          .filter(w => w.interpretations.length > 0);
         break;
       case 'recipes':
         interpretedWords = words
-          .map((w) =>
-            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy)
+          .map(w =>
+            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy),
           )
-          .filter((w) => w.interpretations.length > 0);
+          .filter(w => w.interpretations.length > 0);
         break;
       default:
         throw new Error(`Unknown dictionary type: ${dictionaryType}`);
@@ -135,9 +135,9 @@ export class PhraseIndex<K> {
   // and in the same order as they appear in the dictionary phrase
   //
   // Assumes that values in groupedMatches are sorted by input word index.
-  // eslint-disable-next-line class-methods-use-this
+
   private ensureUniqueMatches(
-    groupedMatches: Map<number, Array<WordMatch>>
+    groupedMatches: Map<number, Array<WordMatch>>,
   ): Map<number, Array<WordMatch>> {
     const result = new Map<number, Array<WordMatch>>();
 
@@ -154,9 +154,9 @@ export class PhraseIndex<K> {
 
           for (const match2 of matches) {
             if (
-              match.word.index === match2.word.index &&
-              minDictIndex < match2.matched.wordIndex &&
-              !usedDictionaryIndices.has(match2.matched.wordIndex)
+              match.word.index === match2.word.index
+              && minDictIndex < match2.matched.wordIndex
+              && !usedDictionaryIndices.has(match2.matched.wordIndex)
             )
               minDictIndex = match2.matched.wordIndex;
           }
@@ -176,27 +176,27 @@ export class PhraseIndex<K> {
   }
 
   private evaluateMatchQuality(input: InterpretedPhrase, matchedWords: Array<WordMatch>): number {
-    const matchedIndices = matchedWords.map((w) => w.matched.wordIndex);
+    const matchedIndices = matchedWords.map(w => w.matched.wordIndex);
 
     const orderViolations = countOrderViolations(matchedIndices);
     const distanceViolations = countDistanceViolations(matchedIndices);
 
-    const dictionaryPhraseLength =
-      this.phraseIndex[matchedWords[0].matched.phraseIndex].words.length;
+    const dictionaryPhraseLength
+      = this.phraseIndex[matchedWords[0].matched.phraseIndex].words.length;
 
     // In some rare cases words can be matched multiple times, clamp to 0 avoid negative cost values
     const unmatchedWords = Math.max(0, dictionaryPhraseLength - matchedWords.length);
 
     return (
-      orderViolations * ORDER_COST +
-      distanceViolations * DISTANCE_COST +
-      unmatchedWords * UNMATCHED_WORD_COST
+      orderViolations * ORDER_COST
+      + distanceViolations * DISTANCE_COST
+      + unmatchedWords * UNMATCHED_WORD_COST
     );
   }
 
   private matchCombination(
     phrase: InterpretedPhrase,
-    combination: Array<number>
+    combination: Array<number>,
   ): Array<PhraseMatch> {
     // First step is to build a flat list of matched words from the word index, where every match is
     // a reference to a specific word in a dictionary phrase in the form of a s
@@ -208,11 +208,11 @@ export class PhraseIndex<K> {
     for (let wi = 0; wi < phrase.words.length; wi += 1) {
       const interpretationIndex = combination[wi];
 
-      const indexMatches =
-        this.wordIndex.get(phrase.words[wi].interpretations[interpretationIndex].dictionaryWord) ||
-        [];
+      const indexMatches
+        = this.wordIndex.get(phrase.words[wi].interpretations[interpretationIndex].dictionaryWord)
+        || [];
 
-      const matchedWords: Array<WordMatch> = indexMatches.map((m) => ({
+      const matchedWords: Array<WordMatch> = indexMatches.map(m => ({
         word: {
           index: wi,
           interpretationIndex,
@@ -271,23 +271,23 @@ export class PhraseIndex<K> {
   findMatches(
     phrase: InterpretedPhrase,
     maxMatches: number,
-    maxCombinations: number
+    maxCombinations: number,
   ): Array<PhraseMatchResult<K>> {
     const matchedPhrases = phrase
       .generateCombinations(maxCombinations)
-      .flatMap((c) => this.matchCombination(phrase, c));
+      .flatMap(c => this.matchCombination(phrase, c));
 
-    if (matchedPhrases.length === 0) return [];
+    if (matchedPhrases.length === 0)
+      return [];
 
     let bestMatchWordCount = matchedPhrases[0].matchedWords.length;
 
     for (let i = 1; i < matchedPhrases.length; i += 1) {
-      if (matchedPhrases[i].matchedWords.length > bestMatchWordCount) {
+      if (matchedPhrases[i].matchedWords.length > bestMatchWordCount)
         bestMatchWordCount = matchedPhrases[i].matchedWords.length;
-      }
     }
 
-    const bestMatches = matchedPhrases.filter((m) => m.matchedWords.length === bestMatchWordCount);
+    const bestMatches = matchedPhrases.filter(m => m.matchedWords.length === bestMatchWordCount);
     bestMatches.sort((m1, m2) => m2.quality - m1.quality);
 
     // exclude duplicates which could have appeared due to different
@@ -307,7 +307,7 @@ export class PhraseIndex<K> {
       }
     }
 
-    return uniqueMatches.slice(0, maxMatches).map((m) => ({
+    return uniqueMatches.slice(0, maxMatches).map(m => ({
       phrase: this.phraseIndex[m.phraseIndex].asTyped,
       key: this.phraseIndex[m.phraseIndex].key,
       quality: m.quality,
@@ -319,10 +319,10 @@ export class PhraseIndex<K> {
     wordOps: LanguageBackend,
     synonymSets: Array<Set<string>>,
     recipeFoodsSynonymsSet: Array<Set<string>> = [],
-    recipeFoodsList: RecipeFoodTuple[] = []
+    recipeFoodsList: RecipeFoodTuple[] = [],
   ) {
     this.languageBackend = wordOps;
-    this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
+    this.phraseIndex = Array.from({ length: phrases.length });
     this.wordIndex = new Map<string, Array<[number, number]>>();
     this.recipeFoodsList = recipeFoodsList;
 
@@ -345,7 +345,7 @@ export class PhraseIndex<K> {
     // function and if the synonym is entered as 'sausage' it will fail to match 'sausag' unless
     // the stemming function is applied to it.
     function stemWordSets(sets: Array<Set<string>>): Array<Set<string>> {
-      return sets.map((set) => new Set([...set].map((word) => wordOps.stem(word))));
+      return sets.map(set => new Set([...set].map(word => wordOps.stem(word))));
     }
 
     const stemmedSynonyms = stemWordSets(synonymSets);
@@ -355,19 +355,18 @@ export class PhraseIndex<K> {
     // Creatinf a dictionary for Locale Indexing with all the synonym sets and dictionary words
     this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, stemmedSynonyms);
 
-    //Falten Array of recipe Foods int othe Set of string
+    // Falten Array of recipe Foods int othe Set of string
     const recipeDictionaryWords = new Set<string>();
     for (const recipeFoodSet of stemmedRecipeSynonyms) {
-      for (const recipeFood of recipeFoodSet) {
+      for (const recipeFood of recipeFoodSet)
         recipeDictionaryWords.add(recipeFood);
-      }
     }
 
     // Create a dictionary for Recipe Foods Indexing with all the synonym sets and recipe foods
     this.recipeFoodsDictionary = new RichDictionary(
       recipeDictionaryWords,
       wordOps.phoneticEncoder,
-      stemmedRecipeSynonyms
+      stemmedRecipeSynonyms,
     );
   }
 }

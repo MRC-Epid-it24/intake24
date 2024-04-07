@@ -5,7 +5,7 @@ type Literal = z.infer<typeof literalSchema>;
 type Json = Literal | { [key: string]: Json } | Json[];
 
 export const jsonSchema: z.ZodType<Json> = z.lazy(() =>
-  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)])
+  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]),
 );
 
 export const jsonObjectSchema: z.ZodType<Json> = z.lazy(() => z.record(jsonSchema));
@@ -18,7 +18,7 @@ export const paginationRequest = z.object({
     .string()
     .max(128)
     .nullish()
-    .transform((val) => val || undefined),
+    .transform(val => val || undefined),
 });
 
 export const paginationMeta = z.object({

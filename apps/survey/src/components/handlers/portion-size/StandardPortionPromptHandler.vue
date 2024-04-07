@@ -13,8 +13,7 @@
     }"
     @action="action"
     @input="update"
-  >
-  </standard-portion-prompt>
+  />
 </template>
 
 <script lang="ts">

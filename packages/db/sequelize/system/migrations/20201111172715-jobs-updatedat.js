@@ -8,7 +8,7 @@ module.exports = {
           type: Sequelize.DATE,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE tools_tasks SET updated_at = completed_at`, {
@@ -17,7 +17,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `UPDATE tools_tasks SET updated_at = created_at WHERE updated_at IS NULL`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -27,11 +27,11 @@ module.exports = {
           type: Sequelize.DATE,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('tools_tasks', 'updated_at', { transaction });
     }),

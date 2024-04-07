@@ -18,24 +18,25 @@ export type UpdateDrinkwareSetInputWithFiles = UpdateDrinkwareSetInput & {
   baseImageFiles: Dictionary<Express.Multer.File>;
 };
 
-const drinkwareSetController = ({
+function drinkwareSetController({
   drinkwareSetService,
-}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService' | 'drinkwareSetService'>) => {
+}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService' | 'drinkwareSetService'>) {
   const entry = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetEntry>,
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
     const drinkwareSet = await drinkwareSetService.getDrinkwareSet(drinkwareSetId);
-    if (!drinkwareSet) throw new NotFoundError();
+    if (!drinkwareSet)
+      throw new NotFoundError();
 
     res.json(drinkwareSet);
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<DrinkwareSetsResponse>
+    res: Response<DrinkwareSetsResponse>,
   ): Promise<void> => {
     const drinkwareSets = await drinkwareSetService.getDrinkwareSets(req.query);
 
@@ -44,7 +45,7 @@ const drinkwareSetController = ({
 
   const store = async (
     req: Request<CreateDrinkwareSetInput>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetEntry>,
   ): Promise<void> => {
     await drinkwareSetService.create(req.body);
 
@@ -55,17 +56,17 @@ const drinkwareSetController = ({
 
   const read = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetResponse>
+    res: Response<DrinkwareSetResponse>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ drinkwareSetId: string }, any, UpdateDrinkwareSetInputWithFiles>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetEntry>,
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
     const user = req.user as User;
@@ -79,12 +80,13 @@ const drinkwareSetController = ({
 
   const destroy = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
     const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, { attributes: ['id'] });
-    if (!drinkwareSet) throw new NotFoundError();
+    if (!drinkwareSet)
+      throw new NotFoundError();
 
     await drinkwareSet.destroy();
 
@@ -104,7 +106,7 @@ const drinkwareSetController = ({
     destroy,
     refs,
   };
-};
+}
 
 export default drinkwareSetController;
 

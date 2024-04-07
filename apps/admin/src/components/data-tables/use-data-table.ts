@@ -21,10 +21,7 @@ export type DataTableProps = {
   trackBy: string;
 };
 
-export const useDataTable = (
-  props: DataTableProps,
-  filter: ComputedRef<Dictionary> | Ref<Dictionary>
-) => {
+export function useDataTable(props: DataTableProps, filter: ComputedRef<Dictionary> | Ref<Dictionary>) {
   const http = useHttp();
   const resource = useResource();
 
@@ -36,7 +33,7 @@ export const useDataTable = (
   const selected = ref<Dictionary[]>([]);
 
   const tracked = computed<string[] | number[]>(() =>
-    selected.value.map((item) => item[props.trackBy])
+    selected.value.map(item => item[props.trackBy]),
   );
 
   const fetch = async () => {
@@ -63,4 +60,4 @@ export const useDataTable = (
   });
 
   return { api, fetch, items, meta, options, selected, tracked };
-};
+}

@@ -2,7 +2,7 @@
   <v-row justify="center" :no-gutters="isMobile">
     <v-slide-x-transition mode="out-in">
       <v-col v-if="showMealList" cols="3">
-        <meal-list v-bind="{ meals }" @action="action"></meal-list>
+        <meal-list v-bind="{ meals }" @action="action" />
       </v-col>
     </v-slide-x-transition>
     <v-col :cols="showMealList ? 8 : 9">
@@ -14,7 +14,7 @@
           :prompt="currentPrompt.prompt"
           :section="currentPrompt.section"
           @action="action"
-        ></component>
+        />
       </v-slide-y-transition>
     </v-col>
   </v-row>

@@ -3,15 +3,17 @@ import isEqual from 'lodash/isEqual';
 export type ConditionInput = number | string | (number | string)[] | null;
 export type ConditionInputOps = { value: ConditionInput; answer: ConditionInput };
 
-const toNumber = (values: ConditionInput) =>
-  (Array.isArray(values) ? values : [values])
-    .map((value) => (typeof value === 'string' ? parseFloat(value) : value))
+function toNumber(values: ConditionInput) {
+  return (Array.isArray(values) ? values : [values])
+    .map(value => (typeof value === 'string' ? Number.parseFloat(value) : value))
     .filter((value): value is number => !Number.isNaN(value));
+}
 
-const toString = (values: ConditionInput) =>
-  (Array.isArray(values) ? values : [values])
-    .map((value) => value?.toString().trim().toLowerCase() || '')
+function toString(values: ConditionInput) {
+  return (Array.isArray(values) ? values : [values])
+    .map(value => value?.toString().trim().toLowerCase() || '')
     .filter(Boolean);
+}
 
 export const conditionOps = {
   eq: ({ answer, value }: ConditionInputOps) => isEqual(toString(answer), toString(value)),
@@ -20,19 +22,20 @@ export const conditionOps = {
     const values = toString(value);
     const answers = toString(answer);
 
-    return answers.some((item) => values.includes(item));
+    return answers.some(item => values.includes(item));
   },
   notIn: ({ answer, value }: ConditionInputOps) => {
     const values = toString(value);
     const answers = toString(answer);
 
-    return answers.every((item) => !values.includes(item));
+    return answers.every(item => !values.includes(item));
   },
   gte: ({ answer, value }: ConditionInputOps) => {
     const values = toNumber(value);
     const answers = toNumber(answer);
 
-    if (!values.length || !answers.length) return false;
+    if (!values.length || !answers.length)
+      return false;
 
     return answers[0] >= values[0];
   },
@@ -40,7 +43,8 @@ export const conditionOps = {
     const values = toNumber(value);
     const answers = toNumber(answer);
 
-    if (!values.length || !answers.length) return false;
+    if (!values.length || !answers.length)
+      return false;
 
     return answers[0] > values[0];
   },
@@ -48,7 +52,8 @@ export const conditionOps = {
     const values = toNumber(value);
     const answers = toNumber(answer);
 
-    if (!values.length || !answers.length) return false;
+    if (!values.length || !answers.length)
+      return false;
 
     return answers[0] <= values[0];
   },
@@ -56,7 +61,8 @@ export const conditionOps = {
     const values = toNumber(value);
     const answers = toNumber(answer);
 
-    if (!values.length || !answers.length) return false;
+    if (!values.length || !answers.length)
+      return false;
 
     return answers[0] < values[0];
   },

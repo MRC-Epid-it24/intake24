@@ -7,7 +7,7 @@ describe('validate translations', () => {
     expect(result).toBe(false);
   });
 
-  it('should fail for object of non-strings', () => {
+  it('should fail for object of non-strings, function', () => {
     const result = validateTranslations({ a: () => 'b' });
 
     expect(result).toBe(false);

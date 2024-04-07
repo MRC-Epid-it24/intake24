@@ -2,7 +2,9 @@
   <v-tab-item key="content" value="content">
     <v-tabs vertical>
       <v-tab v-for="key in keys" :key="key" class="justify-start">
-        <v-icon left>$languages</v-icon>{{ key }}
+        <v-icon left>
+          $languages
+        </v-icon>{{ key }}
       </v-tab>
       <v-tab-item v-for="key in keys" :key="key" class="pl-3">
         <v-card outlined>
@@ -24,15 +26,17 @@
             type="info"
           >
             <template #prepend>
-              <span :class="`fi fi-${lang} mr-3`"></span>
+              <span :class="`fi fi-${lang} mr-3`" />
             </template>
             <template #default>
               <template v-if="$t(`prompts.${promptType}.${key}`, lang)">
                 <div
                   v-if="key.includes('description')"
                   v-html="$t(`prompts.${promptType}.${key}`, lang)"
-                ></div>
-                <div v-else>{{ $t(`prompts.${promptType}.${key}`, lang) }}</div>
+                />
+                <div v-else>
+                  {{ $t(`prompts.${promptType}.${key}`, lang) }}
+                </div>
               </template>
               <div v-else>
                 {{ $t('survey-schemes.i18n.none') }}
@@ -55,7 +59,7 @@
                   v-if="richTextOnly.includes(key.toString())"
                   :key="lang"
                   v-model="items[key][lang]"
-                ></html-editor>
+                />
                 <v-text-field
                   v-else
                   :key="lang"
@@ -63,7 +67,7 @@
                   hide-details="auto"
                   :label="$t(`survey-schemes.i18n.custom`, { key }).toString()"
                   outlined
-                ></v-text-field>
+                />
               </template>
             </language-selector>
           </template>
@@ -121,7 +125,7 @@ export default defineComponent({
     const promptType = computed(() => getPromptType(props.component));
 
     const keys = computed(() =>
-      getObjectNestedKeys(get(i18n.messages.en, `prompts.${promptType.value}`) as object)
+      getObjectNestedKeys(get(i18n.messages.en, `prompts.${promptType.value}`) as object),
     );
 
     const loadLanguage = async (code: string) => {
@@ -133,13 +137,15 @@ export default defineComponent({
     };
 
     const removeKey = (key: string) => {
-      if (Object.keys(items.value[key]).length) return;
+      if (Object.keys(items.value[key]).length)
+        return;
 
       delete items.value[key];
     };
 
     const getAvailableLanguages = (key: string, items: BasePrompt['i18n']) => {
-      if (!items[key]) return ['en'];
+      if (!items[key])
+        return ['en'];
 
       const langs = Object.keys(items[key]);
       return langs.length ? langs : ['en'];

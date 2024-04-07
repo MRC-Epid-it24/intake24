@@ -42,7 +42,8 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
     this.init(job);
 
     const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
+    if (!dbJob)
+      throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
 
     this.dbJob = dbJob;
 
@@ -62,7 +63,7 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
    */
   private async exportData(): Promise<void> {
     const { options, fields, filename, total } = await this.dataExportService.prepareExportInfo(
-      this.params
+      this.params,
     );
 
     this.initProgress(total);

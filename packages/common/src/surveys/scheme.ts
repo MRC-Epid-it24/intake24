@@ -10,13 +10,13 @@ export type SurveyPromptSection = (typeof surveySections)[number];
 export const mealSections = ['preFoods', 'foods', 'postFoods'] as const;
 export type MealSection = (typeof mealSections)[number];
 
-export const isMealSection = (section: any): section is MealSection => {
+export function isMealSection(section: any): section is MealSection {
   return mealSections.includes(section);
-};
+}
 
-export const isSurveySection = (section: any): section is SurveyPromptSection => {
+export function isSurveySection(section: any): section is SurveyPromptSection {
   return surveySections.includes(section);
-};
+}
 
 export type SurveySection = SurveyPromptSection | 'meals';
 
@@ -30,36 +30,41 @@ export interface RecallPrompts extends GenericPrompts {
   meals: MealPrompts;
 }
 
-export const flattenScheme = (scheme: RecallPrompts): Prompt[] =>
-  Object.values(scheme).reduce<Prompt[]>((acc, prompts) => {
+export function flattenScheme(scheme: RecallPrompts): Prompt[] {
+  return Object.values(scheme).reduce<Prompt[]>((acc, prompts) => {
     acc.push(...(Array.isArray(prompts) ? prompts : flattenScheme(prompts)));
     return acc;
   }, []);
+}
 
-export const flattenSchemeWithSection = (scheme: RecallPrompts): PromptWithSection[] =>
-  Object.entries(scheme).reduce<PromptWithSection[]>((acc, [section, prompts]) => {
+export function flattenSchemeWithSection(scheme: RecallPrompts): PromptWithSection[] {
+  return Object.entries(scheme).reduce<PromptWithSection[]>((acc, [section, prompts]) => {
     const items = Array.isArray(prompts)
-      ? prompts.map((prompt) => ({ ...prompt, section }))
+      ? prompts.map(prompt => ({ ...prompt, section }))
       : flattenSchemeWithSection(prompts);
 
     acc.push(...items);
     return acc;
   }, []);
+}
 
-export const groupMultiPrompts = (prompts: Prompt[]) => {
+export function groupMultiPrompts(prompts: Prompt[]) {
   const grouped = prompts.reduce<
     Record<string, { idx: number; prompts: Prompt[]; conditions: Condition[]; inserted: boolean }>
   >((acc, item, idx) => {
-    if (item.type !== 'custom' || !item.group) return acc;
+    if (item.type !== 'custom' || !item.group)
+      return acc;
 
-    if (!acc[item.group]) acc[item.group] = { idx, prompts: [], conditions: [], inserted: false };
+    if (!acc[item.group])
+      acc[item.group] = { idx, prompts: [], conditions: [], inserted: false };
     acc[item.group].prompts.push(item);
     acc[item.group].conditions.push(...item.conditions);
 
     return acc;
   }, {});
 
-  if (!Object.keys(grouped).length) return prompts;
+  if (!Object.keys(grouped).length)
+    return prompts;
 
   return prompts.reduce<Prompt[]>((acc, item) => {
     if (item.type !== 'custom' || !item.group) {
@@ -81,9 +86,9 @@ export const groupMultiPrompts = (prompts: Prompt[]) => {
     }
     return acc;
   }, []);
-};
+}
 
-export const groupSchemeMultiPrompts = (scheme: RecallPrompts): RecallPrompts => {
+export function groupSchemeMultiPrompts(scheme: RecallPrompts): RecallPrompts {
   return {
     preMeals: groupMultiPrompts(scheme.preMeals),
     meals: {
@@ -94,7 +99,7 @@ export const groupSchemeMultiPrompts = (scheme: RecallPrompts): RecallPrompts =>
     postMeals: groupMultiPrompts(scheme.postMeals),
     submission: groupMultiPrompts(scheme.submission),
   };
-};
+}
 
 export const defaultMeals: Meal[] = [
   { name: { en: 'Breakfast' }, time: '8:00' },

@@ -15,13 +15,13 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryContentsResponse } from '@intake24/api/http/responses/admin/categories';
 import { CategoryLocal, SystemLocale } from '@intake24/db';
 
-const adminCategoryController = ({
+function adminCategoryController({
   adminCategoryService,
   cachedParentCategoriesService,
-}: Pick<IoC, 'adminCategoryService' | 'cachedParentCategoriesService'>) => {
+}: Pick<IoC, 'adminCategoryService' | 'cachedParentCategoriesService'>) {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
-    res: Response<CategoriesResponse>
+    res: Response<CategoriesResponse>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -33,7 +33,7 @@ const adminCategoryController = ({
 
     const categories = await adminCategoryService.browseCategories(
       code,
-      pick(req.query, ['page', 'limit', 'sort', 'search'])
+      pick(req.query, ['page', 'limit', 'sort', 'search']),
     );
 
     res.json(categories);
@@ -41,10 +41,10 @@ const adminCategoryController = ({
 
   const browseMain = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<MainCategoriesResponse>
+    res: Response<MainCategoriesResponse>,
   ): Promise<void> => {
     const categories = await adminCategoryService.browseMainCategories(
-      pick(req.query, ['page', 'limit', 'sort', 'search'])
+      pick(req.query, ['page', 'limit', 'sort', 'search']),
     );
 
     res.json(categories);
@@ -52,7 +52,7 @@ const adminCategoryController = ({
 
   const store = async (
     req: Request<{ localeId: string }, any, CategoryInput>,
-    res: Response<CategoryLocalEntry>
+    res: Response<CategoryLocalEntry>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -69,7 +69,7 @@ const adminCategoryController = ({
 
   const read = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response<CategoryLocalEntry>
+    res: Response<CategoryLocalEntry>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -80,14 +80,15 @@ const adminCategoryController = ({
     });
 
     const categoryLocal = await adminCategoryService.getCategory(categoryId, code);
-    if (!categoryLocal) throw new NotFoundError();
+    if (!categoryLocal)
+      throw new NotFoundError();
 
     res.json(categoryLocal);
   };
 
   const update = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response<CategoryLocalEntry>
+    res: Response<CategoryLocalEntry>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -100,15 +101,15 @@ const adminCategoryController = ({
     const { main, ...rest } = req.body;
 
     const canUpdateMain = !!(
-      main?.code &&
-      ((await aclService.hasPermission('locales|food-list')) ||
-        (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
+      main?.code
+      && ((await aclService.hasPermission('locales|food-list'))
+      || (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
     );
 
     const categoryLocal = await adminCategoryService.updateCategory(
       categoryId,
       code,
-      canUpdateMain ? req.body : rest
+      canUpdateMain ? req.body : rest,
     );
 
     res.json(categoryLocal);
@@ -116,7 +117,7 @@ const adminCategoryController = ({
 
   const destroy = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -130,7 +131,8 @@ const adminCategoryController = ({
       attributes: ['id'],
       where: { id: categoryId, localeId: code },
     });
-    if (!categoryLocal) throw new NotFoundError();
+    if (!categoryLocal)
+      throw new NotFoundError();
 
     await categoryLocal.destroy();
 
@@ -139,7 +141,7 @@ const adminCategoryController = ({
 
   const root = async (
     req: Request<{ localeId: string }>,
-    res: Response<RootCategoriesResponse>
+    res: Response<RootCategoriesResponse>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -156,7 +158,7 @@ const adminCategoryController = ({
 
   const contents = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response<CategoryContentsResponse>
+    res: Response<CategoryContentsResponse>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -176,7 +178,8 @@ const adminCategoryController = ({
       attributes: ['id', 'categoryCode'],
       where: { id: categoryId, localeId: code },
     });
-    if (!categoryLocal) throw new NotFoundError();
+    if (!categoryLocal)
+      throw new NotFoundError();
 
     const data = await adminCategoryService.getCategoryContents(categoryLocal.categoryCode, code);
 
@@ -185,7 +188,7 @@ const adminCategoryController = ({
 
   const copy = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -202,7 +205,7 @@ const adminCategoryController = ({
 
   const categories = async (
     req: Request,
-    res: Response<{ categories: string[] }>
+    res: Response<{ categories: string[] }>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -216,10 +219,11 @@ const adminCategoryController = ({
       attributes: ['id', 'categoryCode'],
       where: { id: categoryId, localeId: code },
     });
-    if (!categoryLocal) throw new NotFoundError();
+    if (!categoryLocal)
+      throw new NotFoundError();
 
     const categories = await cachedParentCategoriesService.getCategoryAllCategories(
-      categoryLocal.categoryCode
+      categoryLocal.categoryCode,
     );
 
     res.json({ categories });
@@ -237,7 +241,7 @@ const adminCategoryController = ({
     copy,
     categories,
   };
-};
+}
 
 export default adminCategoryController;
 

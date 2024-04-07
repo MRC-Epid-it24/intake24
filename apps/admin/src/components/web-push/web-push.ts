@@ -15,9 +15,9 @@ export default defineComponent({
       const { protocol, hostname } = window.location;
 
       return (
-        (hostname === 'localhost' || protocol === 'https:') &&
-        'Notification' in window &&
-        'serviceWorker' in navigator
+        (hostname === 'localhost' || protocol === 'https:')
+        && 'Notification' in window
+        && 'serviceWorker' in navigator
       );
     },
   },
@@ -33,16 +33,19 @@ export default defineComponent({
 
   methods: {
     async requestPermission() {
-      if (!this.isWebPushSupported) return;
+      if (!this.isWebPushSupported)
+        return;
 
       this.permission = await Notification.requestPermission();
     },
 
     async subscribe() {
-      if (!this.isPermissionGranted) return;
+      if (!this.isPermissionGranted)
+        return;
 
       const registration = await navigator.serviceWorker.getRegistration();
-      if (!registration) return;
+      if (!registration)
+        return;
 
       const { pushManager } = registration;
 

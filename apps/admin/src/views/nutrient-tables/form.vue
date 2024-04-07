@@ -14,7 +14,7 @@
                 :label="$t('common.id')"
                 name="id"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -25,7 +25,7 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-card-text>
@@ -40,7 +40,7 @@
                 :label="$t('nutrient-tables.mapping.source.idColumnOffset')"
                 name="csvMapping.idColumnOffset"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -50,7 +50,7 @@
                 :label="$t('nutrient-tables.mapping.source.descriptionColumnOffset')"
                 name="csvMapping.descriptionColumnOffset"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -60,7 +60,7 @@
                 :label="$t('nutrient-tables.mapping.source.localDescriptionColumnOffset')"
                 name="csvMapping.localDescriptionColumnOffset"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -70,7 +70,7 @@
                 :label="$t('nutrient-tables.mapping.source.rowOffset')"
                 name="csvMapping.rowOffset"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-card-text>
@@ -78,7 +78,7 @@
           <v-toolbar-title>
             {{ $t('nutrient-tables.mapping.fields._') }}
           </v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             color="primary"
             outlined
@@ -86,7 +86,9 @@
             :title="$t('nutrient-tables.mapping.fields.create')"
             @click.stop="addField"
           >
-            <v-icon left>$add</v-icon>{{ $t('nutrient-tables.mapping.fields.create') }}
+            <v-icon left>
+              $add
+            </v-icon>{{ $t('nutrient-tables.mapping.fields.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>
@@ -98,7 +100,7 @@
               <tr>
                 <th>{{ $t('nutrient-tables.mapping.fields.fieldName') }}</th>
                 <th>{{ $t('nutrient-tables.mapping.fields.columnOffset') }}</th>
-                <th></th>
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -111,8 +113,7 @@
                     :label="$t('nutrient-tables.mapping.fields.fieldName')"
                     name="fieldName"
                     outlined
-                  >
-                  </v-text-field>
+                  />
                 </td>
                 <td class="py-2">
                   <v-text-field
@@ -122,8 +123,7 @@
                     :label="$t('nutrient-tables.mapping.fields.columnOffset')"
                     name="columnOffset"
                     outlined
-                  >
-                  </v-text-field>
+                  />
                 </td>
                 <td class="py-2">
                   <v-btn
@@ -131,7 +131,9 @@
                     :title="$t('nutrient-tables.mapping.fields.delete')"
                     @click="removeField(idx)"
                   >
-                    <v-icon color="error">$delete</v-icon>
+                    <v-icon color="error">
+                      $delete
+                    </v-icon>
                   </v-btn>
                 </td>
               </tr>
@@ -142,7 +144,7 @@
           <v-toolbar-title>
             {{ $t('nutrient-tables.mapping.nutrients._') }}
           </v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             color="primary"
             outlined
@@ -150,7 +152,9 @@
             :title="$t('nutrient-tables.mapping.nutrients.create')"
             @click.stop="addNutrient"
           >
-            <v-icon left>$add</v-icon>{{ $t('nutrient-tables.mapping.nutrients.create') }}
+            <v-icon left>
+              $add
+            </v-icon>{{ $t('nutrient-tables.mapping.nutrients.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>
@@ -167,7 +171,7 @@
               <tr>
                 <th>{{ $t('nutrient-tables.mapping.nutrients.nutrient') }}</th>
                 <th>{{ $t('nutrient-tables.mapping.nutrients.columnOffset') }}</th>
-                <th></th>
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -183,8 +187,7 @@
                     :label="$t('nutrient-tables.mapping.nutrients.nutrient')"
                     name="nutrient"
                     outlined
-                  >
-                  </v-select>
+                  />
                 </td>
                 <td class="py-2">
                   <v-text-field
@@ -194,8 +197,7 @@
                     :label="$t('nutrient-tables.mapping.nutrients.columnOffset')"
                     name="columnOffset"
                     outlined
-                  >
-                  </v-text-field>
+                  />
                 </td>
                 <td class="py-2">
                   <v-btn
@@ -203,7 +205,9 @@
                     :title="$t('nutrient-tables.mapping.nutrients.delete')"
                     @click="removeNutrient(idx)"
                   >
-                    <v-icon color="error">$delete</v-icon>
+                    <v-icon color="error">
+                      $delete
+                    </v-icon>
                   </v-btn>
                 </td>
               </tr>
@@ -216,7 +220,7 @@
           </v-simple-table>
         </v-card-text>
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -247,7 +251,7 @@ export type NutrientTableForm = {
   csvMappingNutrients: CsvMappingNutrient[];
 };
 
-export const transformIn = (data: NutrientTableEntry) => {
+export function transformIn(data: NutrientTableEntry) {
   const { csvMapping, csvMappingFields, csvMappingNutrients } = data;
   const { idColumnOffset, descriptionColumnOffset, localDescriptionColumnOffset } = csvMapping;
 
@@ -268,9 +272,9 @@ export const transformIn = (data: NutrientTableEntry) => {
       columnOffset: offsetToExcelColumn(columnOffset),
     })),
   };
-};
+}
 
-export const transformOut = (data: NutrientTableForm) => {
+export function transformOut(data: NutrientTableForm) {
   const { csvMapping, csvMappingFields, csvMappingNutrients } = data;
   const { idColumnOffset, descriptionColumnOffset, localDescriptionColumnOffset } = csvMapping;
 
@@ -285,19 +289,19 @@ export const transformOut = (data: NutrientTableForm) => {
         : null,
     },
     csvMappingFields: csvMappingFields
-      .filter((field) => field.fieldName && field.columnOffset)
+      .filter(field => field.fieldName && field.columnOffset)
       .map(({ fieldName, columnOffset }) => ({
         fieldName,
         columnOffset: excelColumnToOffset(columnOffset),
       })),
     csvMappingNutrients: csvMappingNutrients
-      .filter((nutrient) => nutrient.nutrientTypeId && nutrient.columnOffset)
+      .filter(nutrient => nutrient.nutrientTypeId && nutrient.columnOffset)
       .map(({ nutrientTypeId, columnOffset }) => ({
         nutrientTypeId,
         columnOffset: excelColumnToOffset(columnOffset),
       })),
   };
-};
+}
 
 export default defineComponent({
   name: 'NutrientTableForm',
@@ -377,8 +381,8 @@ export default defineComponent({
     loadMoreNutrients(entries: IntersectionObserverEntry[]) {
       if (entries[0].isIntersecting && this.nutrientsAvailableToLoad) {
         const startIndex = this.nutrients.items.length;
-        const endIndex =
-          startIndex + this.nutrients.chunk > this.form.csvMappingNutrients.length
+        const endIndex
+          = startIndex + this.nutrients.chunk > this.form.csvMappingNutrients.length
             ? this.form.csvMappingNutrients.length
             : startIndex + this.nutrients.chunk;
 

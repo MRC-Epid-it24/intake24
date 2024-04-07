@@ -1,6 +1,6 @@
 <template>
   <div v-if="provider">
-    <v-divider class="mx-6 mt-3"></v-divider>
+    <v-divider class="mx-6 mt-3" />
     <v-card-text class="px-6 pt-2 pb-6 text-caption">
       <component
         :is="provider"
@@ -10,8 +10,7 @@
         @challengeExpired="expired"
         @expired="expired"
         @verify="verified"
-      >
-      </component>
+      />
       <template v-if="provider === 'h-captcha'">
         This site is protected by <a href="https://hCaptcha.com" target="_blank">hCaptcha</a>
         and its
@@ -63,7 +62,7 @@ export default defineComponent({
       reset();
     };
 
-    const verified = (token?: string /*, eKey: string*/) => {
+    const verified = (token?: string /* , eKey: string */) => {
       emit('verified', token);
     };
 

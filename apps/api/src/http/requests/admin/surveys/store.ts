@@ -38,10 +38,10 @@ export default validate(
         bail: true,
       },
       customSanitizer: {
-        options: (value) => (typeof value === 'string' ? slugify(value, { strict: true }) : value),
+        options: value => (typeof value === 'string' ? slugify(value, { strict: true }) : value),
       },
     },
     ...defaults,
     surveySchemeOverrides,
-  })
+  }),
 );

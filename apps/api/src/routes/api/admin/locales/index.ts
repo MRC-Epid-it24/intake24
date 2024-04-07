@@ -40,7 +40,7 @@ export default () => {
     '/:localeId/tasks',
     upload.single('params[file]'),
     validation.tasks,
-    wrapAsync(localeController.tasks)
+    wrapAsync(localeController.tasks),
   );
 
   router.use('/:localeId/recipe-foods', recipeFoods());

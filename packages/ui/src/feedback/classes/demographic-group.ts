@@ -42,12 +42,12 @@ export default class DemographicGroup {
     age: DemographicRange | null,
     height: DemographicRange | null,
     weight: DemographicRange | null,
-    nutrient?: NutrientType
+    nutrient?: NutrientType,
   ) {
     this.id = id;
     this.type = type;
     this.nutrientRuleType = nutrientRuleType;
-    this.scaleSectors = scaleSectors.map((s) => s.clone());
+    this.scaleSectors = scaleSectors.map(s => s.clone());
     this.sex = sex;
     this.age = age?.clone() ?? null;
     this.height = height?.clone() ?? null;
@@ -59,7 +59,7 @@ export default class DemographicGroup {
 
   static fromJson(
     group: FeedbackSchemeDemographicGroup,
-    nutrient?: NutrientType
+    nutrient?: NutrientType,
   ): DemographicGroup {
     const { age, height, weight } = group;
 
@@ -72,7 +72,7 @@ export default class DemographicGroup {
       age ? DemographicRange.fromJson(age.start, age.end) : null,
       height ? DemographicRange.fromJson(height.start, height.end) : null,
       weight ? DemographicRange.fromJson(weight.start, weight.end) : null,
-      nutrient
+      nutrient,
     );
   }
 
@@ -86,7 +86,7 @@ export default class DemographicGroup {
       this.age,
       this.height,
       this.weight,
-      this.nutrient
+      this.nutrient,
     );
   }
 
@@ -102,20 +102,20 @@ export default class DemographicGroup {
         'and consumption',
         cons,
         'was not found in demographic group',
-        this
+        this,
       );
 
       return new DemographicResult(
         this.cloneWithCustomScaleSectors([]),
         this.cloneWithCustomScaleSectors([]),
-        cons
+        cons,
       );
     }
 
     return new DemographicResult(
       this.cloneWithCustomScaleSectors([scaleSector]),
       this.cloneWithCustomScaleSectors([bestScaleSector]),
-      cons
+      cons,
     );
   }
 
@@ -139,7 +139,7 @@ export default class DemographicGroup {
       throw new Error('Demographic group does not have a nutrient type to calculate consumption');
 
     const consumption = foods
-      .map((f) => f.getAverageIntake(nutrient.id))
+      .map(f => f.getAverageIntake(nutrient.id))
       .reduce((a, b) => a + b, 0);
 
     if (this.nutrientRuleType === 'energy_divided_by_bmr')
@@ -155,28 +155,32 @@ export default class DemographicGroup {
     }
 
     if (this.nutrientRuleType === 'percentage_of_energy') {
-      const energy = foods.map((f) => f.getAverageEnergyIntake()).reduce((a, b) => a + b, 0);
-      if (energy === 0) return 0;
+      const energy = foods.map(f => f.getAverageEnergyIntake()).reduce((a, b) => a + b, 0);
+      if (energy === 0)
+        return 0;
 
       return (consumption * (this.nutrientTypeKCalPerUnit ?? 0) * 100) / energy;
     }
 
-    if (this.nutrientRuleType === 'range') return consumption;
+    if (this.nutrientRuleType === 'range')
+      return consumption;
 
     throw new Error(`Unknown nutrient rule type: ${this.nutrientRuleType}`);
   }
 
   private getScaleSectorByValue(value: number): DemographicScaleSector | undefined {
-    const scaleSectors = this.scaleSectors.filter((ss) => ss.range.contains(value));
+    const scaleSectors = this.scaleSectors.filter(ss => ss.range.contains(value));
     return scaleSectors.length ? scaleSectors[0] : undefined;
   }
 
   private getScaleSectorByBestSentiment(): DemographicScaleSector | undefined {
-    const excScaleSectors = this.scaleSectors.filter((ss) => ss.sentiment === 'excellent');
-    if (excScaleSectors.length) return excScaleSectors[0];
+    const excScaleSectors = this.scaleSectors.filter(ss => ss.sentiment === 'excellent');
+    if (excScaleSectors.length)
+      return excScaleSectors[0];
 
-    const goodScaleSectors = this.scaleSectors.filter((ss) => ss.sentiment === 'good');
-    if (goodScaleSectors.length) return goodScaleSectors[0];
+    const goodScaleSectors = this.scaleSectors.filter(ss => ss.sentiment === 'good');
+    if (goodScaleSectors.length)
+      return goodScaleSectors[0];
 
     return undefined;
   }
@@ -191,7 +195,7 @@ export default class DemographicGroup {
       this.age,
       this.height,
       this.weight,
-      this.nutrient
+      this.nutrient,
     );
   }
 }

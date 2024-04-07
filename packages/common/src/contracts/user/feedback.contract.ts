@@ -1,5 +1,6 @@
+import { Readable } from 'node:stream';
+
 import { initContract } from '@ts-rest/core';
-import { Readable } from 'stream';
 import { z } from 'zod';
 
 export const feedback = initContract().router({
@@ -28,7 +29,7 @@ export const feedback = initContract().router({
         email: z.string().email().toLowerCase(),
         emailConfirm: z.string().email().toLowerCase(),
       })
-      .refine((data) => data.email === data.emailConfirm, {
+      .refine(data => data.email === data.emailConfirm, {
         path: ['emailConfirm'],
         message: 'Emails do not match',
       }),

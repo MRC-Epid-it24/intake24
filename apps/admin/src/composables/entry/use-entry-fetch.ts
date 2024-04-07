@@ -5,7 +5,7 @@ import { useEntry } from '@intake24/admin/stores';
 
 import type { UseStoreEntryProps } from './use-entry';
 
-export const useEntryFetch = (props: UseStoreEntryProps) => {
+export function useEntryFetch(props: UseStoreEntryProps) {
   const { requestEntry } = useEntry();
   const { meta: { action } = {} } = useRoute();
 
@@ -34,4 +34,4 @@ export const useEntryFetch = (props: UseStoreEntryProps) => {
   });
 
   return { fetch };
-};
+}

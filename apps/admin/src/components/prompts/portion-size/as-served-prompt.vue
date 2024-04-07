@@ -7,15 +7,13 @@
           :input-value="badges"
           :label="$t('survey-schemes.prompts.badges')"
           @change="update('badges', $event)"
-        >
-        </v-switch>
+        />
         <v-switch
           hide-details="auto"
           :input-value="leftovers"
           :label="$t('survey-schemes.prompts.leftovers')"
           @change="update('leftovers', $event)"
-        >
-        </v-switch>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

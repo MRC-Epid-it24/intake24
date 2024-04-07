@@ -25,7 +25,7 @@ export class DrinkwareApiV4 {
   public async create(set: CreateDrinkwareSetInput): Promise<CreateResult<DrinkwareSetEntry>> {
     const response = await this.baseClient.postResponse<DrinkwareSetEntry>(
       DrinkwareApiV4.apiPath,
-      set
+      set,
     );
     return parseCreateResponse(response, this.baseClient.logger);
   }
@@ -33,7 +33,7 @@ export class DrinkwareApiV4 {
   public async update(setId: string, update: UpdateDrinkwareSetInput): Promise<DrinkwareSetEntry> {
     return await this.baseClient.put<DrinkwareSetEntry>(
       `${DrinkwareApiV4.apiPath}/${setId}`,
-      update
+      update,
     );
   }
 
@@ -57,7 +57,7 @@ export class DrinkwareApiV4 {
     label: string,
     volumeSamples: number[],
     returning: boolean = false,
-    updateOnConflict: boolean = false
+    updateOnConflict: boolean = false,
   ): Promise<CreateResult<DrinkwareScaleEntry | undefined>> {
     const formData = new FormData();
 
@@ -75,7 +75,7 @@ export class DrinkwareApiV4 {
 
     const response = await this.baseClient.postResponse<DrinkwareScaleEntry | undefined>(
       `${DrinkwareApiV4.apiPath}/${drinkwareSetId}/scales/${choiceId}/v1?version=1&updateOnConflict=${updateOnConflict}&return=${returning}`,
-      formData
+      formData,
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
@@ -89,7 +89,7 @@ export class DrinkwareApiV4 {
     outlineCoordinates: number[],
     volumeSamples: number[],
     returning: boolean = false,
-    updateOnConflict: boolean = false
+    updateOnConflict: boolean = false,
   ): Promise<CreateResult<DrinkwareScaleV2Entry>> {
     const formData = new FormData();
 
@@ -103,26 +103,26 @@ export class DrinkwareApiV4 {
 
     const response = await this.baseClient.postResponse<DrinkwareScaleV2Entry>(
       `${DrinkwareApiV4.apiPath}/${drinkwareSetId}/scales/${choiceId}/v2?updateOnConflict=${updateOnConflict}&return=${returning}`,
-      formData
+      formData,
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
   }
 
   public async getScales(
-    drinkwareSetId: string
+    drinkwareSetId: string,
   ): Promise<DrinkwareScaleEntry | DrinkwareScaleV2Entry | null> {
     return this.baseClient.getOptional<DrinkwareScaleEntry | DrinkwareScaleV2Entry>(
-      `${DrinkwareApiV4.apiPath}/${drinkwareSetId}/scales`
+      `${DrinkwareApiV4.apiPath}/${drinkwareSetId}/scales`,
     );
   }
 
   public async getScale(
     drinkwareSetId: string,
-    choiceId: string
+    choiceId: string,
   ): Promise<DrinkwareScaleEntry | DrinkwareScaleV2Entry | null> {
     return this.baseClient.getOptional<DrinkwareScaleEntry | DrinkwareScaleV2Entry>(
-      `${DrinkwareApiV4.apiPath}/${drinkwareSetId}/scales/${choiceId}`
+      `${DrinkwareApiV4.apiPath}/${drinkwareSetId}/scales/${choiceId}`,
     );
   }
 }

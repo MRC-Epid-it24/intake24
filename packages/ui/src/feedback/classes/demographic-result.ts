@@ -10,7 +10,7 @@ export default class DemographicResult {
   constructor(
     demographicGroup: DemographicGroup,
     targetDemographicGroup: DemographicGroup,
-    consumption: number
+    consumption: number,
   ) {
     this.resultedDemographicGroup = demographicGroup.clone();
     this.targetDemographicGroup = targetDemographicGroup;
@@ -21,7 +21,7 @@ export default class DemographicResult {
     return new DemographicResult(
       this.resultedDemographicGroup,
       this.targetDemographicGroup,
-      this.consumption
+      this.consumption,
     );
   }
 }

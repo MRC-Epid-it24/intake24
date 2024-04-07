@@ -15,7 +15,7 @@
                 outlined
                 prepend-inner-icon="$jobs"
                 @change="updateJob"
-              ></v-select>
+              />
             </v-card-text>
           </v-col>
           <v-col cols="12" md="6">
@@ -27,7 +27,7 @@
               :errors="form.errors"
               name="params"
               @input="form.errors.clear(paramErrors)"
-            ></component>
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -40,11 +40,13 @@
               type="submit"
               x-large
             >
-              <v-icon left>fas fa-play</v-icon>{{ $t('common.action.submit') }}
+              <v-icon left>
+                fas fa-play
+              </v-icon>{{ $t('common.action.submit') }}
             </v-btn>
           </v-col>
         </v-row>
-        <polls-job-list v-bind="{ jobs }"></polls-job-list>
+        <polls-job-list v-bind="{ jobs }" />
       </v-form>
     </v-container>
   </layout>
@@ -77,7 +79,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const jobTypeList = computed(() =>
-      surveyJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
+      surveyJobs.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`) })),
     );
     const jobQuery = computed(() => ({ surveyId: props.id }));
 
@@ -107,7 +109,7 @@ export default defineComponent({
     });
     const { jobs, jobInProgress, startPolling } = usePollsForJobs(surveyJobs, jobQuery);
 
-    const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
+    const paramErrors = computed(() => Object.keys(form.params).map(key => `params.${key}`));
 
     onMounted(async () => {
       await startPolling(true);
@@ -118,15 +120,16 @@ export default defineComponent({
       form.params = defaultJobsParams.value[form.type];
 
       if (form.type === 'SurveyDataExport') {
-        //@ts-expect-error TS does not narrow the type of form.params
+        // @ts-expect-error TS does not narrow the type of form.params
         form.params.startDate = entry.value.startDate;
-        //@ts-expect-error TS does not narrow the type of form.params
+        // @ts-expect-error TS does not narrow the type of form.params
         form.params.endDate = entry.value.endDate;
       }
     };
 
     const submit = async () => {
-      if (jobInProgress.value) return;
+      if (jobInProgress.value)
+        return;
 
       const job = await form.post<JobAttributes>(`admin/surveys/${props.id}/tasks`);
 

@@ -230,6 +230,6 @@ export const resources: Resource[] = [
   },
 ];
 
-export const getResource = (name: string) => resources.find((resource) => resource.name === name);
+export const getResource = (name: string) => resources.find(resource => resource.name === name);
 
 export default resources;

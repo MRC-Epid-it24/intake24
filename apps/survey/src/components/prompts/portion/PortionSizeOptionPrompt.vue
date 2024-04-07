@@ -25,10 +25,10 @@
                 outlined
                 @click="click(toggle)"
               >
-                <component :is="availableMethod.method" :method="availableMethod"></component>
+                <component :is="availableMethod.method" :method="availableMethod" />
                 <v-card-actions
                   class="d-flex justify-end"
-                  :class="{ 'grey lighten-4': !active, ternary: active }"
+                  :class="{ 'grey lighten-4': !active, 'ternary': active }"
                 >
                   <v-chip
                     class="font-weight-medium px-4"
@@ -103,7 +103,8 @@ export default defineComponent({
     click(toggle: () => void) {
       toggle();
 
-      if (!this.optionValid) return;
+      if (!this.optionValid)
+        return;
 
       this.action('next');
     },
@@ -111,7 +112,8 @@ export default defineComponent({
     change() {
       this.clearErrors();
 
-      if (!this.optionValid) return;
+      if (!this.optionValid)
+        return;
 
       this.update();
     },

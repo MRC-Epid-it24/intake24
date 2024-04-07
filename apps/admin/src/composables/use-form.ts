@@ -11,7 +11,7 @@ export type UseFormProps<F> = {
   nonInputErrorKeys?: string[];
 };
 
-export const useForm = <F extends object>(formProps: UseFormProps<F>) => {
+export function useForm<F extends object>(formProps: UseFormProps<F>) {
   const { data, config, loadCallback, nonInputErrorKeys = [] } = formProps;
 
   const form = reactive(createForm<F>(data, config));
@@ -27,7 +27,8 @@ export const useForm = <F extends object>(formProps: UseFormProps<F>) => {
   const clearError = (event: KeyboardEvent) => {
     const { name } = event.target as HTMLInputElement;
 
-    if (name) form.errors.clear(name);
+    if (name)
+      form.errors.clear(name);
   };
 
   return {
@@ -37,4 +38,4 @@ export const useForm = <F extends object>(formProps: UseFormProps<F>) => {
     toForm,
     clearError,
   };
-};
+}

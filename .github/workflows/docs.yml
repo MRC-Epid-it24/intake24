@@ -2,7 +2,7 @@ name: Docs
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'docs/**'
 
@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Repository checkout
         uses: actions/checkout@v4
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install

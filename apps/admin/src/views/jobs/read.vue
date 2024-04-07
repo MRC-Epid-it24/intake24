@@ -39,7 +39,9 @@
               :title="$t('common.action.download')"
               @click="download(entry)"
             >
-              <v-icon color="secondary">$download</v-icon>
+              <v-icon color="secondary">
+                $download
+              </v-icon>
             </v-btn>
           </td>
           <th>{{ $t('jobs.downloadUrlExpiresAt') }}</th>
@@ -50,14 +52,20 @@
           <td>{{ entry.progress }}</td>
           <th>{{ $t('jobs.successful') }}</th>
           <td>
-            <v-icon v-if="entry.successful" color="success" left>$check</v-icon>
-            <v-icon v-else color="error" left>$times</v-icon>
+            <v-icon v-if="entry.successful" color="success" left>
+              $check
+            </v-icon>
+            <v-icon v-else color="error" left>
+              $times
+            </v-icon>
             {{ $t(`common.${entry.successful}`) }}
           </td>
         </tr>
         <tr>
           <th>{{ $t('jobs.message') }}</th>
-          <td colspan="3">{{ entry.message }}</td>
+          <td colspan="3">
+            {{ entry.message }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('jobs.stackTrace') }}</th>

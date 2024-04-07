@@ -4,7 +4,7 @@ export default () => {
   const url = '/api/admin/images/image-maps';
   const permissions = ['image-maps', 'image-maps|browse'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

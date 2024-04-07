@@ -9,7 +9,7 @@ export type UseCardProps = {
   parameters: FeedbackCardParameters;
 };
 
-export const useCard = (props: UseCardProps) => {
+export function useCard(props: UseCardProps) {
   const detail = computed(() => getDetails[props.parameters.type](props.parameters));
   const backgroundImage = computed(() => characterImageMap[props.parameters.image]);
 
@@ -21,4 +21,4 @@ export const useCard = (props: UseCardProps) => {
     getDetails,
     formatOutput,
   };
-};
+}

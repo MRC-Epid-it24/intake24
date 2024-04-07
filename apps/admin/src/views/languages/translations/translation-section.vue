@@ -63,10 +63,12 @@ export default defineComponent({
 
   watch: {
     dialog(val: boolean) {
-      if (!val) this.$emit('close');
+      if (!val)
+        this.$emit('close');
     },
     translation(val: LanguageTranslationAttributes | null) {
-      if (!val) return;
+      if (!val)
+        return;
 
       this.messages = {
         chunk: 10,
@@ -81,8 +83,8 @@ export default defineComponent({
     loadMoreMessages(entries: IntersectionObserverEntry[]) {
       if (entries[0].isIntersecting && this.messagesAvailableToLoad) {
         const startIndex = this.loadedKeys.length;
-        const endIndex =
-          startIndex + this.messages.chunk > this.allKeys.length
+        const endIndex
+          = startIndex + this.messages.chunk > this.allKeys.length
             ? this.allKeys.length
             : startIndex + this.messages.chunk;
 
@@ -104,7 +106,8 @@ export default defineComponent({
     save(event: Event) {
       event.stopPropagation();
 
-      if (!this.translation) return;
+      if (!this.translation)
+        return;
 
       const {
         translation: { id },
@@ -117,10 +120,12 @@ export default defineComponent({
 
     getSectionTitle(): string {
       const key = this.translation?.section;
-      if (!key) return '';
+      if (!key)
+        return '';
 
       const check = has(this.$i18n.messages[this.$i18n.locale], `${key}.title`);
-      if (check) return this.$t(`${key}.title`).toString();
+      if (check)
+        return this.$t(`${key}.title`).toString();
 
       return this.$t(`languages.translations.sections.${key}`).toString();
     },
@@ -128,13 +133,15 @@ export default defineComponent({
     createInputs(
       h: CreateElement,
       translations: LocaleMessageObject,
-      path: string[] = []
+      path: string[] = [],
     ): VNodeChildren {
       const items = Object.keys(translations);
-      if (!items.length || this.translation === null) return [];
+      if (!items.length || this.translation === null)
+        return [];
 
       const section = this.translation?.section;
-      if (!section) return [];
+      if (!section)
+        return [];
 
       const inputs = items.map((item) => {
         const fullPath = [section, ...path, item].join('.');
@@ -152,7 +159,6 @@ export default defineComponent({
             },
             on: {
               input: (event: string) => {
-                // eslint-disable-next-line no-param-reassign
                 translations[item] = event;
               },
             },
@@ -195,7 +201,7 @@ export default defineComponent({
                   click: this.cancel,
                 },
               },
-              [h(VIcon, '$cancel')]
+              [h(VIcon, '$cancel')],
             ),
             h(VToolbarTitle, this.getSectionTitle()),
             h(VSpacer),
@@ -215,33 +221,33 @@ export default defineComponent({
                 [
                   h(VIcon, { props: { left: true } }, '$success'),
                   this.$t('common.action.ok').toString(),
-                ]
+                ],
               ),
             ]),
           ]),
           h(VContainer, [
             h(
               VCardTitle,
-              `${this.$t('languages.translations.title').toString()} - ${this.getSectionTitle()}`
+              `${this.$t('languages.translations.title').toString()} - ${this.getSectionTitle()}`,
             ),
             h(VRow, [
               this.createInputs(h, this.messages.loaded),
               ...[
                 this.messagesAvailableToLoad
                   ? h(VCol, { props: { cols: 12 } }, [
-                      h(IntersectableSkeleton, {
-                        props: { type: 'list-item' },
-                        on: {
-                          intersected: this.loadMoreMessages,
-                        },
-                      }),
-                    ])
+                    h(IntersectableSkeleton, {
+                      props: { type: 'list-item' },
+                      on: {
+                        intersected: this.loadMoreMessages,
+                      },
+                    }),
+                  ])
                   : undefined,
               ].filter(Boolean),
             ]),
           ]),
         ]),
-      ]
+      ],
     );
   },
 });

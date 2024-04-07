@@ -1,9 +1,8 @@
 import { createReadStream } from 'node:fs';
-import { copyFile } from 'node:fs/promises';
+import fs, { copyFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import parseCsv from 'csv-parser';
-import fs from 'fs/promises';
 import { groupBy } from 'lodash';
 
 import type { PkgDrinkScaleV2 } from '@intake24/cli/commands/packager/types/drinkware';
@@ -55,15 +54,15 @@ function parseDrinkScaleCsv(path: string): Promise<DrinkScaleDef[]> {
   return new Promise((resolve) => {
     createReadStream(path)
       .pipe(parseCsv({ headers: drinkScaleRowHeaders, skipLines: 1 }))
-      .on('data', (data) => rows.push(data))
+      .on('data', data => rows.push(data))
       .on('end', () => {
-        const grouped = groupBy(rows, (row) => row.id);
+        const grouped = groupBy(rows, row => row.id);
         const defs: DrinkScaleDef[] = Object.entries(grouped).map(([id, rows]) => ({
           id,
           description: rows[0].description,
           baseImagePath: rows[0].baseImagePath,
           scaleOutlinePath: rows[0].scaleOutlinePath,
-          volumeSamples: rows.map((row) => [parseFloat(row.fillLevel), parseFloat(row.volume)]),
+          volumeSamples: rows.map(row => [Number.parseFloat(row.fillLevel), Number.parseFloat(row.volume)]),
         }));
 
         resolve(defs);
@@ -77,13 +76,13 @@ async function copyDependencies(
   defSourcePath: string,
   outputDir: string,
   setImageDir: string,
-  overwrite: boolean
+  overwrite: boolean,
 ) {
   const selectionDestPath = path.join(
     outputDir,
     setImageDir,
     'selection',
-    path.basename(selectionImagePath)
+    path.basename(selectionImagePath),
   );
 
   await fs.mkdir(path.dirname(selectionDestPath), { recursive: true });
@@ -106,12 +105,12 @@ async function convertDrinkScale(
   logger: Logger,
   drinkScaleDef: DrinkScaleDef,
   defSourcePath: string,
-  setImageDir: string
+  setImageDir: string,
 ): Promise<PkgDrinkScaleV2> {
   // SVG paths are relative to the description CSV path
   const defDir = path.dirname(defSourcePath);
   const scaleSvgPath = path.join(defDir, drinkScaleDef.scaleOutlinePath);
-  const pkgBaseImagePath = setImageDir + '/' + drinkScaleDef.baseImagePath;
+  const pkgBaseImagePath = `${setImageDir}/${drinkScaleDef.baseImagePath}`;
 
   logger.debug(`Extracting drink scale outline from ${scaleSvgPath}`);
 
@@ -131,14 +130,14 @@ function convertSelectionImageMap(
   svgData: ImageMapData,
   scaleDefs: DrinkScaleDef[],
   baseImagePath: string,
-  setImageDir: string
+  setImageDir: string,
 ): PkgImageMap {
-  const pkgBaseImagePath = setImageDir + '/selection/' + path.basename(baseImagePath);
+  const pkgBaseImagePath = `${setImageDir}/selection/${path.basename(baseImagePath)}`;
 
-  const imageMapObjects: [string, PkgImageMapObject][] = svgData.objects.map((svgObj) => [
+  const imageMapObjects: [string, PkgImageMapObject][] = svgData.objects.map(svgObj => [
     svgObj.objectId,
     {
-      description: scaleDefs.find((scale) => scale.id === svgObj.objectId)!.description,
+      description: scaleDefs.find(scale => scale.id === svgObj.objectId)!.description,
       outlineCoordinates: svgObj.coords,
       navigationIndex: svgData.navigation.indexOf(svgObj.objectId),
     },
@@ -164,16 +163,16 @@ export default async (options: ConvertDrinkScaleOptions): Promise<void> => {
 
   const svgImageMapData = await getImageMapData(options.selectionSvg);
 
-  const setImageDir = 'drinkware/' + options.setId;
+  const setImageDir = `drinkware/${options.setId}`;
 
   const pkgDrinkScales: Record<number, PkgDrinkScaleV2> = {};
 
   for (const def of drinkScaleDefs) {
-    pkgDrinkScales[parseInt(def.id)] = await convertDrinkScale(
+    pkgDrinkScales[Number.parseInt(def.id)] = await convertDrinkScale(
       logger,
       def,
       options.scalesCsv,
-      setImageDir
+      setImageDir,
     );
   }
 
@@ -182,7 +181,7 @@ export default async (options: ConvertDrinkScaleOptions): Promise<void> => {
     svgImageMapData,
     drinkScaleDefs,
     options.selectionBaseImage,
-    setImageDir
+    setImageDir,
   );
 
   await copyDependencies(
@@ -191,7 +190,7 @@ export default async (options: ConvertDrinkScaleOptions): Promise<void> => {
     options.scalesCsv,
     options.outputDir,
     setImageDir,
-    options.overwrite
+    options.overwrite,
   );
 
   await packageWriter.appendImageMaps({

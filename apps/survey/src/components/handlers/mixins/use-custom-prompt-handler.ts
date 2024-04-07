@@ -13,9 +13,7 @@ export type UseCustomPromptHandlerProps<P extends keyof Prompts> = {
   section: PromptSection;
 };
 
-export const useCustomPromptHandler = <P extends keyof Prompts>(
-  props: UseCustomPromptHandlerProps<P>
-) => {
+export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustomPromptHandlerProps<P>) {
   const { foodOptional } = useFoodPromptUtils();
   const { mealOptional } = useMealPromptUtils();
   const survey = useSurvey();
@@ -58,7 +56,8 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
           if (isValidAnswer)
             survey.setFoodCustomPromptAnswer({ foodId: food.id, promptId, answer });
 
-          if (isInfo) survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
+          if (isInfo)
+            survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
 
           break;
         }
@@ -72,15 +71,19 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
           if (isValidAnswer)
             survey.setMealCustomPromptAnswer({ mealId: meal.id, promptId, answer });
 
-          if (isInfo) survey.addMealFlag(meal.id, `${promptId}-acknowledged`);
+          if (isInfo)
+            survey.addMealFlag(meal.id, `${promptId}-acknowledged`);
 
           break;
         }
       }
-    } else {
-      if (isValidAnswer) survey.setCustomPromptAnswer({ promptId, answer });
+    }
+    else {
+      if (isValidAnswer)
+        survey.setCustomPromptAnswer({ promptId, answer });
 
-      if (isInfo) survey.addFlag(`${promptId}-acknowledged`);
+      if (isInfo)
+        survey.addFlag(`${promptId}-acknowledged`);
     }
   };
 
@@ -91,4 +94,4 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
     isAnswerRequired,
     mealOptional,
   };
-};
+}

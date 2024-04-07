@@ -52,7 +52,9 @@
         </tr>
         <tr>
           <th>{{ $t('surveys.submissionLimits.minInterval') }}</th>
-          <td colspan="3">{{ entry.minimumSubmissionInterval }}</td>
+          <td colspan="3">
+            {{ entry.minimumSubmissionInterval }}
+          </td>
         </tr>
         <tr v-if="entry.feedbackScheme">
           <th>{{ $t('feedback-schemes._') }}</th>

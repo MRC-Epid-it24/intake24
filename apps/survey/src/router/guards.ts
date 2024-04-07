@@ -14,8 +14,10 @@ export const feedbackParametersGuard: NavigationGuard = async (to, from, next) =
   const survey = useSurvey();
 
   try {
-    if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
-  } catch (error) {
+    if (!survey.parametersLoaded)
+      await survey.loadParameters(surveyId);
+  }
+  catch (error) {
     if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
       await auth.logout(true);
       next({ name: 'survey-login', params: { surveyId } });
@@ -47,8 +49,10 @@ export const surveyParametersGuard: NavigationGuard = async (to, from, next) => 
   const survey = useSurvey();
 
   try {
-    if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
-  } catch (error) {
+    if (!survey.parametersLoaded)
+      await survey.loadParameters(surveyId);
+  }
+  catch (error) {
     if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
       await auth.logout(true);
       next({ name: 'survey-login', params: { surveyId } });
@@ -104,8 +108,9 @@ export const authGuard: NavigationGuard = async (to, from, next) => {
       return;
     }
 
-    throw new Error();
-  } catch {
+    throw new Error('Unexpected error during authentication.');
+  }
+  catch {
     next({ name: 'home' });
   }
 };
@@ -124,10 +129,9 @@ export const createUserGuard: NavigationGuard = async (to, from, next) => {
     // TODO: set redirectUrl if supplied to survey state
 
     next({ name: 'survey-home', params: { surveyId } });
-    return;
-  } catch {
+  }
+  catch {
     next({ name: 'home' });
-    return;
   }
 };
 
@@ -163,13 +167,14 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
       if (auth.challenge) {
         next({
           name: 'survey-challenge',
-          //@ts-expect-error TS doesn't narrow type based on store change
+          // @ts-expect-error TS doesn't narrow type based on store change
           params: { surveyId: auth.challenge.surveyId },
           query: { auth: token },
         });
         return;
       }
-    } catch {
+    }
+    catch {
       next({ name: surveyId ? 'survey-login' : 'home', params: { surveyId } });
       return;
     }
@@ -184,11 +189,13 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
   }
 
   // Get logged-in user information if not yet loaded
-  if (!auth.loggedIn) await auth.refresh(false);
+  if (!auth.loggedIn)
+    await auth.refresh(false);
 
   // Any other page (requires to be logged in)
   if (!auth.loggedIn) {
-    if (surveyId) next({ name: 'survey-login', params: { surveyId } });
+    if (surveyId)
+      next({ name: 'survey-login', params: { surveyId } });
     else next({ name: 'home' });
     return;
   }

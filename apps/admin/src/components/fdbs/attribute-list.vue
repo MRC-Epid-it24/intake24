@@ -22,7 +22,7 @@
             :label="$t('fdbs.attributes.sameAsBeforeOption')"
             name="attributes.sameAsBeforeOption"
             @change="errors.clear('main.attributes.sameAsBeforeOption')"
-          ></v-switch>
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -41,7 +41,7 @@
             :label="$t('fdbs.attributes.readyMealOption')"
             name="attributes.readyMealOption"
             @change="errors.clear('main.attributes.readyMealOption')"
-          ></v-switch>
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -61,7 +61,7 @@
             name="attributes.reasonableAmount"
             outlined
             @input="errors.clear('main.attributes.reasonableAmount')"
-          ></v-text-field>
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -82,8 +82,7 @@
             name="attributes.useInRecipes"
             outlined
             @change="errors.clear('main.attributes.useInRecipes')"
-          >
-          </v-select>
+          />
         </v-col>
       </v-row>
     </v-card-text>
@@ -147,10 +146,10 @@ export default defineComponent({
     });
 
     const useInRecipeTypeItems = computed(() =>
-      Object.values(useInRecipeTypes).map((value) => ({
+      Object.values(useInRecipeTypes).map(value => ({
         value,
         text: i18n.t(`fdbs.attributes.useInRecipes.${value}`),
-      }))
+      })),
     );
 
     return {
@@ -176,7 +175,6 @@ export default defineComponent({
         return;
       }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error it doesn't narrow the type correctly
       this.attributes[attribute] = this.defaultAttributes[attribute];
     },

@@ -3,7 +3,7 @@ import type { Permission, Role } from '@intake24/db';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { User } from '@intake24/db';
 
-const aclCache = ({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) => {
+function aclCache({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) {
   const { enabled, ttl } = aclConfig.cache;
 
   /**
@@ -14,7 +14,8 @@ const aclCache = ({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) => {
    */
   const fetchPermissions = async (userId: string): Promise<Permission[]> => {
     const user = await User.scope(['permissions', 'rolesPerms']).findByPk(userId);
-    if (!user) return [];
+    if (!user)
+      return [];
 
     return user.allPermissions();
   };
@@ -27,7 +28,8 @@ const aclCache = ({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) => {
    */
   const fetchRoles = async (userId: string): Promise<Role[]> => {
     const user = await User.scope('roles').findByPk(userId);
-    if (!user) return [];
+    if (!user)
+      return [];
 
     return user.allRoles();
   };
@@ -41,12 +43,13 @@ const aclCache = ({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) => {
    * @returns {Promise<string[]>}
    */
   const getPermissions = async (userId: string): Promise<string[]> => {
-    if (!enabled) return (await fetchPermissions(userId)).map(({ name }) => name);
+    if (!enabled)
+      return (await fetchPermissions(userId)).map(({ name }) => name);
 
     const permissions = await cache.remember<Permission[]>(
       `${ACL_PERMISSIONS_KEY}:${userId}`,
       ttl,
-      () => fetchPermissions(userId)
+      () => fetchPermissions(userId),
     );
 
     return permissions.map(({ name }) => name);
@@ -60,11 +63,11 @@ const aclCache = ({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) => {
    * @returns {Promise<string[]>}
    */
   const getRoles = async (userId: string): Promise<string[]> => {
-    if (!enabled) return (await fetchRoles(userId)).map(({ name }) => name);
+    if (!enabled)
+      return (await fetchRoles(userId)).map(({ name }) => name);
 
     const roles = await cache.remember<Role[]>(`${ACL_ROLES_KEY}:${userId}`, ttl, () =>
-      fetchRoles(userId)
-    );
+      fetchRoles(userId));
 
     return roles.map(({ name }) => name);
   };
@@ -73,7 +76,7 @@ const aclCache = ({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) => {
     getPermissions,
     getRoles,
   };
-};
+}
 
 export default aclCache;
 

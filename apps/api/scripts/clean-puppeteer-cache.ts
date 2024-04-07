@@ -1,8 +1,8 @@
 import puppeteer from 'puppeteer';
 
-const main = async () => {
+async function main() {
   await puppeteer.trimCache();
-};
+}
 
 main().catch((err) => {
   console.error(err);

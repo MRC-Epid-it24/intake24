@@ -5,14 +5,14 @@ module.exports = {
         'category_portion_size_method_params',
         'value',
         { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'food_portion_size_method_params',
         'value',
         { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
-        { transaction }
+        { transaction },
       );
     }),
 
@@ -22,14 +22,14 @@ module.exports = {
         'category_portion_size_method_params',
         'value',
         { type: Sequelize.STRING(128), allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'food_portion_size_method_params',
         'value',
         { type: Sequelize.STRING(128), allowNull: false },
-        { transaction }
+        { transaction },
       );
     }),
 };

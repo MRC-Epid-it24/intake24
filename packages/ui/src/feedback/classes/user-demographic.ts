@@ -18,7 +18,7 @@ export default class UserDemographic {
     physicalData: NonNullable<UserPhysicalData>,
     henryCoefficients: HenryCoefficient[],
     physicalActivityLevel?: PhysicalActivityLevelAttributes,
-    weightTarget?: WeightTargetCoefficient
+    weightTarget?: WeightTargetCoefficient,
   ) {
     this.physicalData = physicalData;
     this.physicalActivityLevel = physicalActivityLevel;
@@ -46,7 +46,7 @@ export default class UserDemographic {
 
     if (!physicalActivityLevel || !weightTarget) {
       console.warn(
-        'Cannot calculate energy requirement without physicalActivityLevel or weightTarget.'
+        'Cannot calculate energy requirement without physicalActivityLevel or weightTarget.',
       );
       return 0;
     }
@@ -55,6 +55,6 @@ export default class UserDemographic {
   }
 
   hasData(): boolean {
-    return Object.values(this.physicalData).some((value) => value !== null);
+    return Object.values(this.physicalData).some(value => value !== null);
   }
 }

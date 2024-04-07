@@ -1,9 +1,6 @@
 import type { ComputedRef, Ref } from 'vue';
 
-export const usePanel = <T extends Ref<{ panel: number }>>(
-  state: T,
-  conditions: ComputedRef<boolean[]>
-) => {
+export function usePanel<T extends Ref<{ panel: number }>>(state: T, conditions: ComputedRef<boolean[]>) {
   const closePanels = () => {
     state.value.panel = -1;
   };
@@ -24,4 +21,4 @@ export const usePanel = <T extends Ref<{ panel: number }>>(
   };
 
   return { closePanels, setPanel, updatePanel };
-};
+}

@@ -1,5 +1,6 @@
+import { randomUUID } from 'node:crypto';
+
 import type { Job } from 'bullmq';
-import { randomUUID } from 'crypto';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { NutrientTableRecordField, NutrientTableRecordNutrient } from '@intake24/db';
@@ -39,7 +40,8 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     this.init(job);
 
     const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
+    if (!dbJob)
+      throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
 
     this.dbJob = dbJob;
 
@@ -114,7 +116,8 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
       foods.forEach(({ id, nutrientTableId, nutrientTableCode, portionSizes = [] }) => {
         foodIds.push(id);
-        if (!nutrientTableRecordIds[nutrientTableId]) nutrientTableRecordIds[nutrientTableId] = [];
+        if (!nutrientTableRecordIds[nutrientTableId])
+          nutrientTableRecordIds[nutrientTableId] = [];
 
         nutrientTableRecordIds[nutrientTableId].push(nutrientTableCode);
         const [first, second] = portionSizes;
@@ -122,7 +125,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       });
 
       const conditions = Object.entries(nutrientTableRecordIds).map(
-        ([nutrientTableId, nutrientTableRecordId]) => ({ nutrientTableId, nutrientTableRecordId })
+        ([nutrientTableId, nutrientTableRecordId]) => ({ nutrientTableId, nutrientTableRecordId }),
       );
 
       const nutrientRecords = await NutrientTableRecord.findAll({
@@ -148,7 +151,8 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         const { id: foodId, nutrientTableId, nutrientTableCode } = food;
 
         // Skip if nutrient table is not defined (e.g. recipe builder template)
-        if (!nutrientTableId || !nutrientTableCode) continue;
+        if (!nutrientTableId || !nutrientTableCode)
+          continue;
 
         const key = `${nutrientTableId}:${nutrientTableCode}`;
 
@@ -187,7 +191,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
               nutrients.length
                 ? SurveySubmissionNutrient.bulkCreate(nutrients, { transaction })
                 : null,
-            ].filter(Boolean)
+            ].filter(Boolean),
           );
         });
       }

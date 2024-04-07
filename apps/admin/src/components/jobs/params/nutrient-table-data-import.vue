@@ -11,8 +11,7 @@
             :label="$t('nutrient-tables.id')"
             name="nutrientTableId"
             resource="nutrient-tables"
-          >
-          </select-resource>
+          />
         </v-col>
         <v-col cols="12">
           <v-file-input
@@ -24,7 +23,7 @@
             outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
-          ></v-file-input>
+          />
         </v-col>
       </v-row>
     </v-card-text>

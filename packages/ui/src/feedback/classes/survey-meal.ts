@@ -24,7 +24,7 @@ export default class SurveyMeal {
     minutes: number,
     duration: number | null,
     customFields: { name: string; value: string }[],
-    foods: SurveyFood[]
+    foods: SurveyFood[],
   ) {
     const time = fromMealTime({ hours, minutes });
 
@@ -34,7 +34,7 @@ export default class SurveyMeal {
     this.time = time;
     this.duration = duration;
     this.customFields = customFields;
-    this.foods = foods.map((f) => f.clone());
+    this.foods = foods.map(f => f.clone());
   }
 
   clone(): SurveyMeal {
@@ -44,7 +44,7 @@ export default class SurveyMeal {
       this.minutes,
       this.duration,
       this.customFields,
-      this.foods
+      this.foods,
     );
   }
 
@@ -55,7 +55,7 @@ export default class SurveyMeal {
       meal.minutes,
       meal.duration,
       meal.customFields.map(({ name, value }) => ({ name, value })),
-      meal.foods.map((food) => SurveyFood.fromJson(food))
+      meal.foods.map(food => SurveyFood.fromJson(food)),
     );
   }
 }

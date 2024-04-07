@@ -28,22 +28,23 @@ export type FIDOAuthenticationVerificationOps = {
   response: AuthenticationResponseJSON;
 };
 
-const fidoProvider = ({
+function fidoProvider({
   db,
   appConfig,
   securityConfig,
-}: Pick<IoC, 'db' | 'appConfig' | 'securityConfig'>) => {
+}: Pick<IoC, 'db' | 'appConfig' | 'securityConfig'>) {
   const provider = 'fido';
   const { issuer } = securityConfig.mfa.providers[provider];
   const rpID = new URL(getFrontEndUrl(appConfig.urls.base, appConfig.urls.admin)).hostname;
-  if (!rpID) throw new Error('Cannot resolve admin domain from URL');
+  if (!rpID)
+    throw new Error('Cannot resolve admin domain from URL');
 
   const origin = appConfig.urls.admin;
 
   const registrationChallenge = async (
     userID: string,
     userName?: string,
-    userDisplayName?: string
+    userDisplayName?: string,
   ) => {
     const authenticators = await MFAAuthenticator.findAll({
       include: { association: 'device', where: { userId: userID } },
@@ -56,7 +57,7 @@ const fidoProvider = ({
       userName: userName ?? userID,
       userDisplayName: userDisplayName ?? userName ?? userID,
       attestationType: 'none',
-      excludeCredentials: authenticators.map((authenticator) => ({
+      excludeCredentials: authenticators.map(authenticator => ({
         id: authenticator.getIdBuffer(),
         type: 'public-key',
         transports: authenticator.transports,
@@ -79,11 +80,11 @@ const fidoProvider = ({
     return db.system.transaction(async (transaction) => {
       const device = await MFADevice.create(
         { userId, provider: 'fido', name, secret: randomString(32) },
-        { transaction }
+        { transaction },
       );
 
-      const { credentialPublicKey, counter, credentialDeviceType, credentialBackedUp } =
-        registrationInfo;
+      const { credentialPublicKey, counter, credentialDeviceType, credentialBackedUp }
+        = registrationInfo;
 
       await MFAAuthenticator.create(
         {
@@ -95,7 +96,7 @@ const fidoProvider = ({
           backedUp: credentialBackedUp,
           transports: response.response.transports ?? [],
         },
-        { transaction }
+        { transaction },
       );
 
       return device;
@@ -109,10 +110,11 @@ const fidoProvider = ({
    * @returns {Promise<FIDOAuthChallenge>}
    */
   const authenticationChallenge = async (device: MFADevice): Promise<FIDOAuthChallenge> => {
-    if (!device.authenticator) throw new Error('No FIDO authenticator found.');
+    if (!device.authenticator)
+      throw new Error('No FIDO authenticator found.');
 
     const options = await generateAuthenticationOptions({
-      allowCredentials: [device.authenticator].map((authenticator) => ({
+      allowCredentials: [device.authenticator].map(authenticator => ({
         id: authenticator.getIdBuffer(),
         type: 'public-key',
         transports: authenticator.transports,
@@ -140,12 +142,13 @@ const fidoProvider = ({
       authenticator: {
         credentialID: authenticator.getIdBuffer(),
         credentialPublicKey: authenticator.publicKey,
-        counter: parseInt(authenticator.counter, 10),
+        counter: Number.parseInt(authenticator.counter, 10),
         transports: authenticator.transports,
       },
     });
 
-    if (!verified || !authenticationInfo) throw new Error('Invalid FIDO challenge.');
+    if (!verified || !authenticationInfo)
+      throw new Error('Invalid FIDO challenge.');
 
     return { verified, authenticationInfo };
   };
@@ -156,7 +159,7 @@ const fidoProvider = ({
     authenticationChallenge,
     authenticationVerification,
   };
-};
+}
 
 export default fidoProvider;
 

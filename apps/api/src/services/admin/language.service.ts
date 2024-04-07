@@ -21,17 +21,19 @@ export const defaultI18nMessages: Record<Application, LocaleMessages> = {
   survey: survey.en,
 };
 
-export const createMessages = (language: string) => ({
-  admin: admin[language] ?? admin.en,
-  api: api[language] ?? api.en,
-  shared: shared[language] ?? shared.en,
-  survey: survey[language] ?? survey.en,
-});
+export function createMessages(language: string) {
+  return {
+    admin: admin[language] ?? admin.en,
+    api: api[language] ?? api.en,
+    shared: shared[language] ?? shared.en,
+    survey: survey[language] ?? survey.en,
+  };
+}
 
-const languageService = ({
+function languageService({
   i18nStore,
   logger: globalLogger,
-}: Pick<IoC, 'i18nStore' | 'logger'>) => {
+}: Pick<IoC, 'i18nStore' | 'logger'>) {
   const logger = globalLogger.child({ service: 'LanguageService' });
 
   /**
@@ -41,10 +43,11 @@ const languageService = ({
    * @returns {Record<Application, LocaleMessages>}
    */
   const languageForInitialization = async (
-    languageId: string
+    languageId: string,
   ): Promise<Record<Application, LocaleMessages>> => {
     const language = await Language.findByPk(languageId, { attributes: ['id', 'code'] });
-    if (!language) return defaultI18nMessages;
+    if (!language)
+      return defaultI18nMessages;
 
     // 1.: check if the exact match for the language exists in the code (without the dialect)
     if (i18nStore.hasExactLanguage(language.code.toLowerCase()))
@@ -52,11 +55,13 @@ const languageService = ({
 
     const [languageCode] = language.code.toLowerCase().split(/[-_]/);
     // 2.: check if the language exists in the code (without the dialect)
-    if (i18nStore.hasExactLanguage(languageCode)) return createMessages(languageCode);
+    if (i18nStore.hasExactLanguage(languageCode))
+      return createMessages(languageCode);
 
     // 3.: check if the language exists in the code (with some other dialect). Picking the first one
     const languageWithDialect = i18nStore.hasLanguageWithSomeDialect(languageCode);
-    if (languageWithDialect) return createMessages(languageWithDialect);
+    if (languageWithDialect)
+      return createMessages(languageWithDialect);
 
     return defaultI18nMessages;
   };
@@ -69,7 +74,8 @@ const languageService = ({
    */
   const getLanguage = async (languageId: string): Promise<Language> => {
     const language = await Language.findByPk(languageId);
-    if (!language) throw new NotFoundError();
+    if (!language)
+      throw new NotFoundError();
 
     return language;
   };
@@ -99,21 +105,23 @@ const languageService = ({
     const languageMessagesForInitialization = await languageForInitialization(languageId);
 
     const languageMessages: LanguageTranslationCreationAttributes[] = Object.entries(
-      languageMessagesForInitialization
+      languageMessagesForInitialization,
     )
       .map(([application, messages]) =>
-        Object.keys(messages).map((section) => ({
+        Object.keys(messages).map(section => ({
           languageId,
           application: application as Application,
           section,
           messages: messages[section],
-        }))
+        })),
       )
       .flat();
 
-    if (languageMessages.length) await LanguageTranslation.bulkCreate(languageMessages);
+    if (languageMessages.length)
+      await LanguageTranslation.bulkCreate(languageMessages);
 
-    if (reload) await i18nStore.reload();
+    if (reload)
+      await i18nStore.reload();
   };
 
   /**
@@ -123,10 +131,11 @@ const languageService = ({
    * @returns {Promise<LanguageTranslation[]>}
    */
   const getOrCreateLanguageTranslations = async (
-    languageId: string
+    languageId: string,
   ): Promise<LanguageTranslation[]> => {
     const translations = await getLanguageTranslations(languageId);
-    if (translations.length) return translations;
+    if (translations.length)
+      return translations;
 
     await createLanguageTranslations(languageId, true);
 
@@ -154,12 +163,13 @@ const languageService = ({
    */
   const updateLanguage = async (
     languageId: string | Language,
-    input: UpdateLanguageRequest
+    input: UpdateLanguageRequest,
   ): Promise<Language> => {
-    const language =
-      typeof languageId === 'string' ? await Language.findByPk(languageId) : languageId;
+    const language
+      = typeof languageId === 'string' ? await Language.findByPk(languageId) : languageId;
 
-    if (!language) throw new NotFoundError();
+    if (!language)
+      throw new NotFoundError();
 
     await language.update(input);
 
@@ -176,12 +186,14 @@ const languageService = ({
     const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId, {
       attributes: ['id'],
     });
-    if (!language || !language.adminLocales || !language.surveyLocales) throw new NotFoundError();
+    if (!language || !language.adminLocales || !language.surveyLocales)
+      throw new NotFoundError();
 
-    if (language.adminLocales.length || language.surveyLocales.length)
+    if (language.adminLocales.length || language.surveyLocales.length) {
       throw new ForbiddenError(
-        'Language cannot be deleted. There are locales using this language.'
+        'Language cannot be deleted. There are locales using this language.',
       );
+    }
 
     await language.destroy();
   };
@@ -195,7 +207,7 @@ const languageService = ({
    */
   const updateLanguageTranslations = async (
     languageId: string,
-    inputs: Pick<LanguageTranslationAttributes, 'id' | 'messages'>[]
+    inputs: Pick<LanguageTranslationAttributes, 'id' | 'messages'>[],
   ): Promise<LanguageTranslation[]> => {
     const language = await Language.findByPk(languageId, {
       include: [
@@ -209,15 +221,18 @@ const languageService = ({
         },
       ],
     });
-    if (!language) throw new NotFoundError();
+    if (!language)
+      throw new NotFoundError();
 
     const { translations } = language;
 
-    if (!translations?.length) return [];
+    if (!translations?.length)
+      return [];
 
     for (const translation of translations) {
-      const match = inputs.find((input) => input.id === translation.id);
-      if (!match) continue;
+      const match = inputs.find(input => input.id === translation.id);
+      if (!match)
+        continue;
 
       const { messages } = match;
 
@@ -250,13 +265,16 @@ const languageService = ({
    */
   const syncLanguageTranslations = async (id?: string | string[]): Promise<void> => {
     const where: WhereOptions<LanguageTranslationAttributes> = {};
-    if (id) where.id = id;
+    if (id)
+      where.id = id;
 
     const languages = await Language.findAll({ where, include: [{ association: 'translations' }] });
-    if (!languages.length) return;
+    if (!languages.length)
+      return;
 
     for (const language of languages) {
-      if (!language.translations) throw new NotFoundError();
+      if (!language.translations)
+        throw new NotFoundError();
 
       const { id: languageId, translations } = language;
 
@@ -267,15 +285,15 @@ const languageService = ({
 
       const inserts: LanguageTranslationCreationAttributes[] = [];
       const promises: PromiseLike<any>[] = [];
-      //added check for existing languages with the same code in the source code
-      //const languageMessagesForInitialization = await languageForInitialization(languageId);
+      // added check for existing languages with the same code in the source code
+      // const languageMessagesForInitialization = await languageForInitialization(languageId);
 
       for (const [app, appMessages] of Object.entries(defaultI18nMessages)) {
         const application = app as Application;
 
         for (const [section, messages] of Object.entries(appMessages)) {
           const translation = translations.find(
-            (item) => item.application === application && item.section === section
+            item => item.application === application && item.section === section,
           );
 
           if (!translation) {
@@ -285,18 +303,21 @@ const languageService = ({
             continue;
           }
 
-          if (compareMessageKeys(messages, translation.messages)) continue;
+          if (compareMessageKeys(messages, translation.messages))
+            continue;
 
           promises.push(
-            translation.update({ messages: mergeTranslations(messages, translation.messages) })
+            translation.update({ messages: mergeTranslations(messages, translation.messages) }),
           );
           logger.debug(`Updating language messages for '${application}:${section}'.`);
         }
       }
 
-      if (inserts.length) promises.push(LanguageTranslation.bulkCreate(inserts));
+      if (inserts.length)
+        promises.push(LanguageTranslation.bulkCreate(inserts));
 
-      if (promises.length) await Promise.all(promises);
+      if (promises.length)
+        await Promise.all(promises);
     }
 
     await i18nStore.reload();
@@ -314,7 +335,7 @@ const languageService = ({
     deleteLanguageTranslations,
     syncLanguageTranslations,
   };
-};
+}
 
 export default languageService;
 

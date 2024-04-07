@@ -23,5 +23,6 @@ export const tableFieldDefaults: Record<MealTableFieldType, MealTableField> = {
   },
 };
 
-export const getTableFieldDefaults = (type: MealTableFieldType): MealTableField =>
-  copy(tableFieldDefaults[type]);
+export function getTableFieldDefaults(type: MealTableFieldType): MealTableField {
+  return copy(tableFieldDefaults[type]);
+}

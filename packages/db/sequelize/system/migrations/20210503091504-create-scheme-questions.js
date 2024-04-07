@@ -32,11 +32,11 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('scheme_questions', { transaction });
     }),

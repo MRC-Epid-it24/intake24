@@ -31,7 +31,7 @@ Vue.use(
       page_path: to.path,
     }),
   },
-  router
+  router,
 );
 
 const vue = new Vue({
@@ -39,7 +39,7 @@ const vue = new Vue({
   pinia,
   router,
   vuetify,
-  render: (h) => h(App),
+  render: h => h(App),
 });
 
 vue.$http.init(router, useAuth);

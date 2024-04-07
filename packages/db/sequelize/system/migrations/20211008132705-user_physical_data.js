@@ -5,35 +5,35 @@ module.exports = {
         'user_physical_data',
         'sex',
         { type: Sequelize.STRING(64), allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'user_physical_data',
         'weight_kg',
         { type: Sequelize.DOUBLE, allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'user_physical_data',
         'height_cm',
         { type: Sequelize.DOUBLE, allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'user_physical_data',
         'physical_activity_level_id',
         { type: Sequelize.BIGINT, allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'user_physical_data',
         'weight_target',
         { type: Sequelize.STRING(64), allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('user_physical_data', 'realistic_height', {

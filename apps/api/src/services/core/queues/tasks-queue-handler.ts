@@ -81,7 +81,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   }
 
   public async closeWorkers(force = false): Promise<void> {
-    await Promise.all(this.workers.map((worker) => worker.close(force)));
+    await Promise.all(this.workers.map(worker => worker.close(force)));
   }
 
   /**
@@ -110,7 +110,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   async getRepeatableJobById(id: string) {
     const jobs = await this.queue.getRepeatableJobs();
 
-    return jobs.find((job) => job.id?.replace('db-', '') === id);
+    return jobs.find(job => job.id?.replace('db-', '') === id);
   }
 
   /**
@@ -124,7 +124,8 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     const repeatableJobs = await this.queue.getRepeatableJobs();
 
     for (const job of repeatableJobs) {
-      if (id && job.id?.replace('db-', '') !== id) continue;
+      if (id && job.id?.replace('db-', '') !== id)
+        continue;
 
       await this.queue.removeRepeatableByKey(job.key);
     }
@@ -139,9 +140,8 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   private async loadRepeatableJobs() {
     const tasks = await Task.findAll({ where: { active: true } });
 
-    for (const task of tasks) {
+    for (const task of tasks)
       await this.addJob(task);
-    }
   }
 
   /**
@@ -210,7 +210,8 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
      */
     await sleep(20);
 
-    if (active) await this.queueJob(task);
+    if (active)
+      await this.queueJob(task);
 
     this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) updated.`);
   }

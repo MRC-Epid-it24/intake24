@@ -1,7 +1,9 @@
 <template>
   <v-expand-transition>
     <v-card v-show="value" ref="card" class="my-4" color="red lighten-4" outlined>
-      <v-card-text class="px-6"> {{ message }} </v-card-text>
+      <v-card-text class="px-6">
+        {{ message }}
+      </v-card-text>
     </v-card>
   </v-expand-transition>
 </template>
@@ -30,14 +32,16 @@ export default defineComponent({
     watch(
       () => props.value,
       (value) => {
-        if (!value) return;
+        if (!value)
+          return;
 
         setTimeout(async () => {
-          if (!card.value) return;
+          if (!card.value)
+            return;
 
           await card.value.$vuetify.goTo(card.value.$el as HTMLElement, { duration: 1000 });
         }, 100);
-      }
+      },
     );
 
     return { card };

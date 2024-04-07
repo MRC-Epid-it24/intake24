@@ -9,7 +9,7 @@ module.exports = {
           type: Sequelize.TEXT,
           after: 'description',
         },
-        { transaction }
+        { transaction },
       );
     });
   },

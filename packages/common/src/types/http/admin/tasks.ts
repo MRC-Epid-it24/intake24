@@ -6,7 +6,7 @@ import { jobTypeParams, jobTypes, repeatableBullJob } from '../../jobs';
 export const taskRequest = z.object({
   name: z.string().min(3).max(512),
   job: z.enum(jobTypes),
-  cron: z.string().refine((val) => isValidCron(val, { seconds: true })),
+  cron: z.string().refine(val => isValidCron(val, { seconds: true })),
   active: z.boolean(),
   description: z.string().nullish(),
   params: jobTypeParams,

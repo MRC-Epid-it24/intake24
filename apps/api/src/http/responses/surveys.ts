@@ -1,7 +1,7 @@
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import type { Survey } from '@intake24/db';
 
-export const publicSurveyEntryResponse = (survey: Survey): PublicSurveyEntry => {
+export function publicSurveyEntryResponse(survey: Survey): PublicSurveyEntry {
   const {
     id,
     slug,
@@ -24,4 +24,4 @@ export const publicSurveyEntryResponse = (survey: Survey): PublicSurveyEntry => 
     openAccess: allowGenUsers && !genUserKey,
     authCaptcha,
   };
-};
+}

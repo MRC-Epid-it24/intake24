@@ -17,7 +17,7 @@
           :value="selectedItemName"
           v-on="on"
           @click:clear="clearInput"
-        ></v-text-field>
+        />
       </slot>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
@@ -42,8 +42,7 @@
           outlined
           prepend-inner-icon="$search"
           @click:clear="clear"
-        >
-        </v-text-field>
+        />
         <template v-if="items.length">
           <v-list dense min-height="350px">
             <v-list-item-group v-model="selectedItemId">
@@ -51,7 +50,7 @@
                 <v-list-item :key="item[itemId]" :value="item[itemId]">
                   <template #default="{ active }">
                     <v-list-item-action class="mr-2">
-                      <v-checkbox :input-value="active"></v-checkbox>
+                      <v-checkbox :input-value="active" />
                     </v-list-item-action>
                     <v-list-item-avatar>
                       <v-icon>{{ itemIcon }}</v-icon>
@@ -63,12 +62,12 @@
                     </v-list-item-content>
                   </template>
                 </v-list-item>
-                <v-divider v-if="idx + 1 < items.length" :key="`div-${item[itemId]}`"></v-divider>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item[itemId]}`" />
               </template>
             </v-list-item-group>
           </v-list>
           <div class="text-center">
-            <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
+            <v-pagination v-model="page" circle :length="lastPage" />
           </div>
         </template>
         <v-alert v-else color="secondary" text type="info">
@@ -77,9 +76,11 @@
       </v-card-text>
       <v-card-actions>
         <v-btn class="font-weight-bold" color="error" text @click.stop="close">
-          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+          <v-icon left>
+            $cancel
+          </v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
@@ -87,7 +88,9 @@
           text
           @click.stop="confirm"
         >
-          <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+          <v-icon left>
+            $success
+          </v-icon>{{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -155,22 +158,24 @@ export default defineComponent({
   setup(props) {
     const { resource } = toRefs(props);
     const selectedItemId = ref<string | null>(
-      props.initialItem ? props.initialItem[props.itemId] : null
+      props.initialItem ? props.initialItem[props.itemId] : null,
     );
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
-      `/admin/references/${resource.value}`
+      `/admin/references/${resource.value}`,
     );
 
-    if (props.initialItem) items.value.push(props.initialItem);
+    if (props.initialItem)
+      items.value.push(props.initialItem);
 
     watch(
       () => props.value,
       (val) => {
-        if (val === selectedItemId.value) return;
+        if (val === selectedItemId.value)
+          return;
 
         selectedItemId.value = null;
-      }
+      },
     );
 
     return {
@@ -191,14 +196,17 @@ export default defineComponent({
     },
     selectedItem(): Dictionary | null {
       const { selectedItemId } = this;
-      if (!selectedItemId) return null;
+      if (!selectedItemId)
+        return null;
 
-      return this.items.find((item) => item[this.itemId] === selectedItemId) ?? null;
+      return this.items.find(item => item[this.itemId] === selectedItemId) ?? null;
     },
     selectedItemName() {
-      if (this.selectedItem) return this.selectedItem[this.itemName];
+      if (this.selectedItem)
+        return this.selectedItem[this.itemName];
 
-      if (this.initialItem) return this.initialItem[this.itemName];
+      if (this.initialItem)
+        return this.initialItem[this.itemName];
 
       return this.value;
     },

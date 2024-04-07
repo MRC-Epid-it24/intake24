@@ -16,26 +16,26 @@ export type CreateResult<T, CT = any> = CreateSuccess<T> | CreateConflict<CT>;
 
 export function parseCreateResponse<T, CT = any>(
   response: AxiosResponse<T>,
-  logger: winston.Logger
+  logger: winston.Logger,
 ): CreateResult<T, CT> {
   if (response.status === HttpStatusCode.Ok || response.status === HttpStatusCode.Created) {
     return {
       type: 'success',
       data: response.data,
     };
-  } else if (response.status === HttpStatusCode.Conflict) {
+  }
+  else if (response.status === HttpStatusCode.Conflict) {
     return {
       type: 'conflict',
       details: response.data as unknown as CT,
     };
-  } else {
-    {
-      const message = `Unexpected HTTP status: ${response.status} for ${response.request.method} ${response.request.path}`;
+  }
+  else {
+    const message = `Unexpected HTTP status: ${response.status} for ${response.request.method} ${response.request.path}`;
 
-      logger.error(message);
-      logger.error(JSON.stringify(response.data, null, 2));
+    logger.error(message);
+    logger.error(JSON.stringify(response.data, null, 2));
 
-      throw new Error(message);
-    }
+    throw new Error(message);
   }
 }

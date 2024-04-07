@@ -33,11 +33,11 @@ export type RespondentWithPassword = {
   password: string;
 };
 
-const surveyService = ({
+function surveyService({
   adminSurveyService,
   logger: globalLogger,
   scheduler,
-}: Pick<IoC, 'adminSurveyService' | 'logger' | 'scheduler'>) => {
+}: Pick<IoC, 'adminSurveyService' | 'logger' | 'scheduler'>) {
   const logger = globalLogger.child({ service: 'SurveyService' });
 
   /**
@@ -60,14 +60,17 @@ const surveyService = ({
       ],
       include: [{ association: 'counter' }],
     });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;
 
-    if (!allowGenUsers || genUserKey) throw new ForbiddenError();
+    if (!allowGenUsers || genUserKey)
+      throw new ForbiddenError();
 
     let { counter } = survey;
-    if (counter) await counter.increment('count');
+    if (counter)
+      await counter.increment('count');
     else counter = await GenUserCounter.create({ surveyId, count: 1 });
 
     const username = `${slug}${counter.count}`;
@@ -87,7 +90,7 @@ const surveyService = ({
    */
   const createRespondentWithJWT = async (
     slug: string,
-    token: string
+    token: string,
   ): Promise<CreateUserResponse> => {
     const survey = await Survey.findBySlug(slug, {
       attributes: [
@@ -101,7 +104,8 @@ const surveyService = ({
         'userPersonalIdentifiers',
       ],
     });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;
 
@@ -128,12 +132,14 @@ const surveyService = ({
 
       const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(
         survey,
-        { username, password, name }
+        { username, password, name },
       );
 
       return { userId, username, authToken, redirectUrl };
-    } catch (err) {
-      if (err instanceof ZodError) throw new ApplicationError('Malformed token payload');
+    }
+    catch (err) {
+      if (err instanceof ZodError)
+        throw new ApplicationError('Malformed token payload');
 
       throw new ForbiddenError(err instanceof Error ? err.message : undefined);
     }
@@ -145,28 +151,29 @@ const surveyService = ({
    * @param {(string | Survey)} slug
    * @param {string} userId
    * @param {number} tzOffset
-   * @param {number} [increment=0] (increment submission count, e.g. during queued submission, thus not included in stats)
+   * @param {number} [increment] (increment submission count, e.g. during queued submission, thus not included in stats)
    * @returns {Promise<SurveyUserInfoResponse>}
    */
   const userInfo = async (
     slug: string | Survey,
     userId: string,
     tzOffset: number,
-    increment = 0
+    increment = 0,
   ): Promise<SurveyUserInfoResponse> => {
-    const survey =
-      typeof slug === 'string'
+    const survey
+      = typeof slug === 'string'
         ? await Survey.findBySlug(slug, {
-            attributes: [
-              'id',
-              'feedbackSchemeId',
-              'maximumTotalSubmissions',
-              'maximumDailySubmissions',
-              'numberOfSubmissionsForFeedback',
-            ],
-          })
+          attributes: [
+            'id',
+            'feedbackSchemeId',
+            'maximumTotalSubmissions',
+            'maximumDailySubmissions',
+            'numberOfSubmissionsForFeedback',
+          ],
+        })
         : slug;
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const {
       id: surveyId,
@@ -177,7 +184,8 @@ const surveyService = ({
     } = survey;
 
     const user = await User.findByPk(userId, { attributes: ['id', 'name'] });
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
     const { name } = user;
 
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
@@ -222,14 +230,17 @@ const surveyService = ({
     const survey = await Survey.findBySlug(slug, {
       attributes: ['id', 'sessionLifetime', 'storeUserSessionOnServer'],
     });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const { id: surveyId, sessionLifetime, storeUserSessionOnServer } = survey;
 
-    if (!storeUserSessionOnServer) throw new ForbiddenError();
+    if (!storeUserSessionOnServer)
+      throw new ForbiddenError();
 
     const session = await UserSurveySession.findOne({ where: { userId, surveyId } });
-    if (!session) throw new NotFoundError();
+    if (!session)
+      throw new NotFoundError();
 
     const expiredAt = new Date(Date.now() - ms(sessionLifetime));
     if (session.updatedAt < expiredAt) {
@@ -251,24 +262,26 @@ const surveyService = ({
   const setSession = async (
     slug: string,
     userId: string,
-    sessionData: SurveyState
+    sessionData: SurveyState,
   ): Promise<UserSurveySession> => {
     const survey = await Survey.findBySlug(slug, {
       attributes: ['id', 'notifications', 'storeUserSessionOnServer'],
     });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const { id: surveyId, storeUserSessionOnServer } = survey;
 
-    if (!storeUserSessionOnServer) throw new ForbiddenError();
+    if (!storeUserSessionOnServer)
+      throw new ForbiddenError();
 
     const [session] = await UserSurveySession.upsert(
       { id: sessionData.uxSessionId, userId, surveyId, sessionData },
       {
         fields: ['id', 'sessionData'],
-        //@ts-expect-error sequelize incorrectly handles camelCase vs snake_case
+        // @ts-expect-error sequelize incorrectly handles camelCase vs snake_case
         conflictFields: ['survey_id', 'user_id'],
-      }
+      },
     );
 
     /*
@@ -277,9 +290,9 @@ const surveyService = ({
      * - hackish timestamps comparison to determine if the record was inserted
      */
     if (
-      session.createdAt.getTime() === session.updatedAt.getTime() &&
-      survey.notifications.length &&
-      survey.notifications.some(({ type }) => type === 'survey.session.started')
+      session.createdAt.getTime() === session.updatedAt.getTime()
+      && survey.notifications.length
+      && survey.notifications.some(({ type }) => type === 'survey.session.started')
     ) {
       await scheduler.jobs.addJob({
         type: 'SurveyEventNotification',
@@ -305,10 +318,12 @@ const surveyService = ({
    */
   const clearSession = async (slug: string, userId: string): Promise<void> => {
     const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications'] });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const session = await UserSurveySession.findOne({ where: { userId, surveyId: survey.id } });
-    if (!session) throw new NotFoundError();
+    if (!session)
+      throw new NotFoundError();
 
     const {
       id: sessionId,
@@ -317,9 +332,9 @@ const surveyService = ({
     await session.destroy();
 
     if (
-      submissionTime ||
-      !survey.notifications.length ||
-      !survey.notifications.some(({ type }) => type === 'survey.session.cancelled')
+      submissionTime
+      || !survey.notifications.length
+      || !survey.notifications.some(({ type }) => type === 'survey.session.cancelled')
     )
       return;
 
@@ -334,12 +349,12 @@ const surveyService = ({
    * Get user's submissions
    *
    * @param {SubmissionScope} scopeOptions
-   * @param {FindOptions} [options={}]
+   * @param {FindOptions} [options]
    * @returns {Promise<SurveySubmission[]>}
    */
   const getSubmissions = async (
     scopeOptions: SubmissionScope,
-    options: FindOptions = {}
+    options: FindOptions = {},
   ): Promise<SurveySubmission[]> =>
     SurveySubmission.findAll(submissionScope(scopeOptions, options));
 
@@ -352,15 +367,17 @@ const surveyService = ({
    */
   const getFollowUpUrl = async (
     survey: Survey,
-    userId: string
+    userId: string,
   ): Promise<string | null | Record<string, string>> => {
     const { id: surveyId, surveyScheme } = survey;
-    if (!surveyScheme) throw new NotFoundError();
+    if (!surveyScheme)
+      throw new NotFoundError();
 
     const redirectPrompts = surveyScheme.prompts.submission.filter(
-      (prompt): prompt is Prompts['redirect-prompt'] => prompt.component === 'redirect-prompt'
+      (prompt): prompt is Prompts['redirect-prompt'] => prompt.component === 'redirect-prompt',
     );
-    if (!redirectPrompts.length) return null;
+    if (!redirectPrompts.length)
+      return null;
 
     const identifiers = redirectPrompts.map(({ identifier }) => identifier);
 
@@ -370,7 +387,8 @@ const surveyService = ({
     ];
 
     const user = await User.findByPk(userId, { attributes: ['id'], include });
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError();
 
     const { aliases = [], customFields = [] } = user;
 
@@ -395,25 +413,29 @@ const surveyService = ({
         console.log(`identifierValue`, identifierValue);
         console.log(`url`, url);
 
-        if (!identifierValue || !url) return acc;
+        if (!identifierValue || !url)
+          return acc;
 
         if (size > 1 && acc && typeof acc !== 'string') {
           try {
             acc[id] = new URL(url.replace('{identifier}', identifierValue)).href;
-          } catch (err) {
+          }
+          catch (err) {
             logger.error('Invalid follow-up URL', { err });
           }
           return acc;
-        } else {
+        }
+        else {
           try {
             return new URL(url.replace('{identifier}', identifierValue)).href;
-          } catch (err) {
+          }
+          catch (err) {
             logger.error('Invalid follow-up URL', { err });
             return null;
           }
         }
       },
-      size === 1 ? null : {}
+      size === 1 ? null : {},
     );
 
     return urls;
@@ -422,7 +444,7 @@ const surveyService = ({
   const followUp = async (
     slug: string,
     userId: string,
-    tzOffset: number
+    tzOffset: number,
   ): Promise<SurveyUserInfoResponse> => {
     const survey = await Survey.findBySlug(slug, {
       attributes: [
@@ -434,7 +456,8 @@ const surveyService = ({
       ],
       include: [{ association: 'surveyScheme', attributes: ['prompts'], required: true }],
     });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const [followUpUrl, showFeedback] = await Promise.all([
       getFollowUpUrl(survey, userId),
@@ -452,7 +475,8 @@ const surveyService = ({
 
   const storeRating = async (slug: string, userId: string, payload: SurveyRatingRequest) => {
     const survey = await Survey.findBySlug(slug, { attributes: ['id'] });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     return UserSurveyRating.create({ surveyId: survey.id, userId, ...payload });
   };
@@ -470,7 +494,7 @@ const surveyService = ({
     requestHelp,
     storeRating,
   };
-};
+}
 
 export default surveyService;
 

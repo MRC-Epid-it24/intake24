@@ -4,7 +4,7 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.synonym-sets.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         class="ml-3"
         color="primary"
@@ -28,7 +28,7 @@
             :label="$t('locales.synonym-sets.synonyms')"
             name="synonyms"
             outlined
-          ></v-text-field>
+          />
         </v-list-item-content>
         <v-list-item-action>
           <confirm-dialog
@@ -84,7 +84,7 @@ export default defineComponent({
 
   async mounted() {
     const { data: items } = await this.$http.get<LocaleSynonymSet[]>(
-      `admin/locales/${this.id}/synonym-sets`
+      `admin/locales/${this.id}/synonym-sets`,
     );
 
     this.toForm({ items });
@@ -103,7 +103,7 @@ export default defineComponent({
       this.form.items = this.form.items.filter(({ synonyms }) => synonyms);
 
       const items = await this.form.post<LocaleSynonymSet[]>(
-        `admin/locales/${this.id}/synonym-sets`
+        `admin/locales/${this.id}/synonym-sets`,
       );
 
       useStoreEntry().setEntry({ items });

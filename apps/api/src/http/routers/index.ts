@@ -25,7 +25,7 @@ import user from './user';
 
 const server = initServer();
 
-export const registerRouters = (express: Router) => {
+export function registerRouters(express: Router) {
   const responseValidation = false;
   // Public endpoints
   createExpressEndpoints(
@@ -37,7 +37,7 @@ export const registerRouters = (express: Router) => {
       survey: survey(),
     }),
     express,
-    { responseValidation, requestValidationErrorHandler }
+    { responseValidation, requestValidationErrorHandler },
   );
   // Authenticated endpoints
   const authContract = {
@@ -66,7 +66,7 @@ export const registerRouters = (express: Router) => {
       responseValidation,
       requestValidationErrorHandler,
       globalMiddleware: [passport.authenticate('survey', { session: false }), registerACLScope],
-    }
+    },
   );
   // Survey respondent endpoints
   createExpressEndpoints(
@@ -81,7 +81,7 @@ export const registerRouters = (express: Router) => {
         registerACLScope,
         isSurveyRespondent(),
       ],
-    }
+    },
   );
 
   // Admin endpoints - public
@@ -97,7 +97,7 @@ export const registerRouters = (express: Router) => {
       signUp: admin.signUp(),
     }),
     express,
-    { responseValidation, requestValidationErrorHandler }
+    { responseValidation, requestValidationErrorHandler },
   );
 
   // Admin endpoints - authenticated
@@ -117,7 +117,7 @@ export const registerRouters = (express: Router) => {
       responseValidation,
       requestValidationErrorHandler,
       globalMiddleware: [passport.authenticate('admin', { session: false }), registerACLScope],
-    }
+    },
   );
 
   // Admin endpoints - authenticated & verified
@@ -157,13 +157,13 @@ export const registerRouters = (express: Router) => {
     express,
     {
       responseValidation,
-      //@ts-expect-error fix types
+      // @ts-expect-error fix types
       requestValidationErrorHandler,
       globalMiddleware: [
         passport.authenticate('admin', { session: false }),
         registerACLScope,
         isAccountVerified,
       ],
-    }
+    },
   );
-};
+}

@@ -15,21 +15,21 @@ module.exports = {
           allowNull: true,
           type: Sequelize.INTEGER,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'feedback_schemes',
         'sections',
         { allowNull: true, type: Sequelize.TEXT },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'feedback_schemes',
         'meals',
         { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -41,27 +41,27 @@ module.exports = {
             sections: JSON.stringify(defaultSections),
           },
           transaction,
-        }
+        },
       );
 
       await queryInterface.changeColumn(
         'feedback_schemes',
         'sections',
         { allowNull: false, type: Sequelize.TEXT },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'feedback_schemes',
         'meals',
         { allowNull: false, type: Sequelize.TEXT({ length: 'long' }) },
-        { transaction }
+        { transaction },
       );
 
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('survey_submission_meals', 'duration', { transaction });
       await queryInterface.removeColumn('feedback_schemes', 'sections', { transaction });

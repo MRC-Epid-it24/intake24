@@ -17,7 +17,7 @@ interface PaginatedOptions extends Omit<Options, 'result'> {
   result?: boolean | string;
 }
 
-const sharedTests = (suite: typeof Suite) => {
+function sharedTests(suite: typeof Suite) {
   const defaultOptions: Options = { bearer: 'user' };
 
   const assertMissingAuthentication = async (method: Method, url: string, ops?: Options) => {
@@ -34,7 +34,8 @@ const sharedTests = (suite: typeof Suite) => {
     const { bearer, code = 403, input } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
 
     const { status } = await call.send(input);
 
@@ -61,7 +62,8 @@ const sharedTests = (suite: typeof Suite) => {
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { status } = await call.send(input);
 
     expect(status).toBe(code);
@@ -71,13 +73,14 @@ const sharedTests = (suite: typeof Suite) => {
     method: Method,
     url: string,
     fields: string[],
-    ops?: Options
+    ops?: Options,
   ) => {
     const { bearer, code = 400, input } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { status, body } = await call.send(input);
 
     expect(body).toContainAllKeys(['errors', 'message']);
@@ -90,7 +93,8 @@ const sharedTests = (suite: typeof Suite) => {
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { status } = await call.send(input);
 
     expect(status).toBe(code);
@@ -100,7 +104,8 @@ const sharedTests = (suite: typeof Suite) => {
     const { bearer, code = 200, result } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
 
     const { status, body } = await call.send();
 
@@ -108,14 +113,15 @@ const sharedTests = (suite: typeof Suite) => {
     expect(body.data).toBeArray();
 
     if (typeof result === 'boolean') {
-      if (result) expect(body.data).not.toBeEmpty();
+      if (result)
+        expect(body.data).not.toBeEmpty();
       else expect(body.data).toBeEmpty();
     }
 
     if (typeof result === 'string') {
       expect(body.data).not.toBeEmpty();
 
-      const output = (body.data as { id: string }[]).find((item) => item.id === result);
+      const output = (body.data as { id: string }[]).find(item => item.id === result);
       expect(output).toBeTruthy();
     }
 
@@ -126,12 +132,13 @@ const sharedTests = (suite: typeof Suite) => {
     method: Method,
     url: string,
     fields: string[],
-    ops?: Options
+    ops?: Options,
   ) => {
     const { bearer, code = 200 } = ops ?? defaultOptions;
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
 
     const { status, body } = await call.send();
 
@@ -144,10 +151,12 @@ const sharedTests = (suite: typeof Suite) => {
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
-    if (result) expect(body).not.toBeEmpty();
+    if (result)
+      expect(body).not.toBeEmpty();
     else expect(body).toBeEmpty();
 
     expect(status).toBe(code);
@@ -158,7 +167,8 @@ const sharedTests = (suite: typeof Suite) => {
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
     expect(body).toBeInstanceOf(Buffer);
@@ -170,7 +180,8 @@ const sharedTests = (suite: typeof Suite) => {
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
     expect(body).toBeInstanceOf(instance);
@@ -182,13 +193,18 @@ const sharedTests = (suite: typeof Suite) => {
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
     if (typeof output === 'boolean') {
-      if (output) expect(body).not.toBeEmpty();
+      if (output)
+        expect(body).not.toBeEmpty();
       else expect(body).toBeEmpty();
-    } else expect(pick(body, Object.keys(output))).toEqual(output);
+    }
+    else {
+      expect(pick(body, Object.keys(output))).toEqual(output);
+    }
 
     expect(status).toBe(code);
   };
@@ -198,7 +214,8 @@ const sharedTests = (suite: typeof Suite) => {
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
     expect(pick(body, Object.keys(output))).toEqual(output);
@@ -213,7 +230,8 @@ const sharedTests = (suite: typeof Suite) => {
     const { bearer } = ops ?? defaultOptions;
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
-    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    if (bearer)
+      call.set('Authorization', suite.bearer[bearer]);
 
     const { status, body } = await call.send();
 
@@ -238,7 +256,7 @@ const sharedTests = (suite: typeof Suite) => {
     assertRecordUpdated,
     assertRecordDeleted,
   };
-};
+}
 
 export default sharedTests;
 

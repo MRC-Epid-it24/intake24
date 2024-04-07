@@ -10,16 +10,17 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { ConflictError, ForbiddenError } from '@intake24/api/http/errors';
 
-const globalCategoriesController = ({
+function globalCategoriesController({
   globalCategoriesService,
-}: Pick<IoC, 'globalCategoriesService'>) => {
+}: Pick<IoC, 'globalCategoriesService'>) {
   const store = async (
     req: Request<any, any, any, CreateGlobalCategoryRequest>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
 
     // Doing this operation properly is difficult, see
     // https://stackoverflow.com/questions/34708509/how-to-use-returning-with-on-conflict-in-postgresql
@@ -30,21 +31,26 @@ const globalCategoriesController = ({
       await globalCategoriesService.create(req.body);
       const inserted = await globalCategoriesService.read(req.body.code);
       res.status(HttpStatusCode.Created).json(inserted);
-    } catch (e: any) {
+    }
+    catch (e: any) {
       if (e instanceof ConflictError) {
         const existing = await globalCategoriesService.read(req.body.code);
         res.status(HttpStatusCode.Conflict).json(existing);
-      } else throw e;
+      }
+      else {
+        throw e;
+      }
     }
   };
 
   const update = async (
     req: Request<{ categoryId: string; version: string }, any, UpdateGlobalCategoryRequest>,
-    res: Response<FoodEntry>
+    res: Response<FoodEntry>,
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
 
     const { categoryId } = req.params;
     const { version } = req.query;
@@ -60,7 +66,8 @@ const globalCategoriesController = ({
     const { aclService } = req.scope.cradle;
 
     // FIXME: use correct permission
-    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|read')))
+      throw new ForbiddenError();
 
     const { categoryId } = req.params;
 
@@ -74,7 +81,7 @@ const globalCategoriesController = ({
     update,
     read,
   };
-};
+}
 
 export default globalCategoriesController;
 

@@ -7,7 +7,7 @@ import { UserSurveyAlias } from '@intake24/db';
 
 import { ForbiddenError, NotFoundError } from '../../errors';
 
-export const feedback = () => {
+export function feedback() {
   const feedbackRateLimiter = ioc.cradle.rateLimiter.createMiddleware('feedback', {
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.feedback'),
     skipFailedRequests: true,
@@ -31,15 +31,17 @@ export const feedback = () => {
             },
           ],
         });
-        if (!alias?.survey) throw new NotFoundError();
+        if (!alias?.survey)
+          throw new NotFoundError();
         const { survey, username } = alias;
 
-        if (!survey.feedbackScheme?.outputs.includes('download')) throw new ForbiddenError();
+        if (!survey.feedbackScheme?.outputs.includes('download'))
+          throw new ForbiddenError();
 
         const { pdfStream } = await req.scope.cradle.feedbackService.getFeedbackStream(
           survey.id,
           username,
-          submissions
+          submissions,
         );
         const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
 
@@ -66,10 +68,12 @@ export const feedback = () => {
             },
           ],
         });
-        if (!alias?.survey) throw new NotFoundError();
+        if (!alias?.survey)
+          throw new NotFoundError();
         const { survey, username } = alias;
 
-        if (!survey.feedbackScheme?.outputs.includes('email')) throw new ForbiddenError();
+        if (!survey.feedbackScheme?.outputs.includes('email'))
+          throw new ForbiddenError();
 
         await req.scope.cradle.scheduler.jobs.addJob({
           type: 'SurveyFeedbackNotification',
@@ -81,4 +85,4 @@ export const feedback = () => {
       },
     },
   });
-};
+}

@@ -13,7 +13,7 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -23,7 +23,7 @@
                 :label="$t('common.displayName')"
                 name="displayName"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -34,10 +34,10 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-textarea>
+              />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -70,7 +70,7 @@ export default defineComponent({
       props,
       {
         data: { id: null, name: null, displayName: null, description: null },
-      }
+      },
     );
 
     return { entry, entryLoaded, isEdit, clearError, form, routeLeave, submit };

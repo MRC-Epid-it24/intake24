@@ -21,15 +21,14 @@ Additionally, it validates file MIME types since it's awkward to validate using 
 export default (req: Request, res: Response, next: NextFunction) => {
   const { i18nService } = req.scope.cradle;
 
-  if (req.files === undefined) {
+  if (req.files === undefined)
     return next();
-  }
 
   req.body.baseImageFiles = {};
 
   const files = Array.isArray(req.files)
     ? req.files
-    : Object.entries(req.files).flatMap((e) => e[1]);
+    : Object.entries(req.files).flatMap(e => e[1]);
 
   for (const file of files) {
     const fieldName = file.fieldname;
@@ -42,11 +41,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
           type: 'field',
           location: 'body',
           path: fieldName,
-        }
+        },
       );
     }
 
-    if (!allowedImageMimeTypes.includes(file.mimetype))
+    if (!allowedImageMimeTypes.includes(file.mimetype)) {
       throw new ValidationError(
         i18nService.translate('validation.types.file.mime', {
           attribute: fieldName,
@@ -57,20 +56,22 @@ export default (req: Request, res: Response, next: NextFunction) => {
           location: 'body',
           path: fieldName,
           value: file.mimetype,
-        }
+        },
       );
+    }
 
     const scaleId = matches[2];
 
-    if (req.body.baseImageFiles[scaleId] !== undefined)
+    if (req.body.baseImageFiles[scaleId] !== undefined) {
       throw new ValidationError(
         i18nService.translate('validation.types.duplicate._', { attribute: fieldName }),
         {
           type: 'field',
           location: 'body',
           path: fieldName,
-        }
+        },
       );
+    }
 
     req.body.baseImageFiles[scaleId] = file;
   }

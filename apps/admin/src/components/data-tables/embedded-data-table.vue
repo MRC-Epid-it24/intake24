@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-row justify="center">
         <v-col align-self="center" cols="12" sm="auto">
-          <slot name="header-add"></slot>
+          <slot name="header-add" />
         </v-col>
         <v-col cols="12" sm>
           <v-text-field
@@ -17,8 +17,7 @@
             @click:append="setFilter"
             @click:clear="resetFilter"
             @keyup.enter="setFilter"
-          >
-          </v-text-field>
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -90,7 +89,7 @@ export default defineComponent({
       async () => {
         await setFilter();
       },
-      { debounce: 500, maxWait: 2000 }
+      { debounce: 500, maxWait: 2000 },
     );
 
     return { api, fetch, items, meta, options, selected, tracked, filter, setFilter, resetFilter };

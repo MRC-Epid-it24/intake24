@@ -22,9 +22,11 @@ export default defineComponent({
   methods: {
     fallbackLanguages(): string[] {
       const { fallbackLocale } = this.$root.$i18n;
-      if (!fallbackLocale) return [];
+      if (!fallbackLocale)
+        return [];
 
-      if (typeof fallbackLocale === 'string') return [fallbackLocale];
+      if (typeof fallbackLocale === 'string')
+        return [fallbackLocale];
 
       return Array.isArray(fallbackLocale) ? fallbackLocale : Object.keys(fallbackLocale);
     },
@@ -32,7 +34,7 @@ export default defineComponent({
     getLanguages(languageId: string): string[] {
       return [
         ...new Set(
-          [languageId, languageId.split('-')[0], ...this.fallbackLanguages()].filter(Boolean)
+          [languageId, languageId.split('-')[0], ...this.fallbackLanguages()].filter(Boolean),
         ),
       ];
     },
@@ -61,7 +63,8 @@ export default defineComponent({
 
         language = code;
         isRrlLanguage = textDirection === 'rtl';
-      } catch {
+      }
+      catch {
         //
       }
 

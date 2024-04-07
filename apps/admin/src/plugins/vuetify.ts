@@ -8,7 +8,8 @@ import { colors } from '@intake24/common/theme';
 import resources from '../router/resources';
 
 const resourceIcons = resources.reduce<Dictionary>((acc, resource) => {
-  return (acc[resource.name] = resource.icon), acc;
+  acc[resource.name] = resource.icon;
+  return acc;
 }, {});
 
 Vue.use(Vuetify);

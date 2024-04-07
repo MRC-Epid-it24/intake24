@@ -9,7 +9,7 @@
           :prompt="currentPrompt.prompt"
           :section="currentPrompt.section"
           @action="action"
-        ></component>
+        />
       </transition>
     </v-col>
   </v-row>

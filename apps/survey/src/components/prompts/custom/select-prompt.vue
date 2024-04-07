@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text>
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form @submit.prevent="action('next')">
         <v-row>
           <v-col cols="12" md="auto">
             <v-select
@@ -17,16 +17,16 @@
               :label="promptI18n.label"
               :multiple="prompt.multiple"
               outlined
-            ></v-select>
+            />
           </v-col>
         </v-row>
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </component>
 </template>
@@ -71,14 +71,16 @@ export default defineComponent({
     }));
 
     const isValid = computed(() => {
-      if (!props.prompt.validation.required) return true;
+      if (!props.prompt.validation.required)
+        return true;
 
-      if (props.prompt.multiple && Array.isArray(state.value)) return !!state.value.length;
+      if (props.prompt.multiple && Array.isArray(state.value))
+        return !!state.value.length;
 
       return typeof state.value !== 'undefined' && state.value !== null;
     });
     const localeOptions = computed(
-      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en
+      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
     );
 
     return { action, customPromptLayout, isValid, localeOptions, promptI18n, state, translate };

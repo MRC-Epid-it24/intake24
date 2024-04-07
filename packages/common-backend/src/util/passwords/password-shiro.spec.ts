@@ -1,6 +1,6 @@
 import { PasswordShiro } from '@intake24/common-backend';
 
-describe('PasswordShiro', () => {
+describe('passwordShiro', () => {
   it('should throw when new password created', async () => {
     const password = new PasswordShiro();
     await expect(password.hash('password')).rejects.toThrow(Error);

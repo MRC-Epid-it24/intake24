@@ -4,13 +4,13 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.nutrients.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <add-nutrient-dialog
         v-if="!disabled"
         :current-items="items"
         :nutrient-tables="nutrientTables"
         @add="add"
-      ></add-nutrient-dialog>
+      />
     </v-toolbar>
     <v-list class="py-0" two-line>
       <template v-for="(item, idx) in items">
@@ -39,7 +39,7 @@
             </confirm-dialog>
           </v-list-item-action>
         </v-list-item>
-        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
+        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`" />
       </template>
     </v-list>
     <v-messages
@@ -47,7 +47,7 @@
       class="px-4 pb-2"
       color="error"
       :value="errors.get('nutrientRecords')"
-    ></v-messages>
+    />
   </v-card>
 </template>
 
@@ -106,11 +106,11 @@ export default defineComponent({
     };
 
     const remove = (id: string) => {
-      items.value = items.value.filter((item) => item.id !== id);
+      items.value = items.value.filter(item => item.id !== id);
     };
 
     const getNutrientTableName = (id: string) => {
-      const table = props.nutrientTables.find((item) => item.id === id);
+      const table = props.nutrientTables.find(item => item.id === id);
 
       return table?.description ?? i18n.t('common.not.found').toString();
     };

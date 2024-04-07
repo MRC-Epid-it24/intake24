@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const value = {
         en: [
@@ -11,20 +11,20 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `INSERT INTO category_portion_size_method_params (portion_size_method_id, "name", value) SELECT id, 'options', '${JSON.stringify(
-          value
+          value,
         )}' FROM category_portion_size_methods where "method" = 'milk-in-a-hot-drink';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `INSERT INTO food_portion_size_method_params (portion_size_method_id, "name", value) SELECT id, 'options', '${JSON.stringify(
-          value
+          value,
         )}' FROM food_portion_size_methods where "method" = 'milk-in-a-hot-drink';`,
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `DELETE FROM category_portion_size_method_params
@@ -33,7 +33,7 @@ module.exports = {
           and category_portion_size_method_params."name" = 'options'
           and category_portion_size_methods."method" = 'milk-in-a-hot-drink';
         `,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -43,7 +43,7 @@ module.exports = {
           and food_portion_size_method_params."name" = 'options'
           and food_portion_size_methods."method" = 'milk-in-a-hot-drink';
         `,
-        { transaction }
+        { transaction },
       );
     }),
 };

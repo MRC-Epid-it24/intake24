@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
 
 const recipeFoods = [
@@ -91,29 +90,29 @@ const recipeFoods = [
 module.exports = {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      //Getting all available locales from the locales table in foods DB
+      // Getting all available locales from the locales table in foods DB
       const locales = await queryInterface.sequelize.query(`SELECT id FROM locales;`, {
         type: Sequelize.QueryTypes.SELECT,
       });
 
-      let recipeFoodsEntries = [];
+      const recipeFoodsEntries = [];
 
       for (const locale of locales) {
-        //Get all the synonyms for this Recipe Food name and this locale from the Synonyms Set table in foods DB
+        // Get all the synonyms for this Recipe Food name and this locale from the Synonyms Set table in foods DB
         const synonyms = await queryInterface.sequelize.query(
           `SELECT id, locale_id, synonyms FROM synonym_sets WHERE locale_id = '${locale.id}';`,
           {
             type: Sequelize.QueryTypes.SELECT,
             transaction,
-          }
+          },
         );
 
         recipeFoods.map((recipeFood) => {
-          const synonymsIndex = synonyms.findIndex((synonym) =>
-            synonym.synonyms.split(/\s+/).includes(recipeFood.recipe_food.recipe_word.toLowerCase())
+          const synonymsIndex = synonyms.findIndex(synonym =>
+            synonym.synonyms.split(/\s+/).includes(recipeFood.recipe_food.recipe_word.toLowerCase()),
           );
           console.log(
-            `Synonyms Index: ${synonymsIndex} for ${recipeFood.recipe_food.recipe_word} and locale: ${locale.id}`
+            `Synonyms Index: ${synonymsIndex} for ${recipeFood.recipe_food.recipe_word} and locale: ${locale.id}`,
           );
           return recipeFoodsEntries.push({
             ...recipeFood.recipe_food,
@@ -130,10 +129,10 @@ module.exports = {
       // Creating recipe foods
       await queryInterface.bulkInsert(
         'recipe_foods',
-        recipeFoodsEntries.map((recipeFoodEntry) => ({ ...recipeFoodEntry, ...timestamps })),
+        recipeFoodsEntries.map(recipeFoodEntry => ({ ...recipeFoodEntry, ...timestamps })),
         {
           transaction,
-        }
+        },
       );
 
       // Getting all the recipe foods created
@@ -142,24 +141,24 @@ module.exports = {
         {
           type: Sequelize.QueryTypes.SELECT,
           transaction,
-        }
+        },
       );
 
       const recipeFoodsStepsEntries = [];
       // Creating recipe food steps
       await recipeFoodsCreated.map(async (recipeFoodCreated) => {
         const index = recipeFoods.find(
-          (recipeFood) => recipeFood.recipe_food.code === recipeFoodCreated.code
+          recipeFood => recipeFood.recipe_food.code === recipeFoodCreated.code,
         );
         if (index) {
           recipeFoodsStepsEntries.push(
-            ...index.recipe_food_steps.map((recipeFoodStep) => ({
+            ...index.recipe_food_steps.map(recipeFoodStep => ({
               ...recipeFoodStep,
               recipe_foods_id: recipeFoodCreated.id,
               locale_id: recipeFoodCreated.locale_id,
               code: `${recipeFoodCreated.locale_id}_${recipeFoodCreated.id}${recipeFoodStep.code}`,
               ...timestamps,
-            }))
+            })),
           );
         }
       });
@@ -171,9 +170,9 @@ module.exports = {
       });
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      const code = recipeFoods.map((recipeFood) => recipeFood.recipe_food.code);
+      const code = recipeFoods.map(recipeFood => recipeFood.recipe_food.code);
       await queryInterface.sequelize.query(`DELETE FROM recipe_foods WHERE code IN (:code);`, {
         type: queryInterface.sequelize.QueryTypes.DELETE,
         replacements: { code },

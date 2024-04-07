@@ -1,6 +1,7 @@
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import { keys, sortBy, uniqBy, zip } from 'lodash';
-import path from 'path';
 
 import type { ApiClientV3 } from '@intake24/api-client-v3';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
@@ -77,7 +78,7 @@ export class ExporterV3 {
     apiClient: ApiClientV3,
     logger: Logger,
     workingDir: string,
-    options?: Partial<ExporterOptions>
+    options?: Partial<ExporterOptions>,
   ) {
     this.apiClient = apiClient;
     this.logger = logger;
@@ -94,7 +95,8 @@ export class ExporterV3 {
 
     const set = await this.apiClient.portionSize.exportAsServedSet(asServedSetId);
 
-    if (set === null) throw new Error(`Invalid as served set id: ${asServedSetId} (Not Found)`);
+    if (set === null)
+      throw new Error(`Invalid as served set id: ${asServedSetId} (Not Found)`);
 
     return typeConverters.packageAsServedSet(set);
   }
@@ -110,11 +112,12 @@ export class ExporterV3 {
 
     if (guideImage === null) {
       throw new Error(`Invalid guide image id: ${guideImageId} (Not Found)`);
-    } else {
+    }
+    else {
       return {
         imageMapId: guideImage.imageMapId,
         description: guideImage.description,
-        objectWeights: Object.fromEntries(guideImage.objects.map((obj) => [obj.id, obj.weight])),
+        objectWeights: Object.fromEntries(guideImage.objects.map(obj => [obj.id, obj.weight])),
       };
     }
   }
@@ -126,19 +129,20 @@ export class ExporterV3 {
 
     if (imageMap === null) {
       throw new Error(`Invalid image map id: ${imageMapId} (Not Found)`);
-    } else {
+    }
+    else {
       return {
         description: imageMap.description,
         baseImagePath: imageMap.baseImagePath,
         objects: Object.fromEntries(
-          imageMap.objects.map((obj) => [
+          imageMap.objects.map(obj => [
             obj.id,
             {
               description: obj.description,
               outlineCoordinates: obj.outlineCoordinates,
               navigationIndex: obj.navigationIndex,
             },
-          ])
+          ]),
         ),
       };
     }
@@ -152,11 +156,10 @@ export class ExporterV3 {
     logger.debug(`Drinkware set id ${drinkwareSetId}`);
     logger.debug(`${JSON.stringify(drinkwareSet, null, 2)}`);
 
-    if (drinkwareSet === null) {
+    if (drinkwareSet === null)
       throw new Error(`Invalid drinkware set id: ${drinkwareSetId} (Not Found)`);
-    } else {
+    else
       return typeConverters.packageDrinkwareSet(drinkwareSet);
-    }
   }
 
   async getLocalFoodData(localeId: string, foodCode: string): Promise<FoodData> {
@@ -164,7 +167,8 @@ export class ExporterV3 {
 
     const foodRecord = await this.apiClient.foods.getFoodRecord(localeId, foodCode);
 
-    if (foodRecord === null) throw new Error(`Food record not found: (${localeId}, ${foodCode})`);
+    if (foodRecord === null)
+      throw new Error(`Food record not found: (${localeId}, ${foodCode})`);
 
     return {
       localFood: typeConverters.packageLocalFood(foodRecord.main.code, foodRecord.local),
@@ -177,7 +181,7 @@ export class ExporterV3 {
 
     const categoryRecord = await this.apiClient.categories.getCategoryRecord(
       localeId,
-      categoryCode
+      categoryCode,
     );
 
     if (categoryRecord === null)
@@ -186,7 +190,7 @@ export class ExporterV3 {
     return {
       localCategory: typeConverters.packageLocalCategory(
         categoryRecord.main.code,
-        categoryRecord.local
+        categoryRecord.local,
       ),
       globalCategory: typeConverters.packageGlobalCategory(categoryRecord.main),
     };
@@ -197,7 +201,8 @@ export class ExporterV3 {
 
     const properties = await this.apiClient.locales.get(localeId);
 
-    if (properties === null) throw new Error(`Invalid locale id: ${localeId} (Not Found)`);
+    if (properties === null)
+      throw new Error(`Invalid locale id: ${localeId} (Not Found)`);
 
     const [localFoodRecordCodes, enabledLocalFoods, categoryCodes] = await Promise.all([
       this.apiClient.foods.getLocalFoodCodes(localeId),
@@ -209,32 +214,32 @@ export class ExporterV3 {
 
     const foodData = await Promise.all(
       localFoodRecordCodes
-        .filter((code) => !this.skipFoodCodes.has(code))
-        .map((foodCode) => this.getLocalFoodData(localeId, foodCode))
+        .filter(code => !this.skipFoodCodes.has(code))
+        .map(foodCode => this.getLocalFoodData(localeId, foodCode)),
     );
 
     const categoryData = await Promise.all(
-      categoryCodes.map((categoryCode) => this.getLocalCategoryData(localeId, categoryCode))
+      categoryCodes.map(categoryCode => this.getLocalCategoryData(localeId, categoryCode)),
     );
 
     const sortedLocalFoods = sortBy(
-      foodData.map((data) => data.localFood),
-      (localFood) => localFood.code
+      foodData.map(data => data.localFood),
+      localFood => localFood.code,
     );
 
     const sortedGlobalFoods = sortBy(
-      foodData.map((data) => data.globalFood),
-      (globalFood) => globalFood.code
+      foodData.map(data => data.globalFood),
+      globalFood => globalFood.code,
     );
 
     const sortedLocalCategories = sortBy(
-      categoryData.map((data) => data.localCategory),
-      (localData) => localData.code
+      categoryData.map(data => data.localCategory),
+      localData => localData.code,
     );
 
     const sortedGlobalCategories = sortBy(
-      categoryData.map((data) => data.globalCategory),
-      (globalData) => globalData.code
+      categoryData.map(data => data.globalCategory),
+      globalData => globalData.code,
     );
 
     return {
@@ -250,11 +255,11 @@ export class ExporterV3 {
   public skipFoods(foodCodes: string[]) {
     logger.debug(JSON.stringify(foodCodes));
 
-    foodCodes.forEach((code) => this.skipFoodCodes.add(code));
+    foodCodes.forEach(code => this.skipFoodCodes.add(code));
   }
 
   async addLocales(localeIds: string[]): Promise<void> {
-    localeIds.forEach((id) => this.localeIds.add(id));
+    localeIds.forEach(id => this.localeIds.add(id));
   }
 
   private async writeJSON(object: any, outputPath: string): Promise<void> {
@@ -279,13 +284,12 @@ export class ExporterV3 {
 
   private async downloadImages(): Promise<void> {
     this.logger.info(`Downloading ${this.images.size} portion size images`);
-    await Promise.all([...this.images].map((imagePath) => this.downloadImage(imagePath)));
+    await Promise.all([...this.images].map(imagePath => this.downloadImage(imagePath)));
   }
 
   private collectFoodCompositionTableDependencies(localFoods: PkgLocalFood[]): void {
-    for (const localFood of localFoods) {
-      keys(localFood.nutrientTableCodes).forEach((id) => this.foodCompositionTableIds.add(id));
-    }
+    for (const localFood of localFoods)
+      keys(localFood.nutrientTableCodes).forEach(id => this.foodCompositionTableIds.add(id));
   }
 
   private addPortionSizeDependencies(portionSize: PkgPortionSizeMethod) {
@@ -306,16 +310,16 @@ export class ExporterV3 {
       case 'cereal':
         this.imageMapIds.add(PkgConstants.CEREAL_BOWL_IMAGE_MAP);
 
-        PkgConstants.CEREAL_BOWL_TYPES.flatMap((bowlType) => [
+        PkgConstants.CEREAL_BOWL_TYPES.flatMap(bowlType => [
           `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}`,
           `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}${PkgConstants.CEREAL_AS_SERVED_LEFTOVERS_SUFFIX}`,
-        ]).forEach((id) => this.asServedSetIds.add(id));
+        ]).forEach(id => this.asServedSetIds.add(id));
 
         break;
       case 'milk-on-cereal':
         PkgConstants.CEREAL_BOWL_TYPES.map(
-          (bowlType) => `${PkgConstants.CEREAL_MILK_LEVEL_IMAGE_MAP_PREFIX}${bowlType}`
-        ).flatMap((id) => this.imageMapIds.add(id));
+          bowlType => `${PkgConstants.CEREAL_MILK_LEVEL_IMAGE_MAP_PREFIX}${bowlType}`,
+        ).flatMap(id => this.imageMapIds.add(id));
         break;
       case 'pizza':
         this.imageMapIds.add(PkgConstants.PIZZA_IMAGE_MAP);
@@ -330,49 +334,43 @@ export class ExporterV3 {
 
   private collectFoodPortionSizeDependencies(localFoods: PkgLocalFood[]): void {
     for (const localFood of localFoods) {
-      for (const portionSize of localFood.portionSize) {
+      for (const portionSize of localFood.portionSize)
         this.addPortionSizeDependencies(portionSize);
-      }
     }
   }
 
   private collectCategoryPortionSizeDependencies(localCategories: PkgLocalCategory[]): void {
     for (const localCategory of localCategories) {
-      for (const portionSize of localCategory.portionSize) {
+      for (const portionSize of localCategory.portionSize)
         this.addPortionSizeDependencies(portionSize);
-      }
     }
   }
 
   private collectDrinkwareDependencies(drinkwareSets: PkgDrinkwareSet[]): void {
     for (const drinkwareSet of drinkwareSets) {
       this.imageMapIds.add(drinkwareSet.selectionImageMapId);
-      for (const [id, scale] of Object.entries(drinkwareSet.scales)) {
+      for (const [_id, scale] of Object.entries(drinkwareSet.scales)) {
         this.images.add(scale.baseImagePath);
-        if (scale.version === 1) {
+        if (scale.version === 1)
           this.images.add(scale.overlayImagePath);
-        }
       }
     }
   }
 
   private collectGuideImageDependencies(guideImages: PkgGuideImage[]): void {
-    for (const guideImage of guideImages) {
+    for (const guideImage of guideImages)
       this.imageMapIds.add(guideImage.imageMapId);
-    }
   }
 
   private collectImageMapDependencies(imageMaps: PkgImageMap[]): void {
-    for (const imageMap of imageMaps) {
+    for (const imageMap of imageMaps)
       this.images.add(imageMap.baseImagePath);
-    }
   }
 
   private collectAsServedDependencies(asServedSets: PkgAsServedSet[]): void {
     for (const asServedSet of asServedSets) {
-      for (const image of asServedSet.images) {
+      for (const image of asServedSet.images)
         this.images.add(image.imagePath);
-      }
     }
   }
 
@@ -389,7 +387,7 @@ export class ExporterV3 {
   public async export() {
     const sortedLocaleIds = [...this.localeIds].sort();
 
-    const localeData = await Promise.all(sortedLocaleIds.map((id) => this.getLocaleData(id)));
+    const localeData = await Promise.all(sortedLocaleIds.map(id => this.getLocaleData(id)));
 
     localeData.forEach((data) => {
       this.collectFoodPortionSizeDependencies(data.localFoods);
@@ -397,13 +395,13 @@ export class ExporterV3 {
     });
 
     const uniqueGlobalFoods = uniqBy(
-      localeData.flatMap((data) => data.globalFoods),
-      (globalFood) => globalFood.code
+      localeData.flatMap(data => data.globalFoods),
+      globalFood => globalFood.code,
     );
 
     const uniqueGlobalCategories = uniqBy(
-      localeData.flatMap((data) => data.globalCategories),
-      (globalFood) => globalFood.code
+      localeData.flatMap(data => data.globalCategories),
+      globalFood => globalFood.code,
     );
 
     // Drinkware sets and guide images contain references to image maps, download these first
@@ -411,22 +409,22 @@ export class ExporterV3 {
 
     const sortedDrinkwareIds = [...this.drinkwareIds].sort();
     const drinkwareData = await Promise.all(
-      sortedDrinkwareIds.map((id) => this.getDrinkwareData(id))
+      sortedDrinkwareIds.map(id => this.getDrinkwareData(id)),
     );
     this.collectDrinkwareDependencies(drinkwareData);
 
     const sortedGuideImageIds = [...this.guideImageIds].sort();
     const guideImageData = await Promise.all(
-      sortedGuideImageIds.map((id) => this.getGuideImageData(id))
+      sortedGuideImageIds.map(id => this.getGuideImageData(id)),
     );
     this.collectGuideImageDependencies(guideImageData);
 
     const sortedImageMapIds = [...this.imageMapIds].sort();
-    const imageMapData = await Promise.all(sortedImageMapIds.map((id) => this.getImageMapData(id)));
+    const imageMapData = await Promise.all(sortedImageMapIds.map(id => this.getImageMapData(id)));
     this.collectImageMapDependencies(imageMapData);
 
     const sortedAsServedIds = [...this.asServedSetIds].sort();
-    const asServedData = await Promise.all(sortedAsServedIds.map((id) => this.getAsServedData(id)));
+    const asServedData = await Promise.all(sortedAsServedIds.map(id => this.getAsServedData(id)));
     this.collectAsServedDependencies(asServedData);
 
     const writer = new PackageWriter(logger, this.workingDir, this.options);
@@ -434,30 +432,30 @@ export class ExporterV3 {
     await Promise.all([
       writer.writeGlobalFoods(uniqueGlobalFoods),
       writer.writeGlobalCategories(uniqueGlobalCategories),
-      writer.writeLocales(localeData.map((data) => data.properties)),
+      writer.writeLocales(localeData.map(data => data.properties)),
       writer.writeLocalFoods(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
-            localeData.map((data) => data.localFoods)
-          )
-        )
+            localeData.map(data => data.localFoods),
+          ),
+        ),
       ),
       writer.writeLocalCategories(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
-            localeData.map((data) => data.localCategories)
-          )
-        )
+            localeData.map(data => data.localCategories),
+          ),
+        ),
       ),
       writer.writeEnabledLocalFoods(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
-            localeData.map((data) => data.enabledLocalFoods)
-          )
-        )
+            localeData.map(data => data.enabledLocalFoods),
+          ),
+        ),
       ),
       writer.writeDrinkwareSets(Object.fromEntries(zip(sortedDrinkwareIds, drinkwareData))),
       writer.writeGuideImages(Object.fromEntries(zip(sortedGuideImageIds, guideImageData))),

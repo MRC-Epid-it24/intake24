@@ -8,12 +8,12 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { getRequestParamFromSecurable, getResourceFromSecurable } from '@intake24/common/util';
 import { securableIncludes, securableScope } from '@intake24/db';
 
-export type CheckAccessOptions = {
+export interface CheckAccessOptions {
   params: Dictionary;
   scope?: string | string[];
-};
+}
 
-const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig' | 'user'>) => {
+function aclService({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig' | 'user'>) {
   const { userId } = user;
 
   /**
@@ -32,7 +32,7 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
    *
    * @returns {Promise<string[]>}
    */
-  const getRoles = async (): Promise<string[]> => aclCache.getPermissions(userId);
+  const getRoles = async (): Promise<string[]> => aclCache.getRoles(userId);
 
   /**
    * Check is user has provided permission or each permission in provided list
@@ -42,12 +42,13 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
    */
   const hasPermission = async (permission: string | string[]): Promise<boolean> => {
     const currentPermissions = await getPermissions();
-    if (!currentPermissions.length) return false;
+    if (!currentPermissions.length)
+      return false;
 
     if (Array.isArray(permission))
-      return permission.every((item) => currentPermissions.includes(item));
+      return permission.every(item => currentPermissions.includes(item));
 
-    return !!currentPermissions.find((name) => name === permission);
+    return !!currentPermissions.find(name => name === permission);
   };
 
   /**
@@ -58,9 +59,10 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
    */
   const hasAnyPermission = async (permissions: string[]): Promise<boolean> => {
     const currentPermissions = await getPermissions();
-    if (!currentPermissions.length) return false;
+    if (!currentPermissions.length)
+      return false;
 
-    return currentPermissions.some((item) => permissions.includes(item));
+    return currentPermissions.some(item => permissions.includes(item));
   };
 
   /**
@@ -71,11 +73,13 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
    */
   const hasRole = async (role: string | string[]): Promise<boolean> => {
     const currentRoles = await getRoles();
-    if (!currentRoles.length) return false;
+    if (!currentRoles.length)
+      return false;
 
-    if (Array.isArray(role)) return role.every((name) => currentRoles.includes(name));
+    if (Array.isArray(role))
+      return role.every(name => currentRoles.includes(name));
 
-    return !!currentRoles.find((name) => name === role);
+    return !!currentRoles.find(name => name === role);
   };
 
   /**
@@ -86,9 +90,10 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
    */
   const hasAnyRole = async (roles: string[]): Promise<boolean> => {
     const currentRoles = await getRoles();
-    if (!currentRoles.length) return false;
+    if (!currentRoles.length)
+      return false;
 
-    return currentRoles.some((item) => roles.includes(item));
+    return currentRoles.some(item => roles.includes(item));
   };
 
   /**
@@ -103,7 +108,7 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
   const hasSecurableAccess = async (securable: Securable, action: string): Promise<boolean> => {
     const isOwner = securable.ownerId === userId;
     const canAccess = !!securable.securables?.find(
-      (sec) => sec.userId === userId && sec.action === action
+      sec => sec.userId === userId && sec.action === action,
     );
 
     return isOwner || canAccess;
@@ -135,20 +140,23 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
   const checkAccess = async <T extends Securable>(
     req: Request,
     securable: ModelStatic<T>,
-    action: string
+    action: string,
   ): Promise<void> => {
     const securableType = securable.name;
 
-    if (await hasResourceAccess(securableType, action)) return;
+    if (await hasResourceAccess(securableType, action))
+      return;
 
     const paramId = getRequestParamFromSecurable(securableType);
     const { [paramId]: securableId } = req.params;
 
     const record = await securable.findByPk(securableId, securableScope(userId));
-    if (!record) throw new NotFoundError();
+    if (!record)
+      throw new NotFoundError();
 
     const canAccessRecord = await hasSecurableAccess(record, action);
-    if (!canAccessRecord) throw new ForbiddenError();
+    if (!canAccessRecord)
+      throw new ForbiddenError();
   };
 
   /**
@@ -163,15 +171,17 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
   const checkRecordAccess = async <T extends Securable>(
     securable: ModelStatic<T>,
     action: string,
-    record: T | null
+    record: T | null,
   ): Promise<T> => {
     if (await hasResourceAccess(securable.name, action)) {
-      if (!record) throw new NotFoundError();
+      if (!record)
+        throw new NotFoundError();
 
       return record;
     }
 
-    if (!record || !(await hasSecurableAccess(record, action))) throw new ForbiddenError();
+    if (!record || !(await hasSecurableAccess(record, action)))
+      throw new ForbiddenError();
 
     return record;
   };
@@ -179,10 +189,11 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
   const findAndCheckRecordAccess = async <T extends Securable>(
     securable: ModelStatic<T>,
     action: string,
-    findOptions: FindOptions<Attributes<T>>
+    findOptions: FindOptions<Attributes<T>>,
   ): Promise<T> => {
     const { attributes, include, ...rest } = findOptions;
-    if (Array.isArray(attributes) && !attributes.includes('ownerId')) attributes.push('ownerId');
+    if (Array.isArray(attributes) && !attributes.includes('ownerId'))
+      attributes.push('ownerId');
 
     const record = await securable.findOne({
       ...rest,
@@ -205,12 +216,13 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
   const findAndCheckVisibility = async <T extends HasVisibility>(
     securable: ModelStatic<T>,
     action: string,
-    findOptions: FindOptions<Attributes<T>>
+    findOptions: FindOptions<Attributes<T>>,
   ): Promise<T> => {
     const { attributes, include, ...rest } = findOptions;
     if (Array.isArray(attributes)) {
       ['ownerId', 'visibility'].forEach((attribute) => {
-        if (!attributes.includes(attribute)) attributes.push(attribute);
+        if (!attributes.includes(attribute))
+          attributes.push(attribute);
       });
     }
 
@@ -221,7 +233,8 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
     });
 
     if (await hasResourceAccess(securable.name, action)) {
-      if (!record) throw new NotFoundError();
+      if (!record)
+        throw new NotFoundError();
 
       return record;
     }
@@ -240,7 +253,7 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
    */
   const getResourceAccessActions = async (resource: string): Promise<string[]> =>
     (await getPermissions())
-      .filter((permission) => permission.startsWith(`${resource}|`))
+      .filter(permission => permission.startsWith(`${resource}|`))
       .map((permission) => {
         const [, action] = permission.split('|');
         return action;
@@ -285,7 +298,7 @@ const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
     getSecurableAccessActions,
     getAccessActions,
   };
-};
+}
 
 export default aclService;
 

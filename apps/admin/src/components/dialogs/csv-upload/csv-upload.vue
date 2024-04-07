@@ -3,14 +3,18 @@
     <template #activator="{ attrs, on }">
       <v-btn large v-bind="attrs" v-on="on">
         <v-list-item-title>
-          <v-icon left>fas fa-upload</v-icon>
+          <v-icon left>
+            fas fa-upload
+          </v-icon>
           {{ label }}
         </v-list-item-title>
       </v-btn>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-icon dark left>$upload</v-icon>
+        <v-icon dark left>
+          $upload
+        </v-icon>
         <v-toolbar-title>
           {{ dialogTitle }}
         </v-toolbar-title>
@@ -30,20 +34,22 @@
                   prepend-icon=""
                   prepend-inner-icon="fas fa-file-csv"
                   @change="form.errors.clear('file')"
-                ></v-file-input>
+                />
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-btn block color="primary" :disabled="jobInProgress" type="submit" x-large>
-                  <v-icon left>$upload</v-icon>
+                  <v-icon left>
+                    $upload
+                  </v-icon>
                   {{ $t('common.action.upload') }}
                 </v-btn>
               </v-col>
             </v-row>
-            <polls-job-list v-bind="{ jobs }"></polls-job-list>
+            <polls-job-list v-bind="{ jobs }" />
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn class="font-weight-bold" color="info" text @click.stop="close">
             {{ $t('common.action.close') }}
           </v-btn>
@@ -104,7 +110,8 @@ export default defineComponent({
     },
 
     async submit() {
-      if (this.jobInProgress) return;
+      if (this.jobInProgress)
+        return;
 
       const job = await this.form.post<JobAttributes>(this.endpoint);
 

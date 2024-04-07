@@ -8,11 +8,11 @@ module.exports = {
           allowNull: true,
           type: Sequelize.TEXT({ length: 'long' }),
         },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('surveys', 'overrides', { transaction });
     }),

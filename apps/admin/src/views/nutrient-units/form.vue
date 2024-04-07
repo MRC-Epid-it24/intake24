@@ -14,7 +14,7 @@
                 name="id"
                 outlined
                 prepend-inner-icon="$nutrient-units"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -25,7 +25,7 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -36,10 +36,10 @@
                 name="symbol"
                 outlined
                 prepend-inner-icon="fa-square-root-variable"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>

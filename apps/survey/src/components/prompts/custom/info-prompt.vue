@@ -5,10 +5,10 @@
     @action="updateAndAction"
   >
     <template #actions>
-      <next :disabled="!isValid" @click="updateAndAction('next')"></next>
+      <next :disabled="!isValid" @click="updateAndAction('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="updateAndAction('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="updateAndAction('next')" />
     </template>
   </component>
 </template>

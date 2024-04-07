@@ -47,7 +47,8 @@ export default defineComponent({
           this.handleSWRegisterError(e);
         },
       });
-    } catch {
+    }
+    catch {
       console.log('sw: PWA disabled.');
     }
   },
@@ -66,7 +67,7 @@ export default defineComponent({
     updateServiceWorker() {
       this.updateSW && this.updateSW(true);
     },
-    handleSWManualUpdates(swRegistration: ServiceWorkerRegistration) {
+    handleSWManualUpdates(_swRegistration: ServiceWorkerRegistration) {
       console.log('sw: Service worker has been registered.');
     },
     handleSWRegisterError(error: any) {

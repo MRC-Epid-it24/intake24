@@ -7,7 +7,7 @@
           :input-value="multiple"
           :label="$t('survey-schemes.prompts.multiple')"
           @change="update('multiple', $event)"
-        ></v-switch>
+        />
       </v-col>
     </v-row>
     <language-selector
@@ -22,7 +22,7 @@
           :key="lang"
           :options="options[lang]"
           @update:options="updateLanguage('options', lang, $event)"
-        ></options-list>
+        />
       </template>
     </language-selector>
   </v-tab-item>

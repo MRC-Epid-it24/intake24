@@ -16,6 +16,6 @@ export default (param: string): ValidationMiddleware[] => {
           },
         },
       },
-    })
+    }),
   );
 };

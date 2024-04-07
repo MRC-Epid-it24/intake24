@@ -9,8 +9,8 @@ export const profile = initContract().router({
     path: '/user/password',
     body: strongPasswordWithConfirm
       .extend({ passwordCurrent: z.string() })
-      .refine((data) => data.password === data.passwordConfirm, {
-        message: "Passwords don't match",
+      .refine(data => data.password === data.passwordConfirm, {
+        message: 'Passwords don\'t match',
         path: ['passwordConfirm'],
       }),
     responses: {

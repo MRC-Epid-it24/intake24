@@ -12,7 +12,7 @@ const schema = Object.entries({ ...defaults, name, visibility }).reduce<Schema>(
     acc[key] = { ...rest, optional: optional ?? true };
     return acc;
   },
-  {}
+  {},
 );
 
 export default validate(checkSchema(schema));

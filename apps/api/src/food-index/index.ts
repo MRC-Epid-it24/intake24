@@ -27,7 +27,6 @@ interface RebuildResponse {
 
 const foodIndex = {
   async init(): Promise<void> {
-    // eslint-disable-next-line no-new
     indexWorker = new Worker('./dist/foodIndexBuilder.js', {
       workerData: {
         env: config.app.env,
@@ -63,8 +62,9 @@ const foodIndex = {
 
           if (msg.success) {
             indexReady = true;
-          } else {
-            //TODO: should we throw an error here?
+          }
+          else {
+            // TODO: should we throw an error here?
             indexReady = false;
             logger.error(msg.error);
           }
@@ -82,7 +82,7 @@ const foodIndex = {
     const localesInDb = await FoodsLocale.findAll({ where: { id: uniqueLocales } });
     if (localesInDb.length !== uniqueLocales.length) {
       const missingLocales = uniqueLocales.filter(
-        (locale) => !localesInDb.find((localeInDb: FoodsLocale) => localeInDb.id === locale)
+        locale => !localesInDb.find((localeInDb: FoodsLocale) => localeInDb.id === locale),
       );
       logger.error(`Locales ${missingLocales.join(', ')} not found`);
     }
@@ -97,8 +97,9 @@ const foodIndex = {
 
           if (msg.success) {
             indexReady = true;
-          } else {
-            //TODO: should we throw an error here?
+          }
+          else {
+            // TODO: should we throw an error here?
             indexReady = false;
             logger.error(msg.error);
           }
@@ -152,11 +153,10 @@ const foodIndex = {
         order: [['steps', 'order', 'ASC']],
       });
 
-      if (result) {
+      if (result)
         return result;
-      } else {
+      else
         throw new Error('Recipe food not found');
-      }
     }
     throw new IndexNotReadyError();
   },
@@ -167,7 +167,7 @@ const foodIndex = {
     rankingAlgorithm: string,
     matchScoreWeight: number,
     includeHidden: boolean,
-    limitToCategory?: string
+    limitToCategory?: string,
   ): Promise<FoodSearchResponse> {
     if (indexReady) {
       queryIdCounter += 1;
@@ -179,11 +179,10 @@ const foodIndex = {
           if (msg.queryId === queryId) {
             indexWorker.removeListener('message', listener);
 
-            if (msg.success) {
+            if (msg.success)
               resolve(msg.results);
-            } else {
+            else
               reject(msg.error);
-            }
           }
         };
 

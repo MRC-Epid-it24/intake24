@@ -18,10 +18,10 @@ import {
   NutrientTableRecord,
 } from '@intake24/db';
 
-const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
+function localFoodsService({ db }: Pick<IoC, 'db'>) {
   async function toPortionSizeMethodAttrs(
     foodLocalId: string,
-    psm: PortionSizeMethod
+    psm: PortionSizeMethod,
   ): Promise<CreationAttributes<FoodPortionSizeMethod>> {
     return {
       foodLocalId,
@@ -37,10 +37,10 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
   async function updatePortionSizeMethodsImpl(
     foodLocalId: string,
     methods: PortionSizeMethod[],
-    transaction: Transaction
+    transaction: Transaction,
   ) {
     const creationAttributes = await Promise.all(
-      methods.map((psm) => toPortionSizeMethodAttrs(foodLocalId, psm))
+      methods.map(psm => toPortionSizeMethodAttrs(foodLocalId, psm)),
     );
 
     await FoodPortionSizeMethod.destroy({ where: { foodLocalId }, transaction });
@@ -51,7 +51,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
   async function updateNutrientMappingImpl(
     foodLocalId: string,
     nutrientTableReferences: Record<string, string>,
-    transaction: Transaction
+    transaction: Transaction,
   ) {
     const tableIds = new Set<string>();
     const recordIds = new Set<string>();
@@ -73,20 +73,21 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
 
     Object.entries(nutrientTableReferences).forEach(([nutrientTableId, nutrientTableRecordId]) => {
       const record = nutrientTableRecords.find(
-        (record) =>
-          record.nutrientTableId === nutrientTableId &&
-          record.nutrientTableRecordId === nutrientTableRecordId
+        record =>
+          record.nutrientTableId === nutrientTableId
+          && record.nutrientTableRecordId === nutrientTableRecordId,
       );
 
-      if (record === undefined)
+      if (record === undefined) {
         throw new Error(
-          `Could not find food nutrient table record: ${nutrientTableId}/${nutrientTableRecordId}`
+          `Could not find food nutrient table record: ${nutrientTableId}/${nutrientTableRecordId}`,
         );
+      }
 
       nutrientTableRecordIds.push(record.id);
     });
 
-    const creationAttributes = nutrientTableRecordIds.map((nutrientTableRecordId) => ({
+    const creationAttributes = nutrientTableRecordIds.map(nutrientTableRecordId => ({
       foodLocalId,
       nutrientTableRecordId,
     }));
@@ -100,7 +101,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
     localeId: string,
     request: CreateLocalFoodRequest,
     options: CreateLocalFoodRequestOptions,
-    transaction: Transaction
+    transaction: Transaction,
   ): Promise<boolean> {
     let created = false;
 
@@ -125,12 +126,14 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
         instance.version = randomUUID();
 
         await instance.save({ transaction });
-      } else {
+      }
+      else {
         throw new ConflictError(
-          `A record already exists for ${request.code} in locale ${localeId}`
+          `A record already exists for ${request.code} in locale ${localeId}`,
         );
       }
-    } else {
+    }
+    else {
       instance = await FoodLocal.create(
         {
           localeId,
@@ -140,7 +143,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
           version: randomUUID(),
           simpleName: toSimpleName(request.name),
         },
-        { transaction }
+        { transaction },
       );
 
       created = true;
@@ -158,10 +161,11 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
   const updatePortionSizeMethods = async (
     foodLocalId: string,
     methods: PortionSizeMethod[],
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<void> => {
-    if (transaction !== undefined)
+    if (transaction !== undefined) {
       await updatePortionSizeMethodsImpl(foodLocalId, methods, transaction);
+    }
     else {
       await db.foods.transaction(async (t) => {
         await updatePortionSizeMethodsImpl(foodLocalId, methods, t);
@@ -173,24 +177,26 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
     localeId: string,
     request: CreateLocalFoodRequest,
     options: CreateLocalFoodRequestOptions,
-    transaction?: Transaction
+    transaction?: Transaction,
   ): Promise<boolean> => {
     if (transaction !== undefined) {
       return await createImpl(localeId, request, options, transaction);
-    } else {
+    }
+    else {
       return await db.foods.transaction(async (transaction) => {
         return await createImpl(localeId, request, options, transaction);
       });
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const read = async (localeId: string, foodCode: string, transaction?: Transaction) => {};
+  const read = async (_localeId: string, _foodCode: string, _transaction?: Transaction) => {
+    //
+  };
 
   const updateEnabledFoods = async (localeId: string, enabledFoods: string[]) => {
     return await db.foods.transaction(async (transaction) => {
       await FoodLocalList.destroy({ where: { localeId }, transaction });
-      const records = enabledFoods.map((foodCode) => ({ localeId, foodCode }));
+      const records = enabledFoods.map(foodCode => ({ localeId, foodCode }));
       await FoodLocalList.bulkCreate(records, { transaction });
     });
   };
@@ -201,7 +207,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
     updatePortionSizeMethods,
     updateEnabledFoods,
   };
-};
+}
 
 export default localFoodsService;
 

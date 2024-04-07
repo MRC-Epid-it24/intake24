@@ -11,19 +11,17 @@ import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { Task } from '@intake24/db';
 
-const uniqueMiddleware = async <T extends AppRoute | AppRouter>(
-  value: any,
-  { taskId, req }: { taskId?: string; req: TsRestRequest<T> }
-) => {
+async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { taskId, req }: { taskId?: string; req: TsRestRequest<T> }) {
   const where: WhereOptions = taskId ? { id: { [Op.ne]: taskId } } : {};
 
-  if (!(await unique({ model: Task, condition: { field: 'name', value }, options: { where } })))
+  if (!(await unique({ model: Task, condition: { field: 'name', value }, options: { where } }))) {
     throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'name' }), {
       path: 'name',
     });
-};
+  }
+}
 
-export const task = () => {
+export function task() {
   return initServer().router(contract.admin.task, {
     browse: {
       middleware: [permission('tasks', 'tasks|browse')],
@@ -52,7 +50,8 @@ export const task = () => {
       middleware: [permission('tasks', 'tasks|read')],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId);
-        if (!task) throw new NotFoundError();
+        if (!task)
+          throw new NotFoundError();
 
         const bullJob = await req.scope.cradle.scheduler.tasks.getRepeatableJobById(taskId);
 
@@ -63,7 +62,8 @@ export const task = () => {
       middleware: [permission('tasks', 'tasks|edit')],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId);
-        if (!task) throw new NotFoundError();
+        if (!task)
+          throw new NotFoundError();
 
         const bullJob = await req.scope.cradle.scheduler.tasks.getRepeatableJobById(taskId);
 
@@ -76,7 +76,8 @@ export const task = () => {
         await uniqueMiddleware(body.name, { taskId, req });
 
         const task = await Task.findByPk(taskId);
-        if (!task) throw new NotFoundError();
+        if (!task)
+          throw new NotFoundError();
 
         await task.update(body);
         await req.scope.cradle.scheduler.tasks.updateJob(task);
@@ -90,7 +91,8 @@ export const task = () => {
       middleware: [permission('tasks', 'tasks|delete')],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId, { attributes: ['id'] });
-        if (!task) throw new NotFoundError();
+        if (!task)
+          throw new NotFoundError();
 
         await task.destroy();
         await req.scope.cradle.scheduler.tasks.removeJob(task);
@@ -104,17 +106,18 @@ export const task = () => {
         const { userId } = req.scope.cradle.user;
 
         const task = await Task.findByPk(taskId, { attributes: ['id', 'job', 'params'] });
-        if (!task) throw new NotFoundError();
+        if (!task)
+          throw new NotFoundError();
 
         const { job, params } = task;
 
         const jobEntry = await req.scope.cradle.scheduler.jobs.addJob(
           { userId, type: job, params },
-          { delay: 500 }
+          { delay: 500 },
         );
 
         return { status: 200, body: jobEntry };
       },
     },
   });
-};
+}

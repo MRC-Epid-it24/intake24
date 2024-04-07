@@ -2,7 +2,9 @@
   <v-expansion-panel v-bind="$attrs">
     <v-expansion-panel-header>
       <i18n path="prompts.linkedAmount.label">
-        <template #unit>{{ linkedQuantityUnit }}</template>
+        <template #unit>
+          {{ linkedQuantityUnit }}
+        </template>
         <template #food>
           <span class="font-weight-medium">{{ foodName }}</span>
         </template>
@@ -11,7 +13,7 @@
         </template>
       </i18n>
       <template #actions>
-        <expansion-panel-actions :valid="confirm"></expansion-panel-actions>
+        <expansion-panel-actions :valid="confirm" />
       </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
@@ -22,7 +24,7 @@
         :value="value"
         @input="updateQuantity"
         @update:confirm="updateConfirm"
-      ></quantity-card>
+      />
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
@@ -82,7 +84,8 @@ export default defineComponent({
 
     const linkedQuantityUnit = computed(() => {
       const unit = props.linkedParent.categories[0]?.unit;
-      if (!unit || !standardUnitRefs.value[unit]) return i18n.t('prompts.linkedAmount.unit');
+      if (!unit || !standardUnitRefs.value[unit])
+        return i18n.t('prompts.linkedAmount.unit');
 
       return translate(standardUnitRefs.value[unit].howMany, {
         path: 'prompts.linkedAmount.unit',
@@ -92,7 +95,7 @@ export default defineComponent({
     const parentQuantity = computed(() =>
       props.linkedParent.food?.portionSize?.method === 'guide-image'
         ? props.linkedParent.food.portionSize.quantity
-        : 0
+        : 0,
     );
 
     const updateQuantity = (value: number) => {
@@ -104,12 +107,15 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      if (!props.linkedParent.categories.length) return;
+      if (!props.linkedParent.categories.length)
+        return;
 
       const names = props.linkedParent.categories.map(({ unit }) => unit).filter(Boolean);
-      if (names.length) await fetchStandardUnits(names as string[]);
+      if (names.length)
+        await fetchStandardUnits(names as string[]);
 
-      if (!props.confirm) updateQuantity(parentQuantity.value);
+      if (!props.confirm)
+        updateQuantity(parentQuantity.value);
     });
 
     return {

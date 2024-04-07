@@ -3,7 +3,9 @@
     <template #activator="{ attrs, on }">
       <v-list-item key="respondentsFeedback" v-bind="attrs" link v-on="on">
         <v-list-item-title>
-          <v-icon left>fas fa-comments</v-icon>
+          <v-icon left>
+            fas fa-comments
+          </v-icon>
           {{ $t('surveys.respondents.feedback._') }}
         </v-list-item-title>
       </v-list-item>
@@ -33,20 +35,24 @@
           <v-row>
             <v-col cols="12" sm="6">
               <v-btn block :href="user.feedbackAuthUrl" outlined target="_blank" x-large>
-                <v-icon left>fas fa-up-right-from-square</v-icon>
+                <v-icon left>
+                  fas fa-up-right-from-square
+                </v-icon>
                 {{ $t(`surveys.respondents.feedback.open`) }}
               </v-btn>
             </v-col>
             <v-col cols="12" sm="6">
               <v-btn block outlined x-large @click.stop="download">
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t(`surveys.respondents.feedback.download`) }}
               </v-btn>
             </v-col>
           </v-row>
         </v-card-text>
       </v-container>
-      <v-divider></v-divider>
+      <v-divider />
       <v-form @submit.prevent="email">
         <v-card-title>
           {{ $t(`surveys.respondents.feedback.email.title`) }}
@@ -64,7 +70,7 @@
                   outlined
                   prepend-inner-icon="fas fa-envelope"
                   @input="form.errors.clear('email')"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-radio-group
@@ -76,17 +82,16 @@
                   row
                   @change="form.errors.clear('copy')"
                 >
-                  <v-radio :label="$t('surveys.respondents.feedback.email.copy.none')" value="none">
-                  </v-radio>
-                  <v-radio :label="$t('surveys.respondents.feedback.email.copy.cc')" value="cc">
-                  </v-radio>
-                  <v-radio :label="$t('surveys.respondents.feedback.email.copy.bcc')" value="bcc">
-                  </v-radio>
+                  <v-radio :label="$t('surveys.respondents.feedback.email.copy.none')" value="none" />
+                  <v-radio :label="$t('surveys.respondents.feedback.email.copy.cc')" value="cc" />
+                  <v-radio :label="$t('surveys.respondents.feedback.email.copy.bcc')" value="bcc" />
                 </v-radio-group>
               </v-col>
               <v-col class="ml-auto" cols="12" sm="auto">
                 <v-btn block color="primary" :disabled="form.errors.any()" type="submit" x-large>
-                  <v-icon left>fas fa-envelope</v-icon>
+                  <v-icon left>
+                    fas fa-envelope
+                  </v-icon>
                   {{ $t('surveys.respondents.feedback.email.sent') }}
                 </v-btn>
               </v-col>
@@ -94,7 +99,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn class="font-weight-bold" color="info" text @click.stop="close">
             {{ $t('common.action.close') }}
           </v-btn>
@@ -159,9 +164,10 @@ export default defineComponent({
           res,
           `Intake24-${this.surveyId}-${this.user.username}-${new Date()
             .toISOString()
-            .substring(0, 10)}.pdf`
+            .substring(0, 10)}.pdf`,
         );
-      } finally {
+      }
+      finally {
         loading.removeItem('respondent-feedback-download');
       }
     },

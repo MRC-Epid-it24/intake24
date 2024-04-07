@@ -9,12 +9,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_foods_attributes RENAME CONSTRAINT foods_attributes_pk TO v3_foods_attributes_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE foods_attributes_id_seq RENAME TO v3_foods_attributes_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -46,7 +46,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('food_attributes', {
@@ -70,7 +70,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO food_attributes (id, food_code, same_as_before_option, ready_meal_option, reasonable_amount, use_in_recipes) SELECT id, food_code, same_as_before_option, ready_meal_option, reasonable_amount, use_in_recipes FROM v3_foods_attributes',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('food_attributes', 'id', { queryInterface, transaction });
@@ -81,17 +81,17 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_foods_categories RENAME CONSTRAINT foods_categories_pk TO v3_foods_categories_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_foods_categories RENAME CONSTRAINT foods_categories_unique TO v3_foods_categories_unique;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE foods_categories_id_seq RENAME TO v3_foods_categories_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -106,7 +106,7 @@ module.exports = {
             type: Sequelize.STRING(8),
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('foods_categories', {
@@ -153,7 +153,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO foods_categories (food_code, category_code) SELECT food_code, category_code FROM v3_foods_categories',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('food_groups', 'v3_food_groups', {
@@ -162,12 +162,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_food_groups RENAME CONSTRAINT food_groups_id_pk TO v3_food_groups_id_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE food_groups_id_seq RENAME TO v3_food_groups_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -183,7 +183,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('food_groups', ['name'], {
@@ -194,7 +194,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO food_groups (id, name) SELECT id, description FROM v3_food_groups',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('food_groups', 'id', { queryInterface, transaction });
@@ -205,7 +205,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_food_groups_local RENAME CONSTRAINT food_groups_local_pk TO v3_food_groups_local_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -229,7 +229,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('food_group_locals', {
@@ -278,7 +278,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO food_group_locals (food_group_id, locale_id, name) SELECT food_group_id, locale_id, local_description FROM v3_food_groups_local',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameColumn('foods', 'description', 'name', { transaction });
@@ -293,7 +293,7 @@ module.exports = {
         'foods',
         'food_group_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('food_nutrient_mapping', 'v3_food_nutrient_mapping', {
@@ -302,12 +302,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_food_nutrient_mapping RENAME CONSTRAINT food_nutrient_mapping_pkey1 TO v3_food_nutrient_mapping_pkey1;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE food_nutrient_mapping_id_seq1 RENAME TO v3_food_nutrient_mapping_id_seq1;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -322,7 +322,7 @@ module.exports = {
             type: Sequelize.BIGINT,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('foods_nutrients', {
@@ -369,7 +369,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO foods_nutrients (food_local_id, nutrient_table_record_id) SELECT food_local_id, nutrient_table_record_id FROM v3_food_nutrient_mapping',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('brands', 'v3_brands', {
@@ -378,12 +378,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_brands RENAME CONSTRAINT brands_pk TO v3_brands_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE brands_id_seq RENAME TO v3_brands_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -407,7 +407,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('brands', {
@@ -462,7 +462,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO brands (id, food_code, locale_id, name) SELECT id, food_code, locale_id, name FROM v3_brands',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('brands', 'id', { queryInterface, transaction });
@@ -473,12 +473,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_attribute_defaults RENAME CONSTRAINT attribute_defaults_pk TO v3_attribute_defaults_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE attribute_defaults_id_seq RENAME TO v3_attribute_defaults_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -506,12 +506,12 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO attribute_defaults (id, same_as_before_option, ready_meal_option, reasonable_amount, use_in_recipes) SELECT id, same_as_before_option, ready_meal_option, reasonable_amount, use_in_recipes FROM v3_attribute_defaults',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('attribute_defaults', 'id', { queryInterface, transaction });
@@ -522,17 +522,17 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_associated_foods RENAME CONSTRAINT associated_food_prompts_pk TO v3_associated_food_prompts_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_associated_foods RENAME CONSTRAINT either_food_or_category TO v3_either_food_or_category;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE associated_foods_id_seq RENAME TO v3_associated_foods_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -572,7 +572,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('associated_foods', {
@@ -659,7 +659,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO associated_foods (id, food_code, locale_id, associated_food_code, associated_category_code, text, link_as_main, generic_name) SELECT id, food_code, locale_id, associated_food_code, associated_category_code, text, link_as_main, generic_name FROM v3_associated_foods',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('associated_foods', 'id', { queryInterface, transaction });

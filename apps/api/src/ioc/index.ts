@@ -267,7 +267,7 @@ export interface RequestIoC extends IoC {
   clientLanguages: string[];
 }
 
-const configureContainer = () => {
+function configureContainer() {
   const container = createContainer<IoC>({ strict: true });
 
   container.register({
@@ -299,6 +299,6 @@ const configureContainer = () => {
   jobs(container);
 
   return container;
-};
+}
 
 export default configureContainer();

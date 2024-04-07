@@ -5,7 +5,7 @@ import { ref, unref, watch } from 'vue';
 import type { Pagination } from '@intake24/db';
 import { useHttp } from '@intake24/admin/services';
 
-export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) => {
+export function useFetchList<T = any>(url: string, id?: string | Ref<string>) {
   const http = useHttp();
 
   const dialog = ref(false);
@@ -31,7 +31,8 @@ export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) =>
 
       items.value = data;
       lastPage.value = meta.lastPage;
-    } finally {
+    }
+    finally {
       loading.value = false;
     }
   };
@@ -42,13 +43,15 @@ export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) =>
   };
 
   watch(dialog, async (val) => {
-    if (!val || items.value.length) return;
+    if (!val || items.value.length)
+      return;
 
     await fetch();
   });
 
   watch(page, async (val, oldVal) => {
-    if (val === oldVal) return;
+    if (val === oldVal)
+      return;
 
     await fetch();
   });
@@ -59,7 +62,7 @@ export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) =>
       page.value = 1;
       await fetch();
     },
-    { debounce: 500, maxWait: 1000 }
+    { debounce: 500, maxWait: 1000 },
   );
 
   return {
@@ -72,4 +75,4 @@ export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) =>
     fetch,
     clear,
   };
-};
+}

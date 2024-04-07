@@ -1,6 +1,6 @@
 import { PasswordBcrypt } from '@intake24/common-backend';
 
-describe('PasswordBcrypt', () => {
+describe('passwordBcrypt', () => {
   it('should pass on correct password', async () => {
     const password = new PasswordBcrypt();
     const hashedPassword = await password.hash('password');

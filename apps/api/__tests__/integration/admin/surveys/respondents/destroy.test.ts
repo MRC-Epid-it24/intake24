@@ -27,7 +27,7 @@ export default () => {
 
     const respondent = await ioc.cradle.adminSurveyService.createRespondent(
       survey.id,
-      mocker.system.respondent()
+      mocker.system.respondent(),
     );
 
     url = `${baseUrl}/${survey.id}/respondents/${respondent.username}`;
@@ -35,7 +35,7 @@ export default () => {
     invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 
@@ -67,7 +67,7 @@ export default () => {
 
       const { username } = await ioc.cradle.adminSurveyService.createRespondent(
         survey.id,
-        mocker.system.respondent()
+        mocker.system.respondent(),
       );
       const url2 = `${baseUrl}/${survey.id}/respondents/${username}`;
 
@@ -80,7 +80,7 @@ export default () => {
 
       const { username } = await ioc.cradle.adminSurveyService.createRespondent(
         survey.id,
-        mocker.system.respondent()
+        mocker.system.respondent(),
       );
       const url3 = `${baseUrl}/${survey.id}/respondents/${username}`;
 

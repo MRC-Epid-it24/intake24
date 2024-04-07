@@ -1,13 +1,19 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <template #header>{{ $t('prompts.directWeight.label') }} - {{ localeDescription }}</template>
+    <template #header>
+      {{ $t('prompts.directWeight.label') }} - {{ localeDescription }}
+    </template>
     <v-row>
       <v-col>
         <v-card>
           Portion: {{ weight }}g
           <v-card-actions>
-            <v-btn @click="quantity(-1)"> - </v-btn>
-            <v-btn @click="quantity(1)"> + </v-btn>
+            <v-btn @click="quantity(-1)">
+              -
+            </v-btn>
+            <v-btn @click="quantity(1)">
+              +
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

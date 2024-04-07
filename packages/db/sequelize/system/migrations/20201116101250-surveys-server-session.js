@@ -3,7 +3,7 @@ module.exports = {
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `UPDATE surveys SET store_user_session_on_server = false WHERE store_user_session_on_server IS NULL`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -13,7 +13,7 @@ module.exports = {
           type: Sequelize.BOOLEAN,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
@@ -26,7 +26,7 @@ module.exports = {
           type: Sequelize.BOOLEAN,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
     }),
 };

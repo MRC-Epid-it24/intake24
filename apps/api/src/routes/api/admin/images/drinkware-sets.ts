@@ -22,12 +22,12 @@ export default () => {
     .post(
       permission('drinkware-sets|create'),
       validation.store,
-      wrapAsync(drinkwareSetController.store)
+      wrapAsync(drinkwareSetController.store),
     )
     .get(
       permission('drinkware-sets|browse'),
       validation.browse,
-      wrapAsync(drinkwareSetController.browse)
+      wrapAsync(drinkwareSetController.browse),
     );
 
   router.get('/refs', wrapAsync(drinkwareSetController.refs));
@@ -41,14 +41,14 @@ export default () => {
       bodyJsonField('scales'),
       validation.update,
       parseBaseImages,
-      wrapAsync(drinkwareSetController.update)
+      wrapAsync(drinkwareSetController.update),
     )
     .delete(permission('drinkware-sets|delete'), wrapAsync(drinkwareSetController.destroy));
 
   router.get(
     '/:drinkwareSetId/edit',
     permission('drinkware-sets|edit'),
-    wrapAsync(drinkwareSetController.edit)
+    wrapAsync(drinkwareSetController.edit),
   );
 
   router.use('/:drinkwareSetId/scales', drinkScales());

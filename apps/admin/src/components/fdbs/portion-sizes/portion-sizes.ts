@@ -153,7 +153,7 @@ export const psmDefaults: PortionSizeMethodItem[] = [
   },
 ];
 
-export const usePortionSizeMethods = () => {
+export function usePortionSizeMethods() {
   const { i18n } = useI18n();
 
   const estimationMethods = psmDefaults.map(({ method: value }) => ({
@@ -162,7 +162,7 @@ export const usePortionSizeMethods = () => {
   }));
 
   const selections = Object.keys(portionSizeSelectionImages)
-    .map((value) => ({
+    .map(value => ({
       value,
       text: i18n.t(`prompts.portionSizeOption.selections.${value}`).toString(),
     }))
@@ -172,4 +172,4 @@ export const usePortionSizeMethods = () => {
   }[];
 
   return { estimationMethods, selections };
-};
+}

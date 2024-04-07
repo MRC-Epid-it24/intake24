@@ -47,7 +47,8 @@ export const categories: ParamSchema = {
       if (value.some(({ code }) => !code || typeof code !== 'string'))
         throw new Error(customTypeErrorMessage('array.string', meta));
 
-      if (!value.length) return;
+      if (!value.length)
+        return;
 
       const code = value.map(({ code }) => code);
 
@@ -68,7 +69,8 @@ export const locales: ParamSchema = {
       if (value.some(({ id }) => !id || typeof id !== 'string'))
         throw new Error(customTypeErrorMessage('array.string', meta));
 
-      if (!value.length) return;
+      if (!value.length)
+        return;
 
       const id = value.map(({ id }) => id);
 
@@ -89,7 +91,8 @@ export const nutrients: Schema = {
         if (value.some(({ id }) => !id || typeof id !== 'string'))
           throw new Error(customTypeErrorMessage('array.string', meta));
 
-        if (!value.length) return;
+        if (!value.length)
+          return;
 
         const id = value.map(({ id }) => id);
 
@@ -155,10 +158,11 @@ export const portionSizeMethods: Schema = {
         try {
           portionSizeParameter.parse(value);
           return true;
-        } catch (err) {
-          if (err instanceof ZodError) {
+        }
+        catch (err) {
+          if (err instanceof ZodError)
             throw err.errors.at(0)?.message;
-          }
+
           throw err;
         }
       },
@@ -185,20 +189,25 @@ export const associatedFoods: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
-        if (Number.isNaN(index)) throw new Error('Invalid index');
+        if (Number.isNaN(index))
+          throw new Error('Invalid index');
 
         const { associatedFoodCode } = meta.req.body.associatedFoods[index];
 
         if (value) {
-          if (associatedFoodCode) throw new Error('Either category or food code can be defined.');
+          if (associatedFoodCode)
+            throw new Error('Either category or food code can be defined.');
 
           const category = await Category.findByPk(value, { attributes: ['code'] });
-          if (!category)
+          if (!category) {
             throw new Error(
-              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' })
+              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' }),
             );
-        } else {
-          if (!associatedFoodCode) throw new Error('Category or food code is required');
+          }
+        }
+        else {
+          if (!associatedFoodCode)
+            throw new Error('Category or food code is required');
         }
       },
     },
@@ -210,7 +219,8 @@ export const associatedFoods: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
-        if (Number.isNaN(index)) throw new Error('Invalid index');
+        if (Number.isNaN(index))
+          throw new Error('Invalid index');
 
         const { associatedCategoryCode } = meta.req.body.associatedFoods[index];
 
@@ -219,12 +229,15 @@ export const associatedFoods: Schema = {
             throw new Error('Either category or food code can be defined.');
 
           const food = await Food.findByPk(value, { attributes: ['code'] });
-          if (!food)
+          if (!food) {
             throw new Error(
-              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' })
+              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' }),
             );
-        } else {
-          if (!associatedCategoryCode) throw new Error('Category or food code is required');
+          }
+        }
+        else {
+          if (!associatedCategoryCode)
+            throw new Error('Category or food code is required');
         }
       },
     },
@@ -233,7 +246,8 @@ export const associatedFoods: Schema = {
     in: ['body'],
     custom: {
       options: async (value, meta): Promise<void> => {
-        if (!isPlainObject(value)) throw new Error(customTypeErrorMessage('object._', meta));
+        if (!isPlainObject(value))
+          throw new Error(customTypeErrorMessage('object._', meta));
       },
     },
   },
@@ -247,7 +261,8 @@ export const associatedFoods: Schema = {
     in: ['body'],
     custom: {
       options: async (value, meta): Promise<void> => {
-        if (!isPlainObject(value)) throw new Error(customTypeErrorMessage('object._', meta));
+        if (!isPlainObject(value))
+          throw new Error(customTypeErrorMessage('object._', meta));
       },
     },
   },

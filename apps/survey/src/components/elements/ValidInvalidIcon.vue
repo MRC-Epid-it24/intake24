@@ -1,5 +1,7 @@
 <template>
-  <v-icon class="no-rotate" :color="color">{{ icon }}</v-icon>
+  <v-icon class="no-rotate" :color="color">
+    {{ icon }}
+  </v-icon>
 </template>
 
 <script lang="ts">

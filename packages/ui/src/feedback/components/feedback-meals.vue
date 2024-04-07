@@ -15,14 +15,13 @@
             name="submissions"
             prepend-inner-icon="fas fa-calendar-day"
             solo
-          >
-          </v-select>
+          />
           <v-data-table
             class="elevation-1"
             :headers="headers"
             :hide-default-footer="true"
             :items="mealStats.table.tableData"
-          ></v-data-table>
+          />
         </v-col>
       </v-row>
       <v-row class="d-print-none" justify="center" no-gutters>
@@ -35,17 +34,17 @@
           xl="4"
         >
           <v-card class="pa-4">
-            <chart autoresize class="chart" :option="chart"></chart>
+            <chart autoresize class="chart" :option="chart" />
           </v-card>
         </v-col>
       </v-row>
       <v-row class="mb-6" justify="center">
-        <v-col cols="12" sm="auto"> </v-col>
+        <v-col cols="12" sm="auto" />
       </v-row>
     </v-container>
     <div class="d-none d-print-block">
       <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
-        <chart autoresize class="chart-print" :option="chart"></chart>
+        <chart autoresize class="chart-print" :option="chart" />
       </div>
     </div>
   </div>
@@ -104,24 +103,24 @@ export default defineComponent({
       buildMealStats(
         props.config,
         selected.value ? props.surveyStats.getMealStats(selected.value) : [],
-        props.nutrientTypes
-      )
+        props.nutrientTypes,
+      ),
     );
 
     const submissionItems = computed(() =>
       props.submissions.map((item, idx) => ({
         text: `${i18n.t('recall.submissions._')} ${idx + 1}  | ${new Date(
-          item.endTime
+          item.endTime,
         ).toLocaleDateString()}`,
         value: item.id,
-      }))
+      })),
     );
 
     const headers = computed(() =>
       mealStats.value.table.fields.map(({ header, fieldId }) => ({
         text: translate(header),
         value: fieldId,
-      }))
+      })),
     );
 
     const charts = computed(() => {
@@ -156,7 +155,7 @@ export default defineComponent({
             ],
             formatter: ({ seriesName, name: itemName, value, percent }: any) =>
               `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
-                value
+                value,
               )} ${unit} (${Math.round(percent ?? 0)}%)`,
           },
           series: [
@@ -183,7 +182,7 @@ export default defineComponent({
                 alignTo: 'edge',
                 formatter: ({ name: itemName, value, percent }) =>
                   `${itemName} \n {times|${round(
-                    typeof value === 'number' ? value : 0
+                    typeof value === 'number' ? value : 0,
                   )} ${unit} (${Math.round(percent ?? 0)}%)}`,
                 minMargin: 5,
                 edgeDistance: 10,

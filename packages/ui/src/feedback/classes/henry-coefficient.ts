@@ -18,7 +18,7 @@ export default class HenryCoefficient {
     ageRange: DemographicRange,
     weightCoefficient: number,
     heightCoefficient: number,
-    constant: number
+    constant: number,
   ) {
     this.sex = sex;
     this.ageRange = ageRange.clone();
@@ -33,7 +33,7 @@ export default class HenryCoefficient {
       new DemographicRange(coefficient.age.start, coefficient.age.end),
       coefficient.weightCoefficient,
       coefficient.heightCoefficient,
-      coefficient.constant
+      coefficient.constant,
     );
   }
 
@@ -43,7 +43,7 @@ export default class HenryCoefficient {
       this.ageRange,
       this.weightCoefficient,
       this.heightCoefficient,
-      this.constant
+      this.constant,
     );
   }
 

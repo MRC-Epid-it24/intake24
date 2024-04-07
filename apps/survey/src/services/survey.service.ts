@@ -28,11 +28,11 @@ export default {
 
   generateUser: async (
     surveyId: string,
-    payload: GenerateUserPayload
+    payload: GenerateUserPayload,
   ): Promise<GenerateUserResponse> => {
     const { data } = await http.post<GenerateUserResponse>(
       `surveys/${surveyId}/generate-user`,
-      payload
+      payload,
     );
 
     return data;
@@ -70,14 +70,15 @@ export default {
     try {
       const { data } = await http.get<SurveyUserSessionResponse>(`surveys/${surveyId}/session`);
       return data;
-    } catch (err) {
+    }
+    catch (err) {
       return null;
     }
   },
 
   setUserSession: async (
     surveyId: string,
-    sessionData: SurveyState
+    sessionData: SurveyState,
   ): Promise<SurveyUserSessionResponse> => {
     const { data } = await http.post<SurveyUserSessionResponse>(`surveys/${surveyId}/session`, {
       sessionData,
@@ -94,7 +95,7 @@ export default {
     const { data } = await http.post<SurveySubmissionResponse>(
       `surveys/${surveyId}/submission`,
       { submission },
-      { params: { tzOffset } }
+      { params: { tzOffset } },
     );
 
     return data;

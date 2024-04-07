@@ -6,7 +6,7 @@ module.exports = {
         'v3_nutrient_table_records_fields',
         {
           transaction,
-        }
+        },
       );
 
       await queryInterface.createTable(
@@ -44,19 +44,19 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO nutrient_table_record_fields (nutrient_table_id, v3_nutrient_table_record_id, name, value) SELECT nutrient_table_id, nutrient_table_record_id, field_name, field_value FROM v3_nutrient_table_records_fields',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE nutrient_table_record_fields SET nutrient_table_record_id = nutrient_table_records.id from nutrient_table_records
                 WHERE nutrient_table_record_fields.nutrient_table_id = nutrient_table_records.nutrient_table_id
                   AND nutrient_table_record_fields.v3_nutrient_table_record_id = nutrient_table_records.nutrient_table_record_id`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -68,7 +68,7 @@ module.exports = {
         },
         {
           transaction,
-        }
+        },
       );
 
       await queryInterface.removeColumn('nutrient_table_record_fields', 'nutrient_table_id', {
@@ -78,7 +78,7 @@ module.exports = {
       await queryInterface.removeColumn(
         'nutrient_table_record_fields',
         'v3_nutrient_table_record_id',
-        { transaction }
+        { transaction },
       );
     });
   },

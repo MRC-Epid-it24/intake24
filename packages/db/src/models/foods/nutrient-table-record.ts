@@ -82,7 +82,7 @@ export default class NutrientTableRecord extends BaseModel<
   declare fields?: NonAttribute<NutrientTableRecordField[]>;
 
   getNutrientByType(nutrientTypeId: string): NutrientTableRecordNutrient | undefined {
-    return this.nutrients?.find((nutrient) => nutrient.nutrientTypeId === nutrientTypeId);
+    return this.nutrients?.find(nutrient => nutrient.nutrientTypeId === nutrientTypeId);
   }
 }
 

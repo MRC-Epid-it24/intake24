@@ -15,7 +15,7 @@ export class PortionSizeApiV3 {
 
   public async exportAsServedSet(id: string): Promise<PortableAsServedSetV3 | null> {
     return this.baseClient.getOptional<PortableAsServedSetV3>(
-      `/admin/portion-size/as-served/${id}/export`
+      `/admin/portion-size/as-served/${id}/export`,
     );
   }
 
@@ -25,13 +25,13 @@ export class PortionSizeApiV3 {
 
   public async exportImageMap(imageMapId: string): Promise<PortableImageMapV3 | null> {
     return this.baseClient.getOptional<PortableImageMapV3>(
-      `/v2/foods/admin/portion-size/image-maps/${imageMapId}/export`
+      `/v2/foods/admin/portion-size/image-maps/${imageMapId}/export`,
     );
   }
 
   public async exportDrinkwareSet(drinkwareSetId: string): Promise<PortableDrinkwareSetV3 | null> {
     return this.baseClient.getOptional<PortableDrinkwareSetV3>(
-      `/v2/foods/admin/portion-size/drinkware/${drinkwareSetId}/export`
+      `/v2/foods/admin/portion-size/drinkware/${drinkwareSetId}/export`,
     );
   }
 }

@@ -4,9 +4,9 @@ import download from './download.test';
 import read from './read.test';
 
 export default () => {
-  describe('GET /api/admin/jobs', browse);
-  describe('GET /api/admin/jobs/:jobId', read);
-  describe('GET /api/admin/jobs/:jobId/download', download);
+  describe('get /api/admin/jobs', browse);
+  describe('get /api/admin/jobs/:jobId', read);
+  describe('get /api/admin/jobs/:jobId/download', download);
   // describe('GET /api/admin/jobs/:jobId/repeat', repeat);
-  describe('DELETE /api/admin/jobs/:jobId', destroy);
+  describe('delete /api/admin/jobs/:jobId', destroy);
 };

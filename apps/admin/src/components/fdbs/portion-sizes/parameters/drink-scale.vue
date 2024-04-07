@@ -7,11 +7,10 @@
         :label="$t('fdbs.portionSizes.methods.drink-scale.drinkwareSet')"
         name="drinkwareSetId"
         resource="drinkware-sets"
-      >
-      </select-resource>
+      />
     </v-col>
-    <v-col cols="12"
-      ><v-slider
+    <v-col cols="12">
+      <v-slider
         v-model="parameters.initialFillLevel"
         class="mt-5"
         :label="$t('fdbs.portionSizes.methods.drink-scale.initialLevel')"
@@ -19,28 +18,28 @@
         :min="0"
         :step="0.05"
         thumb-label="always"
-      ></v-slider>
+      />
     </v-col>
     <v-col cols="12">
       <v-switch
         v-model="parameters.skipFillLevel"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.drink-scale.skipFillLevelPrompt')"
-      ></v-switch>
+      />
     </v-col>
     <v-col cols="12">
       <v-switch
         v-model="parameters.imageMapLabels"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.drink-scale.imageMapLabels')"
-      ></v-switch>
+      />
     </v-col>
     <v-col cols="12">
       <v-switch
         v-model="parameters.multiple"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.drink-scale.multiple')"
-      ></v-switch>
+      />
     </v-col>
   </v-row>
 </template>

@@ -13,7 +13,7 @@
             outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
-          ></v-file-input>
+          />
         </v-col>
       </v-row>
     </v-card-text>

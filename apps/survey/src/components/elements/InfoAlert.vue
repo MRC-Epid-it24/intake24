@@ -46,7 +46,8 @@ export default defineComponent({
           this.alert = false;
           this.$emit('alert-dismissed');
         }, 5000);
-      } else {
+      }
+      else {
         this.alert = false;
       }
     },

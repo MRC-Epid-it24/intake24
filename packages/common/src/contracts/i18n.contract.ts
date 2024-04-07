@@ -27,7 +27,7 @@ export const i18n = initContract().router({
     method: 'GET',
     path: '/i18n/:languageId',
     pathParams: z.object({
-      languageId: z.string().refine((val) => isLocale(val)),
+      languageId: z.string().refine(val => isLocale(val)),
     }),
     query: z.object({
       app: z.enum(frontEnds),

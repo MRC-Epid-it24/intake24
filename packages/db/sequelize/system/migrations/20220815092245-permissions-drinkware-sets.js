@@ -1,7 +1,7 @@
 const { createPermissions } = require('../../utils.js');
 
 module.exports = {
-  up: async (queryInterface) =>
+  up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const permissions = [
         { name: 'drinkware-sets', display_name: 'Drinkware sets resource access' },
@@ -14,11 +14,11 @@ module.exports = {
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `DELETE FROM permissions WHERE name ilike 'drinkware-sets%';`,
-        { transaction }
+        { transaction },
       );
     }),
 };

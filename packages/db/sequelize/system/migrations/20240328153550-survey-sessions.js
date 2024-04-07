@@ -10,7 +10,7 @@ module.exports = {
 
       const surveys = await queryInterface.sequelize.query(
         `SELECT id, submission_notification_url FROM surveys;`,
-        { type: Sequelize.QueryTypes.SELECT, transaction }
+        { type: Sequelize.QueryTypes.SELECT, transaction },
       );
 
       for (const survey of surveys) {
@@ -18,12 +18,13 @@ module.exports = {
 
         const notifications = [];
 
-        if (submission_notification_url)
+        if (submission_notification_url) {
           notifications.push({
             type: 'survey.session.submitted',
             channel: 'webhook',
             url: submission_notification_url,
           });
+        }
 
         await queryInterface.sequelize.query(
           `UPDATE surveys SET submission_notification_url = :notifications WHERE id = :id;`,
@@ -31,7 +32,7 @@ module.exports = {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
             replacements: { id, notifications: JSON.stringify(notifications) },
             transaction,
-          }
+          },
         );
       }
 
@@ -47,7 +48,7 @@ module.exports = {
           allowNull: false,
           defaultValue: '[]',
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
@@ -58,7 +59,7 @@ module.exports = {
           type: Sequelize.STRING(32),
           defaultValue: '12h',
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
@@ -69,7 +70,7 @@ module.exports = {
           type: Sequelize.BOOLEAN,
           defaultValue: true,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameColumn('survey_submissions', 'ux_session_id', 'session_id', {
@@ -89,7 +90,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE old_user_survey_sessions RENAME CONSTRAINT user_survey_sessions_pkey TO old_user_survey_sessions_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -126,12 +127,12 @@ module.exports = {
           uniqueKeys: {
             user_survey_sessions_unique: { fields: ['survey_id', 'user_id'] },
           },
-        }
+        },
       );
 
       await queryInterface.sequelize.query(
         `INSERT INTO user_survey_sessions (id, user_id, survey_id, session_data, created_at, updated_at) SELECT (session_data::json->>'uxSessionId')::uuid, old.user_id, old.survey_id, old.session_data, old.created_at, old.updated_at FROM old_user_survey_sessions old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_survey_sessions', {
@@ -177,7 +178,7 @@ module.exports = {
           type: Sequelize.STRING(2048),
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameColumn('surveys', 'notifications', 'submission_notification_url', {
@@ -186,7 +187,7 @@ module.exports = {
 
       const surveys = await queryInterface.sequelize.query(
         `SELECT id, submission_notification_url FROM surveys;`,
-        { type: Sequelize.QueryTypes.SELECT, transaction }
+        { type: Sequelize.QueryTypes.SELECT, transaction },
       );
 
       for (const survey of surveys) {
@@ -201,7 +202,7 @@ module.exports = {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
             replacements: { id, url },
             transaction,
-          }
+          },
         );
       }
 

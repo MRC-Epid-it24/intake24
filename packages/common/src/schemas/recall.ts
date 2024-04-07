@@ -64,7 +64,7 @@ export const surveyState = z.object({
   userAgent: z.string().nullable(),
   flags: z.array(z.string()),
   customPromptAnswers: z.record(z.string()),
-  selection: selection,
+  selection,
   meals: mealState.array(),
 });
 

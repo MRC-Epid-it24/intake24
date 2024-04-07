@@ -5,11 +5,12 @@ import { ApplicationError } from '@intake24/api/http/errors';
 import { atob } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
 
-export const duo = () => {
+export function duo() {
   return initServer().router(contract.admin.user.mfa.duo, {
     challenge: async ({ req }) => {
       const subject = atob<Subject>(req.scope.cradle.user.sub);
-      if (subject.provider !== 'email') throw new ApplicationError('Invalid user - missing email.');
+      if (subject.provider !== 'email')
+        throw new ApplicationError('Invalid user - missing email.');
 
       const options = await req.scope.cradle.duoProvider.registrationChallenge(subject.providerKey);
 
@@ -22,7 +23,8 @@ export const duo = () => {
       const { challengeId, name, token } = body;
       const subject = atob<Subject>(sub);
 
-      if (subject.provider !== 'email') throw new ApplicationError('Invalid user - missing email.');
+      if (subject.provider !== 'email')
+        throw new ApplicationError('Invalid user - missing email.');
 
       if (req.session.duoRegChallenge?.challengeId !== challengeId) {
         delete req.session.duoRegChallenge;
@@ -41,4 +43,4 @@ export const duo = () => {
       return { status: 200, body: device };
     },
   });
-};
+}

@@ -20,9 +20,10 @@ export default validate(
             attributes: ['id'],
             where: { id: value, email: { [Op.ne]: null } },
           });
-          if (!user) throw new Error(customTypeErrorMessage('exists._', meta));
+          if (!user)
+            throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },
     },
-  })
+  }),
 );

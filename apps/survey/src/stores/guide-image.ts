@@ -23,11 +23,13 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
   getters: {
     selectedObjectIndex: (state) => {
       return (foodId: number | undefined) => {
-        if (foodId === undefined) return null;
-        if (!state.foodState[foodId]) return null;
+        if (foodId === undefined)
+          return null;
+        if (!state.foodState[foodId])
+          return null;
         if (
-          state.foodState[foodId].food.portionSize !== null &&
-          state.foodState[foodId].food.portionSize?.method === 'guide-image'
+          state.foodState[foodId].food.portionSize !== null
+          && state.foodState[foodId].food.portionSize?.method === 'guide-image'
         ) {
           const objIdx = state.foodState[foodId].objectIdx;
           return objIdx !== null ? objIdx - 1 : null;
@@ -37,11 +39,13 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
     },
     selectedPanelState: (state) => {
       return (foodId: number | undefined) => {
-        if (foodId === undefined) return 0;
-        if (!state.foodState[foodId]) return 0;
+        if (foodId === undefined)
+          return 0;
+        if (!state.foodState[foodId])
+          return 0;
         if (
-          state.foodState[foodId].food.portionSize !== null &&
-          state.foodState[foodId].food.portionSize?.method === 'guide-image'
+          state.foodState[foodId].food.portionSize !== null
+          && state.foodState[foodId].food.portionSize?.method === 'guide-image'
         ) {
           const panelState = state.foodState[foodId].panelOpen;
           return panelState ?? 0;
@@ -56,13 +60,13 @@ export const useFoodGuideImageState = defineStore('guide-image-state', {
       foodId: number,
       data: EncodedFood,
       objIdx: number | null = null,
-      panelOpen = 0
+      panelOpen = 0,
     ) {
       const newGuideState: GuideImageEncodedFood = {
         objectIdx: objIdx,
         food: data,
-        mealId: mealId,
-        panelOpen: panelOpen,
+        mealId,
+        panelOpen,
       };
       this.foodState = { ...this.foodState, [foodId]: newGuideState };
     },

@@ -42,7 +42,8 @@ export class Mailer {
         break;
       case 'log':
       default:
-        if (!isTest) options = { streamTransport: true };
+        if (!isTest)
+          options = { streamTransport: true };
         break;
     }
 
@@ -59,7 +60,7 @@ export class Mailer {
       };
 
       let { html } = options;
-      let text: string | undefined = undefined;
+      let text: string | undefined;
 
       if (html && typeof html === 'string') {
         html = replaceCssAsInlineStyle(html);
@@ -76,8 +77,10 @@ export class Mailer {
       this.logger.info(info.messageId);
 
       // TODO: pipe it to winston logger
-      if (this.mailConfig.mailer === 'log') info.message.pipe(process.stdout);
-    } catch (err) {
+      if (this.mailConfig.mailer === 'log')
+        info.message.pipe(process.stdout);
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         this.logger.error(`${name}: ${message}`, { stack });

@@ -13,7 +13,7 @@
                 :label="$t('surveys.id')"
                 name="slug"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -23,7 +23,7 @@
                 :label="$t('surveys.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
@@ -35,8 +35,7 @@
                 name="localeId"
                 resource="locales"
                 @input="form.errors.clear('localeId')"
-              >
-              </select-resource>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
@@ -47,8 +46,7 @@
                 name="surveySchemeId"
                 resource="survey-schemes"
                 @input="form.errors.clear('surveySchemeId')"
-              >
-              </select-resource>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <date-picker
@@ -56,7 +54,7 @@
                 :error-messages="form.errors.get('startDate')"
                 :label="$t('surveys.startDate').toString()"
                 @change="form.errors.clear('startDate')"
-              ></date-picker>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <date-picker
@@ -64,7 +62,7 @@
                 :error-messages="form.errors.get('endDate')"
                 :label="$t('surveys.endDate').toString()"
                 @change="form.errors.clear('endDate')"
-              ></date-picker>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -76,7 +74,7 @@
                 name="supportEmail"
                 outlined
                 prepend-inner-icon="fas fa-envelope"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -89,7 +87,7 @@
                 outlined
                 prepend-inner-icon="fas fa-spinner"
                 @change="form.errors.clear('state')"
-              ></v-select>
+              />
             </v-col>
             <v-col v-show="form.state === 'suspended'" cols="12">
               <v-text-field
@@ -99,13 +97,15 @@
                 :label="$t('surveys.suspensionReason')"
                 name="suspensionReason"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <v-divider class="my-6"></v-divider>
+          <v-divider class="my-6" />
           <v-row>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">{{ $t('surveys.search._') }}</div>
+              <div class="text-h5 mb-4">
+                {{ $t('surveys.search._') }}
+              </div>
               <v-switch
                 v-model="form.searchCollectData"
                 class="my-6"
@@ -114,7 +114,7 @@
                 :label="$t('surveys.search.collectData')"
                 name="searchCollectData"
                 @change="form.errors.clear('searchCollectData')"
-              ></v-switch>
+              />
               <v-select
                 v-model="form.searchSortingAlgorithm"
                 :error-messages="form.errors.get('searchSortingAlgorithm')"
@@ -125,7 +125,7 @@
                 outlined
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
                 @change="form.errors.clear('searchSortingAlgorithm')"
-              ></v-select>
+              />
               <v-slider
                 v-model.number="form.searchMatchScoreWeight"
                 class="mt-10"
@@ -136,13 +136,15 @@
                 min="0"
                 name="searchMatchScoreWeight"
                 thumb-label="always"
-              ></v-slider>
+              />
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
-              <v-divider :vertical="$vuetify.breakpoint.mdAndUp"></v-divider>
+              <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">{{ $t('surveys.users._') }}</div>
+              <div class="text-h5 mb-4">
+                {{ $t('surveys.users._') }}
+              </div>
               <v-switch
                 v-model="form.userPersonalIdentifiers"
                 :error-messages="form.errors.get('userPersonalIdentifiers')"
@@ -150,7 +152,7 @@
                 :label="$t('surveys.users.personalIdentifiers')"
                 name="userPersonalIdentifiers"
                 @change="form.errors.clear('userPersonalIdentifiers')"
-              ></v-switch>
+              />
               <v-switch
                 v-model="form.userCustomFields"
                 :error-messages="form.errors.get('userCustomFields')"
@@ -158,13 +160,15 @@
                 :label="$t('surveys.users.customFields')"
                 name="userCustomFields"
                 @change="form.errors.clear('userCustomFields')"
-              ></v-switch>
+              />
             </v-col>
           </v-row>
-          <v-divider class="my-6"></v-divider>
+          <v-divider class="my-6" />
           <v-row>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">{{ $t('surveys.auth._') }}</div>
+              <div class="text-h5 mb-4">
+                {{ $t('surveys.auth._') }}
+              </div>
               <v-switch
                 v-model="form.authCaptcha"
                 class="my-6"
@@ -173,7 +177,7 @@
                 :label="$t('surveys.auth.captcha')"
                 name="authCaptcha"
                 @change="form.errors.clear('authCaptcha')"
-              ></v-switch>
+              />
               <v-text-field
                 v-model="form.authUrlTokenCharset"
                 class="mb-4"
@@ -183,7 +187,7 @@
                 name="authUrlTokenCharset"
                 outlined
                 prepend-inner-icon="fas fa-font"
-              ></v-text-field>
+              />
               <v-text-field
                 v-model.number="form.authUrlTokenLength"
                 class="mb-4"
@@ -193,7 +197,7 @@
                 name="authUrlTokenLength"
                 outlined
                 prepend-inner-icon="fas fa-ruler-horizontal"
-              ></v-text-field>
+              />
               <v-text-field
                 v-model="form.authUrlDomainOverride"
                 :error-messages="form.errors.get('authUrlDomainOverride')"
@@ -202,13 +206,15 @@
                 name="authUrlDomainOverride"
                 outlined
                 prepend-inner-icon="fas fa-up-right-from-square"
-              ></v-text-field>
+              />
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
-              <v-divider :vertical="$vuetify.breakpoint.mdAndUp"></v-divider>
+              <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
+              <div class="text-h5 mb-4">
+                {{ $t('surveys.submissionLimits._') }}
+              </div>
               <v-text-field
                 v-model.number="form.maximumDailySubmissions"
                 class="mb-4"
@@ -217,7 +223,7 @@
                 :label="$t('surveys.submissionLimits.maxDaily')"
                 name="maximumDailySubmissions"
                 outlined
-              ></v-text-field>
+              />
               <v-text-field
                 v-model.number="form.maximumTotalSubmissions"
                 class="mb-4"
@@ -226,7 +232,7 @@
                 :label="$t('surveys.submissionLimits.maxTotal')"
                 name="maximumTotalSubmissions"
                 outlined
-              ></v-text-field>
+              />
               <v-text-field
                 v-model.number="form.minimumSubmissionInterval"
                 :error-messages="form.errors.get('minimumSubmissionInterval')"
@@ -234,13 +240,15 @@
                 :label="$t('surveys.submissionLimits.minInterval')"
                 name="minimumSubmissionInterval"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <v-divider class="my-6"></v-divider>
+          <v-divider class="my-6" />
           <v-row>
             <v-col cols="12" md>
-              <div class="text-h5">{{ $t('surveys.externalComm._') }}</div>
+              <div class="text-h5">
+                {{ $t('surveys.externalComm._') }}
+              </div>
               <v-switch
                 v-model="form.allowGenUsers"
                 class="my-6"
@@ -249,7 +257,7 @@
                 :label="$t('surveys.externalComm.allowGenUsers')"
                 name="allowGenUsers"
                 @change="form.errors.clear('allowGenUsers')"
-              ></v-switch>
+              />
               <v-text-field
                 v-model="form.genUserKey"
                 :append-icon="showGenUserKey ? 'fas fa-eye' : 'fas fa-eye-slash'"
@@ -262,19 +270,21 @@
                 outlined
                 :type="showGenUserKey ? 'text' : 'password'"
                 @click:append="showGenUserKey = !showGenUserKey"
-              ></v-text-field>
+              />
               <event-notifications
                 v-model="form.notifications"
                 :error-messages="form.errors.get('notifications')"
                 name="notifications"
                 @input="form.errors.clear('notifications')"
-              ></event-notifications>
+              />
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
-              <v-divider :vertical="$vuetify.breakpoint.mdAndUp"></v-divider>
+              <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">{{ $t('surveys.session._') }}</div>
+              <div class="text-h5 mb-4">
+                {{ $t('surveys.session._') }}
+              </div>
               <v-switch
                 v-model="form.storeUserSessionOnServer"
                 class="my-6"
@@ -283,7 +293,7 @@
                 :label="$t('surveys.session.storeOnServer')"
                 name="storeUserSessionOnServer"
                 @change="form.errors.clear('storeUserSessionOnServer')"
-              ></v-switch>
+              />
               <v-text-field
                 v-model="form.sessionLifetime"
                 :error-messages="form.errors.get('sessionLifetime')"
@@ -293,11 +303,13 @@
                 name="sessionLifetime"
                 outlined
                 prepend-inner-icon="fas fa-stopwatch"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h5 mb-4">{{ $t('surveys.feedback._') }}</div>
+          <v-divider class="my-6" />
+          <div class="text-h5 mb-4">
+            {{ $t('surveys.feedback._') }}
+          </div>
           <v-row>
             <v-col cols="12" md="6">
               <select-resource
@@ -309,8 +321,7 @@
                 name="feedbackSchemeId"
                 resource="feedback-schemes"
                 @input="form.errors.clear('feedbackSchemeId')"
-              >
-              </select-resource>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -321,10 +332,10 @@
                 :label="$t('surveys.feedback.numberOfSubmissions')"
                 name="numberOfSubmissionsForFeedback"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -448,11 +459,11 @@ export default defineComponent({
   data() {
     return {
       showGenUserKey: false,
-      surveyStates: surveyStates.map((value) => ({
+      surveyStates: surveyStates.map(value => ({
         value,
         text: this.$t(`surveys.states.${value}`),
       })),
-      searchSortingAlgorithms: searchSortingAlgorithms.map((value) => ({
+      searchSortingAlgorithms: searchSortingAlgorithms.map(value => ({
         value,
         text: this.$t(`surveys.search.algorithms.${value}`),
       })),
@@ -462,7 +473,8 @@ export default defineComponent({
   watch: {
     'form.allowGenUsers': {
       handler(val) {
-        if (!val) this.showGenUserKey = false;
+        if (!val)
+          this.showGenUserKey = false;
       },
     },
   },

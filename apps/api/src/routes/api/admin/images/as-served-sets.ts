@@ -21,12 +21,12 @@ export default () => {
       permission('as-served-sets|create'),
       upload.single('selectionImage'),
       validation.store,
-      wrapAsync(asServedSetController.store)
+      wrapAsync(asServedSetController.store),
     )
     .get(
       permission('as-served-sets|browse'),
       validation.browse,
-      wrapAsync(asServedSetController.browse)
+      wrapAsync(asServedSetController.browse),
     );
 
   router.get('/refs', wrapAsync(asServedSetController.refs));
@@ -37,14 +37,14 @@ export default () => {
     .put(
       permission('as-served-sets|edit'),
       validation.update,
-      wrapAsync(asServedSetController.update)
+      wrapAsync(asServedSetController.update),
     )
     .delete(permission('as-served-sets|delete'), wrapAsync(asServedSetController.destroy));
 
   router.get(
     '/:asServedSetId/edit',
     permission('as-served-sets|edit'),
-    wrapAsync(asServedSetController.edit)
+    wrapAsync(asServedSetController.edit),
   );
 
   router.use('/:asServedSetId/images', asServedImages());

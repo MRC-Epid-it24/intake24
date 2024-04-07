@@ -17,11 +17,7 @@ export type ListOps<I, O = I> = {
 
 // TODO: fix generic types casting
 
-export const useListWithDialog = <I, O>(
-  props: ListProps<O>,
-  context: SetupContext,
-  ops: ListOps<I, O>
-) => {
+export function useListWithDialog<I, O>(props: ListProps<O>, context: SetupContext, ops: ListOps<I, O>) {
   const { value } = toRefs(props);
   const { newItem, transformIn, transformOut } = ops;
   const form = ref<InstanceType<typeof HTMLFormElement>>();
@@ -45,7 +41,8 @@ export const useListWithDialog = <I, O>(
   });
 
   watch(value, (val) => {
-    if (deepEqual(val, outputItems.value)) return;
+    if (deepEqual(val, outputItems.value))
+      return;
 
     items.value = copy(transformIn ? val.map(transformIn) : val) as any;
   });
@@ -56,6 +53,10 @@ export const useListWithDialog = <I, O>(
 
   const edit = (index: number, item: UnwrapRef<I>) => {
     dialog.value = { show: true, index, item: copy(item) };
+  };
+
+  const update = () => {
+    context.emit('input', outputItems.value);
   };
 
   const load = (list: UnwrapRef<I>[]) => {
@@ -74,7 +75,8 @@ export const useListWithDialog = <I, O>(
   };
 
   const resetList = () => {
-    if (!props.defaults) return;
+    if (!props.defaults)
+      return;
 
     items.value = [...props.defaults] as UnwrapRef<I>[];
     update();
@@ -82,19 +84,17 @@ export const useListWithDialog = <I, O>(
 
   const save = () => {
     const isValid = form.value?.validate();
-    if (!isValid) return;
+    if (!isValid)
+      return;
 
     const { index, item } = dialog.value;
 
-    if (index === -1) items.value.push(item);
+    if (index === -1)
+      items.value.push(item);
     else items.value.splice(index, 1, item);
 
     reset();
     update();
-  };
-
-  const update = () => {
-    context.emit('input', outputItems.value);
   };
 
   return {
@@ -111,4 +111,4 @@ export const useListWithDialog = <I, O>(
     update,
     resetList,
   };
-};
+}

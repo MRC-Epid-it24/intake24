@@ -2,7 +2,9 @@
   <v-card class="pb-4" flat tile>
     <v-toolbar color="grey lighten-4" flat>
       <v-toolbar-title>
-        <v-icon left>{{ mode === 'drinksOnly' ? '$drink' : '$food' }}</v-icon>
+        <v-icon left>
+          {{ mode === 'drinksOnly' ? '$drink' : '$food' }}
+        </v-icon>
         {{ promptI18n.title }}
       </v-toolbar-title>
     </v-toolbar>
@@ -42,7 +44,9 @@
                 x-large
                 @click="moveToList"
               >
-                <v-icon left>fas fa-turn-down fa-rotate-90</v-icon>
+                <v-icon left>
+                  fas fa-turn-down fa-rotate-90
+                </v-icon>
                 {{ promptI18n.add }}
               </v-btn>
             </div>
@@ -64,8 +68,10 @@
                 :value="food.description"
                 @focusout.stop="focusOut(idx)"
                 @input="updateFood(idx, $event)"
-              ></v-text-field>
-              <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
+              />
+              <v-list-item-title v-else>
+                {{ getFoodName(food) }}
+              </v-list-item-title>
               <v-list-item-icon class="my-auto">
                 <confirm-dialog
                   :label="$t('recall.menu.food.delete').toString()"
@@ -166,7 +172,7 @@ export default defineComponent({
     const updateFoods = () => {
       ctx.emit(
         'input',
-        newFood.value.description.length ? [...foods.value, newFood.value] : foods.value
+        newFood.value.description.length ? [...foods.value, newFood.value] : foods.value,
       );
     };
 
@@ -175,7 +181,7 @@ export default defineComponent({
         updateFoods();
       },
       500,
-      { maxWait: 1000 }
+      { maxWait: 1000 },
     );
 
     const editFood = (index: number) => {
@@ -184,14 +190,16 @@ export default defineComponent({
 
     const updateFood = (index: number, description: string) => {
       const food = index === foods.value.length ? newFood.value : foods.value[index];
-      if (food.type !== 'free-text') return;
+      if (food.type !== 'free-text')
+        return;
 
       food.description = description;
       debouncedUpdateFoods();
     };
 
     const moveToList = () => {
-      if (!newFood.value.description.length) return;
+      if (!newFood.value.description.length)
+        return;
 
       foods.value.push(newFood.value);
       editFood(foods.value.length - 1);
@@ -200,7 +208,8 @@ export default defineComponent({
     };
 
     const deleteFood = (index: number) => {
-      if (editIndex.value === index) editIndex.value = null;
+      if (editIndex.value === index)
+        editIndex.value = null;
 
       const [food] = foods.value.splice(index, 1);
       updateFoods();
@@ -210,14 +219,16 @@ export default defineComponent({
     const focusOut = (index: number) => {
       const editEntry = foods.value[index];
 
-      if (editEntry.type === 'free-text' && !editEntry.description.trim().length) deleteFood(index);
+      if (editEntry.type === 'free-text' && !editEntry.description.trim().length)
+        deleteFood(index);
     };
 
     onMounted(async () => {
-      if (!props.focus || !search.value) return;
+      if (!props.focus || !search.value)
+        return;
 
       await nextTick();
-      //@ts-expect-error - vuetify types
+      // @ts-expect-error - vuetify types
       search.value.focus();
     });
 

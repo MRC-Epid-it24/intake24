@@ -4,7 +4,7 @@
     v-model="state"
     v-bind="{ meal, prompt, section }"
     @action="action"
-  ></ready-meal-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -44,19 +44,18 @@ export default defineComponent({
     const getInitialState = computed(() =>
       (
         meal.value.foods.filter(
-          (food) => food.type === 'encoded-food' && food.data.readyMealOption
+          food => food.type === 'encoded-food' && food.data.readyMealOption,
         ) as EncodedFood[]
-      ).map((food) => ({
+      ).map(food => ({
         id: food.id,
         name: food.data.localName,
         value: alreadyAnswered.value ? food.flags.includes('ready-meal') : undefined,
-      }))
+      })),
     );
 
     const commitAnswer = () => {
-      for (const food of state.value) {
+      for (const food of state.value)
         survey.setFoodFlag(food.id, 'ready-meal', !!food.value);
-      }
 
       survey.addMealFlag(meal.value.id, 'ready-meal-complete');
     };
@@ -64,7 +63,8 @@ export default defineComponent({
     const { state, action } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
     onMounted(() => {
-      if (!state.value.length) action('next');
+      if (!state.value.length)
+        action('next');
     });
 
     return { meal, state, action };

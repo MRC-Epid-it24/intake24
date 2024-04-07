@@ -11,14 +11,14 @@ export default validate(
       if (
         value.some(
           ({ id, firstWord, words }) =>
-            (typeof id !== 'undefined' && typeof id !== 'string') ||
-            typeof firstWord !== 'string' ||
-            typeof words !== 'string'
+            (typeof id !== 'undefined' && typeof id !== 'string')
+            || typeof firstWord !== 'string'
+            || typeof words !== 'string',
         )
       )
         return false;
 
       return true;
     })
-    .withMessage('Invalid split lists')
+    .withMessage('Invalid split lists'),
 );

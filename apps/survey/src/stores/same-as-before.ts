@@ -14,8 +14,8 @@ export interface SameAsBeforeState {
   items: {
     [userId: string]:
       | {
-          [foodCode: string]: SameAsBeforeItem | undefined;
-        }
+        [foodCode: string]: SameAsBeforeItem | undefined;
+      }
       | undefined;
   };
 }
@@ -28,12 +28,15 @@ export const useSameAsBefore = defineStore('same-as-before', {
   actions: {
     getItem(localeId: string, foodCode: string) {
       const { userId } = useUser();
-      if (!userId) return undefined;
+      if (!userId)
+        return undefined;
 
       const item = this.items[userId]?.[foodCode];
-      if (item?.localeId !== localeId) return undefined;
+      if (item?.localeId !== localeId)
+        return undefined;
 
-      if (item.food.data.sameAsBeforeOption) return item;
+      if (item.food.data.sameAsBeforeOption)
+        return item;
 
       this.removeItem(foodCode);
       return undefined;
@@ -41,19 +44,23 @@ export const useSameAsBefore = defineStore('same-as-before', {
 
     removeItem(foodCode: string) {
       const { userId } = useUser();
-      if (!userId) return undefined;
+      if (!userId)
+        return undefined;
 
-      const { [foodCode]: remove, ...rest } = this.items[userId] ?? {};
+      const { [foodCode]: _remove, ...rest } = this.items[userId] ?? {};
       this.items = { ...this.items, [userId]: { ...rest } };
     },
 
     saveItem(localeId: string, food: EncodedFood) {
       const { userId } = useUser();
-      if (!userId) return;
+      if (!userId)
+        return;
 
-      if (!food.data.sameAsBeforeOption) return;
+      if (!food.data.sameAsBeforeOption)
+        return;
 
-      if (!this.items[userId]) this.items[userId] = {};
+      if (!this.items[userId])
+        this.items[userId] = {};
 
       this.items[userId]![food.data.code] = { food, localeId, createdAt: Date.now() };
     },

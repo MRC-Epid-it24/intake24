@@ -4,10 +4,10 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LanguageTranslationsResponse } from '@intake24/common/types/http/admin';
 import { Language } from '@intake24/db';
 
-const languageTranslationController = ({ languageService }: Pick<IoC, 'languageService'>) => {
+function languageTranslationController({ languageService }: Pick<IoC, 'languageService'>) {
   const browse = async (
     req: Request<{ languageId: string }>,
-    res: Response<LanguageTranslationsResponse>
+    res: Response<LanguageTranslationsResponse>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -24,7 +24,7 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
 
   const store = async (
     req: Request<{ languageId: string }>,
-    res: Response<LanguageTranslationsResponse>
+    res: Response<LanguageTranslationsResponse>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -41,7 +41,7 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
 
   const update = async (
     req: Request<{ languageId: string }>,
-    res: Response<LanguageTranslationsResponse>
+    res: Response<LanguageTranslationsResponse>,
   ): Promise<void> => {
     const {
       body,
@@ -56,7 +56,7 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
 
     const translations = await languageService.updateLanguageTranslations(
       languageId,
-      body.translations
+      body.translations,
     );
 
     res.json(translations);
@@ -64,7 +64,7 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
 
   const destroy = async (
     req: Request<{ languageId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -81,7 +81,7 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
 
   const sync = async (
     req: Request<{ languageId: string }>,
-    res: Response<LanguageTranslationsResponse>
+    res: Response<LanguageTranslationsResponse>,
   ): Promise<void> => {
     const { languageId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -104,7 +104,7 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
     destroy,
     sync,
   };
-};
+}
 
 export default languageTranslationController;
 

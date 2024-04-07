@@ -1,5 +1,5 @@
 <template>
-  <meal-gap-prompt v-bind="{ meals, prompt, section }" @action="action"></meal-gap-prompt>
+  <meal-gap-prompt v-bind="{ meals, prompt, section }" @action="action" />
 </template>
 
 <script lang="ts">
@@ -41,12 +41,15 @@ export default defineComponent({
         return;
       }
 
-      if (startMeal) survey.addMealFlag(startMeal.id, 'no-meals-before');
-      if (endMeal) survey.addMealFlag(endMeal.id, 'no-meals-after');
+      if (startMeal)
+        survey.addMealFlag(startMeal.id, 'no-meals-before');
+      if (endMeal)
+        survey.addMealFlag(endMeal.id, 'no-meals-after');
     };
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commit();
+      if (type === 'next')
+        commit();
 
       emit('action', type, ...args);
     };

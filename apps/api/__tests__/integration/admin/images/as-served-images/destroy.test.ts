@@ -29,7 +29,7 @@ export default () => {
     invalidParentUrl = `${invalidBaseUrl}/${output.id}`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 

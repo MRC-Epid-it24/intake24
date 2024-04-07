@@ -11,10 +11,10 @@ import type { PaginateQuery, SurveySubmissionAttributes, WhereOptions } from '@i
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Op, submissionScope, Survey, SurveySubmission } from '@intake24/db';
 
-const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
+function adminSurveySubmissionController({ cache }: Pick<IoC, 'cache'>) {
   const browse = async (
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
-    res: Response<SurveySubmissionsResponse>
+    res: Response<SurveySubmissionsResponse>,
   ): Promise<void> => {
     const {
       params: { surveyId },
@@ -29,12 +29,15 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
 
     const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (typeof search === 'string' && search) {
-      if (isUUID(search)) where.id = search;
-      else
+      if (isUUID(search)) {
+        where.id = search;
+      }
+      else {
         where['$user.aliases.username$'] = {
           [SurveySubmission.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.substring]:
             `%${search}%`,
         };
+      }
     }
 
     const submissions = await SurveySubmission.paginate({
@@ -62,7 +65,7 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
 
   const entry = async (
     req: Request<{ surveyId: string; submissionId: string }>,
-    res: Response<SurveySubmissionEntry>
+    res: Response<SurveySubmissionEntry>,
   ): Promise<void> => {
     const { surveyId, submissionId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -77,14 +80,15 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
       ...scope,
       where: { ...scope.where, id: submissionId },
     });
-    if (!submission) throw new NotFoundError();
+    if (!submission)
+      throw new NotFoundError();
 
     res.json(submission);
   };
 
   const destroy = async (
     req: Request<{ surveyId: string; submissionId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { surveyId, submissionId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -98,7 +102,8 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
       attributes: ['id', 'userId'],
       where: { id: submissionId, surveyId },
     });
-    if (!submission) throw new NotFoundError();
+    if (!submission)
+      throw new NotFoundError();
 
     await Promise.all([
       submission.destroy(),
@@ -113,7 +118,7 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
     entry,
     destroy,
   };
-};
+}
 
 export default adminSurveySubmissionController;
 

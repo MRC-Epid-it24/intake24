@@ -3,9 +3,9 @@ import read from './read.test';
 import refs from './refs.test';
 
 export default () => {
-  describe('GET /api/admin/fdbs', browse);
-  describe('GET /api/admin/fdbs/:localeId', read);
-  describe('GET /api/admin/fdbs/refs', refs);
+  describe('get /api/admin/fdbs', browse);
+  describe('get /api/admin/fdbs/:localeId', read);
+  describe('get /api/admin/fdbs/refs', refs);
 
   /*
   TODO: Implement tests for foods & categories

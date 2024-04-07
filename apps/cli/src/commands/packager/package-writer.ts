@@ -1,6 +1,7 @@
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import { merge } from 'lodash';
-import path from 'path';
 
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type {
@@ -33,18 +34,6 @@ export interface PackageInfo {
   date: string;
 }
 
-interface LocaleData {
-  properties: PkgLocale;
-  localFoods: PkgLocalFood[];
-  enabledLocalFoods: string[];
-  globalFoods: PkgGlobalFood[];
-}
-
-interface FoodData {
-  localFood: PkgLocalFood;
-  globalFood: PkgGlobalFood;
-}
-
 export class PackageWriter {
   private static readonly version = '1.1';
 
@@ -63,7 +52,7 @@ export class PackageWriter {
   private async appendJSON(
     newRecords: Record<string, any>,
     filePath: string,
-    overwrite: boolean = false
+    overwrite: boolean = false,
   ): Promise<void> {
     // Not great since this introduces a race condition
     try {
@@ -72,14 +61,15 @@ export class PackageWriter {
       const records = JSON.parse(await fs.readFile(filePath, 'utf-8')) as Record<string, any>;
 
       for (const [id, record] of Object.entries(newRecords)) {
-        if (!overwrite && id in records) {
+        if (!overwrite && id in records)
           throw new Error(`Record ${id} already exists in destination package file ${filePath}`);
-        }
+
         records[id] = record;
       }
 
       await this.writeJSON(records, filePath);
-    } catch (e) {
+    }
+    catch (e) {
       await this.writeJSON(newRecords, filePath);
     }
   }
@@ -87,14 +77,14 @@ export class PackageWriter {
   public async writeGlobalFoods(globalFoods: PkgGlobalFood[]) {
     await this.writeJSON(
       globalFoods,
-      path.join(this.outputDir, PkgConstants.GLOBAL_FOODS_FILE_NAME)
+      path.join(this.outputDir, PkgConstants.GLOBAL_FOODS_FILE_NAME),
     );
   }
 
   public async writeGlobalCategories(globalCategories: PkgGlobalCategory[]) {
     await this.writeJSON(
       globalCategories,
-      path.join(this.outputDir, PkgConstants.GLOBAL_CATEGORIES_FILE_NAME)
+      path.join(this.outputDir, PkgConstants.GLOBAL_CATEGORIES_FILE_NAME),
     );
   }
 
@@ -109,14 +99,14 @@ export class PackageWriter {
   public async writeLocalCategories(localCategories: Record<string, PkgLocalCategory[]>) {
     await this.writeJSON(
       localCategories,
-      path.join(this.outputDir, PkgConstants.LOCAL_CATEGORIES_FILE_NAME)
+      path.join(this.outputDir, PkgConstants.LOCAL_CATEGORIES_FILE_NAME),
     );
   }
 
   public async writeEnabledLocalFoods(enabledFoods: Record<string, string[]>) {
     await this.writeJSON(
       enabledFoods,
-      path.join(this.outputDir, PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME)
+      path.join(this.outputDir, PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME),
     );
   }
 
@@ -126,22 +116,22 @@ export class PackageWriter {
       path.join(
         this.outputDir,
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-        PkgConstants.DRINKWARE_FILE_NAME
-      )
+        PkgConstants.DRINKWARE_FILE_NAME,
+      ),
     );
   }
 
   public async appendDrinkwareSets(
     newDrinkwareSets: Record<string, PkgDrinkwareSet>,
-    overwrite: boolean = false
+    _overwrite: boolean = false,
   ) {
     await this.appendJSON(
       newDrinkwareSets,
       path.join(
         this.outputDir,
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-        PkgConstants.DRINKWARE_FILE_NAME
-      )
+        PkgConstants.DRINKWARE_FILE_NAME,
+      ),
     );
   }
 
@@ -151,8 +141,8 @@ export class PackageWriter {
       path.join(
         this.outputDir,
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-        PkgConstants.GUIDE_IMAGE_FILE_NAME
-      )
+        PkgConstants.GUIDE_IMAGE_FILE_NAME,
+      ),
     );
   }
 
@@ -162,8 +152,8 @@ export class PackageWriter {
       path.join(
         this.outputDir,
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-        PkgConstants.IMAGE_MAP_FILE_NAME
-      )
+        PkgConstants.IMAGE_MAP_FILE_NAME,
+      ),
     );
   }
 
@@ -173,8 +163,8 @@ export class PackageWriter {
       path.join(
         this.outputDir,
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-        PkgConstants.IMAGE_MAP_FILE_NAME
-      )
+        PkgConstants.IMAGE_MAP_FILE_NAME,
+      ),
     );
   }
 
@@ -184,15 +174,15 @@ export class PackageWriter {
       path.join(
         this.outputDir,
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-        PkgConstants.AS_SERVED_FILE_NAME
-      )
+        PkgConstants.AS_SERVED_FILE_NAME,
+      ),
     );
   }
 
   public async writeNutrientTables(nutrientTables: PkgNutrientTable[]) {
     await this.writeJSON(
       nutrientTables,
-      path.join(this.outputDir, PkgConstants.NUTRIENT_TABLES_FILE_NAME)
+      path.join(this.outputDir, PkgConstants.NUTRIENT_TABLES_FILE_NAME),
     );
   }
 
@@ -202,7 +192,7 @@ export class PackageWriter {
         version: PackageWriter.version,
         date: new Date().toISOString(),
       },
-      path.join(this.outputDir, PkgConstants.PACKAGE_INFO_FILE_NAME)
+      path.join(this.outputDir, PkgConstants.PACKAGE_INFO_FILE_NAME),
     );
   }
 

@@ -14,7 +14,7 @@
                 name="id"
                 outlined
                 prepend-inner-icon="$as-served-sets"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -25,18 +25,18 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-card-text>
-        <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
+        <error-list :errors="nonInputErrors" tag="v-card-text" />
         <as-served-images
           :items="entry.images"
           :set-id="entry.id"
           @images="updateImages"
-        ></as-served-images>
+        />
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>

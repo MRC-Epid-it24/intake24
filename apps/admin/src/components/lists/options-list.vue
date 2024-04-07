@@ -3,14 +3,18 @@
     <v-col cols="12">
       <v-toolbar flat tile>
         <v-toolbar-title class="font-weight-medium">
-          <div class="text-h5">{{ $t('common.options._') }}</div>
+          <div class="text-h5">
+            {{ $t('common.options._') }}
+          </div>
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn color="primary" fab small :title="$t('common.options.add')" @click.stop="add">
-          <v-icon small>$add</v-icon>
+          <v-icon small>
+            $add
+          </v-icon>
         </v-btn>
       </v-toolbar>
-      <v-divider></v-divider>
+      <v-divider />
       <v-list dense>
         <draggable v-model="currentOptions" handle=".drag-and-drop__handle" @end="update">
           <transition-group name="drag-and-drop" type="transition">
@@ -32,7 +36,7 @@
                   hide-details="auto"
                   :label="$t('common.options.label')"
                   outlined
-                ></v-text-field>
+                />
                 <v-text-field
                   v-model="option.value"
                   dense
@@ -40,11 +44,13 @@
                   :label="$t('common.options.value')"
                   outlined
                   :rules="optionValueRules"
-                ></v-text-field>
+                />
               </v-list-item-content>
               <v-list-item-action>
                 <v-btn icon :title="$t('common.options.remove')" @click.stop="remove(idx)">
-                  <v-icon color="error">$delete</v-icon>
+                  <v-icon color="error">
+                    $delete
+                  </v-icon>
                 </v-btn>
               </v-list-item-action>
             </v-list-item>
@@ -69,7 +75,7 @@ import { toIndexedList } from '@intake24/admin/util';
 export default defineComponent({
   name: 'OptionsList',
 
-  components: { draggable },
+  components: { Draggable: draggable },
 
   props: {
     options: {
@@ -89,7 +95,7 @@ export default defineComponent({
 
     const defaultValueRules = [
       (value: string | null): boolean | string => {
-        const values = currentOptions.filter((item) => item.value === value);
+        const values = currentOptions.filter(item => item.value === value);
         return values.length < 2 || 'Value is already used.';
       },
     ];
@@ -108,7 +114,8 @@ export default defineComponent({
 
   watch: {
     options(val) {
-      if (deepEqual(val, this.outputOptions)) return;
+      if (deepEqual(val, this.outputOptions))
+        return;
 
       this.currentOptions = toIndexedList(val);
     },

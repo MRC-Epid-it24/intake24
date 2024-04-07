@@ -28,7 +28,7 @@ export const personalAccessToken = initContract().router({
         .date()
         .min(new Date())
         .max(addYears(new Date(), 2))
-        .transform((val) => endOfDay(new Date(val))),
+        .transform(val => endOfDay(new Date(val))),
     }),
     responses: {
       200: z.object({

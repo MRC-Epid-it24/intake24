@@ -42,7 +42,8 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
     this.logger.debug('Job started.');
 
     const info = await this.getSurveyUserInfo();
-    if (!info) return;
+    if (!info)
+      return;
 
     const { survey, alias } = info;
 
@@ -74,7 +75,7 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
 
     if (!alias || !alias.survey) {
       this.logger.warn(
-        `SurveyHelpRequestNotification: could not find user alias for survey: ${surveySlug}, userId: ${userId}`
+        `SurveyHelpRequestNotification: could not find user alias for survey: ${surveySlug}, userId: ${userId}`,
       );
 
       return null;
@@ -90,10 +91,12 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
 
     /* 1. Get survey support users */
     const surveyUsers = await this.adminUserService.getSurveySupportUsers(survey.id);
-    if (surveyUsers.length) to = surveyUsers.map(({ email }) => email).filter(Boolean) as string[];
+    if (surveyUsers.length)
+      to = surveyUsers.map(({ email }) => email).filter(Boolean) as string[];
 
     /* 2. If no survey support users found, use survey support email */
-    if (!to.length) to = [survey.supportEmail].filter(Boolean);
+    if (!to.length)
+      to = [survey.supportEmail].filter(Boolean);
 
     /* 3. If no survey support email found, get global support users */
     if (!to.length) {

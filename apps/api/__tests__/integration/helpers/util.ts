@@ -22,7 +22,7 @@ export type SetSecurableOptions = {
   action?: string[];
 };
 
-const util = (suite: typeof Suite) => {
+function util(suite: typeof Suite) {
   /**
    * Set permissions for a testing role
    *
@@ -32,7 +32,8 @@ const util = (suite: typeof Suite) => {
   const setPermission = async (perm: string | string[], roleName = 'test-role'): Promise<void> => {
     const role = await Role.findOne({ where: { name: roleName } });
 
-    if (!role) throw new Error('Missing mock role.');
+    if (!role)
+      throw new Error('Missing mock role.');
 
     const name = Array.isArray(perm) ? perm : [perm];
 
@@ -54,7 +55,8 @@ const util = (suite: typeof Suite) => {
   const setUserPermission = async (perm: string | string[], userId: string): Promise<void> => {
     const user = await User.findByPk(userId);
 
-    if (!user) throw new Error('Missing mock user.');
+    if (!user)
+      throw new Error('Missing mock user.');
 
     const name = Array.isArray(perm) ? perm : [perm];
 
@@ -74,7 +76,7 @@ const util = (suite: typeof Suite) => {
     await UserSecurable.destroy({ where: { ...rest } });
 
     if (action?.length) {
-      const securables = action.map((item) => ({ userId, ...rest, action: item }));
+      const securables = action.map(item => ({ userId, ...rest, action: item }));
 
       await UserSecurable.bulkCreate(securables);
     }
@@ -85,13 +87,13 @@ const util = (suite: typeof Suite) => {
     setUserPermission,
     setSecurable,
   };
-};
+}
 
 export default util;
 
 export type Util = ReturnType<typeof util>;
 
-export const downloadImage = async (url: string, filename: string): Promise<string> => {
+export async function downloadImage(url: string, filename: string): Promise<string> {
   const filePath = path.resolve(fsConfig.local.downloads, filename);
   const fileStream = fs.createWriteStream(filePath);
 
@@ -101,11 +103,11 @@ export const downloadImage = async (url: string, filename: string): Promise<stri
 
   return new Promise((resolve, reject) => {
     fileStream.on('finish', () => resolve(filePath));
-    fileStream.on('error', () => reject());
+    fileStream.on('error', () => reject(new Error('Failed to download image.')));
   });
-};
+}
 
-export const generateCSV = async (filename: string): Promise<string> => {
+export async function generateCSV(filename: string): Promise<string> {
   const filePath = path.resolve(fsConfig.local.downloads, filename);
 
   const fields = ['username', 'password', 'email', 'name', 'phone'];
@@ -122,4 +124,4 @@ export const generateCSV = async (filename: string): Promise<string> => {
   await fs.writeFile(filePath, csv, { encoding: 'utf-8' });
 
   return filePath;
-};
+}

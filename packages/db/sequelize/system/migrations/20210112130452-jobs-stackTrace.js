@@ -8,7 +8,7 @@ module.exports = {
           type: Sequelize.TEXT({ length: 'long' }),
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
@@ -21,7 +21,7 @@ module.exports = {
           type: Sequelize.STRING(2048),
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
     }),
 };

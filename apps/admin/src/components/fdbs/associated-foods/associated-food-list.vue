@@ -4,7 +4,7 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.associatedFoods.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         v-if="!disabled"
         color="primary"
@@ -13,7 +13,9 @@
         :title="$t('fdbs.associatedFoods.add')"
         @click.stop="add"
       >
-        <v-icon small>$add</v-icon>
+        <v-icon small>
+          $add
+        </v-icon>
       </v-btn>
     </v-toolbar>
     <v-list class="py-0" two-line>
@@ -36,11 +38,13 @@
                 v-if="errors.has('associatedFoods', index)"
                 color="error"
                 :value="errors.get('associatedFoods', index)"
-              ></v-messages>
+              />
             </v-list-item-content>
             <v-list-item-action v-if="!disabled">
               <v-btn icon :title="$t('fdbs.associatedFoods.edit')" @click.stop="edit(index, item)">
-                <v-icon color="secondary lighten-1">$edit</v-icon>
+                <v-icon color="secondary lighten-1">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action v-if="!disabled">
@@ -73,10 +77,12 @@
           <v-toolbar-title>
             {{ $t(`fdbs.associatedFoods.${dialog.index === -1 ? 'add' : 'edit'}`) }}
           </v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-toolbar-items>
             <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
@@ -90,13 +96,13 @@
                   hide-details="auto"
                   :label="$t('fdbs.associatedFoods.linkAsMain')"
                   name="linkAsMain"
-                ></v-switch>
+                />
                 <v-switch
                   v-model="dialog.item.multiple"
                   hide-details="auto"
                   :label="$t('fdbs.associatedFoods.multiple')"
                   name="multiple"
-                ></v-switch>
+                />
               </v-col>
               <v-col cols="12" md="6">
                 <v-card-title>{{ $t('fdbs.associatedFoods.association') }}</v-card-title>
@@ -110,7 +116,9 @@
                   resource="categories"
                   @input="clearFood"
                 >
-                  <template #title>{{ $t(`fdbs.categories.title`) }}</template>
+                  <template #title>
+                    {{ $t(`fdbs.categories.title`) }}
+                  </template>
                   <template #item="{ item }">
                     <v-list-item-title>{{ item.code }}</v-list-item-title>
                     <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
@@ -125,7 +133,9 @@
                   resource="foods"
                   @input="clearCategory"
                 >
-                  <template #title>{{ $t(`fdbs.foods.title`) }}</template>
+                  <template #title>
+                    {{ $t(`fdbs.foods.title`) }}
+                  </template>
                   <template #item="{ item }">
                     <v-list-item-title>{{ item.code }}</v-list-item-title>
                     <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
@@ -148,7 +158,7 @@
                       :label="$t('fdbs.associatedFoods.genericName')"
                       :name="`genericName.${lang}`"
                       outlined
-                    ></v-text-field>
+                    />
                   </template>
                 </language-selector>
               </v-col>
@@ -166,18 +176,22 @@
                       :label="$t('fdbs.associatedFoods.text')"
                       :name="`text.${lang}`"
                       outlined
-                    ></v-text-field>
+                    />
                   </template>
                 </language-selector>
               </v-col>
             </v-row>
             <v-card-actions>
               <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+                <v-icon left>
+                  $cancel
+                </v-icon>{{ $t('common.action.cancel') }}
               </v-btn>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn class="font-weight-bold" color="info" text type="submit">
-                <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+                <v-icon left>
+                  $success
+                </v-icon>{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>
@@ -207,7 +221,7 @@ import { createDefaultAssociatedFood } from './associated-foods';
 export default defineComponent({
   name: 'AssociatedFoodList',
 
-  components: { ConfirmDialog, draggable, LanguageSelector, SelectResource },
+  components: { ConfirmDialog, Draggable: draggable, LanguageSelector, SelectResource },
 
   props: {
     disabled: {
@@ -240,21 +254,23 @@ export default defineComponent({
       _id: randomString(6),
     });
 
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
-      useListWithDialog(props, context, {
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update }
+      = useListWithDialog(props, context, {
         newItem,
         transformIn: withIdAndOrder,
         transformOut: withoutIdAndOrder,
       });
 
     const clearCategory = (code: string | null) => {
-      if (!code) return;
+      if (!code)
+        return;
 
       dialog.value.item.associatedCategoryCode = null;
     };
 
     const clearFood = (code: string | null) => {
-      if (!code) return;
+      if (!code)
+        return;
 
       dialog.value.item.associatedFoodCode = null;
     };

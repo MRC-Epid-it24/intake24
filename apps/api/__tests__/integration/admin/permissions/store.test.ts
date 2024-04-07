@@ -11,7 +11,7 @@ export default () => {
     input = mocker.system.permission();
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('post', url, { permissions });
   });
 

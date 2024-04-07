@@ -9,7 +9,7 @@
     }"
     @action="action"
     @input="update"
-  ></missing-food-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -71,7 +71,7 @@ export default defineComponent({
       props,
       ctx,
       getInitialState,
-      commitAnswer
+      commitAnswer,
     );
 
     return { food, meal, state, action, update };

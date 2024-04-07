@@ -19,17 +19,17 @@ export type DuoAuthenticationVerificationOps = {
   token: string;
 };
 
-const duoProvider = ({
+function duoProvider({
   logger: globalLogger,
   securityConfig,
-}: Pick<IoC, 'logger' | 'securityConfig'>) => {
+}: Pick<IoC, 'logger' | 'securityConfig'>) {
   const logger = globalLogger.child({ service: 'DuoProvider' });
   const provider = 'duo';
   const config = securityConfig.mfa.providers[provider];
 
   const challenge = async (
     email: string,
-    redirectUrlContext = ''
+    redirectUrlContext = '',
   ): Promise<Omit<DuoAuthChallenge, 'deviceId'>> => {
     const { clientId, clientSecret, apiHost } = config;
     const redirectUrl = new URL(redirectUrlContext, config.redirectUrl).href;
@@ -44,27 +44,30 @@ const duoProvider = ({
       });
 
       const { stat } = await duoClient.healthCheck();
-      if (stat !== 'OK') throw new Error('Duo service not available.');
+      if (stat !== 'OK')
+        throw new Error('Duo service not available.');
 
       const challengeId = duoClient.generateState();
       const challengeUrl = duoClient.createAuthUrl(email, challengeId);
 
       return { challengeId, provider, challengeUrl };
-    } catch (err) {
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.debug(`${name}: ${message}`, { stack });
         throw new Error(message);
       }
 
-      throw new Error();
+      throw new Error('Duo challenge unknown error occurred.');
     }
   };
 
   const registrationChallenge = async (email: string) => challenge(email, 'user');
 
   const authenticationChallenge = async (device: MFADevice): Promise<DuoAuthChallenge> => {
-    if (!device.user?.email) throw new Error('Duo device with credentials not found.');
+    if (!device.user?.email)
+      throw new Error('Duo device with credentials not found.');
 
     const challengePayload = await challenge(device.user?.email);
 
@@ -86,17 +89,19 @@ const duoProvider = ({
       });
 
       const { stat } = await duoClient.healthCheck();
-      if (stat !== 'OK') throw new Error('Duo service not available.');
+      if (stat !== 'OK')
+        throw new Error('Duo service not available.');
 
       return await duoClient.exchangeAuthorizationCodeFor2FAResult(token, email);
-    } catch (err) {
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.debug(`${name}: ${message}`, { stack });
         throw new Error(message);
       }
 
-      throw new Error();
+      throw new Error('Duo verification unknown error occurred.');
     }
   };
 
@@ -121,7 +126,7 @@ const duoProvider = ({
     authenticationChallenge,
     authenticationVerification,
   };
-};
+}
 
 export default duoProvider;
 

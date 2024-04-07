@@ -20,7 +20,7 @@ export const standardUnitRequest = z.object({
     .string()
     .min(3)
     .max(64)
-    .transform((v) => toStandardUnitId(v)),
+    .transform(v => toStandardUnitId(v)),
   name: z.string().min(3).max(128),
   estimateIn: requiredLocaleTranslation,
   howMany: requiredLocaleTranslation,

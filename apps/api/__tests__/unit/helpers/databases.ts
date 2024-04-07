@@ -10,7 +10,7 @@ let databases: DatabasesInterface;
 
 export async function initDatabases(): Promise<DatabasesInterface> {
   console.info(
-    `Using database ${databaseConfig.test.foods.database} on ${databaseConfig.test.foods.host}`
+    `Using database ${databaseConfig.test.foods.database} on ${databaseConfig.test.foods.host}`,
   );
 
   databases = new Database({

@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 
 import { contract } from '@intake24/common/contracts';
 
-export const category = () => {
+export function category() {
   return initServer().router(contract.category, {
     browse: async ({ params, req }) => {
       const { localeId, code } = params;
@@ -11,7 +11,7 @@ export const category = () => {
       const foods = await req.scope.cradle.categoryContentsService.searchCategory(
         localeId,
         code,
-        pick(req.query, ['page', 'limit', 'sort', 'search'])
+        pick(req.query, ['page', 'limit', 'sort', 'search']),
       );
 
       return { status: 200, body: foods };
@@ -21,7 +21,7 @@ export const category = () => {
 
       const categoryContents = await req.scope.cradle.categoryContentsService.getCategoryContents(
         localeId,
-        code
+        code,
       );
 
       return { status: 200, body: categoryContents };
@@ -29,10 +29,10 @@ export const category = () => {
     rootContents: async ({ params, req }) => {
       const { localeId } = params;
 
-      const categoryContents =
-        await req.scope.cradle.categoryContentsService.getRootCategories(localeId);
+      const categoryContents
+        = await req.scope.cradle.categoryContentsService.getRootCategories(localeId);
 
       return { status: 200, body: categoryContents };
     },
   });
-};
+}

@@ -16,7 +16,7 @@
         </v-simple-table>
       </v-col>
     </v-row>
-    <guide-drawer v-bind="{ entry, disabled: true, resource: 'image-maps' }"></guide-drawer>
+    <guide-drawer v-bind="{ entry, disabled: true, resource: 'image-maps' }" />
   </layout>
 </template>
 

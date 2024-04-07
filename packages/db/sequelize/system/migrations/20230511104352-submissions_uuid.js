@@ -3,25 +3,25 @@ module.exports = {
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_custom_fields RENAME CONSTRAINT survey_submission_custom_fields_pkey TO survey_submission_custom_fields_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_custom_fields',
         'survey_submission_custom_fields_survey_submission_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_custom_fields',
         'survey_submission_custom_fields_survey_submission_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'survey_submission_custom_fields',
         'survey_submission_custom_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -44,7 +44,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_custom_fields', {
@@ -68,25 +68,25 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_custom_fields (id, survey_submission_id, "name", value) SELECT uuid_generate_v4(), survey_submission_id, "name", value FROM survey_submission_custom_fields_old',
-        { transaction }
+        { transaction },
       );
 
       // Meals
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_meals RENAME CONSTRAINT survey_submission_meals_pkey TO survey_submission_meals_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_meals',
         'survey_submission_meals_survey_submission_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_meals',
         'survey_submission_meals_survey_submission_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('survey_submission_meals', 'survey_submission_meals_old', {
@@ -121,7 +121,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_meals', {
@@ -145,31 +145,31 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_meals (id, id_old, survey_submission_id, hours, minutes, "name") SELECT uuid_generate_v4(), id, survey_submission_id, hours, minutes, "name" FROM survey_submission_meals_old',
-        { transaction }
+        { transaction },
       );
 
       // Meals custom fields
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_meal_custom_fields RENAME CONSTRAINT survey_submission_meal_custom_fields_pkey TO survey_submission_meal_custom_fields_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_meal_custom_fields',
         'survey_submission_meal_custom_fields_meal_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_meal_custom_fields',
         'survey_submission_meal_custom_fields_meal_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'survey_submission_meal_custom_fields',
         'survey_submission_meal_custom_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -196,17 +196,17 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_meal_custom_fields (id, meal_id_old, "name", value) SELECT uuid_generate_v4(), meal_id, "name", value FROM survey_submission_meal_custom_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_meal_custom_fields SET meal_id = survey_submission_meals.id FROM survey_submission_meals WHERE meal_id_old = survey_submission_meals.id_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -216,7 +216,7 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_meal_custom_fields', {
@@ -241,25 +241,25 @@ module.exports = {
       // Missing foods
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_missing_foods RENAME CONSTRAINT survey_submission_missing_foods_pkey TO survey_submission_missing_foods_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_missing_foods',
         'survey_submission_missing_foods_meal_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_missing_foods',
         'survey_submission_missing_foods_meal_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'survey_submission_missing_foods',
         'survey_submission_missing_foods_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -306,17 +306,17 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_missing_foods (id, index, meal_id_old, "name", brand, description, portion_size, leftovers) SELECT uuid_generate_v4(), id, meal_id, "name", brand, description, portion_size, leftovers FROM survey_submission_missing_foods_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_missing_foods SET meal_id = survey_submission_meals.id FROM survey_submission_meals WHERE meal_id_old = survey_submission_meals.id_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -326,7 +326,7 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('survey_submission_missing_foods', ['parent_id'], {
@@ -363,19 +363,19 @@ module.exports = {
       // Foods
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_foods RENAME CONSTRAINT survey_submission_foods_pkey TO survey_submission_foods_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_foods',
         'survey_submission_foods_meal_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_foods',
         'survey_submission_foods_meal_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('survey_submission_foods', 'survey_submission_foods_old', {
@@ -462,17 +462,17 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_foods (id, id_old, index, meal_id_old, code, english_name, local_name, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_name, food_group_local_name, brand, nutrient_table_id, nutrient_table_code) SELECT uuid_generate_v4(), id, id, meal_id, code, english_name, local_name, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_name, food_group_local_name, brand, nutrient_table_id, nutrient_table_code FROM survey_submission_foods_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_foods SET meal_id = survey_submission_meals.id FROM survey_submission_meals WHERE meal_id_old = survey_submission_meals.id_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -482,7 +482,7 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_foods', {
@@ -532,25 +532,25 @@ module.exports = {
       // Foods custom fields
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_food_custom_fields RENAME CONSTRAINT survey_submission_food_custom_fields_pkey TO survey_submission_food_custom_fields_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_food_custom_fields',
         'survey_submission_food_custom_fields_food_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_food_custom_fields',
         'survey_submission_food_custom_fields_food_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'survey_submission_food_custom_fields',
         'survey_submission_food_custom_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -577,17 +577,17 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_food_custom_fields (id, food_id_old, "name", value) SELECT uuid_generate_v4(), food_id, "name", value FROM survey_submission_food_custom_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_food_custom_fields SET food_id = survey_submission_foods.id FROM survey_submission_foods WHERE food_id_old = survey_submission_foods.id_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -597,7 +597,7 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_food_custom_fields', {
@@ -622,19 +622,19 @@ module.exports = {
       // Foods fields
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_fields RENAME CONSTRAINT survey_submission_fields_pkey TO survey_submission_fields_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_fields',
         'survey_submission_fields_food_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_fields',
         'survey_submission_fields_food_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('survey_submission_fields', 'survey_submission_fields_old', {
@@ -665,17 +665,17 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_fields (id, food_id_old, field_name, value) SELECT uuid_generate_v4(), food_id, field_name, value FROM survey_submission_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_fields SET food_id = survey_submission_foods.id FROM survey_submission_foods WHERE food_id_old = survey_submission_foods.id_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -685,7 +685,7 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_fields', {
@@ -710,37 +710,37 @@ module.exports = {
       // Foods nutrients
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_nutrients RENAME CONSTRAINT survey_submission_nutrients_pkey TO survey_submission_nutrients_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_nutrients',
         'survey_submission_nutrients_food_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_nutrients',
         'survey_submission_nutrients_food_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_nutrients',
         'survey_submission_nutrients_nutrient_type_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_nutrients',
         'survey_submission_nutrients_nutrient_type_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'survey_submission_nutrients',
         'survey_submission_nutrients_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -767,17 +767,17 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_nutrients (id, food_id_old, amount, nutrient_type_id) SELECT uuid_generate_v4(), food_id, amount, nutrient_type_id FROM survey_submission_nutrients_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_nutrients SET food_id = survey_submission_foods.id FROM survey_submission_foods WHERE food_id_old = survey_submission_foods.id_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -787,7 +787,7 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_nutrients', {
@@ -831,25 +831,25 @@ module.exports = {
       // Foods portion size fields
       await queryInterface.sequelize.query(
         `ALTER TABLE survey_submission_portion_size_fields RENAME CONSTRAINT survey_submission_portion_size_fields_pkey TO survey_submission_portion_size_fields_pkey_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'survey_submission_portion_size_fields',
         'survey_submission_portion_size_fields_food_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'survey_submission_portion_size_fields',
         'survey_submission_portion_size_fields_food_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'survey_submission_portion_size_fields',
         'survey_submission_portion_size_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -876,17 +876,17 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_portion_size_fields (id, food_id_old, "name", value) SELECT uuid_generate_v4(), food_id, "name", value FROM survey_submission_portion_size_fields_old',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submission_portion_size_fields SET food_id = survey_submission_foods.id FROM survey_submission_foods WHERE food_id_old = survey_submission_foods.id_old;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -896,7 +896,7 @@ module.exports = {
           type: Sequelize.UUID,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_portion_size_fields', {

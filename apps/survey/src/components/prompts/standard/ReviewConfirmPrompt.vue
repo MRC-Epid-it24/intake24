@@ -1,8 +1,8 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
-      <survey-progress-bar :meals="meals"></survey-progress-bar>
-      <v-divider></v-divider>
+      <survey-progress-bar :meals="meals" />
+      <v-divider />
     </v-col>
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <v-card dense flat>
@@ -24,7 +24,9 @@
                     <v-list-item-action-text v-if="meal.time">
                       {{ stringTime(meal.time) }}
                     </v-list-item-action-text>
-                    <v-icon v-else x-small>$question</v-icon>
+                    <v-icon v-else x-small>
+                      $question
+                    </v-icon>
                   </v-list-item-action>
                 </template>
                 <v-list v-if="meal.foods.length && meal.time ? true : false">
@@ -36,10 +38,14 @@
                       {{ foodDisplayName(food) }}
                     </v-list-item-title>
                     <v-list-item-action>
-                      <v-icon v-if="food.data" color="success" x-small>$ok</v-icon>
+                      <v-icon v-if="food.data" color="success" x-small>
+                        $ok
+                      </v-icon>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-icon v-if="food.portionSizeMethod" color="success" x-small>$ok</v-icon>
+                      <v-icon v-if="food.portionSizeMethod" color="success" x-small>
+                        $ok
+                      </v-icon>
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
@@ -95,9 +101,12 @@ export default defineComponent({
     },
     foodDisplayName(food: FoodState) {
       let dispalyName = '???';
-      if (food.type === 'free-text') dispalyName = food.description;
-      if (food.type === 'encoded-food') dispalyName = food.data.localName;
-      if (dispalyName.length > 16) dispalyName = dispalyName.slice(0, 16).concat('...');
+      if (food.type === 'free-text')
+        dispalyName = food.description;
+      if (food.type === 'encoded-food')
+        dispalyName = food.data.localName;
+      if (dispalyName.length > 16)
+        dispalyName = dispalyName.slice(0, 16).concat('...');
       return dispalyName;
     },
     stringTime(time: MealTime): string {

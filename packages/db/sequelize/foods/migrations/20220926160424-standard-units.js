@@ -30,7 +30,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('standard_units', ['name'], {
@@ -40,7 +40,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('standard_units', { transaction });
     }),

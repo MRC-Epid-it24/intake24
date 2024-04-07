@@ -10,7 +10,7 @@ import App from './app.vue';
 import i18n from './i18n';
 import vuetify from './plugins/vuetify';
 import router from './router';
-import { errorHandler, httpService /*, warnHandler*/ } from './services';
+import { errorHandler, httpService /* , warnHandler */ } from './services';
 
 Vue.config.productionTip = false;
 Vue.config.errorHandler = errorHandler;
@@ -31,7 +31,7 @@ Vue.use(
       page_path: to.path,
     }),
   },
-  router
+  router,
 );
 
 new Vue({
@@ -39,5 +39,5 @@ new Vue({
   pinia,
   router,
   vuetify,
-  render: (h) => h(App),
+  render: h => h(App),
 }).$mount('#app');

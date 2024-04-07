@@ -6,15 +6,16 @@ import { atob } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
 import { randomString } from '@intake24/common/util';
 
-export const otp = () => {
+export function otp() {
   return initServer().router(contract.admin.user.mfa.otp, {
     challenge: async ({ req }) => {
       const subject = atob<Subject>(req.scope.cradle.user.sub);
-      if (subject.provider !== 'email') throw new ApplicationError('Invalid user - missing email.');
+      if (subject.provider !== 'email')
+        throw new ApplicationError('Invalid user - missing email.');
 
       const challengeId = randomString(32);
       const { secret, ...rest } = await req.scope.cradle.otpProvider.registrationChallenge(
-        subject.providerKey
+        subject.providerKey,
       );
 
       req.session.otpRegChallenge = { challengeId, secret };
@@ -24,7 +25,8 @@ export const otp = () => {
     verify: async ({ body, req }) => {
       const { sub, userId } = req.scope.cradle.user;
       const subject = atob<Subject>(sub);
-      if (subject.provider !== 'email') throw new ApplicationError('Invalid user - missing email.');
+      if (subject.provider !== 'email')
+        throw new ApplicationError('Invalid user - missing email.');
 
       const { challengeId, name, token } = body;
 
@@ -47,4 +49,4 @@ export const otp = () => {
       return { status: 200, body: device };
     },
   });
-};
+}

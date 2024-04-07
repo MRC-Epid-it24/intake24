@@ -9,18 +9,18 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="homemadeValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="homemadeValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <yes-no-toggle v-model="homemadePrompt" class="mb-4" mandatory></yes-no-toggle>
+          <yes-no-toggle v-model="homemadePrompt" class="mb-4" mandatory />
           <template v-if="homemadePrompt === true">
             <i18n class="mb-4" :path="`prompts.${type}.homemade`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <v-textarea v-model="info.description" outlined @input="update"></v-textarea>
+            <v-textarea v-model="info.description" outlined @input="update" />
           </template>
           <template v-if="homemadePrompt === false">
             <i18n class="mb-4" :path="`prompts.${type}.purchased`" tag="div">
@@ -28,13 +28,13 @@
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <v-text-field v-model="info.brand" outlined @input="update"></v-text-field>
+            <v-text-field v-model="info.brand" outlined @input="update" />
             <i18n class="mb-4" :path="`prompts.${type}.barcode`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <barcode-input :model-value.sync="info.barcode"></barcode-input>
+            <barcode-input :model-value.sync="info.barcode" />
           </template>
           <v-btn :block="isMobile" color="primary" :disabled="!homemadeValid" @click="confirm">
             {{ $t('common.action.continue') }}
@@ -49,11 +49,11 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="!!info.portionSize"></expansion-panel-actions>
+            <expansion-panel-actions :valid="!!info.portionSize" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-textarea v-model="info.portionSize" outlined @input="update"></v-textarea>
+          <v-textarea v-model="info.portionSize" outlined @input="update" />
           <v-btn :block="isMobile" color="primary" :disabled="!info.portionSize" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
@@ -61,10 +61,10 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -104,8 +104,8 @@ export default defineComponent({
   computed: {
     homemadeValid() {
       return (
-        (this.homemadePrompt === true && !!this.info.description) ||
-        (this.homemadePrompt === false && !!this.info.brand)
+        (this.homemadePrompt === true && !!this.info.description)
+        || (this.homemadePrompt === false && !!this.info.brand)
       );
     },
     validConditions(): boolean[] {

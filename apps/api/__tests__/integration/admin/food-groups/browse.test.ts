@@ -9,7 +9,7 @@ export default () => {
     await FoodGroup.create(mocker.foods.foodGroup());
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

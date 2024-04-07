@@ -11,7 +11,7 @@
     }"
     @action="action"
     @input="update"
-  ></milk-on-cereal-prompt>
+  />
 </template>
 
 <script lang="ts">

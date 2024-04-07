@@ -21,9 +21,9 @@ const apiHelmet = helmet({
 const staticContentHelmet = helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],
+      defaultSrc: ['\'self\''],
       connectSrc: [
-        "'self'",
+        '\'self\'',
         'https://hcaptcha.com',
         'https://*.hcaptcha.com',
         'https://*.google-analytics.com',
@@ -31,7 +31,7 @@ const staticContentHelmet = helmet({
         'https://*.googletagmanager.com',
       ],
       frameSrc: [
-        "'self'",
+        '\'self\'',
         'https://hcaptcha.com',
         'https://*.hcaptcha.com',
         'https://www.google.com/recaptcha/',
@@ -40,14 +40,14 @@ const staticContentHelmet = helmet({
         'https://www.youtube.com',
       ],
       imgSrc: [
-        "'self'",
+        '\'self\'',
         'blob:',
         'data:',
         'https://*.google-analytics.com',
         'https://*.googletagmanager.com',
       ],
       scriptSrc: [
-        "'self'",
+        '\'self\'',
         'https://hcaptcha.com',
         'https://*.hcaptcha.com',
         'https://www.google.com/recaptcha/',
@@ -56,10 +56,10 @@ const staticContentHelmet = helmet({
         'https://*.googletagmanager.com',
       ],
       styleSrc: [
-        "'self'",
+        '\'self\'',
         'https://hcaptcha.com',
         'https://*.hcaptcha.com',
-        "'unsafe-inline'", // TODO: review for Vuetify theming
+        '\'unsafe-inline\'', // TODO: review for Vuetify theming
       ],
     },
   },
@@ -68,11 +68,11 @@ const staticContentHelmet = helmet({
   crossOriginResourcePolicy: false,
 });
 
-const catchRestAs404 = (app: Express) => {
+function catchRestAs404(app: Express) {
   app.all('*', (req: Request, res: Response): void => {
     res.status(404).json('Invalid route');
   });
-};
+}
 
 export default (app: Express, { config }: Ops): void => {
   /*
@@ -84,7 +84,7 @@ export default (app: Express, { config }: Ops): void => {
   const { urls } = config.app;
 
   // No content hosted locally -> 404
-  const localContent = Object.keys(urls).some((url) => !isUrlAbsolute(url));
+  const localContent = Object.keys(urls).some(url => !isUrlAbsolute(url));
   if (!localContent) {
     catchRestAs404(app);
     return;
@@ -103,7 +103,7 @@ export default (app: Express, { config }: Ops): void => {
     app.use('/images', express.static(config.filesystem.local.images, { index: false }));
 
   // Check if any site is hosted locally
-  const localSite = Object.keys(sites).some((site) => !isUrlAbsolute(urls[site as Site]));
+  const localSite = Object.keys(sites).some(site => !isUrlAbsolute(urls[site as Site]));
   if (!localSite) {
     catchRestAs404(app);
     return;
@@ -114,7 +114,8 @@ export default (app: Express, { config }: Ops): void => {
 
   // Register sites if they are locally hosted / relative URLs
   Object.entries(sites).forEach(([site, route]) => {
-    if (!isUrlAbsolute(urls[site as Site])) app.use(urls[site as Site], route);
+    if (!isUrlAbsolute(urls[site as Site]))
+      app.use(urls[site as Site], route);
   });
 
   catchRestAs404(app);

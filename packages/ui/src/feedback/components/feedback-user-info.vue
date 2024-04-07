@@ -5,7 +5,7 @@
         <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
           {{ $t('feedback.physicalData.title') }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-tooltip left>
           <template #activator="{ attrs, on }">
             <v-btn
@@ -30,7 +30,7 @@
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-          <v-divider v-if="idx + 1 < physicalData.length" :key="`div-${idx}`"></v-divider>
+          <v-divider v-if="idx + 1 < physicalData.length" :key="`div-${idx}`" />
         </template>
       </v-list>
     </v-card>
@@ -73,17 +73,19 @@ export default defineComponent({
       const items = [];
       const { sex, birthdate } = this.userDemographic.physicalData;
 
-      if (sex !== null)
+      if (sex !== null) {
         items.push(
           this.$t('feedback.physicalData.sex', {
             sex: this.$t(`feedback.physicalData.sexes.${sex}`),
-          }).toString()
+          }).toString(),
         );
+      }
 
-      if (birthdate !== null)
+      if (birthdate !== null) {
         items.push(
-          this.$t('feedback.physicalData.age', { age: this.userDemographic.getAge() }).toString()
+          this.$t('feedback.physicalData.age', { age: this.userDemographic.getAge() }).toString(),
         );
+      }
 
       return items;
     },
@@ -106,18 +108,21 @@ export default defineComponent({
       if (userDemographic.physicalActivityLevel)
         items.push(userDemographic.physicalActivityLevel.name);
 
-      if (this.ageAndSex.length) items.push(this.ageAndSex.join(' | '));
+      if (this.ageAndSex.length)
+        items.push(this.ageAndSex.join(' | '));
 
-      if (this.weightAndHeight.length) items.push(this.weightAndHeight.join(' | '));
+      if (this.weightAndHeight.length)
+        items.push(this.weightAndHeight.join(' | '));
 
-      if (userDemographic.physicalData.weightTarget)
+      if (userDemographic.physicalData.weightTarget) {
         items.push(
           this.$t('feedback.physicalData.weightTarget', {
             target: this.$t(
-              `feedback.physicalData.weightTargets.${userDemographic.physicalData.weightTarget}`
+              `feedback.physicalData.weightTargets.${userDemographic.physicalData.weightTarget}`,
             ),
-          }).toString()
+          }).toString(),
         );
+      }
 
       return items;
     },

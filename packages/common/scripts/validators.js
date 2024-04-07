@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs-extra');
 const execa = require('execa');
 
@@ -62,14 +61,16 @@ const validators = [
   try {
     for (const validator of validators) {
       await execa.command(
-        `npx typescript-json-validator ${validator.srcFile} ${validator.type} ${validator.params}`
+        `npx typescript-json-validator ${validator.srcFile} ${validator.type} ${validator.params}`,
       );
 
-      if (fs.existsSync(validator.destFile)) await fs.unlink(validator.destFile);
+      if (fs.existsSync(validator.destFile))
+        await fs.unlink(validator.destFile);
 
       await fs.move(validator.srcFile.replace('.ts', '.validator.ts'), validator.destFile);
     }
-  } catch (err) {
+  }
+  catch (err) {
     console.log(err);
   }
 })();

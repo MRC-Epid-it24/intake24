@@ -19,7 +19,7 @@ export class ImageMapApiV4 {
     id: string,
     description: string,
     baseImageFilePath: string,
-    objects: ImageMapEntryObject[]
+    objects: ImageMapEntryObject[],
   ): Promise<ImageMap> {
     const formData = new FormData();
 
@@ -36,7 +36,7 @@ export class ImageMapApiV4 {
   public async update(
     id: string,
     description: string,
-    objects: ImageMapEntryObject[]
+    objects: ImageMapEntryObject[],
   ): Promise<ImageMap> {
     return this.baseClient.put<ImageMap>(`${ImageMapApiV4.apiPath}/${id}`, {
       id,

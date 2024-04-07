@@ -17,12 +17,12 @@ export default () => {
       permission('as-served-sets|create'),
       upload.single('image'),
       validation.store,
-      wrapAsync(asServedImageController.store)
+      wrapAsync(asServedImageController.store),
     )
     .get(
       permission('as-served-sets|browse'),
       validation.browse,
-      wrapAsync(asServedImageController.browse)
+      wrapAsync(asServedImageController.browse),
     )
     .delete(permission('as-served-sets|delete'), wrapAsync(asServedImageController.destroyAll));
 

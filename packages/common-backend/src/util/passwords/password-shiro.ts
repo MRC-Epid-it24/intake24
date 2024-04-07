@@ -11,8 +11,7 @@ export default class PasswordShiro implements PasswordAlgorithm {
     this.iterations = iterations;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async hash(password: string): Promise<HashedPassword> {
+  async hash(_password: string): Promise<HashedPassword> {
     return Promise.reject(new Error('Creating new SHA-256 hashed passwords is not allowed'));
   }
 

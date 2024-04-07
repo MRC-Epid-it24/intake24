@@ -12,32 +12,32 @@ export type UseFoodUtilsProps<
   parentFood?: FP;
 };
 
-export const useFoodUtils = <
+export function useFoodUtils<
   F extends FoodState | undefined,
   FP extends EncodedFood | RecipeBuilder | undefined,
->(
-  props: UseFoodUtilsProps<F, FP> = {}
-) => {
+>(props: UseFoodUtilsProps<F, FP> = {}) {
   const { translate } = useI18n();
 
   const getFoodName = (foodState: FoodState) => {
-    if (foodState.type === 'encoded-food') return translate(foodState.data.localName);
+    if (foodState.type === 'encoded-food')
+      return translate(foodState.data.localName);
     if (foodState.type === 'missing-food')
       return capitalize(foodState.info?.name ?? foodState.searchTerm ?? '??');
-    if (foodState.type === 'recipe-builder') return capitalize(foodState.description);
+    if (foodState.type === 'recipe-builder')
+      return capitalize(foodState.description);
 
     return capitalize(foodState.description);
   };
 
   const foodName = computed(
     () =>
-      (props.food ? getFoodName(props.food) : undefined) as F extends undefined ? undefined : string
+      (props.food ? getFoodName(props.food) : undefined) as F extends undefined ? undefined : string,
   );
   const parentFoodName = computed(
     () =>
       (props.parentFood ? getFoodName(props.parentFood) : undefined) as FP extends undefined
         ? undefined
-        : string
+        : string,
   );
 
   return {
@@ -45,4 +45,4 @@ export const useFoodUtils = <
     getFoodName,
     parentFoodName,
   };
-};
+}

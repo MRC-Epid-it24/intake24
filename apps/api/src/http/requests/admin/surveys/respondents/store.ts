@@ -28,9 +28,10 @@ export default validate(
             attributes: ['id'],
             where: { surveyId, username: value },
           });
-          if (entry) throw new Error(customTypeErrorMessage('unique._', meta));
+          if (entry)
+            throw new Error(customTypeErrorMessage('unique._', meta));
         },
       },
     },
-  })
+  }),
 );

@@ -16,8 +16,7 @@ export default class Filesystem {
    * @memberof Filesystem
    */
   public async init(): Promise<void> {
-    for (const dir of Object.values(this.fsConfig.local)) {
+    for (const dir of Object.values(this.fsConfig.local))
       await fs.ensureDir(dir);
-    }
   }
 }

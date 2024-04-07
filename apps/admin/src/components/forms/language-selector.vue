@@ -2,7 +2,7 @@
   <v-card class="mb-4" v-bind="{ disabled, flat, outlined, tile }">
     <v-toolbar color="grey lighten-4" v-bind="{ flat, tile }">
       <v-toolbar-title>{{ label }}</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-menu bottom left>
         <template #activator="{ attrs, on }">
           <v-btn
@@ -18,16 +18,16 @@
         </template>
         <v-list class="grey lighten-3">
           <v-list-item v-for="lang in availableLanguages" :key="lang.code" @click="add(lang.code)">
-            <span :class="`fi fi-${lang.countryFlagCode} mr-3`"></span>
+            <span :class="`fi fi-${lang.countryFlagCode} mr-3`" />
             <span class="font-weight-medium">{{ lang.englishName }}</span>
           </v-list-item>
         </v-list>
       </v-menu>
       <template v-if="languages.length" #extension>
         <v-tabs v-model="selected" background-color="grey lighten-4">
-          <v-tabs-slider></v-tabs-slider>
+          <v-tabs-slider />
           <v-tab v-for="lang in languages" :key="lang">
-            <span :class="`fi fi-${getLanguageFlag(lang)} mr-3`"></span>
+            <span :class="`fi fi-${getLanguageFlag(lang)} mr-3`" />
             <span class="font-weight-medium">{{ getLanguageName(lang) }}</span>
           </v-tab>
         </v-tabs>
@@ -36,12 +36,14 @@
     <v-tabs-items v-model="selected">
       <v-tab-item v-for="lang in languages" :key="lang">
         <v-card-text>
-          <slot :lang="lang" :name="`lang.${lang}`"></slot>
+          <slot :lang="lang" :name="`lang.${lang}`" />
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn color="error" :disabled="isRemoveDisabled" text @click.stop="remove">
-            <v-icon left>$delete</v-icon>{{ $t('common.action.delete') }}
+            <v-icon left>
+              $delete
+            </v-icon>{{ $t('common.action.delete') }}
           </v-btn>
         </v-card-actions>
       </v-tab-item>
@@ -113,27 +115,28 @@ export default defineComponent({
       () => languages.value.length,
       (val) => {
         selected.value = val - 1;
-      }
+      },
     );
 
     const allLanguages = computed(() => useApp().langs ?? [english]);
 
     const availableLanguages = computed(() =>
-      allLanguages.value.filter((lang) => !languages.value.includes(lang.code))
+      allLanguages.value.filter(lang => !languages.value.includes(lang.code)),
     );
 
     const isRemoveDisabled = computed(() => {
-      if (selected.value === undefined) return true;
+      if (selected.value === undefined)
+        return true;
 
       return doNotRemove.value.includes(languages.value[selected.value]);
     });
 
     const getLanguageFlag = (code: string) =>
-      allLanguages.value.find((lang) => lang.code === code)?.countryFlagCode ??
-      english.countryFlagCode;
+      allLanguages.value.find(lang => lang.code === code)?.countryFlagCode
+      ?? english.countryFlagCode;
 
     const getLanguageName = (code: string) =>
-      allLanguages.value.find((lang) => lang.code === code)?.englishName ?? english.englishName;
+      allLanguages.value.find(lang => lang.code === code)?.englishName ?? english.englishName;
 
     const add = async (code: string) => {
       emit('input', { ...props.value, [code]: props.default });
@@ -141,7 +144,8 @@ export default defineComponent({
     };
 
     const remove = () => {
-      if (selected.value === undefined) return;
+      if (selected.value === undefined)
+        return;
 
       const code = languages.value[selected.value];
       const { [code]: remove, ...rest } = props.value;

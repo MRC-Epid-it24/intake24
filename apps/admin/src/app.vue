@@ -4,10 +4,12 @@
     <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" app color="secondary" dark>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="my-1">{{ $t('common._') }}</v-list-item-title>
+          <v-list-item-title class="my-1">
+            {{ $t('common._') }}
+          </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-divider></v-divider>
+      <v-divider />
       <v-list dense nav>
         <v-list-group color="grey lighten-1" prepend-icon="fas fa-fw fa-user" value="true">
           <template #activator>
@@ -62,19 +64,19 @@
         icon="fas fa-fw fa-hamburger"
         name="fdb"
         :resources="resources.fdb"
-      ></menu-tree>
+      />
       <menu-tree
         v-if="can(['languages', 'locales'])"
         icon="fas fa-fw fa-globe"
         name="local"
         :resources="resources.local"
-      ></menu-tree>
+      />
       <menu-tree
         v-if="can(['as-served|browse', 'guide-images|browse', 'image-maps|browse'])"
         icon="fas fa-fw fa-images"
         name="images"
         :resources="resources.images"
-      ></menu-tree>
+      />
       <menu-tree
         v-if="
           can(['feedback-schemes', 'survey-schemes', 'survey-scheme-prompts|browse', 'surveys'])
@@ -82,24 +84,24 @@
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"
         :resources="resources.surveyMgmt"
-      ></menu-tree>
+      />
       <menu-tree
         v-if="can('acl')"
         icon="fas fa-fw fa-low-vision"
         name="acl"
         :resources="resources.acl"
-      ></menu-tree>
+      />
       <menu-tree
         v-if="can(['jobs|browse', 'sign-in-logs|browse', 'tasks|browse'])"
         icon="fas fa-fw fa-tools"
         name="system"
         :resources="resources.system"
-      ></menu-tree>
+      />
     </v-navigation-drawer>
 
     <v-app-bar v-if="loggedIn" app color="primary" dark fixed>
-      <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar"></v-app-bar-nav-icon>
-      <v-spacer></v-spacer>
+      <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar" />
+      <v-spacer />
       <v-btn v-if="isVerified" text :to="{ name: 'user' }">
         <span class="mr-2">{{ $t('user.profile') }}</span>
         <v-icon>$user</v-icon>
@@ -108,7 +110,9 @@
         <template #activator="{ attrs, on }">
           <v-btn text v-bind="attrs" v-on="on">
             <span>{{ $t('common.logout._') }}</span>
-            <v-icon right>$logout</v-icon>
+            <v-icon right>
+              $logout
+            </v-icon>
           </v-btn>
         </template>
         {{ $t('common.logout.text') }}
@@ -122,11 +126,11 @@
             <v-icon>fas fa-caret-right</v-icon>
           </template>
         </v-breadcrumbs>
-        <router-view></router-view>
+        <router-view />
       </v-container>
     </v-main>
-    <service-worker></service-worker>
-    <message-box></message-box>
+    <service-worker />
+    <message-box />
     <!-- <v-footer app> </v-footer> -->
   </v-app>
 </template>
@@ -175,7 +179,8 @@ export default defineComponent({
 
     breadcrumbs(): Breadcrumbs[] {
       const { meta: { module, action } = {}, params } = this.$route;
-      if (!module || !action) return [];
+      if (!module || !action)
+        return [];
 
       const { current, parent } = module;
       return this.buildBreadCrumb(current, action, params, parent);
@@ -183,10 +188,12 @@ export default defineComponent({
 
     title(): string {
       const { meta: { title } = {} } = this.$route;
-      if (title) return this.$t(title).toString();
+      if (title)
+        return this.$t(title).toString();
 
       const { module } = this;
-      if (!module) return this.$t('common._').toString();
+      if (!module)
+        return this.$t('common._').toString();
 
       const { id, name, englishName, description } = this.entry;
 
@@ -215,17 +222,20 @@ export default defineComponent({
       const { state, code } = this.$route.query;
 
       // MFA verification -> do not refresh yet
-      if ([state, code].every((item) => typeof item === 'string' && item.length)) return;
+      if ([state, code].every(item => typeof item === 'string' && item.length))
+        return;
 
       await useAuth().refresh();
       await this.$router.push({ name: this.isVerified ? 'dashboard' : 'verify' });
     }
 
-    if (!this.loggedIn) return;
+    if (!this.loggedIn)
+      return;
 
     // Send subscription to server to keep it up-to-date
     setTimeout(async () => {
-      if (this.isPermissionGranted) await this.subscribe();
+      if (this.isPermissionGranted)
+        await this.subscribe();
     }, 5 * 1000);
   },
 
@@ -243,10 +253,11 @@ export default defineComponent({
       const defaults = { disabled: false, exact: true, link: true };
       const items: Breadcrumbs[] = [];
 
-      if (parent)
+      if (parent) {
         items.push(
-          ...this.buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams)
+          ...this.buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams),
         );
+      }
 
       const name = parent ? `${parent}-${module}` : module;
       const title = parent && module !== 'securables' ? `${parent}.${module}` : module;
@@ -254,11 +265,13 @@ export default defineComponent({
       const { [identifier]: currentId, id } = currentParams;
 
       const params: Dictionary<string> = { [identifier]: currentId };
-      if (parent) params.id = id;
+      if (parent)
+        params.id = id;
 
       items.push({ ...defaults, text: this.$t(`${title}.title`).toString(), to: { name } });
 
-      if (!currentId) return items;
+      if (!currentId)
+        return items;
 
       if (currentId === 'create') {
         items.push({

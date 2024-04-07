@@ -16,8 +16,7 @@
             :prepend-inner-icon="`$${key}`"
             :value="review[key]"
             @change="update('review', { ...review, [key]: $event })"
-          >
-          </v-select>
+          />
         </v-card-text>
       </v-col>
     </v-row>
@@ -49,7 +48,7 @@ export default defineComponent({
   setup() {
     const { i18n } = useI18n();
 
-    const options = reviewOptions.map((value) => ({
+    const options = reviewOptions.map(value => ({
       text: i18n.t(`survey-schemes.prompts.submit-prompt.review.${value}`),
       value,
     }));

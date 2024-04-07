@@ -9,7 +9,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="objectValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="objectValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -24,8 +24,7 @@
             }"
             @confirm="confirmObject"
             @select="selectObject"
-          >
-          </image-map-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
@@ -42,7 +41,7 @@
                 :amount="portionSize.quantity"
                 unit=""
                 :valid="quantityConfirmed"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
@@ -52,7 +51,7 @@
             :confirm.sync="quantityConfirmed"
             @input="selectQuantity"
             @update:confirm="confirmQuantity"
-          ></quantity-card>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <linked-quantity
@@ -62,13 +61,13 @@
         :confirm.sync="linkedQuantityConfirmed"
         @input="selectLinkedQuantity"
         @update:confirm="confirmLinkedQuantity"
-      ></linked-quantity>
+      />
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -137,7 +136,8 @@ export default defineComponent({
     },
 
     labels() {
-      if (!this.labelsEnabled || !this.guideImageData) return [];
+      if (!this.labelsEnabled || !this.guideImageData)
+        return [];
 
       const { guideImageData } = this;
 
@@ -145,23 +145,24 @@ export default defineComponent({
         const { label, weight } = guideImageData.objects[object.id];
 
         return (
-          this.translate(label, { params: { food: this.foodName, weight } }) ||
-          this.translate(object.label, { params: { food: this.foodName, weight } })
+          this.translate(label, { params: { food: this.foodName, weight } })
+          || this.translate(object.label, { params: { food: this.foodName, weight } })
         );
       });
     },
 
     selectedFoodLabel() {
-      if (!this.labels.length || this.portionSize.objectIndex === undefined) return this.foodName;
+      if (!this.labels.length || this.portionSize.objectIndex === undefined)
+        return this.foodName;
 
       return this.labels[this.portionSize.objectIndex] || this.foodName;
     },
 
     objectValid() {
       return (
-        this.portionSize.objectId !== undefined &&
-        this.portionSize.objectIndex !== undefined &&
-        this.objectConfirmed
+        this.portionSize.objectId !== undefined
+        && this.portionSize.objectIndex !== undefined
+        && this.objectConfirmed
       );
     },
 
@@ -172,7 +173,8 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.objectValid, this.quantityValid];
 
-      if (this.linkedParent?.categories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedParent?.categories.length)
+        conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },
@@ -185,7 +187,7 @@ export default defineComponent({
   methods: {
     async fetchGuideImageData() {
       const { data } = await this.$http.get<GuideImageResponse>(
-        `portion-sizes/guide-images/${this.parameters.guideImageId}`
+        `portion-sizes/guide-images/${this.parameters.guideImageId}`,
       );
 
       this.guideImageData = { ...data };
@@ -228,11 +230,11 @@ export default defineComponent({
         const id = this.portionSize.objectId;
 
         this.portionSize.objectWeight = this.guideImageData.objects[id].weight ?? 0;
-        this.portionSize.servingWeight =
-          this.guideImageData.objects[id].weight *
-          this.portionSize.quantity *
-          this.conversionFactor *
-          this.portionSize.linkedQuantity;
+        this.portionSize.servingWeight
+          = this.guideImageData.objects[id].weight
+          * this.portionSize.quantity
+          * this.conversionFactor
+          * this.portionSize.linkedQuantity;
       }
 
       const state: PromptStates['guide-image-prompt'] = {

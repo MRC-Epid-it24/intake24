@@ -1,6 +1,6 @@
 <template>
-  <div class="loader" :class="{ show: show }">
-    <img alt="loader" src="@intake24/ui/assets/loader.svg" />
+  <div class="loader" :class="{ show }">
+    <img alt="loader" src="@intake24/ui/assets/loader.svg">
   </div>
 </template>
 

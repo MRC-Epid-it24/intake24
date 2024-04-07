@@ -4,12 +4,12 @@
       <div class="guide-drawer">
         <v-img ref="img" :src="imageMapData.baseImageUrl">
           <template #placeholder>
-            <image-placeholder></image-placeholder>
+            <image-placeholder />
           </template>
         </v-img>
         <svg ref="svg">
           <filter id="polygon-blur">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4"></feGaussianBlur>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
           </filter>
           <polygon
             v-for="(object, idx) in objects"
@@ -21,7 +21,7 @@
             @keypress.stop="select(idx, object.id)"
             @mouseleave="hoverIndex = undefined"
             @mouseover="hoverIndex = idx"
-          ></polygon>
+          />
         </svg>
       </div>
     </v-col>
@@ -81,7 +81,7 @@ export default defineComponent({
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    //@ts-expect-error should allow vue instance?
+    // @ts-expect-error should allow vue instance?
     const { height, width } = useElementSize(img);
 
     const screenHeight = ref(0);
@@ -90,7 +90,7 @@ export default defineComponent({
     const { hoverIndex, label, objects } = useImageMap(props, width);
 
     const isDisabled = computed(() =>
-      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled
+      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled,
     );
 
     const getScreenDimensions = () => {
@@ -125,7 +125,8 @@ export default defineComponent({
     select(idx: number, id: string) {
       this.$emit('select', idx, id);
 
-      if (!this.isMobile) this.confirm();
+      if (!this.isMobile)
+        this.confirm();
     },
   },
 });

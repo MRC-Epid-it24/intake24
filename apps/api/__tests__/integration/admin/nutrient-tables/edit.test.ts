@@ -32,7 +32,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999/edit`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 
@@ -76,7 +76,7 @@ export default () => {
           ({ fieldName, columnOffset }: NutrientTableRequest['csvMappingFields'][number]) => ({
             fieldName,
             columnOffset,
-          })
+          }),
         );
         expect(fields).toIncludeSameMembers(outputCsvMappingFields);
       }
@@ -89,7 +89,7 @@ export default () => {
           }: NutrientTableRequest['csvMappingNutrients'][number]) => ({
             nutrientTypeId,
             columnOffset,
-          })
+          }),
         );
         expect(nutrients).toIncludeSameMembers(outputCsvMappingNutrients);
       }

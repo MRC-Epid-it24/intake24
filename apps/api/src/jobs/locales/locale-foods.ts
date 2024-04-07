@@ -67,7 +67,8 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
     this.init(job);
 
     const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
+    if (!dbJob)
+      throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
 
     this.dbJob = dbJob;
 
@@ -81,7 +82,8 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
   private async prepareExportInfo() {
     const { localeId } = this.params;
     const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
-    if (!locale) throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
+    if (!locale)
+      throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
 
     const { code: localeCode } = locale;
 
@@ -157,9 +159,9 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
             this.cachedParentCategoriesService.getFoodAllCategories(food.foodCode),
             food.portionSizeMethods?.length
               ? this.portionSizeMethodsService.resolvePortionSizeMethods(
-                  food.localeId,
-                  food.foodCode
-                )
+                food.localeId,
+                food.foodCode,
+              )
               : ([] as (CategoryPortionSizeMethod | FoodPortionSizeMethod)[]),
           ]);
 
@@ -208,7 +210,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                 associatedFoods: associatedFoods
                   .map(
                     ({ associatedFoodCode, associatedCategoryCode }) =>
-                      associatedFoodCode ?? associatedCategoryCode
+                      associatedFoodCode ?? associatedCategoryCode,
                   )
                   .join(', '),
                 categories: categories.join(', '),
@@ -216,7 +218,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                 portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
                   .map(
                     ({ method, conversionFactor, parameters = [] }) =>
-                      `Method: ${method}, conversion: ${conversionFactor}, ${JSON.stringify(parameters)}`
+                      `Method: ${method}, conversion: ${conversionFactor}, ${JSON.stringify(parameters)}`,
                   )
                   .join('\n'),
               };
@@ -224,7 +226,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
           ],
         },
         {},
-        { objectMode: true }
+        { objectMode: true },
       );
 
       foods.on('error', (err) => {

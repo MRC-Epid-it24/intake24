@@ -11,10 +11,10 @@ import type { PaginateOptions, PaginateQuery } from '@intake24/db';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { NutrientTable, Op, securableScope, SystemLocale } from '@intake24/db';
 
-const adminFoodDatabaseController = () => {
+function adminFoodDatabaseController() {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<LocalesResponse>
+    res: Response<LocalesResponse>,
   ): Promise<void> => {
     const {
       aclService,
@@ -45,7 +45,7 @@ const adminFoodDatabaseController = () => {
 
   const read = async (
     req: Request<{ localeId: string }>,
-    res: Response<FoodDatabaseEntry>
+    res: Response<FoodDatabaseEntry>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -64,7 +64,7 @@ const adminFoodDatabaseController = () => {
   };
 
   return { browse, read, refs };
-};
+}
 
 export default adminFoodDatabaseController;
 

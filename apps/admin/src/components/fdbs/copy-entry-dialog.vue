@@ -9,7 +9,9 @@
         :title="$t(`fdbs.${type}.copy`)"
         v-on="on"
       >
-        <v-icon left>fas fa-copy</v-icon>{{ $t(`fdbs.${type}.copy`) }}
+        <v-icon left>
+          fas fa-copy
+        </v-icon>{{ $t(`fdbs.${type}.copy`) }}
       </v-btn>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
@@ -32,7 +34,7 @@
                 :label="$t(`fdbs.${type}.global.code`)"
                 name="code"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -42,16 +44,18 @@
                 :label="$t(`fdbs.${type}.global.name`)"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-card-text>
       </v-form>
       <v-card-actions class="pb-4">
         <v-btn class="font-weight-bold" color="error" text @click.stop="close">
-          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+          <v-icon left>
+            $cancel
+          </v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
@@ -59,7 +63,9 @@
           text
           @click.stop="confirm"
         >
-          <v-icon left>$success</v-icon>{{ $t('common.action.confirm._') }}
+          <v-icon left>
+            $success
+          </v-icon>{{ $t('common.action.confirm._') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -113,7 +119,7 @@ export default defineComponent({
       const { type, localeId, entryId } = props;
       const { name } = form;
       const { id } = await form.post<SurveySchemeEntry>(
-        `admin/fdbs/${localeId}/${type}/${entryId}/copy`
+        `admin/fdbs/${localeId}/${type}/${entryId}/copy`,
       );
 
       close();

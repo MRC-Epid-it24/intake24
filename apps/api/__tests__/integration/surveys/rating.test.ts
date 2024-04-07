@@ -14,7 +14,7 @@ export default () => {
 
     const submission = mocker.system.submission(
       suite.data.system.survey.id,
-      suite.data.system.respondent.id
+      suite.data.system.respondent.id,
     );
     await SurveySubmission.create(submission);
 
@@ -55,7 +55,7 @@ export default () => {
           submissionId: 'not-an-uuid',
           comment: ['comment'],
         },
-      }
+      },
     );
   });
 

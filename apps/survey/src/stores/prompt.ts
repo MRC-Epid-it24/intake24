@@ -25,7 +25,7 @@ export function clearPromptStores(): void {
 }
 
 export function getOrCreatePromptStateStore<T extends object>(
-  promptType: ComponentType
+  promptType: ComponentType,
 ): StoreDefinition {
   let storeDef = promptStores.get(promptType);
 
@@ -52,14 +52,16 @@ export function getOrCreatePromptStateStore<T extends object>(
             ids.forEach((id) => {
               delete this.prompts[id];
             });
-          } else {
+          }
+          else {
             ids.forEach((id) => {
-              if (this.prompts[id]?.[promptId]) Vue.delete(this.prompts[id], promptId);
+              if (this.prompts[id]?.[promptId])
+                Vue.delete(this.prompts[id], promptId);
             });
           }
 
           this.prompts = Object.fromEntries(
-            Object.entries(this.prompts).filter((e) => Object.keys(e[1]).length)
+            Object.entries(this.prompts).filter(e => Object.keys(e[1]).length),
           );
 
           // Dispose store if it is empty

@@ -11,8 +11,7 @@
     }"
     @action="action"
     @input="update"
-  >
-  </associated-foods-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -32,11 +31,13 @@ import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
-const initialPromptState = (allowMultiple: boolean): AssociatedFoodPrompt => ({
-  mainFoodConfirmed: undefined,
-  additionalFoodConfirmed: allowMultiple ? undefined : false,
-  foods: [],
-});
+function initialPromptState(allowMultiple: boolean): AssociatedFoodPrompt {
+  return {
+    mainFoodConfirmed: undefined,
+    additionalFoodConfirmed: allowMultiple ? undefined : false,
+    foods: [],
+  };
+}
 
 interface LinkAsMainNew {
   header: FoodHeader;
@@ -74,18 +75,18 @@ export default defineComponent({
 
     const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
       activePrompt: 0,
-      prompts: food().data.associatedFoodPrompts.map((prompt) =>
-        initialPromptState(props.prompt.multiple && prompt.multiple)
+      prompts: food().data.associatedFoodPrompts.map(prompt =>
+        initialPromptState(props.prompt.multiple && prompt.multiple),
       ),
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
     async function fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
-      //TODO: Show loading
+      // TODO: Show loading
 
       return Promise.all(
-        headers.map((header) => foodSearchService.getData(localeId.value, header.code))
+        headers.map(header => foodSearchService.getData(localeId.value, header.code)),
       );
     }
 
@@ -98,13 +99,13 @@ export default defineComponent({
     function processLinkAsMain(foodId: string) {
       const oldFoodIndex = getFoodIndexRequired(meals.value, foodId);
       const oldMainFood = meals.value[oldFoodIndex.mealIndex].foods[oldFoodIndex.foodIndex];
-      const newMainFoods = oldMainFood.linkedFoods.filter((food) =>
-        food.flags.includes('link-as-main')
+      const newMainFoods = oldMainFood.linkedFoods.filter(food =>
+        food.flags.includes('link-as-main'),
       );
 
       // We don't need the flags anymore so we can clear them here
       oldMainFood.linkedFoods.forEach((food) => {
-        food.flags = food.flags.filter((flag) => flag !== 'link-as-main');
+        food.flags = food.flags.filter(flag => flag !== 'link-as-main');
       });
 
       if (newMainFoods.length === 1) {
@@ -130,12 +131,13 @@ export default defineComponent({
 
         newMainFood.linkedFoods = [
           oldMainFood,
-          ...oldMainFood.linkedFoods.filter((food) => food.id !== newMainFood.id),
+          ...oldMainFood.linkedFoods.filter(food => food.id !== newMainFood.id),
         ];
         oldMainFood.linkedFoods = [];
 
         survey.setFoods({ mealId: meal.value.id, foods: foodsUpdate });
-      } else {
+      }
+      else {
         // Nothing we can do, abort
       }
     }
@@ -201,26 +203,29 @@ export default defineComponent({
       const keepFoods: FoodState[] = [];
 
       meals.value[mealIndex].foods.forEach((food) => {
-        const existingFoodRef = existingFoods.find((ref) => ref.id === food.id);
+        const existingFoodRef = existingFoods.find(ref => ref.id === food.id);
 
         if (food.type === 'encoded-food' && existingFoodRef !== undefined) {
-          if (existingFoodRef.linkAsMain) {
+          if (existingFoodRef.linkAsMain)
             food.flags = [...food.flags, 'link-as-main'];
-          }
+
           moveFoods.push(food);
-        } else {
+        }
+        else {
           keepFoods.push(food);
         }
       });
 
-      const foodData = await fetchFoodData(newFoods.map((f) => f.header));
+      const foodData = await fetchFoodData(newFoods.map(f => f.header));
 
       const linkedFoods: FoodState[] = foodData.map((data, index) => {
         const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
 
         const flags: FoodFlag[] = [];
-        if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
-        if (newFoods[index].linkAsMain) flags.push('link-as-main');
+        if (hasOnePortionSizeMethod)
+          flags.push('portion-size-option-complete');
+        if (newFoods[index].linkAsMain)
+          flags.push('link-as-main');
 
         return {
           type: 'encoded-food',
@@ -247,7 +252,7 @@ export default defineComponent({
 
         // Associated foods prompts for the new linked foods need to be disabled to prevent
         // potential circular associations.
-        const linkedFoodsWithoutPrompts = linkedFoods.map((food) => ({
+        const linkedFoodsWithoutPrompts = linkedFoods.map(food => ({
           ...food,
           flags: [...new Set([...food.flags, 'associated-foods-complete'])] as FoodFlag[],
         }));
@@ -258,7 +263,8 @@ export default defineComponent({
         // Order of the updates is important because any changes to the linked foods will be
         // overwritten by the update to the parent food.
         survey.updateFood({ foodId: parentFood.id, update: { linkedFoods: newLinkedFoods } });
-      } else {
+      }
+      else {
         survey.updateFood({ foodId, update: { linkedFoods } });
       }
 

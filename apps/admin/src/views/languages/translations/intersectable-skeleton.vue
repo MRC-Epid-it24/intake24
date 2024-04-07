@@ -1,6 +1,7 @@
 <template>
   <v-skeleton-loader v-intersect="intersected" :type="type" />
 </template>
+
 <script lang="ts">
 import { defineComponent } from 'vue';
 

@@ -7,7 +7,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_users RENAME CONSTRAINT users_pkey TO v3_users_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query('ALTER SEQUENCE user_id_seq RENAME TO v3_user_id_seq;', {
@@ -62,7 +62,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('users', ['email'], {
@@ -79,7 +79,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO users (id, "name", email, phone, simple_name, email_notifications, sms_notifications, multi_factor_authentication, created_at, updated_at) SELECT id, "name", email, phone, simple_name, email_notifications, sms_notifications, multi_factor_authentication, current_timestamp, current_timestamp FROM v3_users',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('users', 'id', { queryInterface, transaction });
@@ -88,21 +88,21 @@ module.exports = {
         'user_survey_aliases',
         'user_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'user_survey_aliases',
         'survey_id',
         { type: Sequelize.STRING(64), allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'user_survey_aliases',
         'url_auth_token',
         { type: Sequelize.STRING(128), allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('user_survey_aliases', 'user_aliases_user_id_fkey', {
@@ -125,7 +125,7 @@ module.exports = {
       await queryInterface.removeConstraint(
         'user_subscriptions',
         'user_subscriptions_user_id_users_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_subscriptions', {
@@ -162,7 +162,7 @@ module.exports = {
         'user_physical_data',
         'user_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('user_physical_data', 'users_id_fk', {
@@ -186,7 +186,7 @@ module.exports = {
         'user_passwords',
         'user_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('user_passwords', 'user_passwords_user_id_fkey', {
@@ -209,7 +209,7 @@ module.exports = {
       await queryInterface.removeConstraint(
         'user_password_resets',
         'user_password_resets_user_id_users_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_password_resets', {
@@ -231,7 +231,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE user_custom_fields_id_seq RENAME TO v3_user_custom_fields_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -255,7 +255,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_custom_fields', {
@@ -279,7 +279,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO user_custom_fields (id, user_id, "name", value) SELECT id, user_id, "name", value FROM v3_user_custom_fields',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('user_custom_fields', 'id', { queryInterface, transaction });
@@ -287,17 +287,17 @@ module.exports = {
       await queryInterface.renameTable(
         'user_notification_schedule',
         'v3_user_notification_schedule',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_user_notification_schedule RENAME CONSTRAINT user_notification_schedule_pkey TO v3_user_notification_schedule_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE user_notification_schedule_id_seq RENAME TO v3_user_notification_schedule_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -325,7 +325,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_notification_schedule', {
@@ -368,7 +368,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO user_notification_schedule (id, user_id, survey_id, datetime, notification_type) SELECT id, user_id, survey_id, datetime, notification_type FROM v3_user_notification_schedule',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('user_notification_schedule', 'id', { queryInterface, transaction });
@@ -377,7 +377,7 @@ module.exports = {
         'ux_events',
         'user_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('ux_events', 'user_id_fk', {
@@ -452,13 +452,13 @@ module.exports = {
         'external_test_users',
         'user_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'external_test_users',
         'external_test_users_user_id_fkey',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('external_test_users', {
@@ -478,7 +478,7 @@ module.exports = {
         'data_export_tasks',
         'user_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint('data_export_tasks', 'data_export_tasks_user_id_fk', {
@@ -502,13 +502,13 @@ module.exports = {
         'data_export_scheduled',
         'user_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'data_export_scheduled',
         'data_export_scheduled_user_id_fkey',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('data_export_scheduled', {

@@ -6,20 +6,21 @@ import type {
 import { NotFoundError } from '@intake24/api/http/errors';
 import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@intake24/db';
 
-const guideImageService = ({
+function guideImageService({
   portionSizeService,
   processedImageService,
-}: Pick<IoC, 'portionSizeService' | 'processedImageService'>) => {
+}: Pick<IoC, 'portionSizeService' | 'processedImageService'>) {
   const create = async (input: CreateGuideImageInput): Promise<GuideImage> => {
     const { id, description, imageMapId } = input;
 
     const imageMap = await ImageMap.findByPk(imageMapId, { include: ['baseImage'] });
-    if (!imageMap || !imageMap.baseImage) throw new NotFoundError();
+    if (!imageMap || !imageMap.baseImage)
+      throw new NotFoundError();
 
     const selectionImage = await processedImageService.createSelectionImage(
       id,
       imageMap.baseImage.sourceId,
-      'guide'
+      'guide',
     );
 
     const guideImage = await GuideImage.create({
@@ -34,7 +35,7 @@ const guideImageService = ({
       order: [['id', 'ASC']],
     });
 
-    const guideImageObjects = imageMapObjects.map((object) => ({
+    const guideImageObjects = imageMapObjects.map(object => ({
       guideImageId: guideImage.id,
       imageMapObjectId: object.id,
       weight: 0,
@@ -48,18 +49,19 @@ const guideImageService = ({
 
   const update = async (
     guideImageId: string,
-    input: UpdateGuideImageInput
+    input: UpdateGuideImageInput,
   ): Promise<GuideImage> => {
     const { description, objects } = input;
 
     const guideImage = await portionSizeService.getGuideImage(guideImageId);
-    if (!guideImage.objects) throw new NotFoundError();
+    if (!guideImage.objects)
+      throw new NotFoundError();
 
     await guideImage.update({ description });
 
     for (const object of objects) {
       const { id, label, weight } = object;
-      const match = guideImage.objects.find((guideObject) => guideObject.imageMapObjectId === id);
+      const match = guideImage.objects.find(guideObject => guideObject.imageMapObjectId === id);
 
       if (!match) {
         await GuideImageObject.create({ guideImageId, imageMapObjectId: id, label, weight });
@@ -76,7 +78,8 @@ const guideImageService = ({
     const guideImage = await GuideImage.findByPk(guideImageId, {
       attributes: ['id', 'selectionImageId'],
     });
-    if (!guideImage) throw new NotFoundError();
+    if (!guideImage)
+      throw new NotFoundError();
 
     await guideImage.destroy();
     await processedImageService.destroy(guideImage.selectionImageId);
@@ -87,7 +90,7 @@ const guideImageService = ({
     update,
     destroy,
   };
-};
+}
 
 export default guideImageService;
 

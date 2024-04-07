@@ -87,7 +87,7 @@ module.exports = {
       { name: 'tasks-create', display_name: 'Create tasks' },
       { name: 'tasks-edit', display_name: 'Edit tasks' },
       { name: 'tasks-delete', display_name: 'Delete tasks' },
-    ].map((permission) => ({ ...permission, created_at, updated_at }));
+    ].map(permission => ({ ...permission, created_at, updated_at }));
 
     await queryInterface.bulkInsert('permissions', resourcePerms.concat(surveyPerms, fdbPerms));
 
@@ -105,9 +105,8 @@ module.exports = {
     });
 
     // Length check is a workaround for https://github.com/sequelize/sequelize/issues/11071
-    if (records.length > 0) {
+    if (records.length > 0)
       await queryInterface.bulkInsert('permission_role', records);
-    }
 
     // Assign permissions based on legacy ACL system
     const roleMap = roles[0].reduce((acc, role) => {
@@ -122,7 +121,7 @@ module.exports = {
 
     const legacyRoles = await queryInterface.sequelize.query(
       `SELECT user_id, role
-         FROM user_roles;`
+         FROM user_roles;`,
     );
 
     const newPermissions = [];
@@ -153,13 +152,11 @@ module.exports = {
 
     // Length check is a workaround for https://github.com/sequelize/sequelize/issues/11071
 
-    if (newPermissions.length > 0) {
+    if (newPermissions.length > 0)
       await queryInterface.bulkInsert('permission_user', newPermissions);
-    }
 
-    if (newRoles.length > 0) {
+    if (newRoles.length > 0)
       await queryInterface.bulkInsert('role_user', newRoles);
-    }
   },
 
   down: async (queryInterface) => {

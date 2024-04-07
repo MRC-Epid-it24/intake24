@@ -1,6 +1,6 @@
 <template>
   <v-container class="container-max" :class="{ 'pa-0': isMobile }" fluid>
-    <component :is="layout"></component>
+    <component :is="layout" />
   </v-container>
 </template>
 

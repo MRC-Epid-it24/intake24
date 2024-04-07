@@ -11,20 +11,21 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import { Job, Op } from '@intake24/db';
 
-export const job = () => {
+export function job() {
   return initServer().router(contract.admin.user.job, {
     browse: async ({ query, req }) => {
       const { userId } = req.scope.cradle.user;
       const { type, ...rest } = query;
       const jsonParams = Object.entries(
-        pick(rest, ['localeId', 'nutrientTableId', 'surveyId'])
+        pick(rest, ['localeId', 'nutrientTableId', 'surveyId']),
       ).map(([key, value]) => where(literal(`(params::json->>'${key}')::text`), value));
 
       const whereOp: WhereOptions = {
         userId,
         [Op.and]: jsonParams,
       };
-      if (type) whereOp.type = type;
+      if (type)
+        whereOp.type = type;
 
       const jobs = await Job.paginate<() => JobAttributes>({
         query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -39,7 +40,8 @@ export const job = () => {
       const { userId } = req.scope.cradle.user;
 
       const job = await Job.findOne({ where: { id, userId } });
-      if (!job) throw new NotFoundError();
+      if (!job)
+        throw new NotFoundError();
 
       return { status: 200, body: job };
     },
@@ -56,11 +58,13 @@ export const job = () => {
         },
       });
 
-      if (!job?.downloadUrl) throw new NotFoundError();
+      if (!job?.downloadUrl)
+        throw new NotFoundError();
       const { downloadUrl } = job;
 
       const file = path.resolve(req.scope.cradle.fsConfig.local.downloads, downloadUrl);
-      if (!(await fs.pathExists(file))) throw new NotFoundError();
+      if (!(await fs.pathExists(file)))
+        throw new NotFoundError();
 
       const { size } = await fs.stat(file);
 
@@ -74,4 +78,4 @@ export const job = () => {
       };
     },
   });
-};
+}

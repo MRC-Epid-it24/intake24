@@ -48,7 +48,7 @@ export default abstract class RedisStore {
   /**
    * Flush redis store data
    *
-   * @param {string} [pattern='*']
+   * @param {string} [pattern]
    * @returns {Promise<boolean>}
    * @memberof HasRedisClient
    */
@@ -56,9 +56,10 @@ export default abstract class RedisStore {
     const { keyPrefix } = this.config;
 
     const fullKeys = await this.redis.keys([keyPrefix ?? '', pattern].join(''));
-    if (!fullKeys.length) return false;
+    if (!fullKeys.length)
+      return false;
 
-    const keys = keyPrefix ? fullKeys.map((key) => key.replace(keyPrefix, '')) : fullKeys;
+    const keys = keyPrefix ? fullKeys.map(key => key.replace(keyPrefix, '')) : fullKeys;
 
     const result = await this.redis.del(keys);
 

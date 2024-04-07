@@ -5,41 +5,41 @@ module.exports = {
         'associated_foods',
         'generic_name',
         { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'associated_foods',
         'text',
         { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE associated_foods SET generic_name = concat('{"ar":"', generic_name, '"}'), text = concat('{"ar":"', text, '"}') WHERE locale_id = 'ar_AE';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE associated_foods SET generic_name = concat('{"da":"', generic_name, '"}'), text = concat('{"da":"', text, '"}') WHERE locale_id = 'da_DK';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE associated_foods SET generic_name = concat('{"pt":"', generic_name, '"}'), text = concat('{"pt":"', text, '"}') WHERE locale_id = 'pt_PT';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE associated_foods SET generic_name = concat('{"en":"', generic_name, '"}'), text = concat('{"en":"', text, '"}') WHERE locale_id NOT IN ('ar_AE', 'da_DK', 'pt_PT');`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'associated_foods',
         'multiple',
         { allowNull: true, type: Sequelize.BOOLEAN },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE associated_foods SET multiple = false;`, {
@@ -50,7 +50,7 @@ module.exports = {
         'associated_foods',
         'multiple',
         { allowNull: false, type: Sequelize.BOOLEAN },
-        { transaction }
+        { transaction },
       );
     }),
 
@@ -60,21 +60,21 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `UPDATE associated_foods SET generic_name = substring(generic_name, '{"\\S+":"(.*)"}'), text = substring(text, '{"\\S+":"(.*)"}');`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'associated_foods',
         'generic_name',
         { type: Sequelize.STRING(128), allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'associated_foods',
         'text',
         { type: Sequelize.STRING(1024), allowNull: false },
-        { transaction }
+        { transaction },
       );
     }),
 };

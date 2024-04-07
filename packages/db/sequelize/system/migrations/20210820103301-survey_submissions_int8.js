@@ -43,7 +43,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submissions', {
@@ -86,23 +86,23 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `INSERT INTO survey_submissions (id, survey_id, user_id, start_time, end_time, log, ux_session_id, submission_time) SELECT id, survey_id, user_id, start_time, end_time, array_to_string(log, E'\n'), ux_session_id, submission_time FROM v3_survey_submissions`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE survey_submissions SET log = NULL WHERE log = '';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'survey_submission_custom_fields',
         'v3_survey_submission_custom_fields',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_custom_fields_id_seq RENAME TO v3_survey_submission_custom_fields_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -126,7 +126,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_custom_fields', {
@@ -150,7 +150,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_custom_fields (id, survey_submission_id, "name", value) SELECT id, survey_submission_id, "name", value FROM v3_survey_submission_custom_fields',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_custom_fields', 'id', {
@@ -164,7 +164,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_meals_id_seq RENAME TO v3_survey_submission_meals_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -192,7 +192,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_meals', {
@@ -216,7 +216,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_meals (id, survey_submission_id, hours, minutes, "name") SELECT id, survey_submission_id, hours, minutes, "name" FROM v3_survey_submission_meals',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_meals', 'id', {
@@ -227,12 +227,12 @@ module.exports = {
       await queryInterface.renameTable(
         'survey_submission_meal_custom_fields',
         'v3_survey_submission_meal_custom_fields',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_meal_custom_fields_id_seq RENAME TO v3_survey_submission_meal_custom_fields_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -256,7 +256,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_meal_custom_fields', {
@@ -280,7 +280,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_meal_custom_fields (id, meal_id, "name", value) SELECT id, meal_id, "name", value FROM v3_survey_submission_meal_custom_fields',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_meal_custom_fields', 'id', {
@@ -291,12 +291,12 @@ module.exports = {
       await queryInterface.renameTable(
         'survey_submission_missing_foods',
         'v3_survey_submission_missing_foods',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_missing_foods_id_seq RENAME TO v3_survey_submission_missing_foods_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -332,7 +332,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_missing_foods', {
@@ -356,7 +356,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_missing_foods (id, meal_id, "name", brand, description, portion_size, leftovers) SELECT id, meal_id, "name", brand, description, portion_size, leftovers FROM v3_survey_submission_missing_foods',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_missing_foods', 'id', {
@@ -370,7 +370,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_foods_id_seq RENAME TO v3_survey_submission_foods_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -438,7 +438,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_foods', {
@@ -462,7 +462,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_foods (id, meal_id, code, english_description, local_description, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_description, food_group_local_description, brand, nutrient_table_id, nutrient_table_code) SELECT id, meal_id, code, english_description, local_description, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_description, food_group_local_description, brand, nutrient_table_id, nutrient_table_code FROM v3_survey_submission_foods',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_foods', 'id', {
@@ -473,12 +473,12 @@ module.exports = {
       await queryInterface.renameTable(
         'survey_submission_food_custom_fields',
         'v3_survey_submission_food_custom_fields',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_food_custom_fields_id_seq RENAME TO v3_survey_submission_food_custom_fields_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -502,7 +502,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_food_custom_fields', {
@@ -526,7 +526,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_food_custom_fields (id, food_id, "name", value) SELECT id, food_id, "name", value FROM v3_survey_submission_food_custom_fields',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_food_custom_fields', 'id', {
@@ -540,7 +540,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_fields_id_seq RENAME TO v3_survey_submission_fields_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -564,7 +564,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_fields', {
@@ -588,7 +588,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_fields (id, food_id, field_name, value) SELECT id, food_id, field_name, value FROM v3_survey_submission_fields',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_fields', 'id', {
@@ -599,12 +599,12 @@ module.exports = {
       await queryInterface.renameTable(
         'survey_submission_nutrients',
         'v3_survey_submission_nutrients',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_nutrients_id_seq RENAME TO v3_survey_submission_nutrients_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -628,7 +628,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_nutrients', {
@@ -671,7 +671,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_nutrients (id, food_id, amount, nutrient_type_id) SELECT id, food_id, amount, nutrient_type_id FROM v3_survey_submission_nutrients',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_nutrients', 'id', {
@@ -682,12 +682,12 @@ module.exports = {
       await queryInterface.renameTable(
         'survey_submission_portion_size_fields',
         'v3_survey_submission_portion_size_fields',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE survey_submission_portion_size_fields_id_seq RENAME TO v3_survey_submission_portion_size_fields_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -711,7 +711,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_portion_size_fields', {
@@ -735,7 +735,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submission_portion_size_fields (id, food_id, "name", value) SELECT id, food_id, "name", value FROM v3_survey_submission_portion_size_fields',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('survey_submission_portion_size_fields', 'id', {

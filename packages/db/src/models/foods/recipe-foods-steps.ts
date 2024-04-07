@@ -99,6 +99,7 @@ export default class RecipeFoodsSteps extends BaseModel<
     const val = this.getDataValue('name') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
+
   set name(value: LocaleTranslation) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('name', JSON.stringify(value ?? {}));
@@ -115,7 +116,7 @@ export default class RecipeFoodsSteps extends BaseModel<
     defaultValue: () =>
       JSON.stringify({
         en: `Step description for step ${Sequelize.col('name')} of special food ${Sequelize.col(
-          'recipeFoodsId'
+          'recipeFoodsId',
         )}`,
       }),
     type: DataType.TEXT({ length: 'long' }),
@@ -124,6 +125,7 @@ export default class RecipeFoodsSteps extends BaseModel<
     const val = this.getDataValue('description') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
+
   set description(value: LocaleTranslation) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('description', JSON.stringify(value ?? {}));

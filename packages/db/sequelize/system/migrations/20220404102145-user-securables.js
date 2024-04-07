@@ -65,7 +65,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex(
@@ -75,7 +75,7 @@ module.exports = {
           name: 'user_securables_search_idx',
           indexType: 'btree',
           transaction,
-        }
+        },
       );
 
       await queryInterface.addConstraint('user_securables', {
@@ -101,7 +101,7 @@ module.exports = {
         'feedback_schemes',
         'owner_id',
         { type: Sequelize.BIGINT, allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('feedback_schemes', {
@@ -127,7 +127,7 @@ module.exports = {
         'survey_schemes',
         'owner_id',
         { type: Sequelize.BIGINT, allowNull: true },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_schemes', {
@@ -152,7 +152,7 @@ module.exports = {
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('feedback_schemes', 'owner_id', { transaction });
       await queryInterface.removeColumn('survey_schemes', 'owner_id', { transaction });

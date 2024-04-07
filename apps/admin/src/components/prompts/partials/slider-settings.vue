@@ -1,7 +1,9 @@
 <template>
   <v-card outlined>
     <v-toolbar color="grey lighten-4" flat>
-      <v-icon left>fas fa-sliders</v-icon>
+      <v-icon left>
+        fas fa-sliders
+      </v-icon>
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.slider._') }}
       </v-toolbar-title>
@@ -34,15 +36,14 @@
                         ? null
                         : parseFloat($event)
                     "
-                  ></v-text-field>
+                  />
                   <v-switch
                     class="mb-4"
                     hide-details="auto"
                     :input-value="slider[item].label"
                     :label="$t(`survey-schemes.prompts.slider.${item}.label`)"
                     @change="updateLabel(item, $event)"
-                  >
-                  </v-switch>
+                  />
                   <language-selector
                     v-if="slider[item].label"
                     v-model="slider[item].label"
@@ -57,7 +58,7 @@
                         :label="$t(`survey-schemes.prompts.slider.${item}.label`)"
                         :name="`${item}.${lang}`"
                         outlined
-                      ></v-text-field>
+                      />
                     </template>
                   </language-selector>
                   <v-text-field
@@ -68,13 +69,13 @@
                     name="current"
                     outlined
                     :rules="isNumber"
-                  ></v-text-field>
+                  />
                 </v-tab-item>
               </v-tabs-items>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
         <v-col cols="12" md="6">
           <v-card-text>
             <v-text-field
@@ -84,7 +85,7 @@
               name="step"
               outlined
               :rules="isNumber"
-            ></v-text-field>
+            />
           </v-card-text>
         </v-col>
       </v-row>

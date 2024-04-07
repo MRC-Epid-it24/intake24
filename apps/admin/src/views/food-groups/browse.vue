@@ -1,5 +1,5 @@
 <template>
-  <data-table :headers="headers"></data-table>
+  <data-table :headers="headers" />
 </template>
 
 <script lang="ts">

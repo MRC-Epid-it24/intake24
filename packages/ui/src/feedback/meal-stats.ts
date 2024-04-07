@@ -25,11 +25,7 @@ export interface FeedbackMealsData extends Omit<FeedbackMeals, 'chart' | 'table'
   table: FeedbackMealTableData;
 }
 
-export const buildMealStats = (
-  feedbackMeals: FeedbackMeals,
-  meals: MealStats[],
-  nutrientTypes: NutrientType[] = []
-): FeedbackMealsData => {
+export function buildMealStats(feedbackMeals: FeedbackMeals, meals: MealStats[], nutrientTypes: NutrientType[] = []): FeedbackMealsData {
   const { chart, table } = feedbackMeals;
 
   const chartData = chart.nutrients.map((nutrient) => {
@@ -38,7 +34,7 @@ export const buildMealStats = (
     const name = useI18n().translate(nutrient.name);
     const unit = getNutrientUnit(id, nutrientTypes);
 
-    const data = meals.map((meal) => ({
+    const data = meals.map(meal => ({
       name: meal.name,
       value: meal.stats.getGroupAverageIntake(id),
     }));
@@ -56,20 +52,20 @@ export const buildMealStats = (
           resolvedValue = meal[field.fieldId];
           break;
         case 'custom':
-          resolvedValue =
-            meal.customFields.find((item) => item.name === field.fieldId)?.value ?? null;
+          resolvedValue
+            = meal.customFields.find(item => item.name === field.fieldId)?.value ?? null;
           break;
         case 'nutrient':
           resolvedValue = meal.stats.getGroupAverageIntake(field.types);
           break;
       }
 
-      acc[field.fieldId] =
-        value && resolvedValue ? value.replace('{value}', resolvedValue.toString()) : resolvedValue;
+      acc[field.fieldId]
+        = value && resolvedValue ? value.replace('{value}', resolvedValue.toString()) : resolvedValue;
 
       return acc;
     }, {});
   });
 
   return { chart: { ...chart, chartData }, table: { ...table, tableData } };
-};
+}

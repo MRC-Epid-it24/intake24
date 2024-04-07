@@ -14,13 +14,14 @@ let tokenSubscribers: SubscribeCallback[] = [];
 
 const subscribeTokenRefresh = (cb: SubscribeCallback) => tokenSubscribers.push(cb);
 
-const onTokenRefreshed = (errRefreshing?: AxiosError) =>
-  tokenSubscribers.map((cb) => cb(errRefreshing));
+function onTokenRefreshed(errRefreshing?: AxiosError) {
+  return tokenSubscribers.map(cb => cb(errRefreshing));
+}
 
 const httpClient: HttpClient = {
   axios: axios.create({
     baseURL: [import.meta.env.VITE_API_HOST, import.meta.env.VITE_API_URL]
-      .map((item) => trim(item, '/'))
+      .map(item => trim(item, '/'))
       .join('/'),
     headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
     withCredentials: true,
@@ -62,8 +63,10 @@ const httpClient: HttpClient = {
 
     try {
       return await this.axios.request<T, R, D>(rest);
-    } finally {
-      if (loading && loadingId) loading.removeItem(loadingId);
+    }
+    finally {
+      if (loading && loadingId)
+        loading.removeItem(loadingId);
     }
   },
 
@@ -76,7 +79,8 @@ const httpClient: HttpClient = {
     this.axios.interceptors.request.use((request) => {
       const { accessToken } = useAuth();
 
-      if (accessToken) request.headers.Authorization = `Bearer ${accessToken}`;
+      if (accessToken)
+        request.headers.Authorization = `Bearer ${accessToken}`;
 
       return request;
     });
@@ -86,15 +90,15 @@ const httpClient: HttpClient = {
     const auth = useAuth();
 
     this.axios.interceptors.response.use(
-      (response) => response,
+      response => response,
       async (err: AxiosError) => {
         const { config, response: { status } = {} } = err;
 
         // Exclude non-401s and sign-in 401s (/login)
         if (
-          !config?.url ||
-          status !== HttpStatusCode.Unauthorized ||
-          config.url?.match(/auth\/(login|fido|duo|otp)$/)
+          !config?.url
+          || status !== HttpStatusCode.Unauthorized
+          || config.url?.match(/auth\/(login|fido|duo|otp)$/)
         )
           return Promise.reject(err);
 
@@ -103,7 +107,8 @@ const httpClient: HttpClient = {
           isRefreshing = false;
 
           await auth.logout();
-          if (!router.currentRoute.meta?.public) router.push({ name: 'login' });
+          if (!router.currentRoute.meta?.public)
+            router.push({ name: 'login' });
 
           return Promise.reject(err);
         }
@@ -127,17 +132,18 @@ const httpClient: HttpClient = {
 
         return new Promise((resolve, reject) => {
           subscribeTokenRefresh((errRefreshing) => {
-            if (errRefreshing) return reject(errRefreshing);
+            if (errRefreshing)
+              return reject(errRefreshing);
 
             return resolve(this.axios(config));
           });
         });
-      }
+      },
     );
   },
 };
 
-axiosRetry(httpClient.axios, { retries: 5, retryDelay: (retryCount) => retryCount * 400 });
+axiosRetry(httpClient.axios, { retries: 5, retryDelay: retryCount => retryCount * 400 });
 
 export default httpClient;
 

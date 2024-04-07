@@ -8,16 +8,16 @@ export type SubmissionScope = {
   userId?: string | string[];
 };
 
-export const submissionScope = (
-  scopeOps: SubmissionScope = {},
-  ops: FindOptions<SurveySubmissionAttributes> = {}
-): FindOptions<SurveySubmissionAttributes> => {
+export function submissionScope(scopeOps: SubmissionScope = {}, ops: FindOptions<SurveySubmissionAttributes> = {}): FindOptions<SurveySubmissionAttributes> {
   const { sessionId, surveyId, userId } = scopeOps;
   const where: WhereOptions<SurveySubmissionAttributes> = {};
 
-  if (surveyId) where.surveyId = surveyId;
-  if (userId) where.userId = userId;
-  if (sessionId) where.sessionId = sessionId;
+  if (surveyId)
+    where.surveyId = surveyId;
+  if (userId)
+    where.userId = userId;
+  if (sessionId)
+    where.sessionId = sessionId;
 
   return {
     where,
@@ -60,4 +60,4 @@ export const submissionScope = (
     ],
     ...ops,
   };
-};
+}

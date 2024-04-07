@@ -18,7 +18,8 @@ export type ServicesConfig = {
 };
 
 const provider = process.env.CAPTCHA_PROVIDER;
-if (provider && !isCaptchaProvider(provider)) throw new Error('Invalid Captcha provider');
+if (provider && !isCaptchaProvider(provider))
+  throw new Error('Invalid Captcha provider');
 
 const servicesConfig: ServicesConfig = {
   captcha: {

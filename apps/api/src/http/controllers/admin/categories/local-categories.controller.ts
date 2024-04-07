@@ -5,25 +5,30 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LocalCategoryEntry } from '@intake24/common/types/http/admin';
 import { ConflictError, ForbiddenError } from '@intake24/api/http/errors';
 
-const localCategoriesController = ({
+function localCategoriesController({
   localCategoriesService,
-}: Pick<IoC, 'localCategoriesService'>) => {
+}: Pick<IoC, 'localCategoriesService'>) {
   const store = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
     const { localeId } = req.params;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
 
     try {
       await localCategoriesService.create(localeId, req.body);
       res.status(HttpStatusCode.Created);
       res.end();
-    } catch (e: any) {
+    }
+    catch (e: any) {
       if (e instanceof ConflictError) {
         const existing = await localCategoriesService.read(localeId, req.body.code);
         res.status(HttpStatusCode.Conflict).json(existing);
-      } else throw e;
+      }
+      else {
+        throw e;
+      }
     }
   };
 
@@ -33,13 +38,14 @@ const localCategoriesController = ({
     const { localeId, categoryId } = req.params;
     const { version } = req.query;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
 
     await localCategoriesService.update(
       categoryId,
       localeId,
       version as string /* unsafe! */,
-      req.body
+      req.body,
     );
 
     res.status(HttpStatusCode.Ok);
@@ -49,7 +55,8 @@ const localCategoriesController = ({
   const read = async (req: Request, res: Response<LocalCategoryEntry>): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|read')))
+      throw new ForbiddenError();
 
     const { localeId, categoryId } = req.params;
 
@@ -63,7 +70,7 @@ const localCategoriesController = ({
     update,
     read,
   };
-};
+}
 
 export default localCategoriesController;
 

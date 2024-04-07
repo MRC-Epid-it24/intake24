@@ -1,7 +1,7 @@
 <template>
-  <data-table :actions="['read']" :api-url="`admin/fdbs`" :headers="headers">
+  <data-table :actions="['read']" api-url="admin/fdbs" :headers="headers">
     <template #[`item.code`]="{ item }">
-      <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
+      <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
       {{ item.code }}
     </template>
     <template #[`item.action`]="{ item }">

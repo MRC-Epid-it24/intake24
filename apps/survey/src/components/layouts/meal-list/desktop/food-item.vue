@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-list-item
-      :class="{ selected: food.id === selectedFoodId, 'pl-4': !linked, 'pl-8': linked }"
+      :class="{ 'selected': food.id === selectedFoodId, 'pl-4': !linked, 'pl-8': linked }"
       link
       @click="action('selectFood', food.id)"
     >
-      <v-list-item-title class="text-wrap">{{ foodName }}</v-list-item-title>
+      <v-list-item-title class="text-wrap">
+        {{ foodName }}
+      </v-list-item-title>
       <v-list-item-action class="d-flex flex-row">
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
@@ -39,14 +41,14 @@
           <span>
             {{
               $t(
-                `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`
+                `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`,
               )
             }}
           </span>
         </v-tooltip>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <context-menu v-bind="{ food, meal, menu }" @action="action"></context-menu>
+        <context-menu v-bind="{ food, meal, menu }" @action="action" />
       </v-list-item-action>
     </v-list-item>
     <food-item
@@ -54,7 +56,7 @@
       :key="linkedFood.id"
       v-bind="{ food: linkedFood, linked: true, meal, selectedFoodId }"
       @action="action"
-    ></food-item>
+    />
   </div>
 </template>
 

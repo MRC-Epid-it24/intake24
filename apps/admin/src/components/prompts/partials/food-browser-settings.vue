@@ -1,7 +1,9 @@
 <template>
   <v-card outlined>
     <v-toolbar color="grey lighten-4" flat>
-      <v-icon left>$search</v-icon>
+      <v-icon left>
+        $search
+      </v-icon>
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.foodBrowser._') }}
       </v-toolbar-title>
@@ -13,13 +15,13 @@
         :input-value="categoriesFirst.browse"
         :label="$t('survey-schemes.prompts.foodBrowser.categoriesFirst.browse')"
         @change="update('browse', $event)"
-      ></v-switch>
+      />
       <v-switch
         hide-details="auto"
         :input-value="categoriesFirst.search"
         :label="$t('survey-schemes.prompts.foodBrowser.categoriesFirst.search')"
         @change="update('search', $event)"
-      ></v-switch>
+      />
     </v-card-text>
   </v-card>
 </template>

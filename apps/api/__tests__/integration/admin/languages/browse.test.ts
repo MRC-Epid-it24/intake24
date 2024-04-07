@@ -13,7 +13,7 @@ export default () => {
     language = await Language.create(input);
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url);
   });
 

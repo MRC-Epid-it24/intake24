@@ -7,11 +7,11 @@ import store from './store.test';
 import update from './update.test';
 
 export default () => {
-  describe('GET /api/admin/nutrient-types', browse);
-  describe('POST /api/admin/nutrient-types', store);
-  describe('GET /api/admin/nutrient-types/refs', refs);
-  describe('GET /api/admin/nutrient-types/:nutrientTypeId', read);
-  describe('GET /api/admin/nutrient-types/:nutrientTypeId/edit', edit);
-  describe('PUT /api/admin/nutrient-types/:nutrientTypeId', update);
-  describe('DELETE /api/admin/nutrient-types/:nutrientTypeId', destroy);
+  describe('get /api/admin/nutrient-types', browse);
+  describe('post /api/admin/nutrient-types', store);
+  describe('get /api/admin/nutrient-types/refs', refs);
+  describe('get /api/admin/nutrient-types/:nutrientTypeId', read);
+  describe('get /api/admin/nutrient-types/:nutrientTypeId/edit', edit);
+  describe('put /api/admin/nutrient-types/:nutrientTypeId', update);
+  describe('delete /api/admin/nutrient-types/:nutrientTypeId', destroy);
 };

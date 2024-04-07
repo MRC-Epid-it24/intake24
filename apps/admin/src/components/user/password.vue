@@ -21,7 +21,7 @@
           name="email"
           type="text"
           :value="email"
-        />
+        >
         <v-card-text class="pa-6">
           <v-row>
             <v-col cols="12">
@@ -38,7 +38,7 @@
                 required
                 :type="showPassword.current ? 'text' : 'password'"
                 @click:append="showPassword.current = !showPassword.current"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -54,7 +54,7 @@
                 required
                 :type="showPassword.password ? 'text' : 'password'"
                 @click:append="showPassword.password = !showPassword.password"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12">
               <v-text-field
@@ -70,7 +70,7 @@
                 required
                 :type="showPassword.confirm ? 'text' : 'password'"
                 @click:append="showPassword.confirm = !showPassword.confirm"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-card-text>
@@ -134,7 +134,8 @@ export default defineComponent({
         await this.form.post('user/password');
         this.close();
         useMessages().success(this.$t('common.password.updated').toString());
-      } finally {
+      }
+      finally {
         this.loading = false;
       }
     },

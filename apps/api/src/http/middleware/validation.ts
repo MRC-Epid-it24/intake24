@@ -10,7 +10,7 @@ export default (req: Request, res: Response, next: NextFunction): void => {
   const { i18nService } = req.scope.cradle;
 
   const result = validationResult(req);
-  const errors = result.formatWith((error) => createExtendedValidationError(error, i18nService));
+  const errors = result.formatWith(error => createExtendedValidationError(error, i18nService));
 
   if (errors.isEmpty()) {
     next();

@@ -1,6 +1,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('category_portion_size_methods', 'image_url', {
         transaction,

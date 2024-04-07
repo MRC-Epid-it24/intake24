@@ -42,10 +42,10 @@ export type SyncStreamOutput = {
   stream: Transform<SurveySubmissionFood, ExportRow>;
 };
 
-const dataExportService = ({
+function dataExportService({
   dataExportMapper,
   scheduler,
-}: Pick<IoC, 'dataExportMapper' | 'scheduler'>) => {
+}: Pick<IoC, 'dataExportMapper' | 'scheduler'>) {
   /**
    * Scope to query submission foods and missing foods records
    *
@@ -59,7 +59,8 @@ const dataExportService = ({
     endDate,
   }: DataExportInput): SubmissionFindOptions => {
     const surveySubmissionConditions: WhereOptions<SurveySubmissionAttributes> = { surveyId };
-    if (id) surveySubmissionConditions.id = id;
+    if (id)
+      surveySubmissionConditions.id = id;
 
     if (startDate || endDate) {
       const submissionTime = {
@@ -146,7 +147,7 @@ const dataExportService = ({
    */
   const performSubmissionsSearch = async (
     inputStream: Readable,
-    options: SubmissionFindOptions
+    options: SubmissionFindOptions,
   ): Promise<void> => {
     const { batchSize = 25, limit, offset: startOffset = 0, ...params } = options.meals;
 
@@ -195,12 +196,13 @@ const dataExportService = ({
         for (const id of mealId) {
           [...(groupedFoods[id] ?? []), ...(groupedMissingFoods[id] ?? [])]
             .sort(({ index: a }, { index: b }) => a - b)
-            .forEach((food) => inputStream.push({ food, custom: { mealIndex: mealIndex[id] } }));
+            .forEach(food => inputStream.push({ food, custom: { mealIndex: mealIndex[id] } }));
         }
       }
 
       inputStream.push(null);
-    } catch (err) {
+    }
+    catch (err) {
       inputStream.destroy(err instanceof Error ? err : undefined);
     }
   };
@@ -213,7 +215,6 @@ const dataExportService = ({
    */
   const getSubmissionsWithStream = (options: SubmissionFindOptions): Readable => {
     const inputStream = new Readable({ objectMode: true });
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     inputStream._read = () => {};
 
     performSubmissionsSearch(inputStream, options);
@@ -230,9 +231,8 @@ const dataExportService = ({
   const getExportFields = async (sections: ExportSection[]): Promise<ExportFieldInfo[]> => {
     const fields: ExportFieldInfo[] = [];
 
-    for (const section of sections) {
+    for (const section of sections)
       fields.push(...(await dataExportMapper[section.id](section.fields)));
-    }
 
     return fields;
   };
@@ -250,7 +250,8 @@ const dataExportService = ({
       attributes: ['id', 'slug'],
       include: [{ association: 'surveyScheme', attributes: ['dataExport'], required: true }],
     });
-    if (!survey || !survey.surveyScheme) throw new NotFoundError();
+    if (!survey || !survey.surveyScheme)
+      throw new NotFoundError();
 
     const { slug, surveyScheme } = survey;
     const options = getSubmissionOptions(input);
@@ -311,7 +312,7 @@ const dataExportService = ({
     queueExportJob,
     syncStream,
   };
-};
+}
 
 export default dataExportService;
 

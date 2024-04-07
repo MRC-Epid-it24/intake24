@@ -5,14 +5,20 @@
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.review') }}
         </span>
-        <v-icon class="pb-1">fas fa-list-check</v-icon>
+        <v-icon class="pb-1">
+          fas fa-list-check
+        </v-icon>
       </v-btn>
     </template>
     <v-card class="meal-list-mobile__card">
       <div class="py-4 pl-4 pr-3 d-flex flex-row justify-space-between align-center">
-        <div class="text-h6 font-weight-medium">{{ $t('recall.menu.title') }}</div>
+        <div class="text-h6 font-weight-medium">
+          {{ $t('recall.menu.title') }}
+        </div>
         <v-btn color="primary" icon :title="$t('recall.menu.meal.add')" @click="action('addMeal')">
-          <v-icon x-large>$add</v-icon>
+          <v-icon x-large>
+            $add
+          </v-icon>
         </v-btn>
       </div>
       <v-card-text class="pa-0">
@@ -24,7 +30,7 @@
             :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
             @action="action"
             @update:context-id="updateContextId"
-          ></meal-item>
+          />
         </v-list>
       </v-card-text>
       <v-btn
@@ -35,7 +41,9 @@
         :title="$t('common.action.close')"
         @click="closeNavigation"
       >
-        <v-icon left>$close</v-icon>{{ $t('common.action.close') }}
+        <v-icon left>
+          $close
+        </v-icon>{{ $t('common.action.close') }}
       </v-btn>
     </v-card>
   </v-bottom-sheet>
@@ -66,7 +74,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
       props,
-      ctx
+      ctx,
     );
 
     const { getMealName, getMealTime } = useMealUtils();
@@ -83,7 +91,8 @@ export default defineComponent({
     };
 
     watch(navigation, (val) => {
-      if (!val) return;
+      if (!val)
+        return;
 
       contextId.value = selectedMealId.value ?? selectedFoodId.value;
     });

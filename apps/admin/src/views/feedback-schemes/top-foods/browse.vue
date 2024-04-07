@@ -6,26 +6,30 @@
     @save="submit"
   >
     <template #actions>
-      <preview :feedback-scheme="currentFeedbackScheme"></preview>
+      <preview :feedback-scheme="currentFeedbackScheme" />
     </template>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>fas fa-sort-amount-down</v-icon>
+      <v-icon color="secondary" left>
+        fas fa-sort-amount-down
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.top-foods.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <options-menu>
         <select-resource resource="feedback-schemes" return-object="topFoods" @input="load">
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.topFoods"></json-editor-dialog>
+        <json-editor-dialog v-model="form.topFoods" />
       </options-menu>
     </v-toolbar>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
@@ -33,11 +37,13 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="secondary" left>fas fa-palette</v-icon>
+              <v-icon color="secondary" left>
+                fas fa-palette
+              </v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.top-foods.max.title') }}
               </v-toolbar-title>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-text-field
                 v-model.number="form.topFoods.max"
                 background-color="grey lighten-5"
@@ -50,26 +56,26 @@
                 :rules="topFoodsMaxRules"
                 single-line
                 :style="{ maxWidth: '75px' }"
-              ></v-text-field>
+              />
             </v-toolbar>
-            <error-list :errors="nonInputErrors"></error-list>
+            <error-list :errors="nonInputErrors" />
             <color-list
               v-model="form.topFoods.colors"
               :last-label="$t('feedback-schemes.top-foods.other').toString()"
-            ></color-list>
+            />
           </v-col>
-          <v-divider vertical></v-divider>
+          <v-divider vertical />
           <v-col cols="12" md="6">
             <nutrient-list
               v-model="form.topFoods.nutrientTypes"
               :defaults="defaultTopFoods.nutrientTypes"
               :nutrient-types="refs.nutrientTypes"
-            ></nutrient-list>
+            />
           </v-col>
         </v-row>
       </v-container>
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()"></submit-footer>
+        <submit-footer :disabled="form.errors.any()" />
       </v-card-text>
     </v-form>
   </layout>
@@ -144,7 +150,8 @@ export default defineComponent({
 
       if (size < form.topFoods.colors.length) {
         form.topFoods.colors = [...form.topFoods.colors.slice(0, size)];
-      } else if (size > form.topFoods.colors.length) {
+      }
+      else if (size > form.topFoods.colors.length) {
         const newColors = Array.from<string>({
           length: size - form.topFoods.colors.length,
         }).fill(colors.primary);
@@ -165,7 +172,7 @@ export default defineComponent({
       () => form.topFoods.max,
       () => {
         debouncedUpdateColorList();
-      }
+      },
     );
 
     return {

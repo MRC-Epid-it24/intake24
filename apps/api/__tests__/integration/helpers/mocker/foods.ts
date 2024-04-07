@@ -15,25 +15,31 @@ import { randomString, toStandardUnitId } from '@intake24/common/util';
 
 import { downloadImage } from '../util';
 
-const category = () => ({
-  code: randomString(8),
-  name: faker.word.words(5),
-  isHidden: faker.datatype.boolean(),
-  version: randomUUID(),
-});
+function category() {
+  return {
+    code: randomString(8),
+    name: faker.word.words(5),
+    isHidden: faker.datatype.boolean(),
+    version: randomUUID(),
+  };
+}
 
-const food = (foodGroupId: string) => ({
-  code: randomString(8),
-  foodGroupId,
-  name: faker.word.words(5),
-  version: randomUUID(),
-});
+function food(foodGroupId: string) {
+  return {
+    code: randomString(8),
+    foodGroupId,
+    name: faker.word.words(5),
+    version: randomUUID(),
+  };
+}
 
-const foodGroup = () => ({
-  name: faker.word.words(10),
-});
+function foodGroup() {
+  return {
+    name: faker.word.words(10),
+  };
+}
 
-const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInput> => {
+async function asServedSet(asServedSetId?: string): Promise<CreateAsServedSetInput> {
   const id = asServedSetId ?? randomString(32);
   const originalname = `${id}.jpg`;
 
@@ -45,7 +51,7 @@ const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInp
     file: { originalname: `${id}.jpg`, path: filePath },
     uploader: 'admin',
   };
-};
+}
 
 /* const locale = (
   respLangId: string | undefined,
@@ -74,7 +80,7 @@ const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInp
   };
 }; */
 
-const nutrientTable = (): NutrientTableRequest => {
+function nutrientTable(): NutrientTableRequest {
   return {
     id: slugify(randomString(16), { strict: true }),
     description: faker.word.words(5),
@@ -104,27 +110,33 @@ const nutrientTable = (): NutrientTableRequest => {
       { nutrientTypeId: '3', columnOffset: faker.number.int(200) },
     ],
   };
-};
+}
 
-const nutrientType = (unitId: string, kcalPerUnit?: number | null): NutrientTypeRequest => ({
-  id: faker.number.int({ min: 1000, max: 1000000 }).toString(),
-  unitId,
-  description: faker.word.words(5),
-  kcalPerUnit,
-});
+function nutrientType(unitId: string, kcalPerUnit?: number | null): NutrientTypeRequest {
+  return {
+    id: faker.number.int({ min: 1000, max: 1000000 }).toString(),
+    unitId,
+    description: faker.word.words(5),
+    kcalPerUnit,
+  };
+}
 
-const nutrientUnit = (): NutrientUnitRequest => ({
-  id: faker.number.int({ min: 1000, max: 1000000 }).toString(),
-  description: faker.word.words(5),
-  symbol: faker.word.words(1),
-});
+function nutrientUnit(): NutrientUnitRequest {
+  return {
+    id: faker.number.int({ min: 1000, max: 1000000 }).toString(),
+    description: faker.word.words(5),
+    symbol: faker.word.words(1),
+  };
+}
 
-const standardUnit = (): StandardUnitCreationAttributes => ({
-  id: toStandardUnitId(faker.word.words(3)),
-  name: faker.word.words(2),
-  estimateIn: { en: faker.word.words(5), es: faker.word.words(5) },
-  howMany: { en: faker.word.words(5), es: faker.word.words(5) },
-});
+function standardUnit(): StandardUnitCreationAttributes {
+  return {
+    id: toStandardUnitId(faker.word.words(3)),
+    name: faker.word.words(2),
+    estimateIn: { en: faker.word.words(5), es: faker.word.words(5) },
+    howMany: { en: faker.word.words(5), es: faker.word.words(5) },
+  };
+}
 
 export default {
   category,

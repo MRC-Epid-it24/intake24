@@ -62,10 +62,10 @@ export const defaults: Schema = {
       } */
       options: async (value): Promise<void> => {
         if (
-          !isPlainObject(value) ||
-          Object.values(value).some((item) => !Array.isArray(item) && !isPlainObject(item))
+          !isPlainObject(value)
+          || Object.values(value).some(item => !Array.isArray(item) && !isPlainObject(item))
         )
-          throw new Error();
+          throw new Error('Invalid prompts structure');
       },
     },
   },
@@ -77,7 +77,8 @@ export const defaults: Schema = {
         try {
           validateMeals(value);
           return true;
-        } catch (err: any) {
+        }
+        catch (err: any) {
           throw new Error(err.message.split('\n')[0]);
         }
       },
@@ -91,7 +92,8 @@ export const defaults: Schema = {
         try {
           validateExportSections(value);
           return true;
-        } catch (err: any) {
+        }
+        catch (err: any) {
           throw new Error(err.message.split('\n')[0]);
         }
       },

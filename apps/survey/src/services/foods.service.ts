@@ -16,7 +16,7 @@ export default {
   search: async (
     localeId: string,
     description: string,
-    options: SearchOptions = {}
+    options: SearchOptions = {},
   ): Promise<FoodSearchResponse> => {
     const { data } = await http.get<FoodSearchResponse>(`foods/${localeId}`, {
       params: { description, ...options },

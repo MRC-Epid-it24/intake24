@@ -8,7 +8,7 @@ import i18n from '@intake24/survey/i18n';
 const localVue = createLocalVue();
 // const i18nA = VueI18n(localVue);
 
-describe('Testing Component', () => {
+describe('testing Component', () => {
   // Mount with test props
   const props = {
     text: { en: 'Portion Size Options' },
@@ -41,7 +41,7 @@ describe('Testing Component', () => {
   });
 
   // Expect error message will appear with no selection
-  it('Error when nothing selected', () => {
+  it('error when nothing selected', () => {
     expect(wrapper.text()).toContain('Meat lasagne (includes homemade)');
   });
 });

@@ -17,7 +17,9 @@
           :title="$t('feedback.outputs.print')"
           @click="printFeedback"
         >
-          <v-icon left>fas fa-print</v-icon>
+          <v-icon left>
+            fas fa-print
+          </v-icon>
           {{ $t('feedback.outputs.print') }}
         </v-btn>
         <v-dialog
@@ -37,7 +39,9 @@
               :title="$t('feedback.outputs.email._')"
               v-on="on"
             >
-              <v-icon left>fas fa-envelope</v-icon>
+              <v-icon left>
+                fas fa-envelope
+              </v-icon>
               {{ $t('feedback.outputs.email._') }}
             </v-btn>
           </template>
@@ -67,7 +71,7 @@
                         outlined
                         prepend-inner-icon="fas fa-envelope"
                         @input="email.errors.clear('email')"
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -79,7 +83,7 @@
                         outlined
                         prepend-inner-icon="fas fa-envelope"
                         @input="email.errors.clear('emailConfirm')"
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col cols="12">
                       <v-alert v-if="message" outlined type="success">
@@ -95,7 +99,9 @@
                         type="submit"
                         x-large
                       >
-                        <v-icon left>fas fa-paper-plane</v-icon>
+                        <v-icon left>
+                          fas fa-paper-plane
+                        </v-icon>
                         {{ $t('feedback.outputs.email.send') }}
                       </v-btn>
                     </v-col>
@@ -122,7 +128,9 @@
               :title="$t('feedback.outputs.download._')"
               v-on="on"
             >
-              <v-icon left>$download</v-icon>
+              <v-icon left>
+                $download
+              </v-icon>
               {{ $t('feedback.outputs.download._') }}
             </v-btn>
           </template>
@@ -160,7 +168,9 @@
                       x-large
                       @click.stop="downloadFeedback"
                     >
-                      <v-icon left>fas fa-paper-plane</v-icon>
+                      <v-icon left>
+                        fas fa-paper-plane
+                      </v-icon>
                       {{ $t('feedback.outputs.download.send') }}
                     </v-btn>
                   </v-col>
@@ -248,16 +258,18 @@ export default defineComponent({
         downloadFile(res, `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`);
 
         this.message = this.$t('feedback.outputs.download.sent').toString();
-      } catch (err) {
+      }
+      catch (err) {
         this.message = null;
 
         if (axios.isAxiosError(err)) {
           const { response: { status, headers = {} } = {} } = err;
 
           if (status === HttpStatusCode.TooManyRequests)
-            this.setFeedbackInterval(parseInt(headers['retry-after']?.toString() ?? '60', 10));
+            this.setFeedbackInterval(Number.parseInt(headers['retry-after']?.toString() ?? '60', 10));
         }
-      } finally {
+      }
+      finally {
         loading.removeItem('feedback-download');
       }
     },
@@ -277,7 +289,8 @@ export default defineComponent({
 
         this.email.form = { email: '', emailConfirm: '' };
         this.message = this.$t('feedback.outputs.email.sent').toString();
-      } catch (err) {
+      }
+      catch (err) {
         this.message = null;
 
         if (axios.isAxiosError(err)) {
@@ -289,13 +302,14 @@ export default defineComponent({
           }
 
           if (status === HttpStatusCode.TooManyRequests) {
-            this.setFeedbackInterval(parseInt(headers['retry-after']?.toString() ?? '60', 10));
+            this.setFeedbackInterval(Number.parseInt(headers['retry-after']?.toString() ?? '60', 10));
             return;
           }
 
           throw err;
         }
-      } finally {
+      }
+      finally {
         loading.removeItem('feedback-email');
       }
     },
@@ -303,16 +317,19 @@ export default defineComponent({
     feedbackInterval() {
       this.retry.retryIn -= this.retry.retryIn < 5 ? this.retry.retryIn : 5;
 
-      if (!this.retry.retryIn) this.clearFeedbackInterval();
+      if (!this.retry.retryIn)
+        this.clearFeedbackInterval();
     },
 
     setFeedbackInterval(retryIn = 60) {
-      if (this.retry.interval) clearInterval(this.retry.interval);
+      if (this.retry.interval)
+        clearInterval(this.retry.interval);
       this.retry = { retryIn, interval: setInterval(this.feedbackInterval, 5000) };
     },
 
     clearFeedbackInterval() {
-      if (this.retry.interval) clearInterval(this.retry.interval);
+      if (this.retry.interval)
+        clearInterval(this.retry.interval);
 
       this.retry = { retryIn: 0, interval: undefined };
     },

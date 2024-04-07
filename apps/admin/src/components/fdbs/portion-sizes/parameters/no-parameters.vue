@@ -1,5 +1,7 @@
 <template>
-  <v-alert text type="info">{{ $t('fdbs.portionSizes.noParameters') }}</v-alert>
+  <v-alert text type="info">
+    {{ $t('fdbs.portionSizes.noParameters') }}
+  </v-alert>
 </template>
 
 <script lang="ts">

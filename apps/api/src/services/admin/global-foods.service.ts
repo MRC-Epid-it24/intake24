@@ -8,7 +8,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { Category, Food, FoodAttribute, FoodCategory } from '@intake24/db';
 
-const globalFoodsService = ({ db }: Pick<IoC, 'db'>) => {
+function globalFoodsService({ db }: Pick<IoC, 'db'>) {
   const create = async (input: CreateGlobalFoodRequest): Promise<FoodEntry> => {
     return await Food.create({
       version: randomUUID(),
@@ -19,7 +19,7 @@ const globalFoodsService = ({ db }: Pick<IoC, 'db'>) => {
   const update = async (
     globalFoodId: string,
     version: string,
-    input: UpdateGlobalFoodRequest
+    input: UpdateGlobalFoodRequest,
   ): Promise<FoodEntry | null> => {
     return await db.foods.transaction(async (t) => {
       const affectedRows = await Food.update(
@@ -28,29 +28,30 @@ const globalFoodsService = ({ db }: Pick<IoC, 'db'>) => {
           foodGroupId: input.foodGroupId,
           version: randomUUID(),
         },
-        { where: { code: globalFoodId, version: version }, transaction: t }
+        { where: { code: globalFoodId, version }, transaction: t },
       );
 
       // Record with matching food code/version does not exist
-      if (affectedRows[0] !== 1) return null;
+      if (affectedRows[0] !== 1)
+        return null;
 
       // Record exists, update associations
       await FoodAttribute.update(
         {
           ...input.attributes,
         },
-        { where: { foodCode: globalFoodId }, transaction: t }
+        { where: { foodCode: globalFoodId }, transaction: t },
       );
 
       await FoodCategory.destroy({ where: { foodCode: globalFoodId }, transaction: t });
 
-      const categoryEntries =
-        input.parentCategories === undefined
+      const categoryEntries
+        = input.parentCategories === undefined
           ? []
-          : input.parentCategories.map((categoryId) => ({
-              foodCode: globalFoodId,
-              categoryCode: categoryId,
-            }));
+          : input.parentCategories.map(categoryId => ({
+            foodCode: globalFoodId,
+            categoryCode: categoryId,
+          }));
 
       await FoodCategory.bulkCreate(categoryEntries, { transaction: t });
 
@@ -71,7 +72,7 @@ const globalFoodsService = ({ db }: Pick<IoC, 'db'>) => {
     read,
     update,
   };
-};
+}
 
 export default globalFoodsService;
 

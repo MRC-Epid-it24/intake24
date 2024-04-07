@@ -8,7 +8,7 @@ module.exports = {
           type: Sequelize.DATE,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
@@ -18,7 +18,7 @@ module.exports = {
           type: Sequelize.DATE,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -52,7 +52,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable('permissions', {
@@ -105,7 +105,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('permission_role', {
@@ -158,7 +158,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('permission_user', {
@@ -211,7 +211,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('role_user', {

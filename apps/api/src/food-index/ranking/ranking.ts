@@ -15,18 +15,17 @@ export type RankingData = {
 function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] {
   return results
     .sort((a, b) => a.quality - b.quality)
-    .map((result) => ({ code: result.key, name: result.phrase }));
+    .map(result => ({ code: result.key, name: result.phrase }));
 }
 
 function mapValues<T1, T2>(obj: { [s: string]: T1 }, fn: (value: T1) => T2): { [s: string]: T2 } {
   const entries = Object.entries(obj);
-  return Object.fromEntries(entries.map((entry) => [entry[0], fn(entry[1])]));
+  return Object.fromEntries(entries.map(entry => [entry[0], fn(entry[1])]));
 }
 
 function normaliseRankingData(ranking: RankingData): RankingData {
-  if (Object.keys(ranking).length === 0) {
+  if (Object.keys(ranking).length === 0)
     return {};
-  }
 
   const min = Math.min(...Object.values(ranking));
   const max = Math.max(...Object.values(ranking));
@@ -35,16 +34,18 @@ function normaliseRankingData(ranking: RankingData): RankingData {
 
   if (Math.abs(range) < 1e-6) {
     // Map single or repeating values to 1
-    return mapValues(ranking, (_) => 1);
-  } else {
-    return mapValues(ranking, (v) => (v - min) / range);
+    return mapValues(ranking, _ => 1);
+  }
+  else {
+    return mapValues(ranking, v => (v - min) / range);
   }
 }
 
 function normaliseMatchCost(results: PhraseMatchResult<string>[]): PhraseMatchResult<string>[] {
-  if (results.length === 0) return [];
+  if (results.length === 0)
+    return [];
 
-  const costs = results.map((r) => r.quality);
+  const costs = results.map(r => r.quality);
 
   const min = Math.min(...costs);
   const max = Math.max(...costs);
@@ -53,9 +54,10 @@ function normaliseMatchCost(results: PhraseMatchResult<string>[]): PhraseMatchRe
 
   // Convert match cost to score, i.e. higher is better
   if (Math.abs(range) < 1e-6) {
-    return results.map((r) => ({ key: r.key, phrase: r.phrase, quality: 1 }));
-  } else {
-    return results.map((r) => ({
+    return results.map(r => ({ key: r.key, phrase: r.phrase, quality: 1 }));
+  }
+  else {
+    return results.map(r => ({
       key: r.key,
       phrase: r.phrase,
       quality: 1.0 - (r.quality - min) / range,
@@ -67,7 +69,7 @@ function applyRankingData(
   rankingData: RankingData,
   results: PhraseMatchResult<string>[],
   matchScoreWeight: number,
-  logger: Logger
+  logger: Logger,
 ): FoodHeader[] {
   const normalisedRankingData = normaliseRankingData(rankingData);
   const normalisedSearchResults = normaliseMatchCost(results);
@@ -81,8 +83,8 @@ function applyRankingData(
         rankingScore = 0;
       }
 
-      const combinedScore =
-        rankingScore * (1 - matchScoreWeight) + result.quality * matchScoreWeight;
+      const combinedScore
+        = rankingScore * (1 - matchScoreWeight) + result.quality * matchScoreWeight;
 
       return {
         header: { code: result.key, name: result.phrase },
@@ -90,14 +92,14 @@ function applyRankingData(
       };
     })
     .sort((h1, h2) => h2.rankingScore - h1.rankingScore)
-    .map((h) => h.header);
+    .map(h => h.header);
 }
 
 async function getRankingData(
   algorithm: SearchSortingAlgorithm,
   localeId: string,
   foodCodes: string[],
-  logger: Logger
+  logger: Logger,
 ): Promise<RankingData | null> {
   switch (algorithm) {
     case 'fixed':
@@ -119,16 +121,17 @@ export async function rankFoodResults(
   algorithm: SearchSortingAlgorithm,
   matchScoreWeight: number,
   logger: Logger,
-  recipeFoodsHeaders: FoodHeader[]
+  recipeFoodsHeaders: FoodHeader[],
 ): Promise<FoodHeader[]> {
-  const foodCodes = results.map((result) => result.key);
+  const foodCodes = results.map(result => result.key);
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
   if (rankingData !== null) {
     return recipeFoodsHeaders.concat(
-      applyRankingData(rankingData, results, matchScoreWeight, logger)
+      applyRankingData(rankingData, results, matchScoreWeight, logger),
     );
-  } else {
+  }
+  else {
     return recipeFoodsHeaders.concat(noAlgorithmRanking(results));
   }
 }
@@ -136,5 +139,5 @@ export async function rankFoodResults(
 export function rankCategoryResults(results: PhraseMatchResult<string>[]): CategoryHeader[] {
   return results
     .sort((a, b) => a.quality - b.quality)
-    .map((result) => ({ code: result.key, name: result.phrase }));
+    .map(result => ({ code: result.key, name: result.phrase }));
 }

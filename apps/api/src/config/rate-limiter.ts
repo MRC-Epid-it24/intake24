@@ -19,32 +19,32 @@ export interface RateLimiterConfig extends RateLimits {
 const rateLimiterConfig: RateLimiterConfig = {
   redis: {
     host: process.env.RATE_LIMITER_REDIS_HOST || 'localhost',
-    port: parseInt(process.env.RATE_LIMITER_REDIS_PORT || '6379', 10),
+    port: Number.parseInt(process.env.RATE_LIMITER_REDIS_PORT || '6379', 10),
     keyPrefix: process.env.RATE_LIMITER_REDIS_PREFIX || 'it24:rate-limiter:',
   },
   generic: {
     windowMs: ms(process.env.RATE_LIMITER_GENERIC_WINDOW || '5m'),
-    limit: parseInt(process.env.RATE_LIMITER_GENERIC_LIMIT || '300', 10),
+    limit: Number.parseInt(process.env.RATE_LIMITER_GENERIC_LIMIT || '300', 10),
   },
   login: {
     windowMs: ms(process.env.RATE_LIMITER_LOGIN_WINDOW || '15m'),
-    limit: parseInt(process.env.RATE_LIMITER_LOGIN_LIMIT || '5', 10),
+    limit: Number.parseInt(process.env.RATE_LIMITER_LOGIN_LIMIT || '5', 10),
   },
   password: {
     windowMs: ms(process.env.RATE_LIMITER_PASSWORD_WINDOW || '5m'),
-    limit: parseInt(process.env.RATE_LIMITER_PASSWORD_LIMIT || '1', 10),
+    limit: Number.parseInt(process.env.RATE_LIMITER_PASSWORD_LIMIT || '1', 10),
   },
   verify: {
     windowMs: ms(process.env.RATE_LIMITER_VERIFY_WINDOW || '5m'),
-    limit: parseInt(process.env.RATE_LIMITER_VERIFY_LIMIT || '1', 10),
+    limit: Number.parseInt(process.env.RATE_LIMITER_VERIFY_LIMIT || '1', 10),
   },
   generateUser: {
     windowMs: ms(process.env.RATE_LIMITER_GEN_USER_WINDOW || '5m'),
-    limit: parseInt(process.env.RATE_LIMITER_GEN_USER_LIMIT || '1', 10),
+    limit: Number.parseInt(process.env.RATE_LIMITER_GEN_USER_LIMIT || '1', 10),
   },
   feedback: {
     windowMs: ms(process.env.RATE_LIMITER_FEEDBACK_WINDOW || '1m'),
-    limit: parseInt(process.env.RATE_LIMITER_FEEDBACK_LIMIT || '1', 10),
+    limit: Number.parseInt(process.env.RATE_LIMITER_FEEDBACK_LIMIT || '1', 10),
   },
 };
 

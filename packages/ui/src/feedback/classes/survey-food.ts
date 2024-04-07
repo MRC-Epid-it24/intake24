@@ -15,7 +15,7 @@ export default class SurveyFood {
     code: string,
     englishName: string,
     localName: string,
-    nutrients: Map<string, number>
+    nutrients: Map<string, number>,
   ) {
     this.code = code;
     this.englishName = englishName;
@@ -25,9 +25,8 @@ export default class SurveyFood {
 
   static fromJson(food: SurveySubmissionFoodEntry): SurveyFood {
     const mp = new Map<string, number>();
-    for (const nutrient of food.nutrients) {
+    for (const nutrient of food.nutrients)
       mp.set(nutrient.nutrientTypeId, nutrient.amount);
-    }
 
     return new SurveyFood(food.code, food.englishName, food.localName ?? '', mp);
   }
@@ -37,7 +36,7 @@ export default class SurveyFood {
       this.code,
       this.englishName,
       this.localName,
-      this.nutrientIdConsumptionMap
+      this.nutrientIdConsumptionMap,
     );
   }
 

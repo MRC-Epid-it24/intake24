@@ -21,12 +21,12 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO nutrient_units (id, description, symbol) SELECT id, description, symbol FROM v3_nutrient_units',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('nutrient_types', 'v3_nutrient_types', { transaction });
@@ -47,7 +47,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('nutrient_types', {
@@ -71,7 +71,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO nutrient_types (id, description, unit_id) SELECT id, description, unit_id FROM v3_nutrient_types',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('nutrient_type_in_kcal', 'v3_nutrient_type_in_kcal', {
@@ -80,7 +80,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE nutrient_type_in_kcal_id_seq RENAME TO v3_nutrient_type_in_kcal_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -100,7 +100,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('nutrient_type_in_kcal', {
@@ -124,7 +124,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO nutrient_type_in_kcal (id, nutrient_type_id, kcal_per_unit) SELECT id, nutrient_type_id, kcal_per_unit FROM v3_nutrient_type_in_kcal',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('nutrient_type_in_kcal', 'id', { queryInterface, transaction });
@@ -132,7 +132,7 @@ module.exports = {
       await queryInterface.removeConstraint(
         'nutrient_table_record_nutrients',
         'nutrient_table_record_nutrients_nutrient_type_id_fkey',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('nutrient_table_record_nutrients', {
@@ -155,13 +155,13 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'food_groups_feedback_nutrient_ids',
         'food_groups_feedback_group_ids_food_group_id_fkey',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('food_groups_feedback_nutrient_ids', {
@@ -184,13 +184,13 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'demographic_group',
         'demographic_group_nutrient_type_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('demographic_group', {

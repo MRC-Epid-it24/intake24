@@ -29,7 +29,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('put', url, { permissions });
   });
 
@@ -47,7 +47,7 @@ export default () => {
         'put',
         url,
         ['description', 'unitId', 'kcalPerUnit'],
-        { input: { description: { name: 'text' }, unitId: null, kcalPerUnit: { value: [10] } } }
+        { input: { description: { name: 'text' }, unitId: null, kcalPerUnit: { value: [10] } } },
       );
     });
 

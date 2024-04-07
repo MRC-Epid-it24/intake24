@@ -36,7 +36,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('language_translations', {
@@ -64,13 +64,13 @@ module.exports = {
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('language_translations', { transaction });
 
       await queryInterface.sequelize.query(
         `DELETE FROM permissions WHERE name IN ('languages-translations');`,
-        { transaction }
+        { transaction },
       );
     }),
 };

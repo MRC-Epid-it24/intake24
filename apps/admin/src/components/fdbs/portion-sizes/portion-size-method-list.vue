@@ -4,7 +4,7 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.portionSizes.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         v-if="!disabled"
         color="primary"
@@ -13,7 +13,9 @@
         :title="$t('fdbs.portionSizes.add')"
         @click.stop="add"
       >
-        <v-icon small>$add</v-icon>
+        <v-icon small>
+          $add
+        </v-icon>
       </v-btn>
     </v-toolbar>
     <v-list class="py-0" two-line>
@@ -38,11 +40,13 @@
                 v-if="errors.has('portionSizeMethods', index)"
                 color="error"
                 :value="errors.get('portionSizeMethods', index)"
-              ></v-messages>
+              />
             </v-list-item-content>
             <v-list-item-action v-if="!disabled">
               <v-btn icon :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })">
-                <v-icon color="secondary lighten-1">$edit</v-icon>
+                <v-icon color="secondary lighten-1">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action v-if="!disabled">
@@ -60,7 +64,7 @@
         </transition-group>
       </draggable>
     </v-list>
-    <portion-size-method-selector ref="selector" @save="save"></portion-size-method-selector>
+    <portion-size-method-selector ref="selector" @save="save" />
   </v-card>
 </template>
 
@@ -84,7 +88,7 @@ import PortionSizeMethodSelector from './portion-size-method-selector.vue';
 export default defineComponent({
   name: 'PortionSizeMethodList',
 
-  components: { ConfirmDialog, draggable, PortionSizeMethodSelector },
+  components: { ConfirmDialog, Draggable: draggable, PortionSizeMethodSelector },
 
   props: {
     disabled: {
@@ -122,12 +126,14 @@ export default defineComponent({
 
   watch: {
     value(val: PortionSizeMethodItem[]) {
-      if (deepEqual(val, this.outputItems)) return;
+      if (deepEqual(val, this.outputItems))
+        return;
 
       this.items = val.map(withIdAndOrder);
     },
     outputItems(val: PortionSizeMethodItem[]) {
-      if (deepEqual(val, this.value)) return;
+      if (deepEqual(val, this.value))
+        return;
 
       this.$emit('input', [...val]);
     },
@@ -147,7 +153,8 @@ export default defineComponent({
     },
 
     save({ item, index }: PortionSizeMethodEvent) {
-      if (index === -1) this.items.push(item);
+      if (index === -1)
+        this.items.push(item);
       else this.items.splice(index, 1, item);
     },
 

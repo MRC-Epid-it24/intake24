@@ -14,10 +14,12 @@
         <v-toolbar-title>
           {{ $t(`feedback-schemes.cards.${dialog.index === -1 ? 'add' : 'edit'}`) }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-toolbar-items>
           <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-            <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+            <v-icon left>
+              $success
+            </v-icon>{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
         <template #extension>
@@ -40,7 +42,9 @@
                     <v-card outlined>
                       <v-toolbar color="grey lighten-4" flat>
                         <v-toolbar-title>
-                          <v-icon left>fas fa-cloud-meatball</v-icon>
+                          <v-icon left>
+                            fas fa-cloud-meatball
+                          </v-icon>
                           {{ $t(`feedback-schemes.cards.type`) }}
                         </v-toolbar-title>
                       </v-toolbar>
@@ -66,7 +70,9 @@
                                     {{ $t(`feedback-schemes.cards.${card.type}.subtitle`) }}
                                   </v-card-subtitle>
                                   <v-card-text v-show="active" class="text-center">
-                                    <v-icon x-large>$check</v-icon>
+                                    <v-icon x-large>
+                                      $check
+                                    </v-icon>
                                   </v-card-text>
                                 </v-card>
                               </v-item>
@@ -80,7 +86,9 @@
                     <v-card outlined>
                       <v-toolbar color="grey lighten-4" flat>
                         <v-toolbar-title>
-                          <v-icon left>fas fa-gears</v-icon>
+                          <v-icon left>
+                            fas fa-gears
+                          </v-icon>
                           {{ $t(`feedback-schemes.cards.options`) }}
                         </v-toolbar-title>
                       </v-toolbar>
@@ -101,7 +109,7 @@
                                     <v-img
                                       :alt="item.value"
                                       :src="characterImageMap[item.value]"
-                                    ></v-img>
+                                    />
                                   </v-avatar>
                                   {{ $t(`feedback-schemes.images.${item.value}`) }}
                                 </template>
@@ -117,7 +125,7 @@
                                     <v-color-picker
                                       v-model="dialog.card.color"
                                       show-swatches
-                                    ></v-color-picker>
+                                    />
                                   </v-expansion-panel-content>
                                 </v-expansion-panel>
                               </v-expansion-panels>
@@ -128,7 +136,7 @@
                                 v-model="dialog.card.showRecommendations"
                                 hide-details="auto"
                                 :label="$t('feedback-schemes.cards.showRecommendations')"
-                              ></v-switch>
+                              />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -142,15 +150,19 @@
               :is="dialog.card.type"
               v-bind.sync="dialog.card"
               @validate="validate"
-            ></component>
+            />
           </v-tabs-items>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
+              <v-icon left>
+                $cancel
+              </v-icon>{{ $t('common.action.cancel') }}
             </v-btn>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+              <v-icon left>
+                $success
+              </v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -197,7 +209,7 @@ export default defineComponent({
     const { i18n } = useI18n();
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-    const images = characterTypesRef.map((value) => ({
+    const images = characterTypesRef.map(value => ({
       value,
       text: i18n.t(`feedback-schemes.images.${value}`),
     }));
@@ -240,7 +252,8 @@ export default defineComponent({
   methods: {
     focusInTox(event: FocusEvent) {
       const toxDialog = (event.target as HTMLElement).closest('.tox');
-      if (!toxDialog) return;
+      if (!toxDialog)
+        return;
 
       event.stopImmediatePropagation();
     },
@@ -252,8 +265,9 @@ export default defineComponent({
         card: { type },
       } = this.dialog;
 
-      const card = this.cardDefaults.find((item) => item.type === type);
-      if (!card) return;
+      const card = this.cardDefaults.find(item => item.type === type);
+      if (!card)
+        return;
 
       this.dialog = { show, index, card: copy({ ...card, id: randomString(6) }) };
     },
@@ -263,7 +277,7 @@ export default defineComponent({
     },
 
     edit(index: number, card: Card) {
-      const defaults = this.cardDefaults.find((c) => c.type === card.type);
+      const defaults = this.cardDefaults.find(c => c.type === card.type);
       if (!defaults) {
         console.warn(`Card defaults for card type '${card.type}' not found.`);
         return;
@@ -278,7 +292,8 @@ export default defineComponent({
 
     save() {
       const isValid = this.form?.validate();
-      if (!isValid) return;
+      if (!isValid)
+        return;
 
       const { index, card } = this.dialog;
 

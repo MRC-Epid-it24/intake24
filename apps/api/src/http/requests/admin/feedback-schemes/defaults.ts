@@ -59,7 +59,7 @@ export const defaults: Schema = {
     isArray: { bail: true },
     custom: {
       options: async (value: any[], meta): Promise<void> => {
-        if (value.some((action) => !feedbackOutputs.includes(action)))
+        if (value.some(action => !feedbackOutputs.includes(action)))
           throw new Error(customTypeErrorMessage('in.options', meta, { options: feedbackOutputs }));
       },
     },
@@ -70,10 +70,11 @@ export const defaults: Schema = {
     isArray: { bail: true },
     custom: {
       options: async (value: any[], meta): Promise<void> => {
-        if (value.some((action) => !feedbackPhysicalDataFields.includes(action)))
+        if (value.some(action => !feedbackPhysicalDataFields.includes(action))) {
           throw new Error(
-            customTypeErrorMessage('in.options', meta, { options: feedbackPhysicalDataFields })
+            customTypeErrorMessage('in.options', meta, { options: feedbackPhysicalDataFields }),
           );
+        }
       },
     },
   },
@@ -83,10 +84,11 @@ export const defaults: Schema = {
     isArray: { bail: true },
     custom: {
       options: async (value: any[], meta): Promise<void> => {
-        if (value.some((action) => !feedbackSections.includes(action)))
+        if (value.some(action => !feedbackSections.includes(action))) {
           throw new Error(
-            customTypeErrorMessage('in.options', meta, { options: feedbackSections })
+            customTypeErrorMessage('in.options', meta, { options: feedbackSections }),
           );
+        }
       },
     },
   },
@@ -102,7 +104,7 @@ export const defaults: Schema = {
     isArray: { bail: true },
     custom: {
       options: async (value: any[], meta): Promise<void> => {
-        if (value.some((item) => typeof item !== 'string' || !validator.isHexColor(item)))
+        if (value.some(item => typeof item !== 'string' || !validator.isHexColor(item)))
           throw new Error(customTypeErrorMessage('array.colors', meta));
       },
     },
@@ -115,16 +117,16 @@ export const defaults: Schema = {
       options: async (value: any[], meta): Promise<void> => {
         if (
           value.some(
-            (item) =>
-              !has(item, 'id') ||
-              !has(item, 'name.en') ||
-              !Array.isArray(item.id) ||
-              item.id.some((nid: any) => typeof nid !== 'string')
+            item =>
+              !has(item, 'id')
+              || !has(item, 'name.en')
+              || !Array.isArray(item.id)
+              || item.id.some((nid: any) => typeof nid !== 'string'),
           )
         )
           throw new Error(customTypeErrorMessage('structure._', meta));
 
-        if (value.some((item) => item.id.length !== [...new Set(item.id)].length))
+        if (value.some(item => item.id.length !== [...new Set(item.id)].length))
           throw new Error(customTypeErrorMessage('duplicate._', meta));
       },
     },
@@ -137,10 +139,11 @@ export const defaults: Schema = {
         try {
           henryCoefficient.array().parse(value);
           return true;
-        } catch (err) {
-          if (err instanceof ZodError) {
+        }
+        catch (err) {
+          if (err instanceof ZodError)
             throw err.errors.at(0)?.message;
-          }
+
           throw err;
         }
       },
@@ -154,10 +157,11 @@ export const defaults: Schema = {
         try {
           demographicGroup.array().parse(value);
           return true;
-        } catch (err) {
-          if (err instanceof ZodError) {
+        }
+        catch (err) {
+          if (err instanceof ZodError)
             throw err.errors.at(0)?.message;
-          }
+
           throw err;
         }
       },

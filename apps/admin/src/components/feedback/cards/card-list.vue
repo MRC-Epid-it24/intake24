@@ -1,26 +1,32 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>fas fa-cloud-meatball</v-icon>
+      <v-icon color="secondary" left>
+        fas fa-cloud-meatball
+      </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.cards.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn color="primary" fab small :title="$t('feedback-schemes.cards.add')" @click.stop="add">
-        <v-icon small>$add</v-icon>
+        <v-icon small>
+          $add
+        </v-icon>
       </v-btn>
       <options-menu>
         <select-resource resource="feedback-schemes" return-object="cards" @input="load">
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="cards"></json-editor-dialog>
+        <json-editor-dialog v-model="cards" />
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -48,7 +54,9 @@
                 :title="$t('feedback-schemes.cards.edit')"
                 @click.stop="edit({ card, index })"
               >
-                <v-icon color="secondary lighten-1">$edit</v-icon>
+                <v-icon color="secondary lighten-1">
+                  $edit
+                </v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -66,7 +74,7 @@
         </transition-group>
       </draggable>
     </v-list>
-    <card-selector ref="selector" @save="save"></card-selector>
+    <card-selector ref="selector" @save="save" />
   </v-card>
 </template>
 
@@ -93,7 +101,7 @@ export default defineComponent({
   name: 'CardList',
 
   components: {
-    draggable,
+    Draggable: draggable,
     CardSelector,
     ConfirmDialog,
     JsonEditorDialog,
@@ -123,7 +131,8 @@ export default defineComponent({
 
   watch: {
     value(val) {
-      if (deepEqual(val, this.cards)) return;
+      if (deepEqual(val, this.cards))
+        return;
 
       this.cards = [...val];
     },
@@ -141,7 +150,7 @@ export default defineComponent({
 
       const nutrients = this.nutrientTypes
         .filter(({ id }) => card.nutrientTypeIds.includes(id))
-        .map((item) => item.description);
+        .map(item => item.description);
 
       return `${this.$t(`feedback-schemes.images.${image}`)} | ${nutrients.join(' | ')}`;
     },
@@ -159,7 +168,8 @@ export default defineComponent({
     },
 
     save({ card, index }: CardEvent) {
-      if (index === -1) this.cards.push(card);
+      if (index === -1)
+        this.cards.push(card);
       else this.cards.splice(index, 1, card);
     },
 

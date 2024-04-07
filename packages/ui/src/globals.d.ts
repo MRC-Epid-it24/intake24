@@ -1,5 +1,4 @@
 import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
-import type { HttpClient, Permission } from '@intake24/ui/types';
 
 import type { HttpClient, Permission } from './types';
 

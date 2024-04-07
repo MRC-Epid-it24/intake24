@@ -9,7 +9,7 @@ module.exports = {
           allowNull: false,
           defaultValue: false,
         },
-        { transaction }
+        { transaction },
       );
     });
   },

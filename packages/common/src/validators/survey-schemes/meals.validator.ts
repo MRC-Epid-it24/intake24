@@ -1,6 +1,7 @@
+import { inspect } from 'node:util';
+
 import type { ValidateFunction as AjvValidateFunction } from 'ajv';
 import Ajv from 'ajv';
-import { inspect } from 'util';
 
 import type { Meals } from '../../types/meals';
 
@@ -10,10 +11,10 @@ export const ajv = new Ajv({
   useDefaults: true,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line ts/no-var-requires, ts/no-require-imports
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 
-export { Meals };
+export type { Meals };
 export const MealsSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   definitions: {
@@ -48,13 +49,13 @@ export type ValidateFunction<T> = ((data: unknown) => data is T) &
   Pick<AjvValidateFunction, 'errors'>;
 export const isMeals = ajv.compile(MealsSchema) as ValidateFunction<Meals>;
 export default function validate(value: unknown): Meals {
-  if (isMeals(value)) {
+  if (isMeals(value))
     return value;
-  }
+
   throw new Error(
     `${ajv.errorsText(
       isMeals.errors!.filter((e: any) => e.keyword !== 'if'),
-      { dataVar: 'Meals' }
-    )}\n\n${inspect(value)}`
+      { dataVar: 'Meals' },
+    )}\n\n${inspect(value)}`,
   );
 }

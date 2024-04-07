@@ -4,7 +4,7 @@ export default () => {
   const url = '/api/admin/nutrient-types';
   const permissions = ['nutrient-types', 'nutrient-types|browse'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

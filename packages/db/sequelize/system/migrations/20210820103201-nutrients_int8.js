@@ -21,12 +21,12 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO nutrient_units (id, description, symbol) SELECT id, description, symbol FROM v3_nutrient_units',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('nutrient_types', 'v3_nutrient_types', { transaction });
@@ -47,7 +47,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('nutrient_types', {
@@ -71,14 +71,14 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO nutrient_types (id, description, unit_id) SELECT id, description, unit_id FROM v3_nutrient_types',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('missing_foods', 'v3_missing_foods', { transaction });
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE missing_foods_id_seq RENAME TO v3_missing_foods_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -122,7 +122,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('missing_foods', {
@@ -165,7 +165,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO missing_foods (id, survey_id, user_id, "name", brand, description, portion_size, leftovers, submitted_at) SELECT id, survey_id, user_id, "name", brand, description, portion_size, leftovers, submitted_at FROM v3_missing_foods',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('missing_foods', 'id', { queryInterface, transaction });

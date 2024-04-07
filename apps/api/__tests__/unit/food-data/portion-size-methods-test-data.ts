@@ -46,7 +46,7 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
     const parameters = {} as PortionSizeParameters;
 
     for (let j = 0; j < paramCount; ++j) {
-      //@ts-expect-error proper type for parameters
+      // @ts-expect-error proper type for parameters
       parameters[faker.word.words(1)] = faker.word.words(1);
     }
 
@@ -67,19 +67,18 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
 function generateRandomPortionSizeMethodSets(count: number): UserPortionSizeMethod[][] {
   const result: UserPortionSizeMethod[][] = [];
 
-  for (let i = 0; i < count; ++i) {
+  for (let i = 0; i < count; ++i)
     result.push(generateRandomPortionSizeMethods(faker.number.int({ min: 1, max: 5 })));
-  }
 
   return result;
 }
 
-export const generatedPortionSizeMethods: UserPortionSizeMethod[][] =
-  generateRandomPortionSizeMethodSets(10);
+export const generatedPortionSizeMethods: UserPortionSizeMethod[][]
+  = generateRandomPortionSizeMethodSets(10);
 
 async function createCategoryPortionSizeMethods(
   categoryLocalId: string,
-  portionSizeMethods: UserPortionSizeMethod[]
+  portionSizeMethods: UserPortionSizeMethod[],
 ): Promise<void> {
   for (let i = 0; i < portionSizeMethods.length; i++) {
     const catPsm = new CategoryPortionSizeMethod({
@@ -222,7 +221,7 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
 
   await food1.save();
 
-  await sequelize.transaction((t) =>
+  await sequelize.transaction(t =>
     FoodLocal.create(
       {
         foodCode: 'FOOD1',
@@ -235,8 +234,8 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
       {
         transaction: t,
         include: [{ association: 'portionSizeMethods' }],
-      }
-    )
+      },
+    ),
   );
 
   const foodCategory1 = new FoodCategory({
@@ -317,7 +316,7 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
     categoryCode: 'CAT8',
   });
 
-  await sequelize.transaction((t) =>
+  await sequelize.transaction(t =>
     FoodLocal.create(
       {
         foodCode: 'FOOD5',
@@ -330,8 +329,8 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
       {
         transaction: t,
         include: [{ association: 'portionSizeMethods' }],
-      }
-    )
+      },
+    ),
   );
 }
 

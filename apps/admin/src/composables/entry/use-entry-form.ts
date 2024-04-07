@@ -29,10 +29,7 @@ export type UseEntryFormProps<F> = {
   nonInputErrorKeys?: string[];
 };
 
-export const useEntryForm = <F extends object, E extends object>(
-  props: UseStoreEntryProps,
-  formProps: UseEntryFormProps<F>
-) => {
+export function useEntryForm<F extends object, E extends object>(props: UseStoreEntryProps, formProps: UseEntryFormProps<F>) {
   const { id: entryId } = toRefs(props);
   const { data, config, editMethod = 'put', loadCallback, nonInputErrorKeys = [] } = formProps;
 
@@ -51,7 +48,7 @@ export const useEntryForm = <F extends object, E extends object>(
     const entryKeys = config?.extractNestedKeys
       ? getObjectNestedKeys(originalEntry.value)
       : Object.keys(originalEntry.value);
-    const commonKeys = entryKeys.filter((key) => formKeys.includes(key));
+    const commonKeys = entryKeys.filter(key => formKeys.includes(key));
 
     const original = pick(originalEntry.value, commonKeys);
     const updated = pick(form.getData(true), commonKeys);
@@ -78,7 +75,8 @@ export const useEntryForm = <F extends object, E extends object>(
 
       const { id, name } = data;
       useMessages().success(i18n.t('common.msg.updated', { name: name ?? id }).toString());
-    } else {
+    }
+    else {
       data = await form.post<EntryState>(`${resource.api}`);
 
       const { id, name } = data;
@@ -93,11 +91,13 @@ export const useEntryForm = <F extends object, E extends object>(
   const clearError = (event: KeyboardEvent) => {
     const { name } = event.target as HTMLInputElement;
 
-    if (name) form.errors.clear(name);
+    if (name)
+      form.errors.clear(name);
   };
 
   watch(entry, (val) => {
-    if (!Object.keys(val).length) return;
+    if (!Object.keys(val).length)
+      return;
 
     // Creating new record
     // TODO: might be better to load full blank templates directly in store
@@ -120,4 +120,4 @@ export const useEntryForm = <F extends object, E extends object>(
     entryChanged,
     routeLeave,
   };
-};
+}

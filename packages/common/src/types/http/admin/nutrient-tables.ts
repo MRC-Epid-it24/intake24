@@ -10,7 +10,7 @@ export const nutrientTableAttributes = z.object({
   id: z
     .string()
     .max(32)
-    .refine((value) => isWhitelisted(value, identifierSafeChars)),
+    .refine(value => isWhitelisted(value, identifierSafeChars)),
   description: z.string().max(512),
 });
 
@@ -62,7 +62,7 @@ export const nutrientTableRequest = nutrientTableAttributes.extend({
     .pick({ fieldName: true, columnOffset: true })
     .array()
     .refine((value) => {
-      const fieldNames = value.map((field) => field.fieldName);
+      const fieldNames = value.map(field => field.fieldName);
 
       const noDups = [...new Set(fieldNames)];
       return fieldNames.length === noDups.length;
@@ -71,7 +71,7 @@ export const nutrientTableRequest = nutrientTableAttributes.extend({
     .pick({ nutrientTypeId: true, columnOffset: true })
     .array()
     .refine((value) => {
-      const nutrientTypeIds = value.map((nutrient) => nutrient.nutrientTypeId);
+      const nutrientTypeIds = value.map(nutrient => nutrient.nutrientTypeId);
 
       const noDups = [...new Set(nutrientTypeIds)];
       return nutrientTypeIds.length === noDups.length;

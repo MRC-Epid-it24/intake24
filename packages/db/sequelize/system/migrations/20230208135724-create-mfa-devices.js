@@ -40,7 +40,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('mfa_devices', {
@@ -104,7 +104,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('mfa_authenticators', {
@@ -127,7 +127,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('mfa_authenticators', { transaction });
       await queryInterface.dropTable('mfa_devices', { transaction });

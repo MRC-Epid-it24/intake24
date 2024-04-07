@@ -1,6 +1,5 @@
-/* eslint-disable camelcase */
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const { QueryTypes } = queryInterface.sequelize;
 
@@ -52,7 +51,7 @@ module.exports = {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
             replacements: { id, overrides: JSON.stringify(surveySchemeOverrides) },
             transaction,
-          }
+          },
         );
       }
     }),

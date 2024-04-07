@@ -13,7 +13,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all(
-        tables.map((table) =>
+        tables.map(table =>
           queryInterface.addColumn(
             table,
             'visibility',
@@ -22,18 +22,18 @@ module.exports = {
               allowNull: false,
               defaultValue: 'public',
             },
-            { transaction }
-          )
-        )
+            { transaction },
+          ),
+        ),
       );
 
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all(
-        tables.map((table) => queryInterface.removeColumn(table, 'visibility', { transaction }))
+        tables.map(table => queryInterface.removeColumn(table, 'visibility', { transaction })),
       );
 
       const names = permissions.map(({ name }) => `'${name}'`).join(`,`);

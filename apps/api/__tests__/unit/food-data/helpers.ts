@@ -5,7 +5,7 @@ import { initDatabases, releaseDatabases } from '../helpers/databases';
 import createLocales from './test-data-locales';
 
 export default () => {
-  describe('Helpers', () => {
+  describe('helpers', () => {
     beforeAll(async () => {
       await initDatabases();
       await createLocales();

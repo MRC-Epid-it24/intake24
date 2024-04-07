@@ -18,7 +18,6 @@ export default class PasswordBcrypt implements PasswordAlgorithm {
     return Promise.resolve({ hash, salt });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async verify(input: string, hashedPassword: HashedPassword): Promise<boolean> {
     return bcrypt.compare(input, hashedPassword.hash);
   }

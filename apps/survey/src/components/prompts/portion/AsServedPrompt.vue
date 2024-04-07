@@ -14,7 +14,7 @@
                 v-if="prompt.badges"
                 :amount="portionSize.serving?.weight"
                 :valid="servingImageConfirmed"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
@@ -24,7 +24,7 @@
             :as-served-set-id="parameters.servingImageSet"
             @confirm="confirmServing"
             @input="updateServing"
-          ></as-served-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel
@@ -43,12 +43,12 @@
                 v-if="prompt.badges"
                 :amount="portionSize.leftovers?.weight"
                 :valid="leftoversImageConfirmed"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory />
           <template v-if="leftoversPrompt">
             <i18n class="mb-4" :path="`prompts.${type}.leftovers.label`" tag="div">
               <template #food>
@@ -62,7 +62,7 @@
               type="leftovers"
               @confirm="confirmLeftovers"
               @input="updateLeftovers"
-            ></as-served-selector>
+            />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -78,13 +78,13 @@
         :confirm.sync="linkedQuantityConfirmed"
         @input="selectLinkedQuantity"
         @update:confirm="confirmLinkedQuantity"
-      ></linked-quantity>
+      />
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -158,7 +158,8 @@ export default defineComponent({
       if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      if (this.linkedParent?.categories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedParent?.categories.length)
+        conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },
@@ -178,7 +179,8 @@ export default defineComponent({
       this.servingImageConfirmed = false;
       this.clearLeftovers();
 
-      if (this.isValid) this.clearErrors();
+      if (this.isValid)
+        this.clearErrors();
 
       this.update();
     },
@@ -198,7 +200,8 @@ export default defineComponent({
     updateLeftovers() {
       this.leftoversImageConfirmed = false;
 
-      if (this.isValid) this.clearErrors();
+      if (this.isValid)
+        this.clearErrors();
 
       this.update();
     },
@@ -219,10 +222,10 @@ export default defineComponent({
     },
 
     update() {
-      this.portionSize.servingWeight =
-        (this.portionSize.serving?.weight ?? 0) * this.portionSize.linkedQuantity;
-      this.portionSize.leftoversWeight =
-        (this.portionSize.leftovers?.weight ?? 0) * this.portionSize.linkedQuantity;
+      this.portionSize.servingWeight
+        = (this.portionSize.serving?.weight ?? 0) * this.portionSize.linkedQuantity;
+      this.portionSize.leftoversWeight
+        = (this.portionSize.leftovers?.weight ?? 0) * this.portionSize.linkedQuantity;
 
       const state: PromptStates['as-served-prompt'] = {
         portionSize: this.portionSize,

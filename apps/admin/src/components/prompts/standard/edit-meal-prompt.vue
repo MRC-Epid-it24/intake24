@@ -7,7 +7,7 @@
           :input-value="separateDrinks"
           :label="$t('survey-schemes.prompts.edit-meal-prompt.separateDrinks')"
           @change="update('separateDrinks', $event)"
-        ></v-switch>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

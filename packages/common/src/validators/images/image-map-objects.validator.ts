@@ -1,6 +1,7 @@
+import { inspect } from 'node:util';
+
 import type { ValidateFunction as AjvValidateFunction } from 'ajv';
 import Ajv from 'ajv';
-import { inspect } from 'util';
 
 import type { ImageMapInputObjects } from '../../types/http/admin/image-maps';
 
@@ -10,10 +11,10 @@ export const ajv = new Ajv({
   useDefaults: true,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line ts/no-var-requires, ts/no-require-imports
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 
-export { ImageMapInputObjects };
+export type { ImageMapInputObjects };
 export const ImageMapInputObjectsSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   items: {
@@ -39,16 +40,16 @@ export const ImageMapInputObjectsSchema = {
 export type ValidateFunction<T> = ((data: unknown) => data is T) &
   Pick<AjvValidateFunction, 'errors'>;
 export const isImageMapInputObjects = ajv.compile(
-  ImageMapInputObjectsSchema
+  ImageMapInputObjectsSchema,
 ) as ValidateFunction<ImageMapInputObjects>;
 export default function validate(value: unknown): ImageMapInputObjects {
-  if (isImageMapInputObjects(value)) {
+  if (isImageMapInputObjects(value))
     return value;
-  }
+
   throw new Error(
     `${ajv.errorsText(
       isImageMapInputObjects.errors!.filter((e: any) => e.keyword !== 'if'),
-      { dataVar: 'ImageMapInputObjects' }
-    )}\n\n${inspect(value)}`
+      { dataVar: 'ImageMapInputObjects' },
+    )}\n\n${inspect(value)}`,
   );
 }

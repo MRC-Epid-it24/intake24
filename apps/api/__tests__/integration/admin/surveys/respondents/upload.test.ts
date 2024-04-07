@@ -36,7 +36,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999/respondents/upload`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assertMissingAuthentication('post', url);
   });
 

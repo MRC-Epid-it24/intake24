@@ -4,7 +4,7 @@
     :key="prompt.id"
     v-bind="{ meals, prompt, section }"
     @action="action"
-  ></component>
+  />
 </template>
 
 <script lang="ts">
@@ -40,7 +40,8 @@ export default defineComponent({
     const meals = computed(() => survey.meals);
 
     const action = async (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') await survey.submitRecall();
+      if (type === 'next')
+        await survey.submitRecall();
 
       emit('action', type, ...args);
     };

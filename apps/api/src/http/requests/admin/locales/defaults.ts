@@ -86,15 +86,17 @@ export const defaults: Schema = {
         const locale = await SystemLocale.findByPk(localeId, {
           attributes: ['id', 'respondentLanguageId'],
         });
-        if (locale?.respondentLanguageId === value) return;
+        if (locale?.respondentLanguageId === value)
+          return;
 
         try {
           await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
             Language,
             'use',
-            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } }
+            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } },
           );
-        } catch (err) {
+        }
+        catch (err) {
           throw new Error('$restricted');
         }
       },
@@ -113,15 +115,17 @@ export const defaults: Schema = {
         const locale = await SystemLocale.findByPk(localeId, {
           attributes: ['id', 'adminLanguageId'],
         });
-        if (locale?.adminLanguageId === value) return;
+        if (locale?.adminLanguageId === value)
+          return;
 
         try {
           await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
             Language,
             'use',
-            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } }
+            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } },
           );
-        } catch (err) {
+        }
+        catch (err) {
           throw new Error('$restricted');
         }
       },
@@ -145,15 +149,17 @@ export const defaults: Schema = {
         const locale = await SystemLocale.findByPk(localeId, {
           attributes: ['id', 'prototypeLocaleId'],
         });
-        if (locale?.prototypeLocaleId === value) return;
+        if (locale?.prototypeLocaleId === value)
+          return;
 
         try {
           await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
             SystemLocale,
             'use',
-            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } }
+            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } },
           );
-        } catch (err) {
+        }
+        catch (err) {
           throw new Error('$restricted');
         }
       },

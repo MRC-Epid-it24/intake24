@@ -74,15 +74,20 @@ export default defineConfig(({ mode }) => {
           assetFileNames: ({ name }) => {
             let subDir = '';
 
-            if (name?.match(/\.(woff2|ttf)$/)) subDir = 'fonts/';
-            else if (name?.match(/\.(jpe?g|png|svg)$/)) subDir = 'imgs/';
+            if (name?.match(/\.(woff2|ttf)$/))
+              subDir = 'fonts/';
+            else if (name?.match(/\.(jpe?g|png|svg)$/))
+              subDir = 'imgs/';
 
             return `assets/${subDir}[name]-[hash][extname]`;
           },
           manualChunks: (id) => {
-            if (id.includes('echarts')) return 'echarts';
-            if (id.includes('json-editor-vue')) return 'json-editor';
-            if (id.includes('tinymce')) return 'tinymce';
+            if (id.includes('echarts'))
+              return 'echarts';
+            if (id.includes('json-editor-vue'))
+              return 'json-editor';
+            if (id.includes('tinymce'))
+              return 'tinymce';
           },
         },
       },

@@ -18,7 +18,7 @@ module.exports = {
     });
 
     await queryInterface.sequelize.query(
-      "insert into food_index_language_backends(id, flag, description) values ('en', 'gb', 'English')"
+      'insert into food_index_language_backends(id, flag, description) values (\'en\', \'gb\', \'English\')',
     );
 
     await queryInterface.addColumn('locales', 'food_index_language_backend_id', {

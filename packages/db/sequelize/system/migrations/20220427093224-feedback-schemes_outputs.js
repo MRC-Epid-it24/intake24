@@ -5,7 +5,7 @@ module.exports = {
         'feedback_schemes',
         'outputs',
         { allowNull: true, type: Sequelize.TEXT() },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE feedback_schemes SET outputs = :outputs;`, {
@@ -18,11 +18,11 @@ module.exports = {
         'feedback_schemes',
         'outputs',
         { allowNull: false, type: Sequelize.TEXT() },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('feedback_schemes', 'outputs', { transaction });
     }),

@@ -9,7 +9,7 @@ export type StandardUnitRefs = Record<
   { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
 >;
 
-export const useStandardUnits = () => {
+export function useStandardUnits() {
   const standardUnitRefs = ref<StandardUnitRefs>({});
 
   const fetchStandardUnits = async (names: string[]) => {
@@ -27,4 +27,4 @@ export const useStandardUnits = () => {
   };
 
   return { standardUnitRefs, fetchStandardUnits };
-};
+}

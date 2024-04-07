@@ -10,34 +10,34 @@ import submissions from './submissions/index.test';
 import tasks from './tasks.test';
 
 export default () => {
-  describe('GET /api/admin/surveys', browse);
-  describe('POST /api/admin/surveys', store);
-  describe('GET /api/admin/surveys/:surveyId', read);
-  describe('GET /api/admin/surveys/:surveyId/edit', edit);
-  describe('PATCH /api/admin/surveys/:surveyId', patch);
+  describe('get /api/admin/surveys', browse);
+  describe('post /api/admin/surveys', store);
+  describe('get /api/admin/surveys/:surveyId', read);
+  describe('get /api/admin/surveys/:surveyId/edit', edit);
+  describe('patch /api/admin/surveys/:surveyId', patch);
   // describe('PUT /api/admin/surveys/:surveyId', put);
-  describe('DELETE /api/admin/surveys/:surveyId', destroy);
+  describe('delete /api/admin/surveys/:surveyId', destroy);
 
   // Surveys respondents
-  describe('GET /api/admin/surveys/:surveyId/respondents', respondents.browse);
-  describe('POST /api/admin/surveys/:surveyId/respondents', respondents.store);
-  describe('GET /api/admin/surveys/:surveyId/respondents/:surveyId', respondents.read);
-  describe('GET /api/admin/surveys/:surveyId/respondents/:surveyId/edit', respondents.edit);
-  describe('PATCH /api/admin/surveys/:surveyId/respondents/:userId', respondents.update);
-  describe('DELETE /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
-  describe('POST /api/admin/surveys/:surveyId/respondents/upload', respondents.upload);
+  describe('get /api/admin/surveys/:surveyId/respondents', respondents.browse);
+  describe('post /api/admin/surveys/:surveyId/respondents', respondents.store);
+  describe('get /api/admin/surveys/:surveyId/respondents/:surveyId', respondents.read);
+  describe('get /api/admin/surveys/:surveyId/respondents/:surveyId/edit', respondents.edit);
+  describe('patch /api/admin/surveys/:surveyId/respondents/:userId', respondents.update);
+  describe('delete /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
+  describe('post /api/admin/surveys/:surveyId/respondents/upload', respondents.upload);
   describe(
-    'POST /api/admin/surveys/:surveyId/respondents/export-auth-urls',
-    respondents.exportAuthUrls
+    'post /api/admin/surveys/:surveyId/respondents/export-auth-urls',
+    respondents.exportAuthUrls,
   );
   // describe('GET /api/admin/surveys/:surveyId/respondents/:userId', downloadFeedback);
   // describe('POST /api/admin/surveys/:surveyId/respondents/:userId', emailFeedback);
 
   // Surveys submissions
-  describe('GET /api/admin/surveys/:surveyId/submissions', submissions.browse);
-  describe('GET /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.read);
-  describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.destroy);
+  describe('get /api/admin/surveys/:surveyId/submissions', submissions.browse);
+  describe('get /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.read);
+  describe('delete /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.destroy);
 
   // Surveys tasks
-  describe('POST /api/admin/surveys/:surveyId/tasks', tasks);
+  describe('post /api/admin/surveys/:surveyId/tasks', tasks);
 };

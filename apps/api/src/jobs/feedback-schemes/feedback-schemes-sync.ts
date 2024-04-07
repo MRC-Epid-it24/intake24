@@ -41,8 +41,11 @@ export default class FeedbackSchemesSync extends BaseJob<'FeedbackSchemesSync'> 
 
   private getCardMap() {
     return cardDefaults.reduce<Record<string, Card>>(
-      (acc, card) => ((acc[card.type] = card), acc),
-      {}
+      (acc, card) => {
+        acc[card.type] = card;
+        return acc;
+      },
+      {},
     );
   }
 
@@ -58,13 +61,13 @@ export default class FeedbackSchemesSync extends BaseJob<'FeedbackSchemesSync'> 
 
     for (const scheme of schemes) {
       const cards = scheme.cards.map((card: Card) => merge<Card>(cardMap[card.type], card));
-      const demographicGroups = scheme.demographicGroups.map((group) =>
+      const demographicGroups = scheme.demographicGroups.map(group =>
         merge(demographicGroupDefaults, {
           ...group,
-          scaleSectors: group.scaleSectors.map((sector) =>
-            merge(demographicGroupScaleSectorDefaults, sector)
+          scaleSectors: group.scaleSectors.map(sector =>
+            merge(demographicGroupScaleSectorDefaults, sector),
           ),
-        })
+        }),
       );
 
       await scheme.update({ cards, demographicGroups });

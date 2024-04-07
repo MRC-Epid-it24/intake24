@@ -19,7 +19,7 @@ export default () => {
     '/upload',
     upload.single('file'),
     validation.upload,
-    wrapAsync(adminSurveyRespondentController.upload)
+    wrapAsync(adminSurveyRespondentController.upload),
   );
   router.post('/export-auth-urls', wrapAsync(adminSurveyRespondentController.exportAuthUrls));
 

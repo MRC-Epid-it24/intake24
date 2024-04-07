@@ -9,10 +9,10 @@ module.exports = {
           type: Sequelize.BOOLEAN,
           defaultValue: false,
         },
-        { transaction }
+        { transaction },
       );
     }),
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('surveys', 'auth_captcha', { transaction });
     }),

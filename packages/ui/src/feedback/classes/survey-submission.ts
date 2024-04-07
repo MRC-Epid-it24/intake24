@@ -16,7 +16,7 @@ export default class SurveySubmission {
     this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.meals = meals.map((m) => m.clone());
+    this.meals = meals.map(m => m.clone());
   }
 
   clone(): SurveySubmission {
@@ -32,7 +32,7 @@ export default class SurveySubmission {
       submission.id,
       new Date(submission.startTime),
       new Date(submission.endTime),
-      submission.meals.map((meal) => SurveyMeal.fromJson(meal))
+      submission.meals.map(meal => SurveyMeal.fromJson(meal)),
     );
   }
 }

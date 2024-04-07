@@ -112,17 +112,20 @@ export const surveyHelpRequest = z
     phoneCountry: z
       .string()
       .nullish()
-      .refine((value) => (value ? isIn(value, getSupportedRegionCodes()) : true)),
+      .refine(value => (value ? isIn(value, getSupportedRegionCodes()) : true)),
     message: z.string().max(500),
   })
   .refine(
     (data) => {
-      if (!data.email && !data.phone) return false;
+      if (!data.email && !data.phone)
+        return false;
 
       if (data.phone) {
-        if (!data.phoneCountry) return false;
+        if (!data.phoneCountry)
+          return false;
 
-        if (!parsePhoneNumber(data.phone, { regionCode: data.phoneCountry }).valid) return false;
+        if (!parsePhoneNumber(data.phone, { regionCode: data.phoneCountry }).valid)
+          return false;
       }
 
       return true;
@@ -130,13 +133,15 @@ export const surveyHelpRequest = z
     {
       message: 'Valid email or phone is required',
       path: ['email'],
-    }
+    },
   )
   .transform((data) => {
-    if (!data.phone || !data.phoneCountry) return data;
+    if (!data.phone || !data.phoneCountry)
+      return data;
 
     const phoneNumber = parsePhoneNumber(data.phone, { regionCode: data.phoneCountry });
-    if (!phoneNumber.valid) return data;
+    if (!phoneNumber.valid)
+      return data;
 
     return { ...data, phone: phoneNumber.number.international };
   });

@@ -32,7 +32,7 @@ const domain = `${https ? 'https' : 'http'}://${host}:${port}`;
 
 const name = process.env.APP_NAME || 'Intake24';
 const icon = process.env.APP_ICON;
-const fullName = [icon, name].filter((item) => item).join(' ');
+const fullName = [icon, name].filter(item => item).join(' ');
 
 const appConfig: AppConfig = {
   env: (process.env.NODE_ENV || 'development') as Environment,
@@ -44,7 +44,7 @@ const appConfig: AppConfig = {
   version: pkg.version,
 
   host: process.env.APP_HOST || host,
-  port: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : port,
+  port: process.env.APP_PORT ? Number.parseInt(process.env.APP_PORT, 10) : port,
   https,
   certPath,
 

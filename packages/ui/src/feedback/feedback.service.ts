@@ -27,7 +27,7 @@ export type FeedbackResults = {
 
 export type UserPhysicalData = NonNullable<UserPhysicalDataResponse>;
 
-const createFeedbackService = (httpClient: HttpClient) => {
+function createFeedbackService(httpClient: HttpClient) {
   let cachedFeedbackData: FeedbackDataResponse | null = null;
 
   const fetchFeedbackData = async (): Promise<FeedbackDataResponse> => {
@@ -36,7 +36,8 @@ const createFeedbackService = (httpClient: HttpClient) => {
   };
 
   const getFeedbackData = async (): Promise<FeedbackDataResponse> => {
-    if (cachedFeedbackData) return cachedFeedbackData;
+    if (cachedFeedbackData)
+      return cachedFeedbackData;
 
     const data = await fetchFeedbackData();
     cachedFeedbackData = data;
@@ -47,12 +48,12 @@ const createFeedbackService = (httpClient: HttpClient) => {
   const getUserDemographic = (
     feedbackData: FeedbackDataResponse,
     henryCoefficients: HenryCoefficient[],
-    physicalData: UserPhysicalData
+    physicalData: UserPhysicalData,
   ): UserDemographic => {
     const { physicalActivityLevels, weightTargets } = feedbackData;
 
     const physicalActivityLevel = physicalActivityLevels.find(
-      ({ id }) => id === physicalData.physicalActivityLevelId
+      ({ id }) => id === physicalData.physicalActivityLevelId,
     );
     const weightTarget = weightTargets.find(({ id }) => id === physicalData.weightTarget);
 
@@ -60,7 +61,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
       physicalData,
       henryCoefficients,
       physicalActivityLevel,
-      weightTarget
+      weightTarget,
     );
   };
 
@@ -78,7 +79,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
     const surveyStats = SurveyStats.fromJson(submissions);
 
     const demographicGroups = groups.reduce<DemographicGroup[]>((acc, item) => {
-      const nutrientType = feedbackData.nutrientTypes.find((nt) => nt.id === item.nutrientTypeId);
+      const nutrientType = feedbackData.nutrientTypes.find(nt => nt.id === item.nutrientTypeId);
 
       const group = DemographicGroup.fromJson(item, nutrientType);
       acc.push(group);
@@ -92,25 +93,25 @@ const createFeedbackService = (httpClient: HttpClient) => {
           return new CharacterRules(
             card,
             demographicGroups.filter(
-              (group) =>
-                group.type === card.type &&
-                group.nutrient &&
-                card.nutrientTypeIds.includes(group.nutrient.id)
-            )
+              group =>
+                group.type === card.type
+                && group.nutrient
+                && card.nutrientTypeIds.includes(group.nutrient.id),
+            ),
           );
         case 'nutrient-group':
           return {
             ...card,
             demographicGroups: demographicGroups.filter(
-              (group) =>
-                group.type === card.type &&
-                (!group.nutrient || card.nutrientTypes.includes(group.nutrient.id))
+              group =>
+                group.type === card.type
+                && (!group.nutrient || card.nutrientTypes.includes(group.nutrient.id)),
             ),
           };
         default:
           return {
             ...card,
-            demographicGroups: demographicGroups.filter((group) => group.type === card.type),
+            demographicGroups: demographicGroups.filter(group => group.type === card.type),
           };
       }
     });
@@ -136,7 +137,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
     getUserDemographic,
     getFeedbackResults,
   };
-};
+}
 
 export default createFeedbackService;
 

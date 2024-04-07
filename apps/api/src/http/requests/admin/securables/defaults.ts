@@ -11,7 +11,7 @@ export default (securable: SecurableType): Schema => ({
     isArray: { options: { min: 1 }, bail: true },
     custom: {
       options: async (value: any[], meta): Promise<void> => {
-        if (value.some((action) => !securableDefs[securable].includes(action)))
+        if (value.some(action => !securableDefs[securable].includes(action)))
           throw new Error(customTypeErrorMessage('in._', meta));
       },
     },

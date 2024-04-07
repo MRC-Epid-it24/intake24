@@ -2,8 +2,8 @@
   <v-card flat>
     <v-card-title>{{ $t('drinkware-sets.volumeTable.title') }}</v-card-title>
     <v-card-subtitle v-if="legacyWarning" class="mt-0">
-      <v-alert type="info"
-        ><p>
+      <v-alert type="info">
+        <p>
           {{ $t('drinkware-sets.volumeTable.legacy.p1') }}
         </p>
         <p>
@@ -12,20 +12,32 @@
       </v-alert>
     </v-card-subtitle>
     <v-card-actions>
-      <v-btn @click="onAddRow"><v-icon left>fas fa-plus</v-icon></v-btn>
-      <v-btn @click="onRemoveLastRow"
-        ><v-icon left>fas fa-trash</v-icon>{{ $t('drinkware-sets.volumeTable.removeRow') }}</v-btn
-      >
-      <v-btn :disabled="pasteDisabled" @click="onPasteData"
-        ><v-icon left>fas fa-clipboard</v-icon>{{ $t('drinkware-sets.volumeTable.paste') }}</v-btn
-      >
+      <v-btn @click="onAddRow">
+        <v-icon left>
+          fas fa-plus
+        </v-icon>
+      </v-btn>
+      <v-btn @click="onRemoveLastRow">
+        <v-icon left>
+          fas fa-trash
+        </v-icon>{{ $t('drinkware-sets.volumeTable.removeRow') }}
+      </v-btn>
+      <v-btn :disabled="pasteDisabled" @click="onPasteData">
+        <v-icon left>
+          fas fa-clipboard
+        </v-icon>{{ $t('drinkware-sets.volumeTable.paste') }}
+      </v-btn>
     </v-card-actions>
     <v-card-text>
       <v-simple-table>
         <thead>
           <tr>
-            <th class="text-left">{{ $t('drinkware-sets.volumeTable.heightLabel') }}</th>
-            <th class="text-left">{{ $t('drinkware-sets.volumeTable.volumeLabel') }}</th>
+            <th class="text-left">
+              {{ $t('drinkware-sets.volumeTable.heightLabel') }}
+            </th>
+            <th class="text-left">
+              {{ $t('drinkware-sets.volumeTable.volumeLabel') }}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -39,7 +51,7 @@
                 hide-details
                 solo
                 @change="onDataChanged"
-              ></v-text-field>
+              />
             </td>
             <td>
               <v-text-field
@@ -50,7 +62,7 @@
                 hide-details
                 solo
                 @change="onDataChanged"
-              ></v-text-field>
+              />
             </td>
           </tr>
         </tbody>
@@ -80,7 +92,7 @@ export default defineComponent({
   emits: ['confirm', 'select'],
 
   setup(props, { emit }) {
-    const confirm = () => {
+    const _confirm = () => {
       emit('confirm');
     };
 
@@ -91,16 +103,16 @@ export default defineComponent({
       const scale = entry.scales[props.scaleIndex];
 
       return chunk(
-        scale.volumeSamples.map((v) => v.toString()),
-        2
+        scale.volumeSamples.map(v => v.toString()),
+        2,
       );
     });
 
     const legacyWarning = computed(() => {
       return (
-        entrySamples.value.length > 0 &&
-        entrySamples.value.some((s) => parseFloat(s[0]) > 0) &&
-        !entrySamples.value.some((s) => parseFloat(s[0]) > 1)
+        entrySamples.value.length > 0
+        && entrySamples.value.some(s => Number.parseFloat(s[0]) > 0)
+        && !entrySamples.value.some(s => Number.parseFloat(s[0]) > 1)
       );
     });
 
@@ -111,7 +123,7 @@ export default defineComponent({
       const scales = [...entry.scales];
 
       scales[props.scaleIndex].volumeSamples = flatten(
-        volumeSampleRows.value.map(([height, volume]) => [parseFloat(height), parseFloat(volume)])
+        volumeSampleRows.value.map(([height, volume]) => [Number.parseFloat(height), Number.parseFloat(volume)]),
       );
 
       entryStore.updateEntry({
@@ -124,7 +136,7 @@ export default defineComponent({
       const rowIndex = volumeSampleRows.value.length;
 
       volumeSampleRows.value.push(
-        rowIndex < entrySamples.value.length ? entrySamples.value[rowIndex] : ['0', '0']
+        rowIndex < entrySamples.value.length ? entrySamples.value[rowIndex] : ['0', '0'],
       );
       onDataChanged();
     };
@@ -137,9 +149,8 @@ export default defineComponent({
     const onPasteData = async () => {
       const items = await navigator.clipboard.read();
 
-      for (const i of items) {
+      for (const i of items)
         console.log(i.types);
-      }
     };
 
     const pasteDisabled = !navigator.clipboard;

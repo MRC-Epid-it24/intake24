@@ -15,7 +15,9 @@
           :title="$t('common.help.title')"
           v-on="on"
         >
-          <v-icon left>$info</v-icon>{{ $t('common.help._') }}
+          <v-icon left>
+            $info
+          </v-icon>{{ $t('common.help._') }}
         </v-btn>
       </slot>
     </template>
@@ -28,7 +30,9 @@
       </v-toolbar>
       <v-form @keydown.native="errors.clear()" @submit.prevent="requestHelp">
         <v-card-text>
-          <p class="mx-2">{{ $t('common.help.text') }}</p>
+          <p class="mx-2">
+            {{ $t('common.help.text') }}
+          </p>
           <v-container>
             <v-row>
               <v-col cols="12">
@@ -40,7 +44,7 @@
                   name="name"
                   outlined
                   prepend-inner-icon="fas fa-user"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -51,7 +55,7 @@
                   name="email"
                   outlined
                   prepend-inner-icon="fas fa-envelope"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="4">
                 <v-autocomplete
@@ -63,11 +67,11 @@
                   single-line
                 >
                   <template #item="{ item }">
-                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`"></span>
+                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`" />
                     {{ item.text }}
                   </template>
                   <template #selection="{ item }">
-                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`"></span>
+                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`" />
                     {{ item.countryCode }}
                   </template>
                 </v-autocomplete>
@@ -81,7 +85,7 @@
                   name="phone"
                   outlined
                   prepend-inner-icon="fas fa-phone"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-textarea
@@ -93,7 +97,7 @@
                   name="message"
                   outlined
                   prepend-inner-icon="fas fa-message"
-                ></v-textarea>
+                />
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -108,7 +112,9 @@
                   type="submit"
                   x-large
                 >
-                  <v-icon left>fas fa-circle-question</v-icon>
+                  <v-icon left>
+                    fas fa-circle-question
+                  </v-icon>
                   {{ $t('common.help.title') }}
                 </v-btn>
               </v-col>
@@ -195,11 +201,12 @@ export default defineComponent({
         useMessages().success(i18n.t('common.help.sent').toString());
         reset();
         close();
-      } catch (err) {
+      }
+      catch (err) {
         if (
-          axios.isAxiosError(err) &&
-          err.response?.status === HttpStatusCode.BadRequest &&
-          'errors' in err.response.data
+          axios.isAxiosError(err)
+          && err.response?.status === HttpStatusCode.BadRequest
+          && 'errors' in err.response.data
         ) {
           errors.value.record(err.response.data.errors);
           return;

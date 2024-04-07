@@ -7,33 +7,28 @@
           :input-value="badges"
           :label="$t('survey-schemes.prompts.badges')"
           @change="update('badges', $event)"
-        >
-        </v-switch>
+        />
         <v-switch
           hide-details="auto"
           :input-value="leftovers"
           :label="$t('survey-schemes.prompts.leftovers')"
           @change="update('leftovers', $event)"
-        >
-        </v-switch>
+        />
         <v-switch
           hide-details="auto"
           :input-value="multiple"
           :label="$t('survey-schemes.prompts.drink-scale-prompt.multiple')"
           @change="updateMultiple($event)"
-        >
-        </v-switch>
+        />
         <slider-settings
           v-if="multiple"
           class="mt-4"
           :model-value="multiple"
           @update:model-value="update('multiple', $event)"
-        >
-        </slider-settings>
+        />
       </v-col>
       <v-col cols="12" md="6">
-        <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)">
-        </image-map-settings>
+        <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)" />
       </v-col>
     </v-row>
   </v-tab-item>

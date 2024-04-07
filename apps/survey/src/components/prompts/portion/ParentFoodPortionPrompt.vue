@@ -12,7 +12,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="!!portionSize.portionValue"></expansion-panel-actions>
+            <expansion-panel-actions :valid="!!portionSize.portionValue" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -28,25 +28,25 @@
               <template #label>
                 {{ option.label }}
                 <template v-if="prompt.badges">
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <quantity-badge
                     :amount="option.value * parentServing"
                     unit="ml"
                     :valid="portionSize.portionValue === option.value"
-                  ></quantity-badge>
+                  />
                 </template>
               </template>
             </v-radio>
           </v-radio-group>
-          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -99,17 +99,17 @@ export default defineComponent({
     category() {
       const categories = Object.keys(this.parameters.options);
       return (
-        this.parentFood.data.categories.find((category) => categories.includes(category)) ??
-        '_default'
+        this.parentFood.data.categories.find(category => categories.includes(category))
+        ?? '_default'
       );
     },
 
     localeOptions() {
       return (
-        this.parameters.options[this.category][this.$i18n.locale] ??
-        this.parameters.options[this.category].en
+        this.parameters.options[this.category][this.$i18n.locale]
+        ?? this.parameters.options[this.category].en
       )
-        .map((item) => ({ ...item, value: Number(item.value) }))
+        .map(item => ({ ...item, value: Number(item.value) }))
         .filter(({ value }) => !Number.isNaN(value));
     },
 
@@ -127,9 +127,9 @@ export default defineComponent({
   },
 
   watch: {
-    'portionSize.portionValue'(val) {
-      this.portionSize.portionIndex =
-        this.localeOptions.findIndex((option) => option.value === val) ?? null;
+    'portionSize.portionValue': function (val) {
+      this.portionSize.portionIndex
+        = this.localeOptions.findIndex(option => option.value === val) ?? null;
 
       this.updatePanel();
       this.update();

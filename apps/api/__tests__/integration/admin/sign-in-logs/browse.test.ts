@@ -4,7 +4,7 @@ export default () => {
   const url = '/api/admin/sign-in-logs';
   const permissions = ['sign-in-logs', 'sign-in-logs|browse'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

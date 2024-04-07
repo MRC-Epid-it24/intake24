@@ -4,7 +4,7 @@ export default () => {
   const url = '/api/admin/fdbs';
   const permissions = ['locales', 'locales|food-list'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url);
   });
 

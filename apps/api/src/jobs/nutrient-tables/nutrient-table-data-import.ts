@@ -55,7 +55,8 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
     this.logger.debug('Job started.');
 
     const fileExists = await fs.pathExists(this.file);
-    if (!fileExists) throw new Error(`Missing file (${this.file}).`);
+    if (!fileExists)
+      throw new Error(`Missing file (${this.file}).`);
 
     const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId, {
       attributes: ['id'],
@@ -86,7 +87,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
    * Read CSV file and validate in chunks
    *
    * @private
-   * @param {number} [chunk=500]
+   * @param {number} [chunk]
    * @returns {Promise<void>}
    * @memberof NutrientTableDataImport
    */
@@ -96,7 +97,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
         parse({
           headers: false,
           skipLines: this.mappings.mapping.rowOffset,
-        })
+        }),
       );
 
       const maxOffset = [
@@ -111,17 +112,18 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
           if (!checkColumnOffsets) {
             checkColumnOffsets = true;
 
-            if (row.length - 1 < maxOffset)
+            if (row.length - 1 < maxOffset) {
               throw new Error(
-                `Insufficient column number (${row.length}) for the highest mapping offset is ${maxOffset}`
+                `Insufficient column number (${row.length}) for the highest mapping offset is ${maxOffset}`,
               );
+            }
           }
         })
         .on('end', (records: number) => {
           this.initProgress(records);
           resolve();
         })
-        .on('error', (err) => reject(err));
+        .on('error', err => reject(err));
     });
   }
 
@@ -129,7 +131,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
    * Read CSV file and import in chunks
    *
    * @private
-   * @param {number} [chunk=10]
+   * @param {number} [chunk]
    * @returns {Promise<void>}
    * @memberof NutrientTableDataImport
    */
@@ -140,7 +142,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
           headers: false,
           trim: true,
           skipLines: this.mappings.mapping.rowOffset,
-        })
+        }),
       );
 
       stream
@@ -169,7 +171,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
               reject(err);
             });
         })
-        .on('error', (err) => reject(err));
+        .on('error', err => reject(err));
     });
   }
 
@@ -181,7 +183,8 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
    * @memberof NutrientTableDataImport
    */
   private async importChunk(): Promise<void> {
-    if (!this.content.length) return;
+    if (!this.content.length)
+      return;
 
     this.lock();
 
@@ -208,7 +211,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
       ]);
 
       if (fields.length) {
-        const fieldRecords = fields.map((field) => ({
+        const fieldRecords = fields.map(field => ({
           nutrientTableRecordId,
           name: field.fieldName,
           value: record[field.columnOffset],
@@ -219,7 +222,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
 
       if (nutrients.length) {
         const nutrientRecords = nutrients.map((nutrient) => {
-          const units = parseFloat(record[nutrient.columnOffset]);
+          const units = Number.parseFloat(record[nutrient.columnOffset]);
 
           return {
             nutrientTableRecordId,

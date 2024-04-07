@@ -26,7 +26,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('food_locals', ['food_code'], {
@@ -88,7 +88,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO food_locals (food_code, locale_id, "name", simple_name, "version") SELECT food_code, locale_id, local_description, simple_local_description, "version" FROM v3_foods_local',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -100,7 +100,7 @@ module.exports = {
         },
         {
           transaction,
-        }
+        },
       );
     });
   },

@@ -19,7 +19,7 @@ export default () => {
       permission('image-maps|create'),
       upload.single('baseImage'),
       validation.store,
-      wrapAsync(imageMapController.store)
+      wrapAsync(imageMapController.store),
     )
     .get(permission('image-maps|browse'), validation.browse, wrapAsync(imageMapController.browse));
 
@@ -34,14 +34,14 @@ export default () => {
   router.get(
     '/:imageMapId/edit',
     permission('image-maps|edit'),
-    wrapAsync(imageMapController.edit)
+    wrapAsync(imageMapController.edit),
   );
 
   router.put(
     '/:imageMapId/base-image',
     permission('image-maps|edit'),
     upload.single('baseImage'),
-    wrapAsync(imageMapController.updateImage)
+    wrapAsync(imageMapController.updateImage),
   );
 
   return router;

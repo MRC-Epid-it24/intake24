@@ -24,22 +24,22 @@ const resources = [
 ];
 
 module.exports = {
-  up: (queryInterface) =>
+  up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       for (const item of resources) {
         await queryInterface.sequelize.query(
           `UPDATE permissions SET "name" = REPLACE("name", '${item}-', '${item}|') WHERE "name" LIKE '${item}-%';`,
-          { transaction }
+          { transaction },
         );
       }
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       for (const item of resources) {
         await queryInterface.sequelize.query(
           `UPDATE permissions SET "name" = REPLACE("name", '${item}|', '${item}-') WHERE "name" LIKE '${item}|%';`,
-          { transaction }
+          { transaction },
         );
       }
     }),

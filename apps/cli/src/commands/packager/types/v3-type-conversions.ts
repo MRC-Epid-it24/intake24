@@ -65,7 +65,7 @@ function parseOption<T>(encoded: T[]): T | null {
 function parseEither<T1, T2, L, R>(
   encoded: [number, T1 | T2],
   consLeft: (val: T1) => L = identity,
-  consRight: (val: T2) => R = identity
+  consRight: (val: T2) => R = identity,
 ): L | R {
   if (encoded.length !== 2)
     throw new Error('Unexpected Either type format: array must have exactly two elements');
@@ -76,7 +76,7 @@ function parseEither<T1, T2, L, R>(
       return consRight(encoded[1] as T2);
     default:
       throw new Error(
-        'Unexpected Either type format: first element of array must be either 0 or 1'
+        'Unexpected Either type format: first element of array must be either 0 or 1',
       );
   }
 }
@@ -96,21 +96,21 @@ function getPsmParameter(name: string, parameters: PortionSizeMethodParameterV3[
 
 function getOptionalPsmParameter(
   name: string,
-  parameters: PortionSizeMethodParameterV3[]
+  parameters: PortionSizeMethodParameterV3[],
 ): string | undefined {
-  return parameters.find((param) => param.name === name)?.value;
+  return parameters.find(param => param.name === name)?.value;
 }
 
 function parseStandardUnits(parameters: PortionSizeMethodParameterV3[]): PkgStandardUnit[] {
-  const unitsCount = parseInt(getPsmParameter('units-count', parameters));
+  const unitsCount = Number.parseInt(getPsmParameter('units-count', parameters));
 
   const units: PkgStandardUnit[] = [];
 
   for (let i = 0; i < unitsCount; ++i) {
     const name = getPsmParameter(`unit${i}-name`, parameters);
-    const weight = parseFloat(getPsmParameter(`unit${i}-weight`, parameters));
-    const omitFoodDescription =
-      getPsmParameter(`unit${i}-omit-food-description`, parameters) === 'true';
+    const weight = Number.parseFloat(getPsmParameter(`unit${i}-weight`, parameters));
+    const omitFoodDescription
+      = getPsmParameter(`unit${i}-omit-food-description`, parameters) === 'true';
 
     units.push({
       name,
@@ -128,12 +128,12 @@ type AssociatedFoodPartial = {
 };
 
 function parseAssociatedFoodOrCategory(
-  foodOrCategory: [number, FoodHeaderV3 | CategoryHeaderV3]
+  foodOrCategory: [number, FoodHeaderV3 | CategoryHeaderV3],
 ): AssociatedFoodPartial {
   return parseEither(
     foodOrCategory,
-    (foodHeader) => ({ food: foodHeader.code }),
-    (categoryHeader) => ({ category: categoryHeader.code })
+    foodHeader => ({ food: foodHeader.code }),
+    categoryHeader => ({ category: categoryHeader.code }),
   );
 }
 
@@ -152,7 +152,7 @@ function packageAsServedSet(set: PortableAsServedSetV3): PkgAsServedSet {
     id: set.id,
     description: set.description,
     selectionImagePath: set.selectionSourcePath,
-    images: set.images.map((image) => ({
+    images: set.images.map(image => ({
       imagePath: image.sourcePath,
       imageKeywords: image.sourceKeywords,
       weight: image.weight,
@@ -210,7 +210,7 @@ function packageDrinkScale(portionSize: PortionSizeMethodV3): PkgDrinkScalePsm {
     conversionFactor: portionSize.conversionFactor,
     useForRecipes: portionSize.useForRecipes,
     drinkwareId: getPsmParameter('drinkware-id', portionSize.parameters),
-    initialFillLevel: parseFloat(getPsmParameter('initial-fill-level', portionSize.parameters)),
+    initialFillLevel: Number.parseFloat(getPsmParameter('initial-fill-level', portionSize.parameters)),
     skipFillLevel: getPsmParameter('skip-fill-level', portionSize.parameters) === 'true',
   };
 }
@@ -263,9 +263,8 @@ function packageMilkInHotDrink(portionSize: PortionSizeMethodV3): PkgMilkInHotDr
 }
 
 function packagePortionSize(portionSize: PortionSizeMethodV3): PkgPortionSizeMethod {
-  if (!isValidPortionSizeMethod(portionSize.method)) {
+  if (!isValidPortionSizeMethod(portionSize.method))
     throw new Error(`Unexpected portion size estimation method: ${portionSize.method}`);
-  }
 
   switch (portionSize.method) {
     case 'as-served':
@@ -307,7 +306,7 @@ function packageGlobalFood(mainFood: MainFoodRecordV3): PkgGlobalFood {
     englishDescription: mainFood.englishDescription,
     version: mainFood.version,
     groupCode: mainFood.groupCode,
-    parentCategories: mainFood.parentCategories.map((header) => header.code),
+    parentCategories: mainFood.parentCategories.map(header => header.code),
     attributes: {
       readyMealOption: parseOption(mainFood.attributes.readyMealOption) ?? undefined,
       reasonableAmount: parseOption(mainFood.attributes.reasonableAmount) ?? undefined,
@@ -319,7 +318,7 @@ function packageGlobalFood(mainFood: MainFoodRecordV3): PkgGlobalFood {
 
 function packageLocalCategory(
   code: string,
-  localCategory: LocalCategoryRecordV3
+  localCategory: LocalCategoryRecordV3,
 ): PkgLocalCategory {
   return {
     code,
@@ -336,7 +335,7 @@ function packageGlobalCategory(mainCategory: MainCategoryRecordV3): PkgGlobalCat
     englishDescription: mainCategory.englishDescription,
     version: mainCategory.version,
     isHidden: mainCategory.isHidden,
-    parentCategories: mainCategory.parentCategories.map((header) => header.code),
+    parentCategories: mainCategory.parentCategories.map(header => header.code),
     attributes: {
       readyMealOption: parseOption(mainCategory.attributes.readyMealOption) ?? undefined,
       reasonableAmount: parseOption(mainCategory.attributes.reasonableAmount) ?? undefined,
@@ -349,7 +348,7 @@ function packageGlobalCategory(mainCategory: MainCategoryRecordV3): PkgGlobalCat
 function packageDrinkwareSet(drinkwareSet: PortableDrinkwareSetV3): PkgDrinkwareSet {
   const pkgScales: Record<number, PkgDrinkScaleV1> = mapValues(
     drinkwareSet.scales,
-    (s) => ({ version: 1, ...s }) as PkgDrinkScaleV1
+    s => ({ version: 1, ...s }) as PkgDrinkScaleV1,
   );
 
   return {

@@ -13,7 +13,7 @@
               :input-value="!!item"
               :label="$t('feedback-schemes.cards.thresholds.enabled')"
               @change="toggleThreshold(key, $event)"
-            ></v-switch>
+            />
             <template v-if="item">
               <v-slider
                 v-model.number="item.threshold"
@@ -22,13 +22,13 @@
                 max="100"
                 min="0"
                 thumb-label="always"
-              ></v-slider>
+              />
               <language-selector
                 v-model="item.message"
                 :label="$t('feedback-schemes.cards.thresholds.message').toString()"
               >
                 <template v-for="lang in Object.keys(item.message)" #[`lang.${lang}`]>
-                  <html-editor :key="lang" v-model="item.message[lang]"></html-editor>
+                  <html-editor :key="lang" v-model="item.message[lang]" />
                 </template>
               </language-selector>
             </template>
@@ -74,7 +74,8 @@ export default defineComponent({
   watch: {
     thresholds(val: Pick<CustomCard, 'high' | 'low'>) {
       const { high, low } = this;
-      if (deepEqual(val, { high, low })) return;
+      if (deepEqual(val, { high, low }))
+        return;
 
       this.high = val.high === null ? null : { ...val.high };
       this.low = val.low === null ? null : { ...val.low };

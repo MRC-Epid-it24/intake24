@@ -10,41 +10,34 @@ export interface TopFoodData extends TopFoods {
   chartData: NutrientChartData[];
 }
 
-export const filterAndSortFoodByNutrientTypeId = (
-  nutrientTypeId: string[],
-  foods: AggregateFoodStats[]
-): AggregateFoodStats[] =>
-  foods
-    .map((food) => food.clone())
-    .filter((f) => f.getGroupAverageIntake(nutrientTypeId) > 0)
+export function filterAndSortFoodByNutrientTypeId(nutrientTypeId: string[], foods: AggregateFoodStats[]): AggregateFoodStats[] {
+  return foods
+    .map(food => food.clone())
+    .filter(f => f.getGroupAverageIntake(nutrientTypeId) > 0)
     .sort(
-      (a, b) => b.getGroupAverageIntake(nutrientTypeId) - a.getGroupAverageIntake(nutrientTypeId)
+      (a, b) => b.getGroupAverageIntake(nutrientTypeId) - a.getGroupAverageIntake(nutrientTypeId),
     );
+}
 
-export const summarizeOtherFood = (
-  nutrientTypeId: string[],
-  foods: AggregateFoodStats[]
-): AggregateFoodStats[] => {
-  if (!foods.length) return [];
+export function summarizeOtherFood(nutrientTypeId: string[], foods: AggregateFoodStats[]): AggregateFoodStats[] {
+  if (!foods.length)
+    return [];
 
   const nutrients = new Map<string, number>();
   nutrientTypeId.forEach((id) => {
     nutrients.set(
       id,
-      foods.map((f) => f.getAverageIntake(id)).reduce((a, b) => a + b)
+      foods.map(f => f.getAverageIntake(id)).reduce((a, b) => a + b),
     );
   });
 
   return [new AggregateFoodStats('Other food', nutrients)];
-};
+}
 
-export const buildTopFoods = (
-  topFoods: TopFoods,
-  foods: AggregateFoodStats[],
-  nutrientTypes: NutrientType[] = []
-): TopFoodData => {
+export function buildTopFoods(topFoods: TopFoods, foods: AggregateFoodStats[], nutrientTypes: NutrientType[] = []): TopFoodData {
   const { max } = topFoods;
-  if (!max || !topFoods.nutrientTypes.length) return { ...topFoods, chartData: [] };
+  if (!max || !topFoods.nutrientTypes.length)
+    return { ...topFoods, chartData: [] };
 
   const chartData = topFoods.nutrientTypes.map((nutrient) => {
     const { id } = nutrient;
@@ -57,7 +50,7 @@ export const buildTopFoods = (
 
     const list = foodHighInNutrient.slice(0, max).concat(summarizeOtherFood(id, other));
 
-    const data = list.map((food) => ({
+    const data = list.map(food => ({
       name: food.name,
       value: food.getGroupAverageIntake(id),
     }));
@@ -66,4 +59,4 @@ export const buildTopFoods = (
   });
 
   return { ...topFoods, chartData };
-};
+}

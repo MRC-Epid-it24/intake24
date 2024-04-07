@@ -72,7 +72,7 @@ export const recipeFoodResponse = z.object({
         categoryCode: z.string(),
         repeatable: z.boolean(),
         required: z.boolean(),
-      })
+      }),
     )
     .optional(),
 });

@@ -14,7 +14,7 @@
                 name="code"
                 outlined
                 prepend-inner-icon="$languages"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -28,11 +28,11 @@
                 @change="form.errors.clear('countryFlagCode')"
               >
                 <template #item="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`" />
                   {{ item.text }}
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`" />
                   {{ item.text }}
                 </template>
               </v-select>
@@ -45,7 +45,7 @@
                 :label="$t('languages.englishName')"
                 name="englishName"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -55,7 +55,7 @@
                 :label="$t('languages.localName')"
                 name="localName"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -69,11 +69,15 @@
                 @change="form.errors.clear('textDirection')"
               >
                 <template #item="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
               </v-select>
@@ -90,17 +94,21 @@
                 @change="form.errors.clear('visibility')"
               >
                 <template #item="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
               </v-select>
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -147,7 +155,7 @@ export default defineComponent({
           textDirection: 'ltr',
           visibility: 'public',
         },
-      }
+      },
     );
 
     return {

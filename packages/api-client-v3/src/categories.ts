@@ -14,10 +14,10 @@ export class CategoriesApiV3 {
 
   public async getCategoryRecord(
     localeId: string,
-    categoryCode: string
+    categoryCode: string,
   ): Promise<CategoryRecordV3 | null> {
     return this.baseClient.getOptional<CategoryRecordV3>(
-      `/admin/categories/${localeId}/${categoryCode}`
+      `/admin/categories/${localeId}/${categoryCode}`,
     );
   }
 }

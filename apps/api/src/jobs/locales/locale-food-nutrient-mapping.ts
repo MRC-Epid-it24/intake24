@@ -37,7 +37,8 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     this.init(job);
 
     const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
+    if (!dbJob)
+      throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
 
     this.dbJob = dbJob;
 
@@ -51,7 +52,8 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
   private async prepareExportInfo() {
     const { localeId } = this.params;
     const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
-    if (!locale) throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
+    if (!locale)
+      throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
 
     const { code: localeCode } = locale;
 
@@ -67,7 +69,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
       FoodLocal.count({ where: { localeId: localeCode }, include: [{ association: 'main' }] }),
     ]);
 
-    const nutrientFields = nutrients.map((nutrient) => ({
+    const nutrientFields = nutrients.map(nutrient => ({
       label: `${nutrient.description} (${nutrient.unit?.symbol ?? EMPTY})`,
       value: `nt-${nutrient.id}`,
     }));
@@ -130,7 +132,8 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
                 nutrientRecords,
               } = item;
 
-              if (!nutrientRecords?.length) return { foodCode, name, englishName, localeId };
+              if (!nutrientRecords?.length)
+                return { foodCode, name, englishName, localeId };
 
               const { nutrientTableId, nutrientTableRecordId, nutrients = [] } = nutrientRecords[0];
 
@@ -152,7 +155,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
           ],
         },
         {},
-        { objectMode: true }
+        { objectMode: true },
       );
 
       foods.on('error', (err) => {

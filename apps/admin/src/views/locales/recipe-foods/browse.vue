@@ -4,7 +4,7 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.recipe-foods.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         class="ml-3"
         color="secondary"
@@ -23,7 +23,9 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-container class="px-0">
-            <div class="text-h4 font-weight-medium mb-4">{{ item.name }}</div>
+            <div class="text-h4 font-weight-medium mb-4">
+              {{ item.name }}
+            </div>
             <v-row col="12">
               <v-col cols="12" md="6">
                 <v-text-field
@@ -32,7 +34,7 @@
                   :label="$t('locales.recipe-foods.title')"
                   name="special"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
@@ -42,7 +44,7 @@
                   name="code"
                   outlined
                   prepend-inner-icon="fa-sharp fa-regular fa-dollar-sign"
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -53,7 +55,7 @@
                   :label="$t('locales.recipe-foods.special')"
                   name="special"
                   outlined
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12" md="8">
                 <v-select
@@ -68,9 +70,8 @@
                   outlined
                   return-object
                   single-line
-                  @change="changeSynonyms({ idx: idx, item: item.synonyms?.id })"
-                >
-                </v-select>
+                  @change="changeSynonyms({ idx, item: item.synonyms?.id })"
+                />
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -83,7 +84,9 @@
                   type="button"
                   @click.stop="() => openStepsDialog(item.id, item.code, item)"
                 >
-                  <v-icon left>fas fa-arrow-down-1-9</v-icon>{{ $t('locales.recipe-foods.steps') }}
+                  <v-icon left>
+                    fas fa-arrow-down-1-9
+                  </v-icon>{{ $t('locales.recipe-foods.steps') }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -109,10 +112,9 @@
             locale: { id: parseInt(id), code: item.localeId },
             items: activeRecipeFood.steps,
           }"
-          ref="stepsDialog"
           @close="toggleDialog"
           @update-steps="updateItemSteps(idx, item.id, $event)"
-        ></steps-dialog>
+        />
       </v-list-item>
     </v-list>
   </layout>
@@ -180,10 +182,10 @@ export default defineComponent({
 
   async mounted() {
     const { data: items } = await this.$http.get<LocaleRecipeFoods[]>(
-      `admin/locales/${this.id}/recipe-foods`
+      `admin/locales/${this.id}/recipe-foods`,
     );
     const { data: synonymsSets } = await this.$http.get<LocaleSynonymSet[]>(
-      `admin/locales/${this.id}/synonym-sets`
+      `admin/locales/${this.id}/synonym-sets`,
     );
 
     this.toForm({ items, synonymsSets });
@@ -191,7 +193,8 @@ export default defineComponent({
 
   methods: {
     dollarSignAdd(value: string) {
-      if (value[0] === '$') return value;
+      if (value[0] === '$')
+        return value;
       return `$${value}`;
     },
 
@@ -202,9 +205,10 @@ export default defineComponent({
     openStepsDialog(
       recipeFoodId: string | undefined,
       recipeFoodCode: string,
-      recipeFood: LocaleRecipeFoodsInput
+      recipeFood: LocaleRecipeFoodsInput,
     ) {
-      if (!recipeFoodId) return;
+      if (!recipeFoodId)
+        return;
       this.activeRecipeFoodId = recipeFoodId;
       this.activeRecipeFoodCode = recipeFoodCode;
       this.activeRecipeFood = recipeFood;
@@ -215,7 +219,7 @@ export default defineComponent({
     changeSynonyms(changedSynonyms: ChangedSynonyms) {
       console.log(changedSynonyms);
       if (changedSynonyms.item)
-        this.form.items[changedSynonyms.idx].synonyms_id = parseInt(changedSynonyms.item);
+        this.form.items[changedSynonyms.idx].synonyms_id = Number.parseInt(changedSynonyms.item);
     },
 
     add() {
@@ -234,8 +238,9 @@ export default defineComponent({
 
     async updateItemSteps(idx: number, id: string, steps: LocaleRecipeFoodsInput['steps']) {
       this.toggleDialog();
-      const item = this.form.items.find((item) => item.id === id);
-      if (!item) return;
+      const item = this.form.items.find(item => item.id === id);
+      if (!item)
+        return;
       item.steps = steps;
       this.form.items.splice(idx, 1, item);
       useStoreEntry().setEntry({ items: this.form.items });
@@ -250,7 +255,7 @@ export default defineComponent({
         });
       const synonymsSets = this.form.synonymsSets;
       const items = await this.form.post<LocaleRecipeFoods[]>(
-        `admin/locales/${this.id}/recipe-foods`
+        `admin/locales/${this.id}/recipe-foods`,
       );
 
       useStoreEntry().setEntry({ items, synonymsSets });

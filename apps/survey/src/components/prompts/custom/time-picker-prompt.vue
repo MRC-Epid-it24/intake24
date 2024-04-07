@@ -5,21 +5,21 @@
     @action="action"
   >
     <v-card-text class="pt-2 time-picker-prompt">
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form @submit.prevent="action('next')">
         <v-time-picker
           v-model="state"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.breakpoint.smAndUp"
-        ></v-time-picker>
-        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+        />
+        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </component>
 </template>
@@ -50,20 +50,6 @@ export default defineComponent({
   setup(props, ctx) {
     const { i18n } = useI18n();
 
-    const confirm = () => {
-      if (isValid.value) return true;
-
-      errors.value = [i18n.t(`prompts.${type}.validation.required`).toString()];
-      return false;
-    };
-
-    const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
-      props,
-      ctx,
-      confirm
-    );
-
-    const isValid = computed(() => !props.prompt.validation.required || !!state.value);
     const state = computed({
       get() {
         return props.value;
@@ -73,6 +59,22 @@ export default defineComponent({
         ctx.emit('input', value);
       },
     });
+
+    const isValid = computed(() => !props.prompt.validation.required || !!state.value);
+
+    const confirm = () => {
+      if (isValid.value)
+        return true;
+
+      errors.value = [i18n.t(`prompts.${type}.validation.required`).toString()];
+      return false;
+    };
+
+    const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
+      props,
+      ctx,
+      confirm,
+    );
 
     return {
       action,

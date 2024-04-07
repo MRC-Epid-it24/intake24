@@ -3,7 +3,7 @@ import type { Survey } from '@intake24/db';
 
 import { InternalServerError } from '../../errors';
 
-export const surveyListResponse = (survey: Survey): SurveyListEntry => {
+export function surveyListResponse(survey: Survey): SurveyListEntry {
   const {
     id,
     slug,
@@ -20,9 +20,9 @@ export const surveyListResponse = (survey: Survey): SurveyListEntry => {
     throw new InternalServerError('surveyListResponse: not loaded relationships.');
 
   return { id, slug, name, localeId, surveySchemeId, state, securables, locale, surveyScheme };
-};
+}
 
-export const surveyResponse = (survey: Survey): SurveyEntry => {
+export function surveyResponse(survey: Survey): SurveyEntry {
   const { feedbackScheme, surveyScheme, locale, owner } = survey;
 
   if (!locale || !surveyScheme)
@@ -37,4 +37,4 @@ export const surveyResponse = (survey: Survey): SurveyEntry => {
     surveyScheme,
     owner: owner ? { id: owner.id, name: owner.name, email: owner.email } : undefined,
   };
-};
+}

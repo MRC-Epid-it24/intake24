@@ -31,11 +31,11 @@ export default () => {
 
     respondent = await ioc.cradle.adminSurveyService.createRespondent(
       survey.id,
-      mocker.system.respondent()
+      mocker.system.respondent(),
     );
 
     const submission = await SurveySubmission.create(
-      mocker.system.submission(survey.id, respondent.userId)
+      mocker.system.submission(survey.id, respondent.userId),
     );
 
     url = `${baseUrl}/${survey.id}/submissions/${submission.id}`;
@@ -43,7 +43,7 @@ export default () => {
     invalidSubmissionUrl = `${baseUrl}/${survey.id}/submissions/${randomUUID()}`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('delete', url, { permissions });
   });
 
@@ -74,7 +74,7 @@ export default () => {
       await suite.util.setSecurable({ ...securable, action: ['submissions'] });
 
       const { id } = await SurveySubmission.create(
-        mocker.system.submission(survey.id, respondent.userId)
+        mocker.system.submission(survey.id, respondent.userId),
       );
 
       const url2 = `${baseUrl}/${survey.id}/submissions/${id}`;
@@ -87,7 +87,7 @@ export default () => {
       await survey.update({ ownerId: suite.data.system.user.id });
 
       const { id } = await SurveySubmission.create(
-        mocker.system.submission(survey.id, respondent.userId)
+        mocker.system.submission(survey.id, respondent.userId),
       );
 
       const url3 = `${baseUrl}/${survey.id}/submissions/${id}`;

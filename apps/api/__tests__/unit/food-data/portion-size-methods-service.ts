@@ -9,7 +9,7 @@ import {
 import { initDatabases, releaseDatabases } from '../helpers/databases';
 
 export default () => {
-  describe('Portion size methods service', () => {
+  describe('portion size methods service', () => {
     let databases: DatabasesInterface;
     let service: PortionSizeMethodsService;
 
@@ -53,25 +53,25 @@ export default () => {
         const methods = await service.resolveUserPortionSizeMethods('en_AU', 'FOOD5');
         expect(methods).toMatchObject(generatedPortionSizeMethods[5]);
       });
-      it("should return portion size methods for foods that have them in the prototype locale if they don't have any in the current locale", async () => {
+      it('should return portion size methods for foods that have them in the prototype locale if they don\'t have any in the current locale', async () => {
         const methods = await service.resolveUserPortionSizeMethods('en_AU', 'FOOD1');
         expect(methods).toMatchObject(generatedPortionSizeMethods[0]);
       });
       it(
-        'should return portion size methods of direct parent category in the prototype locale ' +
-          "for foods that don't have any in the current locale or in any of current locale parent categories ",
+        'should return portion size methods of direct parent category in the prototype locale '
+        + 'for foods that don\'t have any in the current locale or in any of current locale parent categories ',
         async () => {
           const methods = await service.resolveUserPortionSizeMethods('en_AU', 'FOOD2');
           expect(methods).toMatchObject(generatedPortionSizeMethods[1]);
-        }
+        },
       );
       it(
-        'should return portion size methods of the top level category from the prototype locale' +
-          ' if neither the food nor direct parent have methods in the current locale or in the prototype locale',
+        'should return portion size methods of the top level category from the prototype locale'
+        + ' if neither the food nor direct parent have methods in the current locale or in the prototype locale',
         async () => {
           const methods = await service.resolveUserPortionSizeMethods('en_AU', 'FOOD4');
           expect(methods).toMatchObject(generatedPortionSizeMethods[4]);
-        }
+        },
       );
     });
   });

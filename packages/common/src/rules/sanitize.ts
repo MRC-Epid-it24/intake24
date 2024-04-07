@@ -8,7 +8,7 @@ export type SanitizeInputOptions = {
   allowHtml?: boolean;
 };
 
-const createSanitizer = ({ allowHtml, emptyStringToNull }: SanitizeInputOptions = {}) => {
+function createSanitizer({ allowHtml, emptyStringToNull }: SanitizeInputOptions = {}) {
   const sanitize = (input: any) => {
     let output = input;
 
@@ -21,13 +21,15 @@ const createSanitizer = ({ allowHtml, emptyStringToNull }: SanitizeInputOptions 
               ADD_TAGS: ['iframe'],
               ADD_ATTR: ['allowfullscreen', 'frameborder', 'target'],
             }
-          : { USE_PROFILES: { html: false, mathMl: false, svg: false, svgFilters: false } }
+          : { USE_PROFILES: { html: false, mathMl: false, svg: false, svgFilters: false } },
       );
       output = output.trim();
-      if (emptyStringToNull && !output.length) output = null;
+      if (emptyStringToNull && !output.length)
+        output = null;
     }
 
-    if (Array.isArray(input)) output = input.map((item) => sanitize(item));
+    if (Array.isArray(input))
+      output = input.map(item => sanitize(item));
 
     if (Object.prototype.toString.call(input) === '[object Object]') {
       output = Object.entries(input).reduce<any>((acc, [key, value]) => {
@@ -40,6 +42,6 @@ const createSanitizer = ({ allowHtml, emptyStringToNull }: SanitizeInputOptions 
   };
 
   return sanitize;
-};
+}
 
 export default createSanitizer;

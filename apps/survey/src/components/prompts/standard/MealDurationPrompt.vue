@@ -1,7 +1,7 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form @submit.prevent="action('next')">
         <v-slider
           v-model="state"
           class="quantity-slider__slider px-8"

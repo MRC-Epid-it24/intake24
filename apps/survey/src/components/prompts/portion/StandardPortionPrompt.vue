@@ -9,7 +9,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="unitValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="unitValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -37,7 +37,7 @@
             <template #unit>
               {{
                 translate(
-                  portionSize.unit.inlineHowMany ?? standardUnitRefs[portionSize.unit.name].howMany
+                  portionSize.unit.inlineHowMany ?? standardUnitRefs[portionSize.unit.name].howMany,
                 )
               }}
             </template>
@@ -45,7 +45,9 @@
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
-          <template v-else>{{ $t(`prompts.${type}.howMany.placeholder`) }}</template>
+          <template v-else>
+            {{ $t(`prompts.${type}.howMany.placeholder`) }}
+          </template>
           <template #actions>
             <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
@@ -53,7 +55,7 @@
                 :amount="portionSize.quantity"
                 unit=""
                 :valid="quantityValid"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
@@ -63,7 +65,7 @@
             :confirm.sync="quantityConfirmed"
             @input="selectQuantity"
             @update:confirm="confirmQuantity"
-          ></quantity-card>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <linked-quantity
@@ -73,13 +75,13 @@
         :confirm.sync="linkedQuantityConfirmed"
         @input="selectLinkedQuantity"
         @update:confirm="confirmLinkedQuantity"
-      ></linked-quantity>
+      />
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -153,7 +155,8 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.unitValid, this.quantityValid];
 
-      if (this.linkedParent?.categories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedParent?.categories.length)
+        conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },
@@ -161,14 +164,13 @@ export default defineComponent({
 
   async mounted() {
     const names = this.parameters.units
-      .filter((unit) => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined)
+      .filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined)
       .map(({ name }) => name);
 
-    if (names.length > 0) {
+    if (names.length > 0)
       await this.fetchStandardUnits(names);
-    } else {
+    else
       this.usingStandardTranslations = false;
-    }
 
     if (!this.portionSize.unit && this.parameters.units.length === 1) {
       this.portionSize.unit = this.parameters.units[0];
@@ -204,11 +206,11 @@ export default defineComponent({
     update() {
       const { portionSize } = this;
 
-      this.portionSize.servingWeight =
-        (portionSize.unit?.weight ?? 0) *
-        portionSize.quantity *
-        this.conversionFactor *
-        this.portionSize.linkedQuantity;
+      this.portionSize.servingWeight
+        = (portionSize.unit?.weight ?? 0)
+        * portionSize.quantity
+        * this.conversionFactor
+        * this.portionSize.linkedQuantity;
 
       const state: PromptStates['standard-portion-prompt'] = {
         portionSize: this.portionSize,

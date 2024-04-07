@@ -58,7 +58,7 @@ export default class Pusher {
   public async sendNotification(
     input: SubscriptionInput,
     payload: PushPayload,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<SendResult[]> {
     const subscriptions = await UserSubscription.findAll({ where: input });
 
@@ -69,10 +69,11 @@ export default class Pusher {
         const result = await this.$webPush.sendNotification(
           subscription.subscription,
           JSON.stringify(payload),
-          options
+          options,
         );
         results.push(result);
-      } catch (err) {
+      }
+      catch (err) {
         if (err instanceof WebPushError && err.statusCode === 410) {
           subscription.destroy().catch((dbErr) => {
             const { message, name, stack } = dbErr;
@@ -106,7 +107,7 @@ export default class Pusher {
   public webPush(
     userId: string,
     payload: PushPayload,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<SendResult[]> {
     return this.sendNotification({ type: 'web-push', userId }, payload, options);
   }

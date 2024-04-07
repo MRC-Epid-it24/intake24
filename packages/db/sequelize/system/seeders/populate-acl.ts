@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line ts/no-var-requires, ts/no-require-imports
 const { createPermissions } = require('../../utils.js');
 
 /*
@@ -182,7 +182,7 @@ const permissions = [
 ];
 
 module.exports = {
-  up: async (queryInterface) =>
+  up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query('TRUNCATE TABLE permissions RESTART IDENTITY CASCADE;', {
         transaction,
@@ -196,27 +196,27 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `INSERT INTO roles ("name", display_name, description, created_at, updated_at) VALUES('superuser', 'superuser', null, NOW(), NOW());`,
-        { transaction }
+        { transaction },
       );
       await createPermissions(
-        permissions.map((perm) => ({ name: perm.name, display_name: perm.displayName })),
-        { queryInterface, transaction }
+        permissions.map(perm => ({ name: perm.name, display_name: perm.displayName })),
+        { queryInterface, transaction },
       );
       await queryInterface.sequelize.query(
         `INSERT INTO users ("name", "email", verified_at, created_at, updated_at) VALUES('admin', 'admin', NOW(), NOW(), NOW());`,
-        { transaction }
+        { transaction },
       );
       await queryInterface.sequelize.query(
         `INSERT INTO user_passwords (user_id, password_hash, password_salt, password_hasher) VALUES(1, '$2a$10$HkO6A98uzGa978ASq391yu3hzL02z9zZxZUsXbgyhbSDcn4FJcE6u', '$2a$10$HkO6A98uzGa978ASq391yu', 'bcrypt');`,
-        { transaction }
+        { transaction },
       );
       await queryInterface.sequelize.query(
         `INSERT INTO role_user (role_id, user_id, created_at, updated_at) VALUES(1, 1, NOW(), NOW());`,
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query('TRUNCATE TABLE permissions RESTART IDENTITY CASCADE;', {
         transaction,

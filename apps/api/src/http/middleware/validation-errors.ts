@@ -32,7 +32,7 @@ function getLocalisedTypeErrorMessage(
   type: string,
   attributePath: string,
   i18nService: I18nService,
-  params: I18nParams = {}
+  params: I18nParams = {},
 ): string {
   return i18nService.translate(`validation.types.${type}`, {
     attribute: i18nService.translate(`validation.attributes.${attributePath}`),
@@ -42,7 +42,7 @@ function getLocalisedTypeErrorMessage(
 
 function createExtendedFieldValidationError(
   error: FieldValidationError,
-  i18nService: I18nService
+  i18nService: I18nService,
 ): ExtendedFieldValidationError {
   switch (error.msg) {
     case '$exists':
@@ -54,7 +54,7 @@ function createExtendedFieldValidationError(
         msg: getLocalisedTypeErrorMessage(
           `${error.msg.replace('$', '')}._`,
           error.path,
-          i18nService
+          i18nService,
         ),
       };
     default:
@@ -81,7 +81,7 @@ export function getValidationHttpStatus(error: ExtendedValidationError): number 
 
 export function createExtendedValidationError(
   error: ValidationError,
-  i18nService: I18nService
+  i18nService: I18nService,
 ): ExtendedValidationError {
   switch (error.type) {
     case 'field':
@@ -102,22 +102,19 @@ export function formatZodIssueMessage(issue: ZodIssue, i18nService: I18nService)
   }
 }
 
-export const requestValidationErrorHandler = (
-  err: RequestValidationError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export function requestValidationErrorHandler(err: RequestValidationError, req: Request, res: Response, _next: NextFunction) {
   const { i18nService } = req.scope.cradle;
   const errors: Record<string, ExtendedValidationError> = {};
 
   let firstError: ZodValidationError;
   ['pathParams', 'headers', 'query', 'body'].forEach((key) => {
     const zKey = key as keyof typeof err;
-    if (!err[zKey]) return;
+    if (!err[zKey])
+      return;
 
     const error = fromZodError(err[zKey] as ZodError);
-    if (!firstError) firstError = error;
+    if (!firstError)
+      firstError = error;
 
     error.details.forEach((issue) => {
       const path = issue.path.join('.');
@@ -137,4 +134,4 @@ export const requestValidationErrorHandler = (
     message: firstError!.message,
     errors,
   });
-};
+}

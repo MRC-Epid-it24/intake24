@@ -53,7 +53,7 @@ export const portionSizeComponentTypes = [
   ...portionSizeMethods,
   'missing-food',
   'portion-size-option',
-].map((type) => `${type}-prompt`) as PortionSizeComponentType[];
+].map(type => `${type}-prompt`) as PortionSizeComponentType[];
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 
@@ -125,16 +125,16 @@ export type TimePicker = {
 export type Prompts = {
   // Custom
   'checkbox-list-prompt': BaseCustomPrompt &
-    PromptValidationProps & {
-      component: 'checkbox-list-prompt';
-      options: LocaleOptionList;
-      other: boolean;
-    };
+  PromptValidationProps & {
+    component: 'checkbox-list-prompt';
+    options: LocaleOptionList;
+    other: boolean;
+  };
   'date-picker-prompt': BaseCustomPrompt &
-    PromptValidationProps & {
-      component: 'date-picker-prompt';
-      futureDates: boolean;
-    };
+  PromptValidationProps & {
+    component: 'date-picker-prompt';
+    futureDates: boolean;
+  };
   'info-prompt': BaseCustomPrompt & { component: 'info-prompt' };
   'multi-prompt': BaseCustomPrompt & {
     component: 'multi-prompt';
@@ -144,28 +144,28 @@ export type Prompts = {
     component: 'no-more-information-prompt';
   };
   'radio-list-prompt': BaseCustomPrompt &
-    PromptValidationProps & {
-      component: 'radio-list-prompt';
-      options: LocaleOptionList;
-      orientation: RadioOrientation;
-      other: boolean;
-    };
+  PromptValidationProps & {
+    component: 'radio-list-prompt';
+    options: LocaleOptionList;
+    orientation: RadioOrientation;
+    other: boolean;
+  };
   'select-prompt': BaseCustomPrompt &
-    PromptValidationProps & {
-      component: 'select-prompt';
-      options: LocaleOptionList;
-      multiple: boolean;
-    };
+  PromptValidationProps & {
+    component: 'select-prompt';
+    options: LocaleOptionList;
+    multiple: boolean;
+  };
   'slider-prompt': BaseCustomPrompt & {
     component: 'slider-prompt';
     slider: Slider;
   };
   'textarea-prompt': BaseCustomPrompt & PromptValidationProps & { component: 'textarea-prompt' };
   'time-picker-prompt': BaseCustomPrompt &
-    PromptValidationProps &
-    TimePicker & {
-      component: 'time-picker-prompt';
-    };
+  PromptValidationProps &
+  TimePicker & {
+    component: 'time-picker-prompt';
+  };
   'yes-no-prompt': BaseCustomPrompt & { component: 'yes-no-prompt' };
   // Portion size
   'as-served-prompt': BasePortionPrompt & {
@@ -214,18 +214,18 @@ export type Prompts = {
   };
   'portion-size-option-prompt': BasePortionPrompt & { component: 'portion-size-option-prompt' };
   'recipe-builder-prompt': BasePortionPrompt &
-    FoodBrowser & {
-      component: 'recipe-builder-prompt';
-    };
+  FoodBrowser & {
+    component: 'recipe-builder-prompt';
+  };
   'standard-portion-prompt': BasePortionPrompt & {
     component: 'standard-portion-prompt';
   };
   // Standard
   'associated-foods-prompt': BaseStandardPrompt &
-    FoodBrowser & {
-      component: 'associated-foods-prompt';
-      multiple: boolean;
-    };
+  FoodBrowser & {
+    component: 'associated-foods-prompt';
+    multiple: boolean;
+  };
   'edit-meal-prompt': BaseStandardPrompt & {
     component: 'edit-meal-prompt';
     separateDrinks: boolean;
@@ -235,11 +235,11 @@ export type Prompts = {
     rating: boolean;
   };
   'food-search-prompt': BaseStandardPrompt &
-    FoodBrowser & {
-      component: 'food-search-prompt';
-      allowBrowsing: boolean;
-      dualLanguage: boolean;
-    };
+  FoodBrowser & {
+    component: 'food-search-prompt';
+    allowBrowsing: boolean;
+    dualLanguage: boolean;
+  };
   'meal-add-prompt': BaseStandardPrompt & {
     component: 'meal-add-prompt';
     custom: boolean;
@@ -255,9 +255,9 @@ export type Prompts = {
     endTime: string;
   };
   'meal-time-prompt': BaseStandardPrompt &
-    TimePicker & {
-      component: 'meal-time-prompt';
-    };
+  TimePicker & {
+    component: 'meal-time-prompt';
+  };
   'ready-meal-prompt': BaseStandardPrompt & { component: 'ready-meal-prompt' };
   'redirect-prompt': BaseStandardPrompt & {
     component: 'redirect-prompt';

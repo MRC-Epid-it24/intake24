@@ -3,14 +3,18 @@
     <template #activator="{ attrs, on }">
       <v-list-item key="authUrls" v-bind="attrs" link v-on="on">
         <v-list-item-title>
-          <v-icon left>$download</v-icon>
+          <v-icon left>
+            $download
+          </v-icon>
           {{ $t('surveys.respondents.authUrls._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-icon dark left>$download</v-icon>
+        <v-icon dark left>
+          $download
+        </v-icon>
         <v-toolbar-title>
           {{ $t(`surveys.respondents.authUrls.title`) }}
         </v-toolbar-title>
@@ -20,16 +24,18 @@
           <v-row justify="center">
             <v-col cols="12" md="6" sm="8">
               <v-btn block color="primary" :disabled="jobInProgress" x-large @click="submit">
-                <v-icon left>$download</v-icon>
+                <v-icon left>
+                  $download
+                </v-icon>
                 {{ $t('surveys.respondents.authUrls.submit') }}
               </v-btn>
             </v-col>
           </v-row>
-          <polls-job-list v-bind="{ jobs }"></polls-job-list>
+          <polls-job-list v-bind="{ jobs }" />
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn class="font-weight-bold" color="info" text @click.stop="close">
           {{ $t('common.action.close') }}
         </v-btn>
@@ -70,10 +76,11 @@ export default defineComponent({
     },
 
     async submit() {
-      if (this.jobInProgress) return;
+      if (this.jobInProgress)
+        return;
 
       const { data } = await this.$http.post(
-        `admin/surveys/${this.surveyId}/respondents/export-auth-urls`
+        `admin/surveys/${this.surveyId}/respondents/export-auth-urls`,
       );
 
       this.jobs.unshift(data);

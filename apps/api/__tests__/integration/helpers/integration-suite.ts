@@ -1,5 +1,5 @@
 import type { Express } from 'express';
-import type { Server } from 'http';
+import type { Server } from 'node:http';
 import fs from 'fs-extra';
 
 import type { KyselyDatabases } from '@intake24/db';
@@ -111,7 +111,7 @@ class IntegrationSuite {
     application will bind to an IPv4 socket thus avoiding the potential IPv6/IPv4 mismatch.
     */
 
-    if (process.env['INTAKE24_TEST_SET_HOST']) {
+    if (process.env.INTAKE24_TEST_SET_HOST) {
       let listenResolve: (() => void) | undefined;
       const listenPromise = new Promise<void>((resolve) => {
         listenResolve = resolve;
@@ -166,7 +166,7 @@ class IntegrationSuite {
 
     const { downloads, uploads, images } = this.config.filesystem.local;
     await Promise.all(
-      [downloads, uploads, images].map((folder) => fs.rm(folder, { recursive: true, force: true }))
+      [downloads, uploads, images].map(folder => fs.rm(folder, { recursive: true, force: true })),
     );
   }
 }

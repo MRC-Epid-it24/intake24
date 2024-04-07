@@ -11,19 +11,19 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_surveys RENAME CONSTRAINT surveys_id_characters TO v3_surveys_id_characters;`,
-        { transaction }
+        { transaction },
       );
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_surveys RENAME CONSTRAINT surveys_id_pk TO v3_surveys_id_pk;`,
-        { transaction }
+        { transaction },
       );
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_surveys RENAME CONSTRAINT surveys_maximum_daily_submissions_at_least_one TO v3_surveys_maximum_daily_submissions_at_least_one;`,
-        { transaction }
+        { transaction },
       );
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_surveys RENAME CONSTRAINT surveys_name_key TO v3_surveys_name_key;`,
-        { transaction }
+        { transaction },
       );
       await queryInterface.removeIndex('v3_surveys', 'surveys_survey_scheme_id_idx', {
         transaction,
@@ -172,7 +172,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addIndex('surveys', ['slug'], {
@@ -265,22 +265,22 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO surveys (slug, name, state, start_date, end_date, locale_id, survey_scheme_id, feedback_scheme_id, allow_gen_users, gen_user_key, support_email, suspension_reason, survey_monkey_url, originating_url, submission_notification_url, store_user_session_on_server, number_of_submissions_for_feedback, maximum_daily_submissions, minimum_submission_interval, maximum_total_submissions, auth_url_domain_override, auth_url_token_charset, auth_url_token_length, survey_scheme_overrides, search_sorting_algorithm, search_match_score_weight, created_at, updated_at) SELECT id, "name", state, start_date, end_date, locale_id, survey_scheme_id, feedback_scheme_id, allow_gen_users, gen_user_key, support_email, suspension_reason, survey_monkey_url, originating_url, submission_notification_url, store_user_session_on_server, number_of_submissions_for_feedback, maximum_daily_submissions, minimum_submission_interval, maximum_total_submissions, auth_url_domain_override, auth_url_token_charset, auth_url_token_length, overrides, search_sorting_algorithm, search_match_score_weight, current_timestamp, current_timestamp FROM v3_surveys',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE surveys SET state = 'notStarted' WHERE state = '0';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE surveys SET state = 'active' WHERE state = '1';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE surveys SET state = 'suspended' WHERE state = '2';`,
-        { transaction }
+        { transaction },
       );
 
       await createPermissions(permissions, { queryInterface, transaction });
@@ -292,7 +292,7 @@ module.exports = {
           JOIN permission_user pu on p.id = pu.permission_id
           CROSS JOIN (select id from permissions p2 WHERE p2."name" = 'surveys') as pp
           WHERE (p."name" like '%/staff' or p."name" like '%/support')`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -311,7 +311,7 @@ module.exports = {
             AS a (old_action, new_action, fields)
             on split_part(p."name", '/', 2) = a.old_action
           WHERE (p."name" like '%/staff' or p."name" like '%/support');`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -320,7 +320,7 @@ module.exports = {
           type: queryInterface.sequelize.QueryTypes.DELETE,
           replacements: { permissions: permissionToDelete },
           transaction,
-        }
+        },
       );
 
       await queryInterface.sequelize.query(`DELETE FROM permissions WHERE "name" LIKE '%/staff';`, {
@@ -329,7 +329,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `DELETE FROM permissions WHERE "name" LIKE '%/support';`,
-        { transaction }
+        { transaction },
       );
 
       // client_error_reports
@@ -339,12 +339,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v4dep_client_error_reports RENAME CONSTRAINT client_error_reports_pkey TO v4dep_client_error_reports_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE client_error_reports_id_seq RENAME TO v4dep_client_error_reports_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -385,7 +385,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('client_error_reports', {
@@ -428,7 +428,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `INSERT INTO client_error_reports (id, user_id, survey_id, stack_trace, survey_state_json, "new", created_at, updated_at) SELECT v4depcer.id, CAST(v4depcer.user_id as BIGINT), s.id, v4depcer.stack_trace, v4depcer.survey_state_json, v4depcer."new", v4depcer.reported_at, v4depcer.reported_at FROM v4dep_client_error_reports v4depcer LEFT JOIN surveys s ON v4depcer.survey_id = s.slug`,
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('client_error_reports', 'id', { queryInterface, transaction });
@@ -440,7 +440,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_gen_user_counters RENAME CONSTRAINT gen_user_counters_pkey TO v3_gen_user_counters_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -464,12 +464,12 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO gen_user_counters (survey_id, count, created_at, updated_at) SELECT s.id, v3guc.count, current_timestamp, current_timestamp FROM v3_gen_user_counters v3guc JOIN surveys s ON v3guc.survey_id = s.slug',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('gen_user_counters', {
@@ -490,12 +490,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v4dep_missing_foods RENAME CONSTRAINT missing_foods_pkey TO v4dep_missing_foods_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE missing_foods_id_seq RENAME TO v4dep_missing_foods_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex('v4dep_survey_submissions', 'missing_foods_survey_id_idx', {
@@ -548,7 +548,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('missing_foods', {
@@ -591,7 +591,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO missing_foods (id, survey_id, user_id, "name", brand, description, portion_size, leftovers, submitted_at) SELECT v4depmf.id, s.id, v4depmf.user_id, v4depmf."name", v4depmf.brand, v4depmf.description, v4depmf.portion_size, v4depmf.leftovers, v4depmf.submitted_at FROM v4dep_missing_foods v4depmf JOIN surveys s ON v4depmf.survey_id = s.slug',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('missing_foods', 'id', { queryInterface, transaction });
@@ -603,19 +603,19 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v4dep_survey_submissions RENAME CONSTRAINT survey_submissions_pkey TO v4dep_survey_submissions_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'v4dep_survey_submissions',
         'survey_submissions_survey_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'v4dep_survey_submissions',
         'survey_submissions_user_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -663,12 +663,12 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO survey_submissions (id, survey_id, user_id, start_time, end_time, submission_time, log, ux_session_id, created_at, updated_at) SELECT v4depss.id, s.id, v4depss.user_id, v4depss.start_time, v4depss.end_time, v4depss.submission_time, v4depss.log, v4depss.ux_session_id, current_timestamp, current_timestamp FROM v4dep_survey_submissions v4depss JOIN surveys s ON v4depss.survey_id = s.slug',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submissions', {
@@ -712,7 +712,7 @@ module.exports = {
       await queryInterface.removeConstraint(
         'survey_submission_custom_fields',
         'survey_submission_custom_fields_survey_submission_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_custom_fields', {
@@ -731,7 +731,7 @@ module.exports = {
       await queryInterface.removeConstraint(
         'survey_submission_meals',
         'survey_submission_meals_survey_submission_id_fk',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('survey_submission_meals', {
@@ -751,12 +751,12 @@ module.exports = {
       await queryInterface.renameTable(
         'surveys_ux_events_settings',
         'v3_surveys_ux_events_settings',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_surveys_ux_events_settings RENAME CONSTRAINT surveys_ux_events_settings_pkey TO v3_surveys_ux_events_settings_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -784,12 +784,12 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO surveys_ux_events_settings (survey_id, enable_search_events, enable_associated_foods_events, created_at, updated_at) SELECT s.id, v3sues.enable_search_events, v3sues.enable_associated_foods_events, current_timestamp, current_timestamp FROM v3_surveys_ux_events_settings v3sues JOIN surveys s ON v3sues.survey_id = s.slug',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('surveys_ux_events_settings', {
@@ -809,29 +809,29 @@ module.exports = {
       await queryInterface.renameTable(
         'user_notification_schedule',
         'v4dep_user_notification_schedule',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v4dep_user_notification_schedule RENAME CONSTRAINT user_notification_schedule_pkey TO v4dep_user_notification_schedule_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE user_notification_schedule_id_seq RENAME TO v4dep_user_notification_schedule_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'v4dep_user_notification_schedule',
         'user_notification_schedule_survey_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex(
         'v4dep_user_notification_schedule',
         'user_notification_schedule_user_id_idx',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -859,7 +859,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_notification_schedule', {
@@ -902,7 +902,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `INSERT INTO user_notification_schedule (id, user_id, survey_id, datetime, notification_type) SELECT v4depuns.id, v4depuns.user_id, s.id, v4depuns.datetime, v4depuns.notification_type FROM v4dep_user_notification_schedule v4depuns LEFT JOIN surveys s ON v4depuns.survey_id = s.slug`,
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('user_notification_schedule', 'id', { queryInterface, transaction });
@@ -914,7 +914,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v4dep_user_sessions RENAME CONSTRAINT user_sessions_pkey TO v4dep_user_sessions_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -943,12 +943,12 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO user_survey_sessions (user_id, survey_id, session_data, created_at, updated_at) SELECT v4depus.user_id, s.id, v4depus.session_data, v4depus.created_at, v4depus.updated_at FROM v4dep_user_sessions v4depus JOIN surveys s ON v4depus.survey_id = s.slug',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_survey_sessions', {
@@ -984,7 +984,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_user_survey_aliases RENAME CONSTRAINT user_aliases_pkey TO v3_user_aliases_pkey;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -1022,12 +1022,12 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO user_survey_aliases (user_id, survey_id, username, url_auth_token, created_at, updated_at) SELECT v3usa.user_id, s.id, v3usa.user_name, v3usa.url_auth_token, current_timestamp, current_timestamp FROM v3_user_survey_aliases v3usa JOIN surveys s ON v3usa.survey_id = s.slug',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('user_survey_aliases', {

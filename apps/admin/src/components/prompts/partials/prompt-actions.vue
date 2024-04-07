@@ -6,7 +6,7 @@
         hide-details="auto"
         :label="$t('survey-schemes.actions.enable')"
         @change="changeToggle"
-      ></v-switch>
+      />
     </v-col>
     <template v-if="currentActions">
       <v-col cols="12">
@@ -14,22 +14,28 @@
           v-model="currentActions.both"
           hide-details="auto"
           :label="$t('survey-schemes.actions.both')"
-        ></v-switch>
+        />
       </v-col>
       <v-card-subtitle>
         {{ $t(`survey-schemes.actions.title`) }}
       </v-card-subtitle>
       <v-tabs vertical>
         <v-btn class="mb-4" color="primary" @click="add">
-          <v-icon left>$add</v-icon>
+          <v-icon left>
+            $add
+          </v-icon>
           {{ $t(`survey-schemes.actions.add`) }}
         </v-btn>
         <draggable v-model="currentActions.items" handle=".drag-and-drop__handle" @end="update">
           <transition-group name="drag-and-drop" type="transition">
             <v-tab v-for="(item, idx) in currentActions.items" :key="item.id" class="d-flex ga-3">
-              <v-icon class="drag-and-drop__handle flex-grow-0">$handle</v-icon>
+              <v-icon class="drag-and-drop__handle flex-grow-0">
+                $handle
+              </v-icon>
               <div class="flex-grow-1">
-                <v-icon left>fas fa-location-arrow</v-icon>
+                <v-icon left>
+                  fas fa-location-arrow
+                </v-icon>
                 {{ $t(`survey-schemes.actions.types.${item.type}`) }}({{ idx + 1 }})
               </div>
             </v-tab>
@@ -38,7 +44,9 @@
         <v-tab-item v-for="(action, idx) in currentActions.items" :key="action.id">
           <v-card class="mx-4" outlined>
             <v-card-title>
-              <v-icon left>fas fa-location-arrow</v-icon>
+              <v-icon left>
+                fas fa-location-arrow
+              </v-icon>
               {{ $t(`survey-schemes.actions.types._`) }} #{{ idx + 1 }}
             </v-card-title>
             <v-container>
@@ -50,7 +58,7 @@
                     :items="actionList"
                     :label="$t('survey-schemes.actions.types._')"
                     outlined
-                  ></v-select>
+                  />
                   <div class="d-flex flex-row align-center">
                     <div class="mr-4">
                       {{ $t('survey-schemes.actions.layouts._') }}
@@ -62,7 +70,7 @@
                       class="mr-2"
                       :input-value="layout.value"
                       :label="layout.text"
-                    ></v-checkbox>
+                    />
                   </div>
                   <v-select
                     v-model="action.variant"
@@ -71,7 +79,7 @@
                     :items="actionVariantsList"
                     :label="$t('survey-schemes.actions.variants._')"
                     outlined
-                  ></v-select>
+                  />
                   <v-select
                     v-model="action.color"
                     class="mb-4"
@@ -84,14 +92,14 @@
                       <span
                         class="mr-2 pa-4 rounded-circle"
                         :style="{ backgroundColor: item.color }"
-                      ></span>
+                      />
                       {{ item.text }}
                     </template>
                     <template #selection="{ item }">
                       <span
                         class="mr-2 pa-4 rounded-circle"
                         :style="{ backgroundColor: item.color }"
-                      ></span>
+                      />
                       {{ item.text }}
                     </template>
                   </v-select>
@@ -100,7 +108,7 @@
                     hide-details="auto"
                     :label="$t('survey-schemes.actions.icon')"
                     outlined
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12" md="6">
                   <language-selector
@@ -116,7 +124,7 @@
                         :label="$t('survey-schemes.actions.text')"
                         outlined
                         :rules="[]"
-                      ></v-text-field>
+                      />
                     </template>
                   </language-selector>
                   <language-selector
@@ -131,7 +139,7 @@
                         :label="$t('survey-schemes.actions.label')"
                         outlined
                         :rules="[]"
-                      ></v-text-field>
+                      />
                     </template>
                   </language-selector>
                 </v-col>
@@ -141,7 +149,9 @@
                   <json-editor-dialog v-model="action.params">
                     <template #activator="{ attrs, on }">
                       <v-btn v-bind="attrs" large outlined text v-on="on">
-                        <v-icon left>fas fa-code</v-icon>
+                        <v-icon left>
+                          fas fa-code
+                        </v-icon>
                         {{ $t('survey-schemes.actions.parameters') }}
                       </v-btn>
                     </template>
@@ -150,9 +160,11 @@
               </v-row>
             </v-container>
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
-                <v-icon left>$delete</v-icon>{{ $t('survey-schemes.actions.remove') }}
+                <v-icon left>
+                  $delete
+                </v-icon>{{ $t('survey-schemes.actions.remove') }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -189,7 +201,7 @@ export const defaultAction: ActionItem = {
 export default defineComponent({
   name: 'PromptActions',
 
-  components: { draggable, JsonEditorDialog, LanguageSelector },
+  components: { Draggable: draggable, JsonEditorDialog, LanguageSelector },
 
   props: {
     actions: {
@@ -222,7 +234,8 @@ export default defineComponent({
   computed: {
     outputActions(): Actions | undefined {
       const { currentActions } = this;
-      if (!currentActions) return undefined;
+      if (!currentActions)
+        return undefined;
 
       return {
         ...currentActions,
@@ -233,7 +246,8 @@ export default defineComponent({
 
   watch: {
     actions(val) {
-      if (deepEqual(val, this.outputActions)) return;
+      if (deepEqual(val, this.outputActions))
+        return;
 
       this.currentActions = val ? { ...val, items: withIdList(val.items) } : undefined;
       this.toggle = !!val;

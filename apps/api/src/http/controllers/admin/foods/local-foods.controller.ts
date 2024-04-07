@@ -4,10 +4,10 @@ import { HttpStatusCode } from 'axios';
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError } from '@intake24/api/http/errors';
 
-const localFoodsController = ({
+function localFoodsController({
   localFoodsService,
   cache,
-}: Pick<IoC, 'localFoodsService' | 'cache'>) => {
+}: Pick<IoC, 'localFoodsService' | 'cache'>) {
   const store = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
@@ -17,11 +17,12 @@ const localFoodsController = ({
 
     const _return = req.query.return;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
 
     const created = await localFoodsService.create(localeId, req.body, {
-      update: update ? true : false,
-      return: _return ? true : false,
+      update: !!update,
+      return: !!_return,
     });
 
     res.status(created ? HttpStatusCode.Created : HttpStatusCode.Ok);
@@ -30,7 +31,8 @@ const localFoodsController = ({
       await cache.push('indexing-locales', localeId);
       const instance = await localFoodsService.read(localeId, req.body.code);
       res.json(instance);
-    } else {
+    }
+    else {
       res.end();
     }
   };
@@ -40,7 +42,8 @@ const localFoodsController = ({
 
     const { localeId, foodId } = req.params;
 
-    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|read')))
+      throw new ForbiddenError();
 
     const instance = await localFoodsService.read(localeId, foodId);
 
@@ -51,7 +54,8 @@ const localFoodsController = ({
   const updateEnabledFoods = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit')))
+      throw new ForbiddenError();
     await localFoodsService.updateEnabledFoods(req.params.localeId, req.body.enabledFoods);
     await cache.push('indexing-locales', req.params.localeId);
     res.status(HttpStatusCode.Ok);
@@ -63,7 +67,7 @@ const localFoodsController = ({
     store,
     updateEnabledFoods,
   };
-};
+}
 
 export default localFoodsController;
 

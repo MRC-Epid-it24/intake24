@@ -11,20 +11,24 @@
           <v-alert class="flex-md-grow-1 mr-1" color="grey lighten-4" dense icon="$food">
             {{ step.foods[foodIndex].name }}
             <template #prepend>
-              <v-icon left>$food</v-icon>
+              <v-icon left>
+                $food
+              </v-icon>
             </template>
             <template #append>
               <v-btn
                 class="btn-truncate"
                 color="primary lighten-1"
                 depressed
-                :title="'Change/Delete'"
+                title="Change/Delete"
                 @click="remove(index, foodIndex)"
               >
-                <v-icon left>$delete</v-icon>
+                <v-icon left>
+                  $delete
+                </v-icon>
                 {{ $t(`prompts.${type}.remove`).toString() }}
               </v-btn>
-              <slot> </slot>
+              <slot />
             </template>
           </v-alert>
         </v-row>

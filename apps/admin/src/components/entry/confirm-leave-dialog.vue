@@ -56,7 +56,8 @@ export default defineComponent({
 
   methods: {
     handleLeave(value: boolean) {
-      if (value) return;
+      if (value)
+        return;
 
       this.cancelLeave();
     },
@@ -68,7 +69,8 @@ export default defineComponent({
     async confirmLeave() {
       const { dialog, to } = this.value;
 
-      if (!to) return;
+      if (!to)
+        return;
 
       this.$emit('input', { dialog, to, confirmed: true });
       // TODO: vue-router RawLocation and Route types are incompatible (RawLocation:name cannot be null)

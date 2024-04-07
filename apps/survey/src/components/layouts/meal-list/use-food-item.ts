@@ -20,7 +20,7 @@ export type UseFoodItemProps = {
   meal: MealState;
 };
 
-export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => {
+export function useFoodItem(props: UseFoodItemProps, { emit }: SetupContext) {
   const { i18n } = useI18n();
   const { foodName } = useFoodUtils(props);
 
@@ -47,7 +47,7 @@ export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => 
           icon: '$delete',
         },
       ] satisfies MenuItem[]
-    ).filter((item) => !item.if || item.if(props.food))
+    ).filter(item => !item.if || item.if(props.food)),
   );
 
   const action = (type: FoodActionType | MealActionType, id?: string) => {
@@ -55,4 +55,4 @@ export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => 
   };
 
   return { action, foodName, isPortionSizeComplete, menu };
-};
+}

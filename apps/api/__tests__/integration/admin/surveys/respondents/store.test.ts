@@ -7,11 +7,7 @@ import type { CreateRespondentRequest } from '@intake24/common/types/http/admin'
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-const assertRespondentResponse = async (
-  url: string,
-  input: CreateRespondentRequest,
-  output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>
-) => {
+async function assertRespondentResponse(url: string, input: CreateRespondentRequest, output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>) {
   const { status, body } = await request(suite.app)
     .post(url)
     .set('Accept', 'application/json')
@@ -35,7 +31,7 @@ const assertRespondentResponse = async (
     }));
     expect(fields).toIncludeSameMembers(outputCustomFields);
   }
-};
+}
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
@@ -74,7 +70,7 @@ export default () => {
     };
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('post', url, { input, permissions });
   });
 
@@ -110,7 +106,7 @@ export default () => {
             phone: [new Date()],
             customFields: 'not-a-custom-field',
           },
-        }
+        },
       );
     });
 

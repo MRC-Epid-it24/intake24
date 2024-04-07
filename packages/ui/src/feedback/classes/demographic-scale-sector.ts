@@ -15,7 +15,7 @@ export default class DemographicScaleSector {
     summary: LocaleTranslation,
     description: LocaleTranslation,
     range: DemographicRange,
-    sentiment: Sentiment
+    sentiment: Sentiment,
   ) {
     this.name = name;
     this.summary = summary;
@@ -30,7 +30,7 @@ export default class DemographicScaleSector {
       sector.summary,
       sector.description,
       DemographicRange.fromJson(sector.range.start, sector.range.end) as DemographicRange,
-      sector.sentiment
+      sector.sentiment,
     );
   }
 
@@ -40,7 +40,7 @@ export default class DemographicScaleSector {
       this.summary,
       this.description,
       this.range,
-      this.sentiment
+      this.sentiment,
     );
   }
 }

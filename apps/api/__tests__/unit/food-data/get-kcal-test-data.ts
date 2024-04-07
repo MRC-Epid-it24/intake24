@@ -47,7 +47,7 @@ export default async (foodDatabase: SequelizeTS) => {
           include: [{ association: 'nutrients' }],
         },
       ],
-    }
+    },
   );
 
   const { id: foodGroupId } = await FoodGroup.create({ name: 'Test food group' });
@@ -59,7 +59,7 @@ export default async (foodDatabase: SequelizeTS) => {
     version: '00000000-0000-0000-0000-000000000000',
   });
 
-  await foodDatabase.transaction((t) =>
+  await foodDatabase.transaction(t =>
     FoodLocal.create(
       {
         foodCode: 'FOOD1',
@@ -76,7 +76,7 @@ export default async (foodDatabase: SequelizeTS) => {
       {
         transaction: t,
         include: [FoodNutrient],
-      }
-    )
+      },
+    ),
   );
 };

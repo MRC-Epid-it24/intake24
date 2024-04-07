@@ -7,8 +7,7 @@
           :input-value="badges"
           :label="$t('survey-schemes.prompts.badges')"
           @change="update('badges', $event)"
-        >
-        </v-switch>
+        />
       </v-col>
       <v-col cols="12" md="6">
         <v-select
@@ -18,7 +17,7 @@
           outlined
           :value="orientation"
           @change="update('orientation', $event)"
-        ></v-select>
+        />
       </v-col>
     </v-row>
   </v-tab-item>

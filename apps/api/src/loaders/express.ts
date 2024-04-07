@@ -23,7 +23,8 @@ export default (express: Express, { config }: Ops) => {
 
   const isDev = app.env === 'development';
 
-  if (!app.secret) throw new Error('Application secret not set.');
+  if (!app.secret)
+    throw new Error('Application secret not set.');
 
   // Body parser
   express.use(json());
@@ -46,7 +47,7 @@ export default (express: Express, { config }: Ops) => {
       saveUninitialized: true,
       secret: app.secret,
       resave: false,
-    })
+    }),
   );
 
   // Templates

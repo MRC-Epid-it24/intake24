@@ -1,9 +1,11 @@
 const camelCase = require('lodash/camelCase');
 
 function parseValue(oldValue) {
-  if (['false', 'true'].includes(oldValue)) return oldValue === 'true';
+  if (['false', 'true'].includes(oldValue))
+    return oldValue === 'true';
 
-  if (!Number.isNaN(Number.parseFloat(oldValue))) return Number.parseFloat(oldValue);
+  if (!Number.isNaN(Number.parseFloat(oldValue)))
+    return Number.parseFloat(oldValue);
 
   return oldValue;
 }
@@ -16,13 +18,13 @@ module.exports = {
         'category_portion_size_methods',
         'parameters',
         { type: Sequelize.TEXT({ length: 'long' }), allowNull: false, defaultValue: '{}' },
-        { transaction }
+        { transaction },
       );
       await queryInterface.addColumn(
         'food_portion_size_methods',
         'parameters',
         { type: Sequelize.TEXT({ length: 'long' }), allowNull: false, defaultValue: '{}' },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -33,7 +35,7 @@ module.exports = {
           GROUP BY portion_size_method_id
         ) AS cpsmp
         WHERE category_portion_size_methods.id = cpsmp.portion_size_method_id;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
@@ -44,13 +46,13 @@ module.exports = {
           GROUP BY portion_size_method_id
         ) AS fpsmp
         WHERE food_portion_size_methods.id = fpsmp.portion_size_method_id;`,
-        { transaction }
+        { transaction },
       );
 
       for (const table of ['category_portion_size_methods', 'food_portion_size_methods']) {
         const records = await queryInterface.sequelize.query(
           `SELECT id, method, parameters FROM ${table};`,
-          { type: queryInterface.sequelize.QueryTypes.SELECT, transaction }
+          { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
         );
 
         for (const record of records) {
@@ -59,7 +61,7 @@ module.exports = {
 
           const newParameters = method === 'standard-portion' ? { units: [] } : {};
 
-          const suCount = Object.keys(parameters).filter((item) => item.endsWith('-name')).length;
+          const suCount = Object.keys(parameters).filter(item => item.endsWith('-name')).length;
           if (method === 'standard-portion' && suCount) {
             for (let i = 0; i < suCount; ++i) {
               newParameters.units.push({
@@ -73,7 +75,8 @@ module.exports = {
           }
 
           Object.entries(parameters).forEach(([oldKey, oldValue]) => {
-            if (oldKey.startsWith('unit')) return;
+            if (oldKey.startsWith('unit'))
+              return;
 
             const key = camelCase(oldKey);
             const value = oldKey === 'options' ? JSON.parse(oldValue) : parseValue(oldValue);
@@ -87,7 +90,7 @@ module.exports = {
               type: queryInterface.sequelize.QueryTypes.UPDATE,
               replacements: { id, parameters: JSON.stringify(newParameters) },
               transaction,
-            }
+            },
           );
         }
       }

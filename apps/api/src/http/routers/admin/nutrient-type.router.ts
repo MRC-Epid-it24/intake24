@@ -15,42 +15,38 @@ import {
   SystemNutrientUnit,
 } from '@intake24/db';
 
-const toNutrientTypeResponse = (nutrientType: FoodsNutrientType): NutrientTypeResponse => {
+function toNutrientTypeResponse(nutrientType: FoodsNutrientType): NutrientTypeResponse {
   const { id, description, unitId, unit, inKcal } = nutrientType;
   return { id, description, unitId, unit, kcalPerUnit: inKcal?.kcalPerUnit };
-};
+}
 
-const uniqueMiddleware = async <T extends AppRoute | AppRouter>(
-  value: string,
-  req: TsRestRequest<T>
-) => {
+async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: string, req: TsRestRequest<T>) {
   const [foodsNutrientType, systemNutrientType] = await Promise.all([
     unique({ model: FoodsNutrientType, condition: { field: 'id', value, ci: false } }),
     unique({ model: SystemNutrientType, condition: { field: 'id', value, ci: false } }),
   ]);
 
-  if (!foodsNutrientType || !systemNutrientType)
+  if (!foodsNutrientType || !systemNutrientType) {
     throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
       path: 'id',
     });
-};
+  }
+}
 
-const unitIdMiddleware = async <T extends AppRoute | AppRouter>(
-  unitId: string,
-  req: TsRestRequest<T>
-) => {
+async function unitIdMiddleware<T extends AppRoute | AppRouter>(unitId: string, req: TsRestRequest<T>) {
   const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
     FoodsNutrientUnit.findByPk(unitId, { attributes: ['id'] }),
     SystemNutrientUnit.findByPk(unitId, { attributes: ['id'] }),
   ]);
 
-  if (!foodsNutrientUnit || !systemNutrientUnit)
+  if (!foodsNutrientUnit || !systemNutrientUnit) {
     throw new ValidationError(customTypeValidationMessage('exists._', { req, path: 'unitId' }), {
       path: 'unitId',
     });
-};
+  }
+}
 
-export const nutrientType = () => {
+export function nutrientType() {
   return initServer().router(contract.admin.nutrientType, {
     browse: {
       middleware: [permission('nutrient-types', 'nutrient-types|browse')],
@@ -87,8 +83,8 @@ export const nutrientType = () => {
     read: {
       middleware: [permission('nutrient-types', 'nutrient-types|read')],
       handler: async ({ params: { nutrientTypeId }, req }) => {
-        const nutrientType =
-          await req.scope.cradle.nutrientTypeService.getNutrientType(nutrientTypeId);
+        const nutrientType
+          = await req.scope.cradle.nutrientTypeService.getNutrientType(nutrientTypeId);
 
         return { status: 200, body: toNutrientTypeResponse(nutrientType) };
       },
@@ -96,8 +92,8 @@ export const nutrientType = () => {
     edit: {
       middleware: [permission('nutrient-types', 'nutrient-types|edit')],
       handler: async ({ params: { nutrientTypeId }, req }) => {
-        const nutrientType =
-          await req.scope.cradle.nutrientTypeService.getNutrientType(nutrientTypeId);
+        const nutrientType
+          = await req.scope.cradle.nutrientTypeService.getNutrientType(nutrientTypeId);
 
         return { status: 200, body: toNutrientTypeResponse(nutrientType) };
       },
@@ -109,7 +105,7 @@ export const nutrientType = () => {
 
         const nutrientType = await req.scope.cradle.nutrientTypeService.updateNutrientType(
           nutrientTypeId,
-          body
+          body,
         );
 
         return { status: 200, body: toNutrientTypeResponse(nutrientType) };
@@ -124,4 +120,4 @@ export const nutrientType = () => {
       },
     },
   });
-};
+}

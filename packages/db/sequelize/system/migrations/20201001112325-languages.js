@@ -37,7 +37,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       const created_at = new Date();
@@ -45,19 +45,20 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `UPDATE locales SET respondent_language_id = admin_language_id;`,
-        { transaction }
+        { transaction },
       );
 
       const locales = await queryInterface.sequelize.query(
         `SELECT admin_language_id, country_flag_code FROM locales;`,
-        { transaction }
+        { transaction },
       );
 
       const languages = locales[0].reduce((acc, locale) => {
         const { admin_language_id, country_flag_code } = locale;
 
-        const match = acc.find((item) => item.id === admin_language_id);
-        if (match) return acc;
+        const match = acc.find(item => item.id === admin_language_id);
+        if (match)
+          return acc;
 
         acc.push({
           id: admin_language_id,
@@ -99,7 +100,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeConstraint('locales', 'locales_admin_language_id_fk', {
         transaction,

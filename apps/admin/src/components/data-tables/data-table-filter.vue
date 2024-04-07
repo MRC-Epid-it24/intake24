@@ -12,8 +12,7 @@
           @click:clear="resetFilter"
           @click:prepend="setFilter"
           @keyup.enter="setFilter"
-        >
-        </v-text-field>
+        />
       </v-col>
     </v-row>
     <v-row justify="space-between">
@@ -61,7 +60,7 @@ export default defineComponent({
     const currentSearch = computed(() => filter.value.search);
 
     const refreshItems = () => {
-      items.value = [...Object.values(filter.value)].filter((item) => item);
+      items.value = [...Object.values(filter.value)].filter(item => item);
     };
 
     const setFilter = () => {
@@ -77,7 +76,7 @@ export default defineComponent({
       (val) => {
         filter.value = { ...(isEmpty(val) ? defaults.value : val) };
         refreshItems();
-      }
+      },
     );
 
     watchDebounced(
@@ -85,7 +84,7 @@ export default defineComponent({
       () => {
         setFilter();
       },
-      { debounce: 500, maxWait: 2000 }
+      { debounce: 500, maxWait: 2000 },
     );
 
     return {

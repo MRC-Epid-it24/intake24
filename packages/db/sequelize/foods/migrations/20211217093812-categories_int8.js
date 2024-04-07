@@ -13,7 +13,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'update categories_local set local_description = c.name, simple_local_description = lower(c.name) FROM categories c where category_code = c.code and local_description is null;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('categories_attributes', 'v3_categories_attributes', {
@@ -22,12 +22,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_categories_attributes RENAME CONSTRAINT categories_attributes_pk TO v3_categories_attributes_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE categories_attributes_id_seq RENAME TO v3_categories_attributes_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -59,7 +59,7 @@ module.exports = {
             allowNull: true,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('category_attributes', {
@@ -83,7 +83,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO category_attributes (id, category_code, same_as_before_option, ready_meal_option, reasonable_amount, use_in_recipes) SELECT id, category_code, same_as_before_option, ready_meal_option, reasonable_amount, use_in_recipes FROM v3_categories_attributes',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('category_attributes', 'id', { queryInterface, transaction });
@@ -94,17 +94,17 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_categories_categories RENAME CONSTRAINT categories_categories_pk TO v3_categories_categories_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_categories_categories RENAME CONSTRAINT categories_categories_unique TO v3_categories_categories_unique;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE categories_categories_id_seq RENAME TO v3_categories_categories_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -119,7 +119,7 @@ module.exports = {
             type: Sequelize.STRING(8),
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('categories_categories', {
@@ -166,7 +166,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO categories_categories (subcategory_code, category_code) SELECT subcategory_code, category_code FROM v3_categories_categories',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('categories_local', 'v3_categories_local', {
@@ -175,7 +175,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_categories_local RENAME CONSTRAINT categories_local_pk TO v3_categories_local_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -207,7 +207,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('category_locals', {
@@ -269,23 +269,23 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO category_locals (category_code, locale_id, name, simple_name, version) SELECT category_code, locale_id, local_description, simple_local_description, version FROM v3_categories_local',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable(
         'categories_portion_size_methods',
         'v3_categories_portion_size_methods',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_categories_portion_size_methods RENAME CONSTRAINT categories_portion_size_methods_pk TO v3_categories_portion_size_methods_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE categories_portion_size_methods_id_seq RENAME TO v3_categories_portion_size_methods_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -329,7 +329,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('category_portion_size_methods', {
@@ -353,12 +353,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'INSERT INTO category_portion_size_methods (id, category_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor) SELECT id, category_code, locale_id, "method", description, image_url, use_for_recipes, conversion_factor FROM v3_categories_portion_size_methods',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'UPDATE category_portion_size_methods SET category_local_id = category_locals.id from category_locals WHERE category_portion_size_methods.category_code = category_locals.category_code AND category_portion_size_methods.locale_id = category_locals.locale_id',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -368,7 +368,7 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeColumn('category_portion_size_methods', 'category_code', {
@@ -384,17 +384,17 @@ module.exports = {
       await queryInterface.renameTable(
         'categories_portion_size_method_params',
         'v3_categories_portion_size_method_params',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v3_categories_portion_size_method_params RENAME CONSTRAINT categories_portion_size_method_params_pk TO v3_categories_portion_size_method_params_pk;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE categories_portion_size_method_params_id_seq RENAME TO v3_categories_portion_size_method_params_id_seq;',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -418,7 +418,7 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('category_portion_size_method_params', {
@@ -441,12 +441,12 @@ module.exports = {
           name: 'category_portion_size_method_params_portion_size_method_id_idx',
           indexType: 'btree',
           transaction,
-        }
+        },
       );
 
       await queryInterface.sequelize.query(
         'INSERT INTO category_portion_size_method_params (id, portion_size_method_id, "name", value) SELECT id, portion_size_method_id, "name", value FROM v3_categories_portion_size_method_params',
-        { transaction }
+        { transaction },
       );
 
       await updateSequence('category_portion_size_method_params', 'id', {

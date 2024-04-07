@@ -7,20 +7,20 @@
         focus
         mode="foodsOnly"
         @delete="deleteFood"
-      ></editable-food-list>
+      />
       <editable-food-list
         v-bind="{ prompt, section }"
         v-model="drinksOnly"
         mode="drinksOnly"
         @delete="deleteFood"
-      ></editable-food-list>
+      />
     </template>
     <editable-food-list
       v-else
       v-bind="{ prompt, section }"
       v-model="state"
       focus
-    ></editable-food-list>
+    />
     <template #actions>
       <v-btn
         class="px-4"
@@ -30,7 +30,9 @@
         :title="$t('recall.actions.mealTime')"
         @click="action('mealTime', meal.id)"
       >
-        <v-icon left>fas fa-clock</v-icon>
+        <v-icon left>
+          fas fa-clock
+        </v-icon>
         {{ $t('recall.actions.mealTime') }}
       </v-btn>
       <confirm-dialog
@@ -47,7 +49,9 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon left>$delete</v-icon>
+            <v-icon left>
+              $delete
+            </v-icon>
             {{ $t('recall.actions.nav.deleteMeal') }}
           </v-btn>
         </template>
@@ -57,7 +61,7 @@
           </template>
         </i18n>
       </confirm-dialog>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
       <v-btn
@@ -69,7 +73,9 @@
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.mealTime') }}
         </span>
-        <v-icon class="pb-1">fas fa-clock</v-icon>
+        <v-icon class="pb-1">
+          fas fa-clock
+        </v-icon>
       </v-btn>
       <confirm-dialog
         :label="$t('recall.menu.meal.delete').toString()"
@@ -80,7 +86,9 @@
             <span class="text-overline font-weight-medium">
               {{ $t('recall.actions.nav.deleteMeal') }}
             </span>
-            <v-icon class="pb-1">$delete</v-icon>
+            <v-icon class="pb-1">
+              $delete
+            </v-icon>
           </v-btn>
         </template>
         <i18n path="recall.menu.meal.deleteConfirm">
@@ -89,7 +97,7 @@
           </template>
         </i18n>
       </confirm-dialog>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </card-layout>
 </template>
@@ -143,15 +151,16 @@ export default defineComponent({
     const isValid = computed(() => !!state.value.length);
     const drinksOnly = computed({
       get() {
-        return state.value.filter((food) => food.flags.includes('is-drink'));
+        return state.value.filter(food => food.flags.includes('is-drink'));
       },
       set(val) {
+        // eslint-disable-next-line ts/no-use-before-define
         state.value = [...foodsOnly.value, ...val];
       },
     });
     const foodsOnly = computed({
       get() {
-        return state.value.filter((food) => !food.flags.includes('is-drink'));
+        return state.value.filter(food => !food.flags.includes('is-drink'));
       },
       set(val) {
         state.value = [...drinksOnly.value, ...val];
@@ -159,8 +168,9 @@ export default defineComponent({
     });
 
     const deleteFood = (foodId: string) => {
-      const food = props.meal.foods.find((food) => food.id === foodId);
-      if (!food) return;
+      const food = props.meal.foods.find(food => food.id === foodId);
+      if (!food)
+        return;
 
       action('deleteFood', foodId);
     };

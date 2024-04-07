@@ -4,7 +4,7 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <template v-if="form.translations.length">
         <confirm-dialog
           color="primary"
@@ -28,7 +28,7 @@
         </confirm-dialog>
       </template>
     </v-toolbar>
-    <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
+    <error-list :errors="nonInputErrors" tag="v-card-text" />
     <v-list v-if="form.translations.length" two-line>
       <v-list-item
         v-for="translation in form.translations"
@@ -47,7 +47,9 @@
         </v-list-item-content>
         <v-list-item-action>
           <v-btn icon :title="$t('languages.translations.edit')" @click.stop="edit(translation)">
-            <v-icon color="secondary lighten-2">$edit</v-icon>
+            <v-icon color="secondary lighten-2">
+              $edit
+            </v-icon>
           </v-btn>
         </v-list-item-action>
       </v-list-item>
@@ -66,7 +68,7 @@
       :translation="selected ?? undefined"
       @close="close"
       @update="update"
-    ></translation-section>
+    />
   </layout>
 </template>
 
@@ -119,7 +121,7 @@ export default defineComponent({
 
   async mounted() {
     const { data: translations } = await this.$http.get<LanguageTranslationsResponse>(
-      `admin/languages/${this.id}/translations`
+      `admin/languages/${this.id}/translations`,
     );
 
     this.toForm({ translations });
@@ -128,7 +130,8 @@ export default defineComponent({
   methods: {
     getSectionTitle(key: string): string {
       const check = has(this.$i18n.messages[this.$i18n.locale], `${key}.title`);
-      if (check) return this.$t(`${key}.title`).toString();
+      if (check)
+        return this.$t(`${key}.title`).toString();
 
       return this.$t(`languages.translations.sections.${key}`).toString();
     },
@@ -138,9 +141,10 @@ export default defineComponent({
     },
 
     update(translation: LanguageTranslationAttributes) {
-      const match = this.form.translations.find((item) => item.id === translation.id);
+      const match = this.form.translations.find(item => item.id === translation.id);
 
-      if (match) match.messages = copy(translation.messages);
+      if (match)
+        match.messages = copy(translation.messages);
     },
 
     close() {
@@ -149,7 +153,7 @@ export default defineComponent({
 
     notify(action: string) {
       this.messages.success(
-        this.$t(`languages.translations.${action}`, { name: this.entry.englishName }).toString()
+        this.$t(`languages.translations.${action}`, { name: this.entry.englishName }).toString(),
       );
     },
 
@@ -157,7 +161,7 @@ export default defineComponent({
       const { data: translations } = await this.$http.post<LanguageTranslationsResponse>(
         `admin/languages/${this.id}/translations`,
         {},
-        { withLoading: true }
+        { withLoading: true },
       );
 
       this.toForm({ translations });
@@ -166,7 +170,7 @@ export default defineComponent({
 
     async save() {
       const translations = await this.form.put<LanguageTranslationsResponse>(
-        `admin/languages/${this.id}/translations`
+        `admin/languages/${this.id}/translations`,
       );
 
       this.toForm({ translations });
@@ -184,7 +188,7 @@ export default defineComponent({
       const { data: translations } = await this.$http.post<LanguageTranslationsResponse>(
         `admin/languages/${this.id}/translations/sync`,
         {},
-        { withLoading: true }
+        { withLoading: true },
       );
 
       this.toForm({ translations });

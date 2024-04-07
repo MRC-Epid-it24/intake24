@@ -9,28 +9,29 @@ import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { ImageMap } from '@intake24/db';
 
-const imageMapController = ({
+function imageMapController({
   imagesBaseUrl,
   imageMapService,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'imageMapService' | 'portionSizeService'>) => {
+}: Pick<IoC, 'imagesBaseUrl' | 'imageMapService' | 'portionSizeService'>) {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
     req: Request<{ imageMapId: string }>,
-    res: Response<ImageMapEntry>
+    res: Response<ImageMapEntry>,
   ): Promise<void> => {
     const { imageMapId } = req.params;
 
     const image = await portionSizeService.getImageMap(imageMapId);
-    if (!image) throw new NotFoundError();
+    if (!image)
+      throw new NotFoundError();
 
     res.json(responseCollection.mapEntryResponse(image));
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<ImageMapsResponse>
+    res: Response<ImageMapsResponse>,
   ): Promise<void> => {
     const images = await ImageMap.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -50,7 +51,8 @@ const imageMapController = ({
     } = req;
     const { userId } = req.scope.cradle.user;
 
-    if (!file) throw new ValidationError('File not found.', { path: 'baseImage' });
+    if (!file)
+      throw new ValidationError('File not found.', { path: 'baseImage' });
 
     let imageMap = await imageMapService.create({
       id,
@@ -67,17 +69,17 @@ const imageMapController = ({
 
   const read = async (
     req: Request<{ imageMapId: string }>,
-    res: Response<ImageMapEntry>
+    res: Response<ImageMapEntry>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ imageMapId: string }>,
-    res: Response<ImageMapEntry>
+    res: Response<ImageMapEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ imageMapId: string }>,
-    res: Response<ImageMapEntry>
+    res: Response<ImageMapEntry>,
   ): Promise<void> => {
     const { imageMapId } = req.params;
     const { description, objects } = req.body;
@@ -89,13 +91,14 @@ const imageMapController = ({
 
   const updateImage = async (
     req: Request<{ imageMapId: string }>,
-    res: Response<ImageMapEntry>
+    res: Response<ImageMapEntry>,
   ): Promise<void> => {
     const { file } = req;
     const { imageMapId } = req.params;
     const { userId } = req.scope.cradle.user;
 
-    if (!file) throw new ValidationError('File not found.', { path: 'baseImage' });
+    if (!file)
+      throw new ValidationError('File not found.', { path: 'baseImage' });
 
     await imageMapService.updateImage(imageMapId, file, userId);
 
@@ -106,7 +109,7 @@ const imageMapController = ({
 
   const destroy = async (
     req: Request<{ imageMapId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { imageMapId } = req.params;
 
@@ -129,7 +132,7 @@ const imageMapController = ({
     destroy,
     refs,
   };
-};
+}
 
 export default imageMapController;
 

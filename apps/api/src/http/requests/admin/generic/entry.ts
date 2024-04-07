@@ -11,6 +11,6 @@ export default (param: string): ValidationMiddleware[] => {
         errorMessage: typeErrorMessage('int._'),
         isInt: true,
       },
-    })
+    }),
   );
 };

@@ -9,5 +9,5 @@ export default validate(
     ...identifiers,
     ...password,
     ...user,
-  })
+  }),
 );

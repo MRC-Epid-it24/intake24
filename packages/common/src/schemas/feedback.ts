@@ -17,7 +17,7 @@ export const feedbackSchemeSchema = z.object({
   outputs: z.enum(feedbackOutputs).array(),
   physicalDataFields: z.enum(feedbackPhysicalDataFields).array(),
   visibility: z.string(),
-  topFoods: topFoods,
+  topFoods,
   meals: z.object({}),
   cards: z.array(z.object({})),
   demographicGroups: z.array(z.object({})),

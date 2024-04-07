@@ -3,8 +3,7 @@
     v-if="sabFood"
     v-bind="{ food: encodedFood(), meal, prompt, sabFood, section }"
     @action="action"
-  >
-  </same-as-before-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -51,12 +50,12 @@ export default defineComponent({
 
     const sabAction = (type: 'notSame' | 'same') => {
       if (type === 'same' && sabFood) {
-        const { id, ...update } = sabFood.food;
+        const { _id, ...update } = sabFood.food;
         survey.updateFood({
           foodId,
           update: {
             ...update,
-            linkedFoods: update.linkedFoods.map((linkedFood) => ({
+            linkedFoods: update.linkedFoods.map(linkedFood => ({
               ...linkedFood,
               id: getEntityId(),
             })),
@@ -78,7 +77,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      if (!sabFood) sabAction('notSame');
+      if (!sabFood)
+        sabAction('notSame');
     });
 
     return { action, encodedFood, meal, sabFood };

@@ -9,18 +9,18 @@ module.exports = {
           allowNull: false,
           defaultValue: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE locales SET food_index_enabled = true WHERE id IN (SELECT locale_id FROM surveys WHERE state = 'active')`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeConstraint(
         'locales',
         'locales_food_index_language_backend_id_fk',
-        { transaction }
+        { transaction },
       );
       await queryInterface.dropTable('food_index_language_backends', { transaction });
     }),
@@ -45,12 +45,12 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
-        "insert into food_index_language_backends(id, flag, description) values ('en', 'gb', 'English')",
-        { transaction }
+        'insert into food_index_language_backends(id, flag, description) values (\'en\', \'gb\', \'English\')',
+        { transaction },
       );
 
       await queryInterface.addConstraint('locales', {

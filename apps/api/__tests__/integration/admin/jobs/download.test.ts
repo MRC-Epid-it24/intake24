@@ -46,11 +46,14 @@ export default () => {
       if (res.body.downloadUrl !== null) {
         job = res.body;
         waiting = false;
-      } else sleep(1000);
+      }
+      else {
+        sleep(1000);
+      }
     }
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

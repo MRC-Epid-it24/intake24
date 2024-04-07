@@ -9,7 +9,8 @@ export default class DemographicRange {
   }
 
   static fromJson(start?: number | null, end?: number | null): DemographicRange | null {
-    if (typeof start !== 'number' || typeof end !== 'number') return null;
+    if (typeof start !== 'number' || typeof end !== 'number')
+      return null;
 
     return new DemographicRange(start, end);
   }
@@ -19,15 +20,18 @@ export default class DemographicRange {
   }
 
   contains(n: number | null): boolean {
-    if (n === null) return false;
+    if (n === null)
+      return false;
 
     return n >= this.start && n < this.end;
   }
 
   toString(): string {
-    if (this.end > 999999) return ` > ${this.start}`;
+    if (this.end > 999999)
+      return ` > ${this.start}`;
 
-    if (this.start === this.end) return `${this.start}`;
+    if (this.start === this.end)
+      return `${this.start}`;
 
     return `${this.start} - ${this.end}`;
   }

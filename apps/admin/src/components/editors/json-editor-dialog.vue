@@ -10,7 +10,9 @@
       <slot name="activator" v-bind="{ attrs, on }">
         <v-list-item v-bind="attrs" link v-on="on">
           <v-list-item-title>
-            <v-icon left>fas fa-code</v-icon>
+            <v-icon left>
+              fas fa-code
+            </v-icon>
             {{ $t('common.json._') }}
           </v-list-item-title>
         </v-list-item>
@@ -24,15 +26,17 @@
         <v-toolbar-title>
           {{ $t('common.json.title') }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-toolbar-items>
           <v-btn dark text :title="$t('common.action.ok')" @click.stop="confirm">
-            <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+            <v-icon left>
+              $success
+            </v-icon>{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
       <v-container fluid>
-        <json-editor-vue v-model="content"></json-editor-vue>
+        <json-editor-vue v-model="content" />
       </v-container>
     </v-card>
   </v-dialog>
@@ -61,7 +65,8 @@ export default defineComponent({
     const content = ref(props.value);
 
     watch(dialog, (val) => {
-      if (!val) return;
+      if (!val)
+        return;
 
       content.value = props.value;
     });

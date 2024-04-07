@@ -33,7 +33,8 @@ export default async (cmd: GenerateEnvArgs): Promise<void> => {
   for (const app of apps) {
     const templatePath = path.join(app.path, '.env-template');
     const templateExists = await fs.pathExists(templatePath);
-    if (!templateExists) throw new Error(`Missing '.env-template' for '${app.name}' application.`);
+    if (!templateExists)
+      throw new Error(`Missing '.env-template' for '${app.name}' application.`);
 
     let content = await fs.readFile(templatePath, 'utf-8');
 

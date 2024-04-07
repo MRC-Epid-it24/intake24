@@ -7,7 +7,7 @@
         @food-selected="foodSelected"
         @input="$emit('input', $event)"
         @recipe-builder="recipeBuilder"
-      ></food-browser>
+      />
     </v-card-text>
   </card-layout>
 </template>
@@ -60,10 +60,11 @@ export default defineComponent({
     const isValid = true;
     const rootCategory = computed(() => {
       const foodSearch = props.meal?.flags
-        ?.find((flag) => flag.startsWith('food-search:'))
+        ?.find(flag => flag.startsWith('food-search:'))
         ?.split(':')[1];
 
-      if (!foodSearch) return undefined;
+      if (!foodSearch)
+        return undefined;
 
       const [foodsCategory, drinksCategory] = foodSearch.split('|');
 

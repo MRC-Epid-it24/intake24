@@ -1,13 +1,19 @@
 <template>
   <div>
-    <h2 class="mb-4">{{ $t('user.profile') }}</h2>
+    <h2 class="mb-4">
+      {{ $t('user.profile') }}
+    </h2>
     <data-table :actions="['read']" api-url="admin/user/jobs" :headers="headers">
       <template #[`item.userId`]="{ item }">
         {{ item.user?.email ?? item.userId }}
       </template>
       <template #[`item.successful`]="{ item }">
-        <v-icon v-if="item.successful" color="success">$check</v-icon>
-        <v-icon v-else color="error">$times</v-icon>
+        <v-icon v-if="item.successful" color="success">
+          $check
+        </v-icon>
+        <v-icon v-else color="error">
+          $times
+        </v-icon>
       </template>
       <template #[`item.startedAt`]="{ item }">
         {{ formatDateTime(item.startedAt) }}

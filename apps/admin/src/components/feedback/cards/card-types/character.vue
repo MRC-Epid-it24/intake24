@@ -16,8 +16,7 @@
             :search-input.sync="nutrientTypeIdSearchInput"
             :value="nutrientTypeIds"
             @change="updateNutrientTypeId($event)"
-          >
-          </v-autocomplete>
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -26,7 +25,7 @@
       <character-sentiments
         :value="sentiments"
         @update:sentiments="update('sentiments', $event)"
-      ></character-sentiments>
+      />
     </v-container>
   </v-tab-item>
 </template>

@@ -68,15 +68,17 @@ export const defaults: Schema = {
         const { surveyId } = (meta.req as Request).params;
 
         const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'surveySchemeId'] });
-        if (survey?.surveySchemeId === value) return;
+        if (survey?.surveySchemeId === value)
+          return;
 
         try {
           await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
             SurveyScheme,
             'use',
-            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } }
+            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } },
           );
-        } catch (err) {
+        }
+        catch (err) {
           throw new Error('$restricted');
         }
       },
@@ -92,15 +94,17 @@ export const defaults: Schema = {
         const { surveyId } = (meta.req as Request).params;
 
         const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'localeId'] });
-        if (survey?.localeId === value) return;
+        if (survey?.localeId === value)
+          return;
 
         try {
           await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
             SystemLocale,
             'use',
-            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } }
+            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } },
           );
-        } catch (err) {
+        }
+        catch (err) {
           throw new Error('$restricted');
         }
       },
@@ -191,15 +195,17 @@ export const defaults: Schema = {
         const { surveyId } = (meta.req as Request).params;
 
         const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'feedbackSchemeId'] });
-        if (survey?.feedbackSchemeId === value) return;
+        if (survey?.feedbackSchemeId === value)
+          return;
 
         try {
           await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
             FeedbackScheme,
             'use',
-            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } }
+            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } },
           );
-        } catch (err) {
+        }
+        catch (err) {
           throw new Error('$restricted');
         }
       },
@@ -213,10 +219,11 @@ export const defaults: Schema = {
         try {
           notification.array().parse(value);
           return true;
-        } catch (err) {
-          if (err instanceof ZodError) {
+        }
+        catch (err) {
+          if (err instanceof ZodError)
             throw err.errors.at(0)?.message;
-          }
+
           throw err;
         }
       },
@@ -227,10 +234,10 @@ export const defaults: Schema = {
     errorMessage: typeErrorMessage('date.ms'),
     optional: true,
     custom: {
-      options: (value) => !!ms(value),
+      options: value => !!ms(value),
     },
     customSanitizer: {
-      options: (value) => (Number.isNaN(Number(value)) ? value : ms(Number(value))),
+      options: value => (Number.isNaN(Number(value)) ? value : ms(Number(value))),
     },
   },
   storeUserSessionOnServer: {
@@ -302,21 +309,22 @@ export const surveySchemeOverrides: ParamSchema = {
   custom: {
     options: async (value): Promise<void> => {
       if (
-        typeof value !== 'object' ||
-        Object.keys(value).some((key) => !['meals', 'prompts'].includes(key))
+        typeof value !== 'object'
+        || Object.keys(value).some(key => !['meals', 'prompts'].includes(key))
       )
-        throw new Error();
+        throw new Error('Invalid survey scheme overrides structure');
 
       // Meals
       try {
         validateMeals(value.meals);
-      } catch (err: any) {
+      }
+      catch (err: any) {
         throw new Error(err.message.split('\n')[0]);
       }
 
       // Prompts
       if (!Array.isArray(value.prompts) || value.prompts.some((item: any) => !isPlainObject(item)))
-        throw new Error();
+        throw new Error('Invalid survey scheme prompts structure');
     },
   },
 };

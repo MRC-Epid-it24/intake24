@@ -26,12 +26,12 @@ const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,
 };
 
-const adminSurveyController = (ioc: IoC) => {
+function adminSurveyController(ioc: IoC) {
   const { adminSurveyService } = ioc;
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveysResponse>
+    res: Response<SurveysResponse>,
   ): Promise<void> => {
     const {
       aclService,
@@ -80,16 +80,17 @@ const adminSurveyController = (ioc: IoC) => {
 
     survey = await Survey.scope(['locale', 'feedbackScheme', 'surveyScheme']).findByPk(
       survey.id,
-      securableScope(userId)
+      securableScope(userId),
     );
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     res.status(201).json(surveyResponse(survey));
   };
 
   const read = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyEntry>
+    res: Response<SurveyEntry>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -108,7 +109,7 @@ const adminSurveyController = (ioc: IoC) => {
 
   const edit = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyEntry>
+    res: Response<SurveyEntry>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -139,7 +140,7 @@ const adminSurveyController = (ioc: IoC) => {
     });
 
     await survey.update(
-      pick(req.body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields])
+      pick(req.body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields]),
     );
 
     res.json(surveyResponse(survey));
@@ -147,7 +148,7 @@ const adminSurveyController = (ioc: IoC) => {
 
   const patch = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyEntry>
+    res: Response<SurveyEntry>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const {
@@ -172,10 +173,13 @@ const adminSurveyController = (ioc: IoC) => {
 
     if (resourceActions.includes('edit')) {
       keysToUpdate.push(...updateSurveyFields, ...overridesFields, ...guardedSurveyFields);
-    } else if (survey.ownerId === userId) {
+    }
+    else if (survey.ownerId === userId) {
       keysToUpdate.push(...updateSurveyFields, ...overridesFields);
-    } else {
-      if (securableActions.includes('edit')) keysToUpdate.push(...updateSurveyFields);
+    }
+    else {
+      if (securableActions.includes('edit'))
+        keysToUpdate.push(...updateSurveyFields);
 
       (Object.keys(actionToFieldsMap) as (keyof typeof actionToFieldsMap)[]).forEach((item) => {
         if (securableActions.includes(kebabCase(item)))
@@ -184,7 +188,8 @@ const adminSurveyController = (ioc: IoC) => {
     }
 
     const updateInput = pick(req.body, keysToUpdate);
-    if (!Object.keys(updateInput).length) throw new ValidationError('Missing body');
+    if (!Object.keys(updateInput).length)
+      throw new ValidationError('Missing body');
 
     await survey.update(updateInput);
 
@@ -193,12 +198,12 @@ const adminSurveyController = (ioc: IoC) => {
 
   const put = async (
     req: Request<{ surveyId: string }>,
-    res: Response<SurveyEntry>
+    res: Response<SurveyEntry>,
   ): Promise<void> => update(req, res);
 
   const destroy = async (
     req: Request<{ surveyId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { surveyId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -244,7 +249,8 @@ const adminSurveyController = (ioc: IoC) => {
     const params = { ...pickJobParams(req.body.params, type), surveyId };
 
     if (jobRequiresFile(type)) {
-      if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
+      if (!file)
+        throw new ValidationError('Missing file.', { path: 'params.file' });
 
       params.file = file.path;
     }
@@ -267,7 +273,7 @@ const adminSurveyController = (ioc: IoC) => {
     tasks,
     securables: securableController({ ioc, securable: Survey }),
   };
-};
+}
 
 export default adminSurveyController;
 

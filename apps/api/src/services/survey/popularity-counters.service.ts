@@ -13,9 +13,8 @@ export default class PopularityCountersService {
   private static countOccurrences(foodCodes: string[]): Record<string, number> {
     const result: Record<string, number> = {};
 
-    for (const code of foodCodes) {
+    for (const code of foodCodes)
       result[code] = (result[code] ?? 0) + 1;
-    }
 
     return result;
   }
@@ -28,14 +27,15 @@ export default class PopularityCountersService {
         transaction: tx,
       });
 
-      const currentCounts = Object.fromEntries(counters.map((row) => [row.foodCode, row.counter]));
+      const currentCounts = Object.fromEntries(counters.map(row => [row.foodCode, row.counter]));
 
       for (const foodCode in occurrences) {
         const count = currentCounts[foodCode];
-        if (count) occurrences[foodCode] += count;
+        if (count)
+          occurrences[foodCode] += count;
       }
 
-      const updates = Object.entries(occurrences).map((e) => ({ foodCode: e[0], counter: e[1] }));
+      const updates = Object.entries(occurrences).map(e => ({ foodCode: e[0], counter: e[1] }));
 
       await PopularityCounter.bulkCreate(updates, {
         updateOnDuplicate: ['counter'],
@@ -58,15 +58,16 @@ export default class PopularityCountersService {
       });
 
       const currentCounts = Object.fromEntries(
-        counters.map((row) => [row.foodCode, row.occurrences])
+        counters.map(row => [row.foodCode, row.occurrences]),
       );
 
       for (const k in occurrences) {
         const count = currentCounts[k];
-        if (count) occurrences[k] += count;
+        if (count)
+          occurrences[k] += count;
       }
 
-      const updates = Object.entries(occurrences).map((e) => ({
+      const updates = Object.entries(occurrences).map(e => ({
         localeId,
         foodCode: e[0],
         occurrences: e[1],

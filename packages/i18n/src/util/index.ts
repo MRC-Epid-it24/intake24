@@ -19,11 +19,14 @@ import { i18n } from '../i18n';
  * @returns
  */
 export function mergeTranslations(target: any, source: any) {
-  if (typeof target === 'undefined') return undefined;
+  if (typeof target === 'undefined')
+    return undefined;
 
-  if (typeof source === 'undefined') return target;
+  if (typeof source === 'undefined')
+    return target;
 
-  if (typeof target === 'string') return typeof source === 'string' ? source : target;
+  if (typeof target === 'string')
+    return typeof source === 'string' ? source : target;
 
   if (Object.prototype.toString.call(target) === '[object Object]') {
     return Object.keys(target).reduce<Record<string, any>>((acc, key) => {
@@ -51,7 +54,7 @@ export function compareMessageKeys<
   const xKeys = getObjectNestedKeys(x);
   const yKeys = getObjectNestedKeys(y);
 
-  return xKeys.length === yKeys.length && xKeys.every((key) => yKeys.includes(key));
+  return xKeys.length === yKeys.length && xKeys.every(key => yKeys.includes(key));
 }
 
 /**
@@ -63,8 +66,10 @@ export function compareMessageKeys<
 export function validateTranslations(translation: string | Record<string, any>): boolean {
   if (Object.prototype.toString.call(translation) === '[object Object]') {
     for (const value of Object.values(translation)) {
-      if (!validateTranslations(value)) return false;
+      if (!validateTranslations(value))
+        return false;
     }
+
     return true;
   }
 
@@ -80,7 +85,7 @@ export type I18nParams = Record<
  * Replace parameters in i18n message
  *
  * @param {string} message
- * @param {I18nParams} [params={}]
+ * @param {I18nParams} [params]
  */
 export function replaceParams(message: string, params: I18nParams = {}) {
   return Object.entries(params).reduce((acc, [key, value]) => {
@@ -107,24 +112,30 @@ export function sanitizeParams(content: Dictionary<string | number>) {
 
 export function translate(
   content?: LocaleTranslation | RequiredLocaleTranslation | string,
-  options: LocaleContentOptions = {}
+  options: LocaleContentOptions = {},
 ): string {
   const { path, sanitize = false } = options;
   let { params = {} } = options;
 
-  if (sanitize) params = sanitizeParams(params as Dictionary<string | number>);
+  if (sanitize)
+    params = sanitizeParams(params as Dictionary<string | number>);
 
-  if (typeof content === 'string') return replaceParams(content, params);
+  if (typeof content === 'string')
+    return replaceParams(content, params);
 
   const localeContent = content ? content[i18n.locale] : undefined;
-  if (localeContent) return replaceParams(localeContent, params);
+  if (localeContent)
+    return replaceParams(localeContent, params);
 
-  if (path && has(i18n.messages[i18n.locale], path)) return i18n.t(path, params).toString();
+  if (path && has(i18n.messages[i18n.locale], path))
+    return i18n.t(path, params).toString();
 
   const enContent = content?.en;
-  if (enContent) return replaceParams(enContent, params);
+  if (enContent)
+    return replaceParams(enContent, params);
 
-  if (path && has(i18n.messages.en, path)) return i18n.t(path, params).toString();
+  if (path && has(i18n.messages.en, path))
+    return i18n.t(path, params).toString();
 
   return '';
 }
@@ -132,8 +143,9 @@ export function translate(
 export function translatePath(
   path: string,
   params: Dictionary<string | number> = {},
-  sanitize: boolean = false
+  sanitize: boolean = false,
 ) {
-  if (sanitize) params = sanitizeParams(params as Dictionary<string | number>);
+  if (sanitize)
+    params = sanitizeParams(params as Dictionary<string | number>);
   return i18n.t(path, params).toString();
 }

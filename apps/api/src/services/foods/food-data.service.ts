@@ -21,7 +21,7 @@ import PortionSizeMethodsImpl from './portion-size-methods.service';
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
 
-const foodDataService = () => {
+function foodDataService() {
   const inheritableAttributesImpl = InheritableAttributesImpl();
   const portionSizeMethodsImpl = PortionSizeMethodsImpl();
 
@@ -46,12 +46,13 @@ const foodDataService = () => {
       ],
     });
 
-    if (!foodNutrientData)
+    if (!foodNutrientData) {
       throw new InvalidIdError(
-        `Either locale id '${localeId}' or food code '${foodCode}' is ` +
-          "invalid, food isn't linked to a nutrient table record, or the energy (kcal) nutrient " +
-          'data is missing'
+        `Either locale id '${localeId}' or food code '${foodCode}' is `
+        + 'invalid, food isn\'t linked to a nutrient table record, or the energy (kcal) nutrient '
+        + 'data is missing',
       );
+    }
 
     let kcal = foodNutrientData?.nutrientRecords?.map((el) => {
       return el.nutrients ? el.nutrients[0].unitsPer100g : 0;
@@ -75,7 +76,7 @@ const foodDataService = () => {
    */
   const getLocalAssociatedFoodPrompts = async (
     localeId: string,
-    foodCode: string
+    foodCode: string,
   ): Promise<UserAssociatedFoodPrompt[]> => {
     const associatedFoods = await AssociatedFood.findAll({
       where: { localeId, foodCode },
@@ -90,7 +91,7 @@ const foodDataService = () => {
       order: [['orderBy', 'ASC']],
     });
 
-    return associatedFoods.map((row) => ({
+    return associatedFoods.map(row => ({
       foodCode: row.associatedFoodCode ?? undefined,
       categoryCode: row.associatedCategoryCode ?? undefined,
       promptText: row.text,
@@ -111,7 +112,7 @@ const foodDataService = () => {
   const getBrands = async (localeId: string, foodCode: string): Promise<string[]> => {
     const brands = await Brand.findAll({ where: { localeId, foodCode }, attributes: ['name'] });
 
-    return brands.length ? brands.map((brand) => brand.name) : [];
+    return brands.length ? brands.map(brand => brand.name) : [];
   };
 
   /**
@@ -127,9 +128,9 @@ const foodDataService = () => {
     });
 
     while (queue.length > 0) {
-      const newCodes = queue.map((row) => row.categoryCode).filter((code) => !visited.has(code));
+      const newCodes = queue.map(row => row.categoryCode).filter(code => !visited.has(code));
 
-      newCodes.forEach((code) => visited.add(code));
+      newCodes.forEach(code => visited.add(code));
 
       queue = await CategoryCategory.findAll({
         where: { subcategoryCode: newCodes },
@@ -142,22 +143,23 @@ const foodDataService = () => {
 
   const resolveAssociatedFoodPrompts = async (
     localeId: string,
-    foodCode: string
+    foodCode: string,
   ): Promise<UserAssociatedFoodPrompt[]> => {
     const localPrompts = await getLocalAssociatedFoodPrompts(localeId, foodCode);
 
-    if (localPrompts.length) return localPrompts;
+    if (localPrompts.length)
+      return localPrompts;
 
     const locale = await FoodsLocale.findOne({
       where: { id: localeId },
       include: [{ association: 'parent' }],
     });
 
-    if (!locale) throw new InvalidIdError(`Unknown locale ID: ${localeId}`);
+    if (!locale)
+      throw new InvalidIdError(`Unknown locale ID: ${localeId}`);
 
-    if (locale.parent && locale.respondentLanguageId === locale.parent.respondentLanguageId) {
+    if (locale.parent && locale.respondentLanguageId === locale.parent.respondentLanguageId)
       return resolveAssociatedFoodPrompts(locale.parent.id, foodCode);
-    }
 
     return [];
   };
@@ -165,7 +167,8 @@ const foodDataService = () => {
   const getFoodData = async (localeId: string, foodCode: string): Promise<UserFoodData> => {
     const foodRecord = await Food.findOne({ where: { code: foodCode } });
 
-    if (!foodRecord) throw new InvalidIdError(`Invalid food code: ${foodCode}`);
+    if (!foodRecord)
+      throw new InvalidIdError(`Invalid food code: ${foodCode}`);
 
     const foodListCheck = await FoodLocalList.findOne({
       where: { foodCode, localeId },
@@ -176,14 +179,16 @@ const foodDataService = () => {
       throw new InvalidIdError(`${foodCode} is not in the food list for locale ${localeId}`);
 
     const localeCheck = await FoodsLocale.findOne({ where: { id: localeId }, attributes: ['id'] });
-    if (!localeCheck) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
+    if (!localeCheck)
+      throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
 
     const foodLocal = await FoodLocal.findOne({ where: { foodCode, localeId } });
 
-    if (!foodLocal)
+    if (!foodLocal) {
       throw new InvalidIdError(
-        `No local food data for food code ${foodCode} in locale ${localeId}`
+        `No local food data for food code ${foodCode} in locale ${localeId}`,
       );
+    }
 
     const [
       associatedFoodPrompts,
@@ -221,7 +226,7 @@ const foodDataService = () => {
     getNutrientKCalPer100G,
     getFoodData,
   };
-};
+}
 
 export default foodDataService;
 

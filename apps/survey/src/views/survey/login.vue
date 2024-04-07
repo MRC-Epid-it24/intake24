@@ -19,8 +19,7 @@
                   outlined
                   prepend-inner-icon="fas fa-user"
                   required
-                >
-                </v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -36,7 +35,7 @@
                   required
                   :type="showPassword ? 'text' : 'password'"
                   @click:append="showPassword = !showPassword"
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -53,10 +52,10 @@
           ref="captchaEl"
           @expired="expired"
           @verified="verified"
-        ></captcha>
+        />
       </v-form>
       <template v-if="isOpenAccess">
-        <v-divider></v-divider>
+        <v-divider />
         <v-card-title class="text-h3 font-weight-medium justify-center">
           {{ `No account?` }}
         </v-card-title>
@@ -155,7 +154,8 @@ export default defineComponent({
         try {
           await auth.refresh();
           await router.push({ name: 'survey-home', params: { surveyId: props.surveyId } });
-        } catch (err) {
+        }
+        catch (err) {
           // continue
         }
       }

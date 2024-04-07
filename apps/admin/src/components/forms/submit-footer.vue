@@ -9,7 +9,9 @@
         type="submit"
         x-large
       >
-        <v-icon left>{{ icon }}</v-icon>
+        <v-icon left>
+          {{ icon }}
+        </v-icon>
         {{ label }}
       </v-btn>
     </v-col>

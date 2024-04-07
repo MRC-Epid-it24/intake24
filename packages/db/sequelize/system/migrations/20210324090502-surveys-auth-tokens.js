@@ -8,7 +8,7 @@ module.exports = {
           allowNull: true,
           type: Sequelize.STRING(128),
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
@@ -18,11 +18,11 @@ module.exports = {
           allowNull: true,
           type: Sequelize.INTEGER,
         },
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('surveys', 'auth_url_token_charset', { transaction });
       await queryInterface.removeColumn('surveys', 'auth_url_token_length', { transaction });

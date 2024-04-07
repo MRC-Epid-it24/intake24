@@ -16,7 +16,8 @@ export default (fieldName: string) => (req: Request, res: Response, next: NextFu
   try {
     req.body[fieldName] = JSON.parse(req.body[fieldName]);
     next();
-  } catch (e: any) {
+  }
+  catch (e: any) {
     const msg = i18nService.translate('validation.types.json._', { attribute: fieldName });
 
     throw new ValidationError(msg, {

@@ -14,7 +14,7 @@
               <feedback-user-info
                 v-if="userDemographic?.hasData()"
                 v-bind="{ surveyId, userDemographic }"
-              ></feedback-user-info>
+              />
               <feedback-outputs
                 v-if="!!outputs.length"
                 v-bind="{
@@ -25,7 +25,7 @@
                       : undefined,
                   surveyId,
                 }"
-              ></feedback-outputs>
+              />
             </v-row>
           </v-col>
         </v-row>
@@ -59,7 +59,7 @@
                       >
                         <template #default="{ active }">
                           <v-list-item-action class="my-0">
-                            <v-checkbox :input-value="active"></v-checkbox>
+                            <v-checkbox :input-value="active" />
                           </v-list-item-action>
                           <v-list-item-content>
                             <v-list-item-title>
@@ -90,9 +90,9 @@
         v-if="showCards"
         v-bind="{ cards }"
         :class="`feedback-area order-${getSectionOrder('cards')}`"
-      ></feedback-cards>
+      />
       <v-sheet v-if="showTopFoods" :class="`order-${getSectionOrder('topFoods')}`" color="white">
-        <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
+        <feedback-top-foods v-bind="{ topFoods }" class="feedback-area" />
       </v-sheet>
       <feedback-meals
         v-if="showMeals"
@@ -101,12 +101,12 @@
         :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
         :submissions="submissions"
         :survey-stats="feedbackDicts.surveyStats"
-      ></feedback-meals>
+      />
       <survey-rating
         v-if="showRating"
         v-bind="{ surveyId, type: 'feedback' }"
         :class="`feedback-area order-${getSectionOrder('rating')} d-print-none`"
-      ></survey-rating>
+      />
     </div>
   </div>
 </template>
@@ -213,7 +213,7 @@ export default defineComponent({
       const { cards, demographicGroups: groups, henryCoefficients } = feedbackScheme;
 
       const { physicalData, submissions } = await this.getUserData(surveyId);
-      if (feedbackScheme.physicalDataFields.some((item) => physicalData[item] === null)) {
+      if (feedbackScheme.physicalDataFields.some(item => physicalData[item] === null)) {
         this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
         return;
       }
@@ -231,11 +231,13 @@ export default defineComponent({
 
       this.initSelectedSubmissions();
       this.buildFeedback();
-    } catch (err) {
+    }
+    catch (err) {
       await this.$router.push({ name: 'feedback-error', params: { surveyId } });
 
       throw err;
-    } finally {
+    }
+    finally {
       loading.removeItem('feedback-initial-load');
     }
   },
@@ -246,7 +248,7 @@ export default defineComponent({
       const submissionIds = this.submissions.map(({ id }) => id);
 
       if (Array.isArray(submissions)) {
-        this.selectedSubmissions = submissionIds.filter((id) => id && submissions.includes(id));
+        this.selectedSubmissions = submissionIds.filter(id => id && submissions.includes(id));
         await this.$router.replace(this.$route.path);
         return;
       }

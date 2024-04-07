@@ -9,7 +9,9 @@
           :title="$t('feedback-schemes.preview.title')"
           v-on="on"
         >
-          <v-icon left>$search</v-icon>
+          <v-icon left>
+            $search
+          </v-icon>
           {{ $t('feedback-schemes.preview._') }}
         </v-btn>
       </slot>
@@ -30,13 +32,13 @@
             v-if="showCards"
             v-bind="{ cards }"
             :class="`feedback-area order-${getSectionOrder('cards')}`"
-          ></feedback-cards>
+          />
           <v-sheet
             v-if="showTopFoods"
             :class="`order-${getSectionOrder('topFoods')}`"
             color="white"
           >
-            <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
+            <feedback-top-foods v-bind="{ topFoods }" class="feedback-area" />
           </v-sheet>
           <feedback-meals
             v-if="showTopFoods"
@@ -45,7 +47,7 @@
             :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
             :submissions="submissions"
             :survey-stats="feedbackDicts.surveyStats"
-          ></feedback-meals>
+          />
         </div>
       </v-container>
     </v-card>
@@ -93,8 +95,8 @@ export default defineComponent({
 
     const scheme = computed(() => props.feedbackScheme);
 
-    const { cards, feedbackDicts, getSectionOrder, topFoods, showCards, showMeals, showTopFoods } =
-      useFeedback(scheme);
+    const { cards, feedbackDicts, getSectionOrder, topFoods, showCards, showMeals, showTopFoods }
+      = useFeedback(scheme);
 
     return {
       dialog,
@@ -138,7 +140,8 @@ export default defineComponent({
         submissions,
       });
 
-      if (!feedbackDicts || !userDemographic) return;
+      if (!feedbackDicts || !userDemographic)
+        return;
 
       this.feedbackDicts = feedbackDicts;
 

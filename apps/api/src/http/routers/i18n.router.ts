@@ -7,8 +7,8 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import { Language } from '@intake24/db';
 
-export const i18n = () =>
-  initServer().router(contract.public.i18n, {
+export function i18n() {
+  return initServer().router(contract.public.i18n, {
     browseLanguages: async () => {
       const languages = await Language.scope('public').findAll();
 
@@ -32,7 +32,8 @@ export const i18n = () =>
         language = await Language.scope('public').findOne({ where: { code: fallback }, include });
       }
 
-      if (!language) throw new NotFoundError();
+      if (!language)
+        throw new NotFoundError();
 
       const response = {
         ...pick(language, [
@@ -56,3 +57,4 @@ export const i18n = () =>
       };
     },
   });
+}

@@ -26,7 +26,7 @@ export const useApp = defineStore('app', {
       name: import.meta.env.VITE_APP_NAME,
       host: window.location.host,
       api: [import.meta.env.VITE_API_HOST, import.meta.env.VITE_API_URL]
-        .map((item) => trim(item, '/'))
+        .map(item => trim(item, '/'))
         .join('/'),
       build: {
         version: import.meta.env.VITE_APP_BUILD_VERSION,

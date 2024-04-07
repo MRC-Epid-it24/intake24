@@ -7,16 +7,16 @@ import translations from './translations/index.test';
 import update from './update.test';
 
 export default () => {
-  describe('GET /api/admin/languages', browse);
-  describe('POST /api/admin/languages', store);
-  describe('GET /api/admin/languages/:languageId', read);
-  describe('GET /api/admin/languages/:languageId/edit', edit);
-  describe('PUT /api/admin/languages/:languageId', update);
-  describe('DELETE /api/admin/languages/:languageId', destroy);
+  describe('get /api/admin/languages', browse);
+  describe('post /api/admin/languages', store);
+  describe('get /api/admin/languages/:languageId', read);
+  describe('get /api/admin/languages/:languageId/edit', edit);
+  describe('put /api/admin/languages/:languageId', update);
+  describe('delete /api/admin/languages/:languageId', destroy);
 
-  describe('GET /api/admin/languages/:languageId/translations', translations.browse);
-  describe('POST /api/admin/languages/:languageId/translations', translations.store);
-  describe('PUT /api/admin/languages/:languageId/translations', translations.update);
-  describe('DELETE /api/admin/languages/:languageId/translations', translations.destroy);
+  describe('get /api/admin/languages/:languageId/translations', translations.browse);
+  describe('post /api/admin/languages/:languageId/translations', translations.store);
+  describe('put /api/admin/languages/:languageId/translations', translations.update);
+  describe('delete /api/admin/languages/:languageId/translations', translations.destroy);
   // describe('POST /api/admin/languages/:languageId/translations/sync', translations.sync);
 };

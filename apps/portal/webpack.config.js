@@ -1,5 +1,5 @@
+const path = require('node:path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -11,14 +11,15 @@ module.exports = (env) => {
 
   const plugins = [new ForkTsCheckerWebpackPlugin(), new WebpackBar({ name: 'Portal' })];
 
-  if (isDev)
+  if (isDev) {
     plugins.push(
       new NodemonPlugin({
         script: './dist/server.js',
         watch: ['./dist', '.env'],
         nodeArgs: ['--trace-warnings', '--inspect=6060'],
-      })
+      }),
     );
+  }
 
   return {
     context: __dirname,

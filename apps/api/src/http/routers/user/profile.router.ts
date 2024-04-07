@@ -8,7 +8,7 @@ import { Survey, UserPassword } from '@intake24/db';
 
 import { ForbiddenError, NotFoundError, ValidationError } from '../../errors';
 
-export const profile = () => {
+export function profile() {
   return initServer().router(contract.user.profile, {
     updatePassword: async ({ body, req }) => {
       const { userId } = req.scope.cradle.user;
@@ -17,15 +17,16 @@ export const profile = () => {
       const userPassword = await UserPassword.findByPk(userId);
 
       if (
-        !userPassword ||
-        !(await req.scope.cradle.authenticationService.verifyPassword(
+        !userPassword
+        || !(await req.scope.cradle.authenticationService.verifyPassword(
           passwordCurrent,
-          userPassword
+          userPassword,
         ))
-      )
+      ) {
         throw new ValidationError('Enter your current valid password.', {
           path: 'passwordCurrent',
         });
+      }
 
       await req.scope.cradle.adminUserService.updatePassword(userId, password);
 
@@ -40,9 +41,11 @@ export const profile = () => {
           attributes: ['id'],
           include: [{ association: 'feedbackScheme', attributes: ['id'] }],
         });
-        if (!survey) throw new NotFoundError();
+        if (!survey)
+          throw new NotFoundError();
 
-        if (!survey.feedbackScheme) throw new ForbiddenError();
+        if (!survey.feedbackScheme)
+          throw new ForbiddenError();
       }
 
       const data = await req.scope.cradle.userService.getPhysicalData(userId);
@@ -58,23 +61,27 @@ export const profile = () => {
           attributes: ['id'],
           include: [{ association: 'feedbackScheme', attributes: ['id', 'physicalDataFields'] }],
         });
-        if (!survey) throw new NotFoundError();
+        if (!survey)
+          throw new NotFoundError();
 
-        if (!survey.feedbackScheme) throw new ForbiddenError();
+        if (!survey.feedbackScheme)
+          throw new ForbiddenError();
 
         const errors = survey.feedbackScheme.physicalDataFields.reduce<
           Partial<FieldValidationError>[]
         >((acc, item) => {
-          if (body[item] === undefined || body[item] === null)
+          if (body[item] === undefined || body[item] === null) {
             acc.push({
               path: item,
               msg: 'Physical parameter is required for feedback calculation',
             });
+          }
 
           return acc;
         }, []);
 
-        if (errors.length) throw new ValidationError('Missing physical data fields', errors);
+        if (errors.length)
+          throw new ValidationError('Missing physical data fields', errors);
       }
 
       const data = await req.scope.cradle.userService.setPhysicalData(
@@ -86,7 +93,7 @@ export const profile = () => {
           'heightCm',
           'physicalActivityLevelId',
           'weightTarget',
-        ])
+        ]),
       );
 
       return { status: 200, body: data };
@@ -98,15 +105,16 @@ export const profile = () => {
       const survey = await (typeof slug === 'string'
         ? Survey.findBySlug(slug, { attributes: ['id'] })
         : Survey.findOne({ attributes: ['id'], where: { slug } }));
-      if (!survey) throw new NotFoundError();
+      if (!survey)
+        throw new NotFoundError();
 
       const data = await req.scope.cradle.cache.remember(
         `user-submissions:${userId}`,
         req.scope.cradle.cacheConfig.ttl,
-        async () => req.scope.cradle.surveyService.getSubmissions({ userId, surveyId: survey.id })
+        async () => req.scope.cradle.surveyService.getSubmissions({ userId, surveyId: survey.id }),
       );
 
       return { status: 200, body: data as SurveySubmissionEntry[] };
     },
   });
-};
+}

@@ -5,9 +5,9 @@ import logout from './logout.test';
 import refresh from './refresh.test';
 
 export default () => {
-  describe('POST /api/auth/login', login);
-  describe('POST /api/auth/login/alias', loginAlias);
-  describe('POST /api/auth/login/token', loginToken);
-  describe('POST /api/auth/login/refresh', refresh);
-  describe('POST /api/auth/login/logout', logout);
+  describe('post /api/auth/login', login);
+  describe('post /api/auth/login/alias', loginAlias);
+  describe('post /api/auth/login/token', loginToken);
+  describe('post /api/auth/login/refresh', refresh);
+  describe('post /api/auth/login/logout', logout);
 };

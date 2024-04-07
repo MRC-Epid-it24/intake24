@@ -19,12 +19,12 @@ import {
   UserSurveyAlias,
 } from '@intake24/db';
 
-const adminSurveyService = ({
+function adminSurveyService({
   adminUserService,
   db,
   securityConfig,
   scheduler,
-}: Pick<IoC, 'adminUserService' | 'db' | 'securityConfig' | 'scheduler'>) => {
+}: Pick<IoC, 'adminUserService' | 'db' | 'securityConfig' | 'scheduler'>) {
   /**
    * Fetch survey-specific respondent permission instance or create one
    *
@@ -44,11 +44,11 @@ const adminSurveyService = ({
   /**
    * Get survey resource permissions
    *
-   * @param {(string | string[])} [scope=[]]
+   * @param {(string | string[])} [scope]
    * @returns {Promise<Permission[]>}
    */
   const getSurveyResourcePermissions = async (
-    scope: string | string[] = []
+    scope: string | string[] = [],
   ): Promise<Permission[]> =>
     Permission.scope(scope).findAll({
       where: { name: { [Op.startsWith]: 'surveys-' } },
@@ -64,22 +64,23 @@ const adminSurveyService = ({
    */
   const createRespondent = async (
     survey: Survey | string,
-    input: CreateRespondentInput
+    input: CreateRespondentInput,
   ): Promise<UserSurveyAlias> => {
-    const surveyEntry =
-      typeof survey === 'string'
+    const surveyEntry
+      = typeof survey === 'string'
         ? await Survey.findByPk(survey, {
-            attributes: [
-              'id',
-              'slug',
-              'authUrlTokenCharset',
-              'authUrlTokenLength',
-              'userCustomFields',
-              'userPersonalIdentifiers',
-            ],
-          })
+          attributes: [
+            'id',
+            'slug',
+            'authUrlTokenCharset',
+            'authUrlTokenLength',
+            'userCustomFields',
+            'userPersonalIdentifiers',
+          ],
+        })
         : survey;
-    if (!surveyEntry) throw new NotFoundError();
+    if (!surveyEntry)
+      throw new NotFoundError();
 
     const {
       id: surveyId,
@@ -94,7 +95,7 @@ const adminSurveyService = ({
     return db.system.transaction(async (transaction) => {
       const user = await User.create(
         userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {},
-        { transaction }
+        { transaction },
       );
 
       const { id: userId } = user;
@@ -111,20 +112,20 @@ const adminSurveyService = ({
               username,
               urlAuthToken: randomString(
                 authUrlTokenLength ?? size,
-                authUrlTokenCharset ?? alphabet
+                authUrlTokenCharset ?? alphabet,
               ),
             },
-            { transaction }
+            { transaction },
           ),
           user.$add('permissions', surveyRespondentPermission, { transaction }),
           adminUserService.createPassword({ userId, password }, transaction),
           userCustomFields && customFields?.length
             ? UserCustomField.bulkCreate(
-                customFields.map((field) => ({ ...field, userId })),
-                { transaction }
-              )
+              customFields.map(field => ({ ...field, userId })),
+              { transaction },
+            )
             : null,
-        ].filter(Boolean)
+        ].filter(Boolean),
       );
 
       return respondent as UserSurveyAlias;
@@ -140,7 +141,7 @@ const adminSurveyService = ({
    */
   const createRespondents = async (
     surveyId: string,
-    inputs: CreateRespondentInput[]
+    inputs: CreateRespondentInput[],
   ): Promise<UserSurveyAlias[]> => {
     const survey = await Survey.findByPk(surveyId, {
       attributes: [
@@ -152,7 +153,8 @@ const adminSurveyService = ({
         'authUrlTokenLength',
       ],
     });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     const { id: permissionId } = await getSurveyRespondentPermission(survey.slug);
     const { size, alphabet } = securityConfig.authTokens;
@@ -174,7 +176,7 @@ const adminSurveyService = ({
         // This is to keep it MySQL+others-like compatible, where bulk operation doesn't return generated IDs
         const { id: userId } = await User.create(
           userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {},
-          { transaction }
+          { transaction },
         );
 
         if (userCustomFields && customFields?.length) {
@@ -215,7 +217,7 @@ const adminSurveyService = ({
   const updateRespondent = async (
     surveyId: string,
     username: string,
-    input: UpdateRespondentInput
+    input: UpdateRespondentInput,
   ): Promise<UserSurveyAlias> => {
     const [survey, alias] = await Promise.all([
       Survey.findByPk(surveyId, {
@@ -229,7 +231,8 @@ const adminSurveyService = ({
       }),
     ]);
 
-    if (!survey || !alias?.user) throw new NotFoundError();
+    if (!survey || !alias?.user)
+      throw new NotFoundError();
 
     const { user, userId } = alias;
 
@@ -245,14 +248,14 @@ const adminSurveyService = ({
           password ? adminUserService.updatePassword(userId, password, transaction) : null,
           userCustomFields && customFields && user.customFields
             ? adminUserService.updateUserCustomFields(
-                userId,
-                user.customFields,
-                customFields,
-                transaction
-              )
+              userId,
+              user.customFields,
+              customFields,
+              transaction,
+            )
             : null,
           adminUserService.flushACLCacheByUserId(userId),
-        ].filter(Boolean)
+        ].filter(Boolean),
       );
     });
 
@@ -282,7 +285,8 @@ const adminSurveyService = ({
       }),
     ]);
 
-    if (!survey || !alias?.user) throw new NotFoundError();
+    if (!survey || !alias?.user)
+      throw new NotFoundError();
 
     const { user, userId } = alias;
 
@@ -299,7 +303,8 @@ const adminSurveyService = ({
           }),
         ]);
       });
-    } else {
+    }
+    else {
       // Wipe the whole user record
       await user.destroy();
     }
@@ -318,10 +323,11 @@ const adminSurveyService = ({
   const importRespondents = async (
     surveyId: string,
     userId: string,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<Job> => {
     const survey = await Survey.findByPk(surveyId, { attributes: ['id'] });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     return scheduler.jobs.addJob({
       type: 'SurveyRespondentsImport',
@@ -340,7 +346,8 @@ const adminSurveyService = ({
    */
   const exportAuthenticationUrls = async (surveyId: string, userId: string): Promise<Job> => {
     const survey = await Survey.findByPk(surveyId, { attributes: ['id'] });
-    if (!survey) throw new NotFoundError();
+    if (!survey)
+      throw new NotFoundError();
 
     return scheduler.jobs.addJob({
       type: 'SurveyAuthUrlsExport',
@@ -368,7 +375,7 @@ const adminSurveyService = ({
     exportAuthenticationUrls,
     queueTask,
   };
-};
+}
 
 export default adminSurveyService;
 

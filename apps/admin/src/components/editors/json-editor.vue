@@ -1,5 +1,5 @@
 <template>
-  <json-editor-vue v-bind="{ readOnly, value }" @input="input"></json-editor-vue>
+  <json-editor-vue v-bind="{ readOnly, value }" @input="input" />
 </template>
 
 <script lang="ts">

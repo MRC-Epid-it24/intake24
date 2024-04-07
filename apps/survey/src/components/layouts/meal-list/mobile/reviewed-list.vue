@@ -2,7 +2,9 @@
   <div content-class="meal-list-mobile__sheet" scrollable>
     <v-card class="meal-list-mobile__card" flat>
       <div class="py-4 pl-4 pr-3 d-flex flex-row justify-space-between align-center">
-        <div class="text-h6 font-weight-medium">{{ $t('recall.menu.title') }}</div>
+        <div class="text-h6 font-weight-medium">
+          {{ $t('recall.menu.title') }}
+        </div>
       </div>
       <v-card-text class="pa-0">
         <v-list class="meal-list__list" dense subheader>
@@ -12,7 +14,7 @@
               :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
               @action="action"
               @update:context-id="updateContextId"
-            ></meal-item>
+            />
             <div class="d-flex flex-column pa-4 ga-4">
               <v-checkbox
                 v-if="review === 'checkbox'"
@@ -21,7 +23,7 @@
                 hide-details
                 :label="$t('recall.actions.reviewed')"
                 :value="meal.id"
-              ></v-checkbox>
+              />
               <v-hover v-slot="{ hover }">
                 <v-btn
                   :color="hover ? 'primary' : 'inherit'"
@@ -41,11 +43,11 @@
               class="review-checkbox__checkbox font-weight-medium mt-0"
               hide-details
               :label="$t('recall.actions.reviewed')"
-            ></v-checkbox>
+            />
           </v-card-text>
         </v-list>
       </v-card-text>
-      <div v-if="!bottomReached" v-intersect="bottomIntersect" class="d-hidden"></div>
+      <div v-if="!bottomReached" v-intersect="bottomIntersect" class="d-hidden" />
     </v-card>
   </div>
 </template>
@@ -82,7 +84,7 @@ export default defineComponent({
     const { bottomIntersect, bottomReached, reviewed } = useReviewList(props, ctx);
     const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
       props,
-      ctx
+      ctx,
     );
 
     const { getMealName, getMealTime } = useMealUtils();

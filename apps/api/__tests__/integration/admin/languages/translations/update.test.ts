@@ -32,7 +32,7 @@ export default () => {
     updateTranslations = [translation];
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('put', url, {
       input: { translations: updateTranslations },
       permissions,
@@ -68,8 +68,8 @@ export default () => {
       expect(body).not.toBeEmpty();
 
       const match = (body as any[]).find(
-        (item) =>
-          item.application === translation.application && item.section === translation.section
+        item =>
+          item.application === translation.application && item.section === translation.section,
       );
       expect(match.messages).toStrictEqual(translation.messages);
     });

@@ -86,7 +86,7 @@ export default <
       },
 
       isValid(): boolean {
-        return this.validConditions.every((conditions) => conditions);
+        return this.validConditions.every(conditions => conditions);
       },
 
       type() {
@@ -104,7 +104,8 @@ export default <
       },
 
       async goToActions() {
-        if (this.panel === -1) return;
+        if (this.panel === -1)
+          return;
 
         setTimeout(async () => {
           await this.$vuetify.goTo('#actions', { duration: 1000 });

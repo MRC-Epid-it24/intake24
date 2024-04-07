@@ -12,7 +12,7 @@
     }"
     @action="action"
     @input="update"
-  ></as-served-prompt>
+  />
 </template>
 
 <script lang="ts">

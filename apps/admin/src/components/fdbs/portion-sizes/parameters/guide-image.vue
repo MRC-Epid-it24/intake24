@@ -7,15 +7,14 @@
         :label="$t('fdbs.portionSizes.methods.guide-image._')"
         name="guide-image-id"
         resource="guide-images"
-      >
-      </select-resource>
+      />
     </v-col>
     <v-col cols="12">
       <v-switch
         v-model="parameters.imageMapLabels"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.guide-image.imageMapLabels')"
-      ></v-switch>
+      />
     </v-col>
   </v-row>
 </template>

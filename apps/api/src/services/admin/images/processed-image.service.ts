@@ -12,12 +12,12 @@ export type SelectionImageType = 'guide' | 'as_served';
 
 export type DestroyOptions = { includeSources?: boolean };
 
-const processedImageService = ({
+function processedImageService({
   fsConfig,
   logger: globalLogger,
   sourceImageService,
   imageProcessorConfig,
-}: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService' | 'imageProcessorConfig'>) => {
+}: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService' | 'imageProcessorConfig'>) {
   const { images: imagesPath } = fsConfig.local;
   const logger = globalLogger.child({ service: 'ProcessedImageService' });
 
@@ -25,18 +25,22 @@ const processedImageService = ({
     const sourceImage = await SourceImage.findByPk(sourceImageId, { attributes: ['id', 'path'] });
     if (!sourceImage) {
       logger.warn(
-        `resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`
+        `resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`,
       );
       throw new NotFoundError();
     }
 
     try {
       await fs.access(path.join(imagesPath, sourceImage.path), fs.constants.F_OK);
-    } catch (err) {
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.error(`${name}: ${message}`, { stack });
-      } else logger.error(err);
+      }
+      else {
+        logger.error(err);
+      }
 
       throw new NotFoundError();
     }
@@ -46,10 +50,10 @@ const processedImageService = ({
 
   const createAsServedImages = async (
     id: string,
-    sourceImage: SourceImage | string
+    sourceImage: SourceImage | string,
   ): Promise<[ProcessedImage, ProcessedImage]> => {
-    const image =
-      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+    const image
+      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('as_served', id);
@@ -91,10 +95,10 @@ const processedImageService = ({
 
   const createImageMapBaseImage = async (
     id: string,
-    sourceImage: SourceImage | string
+    sourceImage: SourceImage | string,
   ): Promise<ProcessedImage> => {
-    const image =
-      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+    const image
+      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('image_maps', id);
@@ -117,10 +121,10 @@ const processedImageService = ({
   const createSelectionImage = async (
     id: string,
     sourceImage: SourceImage | string,
-    type: SelectionImageType
+    type: SelectionImageType,
   ): Promise<ProcessedImage> => {
-    const image =
-      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+    const image
+      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join(type, id, 'selection');
@@ -131,7 +135,7 @@ const processedImageService = ({
     await sharp(path.join(imagesPath, image.path))
       .resize(
         imageProcessorConfig.optionSelection.width,
-        imageProcessorConfig.optionSelection.height
+        imageProcessorConfig.optionSelection.height,
       )
       .jpeg({ mozjpeg: true })
       .toFile(path.join(imagesPath, filePath));
@@ -145,10 +149,10 @@ const processedImageService = ({
 
   const createDrinkScaleBaseImage = async (
     drinkwareSetId: string,
-    sourceImage: SourceImage | string
+    sourceImage: SourceImage | string,
   ): Promise<ProcessedImage> => {
-    const image =
-      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+    const image
+      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('drinkware', drinkwareSetId);
@@ -181,7 +185,8 @@ const processedImageService = ({
 
     try {
       await fs.unlink(path.join(imagesPath, processedImage.path));
-    } catch (err) {
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.error(`${name}: ${message}`, { stack });
@@ -192,7 +197,8 @@ const processedImageService = ({
     }
 
     const { includeSources } = options;
-    if (includeSources) await sourceImageService.destroy(processedImage.sourceId);
+    if (includeSources)
+      await sourceImageService.destroy(processedImage.sourceId);
   };
 
   return {
@@ -202,7 +208,7 @@ const processedImageService = ({
     createDrinkScaleBaseImage,
     destroy,
   };
-};
+}
 
 export default processedImageService;
 

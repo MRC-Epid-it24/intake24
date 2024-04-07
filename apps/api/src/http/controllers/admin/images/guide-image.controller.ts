@@ -9,28 +9,29 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { GuideImage } from '@intake24/db';
 
-const guideImageController = ({
+function guideImageController({
   imagesBaseUrl,
   guideImageService,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'guideImageService' | 'portionSizeService'>) => {
+}: Pick<IoC, 'imagesBaseUrl' | 'guideImageService' | 'portionSizeService'>) {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
     req: Request<{ guideImageId: string }>,
-    res: Response<GuideImageEntry>
+    res: Response<GuideImageEntry>,
   ): Promise<void> => {
     const { guideImageId } = req.params;
 
     const guideImage = await portionSizeService.getGuideImage(guideImageId);
-    if (!guideImage) throw new NotFoundError();
+    if (!guideImage)
+      throw new NotFoundError();
 
     res.json(responseCollection.guideEntryResponse(guideImage));
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<GuideImagesResponse>
+    res: Response<GuideImagesResponse>,
   ): Promise<void> => {
     const guideImages = await GuideImage.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -49,24 +50,25 @@ const guideImageController = ({
     await guideImageService.create({ id, description, imageMapId });
 
     const guideImage = await portionSizeService.getGuideImage(id);
-    if (!guideImage) throw new NotFoundError();
+    if (!guideImage)
+      throw new NotFoundError();
 
     res.status(201).json(responseCollection.guideEntryResponse(guideImage));
   };
 
   const read = async (
     req: Request<{ guideImageId: string }>,
-    res: Response<GuideImageEntry>
+    res: Response<GuideImageEntry>,
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ guideImageId: string }>,
-    res: Response<GuideImageEntry>
+    res: Response<GuideImageEntry>,
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ guideImageId: string }>,
-    res: Response<GuideImageEntry>
+    res: Response<GuideImageEntry>,
   ): Promise<void> => {
     const { guideImageId } = req.params;
     const { description, objects } = req.body;
@@ -81,7 +83,7 @@ const guideImageController = ({
 
   const destroy = async (
     req: Request<{ guideImageId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { guideImageId } = req.params;
 
@@ -103,7 +105,7 @@ const guideImageController = ({
     destroy,
     refs,
   };
-};
+}
 
 export default guideImageController;
 

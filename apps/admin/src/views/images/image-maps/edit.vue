@@ -13,7 +13,7 @@
                 :label="$t('image-maps.id')"
                 name="id"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -24,17 +24,17 @@
                 name="description"
                 outlined
                 prepend-inner-icon="$description"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-card-text>
         <guide-drawer
           v-bind="{ entry, resource: 'image-maps' }"
           @image-map-objects="updateObjects"
-        ></guide-drawer>
-        <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
+        />
+        <error-list :errors="nonInputErrors" tag="v-card-text" />
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
     </v-container>

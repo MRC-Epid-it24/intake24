@@ -89,7 +89,8 @@ export default class MFADevice extends BaseModel<
   @BeforeCreate
   static async handleAdminPermission(device: MFADevice): Promise<void> {
     const count = await MFADevice.count({ where: { userId: device.userId } });
-    if (count === 0) device.preferred = true;
+    if (count === 0)
+      device.preferred = true;
   }
 }
 

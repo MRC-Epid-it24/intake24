@@ -38,5 +38,5 @@ export default validate(
       optional: true,
     },
     baseImage: imageFile,
-  })
+  }),
 );

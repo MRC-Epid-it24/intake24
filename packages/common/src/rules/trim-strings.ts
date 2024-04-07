@@ -1,4 +1,4 @@
-const trimStrings = (input: any) => {
+function trimStrings(input: any) {
   let output = input;
 
   if (typeof input === 'string') {
@@ -6,7 +6,8 @@ const trimStrings = (input: any) => {
     output = chars.length ? chars : null;
   }
 
-  if (Array.isArray(input)) output = input.map((item) => trimStrings(item));
+  if (Array.isArray(input))
+    output = input.map(item => trimStrings(item));
 
   if (Object.prototype.toString.call(input) === '[object Object]') {
     output = Object.entries(input).reduce<any>((acc, [key, value]) => {
@@ -16,6 +17,6 @@ const trimStrings = (input: any) => {
   }
 
   return output;
-};
+}
 
 export default trimStrings;

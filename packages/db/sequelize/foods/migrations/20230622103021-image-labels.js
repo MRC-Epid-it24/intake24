@@ -2,21 +2,21 @@ module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all(
-        ['drinkware_scales', 'guide_image_objects', 'image_map_objects'].map((table) =>
+        ['drinkware_scales', 'guide_image_objects', 'image_map_objects'].map(table =>
           queryInterface.addColumn(
             table,
             'label',
             { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
-            { transaction }
-          )
-        )
+            { transaction },
+          ),
+        ),
       );
 
       await queryInterface.changeColumn(
         'drinkware_scales',
         'choice_id',
         { type: Sequelize.BIGINT, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex('drinkware_sets', 'drinkware_sets_guide_image_id_index', {
@@ -50,16 +50,16 @@ module.exports = {
   down: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all(
-        ['drinkware_scales', 'guide_image_objects', 'image_map_objects'].map((table) =>
-          queryInterface.removeColumn(table, 'label', { transaction })
-        )
+        ['drinkware_scales', 'guide_image_objects', 'image_map_objects'].map(table =>
+          queryInterface.removeColumn(table, 'label', { transaction }),
+        ),
       );
 
       await queryInterface.changeColumn(
         'drinkware_scales',
         'choice_id',
         { type: Sequelize.INTEGER, allowNull: false },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeIndex('drinkware_sets', 'drinkware_sets_image_map_id_idx', {

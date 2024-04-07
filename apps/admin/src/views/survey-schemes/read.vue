@@ -5,7 +5,7 @@
         v-if="canHandleEntry('copy')"
         resource="survey-schemes"
         :scheme-id="id"
-      ></copy-scheme-dialog>
+      />
     </template>
     <v-simple-table>
       <tbody>

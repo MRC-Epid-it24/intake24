@@ -9,11 +9,11 @@ const i18n: I18nOptions = { locale: 'en' };
 
 localVue.use(VueI18n);
 
-describe('TextareaPrompt.vue.vue', () => {
+describe('textareaPrompt.vue.vue', () => {
   it('renders props.msg when passed', () => {
     const text = { en: 'Hello world' };
 
-    const wrapper = shallowMount(TextareaPrompt, {
+    const _wrapper = shallowMount(TextareaPrompt, {
       propsData: { promptProps: { text } },
       localVue,
       i18n,

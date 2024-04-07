@@ -9,7 +9,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="bowlValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="bowlValid" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -23,12 +23,12 @@
             }"
             @confirm="confirmBowl"
             @select="selectBowl"
-          ></image-map-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header>
-          <i18n :path="`prompts.asServed.serving.header`">
+          <i18n path="prompts.asServed.serving.header">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -39,7 +39,7 @@
                 v-if="prompt.badges"
                 :amount="portionSize.serving?.weight"
                 :valid="servingImageConfirmed"
-              ></quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
@@ -50,12 +50,12 @@
             :as-served-set-id="servingImageSet"
             @confirm="confirmServing"
             @input="updateServing"
-          ></as-served-selector>
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel v-if="leftoversEnabled" :disabled="!servingImageConfirmed">
         <v-expansion-panel-header>
-          <i18n :path="`prompts.asServed.leftovers.header`">
+          <i18n path="prompts.asServed.leftovers.header">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -66,15 +66,14 @@
                 v-if="prompt.badges"
                 :amount="portionSize.leftovers?.weight"
                 :valid="leftoversImageConfirmed"
-              >
-              </quantity-badge>
+              />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory />
           <template v-if="leftoversPrompt">
-            <i18n class="mb-4" :path="`prompts.asServed.leftovers.label`" tag="div">
+            <i18n class="mb-4" path="prompts.asServed.leftovers.label" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
@@ -86,16 +85,16 @@
               type="leftovers"
               @confirm="confirmLeftovers"
               @input="updateLeftovers"
-            ></as-served-selector>
+            />
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -156,7 +155,8 @@ export default defineComponent({
         portionSize: { bowlIndex, method },
         parameters: { type },
       } = this;
-      if (bowlIndex === undefined) return undefined;
+      if (bowlIndex === undefined)
+        return undefined;
 
       return `${method}_${type}${bowls[bowlIndex]}`;
     },
@@ -167,17 +167,18 @@ export default defineComponent({
         portionSize: { bowlIndex, method },
         parameters: { type },
       } = this;
-      if (bowlIndex === undefined) return undefined;
+      if (bowlIndex === undefined)
+        return undefined;
 
       return `${method}_${type}${bowls[bowlIndex]}_leftovers`;
     },
 
     bowlValid() {
       return !!(
-        this.portionSize.bowlId !== undefined &&
-        this.portionSize.bowlIndex !== undefined &&
-        this.portionSize.bowl &&
-        this.bowlConfirmed
+        this.portionSize.bowlId !== undefined
+        && this.portionSize.bowlIndex !== undefined
+        && this.portionSize.bowl
+        && this.bowlConfirmed
       );
     },
 
@@ -215,7 +216,7 @@ export default defineComponent({
   methods: {
     async fetchBowlImageMap() {
       const { data } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.bowlImageMapId}`
+        `portion-sizes/image-maps/${this.bowlImageMapId}`,
       );
 
       this.bowlImageMap = { ...data };
@@ -239,7 +240,8 @@ export default defineComponent({
     updateServing() {
       this.servingImageConfirmed = false;
 
-      if (this.isValid) this.clearErrors();
+      if (this.isValid)
+        this.clearErrors();
 
       this.update();
     },
@@ -253,7 +255,8 @@ export default defineComponent({
     updateLeftovers() {
       this.leftoversImageConfirmed = false;
 
-      if (this.isValid) this.clearErrors();
+      if (this.isValid)
+        this.clearErrors();
 
       this.update();
     },

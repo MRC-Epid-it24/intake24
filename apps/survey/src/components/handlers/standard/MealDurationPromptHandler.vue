@@ -3,7 +3,7 @@
     v-model="state"
     v-bind="{ meal, prompt, section }"
     @action="action"
-  ></meal-duration-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -40,7 +40,7 @@ export default defineComponent({
     const survey = useSurvey();
 
     const getInitialState = computed(
-      () => props.prompt.slider.current.value || props.prompt.slider.min.value || 0
+      () => props.prompt.slider.current.value || props.prompt.slider.min.value || 0,
     );
 
     const commitAnswer = () => {

@@ -28,12 +28,12 @@ import {
 
 import { securableController } from './securable.controller';
 
-const surveySchemeController = (ioc: IoC) => {
+function surveySchemeController(ioc: IoC) {
   const { dataExportFields } = ioc;
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveySchemesResponse>
+    res: Response<SurveySchemesResponse>,
   ): Promise<void> => {
     const {
       aclService,
@@ -64,7 +64,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const store = async (
     req: Request<any, any, SurveySchemeCreationAttributes>,
-    res: Response<SurveySchemeEntry>
+    res: Response<SurveySchemeEntry>,
   ): Promise<void> => {
     const { userId } = req.scope.cradle.user;
 
@@ -78,7 +78,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const read = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<SurveySchemeEntry>
+    res: Response<SurveySchemeEntry>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -92,7 +92,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const edit = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<SurveySchemeEntry>
+    res: Response<SurveySchemeEntry>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -106,7 +106,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const update = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<SurveySchemeEntry>
+    res: Response<SurveySchemeEntry>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -122,7 +122,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const patch = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<SurveySchemeEntry>
+    res: Response<SurveySchemeEntry>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const {
@@ -142,16 +142,20 @@ const surveySchemeController = (ioc: IoC) => {
 
     if (resourceActions.includes('edit') || surveyScheme.ownerId === userId) {
       keysToUpdate.push(...createSurveySchemeFields);
-    } else {
-      if (securableActions.includes('edit')) keysToUpdate.push(...updateSurveySchemeFields);
+    }
+    else {
+      if (securableActions.includes('edit'))
+        keysToUpdate.push(...updateSurveySchemeFields);
 
       perCardSurveySchemeFields.forEach((item) => {
-        if (securableActions.includes(kebabCase(item))) keysToUpdate.push(item);
+        if (securableActions.includes(kebabCase(item)))
+          keysToUpdate.push(item);
       });
     }
 
     const updateInput = pick(req.body, keysToUpdate);
-    if (!Object.keys(updateInput).length) throw new ValidationError('Missing body');
+    if (!Object.keys(updateInput).length)
+      throw new ValidationError('Missing body');
 
     await surveyScheme.update(updateInput);
 
@@ -160,12 +164,12 @@ const surveySchemeController = (ioc: IoC) => {
 
   const put = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<SurveySchemeEntry>
+    res: Response<SurveySchemeEntry>,
   ): Promise<void> => update(req, res);
 
   const destroy = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -190,7 +194,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const copy = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<SurveySchemeEntry>
+    res: Response<SurveySchemeEntry>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const {
@@ -228,7 +232,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const templates = async (
     req: Request<{ surveySchemeId: string }, any, any, PaginateQuery>,
-    res: Response<SurveySchemeTemplates>
+    res: Response<SurveySchemeTemplates>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -250,7 +254,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const dataExportRefs = async (
     req: Request<{ surveySchemeId: string }>,
-    res: Response<SurveySchemeExportRefsResponse>
+    res: Response<SurveySchemeExportRefsResponse>,
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -286,7 +290,7 @@ const surveySchemeController = (ioc: IoC) => {
     dataExportRefs,
     securables: securableController({ ioc, securable: SurveyScheme }),
   };
-};
+}
 
 export default surveySchemeController;
 

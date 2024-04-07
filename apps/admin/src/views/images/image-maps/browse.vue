@@ -1,5 +1,5 @@
 <template>
-  <gallery subtitle="description" title="id"></gallery>
+  <gallery subtitle="description" title="id" />
 </template>
 
 <script lang="ts">

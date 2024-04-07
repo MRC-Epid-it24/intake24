@@ -7,7 +7,7 @@ export const demographicGroupScaleSector = z.object({
   name: requiredLocaleTranslation,
   summary: localeTranslation,
   description: localeTranslation,
-  range: range,
+  range,
   sentiment: z.enum(sentiments),
 });
 

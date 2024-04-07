@@ -16,7 +16,8 @@ export default defineComponent({
       this.addLoading(name);
       try {
         return await promise;
-      } finally {
+      }
+      finally {
         this.removeLoading(name);
       }
     },

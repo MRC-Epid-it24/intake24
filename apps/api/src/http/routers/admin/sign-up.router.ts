@@ -6,7 +6,7 @@ import { contract } from '@intake24/common/contracts';
 import { captchaCheck } from '../../rules';
 import { attachRefreshToken } from '../util';
 
-export const signUp = () => {
+export function signUp() {
   return initServer().router(contract.admin.signUp, {
     signUp: async ({ req, res }) => {
       const {
@@ -18,19 +18,20 @@ export const signUp = () => {
 
       await req.scope.cradle.adminSignupService.signUp(
         { name, email, phone, password },
-        { notify: true, userAgent }
+        { notify: true, userAgent },
       );
 
       const result = await req.scope.cradle.authenticationService.adminLogin(
         { email, password },
-        { req }
+        { req },
       );
-      if ('devices' in result) return { status: 200, body: result };
+      if ('devices' in result)
+        return { status: 200, body: result };
 
       attachRefreshToken(
         result.refreshToken,
         res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie
+        req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
       return { status: 200, body: { accessToken: result.accessToken } };
     },
@@ -42,4 +43,4 @@ export const signUp = () => {
       return { status: 200, body: undefined };
     },
   });
-};
+}

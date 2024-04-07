@@ -21,12 +21,12 @@ export class FoodsApiV4 {
   }
 
   public async createGlobalFood(
-    createRequest: CreateGlobalFoodRequest
+    createRequest: CreateGlobalFoodRequest,
   ): Promise<CreateResult<FoodEntry>> {
     const response = await this.baseClient.postResponse<FoodEntry>(
       `${FoodsApiV4.globalApiPath}`,
       createRequest,
-      {}
+      {},
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
@@ -39,23 +39,23 @@ export class FoodsApiV4 {
   public async updateGlobalFood(
     code: string,
     version: string,
-    updateRequest: UpdateGlobalFoodRequest
+    updateRequest: UpdateGlobalFoodRequest,
   ): Promise<FoodEntry> {
     return await this.baseClient.put(
       `${FoodsApiV4.globalApiPath}/${code}?version=${version}`,
-      updateRequest
+      updateRequest,
     );
   }
 
   public async createLocalFood(
     localeId: string,
     createRequest: CreateLocalFoodRequest,
-    options: CreateLocalFoodRequestOptions
+    options: CreateLocalFoodRequestOptions,
   ): Promise<CreateResult<FoodEntry>> {
     const response = await this.baseClient.postResponse<FoodEntry>(
       `${FoodsApiV4.localApiPath}/${localeId}`,
       createRequest,
-      options
+      options,
     );
 
     return parseCreateResponse(response, this.baseClient.logger);

@@ -3,7 +3,7 @@
     <v-card-title>
       {{ $t('recall.menu.title') }}
     </v-card-title>
-    <v-divider></v-divider>
+    <v-divider />
     <v-list class="meal-list__list pt-0" dense flat tile>
       <component
         :is="expandable ? 'meal-item-expandable' : 'meal-item'"
@@ -12,7 +12,7 @@
         v-bind="{ meal, selectedMealId, selectedFoodId }"
         :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
         @action="action"
-      ></component>
+      />
     </v-list>
     <v-card-actions>
       <v-hover v-slot="{ hover }">
@@ -23,7 +23,9 @@
           :title="$t('recall.menu.meal.add')"
           @click="action('addMeal')"
         >
-          <v-icon left>$add</v-icon>
+          <v-icon left>
+            $add
+          </v-icon>
           {{ $t('recall.menu.meal.add') }}
         </v-btn>
       </v-hover>
@@ -60,7 +62,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
       props,
-      ctx
+      ctx,
     );
 
     return {

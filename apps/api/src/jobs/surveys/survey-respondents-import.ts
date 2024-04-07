@@ -52,7 +52,8 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
     this.logger.debug('Job started.');
 
     const fileExists = await fs.pathExists(this.file);
-    if (!fileExists) throw new Error(`Missing file (${this.file}).`);
+    if (!fileExists)
+      throw new Error(`Missing file (${this.file}).`);
 
     await this.validate();
 
@@ -65,7 +66,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    * Read CSV file and validate in chunks
    *
    * @private
-   * @param {number} [chunk=100]
+   * @param {number} [chunk]
    * @returns {Promise<void>}
    * @memberof SurveyRespondentsImport
    */
@@ -100,7 +101,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
               reject(err);
             });
         })
-        .on('error', (err) => reject(err));
+        .on('error', err => reject(err));
     });
   }
 
@@ -115,17 +116,18 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    * @memberof SurveyRespondentsImport
    */
   private async validateChunk(): Promise<void> {
-    if (!this.content.length) return;
+    if (!this.content.length)
+      return;
 
     this.lock();
 
     const csvFields = Object.keys(this.content[0]);
 
     // Check for presence of required fields
-    if (requiredFields.some((field) => !csvFields.includes(field)))
+    if (requiredFields.some(field => !csvFields.includes(field)))
       throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
 
-    const username = this.content.map((item) => item.username);
+    const username = this.content.map(item => item.username);
     const { surveyId } = this.params;
 
     // Check for unique aliases within survey
@@ -134,17 +136,17 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
       where: { surveyId, username },
     });
     if (aliases.length) {
-      const existingAliases = aliases.map((alias) => alias.username);
+      const existingAliases = aliases.map(alias => alias.username);
       throw new Error(`Following usernames already exist in survey: ${existingAliases.join(', ')}`);
     }
 
     // Check for unique emails within system
-    const email = this.content.filter((item) => item.email).map((item) => item.email) as string[];
+    const email = this.content.filter(item => item.email).map(item => item.email) as string[];
     if (email.length) {
       const users = await User.findAll({ attributes: ['email'], where: { email } });
 
       if (users.length) {
-        const existingUsers = users.map((user) => user.email);
+        const existingUsers = users.map(user => user.email);
         throw new Error(`Following emails already exist in system: ${existingUsers.join(', ')}`);
       }
     }
@@ -157,7 +159,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    * Read CSV file and import in chunks
    *
    * @private
-   * @param {number} [chunk=100]
+   * @param {number} [chunk]
    * @returns {Promise<void>}
    * @memberof SurveyRespondentsImport
    */
@@ -191,7 +193,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
               reject(err);
             });
         })
-        .on('error', (err) => reject(err));
+        .on('error', err => reject(err));
     });
   }
 
@@ -203,7 +205,8 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    * @memberof SurveyRespondentsImport
    */
   private async importChunk(): Promise<void> {
-    if (!this.content.length) return;
+    if (!this.content.length)
+      return;
 
     this.lock();
 
@@ -212,7 +215,8 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
 
       const customFields = Object.keys(rest).reduce<CustomField[]>((acc, key) => {
         const value = rest[key];
-        if (value) acc.push({ name: key, value });
+        if (value)
+          acc.push({ name: key, value });
 
         return acc;
       }, []);

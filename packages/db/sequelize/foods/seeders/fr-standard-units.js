@@ -1,22 +1,21 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
 
 const translations = {
   anchovies: {
     estimateIn: 'anchois',
-    howMany: "Combien d'anchois",
+    howMany: 'Combien d\'anchois',
   },
   apricots: {
     estimateIn: 'abricots',
-    howMany: "Combien d'abricots",
+    howMany: 'Combien d\'abricots',
   },
   artichoke_hearts: {
-    estimateIn: "cœurs d'artichauts",
-    howMany: "Combien de cœurs d'artichauts",
+    estimateIn: 'cœurs d\'artichauts',
+    howMany: 'Combien de cœurs d\'artichauts',
   },
   aubergine: {
     estimateIn: 'aubergine',
-    howMany: "Combien d'aubergines",
+    howMany: 'Combien d\'aubergines',
   },
   average_size_bags: {
     estimateIn: 'sacs de taille moyenne',
@@ -152,7 +151,7 @@ const translations = {
   },
   chocolate_oranges: {
     estimateIn: 'oranges au chocolat',
-    howMany: "Combien d'oranges au chocolat",
+    howMany: 'Combien d\'oranges au chocolat',
   },
   chocolates: {
     estimateIn: 'chocolats',
@@ -216,11 +215,11 @@ const translations = {
   },
   eggs: {
     estimateIn: 'œufs',
-    howMany: "Combien d'œufs",
+    howMany: 'Combien d\'œufs',
   },
   enchiladas: {
     estimateIn: 'enchiladas',
-    howMany: "Combien d'enchiladas",
+    howMany: 'Combien d\'enchiladas',
   },
   extra_large_bars: {
     estimateIn: 'barres extra larges',
@@ -232,7 +231,7 @@ const translations = {
   },
   extra_large_eggs: {
     estimateIn: 'œufs extra-larges',
-    howMany: "Combien d'œufs extra larges",
+    howMany: 'Combien d\'œufs extra larges',
   },
   extra_large_triangles: {
     estimateIn: 'triangles extra larges',
@@ -248,7 +247,7 @@ const translations = {
   },
   fatty_cutties: {
     estimateIn: 'les cutties grasses',
-    howMany: "Combien d'animaux gras coupés",
+    howMany: 'Combien d\'animaux gras coupés',
   },
   fillets: {
     estimateIn: 'filets',
@@ -316,7 +315,7 @@ const translations = {
   },
   individual_packs: {
     estimateIn: 'emballages individuels',
-    howMany: "Combien d'emballages individuels",
+    howMany: 'Combien d\'emballages individuels',
   },
   individual_pies: {
     estimateIn: 'tartes individuelles',
@@ -336,7 +335,7 @@ const translations = {
   },
   items: {
     estimateIn: 'articles',
-    howMany: "Combien d'articles",
+    howMany: 'Combien d\'articles',
   },
   jars: {
     estimateIn: 'pots',
@@ -456,7 +455,7 @@ const translations = {
   },
   large_items: {
     estimateIn: 'grands articles',
-    howMany: "Combien d'articles volumineux",
+    howMany: 'Combien d\'articles volumineux',
   },
   large_jars: {
     estimateIn: 'grands pots',
@@ -612,11 +611,11 @@ const translations = {
   },
   medium_aubergines: {
     estimateIn: 'aubergines moyennes',
-    howMany: "Combien d'aubergines moyennes",
+    howMany: 'Combien d\'aubergines moyennes',
   },
   medium_avocados: {
     estimateIn: 'avocats moyens',
-    howMany: "Combien d'avocats moyens",
+    howMany: 'Combien d\'avocats moyens',
   },
   medium_bags: {
     estimateIn: 'sacs de taille moyenne',
@@ -664,7 +663,7 @@ const translations = {
   },
   medium_eggs: {
     estimateIn: 'œufs moyens',
-    howMany: "Combien d'œufs moyens",
+    howMany: 'Combien d\'œufs moyens',
   },
   medium_fillet_steaks: {
     estimateIn: 'steaks de filet moyen',
@@ -696,7 +695,7 @@ const translations = {
   },
   medium_items: {
     estimateIn: 'éléments moyens',
-    howMany: "Combien d'articles moyens",
+    howMany: 'Combien d\'articles moyens',
   },
   medium_jars: {
     estimateIn: 'pots moyens',
@@ -712,11 +711,11 @@ const translations = {
   },
   medium_omelettes_2_eggs: {
     estimateIn: 'omelettes moyennes (2 œufs)',
-    howMany: "Combien d'omelettes moyennes (2 œufs)",
+    howMany: 'Combien d\'omelettes moyennes (2 œufs)',
   },
   medium_onions: {
     estimateIn: 'oignons moyens',
-    howMany: "Combien d'oignons moyens",
+    howMany: 'Combien d\'oignons moyens',
   },
   medium_parsnips: {
     estimateIn: 'panais moyen',
@@ -800,7 +799,7 @@ const translations = {
   },
   mini_eggs: {
     estimateIn: 'mini-œufs',
-    howMany: "Combien d'œufs miniatures",
+    howMany: 'Combien d\'œufs miniatures',
   },
   mini_fillets: {
     estimateIn: 'mini filets',
@@ -916,23 +915,23 @@ const translations = {
   },
   olives: {
     estimateIn: 'olives',
-    howMany: "Combien d'olives",
+    howMany: 'Combien d\'olives',
   },
   one_inch_pieces: {
     estimateIn: 'Morceaux de 1 pouce',
     howMany: 'Combien de pièces de 1 pouce',
   },
   onion_rings: {
-    estimateIn: "rondelles d'oignon",
-    howMany: "Combien de rondelles d'oignon",
+    estimateIn: 'rondelles d\'oignon',
+    howMany: 'Combien de rondelles d\'oignon',
   },
   onions: {
     estimateIn: 'oignons',
-    howMany: "Combien d'oignons",
+    howMany: 'Combien d\'oignons',
   },
   oysters: {
     estimateIn: 'huîtres',
-    howMany: "Combien d'huîtres",
+    howMany: 'Combien d\'huîtres',
   },
   packets: {
     estimateIn: 'paquets',
@@ -1060,7 +1059,7 @@ const translations = {
   },
   rings: {
     estimateIn: 'anneaux',
-    howMany: "Combien d'anneaux",
+    howMany: 'Combien d\'anneaux',
   },
   rolls: {
     estimateIn: 'rouleaux',
@@ -1471,12 +1470,12 @@ const translations = {
     howMany: 'Combien de tomates',
   },
   treble_measures: {
-    estimateIn: "mesures d'aigus",
+    estimateIn: 'mesures d\'aigus',
     howMany: 'Combien de mesures aiguës',
   },
   triangle_slices_half_a_piece_of_bread: {
     estimateIn: 'tranches de triangle (un demi-pain)',
-    howMany: "Combien de tranches de triangle (la moitié d'un morceau de pain)",
+    howMany: 'Combien de tranches de triangle (la moitié d\'un morceau de pain)',
   },
   tubes: {
     estimateIn: 'tubes',
@@ -1556,15 +1555,15 @@ const translations = {
   },
   wings: {
     estimateIn: 'ailes',
-    howMany: "Combien d'ailes",
+    howMany: 'Combien d\'ailes',
   },
   wraps_made_with_one_whole_tortilla: {
-    estimateIn: "les wraps composés d'une tortilla entière",
+    estimateIn: 'les wraps composés d\'une tortilla entière',
     howMany: 'Combien de wraps réalisés avec une tortilla entière',
   },
   yams: {
     estimateIn: 'patates douces',
-    howMany: "Combien d'ignames",
+    howMany: 'Combien d\'ignames',
   },
   sandwiches_made_with_two_slices_of_bread: {
     estimateIn: 'sandwichs (avec DEUX tranches de pain)',
@@ -1574,18 +1573,18 @@ const translations = {
 
 function insertTranslation(id, key, jsonString) {
   const translationsObject = JSON.parse(jsonString);
-  translationsObject['fr'] = translations[id][key];
+  translationsObject.fr = translations[id][key];
   return JSON.stringify(translationsObject);
 }
 
 function deleteTranslation(jsonString) {
   const translationsObject = JSON.parse(jsonString);
-  delete translationsObject['fr'];
+  delete translationsObject.fr;
   return JSON.stringify(translationsObject);
 }
 
 module.exports = {
-  up: async (queryInterface) =>
+  up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const records = await queryInterface.select(null, 'standard_units', { transaction });
 
@@ -1610,12 +1609,12 @@ module.exports = {
               id: record.id,
             },
             transaction,
-          }
+          },
         );
       }
     }),
 
-  down: async (queryInterface) =>
+  down: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const records = await queryInterface.select(null, 'standard_units', { transaction });
 
@@ -1634,7 +1633,7 @@ module.exports = {
               id: record.id,
             },
             transaction,
-          }
+          },
         );
       }
     }),

@@ -44,7 +44,7 @@ module.exports = {
             type: Sequelize.STRING(64),
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
@@ -54,7 +54,7 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: true,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addConstraint('surveys', {
@@ -78,12 +78,12 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `INSERT INTO survey_schemes (name, type, questions, meals, data_export, created_at, updated_at, old_scheme_id) SELECT name, 'default', questions, meals, export, created_at, updated_at, id FROM schemes;`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE surveys SET survey_scheme_id = ss.id FROM survey_schemes ss WHERE scheme_id = ss.old_scheme_id`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
@@ -93,7 +93,7 @@ module.exports = {
           type: Sequelize.BIGINT,
           allowNull: false,
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.removeColumn('survey_schemes', 'old_scheme_id', { transaction });
@@ -106,25 +106,25 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `UPDATE permissions SET "name" = replace("name", 'schemes|', 'survey-schemes|') where "name" like 'schemes|%';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE permissions SET "name" = replace("name", 'scheme-questions|', 'survey-scheme-questions|') where "name" like 'scheme-questions|%';`,
-        { transaction }
+        { transaction },
       );
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `UPDATE permissions SET "name" = replace("name", 'survey-schemes|', 'schemes|') where "name" like 'survey-schemes|%';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE permissions SET "name" = replace("name", 'survey-scheme-questions|', 'scheme-questions|') where "name" like 'survey-scheme-questions|%';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.renameTable('survey_scheme_questions', 'scheme_questions', {

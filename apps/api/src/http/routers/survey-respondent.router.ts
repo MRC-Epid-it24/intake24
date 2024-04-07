@@ -15,7 +15,7 @@ import {
 import { merge } from '@intake24/common/util';
 import { Survey } from '@intake24/db';
 
-export const surveyRespondent = () => {
+export function surveyRespondent() {
   const ratingRateLimiter = ioc.cradle.rateLimiter.createGenericMiddleware('rating', {
     message: 'You have recently sent feedback.',
     skipFailedRequests: true,
@@ -53,7 +53,8 @@ export const surveyRespondent = () => {
           { association: 'locale', attributes: ['id', 'code'] },
         ],
       });
-      if (!survey || !survey.locale || !survey.surveyScheme) throw new NotFoundError();
+      if (!survey || !survey.locale || !survey.surveyScheme)
+        throw new NotFoundError();
 
       const {
         id,
@@ -77,35 +78,42 @@ export const surveyRespondent = () => {
 
       let state: SurveyStatus;
       const today = new Date();
-      if (startDate > today) state = 'notStarted';
-      else if (endDate < today) state = 'completed';
+      if (startDate > today)
+        state = 'notStarted';
+      else if (endDate < today)
+        state = 'completed';
       else state = initialState;
 
       // Merge survey's scheme overrides
       // 1) Meals - override whole list
-      if (surveySchemeOverrides.meals.length) meals = [...surveySchemeOverrides.meals];
+      if (surveySchemeOverrides.meals.length)
+        meals = [...surveySchemeOverrides.meals];
 
       // 2) Prompts - merge by Prompt ID & Prompt Name
       if (surveySchemeOverrides.prompts.length) {
         const flattenScheme = flattenSchemeWithSection(prompts);
         for (const prompt of surveySchemeOverrides.prompts) {
           const match = flattenScheme.find(
-            (item) => item.id === prompt.id && item.name === prompt.name
+            item => item.id === prompt.id && item.name === prompt.name,
           );
-          if (!match) continue;
+          if (!match)
+            continue;
 
           const { section } = match;
 
           if (isMealSection(section)) {
             const index = prompts.meals[section].findIndex(
-              (item) => item.id === prompt.id && item.name === prompt.name
+              item => item.id === prompt.id && item.name === prompt.name,
             );
-            if (index !== -1) prompts.meals[section].splice(index, 1, merge<Prompt>(match, prompt));
-          } else {
+            if (index !== -1)
+              prompts.meals[section].splice(index, 1, merge<Prompt>(match, prompt));
+          }
+          else {
             const index = prompts[section].findIndex(
-              (item) => item.id === prompt.id && item.name === prompt.name
+              item => item.id === prompt.id && item.name === prompt.name,
             );
-            if (index !== -1) prompts[section].splice(index, 1, merge<Prompt>(match, prompt));
+            if (index !== -1)
+              prompts[section].splice(index, 1, merge<Prompt>(match, prompt));
           }
         }
       }
@@ -152,7 +160,7 @@ export const surveyRespondent = () => {
       const session = await req.scope.cradle.surveyService.setSession(
         slug,
         userId,
-        sessionData as any
+        sessionData as any,
       );
 
       return { status: 200, body: session };
@@ -209,10 +217,10 @@ export const surveyRespondent = () => {
         slug,
         userId,
         { ...(submission as any), userAgent },
-        tzOffset
+        tzOffset,
       );
 
       return { status: 200, body: followUpInfo };
     },
   });
-};
+}

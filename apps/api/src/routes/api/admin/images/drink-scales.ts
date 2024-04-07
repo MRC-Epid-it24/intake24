@@ -28,7 +28,7 @@ export default () => {
       { name: 'overlayImage', maxCount: 1 },
     ]),
     validation.storeV1,
-    wrapAsync(drinkScaleController.storeV1)
+    wrapAsync(drinkScaleController.storeV1),
   );
 
   router
@@ -37,7 +37,7 @@ export default () => {
       permission('drinkware-sets|create'),
       upload.single('image'),
       validation.storeV2,
-      wrapAsync(drinkScaleController.storeV2)
+      wrapAsync(drinkScaleController.storeV2),
     );
 
   return router;

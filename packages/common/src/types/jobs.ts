@@ -336,8 +336,10 @@ export const defaultJobsParams: JobParams = {
 
 export const isValidJob = (job: any): boolean => jobTypes.includes(job);
 
-export const pickJobParams = <T extends keyof JobParams>(object: object, job: T): JobParams[T] =>
-  pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];
+export function pickJobParams<T extends keyof JobParams>(object: object, job: T): JobParams[T] {
+  return pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];
+}
 
-export const jobRequiresFile = <T extends keyof JobParams>(job: T) =>
-  Object.keys(defaultJobsParams[job]).includes('file');
+export function jobRequiresFile<T extends keyof JobParams>(job: T) {
+  return Object.keys(defaultJobsParams[job]).includes('file');
+}

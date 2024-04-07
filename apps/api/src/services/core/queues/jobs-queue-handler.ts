@@ -85,11 +85,12 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
             return;
           }
 
-          if (typeof progress === 'number' && progress < 1)
+          if (typeof progress === 'number' && progress < 1) {
             await DbJob.update(
               { progress },
-              { where: { id: dbId, progress: { [Op.lt]: progress } } }
+              { where: { id: dbId, progress: { [Op.lt]: progress } } },
             );
+          }
         })
         .on('completed', async (job) => {
           this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
@@ -159,7 +160,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   }
 
   public async closeWorkers(force = false): Promise<void> {
-    await Promise.all(this.workers.map((worker) => worker.close(force)));
+    await Promise.all(this.workers.map(worker => worker.close(force)));
   }
 
   /**
@@ -206,7 +207,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @private
    * @param {DbJob} job
-   * @param {JobsOptions} [options={}]
+   * @param {JobsOptions} [options]
    * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
@@ -223,13 +224,13 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @template T
    * @param {JobInput<T>} input
-   * @param {JobsOptions} [options={}]
+   * @param {JobsOptions} [options]
    * @returns {Promise<DbJob>}
    * @memberof JobsQueueHandler
    */
   public async addJob<T extends JobType>(
     input: JobInput<T>,
-    options: JobsOptions = {}
+    options: JobsOptions = {},
   ): Promise<DbJob> {
     const job = await DbJob.create(input);
     await this.queueJob(job, options);
@@ -246,12 +247,14 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   public async notify(userId: string | null, payload: NotificationPayload): Promise<void> {
-    if (!userId) return;
+    if (!userId)
+      return;
 
     const body = [
       'Requested action has just finished. Click on the notification to show details in application.',
     ];
-    if (payload.message) body.push(`Details: ${payload.message}`);
+    if (payload.message)
+      body.push(`Details: ${payload.message}`);
 
     const pushPayload: PushPayload = {
       title: `${payload.status ? '✔️' : '❌'} ${payload.status.toUpperCase()}: Job has finished.`,

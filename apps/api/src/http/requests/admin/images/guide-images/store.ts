@@ -39,9 +39,10 @@ export default validate(
       custom: {
         options: async (value, meta): Promise<void> => {
           const imageMap = await ImageMap.findByPk(value, { attributes: ['id'] });
-          if (!imageMap) throw new Error(customTypeErrorMessage('exists._', meta));
+          if (!imageMap)
+            throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },
     },
-  })
+  }),
 );

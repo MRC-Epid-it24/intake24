@@ -11,7 +11,7 @@ import {
 
 export type CopyAssociationsOps = JobParams['LocalePopularitySearchCopy'];
 
-const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
+function pairwiseSearchService({ db }: Pick<IoC, 'db'>) {
   /**
    * Copy Pairwise associations data from one locale to another
    *
@@ -25,7 +25,8 @@ const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
       SystemLocale.findByPk(sourceLocaleId, { attributes: ['id', 'code'] }),
     ]);
 
-    if (!sourceLocale || !locale) throw new NotFoundError();
+    if (!sourceLocale || !locale)
+      throw new NotFoundError();
 
     const { code: localeCode } = locale;
     const { code: sourceLocaleCode } = sourceLocale;
@@ -40,9 +41,9 @@ const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
       const { occurrences, coOccurrences, transactionsCount } = copyPairwiseAssociationsQueries();
 
       await Promise.all(
-        [occurrences, coOccurrences, transactionsCount].map((query) =>
-          db.system.query(query, { replacements: { localeCode, sourceLocaleCode }, transaction })
-        )
+        [occurrences, coOccurrences, transactionsCount].map(query =>
+          db.system.query(query, { replacements: { localeCode, sourceLocaleCode }, transaction }),
+        ),
       );
     });
   };
@@ -50,7 +51,7 @@ const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
   return {
     copyAssociations,
   };
-};
+}
 
 export default pairwiseSearchService;
 

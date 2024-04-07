@@ -15,25 +15,26 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { roleEntryResponse } from '@intake24/api/http/responses/admin';
 import { Permission, Role, User } from '@intake24/db';
 
-const roleController = ({
+function roleController({
   aclConfig,
   adminUserService,
-}: Pick<IoC, 'aclConfig' | 'adminUserService'>) => {
+}: Pick<IoC, 'aclConfig' | 'adminUserService'>) {
   const entry = async (
     req: Request<{ roleId: string }>,
-    res: Response<RoleEntry>
+    res: Response<RoleEntry>,
   ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.scope('permissions').findByPk(roleId);
-    if (!role) throw new NotFoundError();
+    if (!role)
+      throw new NotFoundError();
 
     res.json(roleEntryResponse(role));
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<RolesResponse>
+    res: Response<RolesResponse>,
   ): Promise<void> => {
     const roles = await Role.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -65,12 +66,13 @@ const roleController = ({
 
   const update = async (
     req: Request<{ roleId: string }>,
-    res: Response<RoleEntry>
+    res: Response<RoleEntry>,
   ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.scope('permissions').findByPk(roleId);
-    if (!role) throw new NotFoundError();
+    if (!role)
+      throw new NotFoundError();
 
     const { displayName, description } = req.body;
     await role.update({ displayName, description });
@@ -79,7 +81,7 @@ const roleController = ({
 
     await role.$set(
       'permissions',
-      role.name === aclConfig.roles.superuser ? permissions : req.body.permissions
+      role.name === aclConfig.roles.superuser ? permissions : req.body.permissions,
     );
 
     await Promise.all([
@@ -92,12 +94,13 @@ const roleController = ({
 
   const destroy = async (
     req: Request<{ roleId: string }>,
-    res: Response<undefined>
+    res: Response<undefined>,
   ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.findByPk(roleId, { attributes: ['id'] });
-    if (!role) throw new NotFoundError();
+    if (!role)
+      throw new NotFoundError();
 
     await role.destroy();
     res.status(204).json();
@@ -111,12 +114,13 @@ const roleController = ({
 
   const permissions = async (
     req: Request<{ roleId: string }, any, any, PaginateQuery>,
-    res: Response<PermissionsResponse>
+    res: Response<PermissionsResponse>,
   ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.findByPk(roleId, { attributes: ['id'] });
-    if (!role) throw new NotFoundError();
+    if (!role)
+      throw new NotFoundError();
 
     const permissions = await Permission.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -130,12 +134,13 @@ const roleController = ({
 
   const users = async (
     req: Request<{ roleId: string }, any, any, PaginateQuery>,
-    res: Response<UsersResponse>
+    res: Response<UsersResponse>,
   ): Promise<void> => {
     const { roleId } = req.params;
 
     const role = await Role.findByPk(roleId, { attributes: ['id'] });
-    if (!role) throw new NotFoundError();
+    if (!role)
+      throw new NotFoundError();
 
     const users = await User.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -158,7 +163,7 @@ const roleController = ({
     permissions,
     users,
   };
-};
+}
 
 export default roleController;
 

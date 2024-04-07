@@ -34,7 +34,7 @@ export default () => {
     invalidUrl = `${baseUrl}/999999/tasks`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('post', url, { input, permissions });
   });
 
@@ -47,13 +47,13 @@ export default () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['type']);
     });
 
-    it('should return 400 for invalid input data', async () => {
+    it('should return 400 for invalid input data #1', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['type'], {
         input: { type: 'invalidJobType', params: { surveyId: 'demo', nonValidKey: false } },
       });
     });
 
-    it('should return 400 for invalid input data', async () => {
+    it('should return 400 for invalid input data #2', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['params.sourceLocaleId'], {
         input: { type: 'LocalePopularitySearchCopy', params: { nonValidKey: false } },
       });

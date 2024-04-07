@@ -2,7 +2,7 @@ import { initServer } from '@ts-rest/express';
 
 import { contract } from '@intake24/common/contracts';
 
-export const feedback = () => {
+export function feedback() {
   return initServer().router(contract.feedback, {
     data: async ({ req }) => {
       const { cache, cacheConfig, feedbackService } = req.scope.cradle;
@@ -14,10 +14,10 @@ export const feedback = () => {
             feedbackService.getNutrientTypes(),
             feedbackService.getPhysicalActivityLevels(),
             feedbackService.getWeightTargets(),
-          ])
+          ]),
       );
 
       return { status: 200, body: { nutrientTypes, physicalActivityLevels, weightTargets } };
     },
   });
-};
+}

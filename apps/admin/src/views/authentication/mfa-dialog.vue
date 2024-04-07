@@ -22,7 +22,9 @@
                     :width="20"
                   >
                     <div class="d-flex align-center flex-column">
-                      <v-icon class="provider-icon mb-2 ml-2" color="secondary">$duo</v-icon>
+                      <v-icon class="provider-icon mb-2 ml-2" color="secondary">
+                        $duo
+                      </v-icon>
                       <span class="font-weight-bold text-h4">{{ duo.value / 20 }} </span>
                     </div>
                   </v-progress-circular>
@@ -33,7 +35,9 @@
               </v-card>
               <v-card v-if="provider === 'fido'" flat link tile @click="fidoChallenge">
                 <v-sheet class="d-flex flex-column align-center py-6" color="grey lighten-3">
-                  <v-icon class="provider-icon mb-6" color="secondary">$fido</v-icon>
+                  <v-icon class="provider-icon mb-6" color="secondary">
+                    $fido
+                  </v-icon>
                   <v-btn block color="secondary" rounded @click="fidoChallenge">
                     {{ $t('common.action.retry') }}
                   </v-btn>
@@ -41,8 +45,12 @@
               </v-card>
               <v-form v-if="provider === 'otp'" autocomplete="off" @submit.prevent="otpChallenge">
                 <div class="d-flex flex-column align-center" :style="{ maxWidth: '300px' }">
-                  <v-icon class="provider-icon mb-4" color="secondary">$otp</v-icon>
-                  <p class="mb-2 text-subtitle-1">{{ $t('common.mfa.otp') }}</p>
+                  <v-icon class="provider-icon mb-4" color="secondary">
+                    $otp
+                  </v-icon>
+                  <p class="mb-2 text-subtitle-1">
+                    {{ $t('common.mfa.otp') }}
+                  </p>
                   <v-otp-input
                     v-model="otp.token"
                     autocomplete="off"
@@ -52,7 +60,7 @@
                     length="6"
                     name="token"
                     @input="otp.errors.clear('token')"
-                  ></v-otp-input>
+                  />
                   <v-btn block color="secondary" rounded type="submit">
                     {{ $t('common.action.confirm._') }}
                   </v-btn>
@@ -141,7 +149,8 @@ export default defineComponent({
     value: {
       immediate: true,
       async handler(val, oldVal) {
-        if (!val || oldVal || !this.authData.challenge) return;
+        if (!val || oldVal || !this.authData.challenge)
+          return;
 
         const { provider } = this.authData.challenge;
 
@@ -150,10 +159,8 @@ export default defineComponent({
           return;
         }
 
-        if (provider === 'fido') {
+        if (provider === 'fido')
           await this.fidoChallenge();
-          return;
-        }
       },
     },
   },
@@ -176,13 +183,14 @@ export default defineComponent({
       clearInterval(this.duo.interval);
     },
 
-    selectDevice(deviceId: string) {
+    selectDevice(_deviceId: string) {
       // TODO: implement device selection
       // console.log(deviceId);
     },
 
     async triggerChallenge() {
-      if (!this.authData.challenge) return;
+      if (!this.authData.challenge)
+        return;
 
       const { challenge } = this.authData;
 
@@ -201,27 +209,31 @@ export default defineComponent({
     },
 
     async duoChallenge() {
-      if (this.authData.challenge?.provider !== 'duo') throw new Error('Invalid MFA provider');
+      if (this.authData.challenge?.provider !== 'duo')
+        throw new Error('Invalid MFA provider');
 
       this.clearDuoInterval();
       window.location.href = this.authData.challenge.challengeUrl;
     },
 
     async fidoChallenge() {
-      if (this.authData.challenge?.provider !== 'fido') throw new Error('Invalid MFA provider');
+      if (this.authData.challenge?.provider !== 'fido')
+        throw new Error('Invalid MFA provider');
 
       try {
         const { challengeId, provider, options } = this.authData.challenge;
         const response = await startAuthentication(options);
         await this.auth.verify({ challengeId, provider, response });
         await this.finalizeLogin();
-      } catch {
+      }
+      catch {
         useMessages().error(this.$t('common.mfa.error').toString());
       }
     },
 
     async otpChallenge() {
-      if (this.authData.challenge?.provider !== 'otp') throw new Error('Invalid MFA provider');
+      if (this.authData.challenge?.provider !== 'otp')
+        throw new Error('Invalid MFA provider');
 
       const { challengeId, provider } = this.authData.challenge;
 
@@ -234,13 +246,16 @@ export default defineComponent({
         });
         await this.auth.successfulLogin(accessToken);
         await this.finalizeLogin();
-      } catch (err) {
-        if (isAxiosError(err) && err.response?.status !== HttpStatusCode.BadRequest) this.fail();
+      }
+      catch (err) {
+        if (isAxiosError(err) && err.response?.status !== HttpStatusCode.BadRequest)
+          this.fail();
       }
     },
 
     async finalizeLogin() {
-      if (!this.auth.loggedIn) return;
+      if (!this.auth.loggedIn)
+        return;
 
       await this.$router.push({ name: 'dashboard' });
     },

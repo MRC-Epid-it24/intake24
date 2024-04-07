@@ -12,11 +12,7 @@ import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-const assertRespondentResponse = async (
-  url: string,
-  input: UpdateRespondentRequest
-  // output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>
-) => {
+async function assertRespondentResponse(url: string, input: UpdateRespondentRequest) {
   const { status, body } = await request(suite.app)
     .patch(url)
     .set('Accept', 'application/json')
@@ -41,7 +37,7 @@ const assertRespondentResponse = async (
     }));
     expect(fields).toIncludeSameMembers(outputCustomFields);
   }
-};
+}
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
@@ -86,7 +82,7 @@ export default () => {
     invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999`;
   });
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('patch', url, { permissions });
   });
 
@@ -103,7 +99,7 @@ export default () => {
       await suite.sharedTests.assertMissingRecord('patch', invalidRespondentUrl);
     });
 
-    it('should return 400 for invalid input data', async () => {
+    it('should return 400 for invalid input data #1', async () => {
       await suite.sharedTests.assertInvalidInput(
         'patch',
         url,
@@ -117,11 +113,11 @@ export default () => {
             phone: [new Date()],
             customFields: 'not-a-custom-field',
           },
-        }
+        },
       );
     });
 
-    it(`should return 404 when user record doesn't exist`, async () => {
+    it(`should return 404 when user record doesn't exist #2`, async () => {
       await suite.sharedTests.assertMissingRecord('patch', invalidRespondentUrl, {
         input: updateInput,
       });

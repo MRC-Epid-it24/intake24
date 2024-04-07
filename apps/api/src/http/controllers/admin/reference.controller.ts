@@ -43,12 +43,12 @@ import {
   visibilityScope,
 } from '@intake24/db';
 
-const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
+function referenceController({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const asServedSets = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<AsServedSetsResponse>
+    res: Response<AsServedSetsResponse>,
   ): Promise<void> => {
     const asServedSets = await AsServedSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -63,7 +63,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const categories = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<CategoryReferences>
+    res: Response<CategoryReferences>,
   ): Promise<void> => {
     const categories = await Category.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -77,7 +77,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const drinkwareSets = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<DrinkwareSetsResponse>
+    res: Response<DrinkwareSetsResponse>,
   ): Promise<void> => {
     const tasks = await DrinkwareSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -92,7 +92,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const feedbackSchemes = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<FeedbackSchemeReferences>
+    res: Response<FeedbackSchemeReferences>,
   ): Promise<void> => {
     const {
       aclService,
@@ -122,7 +122,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const foodGroups = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<FoodReferences>
+    res: Response<FoodReferences>,
   ): Promise<void> => {
     const foods = await FoodGroup.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -136,7 +136,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const foods = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<FoodReferences>
+    res: Response<FoodReferences>,
   ): Promise<void> => {
     const foods = await Food.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -150,7 +150,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const guideImages = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<GuideImagesResponse>
+    res: Response<GuideImagesResponse>,
   ): Promise<void> => {
     const guideImages = await GuideImage.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -165,7 +165,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const imageMaps = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<ImageMapsResponse>
+    res: Response<ImageMapsResponse>,
   ): Promise<void> => {
     const images = await ImageMap.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -180,7 +180,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const languages = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<LanguageReferences>
+    res: Response<LanguageReferences>,
   ): Promise<void> => {
     const {
       aclService,
@@ -211,7 +211,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const locales = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SystemLocaleReferences>
+    res: Response<SystemLocaleReferences>,
   ): Promise<void> => {
     const {
       aclService,
@@ -242,7 +242,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const nutrientTables = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<NutrientTableReferences>
+    res: Response<NutrientTableReferences>,
   ): Promise<void> => {
     const nutrientTables = await NutrientTable.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -256,7 +256,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const nutrientTableRecords = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<NutrientTableRecordReferences>
+    res: Response<NutrientTableRecordReferences>,
   ): Promise<void> => {
     const {
       params: { nutrientTableId },
@@ -274,7 +274,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const nutrientTypes = async (
     req: Request<any, any, any, PaginateQuery & { nutrientTableId: string | string[] }>,
-    res: Response<NutrientTypesResponse>
+    res: Response<NutrientTypesResponse>,
   ): Promise<void> => {
     const {
       query: { nutrientTableId },
@@ -313,7 +313,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const standardUnits = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveySchemesResponse>
+    res: Response<SurveySchemesResponse>,
   ): Promise<void> => {
     const standardUnits = await StandardUnit.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -326,7 +326,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const surveys = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveyReferences>
+    res: Response<SurveyReferences>,
   ): Promise<void> => {
     const surveys = await Survey.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -339,7 +339,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const surveySchemes = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveySchemeReferences>
+    res: Response<SurveySchemeReferences>,
   ): Promise<void> => {
     const {
       aclService,
@@ -385,7 +385,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     surveys,
     surveySchemes,
   };
-};
+}
 
 export default referenceController;
 

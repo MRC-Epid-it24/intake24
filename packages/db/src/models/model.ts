@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { Readable } from 'node:stream';
 
 import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';
@@ -73,7 +72,7 @@ export default class Model<
    */
   public static async paginate<T extends PaginateTransform, R = Model>(
     this: BaseModelStatic<R extends Model ? R : Model>,
-    { query, columns = [], transform, ...params }: PaginateOptions<any, T>
+    { query, columns = [], transform, ...params }: PaginateOptions<any, T>,
   ): Promise<Pagination<T extends PaginateTransform ? ReturnType<T> : R>> {
     const { page = 1, limit = 50, sort, search } = query;
 
@@ -84,20 +83,20 @@ export default class Model<
     const model = this as BaseModelCtor<R extends Model ? R : Model>;
 
     if (search && columns.length) {
-      const operation =
-        model.sequelize?.getDialect() === 'postgres'
+      const operation
+        = model.sequelize?.getDialect() === 'postgres'
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const operations = columns.map((column) => ({ [column]: operation }));
-      //@ts-expect-error where merge types (watch out what is being merged, might not cover all permutations)
+      const operations = columns.map(column => ({ [column]: operation }));
+      // @ts-expect-error where merge types (watch out what is being merged, might not cover all permutations)
       options.where = { [Op.and]: [options.where, { [Op.or]: operations }] };
     }
 
     const countOptions = Object.keys(options).reduce<BaseCountOptions>((acc, key) => {
-      if (!['order', 'attributes', 'limit', 'offset'].includes(key)) {
+      if (!['order', 'attributes', 'limit', 'offset'].includes(key))
         acc[key] = options[key];
-      }
+
       return acc;
     }, {});
 
@@ -108,7 +107,7 @@ export default class Model<
       const attributes = model.getAttributes();
       if (Object.keys(attributes).includes(column)) {
         options.order = [DataTypes.STRING.key, DataTypes.TEXT.key].includes(
-          (attributes[column].type as AbstractDataType).key
+          (attributes[column].type as AbstractDataType).key,
         )
           ? [[fn('lower', col(`${model.name}.${snakeCase(column)}`)), order]]
           : [[snakeCase(column), order]];
@@ -152,7 +151,7 @@ export default class Model<
   public static async performSearch<M extends Model<M>>(
     this: BaseModelCtor<M>,
     inputStream: Readable,
-    options: StreamFindOptions<M['_attributes']>
+    options: StreamFindOptions<M['_attributes']>,
   ): Promise<void> {
     const {
       batchSize = 100,
@@ -188,11 +187,15 @@ export default class Model<
             const transformedItem = await transform(item);
             inputStream.push(transformedItem);
           }
-        } else items.forEach((item) => inputStream.push(item));
+        }
+        else {
+          items.forEach(item => inputStream.push(item));
+        }
       }
 
       inputStream.push(null);
-    } catch (err) {
+    }
+    catch (err) {
       inputStream.destroy(err instanceof Error ? err : undefined);
     }
   }
@@ -203,19 +206,18 @@ export default class Model<
    * @static
    * @template M
    * @param {BaseModelStatic<M>} this
-   * @param {StreamFindOptions<M['_attributes']>} [options={}]
+   * @param {StreamFindOptions<M['_attributes']>} [options]
    * @returns {Readable}
    * @memberof Model
    */
   public static findAllWithStream<M extends Model = Model>(
     this: BaseModelStatic<M>,
-    options: StreamFindOptions<M['_attributes']> = {}
+    options: StreamFindOptions<M['_attributes']> = {},
   ): Readable {
     // TODO: fix with sequelize types
     const model = this as BaseModelCtor<M>;
 
     const inputStream = new Readable({ objectMode: true });
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     inputStream._read = () => {};
     model.performSearch(inputStream, options);
 

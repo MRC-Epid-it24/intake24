@@ -6,10 +6,10 @@ import store from './store.test';
 import update from './update.test';
 
 export default () => {
-  describe('GET /api/admin/nutrient-units', browse);
-  describe('POST /api/admin/nutrient-units', store);
-  describe('GET /api/admin/nutrient-units/:nutrientUnitId', read);
-  describe('GET /api/admin/nutrient-units/:nutrientUnitId/edit', edit);
-  describe('PUT /api/admin/nutrient-units/:nutrientUnitId', update);
-  describe('DELETE /api/admin/nutrient-units/:nutrientUnitId', destroy);
+  describe('get /api/admin/nutrient-units', browse);
+  describe('post /api/admin/nutrient-units', store);
+  describe('get /api/admin/nutrient-units/:nutrientUnitId', read);
+  describe('get /api/admin/nutrient-units/:nutrientUnitId/edit', edit);
+  describe('put /api/admin/nutrient-units/:nutrientUnitId', update);
+  describe('delete /api/admin/nutrient-units/:nutrientUnitId', destroy);
 };

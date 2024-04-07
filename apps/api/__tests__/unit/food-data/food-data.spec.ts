@@ -7,7 +7,7 @@ import getKcalTests from './get-kcal';
 import helpersTests from './helpers';
 import portionSizeMethodsServiceTests from './portion-size-methods-service';
 
-describe('Food data service', () => {
+describe('food data service', () => {
   helpersTests();
   getKcalTests();
   portionSizeMethodsServiceTests();

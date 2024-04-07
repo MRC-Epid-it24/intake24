@@ -26,7 +26,9 @@
           outlined
           :to="{ name: 'survey-home', params: { surveyId } }"
         >
-          <v-icon left>$home</v-icon>
+          <v-icon left>
+            $home
+          </v-icon>
           {{ $t('common.home') }}
         </v-btn>
         <v-btn
@@ -38,11 +40,13 @@
           outlined
           :to="{ name: 'feedback-home', params: { surveyId } }"
         >
-          <v-icon left>$feedback</v-icon>
+          <v-icon left>
+            $feedback
+          </v-icon>
           {{ $t('recall.actions.feedback') }}
         </v-btn>
         <template v-if="followUpUrl">
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             class="px-4"
             color="secondary"
@@ -52,7 +56,9 @@
             :target="prompt.target"
             :title="promptI18n.goTo"
           >
-            <v-icon left>$redirect</v-icon>
+            <v-icon left>
+              $redirect
+            </v-icon>
             {{ promptI18n.goTo }}
           </v-btn>
         </template>
@@ -62,9 +68,11 @@
           <span class="text-overline font-weight-medium">
             {{ $t('common.home') }}
           </span>
-          <v-icon class="pb-1">$home</v-icon>
+          <v-icon class="pb-1">
+            $home
+          </v-icon>
         </v-btn>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
         <v-btn
           v-if="feedbackEnabled"
           color="primary"
@@ -75,14 +83,18 @@
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.feedback') }}
           </span>
-          <v-icon class="pb-1">$feedback</v-icon>
+          <v-icon class="pb-1">
+            $feedback
+          </v-icon>
         </v-btn>
-        <v-divider vertical></v-divider>
+        <v-divider vertical />
         <v-btn v-if="followUpUrl" :href="followUpUrl" :target="prompt.target">
           <span class="text-overline font-weight-medium">
             {{ promptI18n.goTo }}
           </span>
-          <v-icon class="pb-1">$redirect</v-icon>
+          <v-icon class="pb-1">
+            $redirect
+          </v-icon>
         </v-btn>
       </template>
     </card-layout>
@@ -90,7 +102,7 @@
       v-if="prompt.rating"
       v-bind="{ submissionId, surveyId, type: 'recall' }"
       class="grey lighten-4 pt-6"
-    ></survey-rating>
+    />
   </div>
 </template>
 
@@ -135,10 +147,11 @@ export default defineComponent({
     const timerInterval = ref<undefined | number>(undefined);
     const timerValue = ref(props.prompt.timer ? 100 : 0);
     const timerTick = computed(() =>
-      props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0
+      props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0,
     );
     const timerSecs = computed(() => {
-      if (!props.prompt.timer) return 0;
+      if (!props.prompt.timer)
+        return 0;
 
       const timer = Math.round((timerValue.value / 100) * props.prompt.timer);
       return timer > 0 ? timer : 0;
@@ -147,13 +160,19 @@ export default defineComponent({
     const promptI18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
 
     const redirect = () => {
-      if (!props.followUpUrl) return;
+      if (!props.followUpUrl)
+        return;
 
       window.open(props.followUpUrl, props.prompt.target);
     };
 
+    const clearTimer = () => {
+      clearInterval(timerInterval.value);
+    };
+
     const startTimer = () => {
-      if (!timerValue.value || !props.followUpUrl) return;
+      if (!timerValue.value || !props.followUpUrl)
+        return;
 
       timerInterval.value = setInterval(() => {
         timerValue.value -= timerTick.value;
@@ -163,10 +182,6 @@ export default defineComponent({
           redirect();
         }
       }, 1000);
-    };
-
-    const clearTimer = () => {
-      clearInterval(timerInterval.value);
     };
 
     onMounted(() => {

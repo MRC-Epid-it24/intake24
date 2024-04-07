@@ -12,7 +12,7 @@ const optionalDefaults = Object.entries({ ...defaults, visibility }).reduce<Sche
     acc[key] = { ...rest, optional: optional ?? true };
     return acc;
   },
-  {}
+  {},
 );
 
 export default validate(checkSchema({ ...optionalDefaults, name }));

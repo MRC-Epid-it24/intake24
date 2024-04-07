@@ -8,7 +8,7 @@
       section,
     }"
     @action="action"
-  ></multi-prompt>
+  />
 </template>
 
 <script lang="ts">
@@ -42,27 +42,28 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional } =
-      useCustomPromptHandler(props);
+    const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional }
+      = useCustomPromptHandler(props);
     const survey = useSurvey();
 
     const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
     const state = ref<(CustomPromptAnswer | undefined)[]>(
-      props.prompt.prompts.map((prompt) =>
-        isInfoPrompt(prompt) ? 'next' : getPromptAnswer(prompt.id)
-      )
+      props.prompt.prompts.map(prompt =>
+        isInfoPrompt(prompt) ? 'next' : getPromptAnswer(prompt.id),
+      ),
     );
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commitAnswer();
-
-      emit('action', type, ...args);
-    };
 
     const commitAnswer = () => {
       props.prompt.prompts.forEach((prompt, idx) => {
         commitPromptAnswer(prompt, state.value[idx]);
       });
+    };
+
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      if (type === 'next')
+        commitAnswer();
+
+      emit('action', type, ...args);
     };
 
     return {

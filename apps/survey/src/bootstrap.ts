@@ -5,11 +5,11 @@ import { locale } from '@intake24/ui';
 
 import { loading, platform } from './mixins';
 
-//@ts-expect-error Vue2.7 types
+// @ts-expect-error Vue2.7 types
 Vue.mixin(locale);
-//@ts-expect-error Vue2.7 types
+// @ts-expect-error Vue2.7 types
 Vue.mixin(loading);
-//@ts-expect-error Vue2.7 types
+// @ts-expect-error Vue2.7 types
 Vue.mixin(platform);
 
 Vue.directive('intersect', Intersect);

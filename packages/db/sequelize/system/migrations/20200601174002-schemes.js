@@ -33,7 +33,7 @@ module.exports = {
             type: Sequelize.DATE,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       const created_at = new Date();
@@ -52,7 +52,7 @@ module.exports = {
             updated_at,
           },
         ],
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(`UPDATE surveys SET scheme_id = 'default'`, {
@@ -73,7 +73,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface) =>
+  down: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeConstraint('surveys', 'surveys_scheme_id_schemes_fk', {
         transaction,

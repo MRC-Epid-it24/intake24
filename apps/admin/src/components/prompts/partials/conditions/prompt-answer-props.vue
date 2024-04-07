@@ -8,7 +8,7 @@
         outlined
         :value="section"
         @change="update('section', $event)"
-      ></v-select>
+      />
     </v-col>
     <v-col cols="12" md="6">
       <v-text-field
@@ -17,7 +17,7 @@
         outlined
         :value="promptId"
         @input="update('promptId', $event)"
-      ></v-text-field>
+      />
     </v-col>
   </v-row>
 </template>

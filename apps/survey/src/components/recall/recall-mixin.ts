@@ -63,7 +63,8 @@ export default defineComponent({
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
 
-      if (!prompt) throw new Error('Current prompt must be defined');
+      if (!prompt)
+        throw new Error('Current prompt must be defined');
 
       switch (prompt.type) {
         case 'custom':
@@ -91,7 +92,7 @@ export default defineComponent({
       } = this;
 
       return [mealIndex ?? selectedMealIndex, foodIndex, currentPrompt?.prompt.id]
-        .filter((item) => item !== undefined)
+        .filter(item => item !== undefined)
         .join('-');
     },
 
@@ -104,12 +105,14 @@ export default defineComponent({
     },
 
     showMealList(): boolean {
-      if (!this.currentPrompt) return false;
+      if (!this.currentPrompt)
+        return false;
 
       const { section, prompt } = this.currentPrompt;
 
       if (section === 'submission') {
-        if (prompt.component === 'submit-prompt' && !prompt.review['desktop']) return true;
+        if (prompt.component === 'submit-prompt' && !prompt.review.desktop)
+          return true;
 
         return false;
       }
@@ -145,31 +148,32 @@ export default defineComponent({
 
   methods: {
     onPopState(event: PopStateEvent) {
-      if (this.hasFinished) return;
+      if (this.hasFinished)
+        return;
 
       function isValidSelection(meals: MealState[], selection: Selection): boolean {
         if (
-          selection.element &&
-          selection.element.type === 'meal' &&
-          getMealIndex(meals, selection.element.mealId) === undefined
-        ) {
+          selection.element
+          && selection.element.type === 'meal'
+          && getMealIndex(meals, selection.element.mealId) === undefined
+        )
           return false;
-        }
+
         if (
-          selection.element &&
-          selection.element.type === 'food' &&
-          getFoodIndex(meals, selection.element.foodId) === undefined
-        ) {
+          selection.element
+          && selection.element.type === 'food'
+          && getFoodIndex(meals, selection.element.foodId) === undefined
+        )
           return false;
-        }
+
         return true;
       }
 
       if (
-        event.state &&
-        event.state.promptInstance &&
-        event.state.selection &&
-        event.state.timeStamp
+        event.state
+        && event.state.promptInstance
+        && event.state.selection
+        && event.state.timeStamp
       ) {
         const promptInstance = event.state.promptInstance as PromptInstance;
         const selection = event.state.selection as Selection;
@@ -179,16 +183,19 @@ export default defineComponent({
           this.setSelection(selection);
           this.currentPrompt = promptInstance;
           this.currentPromptTimestamp = timeStamp;
-        } else if (this.currentPromptTimestamp > timeStamp) {
+        }
+        else if (this.currentPromptTimestamp > timeStamp) {
           history.back();
-        } else {
+        }
+        else {
           history.forward();
         }
       }
     },
 
     setSelection(newSelection: Selection) {
-      if (isSelectionEqual(this.survey.data.selection, newSelection)) return;
+      if (isSelectionEqual(this.survey.data.selection, newSelection))
+        return;
 
       // Prevent the currently active prompt from crashing if it expects a different selection type
       this.currentPrompt = null;
@@ -201,13 +208,14 @@ export default defineComponent({
       const prompt = this.recallController?.promptManager.findMealPromptOfType(
         promptType,
         promptSection,
-        mealId
+        mealId,
       );
 
-      if (!prompt)
+      if (!prompt) {
         throw new Error(
-          `Survey scheme is missing required meal (preFoods) prompt of type ${promptType}`
+          `Survey scheme is missing required meal (preFoods) prompt of type ${promptType}`,
         );
+      }
 
       this.currentPrompt = { section: promptSection, prompt };
     },
@@ -228,13 +236,14 @@ export default defineComponent({
 
       const prompt = this.recallController?.promptManager.findSurveyPromptOfType(
         promptType,
-        promptSection
+        promptSection,
       );
 
-      if (!prompt)
+      if (!prompt) {
         throw new Error(
-          `Survey scheme is missing required survey (preMeals) prompt of type ${promptType}`
+          `Survey scheme is missing required survey (preMeals) prompt of type ${promptType}`,
         );
+      }
 
       this.currentPrompt = { section: promptSection, prompt };
     },
@@ -319,7 +328,8 @@ export default defineComponent({
     },
 
     async recallAction(action: GenericActionType, params?: object) {
-      if (this.hasFinished) return;
+      if (this.hasFinished)
+        return;
 
       switch (action) {
         case 'addMeal':
@@ -328,7 +338,10 @@ export default defineComponent({
             const { name, time, flags } = params as MealCreationState;
             this.survey.addMeal({ name, time, flags }, this.$i18n.locale);
             await this.nextPrompt();
-          } else this.showSurveyPrompt('preMeals', 'meal-add-prompt');
+          }
+          else {
+            this.showSurveyPrompt('preMeals', 'meal-add-prompt');
+          }
           break;
       }
     },
@@ -339,14 +352,14 @@ export default defineComponent({
       if (nextPrompt === undefined) {
         // TODO: handle completion
         console.log('No prompts remaining');
-        if (this.hasMeals) {
+        if (this.hasMeals)
           await this.recallAction('addMeal');
-        } else {
+        else
           this.currentPrompt = null;
-        }
-      } else {
+      }
+      else {
         console.debug(
-          `Switching prompt to: ${nextPrompt.prompt.id} (${nextPrompt.prompt.component})`
+          `Switching prompt to: ${nextPrompt.prompt.id} (${nextPrompt.prompt.component})`,
         );
 
         this.currentPrompt = nextPrompt;
@@ -357,9 +370,8 @@ export default defineComponent({
         const selection = JSON.parse(JSON.stringify(this.selection));
         const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
 
-        if (selection && promptInstance) {
+        if (selection && promptInstance)
           history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
-        }
       }
     },
 

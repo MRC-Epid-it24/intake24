@@ -25,8 +25,8 @@ export default class RateLimiter extends HasRedisClient {
           .status(statusCode)
           .json({ message: typeof message === 'function' ? message(req, res) : message });
       },
-      keyGenerator: (req) => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
-      skip: (req) => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
+      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
+      skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generic'),
       legacyHeaders: false,
       standardHeaders: 'draft-7',
@@ -46,8 +46,8 @@ export default class RateLimiter extends HasRedisClient {
       handler: (req, res, next, { message, statusCode }) => {
         res.status(statusCode).json({ message });
       },
-      keyGenerator: (req) => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
-      skip: (req) => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
+      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
+      skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       legacyHeaders: false,
       standardHeaders: 'draft-7',
       ...options,

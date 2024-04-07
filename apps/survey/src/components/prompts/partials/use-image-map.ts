@@ -10,19 +10,19 @@ export type UseImageMapProps = {
   labels: string[];
 };
 
-export const useImageMap = (props: UseImageMapProps, width: Ref<number>) => {
+export function useImageMap(props: UseImageMapProps, width: Ref<number>) {
   const hoverIndex = ref<number | undefined>(undefined);
 
   const objects = computed(() =>
-    props.imageMapData.objects.map((object) => ({
+    props.imageMapData.objects.map(object => ({
       id: object.id,
       polygon: chunk(
-        object.outlineCoordinates.map((coord) => coord * width.value),
-        2
+        object.outlineCoordinates.map(coord => coord * width.value),
+        2,
       )
-        .map((node) => node.join(','))
+        .map(node => node.join(','))
         .join(' '),
-    }))
+    })),
   );
 
   const label = computed(() => {
@@ -38,4 +38,4 @@ export const useImageMap = (props: UseImageMapProps, width: Ref<number>) => {
     label,
     objects,
   };
-};
+}

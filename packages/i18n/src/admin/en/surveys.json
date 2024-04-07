@@ -128,7 +128,6 @@
     "tab": "Submissions",
     "title": "Survey submissions",
     "id": "Submission ID",
-    "userId": "User ID",
     "startTime": "Start Time",
     "endTime": "End Time",
     "submissionTime": "Submission Time"

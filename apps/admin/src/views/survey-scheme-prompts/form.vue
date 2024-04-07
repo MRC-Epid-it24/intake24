@@ -13,7 +13,7 @@
                 :messages="$t('survey-schemes.prompts.internal.id.hint')"
                 name="id"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -24,21 +24,23 @@
                 :messages="$t('survey-schemes.prompts.internal.name.hint')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col align="center">
               <v-btn class="pa-6" color="secondary" outlined x-large @click="edit">
-                <v-icon left>$edit</v-icon>{{ $t('survey-scheme-prompts.editTemplate') }}
+                <v-icon left>
+                  $edit
+                </v-icon>{{ $t('survey-scheme-prompts.editTemplate') }}
               </v-btn>
             </v-col>
           </v-row>
         </v-card-text>
-        <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
+        <error-list :errors="nonInputErrors" tag="v-card-text" />
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()"></submit-footer>
+          <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
       </v-form>
-      <prompt-selector ref="selector" :prompt-ids="promptIds" @save="save"></prompt-selector>
+      <prompt-selector ref="selector" :prompt-ids="promptIds" @save="save" />
     </v-container>
   </layout>
 </template>

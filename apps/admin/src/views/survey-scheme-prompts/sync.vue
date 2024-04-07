@@ -1,8 +1,10 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-card-title>{{
-      $t(`survey-scheme-prompts.sync.title`, { id: entry.prompt.id })
-    }}</v-card-title>
+    <v-card-title>
+      {{
+        $t(`survey-scheme-prompts.sync.title`, { id: entry.prompt.id })
+      }}
+    </v-card-title>
     <v-card-text v-if="!schemes.length">
       <v-alert color="secondary" text type="info">
         {{ $t(`survey-scheme-prompts.sync.noSchemes`) }}
@@ -44,7 +46,9 @@
           >
             <template #activator="{ attrs, on }">
               <v-btn v-bind="attrs" icon :title="$t('survey-scheme-prompts.sync.false')" v-on="on">
-                <v-icon color="warning" large>$sync</v-icon>
+                <v-icon color="warning" large>
+                  $sync
+                </v-icon>
               </v-btn>
             </template>
             {{ $t('survey-scheme-prompts.sync.confirm') }}
@@ -95,13 +99,14 @@ export default defineComponent({
 
   computed: {
     schemes(): SchemeStatus[] {
-      if (!this.refsLoaded) return [];
+      if (!this.refsLoaded)
+        return [];
 
       return this.refs.schemes.reduce<SchemeStatus[]>((acc, scheme) => {
         const prompts = flattenSchemeWithSection(scheme.prompts);
 
         const match = prompts.find(
-          (prompt) => prompt.id === this.entry.prompt.id && prompt.name === this.entry.prompt.name
+          prompt => prompt.id === this.entry.prompt.id && prompt.name === this.entry.prompt.name,
         );
         if (match) {
           const { section, ...prompt } = match;

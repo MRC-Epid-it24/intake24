@@ -37,7 +37,8 @@ export default defineComponent({
     },
     internalTo(): Location {
       const { to } = this;
-      if (to) return to;
+      if (to)
+        return to;
 
       const {
         action,

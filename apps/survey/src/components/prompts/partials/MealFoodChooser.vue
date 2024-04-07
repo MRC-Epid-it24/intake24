@@ -35,7 +35,7 @@ export default defineComponent({
   },
 
   emits: {
-    selected: (foodId: string) => true,
+    selected: (_foodId: string) => true,
   },
 
   setup(props) {
@@ -49,7 +49,7 @@ export default defineComponent({
 
   computed: {
     filteredFoods(): FoodState[] {
-      return this.foods.filter((food) => this.filter(food.id));
+      return this.foods.filter(food => this.filter(food.id));
     },
   },
 

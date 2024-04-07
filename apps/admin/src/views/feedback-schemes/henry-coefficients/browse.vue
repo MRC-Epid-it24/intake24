@@ -1,9 +1,9 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <template #actions>
-      <preview :feedback-scheme="currentFeedbackScheme"></preview>
+      <preview :feedback-scheme="currentFeedbackScheme" />
     </template>
-    <henry-coefficient-list v-model="form.henryCoefficients"></henry-coefficient-list>
+    <henry-coefficient-list v-model="form.henryCoefficients" />
   </layout>
 </template>
 

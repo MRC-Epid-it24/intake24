@@ -11,15 +11,15 @@ import imageMaps from './image-maps/index.test';
 
 export default () => {
   // As served sets
-  describe('GET /api/admin/images/as-served-sets', asServed.browse);
-  describe('POST /api/admin/images/as-served-sets', asServed.store);
-  describe('GET /api/admin/images/as-served-sets/:asServedSetId', asServed.read);
-  describe('GET /api/admin/images/as-served-sets/:asServedSetId/edit', asServed.edit);
-  describe('PUT /api/admin/images/as-served-sets/:asServedSetId', asServed.update);
-  describe('DELETE /api/admin/images/as-served-sets/:asServedSetId', asServed.destroy);
+  describe('get /api/admin/images/as-served-sets', asServed.browse);
+  describe('post /api/admin/images/as-served-sets', asServed.store);
+  describe('get /api/admin/images/as-served-sets/:asServedSetId', asServed.read);
+  describe('get /api/admin/images/as-served-sets/:asServedSetId/edit', asServed.edit);
+  describe('put /api/admin/images/as-served-sets/:asServedSetId', asServed.update);
+  describe('delete /api/admin/images/as-served-sets/:asServedSetId', asServed.destroy);
 
   // As served images
-  describe('As served images', () => {
+  describe('as served images', () => {
     beforeAll(async () => {
       await request(suite.app)
         .post('/api/admin/images/as-served-sets')
@@ -30,43 +30,43 @@ export default () => {
         .attach(
           'selectionImage',
           fs.createReadStream(suite.files.images.jpg),
-          'asServedSetForImages.jpg'
+          'asServedSetForImages.jpg',
         );
     });
 
-    describe('GET /api/admin/images/as-served-sets/:asServedSetId/images', asServedImages.browse);
-    describe('POST /api/admin/images/as-served-sets/:asServedSetId/images', asServedImages.store);
+    describe('get /api/admin/images/as-served-sets/:asServedSetId/images', asServedImages.browse);
+    describe('post /api/admin/images/as-served-sets/:asServedSetId/images', asServedImages.store);
     describe(
-      'GET /api/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId',
-      asServedImages.read
+      'get /api/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId',
+      asServedImages.read,
     );
     describe(
-      'DELETE /api/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId',
-      asServedImages.destroy
+      'delete /api/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId',
+      asServedImages.destroy,
     );
   });
 
   // Drinkware sets - TODO
-  describe('GET /api/admin/images/drinkware-sets', drinkwareSets.browse);
-  describe('POST /api/admin/images/drinkware-sets', drinkwareSets.store);
-  describe('GET /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.read);
-  describe('GET /api/admin/images/drinkware-sets/:drinkwareSetId/edit', drinkwareSets.edit);
+  describe('get /api/admin/images/drinkware-sets', drinkwareSets.browse);
+  describe('post /api/admin/images/drinkware-sets', drinkwareSets.store);
+  describe('get /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.read);
+  describe('get /api/admin/images/drinkware-sets/:drinkwareSetId/edit', drinkwareSets.edit);
   /* describe('PUT /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.update);
   describe('DELETE /api/admin/images/guide-images/:drinkwareSetId', drinkwareSets.destroy); */
 
   // Guided images
-  describe('GET /api/admin/images/guide-images', guideImages.browse);
-  describe('POST /api/admin/images/guide-images', guideImages.store);
-  describe('GET /api/admin/images/guide-images/:guideImageId', guideImages.read);
-  describe('GET /api/admin/images/guide-images/:guideImageId/edit', guideImages.edit);
-  describe('PUT /api/admin/images/guide-images/:guideImageId', guideImages.update);
-  describe('DELETE /api/admin/images/guide-images/:guideImageId', guideImages.destroy);
+  describe('get /api/admin/images/guide-images', guideImages.browse);
+  describe('post /api/admin/images/guide-images', guideImages.store);
+  describe('get /api/admin/images/guide-images/:guideImageId', guideImages.read);
+  describe('get /api/admin/images/guide-images/:guideImageId/edit', guideImages.edit);
+  describe('put /api/admin/images/guide-images/:guideImageId', guideImages.update);
+  describe('delete /api/admin/images/guide-images/:guideImageId', guideImages.destroy);
 
   // Image Maps
-  describe('GET /api/admin/images/image-maps', imageMaps.browse);
-  describe('POST /api/admin/images/image-maps', imageMaps.store);
-  describe('GET /api/admin/images/image-maps/:imageMapId', imageMaps.read);
-  describe('GET /api/admin/images/image-maps/:imageMapId/edit', imageMaps.edit);
-  describe('PUT /api/admin/images/image-maps/:imageMapId', imageMaps.update);
-  describe('DELETE /api/admin/images/image-maps/:imageMapId', imageMaps.destroy);
+  describe('get /api/admin/images/image-maps', imageMaps.browse);
+  describe('post /api/admin/images/image-maps', imageMaps.store);
+  describe('get /api/admin/images/image-maps/:imageMapId', imageMaps.read);
+  describe('get /api/admin/images/image-maps/:imageMapId/edit', imageMaps.edit);
+  describe('put /api/admin/images/image-maps/:imageMapId', imageMaps.update);
+  describe('delete /api/admin/images/image-maps/:imageMapId', imageMaps.destroy);
 };

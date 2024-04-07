@@ -11,8 +11,7 @@
             :items="eventTypes"
             name="type"
             outlined
-          >
-          </v-select>
+          />
         </v-col>
         <v-col cols="12">
           <select-resource
@@ -21,8 +20,7 @@
             :label="$t('surveys.id')"
             name="surveyId"
             resource="surveys"
-          >
-          </select-resource>
+          />
         </v-col>
         <v-col cols="12">
           <v-text-field
@@ -33,7 +31,7 @@
             :label="$t('surveys.submissions.id')"
             name="submissionId"
             outlined
-          ></v-text-field>
+          />
           <v-text-field
             v-else
             v-model="params.sessionId"
@@ -42,7 +40,7 @@
             :label="$t('surveys.sessions.id')"
             name="sessionId"
             outlined
-          ></v-text-field>
+          />
         </v-col>
       </v-row>
     </v-card-text>

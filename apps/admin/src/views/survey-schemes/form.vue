@@ -5,7 +5,7 @@
         v-if="canHandleEntry('copy')"
         resource="survey-schemes"
         :scheme-id="id"
-      ></copy-scheme-dialog>
+      />
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container fluid>
@@ -19,7 +19,7 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -31,7 +31,7 @@
                 name="type"
                 outlined
                 @change="form.errors.clear('type')"
-              ></v-select>
+              />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -46,11 +46,15 @@
                 @change="form.errors.clear('visibility')"
               >
                 <template #item="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
               </v-select>
@@ -58,10 +62,10 @@
           </v-row>
         </v-card-text>
       </v-container>
-      <v-divider></v-divider>
-      <meal-list v-model="form.meals" :scheme-id="id"></meal-list>
+      <v-divider />
+      <meal-list v-model="form.meals" :scheme-id="id" />
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()"></submit-footer>
+        <submit-footer :disabled="form.errors.any()" />
       </v-card-text>
     </v-form>
   </layout>
@@ -108,10 +112,10 @@ export default defineComponent({
     const { visibilityList } = useSelects();
 
     const schemeTypeItems = ref(
-      schemeTypes.map((value) => ({
+      schemeTypes.map(value => ({
         value,
         text: i18n.t(`survey-schemes.types.${value}`),
-      }))
+      })),
     );
 
     const { canHandleEntry, entry, entryLoaded, refs, refsLoaded } = useEntry<

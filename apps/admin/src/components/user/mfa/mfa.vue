@@ -10,7 +10,7 @@
         :label="$t(`user.mfa.${status ? 'disable' : 'enable'}`)"
         name="status"
         @change="toggle"
-      ></v-switch>
+      />
       <v-alert v-if="!devices.length" class="my-auto ml-4" dense text type="info">
         {{ $t('user.mfa.disabled') }}
       </v-alert>
@@ -19,7 +19,7 @@
       <v-toolbar-title>
         {{ $t('user.mfa.devices.title') }}
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-dialog v-model="dialog" :fullscreen="isMobile" max-width="600px">
         <template #activator="{ attrs, on }">
           <v-btn
@@ -30,7 +30,9 @@
             :title="$t('user.mfa.devices.add')"
             v-on="on"
           >
-            <v-icon left>$add</v-icon>
+            <v-icon left>
+              $add
+            </v-icon>
             {{ $t('user.mfa.devices.add') }}
           </v-btn>
         </template>
@@ -44,9 +46,11 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-tabs v-model="tab" background-color="secondary" dark grow @change="clear">
-            <v-tabs-slider></v-tabs-slider>
+            <v-tabs-slider />
             <v-tab v-for="provider in providers" :key="provider" :href="`#${provider}`">
-              <v-icon left>{{ `$${provider}` }}</v-icon>
+              <v-icon left>
+                {{ `$${provider}` }}
+              </v-icon>
               {{ $t(`user.mfa.providers.${provider}._`) }}
             </v-tab>
           </v-tabs>
@@ -59,7 +63,7 @@
                 <v-card-subtitle>
                   {{ $t(`user.mfa.providers.${provider}.description`) }}
                 </v-card-subtitle>
-                <component :is="provider" ref="providerRefs" @registered="add"></component>
+                <component :is="provider" ref="providerRefs" @registered="add" />
               </v-card>
             </v-tab-item>
           </v-tabs-items>
@@ -108,7 +112,7 @@
               </confirm-dialog>
             </v-list-item-action>
           </v-list-item>
-          <v-divider v-if="idx + 1 < devices.length" :key="`div-${device.id}`"></v-divider>
+          <v-divider v-if="idx + 1 < devices.length" :key="`div-${device.id}`" />
         </template>
       </transition-group>
       <v-list-item v-else>
@@ -168,7 +172,8 @@ export default defineComponent({
   methods: {
     async checkDuoRegistrationResponse() {
       const { state: challengeId, code: token } = this.$route.query;
-      if (typeof challengeId !== 'string' || typeof token !== 'string') return;
+      if (typeof challengeId !== 'string' || typeof token !== 'string')
+        return;
 
       this.tab = 'duo';
       this.dialog = true;
@@ -182,7 +187,8 @@ export default defineComponent({
 
       try {
         await this.$http.post('admin/user/mfa/toggle', { status: this.status });
-      } catch (err) {
+      }
+      catch (err) {
         if (isAxiosError(err) && err.response?.status === HttpStatusCode.Forbidden) {
           useMessages().info(this.$t('user.mfa.devices.none').toString());
           return;
@@ -207,18 +213,19 @@ export default defineComponent({
 
     async remove(deviceId: string) {
       await this.$http.delete(`admin/user/mfa/devices/${deviceId}`);
-      this.devices = this.devices.filter((device) => device.id !== deviceId);
-      if (!this.devices.length || this.devices.find((device) => device.preferred)) return;
+      this.devices = this.devices.filter(device => device.id !== deviceId);
+      if (!this.devices.length || this.devices.find(device => device.preferred))
+        return;
 
       const { data } = await this.$http.patch<MFADeviceResponse>(
         `admin/user/mfa/devices/${this.devices[0].id}`,
-        { preferred: true }
+        { preferred: true },
       );
       this.devices.splice(0, 1, data);
     },
 
     clear() {
-      this.providerRefs?.forEach((item) => item.clear());
+      this.providerRefs?.forEach(item => item.clear());
     },
 
     close() {

@@ -14,7 +14,7 @@ import ioc from '@intake24/api/ioc';
 
 const appOps = { config: ioc.cradle.config, logger: ioc.cradle.logger };
 
-const startApp = async (ops: Ops): Promise<void> => {
+async function startApp(ops: Ops): Promise<void> {
   const { config, logger } = ops;
   const { name, host, port, https, certPath } = config.app;
 
@@ -26,7 +26,7 @@ const startApp = async (ops: Ops): Promise<void> => {
       ['cert.pem', 'dev.pem', 'rootCA.pem'].map((file) => {
         const path = certPath ? join(certPath, file) : join(home, '.vite-plugin-mkcert', file);
         return readFile(path);
-      })
+      }),
     );
 
     server = createServer({ key, cert, ca }, server);
@@ -36,7 +36,7 @@ const startApp = async (ops: Ops): Promise<void> => {
   server.listen(port, host, () => {
     logger.child({ service: 'Application' }).info(`${name} is listening on ${host}:${port}!`);
   });
-};
+}
 
 (async () => {
   await startApp(appOps);

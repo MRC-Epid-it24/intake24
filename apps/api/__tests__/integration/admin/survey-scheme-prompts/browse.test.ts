@@ -4,7 +4,7 @@ export default () => {
   const url = '/api/admin/survey-scheme-prompts';
   const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts|browse'];
 
-  test('missing authentication / authorization', async () => {
+  it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });
   });
 

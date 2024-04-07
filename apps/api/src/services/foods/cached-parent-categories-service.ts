@@ -1,10 +1,10 @@
 import type { IoC } from '@intake24/api/ioc';
 import { Category, Food } from '@intake24/db';
 
-const cachedParentCategoriesService = ({
+function cachedParentCategoriesService({
   cache,
   cacheConfig,
-}: Pick<IoC, 'cache' | 'cacheConfig'>) => {
+}: Pick<IoC, 'cache' | 'cacheConfig'>) {
   async function getFoodParentCategories(foodCode: string): Promise<string[]> {
     return cache.remember<string[]>(
       `food-parent-categories:${foodCode}`,
@@ -15,8 +15,8 @@ const cachedParentCategoriesService = ({
           include: [{ association: 'parentCategories', attributes: ['code'] }],
         });
 
-        return row?.parentCategories?.map((cat) => cat.code) ?? [];
-      }
+        return row?.parentCategories?.map(cat => cat.code) ?? [];
+      },
     );
   }
 
@@ -30,8 +30,8 @@ const cachedParentCategoriesService = ({
           include: [{ association: 'parentCategories', attributes: ['code'] }],
         });
 
-        return row?.parentCategories?.map((cat) => cat.code) ?? [];
-      }
+        return row?.parentCategories?.map(cat => cat.code) ?? [];
+      },
     );
   }
 
@@ -44,14 +44,14 @@ const cachedParentCategoriesService = ({
         const allCategories = new Set<string>();
 
         while (nextLevel.length > 0) {
-          nextLevel.forEach((code) => allCategories.add(code));
-          nextLevel = await Promise.all(nextLevel.map(getCategoryParentCategories)).then((x) =>
-            x.flat()
+          nextLevel.forEach(code => allCategories.add(code));
+          nextLevel = await Promise.all(nextLevel.map(getCategoryParentCategories)).then(x =>
+            x.flat(),
           );
         }
 
         return [...allCategories];
-      }
+      },
     );
   }
 
@@ -64,14 +64,14 @@ const cachedParentCategoriesService = ({
         const allCategories = new Set<string>();
 
         while (nextLevel.length > 0) {
-          nextLevel.forEach((code) => allCategories.add(code));
-          nextLevel = await Promise.all(nextLevel.map(getCategoryParentCategories)).then((x) =>
-            x.flat()
+          nextLevel.forEach(code => allCategories.add(code));
+          nextLevel = await Promise.all(nextLevel.map(getCategoryParentCategories)).then(x =>
+            x.flat(),
           );
         }
 
         return [...allCategories];
-      }
+      },
     );
   }
 
@@ -81,7 +81,7 @@ const cachedParentCategoriesService = ({
     getFoodAllCategories,
     getCategoryAllCategories,
   };
-};
+}
 
 export default cachedParentCategoriesService;
 

@@ -8,9 +8,9 @@
             v-if="i18n.description"
             :class="{ 'pb-4': !hasDefaultSlot }"
             v-html="i18n.description"
-          ></div>
+          />
         </slot>
-        <slot></slot>
+        <slot />
         <v-card-actions
           v-if="isInMultiPrompt || !isMobile || prompt.actions?.both"
           id="actions"
@@ -29,12 +29,14 @@
               :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
               @click="action(item.type, foodOrMealId, item.params)"
             >
-              <v-icon v-if="item.icon" left>{{ item.icon }}</v-icon>
+              <v-icon v-if="item.icon" left>
+                {{ item.icon }}
+              </v-icon>
               {{ translate(item.text) }}
             </v-btn>
           </template>
           <template v-else>
-            <slot name="actions"></slot>
+            <slot name="actions" />
           </template>
         </v-card-actions>
       </v-card>

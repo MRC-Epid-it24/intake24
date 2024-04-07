@@ -21,7 +21,8 @@ import {
   fetchRecipeFoodsList,
 } from './food-data';
 
-if (parentPortNullable === null) throw new Error('This file can only be run as a worker thread');
+if (parentPortNullable === null)
+  throw new Error('This file can only be run as a worker thread');
 
 const parentPort = parentPortNullable;
 
@@ -62,7 +63,7 @@ function parseSynonymSet(value: string): Set<string> {
 
 async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
   const synSets = await SynonymSet.findAll({ attributes: ['synonyms'], where: { localeId } });
-  return synSets.map((s) => parseSynonymSet(s.synonyms));
+  return synSets.map(s => parseSynonymSet(s.synonyms));
 }
 
 async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]> {
@@ -71,10 +72,10 @@ async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]>
     where: { localeId },
     include: [{ model: SynonymSet, attributes: ['synonyms'] }],
   });
-  return recipeFoods.map((recipeFoodEntry) =>
+  return recipeFoods.map(recipeFoodEntry =>
     parseSynonymSet(
-      recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
-    )
+      recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? ''),
+    ),
   );
 }
 
@@ -84,7 +85,8 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
     where: { id: localeId },
   });
 
-  if (!row) throw new NotFoundError(`Locale "${localeId}" not found`);
+  if (!row)
+    throw new NotFoundError(`Locale "${localeId}" not found`);
 
   return row.foodIndexLanguageBackendId;
 }
@@ -109,29 +111,31 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 
   const languageBackend = LanguageBackends[languageBackendId];
 
-  if (!languageBackend)
+  if (!languageBackend) {
     throw new NotFoundError(
-      `Language backend "${languageBackendId}" for locale "${localeId}" not found`
+      `Language backend "${languageBackendId}" for locale "${localeId}" not found`,
     );
+  }
 
   const foodDescriptions = new Array<PhraseWithKey<string>>();
 
   for (const food of localFoods) {
-    if (!food.name) continue;
+    if (!food.name)
+      continue;
 
     foodDescriptions.push({ phrase: food.name, key: food.code });
 
     const altNames = food.altNames[languageBackend.languageCode];
 
-    if (altNames !== undefined) {
+    if (altNames !== undefined)
       for (const name of altNames) foodDescriptions.push({ phrase: name, key: food.code });
-    }
   }
 
   const categoryDescriptions = new Array<PhraseWithKey<string>>();
 
   for (const category of localCategories) {
-    if (!category.name) continue;
+    if (!category.name)
+      continue;
 
     categoryDescriptions.push({ phrase: category.name, key: category.code });
   }
@@ -141,17 +145,17 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     LanguageBackends[languageBackendId],
     synonymSets,
     recipeFoodsSynomSet,
-    recipeFoodslist
+    recipeFoodslist,
   );
 
   const categoryIndex = new PhraseIndex<string>(
     categoryDescriptions,
     LanguageBackends[languageBackendId],
-    synonymSets
+    synonymSets,
   );
 
   const foodParentCategories = new Map(
-    localFoods.map((food) => [food.code, food.parentCategories])
+    localFoods.map(food => [food.code, food.parentCategories]),
   );
 
   return {
@@ -170,7 +174,7 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 
 async function matchRecipeFoods(
   interpretedQuery: InterpretedPhrase,
-  query: SearchQuery
+  query: SearchQuery,
 ): Promise<FoodHeader[]> {
   const localeIndex = foodIndex[query.localeId];
   if (!localeIndex)
@@ -194,12 +198,11 @@ async function matchRecipeFoods(
   }
 
   const recipeFoodHeadersFiltered: FoodHeader[] = recipeFoodHeaders.reduce((acc, current) => {
-    const temp = acc.find((item) => item.code === current.code);
-    if (!temp) {
+    const temp = acc.find(item => item.code === current.code);
+    if (!temp)
       return acc.concat([current]);
-    } else {
+    else
       return acc;
-    }
   }, [] as FoodHeader[]);
   return recipeFoodHeadersFiltered;
 }
@@ -210,17 +213,15 @@ function addTransitiveParentCategories(categories: Set<string>): Set<string> {
   let currentSet = categories;
 
   while (currentSet.size > 0) {
-    for (const code of currentSet) {
+    for (const code of currentSet)
       parentCategories.add(code);
-    }
 
     const nextSet = new Set<string>();
 
     for (const code of currentSet) {
       const parentCodes = globalCategoryData.get(code)?.parentCategories ?? [];
-      for (const parentCode of parentCodes) {
+      for (const parentCode of parentCodes)
         nextSet.add(parentCode);
-      }
     }
 
     currentSet = nextSet;
@@ -254,7 +255,8 @@ function isFoodHidden(index: LocalFoodIndex, foodCode: string): boolean {
   }
 
   for (const categoryCode of parentCategories) {
-    if (!isCategoryHidden(categoryCode)) return false;
+    if (!isCategoryHidden(categoryCode))
+      return false;
   }
 
   return true;
@@ -291,32 +293,32 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   const foodInterpretation = localeIndex.foodIndex.interpretPhrase(
     query.description,
     'match-fewer',
-    'foods'
+    'foods',
   );
   const foodInterpretedRecipeFoods = localeIndex.foodIndex.interpretPhrase(
     query.description,
     'match-fewer',
-    'recipes'
+    'recipes',
   );
   let recipeFoodsHeaders: FoodHeader[] = [];
-  if (foodInterpretedRecipeFoods.words.length > 0) {
+  if (foodInterpretedRecipeFoods.words.length > 0)
     recipeFoodsHeaders = await matchRecipeFoods(foodInterpretedRecipeFoods, query);
-  }
+
   const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, 100, 100);
 
   const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
     query.description,
     'match-fewer',
-    'categories'
+    'categories',
   );
 
   const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, 100, 100);
 
   const filteredFoods = foodResults.filter((matchResult) => {
     const acceptHidden = query.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
-    const acceptCategory =
-      query.limitToCategory === undefined ||
-      isFoodInCategory(localeIndex, matchResult.key, query.limitToCategory);
+    const acceptCategory
+      = query.limitToCategory === undefined
+      || isFoodInCategory(localeIndex, matchResult.key, query.limitToCategory);
 
     return acceptHidden && acceptCategory;
   });
@@ -327,12 +329,12 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     query.rankingAlgorithm,
     query.matchScoreWeight,
     logger,
-    recipeFoodsHeaders
+    recipeFoodsHeaders,
   );
 
   const filteredCategories = categoryResults.filter(
-    (matchResult) =>
-      query.limitToCategory === undefined || isSubcategory(matchResult.key, query.limitToCategory)
+    matchResult =>
+      query.limitToCategory === undefined || isSubcategory(matchResult.key, query.limitToCategory),
   );
 
   const categories = rankCategoryResults(filteredCategories);
@@ -381,17 +383,18 @@ async function buildIndex() {
         process.exit(0);
       }
 
-      //rebuild index
+      // rebuild index
       if (msg.rebuild) {
         try {
           if (msg.locales && msg.locales.length > 0) {
             const setLocales = new Set(msg.locales);
             logger.debug(`Rebuilding index for ${msg.locales.length} locales`);
-            for (const localeId of setLocales) {
+            for (const localeId of setLocales)
               foodIndex[localeId] = await buildIndexForLocale(localeId);
-            }
-            //foodIndex[msg.locales] = await buildIndexForLocale(msg.locales);
-          } else {
+
+            // foodIndex[msg.locales] = await buildIndexForLocale(msg.locales);
+          }
+          else {
             logger.debug('Rebuilding All indexs');
             for (const localeId of enabledLocales) {
               logger.debug(`Rebuilding All Indexes including: ${localeId}`);
@@ -404,7 +407,8 @@ async function buildIndex() {
             success: true,
             rebuild: false,
           });
-        } catch (err) {
+        }
+        catch (err) {
           parentPort.postMessage({
             type: 'command',
             queryId: msg.buildId,
@@ -414,7 +418,8 @@ async function buildIndex() {
           });
         }
       }
-    } else if (msg.type === 'query') {
+    }
+    else if (msg.type === 'query') {
       try {
         const results = await queryIndex(msg);
 
@@ -424,7 +429,8 @@ async function buildIndex() {
           success: true,
           results,
         });
-      } catch (err) {
+      }
+      catch (err) {
         parentPort.postMessage({
           type: 'query',
           queryId: msg.queryId,
@@ -432,7 +438,8 @@ async function buildIndex() {
           error: err,
         });
       }
-    } else {
+    }
+    else {
       logger.error(`Unknown message type: ${JSON.stringify(msg)}`);
     }
   });

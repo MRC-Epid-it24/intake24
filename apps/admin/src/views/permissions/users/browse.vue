@@ -8,7 +8,7 @@
           :key="action"
           v-bind="{ action, item }"
           :to="{ name: `users-${action}`, params: { id: item.id } }"
-        ></component>
+        />
       </template>
     </embedded-data-table>
   </layout>
@@ -36,7 +36,7 @@ export default defineComponent({
     const { i18n } = useI18n();
     const user = useUser();
 
-    const actions = ['read', 'edit'].filter((action) => user.can(`users|${action}`));
+    const actions = ['read', 'edit'].filter(action => user.can(`users|${action}`));
 
     const headers = [
       { text: i18n.t('users.name'), sortable: true, value: 'name' },

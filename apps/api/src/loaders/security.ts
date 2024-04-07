@@ -24,6 +24,6 @@ export default (app: Express, { config }: Ops) => {
       origin,
       credentials: true,
       exposedHeaders: ['RateLimit', 'RateLimit-Policy', 'Retry-After'],
-    })
+    }),
   );
 };

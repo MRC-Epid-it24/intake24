@@ -1,6 +1,6 @@
 <template>
   <div class="py-3">
-    <web-push></web-push>
+    <web-push />
   </div>
 </template>
 

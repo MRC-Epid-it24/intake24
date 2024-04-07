@@ -1,14 +1,13 @@
 {
   "name": "intake24",
+  "type": "module",
   "version": "2024.1.0",
-  "description": "Dietary recall system",
-  "keywords": [
-    "Intake24",
-    "Dietary recall system"
-  ],
   "private": true,
+  "packageManager": "pnpm@8.15.6",
+  "description": "Dietary recall system",
   "author": "",
   "license": "Apache-2.0",
+  "homepage": "https://docs.intake24.org",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MRC-Epid-it24/intake24.git"
@@ -16,12 +15,13 @@
   "bugs": {
     "url": "https://github.com/MRC-Epid-it24/intake24/issues"
   },
-  "homepage": "https://docs.intake24.org",
-  "type": "module",
+  "keywords": [
+    "Intake24",
+    "Dietary recall system"
+  ],
   "engines": {
     "node": ">=18.17.0"
   },
-  "packageManager": "pnpm@8.15.5",
   "scripts": {
     "prepare": "pnpm simple-git-hooks",
     "clean": "rimraf --glob **/coverage **/dist **/node_modules",
@@ -40,7 +40,7 @@
     "changelog": "conventional-changelog -p angular",
     "release": "pnpm tsx scripts/release.ts",
     "lint:md": "prettier --write **/*.md",
-    "lint:ts": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "lint:ts": "eslint . --fix",
     "lint": "pnpm lint:md && pnpm lint:ts",
     "test:unit": "jest",
     "test:unit:watch": "pnpm test:unit --watch",
@@ -48,35 +48,16 @@
     "test:integration": "pnpm --filter ./apps/{api,portal} test:integration",
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged",
-    "commit-msg": "pnpm tsx scripts/verify-commit.ts $1"
-  },
-  "lint-staged": {
-    "*.md": "prettier --write",
-    "*.{ts,vue}": "eslint --fix"
-  },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "devDependencies": {
+    "@antfu/eslint-config": "^2.12.2",
     "@jest/types": "^29.6.3",
-    "@ts-rest/open-api": "^3.41.0",
+    "@ts-rest/open-api": "^3.41.1",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.4",
+    "@types/node": "^20.12.5",
     "@types/prompts": "^2.4.9",
-    "@typescript-eslint/eslint-plugin": "~7.3.1",
-    "@typescript-eslint/parser": "~7.3.1",
-    "@vue/eslint-config-prettier": "^9.0.0",
-    "@vue/eslint-config-typescript": "^13.0.0",
     "calver": "^22.9.1",
     "conventional-changelog-cli": "^4.1.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-define-config": "^2.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-prettier": "^5.1.3",
+    "eslint": "^9.0.0",
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "eslint-plugin-vue": "^9.24.0",
     "execa": "^5.1.1",
@@ -101,5 +82,17 @@
         "@algolia/client-search"
       ]
     }
-  }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged",
+    "commit-msg": "pnpm tsx scripts/verify-commit.ts $1"
+  },
+  "lint-staged": {
+    "*.md": "prettier --write",
+    "*.{ts,vue}": "eslint --fix"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

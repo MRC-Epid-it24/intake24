@@ -5,8 +5,8 @@
         v-if="canHandleEntry('copy')"
         resource="feedback-schemes"
         :scheme-id="id"
-      ></copy-scheme-dialog>
-      <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme"></preview>
+      />
+      <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme" />
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container fluid>
@@ -21,7 +21,7 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              ></v-text-field>
+              />
               <v-select
                 v-model="form.type"
                 class="mb-4"
@@ -32,7 +32,7 @@
                 name="type"
                 outlined
                 @change="form.errors.clear('type')"
-              ></v-select>
+              />
               <v-select
                 v-model="form.outputs"
                 class="mb-4"
@@ -125,21 +125,27 @@
                 @change="form.errors.clear('visibility')"
               >
                 <template #item="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>{{ item.icon }}</v-icon>
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
                   {{ item.text }}
                 </template>
               </v-select>
               <v-card outlined>
                 <v-toolbar color="grey lighten-3" dense flat tile>
-                  <v-icon color="secondary" left>fas fa-bars-staggered</v-icon>
+                  <v-icon color="secondary" left>
+                    fas fa-bars-staggered
+                  </v-icon>
                   <v-toolbar-title class="font-weight-medium">
                     {{ $t('feedback-schemes.sections.title') }}
                   </v-toolbar-title>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                 </v-toolbar>
                 <v-list class="py-0">
                   <draggable
@@ -166,7 +172,7 @@
                             v-model="form.sections"
                             color="secondary"
                             :value="section.value"
-                          ></v-checkbox>
+                          />
                         </v-list-item-action>
                       </v-list-item>
                     </transition-group>
@@ -178,7 +184,7 @@
         </v-card-text>
       </v-container>
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()"></submit-footer>
+        <submit-footer :disabled="form.errors.any()" />
       </v-card-text>
     </v-form>
   </layout>
@@ -237,7 +243,7 @@ export type PatchFeedbackSchemeForm = Pick<
 export default defineComponent({
   name: 'SchemeForm',
 
-  components: { CopySchemeDialog, draggable, Preview },
+  components: { CopySchemeDialog, Draggable: draggable, Preview },
 
   mixins: [formMixin],
 
@@ -245,28 +251,22 @@ export default defineComponent({
     const { i18n } = useI18n();
     const { visibilityList } = useSelects();
 
-    const types = feedbackTypes.map((value) => ({
+    const types = feedbackTypes.map(value => ({
       value,
       text: i18n.t(`feedback-schemes.types.${value}`),
     }));
 
-    const outputs = feedbackOutputs.map((value) => ({
+    const outputs = feedbackOutputs.map(value => ({
       value,
       text: i18n.t(`feedback-schemes.outputs.${value}`),
     }));
 
     const sections = ref(
-      feedbackSections.map((value) => ({
+      feedbackSections.map(value => ({
         value,
         text: i18n.t(`feedback-schemes.${kebabCase(value)}.title`),
-      }))
+      })),
     );
-
-    const updateSectionOrder = () => {
-      form.sections = sections.value
-        .filter((section) => form.sections.includes(section.value))
-        .map((section) => section.value);
-    };
 
     const { canHandleEntry, entry, entryLoaded, isCreate } = useEntry<FeedbackSchemeEntry>(props);
     useEntryFetch(props);
@@ -288,8 +288,10 @@ export default defineComponent({
           const aIdx = entry.sections.indexOf(a.value);
           const bIdx = entry.sections.indexOf(b.value);
 
-          if (aIdx === -1) return 1;
-          if (bIdx === -1) return -1;
+          if (aIdx === -1)
+            return 1;
+          if (bIdx === -1)
+            return -1;
 
           return aIdx - bIdx;
         });
@@ -297,7 +299,13 @@ export default defineComponent({
       },
     });
 
-    const physicalDataFields = feedbackPhysicalDataFields.map((value) => ({
+    const updateSectionOrder = () => {
+      form.sections = sections.value
+        .filter(section => form.sections.includes(section.value))
+        .map(section => section.value);
+    };
+
+    const physicalDataFields = feedbackPhysicalDataFields.map(value => ({
       value,
       text: i18n.t(`feedback-schemes.physicalDataFields.${value}`),
     }));
@@ -307,7 +315,7 @@ export default defineComponent({
         ({
           ...entry.value,
           ...form.getData(true),
-        }) as FeedbackSchemeEntry
+        }) as FeedbackSchemeEntry,
     );
 
     const requiredPhysicalDataFields = computed<Record<FeedbackPhysicalDataField, boolean>>(() => {
@@ -329,12 +337,18 @@ export default defineComponent({
             return acc;
           }
 
-          if (group.age) acc.birthdate = true;
-          if (group.sex) acc.sex = true;
-          if (group.weight) acc.weightKg = true;
-          if (group.height) acc.heightCm = true;
-          if (group.physicalActivityLevelId) acc.physicalActivityLevelId = true;
-          if (group.nutrientRuleType === 'per_unit_of_weight') acc.weightKg = true;
+          if (group.age)
+            acc.birthdate = true;
+          if (group.sex)
+            acc.sex = true;
+          if (group.weight)
+            acc.weightKg = true;
+          if (group.height)
+            acc.heightCm = true;
+          if (group.physicalActivityLevelId)
+            acc.physicalActivityLevelId = true;
+          if (group.nutrientRuleType === 'per_unit_of_weight')
+            acc.weightKg = true;
 
           return acc;
         }, flags) ?? flags

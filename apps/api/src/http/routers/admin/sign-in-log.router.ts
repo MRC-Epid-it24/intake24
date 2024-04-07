@@ -6,7 +6,7 @@ import { permission } from '@intake24/api/http/middleware';
 import { contract } from '@intake24/common/contracts';
 import { SignInLog } from '@intake24/db';
 
-export const signInLog = () => {
+export function signInLog() {
   return initServer().router(contract.admin.signInLog, {
     browse: {
       middleware: [permission('sign-in-logs'), permission('sign-in-logs|browse')],
@@ -24,7 +24,8 @@ export const signInLog = () => {
       middleware: [permission('sign-in-logs'), permission('sign-in-logs|read')],
       handler: async ({ params: { signInLogId } }) => {
         const signInLog = await SignInLog.findByPk(signInLogId);
-        if (!signInLog) throw new NotFoundError();
+        if (!signInLog)
+          throw new NotFoundError();
 
         return { status: 200, body: signInLog };
       },
@@ -33,7 +34,8 @@ export const signInLog = () => {
       middleware: [permission('sign-in-logs'), permission('sign-in-logs|delete')],
       handler: async ({ params: { signInLogId } }) => {
         const signInLog = await SignInLog.findByPk(signInLogId, { attributes: ['id'] });
-        if (!signInLog) throw new NotFoundError();
+        if (!signInLog)
+          throw new NotFoundError();
 
         await signInLog.destroy();
 
@@ -41,4 +43,4 @@ export const signInLog = () => {
       },
     },
   });
-};
+}

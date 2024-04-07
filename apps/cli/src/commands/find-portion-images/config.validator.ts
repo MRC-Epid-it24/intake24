@@ -1,6 +1,7 @@
+import { inspect } from 'node:util';
+
 import type { ValidateFunction as AjvValidateFunction } from 'ajv';
 import Ajv from 'ajv';
-import { inspect } from 'util';
 
 import type Config from './config';
 
@@ -10,7 +11,7 @@ export const ajv = new Ajv({
   useDefaults: true,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line ts/no-var-requires, ts/no-require-imports
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 
 export type { Config };
@@ -56,13 +57,13 @@ export type ValidateFunction<T> = ((data: unknown) => data is T) &
   Pick<AjvValidateFunction, 'errors'>;
 export const isConfig = ajv.compile(ConfigSchema) as ValidateFunction<Config>;
 export default function validate(value: unknown): Config {
-  if (isConfig(value)) {
+  if (isConfig(value))
     return value;
-  }
+
   throw new Error(
     `${ajv.errorsText(
       isConfig.errors!.filter((e: any) => e.keyword !== 'if'),
-      { dataVar: 'Config' }
-    )}\n\n${inspect(value)}`
+      { dataVar: 'Config' },
+    )}\n\n${inspect(value)}`,
   );
 }

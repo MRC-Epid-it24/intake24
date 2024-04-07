@@ -16,12 +16,12 @@ export default () => {
     .post(
       permission('guide-images|create'),
       validation.store,
-      wrapAsync(guideImageController.store)
+      wrapAsync(guideImageController.store),
     )
     .get(
       permission('guide-images|browse'),
       validation.browse,
-      wrapAsync(guideImageController.browse)
+      wrapAsync(guideImageController.browse),
     );
 
   router.get('/refs', wrapAsync(guideImageController.refs));
@@ -35,7 +35,7 @@ export default () => {
   router.get(
     '/:guideImageId/edit',
     permission('guide-images|edit'),
-    wrapAsync(guideImageController.edit)
+    wrapAsync(guideImageController.edit),
   );
 
   return router;

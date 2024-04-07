@@ -28,14 +28,16 @@ export default class SurveyEventNotification extends NotificationJob<'SurveyEven
   private async getSession() {
     const { sessionId, surveyId, userId } = this.params;
     const session = await UserSurveySession.findOne({ where: { id: sessionId, surveyId, userId } });
-    if (!session) throw new NotFoundError('Session not found');
+    if (!session)
+      throw new NotFoundError('Session not found');
 
     return undefined;
   }
 
   private async getSubmission(submissionId: string) {
     const submission = await SurveySubmission.findByPk(submissionId, submissionScope());
-    if (!submission) throw new NotFoundError('Submission not found');
+    if (!submission)
+      throw new NotFoundError('Submission not found');
 
     return submission;
   }
@@ -58,11 +60,12 @@ export default class SurveyEventNotification extends NotificationJob<'SurveyEven
     const survey = await Survey.findByPk(surveyId, {
       attributes: ['id', 'notifications', 'genUserKey'],
     });
-    if (!survey) throw new NotFoundError('Survey not found');
+    if (!survey)
+      throw new NotFoundError('Survey not found');
 
     const { notifications, genUserKey } = survey;
     const webhooks = notifications.filter(
-      (n): n is WebhookNotification => n.type === type && n.channel === 'webhook'
+      (n): n is WebhookNotification => n.type === type && n.channel === 'webhook',
     );
     if (!webhooks.length) {
       this.logger.warn(`Event '${type}' notification not set for survey ${surveyId}`);
@@ -71,16 +74,16 @@ export default class SurveyEventNotification extends NotificationJob<'SurveyEven
 
     const [data, ...headers] = await Promise.all([
       this.getEventPayload(),
-      ...webhooks.map((n) =>
+      ...webhooks.map(n =>
         this.getSignatureHeaders(
           n.url,
-          genUserKey ? { payload: this.params, secret: genUserKey } : undefined
-        )
+          genUserKey ? { payload: this.params, secret: genUserKey } : undefined,
+        ),
       ),
     ]);
 
     await Promise.all(
-      webhooks.map((n, i) => axios.post(n.url, { ...this.params, data }, { headers: headers[i] }))
+      webhooks.map((n, i) => axios.post(n.url, { ...this.params, data }, { headers: headers[i] })),
     );
   }
 }

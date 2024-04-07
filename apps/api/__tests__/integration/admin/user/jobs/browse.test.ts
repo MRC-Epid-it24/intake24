@@ -21,7 +21,7 @@ export default () => {
     };
   });
 
-  test('missing authentication', async () => {
+  it('missing authentication', async () => {
     await suite.sharedTests.assertMissingAuthentication('get', url);
   });
 

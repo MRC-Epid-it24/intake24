@@ -6,11 +6,7 @@ import type {
 import type { UserSurveyAlias } from '@intake24/db';
 import { surveyUrlService } from '@intake24/api/services';
 
-export const respondentResponse = (
-  urls: SiteUrls,
-  surveySlug: string,
-  authUrlDomainOverride?: string | null
-) => {
+export function respondentResponse(urls: SiteUrls, surveySlug: string, authUrlDomainOverride?: string | null) {
   const urlService = surveyUrlService(urls, surveySlug, authUrlDomainOverride);
 
   const list = (alias: UserSurveyAlias): SurveyRespondentListEntry => {
@@ -53,6 +49,6 @@ export const respondentResponse = (
   };
 
   return { list, entry };
-};
+}
 
 export type RespondentResponse = ReturnType<typeof respondentResponse>;

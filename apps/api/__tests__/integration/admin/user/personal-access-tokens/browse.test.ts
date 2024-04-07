@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 export default () => {
   const url = '/api/admin/user/personal-access-tokens';
 
-  test('missing authentication', async () => {
+  it('missing authentication', async () => {
     await suite.sharedTests.assertMissingAuthentication('get', url);
   });
 

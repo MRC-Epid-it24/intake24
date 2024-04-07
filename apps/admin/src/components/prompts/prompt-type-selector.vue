@@ -20,7 +20,9 @@
                 {{ $t(`survey-schemes.prompts.${prompt.id}.subtitle`) }}
               </v-card-subtitle>
               <v-card-text v-show="active" class="text-center">
-                <v-icon x-large>$check</v-icon>
+                <v-icon x-large>
+                  $check
+                </v-icon>
               </v-card-text>
             </v-card>
           </v-item>
@@ -29,6 +31,7 @@
     </v-container>
   </v-tab-item>
 </template>
+
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
@@ -51,7 +54,8 @@ export default defineComponent({
 
   methods: {
     tryToggle(active: boolean, toggle: () => void) {
-      if (active) return;
+      if (active)
+        return;
 
       toggle();
     },

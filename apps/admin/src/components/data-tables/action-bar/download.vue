@@ -6,7 +6,9 @@
     target="_blank"
     :title="internalTitle"
   >
-    <v-icon dark>{{ icon }}</v-icon>
+    <v-icon dark>
+      {{ icon }}
+    </v-icon>
   </v-btn>
 </template>
 

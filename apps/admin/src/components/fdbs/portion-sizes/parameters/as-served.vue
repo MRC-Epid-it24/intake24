@@ -7,8 +7,7 @@
         :label="$t('fdbs.portionSizes.methods.as-served.servingImageSet')"
         name="serving-set-id"
         resource="as-served-sets"
-      >
-      </select-resource>
+      />
     </v-col>
     <v-col cols="12">
       <select-resource
@@ -17,8 +16,7 @@
         item-name="description"
         :label="$t('fdbs.portionSizes.methods.as-served.leftoverImageSet')"
         resource="as-served-sets"
-      >
-      </select-resource>
+      />
     </v-col>
   </v-row>
 </template>

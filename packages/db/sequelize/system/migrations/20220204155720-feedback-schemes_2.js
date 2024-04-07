@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const { nanoid } = require('nanoid');
 const { createPermissions } = require('../../utils.js');
 const foodDbConfig = require('../../foods/config.js');
@@ -120,7 +119,7 @@ const characters = [
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
-        title: "Your're so energetic",
+        title: 'Your\'re so energetic',
       },
       {
         sentiment: ['bit_high'],
@@ -153,7 +152,7 @@ const characters = [
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
-        title: "You're Super Starchy!",
+        title: 'You\'re Super Starchy!',
       },
       {
         sentiment: ['bit_high'],
@@ -219,7 +218,7 @@ const characters = [
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
-        title: "You're doing well, Sugar",
+        title: 'You\'re doing well, Sugar',
       },
       {
         sentiment: ['bit_high'],
@@ -303,12 +302,12 @@ const characters = [
       {
         sentiment: ['too_low', 'low'],
         sentimentType: 'danger',
-        title: "Please don't eat me!",
+        title: 'Please don\'t eat me!',
       },
       {
         sentiment: ['bit_low'],
         sentimentType: 'warning',
-        title: "Please don't eat me!",
+        title: 'Please don\'t eat me!',
       },
       {
         sentiment: ['good', 'excellent'],
@@ -318,12 +317,12 @@ const characters = [
       {
         sentiment: ['bit_high'],
         sentimentType: 'warning',
-        title: "Please don't eat me!",
+        title: 'Please don\'t eat me!',
       },
       {
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
-        title: "Please don't eat me!",
+        title: 'Please don\'t eat me!',
       },
     ],
   },
@@ -564,14 +563,14 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `UPDATE permissions SET "name" = 'feedback-schemes|cards', display_name = 'Feedback scheme cards' where "name" = 'feedback-schemes|food-groups';`,
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.addColumn(
         'feedback_schemes',
         'demographic_groups',
         { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
-        { transaction }
+        { transaction },
       );
 
       const { QueryTypes } = queryInterface.sequelize;
@@ -596,12 +595,12 @@ module.exports = {
 
       const dbFoodGroupsFeedbacks = await foods.query(
         `SELECT * FROM food_groups_feedback ORDER BY id;`,
-        { type: QueryTypes.SELECT }
+        { type: QueryTypes.SELECT },
       );
 
       const dbFoodGroupsFeedbackNutrientIds = await foods.query(
         `SELECT * FROM food_groups_feedback_nutrient_ids;`,
-        { type: QueryTypes.SELECT }
+        { type: QueryTypes.SELECT },
       );
 
       const dbFiveADayFeedbacks = await foods.query(`SELECT * FROM five_a_day_feedback;`, {
@@ -626,13 +625,15 @@ module.exports = {
       });
 
       const formatRange = (start, end) => {
-        if (start === null && end === null) return null;
+        if (start === null && end === null)
+          return null;
 
         return { start: start || 0, end: end || 0 };
       };
 
       const formatSectorName = (name) => {
-        if (!name) return '';
+        if (!name)
+          return '';
 
         const sectorName = name
           .replace(/your/gi, '')
@@ -659,7 +660,7 @@ module.exports = {
         } = dbDemographicGroup;
 
         const scaleSectors = dbDemographicGroupScaleSectors
-          .filter((dgScaleSector) => dgScaleSector.demographic_group_id === id)
+          .filter(dgScaleSector => dgScaleSector.demographic_group_id === id)
           .map(({ name, description, sentiment, min_range, max_range }) => ({
             name: { en: formatSectorName(name) },
             description: { en: description || null },
@@ -693,8 +694,8 @@ module.exports = {
         } = dbFoodGroupsFeedback;
 
         const nutrientTypes = dbFoodGroupsFeedbackNutrientIds
-          .filter((nutrientId) => nutrientId.food_groups_feedback_id === id)
-          .map((nutrientId) => nutrientId.nutrient_id.toString());
+          .filter(nutrientId => nutrientId.food_groups_feedback_id === id)
+          .map(nutrientId => nutrientId.nutrient_id.toString());
 
         cards.push({
           id: nanoid(6),
@@ -740,7 +741,7 @@ module.exports = {
 
       const feedbackSchemes = await queryInterface.sequelize.query(
         `SELECT * FROM feedback_schemes WHERE type = :types;`,
-        { type: QueryTypes.SELECT, replacements: { types: 'default' }, transaction }
+        { type: QueryTypes.SELECT, replacements: { types: 'default' }, transaction },
       );
 
       for (const feedbackScheme of feedbackSchemes) {
@@ -753,11 +754,11 @@ module.exports = {
               cards: JSON.stringify(cards),
               demographicGroups: JSON.stringify(demographicGroups),
               henryCoefficients: JSON.stringify(
-                henryCoefficients.map((coefficient) => ({ ...coefficient, id: nanoid(6) }))
+                henryCoefficients.map(coefficient => ({ ...coefficient, id: nanoid(6) })),
               ),
             },
             transaction,
-          }
+          },
         );
       }
 
@@ -765,14 +766,14 @@ module.exports = {
         'feedback_schemes',
         'demographic_groups',
         { allowNull: false, type: Sequelize.TEXT({ length: 'long' }) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.changeColumn(
         'feedback_schemes',
         'henry_coefficients',
         { allowNull: false, type: Sequelize.TEXT({ length: 'long' }) },
-        { transaction }
+        { transaction },
       );
 
       await createPermissions(permissions, { queryInterface, transaction });
@@ -790,12 +791,12 @@ module.exports = {
         'feedback_schemes',
         'henry_coefficients',
         { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `UPDATE permissions SET "name" = 'feedback-schemes|food-groups', display_name = 'Feedback scheme food groups' where "name" = 'feedback-schemes|cards';`,
-        { transaction }
+        { transaction },
       );
 
       const names = permissions.map(({ name }) => `'${name}'`).join(`,`);

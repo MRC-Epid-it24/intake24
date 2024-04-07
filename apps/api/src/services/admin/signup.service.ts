@@ -5,7 +5,7 @@ import { Permission, Role, User } from '@intake24/db';
 
 import type { CreateUserOptions } from './user.service';
 
-const adminSignupService = ({
+function adminSignupService({
   aclConfig,
   appConfig,
   securityConfig,
@@ -15,7 +15,7 @@ const adminSignupService = ({
 }: Pick<
   IoC,
   'adminUserService' | 'aclConfig' | 'appConfig' | 'jwtService' | 'logger' | 'securityConfig'
->) => {
+>) {
   const logger = globalLogger.child({ service: 'AdminSignupService' });
 
   /**
@@ -39,13 +39,14 @@ const adminSignupService = ({
    * Admin tool signup - create new user with researcher role
    *
    * @param {CreateUserInput} input
-   * @param {CreateUserOptions} [options={}]
+   * @param {CreateUserOptions} [options]
    * @returns {Promise<User>}
    */
   const signUp = async (input: CreateUserInput, options: CreateUserOptions = {}): Promise<User> => {
     const { enabled, permissions: permissionNames, roles: roleNames } = aclConfig.signup;
 
-    if (!enabled) throw new ForbiddenError();
+    if (!enabled)
+      throw new ForbiddenError();
 
     const [permissionRecords, roleRecords] = await Promise.all([
       Permission.findAll({ attributes: ['id'], where: { name: permissionNames } }),
@@ -62,10 +63,13 @@ const adminSignupService = ({
     try {
       const { userId } = await jwtService.verify(token, appConfig.secret);
       const user = await User.findOne({ where: { id: userId } });
-      if (!user) throw new Error(`User not found: ${userId}.`);
+      if (!user)
+        throw new Error(`User not found: ${userId}.`);
 
-      if (!user.isVerified()) await user.update({ verifiedAt: new Date() });
-    } catch (err) {
+      if (!user.isVerified())
+        await user.update({ verifiedAt: new Date() });
+    }
+    catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.debug(`${name}: ${message}`, { stack });
@@ -80,7 +84,7 @@ const adminSignupService = ({
     signUp,
     verify,
   };
-};
+}
 
 export default adminSignupService;
 

@@ -9,15 +9,15 @@
             </v-btn>
             <span class="text-subtitle-1 font-weight-medium">{{ food.name }}</span>
           </div>
-          <yes-no-toggle v-model="food.value" mandatory></yes-no-toggle>
+          <yes-no-toggle v-model="food.value" mandatory />
         </v-card-text>
       </v-card>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
   </card-layout>
 </template>
@@ -64,7 +64,7 @@ export default defineComponent({
         ctx.emit('input', value);
       },
     });
-    const isValid = computed(() => state.value.every((food) => food.value !== undefined));
+    const isValid = computed(() => state.value.every(food => food.value !== undefined));
 
     return {
       action,

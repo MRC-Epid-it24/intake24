@@ -56,7 +56,7 @@ export default () => {
           phone: 'notAPhoneNumber',
           phoneCountry: 'notCountryCode',
         },
-      }
+      },
     );
   });
 

@@ -8,7 +8,7 @@ export async function getFoodParentCategories(foodCode: string): Promise<string[
     order: [['categoryCode', 'ASC']],
   });
 
-  return categories.map((row) => row.categoryCode);
+  return categories.map(row => row.categoryCode);
 }
 
 export async function getCategoryParentCategories(categoryCodes: string[]): Promise<string[]> {
@@ -18,7 +18,7 @@ export async function getCategoryParentCategories(categoryCodes: string[]): Prom
     order: [['categoryCode', 'ASC']],
   });
 
-  return categories.map((row) => row.categoryCode);
+  return categories.map(row => row.categoryCode);
 }
 
 /**
@@ -34,7 +34,8 @@ export async function getParentLocale(localeId: string): Promise<FoodsLocale | n
     include: [{ association: 'parent' }],
   });
 
-  if (locale == null) throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
+  if (locale == null)
+    throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
 
   return locale.parent ?? null;
 }

@@ -10,13 +10,13 @@
         @touchmove="onTouchMove"
       >
         <template #placeholder>
-          <image-placeholder></image-placeholder>
+          <image-placeholder />
         </template>
       </v-img>
 
-      <svg ref="svg">
+      <svg>
         <filter id="drink-scale-blur">
-          <feGaussianBlur stdDeviation="4"></feGaussianBlur>
+          <feGaussianBlur stdDeviation="4" />
         </filter>
         <clipPath id="drink-scale-clip">
           <rect
@@ -24,14 +24,14 @@
             width="100%"
             x="0"
             :y="sliderPosPx"
-          ></rect>
+          />
         </clipPath>
         <polygon
           class="drink-scale-polygon"
           clip-path="url(#drink-scale-clip)"
           filter="url(#drink-scale-blur)"
           :points="outlinePoints"
-        ></polygon>
+        />
       </svg>
 
       <div class="drink-scale-slider mr-6" :style="{ bottom: sliderBottomOffset }">
@@ -46,7 +46,7 @@
           :step="0.01"
           thumb-color="secondary"
           vertical
-        ></v-slider>
+        />
       </div>
       <div class="drink-scale-label">
         <v-chip
@@ -61,11 +61,13 @@
         <v-btn
           block
           color="primary"
-          :disabled="sliderValue == 0"
+          :disabled="sliderValue === 0"
           outlined
           @click="moveSliderRelative(-0.2)"
         >
-          <v-icon left>fas fa-circle-down</v-icon>
+          <v-icon left>
+            fas fa-circle-down
+          </v-icon>
           {{ $t(`prompts.drinkScale.${type}.less`) }}
         </v-btn>
       </v-col>
@@ -73,17 +75,21 @@
         <v-btn
           block
           color="primary"
-          :disabled="sliderValue == 1"
+          :disabled="sliderValue === 1"
           outlined
           @click="moveSliderRelative(0.2)"
         >
-          <v-icon left>fas fa-circle-up</v-icon>
+          <v-icon left>
+            fas fa-circle-up
+          </v-icon>
           {{ $t(`prompts.drinkScale.${type}.more`) }}
         </v-btn>
       </v-col>
       <v-col cols="12" sm>
         <v-btn block color="primary" @click="confirm">
-          <v-icon left>$yes</v-icon>
+          <v-icon left>
+            $yes
+          </v-icon>
           {{ $t(`prompts.drinkScale.${type}.confirm`) }}
         </v-btn>
       </v-col>
@@ -135,12 +141,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const wrapper = ref<InstanceType<typeof HTMLFormElement>>();
     const imgDrink = ref<InstanceType<typeof VImg>>();
-    //@ts-expect-error should allow vue instance?
+    // @ts-expect-error should allow vue instance?
     const { height, width } = useElementSize(imgDrink);
 
     // Outline coordinates converted into a format compatible with the svg polygon's points attribute
     const outlinePoints = computed(() =>
-      toSvgPolygonPoints(props.scale.outlineCoordinates, width.value, height.value)
+      toSvgPolygonPoints(props.scale.outlineCoordinates, width.value, height.value),
     );
 
     // The bounding box of the sliding scale (full region not accounting for maxFillLevel)
@@ -156,22 +162,22 @@ export default defineComponent({
       };
     });
 
+    const sliderValue = ref(props.value);
+
     // Height of the usable sliding scale region in pixels with max fill limit applied.
     const scaleHeightPx = computed(
-      () => (scaleBoundsPx.value.bottom - scaleBoundsPx.value.top) * props.maxFillLevel
+      () => (scaleBoundsPx.value.bottom - scaleBoundsPx.value.top) * props.maxFillLevel,
     );
 
     // Vertical offset to the current slider position in pixels. Slider range is fixed to [0, 1]
     // regardless of component properties.
     const sliderPosPx = computed(
-      () => scaleBoundsPx.value.bottom - scaleHeightPx.value * sliderValue.value
+      () => scaleBoundsPx.value.bottom - scaleHeightPx.value * sliderValue.value,
     );
 
     // Vertical offset from the bottom of the image to the start of the sliding scale region in pixels.
     // Used to position the slider element.
     const sliderBottomOffset = computed(() => `${height.value - scaleBoundsPx.value.bottom}px`);
-
-    const sliderValue = ref(props.value);
 
     const isInScale = (x: number, y: number) => {
       const bounds = scaleBoundsPx.value;
@@ -199,9 +205,8 @@ export default defineComponent({
 
       cursorInScale.value = inScale;
 
-      if (inScale && event.buttons & 1) {
+      if (inScale && event.buttons & 1)
         moveSlider(event.offsetY);
-      }
     };
 
     const onTouchMove = (event: TouchEvent) => {
@@ -220,14 +225,15 @@ export default defineComponent({
     };
 
     const onMouseDown = (event: MouseEvent) => {
-      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__')) return;
+      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__'))
+        return;
       moveSlider(event.offsetY);
     };
 
     const fillLevel = computed(() => sliderValue.value * props.maxFillLevel);
 
     const fillVolume = computed(() =>
-      Math.round(calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value))
+      Math.round(calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value)),
     );
 
     const label = computed(() => `${fillVolume.value} ml`);
@@ -237,7 +243,8 @@ export default defineComponent({
     };
 
     watch(fillLevel, (val) => {
-      if (!props.open) return;
+      if (!props.open)
+        return;
 
       emit('input', val);
     });
@@ -246,7 +253,7 @@ export default defineComponent({
       () => props.open,
       () => {
         sliderValue.value = props.value / props.maxFillLevel; // Slider values are always in the range [0, 1]
-      }
+      },
     );
 
     return {
@@ -273,14 +280,16 @@ export default defineComponent({
 
   watch: {
     height() {
-      if (this.open) this.scrollTo();
+      if (this.open)
+        this.scrollTo();
     },
   },
 
   methods: {
     scrollTo() {
       setTimeout(async () => {
-        if (!this.wrapper) return;
+        if (!this.wrapper)
+          return;
 
         await this.$vuetify.goTo(this.wrapper);
       }, 100);

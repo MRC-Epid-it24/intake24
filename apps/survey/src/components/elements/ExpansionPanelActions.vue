@@ -1,11 +1,13 @@
 <template>
   <div class="d-flex">
-    <slot></slot>
+    <slot />
     <slot name="valid" v-bind="{ valid }">
-      <valid-invalid-icon class="ml-1" :valid="valid"></valid-invalid-icon>
+      <valid-invalid-icon class="ml-1" :valid="valid" />
     </slot>
     <slot name="expand">
-      <v-icon class="ml-1">$expand</v-icon>
+      <v-icon class="ml-1">
+        $expand
+      </v-icon>
     </slot>
   </div>
 </template>

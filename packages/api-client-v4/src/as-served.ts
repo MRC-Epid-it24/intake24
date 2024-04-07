@@ -19,7 +19,7 @@ export class AsServedApiV4 {
   public async create(
     id: string,
     description: string,
-    selectionImageFilePath: string
+    selectionImageFilePath: string,
   ): Promise<CreateResult<AsServedSetEntry>> {
     const formData = new FormData();
 
@@ -31,7 +31,7 @@ export class AsServedApiV4 {
 
     const response = await this.baseClient.postResponse<AsServedSetEntry>(
       AsServedApiV4.apiPath,
-      formData
+      formData,
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
@@ -59,7 +59,7 @@ export class AsServedApiV4 {
 
     return await this.baseClient.post<AsServedImageEntry>(
       `${AsServedApiV4.apiPath}/${setId}/images`,
-      formData
+      formData,
     );
   }
 }

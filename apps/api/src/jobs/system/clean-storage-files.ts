@@ -34,9 +34,8 @@ export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
 
     const dirs: LocalLocation[] = ['downloads', 'uploads'];
 
-    for (const dir of dirs) {
+    for (const dir of dirs)
       await this.cleanDir(this.config.local[dir]);
-    }
 
     this.logger.debug('Job finished.');
   }
@@ -46,7 +45,7 @@ export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
    *
    * @private
    * @param {string} dir
-   * @param {string} [expiresIn='1h']
+   * @param {string} [expiresIn]
    * @returns {Promise<void>}
    * @memberof CleanStorageFiles
    */
@@ -61,7 +60,8 @@ export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
       const { ctime } = await fs.stat(filepath);
       const expiresAt = addTime(expiresIn, ctime);
 
-      if (expiresAt > now) continue;
+      if (expiresAt > now)
+        continue;
 
       await fs.unlink(filepath);
     }

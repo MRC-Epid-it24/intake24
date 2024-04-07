@@ -7,7 +7,7 @@ import contract from '@intake24/common/contracts';
 
 import pkg from '../package.json';
 
-const main = async () => {
+async function main() {
   const document = generateOpenApi(contract, {
     info: {
       title: 'Intake24 API Reference',
@@ -39,9 +39,9 @@ const main = async () => {
   writeFileSync(
     resolve('docs', 'public', 'open-api.json'),
     JSON.stringify(document, null, 2),
-    'utf8'
+    'utf8',
   );
-};
+}
 
 main().catch((err) => {
   console.error(err);

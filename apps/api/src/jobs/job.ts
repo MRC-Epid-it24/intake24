@@ -34,7 +34,8 @@ export default abstract class Job<T extends JobType> {
 
     this.logger = this.logger.child({ service: this.name, id, params });
 
-    if (!id) throw new Error('Job ID missing.');
+    if (!id)
+      throw new Error('Job ID missing.');
 
     this.id = id;
     this.dbId = id.replace('db-', '');
@@ -88,7 +89,8 @@ export default abstract class Job<T extends JobType> {
     this.progress.done += done;
 
     const current = this.getProgress();
-    if (!current) return;
+    if (!current)
+      return;
 
     await this.job.updateProgress(current);
   }
@@ -105,7 +107,8 @@ export default abstract class Job<T extends JobType> {
     this.progress.done = done;
 
     const current = this.getProgress();
-    if (!current) return;
+    if (!current)
+      return;
 
     await this.job.updateProgress(current);
   }
