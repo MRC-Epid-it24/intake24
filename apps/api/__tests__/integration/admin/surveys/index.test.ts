@@ -11,7 +11,7 @@ import tasks from './tasks.test';
 
 export default () => {
   describe('get /api/admin/surveys', browse);
-  describe('pOST /api/admin/surveys', store);
+  describe('post /api/admin/surveys', store);
   describe('get /api/admin/surveys/:surveyId', read);
   describe('get /api/admin/surveys/:surveyId/edit', edit);
   describe('patch /api/admin/surveys/:surveyId', patch);
@@ -20,14 +20,14 @@ export default () => {
 
   // Surveys respondents
   describe('get /api/admin/surveys/:surveyId/respondents', respondents.browse);
-  describe('pOST /api/admin/surveys/:surveyId/respondents', respondents.store);
+  describe('post /api/admin/surveys/:surveyId/respondents', respondents.store);
   describe('get /api/admin/surveys/:surveyId/respondents/:surveyId', respondents.read);
   describe('get /api/admin/surveys/:surveyId/respondents/:surveyId/edit', respondents.edit);
   describe('patch /api/admin/surveys/:surveyId/respondents/:userId', respondents.update);
   describe('delete /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
-  describe('pOST /api/admin/surveys/:surveyId/respondents/upload', respondents.upload);
+  describe('post /api/admin/surveys/:surveyId/respondents/upload', respondents.upload);
   describe(
-    'pOST /api/admin/surveys/:surveyId/respondents/export-auth-urls',
+    'post /api/admin/surveys/:surveyId/respondents/export-auth-urls',
     respondents.exportAuthUrls,
   );
   // describe('GET /api/admin/surveys/:surveyId/respondents/:userId', downloadFeedback);
@@ -39,5 +39,5 @@ export default () => {
   describe('delete /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.destroy);
 
   // Surveys tasks
-  describe('pOST /api/admin/surveys/:surveyId/tasks', tasks);
+  describe('post /api/admin/surveys/:surveyId/tasks', tasks);
 };

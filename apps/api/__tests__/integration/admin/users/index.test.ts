@@ -10,7 +10,7 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/users', browse);
-  describe('pOST /api/admin/users', store);
+  describe('post /api/admin/users', store);
   describe('get /api/admin/users/refs', refs);
   describe('get /api/admin/users/:userId', read);
   describe('get /api/admin/users/:userId/edit', edit);

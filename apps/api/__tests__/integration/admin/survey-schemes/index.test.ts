@@ -11,9 +11,9 @@ import templates from './templates.test';
 
 export default () => {
   describe('get /api/admin/survey-schemes', browse);
-  describe('pOST /api/admin/survey-schemes', store);
+  describe('post /api/admin/survey-schemes', store);
   describe('get /api/admin/survey-schemes/refs', refs);
-  describe('pOST /api/admin/survey-schemes/copy', copy);
+  describe('post /api/admin/survey-schemes/copy', copy);
   describe('get /api/admin/survey-schemes/:surveySchemeId', read);
   describe('get /api/admin/survey-schemes/:surveySchemeId/edit', edit);
   describe('patch /api/admin/survey-schemes/:surveySchemeId', patch);

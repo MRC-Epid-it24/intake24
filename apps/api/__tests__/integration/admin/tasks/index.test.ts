@@ -8,10 +8,10 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/tasks', browse);
-  describe('pOST /api/admin/tasks', store);
+  describe('post /api/admin/tasks', store);
   describe('get /api/admin/tasks/:taskId', read);
   describe('get /api/admin/tasks/:taskId/edit', edit);
   describe('put /api/admin/tasks/:taskId', update);
   describe('delete /api/admin/tasks/:taskId', destroy);
-  describe('pOST /api/admin/tasks/:taskId/run', run);
+  describe('post /api/admin/tasks/:taskId/run', run);
 };

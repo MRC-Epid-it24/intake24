@@ -13,20 +13,20 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/locales', browse);
-  describe('pOST /api/admin/locales', store);
+  describe('post /api/admin/locales', store);
   describe('get /api/admin/locales/refs', refs);
   describe('get /api/admin/locales/:localeId', read);
   describe('get /api/admin/locales/:localeId/edit', edit);
   describe('put /api/admin/locales/:localeId', update);
   describe('delete /api/admin/locales/:localeId', destroy);
 
-  describe('pOST /api/admin/locales/:localeId/tasks', tasks);
+  describe('post /api/admin/locales/:localeId/tasks', tasks);
 
   // describe('GET /api/admin/locales/:localeId/recipe-foods', recipeFoods.get);
   describe('get /api/admin/locales/:localeId/split-lists', splitLists.get);
-  describe('pOST /api/admin/locales/:localeId/split-lists', splitLists.set);
+  describe('post /api/admin/locales/:localeId/split-lists', splitLists.set);
   describe('get /api/admin/locales/:localeId/split-words', splitWords.get);
-  describe('pOST /api/admin/locales/:localeId/split-words', splitWords.set);
+  describe('post /api/admin/locales/:localeId/split-words', splitWords.set);
   describe('get /api/admin/locales/:localeId/synonym-sets', synonymSets.get);
-  describe('pOST /api/admin/locales/:localeId/synonym-sets', synonymSets.set);
+  describe('post /api/admin/locales/:localeId/synonym-sets', synonymSets.set);
 };

@@ -8,14 +8,14 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/languages', browse);
-  describe('pOST /api/admin/languages', store);
+  describe('post /api/admin/languages', store);
   describe('get /api/admin/languages/:languageId', read);
   describe('get /api/admin/languages/:languageId/edit', edit);
   describe('put /api/admin/languages/:languageId', update);
   describe('delete /api/admin/languages/:languageId', destroy);
 
   describe('get /api/admin/languages/:languageId/translations', translations.browse);
-  describe('pOST /api/admin/languages/:languageId/translations', translations.store);
+  describe('post /api/admin/languages/:languageId/translations', translations.store);
   describe('put /api/admin/languages/:languageId/translations', translations.update);
   describe('delete /api/admin/languages/:languageId/translations', translations.destroy);
   // describe('POST /api/admin/languages/:languageId/translations/sync', translations.sync);

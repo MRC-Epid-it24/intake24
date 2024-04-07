@@ -10,7 +10,7 @@ import users from './users.test';
 
 export default () => {
   describe('get /api/admin/roles', browse);
-  describe('pOST /api/admin/roles', store);
+  describe('post /api/admin/roles', store);
   describe('get /api/admin/roles/refs', refs);
   describe('get /api/admin/roles/:roleId', read);
   describe('get /api/admin/roles/:roleId/edit', edit);

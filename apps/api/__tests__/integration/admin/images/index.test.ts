@@ -12,7 +12,7 @@ import imageMaps from './image-maps/index.test';
 export default () => {
   // As served sets
   describe('get /api/admin/images/as-served-sets', asServed.browse);
-  describe('pOST /api/admin/images/as-served-sets', asServed.store);
+  describe('post /api/admin/images/as-served-sets', asServed.store);
   describe('get /api/admin/images/as-served-sets/:asServedSetId', asServed.read);
   describe('get /api/admin/images/as-served-sets/:asServedSetId/edit', asServed.edit);
   describe('put /api/admin/images/as-served-sets/:asServedSetId', asServed.update);
@@ -35,7 +35,7 @@ export default () => {
     });
 
     describe('get /api/admin/images/as-served-sets/:asServedSetId/images', asServedImages.browse);
-    describe('pOST /api/admin/images/as-served-sets/:asServedSetId/images', asServedImages.store);
+    describe('post /api/admin/images/as-served-sets/:asServedSetId/images', asServedImages.store);
     describe(
       'get /api/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId',
       asServedImages.read,
@@ -48,7 +48,7 @@ export default () => {
 
   // Drinkware sets - TODO
   describe('get /api/admin/images/drinkware-sets', drinkwareSets.browse);
-  describe('pOST /api/admin/images/drinkware-sets', drinkwareSets.store);
+  describe('post /api/admin/images/drinkware-sets', drinkwareSets.store);
   describe('get /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.read);
   describe('get /api/admin/images/drinkware-sets/:drinkwareSetId/edit', drinkwareSets.edit);
   /* describe('PUT /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.update);
@@ -56,7 +56,7 @@ export default () => {
 
   // Guided images
   describe('get /api/admin/images/guide-images', guideImages.browse);
-  describe('pOST /api/admin/images/guide-images', guideImages.store);
+  describe('post /api/admin/images/guide-images', guideImages.store);
   describe('get /api/admin/images/guide-images/:guideImageId', guideImages.read);
   describe('get /api/admin/images/guide-images/:guideImageId/edit', guideImages.edit);
   describe('put /api/admin/images/guide-images/:guideImageId', guideImages.update);
@@ -64,7 +64,7 @@ export default () => {
 
   // Image Maps
   describe('get /api/admin/images/image-maps', imageMaps.browse);
-  describe('pOST /api/admin/images/image-maps', imageMaps.store);
+  describe('post /api/admin/images/image-maps', imageMaps.store);
   describe('get /api/admin/images/image-maps/:imageMapId', imageMaps.read);
   describe('get /api/admin/images/image-maps/:imageMapId/edit', imageMaps.edit);
   describe('put /api/admin/images/image-maps/:imageMapId', imageMaps.update);

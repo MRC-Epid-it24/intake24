@@ -9,11 +9,11 @@ import store from './store.test';
 
 export default () => {
   describe('get /api/admin/feedback-schemes', browse);
-  describe('pOST /api/admin/feedback-schemes', store);
+  describe('post /api/admin/feedback-schemes', store);
   describe('get /api/admin/feedback-schemes/refs', refs);
   describe('get /api/admin/feedback-schemes/:feedbackSchemeId', read);
   describe('get /api/admin/feedback-schemes/:feedbackSchemeId/edit', edit);
   describe('patch /api/admin/feedback-schemes/:feedbackSchemeId', patch);
   describe('delete /api/admin/feedback-schemes/:feedbackSchemeId', destroy);
-  describe('pOST /api/admin/feedback-schemes/:feedbackSchemeId/copy', copy);
+  describe('post /api/admin/feedback-schemes/:feedbackSchemeId/copy', copy);
 };

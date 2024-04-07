@@ -9,7 +9,7 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/standard-units', browse);
-  describe('pOST /api/admin/standard-units', store);
+  describe('post /api/admin/standard-units', store);
   describe('get /api/admin/standard-units/:standardUnitId', read);
   describe('get /api/admin/standard-units/:standardUnitId/edit', edit);
   describe('put /api/admin/standard-units/:standardUnitId', update);

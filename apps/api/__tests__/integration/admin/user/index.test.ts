@@ -12,6 +12,6 @@ export default () => {
   describe('get /api/admin/user/jobs/:jobId/download', jobs.download);
 
   describe('get /api/admin/user/personal-access-tokens', personalAccessTokens.browse);
-  describe('pOST /api/admin/user/personal-access-tokens', personalAccessTokens.issue);
+  describe('post /api/admin/user/personal-access-tokens', personalAccessTokens.issue);
   describe('delete /api/admin/user/personal-access-tokens/:tokenId', personalAccessTokens.revoke);
 };

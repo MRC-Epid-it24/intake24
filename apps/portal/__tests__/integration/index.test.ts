@@ -3,7 +3,7 @@ import '../bootstrap';
 import { suite } from './helpers';
 import site from './site';
 
-describe('aPI', () => {
+describe('api', () => {
   beforeAll(async () => {
     await suite.init();
   });

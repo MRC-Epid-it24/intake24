@@ -7,7 +7,7 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/nutrient-units', browse);
-  describe('pOST /api/admin/nutrient-units', store);
+  describe('post /api/admin/nutrient-units', store);
   describe('get /api/admin/nutrient-units/:nutrientUnitId', read);
   describe('get /api/admin/nutrient-units/:nutrientUnitId/edit', edit);
   describe('put /api/admin/nutrient-units/:nutrientUnitId', update);

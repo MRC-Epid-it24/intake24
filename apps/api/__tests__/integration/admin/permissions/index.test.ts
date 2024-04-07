@@ -9,7 +9,7 @@ import users from './users.test';
 
 export default () => {
   describe('get /api/admin/permissions', browse);
-  describe('pOST /api/admin/permissions', store);
+  describe('post /api/admin/permissions', store);
   describe('get /api/admin/permissions/:permissionId', read);
   describe('get /api/admin/permissions/:permissionId/edit', edit);
   describe('put /api/admin/permissions/:permissionId', update);

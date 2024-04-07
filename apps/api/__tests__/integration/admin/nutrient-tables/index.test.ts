@@ -9,11 +9,11 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/nutrient-tables', browse);
-  describe('pOST /api/admin/nutrient-tables', store);
+  describe('post /api/admin/nutrient-tables', store);
   describe('get /api/admin/nutrient-tables/refs', refs);
   describe('get /api/admin/nutrient-tables/:nutrientTableId', read);
   describe('get /api/admin/nutrient-tables/:nutrientTableId/edit', edit);
   describe('put /api/admin/nutrient-tables/:nutrientTableId', update);
   describe('delete /api/admin/nutrient-tables/:nutrientTableId', destroy);
-  describe('pOST /api/admin/nutrient-tables/:nutrientTableId/tasks', tasks);
+  describe('post /api/admin/nutrient-tables/:nutrientTableId/tasks', tasks);
 };

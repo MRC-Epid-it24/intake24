@@ -9,11 +9,11 @@ import update from './update.test';
 
 export default () => {
   describe('get /api/admin/survey-scheme-prompts', browse);
-  describe('pOST /api/admin/survey-scheme-prompts', store);
+  describe('post /api/admin/survey-scheme-prompts', store);
   describe('get /api/admin/survey-scheme-prompts/refs', refs);
   describe('get /api/admin/survey-scheme-prompts/:surveySchemePromptId', read);
   describe('get /api/admin/survey-scheme-prompts/:surveySchemePromptId/edit', edit);
   describe('put /api/admin/survey-scheme-prompts/:surveySchemePromptId', update);
   describe('delete /api/admin/survey-scheme-prompts/:surveySchemePromptId', destroy);
-  describe('pOST /api/admin/survey-scheme-prompts/:surveySchemePromptId/sync', sync);
+  describe('post /api/admin/survey-scheme-prompts/:surveySchemePromptId/sync', sync);
 };

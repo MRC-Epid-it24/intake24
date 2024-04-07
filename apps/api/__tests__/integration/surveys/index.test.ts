@@ -12,14 +12,14 @@ import userInfo from './user-info.test';
 export default () => {
   describe('get /api/surveys', browse);
   describe('get /api/surveys/:slug', read);
-  describe('pOST /api/surveys/:slug/generate-user', generateUser);
-  describe('pOST /api/surveys/:slug/create-user', createUser);
+  describe('post /api/surveys/:slug/generate-user', generateUser);
+  describe('post /api/surveys/:slug/create-user', createUser);
 
   describe('get /api/surveys/:slug/parameters', parameters);
   describe('get /api/surveys/:slug/user-info', userInfo);
   describe('get /api/surveys/:slug/session', getSession);
-  describe('pOST /api/surveys/:slug/session', setSession);
+  describe('post /api/surveys/:slug/session', setSession);
   // describe('POST /api/surveys/:slug/submission', submission);
-  describe('pOST /api/surveys/:slug/rating', rating);
-  describe('pOST /api/surveys/:slug/request-help', requestHelp);
+  describe('post /api/surveys/:slug/rating', rating);
+  describe('post /api/surveys/:slug/request-help', requestHelp);
 };
