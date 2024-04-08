@@ -1,6 +1,6 @@
 function mapper(items) {
   return items.map((item) => {
-    const { _localName, props, ...rest } = item;
+    const { localName, props, ...rest } = item;
     const { name, text, description, label, hint, ...restProps } = props;
 
     const i18n = { name, text, description, label, hint };

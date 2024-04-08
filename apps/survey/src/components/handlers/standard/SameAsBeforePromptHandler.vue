@@ -50,7 +50,7 @@ export default defineComponent({
 
     const sabAction = (type: 'notSame' | 'same') => {
       if (type === 'same' && sabFood) {
-        const { _id, ...update } = sabFood.food;
+        const { id, ...update } = sabFood.food;
         survey.updateFood({
           foodId,
           update: {
