@@ -49,7 +49,7 @@
           <v-spacer />
           <v-btn
             class="px-4"
-            color="secondary"
+            color="primary"
             :href="followUpUrl"
             large
             outlined
@@ -88,7 +88,7 @@
           </v-icon>
         </v-btn>
         <v-divider vertical />
-        <v-btn v-if="followUpUrl" :href="followUpUrl" :target="prompt.target">
+        <v-btn v-if="followUpUrl" color="primary" :href="followUpUrl" :target="prompt.target" text>
           <span class="text-overline font-weight-medium">
             {{ promptI18n.goTo }}
           </span>
