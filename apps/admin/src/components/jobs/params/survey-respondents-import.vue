@@ -22,6 +22,7 @@
             outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
+            @change="errors.clear('params.file')"
           />
         </v-col>
       </v-row>
