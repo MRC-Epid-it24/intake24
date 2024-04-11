@@ -47,9 +47,14 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.pusher = pusher;
   }
 
-  private logEventError(err: Error) {
-    const { message, name, stack } = err;
-    this.logger.error(`${name}: ${message}`, { stack });
+  private logEventError(err: unknown) {
+    if (err instanceof Error) {
+      const { message, name, stack } = err;
+      this.logger.error(`${name}: ${message}`, { stack });
+      return;
+    }
+
+    this.logger.error(`Unknown event error: ${err}`);
   }
 
   /**
@@ -86,10 +91,15 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
           }
 
           if (typeof progress === 'number' && progress < 1) {
-            await DbJob.update(
-              { progress },
-              { where: { id: dbId, progress: { [Op.lt]: progress } } },
-            );
+            try {
+              await DbJob.update(
+                { progress },
+                { where: { id: dbId, progress: { [Op.lt]: progress } } },
+              );
+            }
+            catch (err) {
+              this.logEventError(err);
+            }
           }
         })
         .on('completed', async (job) => {
@@ -101,16 +111,21 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
             return;
           }
 
-          const dbJob = await DbJob.findByPk(dbId);
-          if (!dbJob) {
-            this.logger.error(`${this.name}: ${job.name} | ${job.id} not found.`);
-            return;
-          }
+          try {
+            const dbJob = await DbJob.findByPk(dbId);
+            if (!dbJob) {
+              this.logger.error(`${this.name}: ${job.name} | ${job.id} not found.`);
+              return;
+            }
 
-          await Promise.all([
-            dbJob.update({ completedAt: new Date(), progress: 1, successful: true }),
-            this.notify(dbJob.userId, { jobId: dbId, status: 'success' }),
-          ]);
+            await Promise.all([
+              dbJob.update({ completedAt: new Date(), progress: 1, successful: true }),
+              this.notify(dbJob.userId, { jobId: dbId, status: 'success' }),
+            ]);
+          }
+          catch (err) {
+            this.logEventError(err);
+          }
         })
         .on('failed', async (job, err) => {
           const { message, name, stack } = err;
@@ -128,26 +143,31 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
             return;
           }
 
-          const dbJob = await DbJob.findByPk(dbId);
-          if (!dbJob) {
-            this.logger.error(`${this.name}: ${job.name} | ${job.id} not found.`);
-            return;
-          }
+          try {
+            const dbJob = await DbJob.findByPk(dbId);
+            if (!dbJob) {
+              this.logger.error(`${this.name}: ${job.name} | ${job.id} not found.`);
+              return;
+            }
 
-          await Promise.all([
-            dbJob.update({
-              completedAt: new Date(),
-              progress: 1,
-              successful: false,
-              message: job.failedReason,
-              stackTrace: job.stacktrace,
-            }),
-            this.notify(dbJob.userId, {
-              jobId: dbId,
-              status: 'error',
-              message: job.failedReason,
-            }),
-          ]);
+            await Promise.all([
+              dbJob.update({
+                completedAt: new Date(),
+                progress: 1,
+                successful: false,
+                message: job.failedReason,
+                stackTrace: job.stacktrace,
+              }),
+              this.notify(dbJob.userId, {
+                jobId: dbId,
+                status: 'error',
+                message: job.failedReason,
+              }),
+            ]);
+          }
+          catch (err) {
+            this.logEventError(err);
+          }
         })
         .on('error', (err) => {
           this.logEventError(err);

@@ -74,7 +74,7 @@ export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAt
 
   @Column({
     allowNull: true,
-    type: DataType.STRING(1024),
+    type: DataType.TEXT({ length: 'long' }),
   })
   declare message: CreationOptional<string | null>;
 

@@ -28,9 +28,14 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     this.logger = logger.child({ service: 'TasksQueueHandler' });
   }
 
-  private logEventError(err: Error) {
-    const { message, name, stack } = err;
-    this.logger.error(`${name}: ${message}`, { stack });
+  private logEventError(err: unknown) {
+    if (err instanceof Error) {
+      const { message, name, stack } = err;
+      this.logger.error(`${name}: ${message}`, { stack });
+      return;
+    }
+
+    this.logger.error(`Unknown event error: ${err}`);
   }
 
   /**
