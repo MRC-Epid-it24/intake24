@@ -16187,39 +16187,75 @@
             "name": "type",
             "in": "query",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "CleanRedisStore",
-                  "CleanStorageFiles",
-                  "FeedbackSchemesSync",
-                  "LanguageTranslationsSync",
-                  "LocaleIndexBuild",
-                  "PopularitySearchUpdateCounters",
-                  "PurgeExpiredTokens",
-                  "SurveyEventNotification",
-                  "SurveyFeedbackNotification",
-                  "SurveyHelpRequestNotification",
-                  "SurveyRespondentsImport",
-                  "SurveySchemesSync",
-                  "SurveySubmission",
-                  "UserEmailVerificationNotification",
-                  "UserPasswordResetNotification",
-                  "LocaleFoods",
-                  "LocaleFoodNutrientMapping",
-                  "LocaleFoodRankingUpload",
-                  "LocalePopularitySearchCopy",
-                  "NutrientTableMappingImport",
-                  "NutrientTableDataImport",
-                  "SurveyAuthUrlsExport",
-                  "SurveyDataExport",
-                  "SurveyNutrientsRecalculation",
-                  "SurveyRatingsExport",
-                  "SurveyRespondentsImport",
-                  "SurveySessionsExport"
-                ]
-              }
+              "oneOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "CleanRedisStore",
+                    "CleanStorageFiles",
+                    "FeedbackSchemesSync",
+                    "LanguageTranslationsSync",
+                    "LocaleIndexBuild",
+                    "PopularitySearchUpdateCounters",
+                    "PurgeExpiredTokens",
+                    "SurveyEventNotification",
+                    "SurveyFeedbackNotification",
+                    "SurveyHelpRequestNotification",
+                    "SurveyRespondentsImport",
+                    "SurveySchemesSync",
+                    "SurveySubmission",
+                    "UserEmailVerificationNotification",
+                    "UserPasswordResetNotification",
+                    "LocaleFoods",
+                    "LocaleFoodNutrientMapping",
+                    "LocaleFoodRankingUpload",
+                    "LocalePopularitySearchCopy",
+                    "NutrientTableMappingImport",
+                    "NutrientTableDataImport",
+                    "SurveyAuthUrlsExport",
+                    "SurveyDataExport",
+                    "SurveyNutrientsRecalculation",
+                    "SurveyRatingsExport",
+                    "SurveyRespondentsImport",
+                    "SurveySessionsExport"
+                  ]
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "CleanRedisStore",
+                      "CleanStorageFiles",
+                      "FeedbackSchemesSync",
+                      "LanguageTranslationsSync",
+                      "LocaleIndexBuild",
+                      "PopularitySearchUpdateCounters",
+                      "PurgeExpiredTokens",
+                      "SurveyEventNotification",
+                      "SurveyFeedbackNotification",
+                      "SurveyHelpRequestNotification",
+                      "SurveyRespondentsImport",
+                      "SurveySchemesSync",
+                      "SurveySubmission",
+                      "UserEmailVerificationNotification",
+                      "UserPasswordResetNotification",
+                      "LocaleFoods",
+                      "LocaleFoodNutrientMapping",
+                      "LocaleFoodRankingUpload",
+                      "LocalePopularitySearchCopy",
+                      "NutrientTableMappingImport",
+                      "NutrientTableDataImport",
+                      "SurveyAuthUrlsExport",
+                      "SurveyDataExport",
+                      "SurveyNutrientsRecalculation",
+                      "SurveyRatingsExport",
+                      "SurveyRespondentsImport",
+                      "SurveySessionsExport"
+                    ]
+                  }
+                }
+              ]
             }
           },
           {
@@ -18948,7 +18984,7 @@
       "name": "Apache-2.0",
       "url": "https://opensource.org/license/apache-2-0"
     },
-    "version": "2024.1.0"
+    "version": "2024.2.0"
   },
   "servers": [
     {
