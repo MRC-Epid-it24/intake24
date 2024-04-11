@@ -35,6 +35,9 @@ import {
 } from './portion-size-checks';
 
 function foodEnergy(energy: number, food: FoodState): number {
+  if (food.linkedFoods.length)
+    energy += food.linkedFoods.reduce(foodEnergy, energy);
+
   if (food.type !== 'encoded-food' || !food.portionSize)
     return energy;
 
@@ -46,9 +49,6 @@ function foodEnergy(energy: number, food: FoodState): number {
     return energy;
 
   energy += (kcalPer100g * (servingWeight - leftoversWeight)) / 100;
-
-  if (food.linkedFoods.length)
-    energy += food.linkedFoods.reduce(foodEnergy, energy);
 
   return energy;
 }
@@ -62,12 +62,19 @@ function surveyEnergy(energy: number, meals: MealState[]): number {
 }
 
 function foodDrinks(count: number, food: FoodState): number {
+  if (food.linkedFoods.length)
+    count += food.linkedFoods.reduce(foodDrinks, count);
+
   return food.type === 'encoded-food' && food.data.categories.includes('DRNK') ? ++count : count;
 }
 
-const mealDrinks = (count: number, meal: MealState): number => meal.foods.reduce(foodDrinks, count);
+function mealDrinks(count: number, meal: MealState): number {
+  return meal.foods.reduce(foodDrinks, count);
+};
 
-const surveyDrinks = (count: number, meals: MealState[]): number => meals.reduce(mealDrinks, count);
+function surveyDrinks(count: number, meals: MealState[]): number {
+  return meals.reduce(mealDrinks, count);
+};
 
 function propertyGetter(store: SurveyStore, property: 'recallNumber' | 'userName') {
   return ({
