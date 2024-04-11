@@ -15,6 +15,7 @@ export class PkgConstants {
   public static readonly NUTRIENT_TABLES_FILE_NAME = 'nutrient-tables.json';
   public static readonly CSV_FOOD_RECORDS_FILE_NAME = 'food-table.csv';
   public static readonly CSV_STRUCTURE_FILE_NAME = 'structure.json';
+  public static readonly CSV_EXISTING_CATEGORIES_FILE_NAME = 'existing-categories.json';
 
   public static readonly CEREAL_BOWL_IMAGE_MAP = 'gbowl';
   public static readonly CEREAL_AS_SERVED_PREFIX = 'cereal_';
