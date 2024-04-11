@@ -295,7 +295,7 @@ This needs to be run if survey schemes structure changes, e.g. new non-optional 
 
 ```json
 {
-  "type": "survey.sessions.started" | "survey.sessions.cancelled" | "survey.sessions.submitted",
+  "type": "survey.session.started" | "survey.session.cancelled" | "survey.session.submitted",
   "sessionId": string,
   "surveyId": string,
   "userId": string,
