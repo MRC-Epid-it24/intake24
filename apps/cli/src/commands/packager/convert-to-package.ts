@@ -1,18 +1,14 @@
-import { log } from 'node:console';
-import os from 'node:os';
+import { createReadStream } from 'node:fs';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 import csv from 'csv-parser';
-import { createReadStream } from 'fs';
-import fs from 'fs/promises';
-import path from 'path';
 import { v4 as randomUUID } from 'uuid';
 
-import type { ApiClientV4 } from '@intake24/api-client-v4';
 import type logger from '@intake24/common-backend/services/logger/logger';
 
 import type { PackageWriterOptions } from './package-writer';
 import type {
-  CsvColumnStructure,
   CsvFoodRecordUnprocessed,
   CSVHeaders,
   CsvResultStructure,
@@ -20,6 +16,7 @@ import type {
 import type { PkgAssociatedFood, PkgGlobalFood, PkgLocalFood } from './types/foods';
 import { PkgConstants } from './constants';
 import { CsvFoodRecords } from './types/csv-import';
+import { PkgLocale } from './types/locale';
 
 export type Logger = typeof logger;
 
@@ -27,6 +24,10 @@ export const convertorTypeOptions = ['package', 'csv'] as const;
 
 export interface ConvertorOptions {
   type: 'package' | 'csv';
+}
+
+export interface existingCategories {
+  code: string;
 }
 
 const defaultOptions: ConvertorOptions = {
@@ -38,7 +39,10 @@ const defaultJSONOptions: PackageWriterOptions = {
   outputEncoding: 'utf-8',
 };
 
-export const csvHeaders = Object.values(CsvFoodRecords).map((record) => record.header);
+const DEFAULT_FOOD_COMPOSITION_TABLE = process.env.CSV_DEFAULT_FOOD_COMPOSION_TABLE || 'NDNS';
+const DEFAULT_FOOD_COMPOSITION_TABLE_CODE = process.env.CSV_DEFAULT_FOOD_COMPOSITION_CODE || '01B10311';
+
+export const csvHeaders = Object.values(CsvFoodRecords).map(record => record.header);
 
 // function UnionTypeToArray<T extends string>() {
 //   return <U extends T[]>(...args: U & ([T] extends [U[number]] ? unknown : never)) => args;
@@ -46,11 +50,15 @@ export const csvHeaders = Object.values(CsvFoodRecords).map((record) => record.h
 
 export class ConvertorToPackage {
   private readonly inputFilePath: string;
+  private inputDirPath: string | undefined;
   private readonly outputFilePath: string;
   private readonly logger: Logger;
   private readonly options: ConvertorOptions;
   private csvStructure: typeof CsvFoodRecords | undefined;
+  private exisingCategories: string[] | undefined;
 
+  private locales: PkgLocale[] | undefined = [];
+  private localeId: string | null = null;
   private globalFoodList: PkgGlobalFood[] = [];
   private localFoodList: PkgLocalFood[] = [];
   private enabledLocalesFoodList: string[] = [];
@@ -59,15 +67,17 @@ export class ConvertorToPackage {
     inputFilePath: string,
     outputFilePath: string,
     logger: Logger,
-    options: Partial<ConvertorOptions> = defaultOptions
+    options: Partial<ConvertorOptions> = defaultOptions,
   ) {
     this.inputFilePath = inputFilePath;
+    this.inputDirPath = path.dirname(inputFilePath);
     this.outputFilePath = outputFilePath;
     this.logger = logger;
     this.options = {
       ...defaultOptions,
       ...options,
     };
+    this.exisingCategories = undefined;
   }
 
   private async writeJSON(object: any, outputPath: string): Promise<void> {
@@ -76,6 +86,34 @@ export class ConvertorToPackage {
     await fs.writeFile(outputPath, JSON.stringify(object, null, defaultJSONOptions.jsonSpaces), {
       encoding: defaultJSONOptions.outputEncoding,
     });
+  }
+
+  private async readJSON<T>(relativePath: string): Promise<T | undefined> {
+    const filePath = path.join(this.inputDirPath!, relativePath);
+    this.logger.debug(`Reading JSON file: ${filePath}`);
+
+    try {
+      await fs.access(filePath);
+    }
+    catch (e) {
+      this.logger.debug(`File ${filePath} does not exist or is not accessible, skipping`);
+      return undefined;
+    }
+
+    return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
+  }
+
+  private async readLocaleId(): Promise<string | null> {
+    this.logger.info('Loading locales');
+    this.locales = await this.readJSON(PkgConstants.LOCALES_FILE_NAME);
+    if (this.locales !== undefined) {
+      this.logger.debug(`Loaded ${this.locales[0].id} locale`);
+      return this.locales[0].id;
+    }
+    else {
+      this.logger.debug('No locales found');
+      return null;
+    }
   }
 
   // Validate CSV structure against JSON structure (TODO: move to the DB service)
@@ -92,10 +130,10 @@ export class ConvertorToPackage {
   private validateRequiredFieldsExist = (headers: string[]): boolean => {
     this.logger.debug('Validating required fields');
     const requiredFields = Object.values(CsvFoodRecords)
-      .filter((record) => record.required === true)
-      .map((record) => record.header);
+      .filter(record => record.required === true)
+      .map(record => record.header);
     console.log('Required fields:', requiredFields);
-    const transformedHeaders = headers.map((header) => header.toLowerCase());
+    const transformedHeaders = headers.map(header => header.toLowerCase());
     this.logger.debug(`Transformed headers: ${transformedHeaders}`);
     const requiredFieldsValidated = requiredFields.every((field) => {
       this.logger.debug(`Checking for field: ${field} - ${transformedHeaders.includes(field)}`);
@@ -110,6 +148,15 @@ export class ConvertorToPackage {
     this.csvStructure = await CsvFoodRecords;
   }
 
+  private async readExistingCategories(): Promise<string[]> {
+    const existingCategories = await this.readJSON<existingCategories[]>(PkgConstants.CSV_EXISTING_CATEGORIES_FILE_NAME);
+    if (!existingCategories || existingCategories.length === 0) {
+      this.logger.error('No existing categories found');
+      return [];
+    }
+    return existingCategories.map(category => category.code); ;
+  }
+
   private determineRecipeUse = (useInRecipes: string): number => {
     switch (useInRecipes) {
       case 'RegularFoodsOnly':
@@ -121,13 +168,41 @@ export class ConvertorToPackage {
     }
   };
 
+  private determineNutrientTableCodes = (foodCompositionTable: string, foodCompositionTableCode: string): Record<string, string> => {
+    foodCompositionTable = foodCompositionTable.length > 0 ? foodCompositionTable : DEFAULT_FOOD_COMPOSITION_TABLE;
+    foodCompositionTableCode = foodCompositionTableCode.length > 0 ? foodCompositionTableCode : DEFAULT_FOOD_COMPOSITION_TABLE_CODE;
+    return {
+      [foodCompositionTable.trim()]: foodCompositionTableCode,
+    };
+  };
+
+  // validate the categories in the CSV file against the existing categories
+  private determineIfGlobalCategoriesExist = async (categories: string, exisingCategories: string[]): Promise<string[]> => {
+    this.logger.debug('Validating categories');
+    const missingCategories: string[] = [];
+
+    if (this.exisingCategories === undefined)
+      return [];
+    const categoriesForCheck = categories
+      .split(',')
+      .map(category => category.trim());
+
+    categoriesForCheck.forEach((category) => {
+      if (!exisingCategories.includes(category))
+        missingCategories.push(category);
+    });
+
+    return missingCategories;
+  };
+
   private linkAssociatedFoodCategories = (associatedFoodCategory: string): PkgAssociatedFood[] => {
-    if (!associatedFoodCategory) return [];
+    if (!associatedFoodCategory)
+      return [];
     const associatedFoods: PkgAssociatedFood[] = [];
     associatedFoodCategory
       .split(',')
-      .map((category) => category.trim())
-      .map((category) => {
+      .map(category => category.trim())
+      .forEach((category) => {
         associatedFoods.push({
           foodCode: category,
           linkAsMain: false,
@@ -141,11 +216,16 @@ export class ConvertorToPackage {
 
   private async createGlobalFoodListAndWriteJSON(data: CsvFoodRecordUnprocessed[]) {
     const globalFoodList: PkgGlobalFood[] = [];
+    this.exisingCategories = await this.readExistingCategories();
     for (const record of data) {
-      if (record['action'] !== '5') continue;
-      const parentCategories: string[] = record['categories']
+      if (record.action !== '5')
+        continue;
+      const parentCategories: string[] = record.categories
         .split(',')
-        .map((category) => category.trim());
+        .map(category => category.trim());
+      const missingCategories = await this.determineIfGlobalCategoriesExist(record.categories, this.exisingCategories);
+      if (missingCategories.length > 0)
+        this.logger.error(`Categories ${missingCategories} for food ${record['intake24 code']} does not exist in the existing categories list`);
       const globalFood: PkgGlobalFood = {
         version: randomUUID(),
         code: record['intake24 code'],
@@ -162,9 +242,9 @@ export class ConvertorToPackage {
               : false,
           reasonableAmount:
             record['reasonable amount'] && record['reasonable amount'] !== 'Inherited'
-              ? isNaN(parseInt(record['reasonable amount']))
+              ? Number.isNaN(Number.parseInt(record['reasonable amount']))
                 ? 0
-                : parseInt(record['reasonable amount'])
+                : Number.parseInt(record['reasonable amount'])
               : 0,
           sameAsBeforeOption:
             record['same as before option'] && record['same as before option'] !== 'Inherited'
@@ -179,11 +259,11 @@ export class ConvertorToPackage {
 
     await this.writeJSON(
       this.globalFoodList,
-      path.join(this.outputFilePath, PkgConstants.GLOBAL_FOODS_FILE_NAME)
+      path.join(this.outputFilePath, PkgConstants.GLOBAL_FOODS_FILE_NAME),
     );
   }
 
-  private async createLocalFoodListAndWriteJSON(data: CsvFoodRecordUnprocessed[]) {
+  private async createLocalFoodListAndWriteJSON(data: CsvFoodRecordUnprocessed[], localeId: string) {
     const localFoodList: PkgLocalFood[] = [];
     const enabledLocalesFoodList: string[] = [];
     for (const record of data) {
@@ -191,9 +271,10 @@ export class ConvertorToPackage {
         version: randomUUID(),
         code: record['intake24 code'],
         localDescription: record['local description'],
-        nutrientTableCodes: {
-          [record['food composition table']]: record['food composition table record id'],
-        },
+        nutrientTableCodes: this.determineNutrientTableCodes(
+          record['food composition table'],
+          record['food composition table record id'],
+        ),
         associatedFoods: this.linkAssociatedFoodCategories(record['associated food or category']),
         portionSize: [],
         brandNames: [],
@@ -205,13 +286,16 @@ export class ConvertorToPackage {
     this.enabledLocalesFoodList = enabledLocalesFoodList;
 
     await this.writeJSON(
-      this.localFoodList,
-      path.join(this.outputFilePath, PkgConstants.LOCAL_FOODS_FILE_NAME)
+      { [localeId]: this.localFoodList },
+      path.join(this.outputFilePath, PkgConstants.LOCAL_FOODS_FILE_NAME),
     );
 
+    if (this.enabledLocalesFoodList.length !== new Set(this.enabledLocalesFoodList).size)
+      this.logger.error('Duplicate food codes found in the enabled local foods list');
+
     await this.writeJSON(
-      this.enabledLocalesFoodList,
-      path.join(this.outputFilePath, 'enabled-locales-food.json')
+      { [localeId]: this.enabledLocalesFoodList },
+      path.join(this.outputFilePath, PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME),
     );
   }
 
@@ -225,16 +309,15 @@ export class ConvertorToPackage {
       createReadStream(csvFilePath)
         .pipe(csv({}))
         .on('headers', (headers: string[]) => {
-          headers = headers.map((header) => header.toLowerCase());
+          headers = headers.map(header => header.toLowerCase());
           headersValidated = this.validateCsvStructure(headers);
           requiredHeadersValidated = this.validateRequiredFieldsExist(headers);
           if (!headersValidated || !requiredHeadersValidated) {
             reject(
               new Error(
-                'CSV file does not contain the required structure defined in the JSON file.'
-              )
+                'CSV file does not contain the required structure defined in the JSON file.',
+              ),
             );
-            return;
           }
         })
         .on('data', (data: CsvFoodRecordUnprocessed) => {
@@ -243,14 +326,13 @@ export class ConvertorToPackage {
             return new Error('Headers not validated or not all required fields exist.');
           }
           const lowercaseData = Object.fromEntries(
-            Object.entries(data).map(([key, value]) => [key.toLowerCase(), value])
+            Object.entries(data).map(([key, value]) => [key.toLowerCase(), value]),
           ) as CsvFoodRecordUnprocessed;
           results.push(lowercaseData);
         })
         .on('end', () => {
-          if (headersValidated) {
+          if (headersValidated)
             resolve(results);
-          }
         })
         .on('error', (error) => {
           reject(error);
@@ -271,13 +353,20 @@ export class ConvertorToPackage {
       const uproccessedRecords = await this.processCsvFile(options.importedFile);
       // 1. Convert to the GlobalFood JSON structure
       await this.createGlobalFoodListAndWriteJSON(uproccessedRecords);
-      // 2. Convert to the LocalFood JSON structure
-      await this.createLocalFoodListAndWriteJSON(uproccessedRecords);
+      // 2.1. Make sure that locale is loaded
+      this.localeId = await this.readLocaleId();
+      if (!this.localeId) {
+        this.logger.error('No locale found, exiting');
+        return undefined;
+      }
+      // 2.2. Convert to the LocalFood JSON structure
+      await this.createLocalFoodListAndWriteJSON(uproccessedRecords, this.localeId);
       // 3. Convert to the EnabledLocalesFood JSON structure
       // this.createEnabledLocalesFoodList(data);
       // 4. Convert to the PortionSizeMethod JSON structure
       // TODO: Add the rest of the structures
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error processing files:', error);
     }
   };
@@ -295,7 +384,8 @@ export class ConvertorToPackage {
         structure: this.csvStructure,
         importedFile: this.inputFilePath,
       });
-    } else {
+    }
+    else {
       this.logger.debug('Converting to package from unspecified file type');
       throw new Error('Unsupported file type');
     }

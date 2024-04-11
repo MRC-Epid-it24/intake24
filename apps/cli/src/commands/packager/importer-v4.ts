@@ -1009,6 +1009,7 @@ export class ImporterV4 {
     ) {
       this.options.modulesForExecution = ['all'];
     }
+
     try {
       await this.specificModuleExecution(this.options.modulesForExecution);
     }
