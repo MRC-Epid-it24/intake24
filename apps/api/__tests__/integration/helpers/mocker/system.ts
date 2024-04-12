@@ -274,10 +274,16 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
   ].join('');
   const authUrlTokenLength = faker.number.int({ min: 10, max: 100 });
 
-  const searchCollectData = faker.datatype.boolean();
-  const searchMatchScoreWeight = faker.number.int({ min: 0, max: 100 });
-  const searchSortingAlgorithm
-    = searchSortingAlgorithms[faker.number.int({ min: 0, max: searchSortingAlgorithms.length - 1 })];
+  const searchSettings = {
+    collectData: faker.datatype.boolean(),
+    matchScoreWeight: faker.number.int({ min: 0, max: 100 }),
+    sortingAlgorithm: searchSortingAlgorithms[faker.number.int({
+      min: 0,
+      max: searchSortingAlgorithms.length - 1,
+    })],
+    minWordLength1: faker.number.int({ min: 2, max: 10 }),
+    minWordLength2: faker.number.int({ min: 3, max: 10 }),
+  };
 
   const surveySchemeOverrides = {
     meals: [{ name: { en: faker.word.words(3) }, time: '8:00' }],
@@ -309,9 +315,7 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
     authUrlDomainOverride,
     authUrlTokenCharset,
     authUrlTokenLength,
-    searchCollectData,
-    searchMatchScoreWeight,
-    searchSortingAlgorithm,
+    searchSettings,
     surveySchemeOverrides,
     userPersonalIdentifiers,
     userCustomFields,

@@ -23,14 +23,15 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type {
-  SchemeOverrides,
-  SearchSortingAlgorithm,
-  SurveyState,
-} from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import { surveyPermissions } from '@intake24/common/security';
-import { defaultOverrides } from '@intake24/common/surveys';
+import {
+  defaultOverrides,
+  defaultSearchSettings,
+  SchemeOverrides,
+  SearchSettings,
+  SurveyState,
+} from '@intake24/common/surveys';
 
 import BaseModel from '../model';
 import {
@@ -240,27 +241,6 @@ export default class Survey extends BaseModel<
   declare minimumSubmissionInterval: CreationOptional<number>;
 
   @Column({
-    allowNull: false,
-    defaultValue: true,
-    type: DataType.BOOLEAN,
-  })
-  declare searchCollectData: CreationOptional<boolean>;
-
-  @Column({
-    allowNull: false,
-    defaultValue: 20,
-    type: DataType.INTEGER,
-  })
-  declare searchMatchScoreWeight: CreationOptional<number>;
-
-  @Column({
-    allowNull: false,
-    defaultValue: 'popularity',
-    type: DataType.STRING(32),
-  })
-  declare searchSortingAlgorithm: CreationOptional<SearchSortingAlgorithm>;
-
-  @Column({
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
@@ -272,6 +252,20 @@ export default class Survey extends BaseModel<
   set surveySchemeOverrides(value: SchemeOverrides) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('surveySchemeOverrides', JSON.stringify(value ?? defaultOverrides));
+  }
+
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get searchSettings(): SearchSettings {
+    const val = this.getDataValue('searchSettings') as unknown;
+    return val ? JSON.parse(val as string) : defaultSearchSettings;
+  }
+
+  set searchSettings(value: SearchSettings) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('searchSettings', JSON.stringify(value ?? defaultSearchSettings));
   }
 
   @Column({
@@ -410,9 +404,7 @@ export const updateSurveyFields = [
   'maximumDailySubmissions',
   'maximumTotalSubmissions',
   'minimumSubmissionInterval',
-  'searchCollectData',
-  'searchMatchScoreWeight',
-  'searchSortingAlgorithm',
+  'searchSettings',
   'surveySchemeOverrides',
 ] as const;
 

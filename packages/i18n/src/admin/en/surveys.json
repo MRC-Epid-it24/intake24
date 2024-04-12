@@ -41,6 +41,8 @@
     "collectData": "Collect search data",
     "sortingAlgorithm": "Sorting algorithm",
     "matchScoreWeight": "Match score weight",
+    "searchMinWordLength1": "Minimum word length for 1 spelling correction",
+    "searchMinWordLength2": "Minimum word length for 2 spelling corrections",
     "algorithms": {
       "paRules": "Pairwise associations (machine learning)",
       "popularity": "Popularity (reporting frequency)",

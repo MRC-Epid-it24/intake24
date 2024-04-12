@@ -1,3 +1,5 @@
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys/survey';
+
 import type { Condition, Prompt, PromptWithSection } from '../prompts';
 import type { Meal } from '../types';
 
@@ -170,4 +172,20 @@ export type SchemeOverrides = {
 export const defaultOverrides: SchemeOverrides = {
   meals: [],
   prompts: [],
+};
+
+export type SearchSettings = {
+  collectData: boolean;
+  matchScoreWeight: number;
+  sortingAlgorithm: SearchSortingAlgorithm;
+  minWordLength1: number;
+  minWordLength2: number;
+};
+
+export const defaultSearchSettings: SearchSettings = {
+  collectData: true,
+  matchScoreWeight: 20,
+  sortingAlgorithm: 'popularity',
+  minWordLength1: 3,
+  minWordLength2: 6,
 };

@@ -70,8 +70,10 @@ export function surveyRespondent() {
         storeUserSessionOnServer,
         suspensionReason,
         surveySchemeOverrides,
-        searchSortingAlgorithm,
-        searchMatchScoreWeight,
+        searchSettings: {
+          sortingAlgorithm: searchSortingAlgorithm,
+          matchScoreWeight: searchMatchScoreWeight,
+        },
       } = survey;
 
       let { meals, prompts } = surveyScheme;

@@ -67,9 +67,13 @@ export default () => {
         authCaptcha: [0],
         authUrlTokenCharset: 'abcabc',
         authUrlTokenLength: 'this is not a number',
-        searchCollectData: '20',
-        searchSortingAlgorithm: 'invalid-search-algorithm',
-        searchMatchScoreWeight: 500,
+        searchSettings: {
+          collectData: '20',
+          sortingAlgorithm: 'invalid-search-algorithm',
+          matchScoreWeight: 500,
+          minWordLength1: 18,
+          minWordLength2: -3.141592,
+        },
         surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
           prompts: 'invalidPrompts',
@@ -95,9 +99,11 @@ export default () => {
         'authCaptcha',
         'authUrlTokenCharset',
         'authUrlTokenLength',
-        'searchCollectData',
-        'searchSortingAlgorithm',
-        'searchMatchScoreWeight',
+        'searchSettings.collectData',
+        'searchSettings.matchScoreWeight',
+        'searchSettings.sortingAlgorithm',
+        'searchSettings.minWordLength1',
+        'searchSettings.minWordLength2',
         'surveySchemeOverrides',
       ];
 

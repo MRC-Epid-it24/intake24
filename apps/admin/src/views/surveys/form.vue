@@ -107,33 +107,55 @@
                 {{ $t('surveys.search._') }}
               </div>
               <v-switch
-                v-model="form.searchCollectData"
+                v-model="form.searchSettings.collectData"
                 class="my-6"
-                :error-messages="form.errors.get('searchCollectData')"
+                :error-messages="form.errors.get('searchSettings.collectData')"
                 hide-details="auto"
                 :label="$t('surveys.search.collectData')"
                 name="searchCollectData"
-                @change="form.errors.clear('searchCollectData')"
+                @change="form.errors.clear('searchSettings.collectData')"
               />
               <v-select
-                v-model="form.searchSortingAlgorithm"
-                :error-messages="form.errors.get('searchSortingAlgorithm')"
+                v-model="form.searchSettings.sortingAlgorithm"
+                :error-messages="form.errors.get('searchSettings.sortingAlgorithm')"
                 hide-details="auto"
                 :items="searchSortingAlgorithms"
                 :label="$t('surveys.search.sortingAlgorithm')"
                 name="searchSortingAlgorithm"
                 outlined
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
-                @change="form.errors.clear('searchSortingAlgorithm')"
+                @change="form.errors.clear('searchSettings.sortingAlgorithm')"
               />
               <v-slider
-                v-model.number="form.searchMatchScoreWeight"
+                v-model.number="form.searchSettings.matchScoreWeight"
                 class="mt-10"
-                :error-messages="form.errors.get('searchMatchScoreWeight')"
+                :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
                 hide-details="auto"
                 :label="$t('surveys.search.matchScoreWeight')"
                 max="100"
                 min="0"
+                name="searchMatchScoreWeight"
+                thumb-label="always"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.minWordLength1"
+                class="mt-10"
+                :error-messages="form.errors.get('searchSettings.minWordLength1')"
+                hide-details="auto"
+                :label="$t('surveys.search.searchMinWordLength1')"
+                max="10"
+                min="2"
+                name="searchMatchScoreWeight"
+                thumb-label="always"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.minWordLength2"
+                class="mt-10"
+                :error-messages="form.errors.get('searchSettings.minWordLength2')"
+                hide-details="auto"
+                :label="$t('surveys.search.searchMinWordLength2')"
+                max="10"
+                min="3"
                 name="searchMatchScoreWeight"
                 thumb-label="always"
               />
@@ -345,17 +367,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type {
-  SchemeOverrides,
-  SearchSortingAlgorithm,
-  SurveyState,
-} from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { EventNotifications, SelectResource } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import {
+  defaultSearchSettings,
+  type SchemeOverrides,
+  type SearchSettings,
+  type SurveyState,
+} from '@intake24/common/surveys';
 import { defaultOverrides, searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
 
 export type SurveyForm = {
@@ -387,9 +410,7 @@ export type SurveyForm = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
-  searchCollectData: boolean;
-  searchMatchScoreWeight: number;
-  searchSortingAlgorithm: SearchSortingAlgorithm;
+  searchSettings: SearchSettings;
   surveySchemeOverrides: SchemeOverrides;
   userPersonalIdentifiers: boolean;
   userCustomFields: boolean;
@@ -422,9 +443,7 @@ export const surveyForm: SurveyForm = {
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
-  searchCollectData: true,
-  searchMatchScoreWeight: 20,
-  searchSortingAlgorithm: 'popularity',
+  searchSettings: defaultSearchSettings,
   surveySchemeOverrides: defaultOverrides,
   userPersonalIdentifiers: false,
   userCustomFields: false,

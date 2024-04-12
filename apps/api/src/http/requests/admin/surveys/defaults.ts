@@ -269,20 +269,36 @@ export const defaults: Schema = {
     toInt: true,
     optional: true,
   },
-  searchCollectData: {
+  'searchSettings.collectData': {
     in: ['body'],
     errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: true,
   },
-  searchSortingAlgorithm: {
+  'searchSettings.sortingAlgorithm': {
+    in: ['body'],
     errorMessage: typeErrorMessage('in.options', { options: searchSortingAlgorithms }),
     isIn: { options: [searchSortingAlgorithms] },
     optional: true,
   },
-  searchMatchScoreWeight: {
+  'searchSettings.matchScoreWeight': {
+    in: ['body'],
     errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 100 }),
     isInt: { options: { min: 0, max: 100 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.minWordLength1': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 2, max: 10 }),
+    isInt: { options: { min: 3, max: 10 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.minWordLength2': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 3, max: 10 }),
+    isInt: { options: { min: 3, max: 10 } },
     toInt: true,
     optional: true,
   },
