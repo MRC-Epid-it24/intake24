@@ -32,6 +32,7 @@ export function usePromptUtils<
 >(props: UsePromptProps<P, F, FP>, { emit }: SetupContext<any>, confirmCallback?: () => boolean) {
   const { i18n } = useI18n();
   const survey = useSurvey();
+  const surveySlug = computed(() => survey.parameters?.slug);
   const { mealName, mealTime } = useMealUtils(props);
   const { foodName } = useFoodUtils(props);
 
@@ -119,6 +120,7 @@ export function usePromptUtils<
     clearErrors,
     customPromptLayout,
     errors,
+    surveySlug,
     foodName,
     foodOrMealName,
     hasErrors,

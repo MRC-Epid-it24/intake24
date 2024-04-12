@@ -18,6 +18,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   const survey = useSurvey();
 
   const localeId = computed(() => survey.localeId);
+  const surveySlug = computed(() => survey.slug);
   const meals = computed(() => survey.meals);
   const foodIndex = computed(() => survey.selectedFoodIndex);
   const foodOptional = computed(() => survey.selectedFoodOptional);
@@ -169,6 +170,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     foodOptional,
     linkedParent,
     localeId,
+    surveySlug,
     meals,
     parentEncodedFood,
     parentFood,

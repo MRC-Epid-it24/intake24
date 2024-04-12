@@ -2,6 +2,7 @@ import './bootstrap';
 
 import type { Route } from 'vue-router';
 import Vue from 'vue';
+import VueDOMPurifyHTML from 'vue-dompurify-html';
 import VueGtag from 'vue-gtag';
 
 import pinia from '@intake24/ui/stores/bootstrap';
@@ -32,7 +33,11 @@ Vue.use(
     }),
   },
   router,
-);
+).use(VueDOMPurifyHTML, {
+  i18n: {
+    ALLOWED_TAGS: ['b', 'i', 'strong', 'em', 'p', 'u'],
+  },
+});
 
 new Vue({
   i18n,

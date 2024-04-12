@@ -1,3 +1,5 @@
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys/survey';
+
 import type { Condition, Prompt, PromptWithSection } from '../prompts';
 import type { Meal } from '../types';
 
@@ -170,4 +172,42 @@ export type SchemeOverrides = {
 export const defaultOverrides: SchemeOverrides = {
   meals: [],
   prompts: [],
+};
+
+export const spellingCorrectionPreferenceOptions = ['phonetic', 'edit-distance', 'both'] as const;
+
+export type SpellingCorrectionPreference = typeof spellingCorrectionPreferenceOptions[number];
+
+export type SurveySearchSettings = {
+  collectData: boolean;
+  maxResults: number;
+  matchScoreWeight: number;
+  sortingAlgorithm: SearchSortingAlgorithm;
+  spellingCorrectionPreference: SpellingCorrectionPreference;
+  minWordLength1: number;
+  minWordLength2: number;
+  enableEditDistance: boolean;
+  enablePhonetic: boolean;
+  minWordLengthPhonetic: number;
+  firstWordCost: number;
+  wordOrderCost: number;
+  wordDistanceCost: number;
+  unmatchedWordCost: number;
+};
+
+export const defaultSearchSettings: SurveySearchSettings = {
+  collectData: true,
+  maxResults: 100,
+  matchScoreWeight: 20,
+  sortingAlgorithm: 'popularity',
+  spellingCorrectionPreference: 'phonetic',
+  minWordLength1: 3,
+  minWordLength2: 6,
+  enableEditDistance: true,
+  enablePhonetic: true,
+  minWordLengthPhonetic: 3,
+  firstWordCost: 0,
+  wordOrderCost: 4,
+  wordDistanceCost: 1,
+  unmatchedWordCost: 8,
 };
