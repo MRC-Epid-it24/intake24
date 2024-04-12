@@ -6,8 +6,16 @@ import {
   Synonym,
 } from '@intake24/api/food-index/interpreted-word';
 import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
+import { SpellingCorrectionPreference } from '@intake24/common/surveys/scheme';
 
-export type MatchStrategy = 'match-fewer' | 'match-more';
+export interface SpellingCorrectionParameters {
+  spellingCorrectionPreference: SpellingCorrectionPreference;
+  enableEditDistance: boolean;
+  minWordLength1: number;
+  minWordLength2: number;
+  enablePhonetic: boolean;
+  minWordLengthPhonetic: number;
+}
 
 export type DictionaryType = 'foods' | 'recipes' | 'categories';
 
@@ -111,46 +119,10 @@ export class RichDictionary {
     return result;
   }
 
-  fewerSpellingInterpretations(
-    lowerCaseWord: string,
-    maxInterpretations: number,
-  ): Array<AltSpelling> {
-    const phoneticMatches = this.phoneticMatch(lowerCaseWord);
-    if (phoneticMatches.length > 0) {
-      return phoneticMatches
-        .slice(0, maxInterpretations)
-        .map(w => new AltSpelling(w, 'phonetic'));
-    }
-    const lev1matches = this.transducer.match(lowerCaseWord, 1);
-    if (lev1matches.length > 0) {
-      return lev1matches
-        .slice(0, maxInterpretations)
-        .map(match => new AltSpelling(match.word, 'lev1'));
-    }
-    return this.transducer
-      .match(lowerCaseWord, 2)
-      .slice(0, maxInterpretations)
-      .map(match => new AltSpelling(match.word, 'lev2'));
-  }
-
-  moreSpellingInterpretations(
-    lowerCaseWord: string,
-    maxInterpretations: number,
-  ): Array<AltSpelling> {
-    const phoneticMatches = this.phoneticMatch(lowerCaseWord).map(
-      w => new AltSpelling(w, 'phonetic'),
-    );
-    const lev2matches = this.transducer
-      .match(lowerCaseWord, 2)
-      .map(match => new AltSpelling(match.word, 'lev2'));
-
-    return new Array<AltSpelling>(...phoneticMatches, ...lev2matches).slice(0, maxInterpretations);
-  }
-
   interpretWord(
     word: string,
     maxInterpretations: number,
-    strategy: MatchStrategy,
+    parameters: SpellingCorrectionParameters,
   ): InterpretedWord {
     const lowerCaseWord = word.toLocaleLowerCase();
     const interpretations = new Array<WordInterpretation>();
@@ -159,14 +131,40 @@ export class RichDictionary {
       interpretations.push(new ExactMatch(lowerCaseWord));
     }
     else {
-      let spellingCorrected = new Array<AltSpelling>();
+      let phoneticMatches: WordInterpretation[] = [];
 
-      if (strategy === 'match-fewer')
-        spellingCorrected = this.fewerSpellingInterpretations(lowerCaseWord, maxInterpretations);
-      else if (strategy === 'match-more')
-        spellingCorrected = this.moreSpellingInterpretations(lowerCaseWord, maxInterpretations);
+      if (parameters.enablePhonetic && lowerCaseWord.length >= parameters.minWordLengthPhonetic)
+        phoneticMatches = this.phoneticMatch(lowerCaseWord).map(w => new AltSpelling(w, 'phonetic'));
 
-      interpretations.push(...spellingCorrected);
+      let editDistanceMatches: WordInterpretation[] = [];
+
+      if (parameters.enableEditDistance) {
+        const maxEditDistance = lowerCaseWord.length >= parameters.minWordLength2 ? 2 : lowerCaseWord.length >= parameters.minWordLength1 ? 1 : 0;
+        if (maxEditDistance !== 0) {
+          editDistanceMatches = this.transducer.match(lowerCaseWord, maxEditDistance)
+            .map(match => new AltSpelling(match.word, `lev${maxEditDistance}`));
+        }
+      }
+
+      switch (parameters.spellingCorrectionPreference) {
+        case 'phonetic':
+          if (phoneticMatches.length > 0)
+            interpretations.push(...phoneticMatches.slice(0, maxInterpretations));
+          else
+            interpretations.push(...editDistanceMatches.slice(0, maxInterpretations));
+          break;
+        case 'edit-distance':
+          if (editDistanceMatches.length > 0)
+            interpretations.push(...editDistanceMatches.slice(0, maxInterpretations));
+          else
+            interpretations.push(...phoneticMatches.slice(0, maxInterpretations));
+          break;
+        case 'both': {
+          interpretations.push(...phoneticMatches.slice(0, maxInterpretations));
+          interpretations.push(...editDistanceMatches.slice(0, Math.max(0, maxInterpretations - phoneticMatches.length)));
+          break;
+        }
+      }
     }
 
     const synonyms: Array<string> = interpretations.flatMap(sp =>

@@ -26,6 +26,8 @@ if (parentPortNullable === null)
 
 const parentPort = parentPortNullable;
 
+const MAX_PHRASE_COMBINATIONS = 1000;
+
 const databases = new Database({
   environment: workerData.env,
   databaseConfig: workerData.dbConnectionInfo,
@@ -176,9 +178,9 @@ async function matchRecipeFoods(
   interpretedQuery: InterpretedPhrase,
   query: SearchQuery,
 ): Promise<FoodHeader[]> {
-  const localeIndex = foodIndex[query.localeId];
+  const localeIndex = foodIndex[query.parameters.localeId];
   if (!localeIndex)
-    throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
+    throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
   const recipeFoodsTuples = localeIndex.foodIndex.recipeFoodsList;
   const recipeFoodHeaders: FoodHeader[] = [];
 
@@ -286,62 +288,78 @@ function isSubcategory(categoryCode: string, ofCategoryCode: string): boolean {
 }
 
 async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
-  const localeIndex = foodIndex[query.localeId];
+  const localeIndex = foodIndex[query.parameters.localeId];
   if (!localeIndex)
-    throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
+    throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
+
+  const spellingCorrectionParameters = {
+    spellingCorrectionPreference: query.parameters.spellingCorrectionPreference,
+    enableEditDistance: query.parameters.enableEditDistance,
+    minWordLength1: query.parameters.minWordLength1,
+    minWordLength2: query.parameters.minWordLength2,
+    enablePhonetic: query.parameters.enablePhonetic,
+    minWordLengthPhonetic: query.parameters.minWordLengthPhonetic,
+  };
+
+  const matchQualityParameters = {
+    firstWordCost: query.parameters.firstWordCost,
+    wordOrderCost: query.parameters.wordOrderCost,
+    wordDistanceCost: query.parameters.wordDistanceCost,
+    unmatchedWordCost: query.parameters.unmatchedWordCost,
+  };
 
   const foodInterpretation = localeIndex.foodIndex.interpretPhrase(
-    query.description,
-    'match-fewer',
+    query.parameters.description,
+    spellingCorrectionParameters,
     'foods',
   );
   const foodInterpretedRecipeFoods = localeIndex.foodIndex.interpretPhrase(
-    query.description,
-    'match-fewer',
+    query.parameters.description,
+    spellingCorrectionParameters,
     'recipes',
   );
   let recipeFoodsHeaders: FoodHeader[] = [];
   if (foodInterpretedRecipeFoods.words.length > 0)
     recipeFoodsHeaders = await matchRecipeFoods(foodInterpretedRecipeFoods, query);
 
-  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, 100, 100);
+  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
 
   const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
-    query.description,
-    'match-fewer',
+    query.parameters.description,
+    spellingCorrectionParameters,
     'categories',
   );
 
-  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, 100, 100);
+  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
 
   const filteredFoods = foodResults.filter((matchResult) => {
-    const acceptHidden = query.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
+    const acceptHidden = query.parameters.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
     const acceptCategory
-      = query.limitToCategory === undefined
-      || isFoodInCategory(localeIndex, matchResult.key, query.limitToCategory);
+      = query.parameters.limitToCategory === undefined
+      || isFoodInCategory(localeIndex, matchResult.key, query.parameters.limitToCategory);
 
     return acceptHidden && acceptCategory;
   });
 
   const foods = await rankFoodResults(
     filteredFoods,
-    query.localeId,
-    query.rankingAlgorithm,
-    query.matchScoreWeight,
+    query.parameters.localeId,
+    query.parameters.rankingAlgorithm,
+    query.parameters.matchScoreWeight,
     logger,
     recipeFoodsHeaders,
   );
 
   const filteredCategories = categoryResults.filter(
     matchResult =>
-      query.limitToCategory === undefined || isSubcategory(matchResult.key, query.limitToCategory),
+      query.parameters.limitToCategory === undefined || isSubcategory(matchResult.key, query.parameters.limitToCategory),
   );
 
   const categories = rankCategoryResults(filteredCategories);
 
   return {
-    foods,
-    categories,
+    foods: foods.slice(0, query.parameters.limit),
+    categories: categories.slice(0, query.parameters.limit),
   };
 }
 

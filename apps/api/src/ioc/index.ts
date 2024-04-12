@@ -48,7 +48,6 @@ import type {
   AsServedService,
   AuthenticationService,
   Cache,
-  CachedInheritableAttributesService,
   CategoryContentsService,
   DataExportFields,
   DataExportMapper,
@@ -59,6 +58,7 @@ import type {
   FIDOProvider,
   Filesystem,
   FoodDataService,
+  FoodSearchService,
   GlobalCategoriesService,
   GlobalFoodsService,
   GuideImageService,
@@ -232,7 +232,7 @@ export interface IoC extends Jobs {
   portionSizeMethodsService: PortionSizeMethodsService;
   portionSizeService: PortionSizeService;
   inheritableAttributesService: InheritableAttributesService;
-  cachedInheritableAttributesService: CachedInheritableAttributesService;
+  foodSearchService: FoodSearchService;
   cachedParentCategoriesService: CachedParentCategoriesService;
 
   // Categories

@@ -9,7 +9,12 @@ import {
   feedbackPhysicalDataFields,
   feedbackSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
-import { defaultExport, defaultMeals, defaultPrompts } from '@intake24/common/surveys';
+import {
+  defaultExport,
+  defaultMeals,
+  defaultPrompts,
+  defaultSearchSettings,
+} from '@intake24/common/surveys';
 import { permissions } from '@intake24/common-backend';
 import {
   FeedbackScheme,
@@ -186,6 +191,7 @@ export async function initDatabase(): Promise<MockData> {
     supportEmail: 'testSupportEmail@example.com',
     storeUserSessionOnServer: false,
     surveySchemeOverrides: { meals: [], prompts: [] },
+    searchSettings: defaultSearchSettings,
   });
 
   await setupPermissions();

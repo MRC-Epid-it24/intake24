@@ -160,9 +160,9 @@
                 <food-browser
                   v-bind="{
                     localeId,
+                    surveySlug,
                     prompt,
                     rootCategory: associatedFoodPrompts[index].categoryCode,
-                    searchParameters,
                     section,
                     includeHidden: true,
                   }"
@@ -202,7 +202,6 @@ import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFo
 import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
 
-import type { FoodSearchPromptParameters } from './FoodSearchPrompt.vue';
 import createBasePrompt from '../createBasePrompt';
 
 function isPromptValid(prompt: AssociatedFoodPrompt): boolean {
@@ -232,9 +231,8 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    searchParameters: {
-      type: Object as PropType<FoodSearchPromptParameters>,
-      required: true,
+    surveySlug: {
+      type: String,
     },
     value: {
       type: Object as PropType<PromptStates['associated-foods-prompt']>,

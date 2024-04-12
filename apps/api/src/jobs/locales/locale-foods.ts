@@ -31,18 +31,18 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
   private readonly fsConfig;
 
   private readonly cachedParentCategoriesService;
-  private readonly cachedInheritableAttributesService;
+  private readonly foodSearchService;
   private readonly portionSizeMethodsService;
 
   constructor({
     cachedParentCategoriesService,
-    cachedInheritableAttributesService,
+    foodSearchService,
     fsConfig,
     logger,
     portionSizeMethodsService,
   }: Pick<
     IoC,
-    | 'cachedInheritableAttributesService'
+    | 'foodSearchService'
     | 'cachedParentCategoriesService'
     | 'fsConfig'
     | 'logger'
@@ -52,7 +52,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
 
     this.fsConfig = fsConfig;
     this.cachedParentCategoriesService = cachedParentCategoriesService;
-    this.cachedInheritableAttributesService = cachedInheritableAttributesService;
+    this.foodSearchService = foodSearchService;
     this.portionSizeMethodsService = portionSizeMethodsService;
   }
 
@@ -155,7 +155,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
         order: [['foodCode', 'asc']],
         transform: async (food: FoodLocal) => {
           const [attributes, categories, portionSizeMethods] = await Promise.all([
-            this.cachedInheritableAttributesService.getInheritableAttributes([food.foodCode]),
+            this.foodSearchService.getInheritableAttributes([food.foodCode]),
             this.cachedParentCategoriesService.getFoodAllCategories(food.foodCode),
             food.portionSizeMethods?.length
               ? this.portionSizeMethodsService.resolvePortionSizeMethods(

@@ -3,6 +3,7 @@ import type { RedisOptions } from 'ioredis';
 export type CacheConfig = {
   redis: RedisOptions;
   ttl: string;
+  surveySettingsTTL: string;
 };
 
 const cacheConfig: CacheConfig = {
@@ -12,6 +13,7 @@ const cacheConfig: CacheConfig = {
     keyPrefix: process.env.CACHE_REDIS_PREFIX || 'it24:cache:',
   },
   ttl: process.env.CACHE_TTL || '7d',
+  surveySettingsTTL: process.env.CACHE_SURVEY_SETTINGS_TTL || '120s',
 };
 
 export default cacheConfig;

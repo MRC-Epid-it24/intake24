@@ -2,8 +2,10 @@ import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
 import {
+  foodSearchResponse,
   jsonObjectSchema,
   surveyEntryResponse,
+  surveyFoodSearchQuery,
   surveyHelpRequest,
   surveyRatingRequest,
   surveySubmissionResponse,
@@ -109,5 +111,15 @@ export const surveyRespondent = initContract().router({
     },
     summary: 'Submit recall',
     description: 'Submit recall data to the server.',
+  },
+  foodSearch: {
+    method: 'GET',
+    path: '/surveys/:slug/search',
+    query: surveyFoodSearchQuery,
+    responses: {
+      200: foodSearchResponse,
+    },
+    summary: 'Food search',
+    description: 'Returns a list of foods from the food database that match the description using the study search settings.',
   },
 });

@@ -2,6 +2,7 @@ import { Worker } from 'node:worker_threads';
 
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
+import { SearchQueryParameters } from '@intake24/api/food-index/search-query';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { logger } from '@intake24/common-backend/services';
 import { FoodsLocale, RecipeFoods } from '@intake24/db';
@@ -162,14 +163,7 @@ const foodIndex = {
     throw new IndexNotReadyError();
   },
 
-  async search(
-    description: string,
-    localeId: string,
-    rankingAlgorithm: string,
-    matchScoreWeight: number,
-    includeHidden: boolean,
-    limitToCategory?: string,
-  ): Promise<FoodSearchResponse> {
+  async search(parameters: SearchQueryParameters): Promise<FoodSearchResponse> {
     if (indexReady) {
       queryIdCounter += 1;
 
@@ -192,12 +186,7 @@ const foodIndex = {
         indexWorker.postMessage({
           type: 'query',
           queryId,
-          description,
-          localeId,
-          rankingAlgorithm,
-          matchScoreWeight: matchScoreWeight / 100.0,
-          includeHidden,
-          limitToCategory,
+          parameters,
         });
       });
     }
