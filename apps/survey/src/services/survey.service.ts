@@ -66,13 +66,13 @@ export default {
     return data;
   },
 
-  getUserSession: async (surveyId: string): Promise<SurveyUserSessionResponse | null> => {
+  getUserSession: async (surveyId: string): Promise<SurveyUserSessionResponse | undefined> => {
     try {
       const { data } = await http.get<SurveyUserSessionResponse>(`surveys/${surveyId}/session`);
       return data;
     }
     catch (err) {
-      return null;
+      return undefined;
     }
   },
 

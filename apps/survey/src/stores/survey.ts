@@ -91,10 +91,7 @@ export function surveyInitialState(): CurrentSurveyState {
   };
 }
 
-function canUseUserSession(state: CurrentSurveyState, parameters?: SurveyEntryResponse) {
-  if (!parameters?.storeUserSessionOnServer)
-    return false;
-
+function canUseUserSession(state: CurrentSurveyState, sessionLifetime?: number) {
   const { startTime, submissionTime } = state;
   if (!startTime)
     return false;
@@ -108,7 +105,7 @@ function canUseUserSession(state: CurrentSurveyState, parameters?: SurveyEntryRe
   const timeDifference = (now.getTime() - startDt.getTime()) / 1000;
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
 
-  if (timeDifference > parameters.sessionLifetime || startDt.getTime() < startOfDay.getTime())
+  if ((sessionLifetime && timeDifference > sessionLifetime) || startDt.getTime() < startOfDay.getTime())
     return false;
 
   return true;
@@ -255,12 +252,8 @@ export const useSurvey = defineStore('survey', {
         this.setParameters(surveyInfo);
         this.setUserInfo(userInfo);
 
-        if (!surveyInfo.storeUserSessionOnServer)
-          return;
-
-        const userSession = await surveyService.getUserSession(surveyId);
-        if (userSession)
-          this.loadUserSession(userSession.sessionData);
+        const userSession = surveyInfo.storeUserSessionOnServer ? await surveyService.getUserSession(surveyId) : undefined;
+        this.loadUserSession(userSession?.sessionData);
       }
       finally {
         loading.removeItem('loadParameters');
@@ -359,16 +352,20 @@ export const useSurvey = defineStore('survey', {
       this.reCreateStoreAfterDeserialization();
     },
 
-    loadUserSession(state: CurrentSurveyState) {
+    loadUserSession(serverState?: CurrentSurveyState) {
       if (!this.parameters) {
         console.error(`Survey parameters not loaded. Cannot load user session.`);
         return;
       }
 
-      if (!canUseUserSession(state, this.parameters))
+      const { sessionLifetime, storeUserSessionOnServer } = this.parameters;
+      if (serverState && storeUserSessionOnServer && canUseUserSession(serverState, sessionLifetime)) {
+        this.loadState(serverState);
         return;
+      }
 
-      this.loadState(state);
+      if (!canUseUserSession(this.data, sessionLifetime))
+        this.clearState();
     },
 
     async clearUserSession() {
@@ -389,7 +386,7 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (this.isSubmitting || !canUseUserSession(this.data, this.parameters))
+      if (this.isSubmitting || !this.parameters.storeUserSessionOnServer || !canUseUserSession(this.data, this.parameters.sessionLifetime))
         return;
 
       await surveyService.setUserSession(this.parameters.slug, this.data);
