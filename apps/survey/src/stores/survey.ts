@@ -158,6 +158,7 @@ export const useSurvey = defineStore('survey', {
     hasFinished: state => !!state.data.endTime,
     isSubmitted: state => !!state.data.submissionTime,
     localeId: state => state.parameters?.locale.code ?? 'en_GB',
+    slug: state => state.parameters?.slug,
     meals: state => state.data.meals,
     hasMeals: state => !!state.data.meals.length,
     defaultSchemeMeals: state => state.parameters?.surveyScheme.meals,

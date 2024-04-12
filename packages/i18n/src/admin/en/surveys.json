@@ -39,13 +39,70 @@
   "search": {
     "_": "Search options",
     "collectData": "Collect search data",
-    "sortingAlgorithm": "Sorting algorithm",
-    "matchScoreWeight": "Match score weight",
+    "maxResults": "Maximum number of food results",
+    "sorting": "Sorting",
+    "spellingCorrection": "Spelling correction",
+    "sortingAlgorithm": "Food ordering method",
+    "matchQuality": "Match quality",
+    "matchQualityCriteria": "Match quality criteria",
+    "matchScoreWeight": "Sorting preference",
+    "firstWordCost": "First word",
+    "wordOrderCost": "Word order",
+    "wordDistanceCost": "Word distance",
+    "unmatchedWordCost": "Word count",
+    "foodOrdering": "Food ordering",
+    "enableEditDistance": "Use edit distance spelling correction",
+    "minWordLength1": "Minimum word length for 1 correction",
+    "minWordLength2": "Minimum word length for 2 corrections",
+    "enablePhonetic": "Use phonetic spelling correction",
+    "minWordLengthPhonetic": "Minimum word length for phonetic spelling correction",
+    "spellingCorrectionPreference": "Preferred spelling correction method",
+    "spellingCorrectionOptions": {
+      "phonetic": "Phonetic",
+      "edit-distance": "Edit distance",
+      "both": "Both"
+    },
     "algorithms": {
       "paRules": "Pairwise associations (machine learning)",
       "popularity": "Popularity (reporting frequency)",
       "globalPop": "Global popularity (reporting frequency)",
       "fixed": "Predetermined order"
+    },
+    "information": {
+      "matchScoreWeightInfo": {
+        "title": "Sorting preference",
+        "p1": "Intake24 employs two methods to determine the priority of foods in the search results list:",
+        "foodOrdering": "<strong>Food ordering</strong> is the ordering of foods in the database according to the selected \"Food ordering method\" option, typically prioritising items based on how frequently they are reported. The more commonly reported foods are listed at the top.",
+        "matchQuality": "<strong>Match quality</strong> is the estimation of how closely the user's input matches the name of a food from the database. This is based on factors like the matching word count and word order consistency. For instance, \"boiled potato\" is an exact match for an entry labelled \"Boiled potato\" in the database, but it is not as good of a match for \"baked potato\" (where only \"potato\" matches but not \"boiled\") or \"Potato, boiled\" (where the words match, but the order differs).",
+        "p2": "This setting controls how these values are combined to produce the final ordering of the search results.",
+        "p3": "If the slider is adjusted towards \"food ordering\", the sorting will more closely reflect the food ordering (reporting frequency or predetermined order) data. If the slider is moved towards \"match quality\", then the sorting will prioritize more accurate matching of the user input."
+      },
+      "sortingAlgorithmInfo": {
+        "title": "Food ordering method",
+        "p1": "The food ordering method is used to determine relative priorities of foods in the database.",
+        "popularity": "<strong>Popularity (reporting frequency)</strong> gives precedence to frequently reported foods. Frequency data is constantly gathered and updated with each recall submission, improving the data quality as more submissions are received. In this mode, the frequency data is associated with a specific locale and is not shared across locales.",
+        "globalPopularity": "<strong>Global popularity (reporting frequency)</strong> is similar to the above, but the data is collected globally and shared across locales. This method is <u>not recommended</u> because in practice food codes are rarely shared across locales.",
+        "predeterminedOrder": "<strong>Predetermined order</strong> assigns a fixed priority value to each food item. Those with higher priorities appear at the top of the search results, irrespective of their reporting frequencies. Unlike methods based on reporting frequency, this order remains static once uploaded and is not dynamically updated as more recall submissions are received."
+      },
+      "matchQualityInfo": {
+        "title": "Match quality criteria",
+        "p1": "These settings determine the importance assigned to specific criteria by the component of the food search algorithm that assesses the similarity between the user input and food descriptions in the database.",
+        "p2": "Each criterion is evaluated independently, and their results are then aggregated. This cumulative value represents the <em>match cost</em>. The higher the cost, the lower the quality of the match. Search results having the lowest cost are listed at the top.",
+        "p3": "The higher the slider value for the criterion, the greater its impact on the final match cost. When a slider is set to zero, the related criterion is ignored.",
+        "firstWord": "<strong>First word</strong> gives precedence to the initial word in the user input. If the initial word is not found in the food name, this penalty is applied (but other words can still match).",
+        "wordOrder": "<strong>Word order</strong> penalises word order violations. For example, the input \"boiled potato\" will match \"potato, boiled\", but since the word order differs the word order penalty will be applied. This penalty can be applied multiple times for each violation of the word order in case of longer input.",
+        "wordDistance": "<strong>Word distance</strong> penalises violations of relative word distance (adjacency). For example, the input \"sweet chicken\" will match \"sweet and sour chicken\", but because the words that are adjacent in the user input are not adjacent in the food name, this penalty is applied.",
+        "wordCount": "<strong>Word count</strong> applies a penalty for each unmatched word. For example, the input \"boiled chicken\" will match \"sweet and sour chicken\", but this penalty will be applied because the word \"boiled\" is not found in the food name."
+      },
+      "spellingCorrectionInfo": {
+        "title": "Spelling correction",
+        "p1": "These settings control the spelling correction algorithms employed when an exact word match cannot be found.",
+        "editDistance": "<strong>Edit distance spelling correction:</strong> this algorithm compares words based on their spellings. <em>Edit distance</em> (also called Levenshtein distance) is a measure used to quantify the similarity between two words by calculating the minimum number of operations (character insertions, deletions, or substitutions) required to transform one word into the other.",
+        "minimumWordLength": "<strong>Minimum word length:</strong> Intake24 can identify words that are within the edit distance of up to 2 from each other. However, making even one or two changes to shorter words can result in misleading matches. For example, correcting \"cake\" to \"sage\" (edit distance 2: c→s, k→g) is unlikely to be helpful. To prevent this, the number of corrections can be restricted based on the length of the input word.",
+        "phonetic": "<strong>Phonetic spelling correction</strong>: the phonetic encoding algorithm converts words into phonetic representations, which are sequences of characters that reflect their pronunciation. This allows for easier comparison and matching of words based on their sounds rather than their spellings.",
+        "phoneticMinWordLength": "<strong>Minimum word length for phonetic spelling correction:</strong> similar to edit distance based spelling correction, phonetic encoding based spelling correction can be restricted based on the length of the input word to avoid unwanted matches.",
+        "preferredMethod": "<strong>Preferred spelling correction method:</strong> when set to \"Phonetic\" or \"Edit distance\", the respective method is applied first. If no matches are found, then the other method is tried. When set to \"Both\", both methods are always used, and their results are combined. This setting is only applicable when both methods are enabled."
+      }
     }
   },
   "submissionLimits": {

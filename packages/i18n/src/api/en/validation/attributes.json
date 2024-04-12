@@ -104,6 +104,8 @@
   "searchCollectData": "Search collect data",
   "searchMatchScoreWeight": "Search match score weight",
   "searchSortingAlgorithm": "Search sorting algorithm",
+  "searchMinWordLength1": "Minimum word length for 1 spelling correction",
+  "searchMinWordLength2": "Minimum word length for 2 spelling corrections",
   "section": "Section",
   "selectionImage": "Selection image",
   "sessionLifetime": "Session lifetime",

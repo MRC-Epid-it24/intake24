@@ -1,13 +1,12 @@
 import type { ColumnType } from 'kysely';
 
-export type Generated<T> =
-  T extends ColumnType<infer S, infer I, infer U>
-    ? ColumnType<S, I | undefined, U>
-    : ColumnType<T, T | undefined, T>;
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
 
 export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
 
-export type Json = ColumnType<JsonValue, string, string>;
+export type Json = JsonValue;
 
 export type JsonArray = JsonValue[];
 
@@ -186,6 +185,7 @@ export interface PairwiseAssociationsCoOccurrences {
 export interface PairwiseAssociationsOccurrences {
   foodCode: string;
   localeId: string;
+  multiplier: number | null;
   occurrences: number;
 }
 
@@ -218,6 +218,19 @@ export interface PermissionUser {
   createdAt: Timestamp;
   permissionId: Int8;
   updatedAt: Timestamp;
+  userId: Int8;
+}
+
+export interface PersonalAccessTokens {
+  createdAt: Timestamp;
+  expiresAt: Timestamp | null;
+  id: Generated<Int8>;
+  name: string;
+  revoked: Generated<boolean>;
+  scopes: string | null;
+  token: string;
+  updatedAt: Timestamp;
+  usedAt: Timestamp | null;
   userId: Int8;
 }
 
@@ -288,16 +301,16 @@ export interface Surveys {
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: Generated<number>;
   name: string;
+  notifications: Generated<string>;
   numberOfSubmissionsForFeedback: Generated<number>;
   originatingUrl: string | null;
   ownerId: Int8 | null;
-  searchMatchScoreWeight: Generated<number>;
-  searchSortingAlgorithm: Generated<string>;
+  searchSettings: string | null;
+  sessionLifetime: Generated<string>;
   slug: string;
   startDate: Timestamp;
   state: string;
   storeUserSessionOnServer: boolean;
-  submissionNotificationUrl: string | null;
   supportEmail: string;
   surveyMonkeyUrl: string | null;
   surveySchemeId: Int8;
@@ -420,13 +433,13 @@ export interface SurveySubmissions {
   endTime: Timestamp;
   id: string;
   log: string | null;
+  sessionId: string;
   startTime: Timestamp;
   submissionTime: Timestamp;
   surveyId: Int8;
   updatedAt: Timestamp;
   userAgent: string | null;
   userId: Int8;
-  sessionId: string;
 }
 
 export interface SurveysUxEventsSettings {
@@ -533,8 +546,21 @@ export interface UserSurveyAliases {
   username: string;
 }
 
+export interface UserSurveyRatings {
+  comment: string | null;
+  createdAt: Timestamp;
+  id: Generated<Int8>;
+  rating: number;
+  submissionId: string | null;
+  surveyId: Int8;
+  type: string;
+  updatedAt: Timestamp;
+  userId: Int8;
+}
+
 export interface UserSurveySessions {
   createdAt: Timestamp;
+  id: string;
   sessionData: string;
   surveyId: Int8;
   updatedAt: Timestamp;
@@ -574,6 +600,7 @@ export interface DB {
   permissionRole: PermissionRole;
   permissions: Permissions;
   permissionUser: PermissionUser;
+  personalAccessTokens: PersonalAccessTokens;
   popularityCounters: PopularityCounters;
   refreshTokens: RefreshTokens;
   roles: Roles;
@@ -605,6 +632,7 @@ export interface DB {
   userSecurables: UserSecurables;
   userSubscriptions: UserSubscriptions;
   userSurveyAliases: UserSurveyAliases;
+  userSurveyRatings: UserSurveyRatings;
   userSurveySessions: UserSurveySessions;
   uxEvents: UxEvents;
 }

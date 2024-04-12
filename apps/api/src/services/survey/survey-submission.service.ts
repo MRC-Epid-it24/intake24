@@ -409,7 +409,7 @@ function surveySubmissionService({
 
     const [survey, submission] = await Promise.all([
       Survey.findOne({
-        attributes: ['id', 'notifications', 'searchCollectData'],
+        attributes: ['id', 'notifications', 'searchSettings'],
         where: { id: surveyId },
         include: [
           { association: 'locale', attributes: ['id', 'code'], required: true },
@@ -437,7 +437,9 @@ function surveySubmissionService({
         },
       },
       notifications,
-      searchCollectData,
+      searchSettings: {
+        collectData: searchCollectData,
+      },
     } = survey;
 
     const submissionCustomPrompts = [...preMeals, ...postMeals]

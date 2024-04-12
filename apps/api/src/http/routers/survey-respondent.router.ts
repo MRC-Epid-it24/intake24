@@ -3,7 +3,10 @@ import ms from 'ms';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { TokenPayload } from '@intake24/common/security';
-import type { SurveyState as SurveyStatus } from '@intake24/common/surveys';
+import type {
+  SurveyState as SurveyStatus,
+} from '@intake24/common/surveys';
+import { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import { NotFoundError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
@@ -27,6 +30,9 @@ export function surveyRespondent() {
     windowMs: ms('15m'),
     limit: 1,
   });
+  const cache = ioc.cradle.cache;
+  const surveyService = ioc.cradle.surveyService;
+  const surveySettingsCacheTTL = ioc.cradle.config.cache.surveySettingsTTL;
 
   return initServer().router(contract.surveyRespondent, {
     parameters: async ({ params }) => {
@@ -70,8 +76,10 @@ export function surveyRespondent() {
         storeUserSessionOnServer,
         suspensionReason,
         surveySchemeOverrides,
-        searchSortingAlgorithm,
-        searchMatchScoreWeight,
+        searchSettings: {
+          sortingAlgorithm: searchSortingAlgorithm,
+          matchScoreWeight: searchMatchScoreWeight,
+        },
       } = survey;
 
       let { meals, prompts } = surveyScheme;
@@ -221,6 +229,27 @@ export function surveyRespondent() {
       );
 
       return { status: 200, body: followUpInfo };
+    },
+    foodSearch: async ({
+      params: { slug },
+      query,
+      req,
+    }) => {
+      const { searchSettings, localeCode } = await cache.remember(`survey-search-settings:${slug}`, surveySettingsCacheTTL, () => surveyService.getSearchSettings(slug));
+
+      const { description, hidden, category: limitToCategory, previous, recipe } = query;
+
+      const searchOptions: OptionalSearchQueryParameters = {
+        previous,
+        includeHidden: hidden === 'true',
+        limitToCategory,
+        limit: searchSettings.maxResults,
+        ...searchSettings,
+      };
+
+      const searchResults = await req.scope.cradle.foodSearchService.search(localeCode, description, recipe === 'true', searchOptions);
+
+      return { status: 200, body: searchResults };
     },
   });
 }

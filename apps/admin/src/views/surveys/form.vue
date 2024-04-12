@@ -107,36 +107,205 @@
                 {{ $t('surveys.search._') }}
               </div>
               <v-switch
-                v-model="form.searchCollectData"
+                v-model="form.searchSettings.collectData"
                 class="my-6"
-                :error-messages="form.errors.get('searchCollectData')"
+                :error-messages="form.errors.get('searchSettings.collectData')"
                 hide-details="auto"
                 :label="$t('surveys.search.collectData')"
                 name="searchCollectData"
-                @change="form.errors.clear('searchCollectData')"
+                @change="form.errors.clear('searchSettings.collectData')"
               />
+              <v-slider
+                v-model.number="form.searchSettings.maxResults"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.maxResults')"
+                hide-details="auto"
+                :label="$t('surveys.search.maxResults')"
+                max="100"
+                min="10"
+                name="seachMaxResults"
+                thumb-label="always"
+              />
+              <div class="text-h6 mb-6 mt-6 underline">
+                {{ $t('surveys.search.sorting') }}
+              </div>
+              <div class="mt-4">
+                <v-icon
+                  @click="showInformationPopup('sortingAlgorithmInfo')"
+                >
+                  fa-circle-question
+                </v-icon>
+                <v-label class="ml-2">
+                  {{ $t('surveys.search.sortingAlgorithm') }}
+                </v-label>
+              </div>
               <v-select
-                v-model="form.searchSortingAlgorithm"
-                :error-messages="form.errors.get('searchSortingAlgorithm')"
+                v-model="form.searchSettings.sortingAlgorithm"
+                class="mt-2"
+                dense
+                :error-messages="form.errors.get('searchSettings.sortingAlgorithm')"
                 hide-details="auto"
                 :items="searchSortingAlgorithms"
-                :label="$t('surveys.search.sortingAlgorithm')"
                 name="searchSortingAlgorithm"
                 outlined
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
-                @change="form.errors.clear('searchSortingAlgorithm')"
+                @change="form.errors.clear('searchSettings.sortingAlgorithm')"
               />
+              <div class="mt-4">
+                <v-icon
+                  @click="showInformationPopup('matchScoreWeightInfo')"
+                >
+                  fa-circle-question
+                </v-icon>
+                <v-label class="ml-2">
+                  {{ $t('surveys.search.matchScoreWeight') }}
+                </v-label>
+              </div>
               <v-slider
-                v-model.number="form.searchMatchScoreWeight"
-                class="mt-10"
-                :error-messages="form.errors.get('searchMatchScoreWeight')"
+                v-model.number="form.searchSettings.matchScoreWeight"
+                :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
                 hide-details="auto"
-                :label="$t('surveys.search.matchScoreWeight')"
                 max="100"
                 min="0"
                 name="searchMatchScoreWeight"
+                step="1"
+                thumb-label
+              >
+                <template #prepend>
+                  <v-subheader>{{ $t('surveys.search.foodOrdering') }}</v-subheader>
+                </template>
+                <template #append>
+                  <v-subheader>{{ $t('surveys.search.matchQuality') }}</v-subheader>
+                </template>
+              </v-slider>
+              <div class="text-h6 mb-10 mt-4 underline">
+                <v-icon
+                  class="mr-3"
+                  @click="showInformationPopup('matchQualityInfo')"
+                >
+                  fa-circle-question
+                </v-icon>{{ $t('surveys.search.matchQualityCriteria') }}
+              </div>
+              <v-slider
+                v-model.number="form.searchSettings.firstWordCost"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.firstWordCost')"
+                hide-details="auto"
+                :label="$t('surveys.search.firstWordCost')"
+                max="20"
+                min="0"
+                name="searchFirstWordCost"
                 thumb-label="always"
               />
+              <v-slider
+                v-model.number="form.searchSettings.wordOrderCost"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.wordOrderCost')"
+                hide-details="auto"
+                :label="$t('surveys.search.wordOrderCost')"
+                max="10"
+                min="0"
+                name="searchWordOrderCost"
+                thumb-label="always"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.wordDistanceCost"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.wordDistanceCost')"
+                hide-details="auto"
+                :label="$t('surveys.search.wordDistanceCost')"
+                max="10"
+                min="0"
+                name="searchWordDistanceCost"
+                thumb-label="always"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.unmatchedWordCost"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.unmatchedWordCost')"
+                hide-details="auto"
+                :label="$t('surveys.search.unmatchedWordCost')"
+                max="10"
+                min="0"
+                name="searchUnmatchedWordCost"
+                thumb-label="always"
+              />
+              <div class="text-h6 mb-4 mt-4 underline">
+                <v-icon
+                  class="mr-3"
+                  @click="showInformationPopup('spellingCorrectionInfo')"
+                >
+                  fa-circle-question
+                </v-icon>{{ $t('surveys.search.spellingCorrection') }}
+              </div>
+              <v-switch
+                v-model="form.searchSettings.enableEditDistance"
+                class="mt-6"
+                :error-messages="form.errors.get('searchSettings.enableEditDistance')"
+                hide-details="auto"
+                :label="$t('surveys.search.enableEditDistance')"
+                name="searchEnableEditDistance"
+                @change="form.errors.clear('searchSettings.enableEditDistance')"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.minWordLength1"
+                class="mt-6"
+                :error-messages="form.errors.get('searchSettings.minWordLength1')"
+                hide-details="auto"
+                :label="$t('surveys.search.minWordLength1')"
+                max="10"
+                min="2"
+                name="searchMatchScoreWeight"
+                thumb-label="always"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.minWordLength2"
+                class="mt-6"
+                :error-messages="form.errors.get('searchSettings.minWordLength2')"
+                hide-details="auto"
+                :label="$t('surveys.search.minWordLength2')"
+                max="10"
+                min="3"
+                name="searchMatchScoreWeight"
+                thumb-label="always"
+              />
+
+              <v-switch
+                v-model="form.searchSettings.enablePhonetic"
+                class="my-6"
+                :error-messages="form.errors.get('searchSettings.enablePhonetic')"
+                hide-details="auto"
+                :label="$t('surveys.search.enablePhonetic')"
+                name="searchEnablePhonetic"
+                @change="form.errors.clear('searchSettings.enablePhonetic')"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.minWordLengthPhonetic"
+                class="mt-0 mb-6"
+                :error-messages="form.errors.get('searchSettings.minWordLengthPhonetic')"
+                hide-details="auto"
+                :label="$t('surveys.search.minWordLengthPhonetic')"
+                max="10"
+                min="2"
+                name="searchMinWordLengthPhonetic"
+                thumb-label="always"
+              />
+              <v-label>
+                {{ $t('surveys.search.spellingCorrectionPreference') }}
+              </v-label>
+              <v-select
+                v-model="form.searchSettings.spellingCorrectionPreference"
+                class="mt-2"
+                dense
+                :error-messages="form.errors.get('searchSettings.spellingCorrectionPreference')"
+                hide-details="auto"
+                :items="spellingCorrectionOptions"
+                name="searchSpellingCorrectionPreference"
+                outlined
+                prepend-inner-icon="fas fa-arrow-up-wide-short"
+                @change="form.errors.clear('searchSettings.spellingCorrectionPreference')"
+              />
+              <information-popup v-if="infoComponentType" :component-type="`${infoComponentType}`" :open="infoPopupOpen" :title="$t(`surveys.search.information.${infoComponentType}.title`)" @close="hideInformationPopup" />
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
               <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
@@ -343,19 +512,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
-import type {
-  SchemeOverrides,
-  SearchSortingAlgorithm,
-  SurveyState,
-} from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { EventNotifications, SelectResource } from '@intake24/admin/components/dialogs';
+import InformationPopup from '@intake24/admin/components/dialogs/information-popup.vue';
 import { formMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import {
+  defaultSearchSettings,
+  type SchemeOverrides,
+  spellingCorrectionPreferenceOptions,
+  type SurveySearchSettings,
+  type SurveyState,
+} from '@intake24/common/surveys';
 import { defaultOverrides, searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
 
 export type SurveyForm = {
@@ -387,9 +559,7 @@ export type SurveyForm = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
-  searchCollectData: boolean;
-  searchMatchScoreWeight: number;
-  searchSortingAlgorithm: SearchSortingAlgorithm;
+  searchSettings: SurveySearchSettings;
   surveySchemeOverrides: SchemeOverrides;
   userPersonalIdentifiers: boolean;
   userCustomFields: boolean;
@@ -422,9 +592,7 @@ export const surveyForm: SurveyForm = {
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
-  searchCollectData: true,
-  searchMatchScoreWeight: 20,
-  searchSortingAlgorithm: 'popularity',
+  searchSettings: defaultSearchSettings,
   surveySchemeOverrides: defaultOverrides,
   userPersonalIdentifiers: false,
   userCustomFields: false,
@@ -433,17 +601,32 @@ export const surveyForm: SurveyForm = {
 export default defineComponent({
   name: 'SurveyForm',
 
-  components: { DatePicker, EventNotifications, SelectResource },
+  components: { InformationPopup, DatePicker, EventNotifications, SelectResource },
 
   mixins: [formMixin],
 
   setup(props) {
     const { entry, entryLoaded, isEdit } = useEntry<SurveyEntry>(props);
+
+    const infoComponentType = ref(undefined as string | undefined);
+    const infoPopupOpen = ref(false);
+
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
       data: surveyForm,
       editMethod: 'patch',
     });
+
+    const showInformationPopup = (type: string) => {
+      infoComponentType.value = `${type}`;
+      infoPopupOpen.value = true;
+    };
+
+    const hideInformationPopup = () => {
+      infoPopupOpen.value = false;
+    };
+
+    const matchScoreWeightTickLabels = ['Sorting data', 'Match score'];
 
     return {
       entry,
@@ -453,6 +636,11 @@ export default defineComponent({
       form,
       routeLeave,
       submit,
+      showInformationPopup,
+      hideInformationPopup,
+      infoComponentType,
+      infoPopupOpen,
+      matchScoreWeightTickLabels,
     };
   },
 
@@ -466,6 +654,10 @@ export default defineComponent({
       searchSortingAlgorithms: searchSortingAlgorithms.map(value => ({
         value,
         text: this.$t(`surveys.search.algorithms.${value}`),
+      })),
+      spellingCorrectionOptions: spellingCorrectionPreferenceOptions.map(value => ({
+        value,
+        text: this.$t(`surveys.search.spellingCorrectionOptions.${value}`),
       })),
     };
   },
@@ -481,4 +673,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.underline {
+  border-bottom: 1px solid lightgray;
+}
+</style>

@@ -3,6 +3,7 @@ import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/int
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
 import EnglishLanguageBackend from '@intake24/api/food-index/language-backends/en/english-language-backend';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
+import { defaultSearchSettings } from '@intake24/common/surveys';
 
 describe('phrase index', () => {
   const phrases: Array<PhraseWithKey<string>> = [
@@ -129,9 +130,21 @@ describe('phrase index', () => {
     });
 
     it('match', () => {
-      const t = index.interpretPhrase('banana with coffee', 'match-fewer');
+      const t = index.interpretPhrase('banana with coffee', {
+        enableEditDistance: defaultSearchSettings.enableEditDistance,
+        enablePhonetic: defaultSearchSettings.enablePhonetic,
+        minWordLengthPhonetic: defaultSearchSettings.minWordLengthPhonetic,
+        minWordLength1: defaultSearchSettings.minWordLength1,
+        minWordLength2: defaultSearchSettings.minWordLength2,
+        spellingCorrectionPreference: defaultSearchSettings.spellingCorrectionPreference,
+      });
 
-      console.log(JSON.stringify(index.findMatches(t, 10, 100)));
+      console.log(JSON.stringify(index.findMatches(t, 10, {
+        firstWordCost: defaultSearchSettings.firstWordCost,
+        wordOrderCost: defaultSearchSettings.wordOrderCost,
+        wordDistanceCost: defaultSearchSettings.wordDistanceCost,
+        unmatchedWordCost: defaultSearchSettings.unmatchedWordCost,
+      })));
     });
   });
 });

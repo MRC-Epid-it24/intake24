@@ -1,12 +1,9 @@
-import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
 import type { FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
 
 import http from './http.service';
 
 export type SearchOptions = {
-  rankingAlgorithm?: SearchSortingAlgorithm;
-  matchScoreWeight?: number;
   recipe?: boolean;
   hidden?: boolean;
   category?: string;
@@ -14,11 +11,11 @@ export type SearchOptions = {
 
 export default {
   search: async (
-    localeId: string,
+    surveySlug: string,
     description: string,
     options: SearchOptions = {},
   ): Promise<FoodSearchResponse> => {
-    const { data } = await http.get<FoodSearchResponse>(`foods/${localeId}`, {
+    const { data } = await http.get<FoodSearchResponse>(`surveys/${surveySlug}/search`, {
       params: { description, ...options },
     });
     return data;

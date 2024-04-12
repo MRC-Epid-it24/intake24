@@ -7,7 +7,11 @@ import { ZodError } from 'zod';
 import type { SurveyAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
-import { searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
+import {
+  searchSortingAlgorithms,
+  spellingCorrectionPreferenceOptions,
+  surveyStates,
+} from '@intake24/common/surveys';
 import { notification } from '@intake24/common/types';
 import { validateMeals } from '@intake24/common/validators';
 import { FeedbackScheme, Op, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
@@ -269,20 +273,96 @@ export const defaults: Schema = {
     toInt: true,
     optional: true,
   },
-  searchCollectData: {
+  'searchSettings.collectData': {
     in: ['body'],
     errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: true,
   },
-  searchSortingAlgorithm: {
+  'searchSettings.maxResults': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 10, max: 100 }),
+    isInt: { options: { min: 10, max: 100 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.sortingAlgorithm': {
+    in: ['body'],
     errorMessage: typeErrorMessage('in.options', { options: searchSortingAlgorithms }),
     isIn: { options: [searchSortingAlgorithms] },
     optional: true,
   },
-  searchMatchScoreWeight: {
+  'searchSettings.matchScoreWeight': {
+    in: ['body'],
     errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 100 }),
     isInt: { options: { min: 0, max: 100 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.minWordLength1': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 2, max: 10 }),
+    isInt: { options: { min: 2, max: 10 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.minWordLength2': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 3, max: 10 }),
+    isInt: { options: { min: 3, max: 10 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.spellingCorrectionPreference': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('in.options', { options: spellingCorrectionPreferenceOptions }),
+    isIn: { options: [spellingCorrectionPreferenceOptions] },
+    optional: true,
+  },
+  'searchSettings.enableEditDistance': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
+    optional: true,
+  },
+  'searchSettings.enablePhonetic': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
+    optional: true,
+  },
+  'searchSettings.minWordLengthPhonetic': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 2, max: 10 }),
+    isInt: { options: { min: 2, max: 10 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.firstWordCost': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 20 }),
+    isInt: { options: { min: 0, max: 20 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.wordOrderCost': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 10 }),
+    isInt: { options: { min: 0, max: 10 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.wordDistanceCost': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 10 }),
+    isInt: { options: { min: 0, max: 10 } },
+    toInt: true,
+    optional: true,
+  },
+  'searchSettings.unmatchedWordCost': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 10 }),
+    isInt: { options: { min: 0, max: 10 } },
     toInt: true,
     optional: true,
   },

@@ -67,9 +67,22 @@ export default () => {
         authCaptcha: [0],
         authUrlTokenCharset: 'abcabc',
         authUrlTokenLength: 'this is not a number',
-        searchCollectData: '20',
-        searchSortingAlgorithm: 'invalid-search-algorithm',
-        searchMatchScoreWeight: 500,
+        searchSettings: {
+          collectData: '20',
+          maxResults: 1000,
+          sortingAlgorithm: 'invalid-search-algorithm',
+          matchScoreWeight: 500,
+          minWordLength1: 18,
+          minWordLength2: -3.141592,
+          spellingCorrectionPreference: 123,
+          enableEditDistance: 'no',
+          enablePhonetic: ['yes'],
+          minWordLengthPhonetic: 'bazillion',
+          firstWordCost: 40,
+          wordOrderCost: -5,
+          wordDistanceCost: '18',
+          unmatchedWordCost: -10.5,
+        },
         surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
           prompts: 'invalidPrompts',
@@ -95,13 +108,24 @@ export default () => {
         'authCaptcha',
         'authUrlTokenCharset',
         'authUrlTokenLength',
-        'searchCollectData',
-        'searchSortingAlgorithm',
-        'searchMatchScoreWeight',
+        'searchSettings.collectData',
+        'searchSettings.maxResults',
+        'searchSettings.matchScoreWeight',
+        'searchSettings.sortingAlgorithm',
+        'searchSettings.minWordLength1',
+        'searchSettings.minWordLength2',
+        'searchSettings.spellingCorrectionPreference',
+        'searchSettings.enableEditDistance',
+        'searchSettings.enablePhonetic',
+        'searchSettings.minWordLengthPhonetic',
+        'searchSettings.firstWordCost',
+        'searchSettings.wordOrderCost',
+        'searchSettings.wordDistanceCost',
+        'searchSettings.unmatchedWordCost',
         'surveySchemeOverrides',
       ];
 
-      await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput });
+      await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput, log: true });
     });
 
     it('should return 201 and new resource', async () => {
