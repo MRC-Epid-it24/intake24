@@ -34,7 +34,7 @@ function portionSizeMethodsService() {
         'parameters',
       ],
       order: [['orderBy', 'ASC']],
-      include: [{ association: 'categoryLocal', where: { localeId, categoryCode } }],
+      include: [{ association: 'categoryLocal', attributes: [], where: { localeId, categoryCode } }],
     });
 
   const getNearestLocalCategoryPortionSizeMethods = async (
