@@ -324,7 +324,12 @@ export default defineComponent({
     setFeedbackInterval(retryIn = 60) {
       if (this.retry.interval)
         clearInterval(this.retry.interval);
-      this.retry = { retryIn, interval: setInterval(this.feedbackInterval, 5000) };
+
+      this.retry = {
+        retryIn,
+        // @ts-expect-error - node types
+        interval: setInterval(this.feedbackInterval, 5000),
+      };
     },
 
     clearFeedbackInterval() {

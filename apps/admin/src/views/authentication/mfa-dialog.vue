@@ -198,6 +198,7 @@ export default defineComponent({
     },
 
     async duoTimeoutChallenge() {
+      // @ts-expect-error - node types
       this.duo.interval = setInterval(() => {
         this.duo.value -= 20;
 

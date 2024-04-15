@@ -11,74 +11,111 @@
 
 <script lang="ts">
 import type { registerSW } from 'virtual:pwa-register';
-import { defineComponent } from 'vue';
+import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 export type UpdateSW = ReturnType<typeof registerSW>;
+
+const intervalMS = 60 * 60 * 1000;
 
 export default defineComponent({
   name: 'ServiceWorker',
 
-  data() {
-    return {
-      updateSW: undefined as UpdateSW | undefined,
-      offlineReady: false,
-      needRefresh: false,
+  setup() {
+    const updateInterval = ref<number | undefined>(undefined);
+    const updateSW = ref<UpdateSW | undefined>(undefined);
+    const offlineReady = ref(false);
+    const needRefresh = ref(false);
+
+    /* async function closePromptUpdateSW() {
+      offlineReady.value = false;
+      needRefresh.value = false;
+    }; */
+
+    function onOfflineReadyFn() {
+      console.log('[sw] Offline content is ready.');
     };
-  },
 
-  async mounted() {
-    try {
-      const { registerSW } = await import('virtual:pwa-register');
+    function onNeedRefreshFn() {
+      console.log('[sw] New content is available.');
+    };
 
-      this.updateSW = registerSW({
-        immediate: true,
-        onOfflineReady: () => {
-          this.offlineReady = true;
-          this.onOfflineReadyFn();
-        },
-        onNeedRefresh: () => {
-          this.needRefresh = true;
-          this.onNeedRefreshFn();
-        },
-        onRegistered: (swRegistration) => {
-          swRegistration && this.handleSWManualUpdates(swRegistration);
-        },
-        onRegisterError: (e) => {
-          this.handleSWRegisterError(e);
-        },
-      });
-    }
-    catch {
-      console.log('sw: PWA disabled.');
-    }
-  },
+    function updateServiceWorker() {
+      updateSW.value && updateSW.value(true);
+    };
 
-  methods: {
-    async closePromptUpdateSW() {
-      this.offlineReady = false;
-      this.needRefresh = false;
-    },
-    onOfflineReadyFn() {
-      console.log('sw: Offline content is ready.');
-    },
-    onNeedRefreshFn() {
-      console.log('sw: New content is available.');
-    },
-    updateServiceWorker() {
-      this.updateSW && this.updateSW(true);
-    },
-    handleSWManualUpdates(_swRegistration: ServiceWorkerRegistration) {
-      console.log('sw: Service worker has been registered.');
-    },
-    handleSWRegisterError(error: any) {
+    function handleSWManualUpdates(_swRegistration: ServiceWorkerRegistration) {
+      console.log('[sw] Service worker has been registered.');
+    };
+
+    function handleSWRegisterError(error: any) {
       if (error instanceof Error) {
         const { message, name, stack } = error;
-        console.warn('sw: ServiceWorker registration has failed.');
+        console.warn('[sw] ServiceWorker registration has failed.');
         console.warn(stack ?? `${name}: ${message}`);
         return;
       }
-      console.warn('sw: ServiceWorker registration has failed.', error);
-    },
+      console.warn('[sw] ServiceWorker registration has failed.', error);
+    };
+
+    onMounted(async () => {
+      try {
+        const { registerSW } = await import('virtual:pwa-register');
+
+        updateSW.value = registerSW({
+          immediate: true,
+          onOfflineReady: () => {
+            offlineReady.value = true;
+            onOfflineReadyFn();
+          },
+          onNeedRefresh: () => {
+            needRefresh.value = true;
+            onNeedRefreshFn();
+          },
+          onRegisteredSW: (swScriptUrl, swRegistration) => {
+            if (!swRegistration) {
+              console.warn('[sw] ServiceWorker registration has failed.');
+              return;
+            }
+
+            handleSWManualUpdates(swRegistration);
+
+            // @ts-expect-error - node types
+            updateInterval.value = setInterval(async () => {
+              if (!(!swRegistration.installing && navigator))
+                return;
+
+              if (('connection' in navigator) && !navigator.onLine)
+                return;
+
+              const resp = await fetch(swScriptUrl, {
+                cache: 'no-store',
+                headers: { cache: 'no-store', 'cache-control': 'no-cache' },
+              });
+
+              if (resp?.status === 200) {
+                console.log('[sw] ServiceWorker checking for updates...');
+                await swRegistration.update();
+              }
+            }, intervalMS);
+          },
+          onRegisterError: (e) => {
+            handleSWRegisterError(e);
+          },
+        });
+      }
+      catch {
+        console.log('[sw] PWA disabled.');
+      }
+    });
+
+    onBeforeUnmount(() => {
+      clearInterval(updateInterval.value);
+    });
+
+    return {
+      needRefresh,
+      updateServiceWorker,
+    };
   },
 });
 </script>

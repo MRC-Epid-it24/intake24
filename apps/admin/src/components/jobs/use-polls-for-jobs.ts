@@ -33,6 +33,7 @@ export function usePollsForJobs(jobType: JobType | JobType[], query?: ComputedRe
     if (polling.value !== null)
       return;
 
+    // @ts-expect-error - node types
     polling.value = setInterval(async () => {
       await status();
     }, ms);

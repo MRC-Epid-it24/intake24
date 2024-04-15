@@ -74,6 +74,7 @@ export default defineComponent({
       if (!props.timer)
         return;
 
+      // @ts-expect-error - node types
       interval.value = setInterval(() => {
         selectNext();
       }, props.timer);

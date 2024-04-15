@@ -174,6 +174,7 @@ export default defineComponent({
       if (!timerValue.value || !props.followUpUrl)
         return;
 
+      // @ts-expect-error - node types
       timerInterval.value = setInterval(() => {
         timerValue.value -= timerTick.value;
 
