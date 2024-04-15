@@ -20,8 +20,7 @@
     "dev": "webpack --env NODE_ENV=development",
     "cli": "node dist/cli.js",
     "cli:dev": "ts-node -r tsconfig-paths/register src/index.ts",
-    "cli:dev:tsx": "tsx src/index.ts",
-    "lint": "eslint . --ext .js,.ts --fix"
+    "cli:dev:tsx": "tsx src/index.ts"
   },
   "dependencies": {
     "ajv": "^8.12.0",

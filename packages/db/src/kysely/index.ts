@@ -1,7 +1,7 @@
 import type { DB as FoodsDB } from './foods';
 import type { DB as SystemDB } from './system';
 
-export { FoodsDB, SystemDB };
+export type { FoodsDB, SystemDB };
 
 // This needs to be a feature in kysely-codegen
 export type {

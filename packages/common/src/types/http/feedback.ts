@@ -26,6 +26,8 @@ export const feedbackSchemeResponse = z.object({
   henryCoefficients: henryCoefficient.array(),
 });
 
+export type FeedbackSchemeResponse = z.infer<typeof feedbackSchemeResponse>;
+
 export const nutrientType = z.object({
   id: z.string(),
   description: z.string(),

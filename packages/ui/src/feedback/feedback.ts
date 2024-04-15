@@ -2,11 +2,11 @@ import type { ComputedRef } from 'vue';
 import { computed, ref } from 'vue';
 
 import type { FeedbackSection } from '@intake24/common/feedback';
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeResponse } from '@intake24/common/types/http';
 import type { FeedbackCardParameters, FeedbackDictionaries } from '@intake24/ui/feedback';
 import { buildTopFoods } from '@intake24/ui/feedback';
 
-export function useFeedback(scheme: ComputedRef<FeedbackSchemeEntry | undefined>) {
+export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefined>) {
   const feedbackDicts = ref<FeedbackDictionaries | null>(null);
   const cards = ref<FeedbackCardParameters[]>([]);
 

@@ -79,6 +79,7 @@
               </template>
             </i18n>
             <as-served-selector
+              v-if="leftoverImageSet"
               v-model="portionSize.leftovers"
               :as-served-set-id="leftoverImageSet"
               :max-weight="portionSize.serving?.weight"

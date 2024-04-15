@@ -125,6 +125,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <quantity-slider
+            v-if="prompt.multiple"
             v-model="portionSize.count"
             :slider="prompt.multiple"
             @confirm="confirmCount"

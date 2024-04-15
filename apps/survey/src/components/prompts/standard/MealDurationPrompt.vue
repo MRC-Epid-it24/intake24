@@ -23,16 +23,12 @@
           </template>
           <template #prepend>
             <span v-if="prompt.slider.min.label" class="text-h6 font-weight-bold">
-              {{
-                translate(prompt.slider.min.label, { params: { value: prompt.slider.min.value } })
-              }}
+              {{ translate(prompt.slider.min.label) }}
             </span>
           </template>
           <template #append>
             <span v-if="prompt.slider.max.label" class="text-h6 font-weight-bold">
-              {{
-                translate(prompt.slider.max.label, { params: { value: prompt.slider.max.value } })
-              }}
+              {{ translate(prompt.slider.max.label) }}
             </span>
           </template>
         </v-slider>

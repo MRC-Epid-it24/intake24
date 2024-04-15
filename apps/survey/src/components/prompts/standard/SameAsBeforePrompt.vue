@@ -168,6 +168,8 @@ export default defineComponent({
           return { id, text: food.description };
         if (food.type === 'missing-food')
           return { id, text: food.info?.name ?? food.searchTerm };
+        if (food.type === 'recipe-builder')
+          return { id, text: food.template.name ?? food.searchTerm };
 
         const amount = Math.round(foodAmount(food));
         const unit = foodUnit(food);

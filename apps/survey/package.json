@@ -16,9 +16,8 @@
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
     "generate-pwa-assets": "pwa-assets-generator",
-    "start": "node server/index.js",
-    "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path ../../.eslintignore"
+    "start": "node server/index.cjs",
+    "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@coddicat/vue-pinch-scroll-zoom": "^3.3.4",

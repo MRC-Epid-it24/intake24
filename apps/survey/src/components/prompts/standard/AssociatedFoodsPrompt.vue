@@ -158,6 +158,7 @@
                     prompt,
                     rootCategory: associatedFoodPrompts[index].categoryCode,
                     searchParameters,
+                    section,
                     includeHidden: true,
                   }"
                   @food-missing="foodMissing(index)"

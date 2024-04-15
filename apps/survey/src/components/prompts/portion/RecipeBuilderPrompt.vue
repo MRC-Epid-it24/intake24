@@ -57,6 +57,7 @@
                   requiredToFill: step.required,
                   rootCategory: step.categoryCode,
                   prompt,
+                  section,
                 }"
                 @food-missing="(searchTerm) => foodMissing(index, searchTerm)"
                 @food-selected="(food) => foodSelected(index, food)"

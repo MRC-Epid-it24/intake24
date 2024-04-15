@@ -139,6 +139,7 @@ import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 import { VCard } from 'vuetify/lib';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
 import type {
   CategoryContents,
@@ -189,6 +190,10 @@ export default defineComponent({
       type: Object as PropType<
         Prompts['associated-foods-prompt' | 'food-search-prompt' | 'recipe-builder-prompt']
       >,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
     value: {

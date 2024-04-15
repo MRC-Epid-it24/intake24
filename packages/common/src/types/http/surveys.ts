@@ -9,9 +9,9 @@ import {
   surveyStates,
 } from '@intake24/common/surveys';
 
-import { feedbackSchemeSchema } from '../../schemas';
 import { z } from '../../util';
 import { meal } from '../meals';
+import { feedbackSchemeResponse } from './feedback';
 
 export const generateUserResponse = z.object({
   username: z.string(),
@@ -57,7 +57,7 @@ export const surveyEntryResponse = z.object({
     // TODO: validate meals and prompts
     prompts: z.any(),
   }),
-  feedbackScheme: feedbackSchemeSchema.optional(),
+  feedbackScheme: feedbackSchemeResponse.optional(),
   numberOfSubmissionsForFeedback: z.number(),
   sessionLifetime: z.number(),
   storeUserSessionOnServer: z.boolean(),
