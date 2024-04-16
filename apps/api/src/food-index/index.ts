@@ -2,6 +2,7 @@ import { Worker } from 'node:worker_threads';
 
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { logger } from '@intake24/common-backend/services';
 import { FoodsLocale, RecipeFoods } from '@intake24/db';
 
@@ -156,7 +157,7 @@ const foodIndex = {
       if (result)
         return result;
       else
-        throw new Error('Recipe food not found');
+        throw new NotFoundError('Recipe food not found');
     }
     throw new IndexNotReadyError();
   },

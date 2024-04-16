@@ -1229,6 +1229,9 @@ importers:
       '@types/node':
         specifier: ^20.12.5
         version: 20.12.5
+      type-fest:
+        specifier: ^4.15.0
+        version: 4.15.0
       typescript:
         specifier: ^5.4.4
         version: 5.4.4
@@ -5379,7 +5382,7 @@ packages:
   /@types/sax@1.2.7:
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 20.12.5
     dev: false
 
   /@types/semver@7.5.8:
