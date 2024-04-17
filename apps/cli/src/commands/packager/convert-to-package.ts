@@ -41,6 +41,7 @@ const defaultJSONOptions: PackageWriterOptions = {
 
 const DEFAULT_FOOD_COMPOSITION_TABLE = process.env.CSV_DEFAULT_FOOD_COMPOSION_TABLE || 'NDNS';
 const DEFAULT_FOOD_COMPOSITION_TABLE_CODE = process.env.CSV_DEFAULT_FOOD_COMPOSITION_CODE || '01B10311';
+const DEFAULT_SKIP_MISSING_CATEGORIES = process.env.DEFAULT_SKIP_MISSING_CATEGORIES === 'true' || false;
 
 export const csvHeaders = Object.values(CsvFoodRecords).map(record => record.header);
 
@@ -62,6 +63,7 @@ export class ConvertorToPackage {
   private globalFoodList: PkgGlobalFood[] = [];
   private localFoodList: PkgLocalFood[] = [];
   private enabledLocalesFoodList: string[] = [];
+  private skipMissingCategories: boolean;
 
   constructor(
     inputFilePath: string,
@@ -78,6 +80,7 @@ export class ConvertorToPackage {
       ...options,
     };
     this.exisingCategories = undefined;
+    this.skipMissingCategories = DEFAULT_SKIP_MISSING_CATEGORIES;
   }
 
   private async writeJSON(object: any, outputPath: string): Promise<void> {
@@ -220,12 +223,18 @@ export class ConvertorToPackage {
     for (const record of data) {
       if (record.action !== '5')
         continue;
-      const parentCategories: string[] = record.categories
+      let parentCategories: string[] = record.categories
         .split(',')
         .map(category => category.trim());
       const missingCategories = await this.determineIfGlobalCategoriesExist(record.categories, this.exisingCategories);
-      if (missingCategories.length > 0)
-        this.logger.error(`Categories ${missingCategories} for food ${record['intake24 code']} does not exist in the existing categories list`);
+      if (!this.skipMissingCategories && missingCategories.length > 0) {
+        this.logger.error(`Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list. ERROR`);
+      }
+      else if (this.skipMissingCategories && missingCategories.length > 0) {
+        this.logger.warn(`Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list. SKIPPING`);
+        parentCategories = parentCategories.filter(category => !missingCategories.includes(category));
+      }
+
       const globalFood: PkgGlobalFood = {
         version: randomUUID(),
         code: record['intake24 code'],
