@@ -16,7 +16,7 @@
         {{ i18n.pizza }}
       </v-alert>
     </div>
-    <div v-if="contents.foods.length >= 50" class="py-4">
+    <div v-if="contents.foods.length >= 50 && type === 'foodSearch'" class="py-4">
       <v-alert
         border="left"
         class="smaller-padding"
@@ -94,6 +94,10 @@ export default defineComponent({
       default: true,
     },
     searchTerm: {
+      type: String as PropType<string>,
+      default: '',
+    },
+    type: {
       type: String as PropType<string>,
       default: '',
     },

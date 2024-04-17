@@ -62,6 +62,7 @@
             :class="{ 'px-4': dialog }"
             :contents="currentCategoryContents"
             :i18n="promptI18n"
+            :type="type"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
           />
@@ -75,6 +76,7 @@
             :contents="searchContents"
             :i18n="promptI18n"
             :search-term="searchTerm ?? undefined"
+            :type="type"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
           />
