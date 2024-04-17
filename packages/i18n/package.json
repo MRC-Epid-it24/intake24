@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
     "@types/lodash": "^4.17.0",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "bundledDependencies": [
     "@intake24/common"
