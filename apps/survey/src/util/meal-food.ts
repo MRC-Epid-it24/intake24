@@ -100,15 +100,22 @@ export function encodedFoodComplete(food: FoodState) {
 }
 
 export function missingFoodComplete(food: FoodState) {
-  return !!(
-    food.type === 'missing-food'
-    && food.info
-    && food.flags.includes('missing-food-complete')
-  );
+  return food.type === 'missing-food' && !!food.info && food.flags.includes('missing-food-complete');
+}
+
+export function recipeBuilderComplete(food: FoodState) {
+  return food.type === 'recipe-builder' && food.flags.includes('recipe-builder-complete');
 }
 
 export function foodComplete(food: FoodState) {
-  return encodedFoodComplete(food) || missingFoodComplete(food);
+  const foodTypeChecks = {
+    'free-text': () => false,
+    'encoded-food': encodedFoodComplete,
+    'missing-food': missingFoodComplete,
+    'recipe-builder': recipeBuilderComplete,
+  };
+
+  return foodTypeChecks[food.type](food);
 }
 
 export function mealComplete(meal: MealState) {
@@ -117,10 +124,6 @@ export function mealComplete(meal: MealState) {
 
 export function mealPortionSizeComplete(meal: MealState) {
   return !!meal.foods.length && meal.foods.every(foodPortionSizeComplete);
-}
-
-export function mealAssociatedFoodsComplete(meal: MealState) {
-  return !!meal.foods.length && meal.foods.every(associatedFoodPromptsComplete);
 }
 
 export function surveyFreeEntryComplete(survey: SurveyState) {
