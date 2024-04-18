@@ -4066,7 +4066,276 @@
                         },
                         "meals": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                            "chart": {
+                              "type": "object",
+                              "properties": {
+                                "colors": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "nutrients": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "name": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "string",
+                                          "nullable": true
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "colors",
+                                "nutrients"
+                              ]
+                            },
+                            "table": {
+                              "type": "object",
+                              "properties": {
+                                "fields": {
+                                  "type": "array",
+                                  "items": {
+                                    "discriminator": {
+                                      "propertyName": "type"
+                                    },
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "header": {
+                                            "allOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "en": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "en"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "value": {
+                                            "allOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "en": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "en"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "type": {
+                                            "type": "string",
+                                            "enum": [
+                                              "standard"
+                                            ]
+                                          },
+                                          "fieldId": {
+                                            "type": "string",
+                                            "enum": [
+                                              "name",
+                                              "hours",
+                                              "minutes",
+                                              "time",
+                                              "duration"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "header",
+                                          "value",
+                                          "type",
+                                          "fieldId"
+                                        ]
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "header": {
+                                            "allOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "en": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "en"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "value": {
+                                            "allOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "en": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "en"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "type": {
+                                            "type": "string",
+                                            "enum": [
+                                              "custom"
+                                            ]
+                                          },
+                                          "fieldId": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "header",
+                                          "value",
+                                          "type",
+                                          "fieldId"
+                                        ]
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "header": {
+                                            "allOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "en": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "en"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "value": {
+                                            "allOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "en": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "en"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "type": {
+                                            "type": "string",
+                                            "enum": [
+                                              "nutrient"
+                                            ]
+                                          },
+                                          "fieldId": {
+                                            "type": "string"
+                                          },
+                                          "types": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "header",
+                                          "value",
+                                          "type",
+                                          "fieldId",
+                                          "types"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "fields"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "chart",
+                            "table"
+                          ]
                         },
                         "cards": {
                           "type": "array",
