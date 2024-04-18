@@ -45,7 +45,7 @@ Install `pnpm` using corepack or see [pnpm docs](https://pnpm.io) for further in
 ```sh
 corepack enable
 
-corepack prepare pnpm@latest --activate
+corepack install
 ```
 
 Install all dependencies from root-level

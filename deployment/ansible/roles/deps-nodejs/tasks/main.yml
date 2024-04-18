@@ -16,3 +16,6 @@
     name: nodejs
     state: latest
     update_cache: yes
+
+- name: Enable corepack
+  command: corepack enable

@@ -19,7 +19,7 @@ Install `pnpm` using corepack (see [pnpm docs](https://pnpm.io) for further opti
 ```sh
 corepack enable
 
-corepack prepare pnpm@latest --activate
+corepack install
 ```
 
 Install project dependencies

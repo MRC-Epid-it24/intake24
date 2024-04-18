@@ -21,9 +21,6 @@
     name: '{{ env.user }}'
     group: '{{ env.group }}'
 
-- name: '{{ app|upper }} | Install pnpm to latest'
-  command: npm install -g pnpm
-
 - name: '{{ app|upper }} | Create / check application directory'
   file:
     path: '{{ env.directory }}'
@@ -39,6 +36,12 @@
     version: '{{ git_version }}'
     force: yes
     accept_hostkey: true
+
+- name: '{{ app|upper }} | Install pnpm'
+  become_user: '{{ env.user }}'
+  command: corepack install
+  args:
+    chdir: '{{ env.directory }}'
 
 - name: '{{ app|upper }} | Install dependencies'
   become_user: '{{ env.user }}'
