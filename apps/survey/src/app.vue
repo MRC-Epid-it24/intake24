@@ -179,7 +179,7 @@
     />
     <service-worker />
     <message-box />
-    <v-footer class="justify-center pa-4" color="white">
+    <v-footer v-if="!isMobile" class="justify-center pa-4" color="white">
       <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-2">
         <i18n path="common.legal.copyright">
           <template #name>
