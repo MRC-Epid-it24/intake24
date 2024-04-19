@@ -40,6 +40,7 @@ import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '.
 function initialPromptState(step: RecipeFoodStepsType): RecipeBuilderStepState {
   return {
     confirmed: undefined,
+    anotherFoodConfirmed: undefined,
     repeat: step.repeatable,
     foods: [],
     order: step.order - 1,

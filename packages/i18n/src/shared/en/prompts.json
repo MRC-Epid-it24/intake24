@@ -388,8 +388,13 @@
     "search": "Search for a food",
     "root": "all food categories",
     "back": "Back to '{category}'",
-    "addMore": "Add more ingredients",
-    "noMore": "No more ingredients",
+    "optional": {
+      "confirm": "Yes",
+      "reject": "No",
+      "infoPrompt": "What was it?"
+    },
+    "addMore": "Add another",
+    "noMore": "Done",
     "none": "No food results. Please try refining your search.",
     "remove": "Remove",
     "missingAllIngredients": "Please add at least one ingredient to continue.",

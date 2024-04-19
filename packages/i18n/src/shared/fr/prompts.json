@@ -381,6 +381,13 @@
     "search": "Chercher un aliment",
     "root": "toutes les catégories alimentaires",
     "back": "Retour vers '{category}'",
+    "optional": {
+      "confirm": "Oui",
+      "reject": "Non",
+      "infoPrompt": "Qu'est-ce que c'était?"
+    },
+    "addMore": "Ajouter un autre",
+    "noMore": "Complet",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "remove": "Enlever",
     "missing": {
@@ -388,9 +395,7 @@
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
       "report": "Signaler un aliment manquant",
       "tryAgain": "Ok, laissez-moi réessayer"
-    },
-    "addMore": "Ajouter plus d'ingrédients",
-    "noMore": "Plus d'autres ingrédients"
+    }
   },
   "parentFoodPortion": {
     "name": "Portion alimentaire parent",

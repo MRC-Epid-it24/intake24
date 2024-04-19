@@ -14,56 +14,77 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-container class="pl-0">
-            <p>{{ translate(step.description) }}</p>
+          <v-sheet class="mb-4">
+            {{ translate(step.description) }}
+          </v-sheet>
+
+          <v-expand-transition>
             <v-radio-group
-              v-if="step.repeat"
+              v-if="!step.required"
               v-model="step.confirmed"
-              :disabled="!step.foods.length"
               :row="!isMobile"
               @change="onConfirmToggleIngredients(index)"
             >
               <v-radio
-                :label="$t('prompts.recipeBuilder.addMore')"
-                off-icon="fa-regular fa-circle"
-                on-icon="$yes"
-                value="no"
-              />
-              <v-radio
-                :label="$t('prompts.recipeBuilder.noMore')"
+                :label="$t('prompts.recipeBuilder.optional.confirm')"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
                 value="yes"
               />
+              <v-radio
+                :label="$t('prompts.recipeBuilder.optional.reject')"
+                off-icon="fa-regular fa-circle"
+                on-icon="$no"
+                value="no"
+              />
             </v-radio-group>
-          </v-container>
+          </v-expand-transition>
+
+          <v-sheet v-if="!step.required && step.confirmed === 'yes'" class="mb-4">
+            {{ $t('prompts.recipeBuilder.optional.infoPrompt') }}
+          </v-sheet>
+
           <v-expand-transition>
             <selected-food-list
               v-bind="{ index, meal, prompt, step }"
-              :show="!!step.foods.length"
+              :show="step.foods.length > 0 && step.confirmed !== 'no'"
               @remove="removeFood"
             />
           </v-expand-transition>
+
+          <v-btn-toggle
+            v-if="(step.required || step.confirmed === 'yes') && step.repeat && step.foods.length > 0"
+            v-model="step.anotherFoodConfirmed"
+            color="primary" dense
+            :row="!isMobile"
+            @change="onConfirmToggleIngredients(index)"
+          >
+            <v-btn large :value="true">
+              {{ $t('prompts.recipeBuilder.addMore') }}
+            </v-btn>
+            <v-btn large :value="false">
+              {{ $t('prompts.recipeBuilder.noMore') }}
+            </v-btn>
+          </v-btn-toggle>
+
           <v-expand-transition>
-            <v-card
-              v-if="step.confirmed !== 'yes' || (step.confirmed === 'yes' && step.repeat)"
-              flat
-            >
-              <food-browser
-                v-bind="{
-                  localeId,
-                  searchParameters,
-                  stepName: translate(step.name),
-                  requiredToFill: step.required,
-                  rootCategory: step.categoryCode,
-                  prompt,
-                  section,
-                }"
-                @food-missing="(searchTerm) => foodMissing(index, searchTerm)"
-                @food-selected="(food) => foodSelected(index, food)"
-                @food-skipped="foodSkipped(index)"
-              />
-            </v-card>
+            <food-browser
+              v-if="showFoodBrowser(step)"
+              class="mt-2"
+              v-bind="{
+                localeId,
+                searchParameters,
+                stepName: translate(step.name),
+                requiredToFill: step.required,
+                rootCategory: step.categoryCode,
+                prompt,
+                section,
+              }"
+              value=""
+              @food-missing="(searchTerm) => foodMissing(index, searchTerm)"
+              @food-selected="(food) => foodSelected(index, food)"
+              @food-skipped="foodSkipped(index)"
+            />
           </v-expand-transition>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -111,7 +132,10 @@ import type { FoodSearchPromptParameters } from '../standard';
 import createBasePrompt from '../createBasePrompt';
 
 function isStepValid(step: RecipeBuilderStepState): boolean {
-  return step.confirmed !== undefined && step.confirmed === 'yes';
+  if (step.required || step.confirmed === 'yes')
+    return step.foods.length > 0 && step.anotherFoodConfirmed === false;
+  else
+    return step.confirmed === 'no';
 }
 
 function getNextStep(steps: RecipeBuilderStepState[]) {
@@ -159,11 +183,11 @@ export default defineComponent({
 
   computed: {
     allConfirmed(): boolean {
-      return this.recipeSteps.reduce((acc, curr) => acc && curr.confirmed === 'yes', true);
+      return this.recipeSteps.every(step => this.isStepValid(step));
     },
 
     atLeastOneFoodSelected(): boolean {
-      return this.recipeSteps.reduce((acc, curr) => acc || !!curr.foods.length, false);
+      return this.recipeSteps.some(step => step.foods.length > 0);
     },
 
     isValid(): boolean {
@@ -208,6 +232,7 @@ export default defineComponent({
     foodSkipped(index: number): void {
       this.activeStep = index + 1;
       this.recipeSteps[index].confirmed = 'yes';
+      this.recipeSteps[index].anotherFoodConfirmed = undefined;
       this.update();
     },
 
@@ -247,8 +272,8 @@ export default defineComponent({
 
       const update: RecipeBuilderStepState = {
         ...step,
-        confirmed: step.repeat !== true ? 'yes' : 'no',
         foods,
+        anotherFoodConfirmed: undefined,
       };
 
       this.recipeSteps.splice(idx, 1, update);
@@ -276,8 +301,28 @@ export default defineComponent({
 
     updateStepsIngredients() {
       console.log('Updating Steps Ingredients');
-      const chosenIngredients = this.recipeSteps.map(({ foods }) => foods);
+      const chosenIngredients = this.recipeSteps
+        // Ignore optional steps that have been rejected even if they had
+        // initially been accepted and some foods were added
+        .filter(step => step.confirmed !== 'no')
+        .map(({ foods }) => foods);
       this.$emit('add-food', chosenIngredients);
+    },
+
+    showFoodBrowser(step: RecipeBuilderStepState): boolean {
+      if (step.required || step.confirmed === 'yes') {
+        // Current step needs at least one food to be selected, and it hasn't
+        if (step.foods.length === 0)
+          return true;
+        else
+          // Some foods have already been added, but another food has been confirmed by the user
+          return step.anotherFoodConfirmed === true;
+      }
+      else {
+        // Step has not been confirmed or has been rejected (i.e. step.required is false and
+        // step.confirmed is either 'no' or undefined)
+        return false;
+      }
     },
 
     action(type: string, id?: string, stepId?: number) {
