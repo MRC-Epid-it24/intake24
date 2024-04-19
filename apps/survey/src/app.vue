@@ -1,7 +1,7 @@
 <template>
   <v-app :class="{ mobile: isMobile }">
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-model="sidebar" app>
+    <v-navigation-drawer v-model="sidebar" app :height="windowInnerHeight">
       <template v-if="loggedIn && surveyId">
         <v-list>
           <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
@@ -235,10 +235,13 @@ export default defineComponent({
       terms: import.meta.env.VITE_LEGAL_TERMS,
     }));
 
+    const windowInnerHeight = computed(() => window.innerHeight);
+
     return {
       appInfo,
       legal,
       sidebar,
+      windowInnerHeight,
     };
   },
 
