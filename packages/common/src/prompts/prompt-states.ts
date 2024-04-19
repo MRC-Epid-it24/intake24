@@ -41,6 +41,7 @@ export type FoodRecipeBuilderItemState =
 
 export type RecipeBuilderStepState = {
   confirmed?: 'yes' | 'no';
+  anotherFoodConfirmed?: boolean;
   foods: FoodRecipeBuilderItemState[];
   order: number;
   description: RequiredLocaleTranslation;
