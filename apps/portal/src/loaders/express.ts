@@ -32,7 +32,10 @@ export default (app: Express, { config }: Ops) => {
   });
 
   nunjucksEnv.express(app);
-  nunjucksEnv.addGlobal('vite', vite).addGlobal('site', site);
+  nunjucksEnv
+    .addGlobal('vite', vite)
+    .addGlobal('site', site)
+    .addGlobal('year', new Date().getFullYear());
 
   app.engine('njk', nunjucksEnv.render);
   app.set('view engine', 'njk');
