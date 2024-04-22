@@ -1,36 +1,17 @@
 <template>
   <div>
-    <component
-      :is="dialog ? `food-browser-dialog` : `v-card`"
-      :dialog.sync="dialog"
-      :flat="!dialog"
-    >
+    <component :is="dialog ? `food-browser-dialog` : `v-card`" :dialog.sync="dialog" :flat="!dialog">
       <div class="pb-2" :class="{ 'px-4 pt-4': dialog }">
         <v-text-field
-          ref="searchRef"
-          v-model="searchTerm"
-          clearable
-          flat
-          hide-details
-          :label="promptI18n.search"
-          outlined
-          :placeholder="promptI18n.search"
-          prepend-inner-icon="$search"
-          :rounded="dialog"
+          ref="searchRef" v-model="searchTerm" clearable flat hide-details :label="promptI18n.search"
+          outlined :placeholder="promptI18n.search" prepend-inner-icon="$search" :rounded="dialog"
           @focus="openInDialog"
         />
       </div>
       <div v-if="recipeBuilderToggle" :class="isMobile ? 'pa-4' : 'py-2'">
         <v-btn
-          v-for="recipeBuilderFood in recipeBuilderFoods"
-          :key="recipeBuilderFood.code"
-          :block="isMobile"
-          class="mb-2 mr-2"
-          color="primary"
-          :disabled="!recipeBuilderToggle"
-          large
-          outlined
-          @click.stop="recipeBuilder"
+          v-for="recipeBuilderFood in recipeBuilderFoods" :key="recipeBuilderFood.code" :block="isMobile"
+          class="mb-2 mr-2" color="primary" :disabled="!recipeBuilderToggle" large outlined @click.stop="recipeBuilder(recipeBuilderFood.code)"
         >
           {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
         </v-btn>
@@ -61,65 +42,40 @@
           <image-placeholder v-if="requestInProgress" class="my-6" />
           <category-contents-view
             v-if="currentCategoryContents && !requestInProgress"
-            :categories-first="prompt.categoriesFirst.browse"
-            :class="{ 'px-4': dialog }"
-            :contents="currentCategoryContents"
-            :i18n="promptI18n"
-            :type="type"
-            @category-selected="categorySelected"
+            :categories-first="prompt.categoriesFirst.browse" :class="{ 'px-4': dialog }"
+            :contents="currentCategoryContents" :i18n="promptI18n" :type="type" @category-selected="categorySelected"
             @food-selected="foodSelected"
           />
         </v-tab-item>
         <v-tab-item key="search">
           <image-placeholder v-if="requestInProgress" class="my-6" />
           <category-contents-view
-            v-if="!requestInProgress"
-            :categories-first="prompt.categoriesFirst.search"
-            :class="{ 'px-4': dialog }"
-            :contents="searchContents"
-            :i18n="promptI18n"
-            :search-term="searchTerm ?? undefined"
-            :type="type"
-            @category-selected="categorySelected"
+            v-if="!requestInProgress" :categories-first="prompt.categoriesFirst.search"
+            :class="{ 'px-4': dialog }" :contents="searchContents" :i18n="promptI18n"
+            :search-term="searchTerm ?? undefined" :type="type" @category-selected="categorySelected"
             @food-selected="foodSelected"
           />
         </v-tab-item>
       </v-tabs-items>
       <div
-        v-if="type === 'foodSearch' || dialog || !showInDialog"
-        class="d-flex flex-column flex-md-row py-4 ga-2"
+        v-if="type === 'foodSearch' || dialog || !showInDialog" class="d-flex flex-column flex-md-row py-4 ga-2"
         :class="{ 'px-4': dialog }"
       >
         <v-btn
-          v-if="type === 'foodSearch' && tab === 1"
-          color="primary"
-          :disabled="missingDialog"
-          large
-          outlined
-          :title="promptI18n.browse"
-          @click.stop="browseRootCategory"
+          v-if="type === 'foodSearch' && tab === 1" color="primary" :disabled="missingDialog" large outlined
+          :title="promptI18n.browse" @click.stop="browseRootCategory"
         >
           {{ promptI18n.browse }}
         </v-btn>
         <v-btn
-          class="btn-truncate"
-          color="primary"
-          :disabled="missingDialog"
-          large
-          outlined
-          :title="promptI18n['missing.label']"
-          @click.stop="openMissingDialog"
+          class="btn-truncate" color="primary" :disabled="missingDialog" large outlined
+          :title="promptI18n['missing.label']" @click.stop="openMissingDialog"
         >
           {{ promptI18n['missing.label'] }}
         </v-btn>
         <v-btn
-          v-if="type === 'recipeBuilder' && !requiredToFill"
-          class="btn-truncate"
-          color="primary"
-          :disabled="missingDialog"
-          large
-          outlined
-          :title="promptI18n['missing.irrelevantIngredient']"
+          v-if="type === 'recipeBuilder' && !requiredToFill" class="btn-truncate" color="primary"
+          :disabled="missingDialog" large outlined :title="promptI18n['missing.irrelevantIngredient']"
           @click.stop="skipTheStep"
         >
           {{ promptI18n['missing.irrelevantIngredient'] }}
@@ -127,11 +83,8 @@
       </div>
     </component>
     <missing-food-panel
-      v-model="missingDialog"
-      :class="{ 'mt-4': isMobile }"
-      :i18n="promptI18n"
-      @cancel="closeMissingDialog"
-      @confirm="foodMissing"
+      v-model="missingDialog" :class="{ 'mt-4': isMobile }" :i18n="promptI18n"
+      @cancel="closeMissingDialog" @confirm="foodMissing"
     />
   </div>
 </template>
@@ -233,7 +186,7 @@ export default defineComponent({
     const requestInProgress = ref(true);
     const requestFailed = ref(false);
     const recipeBuilderFoods = ref<FoodHeader[]>([]);
-    const recipeFood = ref<RecipeFood | null>(null);
+    const recipeFoods = ref<RecipeFood[]>([]);
     const recipeBuilderToggle = ref(false);
     const tab = ref(0);
 
@@ -368,7 +321,8 @@ export default defineComponent({
 
     const recipeBuilderDetected = async (foods: FoodHeader[]) => {
       foods.forEach(async (food) => {
-        recipeFood.value = await foodsService.getRecipeFood(props.localeId, food.code);
+        const recipeFood: RecipeFood = await foodsService.getRecipeFood(props.localeId, food.code);
+        recipeFoods.value.push(recipeFood);
       });
       recipeBuilderToggle.value = true;
     };
@@ -431,9 +385,9 @@ export default defineComponent({
       ctx.emit('food-skipped', null);
     };
 
-    const recipeBuilder = () => {
+    const recipeBuilder = (key: string) => {
       closeInDialog();
-      ctx.emit('recipe-builder', recipeFood.value);
+      ctx.emit('recipe-builder', recipeFoods.value.find(food => food.code === key));
     };
 
     const navigateBack = () => {
@@ -505,7 +459,7 @@ export default defineComponent({
       requestInProgress,
       requestFailed,
       recipeBuilderFoods,
-      recipeFood,
+      recipeFoods,
       recipeBuilderToggle,
       tab,
       type,
