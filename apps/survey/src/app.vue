@@ -1,7 +1,7 @@
 <template>
   <v-app :class="{ mobile: isMobile }">
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-model="sidebar" app>
+    <v-navigation-drawer v-model="sidebar" app :height="windowInnerHeight">
       <template v-if="loggedIn && surveyId">
         <v-list>
           <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
@@ -64,6 +64,61 @@
           </template>
         </v-list-item-group>
       </v-list>
+      <template #append>
+        <div v-if="loggedIn" class="pa-2">
+          <confirm-dialog
+            :label="$t('common.logout._').toString()"
+            @confirm="logout"
+          >
+            <template #activator="{ attrs, on }">
+              <v-btn v-bind="attrs" block color="grey darken-2" rounded text v-on="on">
+                <v-icon left>
+                  $logout
+                </v-icon>
+                <span class="mr-2">{{ $t('common.logout._') }}</span>
+              </v-btn>
+            </template>
+            {{ $t('common.logout.text') }}
+          </confirm-dialog>
+        </div>
+        <v-divider />
+        <v-list v-if="isMobile" class="py-0" dense>
+          <v-list-group>
+            <template #activator>
+              <v-list-item-title>
+                {{ $t('common.legal._') }}
+              </v-list-item-title>
+            </template>
+            <v-list-item :href="legal.privacy" link target="_blank">
+              <v-list-item-title>
+                {{ $t('common.legal.privacy') }}
+              </v-list-item-title>
+              <v-list-item-action>
+                <v-icon small>
+                  $redirect
+                </v-icon>
+              </v-list-item-action>
+            </v-list-item>
+            <v-list-item :href="legal.terms" link target="_blank">
+              <v-list-item-title>
+                {{ $t('common.legal.terms') }}
+              </v-list-item-title>
+              <v-list-item-action>
+                <v-icon small>
+                  $redirect
+                </v-icon>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list-group>
+        </v-list>
+        <div class="text--secondary text-caption px-4 py-2">
+          <v-icon left small>
+            fas fa-tag
+          </v-icon>
+          {{ appInfo.build.version }} |
+          {{ appInfo.build.revision }}
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-app-bar app color="primary" dark flat hide-on-scroll>
       <v-app-bar-nav-icon :title="$t('common.navigation')" @click.stop="toggleSidebar" />
@@ -124,19 +179,43 @@
     />
     <service-worker />
     <message-box />
-    <!-- <v-footer app> </v-footer> -->
+    <v-footer v-if="!isMobile" class="justify-center pa-4" color="white">
+      <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-2">
+        <i18n path="common.legal.copyright">
+          <template #name>
+            <a class="text-decoration-none" :href="legal.home" target="_blank">
+              {{ $t('common._') }}
+            </a>
+          </template>
+          <template #team>
+            {{ legal.copyright }}
+          </template>
+          <template #year>
+            {{ new Date().getFullYear() }}
+          </template>
+        </i18n>
+        <span class="d-none d-md-flex mx-2">|</span>
+        <a class="text-decoration-none" :href="legal.privacy" target="_blank">
+          {{ $t('common.legal.privacy') }}
+        </a>
+        <span class="d-none d-md-flex mx-2">|</span>
+        <a class="text-decoration-none" :href="legal.terms" target="_blank">
+          {{ $t('common.legal.terms') }}
+        </a>
+      </div>
+    </v-footer>
   </v-app>
 </template>
 
 <script lang="ts">
 import type { TranslateResult } from 'vue-i18n';
 import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import { Navigation } from '@intake24/survey/components/layouts';
 import { ConfirmDialog, Loader, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
-import { useAuth, useSurvey } from './stores';
+import { useApp, useAuth, useSurvey } from './stores';
 
 export default defineComponent({
   name: 'App',
@@ -145,9 +224,24 @@ export default defineComponent({
 
   mixins: [setsLanguage],
 
-  data() {
+  setup() {
+    const appInfo = computed(() => useApp().app);
+    const sidebar = ref(false);
+
+    const legal = computed(() => ({
+      home: import.meta.env.VITE_LEGAL_HOME,
+      copyright: import.meta.env.VITE_LEGAL_COPYRIGHT,
+      privacy: import.meta.env.VITE_LEGAL_PRIVACY,
+      terms: import.meta.env.VITE_LEGAL_TERMS,
+    }));
+
+    const windowInnerHeight = computed(() => window.innerHeight);
+
     return {
-      sidebar: false,
+      appInfo,
+      legal,
+      sidebar,
+      windowInnerHeight,
     };
   },
 

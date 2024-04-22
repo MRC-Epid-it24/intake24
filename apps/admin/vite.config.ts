@@ -95,7 +95,6 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 8100,
       host: '0.0.0.0',
-      https,
       proxy: {
         '/api': {
           target: API_HOST,
