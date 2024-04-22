@@ -42,17 +42,16 @@
       >
         <span class="font-weight-medium">{{ category.name }}</span>
       </v-chip>
-      <v-btn
-        v-if="contents.subcategories.length > threshold"
-        class="my-1 mb-2 show-all-toggle-chip"
-        color="info"
-        outlined
-        rounded
-        @click="showAll = !showAll"
-      >
-        {{ showAll ? 'Show Less' : 'Show All Related Categories' }}
-      </v-btn>
     </v-chip-group>
+    <v-btn
+      v-if="contents.subcategories.length > threshold"
+      class="my-1 mb-2 show-all-toggle-chip"
+      color="info"
+      text
+      @click="showAll = !showAll"
+    >
+      {{ showAll ? 'Show Less' : 'Show All Related Categories' }}
+    </v-btn>
     <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
       <v-list-item
         v-for="food in contents.foods"
