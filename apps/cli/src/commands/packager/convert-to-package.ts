@@ -223,16 +223,16 @@ export class ConvertorToPackage {
     for (const record of data) {
       if (record.action !== '5')
         continue;
-      let parentCategories: string[] = record.categories
+      let parentCategoriesUnique: string[] = [...new Set(record.categories
         .split(',')
-        .map(category => category.trim());
+        .map(category => category.trim()))];
       const missingCategories = await this.determineIfGlobalCategoriesExist(record.categories, this.exisingCategories);
       if (!this.skipMissingCategories && missingCategories.length > 0) {
         this.logger.error(`Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list. ERROR`);
       }
       else if (this.skipMissingCategories && missingCategories.length > 0) {
         this.logger.warn(`Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list. SKIPPING`);
-        parentCategories = parentCategories.filter(category => !missingCategories.includes(category));
+        parentCategoriesUnique = parentCategoriesUnique.filter(category => !missingCategories.includes(category));
       }
 
       const globalFood: PkgGlobalFood = {
@@ -260,7 +260,7 @@ export class ConvertorToPackage {
               ? record['same as before option'].toLowerCase() === 'true'
               : false,
         },
-        parentCategories: parentCategories || [],
+        parentCategories: parentCategoriesUnique || [],
       };
       globalFoodList.push(globalFood);
     }
