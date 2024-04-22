@@ -22,7 +22,10 @@
       </div>
       <div v-if="recipeBuilderToggle" :class="isMobile ? 'pa-4' : 'py-2'">
         <v-btn
+          v-for="recipeBuilderFood in recipeBuilderFoods"
+          :key="recipeBuilderFood.code"
           :block="isMobile"
+          class="mb-2 mr-2"
           color="primary"
           :disabled="!recipeBuilderToggle"
           large
@@ -229,7 +232,7 @@ export default defineComponent({
 
     const requestInProgress = ref(true);
     const requestFailed = ref(false);
-    const recipeBuilderFood = ref<FoodHeader | null>(null);
+    const recipeBuilderFoods = ref<FoodHeader[]>([]);
     const recipeFood = ref<RecipeFood | null>(null);
     const recipeBuilderToggle = ref(false);
     const tab = ref(0);
@@ -363,8 +366,10 @@ export default defineComponent({
       browseCategory(props.rootCategory, true);
     };
 
-    const recipeBuilderDetected = async (food: FoodHeader) => {
-      recipeFood.value = await foodsService.getRecipeFood(props.localeId, food.code);
+    const recipeBuilderDetected = async (foods: FoodHeader[]) => {
+      foods.forEach(async (food) => {
+        recipeFood.value = await foodsService.getRecipeFood(props.localeId, food.code);
+      });
       recipeBuilderToggle.value = true;
     };
 
@@ -374,6 +379,7 @@ export default defineComponent({
 
       requestInProgress.value = true;
       recipeBuilderToggle.value = false;
+      recipeBuilderFoods.value = [];
       searchResults.value = { foods: [], categories: [] };
       const { matchScoreWeight, rankingAlgorithm } = props.searchParameters ?? {};
 
@@ -385,12 +391,17 @@ export default defineComponent({
           category: props.rootCategory,
           hidden: props.includeHidden,
         });
-        if (searchResults.value.foods[0].code.charAt(0) === '$') {
-          recipeBuilderFood.value = searchResults.value.foods.splice(0, 1)[0];
-
-          if (recipeBuilderEnabled.value)
-            await recipeBuilderDetected(recipeBuilderFood.value);
-        }
+        searchResults.value.foods = searchResults.value.foods.filter(
+          (food) => {
+            if (food.code.charAt(0) === '$') {
+              recipeBuilderFoods.value.push(food);
+              return false;
+            }
+            return true;
+          },
+        );
+        if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0)
+          await recipeBuilderDetected(recipeBuilderFoods.value);
         requestFailed.value = false;
       }
       catch (e) {
@@ -493,7 +504,7 @@ export default defineComponent({
       promptI18n,
       requestInProgress,
       requestFailed,
-      recipeBuilderFood,
+      recipeBuilderFoods,
       recipeFood,
       recipeBuilderToggle,
       tab,
