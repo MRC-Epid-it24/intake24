@@ -1,3 +1,5 @@
+import type { Transaction } from 'sequelize';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
@@ -31,11 +33,12 @@ function adminSurveyService({
    * @param {string} slug
    * @returns {Promise<Permission>}
    */
-  const getSurveyRespondentPermission = async (slug: string): Promise<Permission> => {
+  const getSurveyRespondentPermission = async (slug: string, options: { transaction?: Transaction } = {}): Promise<Permission> => {
     const name = surveyRespondent(slug);
     const [permission] = await Permission.findOrCreate({
       where: { name },
       defaults: { name, displayName: name },
+      transaction: options.transaction,
     });
 
     return permission;
@@ -93,6 +96,7 @@ function adminSurveyService({
     const { name, email, phone, customFields, password, username } = input;
 
     return db.system.transaction(async (transaction) => {
+      const surveyRespondentPermission = await getSurveyRespondentPermission(slug, { transaction });
       const user = await User.create(
         userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {},
         { transaction },
@@ -100,8 +104,6 @@ function adminSurveyService({
 
       const { id: userId } = user;
       const { size, alphabet } = securityConfig.authTokens;
-
-      const surveyRespondentPermission = await getSurveyRespondentPermission(slug);
 
       const [respondent] = await Promise.all(
         [
@@ -156,7 +158,6 @@ function adminSurveyService({
     if (!survey)
       throw new NotFoundError();
 
-    const { id: permissionId } = await getSurveyRespondentPermission(survey.slug);
     const { size, alphabet } = securityConfig.authTokens;
 
     const { userCustomFields, userPersonalIdentifiers } = survey;
@@ -165,6 +166,8 @@ function adminSurveyService({
     const urlTokenLength = survey.authUrlTokenLength ?? size;
 
     return db.system.transaction(async (transaction) => {
+      const { id: permissionId } = await getSurveyRespondentPermission(survey.slug, { transaction });
+
       const aliasRecords = [];
       const customFieldsRecords: UserCustomFieldCreationAttributes[] = [];
       const passwordRecords = [];

@@ -5,6 +5,7 @@ import type {
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
+  Transaction,
 } from 'sequelize';
 import {
   AfterBulkCreate,
@@ -24,10 +25,13 @@ import { aclConfig } from '@intake24/common-backend';
 import BaseModel from '../model';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 
-export async function addPermissionsToAdmin(permissions: Permission[]): Promise<void> {
-  const admin = await Role.findOne({ where: { name: aclConfig.roles.superuser } });
-  if (admin)
-    await admin.$add('permissions', permissions);
+export async function addPermissionsToAdmin(permissions: Permission[], options: { transaction?: Transaction } = {}): Promise<void> {
+  const { transaction } = options;
+  const admin = await Role.findOne({ where: { name: aclConfig.roles.superuser }, transaction });
+  if (admin) {
+    const ids = [...new Set(permissions.map(({ id }) => id))];
+    await admin.$add('permissions', ids, { transaction });
+  }
 }
 
 @Scopes(() => ({
@@ -92,13 +96,13 @@ export default class Permission extends BaseModel<
 
   // Always attach new permission(s) to main admin/superuser role
   @AfterCreate
-  static async handleAdminPermission(permission: Permission): Promise<void> {
-    await addPermissionsToAdmin([permission]);
+  static async handleAdminPermission(permission: Permission, options?: { transaction?: Transaction }): Promise<void> {
+    await addPermissionsToAdmin([permission], options);
   }
 
   @AfterBulkCreate
-  static async handleAdminPermissions(permissions: Permission[]): Promise<void> {
-    await addPermissionsToAdmin(permissions);
+  static async handleAdminPermissions(permissions: Permission[], options?: { transaction?: Transaction }): Promise<void> {
+    await addPermissionsToAdmin(permissions, options);
   }
 }
 
