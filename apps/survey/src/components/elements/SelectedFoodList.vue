@@ -8,7 +8,7 @@
           align="baseline"
           class="pa-0"
         >
-          <v-alert class="flex-md-grow-1 pa-0 ml-1" color="grey lighten-4" dense icon="$food">
+          <v-alert class="flex-grow-1 pa-0 ml-1" dense icon="$food">
             {{ step.foods[foodIndex].name }}
             <template #prepend>
               <v-icon left>

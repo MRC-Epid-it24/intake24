@@ -22,7 +22,7 @@
             <v-radio-group
               v-if="!step.required"
               v-model="step.confirmed"
-              :row="!isMobile"
+              row="true"
               @change="onConfirmToggleIngredients(index)"
             >
               <v-radio
@@ -57,7 +57,7 @@
             v-model="step.anotherFoodConfirmed"
             color="primary" dense
             :row="!isMobile"
-            @change="onConfirmToggleIngredients(index)"
+            @change="onToggleStepAddMore(index)"
           >
             <v-btn large :value="true">
               {{ $t('prompts.recipeBuilder.addMore') }}
@@ -67,25 +67,23 @@
             </v-btn>
           </v-btn-toggle>
 
-          <v-expand-transition>
-            <food-browser
-              v-if="showFoodBrowser(step)"
-              class="mt-2"
-              v-bind="{
-                localeId,
-                searchParameters,
-                stepName: translate(step.name),
-                requiredToFill: step.required,
-                rootCategory: step.categoryCode,
-                prompt,
-                section,
-              }"
-              value=""
-              @food-missing="(searchTerm) => foodMissing(index, searchTerm)"
-              @food-selected="(food) => foodSelected(index, food)"
-              @food-skipped="foodSkipped(index)"
-            />
-          </v-expand-transition>
+          <food-browser
+            v-if="showFoodBrowser(step)"
+            class="mt-2"
+            v-bind="{
+              localeId,
+              searchParameters,
+              stepName: translate(step.name),
+              requiredToFill: step.required,
+              rootCategory: step.categoryCode,
+              prompt,
+              section,
+            }"
+            value=""
+            @food-missing="(searchTerm) => foodMissing(index, searchTerm)"
+            @food-selected="(food) => foodSelected(index, food)"
+            @food-skipped="foodSkipped(index)"
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -115,8 +113,8 @@ import type {
   RecipeBuilderStepState,
   SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
-import type { RecipeBuilder } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
+import { meal, type RecipeBuilder } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import {
@@ -182,6 +180,9 @@ export default defineComponent({
   },
 
   computed: {
+    meal() {
+      return meal;
+    },
     allConfirmed(): boolean {
       return this.recipeSteps.every(step => this.isStepValid(step));
     },
@@ -293,6 +294,10 @@ export default defineComponent({
       const { recipeSteps } = this;
       this.$emit('input', { activeStep: index, recipeSteps });
       this.activeStep = index;
+    },
+
+    onToggleStepAddMore(stepIndex: number) {
+      this.goToNextIfCan(stepIndex);
     },
 
     onConfirmToggleIngredients(index: number) {
