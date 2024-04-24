@@ -4,6 +4,14 @@
       :subtitle="$t('common.login.subtitle').toString()"
       :title="$t('common._').toString()"
     >
+      <template #subtitle>
+        <div class="text-h6 text-center font-weight-medium pt-4 pb-2">
+          {{ survey?.name }}
+        </div>
+        <v-card-subtitle class="text-center font-weight-medium py-0">
+          {{ $t('common.login.subtitle').toString() }}
+        </v-card-subtitle>
+      </template>
       <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
         <v-card-text>
           <v-container>

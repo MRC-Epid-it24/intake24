@@ -5,7 +5,7 @@
       :max-width="$vuetify.breakpoint.xs ? $vuetify.breakpoint.thresholds.xs : maxWidth"
       :tile="$vuetify.breakpoint.xs"
     >
-      <div class="d-flex justify-center align-center py-4">
+      <div class="d-flex justify-center align-center pt-4">
         <slot name="logo">
           <v-avatar v-if="hasIcon" tile>
             <img alt="logo" :src="iconFile">
@@ -18,7 +18,7 @@
         </slot>
       </div>
       <slot name="subtitle">
-        <v-card-subtitle class="text-center font-weight-medium px-6 py-0">
+        <v-card-subtitle v-if="subtitle" class="text-center font-weight-medium px-6 pt-4 pb-0">
           {{ subtitle }}
         </v-card-subtitle>
       </slot>

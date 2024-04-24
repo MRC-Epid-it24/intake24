@@ -10,19 +10,19 @@ Detail tab displays selected survey info.
 
 Edit tab allows to modify selected survey.
 
-- `Survey ID` - Short and unique, ideally slug-based string. It is used as primary key in database and also forms the URL of the login / authentication links.
+- `Survey ID` - Short and unique, ideally slug-based string. It forms public URL of the login / authentication links.
 
-- `Survey name` - User friendly name for admin purposes
+- `Survey name` - User friendly name to display participant, e.g. on survey login / dashboard pages
 
-- `Locale` - Associated locale
+- `Locale` - Associated [locale](/admin/localization/locales)
 
-- `Scheme` - Associated scheme
+- `Scheme` - Associated [survey scheme](/admin/surveys/schemes)
 
 - `Start date` - Start date of the survey
 
 - `End date` - End date of the survey
 
-- `Support email` - Email associated with the survey, `help requests` are sent to this email.
+- `Support email` - Email associated with the survey. `Help requests` are sent to this email unless there are users specifically assigned with `support` permission in security tab, in which case the the `help requests` are sent to those users.
 
 - `State` - Survey state
 
@@ -30,7 +30,7 @@ Edit tab allows to modify selected survey.
   - `Active` - Respondent will be allowed to complete a recall
   - `Suspended` - Respondent won't be allowed to complete a recall
 
-- `Suspension reason` - If `Suspended` state is set, additional details can be passed on to respondent using this field..
+- `Suspension reason` - If `Suspended` state is set, additional details can be passed on to respondent using this field.
 
 ### Search options
 

@@ -142,7 +142,7 @@ export default defineComponent({
 
       try {
         await surveyService.storeRating(props.surveyId, form.value);
-        useMessages().success(i18n.t(`${props.type}.rating.sent`).toString());
+        useMessages().info(i18n.t(`${props.type}.rating.sent`).toString());
         sent.value = true;
         close();
       }
