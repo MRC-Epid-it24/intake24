@@ -19,7 +19,7 @@
       </v-btn>
     </v-toolbar>
     <v-list class="py-0" two-line>
-      <draggable v-model="items" handle=".drag-and-drop__handle">
+      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(item, index) in items"
@@ -33,7 +33,7 @@
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ translate(item.genericName) }}</v-list-item-title>
-              <v-list-item-subtitle>{{ translate(item.text.en) }} </v-list-item-subtitle>
+              <v-list-item-subtitle>{{ translate(item.text) }} </v-list-item-subtitle>
               <v-messages
                 v-if="errors.has('associatedFoods', index)"
                 color="error"

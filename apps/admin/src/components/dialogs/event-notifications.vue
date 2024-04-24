@@ -183,10 +183,6 @@ export default defineComponent({
 
     const updateProps = (idx: number) => {
       const defaults = defaultNotifications[items.value[idx].channel];
-      console.log(defaults);
-      console.log(items.value[idx].channel);
-      console.log(items.value[idx].type);
-
       items.value.splice(idx, 1, { ...defaults, type: items.value[idx].type });
     };
 
