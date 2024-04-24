@@ -198,7 +198,7 @@ export default defineComponent({
 
       try {
         await surveyService.requestHelp(surveyId, form.value);
-        useMessages().success(i18n.t('common.help.sent').toString());
+        useMessages().info(i18n.t('common.help.sent').toString());
         reset();
         close();
       }
