@@ -9,6 +9,9 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
+          <v-sheet class="text-sm-body-2">
+            {{ promptI18n.existingFoodHint }}
+          </v-sheet>
           <v-radio-group
             v-model="assocPrompt.mainFoodConfirmed"
             :row="!isMobile"
@@ -129,8 +132,10 @@
             the associated food criteria, allow to pick one of them -->
           <v-expand-transition>
             <v-card v-if="showFoodChooser(index) && availableFoods[index].length" flat>
-              <v-card-title>{{ promptI18n.existingFoodsTitle }}</v-card-title>
-              <v-card-text>
+              <v-card-title class="px-0 font-weight-regular">
+                {{ promptI18n.existingFoodsTitle }}
+              </v-card-title>
+              <v-card-text class="px-0">
                 <meal-food-chooser
                   v-if="meal"
                   :filter="(id) => availableFoods[index].includes(id)"
@@ -144,7 +149,7 @@
           <!-- Database lookup -->
           <v-expand-transition>
             <v-card v-if="showFoodChooser(index)" flat>
-              <v-card-title class="px-0">
+              <v-card-title class="px-0 font-weight-regular">
                 {{
                   availableFoods[index].length
                     ? promptI18n.databaseLookupWithExisting
@@ -245,6 +250,7 @@ export default defineComponent({
 
     const promptI18n = computed(() =>
       translatePrompt([
+        'existingFoodHint',
         'yes',
         'yesAnother',
         'no',
