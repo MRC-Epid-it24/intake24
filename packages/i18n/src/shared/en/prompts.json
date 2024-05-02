@@ -76,6 +76,7 @@
     "description": "",
     "yes": "Yes, I had some",
     "yesAnother": "Yes, I had another",
+    "existingFoodHint": "Choose 'yes' if you have already entered it",
     "no": "No, I did not",
     "moreFoodsQuestion": "Did you have any other foods from this category?",
     "databaseLookupTitle": "What was it?",
