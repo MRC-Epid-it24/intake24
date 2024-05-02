@@ -9,7 +9,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-sheet class="text-sm-body-2">
+          <v-sheet v-if="availableFoods[index].length" class="text-sm-body-2">
             {{ promptI18n.existingFoodHint }}
           </v-sheet>
           <v-radio-group
