@@ -482,6 +482,17 @@ function surveyService({
     return UserSurveyRating.create({ surveyId: survey.id, userId, ...payload });
   };
 
+  const getSearchSettings = async (slug: string) => {
+    const survey = await Survey.findBySlug(slug, { attributes: ['searchSettings'], include: ['locale'] });
+    if (!survey || !survey.locale)
+      throw new NotFoundError();
+
+    return {
+      searchSettings: survey.searchSettings,
+      localeCode: survey.locale.code,
+    };
+  };
+
   return {
     generateRespondent,
     createRespondentWithJWT,
@@ -494,6 +505,7 @@ function surveyService({
     followUp,
     requestHelp,
     storeRating,
+    getSearchSettings,
   };
 }
 

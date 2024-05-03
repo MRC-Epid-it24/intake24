@@ -291,7 +291,7 @@ export const defaults: Schema = {
   'searchSettings.minWordLength1': {
     in: ['body'],
     errorMessage: typeErrorMessage('int.minMax', { min: 2, max: 10 }),
-    isInt: { options: { min: 3, max: 10 } },
+    isInt: { options: { min: 2, max: 10 } },
     toInt: true,
     optional: true,
   },

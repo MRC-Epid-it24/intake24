@@ -1,6 +1,6 @@
 <template>
   <food-search-prompt
-    v-bind="{ discardedFoodName, food: food(), meal, localeId, searchParameters, prompt, section }"
+    v-bind="{ discardedFoodName, food: food(), meal, localeId, surveySlug, prompt, section }"
     v-model="searchTerm"
     @action="action"
     @food-missing="foodMissing"
@@ -59,7 +59,7 @@ export default defineComponent({
       }
     }
 
-    const { food, localeId, initializeRecipeComponents } = useFoodPromptUtils();
+    const { food, localeId, surveySlug, initializeRecipeComponents } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
@@ -114,6 +114,7 @@ export default defineComponent({
       food,
       meal,
       localeId,
+      surveySlug,
       foodData,
       searchParameters: survey.searchParameters,
       searchTerm,

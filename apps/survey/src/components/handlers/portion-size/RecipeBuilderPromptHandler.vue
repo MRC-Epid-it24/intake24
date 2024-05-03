@@ -4,9 +4,9 @@
     v-bind="{
       food: recipeBuilder(),
       localeId,
+      surveySlug,
       meal,
       prompt,
-      searchParameters,
       section,
     }"
     @action="action"
@@ -71,7 +71,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const survey = useSurvey();
-    const { recipeBuilder, localeId } = useFoodPromptUtils();
+    const { recipeBuilder, localeId, surveySlug } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
     const recipeFood = recipeBuilder().template;
@@ -169,7 +169,7 @@ export default defineComponent({
       meal,
       state,
       localeId,
-      searchParameters: survey.searchParameters,
+      surveySlug,
       update,
       action,
       addLinkedFood,

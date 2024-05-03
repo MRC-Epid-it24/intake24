@@ -72,7 +72,7 @@
             class="mt-2"
             v-bind="{
               localeId,
-              searchParameters,
+              surveySlug,
               stepName: translate(step.name),
               requiredToFill: step.required,
               rootCategory: step.categoryCode,
@@ -126,7 +126,6 @@ import {
 import { foodsService } from '@intake24/survey/services';
 import { getEntityId } from '@intake24/survey/util';
 
-import type { FoodSearchPromptParameters } from '../standard';
 import createBasePrompt from '../createBasePrompt';
 
 function isStepValid(step: RecipeBuilderStepState): boolean {
@@ -154,9 +153,8 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    searchParameters: {
-      type: Object as PropType<FoodSearchPromptParameters>,
-      required: true,
+    surveySlug: {
+      type: String,
     },
     value: {
       type: Object as PropType<PromptStates['recipe-builder-prompt']>,

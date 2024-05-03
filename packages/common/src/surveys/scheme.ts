@@ -174,7 +174,7 @@ export const defaultOverrides: SchemeOverrides = {
   prompts: [],
 };
 
-export type SearchSettings = {
+export type SurveySearchSettings = {
   collectData: boolean;
   matchScoreWeight: number;
   sortingAlgorithm: SearchSortingAlgorithm;
@@ -182,7 +182,7 @@ export type SearchSettings = {
   minWordLength2: number;
 };
 
-export const defaultSearchSettings: SearchSettings = {
+export const defaultSearchSettings: SurveySearchSettings = {
   collectData: true,
   matchScoreWeight: 20,
   sortingAlgorithm: 'popularity',

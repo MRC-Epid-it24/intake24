@@ -17,6 +17,7 @@ export type CacheKeyPrefix =
   | 'food-entry'
   | 'food-all-categories'
   | 'food-parent-categories'
+  | 'survey-search-settings'
   | 'user-submissions';
 export type CacheKeyDoublePrefix = 'food-entry';
 export type CacheKey =

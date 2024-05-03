@@ -5,8 +5,8 @@
       food: food(),
       meal,
       localeId,
+      surveySlug,
       prompt,
-      searchParameters,
       section,
     }"
     @action="action"
@@ -69,7 +69,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const { translate } = useI18n();
-    const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
+    const { encodedFood: food, localeId, surveySlug, meals } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
@@ -297,6 +297,7 @@ export default defineComponent({
       food,
       translate,
       localeId,
+      surveySlug,
       meal,
       meals,
       state,

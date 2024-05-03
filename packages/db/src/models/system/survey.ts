@@ -29,7 +29,7 @@ import {
   defaultOverrides,
   defaultSearchSettings,
   SchemeOverrides,
-  SearchSettings,
+  SurveySearchSettings,
   SurveyState,
 } from '@intake24/common/surveys';
 
@@ -258,12 +258,12 @@ export default class Survey extends BaseModel<
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get searchSettings(): SearchSettings {
+  get searchSettings(): SurveySearchSettings {
     const val = this.getDataValue('searchSettings') as unknown;
     return val ? JSON.parse(val as string) : defaultSearchSettings;
   }
 
-  set searchSettings(value: SearchSettings) {
+  set searchSettings(value: SurveySearchSettings) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('searchSettings', JSON.stringify(value ?? defaultSearchSettings));
   }

@@ -55,6 +55,16 @@ export const foodSearchQuery = z.object({
 
 export type FoodSearchQuery = z.infer<typeof foodSearchQuery>;
 
+export const surveyFoodSearchQuery = z.object({
+  description: z.string().max(120),
+  previous: z.string().array().optional(),
+  recipe: z.string().optional(),
+  category: z.string().optional(),
+  hidden: z.string().optional(),
+});
+
+export type SurveyFoodSearchQuery = z.infer<typeof surveyFoodSearchQuery>;
+
 export const recipeFoodResponse = z.object({
   code: z.string(),
   name: z.string(),

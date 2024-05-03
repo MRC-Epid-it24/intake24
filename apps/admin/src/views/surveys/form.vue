@@ -376,7 +376,7 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 import {
   defaultSearchSettings,
   type SchemeOverrides,
-  type SearchSettings,
+  type SurveySearchSettings,
   type SurveyState,
 } from '@intake24/common/surveys';
 import { defaultOverrides, searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
@@ -410,7 +410,7 @@ export type SurveyForm = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
-  searchSettings: SearchSettings;
+  searchSettings: SurveySearchSettings;
   surveySchemeOverrides: SchemeOverrides;
   userPersonalIdentifiers: boolean;
   userCustomFields: boolean;

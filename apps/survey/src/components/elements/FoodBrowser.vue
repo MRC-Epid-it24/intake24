@@ -89,7 +89,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/lib';
 import { watchDebounced } from '@vueuse/core';
@@ -108,7 +108,6 @@ import type {
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 
-import type { FoodSearchPromptParameters } from '../prompts';
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
 import ImagePlaceholder from './ImagePlaceholder.vue';
@@ -134,8 +133,8 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    searchParameters: {
-      type: Object as PropType<FoodSearchPromptParameters>,
+    surveySlug: {
+      type: String,
     },
     rootCategory: {
       type: String,
@@ -208,6 +207,7 @@ export default defineComponent({
 
         return last.name;
       }
+
       // add conditional browse
 
       return {
@@ -335,28 +335,31 @@ export default defineComponent({
       recipeBuilderToggle.value = false;
       recipeBuilderFoods.value = [];
       searchResults.value = { foods: [], categories: [] };
-      const { matchScoreWeight, rankingAlgorithm } = props.searchParameters ?? {};
 
       try {
-        searchResults.value = await foodsService.search(props.localeId, searchTerm.value, {
-          rankingAlgorithm,
-          matchScoreWeight,
-          recipe: false,
-          category: props.rootCategory,
-          hidden: props.includeHidden,
-        });
-        searchResults.value.foods = searchResults.value.foods.filter(
-          (food) => {
-            if (food.code.charAt(0) === '$') {
-              recipeBuilderFoods.value.push(food);
-              return false;
-            }
-            return true;
-          },
-        );
-        if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0)
-          await recipeBuilderDetected(recipeBuilderFoods.value);
-        requestFailed.value = false;
+        if (props.surveySlug !== undefined) {
+          searchResults.value = await foodsService.search(props.surveySlug, searchTerm.value, {
+            recipe: false,
+            category: props.rootCategory,
+            hidden: props.includeHidden,
+          });
+          searchResults.value.foods = searchResults.value.foods.filter(
+            (food) => {
+              if (food.code.charAt(0) === '$') {
+                recipeBuilderFoods.value.push(food);
+                return false;
+              }
+              return true;
+            },
+          );
+          if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0)
+            await recipeBuilderDetected(recipeBuilderFoods.value);
+          requestFailed.value = false;
+        }
+        else {
+          console.error('Expected survey parameters to be loaded at this point');
+          requestFailed.value = true;
+        }
       }
       catch (e) {
         requestFailed.value = true;
@@ -480,4 +483,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang='scss'></style>

@@ -176,9 +176,9 @@ async function matchRecipeFoods(
   interpretedQuery: InterpretedPhrase,
   query: SearchQuery,
 ): Promise<FoodHeader[]> {
-  const localeIndex = foodIndex[query.localeId];
+  const localeIndex = foodIndex[query.parameters.localeId];
   if (!localeIndex)
-    throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
+    throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
   const recipeFoodsTuples = localeIndex.foodIndex.recipeFoodsList;
   const recipeFoodHeaders: FoodHeader[] = [];
 
@@ -286,17 +286,17 @@ function isSubcategory(categoryCode: string, ofCategoryCode: string): boolean {
 }
 
 async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
-  const localeIndex = foodIndex[query.localeId];
+  const localeIndex = foodIndex[query.parameters.localeId];
   if (!localeIndex)
-    throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
+    throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
 
   const foodInterpretation = localeIndex.foodIndex.interpretPhrase(
-    query.description,
+    query.parameters.description,
     'match-fewer',
     'foods',
   );
   const foodInterpretedRecipeFoods = localeIndex.foodIndex.interpretPhrase(
-    query.description,
+    query.parameters.description,
     'match-fewer',
     'recipes',
   );
@@ -307,7 +307,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, 100, 100);
 
   const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
-    query.description,
+    query.parameters.description,
     'match-fewer',
     'categories',
   );
@@ -315,26 +315,26 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, 100, 100);
 
   const filteredFoods = foodResults.filter((matchResult) => {
-    const acceptHidden = query.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
+    const acceptHidden = query.parameters.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
     const acceptCategory
-      = query.limitToCategory === undefined
-      || isFoodInCategory(localeIndex, matchResult.key, query.limitToCategory);
+      = query.parameters.limitToCategory === undefined
+      || isFoodInCategory(localeIndex, matchResult.key, query.parameters.limitToCategory);
 
     return acceptHidden && acceptCategory;
   });
 
   const foods = await rankFoodResults(
     filteredFoods,
-    query.localeId,
-    query.rankingAlgorithm,
-    query.matchScoreWeight,
+    query.parameters.localeId,
+    query.parameters.rankingAlgorithm,
+    query.parameters.matchScoreWeight,
     logger,
     recipeFoodsHeaders,
   );
 
   const filteredCategories = categoryResults.filter(
     matchResult =>
-      query.limitToCategory === undefined || isSubcategory(matchResult.key, query.limitToCategory),
+      query.parameters.limitToCategory === undefined || isSubcategory(matchResult.key, query.parameters.limitToCategory),
   );
 
   const categories = rankCategoryResults(filteredCategories);
