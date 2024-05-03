@@ -32,6 +32,10 @@ Edit tab allows to modify selected locale.
 
 Locale deletion won't be permitted if there are surveys using it. User firstly needs to update the surveys to use different locale.
 
+## Recipe foods
+
+Recipe foods management
+
 ## Split lists
 
 Split list entries management

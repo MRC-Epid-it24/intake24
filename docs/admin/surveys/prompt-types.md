@@ -1,3 +1,7 @@
+---
+{ "outline": { "level": [2, 3] } }
+---
+
 # Prompt types
 
 Prompts / Prompts are divided into three groups:
@@ -161,10 +165,6 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `leftovers` - show leftovers option
 
-- `linked quantity categories`
-  - Category list of that parent food should have (at least one) to trigger quantity selection based on parent food quantity
-  - Optional, standard unit can be assigned to set the `how-many` label
-
 ### Cereal prompt
 
 #### Options
@@ -227,6 +227,12 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
   - `image map labels` - show image map labels
   - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
+- `linked quantity settings`
+  - Allows to trigger quantity selection prompt for linked parent food
+  - `Source categories to trigger` - child food's categories it should trigger on
+  - `Parent categories to link` - parent food's categories it should trigger on
+    - Optional standard unit can be assigned to set the `how-many` label
+
 ### Milk in a hot drink prompt
 
 #### Options
@@ -258,6 +264,8 @@ Calculates portion size based on parent food portion size.
 
 ### Pizza prompt
 
+First iteration for pizza estimation
+
 #### Options
 
 - `badges` - show quantity badge on expansion panel header
@@ -267,7 +275,24 @@ Calculates portion size based on parent food portion size.
   - `image map labels` - show image map labels
   - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
+### Pizza V2 prompt
+
+Second iteration for pizza estimation
+
+#### Options
+
+- `image map settings` - image map settings
+
+  - `image map labels` - show image map labels
+  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+
 ### Portion size option prompt
+
+Portion size option selection prompt
+
+### Recipe builder prompt
+
+Recipe builder prompt for foods with multiple ingredients, such as sandwiches, salads etc. Recipe foods can be defined in [locales recipe-foods](/admin/localization/locales#recipe-foods).
 
 ### Standard portion prompt
 
