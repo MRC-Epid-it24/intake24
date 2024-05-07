@@ -14,7 +14,7 @@ import { FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
 import { securableController } from '../securable.controller';
 
 function localeController(ioc: IoC) {
-  const { localeService } = ioc;
+  const { cache, localeService } = ioc;
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
@@ -71,6 +71,9 @@ function localeController(ioc: IoC) {
       SystemLocale.create({ ...input, ownerId: userId }),
       FoodsLocale.create(foodsInput),
     ]);
+
+    if (input.foodIndexEnabled)
+      await cache.push('indexing-locales', locale.id);
 
     res.status(201).json(localeResponse(locale));
   };
@@ -158,7 +161,11 @@ function localeController(ioc: IoC) {
       'visibility',
     ]);
 
+    if (req.body.foodIndexEnabled && !systemLocale.foodIndexEnabled)
+      await cache.push('indexing-locales', localeId);
+
     await Promise.all([systemLocale.update(input), foodsLocale.update(input)]);
+
     await systemLocale.reload();
 
     res.json(localeResponse(systemLocale));
