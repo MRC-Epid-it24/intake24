@@ -28,19 +28,19 @@ export type MealCreationState = Optional<
   'flags' | 'time' | 'duration' | 'flags'
 >;
 
-export const selectMeal = z.object({
+export const selectedMeal = z.object({
   type: z.literal('meal'),
   mealId: z.string(),
 });
 
-export type SelectedMeal = z.infer<typeof selectMeal>;
+export type SelectedMeal = z.infer<typeof selectedMeal>;
 
-export const selectFood = z.object({
+export const selectedFood = z.object({
   type: z.literal('food'),
   foodId: z.string(),
 });
 
-export type SelectedFood = z.infer<typeof selectFood>;
+export type SelectedFood = z.infer<typeof selectedFood>;
 
 export const selectionModes = ['manual', 'auto'] as const;
 export const selectionMode = z.enum(selectionModes);
@@ -48,7 +48,7 @@ export const selectionMode = z.enum(selectionModes);
 export type SelectionMode = (typeof selectionModes)[number];
 
 export const selection = z.object({
-  element: z.union([z.null(), selectMeal, selectFood]),
+  element: z.union([z.null(), selectedMeal, selectedFood]),
   mode: selectionMode,
 });
 

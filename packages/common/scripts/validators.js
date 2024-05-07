@@ -42,19 +42,6 @@ const validators = [
     destFile: 'src/validators/images/image-map-objects.validator.ts',
     params: '--useNamedExport',
   },
-  // Nutrient tables
-  {
-    type: 'NutrientTableCsvMappingFieldsInput',
-    srcFile: 'src/types/http/admin/nutrient-tables.ts',
-    destFile: 'src/validators/nutrient-tables/csv-mapping-fields.validator.ts',
-    params: '--useNamedExport',
-  },
-  {
-    type: 'NutrientTableCsvMappingNutrientsInput',
-    srcFile: 'src/types/http/admin/nutrient-tables.ts',
-    destFile: 'src/validators/nutrient-tables/csv-mapping-nutrients.validator.ts',
-    params: '--useNamedExport',
-  },
 ];
 
 (async () => {

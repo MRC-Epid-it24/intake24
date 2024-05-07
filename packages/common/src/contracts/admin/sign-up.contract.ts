@@ -16,7 +16,7 @@ export const signUp = initContract().router({
     }),
     body: strongPasswordWithConfirm
       .extend({
-        email: z.string().email().toLowerCase(),
+        email: z.string().max(512).email().toLowerCase(),
         emailConfirm: z.string().email().toLowerCase(),
         name: z.string().min(3).max(512),
         phone: z.string().max(32).nullish(),
