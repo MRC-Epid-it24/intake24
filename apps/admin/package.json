@@ -41,7 +41,7 @@
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "pluralize": "^8.0.0",
-    "tinymce": "^6.8.3",
+    "tinymce": "^7.0.0",
     "vanilla-jsoneditor": "^0.23.3",
     "vue": "^2.7.16",
     "vue-gtag": "^1.16.1",
