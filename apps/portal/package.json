@@ -54,7 +54,7 @@
     "resolve-url-loader": "^5.0.0",
     "rimraf": "^5.0.5",
     "sass": "^1.75.0",
-    "supertest": "^6.3.4",
+    "supertest": "^7.0.0",
     "ts-loader": "^9.5.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.4.5",
