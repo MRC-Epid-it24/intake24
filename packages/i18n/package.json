@@ -16,14 +16,14 @@
   },
   "scripts": {},
   "dependencies": {
-    "dompurify": "^3.1.0",
+    "dompurify": "^3.1.2",
     "lodash": "^4.17.21",
     "vue": "^2.7.16",
     "vue-i18n": "^8.28.2"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.1",
     "typescript": "^5.4.5"
   },
   "bundledDependencies": [

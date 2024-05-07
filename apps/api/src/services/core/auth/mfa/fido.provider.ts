@@ -7,6 +7,7 @@ import {
   verifyAuthenticationResponse,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server';
+import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { FIDOAuthChallenge } from '@intake24/common/security';
@@ -53,13 +54,12 @@ function fidoProvider({
     return generateRegistrationOptions({
       rpName: issuer,
       rpID,
-      userID,
+      userID: isoUint8Array.fromUTF8String(userID),
       userName: userName ?? userID,
       userDisplayName: userDisplayName ?? userName ?? userID,
       attestationType: 'none',
       excludeCredentials: authenticators.map(authenticator => ({
-        id: authenticator.getIdBuffer(),
-        type: 'public-key',
+        id: isoBase64URL.fromBuffer(authenticator.getIdBuffer()),
         transports: authenticator.transports,
       })),
     });
@@ -88,7 +88,7 @@ function fidoProvider({
 
       await MFAAuthenticator.create(
         {
-          id: Buffer.from(registrationInfo.credentialID).toString('base64url'),
+          id: registrationInfo.credentialID,
           deviceId: device.id,
           publicKey: credentialPublicKey,
           counter: counter.toString(),
@@ -114,9 +114,9 @@ function fidoProvider({
       throw new Error('No FIDO authenticator found.');
 
     const options = await generateAuthenticationOptions({
+      rpID,
       allowCredentials: [device.authenticator].map(authenticator => ({
-        id: authenticator.getIdBuffer(),
-        type: 'public-key',
+        id: isoBase64URL.fromBuffer(authenticator.getIdBuffer()),
         transports: authenticator.transports,
       })),
       userVerification: 'preferred',
@@ -140,7 +140,7 @@ function fidoProvider({
       expectedOrigin: origin,
       expectedRPID: rpID,
       authenticator: {
-        credentialID: authenticator.getIdBuffer(),
+        credentialID: isoBase64URL.fromBuffer(authenticator.getIdBuffer()),
         credentialPublicKey: authenticator.publicKey,
         counter: Number.parseInt(authenticator.counter, 10),
         transports: authenticator.transports,
