@@ -3818,7 +3818,7 @@
                     "parameters": {
                       "type": "object",
                       "additionalProperties": {
-                        "nullable": true
+                        "readOnly": true
                       }
                     },
                     "imageUrl": {
@@ -10435,6 +10435,7 @@
                   },
                   "email": {
                     "type": "string",
+                    "maxLength": 512,
                     "format": "email"
                   },
                   "emailConfirm": {
