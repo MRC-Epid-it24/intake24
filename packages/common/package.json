@@ -37,7 +37,7 @@
     "zod": "^3.23.4"
   },
   "devDependencies": {
-    "@simplewebauthn/types": "^9.0.1",
+    "@simplewebauthn/types": "^10.0.0",
     "@types/dompurify": "^3.0.5",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.0",

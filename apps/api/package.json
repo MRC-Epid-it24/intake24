@@ -92,7 +92,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@simplewebauthn/types": "^9.0.1",
+    "@simplewebauthn/types": "^10.0.0",
     "@types/body-parser": "^1.19.5",
     "@types/clean-css": "^4.2.11",
     "@types/cookie-parser": "^1.4.7",
