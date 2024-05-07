@@ -7,9 +7,10 @@
 
 <script lang="ts">
 import 'tinymce/tinymce';
-import 'tinymce/icons/default';
-import 'tinymce/themes/silver';
-import 'tinymce/models/dom';
+import 'tinymce/icons/default/icons.min.js';
+import 'tinymce/themes/silver/theme.min.js';
+import 'tinymce/models/dom/model.min.js';
+import 'tinymce/skins/ui/oxide/skin.js';
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/autolink';
 import 'tinymce/plugins/code';
@@ -20,10 +21,11 @@ import 'tinymce/plugins/lists';
 import 'tinymce/plugins/media';
 import 'tinymce/plugins/preview';
 import 'tinymce/plugins/table';
+import 'tinymce/skins/content/default/content.js';
+import 'tinymce/skins/ui/oxide/content.js';
 
 import type { PropType } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
-import trimEnd from 'lodash/trimEnd';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -48,13 +50,11 @@ export default defineComponent({
   emits: ['input'],
 
   data() {
-    const baseUrl = trimEnd(import.meta.env.VITE_APP_BASE_URL ?? '', '/');
-
     return {
       tinymceDefaults: {
-        skin_url: `${baseUrl}/css/tinymce/ui/oxide`,
-        // TODO: this should point to frontend stylesheet
-        content_css: `${baseUrl}/css/tinymce/content/default/content.min.css`,
+        license_key: 'gpl',
+        skin_url: 'default',
+        content_css: 'default',
         directionality: this.$vuetify.rtl ? 'rtl' : 'ltr',
         default_link_target: '_blank',
         height: 400,
