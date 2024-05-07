@@ -3,23 +3,28 @@ import path from 'node:path';
 import type { Job } from 'bullmq';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
+import { z } from 'zod';
+import { fromError } from 'zod-validation-error';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { CustomField } from '@intake24/common/types';
+import { strongPassword } from '@intake24/common/schemas';
 import { User, UserSurveyAlias } from '@intake24/db';
 
 import StreamLockJob from '../stream-lock-job';
 
-export type CSVRow = {
-  username: string;
-  password: string;
-  name?: string;
-  email?: string;
-  phone?: string;
-  [key: string]: string | undefined;
-};
+const csvRow = z.intersection(
+  z.object({
+    username: z.string().min(1).max(256),
+    password: strongPassword,
+    name: z.string().max(512).optional().transform(val => val || undefined),
+    email: z.string().max(512).email().optional().transform(val => val?.toLowerCase() || undefined),
+    phone: z.string().max(32).optional().transform(val => val || undefined),
+  }),
+  z.record(z.string().transform(val => val || undefined)),
+);
 
-const requiredFields = ['username', 'password'];
+export type CSVRow = z.infer<typeof csvRow>;
 
 export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespondentsImport'> {
   readonly name = 'SurveyRespondentsImport';
@@ -121,13 +126,11 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
 
     this.lock();
 
-    const csvFields = Object.keys(this.content[0]);
+    const result = csvRow.array().safeParse(this.content);
+    if (!result.success)
+      throw fromError(result.error);
 
-    // Check for presence of required fields
-    if (requiredFields.some(field => !csvFields.includes(field)))
-      throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
-
-    const username = this.content.map(item => item.username);
+    const username = result.data.map(item => item.username);
     const { surveyId } = this.params;
 
     // Check for unique aliases within survey
@@ -141,7 +144,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
     }
 
     // Check for unique emails within system
-    const email = this.content.filter(item => item.email).map(item => item.email) as string[];
+    const email = result.data.filter(item => item.email).map(item => item.email) as string[];
     if (email.length) {
       const users = await User.findAll({ attributes: ['email'], where: { email } });
 

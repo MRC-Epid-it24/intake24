@@ -242,14 +242,14 @@ This needs to be run if object structure changes, so all database records are sy
 
 **Available columns**
 
-| Column   | Description | Record          |
-| -------- | ----------- | --------------- |
-| username | Required    | UserSurveyAlias |
-| password | Required    | UserPassword    |
-| name     | Optional    | User            |
-| email    | Optional    | User            |
-| phone    | Optional    | User            |
-| \*       | Optional    | UserCustomField |
+| Column   | Description | Record          | Note                                                       |
+| -------- | ----------- | --------------- | ---------------------------------------------------------- |
+| username | Required    | UserSurveyAlias | Unique respondent identifier                               |
+| password | Required    | UserPassword    | Min 10 chars length, including lower/upper-case and number |
+| name     | Optional    | User            | Optional user's name for personalization                   |
+| email    | Optional    | User            |                                                            |
+| phone    | Optional    | User            |                                                            |
+| \*       | Optional    | UserCustomField |                                                            |
 
 :::tip User custom fields
 Any additional column not listed above, will get stored as `UserCustomField` record, which is `key` -> `value` record in database table.

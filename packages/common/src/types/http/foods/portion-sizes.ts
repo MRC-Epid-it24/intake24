@@ -84,7 +84,7 @@ export type StandardUnitResponse = z.infer<typeof standardUnitResponse>;
 export const weightResponse = z.object({
   method: z.literal('weight'),
   description: z.string(),
-  parameters: z.record(z.any()),
+  parameters: z.record(z.never()),
   imageUrl: z.string(),
   useForRecipes: z.boolean(),
   conversionFactor: z.number(),
