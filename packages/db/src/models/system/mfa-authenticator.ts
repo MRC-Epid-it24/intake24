@@ -87,10 +87,6 @@ export default class MFAAuthenticator extends BaseModel<
 
   @BelongsTo(() => MFADevice, 'deviceId')
   declare device?: NonAttribute<MFADevice>;
-
-  getIdBuffer(): Buffer {
-    return Buffer.from(this.id, 'base64url');
-  }
 }
 
 export type MFAAuthenticatorAttributes = Attributes<MFAAuthenticator>;

@@ -7,7 +7,7 @@ import {
   verifyAuthenticationResponse,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server';
-import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers';
+import { isoUint8Array } from '@simplewebauthn/server/helpers';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { FIDOAuthChallenge } from '@intake24/common/security';
@@ -59,7 +59,7 @@ function fidoProvider({
       userDisplayName: userDisplayName ?? userName ?? userID,
       attestationType: 'none',
       excludeCredentials: authenticators.map(authenticator => ({
-        id: isoBase64URL.fromBuffer(authenticator.getIdBuffer()),
+        id: authenticator.id,
         transports: authenticator.transports,
       })),
     });
@@ -116,7 +116,7 @@ function fidoProvider({
     const options = await generateAuthenticationOptions({
       rpID,
       allowCredentials: [device.authenticator].map(authenticator => ({
-        id: isoBase64URL.fromBuffer(authenticator.getIdBuffer()),
+        id: authenticator.id,
         transports: authenticator.transports,
       })),
       userVerification: 'preferred',
@@ -140,7 +140,7 @@ function fidoProvider({
       expectedOrigin: origin,
       expectedRPID: rpID,
       authenticator: {
-        credentialID: isoBase64URL.fromBuffer(authenticator.getIdBuffer()),
+        credentialID: authenticator.id,
         credentialPublicKey: authenticator.publicKey,
         counter: Number.parseInt(authenticator.counter, 10),
         transports: authenticator.transports,
