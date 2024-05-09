@@ -9,13 +9,13 @@
       <v-container>
         <v-row>
           <v-col
-            v-for="(availableMethod, index) in availableMethods"
-            :key="index"
+            v-for="(availableMethod) in availableMethods"
+            :key="availableMethod.index"
             cols="12"
             md="4"
             sm="6"
           >
-            <v-item v-slot="{ active, toggle }">
+            <v-item v-slot="{ active, toggle }" :value="availableMethod.index">
               <v-card
                 border-color="secondary"
                 class="d-flex flex-column justify-space-between"
@@ -32,7 +32,7 @@
                 >
                   <v-chip
                     class="font-weight-medium px-4"
-                    :color="option === index ? 'info' : 'primary'"
+                    :color="option === availableMethod.index ? 'info' : 'primary'"
                   >
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>
@@ -68,7 +68,7 @@ export default defineComponent({
 
   props: {
     availableMethods: {
-      type: Array as PropType<UserPortionSizeMethod[]>,
+      type: Array as PropType<(UserPortionSizeMethod & { index: number })[]>,
       required: true,
     },
   },
