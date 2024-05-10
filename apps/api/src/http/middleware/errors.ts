@@ -1,5 +1,7 @@
 import type { Express, NextFunction, Request, Response } from 'express';
 import { MulterError } from 'multer';
+import { ZodError } from 'zod';
+import { fromZodError } from 'zod-validation-error';
 
 import type { Ops } from '@intake24/api/app';
 import { IndexNotReadyError } from '@intake24/api/food-index';
@@ -64,6 +66,16 @@ export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ValidationError) {
       const { errors, message } = err;
+      res.status(400).json({ errors, message });
+      return;
+    }
+    next(err);
+  });
+
+  // TODO: format should be unified with express-validator format
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof ZodError) {
+      const { details: errors, message } = fromZodError(err);
       res.status(400).json({ errors, message });
       return;
     }
