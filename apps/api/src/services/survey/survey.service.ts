@@ -13,7 +13,7 @@ import type {
   SurveyUserInfoResponse,
 } from '@intake24/common/types/http';
 import type { FindOptions, Includeable, SubmissionScope } from '@intake24/db';
-import { ApplicationError, ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
 import { strongPassword } from '@intake24/common/schemas';
 import { randomString } from '@intake24/common/util';
@@ -140,7 +140,7 @@ function surveyService({
     }
     catch (err) {
       if (err instanceof ZodError)
-        throw new ApplicationError('Malformed token payload');
+        throw err;
 
       throw new ForbiddenError(err instanceof Error ? err.message : undefined);
     }
