@@ -6,7 +6,7 @@ import slugify from 'slugify';
 import type {
   CreateLanguageRequest,
   CreateLocaleRequest,
-  CreateRespondentRequest,
+  CreateRespondentInput,
   CreateSurveyRequest,
   CreateUserRequest,
   PermissionRequest,
@@ -85,7 +85,7 @@ function user(): CreateUserRequest {
   };
 }
 
-function respondent(): CreateRespondentRequest {
+function respondent(): CreateRespondentInput {
   const username = faker.internet.userName();
   const name = faker.person.firstName();
   const email = faker.internet.email();

@@ -244,8 +244,8 @@ This needs to be run if object structure changes, so all database records are sy
 
 | Column   | Description | Record          | Note                                                       |
 | -------- | ----------- | --------------- | ---------------------------------------------------------- |
-| username | Required    | UserSurveyAlias | Unique respondent identifier                               |
-| password | Required    | UserPassword    | Min 10 chars length, including lower/upper-case and number |
+| username | Required    | UserSurveyAlias | Unique survey respondent identifier                        |
+| password | Optional    | UserPassword    | Min 10 chars length, including lower/upper-case and number |
 | name     | Optional    | User            | Optional user's name for personalization                   |
 | email    | Optional    | User            |                                                            |
 | phone    | Optional    | User            |                                                            |

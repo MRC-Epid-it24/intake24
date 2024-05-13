@@ -122,6 +122,17 @@ export const password: Schema = {
   },
 };
 
+export const passwordOptional: Schema = {
+  password: {
+    ...password.password,
+    optional: { options: { nullable: true } },
+  },
+  passwordConfirm: {
+    ...password.passwordConfirm,
+    optional: { options: { nullable: true } },
+  },
+};
+
 export const user: Schema = {
   permissions,
   roles,

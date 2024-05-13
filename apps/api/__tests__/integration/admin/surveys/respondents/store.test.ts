@@ -3,11 +3,11 @@ import request from 'supertest';
 
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import type { CustomField } from '@intake24/common/types';
-import type { CreateRespondentRequest } from '@intake24/common/types/http/admin';
+import type { CreateRespondentInput } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-async function assertRespondentResponse(url: string, input: CreateRespondentRequest, output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>) {
+async function assertRespondentResponse(url: string, input: CreateRespondentInput, output: Omit<CreateRespondentInput, 'password' | 'passwordConfirm'>) {
   const { status, body } = await request(suite.app)
     .post(url)
     .set('Accept', 'application/json')
@@ -42,8 +42,8 @@ export default () => {
 
   let survey: Survey;
 
-  let input: CreateRespondentRequest;
-  let output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>;
+  let input: CreateRespondentInput;
+  let output: Omit<CreateRespondentInput, 'password' | 'passwordConfirm'>;
 
   let securable: SetSecurableOptions;
 
@@ -84,11 +84,7 @@ export default () => {
     });
 
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, [
-        'username',
-        'password',
-        'passwordConfirm',
-      ]);
+      await suite.sharedTests.assertInvalidInput('post', url, ['username']);
     });
 
     it('should return 400 for invalid input data', async () => {

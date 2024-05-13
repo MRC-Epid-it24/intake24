@@ -8,7 +8,7 @@ import { fromError } from 'zod-validation-error';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { CustomField } from '@intake24/common/types';
-import { strongPassword } from '@intake24/common/schemas';
+import { strongPasswordOptional } from '@intake24/common/schemas';
 import { User, UserSurveyAlias } from '@intake24/db';
 
 import StreamLockJob from '../stream-lock-job';
@@ -16,7 +16,7 @@ import StreamLockJob from '../stream-lock-job';
 const csvRow = z.intersection(
   z.object({
     username: z.string().min(1).max(256),
-    password: strongPassword,
+    password: strongPasswordOptional.transform(val => val || undefined),
     name: z.string().max(512).optional().transform(val => val || undefined),
     email: z.string().max(512).email().optional().transform(val => val?.toLowerCase() || undefined),
     phone: z.string().max(32).optional().transform(val => val || undefined),
