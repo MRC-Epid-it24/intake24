@@ -41,8 +41,10 @@
     "collectData": "Collect search data",
     "sorting": "Sorting",
     "spellingCorrection": "Spelling correction",
-    "sortingAlgorithm": "Sorting algorithm",
-    "matchScoreWeight": "Match score weight",
+    "sortingAlgorithm": "Food ordering method",
+    "matchScoreWeight": "Sorting preference",
+    "foodOrdering": "Food ordering",
+    "matchQuality": "Match quality",
     "enableEditDistance": "Use edit distance spelling correction",
     "minWordLength1": "Minimum word length for 1 spelling correction",
     "minWordLength2": "Minimum word length for 2 spelling corrections",
@@ -61,7 +63,7 @@
       "fixed": "Predetermined order"
     },
     "information": {
-      "matchScoreWeight": {
+      "matchScoreWeightInfo": {
         "title": "Match score weight",
         "text": "bla bla bla"
       }

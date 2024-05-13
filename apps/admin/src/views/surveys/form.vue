@@ -118,33 +118,57 @@
               <div class="text-h6 mb-6 underline">
                 {{ $t('surveys.search.sorting') }}
               </div>
+              <div class="mt-4">
+                <v-icon
+                  @click="showInformationPopup('matchScoreWeightInfo')"
+                >
+                  fa-circle-question
+                </v-icon>
+                <v-label class="ml-2">
+                  {{ $t('surveys.search.sortingAlgorithm') }}
+                </v-label>
+              </div>
               <v-select
                 v-model="form.searchSettings.sortingAlgorithm"
+                class="mt-2"
                 dense
                 :error-messages="form.errors.get('searchSettings.sortingAlgorithm')"
                 hide-details="auto"
                 :items="searchSortingAlgorithms"
-                :label="$t('surveys.search.sortingAlgorithm')"
                 name="searchSortingAlgorithm"
                 outlined
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
                 @change="form.errors.clear('searchSettings.sortingAlgorithm')"
               />
+              <div class="mt-4">
+                <v-icon
+                  @click="showInformationPopup('matchScoreWeightInfo')"
+                >
+                  fa-circle-question
+                </v-icon>
+                <v-label class="ml-2">
+                  {{ $t('surveys.search.matchScoreWeight') }}
+                </v-label>
+              </div>
               <v-slider
                 v-model.number="form.searchSettings.matchScoreWeight"
-                class="mt-10"
                 :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
                 hide-details="auto"
-                :label="$t('surveys.search.matchScoreWeight')"
                 max="100"
                 min="0"
                 name="searchMatchScoreWeight"
-                prepend-icon="fa-circle-question"
-                thumb-label="always"
-                @click:prepend="showInformationPopup('match-score-weight')"
-              />
+                step="1"
+                thumb-label
+              >
+                <template #prepend>
+                  <v-subheader>{{ $t('surveys.search.foodOrdering') }}</v-subheader>
+                </template>
+                <template #append>
+                  <v-subheader>{{ $t('surveys.search.matchQuality') }}</v-subheader>
+                </template>
+              </v-slider>
               <v-slider
-                v-model.number="form.searchSettings.matchScoreWeight"
+                v-model.number="form.searchSettings.orderCost"
                 class="mt-7"
                 :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
                 hide-details="auto"
@@ -156,7 +180,7 @@
                 thumb-label="always"
               />
               <v-slider
-                v-model.number="form.searchSettings.matchScoreWeight"
+                v-model.number="form.searchSettings.distanceCost"
                 class="mt-7"
                 :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
                 hide-details="auto"
@@ -235,6 +259,7 @@
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
                 @change="form.errors.clear('searchSettings.spellingCorrectionPreference')"
               />
+              <information-popup v-if="infoComponentType" :component-type="`${infoComponentType}`" :open="infoPopupOpen" :title="$t(`surveys.search.information.${infoComponentType}.title`)" @close="hideInformationPopup" />
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
               <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
@@ -441,11 +466,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { EventNotifications, SelectResource } from '@intake24/admin/components/dialogs';
+import InformationPopup from '@intake24/admin/components/dialogs/information-popup.vue';
 import { formMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -526,25 +552,35 @@ export const surveyForm: SurveyForm = {
   userCustomFields: false,
 };
 
-type InformationPopupType = 'match-score-weight' | 'order-cost' | 'distance-cost';
-
 export default defineComponent({
   name: 'SurveyForm',
 
-  components: { DatePicker, EventNotifications, SelectResource },
+  components: { InformationPopup, DatePicker, EventNotifications, SelectResource },
 
   mixins: [formMixin],
 
   setup(props) {
     const { entry, entryLoaded, isEdit } = useEntry<SurveyEntry>(props);
+
+    const infoComponentType = ref(undefined as string | undefined);
+    const infoPopupOpen = ref(false);
+
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
       data: surveyForm,
       editMethod: 'patch',
     });
 
-    const showInformationPopup = (_type: InformationPopupType) => {
+    const showInformationPopup = (type: string) => {
+      infoComponentType.value = `${type}`;
+      infoPopupOpen.value = true;
     };
+
+    const hideInformationPopup = () => {
+      infoPopupOpen.value = false;
+    };
+
+    const matchScoreWeightTickLabels = ['Sorting data', 'Match score'];
 
     return {
       entry,
@@ -555,6 +591,10 @@ export default defineComponent({
       routeLeave,
       submit,
       showInformationPopup,
+      hideInformationPopup,
+      infoComponentType,
+      infoPopupOpen,
+      matchScoreWeightTickLabels,
     };
   },
 
