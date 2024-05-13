@@ -10,6 +10,19 @@ export const strongPassword = z.string().refine(val =>
     minSymbols: 0,
   }), { message: 'Weak password' });
 
+export const strongPasswordOptional = z.string().optional().refine((val) => {
+  if (!val)
+    return true;
+
+  return isStrongPassword(val, {
+    minLength: 10,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 0,
+  });
+}, { message: 'Weak password' });
+
 export const strongPasswordWithConfirm = z.object({
   password: z.string().refine(val =>
     isStrongPassword(val, {

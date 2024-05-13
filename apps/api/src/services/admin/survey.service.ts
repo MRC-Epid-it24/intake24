@@ -4,7 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
   CreateRespondentInput,
-  UpdateRespondentInput,
+  RespondentInput,
 } from '@intake24/common/types/http/admin';
 import type { Job, UserCustomFieldCreationAttributes } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
@@ -120,7 +120,7 @@ function adminSurveyService({
             { transaction },
           ),
           user.$add('permissions', surveyRespondentPermission, { transaction }),
-          adminUserService.createPassword({ userId, password }, transaction),
+          adminUserService.createPassword({ userId, password: password ?? randomString(12) }, transaction),
           userCustomFields && customFields?.length
             ? UserCustomField.bulkCreate(
               customFields.map(field => ({ ...field, userId })),
@@ -194,7 +194,7 @@ function adminSurveyService({
           username,
           urlAuthToken: randomString(urlTokenLength, urlTokenCharset),
         });
-        passwordRecords.push({ userId, password });
+        passwordRecords.push({ userId, password: password ?? randomString(12) });
         permissionRecords.push({ userId, permissionId });
       }
 
@@ -214,13 +214,13 @@ function adminSurveyService({
    *
    * @param {string} surveyId
    * @param {string} username
-   * @param {UpdateRespondentInput} input
+   * @param {RespondentInput} input
    * @returns {Promise<UserSurveyAlias>}
    */
   const updateRespondent = async (
     surveyId: string,
     username: string,
-    input: UpdateRespondentInput,
+    input: RespondentInput,
   ): Promise<UserSurveyAlias> => {
     const [survey, alias] = await Promise.all([
       Survey.findByPk(surveyId, {

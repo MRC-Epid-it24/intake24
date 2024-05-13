@@ -118,7 +118,7 @@ function surveyService({
       const { name, password, username, redirectUrl } = z
         .object({
           username: z.string().min(1).max(256),
-          password: strongPassword.optional().transform(val => val ?? randomString(12)),
+          password: strongPassword.optional(),
           redirectUrl: z.string().url().optional(),
           name: z.string().max(512).optional().transform(val => val || undefined),
         })

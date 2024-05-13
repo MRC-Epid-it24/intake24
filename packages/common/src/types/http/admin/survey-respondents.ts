@@ -21,25 +21,14 @@ export interface SurveyRespondentListEntry
 export type SurveyRespondentsResponse = Pagination<SurveyRespondentListEntry>;
 
 export type RespondentInput = {
-  name?: string;
-  email?: string;
-  phone?: string;
+  password?: string | null;
+  passwordConfirm?: string | null;
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
   customFields?: CustomField[];
 };
 
 export interface CreateRespondentInput extends RespondentInput {
   username: string;
-  password: string;
-}
-
-export interface CreateRespondentRequest extends CreateRespondentInput {
-  passwordConfirm: string;
-}
-
-export interface UpdateRespondentInput extends RespondentInput {
-  password?: string;
-}
-
-export interface UpdateRespondentRequest extends UpdateRespondentInput {
-  passwordConfirm?: string;
 }

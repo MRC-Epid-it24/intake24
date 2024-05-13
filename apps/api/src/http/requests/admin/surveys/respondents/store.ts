@@ -8,12 +8,12 @@ import {
 } from '@intake24/api/http/requests/util';
 import { UserSurveyAlias } from '@intake24/db';
 
-import { identifiers, password } from '../../users/defaults';
+import { identifiers, passwordOptional } from '../../users/defaults';
 
 export default validate(
   checkSchema({
     ...identifiers,
-    ...password,
+    ...passwordOptional,
     username: {
       in: ['body'],
       errorMessage: typeErrorMessage('string.max', { max: 256 }),
