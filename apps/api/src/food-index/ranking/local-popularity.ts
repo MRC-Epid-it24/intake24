@@ -32,6 +32,7 @@ export async function getLocalPopularityRanking(
 
     rows.forEach((row) => {
       ranking[row.foodCode] = row.occurrences;
+      ranking[row.foodCode] = row.occurrences * row.multiplier;
     });
   }
 
