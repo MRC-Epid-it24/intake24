@@ -39,15 +39,32 @@
   "search": {
     "_": "Search options",
     "collectData": "Collect search data",
+    "sorting": "Sorting",
+    "spellingCorrection": "Spelling correction",
     "sortingAlgorithm": "Sorting algorithm",
     "matchScoreWeight": "Match score weight",
-    "searchMinWordLength1": "Minimum word length for 1 spelling correction",
-    "searchMinWordLength2": "Minimum word length for 2 spelling corrections",
+    "enableEditDistance": "Use edit distance spelling correction",
+    "minWordLength1": "Minimum word length for 1 spelling correction",
+    "minWordLength2": "Minimum word length for 2 spelling corrections",
+    "enablePhonetic": "Use phonetic spelling correction",
+    "minWordLengthPhonetic": "Minimum word length for phonetic spelling correction",
+    "spellingCorrectionPreference": "Preferred spelling correction method",
+    "spellingCorrectionOptions": {
+      "phonetic": "Phonetic",
+      "edit-distance": "Edit distance",
+      "both": "Both"
+    },
     "algorithms": {
       "paRules": "Pairwise associations (machine learning)",
       "popularity": "Popularity (reporting frequency)",
       "globalPop": "Global popularity (reporting frequency)",
       "fixed": "Predetermined order"
+    },
+    "information": {
+      "matchScoreWeight": {
+        "title": "Match score weight",
+        "text": "bla bla bla"
+      }
     }
   },
   "submissionLimits": {

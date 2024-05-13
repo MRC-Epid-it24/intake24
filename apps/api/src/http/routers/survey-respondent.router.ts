@@ -30,7 +30,7 @@ export function surveyRespondent() {
   });
   const cache = ioc.cradle.cache;
   const surveyService = ioc.cradle.surveyService;
-  const surveySettingsCacheTTLSeconds = 120;
+  const surveySettingsCacheTTLSeconds = 0;
 
   return initServer().router(contract.surveyRespondent, {
     parameters: async ({ params }) => {

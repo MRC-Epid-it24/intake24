@@ -174,18 +174,30 @@ export const defaultOverrides: SchemeOverrides = {
   prompts: [],
 };
 
+export const spellingCorrectionPreferenceOptions = ['phonetic', 'edit-distance', 'both'] as const;
+
+export type SpellingCorrectionPreference = typeof spellingCorrectionPreferenceOptions[number];
+
 export type SurveySearchSettings = {
   collectData: boolean;
   matchScoreWeight: number;
   sortingAlgorithm: SearchSortingAlgorithm;
+  spellingCorrectionPreference: SpellingCorrectionPreference;
   minWordLength1: number;
   minWordLength2: number;
+  enableEditDistance: boolean;
+  enablePhonetic: boolean;
+  minWordLengthPhonetic: number;
 };
 
 export const defaultSearchSettings: SurveySearchSettings = {
   collectData: true,
   matchScoreWeight: 20,
   sortingAlgorithm: 'popularity',
+  spellingCorrectionPreference: 'phonetic',
   minWordLength1: 3,
   minWordLength2: 6,
+  enableEditDistance: true,
+  enablePhonetic: true,
+  minWordLengthPhonetic: 3,
 };

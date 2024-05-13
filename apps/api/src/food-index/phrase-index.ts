@@ -1,6 +1,6 @@
 import type {
   DictionaryType,
-  MatchStrategy,
+  MatchParameters,
   PhoneticEncoder,
 } from '@intake24/api/food-index/dictionary';
 import type { RecipeFoodsHeader } from '@intake24/common/types';
@@ -98,7 +98,7 @@ export class PhraseIndex<K> {
 
   interpretPhrase(
     phrase: string,
-    strategy: MatchStrategy,
+    matchParameters: MatchParameters,
     dictionaryType: DictionaryType = 'foods',
   ): InterpretedPhrase {
     const words = this.getWordList(phrase).slice(0, MAX_WORDS_PER_PHRASE);
@@ -109,13 +109,13 @@ export class PhraseIndex<K> {
       case 'foods':
       case 'categories':
         interpretedWords = words
-          .map(w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
+          .map(w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, matchParameters))
           .filter(w => w.interpretations.length > 0);
         break;
       case 'recipes':
         interpretedWords = words
           .map(w =>
-            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy),
+            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, matchParameters),
           )
           .filter(w => w.interpretations.length > 0);
         break;
