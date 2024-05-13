@@ -15,7 +15,6 @@ import type {
 import type { FindOptions, Includeable, SubmissionScope } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
-import { strongPassword } from '@intake24/common/schemas';
 import { randomString } from '@intake24/common/util';
 import {
   GenUserCounter,
@@ -118,7 +117,9 @@ function surveyService({
       const { name, password, username, redirectUrl } = z
         .object({
           username: z.string().min(1).max(256),
-          password: strongPassword.optional(),
+          // password: strongPassword.optional(),
+          // TODO: revert to strong password policy once survey can adopt
+          password: z.string().min(6).optional(),
           redirectUrl: z.string().url().optional(),
           name: z.string().max(512).optional().transform(val => val || undefined),
         })
