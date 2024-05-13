@@ -31,7 +31,7 @@ export async function getLocalPopularityRanking(
     cache.mset(newCacheEntries);
 
     rows.forEach((row) => {
-      ranking[row.foodCode] = row.occurrences;
+      ranking[row.foodCode] = row.occurrences * row.multiplier;
     });
   }
 
