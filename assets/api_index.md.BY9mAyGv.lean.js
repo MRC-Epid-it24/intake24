@@ -1,1 +1,0 @@
-import{_ as e,c as s,o as a,a4 as i}from"./chunks/framework.DjLEzixm.js";const m=JSON.parse('{"title":"Introduction","description":"","frontmatter":{},"headers":[],"relativePath":"api/index.md","filePath":"api/index.md"}'),n={name:"api/index.md"},t=i("",22),o=[t];function c(p,l,d,h,r,k){return a(),s("div",null,o)}const b=e(n,[["render",c]]);export{m as __pageData,b as default};
