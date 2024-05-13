@@ -36,6 +36,21 @@
     "LanguageTranslationsSync": {
       "_": "Language - Synchronize translations"
     },
+    "LocaleCopy": {
+      "_": "Locale - Copy data",
+      "localeId": "Locale ID",
+      "sourceLocaleId": "Source Locale ID",
+      "subTasks": {
+        "_": "Subtasks",
+        "categories": "Categories",
+        "foods": "Foods",
+        "associatedFoods": "Associated foods",
+        "splitLists": "Split lists",
+        "splitWords": "Split words",
+        "synonymSets": "Synonym sets",
+        "recipeFoods": "Recipe foods"
+      }
+    },
     "LocaleFoodNutrientMapping": {
       "_": "Locale - Export food nutrient mapping",
       "localeId": "Locale ID"

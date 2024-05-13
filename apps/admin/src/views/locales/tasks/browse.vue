@@ -61,7 +61,7 @@ import type { JobAttributes, LocaleEntry, LocaleRefs } from '@intake24/common/ty
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { localeJobs } from '@intake24/common/types';
+import { localeCopySubTasks, localeJobs } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
 type LocaleTasksForm = {
@@ -85,6 +85,7 @@ export default defineComponent({
     const jobQuery = computed(() => ({ localeId: props.id }));
 
     const defaultJobsParams = computed<Pick<JobParams, LocaleJob>>(() => ({
+      LocaleCopy: { localeId: props.id, sourceLocaleId: '', subTasks: [...localeCopySubTasks] },
       LocaleFoods: { localeId: props.id },
       LocaleFoodRankingUpload: { localeId: props.id, file: '' },
       LocaleFoodNutrientMapping: { localeId: props.id },
@@ -92,6 +93,7 @@ export default defineComponent({
     }));
 
     const disabledJobParams = {
+      LocaleCopy: { localeId: true },
       LocaleFoods: { localeId: true },
       LocaleFoodRankingUpload: { localeId: true },
       LocaleFoodNutrientMapping: { localeId: true },

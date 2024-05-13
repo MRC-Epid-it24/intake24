@@ -1,4 +1,5 @@
 import CleanRedisStore from './clean-redis-store.vue';
+import LocaleCopy from './locale-copy.vue';
 import LocaleFoodNutrientMapping from './locale-food-nutrient-mapping.vue';
 import LocaleFoodRankingUpload from './locale-food-ranking-upload.vue';
 import LocaleFoods from './locale-foods.vue';
@@ -17,6 +18,7 @@ export default {
   CleanRedisStore,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
+  LocaleCopy,
   LocaleFoods,
   LocalePopularitySearchCopy,
   NutrientTableDataImport,

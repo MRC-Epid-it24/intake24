@@ -135,6 +135,13 @@ This needs to be run if object structure changes, so all database records are sy
 }
 ```
 
+**Expected file type** - `text/csv`
+
+| Column                       | Description                                              |
+| ---------------------------- | -------------------------------------------------------- |
+| Intake24 nutrient ID         | [Intake24 nutrient type ID](/admin/foods/nutrient-types) |
+| NDB spreadsheet column index | Excel-based column name                                  |
+
 ## PopularitySearchUpdateCounters
 
 `PopularitySearchUpdateCounters` increments popularity search counters based on provided food codes from survey submission.

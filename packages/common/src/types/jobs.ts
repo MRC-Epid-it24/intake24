@@ -25,6 +25,14 @@ export const CleanStorageFiles = z.object({});
 export const FeedbackSchemesSync = z.object({});
 export const LanguageTranslationsSync = z.object({});
 export const LocaleIndexBuild = z.object({});
+
+export const localeCopySubTasks = ['categories', 'foods', 'associatedFoods', 'splitLists', 'splitWords', 'synonymSets', 'recipeFoods'] as const;
+
+export const LocaleCopy = z.object({
+  localeId: z.string(),
+  sourceLocaleId: z.string(),
+  subTasks: z.enum(localeCopySubTasks).array(),
+});
 export const LocaleFoods = z.object({
   localeId: z.string(),
 });
@@ -133,6 +141,7 @@ export const jobParams = z.object({
   FeedbackSchemesSync,
   LanguageTranslationsSync,
   LocaleIndexBuild,
+  LocaleCopy,
   LocaleFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
@@ -164,6 +173,7 @@ export const jobTypeParams = z.union([
   FeedbackSchemesSync,
   LanguageTranslationsSync,
   LocaleIndexBuild,
+  LocaleCopy,
   LocaleFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
@@ -188,6 +198,7 @@ export const jobTypeParams = z.union([
 ]);
 
 export const localeJobs = [
+  'LocaleCopy',
   'LocaleFoods',
   'LocaleFoodNutrientMapping',
   'LocaleFoodRankingUpload',
@@ -250,6 +261,11 @@ export const defaultJobsParams: JobParams = {
   FeedbackSchemesSync: {},
   LanguageTranslationsSync: {},
   LocaleIndexBuild: {},
+  LocaleCopy: {
+    localeId: '',
+    sourceLocaleId: '',
+    subTasks: [...localeCopySubTasks],
+  },
   LocaleFoods: {
     localeId: '',
   },
