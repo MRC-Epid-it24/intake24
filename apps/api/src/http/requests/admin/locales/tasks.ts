@@ -37,7 +37,7 @@ export default validate(
       errorMessage: typeErrorMessage('string._'),
       custom: {
         if: (value: any, { req }: Meta) =>
-          req.body.type && ['LocaleCopy', 'LocalePopularitySearchCopy'].includes(req.body.type),
+          req.body.type && ['LocaleCopy'].includes(req.body.type),
         options: async (value, meta): Promise<void> => {
           if (!value || typeof value !== 'string')
             throw new Error('Invalid source locale ID');

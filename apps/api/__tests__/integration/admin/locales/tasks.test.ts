@@ -26,7 +26,7 @@ export default () => {
     ]);
 
     input = {
-      type: 'LocalePopularitySearchCopy',
+      type: 'LocaleCopy',
       params: { localeId: locale.id, sourceLocaleId },
     };
 

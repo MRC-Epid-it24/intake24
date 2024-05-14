@@ -47,11 +47,6 @@
       "_": "Régional - Exporter les aliments",
       "localeId": "Identifiant régional"
     },
-    "LocalePopularitySearchCopy": {
-      "_": "Régional - Copier les recherches populaires",
-      "localeId": "Identifiant régional",
-      "sourceLocaleId": "Identifiant régional source"
-    },
     "NutrientTableMappingImport": {
       "_": "Tableau des nutriments - Importer le mapping de la BDD nutritionnelle",
       "file": "fichier CSV"

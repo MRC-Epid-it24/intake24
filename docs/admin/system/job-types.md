@@ -7,10 +7,10 @@ Jobs types available in system.
   - [CleanStorageFiles](#cleanstoragefiles)
   - [FeedbackSchemesSync](#feedbackschemessync)
   - [LanguageTranslationsSync](#languagetranslationssync)
+  - [LocaleCopy](#localecopy)
   - [LocaleFoods](#localefoods)
   - [LocaleFoodNutrientMapping](#localefoodnutrientmapping)
   - [LocaleFoodRankingUpload](#localefoodrankingupload)
-  - [LocalePopularitySearchCopy](#localepopularitysearchcopy)
   - [NutrientTableDataImport](#nutrienttabledataimport)
   - [NutrientTableMappingImport](#nutrienttablemappingimport)
   - [PopularitySearchUpdateCounters](#popularitysearchupdatecounters)
@@ -71,6 +71,39 @@ This needs to be run if object structure changes, so all database records are sy
 {}
 ```
 
+## LocaleCopy
+
+`LocaleCopy` copies locale data from specified source locale based on included subtasks.
+
+:::tip Subtask processing
+Each subtask will firstly delete any existing data and then copies over data from specified source locale.
+:::
+
+**Food database subtasks:**
+
+- associated foods
+- brands
+- categories
+- foods
+- food groups
+- recipe foods
+- split lists
+- split words
+- synonym sets
+
+**System database subtasks:**
+
+- search - popularity
+- search - fixed ranking
+
+```json
+{
+  "localeId": string,
+  "sourceLocaleId": string,
+  "subTasks": string[]
+}
+```
+
 ## LocaleFoods
 
 `LocaleFoods` exports foods data for selected locale.
@@ -99,17 +132,6 @@ This needs to be run if object structure changes, so all database records are sy
 {
   "localeId": string,
   "file": File
-}
-```
-
-## LocalePopularitySearchCopy
-
-`LocalePopularitySearchCopy` copies pairwise associations data from source locale to target locale.
-
-```json
-{
-  "localeId": string,
-  "sourceLocaleId": string
 }
 ```
 

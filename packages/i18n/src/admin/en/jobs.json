@@ -42,13 +42,17 @@
       "sourceLocaleId": "Source Locale ID",
       "subTasks": {
         "_": "Subtasks",
+        "associatedFoods": "Associated foods",
+        "brands": "Brands",
         "categories": "Categories",
         "foods": "Foods",
-        "associatedFoods": "Associated foods",
+        "foodGroups": "Food groups",
+        "recipeFoods": "Recipe foods",
+        "searchPopularity": "Search - popularity",
+        "searchFixedRanking": "Search - fixed ranking",
         "splitLists": "Split lists",
         "splitWords": "Split words",
-        "synonymSets": "Synonym sets",
-        "recipeFoods": "Recipe foods"
+        "synonymSets": "Synonym sets"
       }
     },
     "LocaleFoodNutrientMapping": {
@@ -62,11 +66,6 @@
     "LocaleFoods": {
       "_": "Locale - Export foods",
       "localeId": "Locale ID"
-    },
-    "LocalePopularitySearchCopy": {
-      "_": "Locale - Copy popularity search",
-      "localeId": "Locale ID",
-      "sourceLocaleId": "Source Locale ID"
     },
     "LocaleIndexBuild": {
       "_": "Locale - Rebuild Food Indexes for modified locales"

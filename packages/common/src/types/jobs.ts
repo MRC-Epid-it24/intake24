@@ -26,7 +26,12 @@ export const FeedbackSchemesSync = z.object({});
 export const LanguageTranslationsSync = z.object({});
 export const LocaleIndexBuild = z.object({});
 
-export const localeCopySubTasks = ['categories', 'foods', 'associatedFoods', 'splitLists', 'splitWords', 'synonymSets', 'recipeFoods'] as const;
+export const localeCopyFoodsSubTasks = ['categories', 'foods', 'associatedFoods', 'brands', 'foodGroups', 'recipeFoods', 'splitLists', 'splitWords', 'synonymSets'] as const;
+export type LocaleCopyFoodsSubTasks = (typeof localeCopyFoodsSubTasks)[number];
+export const localeCopySystemSubTasks = ['searchPopularity', 'searchFixedRanking'] as const;
+export type LocaleCopySystemSubTasks = (typeof localeCopySystemSubTasks)[number];
+export const localeCopySubTasks = [...localeCopyFoodsSubTasks, ...localeCopySystemSubTasks] as const;
+export type LocaleCopySubTasks = (typeof localeCopySubTasks)[number];
 
 export const LocaleCopy = z.object({
   localeId: z.string(),
@@ -50,10 +55,6 @@ export const NutrientTableDataImport = z.object({
 export const NutrientTableMappingImport = z.object({
   nutrientTableId: z.string(),
   file: z.string(),
-});
-export const LocalePopularitySearchCopy = z.object({
-  localeId: z.string(),
-  sourceLocaleId: z.string(),
 });
 export const PopularitySearchUpdateCounters = z.object({
   localeCode: z.string(),
@@ -147,7 +148,6 @@ export const jobParams = z.object({
   LocaleFoodRankingUpload,
   NutrientTableDataImport,
   NutrientTableMappingImport,
-  LocalePopularitySearchCopy,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
   SurveyAuthUrlsExport,
@@ -179,7 +179,6 @@ export const jobTypeParams = z.union([
   LocaleFoodRankingUpload,
   NutrientTableDataImport,
   NutrientTableMappingImport,
-  LocalePopularitySearchCopy,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
   SurveyAuthUrlsExport,
@@ -202,7 +201,6 @@ export const localeJobs = [
   'LocaleFoods',
   'LocaleFoodNutrientMapping',
   'LocaleFoodRankingUpload',
-  'LocalePopularitySearchCopy',
 ] as const;
 
 export type LocaleJob = (typeof localeJobs)[number];
@@ -283,10 +281,6 @@ export const defaultJobsParams: JobParams = {
   NutrientTableMappingImport: {
     nutrientTableId: '',
     file: '',
-  },
-  LocalePopularitySearchCopy: {
-    localeId: '',
-    sourceLocaleId: '',
   },
   PopularitySearchUpdateCounters: {
     localeCode: '',

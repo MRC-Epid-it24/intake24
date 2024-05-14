@@ -4,12 +4,13 @@ import { sql } from 'kysely';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { FoodsDB, Job as DbJob, SystemLocale } from '@intake24/db';
+import { LocaleCopyFoodsSubTasks, LocaleCopySystemSubTasks } from '@intake24/common/types';
+import { FoodsDB, Job as DbJob, SystemDB, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 
-export type TransactionOps = {
-  trx: Transaction<FoodsDB>;
+export type TransactionOps<T extends FoodsDB | SystemDB> = {
+  trx: Transaction<T>;
   code: string;
   sourceCode: string;
 };
@@ -76,12 +77,49 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     const { code } = locale;
     const { code: sourceCode } = sourceLocale;
 
-    await this.kyselyDb.foods.transaction().execute(async (trx) => {
-      Promise.all(this.params.subTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
+    const foodsTasks: LocaleCopyFoodsSubTasks[] = [];
+    const systemTasks: LocaleCopySystemSubTasks[] = [];
+
+    this.params.subTasks.forEach((task) => {
+      if (['searchPopularity', 'searchFixedRanking'].includes(task))
+        systemTasks.push(task as LocaleCopySystemSubTasks);
+      else foodsTasks.push(task as LocaleCopyFoodsSubTasks);
     });
+
+    if (foodsTasks.length) {
+      await this.kyselyDb.foods.transaction().execute(async (trx) => {
+        Promise.all(foodsTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
+      });
+    }
+
+    if (systemTasks.length) {
+      await this.kyselyDb.system.transaction().execute(async (trx) => {
+        Promise.all(systemTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
+      });
+    }
   }
 
-  private async categories({ trx, code, sourceCode }: TransactionOps) {
+  private async brands({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
+    const delResult = await trx.deleteFrom('brands').where('localeId', '=', code).executeTakeFirst();
+    this.logger.debug(`Number of brands cleared: ${delResult.numDeletedRows}`);
+
+    const insResult = await trx.insertInto('brands')
+      .columns(['foodCode', 'localeId', 'name'])
+      .expression(eb => eb
+        .selectFrom('brands')
+        .select(eb => [
+          'foodCode',
+          eb.val(code).as('localeId'),
+          'name',
+        ]).where('localeId', '=', sourceCode)
+        .orderBy('id'),
+      )
+      .executeTakeFirst();
+
+    this.logger.debug(`Number of brands created: ${insResult.numInsertedOrUpdatedRows}`);
+  }
+
+  private async categories({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('categoryLocals').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of local categories cleared: ${delResult.numDeletedRows}`);
 
@@ -133,7 +171,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of category portion size methods created: ${psmResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async foods({ trx, code, sourceCode }: TransactionOps) {
+  private async foods({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('foodLocals').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of local foods cleared: ${delResult.numDeletedRows}`);
 
@@ -225,7 +263,27 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of local food portion size methods created: ${npResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async associatedFoods({ trx, code, sourceCode }: TransactionOps) {
+  private async foodGroups({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
+    const delResult = await trx.deleteFrom('foodGroupLocals').where('localeId', '=', code).executeTakeFirst();
+    this.logger.debug(`Number of local food groups cleared: ${delResult.numDeletedRows}`);
+
+    const insResult = await trx.insertInto('foodGroupLocals')
+      .columns(['foodGroupId', 'localeId', 'name'])
+      .expression(eb => eb
+        .selectFrom('foodGroupLocals')
+        .select(eb => [
+          'foodGroupId',
+          eb.val(code).as('localeId'),
+          'name',
+        ]).where('localeId', '=', sourceCode)
+        .orderBy('id'),
+      )
+      .executeTakeFirst();
+
+    this.logger.debug(`Number of local food groups created: ${insResult.numInsertedOrUpdatedRows}`);
+  }
+
+  private async associatedFoods({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('associatedFoods').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of associated foods cleared: ${delResult.numDeletedRows}`);
 
@@ -252,7 +310,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of associated foods created: ${insResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async splitLists({ trx, code, sourceCode }: TransactionOps) {
+  private async splitLists({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('splitLists').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of split lists cleared: ${delResult.numDeletedRows}`);
 
@@ -273,7 +331,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of split lists created: ${insResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async splitWords({ trx, code, sourceCode }: TransactionOps) {
+  private async splitWords({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('splitWords').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of split words cleared: ${delResult.numDeletedRows}`);
 
@@ -293,7 +351,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of split words created: ${insResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async synonymSets({ trx, code, sourceCode }: TransactionOps) {
+  private async synonymSets({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('synonymSets').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of synonym sets cleared: ${delResult.numDeletedRows}`);
 
@@ -313,7 +371,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of synonym sets created: ${insResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async recipeFoods({ trx, code, sourceCode }: TransactionOps) {
+  private async recipeFoods({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('recipeFoods').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of recipe foods cleared: ${delResult.numDeletedRows}`);
 
@@ -369,5 +427,78 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
       .executeTakeFirst();
 
     this.logger.debug(`Number of recipe food steps created: ${stepsResult.numInsertedOrUpdatedRows}`);
+  }
+
+  private async searchFixedRanking({ trx, code, sourceCode }: TransactionOps<SystemDB>) {
+    const delResult = await trx.deleteFrom('fixedFoodRanking').where('localeId', '=', code).executeTakeFirst();
+    this.logger.debug(`Number of fixed food rankings cleared: ${delResult.numDeletedRows}`);
+
+    const insResult = await trx.insertInto('fixedFoodRanking')
+      .columns(['foodCode', 'localeId', 'rank'])
+      .expression(eb => eb
+        .selectFrom('fixedFoodRanking')
+        .select(eb => [
+          'foodCode',
+          eb.val(code).as('localeId'),
+          'rank',
+        ]).where('localeId', '=', sourceCode)
+        .orderBy('id'),
+      )
+      .executeTakeFirst();
+
+    this.logger.debug(`Number of fixed food rankings created: ${insResult.numInsertedOrUpdatedRows}`);
+  }
+
+  private async searchPopularity({ trx, code, sourceCode }: TransactionOps<SystemDB>) {
+    const [delOne, delTwo, delThree] = await Promise.all([
+      trx.deleteFrom('pairwiseAssociationsOccurrences').where('localeId', '=', code).executeTakeFirst(),
+      trx.deleteFrom('pairwiseAssociationsCoOccurrences').where('localeId', '=', code).executeTakeFirst(),
+      trx.deleteFrom('pairwiseAssociationsTransactionsCount').where('localeId', '=', code).executeTakeFirst(),
+    ]);
+    this.logger.debug(`Number of PA occurrences cleared: ${delOne.numDeletedRows}`);
+    this.logger.debug(`Number of PA co-occurrences cleared: ${delTwo.numDeletedRows}`);
+    this.logger.debug(`Number of PA transactions cleared: ${delThree.numDeletedRows}`);
+
+    const [insOne, insTwo, insThree] = await Promise.all([
+      trx.insertInto('pairwiseAssociationsOccurrences')
+        .columns(['localeId', 'foodCode', 'occurrences'])
+        .expression(eb => eb
+          .selectFrom('pairwiseAssociationsOccurrences')
+          .select(eb => [
+            eb.val(code).as('localeId'),
+            'foodCode',
+            'occurrences',
+          ]).where('localeId', '=', sourceCode)
+          .orderBy('foodCode'),
+        )
+        .executeTakeFirst(),
+      trx.insertInto('pairwiseAssociationsCoOccurrences')
+        .columns(['localeId', 'antecedentFoodCode', 'consequentFoodCode', 'occurrences'])
+        .expression(eb => eb
+          .selectFrom('pairwiseAssociationsCoOccurrences')
+          .select(eb => [
+            eb.val(code).as('localeId'),
+            'antecedentFoodCode',
+            'consequentFoodCode',
+            'occurrences',
+          ]).where('localeId', '=', sourceCode)
+          .orderBy('antecedentFoodCode'),
+        )
+        .executeTakeFirst(),
+      trx.insertInto('pairwiseAssociationsTransactionsCount')
+        .columns(['localeId', 'transactionsCount'])
+        .expression(eb => eb
+          .selectFrom('pairwiseAssociationsTransactionsCount')
+          .select(eb => [
+            eb.val(code).as('localeId'),
+            'transactionsCount',
+          ]).where('localeId', '=', sourceCode),
+        )
+        .executeTakeFirst(),
+    ]);
+
+    this.logger.debug(`Number of PA occurrences created: ${insOne.numInsertedOrUpdatedRows}`);
+    this.logger.debug(`Number of PA co-occurrences created: ${insTwo.numInsertedOrUpdatedRows}`);
+    this.logger.debug(`Number of PA transactions created: ${insThree.numInsertedOrUpdatedRows}`);
   }
 }

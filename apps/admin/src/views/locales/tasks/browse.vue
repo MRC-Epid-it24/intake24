@@ -89,7 +89,6 @@ export default defineComponent({
       LocaleFoods: { localeId: props.id },
       LocaleFoodRankingUpload: { localeId: props.id, file: '' },
       LocaleFoodNutrientMapping: { localeId: props.id },
-      LocalePopularitySearchCopy: { sourceLocaleId: '', localeId: props.id },
     }));
 
     const disabledJobParams = {
@@ -97,7 +96,6 @@ export default defineComponent({
       LocaleFoods: { localeId: true },
       LocaleFoodRankingUpload: { localeId: true },
       LocaleFoodNutrientMapping: { localeId: true },
-      LocalePopularitySearchCopy: { localeId: true },
     };
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(props);

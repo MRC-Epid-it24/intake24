@@ -75,7 +75,6 @@ import type {
   NutrientTypeService,
   NutrientUnitService,
   OTPProvider,
-  PairwiseSearchService,
   PopularityCountersService,
   PortionSizeMethodsService,
   PortionSizeService,
@@ -238,9 +237,6 @@ export interface IoC extends Jobs {
 
   // Categories
   categoryContentsService: CategoryContentsService;
-
-  // Search
-  pairwiseSearchService: PairwiseSearchService;
 
   // Images
   processedImageService: ProcessedImageService;
