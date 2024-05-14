@@ -5,10 +5,14 @@
 <template>
   <v-card flat>
     <v-card-title>
-      Match score weight
+      {{ $t('surveys.search.information.matchScoreWeightInfo.title') }}
     </v-card-title>
     <v-card-text>
-      <p>Mógłbym tu napisać coś mądrego ale mi się kurwa nie chce</p>
+      <p v-dompurify-html:i18n="$t('surveys.search.information.matchScoreWeightInfo.p1')" />
+      <p v-dompurify-html:i18n="$t('surveys.search.information.matchScoreWeightInfo.foodOrdering')" />
+      <p v-dompurify-html:i18n="$t('surveys.search.information.matchScoreWeightInfo.matchQuality')" />
+      <p v-dompurify-html:i18n="$t('surveys.search.information.matchScoreWeightInfo.p2')" />
+      <p v-dompurify-html:i18n="$t('surveys.search.information.matchScoreWeightInfo.p3')" />
     </v-card-text>
   </v-card>
 </template>

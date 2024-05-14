@@ -161,6 +161,9 @@ importers:
       vue:
         specifier: ^2.7.16
         version: 2.7.16
+      vue-dompurify-html:
+        specifier: ^4.1.4
+        version: 4.1.4(vue@2.7.16)
       vue-gtag:
         specifier: ^1.16.1
         version: 1.16.1(vue@2.7.16)
@@ -15721,6 +15724,18 @@ packages:
     dependencies:
       vue: 3.4.25(typescript@5.4.5)
     dev: true
+
+  /vue-dompurify-html@4.1.4(vue@2.7.16):
+    resolution: {integrity: sha512-K0XDSZA4dmMMvAgW8yaCx1kAYQldmgXeHJaLPS0mlSKOu8B+onE06X4KfB5LGyX4jR3rlVosyWJczRBzR0sZ/g==}
+    peerDependencies:
+      vue: ^2.7.0 || ^3.0.0
+    dependencies:
+      dompurify: 3.1.2
+      vue: 2.7.16
+      vue-demi: 0.14.7(vue@2.7.16)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+    dev: false
 
   /vue-echarts@6.7.2(echarts@5.5.0)(vue@2.7.16):
     resolution: {integrity: sha512-SG8Vmszhx24KjtySsk361DogZLRkPCyLhgoyh7iN1eH3WGJ0kyl3k0g4QiSJqK0+F1Ej0HDopq4A5OGcBlAwzw==}

@@ -120,7 +120,7 @@
               </div>
               <div class="mt-4">
                 <v-icon
-                  @click="showInformationPopup('matchScoreWeightInfo')"
+                  @click="showInformationPopup('sortingAlgorithmInfo')"
                 >
                   fa-circle-question
                 </v-icon>
@@ -167,36 +167,69 @@
                   <v-subheader>{{ $t('surveys.search.matchQuality') }}</v-subheader>
                 </template>
               </v-slider>
+              <div class="text-h6 mb-10 mt-4 underline">
+                <v-icon
+                  class="mr-3"
+                  @click="showInformationPopup('matchQualityInfo')"
+                >
+                  fa-circle-question
+                </v-icon>{{ $t('surveys.search.matchQualityCriteria') }}
+              </div>
               <v-slider
-                v-model.number="form.searchSettings.orderCost"
+                v-model.number="form.searchSettings.firstWordCost"
                 class="mt-7"
-                :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
+                :error-messages="form.errors.get('searchSettings.firstWordCost')"
                 hide-details="auto"
-                label="Order cost"
+                :label="$t('surveys.search.firstWordCost')"
                 max="20"
                 min="0"
-                name="searchMatchScoreWeight"
-                prepend-icon="fa-circle-question"
+                name="searchFirstWordCost"
                 thumb-label="always"
               />
               <v-slider
-                v-model.number="form.searchSettings.distanceCost"
+                v-model.number="form.searchSettings.wordOrderCost"
                 class="mt-7"
-                :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
+                :error-messages="form.errors.get('searchSettings.wordOrderCost')"
                 hide-details="auto"
-                label="Distance cost"
-                max="20"
+                :label="$t('surveys.search.wordOrderCost')"
+                max="10"
                 min="0"
-                name="searchMatchScoreWeight"
-                prepend-icon="fa-circle-question"
+                name="searchWordOrderCost"
                 thumb-label="always"
               />
-              <div class="text-h6 mt-6 mb-6 underline">
-                {{ $t('surveys.search.spellingCorrection') }}
+              <v-slider
+                v-model.number="form.searchSettings.wordDistanceCost"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.wordDistanceCost')"
+                hide-details="auto"
+                :label="$t('surveys.search.wordDistanceCost')"
+                max="10"
+                min="0"
+                name="searchWordDistanceCost"
+                thumb-label="always"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.unmatchedWordCost"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.unmatchedWordCost')"
+                hide-details="auto"
+                :label="$t('surveys.search.unmatchedWordCost')"
+                max="10"
+                min="0"
+                name="searchUnmatchedWordCost"
+                thumb-label="always"
+              />
+              <div class="text-h6 mb-4 mt-4 underline">
+                <v-icon
+                  class="mr-3"
+                  @click="showInformationPopup('spellingCorrectionInfo')"
+                >
+                  fa-circle-question
+                </v-icon>{{ $t('surveys.search.spellingCorrection') }}
               </div>
               <v-switch
                 v-model="form.searchSettings.enableEditDistance"
-                class="mt-7"
+                class="mt-6"
                 :error-messages="form.errors.get('searchSettings.enableEditDistance')"
                 hide-details="auto"
                 :label="$t('surveys.search.enableEditDistance')"
@@ -237,7 +270,7 @@
               />
               <v-slider
                 v-model.number="form.searchSettings.minWordLengthPhonetic"
-                class="mt-0"
+                class="mt-0 mb-6"
                 :error-messages="form.errors.get('searchSettings.minWordLengthPhonetic')"
                 hide-details="auto"
                 :label="$t('surveys.search.minWordLengthPhonetic')"
@@ -246,14 +279,16 @@
                 name="searchMinWordLengthPhonetic"
                 thumb-label="always"
               />
+              <v-label>
+                {{ $t('surveys.search.spellingCorrectionPreference') }}
+              </v-label>
               <v-select
                 v-model="form.searchSettings.spellingCorrectionPreference"
-                class="mt-6"
+                class="mt-2"
                 dense
                 :error-messages="form.errors.get('searchSettings.spellingCorrectionPreference')"
                 hide-details="auto"
                 :items="spellingCorrectionOptions"
-                :label="$t('surveys.search.spellingCorrectionPreference')"
                 name="searchSpellingCorrectionPreference"
                 outlined
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
