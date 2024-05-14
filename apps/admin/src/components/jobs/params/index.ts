@@ -1,8 +1,8 @@
 import CleanRedisStore from './clean-redis-store.vue';
+import LocaleCopy from './locale-copy.vue';
 import LocaleFoodNutrientMapping from './locale-food-nutrient-mapping.vue';
 import LocaleFoodRankingUpload from './locale-food-ranking-upload.vue';
 import LocaleFoods from './locale-foods.vue';
-import LocalePopularitySearchCopy from './locale-popularity-search-copy.vue';
 import NutrientTableDataImport from './nutrient-table-data-import.vue';
 import NutrientTableMappingImport from './nutrient-table-mapping-import.vue';
 import SurveyAuthUrlsExport from './survey-auth-urls-export.vue';
@@ -17,8 +17,8 @@ export default {
   CleanRedisStore,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
+  LocaleCopy,
   LocaleFoods,
-  LocalePopularitySearchCopy,
   NutrientTableDataImport,
   NutrientTableMappingImport,
   SurveyAuthUrlsExport,

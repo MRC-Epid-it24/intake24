@@ -36,6 +36,25 @@
     "LanguageTranslationsSync": {
       "_": "Language - Synchronize translations"
     },
+    "LocaleCopy": {
+      "_": "Locale - Copy data",
+      "localeId": "Locale ID",
+      "sourceLocaleId": "Source Locale ID",
+      "subTasks": {
+        "_": "Subtasks",
+        "associatedFoods": "Associated foods",
+        "brands": "Brands",
+        "categories": "Categories",
+        "foods": "Foods",
+        "foodGroups": "Food groups",
+        "recipeFoods": "Recipe foods",
+        "searchPopularity": "Search - popularity",
+        "searchFixedRanking": "Search - fixed ranking",
+        "splitLists": "Split lists",
+        "splitWords": "Split words",
+        "synonymSets": "Synonym sets"
+      }
+    },
     "LocaleFoodNutrientMapping": {
       "_": "Locale - Export food nutrient mapping",
       "localeId": "Locale ID"
@@ -47,11 +66,6 @@
     "LocaleFoods": {
       "_": "Locale - Export foods",
       "localeId": "Locale ID"
-    },
-    "LocalePopularitySearchCopy": {
-      "_": "Locale - Copy popularity search",
-      "localeId": "Locale ID",
-      "sourceLocaleId": "Source Locale ID"
     },
     "LocaleIndexBuild": {
       "_": "Locale - Rebuild Food Indexes for modified locales"

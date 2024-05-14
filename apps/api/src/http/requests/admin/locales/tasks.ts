@@ -9,7 +9,7 @@ import {
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
-import { jobRequiresFile, localeJobs, pickJobParams } from '@intake24/common/types';
+import { jobRequiresFile, localeCopySubTasks, localeJobs, pickJobParams } from '@intake24/common/types';
 import { SystemLocale } from '@intake24/db';
 
 export default validate(
@@ -37,10 +37,13 @@ export default validate(
       errorMessage: typeErrorMessage('string._'),
       custom: {
         if: (value: any, { req }: Meta) =>
-          req.body.type && req.body.type === 'LocalePopularitySearchCopy',
+          req.body.type && ['LocaleCopy'].includes(req.body.type),
         options: async (value, meta): Promise<void> => {
           if (!value || typeof value !== 'string')
             throw new Error('Invalid source locale ID');
+
+          if (value === meta.req.body.params.localeId)
+            throw new Error('Source locale ID is same as target locale');
 
           const locale = await SystemLocale.findByPk(value, { attributes: ['code'] });
           if (!locale)
@@ -62,6 +65,24 @@ export default validate(
               customTypeErrorMessage('file.ext', meta, { ext: 'CSV (comma-delimited)' }),
             );
           }
+        },
+      },
+    },
+    'params.subTasks': {
+      in: ['body'],
+      errorMessage: typeErrorMessage('array.min', { min: 1 }),
+      isArray: {
+        bail: true,
+        options: { min: 1 },
+        if: (value: any, { req }: Meta) =>
+          req.body.type && ['LocaleCopy'].includes(req.body.type),
+      },
+      custom: {
+        if: (value: any, { req }: Meta) =>
+          req.body.type && ['LocaleCopy'].includes(req.body.type),
+        options: async (value: any[], meta): Promise<void> => {
+          if (value.some(action => !localeCopySubTasks.includes(action)))
+            throw new Error(customTypeErrorMessage('in.options', meta, { options: localeCopySubTasks }));
         },
       },
     },
