@@ -35,7 +35,16 @@
             name="subTasks"
             outlined
             prepend-inner-icon="fas fa-list"
-          />
+          >
+            <template #selection="{ item, index }">
+              <template v-if="index === 0">
+                <span v-if="params.subTasks.length === 1">{{ item.text }}</span>
+                <span v-if="params.subTasks.length > 1">
+                  {{ $t('common.selected', { count: params.subTasks.length }) }}
+                </span>
+              </template>
+            </template>
+          </v-select>
         </v-col>
       </v-row>
     </v-card-text>
