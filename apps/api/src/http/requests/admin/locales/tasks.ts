@@ -42,6 +42,9 @@ export default validate(
           if (!value || typeof value !== 'string')
             throw new Error('Invalid source locale ID');
 
+          if (value === meta.req.body.params.localeId)
+            throw new Error('Source locale ID is same as target locale');
+
           const locale = await SystemLocale.findByPk(value, { attributes: ['code'] });
           if (!locale)
             throw new Error(customTypeErrorMessage('exists._', meta));

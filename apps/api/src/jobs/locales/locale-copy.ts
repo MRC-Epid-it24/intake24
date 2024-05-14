@@ -18,6 +18,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
   readonly name = 'LocaleCopy';
 
   private dbJob!: DbJob;
+
   private kyselyDb;
 
   constructor({
