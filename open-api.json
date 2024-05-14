@@ -5470,10 +5470,10 @@
                               "SurveySubmission",
                               "UserEmailVerificationNotification",
                               "UserPasswordResetNotification",
+                              "LocaleCopy",
                               "LocaleFoods",
                               "LocaleFoodNutrientMapping",
                               "LocaleFoodRankingUpload",
-                              "LocalePopularitySearchCopy",
                               "NutrientTableMappingImport",
                               "NutrientTableDataImport",
                               "SurveyAuthUrlsExport",
@@ -5547,81 +5547,101 @@
                                 "properties": {
                                   "localeId": {
                                     "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "nutrientTableId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "nutrientTableId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "nutrientTableId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "nutrientTableId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
                                   },
                                   "sourceLocaleId": {
                                     "type": "string"
+                                  },
+                                  "subTasks": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "categories",
+                                        "foods",
+                                        "associatedFoods",
+                                        "brands",
+                                        "foodGroups",
+                                        "recipeFoods",
+                                        "splitLists",
+                                        "splitWords",
+                                        "synonymSets",
+                                        "searchPopularity",
+                                        "searchFixedRanking"
+                                      ]
+                                    }
                                   }
                                 },
                                 "required": [
                                   "localeId",
-                                  "sourceLocaleId"
+                                  "sourceLocaleId",
+                                  "subTasks"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId",
+                                  "file"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId",
+                                  "file"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId",
+                                  "file"
                                 ]
                               },
                               {
@@ -6151,10 +6171,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -6228,81 +6248,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -6852,10 +6892,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -6929,81 +6969,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -8546,10 +8606,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -8623,81 +8683,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -11948,10 +12028,10 @@
                               "SurveySubmission",
                               "UserEmailVerificationNotification",
                               "UserPasswordResetNotification",
+                              "LocaleCopy",
                               "LocaleFoods",
                               "LocaleFoodNutrientMapping",
                               "LocaleFoodRankingUpload",
-                              "LocalePopularitySearchCopy",
                               "NutrientTableMappingImport",
                               "NutrientTableDataImport",
                               "SurveyAuthUrlsExport",
@@ -12003,81 +12083,101 @@
                                 "properties": {
                                   "localeId": {
                                     "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "nutrientTableId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "nutrientTableId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "nutrientTableId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "nutrientTableId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
                                   },
                                   "sourceLocaleId": {
                                     "type": "string"
+                                  },
+                                  "subTasks": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "categories",
+                                        "foods",
+                                        "associatedFoods",
+                                        "brands",
+                                        "foodGroups",
+                                        "recipeFoods",
+                                        "splitLists",
+                                        "splitWords",
+                                        "synonymSets",
+                                        "searchPopularity",
+                                        "searchFixedRanking"
+                                      ]
+                                    }
                                   }
                                 },
                                 "required": [
                                   "localeId",
-                                  "sourceLocaleId"
+                                  "sourceLocaleId",
+                                  "subTasks"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId",
+                                  "file"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId",
+                                  "file"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId",
+                                  "file"
                                 ]
                               },
                               {
@@ -12506,10 +12606,10 @@
                       "SurveySubmission",
                       "UserEmailVerificationNotification",
                       "UserPasswordResetNotification",
+                      "LocaleCopy",
                       "LocaleFoods",
                       "LocaleFoodNutrientMapping",
                       "LocaleFoodRankingUpload",
-                      "LocalePopularitySearchCopy",
                       "NutrientTableMappingImport",
                       "NutrientTableDataImport",
                       "SurveyAuthUrlsExport",
@@ -12568,81 +12668,101 @@
                         "properties": {
                           "localeId": {
                             "type": "string"
-                          }
-                        },
-                        "required": [
-                          "localeId"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "localeId": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "localeId"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "localeId": {
-                            "type": "string"
-                          },
-                          "file": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "localeId",
-                          "file"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "nutrientTableId": {
-                            "type": "string"
-                          },
-                          "file": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "nutrientTableId",
-                          "file"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "nutrientTableId": {
-                            "type": "string"
-                          },
-                          "file": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "nutrientTableId",
-                          "file"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "localeId": {
-                            "type": "string"
                           },
                           "sourceLocaleId": {
                             "type": "string"
+                          },
+                          "subTasks": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "categories",
+                                "foods",
+                                "associatedFoods",
+                                "brands",
+                                "foodGroups",
+                                "recipeFoods",
+                                "splitLists",
+                                "splitWords",
+                                "synonymSets",
+                                "searchPopularity",
+                                "searchFixedRanking"
+                              ]
+                            }
                           }
                         },
                         "required": [
                           "localeId",
-                          "sourceLocaleId"
+                          "sourceLocaleId",
+                          "subTasks"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "localeId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "localeId"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "localeId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "localeId"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "localeId": {
+                            "type": "string"
+                          },
+                          "file": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "localeId",
+                          "file"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "nutrientTableId": {
+                            "type": "string"
+                          },
+                          "file": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "nutrientTableId",
+                          "file"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "nutrientTableId": {
+                            "type": "string"
+                          },
+                          "file": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "nutrientTableId",
+                          "file"
                         ]
                       },
                       {
@@ -13023,10 +13143,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -13078,81 +13198,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -13563,10 +13703,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -13618,81 +13758,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -14126,10 +14286,10 @@
                       "SurveySubmission",
                       "UserEmailVerificationNotification",
                       "UserPasswordResetNotification",
+                      "LocaleCopy",
                       "LocaleFoods",
                       "LocaleFoodNutrientMapping",
                       "LocaleFoodRankingUpload",
-                      "LocalePopularitySearchCopy",
                       "NutrientTableMappingImport",
                       "NutrientTableDataImport",
                       "SurveyAuthUrlsExport",
@@ -14188,81 +14348,101 @@
                         "properties": {
                           "localeId": {
                             "type": "string"
-                          }
-                        },
-                        "required": [
-                          "localeId"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "localeId": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "localeId"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "localeId": {
-                            "type": "string"
-                          },
-                          "file": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "localeId",
-                          "file"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "nutrientTableId": {
-                            "type": "string"
-                          },
-                          "file": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "nutrientTableId",
-                          "file"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "nutrientTableId": {
-                            "type": "string"
-                          },
-                          "file": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "nutrientTableId",
-                          "file"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "localeId": {
-                            "type": "string"
                           },
                           "sourceLocaleId": {
                             "type": "string"
+                          },
+                          "subTasks": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "categories",
+                                "foods",
+                                "associatedFoods",
+                                "brands",
+                                "foodGroups",
+                                "recipeFoods",
+                                "splitLists",
+                                "splitWords",
+                                "synonymSets",
+                                "searchPopularity",
+                                "searchFixedRanking"
+                              ]
+                            }
                           }
                         },
                         "required": [
                           "localeId",
-                          "sourceLocaleId"
+                          "sourceLocaleId",
+                          "subTasks"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "localeId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "localeId"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "localeId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "localeId"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "localeId": {
+                            "type": "string"
+                          },
+                          "file": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "localeId",
+                          "file"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "nutrientTableId": {
+                            "type": "string"
+                          },
+                          "file": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "nutrientTableId",
+                          "file"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "nutrientTableId": {
+                            "type": "string"
+                          },
+                          "file": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "nutrientTableId",
+                          "file"
                         ]
                       },
                       {
@@ -14643,10 +14823,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -14698,81 +14878,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -15250,10 +15450,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -15305,81 +15505,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -15814,10 +16034,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -15891,81 +16111,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
@@ -16476,10 +16716,10 @@
                     "SurveySubmission",
                     "UserEmailVerificationNotification",
                     "UserPasswordResetNotification",
+                    "LocaleCopy",
                     "LocaleFoods",
                     "LocaleFoodNutrientMapping",
                     "LocaleFoodRankingUpload",
-                    "LocalePopularitySearchCopy",
                     "NutrientTableMappingImport",
                     "NutrientTableDataImport",
                     "SurveyAuthUrlsExport",
@@ -16510,10 +16750,10 @@
                       "SurveySubmission",
                       "UserEmailVerificationNotification",
                       "UserPasswordResetNotification",
+                      "LocaleCopy",
                       "LocaleFoods",
                       "LocaleFoodNutrientMapping",
                       "LocaleFoodRankingUpload",
-                      "LocalePopularitySearchCopy",
                       "NutrientTableMappingImport",
                       "NutrientTableDataImport",
                       "SurveyAuthUrlsExport",
@@ -16584,10 +16824,10 @@
                               "SurveySubmission",
                               "UserEmailVerificationNotification",
                               "UserPasswordResetNotification",
+                              "LocaleCopy",
                               "LocaleFoods",
                               "LocaleFoodNutrientMapping",
                               "LocaleFoodRankingUpload",
-                              "LocalePopularitySearchCopy",
                               "NutrientTableMappingImport",
                               "NutrientTableDataImport",
                               "SurveyAuthUrlsExport",
@@ -16661,81 +16901,101 @@
                                 "properties": {
                                   "localeId": {
                                     "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "localeId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "nutrientTableId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "nutrientTableId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "nutrientTableId": {
-                                    "type": "string"
-                                  },
-                                  "file": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "nutrientTableId",
-                                  "file"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "localeId": {
-                                    "type": "string"
                                   },
                                   "sourceLocaleId": {
                                     "type": "string"
+                                  },
+                                  "subTasks": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "categories",
+                                        "foods",
+                                        "associatedFoods",
+                                        "brands",
+                                        "foodGroups",
+                                        "recipeFoods",
+                                        "splitLists",
+                                        "splitWords",
+                                        "synonymSets",
+                                        "searchPopularity",
+                                        "searchFixedRanking"
+                                      ]
+                                    }
                                   }
                                 },
                                 "required": [
                                   "localeId",
-                                  "sourceLocaleId"
+                                  "sourceLocaleId",
+                                  "subTasks"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "localeId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "localeId",
+                                  "file"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId",
+                                  "file"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  },
+                                  "file": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId",
+                                  "file"
                                 ]
                               },
                               {
@@ -17266,10 +17526,10 @@
                         "SurveySubmission",
                         "UserEmailVerificationNotification",
                         "UserPasswordResetNotification",
+                        "LocaleCopy",
                         "LocaleFoods",
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
-                        "LocalePopularitySearchCopy",
                         "NutrientTableMappingImport",
                         "NutrientTableDataImport",
                         "SurveyAuthUrlsExport",
@@ -17343,81 +17603,101 @@
                           "properties": {
                             "localeId": {
                               "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "localeId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "nutrientTableId": {
-                              "type": "string"
-                            },
-                            "file": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "nutrientTableId",
-                            "file"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "localeId": {
-                              "type": "string"
                             },
                             "sourceLocaleId": {
                               "type": "string"
+                            },
+                            "subTasks": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "categories",
+                                  "foods",
+                                  "associatedFoods",
+                                  "brands",
+                                  "foodGroups",
+                                  "recipeFoods",
+                                  "splitLists",
+                                  "splitWords",
+                                  "synonymSets",
+                                  "searchPopularity",
+                                  "searchFixedRanking"
+                                ]
+                              }
                             }
                           },
                           "required": [
                             "localeId",
-                            "sourceLocaleId"
+                            "sourceLocaleId",
+                            "subTasks"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "localeId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "localeId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            },
+                            "file": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId",
+                            "file"
                           ]
                         },
                         {
