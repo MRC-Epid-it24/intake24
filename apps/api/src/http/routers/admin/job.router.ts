@@ -18,7 +18,7 @@ export function job() {
           query,
           columns: ['type'],
           order: [['startedAt', 'DESC']],
-          attributes: ['id', 'type', 'userId', 'startedAt', 'completedAt', 'successful'],
+          attributes: ['id', 'type', 'userId', 'startedAt', 'completedAt', 'successful', 'downloadUrl', 'downloadUrlExpiresAt'],
           include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
         });
 

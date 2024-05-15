@@ -3,6 +3,14 @@ import type { Resource } from '@intake24/admin/types';
 const routes: string[] = ['create', 'read', 'edit'];
 
 export const resources: Resource[] = [
+  {
+    group: 'user',
+    name: 'user',
+    icon: 'fas fa-circle-user',
+    api: 'admin/user/jobs',
+    generateRoutes: false,
+    routes: ['read'],
+  },
   // Food databases
   {
     group: 'fdb',

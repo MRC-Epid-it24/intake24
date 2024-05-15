@@ -10,6 +10,7 @@
   "baseImage": "Fichier de la photo à curseur",
   "objects": {
     "_": "Objet de la photo à curseur",
+    "title": "Image map objects",
     "delete": "Supprimer l'objet"
   }
 }

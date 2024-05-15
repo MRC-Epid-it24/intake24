@@ -1,6 +1,7 @@
 import type { Dialect, LogEvent, Logger as KyselyLogFunc } from 'kysely';
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
+import cursor from 'pg-cursor';
 
 import type { Logger } from '@intake24/common-backend';
 import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
@@ -49,6 +50,7 @@ export class KyselyDatabases {
         max: 10,
         log: (...messages: any[]) => this.poolLogger.debug(messages.join('; ')),
       }),
+      cursor,
     });
   }
 

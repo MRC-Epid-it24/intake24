@@ -82,6 +82,10 @@
       "_": "Search - Update popularity counters",
       "foodCodes": "Food codes"
     },
+    "ResourceExport": {
+      "_": "Resource - Export data",
+      "resource": "Resource"
+    },
     "SurveyAuthUrlsExport": {
       "_": "Survey - Export authentication URLs",
       "surveyId": "Survey ID"

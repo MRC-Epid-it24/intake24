@@ -21,10 +21,10 @@ export type JobData<T = any> = { params: T };
 export const CleanRedisStore = z.object({
   store: z.union([z.literal('cache'), z.literal('session')]),
 });
-export const CleanStorageFiles = z.object({});
-export const FeedbackSchemesSync = z.object({});
-export const LanguageTranslationsSync = z.object({});
-export const LocaleIndexBuild = z.object({});
+export const CleanStorageFiles = z.record(z.never());
+export const FeedbackSchemesSync = z.record(z.never());
+export const LanguageTranslationsSync = z.record(z.never());
+export const LocaleIndexBuild = z.record(z.never());
 
 export const localeCopyFoodsSubTasks = ['categories', 'foods', 'associatedFoods', 'brands', 'foodGroups', 'recipeFoods', 'splitLists', 'splitWords', 'synonymSets'] as const;
 export type LocaleCopyFoodsSubTasks = (typeof localeCopyFoodsSubTasks)[number];
@@ -60,7 +60,26 @@ export const PopularitySearchUpdateCounters = z.object({
   localeCode: z.string(),
   foodCodes: z.array(z.string()),
 });
-export const PurgeExpiredTokens = z.object({});
+export const PurgeExpiredTokens = z.record(z.never());
+
+export const resources = [
+  'as-served-sets',
+  'as-served-sets.images',
+  'guide-images',
+  'guide-images.objects',
+  'food-groups',
+  'image-maps',
+  'image-maps.objects',
+  'languages',
+  'locales',
+  'nutrient-types',
+  'standard-units',
+] as const;
+
+export const ResourceExport = z.object({
+  language: z.string().array().optional(),
+  resource: z.enum(resources),
+});
 export const SurveyAuthUrlsExport = z.object({
   surveyId: z.string(),
 });
@@ -150,6 +169,7 @@ export const jobParams = z.object({
   NutrientTableMappingImport,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
+  ResourceExport,
   SurveyAuthUrlsExport,
   SurveyDataExport,
   SurveyEventNotification,
@@ -181,6 +201,7 @@ export const jobTypeParams = z.union([
   NutrientTableMappingImport,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
+  ResourceExport,
   SurveyAuthUrlsExport,
   SurveyDataExport,
   SurveyEventNotification,
@@ -228,6 +249,7 @@ export const jobTypes = [
   'LocaleIndexBuild',
   'PopularitySearchUpdateCounters',
   'PurgeExpiredTokens',
+  'ResourceExport',
   'SurveyEventNotification',
   'SurveyFeedbackNotification',
   'SurveyHelpRequestNotification',
@@ -287,6 +309,9 @@ export const defaultJobsParams: JobParams = {
     foodCodes: [],
   },
   PurgeExpiredTokens: {},
+  ResourceExport: {
+    resource: 'nutrient-types',
+  },
   SurveyAuthUrlsExport: {
     surveyId: '',
   },

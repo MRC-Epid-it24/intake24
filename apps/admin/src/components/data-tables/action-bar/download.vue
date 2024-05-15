@@ -1,10 +1,10 @@
 <template>
   <v-btn
+    v-if="downloadUrlAvailable(item)"
     color="secondary"
-    :href="`${app.api}/${route}/${item.id}`"
     icon
-    target="_blank"
     :title="internalTitle"
+    @click="download(item)"
   >
     <v-icon dark>
       {{ icon }}
@@ -13,10 +13,9 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import { useApp } from '@intake24/admin/stores';
+import { useDownloadJob } from '@intake24/admin/components/jobs';
 
 import ActionMixin from './action-mixin';
 
@@ -25,7 +24,11 @@ export default defineComponent({
 
   mixins: [ActionMixin],
 
-  computed: mapState(useApp, ['app']),
+  setup() {
+    const { download, downloadUrlAvailable } = useDownloadJob();
+
+    return { download, downloadUrlAvailable };
+  },
 });
 </script>
 
