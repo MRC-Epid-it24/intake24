@@ -56,8 +56,15 @@ export default defineComponent({
 
   computed: {
     currentActions(): string[] {
+      if (this.module === 'user')
+        return this.actions;
+
       const { ownerId, securables } = this.item;
-      return this.actions.filter(action => this.can({ action, ownerId, securables }));
+      return this.actions.filter((item) => {
+        const action = item === 'download' ? 'read' : item;
+
+        return this.can({ action, ownerId, securables });
+      });
     },
     route(): string | null | undefined {
       return this.routePrefix ?? this.$route.name;

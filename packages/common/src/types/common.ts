@@ -37,6 +37,8 @@ export type WithKey<K extends string | number | symbol> = {
   [k in K]: string;
 };
 
+export type UnwrapAII<P> = P extends AsyncIterableIterator<infer T> ? T : never;
+
 export const emailCopy = ['cc', 'bcc', 'none'] as const;
 
 export type EmailCopy = (typeof emailCopy)[number];

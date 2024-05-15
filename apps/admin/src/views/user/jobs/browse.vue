@@ -3,7 +3,7 @@
     <h2 class="mb-4">
       {{ $t('user.profile') }}
     </h2>
-    <data-table :actions="['read']" api-url="admin/user/jobs" :headers="headers">
+    <data-table :actions="['download', 'read']" api-url="admin/user/jobs" :headers="headers">
       <template #[`item.userId`]="{ item }">
         {{ item.user?.email ?? item.userId }}
       </template>

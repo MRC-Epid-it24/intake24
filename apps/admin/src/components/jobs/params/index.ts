@@ -5,6 +5,7 @@ import LocaleFoodRankingUpload from './locale-food-ranking-upload.vue';
 import LocaleFoods from './locale-foods.vue';
 import NutrientTableDataImport from './nutrient-table-data-import.vue';
 import NutrientTableMappingImport from './nutrient-table-mapping-import.vue';
+import ResourceExport from './resource-export.vue';
 import SurveyAuthUrlsExport from './survey-auth-urls-export.vue';
 import SurveyDataExport from './survey-data-export.vue';
 import SurveyEventNotification from './survey-event-notification.vue';
@@ -21,6 +22,7 @@ export default {
   LocaleFoods,
   NutrientTableDataImport,
   NutrientTableMappingImport,
+  ResourceExport,
   SurveyAuthUrlsExport,
   SurveyDataExport,
   SurveyEventNotification,

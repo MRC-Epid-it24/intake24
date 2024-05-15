@@ -137,10 +137,11 @@ const routes: RouteConfig[] = [
     meta: { module: { current: 'user' }, title: 'user.jobs._' },
   },
   {
-    path: '/user/jobs/:jobId',
+    path: '/user/jobs/:id',
     name: 'user-jobs-read',
     component: views.user.jobs.read,
     meta: { module: { current: 'user' }, title: 'user.jobs._' },
+    props: true,
   },
   {
     path: '/user/personal-access-tokens',

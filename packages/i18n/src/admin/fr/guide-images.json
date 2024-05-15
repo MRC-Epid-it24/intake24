@@ -9,6 +9,7 @@
   "id": "Identifiant de la photo étalon",
   "objects": {
     "_": "Objet de la photo étalon",
+    "title": "Guide image objects",
     "id": "Identifiant de l'objet",
     "add": "Ajouter une photo étalon",
     "delete": "Supprimer l'objet",

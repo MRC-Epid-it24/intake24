@@ -9,6 +9,7 @@
   "id": "Guide image ID",
   "objects": {
     "_": "Guide image object",
+    "title": "Guide image objects",
     "id": "Object ID",
     "add": "Add guide image",
     "delete": "Delete object",
