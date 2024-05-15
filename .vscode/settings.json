@@ -1,11 +1,9 @@
 {
   // Enable the ESlint flat config support
   "eslint.experimental.useFlatConfig": true,
-
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
   "editor.formatOnSave": false,
-
   // Auto fix
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -22,18 +20,36 @@
     "jsonc",
     "yaml",
     "toml",
+    "xml",
     "gql",
-    "graphql"
+    "graphql",
+    "astro"
   ],
   "eslint.workingDirectories": [
-    { "directory": "apps/api" },
-    { "directory": "apps/portal" },
-    { "directory": "packages/common" },
-    { "directory": "packages/common-backend" },
-    { "directory": "packages/db" },
-    { "directory": "packages/i18n" },
-    { "directory": "packages/services" },
-    { "directory": "packages/ui" }
+    {
+      "directory": "apps/api"
+    },
+    {
+      "directory": "apps/portal"
+    },
+    {
+      "directory": "packages/common"
+    },
+    {
+      "directory": "packages/common-backend"
+    },
+    {
+      "directory": "packages/db"
+    },
+    {
+      "directory": "packages/i18n"
+    },
+    {
+      "directory": "packages/services"
+    },
+    {
+      "directory": "packages/ui"
+    }
   ],
   "files.eol": "\n",
   "search.exclude": {

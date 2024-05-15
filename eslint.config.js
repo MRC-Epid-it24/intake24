@@ -9,6 +9,7 @@ export default await antfu({
   vue: {
     vueVersion: 2,
   },
+  formatters: true,
   ignores: [
     'deployment',
     '**/public',

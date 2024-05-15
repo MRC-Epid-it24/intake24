@@ -15,7 +15,9 @@
     background: $ternary;
   }
 
-  .v-list-group--active > .v-list-group__header > .v-list-group__header__prepend-icon {
+  .v-list-group--active
+    > .v-list-group__header
+    > .v-list-group__header__prepend-icon {
     margin-right: 6px;
 
     .v-icon {

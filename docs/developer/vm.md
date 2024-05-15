@@ -62,9 +62,9 @@ and we therefore recommend using VirtualBox.
 8. Right-click on the imported VM and select `Settings`
 
 <div style="clear: both;"></div>
- 
-9. Open the `Network` section and make sure that Adapter 1 is set to `NAT` and Adapter 2 is set to `Host-only adapter` 
-attached to the Host Only Network you configured in step 2:
+
+9. Open the `Network` section and make sure that Adapter 1 is set to `NAT` and Adapter 2 is set to `Host-only adapter`
+   attached to the Host Only Network you configured in step 2:
 
 ![VM settings](../assets/img/vm/settings-2.png)
 
