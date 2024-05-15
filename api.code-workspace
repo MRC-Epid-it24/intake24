@@ -1,25 +1,67 @@
 {
   "folders": [
-    { "path": "deployment" },
-    { "path": "apps/api" },
-    { "path": "packages/common" },
-    { "path": "packages/common-backend" },
-    { "path": "packages/db" },
-    { "path": "packages/i18n" },
-    { "path": "packages/ui" }
+    {
+      "path": "deployment"
+    },
+    {
+      "path": "apps/api"
+    },
+    {
+      "path": "packages/common"
+    },
+    {
+      "path": "packages/common-backend"
+    },
+    {
+      "path": "packages/db"
+    },
+    {
+      "path": "packages/i18n"
+    },
+    {
+      "path": "packages/ui"
+    }
   ],
   "settings": {
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     },
-    "eslint.validate": ["vue", "vue-html", "html", "javascript", "javascriptreact", "typescript"],
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "vue",
+      "html",
+      "markdown",
+      "json",
+      "jsonc",
+      "yaml",
+      "toml",
+      "xml",
+      "gql",
+      "graphql",
+      "astro"
+    ]
     "eslint.workingDirectories": [
-      { "directory": "apps/api" },
-      { "directory": "packages/common" },
-      { "directory": "packages/common-backend" },
-      { "directory": "packages/db" },
-      { "directory": "packages/i18n" },
-      { "directory": "packages/ui" }
+      {
+        "directory": "apps/api"
+      },
+      {
+        "directory": "packages/common"
+      },
+      {
+        "directory": "packages/common-backend"
+      },
+      {
+        "directory": "packages/db"
+      },
+      {
+        "directory": "packages/i18n"
+      },
+      {
+        "directory": "packages/ui"
+      }
     ],
     "files.eol": "\n",
     "search.exclude": {
@@ -30,6 +72,9 @@
     }
   },
   "extensions": {
-    "recommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode"
+    ]
   }
 }

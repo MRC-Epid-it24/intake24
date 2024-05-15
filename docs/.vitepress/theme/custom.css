@@ -1,11 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
-  --vp-font-family-base: Rubik, 'Chinese Quotes', 'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --vp-c-brand-1: #EE672D;
+  --vp-font-family-base: Rubik, 'Chinese Quotes', 'Inter var', 'Inter',
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --vp-c-brand-1: #ee672d;
   --vp-c-brand-2: #020202;
-  --vp-c-brand-3: #4456A6;
-  --vp-c-brand-soft: #FEE8E1;
+  --vp-c-brand-3: #4456a6;
+  --vp-c-brand-soft: #fee8e1;
 }
 
 a {

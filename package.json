@@ -58,6 +58,7 @@
     "calver": "^22.9.1",
     "conventional-changelog-cli": "^5.0.0",
     "eslint": "^9.2.0",
+    "eslint-plugin-format": "^0.1.1",
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "eslint-plugin-vue": "^9.25.0",
     "execa": "^5.1.1",

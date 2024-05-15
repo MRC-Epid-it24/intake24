@@ -1,22 +1,22 @@
 @media print {
-    @page {
-        size: A4;
-        margin: 15mm 10mm;
+  @page {
+    size: A4;
+    margin: 15mm 10mm;
+  }
+
+  .v-application {
+    background-color: #fff !important;
+
+    .v-toolbar {
+      display: none !important;
     }
 
-    .v-application {
-        background-color: #fff !important;
-
-        .v-toolbar {
-            display: none !important;
-        }
-
-        .v-navigation-drawer {
-            display: none !important;
-        }
-
-        .v-main {
-            padding: 0px !important;
-        }
+    .v-navigation-drawer {
+      display: none !important;
     }
+
+    .v-main {
+      padding: 0px !important;
+    }
+  }
 }

@@ -52,7 +52,7 @@ extensions (e.g., `uuid-ossp`) installed.
 
 :::danger
 **Do not run any tests** unless you're sure that the database configuration settings in the `.env-test` file are
-correct because the test framework setup code will **destroy all data** in those databases!  
+correct because the test framework setup code will **destroy all data** in those databases!
 :::
 
 If using the development VM, simply copy `__tests__/.env-test-dev-vm` to `__tests__/.env-test` and you're good to go.

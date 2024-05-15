@@ -15,7 +15,7 @@ descriptions and meal times, etc.
 
 ::: warning
 This section is not intended to provide a detailed description of the version 3 data structures
-but to serve as a reference for version 4 developers.  
+but to serve as a reference for version 4 developers.
 :::
 
 The data structure looks approximately like this:

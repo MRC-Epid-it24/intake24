@@ -1,11 +1,11 @@
 @import 'vuetify/src/styles/styles.sass';
 
 // Libs
-@import "fontawesome";
-@import "flags";
+@import 'fontawesome';
+@import 'flags';
 
 .list-bordered {
-  >:not(:last-child) {
+  > :not(:last-child) {
     border-bottom: 1px solid map-get($grey, 'lighten-3');
   }
 }
