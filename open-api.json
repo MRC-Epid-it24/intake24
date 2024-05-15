@@ -5462,6 +5462,7 @@
                               "LocaleIndexBuild",
                               "PopularitySearchUpdateCounters",
                               "PurgeExpiredTokens",
+                              "ResourceExport",
                               "SurveyEventNotification",
                               "SurveyFeedbackNotification",
                               "SurveyHelpRequestNotification",
@@ -5528,19 +5529,27 @@
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
@@ -5664,7 +5673,39 @@
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "language": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "resource": {
+                                    "type": "string",
+                                    "enum": [
+                                      "as-served-sets",
+                                      "as-served-sets.images",
+                                      "guide-images",
+                                      "guide-images.objects",
+                                      "food-groups",
+                                      "image-maps",
+                                      "image-maps.objects",
+                                      "languages",
+                                      "locales",
+                                      "nutrient-types",
+                                      "standard-units"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "resource"
+                                ]
                               },
                               {
                                 "type": "object",
@@ -6163,6 +6204,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -6229,19 +6271,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -6365,7 +6415,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -6884,6 +6966,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -6950,19 +7033,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -7086,7 +7177,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -8598,6 +8721,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -8664,19 +8788,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -8800,7 +8932,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -12020,6 +12184,7 @@
                               "LocaleIndexBuild",
                               "PopularitySearchUpdateCounters",
                               "PurgeExpiredTokens",
+                              "ResourceExport",
                               "SurveyEventNotification",
                               "SurveyFeedbackNotification",
                               "SurveyHelpRequestNotification",
@@ -12064,19 +12229,27 @@
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
@@ -12200,7 +12373,39 @@
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "language": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "resource": {
+                                    "type": "string",
+                                    "enum": [
+                                      "as-served-sets",
+                                      "as-served-sets.images",
+                                      "guide-images",
+                                      "guide-images.objects",
+                                      "food-groups",
+                                      "image-maps",
+                                      "image-maps.objects",
+                                      "languages",
+                                      "locales",
+                                      "nutrient-types",
+                                      "standard-units"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "resource"
+                                ]
                               },
                               {
                                 "type": "object",
@@ -12598,6 +12803,7 @@
                       "LocaleIndexBuild",
                       "PopularitySearchUpdateCounters",
                       "PurgeExpiredTokens",
+                      "ResourceExport",
                       "SurveyEventNotification",
                       "SurveyFeedbackNotification",
                       "SurveyHelpRequestNotification",
@@ -12649,19 +12855,27 @@
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
@@ -12785,7 +12999,39 @@
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "language": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "resource": {
+                            "type": "string",
+                            "enum": [
+                              "as-served-sets",
+                              "as-served-sets.images",
+                              "guide-images",
+                              "guide-images.objects",
+                              "food-groups",
+                              "image-maps",
+                              "image-maps.objects",
+                              "languages",
+                              "locales",
+                              "nutrient-types",
+                              "standard-units"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "resource"
+                        ]
                       },
                       {
                         "type": "object",
@@ -13135,6 +13381,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -13179,19 +13426,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -13315,7 +13570,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -13695,6 +13982,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -13739,19 +14027,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -13875,7 +14171,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -14278,6 +14606,7 @@
                       "LocaleIndexBuild",
                       "PopularitySearchUpdateCounters",
                       "PurgeExpiredTokens",
+                      "ResourceExport",
                       "SurveyEventNotification",
                       "SurveyFeedbackNotification",
                       "SurveyHelpRequestNotification",
@@ -14329,19 +14658,27 @@
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
                       },
                       {
                         "type": "object",
@@ -14465,7 +14802,39 @@
                       },
                       {
                         "type": "object",
-                        "properties": {}
+                        "additionalProperties": {
+                          "readOnly": true
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "language": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "resource": {
+                            "type": "string",
+                            "enum": [
+                              "as-served-sets",
+                              "as-served-sets.images",
+                              "guide-images",
+                              "guide-images.objects",
+                              "food-groups",
+                              "image-maps",
+                              "image-maps.objects",
+                              "languages",
+                              "locales",
+                              "nutrient-types",
+                              "standard-units"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "resource"
+                        ]
                       },
                       {
                         "type": "object",
@@ -14815,6 +15184,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -14859,19 +15229,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -14995,7 +15373,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -15442,6 +15852,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -15486,19 +15897,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -15622,7 +16041,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -16026,6 +16477,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -16092,19 +16544,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -16228,7 +16688,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
@@ -16708,6 +17200,7 @@
                     "LocaleIndexBuild",
                     "PopularitySearchUpdateCounters",
                     "PurgeExpiredTokens",
+                    "ResourceExport",
                     "SurveyEventNotification",
                     "SurveyFeedbackNotification",
                     "SurveyHelpRequestNotification",
@@ -16742,6 +17235,7 @@
                       "LocaleIndexBuild",
                       "PopularitySearchUpdateCounters",
                       "PurgeExpiredTokens",
+                      "ResourceExport",
                       "SurveyEventNotification",
                       "SurveyFeedbackNotification",
                       "SurveyHelpRequestNotification",
@@ -16816,6 +17310,7 @@
                               "LocaleIndexBuild",
                               "PopularitySearchUpdateCounters",
                               "PurgeExpiredTokens",
+                              "ResourceExport",
                               "SurveyEventNotification",
                               "SurveyFeedbackNotification",
                               "SurveyHelpRequestNotification",
@@ -16882,19 +17377,27 @@
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
                               },
                               {
                                 "type": "object",
@@ -17018,7 +17521,39 @@
                               },
                               {
                                 "type": "object",
-                                "properties": {}
+                                "additionalProperties": {
+                                  "readOnly": true
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "language": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "resource": {
+                                    "type": "string",
+                                    "enum": [
+                                      "as-served-sets",
+                                      "as-served-sets.images",
+                                      "guide-images",
+                                      "guide-images.objects",
+                                      "food-groups",
+                                      "image-maps",
+                                      "image-maps.objects",
+                                      "languages",
+                                      "locales",
+                                      "nutrient-types",
+                                      "standard-units"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "resource"
+                                ]
                               },
                               {
                                 "type": "object",
@@ -17518,6 +18053,7 @@
                         "LocaleIndexBuild",
                         "PopularitySearchUpdateCounters",
                         "PurgeExpiredTokens",
+                        "ResourceExport",
                         "SurveyEventNotification",
                         "SurveyFeedbackNotification",
                         "SurveyHelpRequestNotification",
@@ -17584,19 +18120,27 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
                         },
                         {
                           "type": "object",
@@ -17720,7 +18264,39 @@
                         },
                         {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "readOnly": true
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "language": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "resource": {
+                              "type": "string",
+                              "enum": [
+                                "as-served-sets",
+                                "as-served-sets.images",
+                                "guide-images",
+                                "guide-images.objects",
+                                "food-groups",
+                                "image-maps",
+                                "image-maps.objects",
+                                "languages",
+                                "locales",
+                                "nutrient-types",
+                                "standard-units"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "resource"
+                          ]
                         },
                         {
                           "type": "object",
