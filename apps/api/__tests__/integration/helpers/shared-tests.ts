@@ -11,6 +11,7 @@ type Options = {
   permissions?: string[];
   input?: any;
   result?: boolean;
+  log?: boolean;
 };
 
 interface PaginatedOptions extends Omit<Options, 'result'> {
@@ -84,7 +85,26 @@ function sharedTests(suite: typeof Suite) {
     const { status, body } = await call.send(input);
 
     expect(body).toContainAllKeys(['errors', 'message']);
-    expect(body.errors).toContainAllKeys(fields);
+
+    // This function fails to produce a useful error message for long key lists
+    // expect(body.errors).toContainAllKeys(fields);
+
+    const errorKeys = Object.keys(body.errors);
+    const missing = fields.filter(field => !errorKeys.includes(field));
+    const unexpected = errorKeys.filter(key => !fields.includes(key));
+
+    const keyErrorMessages: string[] = [];
+
+    if (missing.length > 0)
+      keyErrorMessages.push(`Missing expected errors: ${missing.join(', ')}`);
+    if (unexpected.length > 0)
+      keyErrorMessages.push(`Unexpected errors: ${unexpected.join(', ')}`);
+
+    if (keyErrorMessages.length > 0) {
+      // eslint-disable-next-line unicorn/error-message
+      throw new Error(keyErrorMessages.join('\n\n'));
+    }
+
     expect(status).toBe(code);
   };
 

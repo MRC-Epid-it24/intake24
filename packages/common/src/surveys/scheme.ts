@@ -180,6 +180,7 @@ export type SpellingCorrectionPreference = typeof spellingCorrectionPreferenceOp
 
 export type SurveySearchSettings = {
   collectData: boolean;
+  maxResults: number;
   matchScoreWeight: number;
   sortingAlgorithm: SearchSortingAlgorithm;
   spellingCorrectionPreference: SpellingCorrectionPreference;
@@ -188,10 +189,15 @@ export type SurveySearchSettings = {
   enableEditDistance: boolean;
   enablePhonetic: boolean;
   minWordLengthPhonetic: number;
+  firstWordCost: number;
+  wordOrderCost: number;
+  wordDistanceCost: number;
+  unmatchedWordCost: number;
 };
 
 export const defaultSearchSettings: SurveySearchSettings = {
   collectData: true,
+  maxResults: 100,
   matchScoreWeight: 20,
   sortingAlgorithm: 'popularity',
   spellingCorrectionPreference: 'phonetic',
@@ -200,4 +206,8 @@ export const defaultSearchSettings: SurveySearchSettings = {
   enableEditDistance: true,
   enablePhonetic: true,
   minWordLengthPhonetic: 3,
+  firstWordCost: 0,
+  wordOrderCost: 4,
+  wordDistanceCost: 1,
+  unmatchedWordCost: 8,
 };

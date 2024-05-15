@@ -17,6 +17,11 @@ export interface OptionalSearchQueryParameters {
   enableEditDistance?: boolean;
   enablePhonetic?: boolean;
   minWordLengthPhonetic?: number;
+  firstWordCost?: number;
+  wordOrderCost?: number;
+  wordDistanceCost?: number;
+  unmatchedWordCost?: number;
+
 }
 
 export interface SearchQueryParameters {
@@ -34,6 +39,10 @@ export interface SearchQueryParameters {
   enableEditDistance: boolean;
   enablePhonetic: boolean;
   minWordLengthPhonetic: number;
+  firstWordCost: number;
+  wordOrderCost: number;
+  wordDistanceCost: number;
+  unmatchedWordCost: number;
 }
 
 export interface SearchQuery {
@@ -47,16 +56,20 @@ export function applyDefaultSearchQueryParameters(localeId: string, description:
     localeId,
     description,
     previous: optionalParameters.previous ?? [],
-    limit: optionalParameters.limit ?? 50,
+    limit: optionalParameters.limit ?? defaultSearchSettings.maxResults,
     rankingAlgorithm: optionalParameters.rankingAlgorithm ?? defaultSearchSettings.sortingAlgorithm,
     matchScoreWeight: optionalParameters.matchScoreWeight ?? defaultSearchSettings.matchScoreWeight,
     includeHidden: optionalParameters.includeHidden ?? false,
-    limitToCategory: optionalParameters.limitToCategory,
-    spellingCorrectionPreference: defaultSearchSettings.spellingCorrectionPreference,
+    limitToCategory: optionalParameters.limitToCategory ?? optionalParameters.limitToCategory,
+    spellingCorrectionPreference: optionalParameters.spellingCorrectionPreference ?? defaultSearchSettings.spellingCorrectionPreference,
     minWordLength1: optionalParameters.minWordLength1 ?? defaultSearchSettings.minWordLength1,
     minWordLength2: optionalParameters.minWordLength2 ?? defaultSearchSettings.minWordLength2,
     enableEditDistance: optionalParameters.enableEditDistance ?? defaultSearchSettings.enableEditDistance,
     enablePhonetic: optionalParameters.enablePhonetic ?? defaultSearchSettings.enablePhonetic,
     minWordLengthPhonetic: optionalParameters.minWordLengthPhonetic ?? defaultSearchSettings.minWordLengthPhonetic,
+    firstWordCost: optionalParameters.firstWordCost ?? defaultSearchSettings.firstWordCost,
+    wordOrderCost: optionalParameters.wordOrderCost ?? defaultSearchSettings.wordOrderCost,
+    wordDistanceCost: optionalParameters.wordDistanceCost ?? defaultSearchSettings.wordDistanceCost,
+    unmatchedWordCost: optionalParameters.unmatchedWordCost ?? defaultSearchSettings.unmatchedWordCost,
   };
 }

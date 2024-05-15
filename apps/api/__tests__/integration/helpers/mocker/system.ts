@@ -32,6 +32,7 @@ import {
   defaultMeals,
   defaultPrompts,
   searchSortingAlgorithms,
+  spellingCorrectionPreferenceOptions,
 } from '@intake24/common/surveys';
 import { jobTypes } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
@@ -276,6 +277,7 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
 
   const searchSettings = {
     collectData: faker.datatype.boolean(),
+    maxResults: faker.number.int({ min: 10, max: 100 }),
     matchScoreWeight: faker.number.int({ min: 0, max: 100 }),
     sortingAlgorithm: searchSortingAlgorithms[faker.number.int({
       min: 0,
@@ -283,6 +285,14 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
     })],
     minWordLength1: faker.number.int({ min: 2, max: 10 }),
     minWordLength2: faker.number.int({ min: 3, max: 10 }),
+    spellingCorrectionPreference: spellingCorrectionPreferenceOptions[faker.number.int({ min: 0, max: spellingCorrectionPreferenceOptions.length - 1 })],
+    enableEditDistance: faker.datatype.boolean(),
+    enablePhonetic: faker.datatype.boolean(),
+    minWordLengthPhonetic: faker.number.int({ min: 2, max: 10 }),
+    firstWordCost: faker.number.int({ min: 0, max: 20 }),
+    wordOrderCost: faker.number.int({ min: 0, max: 10 }),
+    wordDistanceCost: faker.number.int({ min: 0, max: 10 }),
+    unmatchedWordCost: faker.number.int({ min: 0, max: 10 }),
   };
 
   const surveySchemeOverrides = {

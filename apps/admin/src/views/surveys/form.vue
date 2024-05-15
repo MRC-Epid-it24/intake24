@@ -115,7 +115,18 @@
                 name="searchCollectData"
                 @change="form.errors.clear('searchSettings.collectData')"
               />
-              <div class="text-h6 mb-6 underline">
+              <v-slider
+                v-model.number="form.searchSettings.maxResults"
+                class="mt-7"
+                :error-messages="form.errors.get('searchSettings.maxResults')"
+                hide-details="auto"
+                :label="$t('surveys.search.maxResults')"
+                max="100"
+                min="10"
+                name="seachMaxResults"
+                thumb-label="always"
+              />
+              <div class="text-h6 mb-6 mt-6 underline">
                 {{ $t('surveys.search.sorting') }}
               </div>
               <div class="mt-4">

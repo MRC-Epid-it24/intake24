@@ -39,6 +39,7 @@
   "search": {
     "_": "Search options",
     "collectData": "Collect search data",
+    "maxResults": "Maximum number of food results",
     "sorting": "Sorting",
     "spellingCorrection": "Spelling correction",
     "sortingAlgorithm": "Food ordering method",

@@ -26,6 +26,8 @@ if (parentPortNullable === null)
 
 const parentPort = parentPortNullable;
 
+const MAX_PHRASE_COMBINATIONS = 1000;
+
 const databases = new Database({
   environment: workerData.env,
   databaseConfig: workerData.dbConnectionInfo,
@@ -290,29 +292,45 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
 
+  const spellingCorrectionParameters = {
+    spellingCorrectionPreference: query.parameters.spellingCorrectionPreference,
+    enableEditDistance: query.parameters.enableEditDistance,
+    minWordLength1: query.parameters.minWordLength1,
+    minWordLength2: query.parameters.minWordLength2,
+    enablePhonetic: query.parameters.enablePhonetic,
+    minWordLengthPhonetic: query.parameters.minWordLengthPhonetic,
+  };
+
+  const matchQualityParameters = {
+    firstWordCost: query.parameters.firstWordCost,
+    wordOrderCost: query.parameters.wordOrderCost,
+    wordDistanceCost: query.parameters.wordDistanceCost,
+    unmatchedWordCost: query.parameters.unmatchedWordCost,
+  };
+
   const foodInterpretation = localeIndex.foodIndex.interpretPhrase(
     query.parameters.description,
-    'match-fewer',
+    spellingCorrectionParameters,
     'foods',
   );
   const foodInterpretedRecipeFoods = localeIndex.foodIndex.interpretPhrase(
     query.parameters.description,
-    'match-fewer',
+    spellingCorrectionParameters,
     'recipes',
   );
   let recipeFoodsHeaders: FoodHeader[] = [];
   if (foodInterpretedRecipeFoods.words.length > 0)
     recipeFoodsHeaders = await matchRecipeFoods(foodInterpretedRecipeFoods, query);
 
-  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, 100, 100);
+  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
 
   const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
     query.parameters.description,
-    'match-fewer',
+    spellingCorrectionParameters,
     'categories',
   );
 
-  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, 100, 100);
+  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
 
   const filteredFoods = foodResults.filter((matchResult) => {
     const acceptHidden = query.parameters.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
@@ -340,8 +358,8 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   const categories = rankCategoryResults(filteredCategories);
 
   return {
-    foods,
-    categories,
+    foods: foods.slice(0, query.parameters.limit),
+    categories: categories.slice(0, query.parameters.limit),
   };
 }
 

@@ -8,7 +8,7 @@ import {
 import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
 import { SpellingCorrectionPreference } from '@intake24/common/surveys/scheme';
 
-export interface MatchParameters {
+export interface SpellingCorrectionParameters {
   spellingCorrectionPreference: SpellingCorrectionPreference;
   enableEditDistance: boolean;
   minWordLength1: number;
@@ -122,7 +122,7 @@ export class RichDictionary {
   interpretWord(
     word: string,
     maxInterpretations: number,
-    parameters: MatchParameters,
+    parameters: SpellingCorrectionParameters,
   ): InterpretedWord {
     const lowerCaseWord = word.toLocaleLowerCase();
     const interpretations = new Array<WordInterpretation>();

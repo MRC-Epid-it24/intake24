@@ -1,7 +1,9 @@
+import { uniq } from 'lodash';
+
 import type {
   DictionaryType,
-  MatchParameters,
   PhoneticEncoder,
+  SpellingCorrectionParameters,
 } from '@intake24/api/food-index/dictionary';
 import type { RecipeFoodsHeader } from '@intake24/common/types';
 import { RichDictionary } from '@intake24/api/food-index/dictionary';
@@ -15,12 +17,6 @@ import type { InterpretedWord } from './interpreted-word';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;
-const _MAX_PHRASE_COMBINATIONS = 1000;
-const _MAX_MATCHES_FOR_MATCH_MORE = 3;
-const _MAX_PHRASE_MATCHES = 6;
-const DISTANCE_COST = 1;
-const ORDER_COST = 4;
-const UNMATCHED_WORD_COST = 8;
 
 export interface PhraseWithKey<K> {
   phrase: string;
@@ -69,6 +65,13 @@ export interface PhraseMatchResult<K> {
   quality: number;
 }
 
+export interface MatchQualityParameters {
+  firstWordCost: number;
+  wordOrderCost: number;
+  wordDistanceCost: number;
+  unmatchedWordCost: number;
+}
+
 export class PhraseIndex<K> {
   readonly languageBackend: LanguageBackend;
 
@@ -98,7 +101,7 @@ export class PhraseIndex<K> {
 
   interpretPhrase(
     phrase: string,
-    matchParameters: MatchParameters,
+    spellingCorrectionParameters: SpellingCorrectionParameters,
     dictionaryType: DictionaryType = 'foods',
   ): InterpretedPhrase {
     const words = this.getWordList(phrase).slice(0, MAX_WORDS_PER_PHRASE);
@@ -109,13 +112,13 @@ export class PhraseIndex<K> {
       case 'foods':
       case 'categories':
         interpretedWords = words
-          .map(w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, matchParameters))
+          .map(w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters))
           .filter(w => w.interpretations.length > 0);
         break;
       case 'recipes':
         interpretedWords = words
           .map(w =>
-            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, matchParameters),
+            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters),
           )
           .filter(w => w.interpretations.length > 0);
         break;
@@ -175,28 +178,28 @@ export class PhraseIndex<K> {
     return result;
   }
 
-  private evaluateMatchQuality(input: InterpretedPhrase, matchedWords: Array<WordMatch>): number {
+  private evaluateMatchQuality(input: InterpretedPhrase, matchedWords: Array<WordMatch>, parameters: MatchQualityParameters): number {
     const matchedIndices = matchedWords.map(w => w.matched.wordIndex);
 
+    const firstWordPenalty = matchedWords.some(match => match.word.index === 0) ? 0 : parameters.firstWordCost;
     const orderViolations = countOrderViolations(matchedIndices);
     const distanceViolations = countDistanceViolations(matchedIndices);
 
-    const dictionaryPhraseLength
-      = this.phraseIndex[matchedWords[0].matched.phraseIndex].words.length;
-
-    // In some rare cases words can be matched multiple times, clamp to 0 avoid negative cost values
-    const unmatchedWords = Math.max(0, dictionaryPhraseLength - matchedWords.length);
+    const matchedWordCount = uniq(matchedWords.map(match => match.word.index)).length;
+    const unmatchedWords = input.words.length - matchedWordCount;
 
     return (
-      orderViolations * ORDER_COST
-      + distanceViolations * DISTANCE_COST
-      + unmatchedWords * UNMATCHED_WORD_COST
+      firstWordPenalty
+      + orderViolations * parameters.wordOrderCost
+      + distanceViolations * parameters.wordDistanceCost
+      + unmatchedWords * parameters.unmatchedWordCost
     );
   }
 
   private matchCombination(
     phrase: InterpretedPhrase,
     combination: Array<number>,
+    matchQualityParameters: MatchQualityParameters,
   ): Array<PhraseMatch> {
     // First step is to build a flat list of matched words from the word index, where every match is
     // a reference to a specific word in a dictionary phrase in the form of a s
@@ -256,7 +259,7 @@ export class PhraseIndex<K> {
     for (const key of uniqueGroupedMatches.keys()) {
       const matchedWords = uniqueGroupedMatches.get(key)!;
 
-      const quality = this.evaluateMatchQuality(phrase, matchedWords);
+      const quality = this.evaluateMatchQuality(phrase, matchedWords, matchQualityParameters);
 
       phraseMatches.push({
         phraseIndex: key,
@@ -270,12 +273,12 @@ export class PhraseIndex<K> {
 
   findMatches(
     phrase: InterpretedPhrase,
-    maxMatches: number,
     maxCombinations: number,
+    matchQualityParameters: MatchQualityParameters,
   ): Array<PhraseMatchResult<K>> {
     const matchedPhrases = phrase
       .generateCombinations(maxCombinations)
-      .flatMap(c => this.matchCombination(phrase, c));
+      .flatMap(c => this.matchCombination(phrase, c, matchQualityParameters));
 
     if (matchedPhrases.length === 0)
       return [];
@@ -307,7 +310,7 @@ export class PhraseIndex<K> {
       }
     }
 
-    return uniqueMatches.slice(0, maxMatches).map(m => ({
+    return uniqueMatches.map(m => ({
       phrase: this.phraseIndex[m.phraseIndex].asTyped,
       key: this.phraseIndex[m.phraseIndex].key,
       quality: m.quality,
