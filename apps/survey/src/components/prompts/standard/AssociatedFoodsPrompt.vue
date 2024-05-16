@@ -3,15 +3,12 @@
     <v-expansion-panels v-model="activePrompt" :tile="isMobile" @change="updatePrompts">
       <v-expansion-panel v-for="(assocPrompt, index) in prompts" :key="index">
         <v-expansion-panel-header>
-          {{ translate(associatedFoodPrompts[index].promptText) }}
+          {{ promptHeader(index) }}
           <template #actions>
             <expansion-panel-actions :valid="isPromptValid(assocPrompt)" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-sheet v-if="availableFoods[index].length" class="text-sm-body-2">
-            {{ promptI18n.existingFoodHint }}
-          </v-sheet>
           <v-radio-group
             v-model="assocPrompt.mainFoodConfirmed"
             :row="!isMobile"
@@ -196,7 +193,7 @@ import type {
 import type { EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { getFoodDescription } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
+import { translate, useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFoodChooser.vue';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -309,6 +306,7 @@ export default defineComponent({
   },
 
   computed: {
+
     associatedFoodPrompts(): UserAssociatedFoodPrompt[] {
       return this.food.data.associatedFoodPrompts;
     },
@@ -367,6 +365,14 @@ export default defineComponent({
 
   methods: {
     isPromptValid,
+
+    promptHeader(index: number): string {
+      const promptText = translate(this.associatedFoodPrompts[index].promptText);
+      if (this.availableFoods[index].length > 0)
+        return `${promptText} ${this.promptI18n.existingFoodHint}`;
+      else
+        return promptText;
+    },
 
     showFoodChooser(promptIndex: number): boolean {
       const prompt = this.prompts[promptIndex];
