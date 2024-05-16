@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { jobTypes } from '@intake24/common/types';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
-import { jobAttributes } from '@intake24/common/types/http/admin';
+import { jobAttributes, userJobRequest } from '@intake24/common/types/http/admin';
 
 export const job = initContract().router({
   browse: {
@@ -25,6 +25,16 @@ export const job = initContract().router({
     },
     summary: 'Browse user jobs',
     description: 'Browse user jobs (paginated list)',
+  },
+  submit: {
+    method: 'POST',
+    path: '/admin/user/jobs',
+    body: userJobRequest,
+    responses: {
+      200: jobAttributes,
+    },
+    summary: 'Submit job',
+    description: 'Submit new job to the queue',
   },
   read: {
     method: 'GET',

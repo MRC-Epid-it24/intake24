@@ -65,6 +65,9 @@ export const PurgeExpiredTokens = z.record(z.never());
 export const resources = [
   'as-served-sets',
   'as-served-sets.images',
+  'drinkware-sets',
+  'drinkware-sets.scales',
+  'drinkware-sets.volumes',
   'guide-images',
   'guide-images.objects',
   'food-groups',
@@ -187,6 +190,8 @@ export const jobParams = z.object({
 
 export type JobParams = z.infer<typeof jobParams>;
 
+export const userJobTypeParams = ResourceExport;
+
 export const jobTypeParams = z.union([
   CleanRedisStore,
   CleanStorageFiles,
@@ -241,6 +246,12 @@ export const surveyJobs = [
 
 export type SurveyJob = (typeof surveyJobs)[number];
 
+export const userJobs = [
+  'ResourceExport',
+] as const;
+
+export type UserJob = (typeof userJobs)[number];
+
 export const jobTypes = [
   'CleanRedisStore',
   'CleanStorageFiles',
@@ -253,7 +264,6 @@ export const jobTypes = [
   'SurveyEventNotification',
   'SurveyFeedbackNotification',
   'SurveyHelpRequestNotification',
-  'SurveyRespondentsImport',
   'SurveySchemesSync',
   'SurveySubmission',
   'UserEmailVerificationNotification',
@@ -261,6 +271,7 @@ export const jobTypes = [
   ...localeJobs,
   ...nutrientTableJobs,
   ...surveyJobs,
+  ...userJobs,
 ] as const;
 
 export type JobType = keyof JobParams & (typeof jobTypes)[number];

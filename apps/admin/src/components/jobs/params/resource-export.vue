@@ -8,7 +8,7 @@
             v-model="params.resource"
             :error-messages="errors.get('params.resource')"
             hide-details="auto"
-            :items="resourceItems"
+            :items="items"
             :label="$t('jobs.types.ResourceExport.resource')"
             name="resource"
             outlined
@@ -23,8 +23,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { useUser } from '@intake24/admin/stores';
 import { type JobParams, resources } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n/index';
+import { useI18n } from '@intake24/i18n';
 
 import jobParams from './job-params';
 
@@ -35,14 +36,15 @@ export default defineComponent({
 
   setup() {
     const { i18n } = useI18n();
+    const { can } = useUser();
 
-    const resourceItems = resources.map(value => ({
+    const items = resources.filter(item => can(`${item.split('.')[0]}|browse`)).map(value => ({
       text: i18n.t(`${value}.title`).toString(),
       value,
     }));
 
     return {
-      resourceItems,
+      items,
     };
   },
 });

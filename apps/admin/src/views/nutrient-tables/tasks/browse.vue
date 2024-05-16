@@ -32,7 +32,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="px-6" cols="6">
+          <v-col class="px-6" cols="12" md="6">
             <v-btn
               block
               color="primary"

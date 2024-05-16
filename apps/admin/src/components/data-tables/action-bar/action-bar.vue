@@ -56,9 +56,6 @@ export default defineComponent({
 
   computed: {
     currentActions(): string[] {
-      if (this.module === 'user')
-        return this.actions;
-
       const { ownerId, securables } = this.item;
       return this.actions.filter((item) => {
         const action = item === 'download' ? 'read' : item;

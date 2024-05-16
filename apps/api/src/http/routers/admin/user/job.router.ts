@@ -7,7 +7,7 @@ import { literal, where } from 'sequelize';
 
 import type { JobAttributes } from '@intake24/common/types/http/admin';
 import type { WhereOptions } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import { Job, Op } from '@intake24/db';
 
@@ -35,6 +35,20 @@ export function job() {
       });
 
       return { status: 200, body: jobs };
+    },
+    submit: async ({ body: { type, params }, req }) => {
+      const { userId } = req.scope.cradle.user;
+
+      const resource = params.resource.split('.')[0];
+      if (!(await req.scope.cradle.aclService.hasPermission(`${resource}|browse`)))
+        throw new ForbiddenError();
+
+      const jobEntry = await req.scope.cradle.scheduler.jobs.addJob(
+        { userId, type, params },
+        { delay: 500 },
+      );
+
+      return { status: 200, body: jobEntry };
     },
     read: async ({ params: { jobId: id }, req }) => {
       const { userId } = req.scope.cradle.user;

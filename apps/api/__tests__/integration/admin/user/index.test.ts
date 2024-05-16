@@ -8,6 +8,7 @@ export default () => {
   describe('get /api/admin/user/verify', verify);
 
   describe('get /api/admin/user/jobs', jobs.browse);
+  describe('post /api/admin/user/jobs', jobs.submit);
   describe('get /api/admin/user/jobs/:jobId', jobs.read);
   describe('get /api/admin/user/jobs/:jobId/download', jobs.download);
 

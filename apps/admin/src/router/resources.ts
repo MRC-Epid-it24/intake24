@@ -5,7 +5,7 @@ const routes: string[] = ['create', 'read', 'edit'];
 export const resources: Resource[] = [
   {
     group: 'user',
-    name: 'user',
+    name: 'user.jobs',
     icon: 'fas fa-circle-user',
     api: 'admin/user/jobs',
     generateRoutes: false,

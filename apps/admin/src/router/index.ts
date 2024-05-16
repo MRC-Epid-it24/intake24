@@ -132,22 +132,29 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/user/jobs',
-    name: 'user-jobs',
+    name: 'user.jobs',
     component: views.user.jobs.browse,
-    meta: { module: { current: 'user' }, title: 'user.jobs._' },
+    meta: { module: { current: 'user.jobs' }, title: 'user.jobs._' },
+  },
+  {
+    path: '/user/jobs/create',
+    name: 'user.jobs-create',
+    component: views.user.jobs.create,
+    meta: { module: { current: 'user.jobs' }, title: 'user.jobs._' },
+    props: true,
   },
   {
     path: '/user/jobs/:id',
-    name: 'user-jobs-read',
+    name: 'user.jobs-read',
     component: views.user.jobs.read,
-    meta: { module: { current: 'user' }, title: 'user.jobs._' },
+    meta: { module: { current: 'user.jobs' }, title: 'user.jobs._' },
     props: true,
   },
   {
     path: '/user/personal-access-tokens',
-    name: 'user-personal-access-tokens',
+    name: 'user.personal-access-tokens',
     component: views.user.personalAccessTokens.browse,
-    meta: { module: { current: 'user' }, title: 'user.personalAccessTokens._' },
+    meta: { module: { current: 'user.personal-access-tokens' }, title: 'user.personalAccessTokens._' },
   },
   // Food databases explorer
   {

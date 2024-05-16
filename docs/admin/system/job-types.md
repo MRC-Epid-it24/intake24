@@ -15,6 +15,7 @@ Jobs types available in system.
   - [NutrientTableMappingImport](#nutrienttablemappingimport)
   - [PopularitySearchUpdateCounters](#popularitysearchupdatecounters)
   - [PurgeExpiredTokens](#purgeexpiredtokens)
+  - [Resource export](#resource-export)
   - [SurveyAuthUrlsExport](#surveyauthurlsexport)
   - [SurveyDataExport](#surveydataexport)
   - [SurveyFeedbackNotification](#surveyfeedbacknotification)
@@ -182,6 +183,33 @@ Each subtask will firstly delete any existing data and then copies over data fro
 ```json
 {}
 ```
+
+## Resource export
+
+`ResourceExport` allows to export specific resource data as CSV-file.
+
+```json
+{
+  "resource": string,
+}
+```
+
+**Exportable resources**
+
+- As served sets
+- As served set images
+- Drinkware sets
+- Drinkware set scales
+- Drinkware set volumes
+- Food groups
+- Guide images
+- Guide image objects
+- Image maps
+- Image map objects
+- Languages
+- Locales
+- Nutrient types
+- Standard units
 
 ## SurveyAuthUrlsExport
 

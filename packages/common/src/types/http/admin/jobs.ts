@@ -2,8 +2,15 @@ import { z } from 'zod';
 
 import type { Pagination } from '@intake24/db';
 
-import { jobTypeParams, jobTypes } from '../../jobs';
+import { jobTypeParams, jobTypes, userJobs, userJobTypeParams } from '../../jobs';
 import { userAttributes } from './users';
+
+export const userJobRequest = z.object({
+  type: z.enum(userJobs),
+  params: userJobTypeParams,
+});
+
+export type UserJobRequest = z.infer<typeof userJobRequest>;
 
 export type JobsResponse = Pagination<JobAttributes>;
 
