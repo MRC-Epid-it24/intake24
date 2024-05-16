@@ -27,7 +27,18 @@ function normaliseRankingData(ranking: RankingData): RankingData {
   if (Object.keys(ranking).length === 0)
     return {};
 
-  const min = Math.min(...Object.values(ranking));
+  // Minimum value can be either zero or Math.min(...Object.values(ranking)).
+  //
+  // In this case it seems more natural to use 0 so that the combined value of
+  // ranking data and match score is more fairly distributed.
+  //
+  // For example, if the incoming ranking data is [50, 100] it could either be
+  // normalised as [0, 1] (if the minimum value is used as the lower bound) or
+  // as [0.5, 1] (if 0 is used as the lower bound).
+  //
+  // Since the initial frequency/lowest priority is 0, it makes more sense
+  // if the lowest non-zero frequency data is mapped to a non-zero value.
+  const min = 0;
   const max = Math.max(...Object.values(ranking));
 
   const range = max - min;
@@ -74,7 +85,7 @@ function applyRankingData(
   const normalisedRankingData = normaliseRankingData(rankingData);
   const normalisedSearchResults = normaliseMatchCost(results);
 
-  return normalisedSearchResults
+  const combinedScoreResults = normalisedSearchResults
     .map((result) => {
       let rankingScore = normalisedRankingData[result.key];
 
@@ -90,9 +101,11 @@ function applyRankingData(
         header: { code: result.key, name: result.phrase },
         rankingScore: combinedScore,
       };
-    })
-    .sort((h1, h2) => h2.rankingScore - h1.rankingScore)
-    .map(h => h.header);
+    });
+
+  const sortedResults = combinedScoreResults.sort((h1, h2) => h2.rankingScore - h1.rankingScore);
+
+  return sortedResults.map(h => h.header);
 }
 
 async function getRankingData(
