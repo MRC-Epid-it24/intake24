@@ -345,7 +345,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     filteredFoods,
     query.parameters.localeId,
     query.parameters.rankingAlgorithm,
-    query.parameters.matchScoreWeight,
+    query.parameters.matchScoreWeight / 100.0,
     logger,
     recipeFoodsHeaders,
   );
