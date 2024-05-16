@@ -8,6 +8,14 @@
   "id": "Drinkware set ID",
   "imageMapTitle": "Vessels in this set",
   "imageMapSubtitle": "Select a vessel from the image below to edit its sliding scale shape and specify liquid volume measurements.",
+  "scales": {
+    "_": "Drinkware scale",
+    "title": "Drinkware scales"
+  },
+  "volumes": {
+    "_": "Drinkware volume",
+    "title": "Drinkware volumes"
+  },
   "selector": {
     "empty": {
       "title": "No object selected",

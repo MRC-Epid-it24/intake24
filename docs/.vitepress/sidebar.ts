@@ -317,6 +317,10 @@ export const sidebar = {
           text: 'Personal access tokens',
           link: '/admin/user/personal-access-tokens',
         },
+        {
+          text: 'Jobs',
+          link: '/admin/user/jobs',
+        },
       ],
     },
     {

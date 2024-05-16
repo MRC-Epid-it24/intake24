@@ -32,7 +32,7 @@
                 <v-list-item-title>{{ $t('user.profile') }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item link :to="{ name: 'user-personal-access-tokens' }">
+            <v-list-item link :to="{ name: 'user.personal-access-tokens' }">
               <v-list-item-action>
                 <v-icon>fas fa-key</v-icon>
               </v-list-item-action>
@@ -40,7 +40,7 @@
                 <v-list-item-title>{{ $t('user.personalAccessTokens.title') }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item link :to="{ name: 'user-jobs' }">
+            <v-list-item link :to="{ name: 'user.jobs' }">
               <v-list-item-action>
                 <v-icon>$jobs</v-icon>
               </v-list-item-action>

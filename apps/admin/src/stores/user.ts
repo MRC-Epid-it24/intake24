@@ -46,6 +46,9 @@ export const useUser = defineStore('user', {
       const { name } = useResource();
       const { resource = name, action, ownerId, securables = [] } = permission;
 
+      if (resource.startsWith('user.'))
+        return true;
+
       if (action) {
         if (this.permissions.includes(`${resource}|${action}`))
           return true;

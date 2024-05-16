@@ -5,6 +5,64 @@
   "create": "Ajouter une série de verres",
   "edit": "Modifier la série de verres",
   "delete": "Supprimer la série de verres",
-
-  "id": "Identifiant de la série de verres"
+  "id": "Identifiant de la série de verres",
+  "imageMapTitle": "Vessels in this set",
+  "imageMapSubtitle": "Select a vessel from the image below to edit its sliding scale shape and specify liquid volume measurements.",
+  "scales": {
+    "_": "Drinkware scale",
+    "title": "Drinkware scales"
+  },
+  "volumes": {
+    "_": "Drinkware volume",
+    "title": "Drinkware volumes"
+  },
+  "selector": {
+    "empty": {
+      "title": "No object selected",
+      "text": "Select a vessel from the drinkware set to edit the sliding scale."
+    }
+  },
+  "label": {
+    "title": "Vessel name"
+  },
+  "slidingScale": {
+    "title": "Sliding scale shape",
+    "missing": {
+      "title": "Sliding scale data missing",
+      "text": "A sliding scale has not yet been created for this object. Select a base image to create a new sliding scale."
+    },
+    "obsolete": "Obsolete sliding scale data",
+    "legacy": {
+      "p1": "Sliding scale data for this object is not editable because it is in the legacy format.",
+      "p2": "Sliding scales in legacy format can still be used for portion size estimation, however in order to make any changes the sliding scale data needs to be converted into the new format.",
+      "p3": "Fillable volume shape (sliding scale outline) <strong>will not</strong> be automatically converted!",
+      "p4": "The sliding scale <strong>will be unusable</strong> after conversion until the fillable volume shape is defined.",
+      "convert": "Convert"
+    },
+    "imagePreview": "Selected image preview",
+    "baseImageFile": "Base image file",
+    "createButtonLabel": "Create",
+    "editInstructions": "<strong>Double click</strong> to add a point · <strong>single click</strong> to select a point · <strong>click and drag</strong> to move a point · <strong>delete key</strong> to delete a point",
+    "fillableAreaToggle": "Show old fillable area image overlay",
+    "deleteSelected": "Delete selected",
+    "deleteAll": "Clear",
+    "replaceBaseImage": "Replace base image",
+    "replaceButtonLabel": "Replace"
+  },
+  "clearScaleDialog": {
+    "title": "Are you sure?",
+    "msg": "You're about to delete the sliding scale shape data.\n This action cannot be undone."
+  },
+  "volumeTable": {
+    "title": "Volume measurements",
+    "legacy": {
+      "p1": "These volume measurements likely come from the legacy sliding scale format that only stores the normalised liquid height values, remapped to the [0, 1] range.",
+      "p2": "Portion size estimation calculations use the normalised values so this data is still valid, but the original height measurements in mm are not available."
+    },
+    "addRow": "Add row",
+    "removeRow": "Remove last row",
+    "paste": "Paste data",
+    "heightLabel": "Liquid height (mm)",
+    "volumeLabel": "Liquid volume (ml)"
+  }
 }

@@ -19,7 +19,8 @@
 
   "jobs": {
     "_": "Job",
-    "title": "Jobs"
+    "title": "Jobs",
+    "create": "New job"
   },
 
   "personalAccessTokens": {
