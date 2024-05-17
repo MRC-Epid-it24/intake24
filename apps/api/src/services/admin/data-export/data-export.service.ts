@@ -162,6 +162,8 @@ function dataExportService({
         start += batchSize;
       }
 
+      let currentIndex = 0;
+
       for (const offset of offsets) {
         const difference = batchSize + offset - max;
         const meals = await SurveySubmissionMeal.findAll({
@@ -173,7 +175,6 @@ function dataExportService({
         const mealId: string[] = [];
         const mealIndex: Record<string, number> = {};
 
-        let currentIndex = 0;
         const mealCount = meals.length;
         meals.forEach(({ id, surveySubmissionId }, index, array) => {
           mealId.push(id);
