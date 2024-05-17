@@ -37,6 +37,7 @@ databases.init();
 
 interface LocalFoodIndex {
   foodParentCategories: Map<string, Set<string>>;
+  nonEmptyCategories: Set<string>;
   foodIndex: PhraseIndex<string>;
   categoryIndex: PhraseIndex<string>;
 }
@@ -160,8 +161,28 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     localFoods.map(food => [food.code, food.parentCategories]),
   );
 
+  const categoryParentCategories = new Map(
+    localCategories.map(category => [category.code, category.parentCategories]),
+  );
+
+  const nonEmptyCategories = new Set<string>();
+
+  function markNonEmpty(categoryCode: string): void {
+    nonEmptyCategories.add(categoryCode);
+
+    const parentCategories = categoryParentCategories.get(categoryCode);
+
+    if (parentCategories !== undefined) {
+      for (const parentCategoryCode of parentCategories)
+        markNonEmpty(parentCategoryCode);
+    }
+  }
+
+  localFoods.forEach(food => food.parentCategories.forEach(categoryCode => markNonEmpty(categoryCode)));
+
   return {
     foodParentCategories,
+    nonEmptyCategories,
     foodIndex,
     categoryIndex,
   };
@@ -352,7 +373,8 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
 
   const filteredCategories = categoryResults.filter(
     matchResult =>
-      query.parameters.limitToCategory === undefined || isSubcategory(matchResult.key, query.parameters.limitToCategory),
+      (query.parameters.limitToCategory === undefined || isSubcategory(matchResult.key, query.parameters.limitToCategory))
+      && localeIndex.nonEmptyCategories.has(matchResult.key),
   );
 
   const categories = rankCategoryResults(filteredCategories);
