@@ -1,4 +1,3 @@
-import type { CategoryHeader } from '@intake24/common/types/http';
 import type { AlternativeFoodNames } from '@intake24/db';
 import { Category, CategoryLocal, FoodLocalList, RecipeFoods, SynonymSet } from '@intake24/db';
 
@@ -8,6 +7,12 @@ export type LocalFoodData = {
   code: string;
   name: string;
   altNames: AlternativeFoodNames;
+  parentCategories: Set<string>;
+};
+
+export type LocalCategoryData = {
+  code: string;
+  name: string;
   parentCategories: Set<string>;
 };
 
@@ -76,17 +81,27 @@ export async function fetchLocalFoods(localeId: string): Promise<LocalFoodData[]
   });
 }
 
-export async function fetchLocalCategories(localeId: string): Promise<CategoryHeader[]> {
+export async function fetchLocalCategories(localeId: string): Promise<LocalCategoryData[]> {
   const localCategories = await CategoryLocal.findAll({
     where: { localeId },
     attributes: ['categoryCode', 'name'],
-    include: { required: true, association: 'main', attributes: [], where: { isHidden: false } },
+    include: { required: true, association: 'main', attributes: ['code'], include: [
+      {
+        association: 'parentCategories',
+        attributes: ['code'],
+      },
+    ], where: { isHidden: false } },
   });
 
-  return localCategories.map(row => ({
-    code: row.categoryCode,
-    name: row.name,
-  }));
+  return localCategories.map((row) => {
+    const parentCategories = new Set(row.main!.parentCategories!.map(row => row.code));
+
+    return ({
+      code: row.categoryCode,
+      name: row.name,
+      parentCategories,
+    });
+  });
 }
 
 /**
