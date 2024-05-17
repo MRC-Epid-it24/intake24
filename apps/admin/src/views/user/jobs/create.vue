@@ -91,7 +91,7 @@ export default defineComponent({
 
   mixins: [formMixin],
 
-  setup(_props) {
+  setup() {
     const { i18n } = useI18n();
 
     const jobTypeList = computed(() =>

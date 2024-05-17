@@ -2,15 +2,15 @@ import { omit, pick } from 'lodash';
 import request from 'supertest';
 
 import type { CustomField } from '@intake24/common/types';
-import type { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
+import type { UserInput, UserRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/users';
   const permissions = ['acl', 'users', 'users|create'];
 
-  let input: CreateUserRequest;
-  let output: Omit<UpdateUserRequest, 'permissions' | 'roles'>;
+  let input: UserRequest;
+  let output: Omit<UserInput, 'permissions' | 'roles'>;
 
   beforeAll(async () => {
     input = mocker.system.user();
@@ -29,15 +29,6 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, [
-        'password',
-        'passwordConfirm',
-        'permissions',
-        'roles',
-      ]);
-    });
-
     it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
@@ -50,14 +41,20 @@ export default () => {
           'emailNotifications',
           'smsNotifications',
           'customFields',
-          'permissions',
-          'roles',
+          'permissions.0',
+          'permissions.1',
+          'permissions.2',
+          'roles.0',
+          'roles.1',
+          'roles.2',
           'disabledAt',
           'verifiedAt',
         ],
         {
           input: {
             email: 'invalidEmailFormat',
+            password: 'weak-pass',
+            passwordConfirm: 'not-matching',
             multiFactorAuthentication: 10,
             emailNotifications: 'string',
             smsNotifications: [100],

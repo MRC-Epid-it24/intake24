@@ -37,12 +37,12 @@ export default () => {
     });
 
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['name', 'displayName']);
+      await suite.sharedTests.assertInvalidInput('put', url, ['displayName']);
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['name', 'displayName'], {
-        input: { name: '', displayName: '' },
+      await suite.sharedTests.assertInvalidInput('put', url, ['displayName', 'description'], {
+        input: { displayName: '', description: {} },
       });
     });
 

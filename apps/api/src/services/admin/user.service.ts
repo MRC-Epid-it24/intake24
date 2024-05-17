@@ -2,11 +2,12 @@ import { uniqBy } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { CustomField } from '@intake24/common/types';
-import type { CreateUserInput, UpdateUserInput } from '@intake24/common/types/http/admin';
+import type { UserInput } from '@intake24/common/types/http/admin';
 import type { Transaction, UserPasswordAttributes } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
+import { randomString } from '@intake24/common/util';
 import { defaultAlgorithm } from '@intake24/common-backend';
 import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 
@@ -203,13 +204,13 @@ function adminUserService({
    * - user permissions
    * - user roles
    *
-   * @param {CreateUserInput} input
+   * @param {UserInput} input
    * @param {CreateUserOptions} [options]
    * @returns {Promise<User>}
    */
-  const create = async (input: CreateUserInput, options: CreateUserOptions = {}): Promise<User> => {
+  const create = async (input: UserInput, options: CreateUserOptions = {}): Promise<User> => {
     const { notify, userAgent } = options;
-    const { password, permissions = [], roles = [], ...rest } = input;
+    const { password = randomString(12), permissions = [], roles = [], ...rest } = input;
 
     const user = await db.system.transaction(async (transaction) => {
       const user = await User.create(
@@ -245,27 +246,27 @@ function adminUserService({
    * - user roles
    *
    * @param {string} userId
-   * @param {UpdateUserInput} input
+   * @param {UserInput} input
    * @returns {Promise<User>}
    */
-  const update = async (userId: string, input: UpdateUserInput): Promise<User> => {
+  const update = async (userId: string, input: UserInput): Promise<User> => {
     const user = await User.scope('customFields').findByPk(userId);
 
     if (!user)
       throw new NotFoundError();
 
-    const { customFields, permissions = [], roles = [], ...rest } = input;
+    if (!Object.keys(input).length)
+      return user;
+
+    const { customFields, permissions, roles, ...rest } = input;
 
     await db.system.transaction(async (transaction) => {
       await Promise.all([
         user.update({ ...rest, simpleName: toSimpleName(rest.name) }, { transaction }),
-        user.$set('permissions', permissions, { transaction }),
-        user.$set('roles', roles, { transaction }),
-      ]);
-
-      // Update custom fields
-      if (customFields && user.customFields)
-        await updateUserCustomFields(userId, user.customFields, customFields, transaction);
+        permissions ? user.$set('permissions', permissions, { transaction }) : null,
+        roles ? user.$set('roles', roles, { transaction }) : null,
+        customFields && user.customFields ? updateUserCustomFields(userId, user.customFields, customFields, transaction) : null,
+      ].filter(Boolean));
 
       await flushACLCacheByUserId(user.id);
     });

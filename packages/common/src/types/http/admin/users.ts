@@ -1,51 +1,32 @@
+import { isInt } from 'validator';
 import { z } from 'zod';
 
-import type {
-  Pagination,
-  PermissionAttributes,
-  RoleAttributes,
-  UserCustomFieldAttributes,
-  UserSurveyAliasAttributes,
-} from '@intake24/db';
+import { strongPasswordWithConfirmOptional } from '@intake24/common/schemas';
 
-import type { CustomField } from '../..';
-import type { PermissionListEntry } from './permissions';
-import type { RoleListEntry } from './roles';
+import { customField } from '../..';
+import { permissionAttributes } from './permissions';
+import { roleAttributes } from './roles';
 
-export type UserInput = {
-  name?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  emailNotifications?: boolean;
-  smsNotifications?: boolean;
-  multiFactorAuthentication?: boolean;
-  customFields?: CustomField[];
-  permissions?: string[];
-  roles?: string[];
-  verifiedAt?: Date | null;
-  disabledAt?: Date | null;
-};
+export const userRequest = z.object({
+  disabledAt: z.coerce.date().nullish(),
+  email: z.string().max(512).email().toLowerCase().nullish(),
+  emailNotifications: z.boolean().optional(),
+  multiFactorAuthentication: z.boolean().optional(),
+  name: z.string().max(512).nullish(),
+  phone: z.string().max(32).nullish(),
+  smsNotifications: z.boolean().optional(),
+  verifiedAt: z.coerce.date().nullish(),
+  permissions: z.string().refine(value => isInt(value)).array().optional(),
+  roles: z.string().refine(value => isInt(value)).array().optional(),
+  customFields: customField.array().optional(),
+}).merge(strongPasswordWithConfirmOptional);
 
-export interface CreateUserInput extends UserInput {
-  password: string;
-}
+export type UserRequest = z.infer<typeof userRequest>;
 
-export interface CreateUserRequest extends CreateUserInput {
-  passwordConfirm: string;
-}
-
-export type UpdateUserInput = UserInput;
-
-export type UpdateUserRequest = UpdateUserInput;
-
-/*
- - for use of we want to allow updating password in Admin UI
-export interface UpdateUserInput extends UserInput {
-  password?: string;
-}
-export interface UpdateUserRequest extends UpdateUserInput {
-  passwordConfirm?: string;
-} */
+export const userInput = userRequest.omit({
+  passwordConfirm: true,
+});
+export type UserInput = z.infer<typeof userInput>;
 
 export const userAttributes = z.object({
   createdAt: z.date(),
@@ -64,20 +45,39 @@ export const userAttributes = z.object({
 
 export type UserAttributes = z.infer<typeof userAttributes>;
 
-export type UsersResponse = Pagination<UserAttributes>;
+export const userCustomField = z.object({
+  id: z.string(),
+  name: z.string(),
+  value: z.string(),
+});
 
-export type UserEntry = UserAttributes & {
-  aliases: UserSurveyAliasAttributes[];
-  customFields: UserCustomFieldAttributes[];
-  permissions: PermissionAttributes[];
-  roles: RoleAttributes[];
-};
+export const userSurveyAliasAttributes = z.object({
+  id: z.string(),
+  surveyId: z.string(),
+  userId: z.string(),
+  username: z.string().min(1).max(256),
+  urlAuthToken: z.string().min(1).max(128),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type UserSurveyAliasAttributes = z.infer<typeof userSurveyAliasAttributes>;
+
+export const userEntry = userAttributes.extend({
+  aliases: z.any().array(),
+  customFields: userCustomField.array(),
+  permissions: permissionAttributes.array(),
+  roles: roleAttributes.array(),
+});
+
+export type UserEntry = z.infer<typeof userEntry>;
 
 export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 
 export type Owner = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 
-export type UserRefs = {
-  permissions: PermissionListEntry[];
-  roles: RoleListEntry[];
-};
+export const userRefs = z.object({
+  permissions: permissionAttributes.pick({ name: true, displayName: true, description: true }).array(),
+  roles: roleAttributes.pick({ name: true, displayName: true, description: true }).array(),
+});
+export type UserRefs = z.infer<typeof userRefs>;

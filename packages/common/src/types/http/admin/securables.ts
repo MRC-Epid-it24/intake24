@@ -1,10 +1,10 @@
 import type { Pagination, UserSecurableAttributes } from '@intake24/db';
 
 import type { UserListEntry } from '.';
-import type { CreateUserInput } from './users';
+import type { UserRequest } from './users';
 
 export interface CreateUserWithSecurables
-  extends Pick<CreateUserInput, 'email' | 'name' | 'phone'> {
+  extends Pick<UserRequest, 'email' | 'name' | 'phone'> {
   email: string;
   name?: string | null;
   phone?: string | null;

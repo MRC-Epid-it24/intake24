@@ -1,4 +1,4 @@
-import type { CreateUserRequest } from '@intake24/common/types/http/admin';
+import type { UserRequest } from '@intake24/common/types/http/admin';
 import type { User } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
@@ -10,7 +10,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: CreateUserRequest;
+  let input: UserRequest;
   let user: User;
 
   beforeAll(async () => {

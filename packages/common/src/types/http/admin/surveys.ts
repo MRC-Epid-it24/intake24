@@ -60,9 +60,3 @@ export const userSurveySessionAttributes = z.object({
 });
 
 export type UserSurveySessionAttributes = z.infer<typeof userSurveySessionAttributes>;
-
-export const userSurveySessionResponse = userSurveySessionAttributes.extend({
-  id: z.string(),
-});
-
-export type UserSurveySessionResponse = z.infer<typeof userSurveySessionResponse>;

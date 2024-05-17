@@ -45,7 +45,6 @@ export default () => {
 
     it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('put', url, [
-        'name',
         'displayName',
         'permissions',
       ]);
@@ -55,8 +54,8 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'put',
         url,
-        ['name', 'displayName', 'permissions'],
-        { input: { name: '', displayName: '', permissions: [1, 'invalidId', 2] } },
+        ['displayName', 'description', 'permissions.0', 'permissions.1', 'permissions.2'],
+        { input: { displayName: '', description: [], permissions: [1, 'invalidId', 2] } },
       );
     });
 

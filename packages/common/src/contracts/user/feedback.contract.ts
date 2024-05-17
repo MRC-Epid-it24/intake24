@@ -9,7 +9,7 @@ export const feedback = initContract().router({
     path: '/user/feedback',
     query: z.object({
       survey: z.string(),
-      submissions: z.array(z.string()).optional(),
+      submissions: z.array(z.string().uuid()).optional(),
     }),
     responses: {
       200: z.instanceof(Readable),
@@ -22,7 +22,7 @@ export const feedback = initContract().router({
     path: '/user/feedback',
     query: z.object({
       survey: z.string(),
-      submissions: z.array(z.string()).optional(),
+      submissions: z.array(z.string().uuid()).optional(),
     }),
     body: z
       .object({

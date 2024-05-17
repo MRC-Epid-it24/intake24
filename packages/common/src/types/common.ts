@@ -10,10 +10,12 @@ export type Application = (typeof applications)[number];
 
 export const isApplication = (app: any): app is Application => applications.includes(app);
 
-export type CustomField = {
-  name: string;
-  value: string;
-};
+export const customField = z.object({
+  name: z.string().min(1).max(128),
+  value: z.string(),
+});
+
+export type CustomField = z.infer<typeof customField>;
 
 export type Dictionary<T = any> = { [key: string]: T };
 

@@ -3,10 +3,10 @@ import type { Transaction } from 'sequelize';
 import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
-  CreateRespondentInput,
-  RespondentInput,
+  CreateRespondentRequest,
+  RespondentRequest,
 } from '@intake24/common/types/http/admin';
-import type { Job, UserCustomFieldCreationAttributes } from '@intake24/db';
+import type { UserCustomFieldCreationAttributes } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { surveyRespondent } from '@intake24/common/security';
@@ -62,12 +62,12 @@ function adminSurveyService({
    * Create respondent record
    *
    * @param {(Survey | string)} survey
-   * @param {CreateRespondentInput} input
+   * @param {CreateRespondentRequest} input
    * @returns {Promise<UserSurveyAlias>}
    */
   const createRespondent = async (
     survey: Survey | string,
-    input: CreateRespondentInput,
+    input: CreateRespondentRequest,
   ): Promise<UserSurveyAlias> => {
     const surveyEntry
       = typeof survey === 'string'
@@ -138,12 +138,12 @@ function adminSurveyService({
    * Bulk create survey respondents
    *
    * @param {string} surveyId
-   * @param {CreateRespondentInput[]} inputs
+   * @param {CreateRespondentRequest[]} inputs
    * @returns {Promise<void>}
    */
   const createRespondents = async (
     surveyId: string,
-    inputs: CreateRespondentInput[],
+    inputs: CreateRespondentRequest[],
   ): Promise<UserSurveyAlias[]> => {
     const survey = await Survey.findByPk(surveyId, {
       attributes: [
@@ -214,13 +214,13 @@ function adminSurveyService({
    *
    * @param {string} surveyId
    * @param {string} username
-   * @param {RespondentInput} input
+   * @param {RespondentRequest} input
    * @returns {Promise<UserSurveyAlias>}
    */
   const updateRespondent = async (
     surveyId: string,
     username: string,
-    input: RespondentInput,
+    input: RespondentRequest,
   ): Promise<UserSurveyAlias> => {
     const [survey, alias] = await Promise.all([
       Survey.findByPk(surveyId, {
@@ -314,52 +314,6 @@ function adminSurveyService({
   };
 
   /**
-   * Bulk import of survey respondents
-   * - runs as a job
-   * - temporarily stores CSV file
-   *
-   * @param {string} surveyId
-   * @param {string} userId
-   * @param {Express.Multer.File} file
-   * @returns {Promise<Job>}
-   */
-  const importRespondents = async (
-    surveyId: string,
-    userId: string,
-    file: Express.Multer.File,
-  ): Promise<Job> => {
-    const survey = await Survey.findByPk(surveyId, { attributes: ['id'] });
-    if (!survey)
-      throw new NotFoundError();
-
-    return scheduler.jobs.addJob({
-      type: 'SurveyRespondentsImport',
-      userId,
-      params: { surveyId, file: file.path },
-    });
-  };
-
-  /**
-   * Export survey respondents authentication URLs
-   * - runs as a job and creates downloadable file
-   *
-   * @param {string} surveyId
-   * @param {string} userId
-   * @returns {Promise<Job>}
-   */
-  const exportAuthenticationUrls = async (surveyId: string, userId: string): Promise<Job> => {
-    const survey = await Survey.findByPk(surveyId, { attributes: ['id'] });
-    if (!survey)
-      throw new NotFoundError();
-
-    return scheduler.jobs.addJob({
-      type: 'SurveyAuthUrlsExport',
-      userId,
-      params: { surveyId },
-    });
-  };
-
-  /**
    * Queue locale tasks
    *
    * @param {QueueJob} input
@@ -374,8 +328,6 @@ function adminSurveyService({
     createRespondents,
     updateRespondent,
     deleteRespondent,
-    importRespondents,
-    exportAuthenticationUrls,
     queueTask,
   };
 }

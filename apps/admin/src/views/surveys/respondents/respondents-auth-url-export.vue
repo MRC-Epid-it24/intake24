@@ -48,6 +48,7 @@
 import { computed, defineComponent } from 'vue';
 
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
+import { useHttp } from '@intake24/admin/services';
 
 export default defineComponent({
   name: 'RespondentsAuthUrlExport',
@@ -62,30 +63,30 @@ export default defineComponent({
   },
 
   setup(props) {
+    const http = useHttp();
     const jobType = 'SurveyAuthUrlsExport';
     const jobQuery = computed(() => ({ surveyId: props.surveyId }));
 
     const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType, jobQuery);
 
-    return { dialog, jobs, jobInProgress, startPolling };
-  },
+    const close = () => {
+      dialog.value = false;
+    };
 
-  methods: {
-    close() {
-      this.dialog = false;
-    },
-
-    async submit() {
-      if (this.jobInProgress)
+    const submit = async () => {
+      if (jobInProgress.value)
         return;
 
-      const { data } = await this.$http.post(
-        `admin/surveys/${this.surveyId}/respondents/export-auth-urls`,
+      const { data } = await http.post(
+        `admin/surveys/${props.surveyId}/tasks`,
+        { type: jobType, params: { surveyId: props.surveyId } },
       );
 
-      this.jobs.unshift(data);
-      await this.startPolling();
-    },
+      jobs.value.unshift(data);
+      await startPolling();
+    };
+
+    return { close, dialog, jobs, jobInProgress, startPolling, submit };
   },
 });
 </script>

@@ -4,7 +4,6 @@ export * from './foods';
 export * from './images';
 export * from './languages';
 export * from './locales';
-export * from './permissions';
 export * from './respondents';
 export * from './roles';
 export * from './survey-scheme';

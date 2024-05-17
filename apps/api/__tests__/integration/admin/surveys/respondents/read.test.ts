@@ -3,13 +3,13 @@ import request from 'supertest';
 
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import type { CustomField } from '@intake24/common/types';
-import type { CreateRespondentInput } from '@intake24/common/types/http/admin';
+import type { CreateRespondentRequest } from '@intake24/common/types/http/admin';
 import type { UserSurveyAlias } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-async function assertRespondentResponse(url: string, output: Omit<CreateRespondentInput, 'password' | 'passwordConfirm'>) {
+async function assertRespondentResponse(url: string, output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>) {
   const { status, body } = await request(suite.app)
     .get(url)
     .set('Accept', 'application/json')
@@ -45,8 +45,8 @@ export default () => {
   let survey: Survey;
   let respondent: UserSurveyAlias;
 
-  let input: CreateRespondentInput;
-  let output: Omit<CreateRespondentInput, 'password' | 'passwordConfirm'>;
+  let input: CreateRespondentRequest;
+  let output: Omit<CreateRespondentRequest, 'password' | 'passwordConfirm'>;
 
   let securable: SetSecurableOptions;
 

@@ -4,15 +4,15 @@ import request from 'supertest';
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import type { CustomField } from '@intake24/common/types';
 import type {
-  CreateRespondentInput,
-  RespondentInput,
+  CreateRespondentRequest,
+  RespondentRequest,
 } from '@intake24/common/types/http/admin';
 import type { UserSurveyAlias } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-async function assertRespondentResponse(url: string, input: RespondentInput) {
+async function assertRespondentResponse(url: string, input: RespondentRequest) {
   const { status, body } = await request(suite.app)
     .patch(url)
     .set('Accept', 'application/json')
@@ -49,8 +49,8 @@ export default () => {
 
   let survey: Survey;
 
-  let input: CreateRespondentInput;
-  let updateInput: RespondentInput;
+  let input: CreateRespondentRequest;
+  let updateInput: RespondentRequest;
   let respondent: UserSurveyAlias;
 
   let securable: SetSecurableOptions;

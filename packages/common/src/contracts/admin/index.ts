@@ -1,3 +1,4 @@
+import acl from './acl';
 import { authentication } from './authentication.contract';
 import { job } from './job.contract';
 import { nutrientTable } from './nutrient-table.contract';
@@ -11,6 +12,7 @@ import { task } from './task.contract';
 import user from './user';
 
 export default {
+  acl,
   authentication,
   job,
   nutrientTable,

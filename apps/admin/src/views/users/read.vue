@@ -84,7 +84,7 @@
       </tbody>
       <tbody v-else>
         <tr>
-          <td colspan="2">
+          <td colspan="3">
             {{ $t('users.aliases.none') }}
           </td>
         </tr>
