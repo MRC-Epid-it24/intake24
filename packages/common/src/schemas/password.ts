@@ -10,7 +10,7 @@ export const strongPassword = z.string().refine(val =>
     minSymbols: 0,
   }), { message: 'Weak password' });
 
-export const strongPasswordOptional = z.string().optional().refine((val) => {
+export const strongPasswordOptional = z.string().nullish().transform(val => val ?? undefined).refine((val) => {
   if (!val)
     return true;
 
@@ -24,21 +24,11 @@ export const strongPasswordOptional = z.string().optional().refine((val) => {
 }, { message: 'Weak password' });
 
 export const strongPasswordWithConfirm = z.object({
-  password: z.string().refine(val =>
-    isStrongPassword(val, {
-      minLength: 10,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 0,
-    }), { message: 'Weak password' }),
-  passwordConfirm: z.string().refine(val =>
-    isStrongPassword(val, {
-      minLength: 10,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 0,
-    }),
-  ),
+  password: strongPassword,
+  passwordConfirm: strongPassword,
+});
+
+export const strongPasswordWithConfirmOptional = z.object({
+  password: strongPasswordOptional,
+  passwordConfirm: strongPasswordOptional,
 });

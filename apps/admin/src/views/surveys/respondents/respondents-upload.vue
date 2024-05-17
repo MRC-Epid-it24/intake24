@@ -25,7 +25,7 @@
             <v-row>
               <v-col cols="12" sm>
                 <v-file-input
-                  v-model="form.file"
+                  v-model="form.params.file"
                   :error-messages="form.errors.get('file')"
                   hide-details="auto"
                   :label="$t('common.file.csv')"
@@ -67,7 +67,11 @@ import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { createForm } from '@intake24/admin/util';
 
 type RespondentsUploadForm = {
-  file: File | null;
+  type: 'SurveyRespondentsImport';
+  params: {
+    surveyId: string;
+    file: File | null;
+  };
 };
 
 export default defineComponent({
@@ -86,30 +90,32 @@ export default defineComponent({
     const jobType = 'SurveyRespondentsImport';
     const jobQuery = computed(() => ({ surveyId: props.surveyId }));
 
-    const form = reactive(createForm<RespondentsUploadForm>({ file: null }, { multipart: true }));
+    const form = reactive(createForm<RespondentsUploadForm>(
+      {
+        type: jobType,
+        params: { file: null, surveyId: props.surveyId },
+      },
+      { multipart: true },
+    ));
 
     const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType, jobQuery);
 
-    return { form, dialog, jobs, jobInProgress, startPolling };
-  },
+    const close = () => {
+      form.reset();
+      dialog.value = false;
+    };
 
-  methods: {
-    close() {
-      this.form.reset();
-      this.dialog = false;
-    },
-
-    async submit() {
-      if (this.jobInProgress)
+    const submit = async () => {
+      if (jobInProgress.value)
         return;
 
-      const job = await this.form.post<JobAttributes>(
-        `admin/surveys/${this.surveyId}/respondents/upload`,
-      );
+      const job = await form.post<JobAttributes>(`admin/surveys/${props.surveyId}/tasks`);
 
-      this.jobs.unshift(job);
-      await this.startPolling();
-    },
+      jobs.value.unshift(job);
+      await startPolling();
+    };
+
+    return { close, form, dialog, jobs, jobInProgress, startPolling, submit };
   },
 });
 </script>

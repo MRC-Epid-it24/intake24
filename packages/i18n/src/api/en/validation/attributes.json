@@ -27,6 +27,7 @@
   "dataExport": "Data export",
   "demographicGroups": "Demographic groups",
   "description": "Description",
+  "disabledAt": "Disabled at",
   "displayName": "Display name",
   "endDate": "End date",
   "email": "Email",
@@ -140,6 +141,7 @@
   "userCustomFields": "User custom fields",
   "username": "Username",
   "value": "Value",
+  "verifiedAt": "Verified at",
   "weight": "Weight",
   "weightKg": "Weight",
   "weightTarget": "Weight target"

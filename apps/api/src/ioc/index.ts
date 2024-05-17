@@ -13,9 +13,6 @@ import type {
   AdminLocalCategoriesController,
   AdminLocalFoodsController,
   AdminSurveyController,
-  AdminSurveyRespondentController,
-  AdminSurveySubmissionController,
-  AdminUserController,
   AsServedImageController,
   AsServedSetController,
   DrinkwareSetController,
@@ -29,9 +26,7 @@ import type {
   LocaleSplitListController,
   LocaleSplitWordController,
   LocaleSynonymSetController,
-  PermissionController,
   ReferenceController,
-  RoleController,
   SurveySchemeController,
   SurveySchemePromptController,
 } from '@intake24/api/http/controllers';
@@ -166,13 +161,6 @@ export interface IoC extends Jobs {
 
   // Survey MGMT
   adminSurveyController: AdminSurveyController;
-  adminSurveyRespondentController: AdminSurveyRespondentController;
-  adminSurveySubmissionController: AdminSurveySubmissionController;
-
-  // ACL controllers
-  permissionController: PermissionController;
-  roleController: RoleController;
-  adminUserController: AdminUserController;
 
   // System services
   db: DatabasesInterface;

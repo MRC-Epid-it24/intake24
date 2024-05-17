@@ -6,12 +6,12 @@ import slugify from 'slugify';
 import type {
   CreateLanguageRequest,
   CreateLocaleRequest,
-  CreateRespondentInput,
+  CreateRespondentRequest,
   CreateSurveyRequest,
-  CreateUserRequest,
   PermissionRequest,
   RoleRequest,
   TaskRequest,
+  UserRequest,
 } from '@intake24/common/types/http/admin';
 import type {
   FeedbackSchemeCreationAttributes,
@@ -54,7 +54,7 @@ function role(): RoleRequest {
   return { name, displayName, description, permissions };
 }
 
-function user(): CreateUserRequest {
+function user(): UserRequest {
   const name = faker.person.firstName();
   const email = faker.internet.email();
   const password = 'sUpErStRoNgPaSwOrD-123467890';
@@ -86,7 +86,7 @@ function user(): CreateUserRequest {
   };
 }
 
-function respondent(): CreateRespondentInput {
+function respondent(): CreateRespondentRequest {
   const username = faker.internet.userName();
   const name = faker.person.firstName();
   const email = faker.internet.email();

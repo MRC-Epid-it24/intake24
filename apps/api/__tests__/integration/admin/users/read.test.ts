@@ -2,7 +2,7 @@ import { omit, pick } from 'lodash';
 import request from 'supertest';
 
 import type { CustomField } from '@intake24/common/types';
-import type { CreateUserRequest, UpdateUserRequest } from '@intake24/common/types/http/admin';
+import type { UserInput, UserRequest } from '@intake24/common/types/http/admin';
 import type { User } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
@@ -14,8 +14,8 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: CreateUserRequest;
-  let output: UpdateUserRequest;
+  let input: UserRequest;
+  let output: UserInput;
   let user: User;
 
   beforeAll(async () => {

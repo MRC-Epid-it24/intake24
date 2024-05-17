@@ -43,12 +43,5 @@ export default (container: AwilixContainer): void => {
 
     // Survey MGMT
     adminSurveyController: asFunction(controllers.admin.surveys.survey),
-    adminSurveyRespondentController: asFunction(controllers.admin.surveys.respondent),
-    adminSurveySubmissionController: asFunction(controllers.admin.surveys.submission),
-
-    // ACL
-    permissionController: asFunction(controllers.admin.acl.permission),
-    roleController: asFunction(controllers.admin.acl.role),
-    adminUserController: asFunction(controllers.admin.acl.user),
   });
 };

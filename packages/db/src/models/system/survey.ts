@@ -23,14 +23,16 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
+import type {
+  SchemeOverrides,
+  SurveySearchSettings,
+  SurveyState,
+} from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import { surveyPermissions } from '@intake24/common/security';
 import {
   defaultOverrides,
   defaultSearchSettings,
-  SchemeOverrides,
-  SurveySearchSettings,
-  SurveyState,
 } from '@intake24/common/surveys';
 
 import BaseModel from '../model';

@@ -7,8 +7,6 @@ import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
 import securables from '../securables';
-import surveyRespondents from './survey-respondents';
-import surveySubmissions from './survey-submissions';
 
 export default () => {
   const { adminSurveyController, fsConfig } = ioc.cradle;
@@ -35,8 +33,6 @@ export default () => {
 
   router.get('/:surveyId/edit', wrapAsync(adminSurveyController.edit));
 
-  router.use('/:surveyId/respondents', surveyRespondents());
-  router.use('/:surveyId/submissions', surveySubmissions());
   router.post(
     '/:surveyId/tasks',
     upload.single('params[file]'),

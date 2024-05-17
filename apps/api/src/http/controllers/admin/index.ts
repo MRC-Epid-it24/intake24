@@ -1,4 +1,3 @@
-import acl from './acl';
 import categories from './categories';
 import fdbs from './fdbs';
 import feedbackScheme from './feedback-scheme.controller';
@@ -12,7 +11,6 @@ import surveyScheme from './survey-scheme.controller';
 import surveySchemePrompt from './survey-scheme-prompt.controller';
 import surveys from './surveys';
 
-export * from './acl';
 export * from './categories';
 export * from './fdbs';
 export * from './feedback-scheme.controller';
@@ -28,7 +26,6 @@ export * from './survey-scheme-prompt.controller';
 export * from './surveys';
 
 export default {
-  acl,
   fdbs,
   foods,
   categories,

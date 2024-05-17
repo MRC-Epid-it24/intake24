@@ -1,5 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
-import type { CreateUserInput } from '@intake24/common/types/http/admin';
+import type { UserInput } from '@intake24/common/types/http/admin';
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { Permission, Role, User } from '@intake24/db';
 
@@ -38,11 +38,11 @@ function adminSignupService({
   /**
    * Admin tool signup - create new user with researcher role
    *
-   * @param {CreateUserInput} input
+   * @param {UserInput} input
    * @param {CreateUserOptions} [options]
    * @returns {Promise<User>}
    */
-  const signUp = async (input: CreateUserInput, options: CreateUserOptions = {}): Promise<User> => {
+  const signUp = async (input: UserInput, options: CreateUserOptions = {}): Promise<User> => {
     const { enabled, permissions: permissionNames, roles: roleNames } = aclConfig.signup;
 
     if (!enabled)

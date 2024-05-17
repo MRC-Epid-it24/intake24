@@ -1,3 +1,6 @@
+import acl from './acl';
+import { permission } from './acl/permission.router';
+import { role } from './acl/role.router';
 import { authentication } from './authentication.router';
 import { job } from './job.router';
 import { nutrientTable } from './nutrient-table.router';
@@ -11,11 +14,14 @@ import { task } from './task.router';
 import user from './user';
 
 export default {
+  acl,
   authentication,
   job,
   nutrientTable,
   nutrientType,
   nutrientUnit,
+  permission,
+  role,
   signInLog,
   signUp,
   standardUnit,

@@ -1,0 +1,108 @@
+import { initContract } from '@ts-rest/core';
+import { z } from 'zod';
+
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import {
+  userAttributes,
+  userRefs,
+  userRequest,
+} from '@intake24/common/types/http/admin';
+
+export const user = initContract().router({
+  browse: {
+    method: 'GET',
+    path: '/admin/users',
+    query: paginationRequest,
+    responses: {
+      200: z.object({
+        data: userAttributes.array(),
+        meta: paginationMeta,
+      }),
+    },
+    summary: 'Browse users',
+    description: 'Browse users (paginated list)',
+  },
+  store: {
+    method: 'POST',
+    path: '/admin/users',
+    body: userRequest,
+    responses: {
+      201: userAttributes,
+    },
+    summary: 'Create user',
+    description: 'Create new user',
+  },
+  refs: {
+    method: 'GET',
+    path: '/admin/users/refs',
+    responses: {
+      200: userRefs,
+    },
+    summary: 'User references',
+    description: 'User reference data',
+  },
+  read: {
+    method: 'GET',
+    path: '/admin/users/:userId',
+    responses: {
+      200: userAttributes,
+    },
+    summary: 'Get user',
+    description: 'Get user by id',
+  },
+  edit: {
+    method: 'GET',
+    path: '/admin/users/:userId/edit',
+    responses: {
+      200: userAttributes,
+    },
+    summary: 'Get user for edit',
+    description: 'Get user by id for edit',
+  },
+  update: {
+    method: 'PUT',
+    path: '/admin/users/:userId',
+    body: userRequest,
+    responses: {
+      200: userAttributes,
+    },
+    summary: 'Update user',
+    description: 'Update user by id',
+  },
+  destroy: {
+    method: 'DELETE',
+    path: '/admin/users/:userId',
+    body: null,
+    responses: {
+      204: z.undefined(),
+    },
+    summary: 'Delete user',
+    description: 'Delete user by id',
+  },
+  permissions: {
+    method: 'GET',
+    path: '/admin/users/:userId/permissions',
+    query: paginationRequest,
+    responses: {
+      200: z.object({
+        data: userAttributes.array(),
+        meta: paginationMeta,
+      }),
+    },
+    summary: 'Browse assigned permissions',
+    description: 'Browse assigned permissions (paginated list)',
+  },
+  roles: {
+    method: 'GET',
+    path: '/admin/users/:userId/roles',
+    query: paginationRequest,
+    responses: {
+      200: z.object({
+        data: userAttributes.array(),
+        meta: paginationMeta,
+      }),
+    },
+    summary: 'Browse assigned roles',
+    description: 'Browse assigned roles (paginated list)',
+  },
+});

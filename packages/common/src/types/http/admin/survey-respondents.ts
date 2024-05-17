@@ -1,34 +1,46 @@
-import type { Pagination, UserSurveyAliasAttributes } from '@intake24/db';
+import { isEmail } from 'validator';
+import { z } from 'zod';
 
-import type { CustomField } from '../..';
+import { userAttributes, userCustomField, userRequest, userSurveyAliasAttributes } from './users';
 
-export interface SurveyRespondentEntry
-  extends Omit<UserSurveyAliasAttributes, 'createdAt' | 'updatedAt'> {
-  name: string | null;
-  email: string | null;
-  phone: string | null;
-  customFields: CustomField[];
-  surveyAuthUrl: string;
-  feedbackAuthUrl: string;
-}
+export const respondentEntry = userSurveyAliasAttributes.omit({
+  createdAt: true,
+  updatedAt: true,
+}).merge(userAttributes.pick({
+  name: true,
+  email: true,
+  phone: true,
+})).extend({
+  customFields: userCustomField.array(),
+  surveyAuthUrl: z.string(),
+  feedbackAuthUrl: z.string(),
+});
 
-export interface SurveyRespondentListEntry
-  extends Omit<UserSurveyAliasAttributes, 'createdAt' | 'updatedAt'> {
-  surveyAuthUrl: string;
-  feedbackAuthUrl: string;
-}
+export type RespondentEntry = z.infer<typeof respondentEntry>;
 
-export type SurveyRespondentsResponse = Pagination<SurveyRespondentListEntry>;
+export const respondentListEntry = userSurveyAliasAttributes.omit({
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  surveyAuthUrl: z.string(),
+  feedbackAuthUrl: z.string(),
+});
 
-export type RespondentInput = {
-  password?: string | null;
-  passwordConfirm?: string | null;
-  name?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  customFields?: CustomField[];
-};
+export type RespondentListEntry = z.infer<typeof respondentListEntry>;
 
-export interface CreateRespondentInput extends RespondentInput {
-  username: string;
-}
+export const respondentRequest = userRequest.pick({
+  name: true,
+  email: true,
+  phone: true,
+  customFields: true,
+  password: true,
+  passwordConfirm: true,
+});
+
+export type RespondentRequest = z.infer<typeof respondentRequest>;
+
+export const createRespondentRequest = respondentRequest.extend({
+  username: z.string().min(1).max(256).refine(val => !isEmail(val)),
+});
+
+export type CreateRespondentRequest = z.infer<typeof createRespondentRequest>;
