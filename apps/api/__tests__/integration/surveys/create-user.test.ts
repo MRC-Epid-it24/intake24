@@ -84,19 +84,26 @@ export default () => {
 
     it(`should return 400 when missing claim (username)`, async () => {
       const { username, ...rest } = payload;
-      const missingClaimToken = jwt.sign(rest, secret, { expiresIn: '5m' });
+      await suite.sharedTests.assertInvalidInput('post', url, ['username'], {
+        input: {
+          token: jwt.sign(rest, secret, { expiresIn: '5m' }),
+        },
+      });
+    });
 
-      const { status } = await request(suite.app)
-        .post(url)
-        .set('Accept', 'application/json')
-        .send({ token: missingClaimToken });
-
-      expect(status).toBe(400);
+    it(`should return 400 for invalid input data`, async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['username', 'password', 'redirectUrl'], {
+        input: {
+          token: jwt.sign({
+            username: false,
+            password: 'weak',
+            redirectUrl: 'not-url',
+          }, secret, { expiresIn: '5m' }),
+        },
+      });
     });
 
     it('should return 200 and respondent record', async () => {
-      await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: secret });
-
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -107,12 +114,26 @@ export default () => {
     });
 
     it('should return 200 and same respondent record, should be idempotent', async () => {
-      await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: secret });
-
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
         .send({ token });
+
+      expect(status).toBe(200);
+      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);
+    });
+
+    it('should return 200 and respondent record (with password)', async () => {
+      const tokenWithPassword = jwt.sign({
+        username: 'userIdentifier002',
+        password: 'aPassword132456',
+        redirectUrl: 'https://redirect-me.here',
+      }, secret, { expiresIn: '15m' });
+
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .send({ token: tokenWithPassword });
 
       expect(status).toBe(200);
       expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);

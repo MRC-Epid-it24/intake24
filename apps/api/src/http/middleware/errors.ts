@@ -16,6 +16,7 @@ import {
   UnauthorizedError,
   ValidationError,
 } from '../errors';
+import { mapZodIssues } from './validation-errors';
 
 export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -75,8 +76,8 @@ export default (app: Express, { logger }: Ops): void => {
   // TODO: format should be unified with express-validator format
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ZodError) {
-      const { details: errors, message } = fromZodError(err);
-      res.status(400).json({ errors, message });
+      const { details, message } = fromZodError(err);
+      res.status(400).json({ errors: mapZodIssues(details), message });
       return;
     }
     next(err);
