@@ -10,7 +10,7 @@ Intake24 system has three main components:
 2. Admin application
 3. Survey application
 
-Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment) section describes in detail how to use ansible scripts.
+Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment/) section describes in detail how to use ansible scripts.
 
 For manual deployment, there are few technical aspects to consider.
 
