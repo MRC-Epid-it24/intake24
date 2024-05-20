@@ -4,6 +4,7 @@ import type {
   AlternativeValidationError,
   FieldValidationError,
   GroupedAlternativeValidationError,
+  Location,
   UnknownFieldsError,
   ValidationError,
 } from 'express-validator';
@@ -91,7 +92,10 @@ export function createExtendedValidationError(
   }
 }
 
-export function formatZodIssueMessage(issue: ZodIssue, i18nService: I18nService) {
+export function formatZodIssueMessage(issue: ZodIssue, i18nService?: I18nService) {
+  if (!i18nService)
+    return issue.message;
+
   switch (issue.code) {
     case 'invalid_type':
       return i18nService.translate(`validation.types.${issue.expected}._`, {
@@ -102,32 +106,40 @@ export function formatZodIssueMessage(issue: ZodIssue, i18nService: I18nService)
   }
 }
 
+export function mapZodIssues(details: ZodIssue[], i18nService?: I18nService, location: Location = 'body'): Record<string, ExtendedValidationError> {
+  return details.reduce<Record<string, ExtendedValidationError>>((acc, issue) => {
+    const path = issue.path.join('.');
+    acc[path] = {
+      type: 'field',
+      location,
+      code: issue.code,
+      msg: formatZodIssueMessage(issue, i18nService),
+      path,
+      value: null,
+    };
+
+    return acc;
+  }, {});
+}
+
 export function requestValidationErrorHandler(err: RequestValidationError, req: Request, res: Response, _next: NextFunction) {
   const { i18nService } = req.scope.cradle;
-  const errors: Record<string, ExtendedValidationError> = {};
-
   let firstError: ZodValidationError;
-  ['pathParams', 'headers', 'query', 'body'].forEach((key) => {
+
+  const errors = ['pathParams', 'headers', 'query', 'body'].reduce<Record<string, ExtendedValidationError>>((acc, key) => {
     const zKey = key as keyof typeof err;
     if (!err[zKey])
-      return;
+      return acc;
 
     const error = fromZodError(err[zKey] as ZodError);
     if (!firstError)
       firstError = error;
 
-    error.details.forEach((issue) => {
-      const path = issue.path.join('.');
-      errors[path] = {
-        type: 'field',
-        location: key as any,
-        code: issue.code,
-        msg: formatZodIssueMessage(issue, i18nService),
-        path,
-        value: null,
-      };
-    });
-  });
+    if (error.details.length)
+      acc = { ...acc, ...mapZodIssues(error.details, i18nService, (key === 'pathParams' ? 'params' : key) as Location) };
+
+    return acc;
+  }, {});
 
   return res.status(400).json({
     // name: firstError!.name,
