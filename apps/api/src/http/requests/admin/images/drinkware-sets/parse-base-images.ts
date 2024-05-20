@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 
 import { ValidationError } from '@intake24/api/http/errors';
 
-const fileKeyRegex = /^([a-zA-Z][a-zA-Z_0-9]*)\[([0-9])+\]$/;
+const fileKeyRegex = /^([a-z]\w*)\[(\d)+\]$/i;
 
 const allowedImageMimeTypes = ['image/jpeg', 'image/webp'];
 

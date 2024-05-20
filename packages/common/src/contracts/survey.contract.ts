@@ -42,7 +42,7 @@ export const survey = initContract().router({
     method: 'POST',
     path: '/surveys/:slug/create-user',
     body: z.object({
-      token: z.string().refine(value => isJWT(value), { path: ['token'], message: 'Token must be a valid JWT' }),
+      token: z.string().refine(value => isJWT(value), { message: 'Token must be a valid JWT' }),
     }),
     responses: {
       200: createUserResponse,
