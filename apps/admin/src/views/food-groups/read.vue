@@ -14,7 +14,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { FoodGroupEntry } from '@intake24/common/types/http/admin';
+import type { FoodGroupAttributes } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
@@ -25,7 +25,7 @@ export default defineComponent({
 
   setup(props) {
     useEntryFetch(props);
-    const { entry, entryLoaded } = useEntry<FoodGroupEntry>(props);
+    const { entry, entryLoaded } = useEntry<FoodGroupAttributes>(props);
 
     return { entry, entryLoaded };
   },

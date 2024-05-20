@@ -2,6 +2,7 @@ import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
 import { strongPasswordWithConfirm } from '../schemas';
+import { captcha } from '../types/http';
 import { z } from '../util';
 
 export const password = initContract().router({
@@ -13,10 +14,7 @@ export const password = initContract().router({
     }),
     body: z.object({
       email: z.string().email().toLowerCase(),
-      captcha: z
-        .string()
-        .nullish()
-        .openapi({ description: 'Captcha token if enabled on system level' }),
+      captcha,
     }),
     responses: {
       200: z.undefined(),

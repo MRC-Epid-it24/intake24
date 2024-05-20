@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import type { UseInRecipeType } from '@intake24/common/types';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
 import type { PortionSizeMethod } from '@intake24/common/types/portion-size';
@@ -6,7 +8,6 @@ import type {
   CategoryAttributes,
   FoodAttributeAttributes,
   FoodAttributes,
-  FoodGroupAttributes,
   FoodLocalAttributes,
   FoodPortionSizeMethodCreationAttributes,
   FoodsLocaleAttributes,
@@ -119,6 +120,17 @@ export type FoodListEntry = {
 
 export type FoodsResponse = Pagination<FoodListEntry>;
 
+export const foodGroupRequest = z.object({
+  name: z.string().min(1).max(256),
+});
+
+export const foodGroupAttributes = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+export type FoodGroupAttributes = z.infer<typeof foodGroupAttributes>;
+
 export type FoodEntry = FoodAttributes & {
   attributes?: FoodAttributeAttributes;
   foodGroup?: FoodGroupAttributes;
@@ -131,5 +143,3 @@ export interface FoodLocalEntry extends FoodLocalAttributes {
 }
 
 export type FoodGroupsResponse = Pagination<FoodGroupAttributes>;
-
-export type FoodGroupEntry = FoodGroupAttributes;

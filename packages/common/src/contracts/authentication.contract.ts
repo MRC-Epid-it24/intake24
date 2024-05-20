@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
-import { challengeResponse, loginResponse } from '../types/http';
+import { captcha, challengeResponse, loginResponse } from '../types/http';
 import { z } from '../util';
 
 export const authentication = initContract().router({
@@ -15,10 +15,7 @@ export const authentication = initContract().router({
       email: z.string().toLowerCase(),
       password: z.string(),
       survey: z.string(),
-      captcha: z
-        .string()
-        .nullish()
-        .openapi({ description: 'Captcha token if enabled on system and survey level' }),
+      captcha,
     }),
     responses: {
       200: z.union([loginResponse, challengeResponse]),
@@ -36,10 +33,7 @@ export const authentication = initContract().router({
       username: z.string(),
       password: z.string(),
       survey: z.string(),
-      captcha: z
-        .string()
-        .nullish()
-        .openapi({ description: 'Captcha token if enabled on system and survey level' }),
+      captcha,
     }),
     responses: {
       200: z.union([loginResponse, challengeResponse]),
@@ -55,10 +49,7 @@ export const authentication = initContract().router({
     }),
     body: z.object({
       token: z.string(),
-      captcha: z
-        .string()
-        .nullish()
-        .openapi({ description: 'Captcha token if enabled on system and survey level' }),
+      captcha,
     }),
     responses: {
       200: z.union([loginResponse, challengeResponse]),

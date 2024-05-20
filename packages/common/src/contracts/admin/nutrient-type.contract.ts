@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as nutrientTypeId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   nutrientTypeRefs,
   nutrientTypeRequest,
@@ -44,6 +44,7 @@ export const nutrientType = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/nutrient-types/:nutrientTypeId',
+    pathParams: z.object({ nutrientTypeId }),
     responses: {
       200: nutrientTypeResponse,
     },
@@ -53,6 +54,7 @@ export const nutrientType = initContract().router({
   edit: {
     method: 'GET',
     path: '/admin/nutrient-types/:nutrientTypeId/edit',
+    pathParams: z.object({ nutrientTypeId }),
     responses: {
       200: nutrientTypeResponse,
     },
@@ -62,6 +64,7 @@ export const nutrientType = initContract().router({
   update: {
     method: 'PUT',
     path: '/admin/nutrient-types/:nutrientTypeId',
+    pathParams: z.object({ nutrientTypeId }),
     body: nutrientTypeRequest.omit({ id: true }),
     responses: {
       200: nutrientTypeResponse,
@@ -72,6 +75,7 @@ export const nutrientType = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/nutrient-types/:nutrientTypeId',
+    pathParams: z.object({ nutrientTypeId }),
     body: null,
     responses: {
       204: z.undefined(),

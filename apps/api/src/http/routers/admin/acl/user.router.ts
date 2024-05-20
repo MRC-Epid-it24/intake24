@@ -26,7 +26,7 @@ async function dataCheck<T extends AppRoute | AppRouter>({ permissions, roles, r
   if (permissions) {
     const availablePermissions = await Permission.count({ where: { id: permissions } });
     if (availablePermissions !== permissions.length) {
-      throw new ValidationError(customTypeValidationMessage('exists', { req, path: 'permissions' }), {
+      throw new ValidationError(customTypeValidationMessage('exists._', { req, path: 'permissions' }), {
         path: 'permissions',
       });
     }
@@ -35,7 +35,7 @@ async function dataCheck<T extends AppRoute | AppRouter>({ permissions, roles, r
   if (roles) {
     const availableRoles = await Role.count({ where: { id: roles } });
     if (availableRoles !== roles.length) {
-      throw new ValidationError(customTypeValidationMessage('exists', { req, path: 'roles' }), {
+      throw new ValidationError(customTypeValidationMessage('exists._', { req, path: 'roles' }), {
         path: 'roles',
       });
     }

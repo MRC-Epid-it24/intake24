@@ -3,7 +3,7 @@ import { Readable } from 'node:stream';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as jobId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { jobAttributes } from '@intake24/common/types/http/admin';
 
 export const job = initContract().router({
@@ -23,6 +23,7 @@ export const job = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/jobs/:jobId',
+    pathParams: z.object({ jobId }),
     responses: {
       200: jobAttributes,
     },
@@ -32,6 +33,7 @@ export const job = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/jobs/:jobId',
+    pathParams: z.object({ jobId }),
     body: null,
     responses: {
       204: z.undefined(),
@@ -42,6 +44,7 @@ export const job = initContract().router({
   download: {
     method: 'GET',
     path: '/admin/jobs/:jobId/download',
+    pathParams: z.object({ jobId }),
     responses: {
       200: z.instanceof(Readable),
     },
@@ -51,6 +54,7 @@ export const job = initContract().router({
   repeat: {
     method: 'POST',
     path: '/admin/jobs/:jobId/repeat',
+    pathParams: z.object({ jobId }),
     body: null,
     responses: {
       200: jobAttributes,

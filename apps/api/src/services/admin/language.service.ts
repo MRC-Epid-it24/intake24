@@ -2,24 +2,17 @@ import type { IoC } from '@intake24/api/ioc';
 import type { Application } from '@intake24/common/types';
 import type {
   CreateLanguageRequest,
+  LanguageTranslationAttributes,
   UpdateLanguageRequest,
 } from '@intake24/common/types/http/admin';
 import type {
-  LanguageTranslationAttributes,
   LanguageTranslationCreationAttributes,
   WhereOptions,
 } from '@intake24/db';
 import type { LocaleMessages } from '@intake24/i18n';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';
-import { admin, api, compareMessageKeys, mergeTranslations, shared, survey } from '@intake24/i18n';
-
-export const defaultI18nMessages: Record<Application, LocaleMessages> = {
-  admin: admin.en,
-  api: api.en,
-  shared: shared.en,
-  survey: survey.en,
-};
+import { admin, api, compareMessageKeys, defaultI18nMessages, mergeTranslations, shared, survey } from '@intake24/i18n';
 
 export function createMessages(language: string) {
   return {
@@ -146,10 +139,11 @@ function languageService({
    * Create language with messages
    *
    * @param {CreateLanguageRequest} input
+   * @param {string} ownerId
    * @returns {Promise<Language>}
    */
-  const createLanguage = async (input: CreateLanguageRequest): Promise<Language> => {
-    const language = await Language.create(input);
+  const createLanguage = async (input: CreateLanguageRequest, ownerId: string): Promise<Language> => {
+    const language = await Language.create({ ...input, ownerId });
 
     return language;
   };
@@ -202,7 +196,7 @@ function languageService({
    * Update language translations set
    *
    * @param {string} languageId
-   * @param {(Pick<LanguageTranslationAttributes, 'id' | 'messages'>[])} inputs
+   * @param {LanguageTranslationAttributes[]} inputs
    * @returns {Promise<LanguageTranslation[]>}
    */
   const updateLanguageTranslations = async (

@@ -1,23 +1,47 @@
-import type { Pagination, UserSecurableAttributes } from '@intake24/db';
+import { z } from 'zod';
+
+import type { Pagination } from '@intake24/db';
 
 import type { UserListEntry } from '.';
-import type { UserRequest } from './users';
+import { bigIntString } from '../generic';
+import { userAttributes } from './users';
 
-export interface CreateUserWithSecurables
-  extends Pick<UserRequest, 'email' | 'name' | 'phone'> {
-  email: string;
-  name?: string | null;
-  phone?: string | null;
-  actions: string[];
-}
+export const createUserWithSecurables = z.object({
+  email: z.string().email().toLowerCase(),
+  name: z.string().max(512).nullish(),
+  phone: z.string().max(32).nullish(),
+  actions: z.string().array().min(1),
+});
 
-export type UpdateSecurableOwnerRequest = {
-  userId: string | null;
-};
+export type CreateUserWithSecurables = z.infer<typeof createUserWithSecurables>;
 
-export interface UserSecurableListEntry extends UserListEntry {
-  securables: UserSecurableAttributes[];
-}
+export const updateSecurableOwnerRequest = z.object({
+  userId: bigIntString.nullable(),
+});
+
+export type UpdateSecurableOwnerRequest = z.infer<typeof updateSecurableOwnerRequest>;
+
+export const userSecurableAttributes = z.object({
+  userId: z.string(),
+  securableId: z.string(),
+  securableType: z.string(),
+  action: z.string(),
+  fields: z.string().array().nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type UserSecurableAttributes = z.infer<typeof userSecurableAttributes>;
+
+export const userSecurableListEntry = userAttributes.pick({
+  id: true,
+  name: true,
+  email: true,
+}).extend({
+  securables: userSecurableAttributes.array().optional(),
+});
+
+export type UserSecurableListEntry = z.infer<typeof userSecurableListEntry>;
 
 export type UsersWithSecurablesResponse = Pagination<UserSecurableListEntry>;
 

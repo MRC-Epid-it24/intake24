@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as permissionId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   permissionAttributes,
   permissionRequest,
@@ -34,6 +34,7 @@ export const permission = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/permissions/:permissionId',
+    pathParams: z.object({ permissionId }),
     responses: {
       200: permissionAttributes,
     },
@@ -43,6 +44,7 @@ export const permission = initContract().router({
   edit: {
     method: 'GET',
     path: '/admin/permissions/:permissionId/edit',
+    pathParams: z.object({ permissionId }),
     responses: {
       200: permissionAttributes,
     },
@@ -52,6 +54,7 @@ export const permission = initContract().router({
   update: {
     method: 'PUT',
     path: '/admin/permissions/:permissionId',
+    pathParams: z.object({ permissionId }),
     body: permissionRequest.omit({ name: true }),
     responses: {
       200: permissionAttributes,
@@ -62,6 +65,7 @@ export const permission = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/permissions/:permissionId',
+    pathParams: z.object({ permissionId }),
     body: null,
     responses: {
       204: z.undefined(),
@@ -72,6 +76,7 @@ export const permission = initContract().router({
   roles: {
     method: 'GET',
     path: '/admin/permissions/:permissionId/roles',
+    pathParams: z.object({ permissionId }),
     query: paginationRequest,
     responses: {
       200: z.object({
@@ -85,6 +90,7 @@ export const permission = initContract().router({
   users: {
     method: 'GET',
     path: '/admin/permissions/:permissionId/users',
+    pathParams: z.object({ permissionId }),
     query: paginationRequest,
     responses: {
       200: z.object({

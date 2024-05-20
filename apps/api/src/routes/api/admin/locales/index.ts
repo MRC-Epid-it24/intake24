@@ -6,7 +6,6 @@ import validation from '@intake24/api/http/requests/admin/locales';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
-import securables from '../securables';
 import recipeFoods from './recipe-foods';
 import splitLists from './split-lists';
 import splitWords from './split-words';
@@ -47,7 +46,6 @@ export default () => {
   router.use('/:localeId/split-lists', splitLists());
   router.use('/:localeId/split-words', splitWords());
   router.use('/:localeId/synonym-sets', synonymSets());
-  router.use('/:localeId/securables', securables('Locale', localeController.securables));
 
   return router;
 };

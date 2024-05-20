@@ -1,9 +1,15 @@
 # Database
 
-- [Sequelize](https://sequelize.org) ORM is used for database layer, any of supported dialects can be used.
+[PostgreSQL](https://www.postgresql.org) is primary database engine and API Server is using mixture of two abstractions:
+
+- [Sequelize](https://sequelize.org) ORM
+
+- [Kysely](https://kysely.dev) query builder
+
+While intake24 is primarly developed / tested on `PostgreSQL`, both `sequelize` and `kysely` support most common database engine dialects, so can potentially be used.
 
 ::: warning
-Older version (v3) has been written only for Postgres and there are still few Postgres specifics that needs to be ported to dialect-agnostic code. Please contact Intake24 dev team for more details about current state of DB engines support.
+Older version (v3) has been written only for Postgres and there might still be few `PostgreSQL` specifics that needs to be ported to dialect-agnostic code. Please reach Intake24 dev team for more details if you require to use different database engine.
 :::
 
 Intake24 system has two main databases:
@@ -13,7 +19,7 @@ Intake24 system has two main databases:
 
 ## Database migrations
 
-Database migrations are being handled by [sequelize](https://sequelize.org/). Please see [sequelize-cli](https://sequelize.org/docs/v6/other-topics/migrations) docs for more details.
+Database migrations are being handled by [sequelize-cli](https://sequelize.org/docs/v6/other-topics/migrations).
 
 ### Migrate system database
 

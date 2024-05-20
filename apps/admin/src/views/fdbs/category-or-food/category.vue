@@ -113,7 +113,6 @@ import { onBeforeRouteUpdate } from 'vue-router/composables';
 
 import type {
   CategoryLocalEntry,
-  FoodDatabaseEntry,
   FoodDatabaseRefs,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
@@ -165,10 +164,10 @@ export default defineComponent({
     const globalEdit = computed(() => user.can('locales|food-list'));
     const isEntryLoaded = computed(() => !!entry.value);
 
-    useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
+    useEntry<LocaleEntry, FoodDatabaseRefs>(props);
     const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
       any,
-      FoodDatabaseEntry
+      LocaleEntry
     >(props, {
       data: {
         name: '',

@@ -8,10 +8,8 @@ export default (container: AwilixContainer): void => {
     // Admin
     referenceController: asFunction(controllers.admin.reference),
 
-    adminFoodDatabaseController: asFunction(controllers.admin.fdbs.fdb),
     adminCategoryController: asFunction(controllers.admin.fdbs.category),
     adminFoodController: asFunction(controllers.admin.fdbs.food),
-    adminFoodGroupController: asFunction(controllers.admin.fdbs.foodGroup),
     adminGlobalFoodsController: asFunction(controllers.admin.foods.globalFoods),
     adminLocalFoodsController: asFunction(controllers.admin.foods.localFoods),
     adminGlobalCategoriesController: asFunction(controllers.admin.categories.globalCategories),
@@ -24,10 +22,6 @@ export default (container: AwilixContainer): void => {
     drinkScaleController: asFunction(controllers.admin.images.drinkScale),
     guideImageController: asFunction(controllers.admin.images.guide),
     imageMapController: asFunction(controllers.admin.images.map),
-
-    // Localization
-    languageController: asFunction(controllers.admin.language),
-    languageTranslationController: asFunction(controllers.admin.languageTranslation),
 
     // Locales
     localeController: asFunction(controllers.admin.locales.locale),

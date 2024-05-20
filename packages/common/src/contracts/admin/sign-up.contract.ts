@@ -3,7 +3,7 @@ import { isJWT } from 'validator';
 import { z } from 'zod';
 
 import { strongPasswordWithConfirm } from '@intake24/common/schemas';
-import { loginResponse } from '@intake24/common/types/http';
+import { captcha, loginResponse } from '@intake24/common/types/http';
 
 import { createSanitizer } from '../../rules';
 
@@ -21,10 +21,7 @@ export const signUp = initContract().router({
         name: z.string().min(3).max(512),
         phone: z.string().max(32).nullish(),
         terms: z.boolean().refine(value => value === true),
-        captcha: z
-          .string()
-          .nullish()
-          .openapi({ description: 'Captcha token if enabled on system and survey level' }),
+        captcha,
       })
       .superRefine((data, ctx) => {
         if (data.email !== data.emailConfirm) {
@@ -53,7 +50,7 @@ export const signUp = initContract().router({
     method: 'POST',
     path: '/admin/sign-up/verify',
     body: z.object({
-      token: z.string().refine(value => isJWT(value)),
+      token: z.string().refine(value => isJWT(value), { path: ['token'], message: 'Token must be a valid JWT' }),
     }),
     responses: {
       200: z.undefined(),

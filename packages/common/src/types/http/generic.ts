@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+export const bigIntString = z.coerce.number().int().transform(val => val.toString());
+export const uuid = z.string().uuid();
+
 const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
 type Literal = z.infer<typeof literalSchema>;
 type Json = Literal | { [key: string]: Json } | Json[];
@@ -9,6 +12,12 @@ export const jsonSchema: z.ZodType<Json> = z.lazy(() =>
 );
 
 export const jsonObjectSchema: z.ZodType<Json> = z.lazy(() => z.record(jsonSchema));
+
+export const captcha = z
+  .string()
+  .nullish()
+  .transform(val => val || undefined)
+  .openapi({ description: 'Captcha token if enabled' });
 
 export const paginationRequest = z.object({
   page: z.coerce.number().int().min(1).optional(),

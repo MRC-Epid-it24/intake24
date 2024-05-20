@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as surveyId, paginationMeta, paginationRequest, uuid as submissionId } from '@intake24/common/types/http';
 import {
   surveySubmissionAttributes,
   surveySubmissionWithUsername,
@@ -11,6 +11,7 @@ export const submission = initContract().router({
   browse: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/submissions',
+    pathParams: z.object({ surveyId }),
     query: paginationRequest,
     responses: {
       200: z.object({
@@ -24,6 +25,7 @@ export const submission = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/submissions/:submissionId',
+    pathParams: z.object({ surveyId, submissionId }),
     responses: {
       200: surveySubmissionAttributes,
     },
@@ -33,6 +35,7 @@ export const submission = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/surveys/:surveyId/submissions/:submissionId',
+    pathParams: z.object({ surveyId, submissionId }),
     body: null,
     responses: {
       204: z.undefined(),

@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as signInLogId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { signInLogAttributes } from '@intake24/common/types/http/admin';
 
 export const signInLog = initContract().router({
@@ -21,6 +21,7 @@ export const signInLog = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/sign-in-logs/:signInLogId',
+    pathParams: z.object({ signInLogId }),
     responses: {
       200: signInLogAttributes,
     },
@@ -30,6 +31,7 @@ export const signInLog = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/sign-in-logs/:signInLogId',
+    pathParams: z.object({ signInLogId }),
     body: null,
     responses: {
       204: z.undefined(),
