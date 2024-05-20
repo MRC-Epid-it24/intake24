@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { isJWT } from 'validator';
 
-import { createUserResponse, generateUserResponse, publicSurveyEntry } from '../types/http';
+import { captcha, createUserResponse, generateUserResponse, publicSurveyEntry } from '../types/http';
 import { z } from '../util';
 
 export const survey = initContract().router({
@@ -30,12 +30,7 @@ export const survey = initContract().router({
   generateUser: {
     method: 'POST',
     path: '/surveys/:slug/generate-user',
-    body: z.object({
-      captcha: z
-        .string()
-        .nullish()
-        .openapi({ description: 'Captcha token if enabled on system level' }),
-    }),
+    body: z.object({ captcha }),
     responses: {
       200: generateUserResponse,
     },
@@ -47,7 +42,7 @@ export const survey = initContract().router({
     method: 'POST',
     path: '/surveys/:slug/create-user',
     body: z.object({
-      token: z.string().refine(value => isJWT(value)),
+      token: z.string().refine(value => isJWT(value), { path: ['token'], message: 'Token must be a valid JWT' }),
     }),
     responses: {
       200: createUserResponse,

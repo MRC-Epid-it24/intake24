@@ -23,7 +23,7 @@ export function password() {
           body: { email, captcha },
           headers: { 'user-agent': userAgent },
         } = req;
-        await captchaCheck(captcha ?? undefined, ioc.cradle.servicesConfig.captcha);
+        await captchaCheck(captcha, ioc.cradle.servicesConfig.captcha);
 
         await req.scope.cradle.scheduler.jobs.addJob({
           type: 'UserPasswordResetNotification',

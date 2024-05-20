@@ -21,7 +21,7 @@ export function authentication() {
         const { email, password, survey, captcha } = body;
 
         const result = await req.scope.cradle.authenticationService.emailLogin(
-          { email, password, survey, captcha: captcha ?? undefined },
+          { email, password, survey, captcha },
           { req },
         );
         if ('provider' in result)
@@ -41,7 +41,7 @@ export function authentication() {
         const { username, password, survey, captcha } = body;
 
         const result = await req.scope.cradle.authenticationService.aliasLogin(
-          { username, password, survey, captcha: captcha ?? undefined },
+          { username, password, survey, captcha },
           { req },
         );
         if ('provider' in result)
@@ -61,7 +61,7 @@ export function authentication() {
         const { token, captcha } = body;
 
         const result = await req.scope.cradle.authenticationService.tokenLogin(
-          { token, captcha: captcha ?? undefined },
+          { token, captcha },
           { req },
         );
         if ('provider' in result)

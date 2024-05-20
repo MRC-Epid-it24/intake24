@@ -26,8 +26,6 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-import { securableController } from './securable.controller';
-
 function surveySchemeController(ioc: IoC) {
   const { dataExportFields } = ioc;
 
@@ -288,7 +286,6 @@ function surveySchemeController(ioc: IoC) {
     refs,
     templates,
     dataExportRefs,
-    securables: securableController({ ioc, securable: SurveyScheme }),
   };
 }
 

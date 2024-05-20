@@ -74,7 +74,13 @@ export type UserEntry = z.infer<typeof userEntry>;
 
 export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 
-export type Owner = Pick<UserAttributes, 'id' | 'name' | 'email'>;
+export const owner = userAttributes.pick({
+  id: true,
+  name: true,
+  email: true,
+});
+
+export type Owner = z.infer<typeof owner>;
 
 export const userRefs = z.object({
   permissions: permissionAttributes.pick({ name: true, displayName: true, description: true }).array(),

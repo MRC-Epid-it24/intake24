@@ -1,5 +1,6 @@
+import { z } from 'zod';
+
 import type {
-  LanguageAttributes,
   Pagination,
   RecipeFoodsAttributes,
   RecipeFoodsCreationAttributes,
@@ -10,12 +11,14 @@ import type {
   SplitWordCreationAttributes,
   SynonymSetAttributes,
   SynonymSetCreationAttributes,
-  SystemLocaleAttributes,
   SystemLocaleCreationAttributes,
-  UserSecurableAttributes,
 } from '@intake24/db';
+import { recordVisibilities } from '@intake24/common/security';
 
-import type { Owner } from './users';
+import { textDirections } from '../../common';
+import { languageAttributes } from './languages';
+import { userSecurableAttributes } from './securables';
+import { owner } from './users';
 
 export type LocaleRequest = {
   code: string;
@@ -30,19 +33,41 @@ export type LocaleRequest = {
   foodIndexEnabled?: boolean;
 };
 
+export const systemLocaleAttributes = z.object({
+  id: z.string(),
+  code: z.string().min(1).max(16),
+  englishName: z.string().min(1).max(64),
+  localName: z.string().min(1).max(64),
+  respondentLanguageId: z.string().min(1).max(16),
+  adminLanguageId: z.string().min(1).max(16),
+  countryFlagCode: z.string().min(1).max(16),
+  prototypeLocaleId: z.string().min(1).max(16).nullable(),
+  textDirection: z.enum(textDirections),
+  foodIndexEnabled: z.boolean(),
+  foodIndexLanguageBackendId: z.string().min(1).max(16),
+  ownerId: z.string().nullable(),
+  visibility: z.enum(recordVisibilities),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type SystemLocaleAttributes = z.infer<typeof systemLocaleAttributes>;
+
 export type CreateLocaleRequest = SystemLocaleCreationAttributes;
 
 export type UpdateLocaleRequest = Omit<LocaleRequest, 'code'>;
 
 export type LocalesResponse = Pagination<SystemLocaleAttributes>;
 
-export interface LocaleEntry extends SystemLocaleAttributes {
-  parent?: SystemLocaleAttributes;
-  adminLanguage: LanguageAttributes;
-  respondentLanguage: LanguageAttributes;
-  owner?: Owner;
-  securables?: UserSecurableAttributes[];
-}
+export const localeEntry = systemLocaleAttributes.extend({
+  parent: systemLocaleAttributes.optional(),
+  adminLanguage: languageAttributes.optional(),
+  respondentLanguage: languageAttributes.optional(),
+  owner: owner.optional(),
+  securables: userSecurableAttributes.array().optional(),
+});
+
+export type LocaleEntry = z.infer<typeof localeEntry>;
 
 export type LocaleListEntry = Pick<
   SystemLocaleAttributes,

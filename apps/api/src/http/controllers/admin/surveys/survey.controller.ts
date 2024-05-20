@@ -20,8 +20,6 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-import { securableController } from '../securable.controller';
-
 const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,
 };
@@ -271,7 +269,6 @@ function adminSurveyController(ioc: IoC) {
     destroy,
     refs,
     tasks,
-    securables: securableController({ ioc, securable: Survey }),
   };
 }
 

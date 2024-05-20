@@ -1,7 +1,9 @@
-import type { FoodsLocaleAttributes, NutrientTableAttributes } from '@intake24/db';
+import { z } from 'zod';
 
-export type FoodDatabaseEntry = FoodsLocaleAttributes;
+import { nutrientTableAttributes } from './nutrient-tables';
 
-export type FoodDatabaseRefs = {
-  nutrientTables: NutrientTableAttributes[];
-};
+export const foodDatabaseRefs = z.object({
+  nutrientTables: nutrientTableAttributes.array(),
+});
+
+export type FoodDatabaseRefs = z.infer<typeof foodDatabaseRefs>;

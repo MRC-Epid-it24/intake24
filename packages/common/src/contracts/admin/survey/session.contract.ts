@@ -1,13 +1,14 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as surveyId, paginationMeta, paginationRequest, uuid as sessionId } from '@intake24/common/types/http';
 import { userSurveySessionAttributes } from '@intake24/common/types/http/admin';
 
 export const session = initContract().router({
   browse: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/sessions',
+    pathParams: z.object({ surveyId }),
     query: paginationRequest,
     responses: {
       200: z.object({
@@ -21,6 +22,7 @@ export const session = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/sessions/:sessionId',
+    pathParams: z.object({ surveyId, sessionId }),
     responses: {
       200: userSurveySessionAttributes,
     },
@@ -30,6 +32,7 @@ export const session = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/surveys/:surveyId/sessions/:sessionId',
+    pathParams: z.object({ surveyId, sessionId }),
     body: null,
     responses: {
       204: z.undefined(),

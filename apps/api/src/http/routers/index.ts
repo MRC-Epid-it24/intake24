@@ -3,6 +3,7 @@ import { createExpressEndpoints, initServer } from '@ts-rest/express';
 import passport from 'passport';
 
 import { contract } from '@intake24/common/contracts';
+import { FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 
 import {
   isAccountVerified,
@@ -122,13 +123,22 @@ export function registerRouters(express: Router) {
 
   // Admin endpoints - authenticated & verified
   const adminAuthVerifiedContract = {
+    feedbackSchemeSecurable: contract.admin.feedbackSchemeSecurable,
+    foodDb: contract.admin.foodDb,
+    foodGroup: contract.admin.foodGroup,
     job: contract.admin.job,
-    signInLog: contract.admin.signInLog,
+    language: contract.admin.language,
+    languageSecurable: contract.admin.languageSecurable,
+    languageTranslation: contract.admin.languageTranslation,
+    localeSecurable: contract.admin.localeSecurable,
     nutrientTable: contract.admin.nutrientTable,
     nutrientType: contract.admin.nutrientType,
     nutrientUnit: contract.admin.nutrientUnit,
+    signInLog: contract.admin.signInLog,
     standardUnit: contract.admin.standardUnit,
+    surveySchemeSecurable: contract.admin.surveySchemeSecurable,
     surveyRespondent: contract.admin.survey.respondent,
+    surveySecurable: contract.admin.surveySecurable,
     surveySession: contract.admin.survey.session,
     surveySubmission: contract.admin.survey.submission,
     task: contract.admin.task,
@@ -145,15 +155,24 @@ export function registerRouters(express: Router) {
   createExpressEndpoints(
     adminAuthVerifiedContract,
     server.router(adminAuthVerifiedContract, {
+      feedbackSchemeSecurable: admin.securable(FeedbackScheme)(),
+      foodDb: admin.foodDb(),
+      foodGroup: admin.foodGroup(),
       job: admin.job(),
-      signInLog: admin.signInLog(),
+      language: admin.language(),
+      languageTranslation: admin.languageTranslation(),
+      languageSecurable: admin.securable(Language)(),
+      localeSecurable: admin.securable(SystemLocale)(),
       nutrientTable: admin.nutrientTable(),
       nutrientType: admin.nutrientType(),
       nutrientUnit: admin.nutrientUnit(),
+      signInLog: admin.signInLog(),
       standardUnit: admin.standardUnit(),
       surveyRespondent: admin.survey.respondent(),
+      surveySecurable: admin.securable(Survey)(),
       surveySession: admin.survey.session(),
       surveySubmission: admin.survey.submission(),
+      surveySchemeSecurable: admin.securable(SurveyScheme)(),
       task: admin.task(),
       personalAccessToken: admin.user.personalAccessToken(),
       device: admin.user.mfa.device(),

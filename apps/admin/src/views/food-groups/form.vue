@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { FoodGroupEntry } from '@intake24/common/types/http/admin';
+import type { FoodGroupAttributes } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
@@ -40,9 +40,9 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useEntry<FoodGroupEntry>(props);
+    const { entry, entryLoaded } = useEntry<FoodGroupAttributes>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<FoodGroupForm, FoodGroupEntry>(
+    const { clearError, form, routeLeave, submit } = useEntryForm<FoodGroupForm, FoodGroupAttributes>(
       props,
       {
         data: { id: null, name: null },

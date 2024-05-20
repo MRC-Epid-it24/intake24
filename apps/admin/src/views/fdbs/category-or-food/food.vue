@@ -139,7 +139,6 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router/composables';
 
 import type {
-  FoodDatabaseEntry,
   FoodDatabaseRefs,
   FoodLocalEntry,
   FoodLocalInput,
@@ -206,10 +205,10 @@ export default defineComponent({
     );
     const isEntryLoaded = computed(() => !!entry.value);
 
-    const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
+    const { refs } = useEntry<LocaleEntry, FoodDatabaseRefs>(props);
     const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
       FoodLocalInput,
-      FoodDatabaseEntry
+      LocaleEntry
     >(props, {
       data: {
         name: '',

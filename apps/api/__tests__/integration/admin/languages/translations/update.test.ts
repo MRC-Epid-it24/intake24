@@ -50,9 +50,7 @@ export default () => {
 
     it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('put', url, ['translations'], {
-        input: {
-          translations: 'invalid-translation-object',
-        },
+        input: { translations: 'invalid-translation-object' },
       });
     });
 

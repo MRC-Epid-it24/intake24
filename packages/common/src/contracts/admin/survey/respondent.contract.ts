@@ -81,12 +81,8 @@ export const respondent = initContract().router({
     body: z
       .object({
         email: z.string().email().toLowerCase(),
-        // emailConfirm: z.string().email().toLowerCase(),
         copy: z.enum(emailCopy),
-      }), /* .refine(data => data.email === data.emailConfirm, {
-        path: ['emailConfirm'],
-        message: 'Emails do not match',
-      }), */
+      }),
     responses: {
       200: z.undefined(),
     },

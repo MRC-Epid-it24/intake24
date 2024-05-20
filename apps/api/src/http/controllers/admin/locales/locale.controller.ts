@@ -11,8 +11,6 @@ import { localeResponse } from '@intake24/api/http/responses/admin';
 import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
 import { FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
 
-import { securableController } from '../securable.controller';
-
 function localeController(ioc: IoC) {
   const { cache, localeService } = ioc;
 
@@ -249,7 +247,6 @@ function localeController(ioc: IoC) {
     destroy,
     refs,
     tasks,
-    securables: securableController({ ioc, securable: SystemLocale }),
   };
 }
 

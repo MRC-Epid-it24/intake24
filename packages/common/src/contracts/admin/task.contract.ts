@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as taskId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   jobAttributes,
   taskAttributes,
@@ -36,6 +36,7 @@ export const task = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/tasks/:taskId',
+    pathParams: z.object({ taskId }),
     responses: {
       200: taskResponse,
     },
@@ -45,6 +46,7 @@ export const task = initContract().router({
   edit: {
     method: 'GET',
     path: '/admin/tasks/:taskId/edit',
+    pathParams: z.object({ taskId }),
     responses: {
       200: taskResponse,
     },
@@ -54,6 +56,7 @@ export const task = initContract().router({
   update: {
     method: 'PUT',
     path: '/admin/tasks/:taskId',
+    pathParams: z.object({ taskId }),
     body: taskRequest,
     responses: {
       200: taskResponse,
@@ -64,6 +67,7 @@ export const task = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/tasks/:taskId',
+    pathParams: z.object({ taskId }),
     body: null,
     responses: {
       204: z.undefined(),
@@ -74,6 +78,7 @@ export const task = initContract().router({
   run: {
     method: 'POST',
     path: '/admin/tasks/:taskId/run',
+    pathParams: z.object({ taskId }),
     body: null,
     responses: {
       200: jobAttributes,

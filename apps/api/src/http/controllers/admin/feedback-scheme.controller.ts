@@ -2,7 +2,6 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import { col, fn } from 'sequelize';
 
-import type { IoC } from '@intake24/api/ioc';
 import type {
   FeedbackSchemeEntry,
   FeedbackSchemeRefs,
@@ -28,9 +27,7 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-import { securableController } from './securable.controller';
-
-function feedbackSchemeController(ioc: IoC) {
+function feedbackSchemeController() {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<FeedbackSchemesResponse>,
@@ -262,7 +259,6 @@ function feedbackSchemeController(ioc: IoC) {
     destroy,
     copy,
     refs,
-    securables: securableController({ ioc, securable: FeedbackScheme }),
   };
 }
 

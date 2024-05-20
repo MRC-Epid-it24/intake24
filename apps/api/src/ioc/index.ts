@@ -6,8 +6,6 @@ import type {
   // Admin
   AdminCategoryController,
   AdminFoodController,
-  AdminFoodDatabaseController,
-  AdminFoodGroupController,
   AdminGlobalCategoriesController,
   AdminGlobalFoodsController,
   AdminLocalCategoriesController,
@@ -19,8 +17,6 @@ import type {
   FeedbackSchemeController,
   GuideImageController,
   ImageMapController,
-  LanguageController,
-  LanguageTranslationController,
   LocaleController,
   LocaleRecipeFoodsController,
   LocaleSplitListController,
@@ -128,10 +124,8 @@ export interface IoC extends Jobs {
   // Admin controllers
   referenceController: ReferenceController;
 
-  adminFoodDatabaseController: AdminFoodDatabaseController;
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
-  adminFoodGroupController: AdminFoodGroupController;
   adminGlobalFoodsController: AdminGlobalFoodsController;
   adminLocalFoodsController: AdminLocalFoodsController;
   adminGlobalCategoriesController: AdminGlobalCategoriesController;
@@ -146,8 +140,6 @@ export interface IoC extends Jobs {
   imageMapController: ImageMapController;
 
   // Localization
-  languageController: LanguageController;
-  languageTranslationController: LanguageTranslationController;
   localeController: LocaleController;
   localeRecipeFoodsController: LocaleRecipeFoodsController;
   localeSplitListController: LocaleSplitListController;

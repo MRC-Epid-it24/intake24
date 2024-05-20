@@ -10,27 +10,25 @@ Intake24 system has three main components:
 2. Admin application
 3. Survey application
 
-Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment/) section describes in detail how to use ansible scripts.
+Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment) section describes in detail how to use ansible scripts.
 
 For manual deployment, there are few technical aspects to consider.
 
 ## API Server
 
-### Databases
+API Server requires [Node.js](https://nodejs.org) runtime and couple of backend services.
 
-- [sequelize](https://sequelize.org) ORM is used for database querying, any of supported dialects can be used.
+### Database
 
-::: warning
-Older version (v3) has been written only for Postgres and there are still few Postgres specifics that needs to be ported to dialect-agnostic code. Please contact Intake24 dev team for more details about current state of DB engines support.
-:::
+[PostgreSQL](https://www.postgresql.org) is used as primary database engine. For more information about database and support of other engines, please see [Database](/overview/database) section.
 
 ### Redis
 
-- [Redis](https://redis.io) is used for `cache` / `queue` / `rate-limit` / `session` services.
+[Redis](https://redis.io) is used for `cache` / `queue` / `rate-limit` / `session` services.
 
 ### PDF generation
 
-- [Puppeteer](https://github.com/puppeteer/puppeteer) is used for PDF generation. Make sure OS has all necessary components to run headless Chrome.
+[Puppeteer](https://github.com/puppeteer/puppeteer) is used for PDF generation (Feedback generation). Make sure OS has all necessary components to run headless Chrome if PDF rendering is required.
 
 ## Admin & Survey apps
 
