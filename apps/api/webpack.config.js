@@ -6,8 +6,9 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
 module.exports = (env) => {
-  const { NODE_ENV = 'development' } = env;
+  const { NODE_ENV = 'development', NODE_INSPECT_BREAK } = env;
   const isDev = NODE_ENV === 'development';
+  const inspectBreak = !!NODE_INSPECT_BREAK;
   const mode = NODE_ENV === 'test' ? 'none' : NODE_ENV;
 
   const plugins = [new ForkTsCheckerWebpackPlugin(), new WebpackBar({ name: 'Server' })];
@@ -17,7 +18,7 @@ module.exports = (env) => {
       new NodemonPlugin({
         script: './dist/server.js',
         watch: ['./dist', '.env'],
-        nodeArgs: ['--trace-warnings', '--inspect=5959'],
+        nodeArgs: ['--trace-warnings', inspectBreak ? '--inspect-brk=9229' : '--inspect=5959'],
       }),
     );
   }
