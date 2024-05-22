@@ -21,7 +21,8 @@ export interface OptionalSearchQueryParameters {
   wordOrderCost?: number;
   wordDistanceCost?: number;
   unmatchedWordCost?: number;
-
+  enableRelevantCategories?: boolean;
+  relevantCategoryDepth?: number;
 }
 
 export interface SearchQueryParameters {
@@ -43,6 +44,8 @@ export interface SearchQueryParameters {
   wordOrderCost: number;
   wordDistanceCost: number;
   unmatchedWordCost: number;
+  enableRelevantCategories: boolean;
+  relevantCategoryDepth: number;
 }
 
 export interface SearchQuery {
@@ -71,5 +74,7 @@ export function applyDefaultSearchQueryParameters(localeId: string, description:
     wordOrderCost: optionalParameters.wordOrderCost ?? defaultSearchSettings.wordOrderCost,
     wordDistanceCost: optionalParameters.wordDistanceCost ?? defaultSearchSettings.wordDistanceCost,
     unmatchedWordCost: optionalParameters.unmatchedWordCost ?? defaultSearchSettings.unmatchedWordCost,
+    enableRelevantCategories: optionalParameters.enableRelevantCategories ?? defaultSearchSettings.enableRelevantCategories,
+    relevantCategoryDepth: optionalParameters.relevantCategoryDepth ?? defaultSearchSettings.relevantCategoryDepth,
   };
 }

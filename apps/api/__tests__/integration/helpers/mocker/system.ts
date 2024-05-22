@@ -293,6 +293,8 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
     wordOrderCost: faker.number.int({ min: 0, max: 10 }),
     wordDistanceCost: faker.number.int({ min: 0, max: 10 }),
     unmatchedWordCost: faker.number.int({ min: 0, max: 10 }),
+    enableRelevantCategories: faker.datatype.boolean(),
+    relevantCategoryDepth: faker.number.int({ min: 0, max: 5 }),
   };
 
   const surveySchemeOverrides = {
