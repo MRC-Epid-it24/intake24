@@ -305,6 +305,34 @@
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
                 @change="form.errors.clear('searchSettings.spellingCorrectionPreference')"
               />
+              <div class="text-h6 mb-4 mt-4 underline">
+                <v-icon
+                  class="mr-3"
+                  @click="showInformationPopup('relevantCategoriesInfo')"
+                >
+                  fa-circle-question
+                </v-icon>{{ $t('surveys.search.relevantCategories') }}
+              </div>
+              <v-switch
+                v-model="form.searchSettings.enableRelevantCategories"
+                class="mt-6"
+                :error-messages="form.errors.get('searchSettings.enableRelevantCategories')"
+                hide-details="auto"
+                :label="$t('surveys.search.enableRelevantCategories')"
+                name="searchEnableRelevantCategories"
+                @change="form.errors.clear('searchSettings.enableRelevantCategories')"
+              />
+              <v-slider
+                v-model.number="form.searchSettings.relevantCategoryDepth"
+                class="mt-8"
+                :error-messages="form.errors.get('searchSettings.relevantCategoryDepth')"
+                hide-details="auto"
+                :label="$t('surveys.search.relevantCategoryDepth')"
+                max="5"
+                min="0"
+                name="searchRelevantCategoryDepth"
+                thumb-label="always"
+              />
               <information-popup v-if="infoComponentType" :component-type="`${infoComponentType}`" :open="infoPopupOpen" :title="$t(`surveys.search.information.${infoComponentType}.title`)" @close="hideInformationPopup" />
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">

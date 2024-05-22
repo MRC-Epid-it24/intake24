@@ -2,23 +2,23 @@ import '@intake24/api/bootstrap';
 
 import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
 
-import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
+import type { PhraseMatchResult, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
+import { ParentCategoryIndex } from '@intake24/api/food-index/workers/parent-category-index';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { logger as servicesLogger } from '@intake24/common-backend';
 import { Database, FoodsLocale, RecipeFoods, SynonymSet } from '@intake24/db';
 
 import type InterpretedPhrase from '../interpreted-phrase';
-import type { GlobalCategoryData } from './food-data';
 import {
-  fetchGlobalCategoryData,
   fetchLocalCategories,
   fetchLocalFoods,
   fetchRecipeFoodsList,
+  LocalCategoryData,
 } from './food-data';
 
 if (parentPortNullable === null)
@@ -36,10 +36,9 @@ const databases = new Database({
 databases.init();
 
 interface LocalFoodIndex {
-  foodParentCategories: Map<string, Set<string>>;
-  nonEmptyCategories: Set<string>;
   foodIndex: PhraseIndex<string>;
   categoryIndex: PhraseIndex<string>;
+  parentCategoryIndex: ParentCategoryIndex;
 }
 
 interface FoodIndex {
@@ -55,8 +54,6 @@ type IndexCommand = {
 };
 
 const foodIndex: FoodIndex = {};
-
-let globalCategoryData: GlobalCategoryData;
 
 const logger = servicesLogger.child({ service: 'Food index' });
 
@@ -98,7 +95,7 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
 async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
   const [
     localFoods,
-    localCategories,
+    allLocalCategories,
     synonymSets,
     recipeFoodsSynomSet,
     languageBackendId,
@@ -119,6 +116,10 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
       `Language backend "${languageBackendId}" for locale "${localeId}" not found`,
     );
   }
+
+  const parentCategoryIndex = new ParentCategoryIndex(localFoods, allLocalCategories, logger);
+
+  const localCategories = allLocalCategories.filter(category => parentCategoryIndex.nonEmptyCategories.has(category.code));
 
   const foodDescriptions = new Array<PhraseWithKey<string>>();
 
@@ -157,34 +158,10 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     synonymSets,
   );
 
-  const foodParentCategories = new Map(
-    localFoods.map(food => [food.code, food.parentCategories]),
-  );
-
-  const categoryParentCategories = new Map(
-    localCategories.map(category => [category.code, category.parentCategories]),
-  );
-
-  const nonEmptyCategories = new Set<string>();
-
-  function markNonEmpty(categoryCode: string): void {
-    nonEmptyCategories.add(categoryCode);
-
-    const parentCategories = categoryParentCategories.get(categoryCode);
-
-    if (parentCategories !== undefined) {
-      for (const parentCategoryCode of parentCategories)
-        markNonEmpty(parentCategoryCode);
-    }
-  }
-
-  localFoods.forEach(food => food.parentCategories.forEach(categoryCode => markNonEmpty(categoryCode)));
-
   return {
-    foodParentCategories,
-    nonEmptyCategories,
     foodIndex,
     categoryIndex,
+    parentCategoryIndex,
   };
 }
 
@@ -230,82 +207,26 @@ async function matchRecipeFoods(
   return recipeFoodHeadersFiltered;
 }
 
-function addTransitiveParentCategories(categories: Set<string>): Set<string> {
-  const parentCategories = new Set<string>();
+function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchResult<string>[], categoryResults: PhraseMatchResult<string>[], transitiveLimit: number): PhraseMatchResult<string>[] {
+  const foodCodes = foodResults.map(matchResult => matchResult.key);
+  const relevantCategories: Map<string, LocalCategoryData> = new Map<string, LocalCategoryData>();
 
-  let currentSet = categories;
-
-  while (currentSet.size > 0) {
-    for (const code of currentSet)
-      parentCategories.add(code);
-
-    const nextSet = new Set<string>();
-
-    for (const code of currentSet) {
-      const parentCodes = globalCategoryData.get(code)?.parentCategories ?? [];
-      for (const parentCode of parentCodes)
-        nextSet.add(parentCode);
+  for (const foodCode of foodCodes) {
+    const transitiveParentCategories = index.parentCategoryIndex.getFoodTransitiveParentCategories(foodCode, transitiveLimit);
+    for (const [categoryCode, data] of transitiveParentCategories) {
+      // Skip categories that have been matched by the search algorithm to prevent duplicates (for example, "Tap water"/"Water")
+      if (!categoryResults.some(result => result.key === categoryCode)) {
+        if (!relevantCategories.has(categoryCode))
+          relevantCategories.set(categoryCode, data);
+      }
     }
-
-    currentSet = nextSet;
   }
 
-  return parentCategories;
-}
-
-function foodAllCategories(index: LocalFoodIndex, foodCode: string): Set<string> {
-  const parentCategories = index.foodParentCategories.get(foodCode);
-
-  if (parentCategories === undefined) {
-    logger.error(`No parent category data for ${foodCode}!`);
-    return new Set();
-  }
-
-  return addTransitiveParentCategories(parentCategories);
-}
-
-function isFoodHidden(index: LocalFoodIndex, foodCode: string): boolean {
-  const parentCategories = index.foodParentCategories.get(foodCode);
-
-  if (parentCategories === undefined) {
-    logger.error(`No parent category data for ${foodCode}!`);
-    return false;
-  }
-
-  if (parentCategories.size === 0) {
-    logger.warn(`${foodCode} is not assigned to any category`);
-    return false;
-  }
-
-  for (const categoryCode of parentCategories) {
-    if (!isCategoryHidden(categoryCode))
-      return false;
-  }
-
-  return true;
-}
-
-function isCategoryHidden(categoryCode: string): boolean {
-  const categoryData = globalCategoryData.get(categoryCode);
-  if (categoryData === undefined) {
-    logger.error(`No global category data for ${categoryCode}!`);
-    return false;
-  }
-  return categoryData.isHidden;
-}
-
-function isFoodInCategory(index: LocalFoodIndex, foodCode: string, categoryCode: string): boolean {
-  return foodAllCategories(index, foodCode).has(categoryCode);
-}
-
-function isSubcategory(categoryCode: string, ofCategoryCode: string): boolean {
-  const categoryData = globalCategoryData.get(categoryCode);
-  if (categoryData === undefined) {
-    logger.error(`No global category data for ${categoryCode}!`);
-    return false;
-  }
-
-  return addTransitiveParentCategories(categoryData.parentCategories).has(ofCategoryCode);
+  return [...relevantCategories.entries()].map(([categoryCode, categoryData]) => ({
+    key: categoryCode,
+    phrase: categoryData.name,
+    quality: 0,
+  }));
 }
 
 async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
@@ -353,11 +274,14 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
 
   const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
 
+  if (query.parameters.enableRelevantCategories)
+    categoryResults.push(...getRelevantCategories(localeIndex, foodResults, categoryResults, query.parameters.relevantCategoryDepth));
+
   const filteredFoods = foodResults.filter((matchResult) => {
-    const acceptHidden = query.parameters.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
+    const acceptHidden = query.parameters.includeHidden || !localeIndex.parentCategoryIndex.isFoodHidden(matchResult.key);
     const acceptCategory
       = query.parameters.limitToCategory === undefined
-      || isFoodInCategory(localeIndex, matchResult.key, query.parameters.limitToCategory);
+      || localeIndex.parentCategoryIndex.isFoodInCategory(matchResult.key, query.parameters.limitToCategory);
 
     return acceptHidden && acceptCategory;
   });
@@ -373,8 +297,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
 
   const filteredCategories = categoryResults.filter(
     matchResult =>
-      (query.parameters.limitToCategory === undefined || isSubcategory(matchResult.key, query.parameters.limitToCategory))
-      && localeIndex.nonEmptyCategories.has(matchResult.key),
+      (query.parameters.limitToCategory === undefined || localeIndex.parentCategoryIndex.isSubCategory(matchResult.key, query.parameters.limitToCategory)),
   );
 
   const categories = rankCategoryResults(filteredCategories);
@@ -393,10 +316,6 @@ async function buildIndex() {
     where: { foodIndexEnabled: true },
   });
   const enabledLocales = locales.map(({ id }) => id);
-
-  logger.debug('Fetching global category data');
-
-  globalCategoryData = await fetchGlobalCategoryData();
 
   logger.debug(`Enabled locales: ${JSON.stringify(enabledLocales)}`);
 

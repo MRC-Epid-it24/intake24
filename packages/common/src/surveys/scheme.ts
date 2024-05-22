@@ -193,6 +193,8 @@ export type SurveySearchSettings = {
   wordOrderCost: number;
   wordDistanceCost: number;
   unmatchedWordCost: number;
+  enableRelevantCategories: boolean;
+  relevantCategoryDepth: number;
 };
 
 export const defaultSearchSettings: SurveySearchSettings = {
@@ -210,4 +212,6 @@ export const defaultSearchSettings: SurveySearchSettings = {
   wordOrderCost: 4,
   wordDistanceCost: 1,
   unmatchedWordCost: 8,
+  enableRelevantCategories: false,
+  relevantCategoryDepth: 0,
 };

@@ -366,6 +366,19 @@ export const defaults: Schema = {
     toInt: true,
     optional: true,
   },
+  'searchSettings.enableRelevantCategories': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
+    optional: true,
+  },
+  'searchSettings.relevantCategoryDepth': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('int.minMax', { min: 0, max: 5 }),
+    isInt: { options: { min: 0, max: 5 } },
+    toInt: true,
+    optional: true,
+  },
 };
 
 export const userPersonalData: Schema = {

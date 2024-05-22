@@ -82,6 +82,8 @@ export default () => {
           wordOrderCost: -5,
           wordDistanceCost: '18',
           unmatchedWordCost: -10.5,
+          enableRelevantCategories: 'nope',
+          relevantCategoryDepth: 10,
         },
         surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
@@ -122,6 +124,8 @@ export default () => {
         'searchSettings.wordOrderCost',
         'searchSettings.wordDistanceCost',
         'searchSettings.unmatchedWordCost',
+        'searchSettings.enableRelevantCategories',
+        'searchSettings.relevantCategoryDepth',
         'surveySchemeOverrides',
       ];
 
