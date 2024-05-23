@@ -16,7 +16,7 @@
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
     "generate-pwa-assets": "pwa-assets-generator",
-    "start": "node server/index.cjs",
+    "start": "node server/index.js",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {

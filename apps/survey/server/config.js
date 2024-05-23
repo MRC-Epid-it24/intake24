@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   env: process.env.NODE_ENV || 'development',
   name: process.env.SERVER_NAME || 'Intake24 Survey',
   url: process.env.SERVER_URL || 'localhost',
