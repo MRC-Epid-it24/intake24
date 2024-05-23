@@ -5,11 +5,11 @@ import { fromZodError } from 'zod-validation-error';
 
 import type { Ops } from '@intake24/api/app';
 import { IndexNotReadyError } from '@intake24/api/food-index';
-import ConflictError from '@intake24/api/http/errors/conflict.error';
 import { DatabaseError } from '@intake24/db';
 
 import {
   ApplicationError,
+  ConflictError,
   ForbiddenError,
   InternalServerError,
   NotFoundError,
@@ -73,7 +73,6 @@ export default (app: Express, { logger }: Ops): void => {
     next(err);
   });
 
-  // TODO: format should be unified with express-validator format
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ZodError) {
       const { details, message } = fromZodError(err);

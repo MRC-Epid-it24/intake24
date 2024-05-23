@@ -1,16 +1,18 @@
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
+/* eslint-disable import/first */
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 
-const env = dotenv.config();
-dotenvExpand.expand(env);
+const dotEnv = dotenv.config();
+dotenvExpand.expand(dotEnv);
 
-const express = require('express');
-const fs = require('node:fs');
-const helmet = require('helmet');
-const path = require('node:path');
-const { cspHashes } = require('@vitejs/plugin-legacy');
+import fs from 'node:fs';
+import path from 'node:path';
 
-const config = require('./config');
+import { cspHashes } from '@vitejs/plugin-legacy';
+import express from 'express';
+import helmet from 'helmet';
+
+import config from './config.js';
 
 async function startApp() {
   const app = express();
