@@ -13,7 +13,7 @@ import type {
   CSVHeaders,
   CsvResultStructure,
 } from './types/csv-import';
-import type { PkgAssociatedFood, PkgGlobalFood, PkgLocalFood } from './types/foods';
+import type { PkgAssociatedFood, PkgGlobalFood, PkgLocalFood, PkgPortionSizeMethod, PkgStandardUnit } from './types/foods';
 import { PkgConstants } from './constants';
 import { CsvFoodRecords } from './types/csv-import';
 import { PkgLocale } from './types/locale';
@@ -42,6 +42,8 @@ const defaultJSONOptions: PackageWriterOptions = {
 const DEFAULT_FOOD_COMPOSITION_TABLE = process.env.CSV_DEFAULT_FOOD_COMPOSION_TABLE || 'NDNS';
 const DEFAULT_FOOD_COMPOSITION_TABLE_CODE = process.env.CSV_DEFAULT_FOOD_COMPOSITION_CODE || '01B10311';
 const DEFAULT_SKIP_MISSING_CATEGORIES = process.env.DEFAULT_SKIP_MISSING_CATEGORIES === 'true' || false;
+
+const allThePsmInTheImportCSV = new Set<string>([]);
 
 export const csvHeaders = Object.values(CsvFoodRecords).map(record => record.header);
 
@@ -157,7 +159,7 @@ export class ConvertorToPackage {
       this.logger.error('No existing categories found');
       return [];
     }
-    return existingCategories.map(category => category.code); ;
+    return existingCategories.map(category => category.code);
   }
 
   private determineRecipeUse = (useInRecipes: string): number => {
@@ -215,6 +217,118 @@ export class ConvertorToPackage {
       });
 
     return associatedFoods;
+  };
+
+  private fromCSVPortionSizeMethodPackage = (psm: string): PkgPortionSizeMethod[] => {
+    if (!psm || psm.length === 0)
+      return [];
+    const normalizedPsm: PkgPortionSizeMethod[] = [];
+    const lines = psm
+      .split('\n')
+      .map(method => method.trim());
+    lines.forEach((line) => {
+      const keyValuePairs = line.split(',').map(pair => pair.trim().split(': '));
+      const method = keyValuePairs.find(pair => pair[0] === 'Method')?.[1];
+      const useForRecipes = keyValuePairs.find(pair => pair[0] === 'use for recipes')?.[1];
+      const conversionFactor = keyValuePairs.find(pair => pair[0] === 'conversion')?.[1];
+
+      allThePsmInTheImportCSV.add(method!);
+      switch (method) {
+        case 'as-served':
+          normalizedPsm.push({
+            method: 'as-served',
+            description: 'use_an_image',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            leftoversImageSet: keyValuePairs.find(pair => pair[0] === 'leftovers')?.[1],
+            useForRecipes: useForRecipes === 'true',
+            servingImageSet: keyValuePairs.find(pair => pair[0] === 'serving')?.[1] ?? '',
+          });
+          break;
+        case 'guide-image':
+          normalizedPsm.push({
+            method: 'guide-image',
+            description: 'use_a_guided__image',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            guideImageId: keyValuePairs.find(pair => pair[0] === 'guide-image-id')?.[1] ?? '',
+            useForRecipes: useForRecipes === 'true',
+          });
+          break;
+        case 'drink-scale':
+          normalizedPsm.push({
+            method: 'drink-scale',
+            description: 'use_a_drinware_image',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            drinkwareId: keyValuePairs.find(pair => pair[0] === 'drinkware-id')?.[1] ?? '',
+            initialFillLevel: Number.parseFloat(keyValuePairs.find(pair => pair[0] === 'initial-fill-level')?.[1] ?? '0.9'),
+            skipFillLevel: keyValuePairs.find(pair => pair[0] === 'skip-fill-level')?.[1] === 'true',
+            useForRecipes: useForRecipes === 'true',
+          });
+          break;
+        case 'standard-portion': {
+          const unitCount = Number.parseInt(keyValuePairs.find(pair => pair[0] === 'units-count')?.[1] ?? '0');
+          const units: PkgStandardUnit[] = [];
+          if (unitCount) {
+            for (let i = 0; i < unitCount; i++) {
+              const name = keyValuePairs.find(pair => pair[0] === `unit${i}-name`)?.[1];
+              const weight = keyValuePairs.find(pair => pair[0] === `unit${i}-weight`)?.[1];
+              const omitFoodDescription = keyValuePairs.find(pair => pair[0] === `unit${i}-omit-food-description`)?.[1] === 'true';
+              units.push({
+                name: name ?? '',
+                weight: Number.parseFloat(weight ?? '0'),
+                omitFoodDescription,
+                inlineEstimateIn: '',
+                inlineHowMany: '',
+              });
+            }
+          }
+
+          normalizedPsm.push({
+            method: 'standard-portion',
+            description: 'use_a_standard_portion',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            units,
+            useForRecipes: useForRecipes === 'true',
+          });
+        }
+          break;
+        case 'cereal':
+          normalizedPsm.push({
+            method: 'cereal',
+            description: 'use_a_cereal_portion',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            type: keyValuePairs.find(pair => pair[0] === 'cereal-type')?.[1] ?? '',
+            useForRecipes: useForRecipes === 'true',
+          });
+          break;
+        case 'pizza':
+          normalizedPsm.push({
+            method: 'pizza',
+            description: 'use_a_pizza_portion',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            useForRecipes: useForRecipes === 'true',
+          });
+          break;
+        case 'milk-on-cereal':
+          normalizedPsm.push({
+            method: 'milk-on-cereal',
+            description: 'use_a_milk_on_cereal_portion',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            useForRecipes: useForRecipes === 'true',
+          });
+          break;
+        case 'milk-in-a-hot-drink':
+          normalizedPsm.push({
+            method: 'milk-in-a-hot-drink',
+            description: 'use_a_milk_in_a_hot_drink_portion',
+            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+            useForRecipes: useForRecipes === 'true',
+          });
+          break;
+        default:
+          break;
+      }
+    });
+    return normalizedPsm;
   };
 
   private async createGlobalFoodListAndWriteJSON(data: CsvFoodRecordUnprocessed[]) {
@@ -285,7 +399,7 @@ export class ConvertorToPackage {
           record['food composition table record id'],
         ),
         associatedFoods: this.linkAssociatedFoodCategories(record['associated food or category']),
-        portionSize: [],
+        portionSize: this.fromCSVPortionSizeMethodPackage(record['portion size estimation methods']),
         brandNames: [],
       };
       localFoodList.push(localFood);
@@ -398,5 +512,8 @@ export class ConvertorToPackage {
       this.logger.debug('Converting to package from unspecified file type');
       throw new Error('Unsupported file type');
     }
+
+    this.logger.info('Conversion complete');
+    this.logger.info(`This are the PSMs in the CSV file: ${Array.from(allThePsmInTheImportCSV).join(', ')}`);
   }
 }

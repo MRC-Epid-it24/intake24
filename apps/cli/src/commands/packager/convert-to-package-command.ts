@@ -15,7 +15,7 @@ export default async (
   version: string,
   inputFilePath: string,
   outputFilePath: string,
-  options: PackageImportOptions
+  options: PackageImportOptions,
 ): Promise<void> => {
   const logger = mainLogger.child({ service: 'toPackageConvertor' });
 
