@@ -191,7 +191,6 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
           localeId: this.localeCode,
           foodCode: row.foodCode,
           occurrences: row.sortingPriority,
-          multiplier: 1, // should use default, but the current table schema allows nulls
         }));
 
         await PAOccurrence.bulkCreate(records, { transaction });
