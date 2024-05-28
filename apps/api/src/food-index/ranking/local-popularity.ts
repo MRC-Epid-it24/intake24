@@ -5,7 +5,8 @@ import { toCacheKey, toFoodCode } from '@intake24/api/food-index/ranking/utils';
 import { mapKeys } from '@intake24/common/util';
 import { PAOccurrence } from '@intake24/db';
 
-const cache = new NodeCache({ stdTTL: 600, checkperiod: 600 });
+// change it back to 600
+const cache = new NodeCache({ stdTTL: 0, checkperiod: 600 });
 
 export async function getLocalPopularityRanking(
   localeId: string,
@@ -19,19 +20,18 @@ export async function getLocalPopularityRanking(
 
   if (codesToFetch.length > 0) {
     const rows = await PAOccurrence.findAll({
-      attributes: ['foodCode', 'occurrences'],
+      attributes: ['foodCode', 'occurrences', 'multiplier'],
       where: { localeId, foodCode: codesToFetch },
     });
 
     const newCacheEntries = rows.map(row => ({
       key: toCacheKey(localeId, row.foodCode),
-      val: row.occurrences,
+      val: row.occurrences * row.multiplier,
     }));
 
     cache.mset(newCacheEntries);
 
     rows.forEach((row) => {
-      ranking[row.foodCode] = row.occurrences;
       ranking[row.foodCode] = row.occurrences * row.multiplier;
     });
   }
