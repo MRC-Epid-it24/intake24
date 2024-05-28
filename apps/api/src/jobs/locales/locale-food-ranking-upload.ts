@@ -8,7 +8,8 @@ import { camelCase } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { FixedFoodRanking, FoodLocalList, SystemLocale } from '@intake24/db';
+import { SearchSortingAlgorithm } from '@intake24/common/surveys';
+import { FixedFoodRanking, FoodLocalList, PAOccurrence, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 
@@ -57,19 +58,31 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
 
     this.localeCode = locale.code;
 
+    const targetAlgorithm = this.params.targetAlgorithm;
+
+    if (targetAlgorithm === 'globalPop')
+      throw new Error(`Job ${this.name}: global popularity (food frequency) update not implemented`);
+
     await this.db.system.transaction(async (tx) => {
-      await this.deleteRows(tx);
-      await this.uploadImpl(tx);
+      await this.deleteRows(targetAlgorithm, tx);
+      await this.uploadImpl(targetAlgorithm, tx);
     });
 
     this.logger.debug('Job finished.');
   }
 
-  private async deleteRows(transaction: Transaction) {
-    await FixedFoodRanking.destroy({ where: { localeId: this.localeCode }, transaction });
+  private async deleteRows(targetAlgorithm: Exclude<SearchSortingAlgorithm, 'globalPop'>, transaction: Transaction) {
+    switch (targetAlgorithm) {
+      case 'popularity':
+        await PAOccurrence.destroy({ where: { localeId: this.localeCode }, transaction });
+        break;
+      case 'fixed':
+        await FixedFoodRanking.destroy({ where: { localeId: this.localeCode }, transaction });
+        break;
+    }
   }
 
-  private async uploadImpl(tx: Transaction, chunk = 100): Promise<void> {
+  private async uploadImpl(targetAlgorithm: Exclude<SearchSortingAlgorithm, 'globalPop'>, tx: Transaction, chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
       const stream = fs
         .createReadStream(this.file)
@@ -93,7 +106,7 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
               });
               chunkOps.push(chunkPromise);
               await this.validateChunk(chunkRows);
-              await this.importChunk(chunkRows, tx);
+              await this.importChunk(targetAlgorithm, chunkRows, tx);
               chunkResolve?.();
             }
             catch (err) {
@@ -109,7 +122,7 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
         .on('end', async () => {
           try {
             await this.validateChunk(parsedRows);
-            await this.importChunk(parsedRows, tx);
+            await this.importChunk(targetAlgorithm, parsedRows, tx);
             await Promise.all(chunkOps);
             resolve();
           }
@@ -156,16 +169,35 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
     }
   }
 
-  private async importChunk(rows: CSVRow[], transaction: Transaction): Promise<void> {
+  private async importChunk(targetAlgorithm: Exclude<SearchSortingAlgorithm, 'globalPop'>, rows: CSVRow[], transaction: Transaction): Promise<void> {
     if (!rows.length)
       return;
 
-    const records = rows.map(row => ({
-      localeId: this.localeCode,
-      foodCode: row.foodCode,
-      rank: row.sortingPriority,
-    }));
+    switch (targetAlgorithm) {
+      case 'fixed': {
+        const
+          records = rows.map(row => ({
+            localeId: this.localeCode,
+            foodCode: row.foodCode,
+            rank: row.sortingPriority,
+          }));
 
-    await FixedFoodRanking.bulkCreate(records, { transaction });
+        await FixedFoodRanking.bulkCreate(records, { transaction });
+
+        break;
+      }
+      case 'popularity': {
+        const records = rows.map(row => ({
+          localeId: this.localeCode,
+          foodCode: row.foodCode,
+          occurrences: row.sortingPriority,
+          multiplier: 1, // should use default, but the current table schema allows nulls
+        }));
+
+        await PAOccurrence.bulkCreate(records, { transaction });
+
+        break;
+      }
+    }
   }
 }

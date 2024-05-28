@@ -90,7 +90,11 @@
   "page": "Page",
   "password": "Password",
   "passwordConfirm": "Password confirmation",
-  "params": "Parameters",
+  "params": {
+    "_":  "Parameters",
+    "file": "File",
+    "targetAlgorithm": "Sorting algorithm type"
+  },
   "permissions": "Permissions",
   "phone": "Phone",
   "physicalActivityLevelId": "Physical activity level",

@@ -1,6 +1,8 @@
 import pick from 'lodash/pick';
 import { z } from 'zod';
 
+import { searchSortingAlgorithms } from '@intake24/common/surveys';
+
 import type { SurveyState } from './recall';
 
 // Not defined in bull-mq
@@ -47,6 +49,7 @@ export const LocaleFoodNutrientMapping = z.object({
 export const LocaleFoodRankingUpload = z.object({
   localeId: z.string(),
   file: z.string(),
+  targetAlgorithm: z.enum(searchSortingAlgorithms),
 });
 export const NutrientTableDataImport = z.object({
   nutrientTableId: z.string(),
@@ -306,6 +309,7 @@ export const defaultJobsParams: JobParams = {
   LocaleFoodRankingUpload: {
     localeId: '',
     file: '',
+    targetAlgorithm: 'fixed',
   },
   NutrientTableDataImport: {
     nutrientTableId: '',
@@ -388,4 +392,8 @@ export function pickJobParams<T extends keyof JobParams>(object: object, job: T)
 
 export function jobRequiresFile<T extends keyof JobParams>(job: T) {
   return Object.keys(defaultJobsParams[job]).includes('file');
+}
+
+export function jobHasParam<T extends keyof JobParams>(job: T, key: string) {
+  return Object.keys(defaultJobsParams[job]).includes(key);
 }

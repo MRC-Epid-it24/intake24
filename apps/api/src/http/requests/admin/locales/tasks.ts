@@ -9,7 +9,14 @@ import {
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
-import { jobRequiresFile, localeCopySubTasks, localeJobs, pickJobParams } from '@intake24/common/types';
+import { searchSortingAlgorithms } from '@intake24/common/surveys';
+import {
+  jobHasParam,
+  jobRequiresFile,
+  localeCopySubTasks,
+  localeJobs,
+  pickJobParams,
+} from '@intake24/common/types';
 import { SystemLocale } from '@intake24/db';
 
 export default validate(
@@ -65,6 +72,16 @@ export default validate(
               customTypeErrorMessage('file.ext', meta, { ext: 'CSV (comma-delimited)' }),
             );
           }
+        },
+      },
+    },
+    'params.targetAlgorithm': {
+      in: ['body'],
+      custom: {
+        if: (value: any, { req }: Meta) => req.body.type && jobHasParam(req.body.type, 'targetAlgorithm'),
+        options: async (value: any, meta): Promise<void> => {
+          if (!searchSortingAlgorithms.includes(value))
+            throw new Error(customTypeErrorMessage('in.options', meta, { options: searchSortingAlgorithms }));
         },
       },
     },

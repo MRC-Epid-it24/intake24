@@ -61,7 +61,13 @@
     },
     "LocaleFoodRankingUpload": {
       "_": "Locale - food ranking CSV upload",
-      "file": "CSV file"
+      "file": "CSV file",
+      "targetAlgorithm": "Sorting algorithm type to update",
+      "warningTitle": "Warning: risk of data loss. Proceed with caution.",
+      "warningP1": "The food frequency data is automatically updated by the system as new recalls are received.",
+      "warningP2": "Uploading frequency data from a CSV file will override existing records in the database, potentially leading to data loss.",
+      "warningP3": "This feature is intended only for initialising new locales or fixing issues with existing frequency data.",
+      "warningP4": "Please double-check that you are in the correct locale before uploading the data."
     },
     "LocaleFoods": {
       "_": "Locale - Export foods",
