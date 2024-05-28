@@ -87,7 +87,7 @@ export default defineComponent({
     const defaultJobsParams = computed<Pick<JobParams, LocaleJob>>(() => ({
       LocaleCopy: { localeId: props.id, sourceLocaleId: '', subTasks: [...localeCopySubTasks] },
       LocaleFoods: { localeId: props.id },
-      LocaleFoodRankingUpload: { localeId: props.id, file: '' },
+      LocaleFoodRankingUpload: { localeId: props.id, file: '', targetAlgorithm: 'fixed' },
       LocaleFoodNutrientMapping: { localeId: props.id },
     }));
 
