@@ -36,11 +36,6 @@ export default class PAOccurrence extends BaseModel<
     type: DataType.INTEGER,
   })
   declare occurrences: number;
-
-  @Column({
-    type: DataType.INTEGER,
-  })
-  declare multiplier: number;
 }
 
 export type PAOccurrenceAttributes = Attributes<PAOccurrence>;
