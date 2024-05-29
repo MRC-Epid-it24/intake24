@@ -4,9 +4,6 @@
       {{ $t('user.profile') }}
     </h2>
     <data-table :actions="['create', 'download', 'read']" api-url="admin/user/jobs" :headers="headers">
-      <template #[`item.userId`]="{ item }">
-        {{ item.user?.email ?? item.userId }}
-      </template>
       <template #[`item.successful`]="{ item }">
         <v-icon v-if="item.successful" color="success">
           $check

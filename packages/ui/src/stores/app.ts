@@ -10,6 +10,7 @@ export type AppState = {
     api: string;
     host: string;
     name: string;
+    docs: string;
     build: {
       version: string;
       revision: string;
@@ -28,6 +29,7 @@ export const useApp = defineStore('app', {
       api: [import.meta.env.VITE_API_HOST, import.meta.env.VITE_API_URL]
         .map(item => trim(item, '/'))
         .join('/'),
+      docs: import.meta.env.VITE_DOCS_URL || 'https://docs.intake24.org',
       build: {
         version: import.meta.env.VITE_APP_BUILD_VERSION,
         revision: import.meta.env.VITE_APP_BUILD_REVISION,

@@ -25,6 +25,7 @@ export default new Vuetify({
       create: 'fas fa-plus',
       back: 'fas fa-level-up-alt',
       dashboard: 'fas fa-tachometer-alt',
+      docs: 'fas fa-circle-info',
       delete: 'fas fa-trash',
       description: 'fas fa-note-sticky',
       desktop: 'fas fa-desktop',

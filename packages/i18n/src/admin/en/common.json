@@ -1,6 +1,7 @@
 {
   "_": "Intake24 Admin Tool",
   "title": "Common",
+  "docs": "Docs",
   "login": {
     "_": "Sign in",
     "subtitle": "Sign in to Intake24 Admin Tool account",

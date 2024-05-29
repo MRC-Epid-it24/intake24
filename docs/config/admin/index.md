@@ -110,6 +110,10 @@ API Server base URL. Defaults to `$API_HOST`.
 
 API Server context URL to be appended to `VITE_API_HOST`. Defaults to `api`.
 
+### VITE_DOCS_URL
+
+Intake24 documentation URL. Defaults to [https://docs.intake24.org](/).
+
 ### VITE_ACL_SIGNUP_ENABLED
 
 Flag whether to allow admin tool sign-ups. Defaults to `true`. Flag only enables sign-up view in the application. Sign-ups also has to be enabled in [API Server ACL settings](/config/api/acl#sign-up).
