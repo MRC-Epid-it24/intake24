@@ -10517,11 +10517,20 @@
                                   },
                                   "file": {
                                     "type": "string"
+                                  },
+                                  "targetAlgorithm": {
+                                    "type": "string",
+                                    "enum": [
+                                      "popularity",
+                                      "globalPop",
+                                      "fixed"
+                                    ]
                                   }
                                 },
                                 "required": [
                                   "localeId",
-                                  "file"
+                                  "file",
+                                  "targetAlgorithm"
                                 ]
                               },
                               {
@@ -11263,11 +11272,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -12031,11 +12049,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -16344,11 +16371,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -22094,11 +22130,20 @@
                                   },
                                   "file": {
                                     "type": "string"
+                                  },
+                                  "targetAlgorithm": {
+                                    "type": "string",
+                                    "enum": [
+                                      "popularity",
+                                      "globalPop",
+                                      "fixed"
+                                    ]
                                   }
                                 },
                                 "required": [
                                   "localeId",
-                                  "file"
+                                  "file",
+                                  "targetAlgorithm"
                                 ]
                               },
                               {
@@ -22723,11 +22768,20 @@
                           },
                           "file": {
                             "type": "string"
+                          },
+                          "targetAlgorithm": {
+                            "type": "string",
+                            "enum": [
+                              "popularity",
+                              "globalPop",
+                              "fixed"
+                            ]
                           }
                         },
                         "required": [
                           "localeId",
-                          "file"
+                          "file",
+                          "targetAlgorithm"
                         ]
                       },
                       {
@@ -23297,11 +23351,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -23902,11 +23965,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -24537,11 +24609,20 @@
                           },
                           "file": {
                             "type": "string"
+                          },
+                          "targetAlgorithm": {
+                            "type": "string",
+                            "enum": [
+                              "popularity",
+                              "globalPop",
+                              "fixed"
+                            ]
                           }
                         },
                         "required": [
                           "localeId",
-                          "file"
+                          "file",
+                          "targetAlgorithm"
                         ]
                       },
                       {
@@ -25111,11 +25192,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -25784,11 +25874,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -26435,11 +26534,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -27271,11 +27379,20 @@
                                   },
                                   "file": {
                                     "type": "string"
+                                  },
+                                  "targetAlgorithm": {
+                                    "type": "string",
+                                    "enum": [
+                                      "popularity",
+                                      "globalPop",
+                                      "fixed"
+                                    ]
                                   }
                                 },
                                 "required": [
                                   "localeId",
-                                  "file"
+                                  "file",
+                                  "targetAlgorithm"
                                 ]
                               },
                               {
@@ -28061,11 +28178,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
@@ -28765,11 +28891,20 @@
                             },
                             "file": {
                               "type": "string"
+                            },
+                            "targetAlgorithm": {
+                              "type": "string",
+                              "enum": [
+                                "popularity",
+                                "globalPop",
+                                "fixed"
+                              ]
                             }
                           },
                           "required": [
                             "localeId",
-                            "file"
+                            "file",
+                            "targetAlgorithm"
                           ]
                         },
                         {
