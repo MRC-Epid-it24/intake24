@@ -138,7 +138,7 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
   const categoryDescriptions = new Array<PhraseWithKey<string>>();
 
   for (const category of localCategories) {
-    if (!category.name)
+    if (!category.name || category.isHidden)
       continue;
 
     categoryDescriptions.push({ phrase: category.name, key: category.code });
