@@ -64,7 +64,7 @@ export async function fetchLocalCategories(localeId: string): Promise<LocalCateg
         association: 'parentCategories',
         attributes: ['code'],
       },
-    ], where: { isHidden: false } },
+    ] },
   });
 
   return localCategories.map((row) => {
