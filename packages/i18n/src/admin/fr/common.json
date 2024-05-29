@@ -1,6 +1,7 @@
 {
   "_": "Outil administrateur Intake24",
   "title": "Commun",
+  "docs": "Docs",
   "login": {
     "_": "Se connecter",
     "subtitle": "Connexion à un compte de l'outil adminstrateur de Intake24",

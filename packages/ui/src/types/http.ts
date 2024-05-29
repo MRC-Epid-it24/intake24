@@ -9,10 +9,11 @@ export interface HttpRequestConfig<D = any> extends AxiosRequestConfig<D> {
 
 export interface HttpClient {
   axios: AxiosInstance;
-  init: (router: Router, authStore: unknown) => void;
-  mountInterceptors: (router: Router, authStore: unknown) => void;
-  mountBearerInterceptor: (authStore: unknown) => void;
-  mount401Interceptor: (router: Router, authStore: unknown) => void;
+  // TODO: authStore should be authentication store, but they differ a bit between admin & survey -> would need common interface defined
+  init: (router: Router, authStore: any) => void;
+  mountInterceptors: (router: Router, authStore: any) => void;
+  mountBearerInterceptor: (authStore: any) => void;
+  mount401Interceptor: (router: Router, authStore: any) => void;
   get: <T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     config?: HttpRequestConfig<D>

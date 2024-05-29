@@ -102,15 +102,24 @@
     <v-app-bar v-if="loggedIn" app color="primary" dark fixed>
       <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar" />
       <v-spacer />
-      <v-btn v-if="isVerified" text :to="{ name: 'user' }">
-        <span class="mr-2">{{ $t('user.profile') }}</span>
-        <v-icon>$user</v-icon>
+      <v-btn :href="app.docs" target="_blank" text :title="$t('common.docs')">
+        <v-icon :left="!isMobile">
+          $docs
+        </v-icon>
+        <span class="d-none d-sm-block">{{ $t('common.docs') }}</span>
       </v-btn>
+      <v-btn v-if="isVerified" text :to="{ name: 'user' }">
+        <v-icon :left="!isMobile">
+          $user
+        </v-icon>
+        <span class="d-none d-sm-block">{{ $t('user.profile') }}</span>
+      </v-btn>
+      <v-divider class="mx-2" vertical />
       <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
         <template #activator="{ attrs, on }">
           <v-btn text v-bind="attrs" v-on="on">
-            <span>{{ $t('common.logout._') }}</span>
-            <v-icon right>
+            <span class="d-none d-sm-block">{{ $t('common.logout._') }}</span>
+            <v-icon :right="!isMobile">
               $logout
             </v-icon>
           </v-btn>
@@ -146,7 +155,7 @@ import type { Dictionary } from '@intake24/common/types';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';
-import { useAuth, useEntry, useUser } from '@intake24/admin/stores';
+import { useApp, useAuth, useEntry, useUser } from '@intake24/admin/stores';
 import { ConfirmDialog, Loader, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
 type Breadcrumbs = {
@@ -173,6 +182,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useApp, ['app']),
     ...mapState(useAuth, ['loggedIn']),
     ...mapState(useEntry, { entry: 'data' }),
     ...mapState(useUser, ['isVerified']),
