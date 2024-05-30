@@ -67,7 +67,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <linked-quantity
-        v-if="linkedParent"
+        v-if="linkedParent && !linkedParent.auto"
         v-bind="{
           disabled: leftoversEnabled ? !leftoversValid : !servingValid,
           food,
@@ -158,7 +158,7 @@ export default defineComponent({
       if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      if (this.linkedParent?.categories.length)
+      if (this.linkedParent && !this.linkedParent.auto && this.linkedParent.categories.length)
         conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;

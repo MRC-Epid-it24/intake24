@@ -50,6 +50,7 @@ export default defineComponent({
       encodedFood: food,
       encodedFoodPortionSizeData,
       linkedParent,
+      linkedParentQuantity,
       parameters,
       parentFoodOptional: parentFood,
     } = useFoodPromptUtils<'standard-portion'>();
@@ -60,7 +61,7 @@ export default defineComponent({
         method: 'standard-portion',
         unit: null,
         quantity: 1,
-        linkedQuantity: 1,
+        linkedQuantity: linkedParentQuantity.value,
         servingWeight: 0,
         leftoversWeight: 0,
       },

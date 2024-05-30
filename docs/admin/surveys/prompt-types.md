@@ -229,6 +229,7 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
 
 - `linked quantity settings`
   - Allows to trigger quantity selection prompt for linked parent food
+  - `Automatically apply linked quantity` - skips prompt panel with quantity selection
   - `Source categories to trigger` - child food's categories it should trigger on
   - `Parent categories to link` - parent food's categories it should trigger on
     - Optional standard unit can be assigned to set the `how-many` label
