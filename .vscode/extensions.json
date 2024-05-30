@@ -1,8 +1,7 @@
 {
   "recommendations": [
+    "Vue.volar",
     "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "redhat.vscode-yaml",
-    "vue.volar"
+    "esbenp.prettier-vscode"
   ]
 }

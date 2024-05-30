@@ -41,8 +41,10 @@
       "xml",
       "gql",
       "graphql",
-      "astro"
-    ]
+      "astro",
+      "css",
+      "scss"
+    ],
     "eslint.workingDirectories": [
       {
         "directory": "apps/api"
@@ -73,6 +75,7 @@
   },
   "extensions": {
     "recommendations": [
+      "Vue.volar",
       "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode"
     ]

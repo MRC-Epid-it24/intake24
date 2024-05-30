@@ -17,6 +17,7 @@
         "@tinymce/tinymce-vue",
         "@vue/compiler-sfc",
         "vue",
+        "vue-dompurify-html",
         "vue-gtag",
         "vue-i18n",
         "vue-router",
