@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "axios": "^1.7.0",
+    "axios": "^1.7.2",
     "cookie": "^0.6.0",
     "formdata-node": "4.4.1",
     "mime-types": "^2.1.35",
