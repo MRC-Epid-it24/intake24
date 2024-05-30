@@ -50,6 +50,7 @@ export default defineComponent({
       encodedFood: food,
       encodedFoodPortionSizeData,
       linkedParent,
+      linkedParentQuantity,
       parameters,
       parentFoodOptional: parentFood,
     } = useFoodPromptUtils<'guide-image'>();
@@ -64,7 +65,7 @@ export default defineComponent({
         objectIndex: undefined,
         objectWeight: 0,
         quantity: 1,
-        linkedQuantity: 1,
+        linkedQuantity: linkedParentQuantity.value,
         servingWeight: 0,
         leftoversWeight: 0,
       },

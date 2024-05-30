@@ -43,8 +43,9 @@ import QuantityCard from './QuantityCard.vue';
 import { useStandardUnits } from './use-standard-units';
 
 export type LinkedParent = {
-  food: EncodedFood;
+  auto: boolean;
   categories: Prompts['guide-image-prompt']['linkedQuantity']['parent'];
+  food: EncodedFood;
 };
 
 export default defineComponent({
@@ -95,7 +96,7 @@ export default defineComponent({
     const parentQuantity = computed(() =>
       props.linkedParent.food?.portionSize?.method === 'guide-image'
         ? props.linkedParent.food.portionSize.quantity
-        : 0,
+        : 1,
     );
 
     const updateQuantity = (value: number) => {
@@ -113,9 +114,6 @@ export default defineComponent({
       const names = props.linkedParent.categories.map(({ unit }) => unit).filter(Boolean);
       if (names.length)
         await fetchStandardUnits(names as string[]);
-
-      if (!props.confirm)
-        updateQuantity(parentQuantity.value);
     });
 
     return {

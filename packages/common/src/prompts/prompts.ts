@@ -123,6 +123,7 @@ export const linkedQuantityCategory = z.object({
 export type LinkedQuantityCategory = z.infer<typeof linkedQuantityCategory>;
 
 export const linkedQuantity = z.object({
+  auto: z.boolean(),
   parent: linkedQuantityCategory.array(),
   source: z.string().array(),
 });

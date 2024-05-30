@@ -281,6 +281,7 @@
     "linkedQuantity": {
       "title": "Linked quantity settings",
       "subtitle": "Allows to trigger quantity prompt for linked parent food",
+      "auto": "Automatically apply linked quantity",
       "parent": "Parent categories to link",
       "source": "Source categories to trigger"
     },

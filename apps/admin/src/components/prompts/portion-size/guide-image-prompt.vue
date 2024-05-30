@@ -12,6 +12,14 @@
             <v-card-subtitle>
               {{ $t('survey-schemes.prompts.linkedQuantity.subtitle') }}
             </v-card-subtitle>
+            <v-card-text>
+              <v-switch
+                hide-details="auto"
+                :input-value="linkedQuantity.auto"
+                :label="$t('survey-schemes.prompts.linkedQuantity.auto')"
+                @change="update('linkedQuantity', { ...linkedQuantity, auto: $event })"
+              />
+            </v-card-text>
             <category-list
               class="mb-6"
               flat
@@ -30,7 +38,6 @@
                 </v-list-item-content>
               </template>
             </category-list>
-            <v-divider />
             <category-list
               flat
               tile

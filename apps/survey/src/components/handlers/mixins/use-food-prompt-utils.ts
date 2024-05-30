@@ -16,6 +16,8 @@ import type {
 import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
+import type { LinkedParent } from '../../prompts/partials';
+
 export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   const survey = useSurvey();
 
@@ -130,7 +132,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   const linkedQuantityCategories = (data: UserFoodData) =>
     survey.linkedQuantity?.parent.filter(cat => data.categories.includes(cat.code)) ?? [];
 
-  const linkedParent = computed(() => {
+  const linkedParent = computed<LinkedParent | undefined>(() => {
     const source = encodedFood().data.categories.find(cat =>
       survey.linkedQuantity?.source.includes(cat),
     );
@@ -143,8 +145,9 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
       && parentFoodOptional.value.portionSize.quantity > 1
     ) {
       return {
-        food: parentFoodOptional.value,
+        auto: !!survey.linkedQuantity?.auto,
         categories: linkedQuantityCategories(parentFoodOptional.value.data),
+        food: parentFoodOptional.value,
       };
     }
 
@@ -156,12 +159,23 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
           && food.portionSize.quantity > 1,
       ) as EncodedFood | undefined;
 
-      if (food)
-        return { food, categories: linkedQuantityCategories(food.data) };
+      if (food) {
+        return {
+          auto: !!survey.linkedQuantity?.auto,
+          categories: linkedQuantityCategories(food.data),
+          food,
+        };
+      }
     }
 
     return undefined;
   });
+
+  const linkedParentQuantity = computed(() =>
+    linkedParent.value?.food?.portionSize?.method === 'guide-image'
+      ? linkedParent.value.food.portionSize.quantity
+      : 1,
+  );
 
   const initializeRecipeComponents = (steps: number[]) =>
     steps.map(step => ({ ingredients: [], order: step }));
@@ -171,6 +185,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     foodIndex,
     foodOptional,
     linkedParent,
+    linkedParentQuantity,
     localeId,
     surveySlug,
     meals,

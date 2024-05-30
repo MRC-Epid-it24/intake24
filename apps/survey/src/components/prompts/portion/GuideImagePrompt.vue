@@ -55,7 +55,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <linked-quantity
-        v-if="linkedParent"
+        v-if="linkedParent && !linkedParent.auto"
         v-bind="{ disabled: !quantityValid, food, linkedParent, prompt }"
         v-model="portionSize.linkedQuantity"
         :confirm.sync="linkedQuantityConfirmed"
@@ -173,7 +173,7 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.objectValid, this.quantityValid];
 
-      if (this.linkedParent?.categories.length)
+      if (this.linkedParent && !this.linkedParent.auto && this.linkedParent.categories.length)
         conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
