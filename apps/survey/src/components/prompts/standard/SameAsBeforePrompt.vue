@@ -13,7 +13,7 @@
               <v-list-item-title>{{ promptI18n.serving }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item class="pl-0" dense>
+          <v-list-item v-if="showLeftovers" class="pl-0" dense>
             <v-list-item-avatar class="my-auto mr-2">
               <v-icon>fas fa-caret-right</v-icon>
             </v-list-item-avatar>
@@ -98,10 +98,11 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted } from 'vue';
 
+import type { Prompt } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
-import type { SameAsBeforeItem } from '@intake24/survey/stores';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { type SameAsBeforeItem, useSurvey } from '@intake24/survey/stores';
 
 import createBasePrompt from '../createBasePrompt';
 import { useStandardUnits } from '../partials';
@@ -122,6 +123,7 @@ export default defineComponent({
     const { translate, i18n } = useI18n();
     const { action, translatePrompt, type } = usePromptUtils(props, ctx);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+    const survey = useSurvey();
 
     const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
     const isValid = true;
@@ -194,6 +196,13 @@ export default defineComponent({
       return i18n.t(`prompts.${type.value}.leftovers`, { amount: `${leftoversPercentage}%` });
     });
 
+    const leftoversEnabled = computed(() => {
+      const prompt: Prompt | undefined = survey.foodPrompts.find((item: Prompt) => item.component === `${props.sabFood.food.portionSize?.method}-prompt`);
+      return prompt && 'leftovers' in prompt && prompt.leftovers;
+    });
+
+    const showLeftovers = computed(() => leftoversEnabled.value || !!props.sabFood.food.portionSize?.leftoversWeight);
+
     const promptI18n = computed(() => ({
       serving: serving.value,
       leftovers: leftovers.value,
@@ -208,8 +217,9 @@ export default defineComponent({
             || !food.portionSize
             || food.portionSize?.method !== 'standard-portion'
             || !food.portionSize.unit
-          )
+          ) {
             return acc;
+          }
 
           acc.push(food.portionSize.unit.name);
           return acc;
@@ -228,6 +238,7 @@ export default defineComponent({
       isValid,
       linkedFoods,
       promptI18n,
+      showLeftovers,
       translate,
     };
   },

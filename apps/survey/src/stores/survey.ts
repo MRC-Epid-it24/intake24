@@ -168,23 +168,23 @@ export const useSurvey = defineStore('survey', {
 
       return { matchScoreWeight, rankingAlgorithm };
     },
-    surveySchemeFoodPrompts: state => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
+    foodPrompts: state => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
     registeredPortionSizeMethods(): string[] {
       return (
-        this.surveySchemeFoodPrompts
+        this.foodPrompts
           .filter(item => item.type === 'portion-size')
           .map(item => item.component.replace('-prompt', '')) ?? []
       );
     },
     linkedQuantity(): LinkedQuantity | undefined {
-      const prompt = this.surveySchemeFoodPrompts.find(
+      const prompt = this.foodPrompts.find(
         prompt => prompt.component === 'guide-image-prompt',
       ) as Prompts['guide-image-prompt'] | undefined;
 
       return prompt?.linkedQuantity;
     },
     sameAsBeforeAllowed(): boolean {
-      return !!this.surveySchemeFoodPrompts.find(
+      return !!this.foodPrompts.find(
         item => item.component === 'same-as-before-prompt',
       );
     },
@@ -630,8 +630,9 @@ export const useSurvey = defineStore('survey', {
       if (
         flags.includes('portion-size-method-complete')
         || flags.includes('associated-foods-complete')
-      )
+      ) {
         this.saveSameAsBefore(foodId);
+      }
     },
 
     removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
@@ -675,8 +676,9 @@ export const useSurvey = defineStore('survey', {
         || (originalFood.type === 'encoded-food'
         && food.type === 'encoded-food'
         && originalFood.data.code !== food.data.code)
-      )
+      ) {
         this.clearEntityPromptStores(foodId);
+      }
     },
 
     /*
@@ -701,8 +703,9 @@ export const useSurvey = defineStore('survey', {
         // 4) associated foods portion size estimations are not finished
         || (mainFood.linkedFoods.length
         && mainFood.linkedFoods.some(item => !portionSizeComplete(item)))
-      )
+      ) {
         return;
+      }
 
       useSameAsBefore().saveItem(this.localeId, mainFood);
     },
@@ -726,7 +729,7 @@ export const useSurvey = defineStore('survey', {
         if (food.portionSize) {
           const component: PortionSizeComponentType = `${food.portionSize.method}-prompt`;
           const store = getOrCreatePromptStateStore(component)();
-          const prompt = this.surveySchemeFoodPrompts.find(item => item.component === component);
+          const prompt = this.foodPrompts.find(item => item.component === component);
 
           if (store && prompt)
             store.clearState(food.id, prompt.id);
