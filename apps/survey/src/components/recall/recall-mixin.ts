@@ -156,15 +156,17 @@ export default defineComponent({
           selection.element
           && selection.element.type === 'meal'
           && getMealIndex(meals, selection.element.mealId) === undefined
-        )
+        ) {
           return false;
+        }
 
         if (
           selection.element
           && selection.element.type === 'food'
           && getFoodIndex(meals, selection.element.foodId) === undefined
-        )
+        ) {
           return false;
+        }
 
         return true;
       }

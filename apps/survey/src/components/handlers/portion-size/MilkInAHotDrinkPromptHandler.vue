@@ -81,8 +81,9 @@ export default defineComponent({
         !parentFood.value.portionSize
         || parentFood.value.portionSize.servingWeight === null
         || parentFood.value.portionSize.leftoversWeight === null
-      )
+      ) {
         throw new Error('Milk in a hot drink prompt: Parent food missing portion size data');
+      }
 
       const { servingWeight, leftoversWeight } = parentFood.value.portionSize;
 

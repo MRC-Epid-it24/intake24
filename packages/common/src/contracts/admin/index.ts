@@ -1,5 +1,6 @@
 import acl from './acl';
 import { authentication } from './authentication.contract';
+import { feedbackScheme } from './feedback-scheme.contract';
 import { foodDb } from './food-db.contract';
 import { foodGroup } from './food-group.contract';
 import { job } from './job.contract';
@@ -19,6 +20,7 @@ import user from './user';
 export default {
   acl,
   authentication,
+  feedbackScheme,
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   foodDb,
   foodGroup,

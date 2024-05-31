@@ -2,6 +2,7 @@ import acl from './acl';
 import { permission } from './acl/permission.router';
 import { role } from './acl/role.router';
 import { authentication } from './authentication.router';
+import { feedbackScheme } from './feedback-scheme.router';
 import { foodDb } from './food-db.router';
 import { foodGroup } from './food-group.router';
 import { job } from './job.router';
@@ -21,6 +22,7 @@ import user from './user';
 export default {
   acl,
   authentication,
+  feedbackScheme,
   foodDb,
   foodGroup,
   job,

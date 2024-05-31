@@ -13,8 +13,9 @@ export default validate(
           ({ id, words }) =>
             (typeof id !== 'undefined' && typeof id !== 'string') || typeof words !== 'string',
         )
-      )
+      ) {
         return false;
+      }
 
       return true;
     })

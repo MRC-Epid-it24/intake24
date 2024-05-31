@@ -14,7 +14,6 @@ import type {
   AsServedImageController,
   AsServedSetController,
   DrinkwareSetController,
-  FeedbackSchemeController,
   GuideImageController,
   ImageMapController,
   LocaleController,
@@ -147,7 +146,6 @@ export interface IoC extends Jobs {
   localeSynonymSetController: LocaleSynonymSetController;
 
   // Schemes
-  feedbackSchemeController: FeedbackSchemeController;
   surveySchemeController: SurveySchemeController;
   surveySchemePromptController: SurveySchemePromptController;
 

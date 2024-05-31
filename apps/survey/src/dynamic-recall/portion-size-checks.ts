@@ -27,8 +27,9 @@ export function asServedComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'as-served') {
     console.warn(
@@ -45,8 +46,9 @@ export function cerealComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'cereal') {
     console.warn(
@@ -63,8 +65,9 @@ export function guideImageComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'guide-image') {
     console.warn(
@@ -81,8 +84,9 @@ export function drinkScaleComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'drink-scale') {
     console.warn(
@@ -103,8 +107,9 @@ export function milkInAHotDrinkComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'milk-in-a-hot-drink') {
     console.warn(
@@ -121,8 +126,9 @@ export function milkOnCerealComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'milk-on-cereal') {
     console.warn(
@@ -139,8 +145,9 @@ export function parentFoodPortionComplete(food: FoodState) {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'parent-food-portion') {
     console.warn(
@@ -157,8 +164,9 @@ export function pizzaComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'pizza') {
     console.warn(
@@ -175,8 +183,9 @@ export function pizzaV2Complete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'pizza-v2') {
     console.warn(
@@ -193,8 +202,9 @@ export function standardPortionComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'standard-portion') {
     console.warn(
@@ -211,8 +221,9 @@ export function directWeightComplete(food: FoodState): boolean {
     food.type !== 'encoded-food'
     || !food.portionSize
     || !food.flags.includes('portion-size-method-complete')
-  )
+  ) {
     return false;
+  }
 
   if (food.portionSize.method !== 'direct-weight') {
     console.warn(

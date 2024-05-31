@@ -30,8 +30,9 @@ export default validate(
             || typeof repeatable !== 'boolean'
             || typeof required !== 'boolean',
         )
-      )
+      ) {
         return false;
+      }
 
       return true;
     })

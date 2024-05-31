@@ -13,8 +13,9 @@ export default validate(
           ({ id, synonyms }) =>
             (typeof id !== 'undefined' && typeof id !== 'string') || typeof synonyms !== 'string',
         )
-      )
+      ) {
         return false;
+      }
 
       return true;
     })

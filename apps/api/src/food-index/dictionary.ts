@@ -111,8 +111,9 @@ export class RichDictionary {
       for (const phoneticEncoding of this.phoneticEncoder.encode(word)) {
         const matchedWords = this.phoneticMap.get(phoneticEncoding);
 
-        if (matchedWords)
+        if (matchedWords) {
           for (const matched of matchedWords) result.push(matched);
+        }
       }
     }
 

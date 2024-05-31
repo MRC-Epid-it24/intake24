@@ -441,8 +441,9 @@ export default defineComponent({
         if (
           !currentCategoryContents.value
           || props.rootCategory !== currentCategoryContents.value.header.code
-        )
+        ) {
           await browseCategory(props.rootCategory, true);
+        }
       },
       { debounce: 500, maxWait: 2000 },
     );

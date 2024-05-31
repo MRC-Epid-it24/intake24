@@ -159,8 +159,9 @@ export default defineComponent({
           while (
             ((maxNumerator + 1) / denominator) * weight < props.maxWeight
             && maxNumerator <= denominator * 5
-          )
+          ) {
             maxNumerator += 1;
+          }
         }
       }
 

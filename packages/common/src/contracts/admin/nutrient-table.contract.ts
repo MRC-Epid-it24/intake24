@@ -45,7 +45,7 @@ export const nutrientTable = initContract().router({
     responses: {
       200: nutrientTableRefs,
     },
-    summary: 'nutrient table references',
+    summary: 'Nutrient table references',
     description: 'Get references for nutrient tables',
   },
   read: {

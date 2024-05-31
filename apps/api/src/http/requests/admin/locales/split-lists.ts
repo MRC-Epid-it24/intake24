@@ -15,8 +15,9 @@ export default validate(
             || typeof firstWord !== 'string'
             || typeof words !== 'string',
         )
-      )
+      ) {
         return false;
+      }
 
       return true;
     })

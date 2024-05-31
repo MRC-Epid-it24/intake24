@@ -31,7 +31,6 @@ export default (container: AwilixContainer): void => {
     localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),
 
     // Schemes
-    feedbackSchemeController: asFunction(controllers.admin.feedbackScheme),
     surveySchemeController: asFunction(controllers.admin.surveyScheme),
     surveySchemePromptController: asFunction(controllers.admin.surveySchemePrompt),
 

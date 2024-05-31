@@ -69,8 +69,9 @@ class AsServedHelper {
         if (
           Math.abs(weight - set.asServedImages[i].weight)
           < Math.abs(weight - set.asServedImages[best].weight)
-        )
+        ) {
           best = i;
+        }
       }
 
       const { image } = set.asServedImages[best];
@@ -141,8 +142,9 @@ class GuideImageHelper {
         if (
           Math.abs(weight - guideImage.objects[i].weight)
           < Math.abs(weight - guideImage.objects[best].weight)
-        )
+        ) {
           best = i;
+        }
       }
 
       const guideImageObject = guideImage.objects[best]!;
@@ -362,8 +364,9 @@ async function findPortionSizeImages(
             if (
               config.portionSizeFilter.length > 0
               && !config.portionSizeFilter.includes(asServedSetId)
-            )
+            ) {
               continue;
+            }
 
             const asServedImageData = asServedHelper.findClosestPortionSize(
               asServedSetId,
@@ -397,8 +400,9 @@ async function findPortionSizeImages(
             if (
               config.portionSizeFilter.length > 0
               && !config.portionSizeFilter.includes(guideImageId)
-            )
+            ) {
               continue;
+            }
 
             const guideImageData = guideHelper.findClosestPortionSize(
               guideImageId,

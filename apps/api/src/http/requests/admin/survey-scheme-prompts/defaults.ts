@@ -21,8 +21,9 @@ const defaults: Schema = {
           || ['id', 'name', 'type', 'component'].some(
             key => !(key in value) || typeof value[key] !== 'string',
           )
-        )
+        ) {
           throw new Error(customTypeErrorMessage('structure._', meta));
+        }
 
         const prompts = await SurveySchemePrompt.findAll({
           attributes: ['id', 'prompt'],

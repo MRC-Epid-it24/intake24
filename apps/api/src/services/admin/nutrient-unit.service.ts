@@ -78,8 +78,9 @@ function nutrientUnitService() {
       || !foodsNutrientUnit.nutrientTypes
       || !systemNutrientUnit
       || !systemNutrientUnit.nutrientTypes
-    )
+    ) {
       throw new NotFoundError();
+    }
 
     if (foodsNutrientUnit.nutrientTypes.length || systemNutrientUnit.nutrientTypes.length) {
       throw new ForbiddenError(

@@ -32,8 +32,9 @@ export const name: ParamSchema = {
           condition: { field: 'name', value },
           options: { where },
         }))
-      )
+      ) {
         throw new Error(customTypeErrorMessage('unique._', meta));
+      }
     },
   },
 };
@@ -64,8 +65,9 @@ export const defaults: Schema = {
         if (
           !isPlainObject(value)
           || Object.values(value).some(item => !Array.isArray(item) && !isPlainObject(item))
-        )
+        ) {
           throw new Error('Invalid prompts structure');
+        }
       },
     },
   },

@@ -160,8 +160,9 @@ export class PhraseIndex<K> {
               match.word.index === match2.word.index
               && minDictIndex < match2.matched.wordIndex
               && !usedDictionaryIndices.has(match2.matched.wordIndex)
-            )
+            ) {
               minDictIndex = match2.matched.wordIndex;
+            }
           }
 
           if (minDictIndex !== -1) {
