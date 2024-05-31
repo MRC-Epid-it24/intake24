@@ -1,0 +1,244 @@
+import type { AppRoute, AppRouter } from '@ts-rest/core';
+import type { TsRestRequest } from '@ts-rest/express';
+import type { WhereOptions } from 'sequelize';
+import { initServer } from '@ts-rest/express';
+import { pick } from 'lodash';
+import { col, fn, Op } from 'sequelize';
+
+import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
+import { permission } from '@intake24/api/http/middleware';
+import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
+import { feedbackSchemeResponse } from '@intake24/api/http/responses/admin';
+import { unique } from '@intake24/api/http/rules';
+import { contract } from '@intake24/common/contracts';
+import { kebabCase } from '@intake24/common/util';
+import {
+  createFeedbackSchemeFields,
+  FeedbackScheme,
+  PaginateOptions,
+  perCardFeedbackSchemeFields,
+  PhysicalActivityLevel,
+  securableScope,
+  SystemNutrientType,
+  updateFeedbackSchemeFields,
+  UserSecurable,
+} from '@intake24/db';
+
+async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { feedbackSchemeId, req }: { feedbackSchemeId?: string; req: TsRestRequest<T> }) {
+  const where: WhereOptions = feedbackSchemeId ? { id: { [Op.ne]: feedbackSchemeId } } : {};
+
+  if (!(await unique({ model: FeedbackScheme, condition: { field: 'name', value }, options: { where } }))) {
+    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'name' }), {
+      path: 'name',
+    });
+  }
+}
+
+export function feedbackScheme() {
+  return initServer().router(contract.admin.feedbackScheme, {
+    browse: {
+      middleware: [permission('feedback-schemes')],
+      handler: async ({ query, req }) => {
+        const {
+          aclService,
+          user: { userId },
+        } = req.scope.cradle;
+
+        const paginateOptions: PaginateOptions = {
+          query,
+          columns: ['name'],
+          order: [[fn('lower', col('FeedbackScheme.name')), 'ASC']],
+        };
+
+        if (await aclService.hasPermission('feedback-schemes|browse')) {
+          const feedbackSchemes = await FeedbackScheme.paginate(paginateOptions);
+          return { status: 200, body: feedbackSchemes };
+        }
+
+        const feedbackSchemes = await FeedbackScheme.paginate({
+          ...paginateOptions,
+          where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+          ...securableScope(userId),
+          subQuery: false,
+        });
+
+        return { status: 200, body: feedbackSchemes };
+      },
+    },
+    store: {
+      middleware: [permission('feedback-schemes', 'feedback-schemes|create')],
+      handler: async ({ body, req }) => {
+        await uniqueMiddleware(body.name, { req });
+
+        const { userId } = req.scope.cradle.user;
+
+        const feedbackScheme = await FeedbackScheme.create({
+          ...body,
+          ownerId: userId,
+        });
+
+        return { status: 201, body: feedbackSchemeResponse(feedbackScheme) };
+      },
+    },
+    refs: {
+      middleware: [permission('feedback-schemes')],
+      handler: async () => {
+        const [nutrientTypes, physicalActivityLevels] = await Promise.all([
+          SystemNutrientType.scope('list').findAll(),
+          PhysicalActivityLevel.scope('list').findAll(),
+        ]);
+
+        return { status: 200, body: { nutrientTypes, physicalActivityLevels } };
+      },
+    },
+    read: {
+      middleware: [permission('feedback-schemes')],
+      handler: async ({ params: { feedbackSchemeId }, req }) => {
+        const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'read', {
+          where: { id: feedbackSchemeId },
+        });
+
+        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
+      },
+    },
+    edit: {
+      middleware: [permission('feedback-schemes')],
+      handler: async ({ params: { feedbackSchemeId }, req }) => {
+        const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
+          where: { id: feedbackSchemeId },
+        });
+
+        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
+      },
+    },
+    patch: {
+      middleware: [permission('feedback-schemes')],
+      handler: async ({ body, params: { feedbackSchemeId }, req }) => {
+        await uniqueMiddleware(body.name, { feedbackSchemeId, req });
+
+        const {
+          aclService,
+          user: { userId },
+        } = req.scope.cradle;
+
+        const feedbackScheme = await aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
+          where: { id: feedbackSchemeId },
+        });
+
+        const keysToUpdate: string[] = [];
+        const [resourceActions, securableActions] = await Promise.all([
+          aclService.getResourceAccessActions('feedback-schemes'),
+          aclService.getSecurableAccessActions(feedbackScheme),
+        ]);
+
+        if (resourceActions.includes('edit') || feedbackScheme.ownerId === userId) {
+          keysToUpdate.push(...createFeedbackSchemeFields);
+        }
+        else {
+          if (securableActions.includes('edit'))
+            keysToUpdate.push(...updateFeedbackSchemeFields);
+
+          perCardFeedbackSchemeFields.forEach((item) => {
+            if (securableActions.includes(kebabCase(item)))
+              keysToUpdate.push(item);
+          });
+        }
+
+        const updateInput = pick(body, keysToUpdate);
+        if (!Object.keys(updateInput).length)
+          throw new ValidationError('Missing body');
+
+        await feedbackScheme.update(updateInput);
+
+        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
+      },
+    },
+    put: {
+      middleware: [permission('feedback-schemes')],
+      handler: async ({ body, params: { feedbackSchemeId }, req }) => {
+        await uniqueMiddleware(body.name, { feedbackSchemeId, req });
+
+        const { aclService } = req.scope.cradle;
+
+        const feedbackScheme = await aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
+          where: { id: feedbackSchemeId },
+        });
+
+        await feedbackScheme.update(pick(body, createFeedbackSchemeFields));
+
+        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
+      },
+    },
+    destroy: {
+      middleware: [permission('feedback-schemes')],
+      handler: async ({ params: { feedbackSchemeId }, req }) => {
+        const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'delete', {
+          attributes: ['id'],
+          where: { id: feedbackSchemeId },
+          include: [{ association: 'surveys', attributes: ['id'] }],
+        });
+
+        const { id: securableId, surveys } = feedbackScheme;
+
+        if (!surveys || surveys.length) {
+          throw new ForbiddenError(
+            'Feedback scheme cannot be deleted. There are surveys using this feedback scheme.',
+          );
+        }
+
+        await Promise.all([
+          UserSecurable.destroy({ where: { securableId, securableType: 'FeedbackScheme' } }),
+          feedbackScheme.destroy(),
+        ]);
+
+        return { status: 204, body: undefined };
+      },
+    },
+    copy: {
+      middleware: [permission('feedback-schemes')],
+      handler: async ({ body, params: { feedbackSchemeId }, req }) => {
+        await uniqueMiddleware(body.name, { req });
+
+        const {
+          aclService,
+          user: { userId },
+        } = req.scope.cradle;
+
+        const feedbackScheme = await aclService.findAndCheckRecordAccess(FeedbackScheme, 'copy', {
+          where: { id: feedbackSchemeId },
+        });
+
+        const { name } = body;
+        const {
+          type,
+          visibility,
+          outputs,
+          physicalDataFields,
+          sections,
+          topFoods,
+          meals,
+          cards,
+          demographicGroups,
+          henryCoefficients,
+        } = feedbackScheme;
+
+        const feedbackSchemeCopy = await FeedbackScheme.create({
+          name,
+          type,
+          visibility,
+          outputs,
+          physicalDataFields,
+          sections,
+          topFoods,
+          meals,
+          cards,
+          demographicGroups,
+          henryCoefficients,
+          ownerId: userId,
+        });
+
+        return { status: 200, body: feedbackSchemeResponse(feedbackSchemeCopy) };
+      },
+    },
+  });
+}

@@ -336,8 +336,9 @@ function surveyService({
       submissionTime
       || !survey.notifications.length
       || !survey.notifications.some(({ type }) => type === 'survey.session.cancelled')
-    )
+    ) {
       return;
+    }
 
     await scheduler.jobs.addJob({
       type: 'SurveyEventNotification',

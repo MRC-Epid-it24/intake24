@@ -67,14 +67,14 @@ export default class FeedbackScheme
     defaultValue: 'default',
     type: DataType.STRING(64),
   })
-  declare type: FeedbackType;
+  declare type: CreationOptional<FeedbackType>;
 
   @Column({
     allowNull: false,
     defaultValue: () => JSON.stringify([]),
     type: DataType.TEXT,
   })
-  get sections(): FeedbackSection[] {
+  get sections(): CreationOptional<FeedbackSection[]> {
     const val = this.getDataValue('sections') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
@@ -89,7 +89,7 @@ export default class FeedbackScheme
     defaultValue: () => JSON.stringify([]),
     type: DataType.TEXT,
   })
-  get outputs(): FeedbackOutput[] {
+  get outputs(): CreationOptional<FeedbackOutput[]> {
     const val = this.getDataValue('outputs') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
@@ -104,7 +104,7 @@ export default class FeedbackScheme
     defaultValue: JSON.stringify([]),
     type: DataType.TEXT,
   })
-  get physicalDataFields(): FeedbackPhysicalDataField[] {
+  get physicalDataFields(): CreationOptional<FeedbackPhysicalDataField[]> {
     const val = this.getDataValue('physicalDataFields') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
@@ -119,7 +119,7 @@ export default class FeedbackScheme
     defaultValue: () => JSON.stringify(defaultTopFoods),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get topFoods(): TopFoods {
+  get topFoods(): CreationOptional<TopFoods> {
     const val = this.getDataValue('topFoods') as unknown;
     return val ? JSON.parse(val as string) : defaultTopFoods;
   }
@@ -134,7 +134,7 @@ export default class FeedbackScheme
     defaultValue: () => JSON.stringify(defaultMeals),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get meals(): FeedbackMeals {
+  get meals(): CreationOptional<FeedbackMeals> {
     const val = this.getDataValue('meals') as unknown;
     return val ? JSON.parse(val as string) : defaultMeals;
   }
@@ -149,7 +149,7 @@ export default class FeedbackScheme
     defaultValue: JSON.stringify([]),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get cards(): Card[] {
+  get cards(): CreationOptional<Card[]> {
     const val = this.getDataValue('cards') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
@@ -164,7 +164,7 @@ export default class FeedbackScheme
     defaultValue: JSON.stringify([]),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get demographicGroups(): DemographicGroup[] {
+  get demographicGroups(): CreationOptional<DemographicGroup[]> {
     const val = this.getDataValue('demographicGroups') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
@@ -179,7 +179,7 @@ export default class FeedbackScheme
     defaultValue: JSON.stringify([]),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get henryCoefficients(): HenryCoefficient[] {
+  get henryCoefficients(): CreationOptional<HenryCoefficient[]> {
     const val = this.getDataValue('henryCoefficients') as unknown;
     return val ? JSON.parse(val as string) : [];
   }

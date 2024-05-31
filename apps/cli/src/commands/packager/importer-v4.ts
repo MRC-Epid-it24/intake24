@@ -827,8 +827,9 @@ export class ImporterV4 {
     if (
       this.options.modulesForExecution === undefined
       || this.options.modulesForExecution.length === 0
-    )
+    ) {
       this.options.modulesForExecution = ['all'];
+    }
 
     try {
       await this.specificModuleExecution(this.options.modulesForExecution);

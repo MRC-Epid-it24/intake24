@@ -420,8 +420,9 @@ export class FrenchAnsesLocaleBuilder {
         portionSizeRow.LISTE_PHOTOS !== undefined
         && portionSizeRow.LISTE_PHOTOS.length > 0
         && portionSizeRow.LISTE_PHOTOS !== '.'
-      )
+      ) {
         portionSizeMethods.push(...this.photoListToAsServed(portionSizeRow.LISTE_PHOTOS));
+      }
 
       if (
         portionSizeRow.METHODE_unite_standard !== undefined
@@ -499,8 +500,9 @@ export class FrenchAnsesLocaleBuilder {
         portionSizeRow.LISTE_PHOTOS !== undefined
         && portionSizeRow.LISTE_PHOTOS.length > 0
         && portionSizeRow.LISTE_PHOTOS !== '.'
-      )
+      ) {
         portionSizeMethods.push(...this.photoListToAsServed(portionSizeRow.LISTE_PHOTOS));
+      }
 
       if (
         portionSizeRow.METHODE_unite_standard !== undefined

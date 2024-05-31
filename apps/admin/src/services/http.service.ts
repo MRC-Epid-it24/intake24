@@ -99,8 +99,9 @@ const httpClient: HttpClient = {
           !config?.url
           || status !== HttpStatusCode.Unauthorized
           || config.url?.match(/auth\/(login|fido|duo|otp)$/)
-        )
+        ) {
           return Promise.reject(err);
+        }
 
         // Refresh token has failed. Logout the user
         if (config.url?.includes('auth/refresh')) {

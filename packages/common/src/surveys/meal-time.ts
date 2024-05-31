@@ -84,8 +84,9 @@ export function resolveMealGaps(meals: MealState[], prompt: Prompts['meal-gap-pr
       if (
         minutesBeforeMeal(meal.time, nextMeal.time) > gap
         && !meal.flags.includes('no-meals-between')
-      )
+      ) {
         return [meal, nextMeal];
+      }
     }
   }
 

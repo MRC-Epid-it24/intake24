@@ -131,8 +131,9 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 
     const altNames = food.altNames[languageBackend.languageCode];
 
-    if (altNames !== undefined)
+    if (altNames !== undefined) {
       for (const name of altNames) foodDescriptions.push({ phrase: name, key: food.code });
+    }
   }
 
   const categoryDescriptions = new Array<PhraseWithKey<string>>();

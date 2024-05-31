@@ -67,8 +67,9 @@ export default defineComponent({
       if (
         food.portionSizeMethodIndex !== null
         && food.portionSizeMethodIndex !== state.value.option
-      )
+      ) {
         update.portionSize = null;
+      }
 
       survey.updateFood({ foodId: food.id, update });
       survey.addFoodFlag(food.id, 'portion-size-option-complete');

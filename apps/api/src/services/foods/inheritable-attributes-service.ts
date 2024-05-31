@@ -21,8 +21,9 @@ function inheritableAttributesService() {
       || attributes.reasonableAmount == null
       || attributes.sameAsBeforeOption == null
       || attributes.useInRecipes == null
-    )
+    ) {
       return undefined;
+    }
 
     return {
       readyMealOption: attributes.readyMealOption,

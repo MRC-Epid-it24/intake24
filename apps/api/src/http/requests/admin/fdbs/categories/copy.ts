@@ -44,8 +44,9 @@ export default validate(
               condition: { field: 'categoryCode', value },
               options,
             }))
-          )
+          ) {
             throw new Error(customTypeErrorMessage('unique._', meta));
+          }
         },
       },
     },

@@ -4,7 +4,6 @@ import { authenticate, isAccountVerified } from '@intake24/api/http/middleware';
 
 import categories from './categories';
 import fdbs from './fdbs';
-import feedbackSchemes from './feedback-schemes';
 import foods from './foods';
 import images from './images';
 import locales from './locales';
@@ -23,7 +22,6 @@ export default () => {
   router.use('/categories', categories());
   router.use('/fdbs', fdbs());
   router.use('/foods', foods());
-  router.use('/feedback-schemes', feedbackSchemes());
   router.use('/images', images());
   router.use('/locales', locales());
   router.use('/references', references());

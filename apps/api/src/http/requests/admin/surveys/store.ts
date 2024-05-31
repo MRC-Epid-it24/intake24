@@ -32,8 +32,9 @@ export default validate(
               model: Survey,
               condition: { field: 'slug', value: slugify(value, { strict: true }) },
             }))
-          )
+          ) {
             throw new Error(customTypeErrorMessage('unique._', meta));
+          }
         },
         bail: true,
       },

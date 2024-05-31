@@ -205,8 +205,9 @@ export default defineComponent({
     if (
       this.parentFood?.type !== 'encoded-food'
       || this.parentFood?.portionSize?.method !== 'cereal'
-    )
+    ) {
       return;
+    }
 
     const { bowlIndex, bowlId } = this.parentFood.portionSize;
 

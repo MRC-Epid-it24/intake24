@@ -34,8 +34,9 @@ export const defaults: Schema = {
             condition: { field: 'name', value },
             options: { where },
           }))
-        )
+        ) {
           throw new Error(customTypeErrorMessage('unique._', meta));
+        }
       },
     },
   },
@@ -404,8 +405,9 @@ export const surveySchemeOverrides: ParamSchema = {
       if (
         typeof value !== 'object'
         || Object.keys(value).some(key => !['meals', 'prompts'].includes(key))
-      )
+      ) {
         throw new Error('Invalid survey scheme overrides structure');
+      }
 
       // Meals
       try {

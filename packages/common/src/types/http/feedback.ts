@@ -1,29 +1,21 @@
 import { z } from 'zod';
 
 import {
-  feedbackMeals,
-  feedbackOutputs,
-  feedbackPhysicalDataFields,
-  feedbackSections,
-  feedbackTypes,
-  henryCoefficient,
-  topFoods,
   weightTargetCoefficients,
 } from '../../feedback';
+import { feedbackSchemeAttributes, physicalActivityLevelAttributes } from './admin';
 
-export const feedbackSchemeResponse = z.object({
-  id: z.string(),
-  name: z.string(),
-  type: z.enum(feedbackTypes),
-  sections: z.enum(feedbackSections).array(),
-  outputs: z.enum(feedbackOutputs).array(),
-  physicalDataFields: z.enum(feedbackPhysicalDataFields).array(),
-  visibility: z.string(),
-  topFoods,
-  meals: feedbackMeals,
-  cards: z.array(z.object({})),
-  demographicGroups: z.array(z.object({})),
-  henryCoefficients: henryCoefficient.array(),
+export const feedbackSchemeResponse = feedbackSchemeAttributes.pick({
+  id: true,
+  cards: true,
+  demographicGroups: true,
+  henryCoefficients: true,
+  meals: true,
+  outputs: true,
+  physicalDataFields: true,
+  sections: true,
+  topFoods: true,
+  type: true,
 });
 
 export type FeedbackSchemeResponse = z.infer<typeof feedbackSchemeResponse>;
@@ -37,17 +29,9 @@ export const nutrientType = z.object({
 
 export type NutrientType = z.infer<typeof nutrientType>;
 
-export const physicalActivityLevel = z.object({
-  id: z.string(),
-  name: z.string(),
-  coefficient: z.number(),
-});
-
-export type PhysicalActivityLevel = z.infer<typeof physicalActivityLevel>;
-
 export const feedbackDataResponse = z.object({
   nutrientTypes: nutrientType.array(),
-  physicalActivityLevels: physicalActivityLevel.array(),
+  physicalActivityLevels: physicalActivityLevelAttributes.array(),
   weightTargets: weightTargetCoefficients.array(),
 });
 

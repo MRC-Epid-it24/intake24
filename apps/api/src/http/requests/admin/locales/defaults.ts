@@ -44,8 +44,9 @@ export const defaults: Schema = {
             condition: { field: 'englishName', value },
             options: { where },
           }))
-        )
+        ) {
           throw new Error('$unique');
+        }
       },
     },
   },
@@ -68,8 +69,9 @@ export const defaults: Schema = {
             condition: { field: 'localName', value },
             options: { where },
           }))
-        )
+        ) {
           throw new Error('$unique');
+        }
       },
     },
   },

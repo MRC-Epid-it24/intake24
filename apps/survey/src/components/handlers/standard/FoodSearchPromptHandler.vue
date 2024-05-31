@@ -79,10 +79,12 @@ export default defineComponent({
     if (
       currentState.type === 'encoded-food'
       && (currentState.portionSizeMethodIndex !== null || currentState.portionSize !== null)
-    )
+    ) {
       discardedFoodName.value = currentState.data.localName;
-    else
+    }
+    else {
       discardedFoodName.value = null;
+    }
 
     const getFoodToReplace = () => {
       const { id, customPromptAnswers, flags } = food();

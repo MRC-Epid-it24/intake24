@@ -15,8 +15,9 @@ export default validate(
             || typeof name !== 'string'
             || typeof recipeWord !== 'string',
         )
-      )
+      ) {
         return false;
+      }
 
       return true;
     })

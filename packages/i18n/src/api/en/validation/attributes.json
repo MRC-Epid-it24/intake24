@@ -91,7 +91,7 @@
   "password": "Password",
   "passwordConfirm": "Password confirmation",
   "params": {
-    "_":  "Parameters",
+    "_": "Parameters",
     "file": "File",
     "targetAlgorithm": "Sorting algorithm type"
   },

@@ -123,6 +123,7 @@ export function registerRouters(express: Router) {
 
   // Admin endpoints - authenticated & verified
   const adminAuthVerifiedContract = {
+    feedbackScheme: contract.admin.feedbackScheme,
     feedbackSchemeSecurable: contract.admin.feedbackSchemeSecurable,
     foodDb: contract.admin.foodDb,
     foodGroup: contract.admin.foodGroup,
@@ -155,6 +156,7 @@ export function registerRouters(express: Router) {
   createExpressEndpoints(
     adminAuthVerifiedContract,
     server.router(adminAuthVerifiedContract, {
+      feedbackScheme: admin.feedbackScheme(),
       feedbackSchemeSecurable: admin.securable(FeedbackScheme)(),
       foodDb: admin.foodDb(),
       foodGroup: admin.foodGroup(),

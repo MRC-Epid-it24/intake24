@@ -1,5 +1,4 @@
 import fdbs from './fdbs';
-import feedbackSchemes from './feedback-schemes';
 import images from './images';
 import locales from './locales';
 import references from './references';
@@ -9,7 +8,6 @@ import surveys from './surveys';
 
 export default {
   fdbs,
-  feedbackSchemes,
   images,
   locales,
   references,
