@@ -2,7 +2,8 @@ import './bootstrap';
 
 import { Argument, Command, Option } from 'commander';
 
-import buildFrLocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
+import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 
 import pkg from '../package.json';
@@ -143,11 +144,20 @@ async function run() {
 
   program
     .command('build-fr-locale')
-    .description('Build French locale')
+    .description('Build French INCA3 locale')
     .requiredOption('-i, --input-path [input path]', 'Source file path')
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (options) => {
-      await buildFrLocaleCommand(options);
+      await buildFrInca3LocaleCommand(options);
+    });
+
+  program
+    .command('build-fr-albane')
+    .description('Build French Albane locale')
+    .requiredOption('-i, --input-path [input path]', 'Source file path')
+    .requiredOption('-o, --output-path [output path]', 'Output file path')
+    .action(async (options) => {
+      await buildFrAlbaneLocaleCommand(options);
     });
 
   program
