@@ -1,79 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import { z } from 'zod';
 
-export type ConditionInput = number | string | (number | string)[] | null;
-export type ConditionInputOps = { value: ConditionInput; answer: ConditionInput };
-
-function toNumber(values: ConditionInput) {
-  return (Array.isArray(values) ? values : [values])
-    .map(value => (typeof value === 'string' ? Number.parseFloat(value) : value))
-    .filter((value): value is number => !Number.isNaN(value));
-}
-
-function toString(values: ConditionInput) {
-  return (Array.isArray(values) ? values : [values])
-    .map(value => value?.toString().trim().toLowerCase() || '')
-    .filter(Boolean);
-}
-
 export const ops = ['eq', 'ne', 'in', 'notIn', 'gte', 'gt', 'lte', 'lt'] as const;
-
-export const conditionOps = {
-  eq: ({ answer, value }: ConditionInputOps) => isEqual(toString(answer), toString(value)),
-  ne: ({ answer, value }: ConditionInputOps) => !isEqual(toString(answer), toString(value)),
-  in: ({ answer, value }: ConditionInputOps) => {
-    const values = toString(value);
-    const answers = toString(answer);
-
-    return answers.some(item => values.includes(item));
-  },
-  notIn: ({ answer, value }: ConditionInputOps) => {
-    const values = toString(value);
-    const answers = toString(answer);
-
-    return answers.every(item => !values.includes(item));
-  },
-  gte: ({ answer, value }: ConditionInputOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
-
-    if (!values.length || !answers.length)
-      return false;
-
-    return answers[0] >= values[0];
-  },
-  gt: ({ answer, value }: ConditionInputOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
-
-    if (!values.length || !answers.length)
-      return false;
-
-    return answers[0] > values[0];
-  },
-  lte: ({ answer, value }: ConditionInputOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
-
-    if (!values.length || !answers.length)
-      return false;
-
-    return answers[0] <= values[0];
-  },
-  lt: ({ answer, value }: ConditionInputOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
-
-    if (!values.length || !answers.length)
-      return false;
-
-    return answers[0] < values[0];
-  },
-};
-
-export type ConditionOps = typeof conditionOps;
-
-export type ConditionOp = keyof ConditionOps;
 
 export const conditionTypes = [
   'drinks',
@@ -94,7 +22,7 @@ export type ConditionSection = (typeof conditionSections)[number];
 const baseCondition = z.object({
   type: z.enum(conditionTypes),
   op: z.enum(ops),
-  value: z.union([z.string().or(z.number()), z.string().or(z.number()).array()]),
+  value: z.union([z.string().or(z.number()), z.string().or(z.number()).array()]).nullable(),
 });
 
 export type BaseCondition = z.infer<typeof baseCondition>;
@@ -175,3 +103,75 @@ export const condition = z.union([
 ]);
 
 export type Condition = z.infer<typeof condition>;
+
+export type ConditionValue = z.infer<typeof baseCondition.shape.value>;
+export type ConditionValueOps = { value: ConditionValue; answer: ConditionValue };
+
+function toNumber(values: ConditionValue) {
+  return (Array.isArray(values) ? values : [values])
+    .map(value => (typeof value === 'string' ? Number.parseFloat(value) : value))
+    .filter((value): value is number => !Number.isNaN(value));
+}
+
+function toString(values: ConditionValue) {
+  return (Array.isArray(values) ? values : [values])
+    .map(value => value?.toString().trim().toLowerCase() || '')
+    .filter(Boolean);
+}
+
+export const conditionOps = {
+  eq: ({ answer, value }: ConditionValueOps) => isEqual(toString(answer), toString(value)),
+  ne: ({ answer, value }: ConditionValueOps) => !isEqual(toString(answer), toString(value)),
+  in: ({ answer, value }: ConditionValueOps) => {
+    const values = toString(value);
+    const answers = toString(answer);
+
+    return answers.some(item => values.includes(item));
+  },
+  notIn: ({ answer, value }: ConditionValueOps) => {
+    const values = toString(value);
+    const answers = toString(answer);
+
+    return answers.every(item => !values.includes(item));
+  },
+  gte: ({ answer, value }: ConditionValueOps) => {
+    const values = toNumber(value);
+    const answers = toNumber(answer);
+
+    if (!values.length || !answers.length)
+      return false;
+
+    return answers[0] >= values[0];
+  },
+  gt: ({ answer, value }: ConditionValueOps) => {
+    const values = toNumber(value);
+    const answers = toNumber(answer);
+
+    if (!values.length || !answers.length)
+      return false;
+
+    return answers[0] > values[0];
+  },
+  lte: ({ answer, value }: ConditionValueOps) => {
+    const values = toNumber(value);
+    const answers = toNumber(answer);
+
+    if (!values.length || !answers.length)
+      return false;
+
+    return answers[0] <= values[0];
+  },
+  lt: ({ answer, value }: ConditionValueOps) => {
+    const values = toNumber(value);
+    const answers = toNumber(answer);
+
+    if (!values.length || !answers.length)
+      return false;
+
+    return answers[0] < values[0];
+  },
+};
+
+export type ConditionOps = typeof conditionOps;
+
+export type ConditionOp = keyof ConditionOps;
