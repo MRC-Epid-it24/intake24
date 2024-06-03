@@ -68,8 +68,8 @@
                       :key="layout.value"
                       v-model="action.layout"
                       class="mr-2"
-                      :input-value="layout.value"
                       :label="layout.text"
+                      :value="layout.value"
                     />
                   </div>
                   <v-select

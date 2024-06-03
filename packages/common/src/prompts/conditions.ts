@@ -94,7 +94,7 @@ export type ConditionSection = (typeof conditionSections)[number];
 const baseCondition = z.object({
   type: z.enum(conditionTypes),
   op: z.enum(ops),
-  value: z.union([z.string(), z.string().array()]),
+  value: z.union([z.string().or(z.number()), z.string().or(z.number()).array()]),
 });
 
 export type BaseCondition = z.infer<typeof baseCondition>;
