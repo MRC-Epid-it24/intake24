@@ -11,8 +11,8 @@ import type {
 import type { PkgImageMapObject } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
+import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type { UseInRecipeType } from '@intake24/common/types';
-import type { PortionSizeMethod } from '@intake24/common/types/';
 import type {
   CreateGlobalCategoryRequest,
   CreateGlobalFoodRequest,
@@ -20,7 +20,7 @@ import type {
   CreateLocalFoodRequest,
   ImageMapEntryObject,
   LocaleRequest,
-  NutrientTableRecord,
+  NutrientTableRecordRequest,
   NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
@@ -219,7 +219,7 @@ function fromPackageNutrientTable(nutrientTable: PkgNutrientTable): NutrientTabl
   };
 }
 
-function fromPackageNutrientTableRecords(nutrientTable: PkgNutrientTable): NutrientTableRecord[] {
+function fromPackageNutrientTableRecords(nutrientTable: PkgNutrientTable): NutrientTableRecordRequest[] {
   return nutrientTable.records;
 }
 
