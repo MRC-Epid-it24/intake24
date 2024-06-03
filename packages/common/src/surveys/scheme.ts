@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
-import { searchSortingAlgorithms } from '@intake24/common/surveys';
-
 import { basePrompt, type Condition, type Prompt, prompt } from '../prompts';
 import { type Meal, meal } from './meals';
+import { searchSortingAlgorithms } from './survey';
 
 export const schemeTypes = ['default'] as const;
 export type SchemeType = (typeof schemeTypes)[number];
