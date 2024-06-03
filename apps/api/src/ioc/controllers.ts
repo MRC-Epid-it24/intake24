@@ -6,8 +6,6 @@ import controllers from '@intake24/api/http/controllers';
 export default (container: AwilixContainer): void => {
   container.register({
     // Admin
-    referenceController: asFunction(controllers.admin.reference),
-
     adminCategoryController: asFunction(controllers.admin.fdbs.category),
     adminFoodController: asFunction(controllers.admin.fdbs.food),
     adminGlobalFoodsController: asFunction(controllers.admin.foods.globalFoods),
@@ -29,10 +27,6 @@ export default (container: AwilixContainer): void => {
     localeSplitListController: asFunction(controllers.admin.locales.splitList),
     localeSplitWordController: asFunction(controllers.admin.locales.splitWord),
     localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),
-
-    // Schemes
-    surveySchemeController: asFunction(controllers.admin.surveyScheme),
-    surveySchemePromptController: asFunction(controllers.admin.surveySchemePrompt),
 
     // Survey MGMT
     adminSurveyController: asFunction(controllers.admin.surveys.survey),

@@ -1,4 +1,5 @@
-import type { FoodState, PortionSizeMethodId, RecipeBuilder } from '@intake24/common/types';
+import type { PortionSizeMethodId } from '@intake24/common/surveys';
+import type { FoodState, RecipeBuilder } from '@intake24/common/types';
 
 export function portionSizeMethodSelected(food: FoodState, method: PortionSizeMethodId): boolean {
   if (food.type !== 'encoded-food')

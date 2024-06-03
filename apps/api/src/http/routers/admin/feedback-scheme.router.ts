@@ -70,12 +70,7 @@ export function feedbackScheme() {
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 
-        const { userId } = req.scope.cradle.user;
-
-        const feedbackScheme = await FeedbackScheme.create({
-          ...body,
-          ownerId: userId,
-        });
+        const feedbackScheme = await FeedbackScheme.create({ ...body, ownerId: req.scope.cradle.user.userId });
 
         return { status: 201, body: feedbackSchemeResponse(feedbackScheme) };
       },
@@ -158,13 +153,11 @@ export function feedbackScheme() {
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {
         await uniqueMiddleware(body.name, { feedbackSchemeId, req });
 
-        const { aclService } = req.scope.cradle;
-
-        const feedbackScheme = await aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
+        const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
           where: { id: feedbackSchemeId },
         });
 
-        await feedbackScheme.update(pick(body, createFeedbackSchemeFields));
+        await feedbackScheme.update(body);
 
         return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
       },

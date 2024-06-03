@@ -38,7 +38,7 @@ export const userSecurableListEntry = userAttributes.pick({
   name: true,
   email: true,
 }).extend({
-  securables: userSecurableAttributes.array().optional(),
+  securables: userSecurableAttributes.array(),
 });
 
 export type UserSecurableListEntry = z.infer<typeof userSecurableListEntry>;

@@ -113,7 +113,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { SurveyRespondentEntry } from '@intake24/common/types/http/admin';
+import type { RespondentEntry } from '@intake24/common/types/http/admin';
 import { createForm } from '@intake24/admin/util';
 import { useLoading } from '@intake24/ui/stores';
 import { downloadFile } from '@intake24/ui/util';
@@ -132,7 +132,7 @@ export default defineComponent({
       required: true,
     },
     user: {
-      type: Object as PropType<SurveyRespondentEntry>,
+      type: Object as PropType<RespondentEntry>,
       required: true,
     },
   },

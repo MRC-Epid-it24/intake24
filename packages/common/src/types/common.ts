@@ -70,12 +70,12 @@ export type ListOption<T extends z.ZodTypeAny = z.ZodString> = z.infer<
   ReturnType<typeof listOption<T>>
 >;
 
-export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>(schema: T) {
+export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>(schema?: T) {
   return z.intersection(
     z.object({
-      en: z.array(listOption(schema)),
+      en: z.array(listOption(schema ?? z.string())),
     }),
-    z.record(z.array(listOption(schema))),
+    z.record(z.array(listOption(schema ?? z.string()))),
   );
 }
 

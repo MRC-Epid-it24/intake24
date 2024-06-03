@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { DrinkwareSetAttributes, Pagination } from '@intake24/db';
+import type { Pagination } from '@intake24/db';
 import { type Dictionary, type LocaleTranslation, localeTranslation } from '@intake24/common/types';
 
 export type CreateDrinkwareSetInput = {
@@ -21,9 +21,12 @@ export type UpdateDrinkwareSetInput = {
   scales: Dictionary<UpdateDrinkwareScaleInput>;
 };
 
-export interface DrinkwareSetListEntry extends Pick<DrinkwareSetAttributes, 'id' | 'description'> {
-  imageUrl: string;
-}
+export const drinkwareSetListEntry = z.object({
+  id: z.string(),
+  description: z.string(),
+  imageUrl: z.string(),
+});
+export type DrinkwareSetListEntry = z.infer<typeof drinkwareSetListEntry>;
 
 export const drinkwareScaleEntry = z.object({
   baseImageUrl: z.string(),

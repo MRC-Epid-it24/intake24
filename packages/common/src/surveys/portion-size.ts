@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { categoryLocaleOptionList, localeOptionList } from './common';
+import { categoryLocaleOptionList, localeOptionList } from '../types/common';
 
 export const portionSizeMethods = [
   'as-served',

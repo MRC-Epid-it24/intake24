@@ -9,11 +9,14 @@ import { languageTranslation } from './language-translation.contract';
 import { nutrientTable } from './nutrient-table.contract';
 import { nutrientType } from './nutrient-type.contract';
 import { nutrientUnit } from './nutrient-unit.contract';
+import { reference } from './reference.contract';
 import { securable } from './securable.contract';
 import { signInLog } from './sign-in-log.contract';
 import { signUp } from './sign-up.contract';
 import { standardUnit } from './standard-unit.contract';
 import survey from './survey';
+import { surveyScheme } from './survey-scheme.contract';
+import { surveySchemePrompt } from './survey-scheme-prompt.contract';
 import { task } from './task.contract';
 import user from './user';
 
@@ -32,11 +35,14 @@ export default {
   nutrientTable,
   nutrientType,
   nutrientUnit,
+  reference,
   signInLog,
   signUp,
   standardUnit,
   survey,
   surveySecurable: securable('Survey', '/admin/surveys/:surveyId'),
+  surveyScheme,
+  surveySchemePrompt,
   surveySchemeSecurable: securable('SurveyScheme', '/admin/survey-schemes/:surveySchemeId'),
   task,
   user,

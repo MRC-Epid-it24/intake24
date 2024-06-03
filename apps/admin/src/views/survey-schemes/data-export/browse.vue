@@ -78,7 +78,7 @@ import draggable from 'vuedraggable';
 import type { ExportField, ExportSection } from '@intake24/common/surveys';
 import type {
   SurveySchemeEntry,
-  SurveySchemeExportRefsResponse,
+  SurveySchemeExportRefs,
 } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
@@ -100,7 +100,7 @@ export default defineComponent({
 
   setup(props) {
     const selected = ref<ExportSection | null>(null);
-    const exportRefs = ref<SurveySchemeExportRefsResponse | null>(null);
+    const exportRefs = ref<SurveySchemeExportRefs | null>(null);
 
     const { entry, entryLoaded } = useEntry<SurveySchemeEntry>(props);
     const { fetch } = useEntryFetch(props);
@@ -130,7 +130,7 @@ export default defineComponent({
       if (!this.selected || !this.exportRefs)
         return [];
 
-      return this.exportRefs[this.selected.id];
+      return this.exportRefs[this.selected.id] ?? [];
     },
   },
 
@@ -146,7 +146,7 @@ export default defineComponent({
 
   methods: {
     async fetchExportRefs(): Promise<void> {
-      const { data } = await this.$http.get<SurveySchemeExportRefsResponse>(
+      const { data } = await this.$http.get<SurveySchemeExportRefs>(
         `admin/survey-schemes/${this.id}/data-export`,
       );
       this.exportRefs = data;

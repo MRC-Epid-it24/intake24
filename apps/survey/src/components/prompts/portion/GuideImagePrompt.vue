@@ -77,7 +77,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters } from '@intake24/common/types';
+import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';

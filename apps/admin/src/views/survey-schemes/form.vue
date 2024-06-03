@@ -75,8 +75,7 @@
 import { defineComponent, ref } from 'vue';
 
 import type { RecordVisibility } from '@intake24/common/security';
-import type { ExportSection, RecallPrompts, SchemeType } from '@intake24/common/surveys';
-import type { Meal } from '@intake24/common/types';
+import type { ExportSection, Meal, RecallPrompts, SchemeType } from '@intake24/common/surveys';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';

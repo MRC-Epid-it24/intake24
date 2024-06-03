@@ -3,11 +3,11 @@ import { randomUUID } from 'node:crypto';
 import type { CreationAttributes, Transaction } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type {
   CreateLocalFoodRequest,
   CreateLocalFoodRequestOptions,
 } from '@intake24/common/types/http/admin';
-import type { PortionSizeMethod } from '@intake24/common/types/portion-size';
 import { ConflictError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import {

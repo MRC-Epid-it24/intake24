@@ -1,19 +1,19 @@
 import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
-import { isPlainObject } from 'lodash';
 import ms from 'ms';
-import { ZodError } from 'zod';
+import { z, ZodError } from 'zod';
 
 import type { SurveyAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
+import { prompt } from '@intake24/common/prompts';
 import {
+  meal,
   searchSortingAlgorithms,
-  spellingCorrectionPreferenceOptions,
+  spellingCorrectionPreferences,
   surveyStates,
 } from '@intake24/common/surveys';
 import { notification } from '@intake24/common/types';
-import { validateMeals } from '@intake24/common/validators';
 import { FeedbackScheme, Op, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 
 export const defaults: Schema = {
@@ -316,8 +316,8 @@ export const defaults: Schema = {
   },
   'searchSettings.spellingCorrectionPreference': {
     in: ['body'],
-    errorMessage: typeErrorMessage('in.options', { options: spellingCorrectionPreferenceOptions }),
-    isIn: { options: [spellingCorrectionPreferenceOptions] },
+    errorMessage: typeErrorMessage('in.options', { options: spellingCorrectionPreferences }),
+    isIn: { options: [spellingCorrectionPreferences] },
     optional: true,
   },
   'searchSettings.enableEditDistance': {
@@ -401,25 +401,20 @@ export const surveySchemeOverrides: ParamSchema = {
   in: ['body'],
   errorMessage: typeErrorMessage('structure._'),
   custom: {
-    options: async (value): Promise<void> => {
-      if (
-        typeof value !== 'object'
-        || Object.keys(value).some(key => !['meals', 'prompts'].includes(key))
-      ) {
-        throw new Error('Invalid survey scheme overrides structure');
-      }
-
-      // Meals
+    options: (value): boolean => {
       try {
-        validateMeals(value.meals);
+        z.object({
+          meals: meal.array(),
+          prompts: prompt.array(),
+        }).parse(value);
+        return true;
       }
-      catch (err: any) {
-        throw new Error(err.message.split('\n')[0]);
-      }
+      catch (err) {
+        if (err instanceof ZodError)
+          throw err.errors.at(0)?.message;
 
-      // Prompts
-      if (!Array.isArray(value.prompts) || value.prompts.some((item: any) => !isPlainObject(item)))
-        throw new Error('Invalid survey scheme prompts structure');
+        throw err;
+      }
     },
   },
 };

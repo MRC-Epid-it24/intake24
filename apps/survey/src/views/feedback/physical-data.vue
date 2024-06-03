@@ -121,14 +121,14 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FeedbackPhysicalDataField, Sex } from '@intake24/common/feedback';
-import type { PhysicalActivityLevel } from '@intake24/common/types/http';
+import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/http/admin';
 import type { UserPhysicalData } from '@intake24/ui/feedback';
 import { sexes, weightTargets } from '@intake24/common/feedback';
 import { Errors } from '@intake24/common/util';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 
-export interface NullablePhysicalActivityLevel extends Omit<PhysicalActivityLevel, 'id'> {
+export interface NullablePhysicalActivityLevel extends Omit<PhysicalActivityLevelAttributes, 'id'> {
   id: string | null;
 }
 

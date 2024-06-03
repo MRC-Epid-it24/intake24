@@ -7,9 +7,6 @@ import fdbs from './fdbs';
 import foods from './foods';
 import images from './images';
 import locales from './locales';
-import references from './references';
-import surveySchemePrompts from './survey-scheme-prompts';
-import surveySchemes from './survey-schemes';
 import surveys from './surveys';
 
 export default () => {
@@ -24,9 +21,6 @@ export default () => {
   router.use('/foods', foods());
   router.use('/images', images());
   router.use('/locales', locales());
-  router.use('/references', references());
-  router.use('/survey-schemes', surveySchemes());
-  router.use('/survey-scheme-prompts', surveySchemePrompts());
   router.use('/surveys', surveys());
 
   return router;

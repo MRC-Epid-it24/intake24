@@ -9,7 +9,7 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/types';
+import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
 
 import BaseModel from '../model';
 import CategoryLocal from './category-local';

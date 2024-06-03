@@ -3,6 +3,8 @@ import { isIn } from 'validator';
 
 import type { SurveySchemeAttributes } from '@intake24/db';
 import {
+  meal,
+  recallPrompts,
   schemeTypes,
   searchSortingAlgorithms,
   surveyRatings,
@@ -10,7 +12,6 @@ import {
 } from '@intake24/common/surveys';
 
 import { z } from '../../util';
-import { meal } from '../meals';
 import { feedbackSchemeResponse } from './feedback';
 
 export const generateUserResponse = z.object({
@@ -54,8 +55,7 @@ export const surveyEntryResponse = z.object({
     id: z.string(),
     type: z.enum(schemeTypes),
     meals: meal.array(),
-    // TODO: validate meals and prompts
-    prompts: z.any(),
+    prompts: recallPrompts,
   }),
   feedbackScheme: feedbackSchemeResponse.optional(),
   numberOfSubmissionsForFeedback: z.number(),

@@ -1,10 +1,10 @@
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import type { ComponentType } from '../prompts';
+import type { CerealType, StandardUnit } from '../surveys';
 import type { Dictionary, Optional, RequiredLocaleTranslation } from './common';
 import type { RecipeFood } from './foods';
 import type { UserFoodData } from './http';
-import type { CerealType, StandardUnit } from './portion-size';
 
 /*
 Not currently used:

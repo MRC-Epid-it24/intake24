@@ -1,5 +1,4 @@
 export * from './actions';
-export * from './base';
 export * from './conditions';
 export * from './custom';
 export * from './portion-size';

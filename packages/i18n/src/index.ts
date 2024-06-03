@@ -1,6 +1,6 @@
 import type { LocaleMessages } from 'vue-i18n';
 
-import { Application } from '@intake24/common/types';
+import type { Application } from '@intake24/common/types';
 
 import admin from './admin';
 import api from './api';
