@@ -552,7 +552,7 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 import {
   defaultSearchSettings,
   type SchemeOverrides,
-  spellingCorrectionPreferenceOptions,
+  spellingCorrectionPreferences,
   type SurveySearchSettings,
   type SurveyState,
 } from '@intake24/common/surveys';
@@ -683,7 +683,7 @@ export default defineComponent({
         value,
         text: this.$t(`surveys.search.algorithms.${value}`),
       })),
-      spellingCorrectionOptions: spellingCorrectionPreferenceOptions.map(value => ({
+      spellingCorrectionOptions: spellingCorrectionPreferences.map(value => ({
         value,
         text: this.$t(`surveys.search.spellingCorrectionOptions.${value}`),
       })),
