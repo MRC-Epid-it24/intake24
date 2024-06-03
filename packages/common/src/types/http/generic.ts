@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const bigIntString = z.coerce.number().int().transform(val => val.toString());
+export const bigIntString = z.bigint().or(z.number().or(z.string()).pipe(z.coerce.number().int())).pipe(z.coerce.string());
 export const uuid = z.string().uuid();
 
 const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);

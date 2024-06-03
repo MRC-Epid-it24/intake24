@@ -1,41 +1,64 @@
-import type {
-  CategoryAttributes,
-  FeedbackSchemeAttributes,
-  FoodAttributes,
-  LanguageAttributes,
-  NutrientTableAttributes,
-  NutrientTableRecordAttributes,
-  Pagination,
-  StandardUnitAttributes,
-  SurveyAttributes,
-  SurveySchemeAttributes,
-  SystemLocaleAttributes,
-} from '@intake24/db';
+import { z } from 'zod';
 
-export type CategoryReferences = Pagination<Pick<CategoryAttributes, 'code' | 'name'>>;
+import { languageAttributes } from './languages';
+import { systemLocaleAttributes } from './locales';
+import { standardUnitAttributes } from './standard-units';
+import { surveyAttributes } from './surveys';
 
-export type FoodReferences = Pagination<Pick<FoodAttributes, 'code' | 'name'>>;
+export const categoryReference = z.object({
+  code: z.string(),
+  name: z.string(),
+});
+export type CategoryReference = z.infer<typeof categoryReference>;
 
-export type FeedbackSchemeReferences = Pagination<FeedbackSchemeAttributes>;
+export const foodGroupReference = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+export type FoodGroupReference = z.infer<typeof foodGroupReference>;
 
-export type LanguageReferences = Pagination<
-  Pick<LanguageAttributes, 'id' | 'code' | 'englishName' | 'localName'>
->;
+export const foodReference = z.object({
+  code: z.string(),
+  name: z.string(),
+});
+export type FoodReference = z.infer<typeof foodReference>;
 
-export type SystemLocaleReferences = Pagination<
-  Pick<SystemLocaleAttributes, 'id' | 'code' | 'englishName' | 'localName'>
->;
+export const languageReference = languageAttributes.pick({
+  id: true,
+  code: true,
+  englishName: true,
+  localName: true,
+});
+export type LanguageReference = z.infer<typeof languageReference>;
 
-export type StandardUnitReferences = Pagination<
-  Pick<StandardUnitAttributes, 'id' | 'estimateIn' | 'howMany'>
->;
+export const localeReference = systemLocaleAttributes.pick({
+  id: true,
+  code: true,
+  englishName: true,
+  localName: true,
+});
+export type LocaleReference = z.infer<typeof localeReference>;
 
-export type NutrientTableReferences = Pagination<
-  Pick<NutrientTableAttributes, 'id' | 'description'>
->;
+export const nutrientTableRecordReference = z.object({
+  id: z.string(),
+  nutrientTableId: z.string(),
+  nutrientTableRecordId: z.string(),
+  name: z.string(),
+  localName: z.string(),
+});
+export type NutrientTableRecordReference = z.infer<typeof nutrientTableRecordReference>;
 
-export type NutrientTableRecordReferences = Pagination<NutrientTableRecordAttributes>;
+export const standardUnitReference = standardUnitAttributes.pick({
+  id: true,
+  name: true,
+  estimateIn: true,
+  howMany: true,
+});
+export type StandardUnitReference = z.infer<typeof standardUnitReference>;
 
-export type SurveySchemeReferences = Pagination<SurveySchemeAttributes>;
-
-export type SurveyReferences = Pagination<Pick<SurveyAttributes, 'id' | 'name' | 'slug'>>;
+export const surveyReference = surveyAttributes.pick({
+  id: true,
+  name: true,
+  slug: true,
+});
+export type SurveyReference = z.infer<typeof surveyReference>;

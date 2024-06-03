@@ -4,7 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { JobType, QueueJob } from '@intake24/common/types';
 import type {
   NutrientTableEntry,
-  NutrientTableRecord as ApiNutrientTableRecord,
+  NutrientTableRecordRequest as ApiNutrientTableRecord,
   NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { Transaction } from '@intake24/db';

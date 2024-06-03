@@ -1,4 +1,4 @@
-import type { PortionSizeMethod } from '@intake24/common/types';
+import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods/user-food-data';
 import type { FoodPortionSizeMethod } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';

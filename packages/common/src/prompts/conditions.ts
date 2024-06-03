@@ -1,4 +1,5 @@
 import isEqual from 'lodash/isEqual';
+import { z } from 'zod';
 
 export type ConditionInput = number | string | (number | string)[] | null;
 export type ConditionInputOps = { value: ConditionInput; answer: ConditionInput };
@@ -14,6 +15,8 @@ function toString(values: ConditionInput) {
     .map(value => value?.toString().trim().toLowerCase() || '')
     .filter(Boolean);
 }
+
+export const ops = ['eq', 'ne', 'in', 'notIn', 'gte', 'gt', 'lte', 'lt'] as const;
 
 export const conditionOps = {
   eq: ({ answer, value }: ConditionInputOps) => isEqual(toString(answer), toString(value)),
@@ -85,55 +88,90 @@ export const conditionTypes = [
 
 export type ConditionType = (typeof conditionTypes)[number];
 
-export type ConditionSection = 'survey' | 'meal' | 'food';
+export const conditionSections = ['survey', 'meal', 'food'] as const;
+export type ConditionSection = (typeof conditionSections)[number];
 
-export type BaseCondition = { type: ConditionType; op: ConditionOp; value: string | string[] };
+const baseCondition = z.object({
+  type: z.enum(conditionTypes),
+  op: z.enum(ops),
+  value: z.union([z.string(), z.string().array()]),
+});
 
-export type Conditions = {
-  drinks: BaseCondition & {
-    type: 'drinks';
-    props: {
-      section: ConditionSection;
-    };
-  };
-  energy: BaseCondition & {
-    type: 'energy';
-    props: {
-      section: ConditionSection;
-    };
-  };
-  flag: BaseCondition & {
-    type: 'flag';
-    props: {
-      section: ConditionSection;
-    };
-  };
-  foodCategory: BaseCondition & {
-    type: 'foodCategory';
-    props: {};
-  };
-  meals: BaseCondition & {
-    type: 'meals';
-    props: {};
-  };
-  promptAnswer: BaseCondition & {
-    type: 'promptAnswer';
-    props: {
-      promptId: string;
-      section: ConditionSection;
-    };
-  };
-  property: BaseCondition & {
-    type: 'property';
-    props: {
-      name: 'recallNumber' | 'userName';
-    };
-  };
-  // @deprecate - use property instead
-  recallNumber: BaseCondition & {
-    type: 'recallNumber';
-    props: {};
-  };
-};
+export type BaseCondition = z.infer<typeof baseCondition>;
 
-export type Condition = Conditions[keyof Conditions];
+const drinksCondition = baseCondition.extend({
+  type: z.literal('drinks'),
+  props: z.object({
+    section: z.enum(conditionSections),
+  }),
+});
+
+const energyCondition = baseCondition.extend({
+  type: z.literal('energy'),
+  props: z.object({
+    section: z.enum(conditionSections),
+  }),
+});
+
+const flagCondition = baseCondition.extend({
+  type: z.literal('flag'),
+  props: z.object({
+    section: z.enum(conditionSections),
+  }),
+});
+
+const foodCategoryCondition = baseCondition.extend({
+  type: z.literal('foodCategory'),
+  props: z.record(z.never()),
+});
+
+const mealsCondition = baseCondition.extend({
+  type: z.literal('meals'),
+  props: z.record(z.never()),
+});
+
+const promptAnswerCondition = baseCondition.extend({
+  type: z.literal('promptAnswer'),
+  props: z.object({
+    promptId: z.string(),
+    section: z.enum(conditionSections),
+  }),
+});
+
+const propertyCondition = baseCondition.extend({
+  type: z.literal('property'),
+  props: z.object({
+    name: z.enum(['recallNumber', 'userName']),
+  }),
+});
+
+const recallNumberCondition = baseCondition.extend({
+  type: z.literal('recallNumber'),
+  props: z.record(z.never()),
+});
+
+export const conditions = z.object({
+  drinks: drinksCondition,
+  energy: energyCondition,
+  flag: flagCondition,
+  foodCategory: foodCategoryCondition,
+  mealsC: mealsCondition,
+  promptAnswer: promptAnswerCondition,
+  property: propertyCondition,
+  recallNumber: recallNumberCondition,
+});
+
+export type Conditions = z.infer<typeof conditions>;
+
+export const condition = z.union([
+  drinksCondition,
+  energyCondition,
+  flagCondition,
+  foodCategoryCondition,
+  mealsCondition,
+  promptAnswerCondition,
+  propertyCondition,
+  recallNumberCondition,
+]);
+
+export type Condition = z.infer<typeof condition>;

@@ -159,7 +159,8 @@ import PizzaWhole from 'virtual:icons/game-icons/full-pizza';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, PortionSizeParameters, RecipeBuilder } from '@intake24/common/types';
+import type { PortionSizeParameters } from '@intake24/common/surveys';
+import type { EncodedFood, RecipeBuilder } from '@intake24/common/types';
 import { pizzaCrusts, pizzaSizes, pizzaUnits } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';

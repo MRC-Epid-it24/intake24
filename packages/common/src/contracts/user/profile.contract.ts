@@ -1,7 +1,9 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { strongPasswordWithConfirm, userPhysicalDataScheme } from '../../schemas';
+import { userPhysicalDataAttributes, userPhysicalDataResponse } from '@intake24/common/types/http';
+
+import { strongPasswordWithConfirm } from '../../schemas';
 
 export const profile = initContract().router({
   updatePassword: {
@@ -26,7 +28,7 @@ export const profile = initContract().router({
       survey: z.string().optional(),
     }),
     responses: {
-      200: userPhysicalDataScheme.nullable(),
+      200: userPhysicalDataResponse,
     },
     summary: 'Get physical data',
     description: 'Get user physical data for feedback and survey recall calculations.',
@@ -37,9 +39,9 @@ export const profile = initContract().router({
     query: z.object({
       survey: z.string().optional(),
     }),
-    body: userPhysicalDataScheme.omit({ userId: true }),
+    body: userPhysicalDataAttributes.omit({ userId: true }),
     responses: {
-      200: userPhysicalDataScheme,
+      200: userPhysicalDataResponse,
     },
     summary: 'Set physical data',
     description: 'Set user physical data for feedback and survey recall calculations.',

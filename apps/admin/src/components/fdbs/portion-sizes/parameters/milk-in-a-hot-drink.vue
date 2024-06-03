@@ -24,7 +24,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ListOption, PortionSizeParameters } from '@intake24/common/types';
+import type { PortionSizeParameters } from '@intake24/common/surveys';
+import type { ListOption } from '@intake24/common/types';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { OptionsList } from '@intake24/admin/components/lists';
 

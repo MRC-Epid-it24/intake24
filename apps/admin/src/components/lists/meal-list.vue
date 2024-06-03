@@ -159,7 +159,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { Meal, Meals } from '@intake24/common/types';
+import type { Meal, Meals } from '@intake24/common/surveys';
 import { defaultMeals } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';

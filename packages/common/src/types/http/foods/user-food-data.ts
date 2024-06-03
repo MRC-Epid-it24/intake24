@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { localeTranslation } from '../../common';
-import { portionSizeMethods, portionSizeParameter } from '../../portion-size';
+import { portionSizeMethods, portionSizeParameter } from '@intake24/common/surveys';
+import { localeTranslation } from '@intake24/common/types';
 
 export const userPortionSizeMethod = z.object({
   method: z.enum(portionSizeMethods),

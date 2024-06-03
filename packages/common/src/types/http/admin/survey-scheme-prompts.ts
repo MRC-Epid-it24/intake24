@@ -1,22 +1,36 @@
-import type {
-  Pagination,
-  SurveySchemePromptAttributes,
-  SurveySchemePromptCreationAttributes,
-} from '@intake24/db';
+import { z } from 'zod';
 
-import type { SurveySchemeRefEntry } from './survey-schemes';
+import { prompt } from '@intake24/common/prompts';
+import { promptSections } from '@intake24/common/surveys';
 
-export type SurveySchemePromptRequest = SurveySchemePromptCreationAttributes;
+import { surveySchemeAttributes } from './survey-schemes';
 
-export type CreateSurveySchemePromptRequest = SurveySchemePromptRequest;
-
-export type UpdateSurveySchemePromptRequest = Omit<SurveySchemePromptRequest, 'id'>;
-
-export type SurveySchemePromptsResponse = Pagination<SurveySchemePromptAttributes>;
+export const surveySchemePromptAttributes = z.object({
+  id: z.string(),
+  promptId: z.string().min(1).max(128),
+  name: z.string().min(1).max(512),
+  prompt,
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+export type SurveySchemePromptAttributes = z.infer<typeof surveySchemePromptAttributes>;
 
 export type SurveySchemePromptEntry = SurveySchemePromptAttributes;
 
-export type SurveySchemePromptRefs = {
-  schemes: SurveySchemeRefEntry[];
-  promptIds: string[];
-};
+export const surveySchemePromptRequest = surveySchemePromptAttributes.pick({
+  prompt: true,
+});
+export type SurveySchemePromptRequest = z.infer<typeof surveySchemePromptRequest>;
+
+export const surveySchemePromptSyncRequest = z.object({
+  surveySchemeId: z.string(),
+  section: z.enum(promptSections),
+  prompt,
+});
+export type SurveySchemePromptSyncRequest = z.infer<typeof surveySchemePromptSyncRequest>;
+
+export const surveySchemePromptRefs = z.object({
+  schemes: surveySchemeAttributes.array(),
+  promptIds: z.string().array(),
+});
+export type SurveySchemePromptRefs = z.infer<typeof surveySchemePromptRefs>;

@@ -183,9 +183,9 @@
 import { defineComponent, ref } from 'vue';
 
 import type {
+  RespondentEntry,
+  RespondentListEntry,
   SurveyEntry,
-  SurveyRespondentEntry,
-  SurveyRespondentListEntry,
 } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin } from '@intake24/admin/components/entry';
@@ -295,7 +295,7 @@ export default defineComponent({
 
   methods: {
     async fetchUser(username: string) {
-      const { data } = await this.$http.get<SurveyRespondentEntry>(
+      const { data } = await this.$http.get<RespondentEntry>(
         `admin/surveys/${this.id}/respondents/${username}`,
       );
 
@@ -307,7 +307,7 @@ export default defineComponent({
       this.dialog = true;
     },
 
-    async edit(item: SurveyRespondentListEntry) {
+    async edit(item: RespondentListEntry) {
       this.loading = true;
       this.dialog = true;
 
@@ -331,14 +331,14 @@ export default defineComponent({
 
     async save() {
       if (this.form.userId) {
-        const { username: name } = await this.form.patch<SurveyRespondentEntry>(
+        const { username: name } = await this.form.patch<RespondentEntry>(
           `admin/surveys/${this.id}/respondents/${this.form.username}`,
         );
 
         useMessages().success(this.$t('common.msg.updated', { name }).toString());
       }
       else {
-        const { username: name } = await this.form.post<SurveyRespondentEntry>(
+        const { username: name } = await this.form.post<RespondentEntry>(
           `admin/surveys/${this.id}/respondents`,
         );
 
@@ -349,7 +349,7 @@ export default defineComponent({
       await this.updateTable();
     },
 
-    async remove({ username: name }: SurveyRespondentListEntry) {
+    async remove({ username: name }: RespondentListEntry) {
       await this.$http.delete(`admin/surveys/${this.id}/respondents/${name}`);
       useMessages().success(this.$t('common.msg.deleted', { name }).toString());
 

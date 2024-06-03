@@ -9,7 +9,7 @@ import {
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   jobAttributes,
-  nutrientTableRecord,
+  nutrientTableRecordRequest,
   nutrientTableRefs,
   nutrientTableRequest,
   nutrientTableResponse,
@@ -108,7 +108,7 @@ export const nutrientTable = initContract().router({
     method: 'PUT',
     path: '/admin/nutrient-tables/:nutrientTableId/records',
     body: z.object({
-      records: nutrientTableRecord.array(),
+      records: nutrientTableRecordRequest.array(),
     }),
     responses: {
       200: z.undefined(),

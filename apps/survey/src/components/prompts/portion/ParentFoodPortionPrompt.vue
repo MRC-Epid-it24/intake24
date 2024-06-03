@@ -56,7 +56,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, PortionSizeParameters } from '@intake24/common/types';
+import type { PortionSizeParameters } from '@intake24/common/surveys';
+import type { EncodedFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useFoodUtils } from '@intake24/survey/composables';
 

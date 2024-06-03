@@ -1,10 +1,13 @@
-import type { PromptSection } from '../surveys';
-import type { LocaleOptionList, LocaleTranslation, PortionSizeMethodId } from '../types';
-import type { Actions, PromptLayout } from './actions';
-import type { Condition } from './conditions';
-import { portionSizeMethods } from '../types';
+import { z } from 'zod';
 
-export type RadioOrientation = 'column' | 'row';
+import type { PortionSizeMethodId } from '../surveys';
+import { localeOptionList } from '../types';
+import { localeTranslation } from './../types';
+import { actions, promptLayouts } from './actions';
+import { condition } from './conditions';
+
+export const radioOrientations = ['column', 'row'] as const;
+export type RadioOrientation = (typeof radioOrientations)[number];
 
 export const promptTypes = ['custom', 'standard', 'portion-size'] as const;
 export type PromptType = (typeof promptTypes)[number];
@@ -49,231 +52,401 @@ export type PortionSizeComponentType =
   | 'missing-food-prompt'
   | 'portion-size-option-prompt';
 
-export const portionSizeComponentTypes = [
+/* export const portionSizeComponentTypes = [
   ...portionSizeMethods,
   'missing-food',
   'portion-size-option',
-].map(type => `${type}-prompt`) as PortionSizeComponentType[];
+].map(type => `${type}-prompt`) as PortionSizeComponentType[]; */
+
+export const portionSizeComponentTypes = [
+  'as-served-prompt',
+  'cereal-prompt',
+  'direct-weight-prompt',
+  'drink-scale-prompt',
+  'guide-image-prompt',
+  'milk-in-a-hot-drink-prompt',
+  'milk-on-cereal-prompt',
+  'parent-food-portion-prompt',
+  'pizza-prompt',
+  'pizza-v2-prompt',
+  'recipe-builder-prompt',
+  'standard-portion-prompt',
+  'missing-food-prompt',
+  'portion-size-option-prompt',
+] as const;
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 
-export type PromptValidationProps = {
-  validation: {
-    required: boolean;
-    message: LocaleTranslation;
-  };
-};
+export const promptValidationProps = z.object({
+  validation: z.object({
+    required: z.boolean(),
+    message: localeTranslation,
+  }),
+});
+export type PromptValidationProps = z.infer<typeof promptValidationProps>;
 
-export type BasePrompt = {
-  id: string;
-  name: string;
-  i18n: Record<string, LocaleTranslation>;
-  actions?: Actions;
-  conditions: Condition[];
-};
+export const basePrompt = z.object({
+  id: z.string(),
+  name: z.string(),
+  i18n: z.record(localeTranslation),
+  actions: actions.optional(),
+  conditions: condition.array(),
+});
 
-export type ValidatedPrompt = BasePrompt & PromptValidationProps;
+export type BasePrompt = z.infer<typeof basePrompt>;
 
-export type BaseCustomPrompt = BasePrompt & { type: 'custom'; group?: string | null };
-export type BasePortionPrompt = BasePrompt & { type: 'portion-size'; badges: boolean };
-export type BaseStandardPrompt = BasePrompt & { type: 'standard' };
+export const validatedPrompt = basePrompt.merge(promptValidationProps);
+export type ValidatedPrompt = z.infer<typeof validatedPrompt>;
 
-export interface PromptWithSection extends BasePrompt {
-  section: PromptSection;
-}
+export const baseCustomPrompt = basePrompt.extend({ type: z.literal('custom'), group: z.string().nullish() });
+export type BaseCustomPrompt = z.infer<typeof baseCustomPrompt>;
+export const basePortionPrompt = basePrompt.extend({ type: z.literal('portion-size'), badges: z.boolean() });
+export type BasePortionPrompt = z.infer<typeof basePortionPrompt>;
+export const baseStandardPrompt = basePrompt.extend({ type: z.literal('standard') });
+export type BaseStandardPrompt = z.infer<typeof baseStandardPrompt>;
 
-export type FoodBrowser = {
-  categoriesFirst: Record<'browse' | 'search', boolean>;
-};
+export const foodBrowser = z.object({
+  categoriesFirst: z.record(z.enum(['browse', 'search']), z.boolean()),
+});
+export type FoodBrowser = z.infer<typeof foodBrowser>;
 
-export type ImageMap = {
-  labels: boolean;
-  pinchZoom: boolean;
-};
+export const imageMap = z.object({
+  labels: z.boolean(),
+  pinchZoom: z.boolean(),
+});
+export type ImageMap = z.infer<typeof imageMap>;
 
-export type LinkedQuantityCategory = {
-  code: string;
-  unit?: string;
-};
+export const linkedQuantityCategory = z.object({
+  code: z.string(),
+  unit: z.string().optional(),
+});
+export type LinkedQuantityCategory = z.infer<typeof linkedQuantityCategory>;
 
-export type LinkedQuantity = {
-  parent: LinkedQuantityCategory[];
-  source: string[];
-};
+export const linkedQuantity = z.object({
+  parent: linkedQuantityCategory.array(),
+  source: z.string().array(),
+});
+export type LinkedQuantity = z.infer<typeof linkedQuantity>;
 
 export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as const;
-
 export type ReviewOptions = (typeof reviewOptions)[number];
 
-export type SliderValue = {
-  value: number | null;
-  label: false | LocaleTranslation;
+export const sliderValue = z.object({
+  value: z.number().nullable(),
+  label: z.union([z.literal(false), localeTranslation]),
+});
+export type SliderValue = z.infer<typeof sliderValue>;
+
+export const slider = z.object({
+  current: sliderValue.extend({ size: z.number() }),
+  min: sliderValue,
+  max: sliderValue,
+  step: z.number(),
+});
+export type Slider = z.infer<typeof slider>;
+
+export const timePicker = z.object({
+  format: z.enum(['ampm', '24hr']),
+  allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
+});
+export type TimePicker = z.infer<typeof timePicker>;
+
+// Custom
+const checkboxListPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+  component: z.literal('checkbox-list-prompt'),
+  options: localeOptionList(),
+  other: z.boolean(),
+});
+
+const datePickerPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+  component: z.literal('date-picker-prompt'),
+  futureDates: z.boolean(),
+});
+
+const infoPrompt = baseCustomPrompt.extend({
+  component: z.literal('info-prompt'),
+});
+
+const baseMultiPrompt = baseCustomPrompt.extend({
+  component: z.literal('multi-prompt'),
+});
+
+type MultiPrompt = z.infer<typeof baseMultiPrompt> & {
+  prompts: Prompt[];
 };
 
-export type Slider = {
-  current: SliderValue & { size: number };
-  min: SliderValue;
-  max: SliderValue;
-  step: number;
-};
+const multiPrompt: z.ZodType<MultiPrompt> = baseMultiPrompt.extend({
+  // eslint-disable-next-line ts/no-use-before-define
+  prompts: z.lazy(() => prompt.array()),
+});
 
-export type TimePicker = {
-  format: 'ampm' | '24hr';
-  allowedMinutes: 1 | 5 | 10 | 15 | 20 | 30;
-};
+const noMoreInformationPrompt = baseCustomPrompt.extend({
+  component: z.literal('no-more-information-prompt'),
+});
 
-export type Prompts = {
+const radioListPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+  component: z.literal('radio-list-prompt'),
+  options: localeOptionList(),
+  orientation: z.enum(radioOrientations),
+  other: z.boolean(),
+});
+
+const selectPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+  component: z.literal('select-prompt'),
+  options: localeOptionList(),
+  multiple: z.boolean(),
+});
+
+const sliderPrompt = baseCustomPrompt.extend({
+  component: z.literal('slider-prompt'),
+  slider,
+});
+
+const textareaPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+  component: z.literal('textarea-prompt'),
+});
+
+const timePickerPrompt = baseCustomPrompt.merge(promptValidationProps).merge(timePicker).extend({
+  component: z.literal('time-picker-prompt'),
+});
+
+const yesNoPrompt = baseCustomPrompt.extend({
+  component: z.literal('yes-no-prompt'),
+});
+
+// Portion size
+const asServedPrompt = basePortionPrompt.extend({
+  component: z.literal('as-served-prompt'),
+  leftovers: z.boolean(),
+});
+
+const cerealPrompt = basePortionPrompt.extend({
+  component: z.literal('cereal-prompt'),
+  imageMap,
+  leftovers: z.boolean(),
+});
+
+const directWeightPrompt = basePortionPrompt.extend({
+  component: z.literal('direct-weight-prompt'),
+});
+
+const drinkScalePrompt = basePortionPrompt.extend({
+  component: z.literal('drink-scale-prompt'),
+  imageMap,
+  leftovers: z.boolean(),
+  multiple: z.union([z.literal(false), slider]),
+});
+
+const guideImagePrompt = basePortionPrompt.extend({
+  component: z.literal('guide-image-prompt'),
+  imageMap,
+  linkedQuantity,
+});
+
+const milkInAHotDrinkPrompt = basePortionPrompt.extend({
+  component: z.literal('milk-in-a-hot-drink-prompt'),
+  orientation: z.enum(radioOrientations),
+});
+
+const milkOnCerealPrompt = basePortionPrompt.extend({
+  component: z.literal('milk-on-cereal-prompt'),
+  imageMap,
+});
+
+const missingFoodPrompt = basePortionPrompt.extend({
+  component: z.literal('missing-food-prompt'),
+});
+
+const parentFoodPortionPrompt = basePortionPrompt.extend({
+  component: z.literal('parent-food-portion-prompt'),
+  orientation: z.enum(radioOrientations),
+});
+
+const pizzaPrompt = basePortionPrompt.extend({
+  component: z.literal('pizza-prompt'),
+  imageMap,
+});
+
+const pizzaV2Prompt = basePortionPrompt.extend({
+  component: z.literal('pizza-v2-prompt'),
+  imageMap,
+});
+
+const portionSizeOptionPrompt = basePortionPrompt.extend({
+  component: z.literal('portion-size-option-prompt'),
+});
+
+const recipeBuilderPrompt = basePortionPrompt.merge(foodBrowser).extend({
+  component: z.literal('recipe-builder-prompt'),
+});
+
+const standardPortionPrompt = basePortionPrompt.extend({
+  component: z.literal('standard-portion-prompt'),
+});
+
+// Standard
+const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
+  component: z.literal('associated-foods-prompt'),
+  multiple: z.boolean(),
+});
+
+const editMealPrompt = baseStandardPrompt.extend({
+  component: z.literal('edit-meal-prompt'),
+  separateDrinks: z.boolean(),
+});
+
+const finalPrompt = baseStandardPrompt.extend({
+  component: z.literal('final-prompt'),
+  rating: z.boolean(),
+});
+
+const foodSearchPrompt = baseStandardPrompt.merge(foodBrowser).extend({
+  component: z.literal('food-search-prompt'),
+  allowBrowsing: z.boolean(),
+  dualLanguage: z.boolean(),
+});
+
+const mealAddPrompt = baseStandardPrompt.extend({
+  component: z.literal('meal-add-prompt'),
+  custom: z.boolean(),
+});
+
+const mealDurationPrompt = baseStandardPrompt.extend({
+  component: z.literal('meal-duration-prompt'),
+  slider,
+});
+
+const mealGapPrompt = baseStandardPrompt.extend({
+  component: z.literal('meal-gap-prompt'),
+  gap: z.number(),
+  startTime: z.string(),
+  endTime: z.string(),
+});
+
+const mealTimePrompt = baseStandardPrompt.merge(timePicker).extend({
+  component: z.literal('meal-time-prompt'),
+});
+
+const readyMealPrompt = baseStandardPrompt.extend({
+  component: z.literal('ready-meal-prompt'),
+});
+
+const redirectPrompt = baseStandardPrompt.extend({
+  component: z.literal('redirect-prompt'),
+  rating: z.boolean(),
+  url: z.string().nullable(),
+  identifier: z.union([z.literal('userId'), z.literal('username'), z.literal('urlAuthToken'), z.string(), z.null()]),
+  timer: z.number(),
+  target: z.union([z.literal('_self'), z.literal('_blank')]),
+});
+
+const reviewConfirmPrompt = baseStandardPrompt.extend({
+  component: z.literal('review-confirm-prompt'),
+});
+
+const sameAsBeforePrompt = baseStandardPrompt.extend({
+  component: z.literal('same-as-before-prompt'),
+});
+
+const splitFoodPrompt = baseStandardPrompt.extend({
+  component: z.literal('split-food-prompt'),
+});
+
+const submitPrompt = baseStandardPrompt.extend({
+  component: z.literal('submit-prompt'),
+  review: z.record(z.enum(promptLayouts), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
+});
+
+export const prompts = z.object({
   // Custom
-  'checkbox-list-prompt': BaseCustomPrompt &
-  PromptValidationProps & {
-    component: 'checkbox-list-prompt';
-    options: LocaleOptionList;
-    other: boolean;
-  };
-  'date-picker-prompt': BaseCustomPrompt &
-  PromptValidationProps & {
-    component: 'date-picker-prompt';
-    futureDates: boolean;
-  };
-  'info-prompt': BaseCustomPrompt & { component: 'info-prompt' };
-  'multi-prompt': BaseCustomPrompt & {
-    component: 'multi-prompt';
-    prompts: Prompt[];
-  };
-  'no-more-information-prompt': BaseCustomPrompt & {
-    component: 'no-more-information-prompt';
-  };
-  'radio-list-prompt': BaseCustomPrompt &
-  PromptValidationProps & {
-    component: 'radio-list-prompt';
-    options: LocaleOptionList;
-    orientation: RadioOrientation;
-    other: boolean;
-  };
-  'select-prompt': BaseCustomPrompt &
-  PromptValidationProps & {
-    component: 'select-prompt';
-    options: LocaleOptionList;
-    multiple: boolean;
-  };
-  'slider-prompt': BaseCustomPrompt & {
-    component: 'slider-prompt';
-    slider: Slider;
-  };
-  'textarea-prompt': BaseCustomPrompt & PromptValidationProps & { component: 'textarea-prompt' };
-  'time-picker-prompt': BaseCustomPrompt &
-  PromptValidationProps &
-  TimePicker & {
-    component: 'time-picker-prompt';
-  };
-  'yes-no-prompt': BaseCustomPrompt & { component: 'yes-no-prompt' };
+  'checkbox-list-prompt': checkboxListPrompt,
+  'date-picker-prompt': datePickerPrompt,
+  'info-prompt': infoPrompt,
+  'multi-prompt': multiPrompt,
+  'no-more-information-prompt': noMoreInformationPrompt,
+  'radio-list-prompt': radioListPrompt,
+  'select-prompt': selectPrompt,
+  'slider-prompt': sliderPrompt,
+  'textarea-prompt': textareaPrompt,
+  'time-picker-prompt': timePickerPrompt,
+  'yes-no-prompt': yesNoPrompt,
   // Portion size
-  'as-served-prompt': BasePortionPrompt & {
-    component: 'as-served-prompt';
-    leftovers: boolean;
-  };
-  'cereal-prompt': BasePortionPrompt & {
-    component: 'cereal-prompt';
-    imageMap: ImageMap;
-    leftovers: boolean;
-  };
-  'direct-weight-prompt': BasePortionPrompt & { component: 'direct-weight-prompt' };
-  'drink-scale-prompt': BasePortionPrompt & {
-    component: 'drink-scale-prompt';
-    imageMap: ImageMap;
-    leftovers: boolean;
-    multiple: false | Slider;
-  };
-  'guide-image-prompt': BasePortionPrompt & {
-    component: 'guide-image-prompt';
-    imageMap: ImageMap;
-    linkedQuantity: LinkedQuantity;
-  };
-  'milk-in-a-hot-drink-prompt': BasePortionPrompt & {
-    component: 'milk-in-a-hot-drink-prompt';
-    orientation: RadioOrientation;
-  };
-  'milk-on-cereal-prompt': BasePortionPrompt & {
-    component: 'milk-on-cereal-prompt';
-    imageMap: ImageMap;
-  };
-  'missing-food-prompt': BasePortionPrompt & {
-    component: 'missing-food-prompt';
-  };
-  'parent-food-portion-prompt': BasePortionPrompt & {
-    component: 'parent-food-portion-prompt';
-    orientation: RadioOrientation;
-  };
-  'pizza-prompt': BasePortionPrompt & {
-    component: 'pizza-prompt';
-    imageMap: ImageMap;
-  };
-  'pizza-v2-prompt': BasePortionPrompt & {
-    component: 'pizza-v2-prompt';
-    imageMap: ImageMap;
-  };
-  'portion-size-option-prompt': BasePortionPrompt & { component: 'portion-size-option-prompt' };
-  'recipe-builder-prompt': BasePortionPrompt &
-  FoodBrowser & {
-    component: 'recipe-builder-prompt';
-  };
-  'standard-portion-prompt': BasePortionPrompt & {
-    component: 'standard-portion-prompt';
-  };
+  'as-served-prompt': asServedPrompt,
+  'cereal-prompt': cerealPrompt,
+  'direct-weight-prompt': directWeightPrompt,
+  'drink-scale-prompt': drinkScalePrompt,
+  'guide-image-prompt': guideImagePrompt,
+  'milk-in-a-hot-drink-prompt': milkInAHotDrinkPrompt,
+  'milk-on-cereal-prompt': milkOnCerealPrompt,
+  'missing-food-prompt': missingFoodPrompt,
+  'parent-food-portion-prompt': parentFoodPortionPrompt,
+  'pizza-prompt': pizzaPrompt,
+  'pizza-v2-prompt': pizzaV2Prompt,
+  'portion-size-option-prompt': portionSizeOptionPrompt,
+  'recipe-builder-prompt': recipeBuilderPrompt,
+  'standard-portion-prompt': standardPortionPrompt,
   // Standard
-  'associated-foods-prompt': BaseStandardPrompt &
-  FoodBrowser & {
-    component: 'associated-foods-prompt';
-    multiple: boolean;
-  };
-  'edit-meal-prompt': BaseStandardPrompt & {
-    component: 'edit-meal-prompt';
-    separateDrinks: boolean;
-  };
-  'final-prompt': BaseStandardPrompt & {
-    component: 'final-prompt';
-    rating: boolean;
-  };
-  'food-search-prompt': BaseStandardPrompt &
-  FoodBrowser & {
-    component: 'food-search-prompt';
-    allowBrowsing: boolean;
-    dualLanguage: boolean;
-  };
-  'meal-add-prompt': BaseStandardPrompt & {
-    component: 'meal-add-prompt';
-    custom: boolean;
-  };
-  'meal-duration-prompt': BaseStandardPrompt & {
-    component: 'meal-duration-prompt';
-    slider: Slider;
-  };
-  'meal-gap-prompt': BaseStandardPrompt & {
-    component: 'meal-gap-prompt';
-    gap: number;
-    startTime: string;
-    endTime: string;
-  };
-  'meal-time-prompt': BaseStandardPrompt &
-  TimePicker & {
-    component: 'meal-time-prompt';
-  };
-  'ready-meal-prompt': BaseStandardPrompt & { component: 'ready-meal-prompt' };
-  'redirect-prompt': BaseStandardPrompt & {
-    component: 'redirect-prompt';
-    rating: boolean;
-    url: string | null;
-    identifier: 'userId' | 'username' | 'urlAuthToken' | string | null;
-    timer: number;
-    target: '_self' | '_blank';
-  };
-  'review-confirm-prompt': BaseStandardPrompt & { component: 'review-confirm-prompt' };
-  'same-as-before-prompt': BaseStandardPrompt & { component: 'same-as-before-prompt' };
-  'split-food-prompt': BaseStandardPrompt & { component: 'split-food-prompt' };
-  'submit-prompt': BaseStandardPrompt & {
-    component: 'submit-prompt';
-    review: Record<PromptLayout, ReviewOptions>;
-  };
-};
+  'associated-foods-prompt': associatedFoodsPrompt,
+  'edit-meal-prompt': editMealPrompt,
+  'final-prompt': finalPrompt,
+  'food-search-prompt': foodSearchPrompt,
+  'meal-add-prompt': mealAddPrompt,
+  'meal-duration-prompt': mealDurationPrompt,
+  'meal-gap-prompt': mealGapPrompt,
+  'meal-time-prompt': mealTimePrompt,
+  'ready-meal-prompt': readyMealPrompt,
+  'redirect-prompt': redirectPrompt,
+  'review-confirm-prompt': reviewConfirmPrompt,
+  'same-as-before-prompt': sameAsBeforePrompt,
+  'split-food-prompt': splitFoodPrompt,
+  'submit-prompt': submitPrompt,
+});
 
-export type Prompt = Prompts[keyof Prompts];
+export const prompt = z.union([
+  // Custom
+  checkboxListPrompt,
+  datePickerPrompt,
+  infoPrompt,
+  multiPrompt,
+  noMoreInformationPrompt,
+  radioListPrompt,
+  selectPrompt,
+  sliderPrompt,
+  textareaPrompt,
+  timePickerPrompt,
+  yesNoPrompt,
+  // Portion size
+  asServedPrompt,
+  cerealPrompt,
+  directWeightPrompt,
+  drinkScalePrompt,
+  guideImagePrompt,
+  milkInAHotDrinkPrompt,
+  milkOnCerealPrompt,
+  missingFoodPrompt,
+  parentFoodPortionPrompt,
+  pizzaPrompt,
+  pizzaV2Prompt,
+  portionSizeOptionPrompt,
+  recipeBuilderPrompt,
+  standardPortionPrompt,
+  // Standard
+  associatedFoodsPrompt,
+  editMealPrompt,
+  finalPrompt,
+  foodSearchPrompt,
+  mealAddPrompt,
+  mealDurationPrompt,
+  mealGapPrompt,
+  mealTimePrompt,
+  readyMealPrompt,
+  redirectPrompt,
+  reviewConfirmPrompt,
+  sameAsBeforePrompt,
+  splitFoodPrompt,
+  submitPrompt,
+]);
+
+export type Prompts = z.infer<typeof prompts>;
+
+export type Prompt = z.infer<typeof prompt>;

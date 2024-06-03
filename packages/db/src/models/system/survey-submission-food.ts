@@ -8,7 +8,7 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
-import type { PortionSizeMethodId } from '@intake24/common/types';
+import type { PortionSizeMethodId } from '@intake24/common/surveys';
 
 import BaseModel from '../model';
 import {

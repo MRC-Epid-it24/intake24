@@ -21,9 +21,6 @@ import type {
   LocaleSplitListController,
   LocaleSplitWordController,
   LocaleSynonymSetController,
-  ReferenceController,
-  SurveySchemeController,
-  SurveySchemePromptController,
 } from '@intake24/api/http/controllers';
 import type { DrinkScaleController } from '@intake24/api/http/controllers/admin/images/drink-scale.controller';
 import type { Jobs } from '@intake24/api/jobs';
@@ -121,8 +118,6 @@ export interface IoC extends Jobs {
   // user: TokenPayload;
 
   // Admin controllers
-  referenceController: ReferenceController;
-
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
   adminGlobalFoodsController: AdminGlobalFoodsController;
@@ -144,10 +139,6 @@ export interface IoC extends Jobs {
   localeSplitListController: LocaleSplitListController;
   localeSplitWordController: LocaleSplitWordController;
   localeSynonymSetController: LocaleSynonymSetController;
-
-  // Schemes
-  surveySchemeController: SurveySchemeController;
-  surveySchemePromptController: SurveySchemePromptController;
 
   // Survey MGMT
   adminSurveyController: AdminSurveyController;

@@ -46,10 +46,10 @@ export function permission(...args: string[]) {
   };
 }
 
-export function anyPermission(permission: string[]) {
-  return (req: Request, res: Response, next: NextFunction): void => {
+export function anyPermission(...args: string[]) {
+  return (req: Request<any, any, any, any, any>, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
-      .hasAnyPermission(permission)
+      .hasAnyPermission(args)
       .then(result => (result ? next() : next(new ForbiddenError())))
       .catch(err => next(err));
   };

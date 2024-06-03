@@ -3,7 +3,7 @@ import { copy } from '@intake24/common/util';
 import type { ImageMap, Prompt, Prompts } from './prompts';
 import { basePortionPrompt } from './base';
 
-export const imageMap: ImageMap = {
+const imageMap: ImageMap = {
   labels: false,
   pinchZoom: false,
 };

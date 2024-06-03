@@ -94,7 +94,7 @@ export const nutrientTableRefs = z.object({
 
 export type NutrientTableRefs = z.infer<typeof nutrientTableRefs>;
 
-export const nutrientTableRecord = z.object({
+export const nutrientTableRecordRequest = z.object({
   recordId: z.string(),
   name: z.string(),
   localName: z.string().optional(),
@@ -102,6 +102,6 @@ export const nutrientTableRecord = z.object({
   fields: z.array(z.tuple([z.string(), z.string()])),
 });
 
-export type NutrientTableRecord = z.infer<typeof nutrientTableRecord>;
+export type NutrientTableRecordRequest = z.infer<typeof nutrientTableRecordRequest>;
 
 export type NutrientTableRecordsResponse = Pagination<NutrientTableRecordAttributes>;

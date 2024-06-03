@@ -1,4 +1,6 @@
-import type { AsServedImageAttributes, AsServedSetAttributes, Pagination } from '@intake24/db';
+import { z } from 'zod';
+
+import type { AsServedImageAttributes, Pagination } from '@intake24/db';
 
 import type { UploadSourceImageInput } from './source-images';
 
@@ -17,9 +19,12 @@ export type UpdateAsServedSetInput = {
   images: AsServedImageInput[];
 };
 
-export interface AsServedSetListEntry extends Pick<AsServedSetAttributes, 'id' | 'description'> {
-  imageUrl: string;
-}
+export const asServedSetListEntry = z.object({
+  id: z.string(),
+  description: z.string(),
+  imageUrl: z.string(),
+});
+export type AsServedSetListEntry = z.infer<typeof asServedSetListEntry>;
 
 export type AsServedSetsResponse = Pagination<AsServedSetListEntry>;
 

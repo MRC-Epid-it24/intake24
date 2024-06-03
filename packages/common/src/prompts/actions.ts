@@ -1,4 +1,6 @@
-import type { LocaleTranslation } from '../types';
+import { z } from 'zod';
+
+import { localeTranslation } from '../types';
 
 export const promptLayouts = ['desktop', 'mobile'] as const;
 export type PromptLayout = (typeof promptLayouts)[number];
@@ -29,18 +31,22 @@ export const actionVariants = ['elevated', 'outlined', 'text'] as const;
 
 export type ActionVariant = (typeof actionVariants)[number];
 
-export type ActionItem = {
-  type: ActionType;
-  params: object;
-  text: LocaleTranslation;
-  label: LocaleTranslation;
-  color: string | null;
-  variant: ActionVariant;
-  icon: string | null;
-  layout: PromptLayout[];
-};
+export const actionItem = z.object({
+  type: z.enum(actionTypes),
+  params: z.any(),
+  text: localeTranslation,
+  label: localeTranslation,
+  color: z.string().nullable(),
+  variant: z.enum(actionVariants),
+  icon: z.string().nullable(),
+  layout: z.enum(promptLayouts).array(),
+});
 
-export type Actions = {
-  both: boolean;
-  items: ActionItem[];
-};
+export type ActionItem = z.infer<typeof actionItem>; ;
+
+export const actions = z.object({
+  both: z.boolean(),
+  items: actionItem.array(),
+});
+
+export type Actions = z.infer<typeof actions>;

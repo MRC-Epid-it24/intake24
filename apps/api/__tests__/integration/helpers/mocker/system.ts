@@ -32,7 +32,7 @@ import {
   defaultMeals,
   defaultPrompts,
   searchSortingAlgorithms,
-  spellingCorrectionPreferenceOptions,
+  spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
 import { jobTypes } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
@@ -285,7 +285,7 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
     })],
     minWordLength1: faker.number.int({ min: 2, max: 10 }),
     minWordLength2: faker.number.int({ min: 3, max: 10 }),
-    spellingCorrectionPreference: spellingCorrectionPreferenceOptions[faker.number.int({ min: 0, max: spellingCorrectionPreferenceOptions.length - 1 })],
+    spellingCorrectionPreference: spellingCorrectionPreferences[faker.number.int({ min: 0, max: spellingCorrectionPreferences.length - 1 })],
     enableEditDistance: faker.datatype.boolean(),
     enablePhonetic: faker.datatype.boolean(),
     minWordLengthPhonetic: faker.number.int({ min: 2, max: 10 }),

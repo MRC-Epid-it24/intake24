@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import type { Kysely } from 'kysely';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { PortionSizeMethod, PortionSizeMethodId } from '@intake24/common/types';
+import type { PortionSizeMethod, PortionSizeMethodId } from '@intake24/common/surveys';
 import type {
   CreateLocalCategoryRequest,
   LocalCategoryEntry,

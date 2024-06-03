@@ -113,8 +113,8 @@ import type {
   RecipeBuilderStepState,
   SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
+import type { RecipeBuilder } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
-import { meal, type RecipeBuilder } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import {
@@ -180,9 +180,6 @@ export default defineComponent({
   },
 
   computed: {
-    meal() {
-      return meal;
-    },
     allConfirmed(): boolean {
       return this.recipeSteps.every(step => this.isStepValid(step));
     },

@@ -1,7 +1,9 @@
-import type { SearchSortingAlgorithm } from '@intake24/common/surveys/survey';
+import { z } from 'zod';
 
-import type { Condition, Prompt, PromptWithSection } from '../prompts';
-import type { Meal } from '../types';
+import { searchSortingAlgorithms } from '@intake24/common/surveys';
+
+import { basePrompt, type Condition, type Prompt, prompt } from '../prompts';
+import { type Meal, meal } from './meals';
 
 export const schemeTypes = ['default'] as const;
 export type SchemeType = (typeof schemeTypes)[number];
@@ -11,6 +13,14 @@ export type SurveyPromptSection = (typeof surveySections)[number];
 
 export const mealSections = ['preFoods', 'foods', 'postFoods'] as const;
 export type MealSection = (typeof mealSections)[number];
+
+export const promptSections = [...surveySections, ...mealSections] as const;
+export type PromptSection = (typeof promptSections)[number];
+
+export const promptWithSection = basePrompt.extend({
+  section: z.enum(promptSections),
+});
+export type PromptWithSection = z.infer<typeof promptWithSection>;
 
 export function isMealSection(section: any): section is MealSection {
   return mealSections.includes(section);
@@ -22,18 +32,27 @@ export function isSurveySection(section: any): section is SurveyPromptSection {
 
 export type SurveySection = SurveyPromptSection | 'meals';
 
-export type PromptSection = SurveyPromptSection | MealSection;
+export const genericPrompts = z.record(z.enum(surveySections), prompt.array());
+export type GenericPrompts = z.infer<typeof genericPrompts>;
 
-export type GenericPrompts = Record<SurveyPromptSection, Prompt[]>;
+export const mealPrompts = z.record(z.enum(mealSections), prompt.array());
+export type MealPrompts = z.infer<typeof mealPrompts>;
 
-export type MealPrompts = Record<MealSection, Prompt[]>;
-
-export interface RecallPrompts extends GenericPrompts {
-  meals: MealPrompts;
-}
+export const recallPrompts = z.object({
+  preMeals: prompt.array(),
+  meals: z.object({
+    preFoods: prompt.array(),
+    foods: prompt.array(),
+    postFoods: prompt.array(),
+  }),
+  postMeals: prompt.array(),
+  submission: prompt.array(),
+});
+export type RecallPrompts = z.infer<typeof recallPrompts>;
 
 export function flattenScheme(scheme: RecallPrompts): Prompt[] {
   return Object.values(scheme).reduce<Prompt[]>((acc, prompts) => {
+    // @ts-expect-error fix
     acc.push(...(Array.isArray(prompts) ? prompts : flattenScheme(prompts)));
     return acc;
   }, []);
@@ -43,8 +62,10 @@ export function flattenSchemeWithSection(scheme: RecallPrompts): PromptWithSecti
   return Object.entries(scheme).reduce<PromptWithSection[]>((acc, [section, prompts]) => {
     const items = Array.isArray(prompts)
       ? prompts.map(prompt => ({ ...prompt, section }))
+      // @ts-expect-error fix
       : flattenSchemeWithSection(prompts);
 
+    // @ts-expect-error fix
     acc.push(...items);
     return acc;
   }, []);
@@ -112,31 +133,33 @@ export const defaultMeals: Meal[] = [
   { name: { en: 'Evening snack' }, time: '20:00' },
 ];
 
-export type ExportSectionId =
-  | 'user'
-  | 'userCustom'
-  | 'survey'
-  | 'submission'
-  | 'submissionCustom'
-  | 'meal'
-  | 'mealCustom'
-  | 'food'
-  | 'foodCustom'
-  | 'foodNutrients'
-  | 'foodFields'
-  | 'portionSizes';
+export const exportSectionIds = [
+  'user',
+  'userCustom',
+  'survey',
+  'submission',
+  'submissionCustom',
+  'meal',
+  'mealCustom',
+  'food',
+  'foodCustom',
+  'foodNutrients',
+  'foodFields',
+  'portionSizes',
+] as const;
+export type ExportSectionId = (typeof exportSectionIds)[number];
 
-export type ExportField = {
-  id: string;
-  label: string;
-};
+export const exportField = z.object({
+  id: z.string(),
+  label: z.string(),
+});
+export type ExportField = z.infer<typeof exportField>;
 
-export type ExportSection = {
-  id: ExportSectionId;
-  fields: ExportField[];
-};
-
-export type ExportSections = ExportSection[];
+export const exportSection = z.object({
+  id: z.enum(exportSectionIds),
+  fields: exportField.array(),
+});
+export type ExportSection = z.infer<typeof exportSection>;
 
 export const defaultExport: ExportSection[] = [
   { id: 'user', fields: [] },
@@ -164,38 +187,39 @@ export const defaultPrompts: RecallPrompts = {
   submission: [],
 };
 
-export type SchemeOverrides = {
-  meals: Meal[];
-  prompts: Prompt[];
-};
+export const schemeOverrides = z.object({
+  meals: meal.array(),
+  prompts: prompt.array(),
+});
+export type SchemeOverrides = z.infer<typeof schemeOverrides>;
 
 export const defaultOverrides: SchemeOverrides = {
   meals: [],
   prompts: [],
 };
 
-export const spellingCorrectionPreferenceOptions = ['phonetic', 'edit-distance', 'both'] as const;
+export const spellingCorrectionPreferences = ['phonetic', 'edit-distance', 'both'] as const;
+export type SpellingCorrectionPreference = typeof spellingCorrectionPreferences[number];
 
-export type SpellingCorrectionPreference = typeof spellingCorrectionPreferenceOptions[number];
-
-export type SurveySearchSettings = {
-  collectData: boolean;
-  maxResults: number;
-  matchScoreWeight: number;
-  sortingAlgorithm: SearchSortingAlgorithm;
-  spellingCorrectionPreference: SpellingCorrectionPreference;
-  minWordLength1: number;
-  minWordLength2: number;
-  enableEditDistance: boolean;
-  enablePhonetic: boolean;
-  minWordLengthPhonetic: number;
-  firstWordCost: number;
-  wordOrderCost: number;
-  wordDistanceCost: number;
-  unmatchedWordCost: number;
-  enableRelevantCategories: boolean;
-  relevantCategoryDepth: number;
-};
+export const surveySearchSettings = z.object({
+  collectData: z.boolean(),
+  maxResults: z.number().int().min(10).max(100),
+  matchScoreWeight: z.number().int().min(0).max(100),
+  sortingAlgorithm: z.enum(searchSortingAlgorithms),
+  spellingCorrectionPreference: z.enum(spellingCorrectionPreferences),
+  minWordLength1: z.number().int().min(2).max(10),
+  minWordLength2: z.number().int().min(3).max(10),
+  enableEditDistance: z.boolean(),
+  enablePhonetic: z.boolean(),
+  minWordLengthPhonetic: z.number().int().min(2).max(10),
+  firstWordCost: z.number(),
+  wordOrderCost: z.number(),
+  wordDistanceCost: z.number(),
+  unmatchedWordCost: z.number(),
+  enableRelevantCategories: z.boolean(),
+  relevantCategoryDepth: z.number(),
+});
+export type SurveySearchSettings = z.infer<typeof surveySearchSettings>;
 
 export const defaultSearchSettings: SurveySearchSettings = {
   collectData: true,

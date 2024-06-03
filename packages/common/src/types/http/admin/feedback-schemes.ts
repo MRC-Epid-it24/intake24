@@ -1,20 +1,21 @@
 import { z } from 'zod';
 
-import type {
-  Pagination,
-} from '@intake24/db';
-import { card, demographicGroup, feedbackMeals, feedbackOutputs, feedbackPhysicalDataFields, feedbackSections, feedbackTypes, henryCoefficient, topFoods } from '@intake24/common/feedback';
+import {
+  card,
+  demographicGroup,
+  feedbackMeals,
+  feedbackOutputs,
+  feedbackPhysicalDataFields,
+  feedbackSections,
+  feedbackTypes,
+  henryCoefficient,
+  topFoods,
+} from '@intake24/common/feedback';
 import { recordVisibilities } from '@intake24/common/security';
 
 import { nutrientTypeResponse } from './nutrient-types';
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
-
-/* export type FeedbackSchemeRequest = FeedbackSchemeCreationAttributes;
-
-export type CreateFeedbackSchemeRequest = FeedbackSchemeRequest;
-
-export type UpdateFeedbackSchemeRequest = Omit<FeedbackSchemeRequest, 'id'>; */
 
 export const physicalActivityLevelAttributes = z.object({
   id: z.string(),
@@ -23,8 +24,6 @@ export const physicalActivityLevelAttributes = z.object({
 });
 
 export type PhysicalActivityLevelAttributes = z.infer<typeof physicalActivityLevelAttributes>;
-
-export type FeedbackSchemesResponse = Pagination<FeedbackSchemeAttributes>;
 
 export const feedbackSchemeAttributes = z.object({
   id: z.string(),

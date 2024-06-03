@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { requiredLocaleTranslation } from '.';
+import { requiredLocaleTranslation } from '../types';
 
 export const meal = z.object({
   name: requiredLocaleTranslation,

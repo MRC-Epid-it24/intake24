@@ -1,4 +1,6 @@
-import type { GuideImageAttributes, Pagination } from '@intake24/db';
+import { z } from 'zod';
+
+import type { Pagination } from '@intake24/db';
 
 import type { ImageMapEntry, ImageMapEntryObject } from './image-maps';
 
@@ -19,9 +21,12 @@ export type UpdateGuideImageInput = {
   objects: GuideImageInputObjects;
 };
 
-export interface GuideImageListEntry extends Pick<GuideImageAttributes, 'id' | 'description'> {
-  imageUrl: string;
-}
+export const guideImageListEntry = z.object({
+  id: z.string(),
+  description: z.string(),
+  imageUrl: z.string(),
+});
+export type GuideImageListEntry = z.infer<typeof guideImageListEntry>;
 
 export type GuideImagesResponse = Pagination<GuideImageListEntry>;
 

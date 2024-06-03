@@ -19,8 +19,7 @@ import {
 } from 'sequelize-typescript';
 
 import type { RecordVisibility } from '@intake24/common/security';
-import type { ExportSection, RecallPrompts, SchemeType } from '@intake24/common/surveys';
-import type { Meal } from '@intake24/common/types';
+import type { ExportSection, Meal, RecallPrompts, SchemeType } from '@intake24/common/surveys';
 import { defaultExport, defaultMeals, defaultPrompts } from '@intake24/common/surveys';
 
 import type { HasVisibility } from '..';

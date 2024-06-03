@@ -64,7 +64,7 @@ export const userSurveyAliasAttributes = z.object({
 export type UserSurveyAliasAttributes = z.infer<typeof userSurveyAliasAttributes>;
 
 export const userEntry = userAttributes.extend({
-  aliases: z.any().array(),
+  aliases: userSurveyAliasAttributes.array(),
   customFields: userCustomField.array(),
   permissions: permissionAttributes.array(),
   roles: roleAttributes.array(),

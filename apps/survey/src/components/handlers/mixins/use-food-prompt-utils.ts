@@ -1,13 +1,15 @@
 import { computed } from 'vue';
 
 import type {
+  PortionSizeMethodId,
+  PortionSizeParameters,
+} from '@intake24/common/surveys';
+import type {
   EncodedFood,
   FoodState,
   FreeTextFood,
   LocaleTranslation,
   MissingFood,
-  PortionSizeMethodId,
-  PortionSizeParameters,
   PortionSizeStates,
   RecipeBuilder,
 } from '@intake24/common/types';
