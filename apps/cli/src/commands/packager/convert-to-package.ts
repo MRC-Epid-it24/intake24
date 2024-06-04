@@ -6,6 +6,8 @@ import csv from 'csv-parser';
 import { v4 as randomUUID } from 'uuid';
 
 import type logger from '@intake24/common-backend/services/logger/logger';
+import { ApiClientV4 } from '@intake24/api-client-v4';
+import { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
 
 import type { PackageWriterOptions } from './package-writer';
 import type {
@@ -67,12 +69,16 @@ export class ConvertorToPackage {
   private enabledLocalesFoodList: string[] = [];
   private skipMissingCategories: boolean;
 
+  private readonly apiClient: ApiClientV4;
+
   constructor(
+    apiClient: ApiClientV4,
     inputFilePath: string,
     outputFilePath: string,
     logger: Logger,
     options: Partial<ConvertorOptions> = defaultOptions,
   ) {
+    this.apiClient = apiClient;
     this.inputFilePath = inputFilePath;
     this.inputDirPath = path.dirname(inputFilePath);
     this.outputFilePath = outputFilePath;
@@ -198,6 +204,38 @@ export class ConvertorToPackage {
     });
 
     return missingCategories;
+  };
+
+  // Create a Map of the existing categories leaf - key, all parent categories - value
+  private determineCategoriesHierarchy = async (level: number, category: CategoryHeader, parentCategories: string[] = []): Promise<Map<string, string[]>> => {
+    const categoriesHierarchy: Map<string, string[]> = new Map();
+    categoriesHierarchy.set(`${category.code}:_${Math.round(Math.random() * 1000)}`, parentCategories);
+
+    const contents = await this.apiClient.categories.getCategoryContents(
+      category.code,
+      this.localeId ?? '',
+    );
+
+    if (contents.subcategories.length === 0)
+      return categoriesHierarchy;
+    for (const subheader of contents.subcategories) {
+      const categoryPath = await this.determineCategoriesHierarchy(level + 1, subheader, [...parentCategories, category.code]);
+      categoryPath.forEach((value, key) => {
+        categoriesHierarchy.set(key, value);
+      });
+    }
+    return categoriesHierarchy;
+  };
+
+  private mapCategoryHierarchy = async (categories: CategoryContents): Promise<Map<string, string[]>> => {
+    const categoriesHierarchy: Map<string, string[]> = new Map();
+    for (const category of categories.subcategories) {
+      const categoryPath = await this.determineCategoriesHierarchy(1, category, []);
+      categoryPath.forEach((value, key) => {
+        categoriesHierarchy.set(key, value);
+      });
+    }
+    return categoriesHierarchy;
   };
 
   private linkAssociatedFoodCategories = (associatedFoodCategory: string): PkgAssociatedFood[] => {
@@ -333,7 +371,21 @@ export class ConvertorToPackage {
 
   private async createGlobalFoodListAndWriteJSON(data: CsvFoodRecordUnprocessed[]) {
     const globalFoodList: PkgGlobalFood[] = [];
+
     this.exisingCategories = await this.readExistingCategories();
+    // if existing categories file doesn't exisit or is empty, access V4 Api to get all categories
+    if (!this.exisingCategories) {
+      this.logger.debug('No existing categories found, fetching from V4 API');
+      this.exisingCategories = (await this.apiClient.categories.getAllCategories()).map(category => category.code);
+    }
+
+    // Get the root categories for the locale
+    const localeRootCategories = await this.apiClient.categories.getRootCategories(this.localeId ?? '');
+    // Create a Map of the existing categories leaf - key, all parent categories - value
+    const localeCategoriesHierarchy: Map<string, string[]> = await this.mapCategoryHierarchy(localeRootCategories);
+
+    this.logger.info('Creating global food list');
+
     for (const record of data) {
       if (record.action !== '5')
         continue;
@@ -348,6 +400,40 @@ export class ConvertorToPackage {
         this.logger.warn(`Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list. SKIPPING`);
         parentCategoriesUnique = parentCategoriesUnique.filter(category => !missingCategories.includes(category));
       }
+
+      // Filter out the categories that are parents of the other existing categories in the parentCategoriesUnique array
+      // based on the locale categories hierarchy
+      // reverse the array to start from the leaf categories
+      const parentCategoriesUniqueReversed = [...parentCategoriesUnique].reverse();
+      const parentCategoriesFiltered: string[] = parentCategoriesUniqueReversed.reduce((filtered, category) => {
+        const regex = new RegExp(`^${category}:_`);
+        const matchingKeys = Array.from(localeCategoriesHierarchy.keys()).filter(key => regex.test(key));
+
+        // create a new set with all the parents categories from the matching keys
+        const matchedParentCategories = [...new Set(matchingKeys.map(key => localeCategoriesHierarchy.get(key)).flat())].filter(cat => cat !== undefined) as string[];
+
+        // add matched parent categories to the filtered array
+        return matchedParentCategories.length > 0 ? [...filtered, ...matchedParentCategories] : filtered;
+      }, [] as string[]);
+
+      const cleanedParentCategories = [...parentCategoriesUnique].filter(category => ![...parentCategoriesFiltered].includes(category));
+
+      this.logger.info(`Cleaned categories for food ${record['intake24 code']}: ${cleanedParentCategories}, was ${parentCategoriesUnique}`);
+
+      // const parentCategoriesFiltered: string[] = [];
+      // parentCategoriesUniqueReversed.forEach((category) => {
+      //   const regex = new RegExp(`^${category}:_`);
+      //   const matchingKeys = Array.from(localeCategoriesHierarchy.keys()).filter(key => regex.test(key));
+      //   this.logger.info(`Matching keys for category ${category}: ${matchingKeys}`);
+      //   const matchedParentCategories = new Set([...matchingKeys.map(key => localeCategoriesHierarchy.get(key)).flat()]);
+      //   this.logger.info(`Matched parent categories for category ${category}: ${[...matchedParentCategories]}`);
+      //   if (matchedParentCategories.size > 0) {
+      //     matchedParentCategories.forEach((parentCategory) => {
+      //       if (parentCategory)
+      //         parentCategoriesFiltered.push(parentCategory);
+      //     });
+      //   };
+      // });
 
       const globalFood: PkgGlobalFood = {
         version: randomUUID(),
@@ -374,7 +460,7 @@ export class ConvertorToPackage {
               ? record['same as before option'].toLowerCase() === 'true'
               : false,
         },
-        parentCategories: parentCategoriesUnique || [],
+        parentCategories: cleanedParentCategories || [],
       };
       globalFoodList.push(globalFood);
     }
@@ -473,19 +559,23 @@ export class ConvertorToPackage {
         this.logger.debug('No structure file found, skipping CSV import');
         return undefined;
       }
-      const uproccessedRecords = await this.processCsvFile(options.importedFile);
-      // 1. Convert to the GlobalFood JSON structure
-      await this.createGlobalFoodListAndWriteJSON(uproccessedRecords);
-      // 2.1. Make sure that locale is loaded
+      // 0. Make sure that locale is loaded
       this.localeId = await this.readLocaleId();
       if (!this.localeId) {
         this.logger.error('No locale found, exiting');
-        return undefined;
+        throw new Error('No locale found');
       }
-      // 2.2. Convert to the LocalFood JSON structure
+      const uproccessedRecords = await this.processCsvFile(options.importedFile);
+
+      // 1. Convert to the GlobalFood JSON structure
+      await this.createGlobalFoodListAndWriteJSON(uproccessedRecords);
+
+      // 2. Convert to the LocalFood JSON structure
       await this.createLocalFoodListAndWriteJSON(uproccessedRecords, this.localeId);
+
       // 3. Convert to the EnabledLocalesFood JSON structure
       // this.createEnabledLocalesFoodList(data);
+
       // 4. Convert to the PortionSizeMethod JSON structure
       // TODO: Add the rest of the structures
     }
@@ -502,11 +592,13 @@ export class ConvertorToPackage {
 
       await this.readCSVStructure();
 
-      // await this.convertFromCsv();
       await this.processCSVImport({
         structure: this.csvStructure,
         importedFile: this.inputFilePath,
       });
+
+      // const data = await this.apiClient.categories.getAllCategories();
+      // this.logger.info('Data from the API:', data);
     }
     else {
       this.logger.debug('Converting to package from unspecified file type');

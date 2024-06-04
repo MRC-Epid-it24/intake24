@@ -135,7 +135,7 @@ async function run() {
     });
 
   const convertTypeOption = new Option('-t, --type [type]', 'Import type').choices(
-    convertorTypeOptions
+    convertorTypeOptions,
   );
 
   program
