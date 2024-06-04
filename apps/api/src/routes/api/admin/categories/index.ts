@@ -17,6 +17,7 @@ export default () => {
   router.use(anyPermission('locales', 'survey-schemes'));
 
   router.get('', validation.browse, wrapAsync(adminCategoryController.browseMain));
+  router.get('/all', wrapAsync(adminCategoryController.all));
 
   router.use('/local', local());
   router.use('/global', global());

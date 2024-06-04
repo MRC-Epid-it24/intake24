@@ -4,6 +4,7 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
+  CategoryGlobalListEntry,
   CategoryInput,
   CategoryListEntry,
   CategoryLocalCopyInput,
@@ -108,6 +109,13 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
           FROM categories_categories cc2 JOIN categories c2 ON cc2.category_code = c2.code
           WHERE c2.is_hidden = False AND cc2.subcategory_code = Category.code)`),
     }); */
+  };
+
+  const getAllCategories = async (): Promise<CategoryGlobalListEntry[]> => {
+    return Category.findAll({
+      attributes: ['code', 'name', 'isHidden'],
+      order: [['name', 'ASC']],
+    });
   };
 
   const getCategoryContents = async (categoryCode: string, localeId?: string) => {
@@ -407,6 +415,7 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     copyCategory,
     createCategory,
     getRootCategories,
+    getAllCategories,
     getNoCategoryContents,
     getCategoryContents,
     getCategory,
