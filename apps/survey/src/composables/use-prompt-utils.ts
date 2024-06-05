@@ -16,7 +16,7 @@ import { useMealUtils } from './use-meal-utils';
 
 export type UsePromptPropsBase<P extends keyof Prompts> = {
   prompt: Prompts[P];
-  section: PromptSection;
+  section?: PromptSection;
 };
 
 export type UsePromptProps<
