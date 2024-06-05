@@ -21,7 +21,7 @@
       </v-img>
     </v-row>
     <v-row v-if="asServedData" class="mt-4">
-      <v-col class="pa-1 rounded-lg" cols="3" lg="auto" sm="2">
+      <v-col class="pa-1 rounded-lg" :class="{ 'border-primary-2': isLessWeightFactorActive }" cols="3" lg="auto" sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img :src="firstThumbnail" />
           <v-overlay absolute>
@@ -40,7 +40,7 @@
         <v-col
           :key="idx"
           class="pa-1 rounded-lg"
-          :class="isSelected(idx)"
+          :class="{ 'border-primary-2': isSelected(idx) }"
           cols="3"
           lg="auto"
           sm="2"
@@ -50,7 +50,7 @@
           </v-card>
         </v-col>
       </template>
-      <v-col v-if="showMoreWeightFactor" class="pa-1 rounded-lg" cols="3" lg="auto" sm="2">
+      <v-col v-if="showMoreWeightFactor" class="pa-1 rounded-lg" :class="{ 'border-primary-2': isMoreWeightFactorActive }" cols="3" lg="auto" sm="2">
         <v-card :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
           <v-img :src="lastThumbnail" />
           <v-overlay absolute>
@@ -352,8 +352,11 @@ export default defineComponent({
       this.update();
     },
 
-    isSelected(idx: number): string {
-      return idx === this.objectIdx ? 'border-primary-2' : '';
+    isSelected(idx: number) {
+      if (this.isLessWeightFactorActive || this.isMoreWeightFactorActive)
+        return false;
+
+      return idx === this.objectIdx;
     },
 
     update() {

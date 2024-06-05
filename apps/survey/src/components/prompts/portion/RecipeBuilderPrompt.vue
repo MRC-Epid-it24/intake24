@@ -22,7 +22,7 @@
             <v-radio-group
               v-if="!step.required"
               v-model="step.confirmed"
-              row="true"
+              row
               @change="onConfirmToggleIngredients(index)"
             >
               <v-radio
