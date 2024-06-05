@@ -178,8 +178,8 @@ export const useSurvey = defineStore('survey', {
     },
     linkedQuantity(): LinkedQuantity | undefined {
       const prompt = this.foodPrompts.find(
-        prompt => prompt.component === 'guide-image-prompt',
-      ) as Prompts['guide-image-prompt'] | undefined;
+        (prompt): prompt is Prompts['guide-image-prompt'] => prompt.component === 'guide-image-prompt',
+      );
 
       return prompt?.linkedQuantity;
     },

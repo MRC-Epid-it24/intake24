@@ -4,7 +4,7 @@
       {{ icon }}
     </v-icon>
     <slot>
-      {{ $t('recall.actions.next') }}
+      {{ label }}
     </slot>
   </v-btn>
 </template>
