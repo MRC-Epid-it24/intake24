@@ -42,7 +42,7 @@ export async function asServedImages({ config, kyselyDb }: ResourceOps) {
         'asServedSetDescription',
         { label: 'imagePath', value: (row: UnwrapAII<typeof cursor>) => getImageUrl(row.imagePath) },
         'imagePurpose',
-        { label: 'thumbnailImagePath', value: (row: UnwrapAII<typeof cursor>) => getImageUrl(row.imagePath) },
+        { label: 'thumbnailImagePath', value: (row: UnwrapAII<typeof cursor>) => getImageUrl(row.thumbnailImagePath) },
         'thumbnailImagePurpose',
       ],
       withBOM: true,
