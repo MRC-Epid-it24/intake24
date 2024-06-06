@@ -101,6 +101,8 @@ export const basePrompt = z.object({
   i18n: z.record(localeTranslation),
   actions: actions.optional(),
   conditions: condition.array(),
+  useGraph: z.boolean(),
+  graph: z.any().optional(),
 });
 
 export type BasePrompt = z.infer<typeof basePrompt>;

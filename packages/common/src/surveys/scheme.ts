@@ -109,6 +109,7 @@ export function groupMultiPrompts(prompts: SinglePrompt[]) {
         prompts: grouped[item.group].prompts,
         i18n: {},
         conditions: grouped[item.group].conditions,
+        useGraph: false,
       });
       grouped[item.group].inserted = true;
     }
