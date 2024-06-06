@@ -35,6 +35,7 @@
     "flag-icons": "^7.2.3",
     "helmet": "^7.1.0",
     "json-editor-vue": "^0.15.1",
+    "litegraph.js": "^0.7.18",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.7",
     "object-to-formdata": "^4.5.1",
