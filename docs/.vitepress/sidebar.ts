@@ -578,6 +578,10 @@ export const sidebar = {
           link: '/developer/vm',
         },
         {
+          text: 'Adding a New Prompt',
+          link: '/developer/new-prompts',
+        },
+        {
           text: 'Version 3 recall model',
           link: '/developer/v3-survey',
         },

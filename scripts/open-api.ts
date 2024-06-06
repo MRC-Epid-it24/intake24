@@ -7,6 +7,20 @@ import contract from '@intake24/common/contracts';
 
 import pkg from '../package.json';
 
+const defaultRecall = {
+  type: 'object',
+  properties: {
+    preMeals: { type: 'array', items: [] },
+    meals: { type: 'object', properties: {
+      preFoods: { type: 'array', items: [] },
+      foods: { type: 'array', items: [] },
+      postFoods: { type: 'array', items: [] },
+    } },
+    postMeals: { type: 'array', items: [] },
+    submission: { type: 'array', items: [] },
+  },
+};
+
 async function main() {
   const document = generateOpenApi(contract, {
     info: {
@@ -33,6 +47,46 @@ async function main() {
           bearerFormat: 'JWT',
         },
       },
+    },
+  }, {
+    operationMapper: (operation, appRoute) => {
+      /*
+      * !!! TEMP HACKY REMOVAL OF HUGE RECALL SURVEY SCHEME OPEN API JSON SCHEME !!!
+      * - size of the open-api json file grows from ~15MB to ~150MB, which is due to survey scheme recall JSON schema
+      * - TODO: figure out how to maybe use JSON $refs with @ts-rest/open-api ?
+      */
+      if (appRoute.path === '/surveys/:slug/parameters') {
+        operation.responses['200'].content['application/json'].schema.properties.surveyScheme.properties.prompts = { ...defaultRecall };
+        return operation;
+      }
+
+      if (
+        appRoute.path === '/admin/survey-schemes'
+        || appRoute.path === '/admin/survey-schemes/:surveySchemeId'
+        || appRoute.path === '/admin/survey-schemes/:surveySchemeId/edit'
+        || appRoute.path === '/admin/survey-schemes/:surveySchemeId/copy'
+      ) {
+        if (operation.requestBody?.content['application/json']?.schema?.properties?.prompts)
+          operation.requestBody.content['application/json'].schema.properties.prompts = { ...defaultRecall };
+
+        if (operation.responses['200']?.content['application/json'].schema?.properties?.prompts)
+          operation.responses['200'].content['application/json'].schema.properties.prompts = { ...defaultRecall };
+        if (operation.responses['201']?.content['application/json'].schema?.properties?.prompts)
+          operation.responses['201'].content['application/json'].schema.properties.prompts = { ...defaultRecall };
+      }
+
+      if (appRoute.path === '/admin/survey-scheme-prompts/refs') {
+        if (operation.responses['200']?.content['application/json'].schema?.properties?.schemes)
+          operation.responses['200'].content['application/json'].schema.properties.schemes = { type: 'array' };
+      }
+
+      if (appRoute.path === '/admin/references/survey-schemes'
+      ) {
+        if (operation.responses['200']?.content['application/json'].schema?.properties?.data)
+          operation.responses['200'].content['application/json'].schema.properties.data = { type: 'array' };
+      }
+
+      return operation;
     },
   });
 
