@@ -117,8 +117,8 @@ export const surveyScheme = initContract().router({
     responses: {
       200: surveySchemeTemplates,
     },
-    summary: 'Copy survey scheme',
-    description: 'Copy survey scheme record',
+    summary: 'Survey scheme templates',
+    description: 'Survey scheme templates',
   },
   dataExportRefs: {
     method: 'GET',
