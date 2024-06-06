@@ -94,6 +94,7 @@ export const mealTimePrompt: Prompts['meal-time-prompt'] = copy({
   name: 'Meal Time prompt',
   allowedMinutes: 5,
   format: '24hr',
+  timepickerType: 'clock',
 });
 
 export const readyMealPrompt: Prompts['ready-meal-prompt'] = copy({

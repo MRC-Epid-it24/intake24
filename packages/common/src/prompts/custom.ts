@@ -93,6 +93,7 @@ export const timePickerPrompt: Prompts['time-picker-prompt'] = copy({
   type: 'custom',
   id: 'time-picker-prompt',
   name: 'Time picker prompt',
+  timepickerType: 'clock',
   allowedMinutes: 5,
   format: '24hr',
 });

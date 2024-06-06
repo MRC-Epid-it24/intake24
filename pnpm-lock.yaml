@@ -54,8 +54,13 @@ importers:
         specifier: ^4.0.2
         version: 4.0.2(jest@29.7.0(@types/node@20.12.13)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))
       lint-staged:
+<<<<<<< HEAD
         specifier: ^15.2.5
         version: 15.2.5
+=======
+        specifier: ^15.2.2
+        version: 15.2.4
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       picocolors:
         specifier: ^1.0.1
         version: 1.0.1
@@ -72,8 +77,13 @@ importers:
         specifier: ^2.11.1
         version: 2.11.1
       ts-jest:
+<<<<<<< HEAD
         specifier: ^29.1.4
         version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5)
+=======
+        specifier: ^29.1.2
+        version: 29.1.3(@babel/core@7.24.5)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.5))(jest@29.7.0(@types/node@20.12.12)(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.5)))(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.12.13)(typescript@5.4.5)
@@ -87,8 +97,13 @@ importers:
         specifier: ^5.2.12
         version: 5.2.12(@types/node@20.12.13)(sass@1.77.3)(terser@5.31.0)
       vitepress:
+<<<<<<< HEAD
         specifier: ^1.2.2
         version: 1.2.2(@algolia/client-search@4.23.3)(@types/node@20.12.13)(axios@1.7.2)(jwt-decode@4.0.0)(postcss@8.4.38)(qrcode@1.5.3)(sass@1.77.3)(search-insights@2.13.0)(sortablejs@1.10.2)(terser@5.31.0)(typescript@5.4.5)
+=======
+        specifier: ^1.2.0
+        version: 1.2.2(@algolia/client-search@4.23.3)(@types/node@20.12.12)(axios@1.7.2)(jwt-decode@4.0.0)(postcss@8.4.38)(qrcode@1.5.3)(sass@1.77.2)(search-insights@2.13.0)(sortablejs@1.10.2)(terser@5.31.0)(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   apps/admin:
     dependencies:
@@ -105,10 +120,17 @@ importers:
         specifier: ^10.10.0
         version: 10.10.0(vue@2.7.16)
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.2
         version: 1.7.2(debug@4.3.4)
       axios-retry:
         specifier: ^4.3.0
+=======
+        specifier: ^1.7.0
+        version: 1.7.2(debug@4.3.4)
+      axios-retry:
+        specifier: ^4.2.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 4.3.0(axios@1.7.2)
       cronstrue:
         specifier: ^2.50.0
@@ -129,8 +151,13 @@ importers:
         specifier: 5.0.1
         version: 5.0.1
       flag-icons:
+<<<<<<< HEAD
         specifier: ^7.2.3
         version: 7.2.3
+=======
+        specifier: ^7.2.1
+        version: 7.2.2
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       helmet:
         specifier: ^7.1.0
         version: 7.1.0
@@ -265,14 +292,23 @@ importers:
         specifier: ^10.0.2
         version: 10.0.2
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.2
+=======
+        specifier: ^1.7.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 1.7.2(debug@4.3.4)
       body-parser:
         specifier: ^1.20.2
         version: 1.20.2
       bullmq:
+<<<<<<< HEAD
         specifier: ^5.7.14
         version: 5.7.14
+=======
+        specifier: ^5.7.9
+        version: 5.7.10
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       clean-css:
         specifier: ^5.3.3
         version: 5.3.3
@@ -699,8 +735,13 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(chokidar@3.6.0)
       sitemap:
+<<<<<<< HEAD
         specifier: ^8.0.0
         version: 8.0.0
+=======
+        specifier: ^7.1.1
+        version: 7.1.2
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     devDependencies:
       '@types/express':
         specifier: ^4.17.21
@@ -787,10 +828,17 @@ importers:
         specifier: ^6.9.0
         version: 6.9.0
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.2
         version: 1.7.2(debug@4.3.4)
       axios-retry:
         specifier: ^4.3.0
+=======
+        specifier: ^1.7.0
+        version: 1.7.2(debug@4.3.4)
+      axios-retry:
+        specifier: ^4.2.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 4.3.0(axios@1.7.2)
       dotenv:
         specifier: ^16.4.5
@@ -802,8 +850,13 @@ importers:
         specifier: ^4.19.2
         version: 4.19.2
       flag-icons:
+<<<<<<< HEAD
         specifier: ^7.2.3
         version: 7.2.3
+=======
+        specifier: ^7.2.1
+        version: 7.2.2
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       helmet:
         specifier: ^7.1.0
         version: 7.1.0
@@ -831,6 +884,9 @@ importers:
       vue-router:
         specifier: ^3.6.5
         version: 3.6.5(vue@2.7.16)
+      vue2-timepicker:
+        specifier: ^1.1.6
+        version: 1.1.6(vue@2.7.16)
       vuetify:
         specifier: ^2.7.2
         version: 2.7.2(vue@2.7.16)
@@ -917,7 +973,11 @@ importers:
   packages/api-client-v3:
     dependencies:
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.2
+=======
+        specifier: ^1.7.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 1.7.2(debug@4.3.4)
       p-limit:
         specifier: ^3.1.0
@@ -929,7 +989,11 @@ importers:
   packages/api-client-v4:
     dependencies:
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.2
+=======
+        specifier: ^1.7.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 1.7.2(debug@4.3.4)
       cookie:
         specifier: ^0.6.0
@@ -981,7 +1045,11 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1
       dompurify:
+<<<<<<< HEAD
         specifier: ^3.1.4
+=======
+        specifier: ^3.1.3
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 3.1.4
       fast-copy:
         specifier: ^3.0.2
@@ -1146,7 +1214,11 @@ importers:
   packages/i18n:
     dependencies:
       dompurify:
+<<<<<<< HEAD
         specifier: ^3.1.4
+=======
+        specifier: ^3.1.3
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 3.1.4
       lodash:
         specifier: ^4.17.21
@@ -1196,7 +1268,11 @@ importers:
         specifier: ^10.10.0
         version: 10.10.0(vue@2.7.16)
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.2
+=======
+        specifier: ^1.7.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
         version: 1.7.2(debug@4.3.4)
       echarts:
         specifier: ^5.5.0
@@ -3143,8 +3219,13 @@ packages:
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
+<<<<<<< HEAD
   '@types/express-serve-static-core@4.19.3':
     resolution: {integrity: sha512-KOzM7MhcBFlmnlr/fzISFF5vGWVSvN6fTd4T+ExOt08bA/dA5kpSzY52nMsI1KDFmUREpJelPYyuslLRSjjgCg==}
+=======
+  '@types/express-serve-static-core@4.19.1':
+    resolution: {integrity: sha512-ej0phymbFLoCB26dbbq5PGScsf2JAJ4IJHjG10LalgUV36XKTmA4GdA+PVllKvRk0sEKt64X8975qFnkSi0hqA==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   '@types/express-session@1.18.0':
     resolution: {integrity: sha512-27JdDRgor6PoYlURY+Y5kCakqp5ulC0kmf7y+QwaY+hv9jEFuQOThgkjyA53RP3jmKuBsH5GR6qEfFmvb8mwOA==}
@@ -3359,8 +3440,13 @@ packages:
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
 
+<<<<<<< HEAD
   '@typescript-eslint/eslint-plugin@7.11.0':
     resolution: {integrity: sha512-P+qEahbgeHW4JQ/87FuItjBj8O3MYv5gELDzr8QaQ7fsll1gSMTYb6j87MYyxwf3DtD7uGFB9ShwgmCJB5KmaQ==}
+=======
+  '@typescript-eslint/eslint-plugin@7.10.0':
+    resolution: {integrity: sha512-PzCr+a/KAef5ZawX7nbyNwBDtM1HdLIT53aSA2DDlxmxMngZ43O8SIePOeX8H5S+FHXeI6t97mTt/dDdzY4Fyw==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: ^18.18.0 || >=20.0.0}
     peerDependencies:
       '@typescript-eslint/parser': ^7.0.0
@@ -3370,8 +3456,13 @@ packages:
       typescript:
         optional: true
 
+<<<<<<< HEAD
   '@typescript-eslint/parser@7.11.0':
     resolution: {integrity: sha512-yimw99teuaXVWsBcPO1Ais02kwJ1jmNA1KxE7ng0aT7ndr1pT1wqj0OJnsYVGKKlc4QJai86l/025L6z8CljOg==}
+=======
+  '@typescript-eslint/parser@7.10.0':
+    resolution: {integrity: sha512-2EjZMA0LUW5V5tGQiaa2Gys+nKdfrn2xiTIBLR4fxmPmVSvgPcKNW+AE/ln9k0A4zDUti0J/GZXMDupQoI+e1w==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: ^18.18.0 || >=20.0.0}
     peerDependencies:
       eslint: ^8.56.0
@@ -3380,12 +3471,21 @@ packages:
       typescript:
         optional: true
 
+<<<<<<< HEAD
   '@typescript-eslint/scope-manager@7.11.0':
     resolution: {integrity: sha512-27tGdVEiutD4POirLZX4YzT180vevUURJl4wJGmm6TrQoiYwuxTIY98PBp6L2oN+JQxzE0URvYlzJaBHIekXAw==}
     engines: {node: ^18.18.0 || >=20.0.0}
 
   '@typescript-eslint/type-utils@7.11.0':
     resolution: {integrity: sha512-WmppUEgYy+y1NTseNMJ6mCFxt03/7jTOy08bcg7bxJJdsM4nuhnchyBbE8vryveaJUf62noH7LodPSo5Z0WUCg==}
+=======
+  '@typescript-eslint/scope-manager@7.10.0':
+    resolution: {integrity: sha512-7L01/K8W/VGl7noe2mgH0K7BE29Sq6KAbVmxurj8GGaPDZXPr8EEQ2seOeAS+mEV9DnzxBQB6ax6qQQ5C6P4xg==}
+    engines: {node: ^18.18.0 || >=20.0.0}
+
+  '@typescript-eslint/type-utils@7.10.0':
+    resolution: {integrity: sha512-D7tS4WDkJWrVkuzgm90qYw9RdgBcrWmbbRkrLA4d7Pg3w0ttVGDsvYGV19SH8gPR5L7OtcN5J1hTtyenO9xE9g==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: ^18.18.0 || >=20.0.0}
     peerDependencies:
       eslint: ^8.56.0
@@ -3394,12 +3494,21 @@ packages:
       typescript:
         optional: true
 
+<<<<<<< HEAD
   '@typescript-eslint/types@7.11.0':
     resolution: {integrity: sha512-MPEsDRZTyCiXkD4vd3zywDCifi7tatc4K37KqTprCvaXptP7Xlpdw0NR2hRJTetG5TxbWDB79Ys4kLmHliEo/w==}
     engines: {node: ^18.18.0 || >=20.0.0}
 
   '@typescript-eslint/typescript-estree@7.11.0':
     resolution: {integrity: sha512-cxkhZ2C/iyi3/6U9EPc5y+a6csqHItndvN/CzbNXTNrsC3/ASoYQZEt9uMaEp+xFNjasqQyszp5TumAVKKvJeQ==}
+=======
+  '@typescript-eslint/types@7.10.0':
+    resolution: {integrity: sha512-7fNj+Ya35aNyhuqrA1E/VayQX9Elwr8NKZ4WueClR3KwJ7Xx9jcCdOrLW04h51de/+gNbyFMs+IDxh5xIwfbNg==}
+    engines: {node: ^18.18.0 || >=20.0.0}
+
+  '@typescript-eslint/typescript-estree@7.10.0':
+    resolution: {integrity: sha512-LXFnQJjL9XIcxeVfqmNj60YhatpRLt6UhdlFwAkjNc6jSUlK8zQOl1oktAP8PlWFzPQC1jny/8Bai3/HPuvN5g==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: ^18.18.0 || >=20.0.0}
     peerDependencies:
       typescript: '*'
@@ -3407,14 +3516,24 @@ packages:
       typescript:
         optional: true
 
+<<<<<<< HEAD
   '@typescript-eslint/utils@7.11.0':
     resolution: {integrity: sha512-xlAWwPleNRHwF37AhrZurOxA1wyXowW4PqVXZVUNCLjB48CqdPJoJWkrpH2nij9Q3Lb7rtWindtoXwxjxlKKCA==}
+=======
+  '@typescript-eslint/utils@7.10.0':
+    resolution: {integrity: sha512-olzif1Fuo8R8m/qKkzJqT7qwy16CzPRWBvERS0uvyc+DHd8AKbO4Jb7kpAvVzMmZm8TrHnI7hvjN4I05zow+tg==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: ^18.18.0 || >=20.0.0}
     peerDependencies:
       eslint: ^8.56.0
 
+<<<<<<< HEAD
   '@typescript-eslint/visitor-keys@7.11.0':
     resolution: {integrity: sha512-7syYk4MzjxTEk0g/w3iqtgxnFQspDJfn6QKD36xMuuhTzjcxY7F8EmBLnALjVyaOF1/bVocu3bS/2/F7rXrveQ==}
+=======
+  '@typescript-eslint/visitor-keys@7.10.0':
+    resolution: {integrity: sha512-9ntIVgsi6gg6FIq9xjEO4VQJvwOqA3jaBFQJ/6TK5AvEup2+cECI6Fh7QiBxmfMHXU0V0J4RyPeOU1VDNzl9cg==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: ^18.18.0 || >=20.0.0}
 
   '@vite-pwa/assets-generator@0.2.4':
@@ -4043,8 +4162,13 @@ packages:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
 
+<<<<<<< HEAD
   bullmq@5.7.14:
     resolution: {integrity: sha512-ESAQlJGU1W+qp5xTgx5XR+4svqCqGGZNlwkn83K0A0c2FL0x+d9mpX9KmENyb9pt5G6fplFWq8RFebajUYRH4g==}
+=======
+  bullmq@5.7.10:
+    resolution: {integrity: sha512-DX0oHsXkCicuhHZ0sAkpnpN/40dst+5qQ4JxqmlzTYLvfoMPAkxRdpcLZTHfApXobSki9tkxwJovRf8ouALh7w==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -4083,8 +4207,13 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
 
+<<<<<<< HEAD
   caniuse-lite@1.0.30001625:
     resolution: {integrity: sha512-4KE9N2gcRH+HQhpeiRZXd+1niLB/XNLAhSy4z7fI8EzcbcPoAqjNInxVHTiTwWfTIV4w096XG8OtCOCQQKPv3w==}
+=======
+  caniuse-lite@1.0.30001621:
+    resolution: {integrity: sha512-+NLXZiviFFKX0fk8Piwv3PfLPGtRqJeq2TiNoUff/qB5KJgwecJTvCXDpmlyP/eCI/GUEmp/h/y5j0yckiiZrA==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
@@ -4823,8 +4952,13 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
+<<<<<<< HEAD
   electron-to-chromium@1.4.787:
     resolution: {integrity: sha512-d0EFmtLPjctczO3LogReyM2pbBiiZbnsKnGF+cdZhsYzHm/A0GV7W94kqzLD8SN4O3f3iHlgLUChqghgyznvCQ==}
+=======
+  electron-to-chromium@1.4.777:
+    resolution: {integrity: sha512-n02NCwLJ3wexLfK/yQeqfywCblZqLcXphzmid5e8yVPdtEcida7li0A5WQKghHNG0FeOMCzeFOzEbtAh5riXFw==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -5379,8 +5513,13 @@ packages:
     resolution: {integrity: sha512-YyZM99iHrqLKjmt4LJDj58KI+fYyufRLBSYcqycxf//KpBk9FoewoGX0450m9nB44qrZnovzC2oeP5hUibxc/g==}
     engines: {node: '>=18'}
 
+<<<<<<< HEAD
   flag-icons@7.2.3:
     resolution: {integrity: sha512-X2gUdteNuqdNqob2KKTJTS+ZCvyWeLCtDz9Ty8uJP17Y4o82Y+U/Vd4JNrdwTAjagYsRznOn9DZ+E/Q52qbmqg==}
+=======
+  flag-icons@7.2.2:
+    resolution: {integrity: sha512-9cC2y77npwpNJ1Whl3iACVFd/vR7ZQe9AwN8BRDJU2sZROMpEzIC3tOT1qbRRm/QS9b9UTXBHEKAO4I6d7L0xg==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   flat-cache@3.2.0:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
@@ -5582,8 +5721,13 @@ packages:
   glob-to-regexp@0.4.1:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
 
+<<<<<<< HEAD
   glob@10.4.1:
     resolution: {integrity: sha512-2jelhlq3E4ho74ZyVLN03oKdAZVUa6UDZzFLVH1H7dnoax+y9qyaq8zBkfDIggjniU19z0wU18y16jMB2eyVIw==}
+=======
+  glob@10.3.16:
+    resolution: {integrity: sha512-JDKXl1DiuuHJ6fVS2FXjownaavciiHNUU4mOvV/B793RLh05vZL1rcPnCSaOgv1hDT6RDlY7AB7ZUvFYAtPgAw==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: '>=16 || 14 >=14.18'}
     hasBin: true
 
@@ -6468,8 +6612,13 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
+<<<<<<< HEAD
   lint-staged@15.2.5:
     resolution: {integrity: sha512-j+DfX7W9YUvdzEZl3Rk47FhDF6xwDBV5wwsCPw6BwWZVPYJemusQmvb9bRsW23Sqsaa+vRloAWogbK4BUuU2zA==}
+=======
+  lint-staged@15.2.4:
+    resolution: {integrity: sha512-3F9KRQIS2fVDGtCkBp4Bx0jswjX7zUcKx6OF0ZeY1prksUyKPRIIUqZhIUYAstJfvj6i48VFs4dwVIbCYwvTYQ==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -6706,8 +6855,13 @@ packages:
   micromark@2.11.4:
     resolution: {integrity: sha512-+WoovN/ppKolQOFIAajxi7Lu9kInbPxFuTBVEavFcL8eAfVstoc5MocPmqBeAdBOJV00uaVjegzH4+MA0DN/uA==}
 
+<<<<<<< HEAD
   micromatch@4.0.7:
     resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
+=======
+  micromatch@4.0.6:
+    resolution: {integrity: sha512-Y4Ypn3oujJYxJcMacVgcs92wofTHxp9FzfDpQON4msDefoC0lb3ETvQLOdLcbhSwU1bz8HrL/1sygfBIHudrkQ==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: '>=8.6'}
 
   mime-db@1.52.0:
@@ -8062,9 +8216,15 @@ packages:
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
+<<<<<<< HEAD
   sitemap@8.0.0:
     resolution: {integrity: sha512-+AbdxhM9kJsHtruUF39bwS/B0Fytw6Fr1o4ZAIAEqA6cke2xcoO2GleBw9Zw7nRzILVEgz7zBM5GiTJjie1G9A==}
     engines: {node: '>=14.0.0', npm: '>=6.0.0'}
+=======
+  sitemap@7.1.2:
+    resolution: {integrity: sha512-ARCqzHJ0p4gWt+j7NlU5eDlIO9+Rkr/JhPFZKKQ1l5GCus7rJH4UdrlVAh0xC/gDS/Qir2UMxqYNHtsKr2rpCw==}
+    engines: {node: '>=12.0.0', npm: '>=5.6.0'}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     hasBin: true
 
   slash@3.0.0:
@@ -8534,8 +8694,13 @@ packages:
     resolution: {integrity: sha512-8CYSLazCyj0DJDpPIxOFzJG46r93uh6EynYjuey+bxcLltBeqZL7DMfaE5ZPzZNFlav7wx+2TDa/mBl8gkTYzw==}
     engines: {node: '>=14.13.1'}
 
+<<<<<<< HEAD
   ts-jest@29.1.4:
     resolution: {integrity: sha512-YiHwDhSvCiItoAgsKtoLFCuakDzDsJ1DLDnSouTaTmdOcOwIkSzbLXduaQ6M5DRVhuZC/NYaaZ/mtHbWMv/S6Q==}
+=======
+  ts-jest@29.1.3:
+    resolution: {integrity: sha512-6L9qz3ginTd1NKhOxmkP0qU3FyKjj5CPoY+anszfVn6Pmv/RIKzhiMCsH7Yb7UvJR9I2A64rm4zQl531s2F1iw==}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     engines: {node: ^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -9045,6 +9210,11 @@ packages:
     peerDependencies:
       typescript: '*'
 
+  vue2-timepicker@1.1.6:
+    resolution: {integrity: sha512-DhO2UH4CTer/lMWxg+jqxn/+h6g2vZrsM6vCe9u7/Ie+Pej9yA+8mQA3C3VPApZ+LauKc43WxCspOXb6SGBOTw==}
+    peerDependencies:
+      vue: ^2.6.5
+
   vue@2.7.16:
     resolution: {integrity: sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==}
     deprecated: Vue 2 has reached EOL and is no longer actively maintained. See https://v2.vuejs.org/eol/ for more details.
@@ -9540,8 +9710,13 @@ snapshots:
       '@antfu/install-pkg': 0.3.3
       '@clack/prompts': 0.7.0
       '@stylistic/eslint-plugin': 2.1.0(eslint@9.3.0)(typescript@5.4.5)
+<<<<<<< HEAD
       '@typescript-eslint/eslint-plugin': 7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)
       '@typescript-eslint/parser': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
+=======
+      '@typescript-eslint/eslint-plugin': 7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)
+      '@typescript-eslint/parser': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint: 9.3.0
       eslint-config-flat-gitignore: 0.1.5
       eslint-flat-config-utils: 0.2.5
@@ -9559,8 +9734,13 @@ snapshots:
       eslint-plugin-regexp: 2.6.0(eslint@9.3.0)
       eslint-plugin-toml: 0.11.0(eslint@9.3.0)
       eslint-plugin-unicorn: 53.0.0(eslint@9.3.0)
+<<<<<<< HEAD
       eslint-plugin-unused-imports: 3.2.0(@typescript-eslint/eslint-plugin@7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)
       eslint-plugin-vitest: 0.5.4(@typescript-eslint/eslint-plugin@7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.13)(sass@1.77.3)(terser@5.31.0))
+=======
+      eslint-plugin-unused-imports: 3.2.0(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)
+      eslint-plugin-vitest: 0.5.4(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0))
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint-plugin-vue: 9.26.0(eslint@9.3.0)
       eslint-plugin-yml: 1.14.0(eslint@9.3.0)
       eslint-processor-vue-blocks: 0.1.2(@vue/compiler-sfc@3.4.27)(eslint@9.3.0)
@@ -10595,7 +10775,11 @@ snapshots:
     dependencies:
       '@types/eslint': 8.56.10
       '@types/estree': 1.0.5
+<<<<<<< HEAD
       '@typescript-eslint/types': 7.11.0
+=======
+      '@typescript-eslint/types': 7.10.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       comment-parser: 1.4.1
       esquery: 1.5.0
       jsdoc-type-pratt-parser: 4.0.0
@@ -10898,7 +11082,11 @@ snapshots:
       jest-util: 29.7.0
       jest-validate: 29.7.0
       jest-watcher: 29.7.0
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       pretty-format: 29.7.0
       slash: 3.0.0
       strip-ansi: 6.0.1
@@ -11009,7 +11197,11 @@ snapshots:
       jest-haste-map: 29.7.0
       jest-regex-util: 29.6.3
       jest-util: 29.7.0
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       pirates: 4.0.6
       slash: 3.0.0
       write-file-atomic: 4.0.2
@@ -11443,7 +11635,11 @@ snapshots:
   '@stylistic/eslint-plugin-plus@2.1.0(eslint@9.3.0)(typescript@5.4.5)':
     dependencies:
       '@types/eslint': 8.56.10
+<<<<<<< HEAD
       '@typescript-eslint/utils': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
+=======
+      '@typescript-eslint/utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint: 9.3.0
     transitivePeerDependencies:
       - supports-color
@@ -11453,7 +11649,11 @@ snapshots:
     dependencies:
       '@stylistic/eslint-plugin-js': 2.1.0(eslint@9.3.0)
       '@types/eslint': 8.56.10
+<<<<<<< HEAD
       '@typescript-eslint/utils': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
+=======
+      '@typescript-eslint/utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint: 9.3.0
     transitivePeerDependencies:
       - supports-color
@@ -11595,7 +11795,11 @@ snapshots:
 
   '@types/estree@1.0.5': {}
 
+<<<<<<< HEAD
   '@types/express-serve-static-core@4.19.3':
+=======
+  '@types/express-serve-static-core@4.19.1':
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       '@types/node': 20.12.13
       '@types/qs': 6.9.15
@@ -11609,7 +11813,11 @@ snapshots:
   '@types/express@4.17.21':
     dependencies:
       '@types/body-parser': 1.19.5
+<<<<<<< HEAD
       '@types/express-serve-static-core': 4.19.3
+=======
+      '@types/express-serve-static-core': 4.19.1
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       '@types/qs': 6.9.15
       '@types/serve-static': 1.15.7
 
@@ -11768,7 +11976,11 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
+<<<<<<< HEAD
       '@types/node': 20.12.13
+=======
+      '@types/node': 20.12.12
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   '@types/semver@7.5.8': {}
 
@@ -11837,6 +12049,7 @@ snapshots:
       '@types/node': 20.12.13
     optional: true
 
+<<<<<<< HEAD
   '@typescript-eslint/eslint-plugin@7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)':
     dependencies:
       '@eslint-community/regexpp': 4.10.0
@@ -11845,6 +12058,16 @@ snapshots:
       '@typescript-eslint/type-utils': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
       '@typescript-eslint/utils': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
       '@typescript-eslint/visitor-keys': 7.11.0
+=======
+  '@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)':
+    dependencies:
+      '@eslint-community/regexpp': 4.10.0
+      '@typescript-eslint/parser': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+      '@typescript-eslint/scope-manager': 7.10.0
+      '@typescript-eslint/type-utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+      '@typescript-eslint/utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+      '@typescript-eslint/visitor-keys': 7.10.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint: 9.3.0
       graphemer: 1.4.0
       ignore: 5.3.1
@@ -11855,12 +12078,21 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5)':
     dependencies:
       '@typescript-eslint/scope-manager': 7.11.0
       '@typescript-eslint/types': 7.11.0
       '@typescript-eslint/typescript-estree': 7.11.0(typescript@5.4.5)
       '@typescript-eslint/visitor-keys': 7.11.0
+=======
+  '@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5)':
+    dependencies:
+      '@typescript-eslint/scope-manager': 7.10.0
+      '@typescript-eslint/types': 7.10.0
+      '@typescript-eslint/typescript-estree': 7.10.0(typescript@5.4.5)
+      '@typescript-eslint/visitor-keys': 7.10.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       debug: 4.3.4(supports-color@5.5.0)
       eslint: 9.3.0
     optionalDependencies:
@@ -11868,6 +12100,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/scope-manager@7.11.0':
     dependencies:
       '@typescript-eslint/types': 7.11.0
@@ -11877,6 +12110,17 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 7.11.0(typescript@5.4.5)
       '@typescript-eslint/utils': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
+=======
+  '@typescript-eslint/scope-manager@7.10.0':
+    dependencies:
+      '@typescript-eslint/types': 7.10.0
+      '@typescript-eslint/visitor-keys': 7.10.0
+
+  '@typescript-eslint/type-utils@7.10.0(eslint@9.3.0)(typescript@5.4.5)':
+    dependencies:
+      '@typescript-eslint/typescript-estree': 7.10.0(typescript@5.4.5)
+      '@typescript-eslint/utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       debug: 4.3.4(supports-color@5.5.0)
       eslint: 9.3.0
       ts-api-utils: 1.3.0(typescript@5.4.5)
@@ -11885,12 +12129,21 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/types@7.11.0': {}
 
   '@typescript-eslint/typescript-estree@7.11.0(typescript@5.4.5)':
     dependencies:
       '@typescript-eslint/types': 7.11.0
       '@typescript-eslint/visitor-keys': 7.11.0
+=======
+  '@typescript-eslint/types@7.10.0': {}
+
+  '@typescript-eslint/typescript-estree@7.10.0(typescript@5.4.5)':
+    dependencies:
+      '@typescript-eslint/types': 7.10.0
+      '@typescript-eslint/visitor-keys': 7.10.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       debug: 4.3.4(supports-color@5.5.0)
       globby: 11.1.0
       is-glob: 4.0.3
@@ -11902,20 +12155,35 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/utils@7.11.0(eslint@9.3.0)(typescript@5.4.5)':
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@9.3.0)
       '@typescript-eslint/scope-manager': 7.11.0
       '@typescript-eslint/types': 7.11.0
       '@typescript-eslint/typescript-estree': 7.11.0(typescript@5.4.5)
+=======
+  '@typescript-eslint/utils@7.10.0(eslint@9.3.0)(typescript@5.4.5)':
+    dependencies:
+      '@eslint-community/eslint-utils': 4.4.0(eslint@9.3.0)
+      '@typescript-eslint/scope-manager': 7.10.0
+      '@typescript-eslint/types': 7.10.0
+      '@typescript-eslint/typescript-estree': 7.10.0(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint: 9.3.0
     transitivePeerDependencies:
       - supports-color
       - typescript
 
+<<<<<<< HEAD
   '@typescript-eslint/visitor-keys@7.11.0':
     dependencies:
       '@typescript-eslint/types': 7.11.0
+=======
+  '@typescript-eslint/visitor-keys@7.10.0':
+    dependencies:
+      '@typescript-eslint/types': 7.10.0
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint-visitor-keys: 3.4.3
 
   '@vite-pwa/assets-generator@0.2.4':
@@ -12108,7 +12376,11 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
+<<<<<<< HEAD
   '@vueuse/integrations@10.10.0(axios@1.7.2)(focus-trap@7.5.4)(jwt-decode@4.0.0)(qrcode@1.5.3)(sortablejs@1.10.2)(vue@3.4.27(typescript@5.4.5))':
+=======
+  '@vueuse/integrations@10.9.0(axios@1.7.2)(focus-trap@7.5.4)(jwt-decode@4.0.0)(qrcode@1.5.3)(sortablejs@1.10.2)(vue@3.4.27(typescript@5.4.5))':
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       '@vueuse/core': 10.10.0(vue@3.4.27(typescript@5.4.5))
       '@vueuse/shared': 10.10.0(vue@3.4.27(typescript@5.4.5))
@@ -12642,8 +12914,13 @@ snapshots:
 
   browserslist@4.23.0:
     dependencies:
+<<<<<<< HEAD
       caniuse-lite: 1.0.30001625
       electron-to-chromium: 1.4.787
+=======
+      caniuse-lite: 1.0.30001621
+      electron-to-chromium: 1.4.777
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.0)
 
@@ -12684,7 +12961,11 @@ snapshots:
 
   builtin-modules@3.3.0: {}
 
+<<<<<<< HEAD
   bullmq@5.7.14:
+=======
+  bullmq@5.7.10:
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.4.1
@@ -12730,7 +13011,11 @@ snapshots:
 
   camelcase@6.3.0: {}
 
+<<<<<<< HEAD
   caniuse-lite@1.0.30001625: {}
+=======
+  caniuse-lite@1.0.30001621: {}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   caseless@0.12.0: {}
 
@@ -13481,7 +13766,11 @@ snapshots:
     dependencies:
       jake: 10.9.1
 
+<<<<<<< HEAD
   electron-to-chromium@1.4.787: {}
+=======
+  electron-to-chromium@1.4.777: {}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   emittery@0.13.1: {}
 
@@ -13745,7 +14034,11 @@ snapshots:
 
   eslint-plugin-import-x@0.5.1(eslint@9.3.0)(typescript@5.4.5):
     dependencies:
+<<<<<<< HEAD
       '@typescript-eslint/utils': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
+=======
+      '@typescript-eslint/utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       debug: 4.3.4(supports-color@5.5.0)
       doctrine: 3.0.0
       eslint: 9.3.0
@@ -13807,7 +14100,11 @@ snapshots:
 
   eslint-plugin-perfectionist@2.10.0(eslint@9.3.0)(svelte@4.2.17)(typescript@5.4.5)(vue-eslint-parser@9.4.2(eslint@9.3.0)):
     dependencies:
+<<<<<<< HEAD
       '@typescript-eslint/utils': 7.11.0(eslint@9.3.0)(typescript@5.4.5)
+=======
+      '@typescript-eslint/utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       eslint: 9.3.0
       minimatch: 9.0.4
       natural-compare-lite: 1.4.0
@@ -13865,11 +14162,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   eslint-plugin-unused-imports@3.2.0(@typescript-eslint/eslint-plugin@7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0):
+=======
+  eslint-plugin-unused-imports@3.2.0(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0):
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       eslint: 9.3.0
       eslint-rule-composer: 0.3.0
     optionalDependencies:
+<<<<<<< HEAD
       '@typescript-eslint/eslint-plugin': 7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)
 
   eslint-plugin-vitest@0.5.4(@typescript-eslint/eslint-plugin@7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.13)(sass@1.77.3)(terser@5.31.0)):
@@ -13879,6 +14181,17 @@ snapshots:
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)
       vitest: 1.6.0(@types/node@20.12.13)(sass@1.77.3)(terser@5.31.0)
+=======
+      '@typescript-eslint/eslint-plugin': 7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)
+
+  eslint-plugin-vitest@0.5.4(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0)):
+    dependencies:
+      '@typescript-eslint/utils': 7.10.0(eslint@9.3.0)(typescript@5.4.5)
+      eslint: 9.3.0
+    optionalDependencies:
+      '@typescript-eslint/eslint-plugin': 7.10.0(@typescript-eslint/parser@7.10.0(eslint@9.3.0)(typescript@5.4.5))(eslint@9.3.0)(typescript@5.4.5)
+      vitest: 1.6.0(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0)
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -14164,7 +14477,11 @@ snapshots:
       '@nodelib/fs.walk': 1.2.8
       glob-parent: 5.1.2
       merge2: 1.4.1
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   fast-json-stable-stringify@2.1.0: {}
 
@@ -14248,7 +14565,11 @@ snapshots:
       path-exists: 5.0.0
       unicorn-magic: 0.1.0
 
+<<<<<<< HEAD
   flag-icons@7.2.3: {}
+=======
+  flag-icons@7.2.2: {}
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   flat-cache@3.2.0:
     dependencies:
@@ -14479,7 +14800,11 @@ snapshots:
 
   glob-to-regexp@0.4.1: {}
 
+<<<<<<< HEAD
   glob@10.4.1:
+=======
+  glob@10.3.16:
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       foreground-child: 3.1.1
       jackspeak: 3.1.2
@@ -15027,7 +15352,11 @@ snapshots:
       jest-runner: 29.7.0
       jest-util: 29.7.0
       jest-validate: 29.7.0
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       parse-json: 5.2.0
       pretty-format: 29.7.0
       slash: 3.0.0
@@ -15087,7 +15416,11 @@ snapshots:
       jest-regex-util: 29.6.3
       jest-util: 29.7.0
       jest-worker: 29.7.0
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       walker: 1.0.8
     optionalDependencies:
       fsevents: 2.3.3
@@ -15111,7 +15444,11 @@ snapshots:
       '@types/stack-utils': 2.0.3
       chalk: 4.1.2
       graceful-fs: 4.2.11
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       pretty-format: 29.7.0
       slash: 3.0.0
       stack-utils: 2.0.6
@@ -15289,7 +15626,11 @@ snapshots:
     dependencies:
       config-chain: 1.1.13
       editorconfig: 1.0.4
+<<<<<<< HEAD
       glob: 10.4.1
+=======
+      glob: 10.3.16
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       js-cookie: 3.0.5
       nopt: 7.2.1
 
@@ -15475,7 +15816,11 @@ snapshots:
       dotenv-expand: 11.0.6
       git-diff: 2.0.6
       kysely: 0.27.3
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       minimist: 1.2.8
     optionalDependencies:
       '@tediousjs/connection-string': 0.5.0
@@ -15506,7 +15851,11 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
+<<<<<<< HEAD
   lint-staged@15.2.5:
+=======
+  lint-staged@15.2.4:
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       chalk: 5.3.0
       commander: 12.1.0
@@ -15514,7 +15863,11 @@ snapshots:
       execa: 8.0.1
       lilconfig: 3.1.1
       listr2: 8.2.1
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       pidtree: 0.6.0
       string-argv: 0.3.2
       yaml: 2.4.2
@@ -15747,10 +16100,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   micromatch@4.0.7:
     dependencies:
       braces: 3.0.3
       picomatch: 2.3.1
+=======
+  micromatch@4.0.6:
+    dependencies:
+      braces: 3.0.3
+      picomatch: 4.0.2
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   mime-db@1.52.0: {}
 
@@ -16889,7 +17249,11 @@ snapshots:
 
   rimraf@5.0.7:
     dependencies:
+<<<<<<< HEAD
       glob: 10.4.1
+=======
+      glob: 10.3.16
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
 
   rollup@2.79.1:
     optionalDependencies:
@@ -17099,7 +17463,7 @@ snapshots:
     dependencies:
       decode-ico: 0.4.1
       ico-endec: 0.1.6
-      sharp: 0.32.6
+      sharp: 0.33.4
 
   sharp@0.32.6:
     dependencies:
@@ -17199,7 +17563,11 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
+<<<<<<< HEAD
   sitemap@8.0.0:
+=======
+  sitemap@7.1.2:
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       '@types/node': 17.0.45
       '@types/sax': 1.2.7
@@ -17723,7 +18091,11 @@ snapshots:
 
   ts-deepmerge@6.2.1: {}
 
+<<<<<<< HEAD
   ts-jest@29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13)(ts-node@10.9.2(@types/node@20.12.13)(typescript@5.4.5)))(typescript@5.4.5):
+=======
+  ts-jest@29.1.3(@babel/core@7.24.5)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.5))(jest@29.7.0(@types/node@20.12.12)(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.5)))(typescript@5.4.5):
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -17736,7 +18108,11 @@ snapshots:
       typescript: 5.4.5
       yargs-parser: 21.1.1
     optionalDependencies:
+<<<<<<< HEAD
       '@babel/core': 7.24.6
+=======
+      '@babel/core': 7.24.5
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       babel-jest: 29.7.0(@babel/core@7.24.6)
@@ -17745,7 +18121,11 @@ snapshots:
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.16.1
+<<<<<<< HEAD
       micromatch: 4.0.7
+=======
+      micromatch: 4.0.6
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       semver: 7.6.2
       source-map: 0.7.4
       typescript: 5.4.5
@@ -18211,7 +18591,11 @@ snapshots:
       sass: 1.77.3
       terser: 5.31.0
 
+<<<<<<< HEAD
   vitepress@1.2.2(@algolia/client-search@4.23.3)(@types/node@20.12.13)(axios@1.7.2)(jwt-decode@4.0.0)(postcss@8.4.38)(qrcode@1.5.3)(sass@1.77.3)(search-insights@2.13.0)(sortablejs@1.10.2)(terser@5.31.0)(typescript@5.4.5):
+=======
+  vitepress@1.2.2(@algolia/client-search@4.23.3)(@types/node@20.12.12)(axios@1.7.2)(jwt-decode@4.0.0)(postcss@8.4.38)(qrcode@1.5.3)(sass@1.77.2)(search-insights@2.13.0)(sortablejs@1.10.2)(terser@5.31.0)(typescript@5.4.5):
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
     dependencies:
       '@docsearch/css': 3.6.0
       '@docsearch/js': 3.6.0(@algolia/client-search@4.23.3)(search-insights@2.13.0)
@@ -18221,8 +18605,13 @@ snapshots:
       '@vitejs/plugin-vue': 5.0.4(vite@5.2.12(@types/node@20.12.13)(sass@1.77.3)(terser@5.31.0))(vue@3.4.27(typescript@5.4.5))
       '@vue/devtools-api': 7.2.1(vue@3.4.27(typescript@5.4.5))
       '@vue/shared': 3.4.27
+<<<<<<< HEAD
       '@vueuse/core': 10.10.0(vue@3.4.27(typescript@5.4.5))
       '@vueuse/integrations': 10.10.0(axios@1.7.2)(focus-trap@7.5.4)(jwt-decode@4.0.0)(qrcode@1.5.3)(sortablejs@1.10.2)(vue@3.4.27(typescript@5.4.5))
+=======
+      '@vueuse/core': 10.9.0(vue@3.4.27(typescript@5.4.5))
+      '@vueuse/integrations': 10.9.0(axios@1.7.2)(focus-trap@7.5.4)(jwt-decode@4.0.0)(qrcode@1.5.3)(sortablejs@1.10.2)(vue@3.4.27(typescript@5.4.5))
+>>>>>>> 6c3e6bbcc (feat(survey, admin): add simple dropdown style time picker for meal time prompts)
       focus-trap: 7.5.4
       mark.js: 8.11.1
       minisearch: 6.3.0
@@ -18395,6 +18784,10 @@ snapshots:
       '@vue/language-core': 2.0.19(typescript@5.4.5)
       semver: 7.6.2
       typescript: 5.4.5
+
+  vue2-timepicker@1.1.6(vue@2.7.16):
+    dependencies:
+      vue: 2.7.16
 
   vue@2.7.16:
     dependencies:
