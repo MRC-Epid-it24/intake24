@@ -23,6 +23,7 @@ import type {
 } from '@intake24/common/types';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { sortMeals, toMealTime } from '@intake24/common/surveys';
+import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
   associatedFoodPromptsComplete,
@@ -37,7 +38,6 @@ import {
 } from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
 
-import { portionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';

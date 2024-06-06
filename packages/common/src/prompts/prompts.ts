@@ -70,6 +70,8 @@ export type BasePrompt = {
   i18n: Record<string, LocaleTranslation>;
   actions?: Actions;
   conditions: Condition[];
+  useGraph: boolean;
+  graph?: object;
 };
 
 export type ValidatedPrompt = BasePrompt & PromptValidationProps;

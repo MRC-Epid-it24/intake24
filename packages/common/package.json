@@ -29,6 +29,7 @@
     "deepmerge": "^4.3.1",
     "dompurify": "^3.1.4",
     "fast-copy": "^3.0.2",
+    "litegraph.js": "^0.7.18",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.7",
     "pluralize": "^8.0.0",

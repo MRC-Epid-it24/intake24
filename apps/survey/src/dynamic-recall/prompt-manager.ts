@@ -1,10 +1,27 @@
+import { LGraph } from 'litegraph.js';
+
 import type { ComponentType, Condition, Conditions, Prompt } from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { conditionOps } from '@intake24/common/prompts';
+import { type PromptContextNode, PromptNode } from '@intake24/common/prompts/graph/nodes/prompt';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
+import {
+  asServedComplete,
+  cerealComplete,
+  drinkScaleComplete,
+  guideImageComplete,
+  milkInAHotDrinkComplete,
+  milkOnCerealComplete,
+  parentFoodPortionComplete,
+  pizzaComplete,
+  pizzaV2Complete,
+  portionSizeMethodSelected,
+  recipeBuilderComplete,
+  standardPortionComplete,
+} from '@intake24/common/util/portion-size-checks';
 import {
   findMeal,
   foodPortionSizeComplete,
@@ -19,20 +36,6 @@ import {
 
 import type { SurveyState, SurveyStore } from '../stores';
 import { recallLog } from '../stores';
-import {
-  asServedComplete,
-  cerealComplete,
-  drinkScaleComplete,
-  guideImageComplete,
-  milkInAHotDrinkComplete,
-  milkOnCerealComplete,
-  parentFoodPortionComplete,
-  pizzaComplete,
-  pizzaV2Complete,
-  portionSizeMethodSelected,
-  recipeBuilderComplete,
-  standardPortionComplete,
-} from './portion-size-checks';
 
 function foodEnergy(energy: number, food: FoodState): number {
   if (food.linkedFoods.length)
@@ -817,6 +820,30 @@ function checkFoodCustomConditions(store: SurveyStore, mealState: MealState, foo
   });
 }
 
+function checkGraphConditions(store: SurveyStore, mealState: MealState | null, foodState: FoodState | null, prompt: Prompt): boolean {
+  if (!prompt.useGraph || !prompt.graph)
+    return true;
+
+  const graph = new LGraph(prompt.graph); // Perf: cache this
+
+  const propertyNodes = graph.findNodesByType<PromptNode>('Prompt/Properties');
+
+  if (propertyNodes.length !== 1) {
+    console.error(`Prompt graph invalid for prompt ${prompt.id}(${prompt.component}): there must be one and only one node of type Prompt/Properties.`);
+    return true;
+  }
+
+  const propertyNode = propertyNodes[0];
+
+  for (const contextNode of graph.findNodesByType<PromptContextNode>('Prompt/Context')) {
+    contextNode.setValues(foodState, mealState);
+  }
+
+  graph.runStep();
+
+  return propertyNode.isEnabled();
+}
+
 export default class PromptManager {
   private scheme;
 
@@ -845,7 +872,8 @@ export default class PromptManager {
     return this.scheme.prompts.meals.foods.find(
       prompt =>
         prompt.component === type
-        && checkFoodCustomConditions(this.store, mealState, foodState, prompt),
+        && checkFoodCustomConditions(this.store, mealState, foodState, prompt)
+        && checkGraphConditions(this.store, mealState, foodState, prompt),
     );
   }
 
@@ -858,7 +886,7 @@ export default class PromptManager {
     const meal = findMeal(state.data.meals, mealId);
 
     return this.scheme.prompts.meals[section].find(
-      prompt => prompt.component === type && checkMealCustomConditions(this.store, meal, prompt),
+      prompt => prompt.component === type && checkMealCustomConditions(this.store, meal, prompt) && checkGraphConditions(this.store, meal, null, prompt),
     );
   }
 
@@ -872,7 +900,8 @@ export default class PromptManager {
     return this.scheme.prompts[section].find(
       prompt =>
         checkSurveyStandardConditions(this.store.$state, prompt)
-        && checkSurveyCustomConditions(this.store, prompt),
+        && checkSurveyCustomConditions(this.store, prompt)
+        && checkGraphConditions(this.store, null, null, prompt),
     );
   }
 
@@ -892,7 +921,8 @@ export default class PromptManager {
     return this.scheme.prompts.meals[section].find(
       prompt =>
         checkMealStandardConditions(state, meal, withSelection, prompt)
-        && checkMealCustomConditions(this.store, meal, prompt),
+        && checkMealCustomConditions(this.store, meal, prompt)
+        && checkGraphConditions(this.store, meal, null, prompt),
     );
   }
 
@@ -906,7 +936,8 @@ export default class PromptManager {
     return this.scheme.prompts.meals.foods.find(
       prompt =>
         checkFoodStandardConditions(state, foodState, withSelection, prompt)
-        && checkFoodCustomConditions(this.store, mealState, foodState, prompt),
+        && checkFoodCustomConditions(this.store, mealState, foodState, prompt)
+        && checkGraphConditions(this.store, mealState, foodState, prompt),
     );
   }
 

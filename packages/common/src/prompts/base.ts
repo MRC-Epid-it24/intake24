@@ -1,8 +1,9 @@
 import type { BasePortionPrompt, BasePrompt } from './prompts';
 
-export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions'> = {
+export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions' | 'graph'> = {
   i18n: {},
   conditions: [],
+  graph: undefined,
   actions: undefined,
 };
 
