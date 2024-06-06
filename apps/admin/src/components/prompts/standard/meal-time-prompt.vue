@@ -2,9 +2,9 @@
   <v-tab-item key="options" value="options">
     <v-card-text>
       <v-row>
-        <v-col class="bg-red" cols="12" lg="4" md="6">
+        <v-col cols="12" lg="4" md="6">
           <v-card-title>
-            {{ $t("survey-schemes.prompts.timePicker.allowedMinutes._") }}
+            {{ $t('survey-schemes.prompts.timePicker.allowedMinutes._') }}
           </v-card-title>
           <v-select
             :items="[1, 5, 10, 15, 20, 30]"
@@ -39,7 +39,7 @@
         </v-col>
         <v-col cols="12" lg="4" md="6">
           <v-card-title>
-            {{ $t("survey-schemes.prompts.timePicker.format._") }}
+            {{ $t('survey-schemes.prompts.timePicker.format._') }}
           </v-card-title>
           <v-btn-toggle
             class="d-flex"
@@ -53,20 +53,20 @@
               :title="$t('survey-schemes.prompts.timePicker.format.24hr')"
               value="24hr"
             >
-              {{ $t("survey-schemes.prompts.timePicker.format.24hr") }}
+              {{ $t('survey-schemes.prompts.timePicker.format.24hr') }}
             </v-btn>
             <v-btn
               class="px-10 flex-grow-1 flex-md-grow-0"
               :title="$t('survey-schemes.prompts.timePicker.format.ampm')"
               value="ampm"
             >
-              {{ $t("survey-schemes.prompts.timePicker.format.ampm") }}
+              {{ $t('survey-schemes.prompts.timePicker.format.ampm') }}
             </v-btn>
           </v-btn-toggle>
         </v-col>
         <v-col cols="12" lg="6" md="6">
           <v-card-title>
-            {{ $t("survey-schemes.prompts.timePicker.pickerType._") }}
+            {{ $t('survey-schemes.prompts.timePicker.pickerType._') }}
           </v-card-title>
           <v-btn-toggle
             class="d-flex"
@@ -80,14 +80,14 @@
               :title="$t('survey-schemes.prompts.timePicker.pickerType.clock')"
               value="clock"
             >
-              {{ $t("survey-schemes.prompts.timePicker.pickerType.clock") }}
+              {{ $t('survey-schemes.prompts.timePicker.pickerType.clock') }}
             </v-btn>
             <v-btn
               class="px-10 flex-grow-1 flex-md-grow-0"
               :title="$t('survey-schemes.prompts.timePicker.pickerType.simple')"
               value="simple"
             >
-              {{ $t("survey-schemes.prompts.timePicker.pickerType.simple") }}
+              {{ $t('survey-schemes.prompts.timePicker.pickerType.simple') }}
             </v-btn>
           </v-btn-toggle>
         </v-col>
