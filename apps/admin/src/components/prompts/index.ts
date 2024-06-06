@@ -5,7 +5,7 @@ export { default as customPrompts } from './custom';
 export { default as portionSizePrompts } from './portion-size';
 export { default as standardPrompts } from './standard';
 
-const baseTabs = ['general', 'content', 'actions', 'conditions'];
+const baseTabs = ['general', 'content', 'actions', 'conditions', 'graph'];
 const tabs = [...baseTabs, 'options', 'json'];
 const tabsWithValidation = [...baseTabs, 'validation', 'options', 'json'];
 

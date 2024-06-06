@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import Vue from 'vue';
 
 import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
+import type { SessionSettings } from '@intake24/common/surveys';
 import type {
   CustomPromptAnswer,
   EncodedFood,
@@ -22,8 +23,9 @@ import type {
   SurveyState as CurrentSurveyState,
 } from '@intake24/common/types';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
-import { type SessionSettings, sortMeals, toMealTime } from '@intake24/common/surveys';
+import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import { isSessionAgeValid, isSessionFixedPeriodValid } from '@intake24/common/util';
+import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
   associatedFoodPromptsComplete,
@@ -38,7 +40,6 @@ import {
 } from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
 
-import { portionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
