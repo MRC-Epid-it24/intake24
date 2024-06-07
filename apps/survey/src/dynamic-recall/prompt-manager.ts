@@ -820,7 +820,7 @@ function checkFoodCustomConditions(store: SurveyStore, mealState: MealState, foo
   });
 }
 
-function checkGraphConditions(store: SurveyStore, mealState: MealState | null, foodState: FoodState | null, prompt: Prompt): boolean {
+function checkGraphConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt): boolean {
   if (!prompt.useGraph || !prompt.graph)
     return true;
 
@@ -836,7 +836,7 @@ function checkGraphConditions(store: SurveyStore, mealState: MealState | null, f
   const propertyNode = propertyNodes[0];
 
   for (const contextNode of graph.findNodesByType<PromptContextNode>('Prompt/Context')) {
-    contextNode.setValues(foodState, mealState);
+    contextNode.setValues(store.currentState, foodState, mealState);
   }
 
   graph.runStep();
@@ -886,7 +886,7 @@ export default class PromptManager {
     const meal = findMeal(state.data.meals, mealId);
 
     return this.scheme.prompts.meals[section].find(
-      prompt => prompt.component === type && checkMealCustomConditions(this.store, meal, prompt) && checkGraphConditions(this.store, meal, null, prompt),
+      prompt => prompt.component === type && checkMealCustomConditions(this.store, meal, prompt) && checkGraphConditions(this.store, meal, undefined, prompt),
     );
   }
 
@@ -901,7 +901,7 @@ export default class PromptManager {
       prompt =>
         checkSurveyStandardConditions(this.store.$state, prompt)
         && checkSurveyCustomConditions(this.store, prompt)
-        && checkGraphConditions(this.store, null, null, prompt),
+        && checkGraphConditions(this.store, undefined, undefined, prompt),
     );
   }
 
@@ -922,7 +922,7 @@ export default class PromptManager {
       prompt =>
         checkMealStandardConditions(state, meal, withSelection, prompt)
         && checkMealCustomConditions(this.store, meal, prompt)
-        && checkGraphConditions(this.store, meal, null, prompt),
+        && checkGraphConditions(this.store, meal, undefined, prompt),
     );
   }
 

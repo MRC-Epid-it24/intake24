@@ -26,3 +26,29 @@ export class MealProgressNode extends LGraphNode {
     }
   }
 }
+
+export class MealCustomPromptAnswerNode extends LGraphNode {
+  static title = 'Custom prompt answer';
+
+  constructor() {
+    super();
+
+    this.title = 'Custom prompt answer';
+
+    this.addInput('Meal', 'meal');
+    this.addProperty('promptId', '', 'string');
+    this.addWidget('text', 'Prompt ID', this.properties.promptId, 'promptId');
+    this.addOutput('Value', 'any');
+  }
+
+  onExecute() {
+    const inMeal = this.getInputData<MealState | undefined>(0);
+
+    if (inMeal !== undefined) {
+      this.setOutputData(0, inMeal.customPromptAnswers[this.properties.promptId]);
+    }
+    else {
+      this.setOutputData(0, undefined);
+    }
+  }
+}

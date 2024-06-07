@@ -1,6 +1,6 @@
 import { LGraphNode } from 'litegraph.js';
 
-import type { FoodState, MealState } from '@intake24/common/types';
+import type { FoodState, MealState, SurveyState } from '@intake24/common/types';
 
 export class PromptNode extends LGraphNode {
   static title = 'Prompt';
@@ -31,10 +31,16 @@ export class PromptContextNode extends LGraphNode {
 
     this.addOutput('Current Food', 'food');
     this.addOutput('Current Meal', 'meal');
+    this.addOutput('Current Recall', 'recall');
+    this.addOutput('Recall Number', 'number');
+    this.addOutput('Prompt Answer', 'any');
   }
 
-  setValues(currentFood: FoodState | null, currentMeal: MealState | null) {
+  setValues(recallNumber: number, survey: SurveyState, currentFood: FoodState | undefined, currentMeal: MealState | undefined) {
     this.setOutputData(0, currentFood);
     this.setOutputData(1, currentMeal);
+    this.setOutputData(2, survey);
+    this.setOutputData(3, recallNumber);
+    this.setOutputData(4, undefined);
   }
 }

@@ -2,7 +2,7 @@
   <v-tab-item key="graph" ref="root" value="graph">
     <v-container>
       <v-row align="center">
-        <v-switch class="ml-3" label="Use graph" :value="useGraph" @change="useGraphChange" />
+        <v-switch class="ml-3" :input-value="useGraph" label="Use graph" @change="useGraphChange" />
         <v-btn class="ml-8" @click="resetGraph()">
           Reset
         </v-btn>
@@ -42,6 +42,11 @@ class PromptGraph extends LGraph {
     }
     this.contentHash = contentHash;
     return super.configure(data, keep_old);
+  }
+
+  clear() {
+    super.clear();
+    this.contentHash = undefined;
   }
 }
 
@@ -87,6 +92,8 @@ export default defineComponent({
         graph.configure(props.graph);
       }
       else {
+        console.log('graph.clear');
+
         graph.clear();
 
         const promptNode = LiteGraph.createNode<PromptNode>('Prompt/Properties');
@@ -147,6 +154,7 @@ export default defineComponent({
     };
 
     const useGraphChange = (v) => {
+      console.log(`useGraphChange ${v}`);
       emit('update:useGraph', v);
     };
 
