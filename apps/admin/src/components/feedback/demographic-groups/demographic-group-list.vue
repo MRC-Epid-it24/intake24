@@ -114,7 +114,7 @@
           <template #extension>
             <v-container>
               <v-tabs v-model="tab" background-color="secondary" dark>
-                <v-tab v-for="item in ['general', 'sectors']" :key="item">
+                <v-tab v-for="item in ['general', 'sectors', 'json']" :key="item">
                   {{ $t(`feedback-schemes.demographic-groups.tabs.${item}`) }}
                 </v-tab>
               </v-tabs>
@@ -210,6 +210,11 @@
                   />
                 </v-container>
               </v-tab-item>
+              <v-tab-item key="json">
+                <v-container>
+                  <json-editor v-model="dialog.item" />
+                </v-container>
+              </v-tab-item>
             </v-tabs-items>
             <v-card-actions>
               <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
@@ -240,7 +245,7 @@ import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditorDialog } from '@intake24/admin/components/editors';
+import { JsonEditor, JsonEditorDialog } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
 import { cardTypes as cardTypesRef, nutrientRuleTypes, sexes } from '@intake24/common/feedback';
@@ -259,6 +264,7 @@ export default defineComponent({
     Draggable: draggable,
     DemographicGroupRange,
     DemographicGroupSectors,
+    JsonEditor,
     JsonEditorDialog,
     OptionsMenu,
     SelectResource,

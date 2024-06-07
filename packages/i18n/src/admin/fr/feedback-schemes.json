@@ -218,7 +218,8 @@
       "content": "Contenu",
       "unit": "Unité",
       "thresholds": "Seuils",
-      "nutrients": "Nutriments"
+      "nutrients": "Nutriments",
+      "json": "JSON"
     },
 
     "character": {
@@ -260,7 +261,8 @@
 
     "tabs": {
       "general": "Général",
-      "sectors": "Secteurs d'échelonnage"
+      "sectors": "Secteurs d'échelonnage",
+      "json": "JSON"
     },
 
     "sectors": {

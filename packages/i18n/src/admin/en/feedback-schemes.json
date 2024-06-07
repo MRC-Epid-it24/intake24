@@ -222,7 +222,8 @@
       "content": "Content",
       "unit": "Unit",
       "thresholds": "Thresholds",
-      "nutrients": "Nutrients"
+      "nutrients": "Nutrients",
+      "json": "JSON"
     },
 
     "character": {
@@ -264,7 +265,8 @@
 
     "tabs": {
       "general": "General",
-      "sectors": "Scale sectors"
+      "sectors": "Scale sectors",
+      "json": "JSON"
     },
 
     "sectors": {

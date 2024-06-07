@@ -1,11 +1,14 @@
 <template>
   <div>
-    <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)" />
+    <card-unit v-bind="{ unit: value.unit }" @update:unit="update('unit', $event)" />
     <card-thresholds
-      :thresholds="{ high, low }"
+      :thresholds="{ high: value.high, low: value.low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
     />
+    <v-tab-item key="json" value="json">
+      <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
+    </v-tab-item>
   </div>
 </template>
 
@@ -14,33 +17,29 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { FiveADayCard } from '@intake24/common/feedback';
+import { JsonEditor } from '@intake24/admin/components/editors';
 
 import { CardThresholds, CardUnit } from '../partials';
 
 export default defineComponent({
   name: 'FiveADayCard',
 
-  components: { CardThresholds, CardUnit },
+  components: { CardThresholds, CardUnit, JsonEditor },
 
   props: {
-    high: {
-      type: Object as PropType<FiveADayCard['high']>,
-      default: null,
-    },
-    low: {
-      type: Object as PropType<FiveADayCard['low']>,
-      default: null,
-    },
-    unit: {
-      type: Object as PropType<FiveADayCard['unit']>,
+    value: {
+      type: Object as PropType<FiveADayCard>,
       required: true,
     },
   },
 
-  methods: {
-    update(field: string, value: any) {
-      this.$emit(`update:${field}`, value);
-    },
+  setup(props, { emit }) {
+    const update = (field: string, value: any) => {
+      emit('input', { ...props.value, [field]: value });
+    };
+
+    return { update };
   },
+
 });
 </script>
