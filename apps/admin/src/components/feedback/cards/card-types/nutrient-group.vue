@@ -1,12 +1,12 @@
 <template>
   <div>
-    <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)" />
+    <card-unit v-bind="{ unit: value.unit }" @update:unit="update('unit', $event)" />
     <card-thresholds
-      :thresholds="{ high, low }"
+      :thresholds="{ high: value.high, low: value.low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
     />
-    <v-tab-item key="nutrients">
+    <v-tab-item key="nutrients" value="nutrients">
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
@@ -84,6 +84,9 @@
         </v-row>
       </v-container>
     </v-tab-item>
+    <v-tab-item key="json" value="json">
+      <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
+    </v-tab-item>
   </div>
 </template>
 
@@ -94,6 +97,7 @@ import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { NutrientGroupCard } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { useEntry } from '@intake24/admin/stores';
 
 import { CardThresholds, CardUnit } from '../partials';
@@ -101,29 +105,17 @@ import { CardThresholds, CardUnit } from '../partials';
 export default defineComponent({
   name: 'NutrientGroupCard',
 
-  components: { CardThresholds, CardUnit },
+  components: { CardThresholds, CardUnit, JsonEditor },
 
   props: {
-    high: {
-      type: Object as PropType<NutrientGroupCard['high']>,
-      default: null,
-    },
-    low: {
-      type: Object as PropType<NutrientGroupCard['low']>,
-      default: null,
-    },
-    unit: {
-      type: Object as PropType<NutrientGroupCard['unit']>,
-      required: true,
-    },
-    nutrientTypes: {
-      type: Array as PropType<NutrientGroupCard['nutrientTypes']>,
+    value: {
+      type: Object as PropType<NutrientGroupCard>,
       required: true,
     },
   },
 
-  setup(props) {
-    const currentNutrientTypeIds = ref([...props.nutrientTypes]);
+  setup(props, { emit }) {
+    const currentNutrientTypeIds = ref([...props.value.nutrientTypes]);
     const search = ref<string | null>(null);
     const filteredNutrientTypes = ref<NutrientTypeResponse[]>([]);
     const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
@@ -180,6 +172,10 @@ export default defineComponent({
         loadMoreNutrientTypes();
     };
 
+    const update = (field: string, value: any) => {
+      emit('input', { ...props.value, [field]: value });
+    };
+
     watch(
       allNutrientTypes,
       () => {
@@ -207,14 +203,11 @@ export default defineComponent({
       loadFilteredNutrientTypes,
       loadMoreNutrientTypes,
       tryLoadMoreNutrientTypes,
+      update,
     };
   },
 
   methods: {
-    update(field: string, value: any) {
-      this.$emit(`update:${field}`, value);
-    },
-
     add(nutrientTypeId: string) {
       this.currentNutrientTypeIds.push(nutrientTypeId);
 

@@ -25,7 +25,10 @@
         <template #extension>
           <v-container>
             <v-tabs v-model="tab" background-color="secondary" dark>
-              <v-tab v-for="item in cardSettings[dialog.card.type].tabs" :key="item">
+              <v-tab
+                v-for="item in cardSettings[dialog.card.type].tabs" :key="item"
+                :tab-value="item"
+              >
                 {{ $t(`feedback-schemes.cards.tabs.${item}`) }}
               </v-tab>
             </v-tabs>
@@ -35,7 +38,7 @@
       <v-form ref="form" @submit.prevent="save">
         <v-container>
           <v-tabs-items v-model="tab" class="pt-1">
-            <v-tab-item key="general">
+            <v-tab-item key="general" value="general">
               <v-container>
                 <v-row>
                   <v-col cols="12">
@@ -148,7 +151,7 @@
             </v-tab-item>
             <component
               :is="dialog.card.type"
-              v-bind.sync="dialog.card"
+              v-model="dialog.card"
               @validate="validate"
             />
           </v-tabs-items>

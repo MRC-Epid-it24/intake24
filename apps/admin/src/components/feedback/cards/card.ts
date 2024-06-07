@@ -8,12 +8,12 @@ export type CardSettings = Record<CardType, CardSettingsRecord>;
 
 export const cardSettings: CardSettings = {
   character: {
-    tabs: ['general', 'content'],
+    tabs: ['general', 'content', 'json'],
   },
   'nutrient-group': {
-    tabs: ['general', 'unit', 'thresholds', 'nutrients'],
+    tabs: ['general', 'unit', 'thresholds', 'nutrients', 'json'],
   },
   'five-a-day': {
-    tabs: ['general', 'unit', 'thresholds'],
+    tabs: ['general', 'unit', 'thresholds', 'json'],
   },
 };

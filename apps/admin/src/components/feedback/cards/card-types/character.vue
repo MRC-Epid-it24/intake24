@@ -1,41 +1,47 @@
 <template>
-  <v-tab-item key="content">
-    <v-container>
-      <v-row>
-        <v-col cols="12" md="6">
-          <v-autocomplete
-            hide-details="auto"
-            item-text="description"
-            item-value="id"
-            :items="nutrientTypes"
-            :label="$t('nutrient-types._')"
-            multiple
-            name="nutrientTypeIds"
-            outlined
-            prepend-inner-icon="$nutrient-types"
-            :search-input.sync="nutrientTypeIdSearchInput"
-            :value="nutrientTypeIds"
-            @change="updateNutrientTypeId($event)"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-card-title>{{ $t('feedback-schemes.sentiments.title') }}</v-card-title>
-    <v-container>
-      <character-sentiments
-        :value="sentiments"
-        @update:sentiments="update('sentiments', $event)"
-      />
-    </v-container>
-  </v-tab-item>
+  <div>
+    <v-tab-item key="content" value="content">
+      <v-container>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-autocomplete
+              hide-details="auto"
+              item-text="description"
+              item-value="id"
+              :items="nutrientTypes"
+              :label="$t('nutrient-types._')"
+              multiple
+              name="nutrientTypeIds"
+              outlined
+              prepend-inner-icon="$nutrient-types"
+              :search-input.sync="nutrientTypeIdSearchInput"
+              :value="value.nutrientTypeIds"
+              @change="updateNutrientTypeId($event)"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-card-title>{{ $t('feedback-schemes.sentiments.title') }}</v-card-title>
+      <v-container>
+        <character-sentiments
+          :value="value.sentiments"
+          @update:sentiments="update('sentiments', $event)"
+        />
+      </v-container>
+    </v-tab-item>
+    <v-tab-item key="json" value="json">
+      <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
+    </v-tab-item>
+  </div>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { Character } from '@intake24/common/feedback';
 import type { NutrientTypeAttributes } from '@intake24/common/types/http/admin';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { useEntry } from '@intake24/admin/stores';
 
 import { CharacterSentiments } from '../partials';
@@ -43,44 +49,30 @@ import { CharacterSentiments } from '../partials';
 export default defineComponent({
   name: 'CharacterCard',
 
-  components: { CharacterSentiments },
+  components: { CharacterSentiments, JsonEditor },
 
   props: {
-    image: {
-      type: String as PropType<Character['image']>,
-      required: true,
-    },
-    nutrientTypeIds: {
-      type: Array as PropType<Character['nutrientTypeIds']>,
-      required: true,
-    },
-    sentiments: {
-      type: Array as PropType<Character['sentiments']>,
+    value: {
+      type: Object as PropType<Character>,
       required: true,
     },
   },
 
-  data() {
-    return {
-      nutrientTypeIdSearchInput: null as null | string,
+  setup(props, { emit }) {
+    const nutrientTypeIdSearchInput = ref<null | string>(null);
+
+    const nutrientTypes = computed<NutrientTypeAttributes>(() => useEntry().refs.nutrientTypes ?? []);
+
+    const update = (field: string, value: any) => {
+      emit('input', { ...props.value, [field]: value });
     };
-  },
 
-  computed: {
-    nutrientTypes(): NutrientTypeAttributes[] {
-      return useEntry().refs.nutrientTypes ?? [];
-    },
-  },
+    const updateNutrientTypeId = (value: string[]) => {
+      update('nutrientTypeIds', value);
+      nutrientTypeIdSearchInput.value = null;
+    };
 
-  methods: {
-    update(field: string, value: any) {
-      this.$emit(`update:${field}`, value);
-    },
-
-    updateNutrientTypeId(value: string[]) {
-      this.update('nutrientTypeIds', value);
-      this.nutrientTypeIdSearchInput = null;
-    },
+    return { nutrientTypes, nutrientTypeIdSearchInput, update, updateNutrientTypeId };
   },
 });
 </script>

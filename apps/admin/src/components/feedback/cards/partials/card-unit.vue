@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="unit">
+  <v-tab-item key="unit" value="unit">
     <language-selector
       v-model="internalUnit.name"
       :label="$t('feedback-schemes.cards.unit.name').toString()"
