@@ -90,7 +90,8 @@
     "add": "Nouvelle option",
     "remove": "Supprimer l'option",
     "label": "Libellé",
-    "value": "Valeur"
+    "value": "Valeur",
+    "exclusive": "Exclusive"
   },
 
   "date": "Date",

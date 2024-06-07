@@ -58,11 +58,12 @@ export const requiredLocaleTranslation = z.intersection(
 
 export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
 
-export function listOption<T extends z.ZodTypeAny = z.ZodString>(schema: T) {
+export function listOption<T extends z.ZodTypeAny = z.ZodString>(schema?: T) {
   return z.object({
     id: z.number().optional(),
     label: z.string(),
-    value: schema,
+    value: schema ?? z.string(),
+    exclusive: z.boolean().optional(),
   });
 }
 

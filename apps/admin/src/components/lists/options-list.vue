@@ -29,7 +29,7 @@
               <v-list-item-avatar class="drag-and-drop__handle">
                 <v-icon>$handle</v-icon>
               </v-list-item-avatar>
-              <v-list-item-content class="options-list__item">
+              <v-list-item-content class="options-list__item flex-column flex-lg-row align-stretch align-lg-stretch">
                 <v-text-field
                   v-model="option.label"
                   dense
@@ -44,6 +44,13 @@
                   :label="$t('common.options.value')"
                   outlined
                   :rules="optionValueRules"
+                />
+                <v-switch
+                  v-if="exclusive"
+                  v-model="option.exclusive"
+                  class="mt-0"
+                  hide-details="auto"
+                  :label="$t('common.options.exclusive')"
                 />
               </v-list-item-content>
               <v-list-item-action>
@@ -78,6 +85,9 @@ export default defineComponent({
   components: { Draggable: draggable },
 
   props: {
+    exclusive: {
+      type: Boolean,
+    },
     options: {
       type: Array as PropType<ListOption<ZodString | ZodNumber>[]>,
       required: true,
@@ -105,7 +115,7 @@ export default defineComponent({
 
   computed: {
     outputOptions(): ListOption<ZodString | ZodNumber>[] {
-      return this.currentOptions.map(({ label, value }) => ({ label, value }));
+      return this.currentOptions.map(({ id, ...rest }) => (rest));
     },
     optionValueRules(): RuleCallback[] {
       return [...this.defaultValueRules, ...this.rules];

@@ -20,6 +20,7 @@
       <template v-for="lang in Object.keys(options)" #[`lang.${lang}`]>
         <options-list
           :key="lang"
+          exclusive
           :options="options[lang]"
           @update:options="updateLanguage('options', lang, $event)"
         />

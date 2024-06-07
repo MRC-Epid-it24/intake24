@@ -297,7 +297,9 @@
     },
     "validation": {
       "required": "L'invite doit être remplie",
-      "message": "Message d'erreur à afficher"
+      "message": "Message d'erreur à afficher",
+      "min": "Minimum number of answers",
+      "max": "Maximum number of answers"
     },
     "templates": {
       "_": "Modèle d'invite",

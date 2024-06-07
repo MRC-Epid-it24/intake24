@@ -137,7 +137,8 @@
                 'validation' in dialog.prompt
                   && promptSettings[dialog.prompt.component].tabs.includes('validation')
               "
-              v-bind.sync="dialog.prompt.validation"
+              :limits="dialog.prompt.component === 'checkbox-list-prompt'"
+              :validation.sync="dialog.prompt.validation"
             />
             <component
               :is="dialog.prompt.component"

@@ -309,10 +309,13 @@ Multi-select list of options.
 
 - `options` - locale-specific list of options with properties:
 
-  - `label` (user-facing displayed value)
-  - `value` (value stored in database) can be specified
+  - `label` - (user-facing displayed value)
+  - `value` - (value stored in database) can be specified
+  - `exclusive` - exclusive flag - if selected, other options are deselected
 
 - `other` - `true` or `false` whether to show 'other' option, free-form text input
+- `min` - Minimum number of answers
+- `max` - Maximum number of answers
 
 ### Date picker prompt
 

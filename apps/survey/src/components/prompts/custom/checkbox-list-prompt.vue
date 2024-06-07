@@ -14,17 +14,18 @@
           :key="option.value"
           v-model="selected"
           class="mt-2"
+          :disabled="disableOption(option.value)"
           :error="hasErrors"
           hide-details="auto"
           :label="option.label"
           :value="option.value"
-          @change="update"
+          @change="update(option)"
         />
         <v-row v-if="prompt.other" align="center" class="mt-2" no-gutters>
-          <v-checkbox v-model="otherEnabled" class="my-auto" hide-details />
+          <v-checkbox v-model="otherEnabled" class="my-auto" :disabled="disableOption(otherOutput)" hide-details />
           <v-text-field
             v-model.trim="otherValue"
-            :disabled="!otherEnabled"
+            :disabled="!otherEnabled || disableOption(otherOutput)"
             :error="hasErrors && otherEnabled"
             hide-details="auto"
             :label="$t(`prompts.${type}.other`)"
@@ -48,6 +49,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref, watch } from 'vue';
 
+import type { ListOption } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 
@@ -72,17 +74,25 @@ export default defineComponent({
 
     const otherEnabled = ref(false);
     const otherValue = ref('');
-    const selected = ref(Array.isArray(props.value) ? props.value : []);
+    const otherOutput = computed(() => otherValue.value.length ? `Other: ${otherValue.value}` : '');
 
-    const state = computed(() =>
-      [...selected.value, otherValue.value.length ? `Other: ${otherValue.value}` : ''].filter(
-        Boolean,
-      ),
-    );
-    const isValid = computed(() => !props.prompt.validation.required || !!state.value.length);
+    const selected = ref(Array.isArray(props.value) ? props.value : []);
+    const state = computed(() => [...selected.value, otherOutput.value].filter(Boolean));
+
     const localeOptions = computed(
       () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
     );
+    const isMinSatisfied = computed(() => !props.prompt.validation.min || props.value.length >= props.prompt.validation.min);
+    const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.value.length <= props.prompt.validation.max);
+    const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.value.includes(option.value)));
+    const disableOption = (value: string) => !props.value.includes(value)
+      && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.value.length === props.prompt.validation.max));
+    const isValid = computed(() => {
+      if (!props.prompt.validation.required)
+        return false;
+
+      return isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value);
+    });
 
     const confirm = () => {
       if (isValid.value)
@@ -98,7 +108,12 @@ export default defineComponent({
       confirm,
     );
 
-    const update = () => {
+    const update = (option?: ListOption) => {
+      if (option?.exclusive && selected.value.includes(option.value)) {
+        selected.value = [option.value];
+        otherEnabled.value = false;
+      }
+
       clearErrors();
 
       ctx.emit('input', [...state.value]);
@@ -118,7 +133,9 @@ export default defineComponent({
       hasErrors,
       isValid,
       localeOptions,
+      disableOption,
       otherEnabled,
+      otherOutput,
       otherValue,
       selected,
       type,

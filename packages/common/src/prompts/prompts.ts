@@ -77,13 +77,23 @@ export const portionSizeComponentTypes = [
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 
-export const promptValidationProps = z.object({
-  validation: z.object({
-    required: z.boolean(),
-    message: localeTranslation,
-  }),
+export const promptValidation = z.object({
+  required: z.boolean(),
+  message: localeTranslation,
 });
-export type PromptValidationProps = z.infer<typeof promptValidationProps>;
+export type PromptValidation = z.infer<typeof promptValidation>;
+
+export const promptValidationWithLimits = promptValidation.extend({
+  min: z.coerce.number().int().nonnegative().nullish(),
+  max: z.coerce.number().int().nonnegative().nullish(),
+})
+  .refine((data) => {
+    if (typeof data.max !== 'number' || typeof data.min !== 'number')
+      return true;
+
+    return data.max >= data.min;
+  }, { path: ['validation.max'] });
+export type PromptValidationWithLimits = z.infer<typeof promptValidationWithLimits>;
 
 export const basePrompt = z.object({
   id: z.string(),
@@ -95,7 +105,7 @@ export const basePrompt = z.object({
 
 export type BasePrompt = z.infer<typeof basePrompt>;
 
-export const validatedPrompt = basePrompt.merge(promptValidationProps);
+export const validatedPrompt = basePrompt.extend({ validation: promptValidation });
 export type ValidatedPrompt = z.infer<typeof validatedPrompt>;
 
 export const baseCustomPrompt = basePrompt.extend({ type: z.literal('custom'), group: z.string().nullish() });
@@ -153,13 +163,15 @@ export const timePicker = z.object({
 export type TimePicker = z.infer<typeof timePicker>;
 
 // Custom
-const checkboxListPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
-  component: z.literal('checkbox-list-prompt'),
-  options: localeOptionList(),
-  other: z.boolean(),
-});
+const checkboxListPrompt = baseCustomPrompt
+  .extend({
+    component: z.literal('checkbox-list-prompt'),
+    options: localeOptionList(),
+    other: z.boolean(),
+    validation: promptValidationWithLimits,
+  });
 
-const datePickerPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
   component: z.literal('date-picker-prompt'),
   futureDates: z.boolean(),
 });
@@ -185,14 +197,14 @@ const noMoreInformationPrompt = baseCustomPrompt.extend({
   component: z.literal('no-more-information-prompt'),
 });
 
-const radioListPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+const radioListPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
   component: z.literal('radio-list-prompt'),
   options: localeOptionList(),
   orientation: z.enum(radioOrientations),
   other: z.boolean(),
 });
 
-const selectPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+const selectPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
   component: z.literal('select-prompt'),
   options: localeOptionList(),
   multiple: z.boolean(),
@@ -203,11 +215,11 @@ const sliderPrompt = baseCustomPrompt.extend({
   slider,
 });
 
-const textareaPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
+const textareaPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
   component: z.literal('textarea-prompt'),
 });
 
-const timePickerPrompt = baseCustomPrompt.merge(promptValidationProps).merge(timePicker).extend({
+const timePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(timePicker).extend({
   component: z.literal('time-picker-prompt'),
 });
 
