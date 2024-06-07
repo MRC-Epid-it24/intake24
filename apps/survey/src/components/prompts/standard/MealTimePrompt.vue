@@ -1,8 +1,19 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <card-layout
+    v-bind="{ food, meal, prompt, section, isValid }"
+    @action="action"
+  >
     <v-card-text class="pt-2 meal-time-prompt">
       <v-form @submit.prevent="action('next')">
+        <time-picker
+          v-if="prompt.timepickerType === 'simple'"
+          v-model="state"
+          :allowed-minutes="prompt.allowedMinutes"
+          :is12-hour-format="prompt.format === 'ampm'"
+        />
+
         <v-time-picker
+          v-else
           v-model="state"
           :allowed-minutes="allowedMinutes"
           :format="prompt.format"
@@ -33,7 +44,12 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn color="primary" text :title="promptI18n.no" @click.stop="action('cancel')">
+      <v-btn
+        color="primary"
+        text
+        :title="promptI18n.no"
+        @click.stop="action('cancel')"
+      >
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>
@@ -67,10 +83,13 @@ import type { MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 
+import TimePicker from '../../elements/TimePicker.vue';
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealTimePrompt',
+
+  components: { TimePicker },
 
   mixins: [createBasePrompt<'meal-time-prompt'>()],
 

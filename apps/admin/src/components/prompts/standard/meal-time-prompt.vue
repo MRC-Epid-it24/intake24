@@ -14,7 +14,9 @@
             @input="update('allowedMinutes', $event)"
           >
             <template #item="{ item }">
-              <i18n path="survey-schemes.prompts.timePicker.allowedMinutes.item">
+              <i18n
+                path="survey-schemes.prompts.timePicker.allowedMinutes.item"
+              >
                 <template #item>
                   <v-chip>
                     <span>{{ item }}</span>
@@ -23,7 +25,9 @@
               </i18n>
             </template>
             <template #selection="{ item }">
-              <i18n path="survey-schemes.prompts.timePicker.allowedMinutes.item">
+              <i18n
+                path="survey-schemes.prompts.timePicker.allowedMinutes.item"
+              >
                 <template #item>
                   <v-chip>
                     <span>{{ item }}</span>
@@ -60,6 +64,33 @@
             </v-btn>
           </v-btn-toggle>
         </v-col>
+        <v-col cols="12" lg="6" md="6">
+          <v-card-title>
+            {{ $t('survey-schemes.prompts.timePicker.pickerType._') }}
+          </v-card-title>
+          <v-btn-toggle
+            class="d-flex"
+            color="primary"
+            mandatory
+            :value="timepickerType"
+            @change="update('timepickerType', $event)"
+          >
+            <v-btn
+              class="px-10 flex-grow-1 flex-md-grow-0"
+              :title="$t('survey-schemes.prompts.timePicker.pickerType.clock')"
+              value="clock"
+            >
+              {{ $t('survey-schemes.prompts.timePicker.pickerType.clock') }}
+            </v-btn>
+            <v-btn
+              class="px-10 flex-grow-1 flex-md-grow-0"
+              :title="$t('survey-schemes.prompts.timePicker.pickerType.simple')"
+              value="simple"
+            >
+              {{ $t('survey-schemes.prompts.timePicker.pickerType.simple') }}
+            </v-btn>
+          </v-btn-toggle>
+        </v-col>
       </v-row>
     </v-card-text>
   </v-tab-item>
@@ -85,6 +116,10 @@ export default defineComponent({
     },
     format: {
       type: String as PropType<Prompts['meal-time-prompt']['format']>,
+      required: true,
+    },
+    timepickerType: {
+      type: String as PropType<Prompts['meal-time-prompt']['timepickerType']>,
       required: true,
     },
   },

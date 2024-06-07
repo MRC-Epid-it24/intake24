@@ -98,9 +98,15 @@ export type BasePrompt = z.infer<typeof basePrompt>;
 export const validatedPrompt = basePrompt.merge(promptValidationProps);
 export type ValidatedPrompt = z.infer<typeof validatedPrompt>;
 
-export const baseCustomPrompt = basePrompt.extend({ type: z.literal('custom'), group: z.string().nullish() });
+export const baseCustomPrompt = basePrompt.extend({
+  type: z.literal('custom'),
+  group: z.string().nullish(),
+});
 export type BaseCustomPrompt = z.infer<typeof baseCustomPrompt>;
-export const basePortionPrompt = basePrompt.extend({ type: z.literal('portion-size'), badges: z.boolean() });
+export const basePortionPrompt = basePrompt.extend({
+  type: z.literal('portion-size'),
+  badges: z.boolean(),
+});
 export type BasePortionPrompt = z.infer<typeof basePortionPrompt>;
 export const baseStandardPrompt = basePrompt.extend({ type: z.literal('standard') });
 export type BaseStandardPrompt = z.infer<typeof baseStandardPrompt>;
@@ -148,7 +154,15 @@ export type Slider = z.infer<typeof slider>;
 
 export const timePicker = z.object({
   format: z.enum(['ampm', '24hr']),
-  allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
+  allowedMinutes: z.union([
+    z.literal(1),
+    z.literal(5),
+    z.literal(10),
+    z.literal(15),
+    z.literal(20),
+    z.literal(30),
+  ]),
+  timepickerType: z.enum(['clock', 'simple']),
 });
 export type TimePicker = z.infer<typeof timePicker>;
 
@@ -207,9 +221,12 @@ const textareaPrompt = baseCustomPrompt.merge(promptValidationProps).extend({
   component: z.literal('textarea-prompt'),
 });
 
-const timePickerPrompt = baseCustomPrompt.merge(promptValidationProps).merge(timePicker).extend({
-  component: z.literal('time-picker-prompt'),
-});
+const timePickerPrompt = baseCustomPrompt
+  .merge(promptValidationProps)
+  .merge(timePicker)
+  .extend({
+    component: z.literal('time-picker-prompt'),
+  });
 
 const yesNoPrompt = baseCustomPrompt.extend({
   component: z.literal('yes-no-prompt'),
@@ -336,7 +353,13 @@ const redirectPrompt = baseStandardPrompt.extend({
   component: z.literal('redirect-prompt'),
   rating: z.boolean(),
   url: z.string().nullable(),
-  identifier: z.union([z.literal('userId'), z.literal('username'), z.literal('urlAuthToken'), z.string(), z.null()]),
+  identifier: z.union([
+    z.literal('userId'),
+    z.literal('username'),
+    z.literal('urlAuthToken'),
+    z.string(),
+    z.null(),
+  ]),
   timer: z.number(),
   target: z.union([z.literal('_self'), z.literal('_blank')]),
 });
@@ -355,7 +378,15 @@ const splitFoodPrompt = baseStandardPrompt.extend({
 
 const submitPrompt = baseStandardPrompt.extend({
   component: z.literal('submit-prompt'),
-  review: z.record(z.enum(promptLayouts), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
+  review: z.record(
+    z.enum(promptLayouts),
+    z.union([
+      z.literal(false),
+      z.literal('scroll'),
+      z.literal('checkbox'),
+      z.literal('onecheckbox'),
+    ]),
+  ),
 });
 
 export const prompts = z.object({

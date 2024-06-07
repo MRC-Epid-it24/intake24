@@ -317,6 +317,11 @@
         "_": "Time format",
         "ampm": "AM/PM",
         "24hr": "24-hour"
+      },
+      "pickerType": {
+        "_": "Time picker type",
+        "simple": "Simple",
+        "clock": "Clock"
       }
     },
     "validation": {
