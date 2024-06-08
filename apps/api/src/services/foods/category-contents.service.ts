@@ -154,6 +154,7 @@ function categoryContentsService({
     });
 
     const foodHeaders = foods.map((row) => {
+      // TODO: Prone to error, should be handled better (if name is NULL and prototypeLocals is NULL, etc.)
       const name = row.food?.locals?.[0].name ?? row.food?.prototypeLocals?.[0].name;
 
       return { code: row.foodCode, name };
