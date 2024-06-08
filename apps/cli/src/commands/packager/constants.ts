@@ -4,6 +4,7 @@ export class PkgConstants {
   public static readonly GLOBAL_FOODS_FILE_NAME = 'global-foods.json';
   public static readonly GLOBAL_CATEGORIES_FILE_NAME = 'global-categories.json';
   public static readonly LOCALES_FILE_NAME = 'locales.json';
+  public static readonly CATEGORY_PSM_FILE_NAME = 'category-psm.json';
   public static readonly LOCAL_FOODS_FILE_NAME = 'local-foods.json';
   public static readonly LOCAL_CATEGORIES_FILE_NAME = 'local-categories.json';
   public static readonly ENABLED_LOCAL_FOODS_FILE_NAME = 'enabled-local-foods.json';

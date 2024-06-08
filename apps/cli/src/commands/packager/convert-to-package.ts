@@ -14,6 +14,7 @@ import type {
   CsvFoodRecordUnprocessed,
   CSVHeaders,
   CsvResultStructure,
+  DefaultPSMCategory,
 } from './types/csv-import';
 import type { PkgAssociatedFood, PkgGlobalFood, PkgLocalFood, PkgPortionSizeMethod, PkgStandardUnit } from './types/foods';
 import { PkgConstants } from './constants';
@@ -49,10 +50,6 @@ const allThePsmInTheImportCSV = new Set<string>([]);
 
 export const csvHeaders = Object.values(CsvFoodRecords).map(record => record.header);
 
-// function UnionTypeToArray<T extends string>() {
-//   return <U extends T[]>(...args: U & ([T] extends [U[number]] ? unknown : never)) => args;
-// }
-
 export class ConvertorToPackage {
   private readonly inputFilePath: string;
   private inputDirPath: string | undefined;
@@ -63,6 +60,7 @@ export class ConvertorToPackage {
   private exisingCategories: string[] | undefined;
 
   private locales: PkgLocale[] | undefined = [];
+  private categoryPsm: DefaultPSMCategory[] | undefined;
   private localeId: string | null = null;
   private globalFoodList: PkgGlobalFood[] = [];
   private localFoodList: PkgLocalFood[] = [];
@@ -124,6 +122,19 @@ export class ConvertorToPackage {
     else {
       this.logger.debug('No locales found');
       return null;
+    }
+  }
+
+  private async readCategoryPsm(): Promise<DefaultPSMCategory[] | undefined> {
+    this.logger.info('Loading category PSM');
+    const categoryPsmJSON = await this.readJSON<DefaultPSMCategory[]>(PkgConstants.CATEGORY_PSM_FILE_NAME);
+    if (categoryPsmJSON !== undefined && categoryPsmJSON !== null) {
+      this.logger.debug('Loaded category PSM');
+      return categoryPsmJSON;
+    }
+    else {
+      this.logger.debug('No category PSMs found');
+      return undefined;
     }
   }
 
@@ -257,8 +268,29 @@ export class ConvertorToPackage {
     return associatedFoods;
   };
 
+  // Check if the parent categories have a default PSM
+  private checkForCategoryDefaultPsm = (parentCategories: string[]): string => {
+    this.logger.info(`Checking for default PSM - ${parentCategories.join(', ')}`);
+    if (parentCategories.length === 0 || !this.categoryPsm)
+      return '';
+    const defaultPsm: string = '';
+    // get the first PSM for the parent category that has PSM in the this.categoryPsm
+    for (const category of parentCategories) {
+      const psm = this.categoryPsm.find(psm => psm.code === category)?.psm;
+      this.logger.info(`PSM for category ${category} - ${psm}`);
+      if (psm)
+        return psm;
+    }
+    return defaultPsm;
+  };
+
   private fromCSVPortionSizeMethodPackage = (psm: string): PkgPortionSizeMethod[] => {
-    if (!psm || psm.length === 0)
+    this.logger.debug(`Processing PSM - ${psm}`);
+    const psmToUse = psm;
+    // TODO: Check if the parent categories have a default PSM
+    // const psmToUse = psm.length > 0 ? psm : this.checkForCategoryDefaultPsm(parentCategories);
+
+    if (!psmToUse || psmToUse.length === 0)
       return [];
     const normalizedPsm: PkgPortionSizeMethod[] = [];
     const lines = psm
@@ -269,6 +301,9 @@ export class ConvertorToPackage {
       const method = keyValuePairs.find(pair => pair[0] === 'Method')?.[1];
       const useForRecipes = keyValuePairs.find(pair => pair[0] === 'use for recipes')?.[1];
       const conversionFactor = keyValuePairs.find(pair => pair[0] === 'conversion')?.[1];
+      const servingImageSet = keyValuePairs.find(pair => pair[0] === 'serving-image-set')?.[1];
+      const leftoversImageSet = keyValuePairs.find(pair => pair[0] === 'leftovers-image-set')?.[1];
+      this.logger.info(`Method: ${method}, useForRecipes: ${useForRecipes}, conversionFactor: ${conversionFactor}`);
 
       allThePsmInTheImportCSV.add(method!);
       switch (method) {
@@ -277,9 +312,9 @@ export class ConvertorToPackage {
             method: 'as-served',
             description: 'use_an_image',
             conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            leftoversImageSet: keyValuePairs.find(pair => pair[0] === 'leftovers')?.[1],
+            leftoversImageSet: leftoversImageSet ?? '',
             useForRecipes: useForRecipes === 'true',
-            servingImageSet: keyValuePairs.find(pair => pair[0] === 'serving')?.[1] ?? '',
+            servingImageSet: servingImageSet ?? '',
           });
           break;
         case 'guide-image':
@@ -418,23 +453,6 @@ export class ConvertorToPackage {
 
       const cleanedParentCategories = [...parentCategoriesUnique].filter(category => ![...parentCategoriesFiltered].includes(category));
 
-      this.logger.info(`Cleaned categories for food ${record['intake24 code']}: ${cleanedParentCategories}, was ${parentCategoriesUnique}`);
-
-      // const parentCategoriesFiltered: string[] = [];
-      // parentCategoriesUniqueReversed.forEach((category) => {
-      //   const regex = new RegExp(`^${category}:_`);
-      //   const matchingKeys = Array.from(localeCategoriesHierarchy.keys()).filter(key => regex.test(key));
-      //   this.logger.info(`Matching keys for category ${category}: ${matchingKeys}`);
-      //   const matchedParentCategories = new Set([...matchingKeys.map(key => localeCategoriesHierarchy.get(key)).flat()]);
-      //   this.logger.info(`Matched parent categories for category ${category}: ${[...matchedParentCategories]}`);
-      //   if (matchedParentCategories.size > 0) {
-      //     matchedParentCategories.forEach((parentCategory) => {
-      //       if (parentCategory)
-      //         parentCategoriesFiltered.push(parentCategory);
-      //     });
-      //   };
-      // });
-
       const globalFood: PkgGlobalFood = {
         version: randomUUID(),
         code: record['intake24 code'],
@@ -476,6 +494,9 @@ export class ConvertorToPackage {
     const localFoodList: PkgLocalFood[] = [];
     const enabledLocalesFoodList: string[] = [];
     for (const record of data) {
+      this.logger.info(`Processing local food ${record['intake24 code']}`);
+      const localPsm = this.fromCSVPortionSizeMethodPackage(record['portion size estimation methods']);
+      this.logger.info(`Local PSM for food ${record['intake24 code']}: ${localPsm.map(psm => psm.method).join(', ')}`);
       const localFood: PkgLocalFood = {
         version: randomUUID(),
         code: record['intake24 code'],
@@ -485,7 +506,7 @@ export class ConvertorToPackage {
           record['food composition table record id'],
         ),
         associatedFoods: this.linkAssociatedFoodCategories(record['associated food or category']),
-        portionSize: this.fromCSVPortionSizeMethodPackage(record['portion size estimation methods']),
+        portionSize: localPsm,
         brandNames: [],
       };
       localFoodList.push(localFood);
@@ -565,6 +586,7 @@ export class ConvertorToPackage {
         this.logger.error('No locale found, exiting');
         throw new Error('No locale found');
       }
+      // this.categoryPsm = await this.readCategoryPsm();
       const uproccessedRecords = await this.processCsvFile(options.importedFile);
 
       // 1. Convert to the GlobalFood JSON structure
@@ -596,9 +618,6 @@ export class ConvertorToPackage {
         structure: this.csvStructure,
         importedFile: this.inputFilePath,
       });
-
-      // const data = await this.apiClient.categories.getAllCategories();
-      // this.logger.info('Data from the API:', data);
     }
     else {
       this.logger.debug('Converting to package from unspecified file type');

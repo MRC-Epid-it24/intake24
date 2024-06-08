@@ -18,96 +18,10 @@ export interface CsvResultStructure {
   [key: string]: string;
 }
 
-// export interface CsvFoodRecord {
-//   intake24_code: {
-//     header: 'Intake24 code';
-//     type: string;
-//     format: string;
-//     required: true;
-//   };
-//   english_description: {
-//     header: 'English description';
-//     type: string;
-//     format: string;
-//     required: true;
-//   };
-//   local_description: {
-//     header: 'Local description';
-//     type: string;
-//     required: true;
-//   };
-//   foodCompositionTable: {
-//     header: 'Food composition table';
-//     type: string;
-//     format: string;
-//     required: true;
-//   };
-//   foodCompostionTableRecordId: {
-//     header: 'Food composition table record ID';
-//     type: string;
-//     required: true;
-//   };
-//   associatedFoodCategory: {
-//     header: 'Associated food or category';
-//     type: string;
-//     required: false;
-//   };
-//   portionSizeEstimationMethods: {
-//     header: 'Portion size estimation methods';
-//     type: string;
-//     required: true;
-//   };
-//   readyMealOption: {
-//     header: 'Ready meal option';
-//     type: string;
-//     required: false;
-//   };
-//   sameAsBeforeOption: {
-//     header: 'Same as before option';
-//     type: string;
-//     required: false;
-//   };
-//   reasonableAmount: {
-//     header: 'Reasonable amount';
-//     type: string;
-//     required: false;
-//   };
-//   useInRecipes: {
-//     header: 'Use in recipes';
-//     type: string;
-//     required: false;
-//   };
-//   brandNames: {
-//     header: 'Brand names';
-//     type: string;
-//     required: false;
-//   };
-//   link: {
-//     header: 'Link';
-//     type: string;
-//     required: false;
-//   };
-//   categories?: {
-//     header: 'Categories';
-//     type: string;
-//     required: false;
-//   };
-//   revisedLocalDescription: {
-//     header: 'Revised local description';
-//     type: string;
-//     required: false;
-//   };
-//   action: {
-//     header: 'Action';
-//     type: string;
-//     required: false;
-//   };
-//   milkInAHotDrink: {
-//     header: 'Milk in a hot drink';
-//     type: string;
-//     required: false;
-//   };
-// }
+export interface DefaultPSMCategory {
+  code: string;
+  psm: string;
+}
 
 export const CsvFoodRecords = {
   intake24_code: {
@@ -197,7 +111,7 @@ export const CsvFoodRecords = {
   },
 } as const;
 
-//** Type conversions */
+//* * Type conversions */
 // type GenerateTypeFromProperty<T, P extends keyof CsvRecordStructure> = {
 //   [K in keyof T]: T[K] extends { [key in P]: infer U } ? U : never;
 // }[keyof T];
@@ -211,7 +125,7 @@ type EnforceCsvRecordStructure<T> = {
 };
 
 type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
-//** Type conversions */
+//* * Type conversions */
 
 type CsvFoodRecordType = EnforceCsvRecordStructure<typeof CsvFoodRecords>;
 
@@ -233,7 +147,7 @@ export type CSVOptionalFields = Pick<
     [K in keyof CSVFields]: CsvFoodRecordType[K] extends { required: false } ? K : never;
   }[keyof CSVFields]
 >;
-//Union of required fields (CSVRequiredFields) and optional fields (CSVFields)
+// Union of required fields (CSVRequiredFields) and optional fields (CSVFields)
 export type CSVFieldsWithOptional = AtLeastOne<CSVOptionalFields> | CSVRequiredFields;
 
 export type CsvFoodRecordUnprocessed = {
