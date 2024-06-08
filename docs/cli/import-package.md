@@ -1,6 +1,7 @@
 # Import food data from a portable format
 
-This command allows to import a new locale/images/nutrient table from the pre-defined portable format (archived folder). The exact format can be supplied upon request
+This command allows to import a new locale/images/nutrient table from the pre-defined portable format (archived folder). The exact format can be supplied upon request.
+**CLI need to be build before usage**
 
 ## Available options:
 

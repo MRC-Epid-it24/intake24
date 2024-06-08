@@ -1,5 +1,6 @@
 import type { CategoryContents } from '@intake24/common/types/http';
 import type {
+  CategoryGlobalListEntry,
   CreateGlobalCategoryRequest,
   CreateLocalCategoryRequest,
   GlobalCategoryEntry,
@@ -33,6 +34,10 @@ export class CategoriesApiV4 {
 
   public async getRootCategories(localeId: string): Promise<CategoryContents> {
     return this.baseClient.get<CategoryContents>(`${CategoriesApiV4.apiPath}/${localeId}`);
+  }
+
+  public async getAllCategories(): Promise<CategoryGlobalListEntry[]> {
+    return this.baseClient.get<CategoryGlobalListEntry[]>(`${CategoriesApiV4.adminApiPath}`);
   }
 
   public async getCategoryContents(
