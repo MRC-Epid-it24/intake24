@@ -48,6 +48,9 @@ function normaliseRankingData(ranking: RankingData): RankingData {
     return mapValues(ranking, _ => 1);
   }
   else {
+    // // delete the logging
+    // console.log('Original ranking:', ranking);
+    // console.log('Normalized ranking:', mapValues(ranking, v => (v - min) / range));
     return mapValues(ranking, v => (v - min) / range);
   }
 }

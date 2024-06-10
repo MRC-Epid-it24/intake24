@@ -15,6 +15,7 @@ import {
   hashPassword,
   packageExportV3,
   packageImportV4,
+  searchTest,
 } from './commands';
 import {
   conflictResolutionOptions,
@@ -97,6 +98,14 @@ async function run() {
         default:
           throw new Error(`Unexpected version option: ${version}`);
       }
+    });
+
+  program
+    .command('search-test')
+    .description('Test search quality of the system')
+    .option('-t, --term <term>', 'Search term')
+    .action(async (cmd) => {
+      await searchTest(cmd);
     });
 
   const conflictResolutionOption = new Option(
