@@ -58,11 +58,11 @@ export default class PopularityCountersService {
       });
 
       const currentCounts = Object.fromEntries(
-        counters.map(row => [row.foodCode, row.occurrences]),
+        counters.map(row => [row.foodCode, { occurences: row.occurrences, multiplier: row.multiplier }]),
       );
 
       for (const k in occurrences) {
-        const count = currentCounts[k];
+        const count = currentCounts[k].occurences;
         if (count)
           occurrences[k] += count;
       }
@@ -71,6 +71,7 @@ export default class PopularityCountersService {
         localeId,
         foodCode: e[0],
         occurrences: e[1],
+        multiplier: currentCounts[e[0]] ? currentCounts[e[0]].multiplier : 1,
       }));
 
       await PAOccurrence.bulkCreate(updates, {
