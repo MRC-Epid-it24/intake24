@@ -41,7 +41,7 @@ export default async (cmd: SearchTestArgs): Promise<void> => {
     const result = await apiClient.baseClient.get(
       `/api/foods/UK_V3_2023?description=${searchTerm}`,
     );
-    // console.log(result);
+    console.log(result);
 
     // console.log("reached here")
     // const csvFilePath = path.join('../../../it24-ai/', 'orig-search-result.csv');
