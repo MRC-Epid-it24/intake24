@@ -43,9 +43,11 @@
         </v-row>
       </v-container>
     </v-item-group>
-    <v-alert v-else border="left" outlined type="warning">
-      {{ $t('prompts.unknown.text', { food: foodName }) }}
-    </v-alert>
+    <v-card-text v-else>
+      <v-alert border="left" outlined type="warning">
+        {{ $t(`prompts.${type}.unknown`, { food: foodName }) }}
+      </v-alert>
+    </v-card-text>
   </card-layout>
 </template>
 

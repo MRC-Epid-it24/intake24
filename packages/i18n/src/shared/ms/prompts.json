@@ -283,7 +283,8 @@
       "use_these_crisps_in_a_bag": "Gunakan kerepok ini di dalam pek",
       "use_tortilla_chips_in_a_bowl": "Gunakan kerepek tortilla dalam mangkuk",
       "weight": "Masukkan berat/isipadu"
-    }
+    },
+    "unknown": "Pada masa ini tiada kaedah anggaran saiz porsi untuk {food}."
   },
   "linkedAmount": {
     "label": "Berapa banyak keping (daripada {quantity}) anda telah ambil {food}.?",
@@ -436,11 +437,6 @@
       "withFood": "{unit} {food} yang anda ambil?"
     },
     "confirm": "Saya telah mengambil sebanyak itu"
-  },
-  "unknown": {
-    "name": "Tidak diketahui",
-    "text": "",
-    "description": "Pada masa ini tiada kaedah anggaran saiz porsi untuk {food}."
   },
   "weight": {
     "name": "Berat",

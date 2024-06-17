@@ -284,7 +284,8 @@
       "use_these_crisps_in_a_bag": "Use these crisps in a bag",
       "use_tortilla_chips_in_a_bowl": "Use tortilla chips in a bowl",
       "weight": "Enter weight/volume"
-    }
+    },
+    "unknown": "There is currently no portion size estimation method for {food}."
   },
   "linkedAmount": {
     "label": "{unit} (out of {quantity}) did you have {food} on?",
@@ -470,11 +471,6 @@
       "withFood": "{unit} of {food} did you have?"
     },
     "confirm": "I had that many"
-  },
-  "unknown": {
-    "name": "Unknown",
-    "text": "",
-    "description": "There is currently no portion size estimation method for {food}."
   },
   "weight": {
     "name": "Weight",

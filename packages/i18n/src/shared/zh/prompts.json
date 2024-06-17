@@ -284,7 +284,8 @@
       "use_these_crisps_in_a_bag": "使用袋装的薯",
       "use_tortilla_chips_in_a_bowl": "使用碗中的墨西哥玉米片",
       "weight": "输入重量/体积"
-    }
+    },
+    "unknown": "{food}没有当前的份量估计方法。"
   },
   "linkedAmount": {
     "label": "在 {food} 中，您吃了多少片 ({quantity})?",
@@ -436,11 +437,6 @@
       "withFood": "你吃了{unit}的{food}"
     },
     "confirm": "我吃了那么多"
-  },
-  "unknown": {
-    "name": "未知",
-    "text": "",
-    "description": "{food}没有当前的份量估计方法。"
   },
   "weight": {
     "name": "重量",

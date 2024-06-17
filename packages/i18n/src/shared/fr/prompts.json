@@ -278,7 +278,8 @@
       "use_these_crisps_in_a_bag": "Utiliser ces chips dans un sachet",
       "use_tortilla_chips_in_a_bowl": "Utiliser des chips tortilla dans un bol",
       "weight": "Entrer le poids ou le volume"
-    }
+    },
+    "unknown": "Il n'y a actuellement aucune méthode d'estimation de la taille de portion pour {food}."
   },
   "linkedAmount": {
     "label": "{unit} (par rapport à {quantity}) l'aliment {food} couvrait quel pourcentage ?",
@@ -433,11 +434,6 @@
       "withFood": "{unit} de {food} avez-vous consommé ?"
     },
     "confirm": "J'en ai consommé cette quantité"
-  },
-  "unknown": {
-    "name": "Inconnu",
-    "text": "",
-    "description": "Il n'y a actuellement aucune méthode d'estimation de la taille de portion pour {food}."
   },
   "weight": {
     "name": "Poids",
