@@ -322,6 +322,11 @@
     "description": "",
     "container": "Sélectionnez le bol qui ressemble le plus à celui que vous avez utilisé pour {food}."
   },
+  "directWeight": {
+    "name": "Poids",
+    "text": "",
+    "description": "Entrez la quantité consommée."
+  },
   "drinkScale": {
     "name": "Quantification du verre",
     "text": "",
@@ -434,10 +439,5 @@
       "withFood": "{unit} de {food} avez-vous consommé ?"
     },
     "confirm": "J'en ai consommé cette quantité"
-  },
-  "weight": {
-    "name": "Poids",
-    "text": "",
-    "description": "Entrez la quantité consommée."
   }
 }

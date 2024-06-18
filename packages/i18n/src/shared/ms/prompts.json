@@ -327,6 +327,11 @@
     "description": "",
     "container": "Pilih mangkuk yang paling sama seperti mangkuk yang anda gunakan untuk {food} anda."
   },
+  "directWeight": {
+    "name": "Berat",
+    "text": "",
+    "description": "Masukkan jumlah yang telah anda ambil."
+  },
   "drinkScale": {
     "name": "Skala minuman",
     "text": "",
@@ -437,10 +442,5 @@
       "withFood": "{unit} {food} yang anda ambil?"
     },
     "confirm": "Saya telah mengambil sebanyak itu"
-  },
-  "weight": {
-    "name": "Berat",
-    "text": "",
-    "description": "Masukkan jumlah yang telah anda ambil."
   }
 }

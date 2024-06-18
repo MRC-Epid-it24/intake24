@@ -411,10 +411,6 @@ function surveyService({
             break;
         }
 
-        console.log(`identifier`, identifier);
-        console.log(`identifierValue`, identifierValue);
-        console.log(`url`, url);
-
         if (!identifierValue || !url)
           return acc;
 

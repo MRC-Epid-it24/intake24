@@ -328,6 +328,11 @@
     "description": "",
     "container": "请选择一个看起来最像您在吃{food}时使用的餐碗的图片。"
   },
+  "directWeight": {
+    "name": "重量",
+    "text": "",
+    "description": "输入你吃了多少。"
+  },
   "drinkScale": {
     "name": "饮料秤",
     "text": "",
@@ -437,10 +442,5 @@
       "withFood": "你吃了{unit}的{food}"
     },
     "confirm": "我吃了那么多"
-  },
-  "weight": {
-    "name": "重量",
-    "text": "",
-    "description": "输入你吃了多少。"
   }
 }

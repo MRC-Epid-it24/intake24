@@ -22,6 +22,7 @@ import { recallLog } from '../stores';
 import {
   asServedComplete,
   cerealComplete,
+  directWeightComplete,
   drinkScaleComplete,
   guideImageComplete,
   milkInAHotDrinkComplete,
@@ -495,6 +496,28 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
         portionSizeMethodSelected(foodState, 'guide-image')
           ? 'Guide image estimation already complete'
           : 'Guide image estimation not selected',
+      );
+      return false;
+    }
+
+    case 'direct-weight-prompt': {
+      if (
+        portionSizeMethodSelected(foodState, 'direct-weight')
+        && !directWeightComplete(foodState)
+      ) {
+        recallLog().promptCheck(
+          component,
+          true,
+          'Direct weight estimation selected but not yet complete',
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        component,
+        false,
+        portionSizeMethodSelected(foodState, 'direct-weight')
+          ? 'Direct weight estimation already complete'
+          : 'Direct weight estimation not selected',
       );
       return false;
     }

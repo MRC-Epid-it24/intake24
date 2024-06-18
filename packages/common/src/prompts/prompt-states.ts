@@ -68,7 +68,9 @@ export type PromptStates = {
     leftoversImageConfirmed: boolean;
     leftoversPrompt?: boolean;
   };
-  'direct-weight-prompt': never;
+  'direct-weight-prompt': {
+    portionSize: PortionSizeStates['direct-weight'];
+  };
   'drink-scale-prompt': {
     portionSize: PortionSizeStates['drink-scale'];
     panel: number;

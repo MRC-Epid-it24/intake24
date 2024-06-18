@@ -83,6 +83,10 @@ export type PortionSizeStates = {
     serving: SelectedAsServedImage | null;
     leftovers: SelectedAsServedImage | null;
   };
+  'direct-weight': PortionSizeStateBase & {
+    method: 'direct-weight';
+    quantity: number | null;
+  };
   'drink-scale': PortionSizeStateBase & {
     method: 'drink-scale';
     drinkwareId: string;
@@ -152,14 +156,13 @@ export type PortionSizeStates = {
     unit: PizzaUnit | null;
     quantity: number;
   };
+  'recipe-builder': PortionSizeStateBase & { method: 'recipe-builder' };
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';
     unit: StandardUnit | null;
     quantity: number;
     linkedQuantity: number;
   };
-  'direct-weight': PortionSizeStateBase & { method: 'direct-weight' };
-  'recipe-builder': PortionSizeStateBase & { method: 'recipe-builder' };
 };
 
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];

@@ -5,6 +5,7 @@ import StandardUnits from './standard-units.vue';
 export default {
   'as-served': PortionImage,
   cereal: PortionImage,
+  'direct-weight': PortionImage,
   'drink-scale': PortionImage,
   'guide-image': PortionImage,
   'milk-on-cereal': PortionImage,

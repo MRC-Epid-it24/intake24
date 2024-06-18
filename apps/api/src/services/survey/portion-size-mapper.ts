@@ -74,6 +74,16 @@ export function cerealMapper(foodId: string, state: PortionSizeStates['cereal'])
   ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
 }
 
+export function directWeightMapper(foodId: string, state: PortionSizeStates['direct-weight']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+  const { leftoversWeight, servingWeight, quantity } = state;
+
+  return [
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+    { name: 'quantity', value: quantity?.toString() ?? '0' },
+  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+}
+
 export function drinkScaleMapper(foodId: string, state: PortionSizeStates['drink-scale']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
   const {
     containerId,
@@ -232,6 +242,7 @@ export const portionSizeMappers: Record<
 > = {
   'as-served': asServedMapper,
   cereal: cerealMapper,
+  'direct-weight': directWeightMapper,
   'drink-scale': drinkScaleMapper,
   'guide-image': guideImageMapper,
   'milk-in-a-hot-drink': milkInAHotDrinkMapper,
@@ -239,9 +250,8 @@ export const portionSizeMappers: Record<
   'parent-food-portion': parentFoodPortionMapper,
   pizza: pizzaPortionMapper,
   'pizza-v2': pizzaV2PortionMapper,
-  'standard-portion': standardPortionMapper,
-  'direct-weight': genericMapper,
   'recipe-builder': genericMapper,
+  'standard-portion': standardPortionMapper,
 };
 
 export type PortionSizeMappers = typeof portionSizeMappers;

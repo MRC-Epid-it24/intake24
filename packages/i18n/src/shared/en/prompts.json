@@ -328,6 +328,11 @@
     "description": "",
     "container": "Select the bowl that looks most like the one you used for your {food}."
   },
+  "directWeight": {
+    "name": "Weight",
+    "text": "",
+    "description": "Enter how much you had in grams or mls."
+  },
   "drinkScale": {
     "name": "Drink scale",
     "text": "",
@@ -471,10 +476,5 @@
       "withFood": "{unit} of {food} did you have?"
     },
     "confirm": "I had that many"
-  },
-  "weight": {
-    "name": "Weight",
-    "text": "",
-    "description": "Enter how much you had."
   }
 }
