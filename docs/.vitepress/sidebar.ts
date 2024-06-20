@@ -151,7 +151,7 @@ export const sidebar = {
   ],
   '/api/': [
     {
-      text: 'Global',
+      text: 'API',
       collapsable: false,
       items: [
         {
@@ -159,9 +159,17 @@ export const sidebar = {
           link: '/api/',
         },
         {
-          text: 'API Reference',
+          text: 'OpenAPI Reference',
           link: '/open-api.html',
           target: '_blank',
+        },
+        {
+          text: 'Authentication',
+          link: '/api/authentication',
+        },
+        {
+          text: 'Rate and usage limits',
+          link: '/api/rate-limits',
         },
       ],
     },
