@@ -27,7 +27,7 @@ Content-Type: application/json
 401 Unauthorized
 ```
 
-#### Invalid authorization attempt will will return HTTP `403 Forbidden` status code.
+#### Invalid authorization attempt will return HTTP `403 Forbidden` status code.
 
 ```json
 403 Forbidden

@@ -8,7 +8,7 @@ API is rate limited to allow fair usage. API responses will include headers that
 | RateLimit-Policy | Informative rate policy                              |
 | Retry-After      | Attached on blocked requests                         |
 
-Blocked requests will return an HTTP `429 Too Many Requests` status code.
+Blocked requests will return HTTP `429 Too Many Requests` status code.
 
 ```json
 429 Too Many Requests

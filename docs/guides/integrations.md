@@ -34,20 +34,41 @@ Once enabled, two options listed below can be used to create respondent accounts
 - use [create user API endpoint](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"}
 - create JWT token with desired payload according the specification
 
-#### Specifications of `token`
+#### Token specifications
 
 - `token` must be a valid JWT token signed with the [`JWT secret`](/admin/surveys/#users-settings)
 - `HS256` and `HS512` algorithms are supported
-- expected claims / payload shape:
-  - `username` - Unique respondent username within the survey
-  - `password` (optional) - password for username:password login
-  - `redirectUrl` (optional) - redirect URL for user redirection after recall completion
-  - `name` (optional) - user's name for personalisation
+
+#### Standard JWT claims
+
+Use standard JWT claims to help identify JWT and limit its lifetime.
+
+- `iat` - issued at timestamp (NumericDate in seconds)
+- `exp` - expiration timestamp (NumericDate in seconds)
+- `aud` - API resource server, e.g. `https://api.example.com`
+- `sub` - survey identifier -> `surveyId`
+- `iss` - issuer of the token
+
+:::warning
+Tokens without standard claims limit their identifiability and may pose increased security risk. E.g. tokens with missing `exp` claim won't expire, thus can pose a security risk.
+:::
+
+#### User creation claims
+
+- `username` - Unique respondent username within the survey
+- `password` (optional) - password for `username:password` login, can be omitted if only authentication URL is intended to be used
+- `redirectUrl` (optional) - redirect URL for user redirection after recall completion
+- `name` (optional) - user's name for personalisation
 
 #### JWT payload
 
 ```json
 {
+  "iat": number,
+  "exp": number,
+  "aud": string,
+  "sub": string,
+  "iss": string,
   "username": string,
   "password"?: string
   "redirectUrl"?: string
