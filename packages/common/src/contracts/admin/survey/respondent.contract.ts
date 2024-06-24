@@ -4,13 +4,14 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { emailCopy } from '@intake24/common/types';
-import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as surveyId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { createRespondentRequest, respondentEntry, respondentListEntry, respondentRequest } from '@intake24/common/types/http/admin';
 
 export const respondent = initContract().router({
   browse: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/respondents',
+    pathParams: z.object({ surveyId }),
     query: paginationRequest,
     responses: {
       200: z.object({
@@ -24,6 +25,7 @@ export const respondent = initContract().router({
   store: {
     method: 'POST',
     path: '/admin/surveys/:surveyId/respondents',
+    pathParams: z.object({ surveyId }),
     body: createRespondentRequest,
     responses: {
       201: respondentEntry,
@@ -34,6 +36,7 @@ export const respondent = initContract().router({
   read: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/respondents/:username',
+    pathParams: z.object({ surveyId }),
     responses: {
       200: respondentEntry,
     },
@@ -43,6 +46,7 @@ export const respondent = initContract().router({
   update: {
     method: 'PATCH',
     path: '/admin/surveys/:surveyId/respondents/:username',
+    pathParams: z.object({ surveyId }),
     body: respondentRequest,
     responses: {
       200: respondentEntry,
@@ -53,6 +57,7 @@ export const respondent = initContract().router({
   destroy: {
     method: 'DELETE',
     path: '/admin/surveys/:surveyId/respondents/:username',
+    pathParams: z.object({ surveyId }),
     body: null,
     responses: {
       204: z.undefined(),
@@ -63,6 +68,7 @@ export const respondent = initContract().router({
   downloadFeedback: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/respondents/:username/feedback',
+    pathParams: z.object({ surveyId }),
     query: z.object({
       submissions: z.array(z.string().uuid()).optional(),
     }),
@@ -75,6 +81,7 @@ export const respondent = initContract().router({
   emailFeedback: {
     method: 'POST',
     path: '/admin/surveys/:surveyId/respondents/:username/feedback',
+    pathParams: z.object({ surveyId }),
     query: z.object({
       submissions: z.array(z.string().uuid()).optional(),
     }),

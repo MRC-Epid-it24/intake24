@@ -1,12 +1,11 @@
-import type { Request } from 'express';
 import type { Attributes, FindOptions } from 'sequelize';
 
 import type { RequestIoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
 import type { HasVisibility, ModelStatic, Securable } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { getRequestParamFromSecurable, getResourceFromSecurable } from '@intake24/common/util';
-import { securableIncludes, securableScope } from '@intake24/db';
+import { getResourceFromSecurable } from '@intake24/common/util';
+import { securableIncludes } from '@intake24/db';
 
 export interface CheckAccessOptions {
   params: Dictionary;
@@ -126,37 +125,6 @@ function aclService({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
     const resource = getResourceFromSecurable(securableType);
 
     return hasPermission(`${resource}|${action}`);
-  };
-
-  /**
-   * Check if user has access to a record
-   *
-   * @template T
-   * @param {Request} req
-   * @param {ModelStatic<T>} securable
-   * @param {string} action
-   * @returns {Promise<void>}
-   */
-  const checkAccess = async <T extends Securable>(
-    req: Request,
-    securable: ModelStatic<T>,
-    action: string,
-  ): Promise<void> => {
-    const securableType = securable.name;
-
-    if (await hasResourceAccess(securableType, action))
-      return;
-
-    const paramId = getRequestParamFromSecurable(securableType);
-    const { [paramId]: securableId } = req.params;
-
-    const record = await securable.findByPk(securableId, securableScope(userId));
-    if (!record)
-      throw new NotFoundError();
-
-    const canAccessRecord = await hasSecurableAccess(record, action);
-    if (!canAccessRecord)
-      throw new ForbiddenError();
   };
 
   /**
@@ -291,7 +259,6 @@ function aclService({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
     hasAnyPermission,
     hasRole,
     hasAnyRole,
-    checkAccess,
     findAndCheckRecordAccess,
     findAndCheckVisibility,
     getResourceAccessActions,

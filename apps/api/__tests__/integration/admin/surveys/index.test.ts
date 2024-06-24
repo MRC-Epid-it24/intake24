@@ -4,6 +4,7 @@ import destroy from './destroy.test';
 import edit from './edit.test';
 import patch from './patch.test';
 import read from './read.test';
+import respondentCustomFields from './respondent-custom-fields/index.test';
 import respondents from './respondents/index.test';
 import store from './store.test';
 import submissions from './submissions/index.test';
@@ -21,11 +22,19 @@ export default () => {
   // Surveys respondents
   describe('get /api/admin/surveys/:surveyId/respondents', respondents.browse);
   describe('post /api/admin/surveys/:surveyId/respondents', respondents.store);
-  describe('get /api/admin/surveys/:surveyId/respondents/:surveyId', respondents.read);
-  describe('patch /api/admin/surveys/:surveyId/respondents/:userId', respondents.update);
-  describe('delete /api/admin/surveys/:surveyId/respondents/:userId', respondents.destroy);
-  // describe('GET /api/admin/surveys/:surveyId/respondents/:userId/feedback', downloadFeedback);
-  // describe('POST /api/admin/surveys/:surveyId/respondents/:userId/feedback', emailFeedback);
+  describe('get /api/admin/surveys/:surveyId/respondents/:username', respondents.read);
+  describe('patch /api/admin/surveys/:surveyId/respondents/:username', respondents.update);
+  describe('delete /api/admin/surveys/:surveyId/respondents/:username', respondents.destroy);
+  // describe('GET /api/admin/surveys/:surveyId/respondents/:username/feedback', downloadFeedback);
+  // describe('POST /api/admin/surveys/:surveyId/respondents/:username/feedback', emailFeedback);
+
+  // Surveys respondents custom fields
+  describe('get /api/admin/surveys/:surveyId/respondents/:username/fields', respondentCustomFields.browse);
+  describe('post /api/admin/surveys/:surveyId/respondents/:username/fields', respondentCustomFields.store);
+  describe('get /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.read);
+  describe('patch /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.update);
+  describe('put /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.upsert);
+  describe('delete /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.destroy);
 
   // Surveys submissions
   describe('get /api/admin/surveys/:surveyId/submissions', submissions.browse);

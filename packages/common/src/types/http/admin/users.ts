@@ -45,10 +45,9 @@ export const userAttributes = z.object({
 
 export type UserAttributes = z.infer<typeof userAttributes>;
 
-export const userCustomField = z.object({
+export const userCustomField = customField.extend({
   id: z.string(),
-  name: z.string(),
-  value: z.string(),
+  userId: z.string(),
 });
 
 export const userSurveyAliasAttributes = z.object({

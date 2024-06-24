@@ -133,7 +133,7 @@ export default () => {
       await suite.util.setPermission(['surveys']);
     });
 
-    it('should return 204 and no content when securable set', async () => {
+    it('should return 200 and data when securable set', async () => {
       await suite.util.setSecurable({ ...securable, action: ['respondents'] });
 
       const updateRespondent2 = omit(mocker.system.respondent(), ['username']);
@@ -145,7 +145,7 @@ export default () => {
       await assertRespondentResponse(url, updateInput2);
     });
 
-    it('should return 204 and no content when owner set', async () => {
+    it('should return 200 and data when owner set', async () => {
       await suite.util.setSecurable(securable);
       await survey.update({ ownerId: suite.data.system.user.id });
 

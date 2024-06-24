@@ -11,11 +11,13 @@ export type Application = (typeof applications)[number];
 export const isApplication = (app: any): app is Application => applications.includes(app);
 
 export const customField = z.object({
-  name: z.string().min(1).max(128),
-  value: z.string(),
+  name: z.string().min(1).max(10),
+  value: z.union([z.string(), z.number(), z.boolean(), z.date()]).pipe(z.coerce.string().min(1).max(512)),
 });
-
 export type CustomField = z.infer<typeof customField>;
+
+export const customFieldRecord = z.record(customField.shape.name, customField.shape.value);
+export type CustomFieldRecord = z.infer<typeof customFieldRecord>;
 
 export type Dictionary<T = any> = { [key: string]: T };
 

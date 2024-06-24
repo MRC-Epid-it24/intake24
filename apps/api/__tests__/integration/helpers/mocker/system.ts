@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { faker } from '@faker-js/faker';
+import { times } from 'lodash';
 import slugify from 'slugify';
 
 import type {
@@ -34,7 +35,7 @@ import {
   searchSortingAlgorithms,
   spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
-import { jobTypes } from '@intake24/common/types';
+import { CustomField, jobTypes } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
 
 function permission(): PermissionRequest {
@@ -86,6 +87,10 @@ function user(): UserRequest {
   };
 }
 
+function customField(): CustomField {
+  return { name: randomString(10), value: faker.word.words(5) };
+}
+
 function respondent(): CreateRespondentRequest {
   const username = faker.internet.userName();
   const name = faker.person.firstName();
@@ -93,10 +98,7 @@ function respondent(): CreateRespondentRequest {
   const password = 'sUpErStRoNgPaSwOrD-123467890';
   const passwordConfirm = password;
   const phone = faker.phone.number();
-  const customFields = [
-    { name: faker.word.words(1), value: faker.word.words(5) },
-    { name: faker.word.words(1), value: faker.word.words(5) },
-  ];
+  const customFields = times(5, () => customField());
 
   return {
     username,
@@ -365,6 +367,7 @@ function task(): TaskRequest {
 }
 
 export default {
+  customField,
   feedbackScheme,
   language,
   locale,

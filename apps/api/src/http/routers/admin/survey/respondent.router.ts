@@ -81,11 +81,6 @@ export function respondent() {
     update: {
       middleware: [permission('surveys')],
       handler: async ({ body, params: { surveyId, username }, req }) => {
-        await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'respondents', {
-          attributes: ['id'],
-          where: { id: surveyId },
-        });
-
         const { slug, authUrlDomainOverride } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
