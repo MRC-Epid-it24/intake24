@@ -82,17 +82,14 @@ export default defineComponent({
     const localeOptions = computed(
       () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
     );
+    const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.value.includes(option.value)));
     const isMinSatisfied = computed(() => !props.prompt.validation.min || props.value.length >= props.prompt.validation.min);
     const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.value.length <= props.prompt.validation.max);
-    const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.value.includes(option.value)));
+    const isRequiredSatisfied = computed(() => !props.prompt.validation.required || !!props.value.length);
+    const isValid = computed(() => isRequiredSatisfied.value && (isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value)));
+
     const disableOption = (value: string) => !props.value.includes(value)
       && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.value.length === props.prompt.validation.max));
-    const isValid = computed(() => {
-      if (!props.prompt.validation.required)
-        return false;
-
-      return isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value);
-    });
 
     const confirm = () => {
       if (isValid.value)
