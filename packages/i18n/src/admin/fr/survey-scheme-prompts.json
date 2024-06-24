@@ -6,7 +6,6 @@
   "create": "Ajouter une invite dans la configuration",
   "edit": "Modifier l'invite de la configuration",
   "delete": "Supprimer l'invite de la configuration",
-
   "editTemplate": "Modifier l'invite de la configuration",
   "sync": {
     "_": "Synchronisation",

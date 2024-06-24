@@ -70,13 +70,13 @@
     "text": "",
     "description": ""
   },
-
   "associatedFoods": {
     "name": "Makanan berkaitan",
     "text": "",
     "description": "",
     "yes": "Ya, saya ada mengambilnya",
     "yesAnother": "Yes, I had another",
+    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "Tidak, saya tidak mengambilnya",
     "moreFoodsQuestion": "Did you have any other foods from this category?",
     "databaseLookupTitle": "What was it?",
@@ -95,7 +95,8 @@
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
       "report": "Report a missing food",
-      "tryAgain": "OK, let me try again"
+      "tryAgain": "OK, let me try again",
+      "placeholder": "Missing food"
     }
   },
   "editMeal": {
@@ -122,6 +123,7 @@
     "back": "Back to '{category}'",
     "none": "No food results. Please try refining your search.",
     "refine": "The search has found a lot of results. You can try refining your search.",
+    "pizza": "If your pizza was from a takeaway or restaurant, please select that option in the list.",
     "missing": {
       "label": "I can't find my food",
       "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -222,7 +224,6 @@
     "text": "",
     "description": ""
   },
-
   "quantity": {
     "_": "Quantity",
     "whole": "Keseluruhan",
@@ -394,6 +395,11 @@
     "search": "Search for a food",
     "root": "all food categories",
     "back": "Back to '{category}'",
+    "optional": {
+      "confirm": "Yes",
+      "reject": "No",
+      "infoPrompt": "What was it?"
+    },
     "addMore": "Add more ingredients",
     "noMore": "No more ingredients",
     "none": "No food results. Please try refining your search.",
@@ -429,6 +435,34 @@
       "label": "Berapa banyak kepingan ini yang anda ambil?"
     },
     "confirm": "Saya telah mengambil sebanyak itu"
+  },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "sizes": {
+      "label": "What size pizza did you have?",
+      "personal": "Personal 7\"",
+      "small": "Small 9.5\"",
+      "medium": "Medium 11.5\"",
+      "large": "Large 13.5\"",
+      "xxl": "Extra large 15.5\""
+    },
+    "crusts": {
+      "label": "What type of pizza crust did you have?",
+      "classic": "Classic",
+      "italian-thin": "Italian / Thin",
+      "stuffed": "Stuffed"
+    },
+    "units": {
+      "label": "How do you want to estimate your portion?",
+      "slice": "In slices",
+      "whole": "In whole pizzas"
+    },
+    "quantity": {
+      "slice": "How many slices did you have?",
+      "whole": "How many whole pizzas did you have?"
+    }
   },
   "standardPortion": {
     "name": "Porsi standard",

@@ -10,12 +10,10 @@
   "message": "Message",
   "params": "Paramètres de la tâche",
   "stackTrace": "Message d'erreur",
-
   "repeat": {
     "_": "Répéter la tâche",
     "confirm": "Placer la tâche dans la file d'attente"
   },
-
   "types": {
     "_": "Types de tâches",
     "CleanRedisStore": {
@@ -29,11 +27,33 @@
     "CleanStorageFiles": {
       "_": "Nettoyer les fichiers de stockage"
     },
-    "PurgeRefreshTokens": {
-      "_": "Supprimer les jetons de rafraîchissement expirés"
+    "FeedbackSchemesSync": {
+      "_": "Feedback schemes - Synchronize schemes"
+    },
+    "PurgeExpiredTokens": {
+      "_": "Purge expired access/refresh tokens"
     },
     "LanguageTranslationsSync": {
       "_": "Langue - Synchroniser les traductions"
+    },
+    "LocaleCopy": {
+      "_": "Locale - Copy data",
+      "localeId": "Locale ID",
+      "sourceLocaleId": "Source Locale ID",
+      "subTasks": {
+        "_": "Subtasks",
+        "associatedFoods": "Associated foods",
+        "brands": "Brands",
+        "categories": "Categories",
+        "foods": "Foods",
+        "foodGroups": "Food groups",
+        "recipeFoods": "Recipe foods",
+        "searchPopularity": "Search - popularity",
+        "searchFixedRanking": "Search - fixed ranking",
+        "splitLists": "Split lists",
+        "splitWords": "Split words",
+        "synonymSets": "Synonym sets"
+      }
     },
     "LocaleFoodNutrientMapping": {
       "_": "Régional - Exporter le mapping des nutriments",
@@ -41,11 +61,20 @@
     },
     "LocaleFoodRankingUpload": {
       "_": "Régional - téléchargement du CSV de classement d'aliments",
-      "file": "fichier CSV"
+      "file": "fichier CSV",
+      "targetAlgorithm": "Sorting algorithm type to update",
+      "warningTitle": "Warning: risk of data loss. Proceed with caution.",
+      "warningP1": "The food frequency data is automatically updated by the system as new recalls are received.",
+      "warningP2": "Uploading frequency data from a CSV file will override existing records in the database, potentially leading to data loss.",
+      "warningP3": "This feature is intended only for initialising new locales or fixing issues with existing frequency data.",
+      "warningP4": "Please double-check that you are in the correct locale before uploading the data."
     },
     "LocaleFoods": {
       "_": "Régional - Exporter les aliments",
       "localeId": "Identifiant régional"
+    },
+    "LocaleIndexBuild": {
+      "_": "Locale - Rebuild Food Indexes for modified locales"
     },
     "NutrientTableMappingImport": {
       "_": "Tableau des nutriments - Importer le mapping de la BDD nutritionnelle",
@@ -59,6 +88,10 @@
       "_": "Chercher - Mettre à jour les compteurs de popularité",
       "foodCodes": "Codes des aliments"
     },
+    "ResourceExport": {
+      "_": "Resource - Export data",
+      "resource": "Resource"
+    },
     "SurveyAuthUrlsExport": {
       "_": "Enquête - Exporter les URL d'identification",
       "surveyId": "Identifiant de l'enquête"
@@ -71,14 +104,19 @@
       "_": "Survey - Event notification"
     },
     "SurveyFeedbackNotification": {
-      "_": "Enquête - Envoyer le bilan du répondant"
+      "_": "Enquête - Envoyer le bilan du répondant",
+      "surveyId": "Survey ID"
     },
     "SurveyHelpRequestNotification": {
-      "_": "Enquête - Notification de demande d'assistance "
+      "_": "Enquête - Notification de demande d'assistance ",
+      "surveyId": "Survey ID"
     },
     "SurveyNutrientsRecalculation": {
       "_": "Enquête - Carculer à nouveau les nutriments",
       "surveyId": "Identifiant de l'enquête"
+    },
+    "SurveyRatingsExport": {
+      "_": "Survey - Ratings export"
     },
     "SurveyRespondentsImport": {
       "_": "Enquête - Importer les répondants",

@@ -8,13 +8,11 @@
   },
   "title": "உங்கள் நினைவுகளில் இருந்து கருத்து",
   "missingFoods": "விடுபட்டதாகப் புகாரளிக்கப்பட்ட எந்த உணவுகளும் உங்கள் உணவுக் கருத்தில் சேர்க்கப்படாது",
-
   "physicalData": {
     "title": "About you",
     "subtitle": "So we can present your feedback in the right way, enter the following details.",
     "change": "Change my info",
     "recall": "Record another day",
-
     "sexes": {
       "_": "Sex",
       "m": "Male",
@@ -37,7 +35,6 @@
       "gain_weight": "எடையை அதிகரிக்க"
     }
   },
-
   "outputs": {
     "title": "வெளியீடுகள்",
     "download": {
@@ -56,17 +53,21 @@
     "retry": "கருத்து வெளியீடு சமீபத்தில் கோரப்பட்டது, {secs} வினாடிகளில் மீண்டும் முயற்சிக்கவும்.",
     "print": "அச்சிடுக"
   },
-
   "topFoods": {
     "title": "உங்கள் ஊட்டச்சத்து உட்கொள்ளலுக்கு மிகவும் பங்களிக்கும் உணவுகள்",
     "chart": "அதிகமான {nutrient}"
   },
-
   "meals": {
     "title": "Meals per-day breakdown",
     "chart": "{nutrient}"
   },
-
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the dietary feedback?",
+    "comment": "Tell us more about the rating you gave the dietary feedback",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "intake": {
     "your": "உங்கள் {nutrient} உட்கொள்ளல்  {amount}",
     "estimated": "மதிப்பிடப்பட்ட உட்கொள்ளல்",
@@ -74,7 +75,6 @@
     "tellMeMore": "இன்னும் எனக்கு சொல்லுங்கள்",
     "gotIt": "அறிந்துகொண்டேன்!"
   },
-
   "unitDescription": {
     "percentage_of_energy": "உங்கள் ஆற்றல் உட்கொள்ளலில் இந்த ஊட்டச்சத்தின் பங்களிப்பு மற்றும் பரிந்துரைகளுடன் ஒப்பிடும் விதம் ஆகியவற்றின் அடிப்படையில் பின்னூட்டம் அமைந்துள்ளது.",
     "energy_divided_by_bmr": "உங்கள் ஆற்றல் உட்கொள்ளலை BMR ஆல் பிரிக்கப்பட்டு மற்றும் இது பரிந்துரைகளுடன் ஒப்பிடும் விதம் ஆகியவற்றின் அடிப்படையில் கருத்துத் தெரிவிக்கப்படுகிறது.",

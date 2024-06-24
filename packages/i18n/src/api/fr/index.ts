@@ -1,11 +1,11 @@
 import type { LocaleMessages } from 'vue-i18n';
 
-import attributes from './attributes.json';
-import types from './types.json';
+import rateLimit from './rate-limit.json';
+import validation from './validation.json';
 
 const messages: LocaleMessages = {
-  attributes,
-  types,
+  validation,
+  rateLimit,
 };
 
 export default messages;

@@ -20,7 +20,6 @@
     "subtitle": "使用您的用户名和密码登录",
     "captcha": "Complete the captcha challenge",
     "back": "返回登录",
-
     "err": {
       "captcha": "Invalid captcha challenge response.",
       "credentials": "提供的用户名和密码凭据无效。",
@@ -32,7 +31,6 @@
     "_": "登出",
     "text": "登出应用程序"
   },
-
   "username": "用户名",
   "name": "名字",
   "email": "电子邮件",
@@ -41,30 +39,25 @@
   "phone": "电话",
   "message": "Message",
   "continue": "继续",
-
   "help": {
     "_": "帮助",
     "title": "请求帮助",
     "text": "Please complete the form below and one of our support staff will get in touch as soon as they can.",
     "sent": "您的帮助请求已发送。"
   },
-
   "app": {
     "_": "应用程序",
     "info": "应用程序信息",
     "build": "构建"
   },
-
   "clipboard": {
     "_": "复制到剪贴板",
     "copied": "数据已复制到剪贴板"
   },
-
   "sw": {
     "check": "内容更新可用",
     "update": "更新"
   },
-
   "action": {
     "cancel": "取消",
     "close": "关闭",
@@ -83,12 +76,10 @@
     "yes": "是",
     "no": "否"
   },
-
   "not": {
     "provided": "未提供",
     "selected": "未选择"
   },
-
   "errors": {
     "expansionIncomplete": "完成标有 ! 部分"
   }

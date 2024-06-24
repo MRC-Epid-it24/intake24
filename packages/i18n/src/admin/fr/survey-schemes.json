@@ -8,18 +8,15 @@
   "delete": "Supprimer la configuration d'enquête",
   "load": "Charger depuis la configuration",
   "none": "Aucune struture d'enquête trouvée",
-
   "copy": {
     "_": "Copier",
     "title": "Copier la configuration de l'enquête",
     "name": "Nom de la nouvelle configuration de l'enquête"
   },
-
   "types": {
     "_": "Type",
     "default": "Défaut"
   },
-
   "meals": {
     "_": "Repas",
     "title": "Repas par défaut",
@@ -36,7 +33,6 @@
       "unique": "Le nom du repas existe déjà dans une liste actuelle."
     }
   },
-
   "actions": {
     "_": "Action",
     "title": "Actions",
@@ -63,6 +59,7 @@
       "review": "Analyse",
       "addFood": "Ajouter un aliment",
       "addMeal": "Ajouter un repas",
+      "changeFood": "Change food",
       "deleteFood": "Supprimer l'aliment",
       "deleteMeal": "Supprimer le repas",
       "editFood": "Modifier l'aliment",
@@ -79,7 +76,6 @@
       "text": "Texte"
     }
   },
-
   "conditions": {
     "_": "Condition",
     "title": "Conditions",
@@ -225,6 +221,10 @@
       "name": {
         "_": "Nom de l'invite",
         "hint": "Nom interne descriptif pour faciliter la compréhension "
+      },
+      "group": {
+        "_": "Prompt group",
+        "hint": "Group ID to collate prompts together"
       }
     },
     "type": "Type d'invite",
@@ -257,11 +257,20 @@
       "noPrompts": "Pas d'invites de taille de portion disponibles pour cette section"
     },
     "badges": "Montrer les badges de quantité",
+    "foodBrowser": {
+      "_": "Food browser settings",
+      "categoriesFirst": {
+        "_": "Show categories first in the list",
+        "browse": "Food browse list",
+        "search": "Food search list"
+      }
+    },
     "imageMap": {
       "_": "Paramètres des photos à curseur",
       "labels": "Montrer les libellés",
       "pinchZoom": "Montrer PinchZoom pour mobile UI"
     },
+    "multiple": "Allow multiple items to be selected",
     "label": "Libellé de la liste d'options",
     "leftovers": "Autoriser les restes",
     "linkedQuantity": {
@@ -279,9 +288,19 @@
     },
     "slider": {
       "_": "Paramètres du curseur",
-      "initial": "Valeur initiale",
-      "min": "Valeur minimale",
-      "max": "Valeur maximale",
+      "current": {
+        "label": "Current label",
+        "value": "Current value",
+        "size": "Label size"
+      },
+      "min": {
+        "label": "Minimum label",
+        "value": "Minimum value"
+      },
+      "max": {
+        "label": "Maximum label",
+        "value": "Maximum value"
+      },
       "step": "Incrémentation"
     },
     "timePicker": {
@@ -312,7 +331,6 @@
         "title": "Sauvegarder l'invite en tant que modèle"
       }
     },
-
     "associated-foods-prompt": {
       "title": "Aliments associés",
       "subtitle": "Suggérer des aliments souvent consommés ensemble",
@@ -325,7 +343,11 @@
     },
     "final-prompt": {
       "title": "Dernier",
-      "subtitle": "Dernière page avant soumission"
+      "subtitle": "Dernière page avant soumission",
+      "rating": {
+        "_": "Enable survey rating collection",
+        "title": "Survey rating"
+      }
     },
     "food-search-prompt": {
       "title": "Recherche dans la base de données alimentaire",
@@ -340,11 +362,7 @@
     },
     "meal-duration-prompt": {
       "title": "Durée du repas",
-      "subtitle": "Demander la durée du repas",
-      "initial": "Durée du repas initiale",
-      "min": "Durée du repas minimale",
-      "max": "Durée du repas maximale",
-      "step": "Etape durée du repas"
+      "subtitle": "Demander la durée du repas"
     },
     "meal-gap-prompt": {
       "title": "Intervalle entre deux repas",
@@ -364,6 +382,10 @@
     "redirect-prompt": {
       "title": "Rediriger",
       "subtitle": "Dernière page pour l'utilisateur redirigeant sur le site externe",
+      "rating": {
+        "_": "Enable survey rating collection",
+        "title": "Survey rating"
+      },
       "url": {
         "_": "URL de base",
         "title": "Options d'URL",
@@ -379,6 +401,12 @@
           "username": "Nom d'utilisateur",
           "urlAuthToken": "Jeton d'authentification"
         }
+      },
+      "target": {
+        "_": "Target",
+        "subtitle": "Choose where to open the URL",
+        "_self": "Open in the same window",
+        "_blank": "Open in a new window"
       },
       "timer": {
         "_": "Nombre de secondes avant d'être redirigé",
@@ -405,10 +433,10 @@
         "subtitle": "Choisissez les options que vous voulez voir apparaître pour la dernière relecture.",
         "false": "Pas de relecture",
         "scroll": "Scroller jusqu'en bas pour passer la relecture",
-        "checkbox": "Cocher une case pour passer la relecture"
+        "checkbox": "Cocher une case pour passer la relecture",
+        "onecheckbox": "Tick one survey check to pass review"
       }
     },
-
     "info-prompt": {
       "title": "Information",
       "subtitle": "Afficher un message ou des consignes et demander confirmation"
@@ -434,6 +462,14 @@
       "title": "Choix unique",
       "subtitle": "Demander de choisir un élément d'une liste"
     },
+    "select-prompt": {
+      "title": "Select",
+      "subtitle": "Ask to choose value from select box"
+    },
+    "slider-prompt": {
+      "title": "Slider",
+      "subtitle": "Ask to choose value on slider"
+    },
     "textarea-prompt": {
       "title": "Texte libre",
       "subtitle": "Demander d'écrire dans un champ de texte libre"
@@ -442,7 +478,6 @@
       "title": "Choix OUI/NON",
       "subtitle": "Demander de choisir oui ou non"
     },
-
     "as-served-prompt": {
       "title": "Photo de portions",
       "subtitle": "Choisir la méthode \"as served\" pour estimer la taille de la portion"
@@ -479,6 +514,10 @@
     "pizza-prompt": {
       "title": "Pizza",
       "subtitle": "Choisir la méthode \"pizza\" pour estimer la taille de la portion"
+    },
+    "pizza-v2-prompt": {
+      "title": "Pizza V2",
+      "subtitle": "Use the \"pizza v2\" method to estimate the portion size"
     },
     "parent-food-portion-prompt": {
       "title": "Portion d'aliment parent",

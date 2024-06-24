@@ -1,0 +1,269 @@
+{
+  "attributes": {
+    "actions": "Actions",
+    "active": "Active",
+    "allowGenUsers": "Allow generate users",
+    "app": "Application",
+    "adminLanguageId": "Admin language ID",
+    "authUrlDomainOverride": "Authentication URL domain override",
+    "authUrlTokenCharset": "Authentication URL token charset",
+    "authUrlTokenLength": "Authentication URL token length",
+    "baseImage": "Base image",
+    "birthdate": "Birth date",
+    "captcha": "CAPTCHA",
+    "countryFlagCode": "Country flag code",
+    "code": "Code",
+    "conversionFactor": "Conversion factor",
+    "copy": "Copy",
+    "cron": "CRON",
+    "csvMapping": {
+      "rowOffset": "Row offset",
+      "idColumnOffset": "ID column offset",
+      "descriptionColumnOffset": "Description column offset",
+      "localDescriptionColumnOffset": "Local description column offset"
+    },
+    "csvMappingFields": "Field column mappings",
+    "csvMappingNutrients": "Nutrient column mappings",
+    "customFields": "Custom fields",
+    "dataExport": "Data export",
+    "demographicGroups": "Demographic groups",
+    "description": "Description",
+    "disabledAt": "Disabled at",
+    "displayName": "Display name",
+    "endDate": "End date",
+    "email": "Email",
+    "emailConfirm": "Confirm email",
+    "emailNotifications": "Email notifications",
+    "englishName": "English name",
+    "estimateIn": "Estimate in",
+    "expiresAt": "Expires at",
+    "feedbackSchemeId": "Feedback scheme ID",
+    "file": "File",
+    "genericName": "Generic name",
+    "genUserKey": "JWT secret",
+    "guideImageId": "Guide image ID",
+    "heightCm": "Height",
+    "henryCoefficients": "Henry coefficients",
+    "howMany": "How many",
+    "i18n": {
+      "defaults": "Missing default translations",
+      "keys": "Not matching translation keys",
+      "messages": "Invalid translations"
+    },
+    "id": "ID",
+    "imageMapId": "Image map ID",
+    "images": "Images",
+    "job": "Job",
+    "label": "Label",
+    "languageId": "Language ID",
+    "localeId": "Locale ID",
+    "limit": "Limit",
+    "linkAsMain": "Link as main",
+    "localName": "Local name",
+    "main": {
+      "attributes": {
+        "readyMealOption": "Ready meal option",
+        "reasonableAmount": "Reasonable amount",
+        "sameAsBeforeOption": "Same as before option",
+        "useInRecipes": "Use in recipes"
+      },
+      "code": "Global code",
+      "foodGroupId": "Food group ID",
+      "isHidden": "Is hidden",
+      "name": "Global name",
+      "parentCategories": "Parent categories"
+    },
+    "maximumDailySubmissions": "Maximum daily submissions",
+    "maximumTotalSubmissions": "Maximum total submissions",
+    "meals": "Meals",
+    "method": "Method",
+    "message": "Message",
+    "minimumSubmissionInterval": "Minimum submission interval",
+    "multiFactorAuthentication": "Multi-factor authentication",
+    "name": "Name",
+    "numberOfSubmissionsForFeedback": "Number of submissions for feedback",
+    "nutrientRecords": "Nutrient records",
+    "objects": "Objects",
+    "outlineCoordinates": "Outline coordinates",
+    "outputs": "Outputs",
+    "orderBy": "Order",
+    "ownerId": "Owner ID",
+    "page": "Page",
+    "password": "Password",
+    "passwordConfirm": "Password confirmation",
+    "params": {
+      "_": "Parameters",
+      "file": "File",
+      "targetAlgorithm": "Sorting algorithm type"
+    },
+    "permissions": "Permissions",
+    "phone": "Phone",
+    "physicalActivityLevelId": "Physical activity level",
+    "physicalDataFields": "Physical data fields",
+    "prompt": "Prompt",
+    "prompts": "Prompts",
+    "prototypeLocaleId": "Prototype locale ID",
+    "respondentLanguageId": "Respondent language ID",
+    "roles": "Roles",
+    "sessionData": "Session data",
+    "search": "Search",
+    "searchCollectData": "Search collect data",
+    "searchMatchScoreWeight": "Search match score weight",
+    "searchSortingAlgorithm": "Search sorting algorithm",
+    "searchMinWordLength1": "Minimum word length for 1 spelling correction",
+    "searchMinWordLength2": "Minimum word length for 2 spelling corrections",
+    "section": "Section",
+    "selectionImage": "Selection image",
+    "sessionLifetime": "Session lifetime",
+    "sex": "Sex",
+    "slug": "Slug",
+    "smsNotifications": "SMS notifications",
+    "sort": "Sort",
+    "startDate": "Start date",
+    "state": "State",
+    "submissions": "Submissions",
+    "supportEmail": "Support email",
+    "survey": "Survey",
+    "surveySchemeId": "Survey scheme ID",
+    "surveySchemeOverrides": "Survey scheme overrides",
+    "suspensionReason": "Suspension reason",
+    "storeUserSessionOnServer": "Store user session on server",
+    "textDirection": "Text direction",
+    "text": "Text",
+    "terms": "Terms",
+    "token": "Token",
+    "topFoods": {
+      "max": "Max number of foods",
+      "colors": "Colors",
+      "nutrientTypes": "Nutrient types"
+    },
+    "translations": "Translations",
+    "type": "Type",
+    "tzOffset": "Timezone offset",
+    "useForRecipes": "Use for recipes",
+    "userId": "User ID",
+    "userPersonalIdentifiers": "User personal identifiers",
+    "userCustomFields": "User custom fields",
+    "username": "Username",
+    "value": "Value",
+    "verifiedAt": "Verified at",
+    "weight": "Weight",
+    "weightKg": "Weight",
+    "weightTarget": "Weight target"
+  },
+  "types": {
+    "array": {
+      "_": "\"{attribute}\" doit être un tableau.",
+      "min": "\"{attribute}\" doit être un tableau (min: {min}).",
+      "max": "\"{attribute}\" doit être un tableau (max: {max}).",
+      "minMax": "\"{attribute}\" doit être un tableau (min: {min}, max: {max}).",
+      "even": "\"{attribute}\" must have an even number of elements.",
+      "number": "\"{attribute}\" doit être un tableau de nombres.",
+      "string": "\"{attribute}\" doit être un tableau de chaînes de caractères.",
+      "colors": "\"{attribute}\" doit être un tableau de couleurs."
+    },
+    "boolean": {
+      "_": "\"{attribute}\" doit être un booléen (vrai/faux)."
+    },
+    "cron": {
+      "_": "\"{attribute}\" doit être une entrée CRON."
+    },
+    "date": {
+      "_": "\"{attribute}\" doit être une date.",
+      "after": "\"{attribute}\" must be a date after {after}.",
+      "before": "\"{attribute}\" must be a date before {before}.",
+      "between": "\"{attribute}\" must be a date between {after} and {before}.",
+      "ms": "\"{attribute}\" must be a duration format (30m, 1h, 2d)."
+    },
+    "duplicate": {
+      "_": "\"{attribute}\" ne peut pas contenir de doublons."
+    },
+    "float": {
+      "_": "\"{attribute}\" doit être un nombre décimal.",
+      "min": "\"{attribute}\" doit être un nombre décimal (min: {min}).",
+      "max": "\"{attribute}\" doit être un nombre décimal (max: {max}).",
+      "minMax": "\"{attribute}\" doit être un nombre décimal (min: {min}, max: {max})."
+    },
+    "exists": {
+      "_": "\"{attribute}\" doit se rapporter à une base de données existante."
+    },
+    "either": {
+      "_": "Soit {one} soit {two} doit être rempli."
+    },
+    "email": {
+      "_": "\"{attribute}\" doit être une adresse mail valide."
+    },
+    "file": {
+      "_": "\"{attribute}\" doit être un fichier.",
+      "ext": "\"{attribute}\" ne présente pas le bon format de fichier (extension du fichier), attendu : {ext}",
+      "mime": "\"{attribute}\" ne présente pas le bon format de fichier (type MIME), attendu : {mime}"
+    },
+    "in": {
+      "_": "\"{attribute}\" doit être une valeur autorisée.",
+      "options": "\"{attribute}\" doit être une des valeurs suivantes : {options}."
+    },
+    "int": {
+      "_": "\"{attribute}\" doit être un nombre entier.",
+      "min": "\"{attribute}\" doit être un nombre entier (min: {min}).",
+      "max": "\"{attribute}\" doit être un nombre entier (max: {max}).",
+      "minMax": "\"{attribute}\" doit être un nombre entier (min: {min}, max: {max})."
+    },
+    "json": {
+      "_": "\"{attribute}\" must be a valid JSON object."
+    },
+    "jwt": {
+      "_": "\"{attribute}\" doit être un jeton web JSON (JWT) valide."
+    },
+    "locale": {
+      "_": "\"{attribute}\" doit être un code language valide."
+    },
+    "number": {
+      "_": "\"{attribute}\" must be a number."
+    },
+    "match": {
+      "_": "\"{attribute}\" doit correspondre à la valeur {match}."
+    },
+    "object": {
+      "_": "\"{attribute}\" doit être un objet."
+    },
+    "password": {
+      "_": "Le mot de passe doit contenir au moins 10 carcactères minsucules/majuscules et des nombres."
+    },
+    "phone": {
+      "_": "\"{attribute}\"  doit être un numéro de téléphone valide."
+    },
+    "regEx": {
+      "_": "\"{attribute}\" iest invalide."
+    },
+    "restricted": {
+      "_": "\"{attribute}\" is restricted to allowed values."
+    },
+    "safeChars": {
+      "_": "\"{attribute}\" doit être un code unique (série de caractères [a-zA-Z0-9-_])."
+    },
+    "string": {
+      "_": "\"{attribute}\" doit être rempli.",
+      "max": "\"{attribute}\" doit être rempli (max: {max}).",
+      "minMax": "\"{attribute}\" doit être rempli (min: {min}, max: {max}).",
+      "or": {
+        "array": "\"{attribute}\" doit être une chaîne de caractères ou un tableau."
+      },
+      "unique": "\"{attribute}\" doit être une chaîne de caractères uniques."
+    },
+    "structure": {
+      "_": "\"{attribute}\" doit avoir une structure valide."
+    },
+    "terms": {
+      "_": "\"{attribute}\" doit être accepté."
+    },
+    "unique": {
+      "_": "Une entrée avec la même valeur de \"{attribute}\" existe déjà."
+    },
+    "url": {
+      "_": "\"{attribute}\" doit être une URL valide."
+    },
+    "uuid": {
+      "_": "\"{attribute}\" must be a valid UUID."
+    }
+  }
+}

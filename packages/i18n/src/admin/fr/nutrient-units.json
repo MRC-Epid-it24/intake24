@@ -6,7 +6,6 @@
   "create": "Ajouter une unité de nutriment",
   "edit": "Modifier l'unité de nutriment",
   "remove": "Enlever l'unité de nutriment",
-
   "id": "Identifiant de l'unité du nutriment",
   "symbol": "Symbole"
 }

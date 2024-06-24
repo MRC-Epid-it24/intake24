@@ -10,9 +10,9 @@
     }
   },
   "datePicker": {
+    "name": "தேதியைத் தேர்ந்தெடுக்கவும்",
     "text": "",
     "description": "",
-    "name": "தேதியைத் தேர்ந்தெடுக்கவும்",
     "validation": {
       "required": "இந்தப் புலம் நிரப்பப்பட வேண்டும்."
     }
@@ -70,13 +70,13 @@
     "text": "",
     "description": ""
   },
-
   "associatedFoods": {
     "name": "தொடர்புடைய உணவுகள்",
     "text": "",
     "description": "",
     "yes": "ஆம், என்னிடம் சில இருந்தது",
     "yesAnother": "Yes, I had another",
+    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "இல்லை நான் செய்யவில்லை",
     "moreFoodsQuestion": "Did you have any other foods from this category?",
     "databaseLookupTitle": "What was it?",
@@ -95,14 +95,14 @@
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
       "report": "Report a missing food",
-      "tryAgain": "OK, let me try again"
+      "tryAgain": "OK, let me try again",
+      "placeholder": "Missing food"
     }
   },
   "editMeal": {
     "name": "உணவைத் திருத்தவும்",
     "text": "",
     "description": "எடுத்துக்காட்டாக:<p><ul><li>வாழைப்பழம்</li><li>கிரிஸ்ப்ஸ்</li><li>அரிசி</li><li>தேநீர்</li></ul></p><p>நீங்கள் தட்டச்சு செய்யும் போது அடுத்த வரிக்குச் செல்ல உங்கள் விசைப்பலகையில் Enter அல்லது \"உணவு/பானத்தைச் சேர்\" பொத்தானை அழுத்தலாம்.</p><p> உங்களிடம் எவ்வளவு இருந்தது என்பதை உள்ளிட <strong>வேண்டாம்</strong>, உணவுப் பெயர்கள் மட்டுமே.",
-    "food": "உங்கள் உணவு மற்றும் பானங்கள்",
     "add": "Add",
     "drinksOnly": "பானங்கள்",
     "foods": "Foods and drinks",
@@ -224,7 +224,6 @@
     "text": "",
     "description": ""
   },
-
   "quantity": {
     "_": "Quantity",
     "whole": "முழுமையாக ",
@@ -351,7 +350,8 @@
       "less": "நான் குறைவாக விட்டுவிட்டேன்",
       "more": "நான் அதிகமாக விட்டுவிட்டேன்",
       "confirm": "அந்த அளவுக்கு விட்டுவிட்டேன்"
-    }
+    },
+    "count": "How many of these drinks did you have at this time?"
   },
   "guideImage": {
     "name": "வழிகாட்டி படம்",
@@ -395,6 +395,11 @@
     "search": "Search for a food",
     "root": "all food categories",
     "back": "Back to '{category}'",
+    "optional": {
+      "confirm": "Yes",
+      "reject": "No",
+      "infoPrompt": "What was it?"
+    },
     "addMore": "Add more ingredients",
     "noMore": "No more ingredients",
     "none": "No food results. Please try refining your search.",
@@ -430,6 +435,34 @@
       "label": "இவற்றில் நீங்கள் எடுத்துக்கொண்டீர்கள்?"
     },
     "confirm": "நான் அவ்வளவு எடுத்து கொண்டேன்"
+  },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "sizes": {
+      "label": "What size pizza did you have?",
+      "personal": "Personal 7\"",
+      "small": "Small 9.5\"",
+      "medium": "Medium 11.5\"",
+      "large": "Large 13.5\"",
+      "xxl": "Extra large 15.5\""
+    },
+    "crusts": {
+      "label": "What type of pizza crust did you have?",
+      "classic": "Classic",
+      "italian-thin": "Italian / Thin",
+      "stuffed": "Stuffed"
+    },
+    "units": {
+      "label": "How do you want to estimate your portion?",
+      "slice": "In slices",
+      "whole": "In whole pizzas"
+    },
+    "quantity": {
+      "slice": "How many slices did you have?",
+      "whole": "How many whole pizzas did you have?"
+    }
   },
   "standardPortion": {
     "name": "நிலையான பகுதி",

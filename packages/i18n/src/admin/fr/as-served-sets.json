@@ -5,7 +5,6 @@
   "create": "Ajouter une série de photos de portions",
   "edit": "Modifier la série de photos de portions",
   "delete": "Supprimer la série de photos de portions",
-
   "id": "Identifiant de la série de photos de portions",
   "selectionImage": "Photo sélectionnée",
   "images": {

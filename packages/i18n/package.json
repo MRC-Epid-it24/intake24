@@ -14,7 +14,9 @@
   "engines": {
     "node": ">=18.17.0"
   },
-  "scripts": {},
+  "scripts": {
+    "i18n:sync": "pnpm tsx scripts/i18n-sync.ts"
+  },
   "dependencies": {
     "dompurify": "^3.1.5",
     "lodash": "^4.17.21",

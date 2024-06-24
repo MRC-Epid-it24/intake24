@@ -11,10 +11,10 @@
   },
   "rating": {
     "_": "Évaluez votre expérience",
+    "title": "Comment évalueriez-vous le rappel ?",
     "comment": "Dites-nous en plus sur la note que vous avez attribuée au rappel",
     "send": "Envoyer des commentaires",
-    "sent": "Commentaires envoyés, merci !",
-    "title": "Comment évalueriez-vous le rappel ?"
+    "sent": "Commentaires envoyés, merci !"
   },
   "survey": "Enquête: {name}",
   "submissions": {

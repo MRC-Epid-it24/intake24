@@ -70,13 +70,13 @@
     "text": "",
     "description": ""
   },
-
   "associatedFoods": {
     "name": "相关食物",
     "text": "",
     "description": "",
     "yes": "是的，我有",
     "yesAnother": "Yes, I had another",
+    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "不是的，我没有吃",
     "moreFoodsQuestion": "Did you have any other foods from this category?",
     "databaseLookupTitle": "What was it?",
@@ -95,7 +95,8 @@
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
       "report": "Report a missing food",
-      "tryAgain": "OK, let me try again"
+      "tryAgain": "OK, let me try again",
+      "placeholder": "Missing food"
     }
   },
   "editMeal": {
@@ -223,7 +224,6 @@
     "text": "",
     "description": ""
   },
-
   "quantity": {
     "_": "Quantity",
     "whole": "整个",
@@ -350,7 +350,8 @@
       "less": "我留下了少量",
       "more": "我留下了大量",
       "confirm": "就是那么多"
-    }
+    },
+    "count": "How many of these drinks did you have at this time?"
   },
   "guideImage": {
     "name": "指南图片",
@@ -394,6 +395,11 @@
     "search": "Search for a food",
     "root": "all food categories",
     "back": "Back to '{category}'",
+    "optional": {
+      "confirm": "Yes",
+      "reject": "No",
+      "infoPrompt": "What was it?"
+    },
     "addMore": "Add more ingredients",
     "noMore": "No more ingredients",
     "none": "No food results. Please try refining your search.",
@@ -429,6 +435,34 @@
       "label": "你吃了几片这样的披萨？"
     },
     "confirm": "我吃了那么多"
+  },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "sizes": {
+      "label": "What size pizza did you have?",
+      "personal": "Personal 7\"",
+      "small": "Small 9.5\"",
+      "medium": "Medium 11.5\"",
+      "large": "Large 13.5\"",
+      "xxl": "Extra large 15.5\""
+    },
+    "crusts": {
+      "label": "What type of pizza crust did you have?",
+      "classic": "Classic",
+      "italian-thin": "Italian / Thin",
+      "stuffed": "Stuffed"
+    },
+    "units": {
+      "label": "How do you want to estimate your portion?",
+      "slice": "In slices",
+      "whole": "In whole pizzas"
+    },
+    "quantity": {
+      "slice": "How many slices did you have?",
+      "whole": "How many whole pizzas did you have?"
+    }
   },
   "standardPortion": {
     "name": "标准份量",

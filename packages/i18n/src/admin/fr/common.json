@@ -62,7 +62,6 @@
     "privacy": "Politique de confidentialité",
     "tos": "Conditions d'utilisation"
   },
-
   "admin": "Administrateur",
   "fdb": "Base de données alimentaires",
   "local": "Version régionale",
@@ -70,14 +69,12 @@
   "surveyMgmt": "Gestion des enquêtes",
   "acl": "Contrôle d'accès",
   "system": "Système",
-
   "yes": "Oui",
   "true": "Oui",
   "no": "Non",
   "false": "Non",
   "none": "Aucun",
   "na": "Non concerné",
-
   "name": "Nom",
   "displayName": "Libellé",
   "description": "Description",
@@ -93,31 +90,28 @@
     "value": "Valeur",
     "exclusive": "Exclusive"
   },
-
   "date": "Date",
   "expiredAt": "Expiré à",
+  "expiresAt": "Expires at",
   "startedAt": "Commencé à",
   "completedAt": "Complété à",
   "createdAt": "Créé à",
   "updatedAt": "Mis à jour à",
   "deletedAt": "Supprimé à",
-
   "app": {
     "_": "Application",
     "info": "Informations de l'application",
     "build": "Construire"
   },
-
   "clipboard": {
     "_": "Copier dans le presse-papiers",
+    "na": "Clipboard API not available",
     "copied": "Données copiées dans le presse-papiers"
   },
-
   "sw": {
     "check": "Une mise à jour du contenu est disponible",
     "update": "Mise à jour"
   },
-
   "action": {
     "_": "Action",
     "active": "Activer",
@@ -155,23 +149,23 @@
       "msg": "Vous allez quitter une page avec des modifications qui n'ont pas été enregistrées. Voulez-vous continuer ?",
       "delete": "Vous êtes sur le point de supprimer {name}.",
       "remove": "Vous êtes sur le point d'enlever {name}.",
+      "revoke": "You're about to revoke {name}.",
       "multi": {
         "delete": "Voulez-vous supprimer les éléments sélectionnés : {count}"
       },
       "typed": "Veuillez saisir {name} pour confirmer."
     }
   },
-
   "msg": {
     "created": "L'enregistrement ({name}) a été créé.",
     "updated": "L'enregistrement ({name}) a été mis à jour.",
     "deleted": "L'enregistrement ({name}) a été supprimé.",
+    "revoked": "Record ({name}) has been revoked.",
     "multi": {
       "deleted": "Les éléments sélectionnés ont été supprimés ({count})."
     },
     "sent": "Votre message a été envoyé."
   },
-
   "search": {
     "_": "Chercher",
     "filter": "Filtre",
@@ -180,23 +174,18 @@
     "selected": "Enregistrements sélectionnés",
     "none": "Aucun enregistrement trouvé"
   },
-
   "redirect": "Rediriger vers une autre entrée",
-
   "selected": "{count} éléments sélectionnés",
-
   "not": {
     "assigned": "Non attribué",
     "found": "Non trouvé",
     "provided": "Non renseigné",
     "selected": "Non sélectionné"
   },
-
   "json": {
     "_": "JSON brut",
     "title": "Editeur de contenu JSON"
   },
-
   "file": {
     "csv": "Fichier CSV à importer"
   }

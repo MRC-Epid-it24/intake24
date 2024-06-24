@@ -9,10 +9,8 @@
   "label": "Libellé du type de nutriment",
   "current": "Types de nutriments actuels",
   "available": "Types de nutriments disponibles",
-
   "id": "Identifiant du type de nutriment",
   "kcalPerUnit": "Kcal par unité",
-
   "reset": {
     "_": "Réinitialiser les types de nutriments",
     "text": "Réinitialiser les types de nutriments et leur assigner leurs valeurs par défaut"

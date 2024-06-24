@@ -27,6 +27,17 @@
     "text": "",
     "description": "<p> Nous avons toutes les informations dont nous avons besoin au sujet de <strong>{item}</strong> à l'heure actuelle.</p><p>Pour poursuivre cette enquête, sélectionnez le bouton \"Continuer\" ci-dessous et nous sélectionnerons automatiquement le prochain aliment ou repas pour lequel nous avons encore besoin de précisions.</p><p>Vous pouvez aussi sélectionner un repas ou un aliment sur la gauche si vous souhaitez apporter des précisions sur un élément particulier.</p>"
   },
+  "select": {
+    "name": "Select value from list",
+    "text": "",
+    "description": "",
+    "label": "Select option"
+  },
+  "slider": {
+    "name": "Select value on slider",
+    "text": "",
+    "description": ""
+  },
   "radioList": {
     "name": "Liste à choix unique",
     "text": "",
@@ -59,7 +70,6 @@
     "text": "",
     "description": ""
   },
-
   "associatedFoods": {
     "name": "Aliments associés",
     "text": "",
@@ -117,12 +127,6 @@
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
-      "report": "Signaler un aliment manquant",
-      "tryAgain": "Ok, laissez-moi réessayer"
-    },
-    "recipeBuilder": {
-      "label": "Ajouter son propre {searchTerm}",
-      "description": "<p>Construisez votre propre recette.</p>",
       "report": "Signaler un aliment manquant",
       "tryAgain": "Ok, laissez-moi réessayer"
     },
@@ -220,12 +224,14 @@
     "text": "",
     "description": ""
   },
-
   "quantity": {
+    "_": "Quantity",
     "whole": "Entier",
     "fraction": "Fraction",
     "and": "et",
-    "confirm": "C'est la quantité que j'ai consommée."
+    "confirm": "C'est la quantité que j'ai consommée.",
+    "more": "More",
+    "less": "Less"
   },
   "portionSizeOption": {
     "name": "Méthode de quantification",
@@ -384,6 +390,7 @@
     "name": "Créateur de recettes pour {food}",
     "text": "",
     "description": "Veuillez suivre les étapes ci-dessous pour créer votre propre recette de {food}.",
+    "label": "Add your own {searchTerm}",
     "browse": "Parcourir tous les aliments",
     "search": "Chercher un aliment",
     "root": "toutes les catégories alimentaires",
@@ -397,11 +404,13 @@
     "noMore": "Complet",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "remove": "Enlever",
+    "missingAllIngredients": "Please add at least one ingredient to continue.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
       "report": "Signaler un aliment manquant",
-      "tryAgain": "Ok, laissez-moi réessayer"
+      "tryAgain": "Ok, laissez-moi réessayer",
+      "irrelevantIngredient": "I didn't have any {ingredient}"
     }
   },
   "parentFoodPortion": {
@@ -426,6 +435,34 @@
       "label": "Combien de parts identiques à celle-ci avez-vous mangées?"
     },
     "confirm": "J'en ai mangé autant"
+  },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "sizes": {
+      "label": "What size pizza did you have?",
+      "personal": "Personal 7\"",
+      "small": "Small 9.5\"",
+      "medium": "Medium 11.5\"",
+      "large": "Large 13.5\"",
+      "xxl": "Extra large 15.5\""
+    },
+    "crusts": {
+      "label": "What type of pizza crust did you have?",
+      "classic": "Classic",
+      "italian-thin": "Italian / Thin",
+      "stuffed": "Stuffed"
+    },
+    "units": {
+      "label": "How do you want to estimate your portion?",
+      "slice": "In slices",
+      "whole": "In whole pizzas"
+    },
+    "quantity": {
+      "slice": "How many slices did you have?",
+      "whole": "How many whole pizzas did you have?"
+    }
   },
   "standardPortion": {
     "name": "Portion standard",

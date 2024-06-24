@@ -9,6 +9,13 @@
     "daily": "Anda telah mencapai had harian ingatan semula.",
     "total": "Anda telah mencapai jumlah had ingatan semula."
   },
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the recall?",
+    "comment": "Tell us more about the rating you gave the recall",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "survey": "Study: {name}",
   "submissions": {
     "_": "Hari ingatan semula",
@@ -83,6 +90,7 @@
     "feedback": "Pergi ke maklum balas",
     "next": "Teruskan",
     "submit": "Hantar ingatan semula",
+    "reviewed": "Reviewed",
     "addMeal": "Tambah hidangan",
     "deleteFood": "Padam makanan",
     "deleteMeal": "Padam hidangan",

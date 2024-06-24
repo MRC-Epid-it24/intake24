@@ -18,9 +18,8 @@
     "_": "Se connecter",
     "start": "Commençons",
     "subtitle": "Se connecter avec votre nom d'utilisateur et votre mot de passe",
-    "back": "Retour à la connexion",
     "captcha": "Remplir le test CAPTCHA",
-
+    "back": "Retour à la connexion",
     "err": {
       "captcha": "Réponse invalide au test CAPTCHA.",
       "credentials": "Le nom d'utilisateur et le mot de passe renseignés sont invalides.",
@@ -32,7 +31,6 @@
     "_": "Se déconnecter",
     "text": "Se déconnecter de l'application"
   },
-
   "username": "Nom d'utilisateur",
   "name": "Nom",
   "email": "Adresse mail",
@@ -41,30 +39,25 @@
   "phone": "Téléphone",
   "message": "Message",
   "continue": "Continuer",
-
   "help": {
     "_": "Aide",
     "title": "Demander de l'aide",
     "text": "Veuillez compléter le formulaire ci-dessous et une de nos équipes d'appui vous contactera dès que possible.",
     "sent": "Votre demande d'aide a été envoyée."
   },
-
   "app": {
     "_": "Application",
     "info": "Informations de l'application",
     "build": "Construire"
   },
-
   "clipboard": {
     "_": "Copier dans le presse-papiers",
     "copied": "Données copiées dans le presse-papiers"
   },
-
   "sw": {
     "check": "Une mise à jour du contenu est disponible.",
     "update": "Mettre à jour"
   },
-
   "action": {
     "cancel": "Annuler",
     "close": "Fermer",
@@ -83,12 +76,10 @@
     "yes": "Oui",
     "no": "Non"
   },
-
   "not": {
     "provided": "Non renseigné",
     "selected": "Non sélectionné"
   },
-
   "errors": {
     "expansionIncomplete": "Veuillez compléter toutes les sections avec un point d'exclamation."
   }

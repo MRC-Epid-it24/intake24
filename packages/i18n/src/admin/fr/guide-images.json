@@ -5,7 +5,6 @@
   "create": "Ajouter une photo étalon",
   "edit": "Modifier la photo étalon",
   "delete": "Supprimer la photo étalon",
-
   "id": "Identifiant de la photo étalon",
   "objects": {
     "_": "Objet de la photo étalon",

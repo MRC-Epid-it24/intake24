@@ -8,13 +8,11 @@
   },
   "title": "Maklum balas daripada {name}  ingatan semula anda",
   "missingFoods": "Sebarang makanan yang dilaporkan hilang tidak akan disertakan dalam maklum balas pemakanan anda",
-
   "physicalData": {
     "title": "Tentang diri anda",
     "subtitle": "Kami hanya memerlukan sedikit butiran tentang diri anda",
     "change": "Tukar maklumat saya",
     "recall": "Rekod hari seterusnya",
-
     "sexes": {
       "_": "Jantina",
       "m": "Lelaki",
@@ -37,7 +35,6 @@
       "gain_weight": "Capai berat badan"
     }
   },
-
   "outputs": {
     "title": "Output",
     "download": {
@@ -56,17 +53,21 @@
     "retry": "Output maklum balas baru sahaja dipohon, cuba lagi dalam {secs}.",
     "print": "Cetak"
   },
-
   "topFoods": {
     "title": "Makanan yang paling banyak menyumbang kepada pengambilan nutrien anda",
     "chart": "Paling tinggi {nutrient}"
   },
-
   "meals": {
     "title": "Meals per-day breakdown",
     "chart": "{nutrient}"
   },
-
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the dietary feedback?",
+    "comment": "Tell us more about the rating you gave the dietary feedback",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "intake": {
     "your": "Pengambilan {nutrient} anda ialah {amount}",
     "estimated": "Anggaran pengambilan",
@@ -74,7 +75,6 @@
     "tellMeMore": "Huraikan dengan lebih lanjut",
     "gotIt": "Saya faham!"
   },
-
   "unitDescription": {
     "percentage_of_energy": "Maklum balas adalah berdasarkan sumbangan nutrien ini kepada pengambilan tenaga anda dan perbandingannya dengan saranan pengambilan.",
     "energy_divided_by_bmr": "Maklum balas adalah berdasarkan pengambilan tenaga anda dibahagikan dengan BMR dan perbandingannya dengan saranan pengambilan.",

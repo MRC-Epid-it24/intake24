@@ -8,13 +8,11 @@
   },
   "title": "Bilan nutritionnel des rappels de {name} ",
   "missingFoods": "Tous les aliments signalés comme manquants ne seront pas inclus dans le bilan nutritionnel",
-
   "physicalData": {
     "title": "A propos de vous",
     "subtitle": "Afin que nous puissions vous communiquer les résultats de ce bilan, veuillez renseigner les informations suivantes.",
     "change": "Modifier mes informations",
     "recall": "Enregistrer un autre jour",
-
     "sexes": {
       "_": "Sexe",
       "m": "Masculin",
@@ -37,7 +35,6 @@
       "gain_weight": "Prendre du poids"
     }
   },
-
   "outputs": {
     "title": "Résultats",
     "download": {
@@ -56,17 +53,21 @@
     "retry": "Le bilan nutritionnel a déjà été demandé récemment, réessayez dans {secs} s.",
     "print": "Imprimer"
   },
-
   "topFoods": {
     "title": "Aliments contribuant le plus à vos apports nutritionnels",
     "chart": "Le plus riche en {nutrient}"
   },
-
   "meals": {
     "title": "Détail des repas quotidiens",
     "chart": "{nutrient}"
   },
-
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the dietary feedback?",
+    "comment": "Tell us more about the rating you gave the dietary feedback",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "intake": {
     "your": "Votre apport en {nutrient} est de {amount}",
     "estimated": "Apport estimé",
@@ -74,7 +75,6 @@
     "tellMeMore": "Dites m'en plus",
     "gotIt": "J'ai compris !"
   },
-
   "unitDescription": {
     "percentage_of_energy": "Le bilan nutritionnel est calculé à partir de la contribution de ce nutriment à votre apport énergétique et de la comparaison avec les recommandations nutritionnelles.",
     "energy_divided_by_bmr": "Le bilan nutritionnel est calculé à partir de votre apport énergétique divisé par votre besoin métabolique de repos et de la comparaison avec les recommandations nutritionnelles.",

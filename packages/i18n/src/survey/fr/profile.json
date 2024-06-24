@@ -2,14 +2,11 @@
   "_": "Profil",
   "info": "Informations",
   "settings": "Paramètres",
-
   "provider": "Fournisseur",
   "providerId": "Identité du fournisseur",
-
   "languages": {
     "_": "Langue",
     "title": "Langues",
-
     "ar": "Arabe",
     "de": "Allemand",
     "dk": "Danois",

@@ -6,7 +6,6 @@
   "create": "Ajouter un utilisateur",
   "edit": "Modifier l'utilisateur",
   "delete": "Supprimer l'utilisateur",
-
   "id": "Identifiant de l'utilisateur",
   "name": "Nom",
   "simpleName": "Nom simple",
@@ -39,12 +38,10 @@
     "title": "Rôles",
     "tab": "Rôles"
   },
-
   "mfa": {
     "_": "Authentification multi-facteurs",
     "abbr": "2FA"
   },
-
   "notifications": {
     "email": "Notifications mail",
     "sms": "Notifications SMS"

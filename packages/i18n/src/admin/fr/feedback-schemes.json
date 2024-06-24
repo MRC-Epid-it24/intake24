@@ -7,14 +7,12 @@
   "delete": "Supprimer la configuration du bilan",
   "load": "Charger à partir de la configuration",
   "none": "Aucune configuration de bilan trouvée",
-
   "types": {
     "_": "Type de bilan",
     "title": "Types de bilan",
     "default": "Défaut",
     "playful": "Joueur"
   },
-
   "outputs": {
     "_": "Sortie",
     "title": "Sorties",
@@ -22,7 +20,6 @@
     "email": "Adresse mail",
     "download": "Télécharger"
   },
-
   "physicalDataFields": {
     "_": "Champs pour les données physiques",
     "title": "Champs pour les données physiques",
@@ -35,50 +32,41 @@
     "birthdate": "Date de naissance",
     "weightTarget": "Poids cible"
   },
-
   "sections": {
     "_": "Section",
     "title": "Sections"
   },
-
   "copy": {
     "_": "Copier",
     "title": "Copier la configuration du bilan",
     "name": "Nouveau nom de configuration du bilan"
   },
-
   "preview": {
     "_": "Prévisualiser",
     "title": "Prévisualisation du bilan"
   },
-
   "ranges": {
     "_": "Intervalle",
     "start": "Début",
     "end": "Fin"
   },
-
   "age": {
     "_": "Age",
     "range": "Intervalle d'âge",
     "start": "Début de l'intervalle d'âge",
     "end": "Fin de l'intervalle d'âge"
   },
-
   "height": {
     "_": "Hauteur"
   },
-
   "weight": {
     "_": "Poids"
   },
-
   "sexes": {
     "_": "Sexe",
     "m": "Masculin",
     "f": "Féminin"
   },
-
   "sentiments": {
     "_": "Appréciation",
     "title": "Appréciations",
@@ -93,25 +81,25 @@
     "bit_high": "Un peu haut",
     "too_high": "Trop haut"
   },
-
-  "characterTypes": {
-    "_": "Type de caractères",
-    "battery": "Energie",
-    "bread": "Pain",
-    "candy": "Bonbon",
-    "salmon": "Saumon",
-    "sausage": "Saucisse",
-    "egg": "Œuf",
-    "apple": "Pomme",
-    "strawberry": "Fraise",
+  "images": {
+    "_": "Image",
+    "battery": "Battery",
+    "beef": "Beef",
+    "bread": "Bread",
+    "candy": "Candy",
+    "salmon": "Salmon",
+    "sausage": "Sausage",
+    "egg": "Egg",
+    "apple": "Apple",
+    "strawberry": "Strawberry",
     "burger": "Burger",
-    "fries": "Frites",
-    "milk": "Lait",
-    "iron": "Fer",
+    "fries": "Fries",
+    "milk": "Milk",
+    "iron": "Iron",
     "folate": "Folate",
-    "co2": "CO2"
+    "co2": "CO2",
+    "fruitVeg": "Fruit & Vegetables"
   },
-
   "characterSentimentTypes": {
     "_": "Type d'appréciation du caractère",
     "title": "Types d'appréciations du caractère",
@@ -120,7 +108,6 @@
     "happy": "Heureux",
     "exciting": "Excité"
   },
-
   "nutrientRuleTypes": {
     "_": "Type de règle nutritionnelle",
     "title": "Types de règles nutritionnelles",
@@ -129,7 +116,6 @@
     "per_unit_of_weight": "Par unité de poids",
     "range": "Intervalle"
   },
-
   "colors": {
     "_": "Couleur",
     "title": "Liste des couleurs",
@@ -140,12 +126,10 @@
       "required": "La valeur doit être un entier"
     }
   },
-
   "physicalActivityLevels": {
     "_": "Niveau d'activité physique",
     "title": "Niveaux d'activité physique"
   },
-
   "top-foods": {
     "_": "Aliments principaux",
     "title": "Aliments principaux",
@@ -156,7 +140,6 @@
     },
     "other": "Autre aliment"
   },
-
   "meals": {
     "_": "Repas",
     "title": "Repas",
@@ -198,7 +181,6 @@
       }
     }
   },
-
   "cards": {
     "_": "Carte",
     "title": "Cartes",
@@ -208,11 +190,12 @@
     "remove": "Enlever la carte",
     "type": "Type de carte",
     "options": "Options de carte",
+    "color": "Card color",
     "name": "Nom de la carte",
     "required": "Le nom de la carte est requis.",
+    "summary": "Card summary",
     "description": "Description",
     "showRecommendations": "Montrer les recommandations du bilan",
-
     "tabs": {
       "general": "Général",
       "content": "Contenu",
@@ -221,7 +204,6 @@
       "nutrients": "Nutriments",
       "json": "JSON"
     },
-
     "character": {
       "title": "Lettre",
       "subtitle": "Lettre / Nutriment"
@@ -234,7 +216,6 @@
       "title": "Cinq par jour",
       "subtitle": "Retour sur les 'cinq par jour'"
     },
-
     "thresholds": {
       "_": "Seuil",
       "title": "Seuils",
@@ -243,14 +224,12 @@
       "enabled": "Autoriser  un seuil",
       "message": "Message d'avertissement"
     },
-
     "unit": {
       "name": "Nom de l'unité",
       "description": "Description de l'unité",
       "required": "Le nom de l'unité est requis."
     }
   },
-
   "demographic-groups": {
     "_": "Groupe démographique",
     "title": "Groupes démographiques",
@@ -258,13 +237,11 @@
     "create": "Nouveau groupe démographique",
     "edit": "Modifier le groupe démographique",
     "remove": "Enlever le groupe démographique",
-
     "tabs": {
       "general": "Général",
       "sectors": "Secteurs d'échelonnage",
       "json": "JSON"
     },
-
     "sectors": {
       "_": "Secteurs d'échelonnage",
       "title": "Secteurs d'échelonnage",
@@ -272,7 +249,6 @@
       "remove": "Enlever le secteur d'échelonnage"
     }
   },
-
   "henry-coefficients": {
     "_": "Coefficient de Henry",
     "title": "Coefficients de Henry",
@@ -280,9 +256,12 @@
     "create": "Nouveau coefficient de Henry",
     "edit": "Modifier le coefficient de Henry",
     "remove": "Enlever le coefficient de Henry",
-
     "constant": "Constante",
     "weightCoefficient": "Coefficient de poids",
     "heightCoefficient": "Coefficient de taille"
+  },
+  "rating": {
+    "_": "Rating",
+    "title": "Rating"
   }
 }

@@ -2,14 +2,11 @@
   "_": "简介",
   "info": "信息",
   "settings": "设置",
-
   "provider": "供应商",
   "providerId": "供应商ID",
-
   "languages": {
     "_": "语言",
     "title": "语言",
-
     "ar": "阿拉伯语",
     "de": "德语",
     "dk": "丹麦语",

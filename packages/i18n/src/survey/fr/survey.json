@@ -20,15 +20,15 @@
     }
   },
   "generateUser": {
+    "400": "Le captcha est invalide.",
+    "403": "L'étude {surveyId} ne permet pas de générer de nouveaux identifiants.",
+    "404": "L'étude {surveyId} n'a pas été reconnue.",
+    "429": "De nouveaux identifiants viennent d'être générés, rééssayez plus tard.",
     "_": "Accéder à l'étude",
     "subtitle": "Ceci est une étude en libre accès, vous pouvez y accéder gratuitement.",
     "link": "lien",
     "info1": "Sélectionnez 'Accéder à l'étude' pour générer de nouveaux identifiants. Il vous faudra retenir ces identifiants si vous souhaitez reprendre votre session plus tard.",
     "info2": "Ce rappel va durer approximativement vingt minutes.",
-    "info3": "Si vous fermez la fenêtre de votre navigateur, vous pouvez revenir en utilisant ce {action}.",
-    "400": "Le captcha est invalide.",
-    "403": "L'étude {surveyId} ne permet pas de générer de nouveaux identifiants.",
-    "404": "L'étude {surveyId} n'a pas été reconnue.",
-    "429": "De nouveaux identifiants viennent d'être générés, rééssayez plus tard."
+    "info3": "Si vous fermez la fenêtre de votre navigateur, vous pouvez revenir en utilisant ce {action}."
   }
 }

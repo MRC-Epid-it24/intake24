@@ -7,7 +7,6 @@
   "create": "Ajouter une langue",
   "edit": "Modifier la langue",
   "delete": "Supprimer la langue",
-
   "englishName": "Nom anglais",
   "localName": "Nom local",
   "countryFlagCode": "Code du drapeau du pays",
@@ -16,8 +15,6 @@
     "ltr": "Gauche à droite",
     "rtl": "Droite à gauche"
   },
-  "foodIndexLanguageBackend": "Langue d'arrière-plan pour l'index alimentaire",
-
   "translations": {
     "_": "Traduction",
     "title": "Traductions",
@@ -47,7 +44,6 @@
       "survey": "Enquête",
       "validation": "Validation"
     },
-
     "created": "La traduction linguistique ({name}) a été créée.",
     "updated": "La traduction linguistique ({name}) a été mise à jour.",
     "deleted": "La traduction linguistique ({name}) a été supprimée.",

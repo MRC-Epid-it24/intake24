@@ -9,6 +9,13 @@
     "daily": "தினசரி நினைவு வரம்பை அடைந்துவிட்டீர்கள்.",
     "total": "திரும்ப அழைக்கும் மொத்த வரம்பை அடைந்துவிட்டீர்கள்."
   },
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the recall?",
+    "comment": "Tell us more about the rating you gave the recall",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "survey": "Study: {name}",
   "submissions": {
     "_": "நினைவூட்டல் நாள்",
@@ -83,6 +90,7 @@
     "feedback": "பின்னூட்டத்திற்கு செல்",
     "next": "தொடரவும்",
     "submit": "நினைவூட்டலை சமர்ப்பிக்கவும்",
+    "reviewed": "Reviewed",
     "addMeal": "சாப்பாடு சேர்க்கவும்",
     "deleteFood": "உணவை நீக்கவும்",
     "deleteMeal": "சாப்பாட்டை நீக்கவும்",

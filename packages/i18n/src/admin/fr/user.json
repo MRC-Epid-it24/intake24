@@ -5,24 +5,20 @@
   "access": "Accès",
   "profile": "Profile",
   "settings": "Paramètres",
-
   "name": "Nom",
   "email": "Adresse mail",
   "phone": "Téléphone",
   "permissions": "Autorisations attribuées",
   "roles": "Rôles attribués",
-
   "languages": {
     "_": "Langue",
     "title": "Langues"
   },
-
   "jobs": {
     "_": "Job",
     "title": "Jobs",
     "create": "New job"
   },
-
   "personalAccessTokens": {
     "_": "Personal access token",
     "title": "Personal access tokens",
@@ -32,7 +28,6 @@
     "none": "No personal access token created.",
     "save": "Store the token below securely. You won't be able to access it again."
   },
-
   "mfa": {
     "_": "MFA",
     "title": "Authentification à facteurs multiples",

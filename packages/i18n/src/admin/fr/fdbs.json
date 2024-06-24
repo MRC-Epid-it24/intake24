@@ -6,14 +6,16 @@
   "create": "Ajouter une base de données",
   "edit": "Modifier la base de données",
   "delete": "Supprimer la base de données",
-
   "showGlobalName": "Afficher le nom global",
-
+  "food-list": {
+    "_": "Food list",
+    "title": "Food list",
+    "tab": "Food list"
+  },
   "search": {
     "_": "Chercher",
     "title": "Chercher des catégories et des aliments"
   },
-
   "categories": {
     "_": "Catégorie",
     "title": "Catégories",
@@ -22,6 +24,7 @@
     "noCategory": "Non catégorisé",
     "alreadyIncluded": "La catégorie '{code}' est déjà présente dans la liste actuelle.",
     "none": "Pas de catégorie trouvée pour cette recherche.",
+    "copy": "Copy category",
     "global": {
       "_": "Paramètre des catégories globales",
       "code": "Code de la catégorie",
@@ -40,10 +43,11 @@
       "_": "Catégories parent"
     }
   },
-
   "foods": {
     "_": "Aliment",
     "title": "Aliments",
+    "add": "Add food",
+    "copy": "Copy food",
     "global": {
       "_": "Paramètres pour les aliments globaux",
       "code": "Code de l'aliment",
@@ -62,7 +66,13 @@
       "_": "Catégories parent"
     }
   },
-
+  "locales": {
+    "_": "Use in locales",
+    "title": "Use in locales",
+    "description": "Food is included in {count} locales.",
+    "add": "Add locale",
+    "remove": "Remove locale"
+  },
   "attributes": {
     "_": "Attributs",
     "title": "Attributs",
@@ -72,13 +82,12 @@
     "readyMealOption": "Etait-ce un repas tout fait ou un plat préparé ?",
     "reasonableAmount": "Quantité raisonnable (g/ml)",
     "useInRecipes": {
-      "_": "Utiliser pour les recettes",
       "0": "Utiliser partout",
       "1": "Utiliser seulement comme aliment",
-      "2": "Utiliser seulement comme ingrédient d'une recette"
+      "2": "Utiliser seulement comme ingrédient d'une recette",
+      "_": "Utiliser pour les recettes"
     }
   },
-
   "nutrients": {
     "_": "Enregistrement de la table nutritionnelle",
     "title": "Enregistrements de la table nutritionnelle",
@@ -87,35 +96,29 @@
     "alreadyIncluded": "L'enregistrement de la table nutritionnelle '{id}' est déjà inclus dans la liste actuelle.",
     "none": "Aucun enregistrement de table nutritionnelle n'a été trouvé pour cette recherche."
   },
-
   "associatedFoods": {
     "_": "Aliment associé",
     "title": "Aliments associés",
     "add": "Ajouter un aliment associé",
     "edit": "Modifier un aliment associé",
     "remove": "Enlever un aliment associé",
-
     "association": "Association",
     "genericName": "Nom générique",
     "text": "Texte",
     "linkAsMain": "Lier à l'aliment principal",
     "multiple": "Autoriser plusieurs aliments"
   },
-
   "portionSizes": {
     "_": "Méthode de quantification",
     "title": "Méthodes de quantification",
     "add": "Ajouter une méthode de quantification",
     "edit": "Modifier la méthode de quantification",
     "remove": "Enlever la méthode de quantification",
-
     "parameters": "Paramètres",
     "noParameters": "La méthode ne présente pas plus de paramètres.",
     "description": "Description",
-    "imageUrl": "URL de l'image",
     "useForRecipes": "Utiliser pour les recettes",
     "conversionFactor": "Facteur de conversion",
-
     "methods": {
       "_": "Méthode de quantification",
       "as-served": {
@@ -157,6 +160,9 @@
       "pizza": {
         "_": "Pizza",
         "imageMapLabels": "Libellés de l'image à curseur"
+      },
+      "pizza-v2": {
+        "_": "Pizza V2"
       },
       "standard-portion": {
         "_": "Portion standard",

@@ -6,7 +6,6 @@
   "edit": "Modifier le tableau nutritionnel",
   "delete": "Supprimer le tableau nutritionnel",
   "id": "Identifiant du tableau nutritionnel",
-
   "mapping": {
     "source": {
       "_": "Mapping du tableau source",
@@ -30,7 +29,6 @@
       "columnOffset": "Colonne CSV"
     }
   },
-
   "tasks": {
     "_": "Missions",
     "title": "Missions sur les tables nutritionnelles",

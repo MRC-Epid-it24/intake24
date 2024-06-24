@@ -6,7 +6,6 @@
   "create": "Ajouter un rôle",
   "edit": "Modifier le rôle",
   "delete": "Supprimer le rôle",
-
   "permissions": {
     "_": "Autorisation",
     "title": "Autorisations",

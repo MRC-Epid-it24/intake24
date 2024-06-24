@@ -8,13 +8,11 @@
   },
   "title": "您的召回反馈",
   "missingFoods": "任何报告为丢失的食物将不包含在您的饮食反馈中",
-
   "physicalData": {
     "title": "关于您",
     "subtitle": "我们只需要您的几个详细信息",
     "change": "更改我的信息",
     "recall": "记录另一天",
-
     "sexes": {
       "_": "性别",
       "m": "男性",
@@ -37,7 +35,6 @@
       "gain_weight": "增加体重"
     }
   },
-
   "outputs": {
     "title": "输出",
     "download": {
@@ -56,17 +53,21 @@
     "retry": "最近已请求反馈输出，请在 {secs} 秒后重试。",
     "print": "打印"
   },
-
   "topFoods": {
     "title": "对您的营养摄入量做出最大贡献的食物",
     "chart": "{nutrient} 最高"
   },
-
   "meals": {
     "title": "Meals per-day breakdown",
     "chart": "{nutrient}"
   },
-
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the dietary feedback?",
+    "comment": "Tell us more about the rating you gave the dietary feedback",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "intake": {
     "your": "您的 {nutrient} 摄入量为 {amount}",
     "estimated": "估计摄入量",
@@ -74,7 +75,6 @@
     "tellMeMore": "让我知道多一点",
     "gotIt": "明白了！"
   },
-
   "unitDescription": {
     "percentage_of_energy": "反馈基于该营养素对您的能量摄入的贡献以及与建议的比较。",
     "energy_divided_by_bmr": "反馈是基于您的能量摄入量除以BMR以及与推荐值的比较。",

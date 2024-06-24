@@ -2,17 +2,14 @@
   "_": "Sécurité",
   "title": "Sécurité",
   "tab": "Sécurité",
-
   "add": "Ajouter un accès utilisateur",
   "edit": "Modifier l'accès utilisateur",
   "search": "Chercher un utilisateur",
   "create": "Créer un nouvel utilisateur",
-
   "owner": {
     "_": "Propriétaire",
     "title": "Propriété"
   },
-
   "actions": {
     "_": "Action ressource",
     "title": "Actions ressources",
@@ -21,15 +18,13 @@
     "delete": "Supprimer l'enregistrement",
     "copy": "Copier l'enregistrement",
     "securables": "Sécurité",
-
+    "use": "Use record",
     "cards": "Cartes",
     "top-foods": "Aliments majoritaires",
     "meals": "Repas",
     "demographic-groups": "Groupes démographiques",
     "henry-coefficients": "Coefficients de Henry",
-
     "translations": "Traductions",
-
     "food-list": "Liste d'aliments",
     "food-ranking": "Classement d'aliments",
     "split-lists": "Séparer les listes",
@@ -37,14 +32,18 @@
     "split-words": "Séparer les mots",
     "synonym-sets": "Séries de synonymes",
     "tasks": "Tâches",
-
     "prompts": "Invites",
     "data-export": "Export de données",
-
     "overrides": "Dérogations",
     "respondents": "Répondants",
     "sessions": "Sessions",
     "submissions": "Soumissions",
     "support": "Aide"
+  },
+  "visibility": {
+    "_": "Visibility",
+    "title": "Record visibility",
+    "public": "Public",
+    "restricted": "Restricted"
   }
 }

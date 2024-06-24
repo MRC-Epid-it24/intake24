@@ -20,7 +20,6 @@
     "subtitle": "Daftar masuk dengan nama pengguna & kata laluan anda",
     "captcha": "Complete the captcha challenge",
     "back": "Kembali ke log masuk",
-
     "err": {
       "captcha": "Invalid captcha challenge response.",
       "credentials": "Nama pengguna & kata laluan yang diberikan adalah tidak sah.",
@@ -32,7 +31,6 @@
     "_": "Log keluar",
     "text": "Log keluar daripada aplikasi"
   },
-
   "username": "Nama pengguna",
   "name": "Nama",
   "email": "Emel",
@@ -41,30 +39,25 @@
   "phone": "Telefon",
   "message": "Message",
   "continue": "Teruskan",
-
   "help": {
     "_": "Bantuan",
     "title": "Mohon bantuan",
     "text": "Please complete the form below and one of our support staff will get in touch as soon as they can.",
     "sent": "Permohonan bantuan anda telah dihantar."
   },
-
   "app": {
     "_": "Aplikasi",
     "info": "Maklumat aplikasi",
     "build": "Bina"
   },
-
   "clipboard": {
     "_": "Salin ke clipboard",
     "copied": "Data disalin ke clipboard"
   },
-
   "sw": {
     "check": "Kandungan yang dikemas kini telah tersedia",
     "update": "Kemas kini"
   },
-
   "action": {
     "cancel": "Batal",
     "close": "Tutup",
@@ -83,12 +76,10 @@
     "yes": "Ya",
     "no": "Tidak"
   },
-
   "not": {
     "provided": "Tidak disediakan",
     "selected": "Tidak dipilih"
   },
-
   "errors": {
     "expansionIncomplete": "Lengkapkan semua bahagian yang ditanda dengan !"
   }
