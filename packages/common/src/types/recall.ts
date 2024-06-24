@@ -1,6 +1,6 @@
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
-import type { ComponentType } from '../prompts';
+import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
 import type { CerealType, StandardUnit } from '../surveys';
 import type { Dictionary, Optional, RequiredLocaleTranslation } from './common';
 import type { RecipeFood } from './foods';
@@ -184,6 +184,7 @@ export interface AbstractFoodState {
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
   type: 'free-text' | 'encoded-food' | 'missing-food' | 'recipe-builder';
+  external?: Record<ExternalSource, PromptStates['external-source-prompt'] | undefined>;
 }
 
 export interface FreeTextFood extends AbstractFoodState {
@@ -307,7 +308,7 @@ export function getFoodDescription(food: FoodState): string {
     case 'encoded-food':
       return food.data.localName;
     default:
-      return food.searchTerm ?? '??';
+      return food.searchTerm ?? '';
   }
 }
 

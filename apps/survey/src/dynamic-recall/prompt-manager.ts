@@ -336,6 +336,26 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
       return true;
     }
 
+    case 'external-source-prompt': {
+      if (
+        ['encoded-food', 'missing-food', 'recipe-builder'].includes(foodState.type)
+        && (foodState.external ?? {})[prompt.source.type]?.type === undefined
+      ) {
+        recallLog().promptCheck(
+          component,
+          true,
+          `Entry type is ${foodState.type}, external source not yet selected.`,
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        component,
+        false,
+        `Entry type is ${foodState.type}, external source already selected.`,
+      );
+      return false;
+    }
+
     case 'food-search-prompt': {
       const freeEntryComplete = surveyFreeEntryComplete(surveyState.data);
 

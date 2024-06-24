@@ -1,25 +1,26 @@
 <template>
-  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ label, name }" outlined>
+  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ ...$attrs, name }" v-on="$listeners">
     <template #append>
       <v-icon @click.stop.prevent="open">
         fas fa-barcode
       </v-icon>
-      <barcode-reader
+      <quagga-reader
         :dialog.sync="dialog"
         :model-value.sync="barcode"
-        v-bind="{ errorThreshold, readers, successfulReads }"
+        v-bind="{ errorThreshold, readers: options.readers, successfulReads }"
       />
     </template>
   </v-text-field>
 </template>
 
 <script lang="ts" setup>
-import type { QuaggaJSCodeReader } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
 import { defineComponent, ref } from 'vue';
 
-import BarcodeReader from './barcode-reader.vue';
+import type { QuaggaScanner } from '@intake24/common/barcodes';
+
+import QuaggaReader from './quagga-reader.vue';
 
 const props = defineProps({
   label: {
@@ -36,8 +37,9 @@ const props = defineProps({
   errorThreshold: {
     type: Number,
   },
-  readers: {
-    type: Array as PropType<QuaggaJSCodeReader[]>,
+  options: {
+    type: Object as PropType<QuaggaScanner>,
+    required: true,
   },
   successfulReads: {
     type: Number,
@@ -61,7 +63,7 @@ function open(event: Event) {
 
 <script lang="ts">
 export default defineComponent({
-  name: 'BarcodeInput',
+  name: 'QuaggaInput',
 });
 </script>
 

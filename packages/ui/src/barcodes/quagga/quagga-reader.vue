@@ -37,14 +37,16 @@
 </template>
 
 <script lang="ts" setup>
-import type { QuaggaJSCodeReader, QuaggaJSResultObject } from '@ericblade/quagga2';
+import type { QuaggaJSResultObject } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
 import Quagga from '@ericblade/quagga2';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue';
 import { VCard } from 'vuetify/lib';
 
-import { useMessages } from '../stores';
+import type { QuaggaReaders } from '@intake24/common/barcodes';
+
+import { useMessages } from '../../stores';
 
 const props = defineProps({
   dialog: {
@@ -60,7 +62,7 @@ const props = defineProps({
     default: 0.2,
   },
   readers: {
-    type: Array as PropType<QuaggaJSCodeReader[]>,
+    type: Array as PropType<QuaggaReaders[]>,
     default: () => ['ean_reader', 'ean_8_reader', 'ean_5_reader'],
   },
   successfulReads: {
@@ -315,7 +317,7 @@ function successfulRead(barcode: string) {
 
 <script lang="ts">
 export default defineComponent({
-  name: 'BarcodeReader',
+  name: 'QuaggaReader',
 });
 </script>
 
