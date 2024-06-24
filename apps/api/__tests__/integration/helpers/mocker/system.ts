@@ -64,10 +64,7 @@ function user(): UserRequest {
   const multiFactorAuthentication = false;
   const emailNotifications = faker.datatype.boolean();
   const smsNotifications = faker.datatype.boolean();
-  const customFields = [
-    { name: faker.word.words(1), value: faker.word.words(5) },
-    { name: faker.word.words(1), value: faker.word.words(5) },
-  ];
+  const customFields = times(3, () => customField());
 
   const permissions: string[] = [];
   const roles: string[] = [];

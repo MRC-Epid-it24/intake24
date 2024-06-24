@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -6,7 +7,6 @@ import type csvParser from 'csv-parser';
 import parseCsv from 'csv-parser';
 import { groupBy } from 'lodash';
 import removeBOM from 'remove-bom-stream';
-import { v4 as randomUUID } from 'uuid';
 
 import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import type { INCA3EnglishDescription } from '@intake24/cli/commands/fr-inca3/types/english-description';
