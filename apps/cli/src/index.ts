@@ -15,6 +15,7 @@ import {
   hashPassword,
   packageExportV3,
   packageImportV4,
+  searchTest,
 } from './commands';
 import {
   conflictResolutionOptions,
@@ -168,6 +169,15 @@ async function run() {
     )
     .action(async (options) => {
       await convertDrinkScale(options);
+    });
+
+  program
+    .command('search-test')
+    .description('Test search quality of the system')
+    .requiredOption('-t, --term <term>', 'Search term')
+    .requiredOption('-p, --path <path>', 'Jsonl file path')
+    .action(async (cmd) => {
+      await searchTest(cmd);
     });
 
   await program.parseAsync(process.argv);
