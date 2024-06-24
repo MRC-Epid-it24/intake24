@@ -59,9 +59,6 @@ importers:
       picocolors:
         specifier: ^1.0.1
         version: 1.0.1
-      prettier:
-        specifier: ^3.3.2
-        version: 3.3.2
       prompts:
         specifier: ^2.4.2
         version: 2.4.2

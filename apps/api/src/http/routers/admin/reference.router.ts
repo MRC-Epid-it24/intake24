@@ -212,7 +212,7 @@ export function reference() {
       },
     },
     nutrientTables: {
-      middleware: [anyPermission('locales')],
+      middleware: [anyPermission('locales', 'survey-schemes')],
       handler: async ({ query }) => {
         const nutrientTables = await NutrientTable.paginate({
           query,
