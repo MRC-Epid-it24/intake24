@@ -185,6 +185,7 @@ import {
 } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
 
+import { useTinymce } from '../editors';
 import {
   PromptActions,
   PromptConditions,
@@ -236,6 +237,7 @@ export default defineComponent({
   emits: ['save'],
 
   setup() {
+    useTinymce();
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
     return { form };
@@ -296,14 +298,6 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    document.addEventListener('focusin', this.focusInTox, true);
-  },
-
-  beforeDestroy() {
-    document.removeEventListener('focusin', this.focusInTox, true);
-  },
-
   methods: {
     newDialog(show = false): PromptDialog {
       return {
@@ -311,14 +305,6 @@ export default defineComponent({
         index: -1,
         prompt: copy(this.availablePrompts[0]),
       };
-    },
-
-    focusInTox(event: FocusEvent) {
-      const toxDialog = (event.target as HTMLElement).closest('.tox-dialog');
-      if (!toxDialog)
-        return;
-
-      event.stopImmediatePropagation();
     },
 
     updatePromptProps() {

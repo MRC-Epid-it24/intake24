@@ -114,7 +114,7 @@
           <template #extension>
             <v-container>
               <v-tabs v-model="tab" background-color="secondary" dark>
-                <v-tab v-for="item in ['general', 'sectors', 'json']" :key="item">
+                <v-tab v-for="item in ['general', 'sectors', 'json']" :key="item" :tab-value="item">
                   {{ $t(`feedback-schemes.demographic-groups.tabs.${item}`) }}
                 </v-tab>
               </v-tabs>
@@ -124,7 +124,7 @@
         <v-form ref="form" @submit.prevent="save">
           <v-container>
             <v-tabs-items v-model="tab" class="pt-1">
-              <v-tab-item key="general">
+              <v-tab-item key="general" value="general">
                 <v-container>
                   <v-row>
                     <v-col cols="12" md="6">
@@ -203,14 +203,14 @@
                   </v-row>
                 </v-container>
               </v-tab-item>
-              <v-tab-item key="sectors">
+              <v-tab-item key="sectors" value="sectors">
                 <v-container>
                   <demographic-group-sectors
                     v-model="dialog.item.scaleSectors"
                   />
                 </v-container>
               </v-tab-item>
-              <v-tab-item key="json">
+              <v-tab-item key="json" value="json">
                 <v-container>
                   <json-editor v-model="dialog.item" />
                 </v-container>
@@ -245,7 +245,7 @@ import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor, JsonEditorDialog } from '@intake24/admin/components/editors';
+import { JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
 import { cardTypes as cardTypesRef, nutrientRuleTypes, sexes } from '@intake24/common/feedback';
@@ -282,11 +282,12 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    useTinymce();
     const { i18n } = useI18n();
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update }
+    const { dialog, form, items, newDialog, add, edit, load, remove, reset: resetItem, save, update }
       = useListWithDialog(props, context, { newItem: getDemographicGroupDefaults });
 
-    const tab = ref(0);
+    const tab = ref('general');
 
     const cardTypes = computed(() =>
       cardTypesRef.map(value => ({
@@ -294,6 +295,11 @@ export default defineComponent({
         value,
       })),
     );
+
+    const reset = () => {
+      tab.value = 'general';
+      resetItem();
+    };
 
     return {
       cardTypes,

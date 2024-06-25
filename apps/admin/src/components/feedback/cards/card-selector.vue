@@ -179,6 +179,7 @@ import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
+import { useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { cardDefaults, images as characterTypesRef } from '@intake24/common/feedback';
 import { copy, merge, randomString } from '@intake24/common/util';
@@ -209,6 +210,7 @@ export default defineComponent({
   emits: ['save'],
 
   setup() {
+    useTinymce();
     const { i18n } = useI18n();
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
@@ -232,7 +234,7 @@ export default defineComponent({
       newDialog: dialog,
       cardDefaults,
       cardSettings,
-      tab: 0,
+      tab: 'general',
     };
   },
 
@@ -244,23 +246,7 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    document.addEventListener('focusin', this.focusInTox, true);
-  },
-
-  beforeDestroy() {
-    document.removeEventListener('focusin', this.focusInTox, true);
-  },
-
   methods: {
-    focusInTox(event: FocusEvent) {
-      const toxDialog = (event.target as HTMLElement).closest('.tox');
-      if (!toxDialog)
-        return;
-
-      event.stopImmediatePropagation();
-    },
-
     updateCardProps() {
       const {
         show,
@@ -306,7 +292,7 @@ export default defineComponent({
     },
 
     reset() {
-      this.tab = 0;
+      this.tab = 'general';
       this.dialog = this.newDialog();
       this.form?.resetValidation();
     },
