@@ -12,9 +12,11 @@
             autofocus
             class="meal-add-prompt__combobox"
             clearable
-            :items="defaultMeals"
+            hide-details="auto"
+            :items="availableMeals"
             :label="promptI18n.label"
             outlined
+            :rules="rules"
             :search-input.sync="state"
           />
         </v-col>
@@ -98,8 +100,8 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       required: true,
     },
-    hasMeals: {
-      type: Boolean,
+    meals: {
+      type: Array as PropType<string[]>,
       required: true,
     },
     value: {
@@ -121,18 +123,29 @@ export default defineComponent({
         ctx.emit('input', value);
       },
     });
-    const isValid = computed(() => !!state.value);
+
+    const isValidMeal = (value: any) => !props.meals.includes(value?.toLowerCase().trim());
+    const availableMeals = computed(() => props.defaultMeals.filter(meal => isValidMeal(meal)));
+    const hasMeals = computed(() => !!props.meals.length);
+
+    const isValid = computed(() => !!state.value && isValidMeal(state.value));
+
     const i18nPrefix = computed(
       () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`,
     );
     const promptI18n = computed(() => ({
+      exists: i18n.t(`prompts.${type.value}.exists`),
       no: i18n.t(`prompts.${type.value}.no`),
       yes: i18n.t(`prompts.${type.value}.yes`),
       description: translatePath(`${i18nPrefix.value}.description`, params.value, true),
       label: i18n.t(`${i18nPrefix.value}.label`),
     }));
 
-    return { action, isValid, promptI18n, state };
+    const rules = [
+      (value: any): boolean | string => isValidMeal(value) || promptI18n.value.exists.toString(),
+    ];
+
+    return { action, availableMeals, hasMeals, isValid, promptI18n, rules, state };
   },
 });
 </script>

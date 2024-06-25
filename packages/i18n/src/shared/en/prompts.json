@@ -148,6 +148,7 @@
     },
     "yes": "Add this meal",
     "no": "Cancel",
+    "exists": "Entered meal already exists, select another meal.",
     "noMeal": "No meals remaining, add at least one"
   },
   "mealDuration": {

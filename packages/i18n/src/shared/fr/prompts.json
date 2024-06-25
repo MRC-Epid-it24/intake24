@@ -148,6 +148,7 @@
     },
     "yes": "Ajouter ce repas",
     "no": "Annuler",
+    "exists": "Entered meal already exists, select another meal.",
     "noMeal": "Plus de repas restants, en ajouter au moins un"
   },
   "mealDuration": {

@@ -148,6 +148,7 @@
     },
     "yes": "添加这餐食",
     "no": "取消",
+    "exists": "Entered meal already exists, select another meal.",
     "noMeal": "没有剩余餐食，至少添加一个"
   },
   "mealDuration": {

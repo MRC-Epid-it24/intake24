@@ -1,7 +1,7 @@
 <template>
   <meal-add-prompt
     v-model="state"
-    v-bind="{ defaultMeals, hasMeals, prompt, section }"
+    v-bind="{ defaultMeals, meals, prompt, section }"
     @action="action"
   />
 </template>
@@ -43,10 +43,8 @@ export default defineComponent({
     const { i18n } = useI18n();
     const survey = useSurvey();
 
-    const hasMeals = computed(() => survey.hasMeals);
-    const defaultMeals = computed(
-      () => survey.defaultSchemeMeals?.map(meal => meal.name[i18n.locale] ?? meal.name.en) ?? [],
-    );
+    const defaultMeals = computed(() => survey.defaultSchemeMeals?.map(({ name }) => name[i18n.locale] ?? name.en) ?? []);
+    const meals = computed(() => survey.meals.map(({ name }) => (name[i18n.locale] ?? name.en).toLowerCase().trim()));
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next')
@@ -70,7 +68,7 @@ export default defineComponent({
       survey.addMeal({ name: { en: state.value, [i18n.locale]: state.value } }, i18n.locale);
     };
 
-    return { state, action, defaultMeals, hasMeals };
+    return { state, action, defaultMeals, meals };
   },
 });
 </script>

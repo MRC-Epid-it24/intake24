@@ -148,6 +148,7 @@
     },
     "yes": "Tambah hidangan ini",
     "no": "Batal",
+    "exists": "Entered meal already exists, select another meal.",
     "noMeal": "Tiada hidangan yang tinggal, tambah sekurang-kurangnya satu hidangan"
   },
   "mealDuration": {
