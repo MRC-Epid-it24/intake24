@@ -32,6 +32,7 @@
     "db:system:migrate": "pnpm --filter @intake24/db db:system:migrate",
     "db:system:migrate:undo": "pnpm --filter @intake24/db db:system:migrate:undo",
     "cli": "pnpm --filter @intake24/cli cli",
+    "i18n:sync": "pnpm --filter @intake24/i18n i18n:sync",
     "docs:dev": "pnpm docs:open-api && vitepress dev docs",
     "docs:build": "pnpm docs:open-api && vitepress build docs",
     "docs:serve": "pnpm docs:open-api && vitepress serve docs",

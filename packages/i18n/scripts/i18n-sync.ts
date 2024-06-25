@@ -22,7 +22,7 @@ for (const component of components) {
       const defaults = JSON.parse(readFileSync(resolve('src', component, 'en', section), 'utf8'));
       const sync = JSON.parse(readFileSync(resolve('src', component, lang, section), 'utf8'));
       const merged = mergeTranslations(defaults, sync);
-      writeFileSync(resolve('src', component, lang, section), JSON.stringify(merged, null, 2), 'utf8');
+      writeFileSync(resolve('src', component, lang, section), `${JSON.stringify(merged, null, 2)}\n`, 'utf8');
     }
   }
 }
