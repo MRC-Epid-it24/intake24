@@ -20,6 +20,7 @@
     "db:foods:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/foods/options.js",
     "db:foods:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_FOODS_URL)\" --camel-case --out-file ./src/kysely/foods.d.ts",
     "db:system:migrate": "pnpm sequelize db:migrate --options-path sequelize/system/options.js",
+    "db:system:migration:new": "pnpm sequelize migration:generate --migrations-path sequelize/system/migrations",
     "db:system:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/system/options.js",
     "db:system:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_SYSTEM_URL)\" --camel-case --out-file ./src/kysely/system.d.ts"
   },

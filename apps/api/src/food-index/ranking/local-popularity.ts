@@ -19,19 +19,19 @@ export async function getLocalPopularityRanking(
 
   if (codesToFetch.length > 0) {
     const rows = await PAOccurrence.findAll({
-      attributes: ['foodCode', 'occurrences'],
+      attributes: ['foodCode', 'occurrences', 'multiplier'],
       where: { localeId, foodCode: codesToFetch },
     });
 
     const newCacheEntries = rows.map(row => ({
       key: toCacheKey(localeId, row.foodCode),
-      val: row.occurrences,
+      val: row.occurrences * (row.multiplier ?? 1),
     }));
 
     cache.mset(newCacheEntries);
 
     rows.forEach((row) => {
-      ranking[row.foodCode] = row.occurrences;
+      ranking[row.foodCode] = row.occurrences * (row.multiplier ?? 1);
     });
   }
 
