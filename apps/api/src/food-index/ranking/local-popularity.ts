@@ -25,13 +25,13 @@ export async function getLocalPopularityRanking(
 
     const newCacheEntries = rows.map(row => ({
       key: toCacheKey(localeId, row.foodCode),
-      val: row.occurrences * row.multiplier,
+      val: row.occurrences * (row.multiplier ?? 1),
     }));
 
     cache.mset(newCacheEntries);
 
     rows.forEach((row) => {
-      ranking[row.foodCode] = row.occurrences * row.multiplier;
+      ranking[row.foodCode] = row.occurrences * (row.multiplier ?? 1);
     });
   }
 
