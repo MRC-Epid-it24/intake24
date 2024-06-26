@@ -1,6 +1,7 @@
 import type {
   Attributes,
   CreationAttributes,
+  CreationOptional,
   InferAttributes,
   InferCreationAttributes,
 } from 'sequelize';
@@ -41,7 +42,7 @@ export default class PAOccurrence extends BaseModel<
     allowNull: true,
     type: DataType.INTEGER,
   })
-  declare multiplier: number | null;
+  declare multiplier: CreationOptional<number | null>;
 }
 
 export type PAOccurrenceAttributes = Attributes<PAOccurrence>;
