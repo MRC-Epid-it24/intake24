@@ -76,9 +76,9 @@
         </tr>
         <tr>
           <th>{{ $t('surveys.search.sortingAlgorithm') }}</th>
-          <td>{{ $t(`surveys.search.algorithms.${entry.searchSortingAlgorithm}`) }}</td>
+          <td>{{ $t(`surveys.search.algorithms.${entry.searchSettings.sortingAlgorithm}`) }}</td>
           <th>{{ $t('surveys.search.matchScoreWeight') }}</th>
-          <td>{{ entry.searchMatchScoreWeight }}</td>
+          <td>{{ entry.searchSettings.matchScoreWeight }}</td>
         </tr>
       </tbody>
     </v-simple-table>

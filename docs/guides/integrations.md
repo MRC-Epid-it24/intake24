@@ -57,22 +57,24 @@ Tokens without standard claims limit their identifiability and may pose increase
 
 - `username` - Unique respondent username within the survey
 - `password` (optional) - password for `username:password` login, can be omitted if only authentication URL is intended to be used
-- `redirectUrl` (optional) - redirect URL for user redirection after recall completion
 - `name` (optional) - user's name for personalisation
+- `customFields` (optional) - user's custom fields
+- `redirectUrl` (optional) - redirect URL for user redirection after recall completion
 
 #### JWT payload
 
 ```json
 {
-  "iat": number,
-  "exp": number,
-  "aud": string,
-  "sub": string,
-  "iss": string,
+  "iat"?: number,
+  "exp"?: number,
+  "aud"?: string | string[],
+  "sub"?: string,
+  "iss"?: string,
   "username": string,
-  "password"?: string
+  "password"?: string,
+  "name"?: string,
+  "customFields"?: [{"name": string, "value": string}],
   "redirectUrl"?: string
-  "name"?: string
 }
 ```
 

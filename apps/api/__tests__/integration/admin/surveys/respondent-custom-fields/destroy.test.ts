@@ -38,10 +38,10 @@ export default () => {
     );
     const field = respondentInput.customFields!.at(0)!.name;
 
-    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields/${field}`;
-    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/fields/${field}`;
-    invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/fields/${field}`;
-    invalidUrl = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields/invalid-field`;
+    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/${field}`;
+    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/custom-fields/${field}`;
+    invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/custom-fields/${field}`;
+    invalidUrl = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/invalid-field`;
   });
 
   it('missing authentication / authorization', async () => {
@@ -85,7 +85,7 @@ export default () => {
       await suite.util.setSecurable({ ...securable, action: ['respondents'] });
 
       const field2 = respondentInput.customFields!.at(1)!.name;
-      const url2 = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields/${field2}`;
+      const url2 = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/${field2}`;
 
       await suite.sharedTests.assertRecordDeleted('delete', url2);
     });
@@ -95,7 +95,7 @@ export default () => {
       await survey.update({ ownerId: suite.data.system.user.id });
 
       const field3 = respondentInput.customFields!.at(2)!.name;
-      const url3 = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields/${field3}`;
+      const url3 = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/${field3}`;
 
       await suite.sharedTests.assertRecordDeleted('delete', url3);
     });

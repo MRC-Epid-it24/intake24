@@ -59,7 +59,12 @@ export default () => {
 
   describe('for correct survey settings', () => {
     beforeAll(async () => {
-      await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: secret });
+      await suite.data.system.survey.update({
+        allowGenUsers: true,
+        genUserKey: secret,
+        userCustomFields: false,
+        userPersonalIdentifiers: false,
+      });
     });
 
     it(`should return 403 for invalid JWT secret`, async () => {
@@ -92,12 +97,14 @@ export default () => {
     });
 
     it(`should return 400 for invalid input data`, async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['username', 'password', 'redirectUrl'], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['username', 'password', 'name', 'customFields', 'redirectUrl'], {
         input: {
           token: jwt.sign({
             username: false,
+            name: ['name'],
             password: 'weak',
             redirectUrl: 'not-url',
+            customFields: { field: 'value' },
           }, secret, { expiresIn: '5m' }),
         },
       });
@@ -124,7 +131,7 @@ export default () => {
     });
 
     it('should return 200 and respondent record (with password)', async () => {
-      const tokenWithPassword = jwt.sign({
+      const token = jwt.sign({
         username: 'userIdentifier002',
         password: 'aPassword132456',
         redirectUrl: 'https://redirect-me.here',
@@ -133,10 +140,63 @@ export default () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
-        .send({ token: tokenWithPassword });
+        .send({ token });
 
       expect(status).toBe(200);
       expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);
+    });
+
+    it('should return 200 and respondent record without name & custom fields', async () => {
+      const token = jwt.sign({
+        username: 'userIdentifier002',
+        password: 'aPassword132456',
+        name: 'myName',
+        customFields: [{ name: 'field01', value: 'value01' }],
+      }, secret, { expiresIn: '15m' });
+
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .send({ token });
+
+      expect(status).toBe(200);
+      expect(body).toContainAllKeys(['userId', 'username', 'authToken']);
+    });
+
+    it('should return 200 and respondent record with name', async () => {
+      await suite.data.system.survey.update({ userCustomFields: false, userPersonalIdentifiers: true });
+
+      const token = jwt.sign({
+        username: 'userIdentifier002',
+        name: 'myName',
+        customFields: [{ name: 'field01', value: 'value01' }],
+      }, secret, { expiresIn: '15m' });
+
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .send({ token });
+
+      expect(status).toBe(200);
+      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'name']);
+    });
+
+    it('should return 200 and respondent record with custom fields', async () => {
+      await suite.data.system.survey.update({ userCustomFields: true, userPersonalIdentifiers: false });
+
+      const token = jwt.sign({
+        username: 'userIdentifier002',
+        name: 'myName',
+        customFields: [{ name: 'field01', value: 'value01' }],
+      }, secret, { expiresIn: '15m' });
+
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .send({ token });
+
+      expect(status).toBe(200);
+      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'customFields']);
     });
   });
 };

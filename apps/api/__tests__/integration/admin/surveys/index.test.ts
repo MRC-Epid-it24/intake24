@@ -29,12 +29,12 @@ export default () => {
   // describe('POST /api/admin/surveys/:surveyId/respondents/:username/feedback', emailFeedback);
 
   // Surveys respondents custom fields
-  describe('get /api/admin/surveys/:surveyId/respondents/:username/fields', respondentCustomFields.browse);
-  describe('post /api/admin/surveys/:surveyId/respondents/:username/fields', respondentCustomFields.store);
-  describe('get /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.read);
-  describe('patch /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.update);
-  describe('put /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.upsert);
-  describe('delete /api/admin/surveys/:surveyId/respondents/:username/fields/:field', respondentCustomFields.destroy);
+  describe('get /api/admin/surveys/:surveyId/respondents/:username/custom-fields', respondentCustomFields.browse);
+  describe('post /api/admin/surveys/:surveyId/respondents/:username/custom-fields', respondentCustomFields.store);
+  describe('get /api/admin/surveys/:surveyId/respondents/:username/custom-fields/:field', respondentCustomFields.read);
+  describe('patch /api/admin/surveys/:surveyId/respondents/:username/custom-fields/:field', respondentCustomFields.update);
+  describe('put /api/admin/surveys/:surveyId/respondents/:username/custom-fields/:field', respondentCustomFields.upsert);
+  describe('delete /api/admin/surveys/:surveyId/respondents/:username/custom-fields/:field', respondentCustomFields.destroy);
 
   // Surveys submissions
   describe('get /api/admin/surveys/:surveyId/submissions', submissions.browse);

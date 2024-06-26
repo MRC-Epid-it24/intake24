@@ -7,7 +7,7 @@ import { userCustomField } from '@intake24/common/types/http/admin';
 export const respondentCustomField = initContract().router({
   browse: {
     method: 'GET',
-    path: '/admin/surveys/:surveyId/respondents/:username/fields',
+    path: '/admin/surveys/:surveyId/respondents/:username/custom-fields',
     pathParams: z.object({ surveyId }),
     query: paginationRequest,
     responses: {
@@ -21,7 +21,7 @@ export const respondentCustomField = initContract().router({
   },
   store: {
     method: 'POST',
-    path: '/admin/surveys/:surveyId/respondents/:username/fields',
+    path: '/admin/surveys/:surveyId/respondents/:username/custom-fields',
     pathParams: z.object({ surveyId }),
     body: userCustomField.pick({ name: true, value: true }),
     responses: {
@@ -32,7 +32,7 @@ export const respondentCustomField = initContract().router({
   },
   read: {
     method: 'GET',
-    path: '/admin/surveys/:surveyId/respondents/:username/fields/:field',
+    path: '/admin/surveys/:surveyId/respondents/:username/custom-fields/:field',
     pathParams: z.object({ surveyId }),
     responses: {
       200: userCustomField,
@@ -42,7 +42,7 @@ export const respondentCustomField = initContract().router({
   },
   update: {
     method: 'PATCH',
-    path: '/admin/surveys/:surveyId/respondents/:username/fields/:field',
+    path: '/admin/surveys/:surveyId/respondents/:username/custom-fields/:field',
     pathParams: z.object({ surveyId }),
     body: userCustomField.pick({ value: true }),
     responses: {
@@ -53,7 +53,7 @@ export const respondentCustomField = initContract().router({
   },
   upsert: {
     method: 'PUT',
-    path: '/admin/surveys/:surveyId/respondents/:username/fields/:field',
+    path: '/admin/surveys/:surveyId/respondents/:username/custom-fields/:field',
     pathParams: z.object({ surveyId }),
     body: userCustomField.pick({ value: true }),
     responses: {
@@ -65,7 +65,7 @@ export const respondentCustomField = initContract().router({
   },
   destroy: {
     method: 'DELETE',
-    path: '/admin/surveys/:surveyId/respondents/:username/fields/:field',
+    path: '/admin/surveys/:surveyId/respondents/:username/custom-fields/:field',
     pathParams: z.object({ surveyId }),
     body: null,
     responses: {

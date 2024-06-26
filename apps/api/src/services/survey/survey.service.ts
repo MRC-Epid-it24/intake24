@@ -6,7 +6,6 @@ import { z, ZodError } from 'zod';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Prompts } from '@intake24/common/prompts';
-import type { JobParams, SurveyState } from '@intake24/common/types';
 import type {
   CreateUserResponse,
   SurveyRatingRequest,
@@ -16,6 +15,7 @@ import type { FindOptions, Includeable, SubmissionScope } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
 import { strongPassword } from '@intake24/common/schemas';
+import { customField, type JobParams, type SurveyState } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
 import {
   GenUserCounter,
@@ -36,9 +36,10 @@ export type RespondentWithPassword = {
 
 function surveyService({
   adminSurveyService,
+  adminUserService,
   logger: globalLogger,
   scheduler,
-}: Pick<IoC, 'adminSurveyService' | 'logger' | 'scheduler'>) {
+}: Pick<IoC, 'adminSurveyService' | 'adminUserService' | 'logger' | 'scheduler'>) {
   const logger = globalLogger.child({ service: 'SurveyService' });
 
   /**
@@ -115,28 +116,61 @@ function surveyService({
 
     try {
       const decoded = await jwt.verify(token, genUserKey, { algorithms: ['HS256', 'HS512'] });
-      const { name, password, username, redirectUrl } = z
+      const { name, password, username, redirectUrl, customFields } = z
         .object({
           username: z.string().min(1).max(256),
           password: strongPassword.optional(),
           redirectUrl: z.string().url().optional(),
-          name: z.string().max(512).optional().transform(val => val || undefined),
+          name: z.string().min(1).max(512).nullish(),
+          customFields: customField.array().optional(),
         })
         .parse(decoded);
 
-      const alias = await UserSurveyAlias.findOne({ where: { surveyId, username } });
-      if (alias) {
-        const { userId, urlAuthToken: authToken } = alias;
+      const alias = await UserSurveyAlias.findOne(
+        {
+          include: [{
+            association: 'user',
+            attributes: ['id', 'name'],
+            required: true,
+            include: [{ association: 'customFields', attributes: ['name', 'value'] }],
+          }],
+          where: { surveyId, username },
+        },
+      );
 
-        return { userId, username, authToken, redirectUrl };
+      if (alias?.user) {
+        const { userId, urlAuthToken: authToken, user } = alias;
+
+        const payload: CreateUserResponse = { userId, username, authToken, redirectUrl };
+
+        if (survey.userPersonalIdentifiers) {
+          await user.update({ name });
+          payload.name = name ?? user.name;
+        }
+
+        if (survey.userCustomFields) {
+          if (customFields && user.customFields)
+            await adminUserService.updateUserCustomFields(userId, user.customFields, customFields);
+
+          payload.customFields = customFields ?? user.customFields;
+        }
+
+        return payload;
       }
 
       const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(
         survey,
-        { username, password, name },
+        { username, password, name, customFields },
       );
 
-      return { userId, username, authToken, redirectUrl };
+      const payload: CreateUserResponse = { userId, username, authToken, redirectUrl };
+      if (survey.userPersonalIdentifiers)
+        payload.name = name;
+
+      if (survey.userCustomFields)
+        payload.customFields = customFields;
+
+      return payload;
     }
     catch (err) {
       if (err instanceof ZodError)

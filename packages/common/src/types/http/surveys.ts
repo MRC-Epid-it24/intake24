@@ -12,6 +12,7 @@ import {
 } from '@intake24/common/surveys';
 
 import { z } from '../../util';
+import { customField } from '../common';
 import { feedbackSchemeResponse } from './feedback';
 
 export const generateUserResponse = z.object({
@@ -25,6 +26,8 @@ export const createUserResponse = z.object({
   userId: z.string(),
   username: z.string(),
   authToken: z.string(),
+  name: z.string().nullish(),
+  customFields: customField.array().optional(),
   redirectUrl: z.string().optional(),
 });
 
@@ -66,7 +69,6 @@ export const surveyEntryResponse = z.object({
   searchMatchScoreWeight: z.number(),
 });
 
-// TODO: write zod prompts schema
 export type SurveyEntryResponse = z.infer<typeof surveyEntryResponse>;
 
 export const surveyUserInfoResponse = z.object({

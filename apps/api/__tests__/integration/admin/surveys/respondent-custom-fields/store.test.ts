@@ -35,9 +35,9 @@ export default () => {
     input = mocker.system.customField();
     output = { ...input };
 
-    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields`;
-    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/fields`;
-    invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/fields`;
+    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields`;
+    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/custom-fields`;
+    invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/custom-fields`;
   });
 
   it('missing authentication / authorization', async () => {

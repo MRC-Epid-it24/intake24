@@ -28,8 +28,8 @@ export default () => {
 
     respondent = await ioc.cradle.adminSurveyService.createRespondent(survey.id, mocker.system.respondent());
 
-    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields`;
-    invalidUrl = `${baseUrl}/${survey.id}/respondents/invalid-username/fields`;
+    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields`;
+    invalidUrl = `${baseUrl}/${survey.id}/respondents/invalid-username/custom-fields`;
   });
 
   it('missing authentication / authorization', async () => {

@@ -38,10 +38,10 @@ export default () => {
     respondent = await ioc.cradle.adminSurveyService.createRespondent(survey.id, input);
     output = input.customFields!.at(0)!;
 
-    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields/${output.name}`;
-    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/fields/${output.name}`;
-    invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/fields/${output.name}`;
-    invalidUrl = `${baseUrl}/${survey.id}/respondents/${respondent.username}/fields/invalid-field`;
+    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/${output.name}`;
+    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/custom-fields/${output.name}`;
+    invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/custom-fields/${output.name}`;
+    invalidUrl = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/invalid-field`;
   });
 
   it('missing authentication / authorization', async () => {
