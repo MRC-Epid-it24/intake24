@@ -17,16 +17,32 @@
         :value="barcode.type"
         @input="update('type', $event)"
       />
-      <v-select
-        v-if="barcode.type !== 'none'"
-        :items="readers"
-        :label="$t('survey-schemes.prompts.barcodes.readers._')"
-        multiple
-        name="readers"
-        outlined
-        :value="barcode.readers"
-        @input="update('readers', $event)"
-      />
+      <template v-if="barcode.type !== 'none'">
+        <v-select
+
+          :items="readers"
+          :label="$t('survey-schemes.prompts.barcodes.readers._')"
+          multiple
+          name="readers"
+          outlined
+          :value="barcode.readers"
+          @input="update('readers', $event)"
+        />
+        <v-label>{{ $t('survey-schemes.prompts.barcodes.feedback._') }}</v-label>
+        <v-switch
+          hide-details="auto"
+          :input-value="barcode.feedback.vibration"
+          :label="$t('survey-schemes.prompts.barcodes.feedback.vibration')"
+          @change="update('feedback', { ...barcode.feedback, vibration: $event })"
+        />
+        <v-switch
+          disabled
+          hide-details="auto"
+          :input-value="barcode.feedback.audio"
+          :label="$t('survey-schemes.prompts.barcodes.feedback.audio')"
+          @change="update('feedback', { ...barcode.feedback, audio: $event })"
+        />
+      </template>
     </v-card-text>
   </v-card>
 </template>

@@ -4,9 +4,9 @@
       <v-icon @click.stop.prevent="open">
         fas fa-barcode
       </v-icon>
-      <quagga-reader
+      <strich-reader
         :dialog.sync="dialog"
-        v-bind="{ errorThreshold, options, successfulReads }"
+        v-bind="{ options }"
         @detected="detected"
       />
     </template>
@@ -18,9 +18,9 @@ import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
 import { defineComponent, ref } from 'vue';
 
-import type { QuaggaScanner } from '@intake24/common/barcodes';
+import type { StrichScanner } from '@intake24/common/barcodes';
 
-import QuaggaReader from './quagga-reader.vue';
+import StrichReader from './strich-reader.vue';
 
 const props = defineProps({
   modelValue: {
@@ -31,14 +31,8 @@ const props = defineProps({
     type: String,
     default: 'barcode',
   },
-  errorThreshold: {
-    type: Number,
-  },
   options: {
-    type: Object as PropType<QuaggaScanner>,
-  },
-  successfulReads: {
-    type: Number,
+    type: Object as PropType<StrichScanner>,
   },
 });
 
@@ -67,7 +61,7 @@ function detected(value: string) {
 
 <script lang="ts">
 export default defineComponent({
-  name: 'QuaggaInput',
+  name: 'StrichInput',
 });
 </script>
 

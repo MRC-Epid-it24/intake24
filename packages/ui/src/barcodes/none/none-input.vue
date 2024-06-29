@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    v-bind="{ ...$attrs, name }"
+    v-bind="{ name, ...$attrs }"
     v-model="barcode"
     v-on="$listeners"
   />

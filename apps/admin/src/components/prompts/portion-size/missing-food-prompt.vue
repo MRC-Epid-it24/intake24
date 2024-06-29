@@ -1,13 +1,11 @@
 <template>
   <v-tab-item key="options" value="options">
     <v-row>
-      <v-col cols="12" lg="4" md="6">
-        <v-col cols="12" md="6">
-          <barcode-settings
-            v-bind="{ barcode }"
-            @update:barcode="update('barcode', $event)"
-          />
-        </v-col>
+      <v-col cols="12" md="6">
+        <barcode-settings
+          v-bind="{ barcode }"
+          @update:barcode="update('barcode', $event)"
+        />
       </v-col>
     </v-row>
   </v-tab-item>

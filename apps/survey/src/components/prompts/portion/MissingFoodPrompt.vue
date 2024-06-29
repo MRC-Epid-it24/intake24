@@ -35,8 +35,9 @@
               </template>
             </i18n>
             <component
-              :is="prompt.barcode"
+              :is="prompt.barcode.type"
               :model-value.sync="info.barcode"
+              :options="prompt.barcode"
               outlined
             />
           </template>

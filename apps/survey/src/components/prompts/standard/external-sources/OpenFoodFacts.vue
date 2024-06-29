@@ -14,6 +14,7 @@
             outlined
             :placeholder="promptI18n.search"
             prepend-inner-icon="$search"
+            @detected="search"
             @keydown.enter="search"
           />
           <v-btn
@@ -68,35 +69,6 @@
               </div>
             </v-card-text>
           </v-card>
-          <!-- <v-card class="d-flex flex-column flex-md-row gr-2" flat tile>
-            <div class="py-4">
-              <v-img
-                :src="selectedProductDetails.url"
-                width="250px"
-              />
-            </div>
-            <div>
-              <v-card-title>{{ selectedProductDetails.name }}</v-card-title>
-              <v-card-text>
-                <div class="my-2">
-                  <span class="font-weight-medium">Code:</span>
-                  {{ selectedProductDetails.code }}
-                </div>
-                <div class="my-2">
-                  <span class="font-weight-medium">Gen Name:</span>
-                  {{ selectedProductDetails.genericName }}
-                </div>
-                <div class="my-2">
-                  <span class="font-weight-medium">Quantity:</span>
-                  {{ selectedProductDetails.quantity }}
-                </div>
-                <div class="my-2">
-                  <span class="font-weight-medium">Packaging:</span>
-                  {{ selectedProductDetails.packaging }}
-                </div>
-              </v-card-text>
-            </div>
-          </v-card> -->
         </template>
         <image-placeholder v-if="loading" class="my-8" />
         <v-container v-if="!loading && !selected && response?.products.length" class="px-0" fluid>
@@ -217,7 +189,7 @@ export default defineComponent({
 
     const lang = computed(() => app.lang);
     const searchBaseUrl = computed(() => `https://${props.prompt.source.country}.openfoodfacts.org/cgi/search.pl`);
-    const productBaseUrl = 'https://openfoodfacts.org/api/v2/product';
+    const productBaseUrl = computed(() => `https://${props.prompt.source.country}.openfoodfacts.org/api/v2/product`);
 
     const response = ref<OOFProductsResponse | undefined>();
     const selected = ref<OOFProduct | undefined>();
@@ -263,7 +235,7 @@ export default defineComponent({
 
     const fetchProduct = async (barcode: string) => {
       try {
-        const { data: { product } } = await client.get<OOFProductResponse>(`${productBaseUrl}/${barcode}`);
+        const { data: { product } } = await client.get<OOFProductResponse>(`${productBaseUrl.value}/${barcode}`);
 
         // selected.value = res.data.product;
         response.value = {

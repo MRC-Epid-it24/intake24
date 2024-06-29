@@ -4,6 +4,7 @@ import { quaggaReaders } from './quagga';
 import { strichReaders } from './strich';
 
 export * from './quagga';
+export * from './strich';
 
 export const barcodeScanners = ['none', 'quagga', 'strich'] as const;
 export type BarcodeScanner = typeof barcodeScanners[number];
@@ -13,13 +14,17 @@ export const noneScanner = z.object({
 });
 export type NoneScanner = z.infer<typeof noneScanner>;
 
-export const quaggaScanner = z.object({
+export const baseScanner = z.object({
+  feedback: z.record(z.enum(['audio', 'vibration']), z.boolean()),
+});
+
+export const quaggaScanner = baseScanner.extend({
   type: z.literal('quagga'),
   readers: z.enum(quaggaReaders).array(),
 });
 export type QuaggaScanner = z.infer<typeof quaggaScanner>;
 
-export const strichScanner = z.object({
+export const strichScanner = baseScanner.extend({
   type: z.literal('strich'),
   readers: z.enum(strichReaders).array(),
 });
@@ -48,9 +53,11 @@ export const defaultBarcodeScannerOptions: Record<BarcodeScanner, BarcodeScanner
   quagga: {
     type: 'quagga',
     readers: ['ean_reader', 'ean_8_reader', 'ean_5_reader', 'ean_2_reader'],
+    feedback: { audio: false, vibration: true },
   },
   strich: {
     type: 'strich',
     readers: ['ean13', 'ean8', 'ean5', 'ean2'],
+    feedback: { audio: false, vibration: true },
   },
 };

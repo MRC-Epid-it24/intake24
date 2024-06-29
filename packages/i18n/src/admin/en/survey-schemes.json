@@ -275,6 +275,11 @@
       "readers": {
         "_": "Reader",
         "title": "Readers"
+      },
+      "feedback": {
+        "_": "Feedback",
+        "audio": "Audio",
+        "vibration": "Vibration"
       }
     },
     "externalSources": {
