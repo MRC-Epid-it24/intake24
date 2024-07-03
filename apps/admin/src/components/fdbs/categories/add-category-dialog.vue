@@ -111,8 +111,8 @@ export default defineComponent({
     const selected = ref<string[]>([]);
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
-    (CategoriesResponse | MainCategoriesResponse)['data'][number]
-      >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
+      (CategoriesResponse | MainCategoriesResponse)['data'][number]
+    >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
 
     return { dialog, loading, items, page, lastPage, search, selected, clear };
   },
