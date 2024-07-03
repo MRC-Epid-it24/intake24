@@ -19,6 +19,7 @@ import {
 } from 'sequelize-typescript';
 
 import type { RecordVisibility } from '@intake24/common/security';
+import { TextDirection } from '@intake24/common/types';
 
 import type { HasVisibility } from '..';
 import BaseModel from '../model';
@@ -98,7 +99,7 @@ export default class SystemLocale
     defaultValue: 'ltr',
     type: DataType.STRING(8),
   })
-  declare textDirection: CreationOptional<string>;
+  declare textDirection: CreationOptional<TextDirection>;
 
   @Column({
     allowNull: false,

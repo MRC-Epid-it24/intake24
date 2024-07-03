@@ -12,10 +12,11 @@ export default () => {
   let job: JobAttributes;
 
   beforeAll(async () => {
-    const { startDate, endDate } = suite.data.system.survey;
+    const { id, startDate, endDate } = suite.data.system.survey;
     const input = {
       type: 'SurveyDataExport',
       params: {
+        surveyId: id,
         startDate: startDate.toISOString().split('T')[0],
         endDate: endDate.toISOString().split('T')[0],
       },

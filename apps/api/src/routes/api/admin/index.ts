@@ -7,7 +7,6 @@ import fdbs from './fdbs';
 import foods from './foods';
 import images from './images';
 import locales from './locales';
-import surveys from './surveys';
 
 export default () => {
   const router = Router();
@@ -21,7 +20,6 @@ export default () => {
   router.use('/foods', foods());
   router.use('/images', images());
   router.use('/locales', locales());
-  router.use('/surveys', surveys());
 
   return router;
 };

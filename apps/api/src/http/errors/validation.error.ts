@@ -1,11 +1,11 @@
-import type { FieldValidationError } from 'express-validator';
+import { ExtendedFieldValidationError } from '../middleware';
 
 export default class ValidationError extends Error {
-  public errors: { [name: string]: FieldValidationError } = {};
+  public errors: { [name: string]: ExtendedFieldValidationError } = {};
 
   constructor(
     msg: string,
-    error?: Partial<FieldValidationError> | Partial<FieldValidationError>[],
+    error?: Partial<ExtendedFieldValidationError> | Partial<ExtendedFieldValidationError>[],
   ) {
     super(msg);
 
@@ -13,11 +13,12 @@ export default class ValidationError extends Error {
       return;
 
     (Array.isArray(error) ? error : [error]).forEach((item) => {
-      const { path } = item;
+      const { code, path } = item;
       if (!path)
         return;
 
       this.errors[path] = {
+        code: code ?? null,
         type: 'field',
         path,
         msg,

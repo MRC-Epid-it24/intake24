@@ -1,3 +1,4 @@
+import { endOfDay, startOfDay } from 'date-fns';
 import pick from 'lodash/pick';
 import { z } from 'zod';
 
@@ -92,8 +93,8 @@ export const SurveyAuthUrlsExport = z.object({
 export const SurveyDataExport = z.object({
   id: z.union([z.string(), z.array(z.string())]).optional(),
   surveyId: z.string(),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  startDate: z.coerce.date().transform(val => startOfDay(val)).optional(),
+  endDate: z.coerce.date().transform(val => endOfDay(val)).optional(),
   userId: z.string().optional(),
 });
 
@@ -225,6 +226,27 @@ export const jobTypeParams = z.union([
   UserPasswordResetNotification,
 ]);
 
+export const localeTasks = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('LocaleCopy'),
+    params: LocaleCopy,
+  }),
+  z.object({
+    type: z.literal('LocaleFoods'),
+    params: LocaleFoods,
+  }),
+  z.object({
+    type: z.literal('LocaleFoodNutrientMapping'),
+    params: LocaleFoodNutrientMapping,
+  }),
+  z.object({
+    type: z.literal('LocaleFoodRankingUpload'),
+    params: LocaleFoodRankingUpload.omit({ file: true }),
+  }),
+]);
+
+export type LocaleTask = z.infer<typeof localeTasks>;
+
 export const localeJobs = [
   'LocaleCopy',
   'LocaleFoods',
@@ -233,6 +255,19 @@ export const localeJobs = [
 ] as const;
 
 export type LocaleJob = (typeof localeJobs)[number];
+
+export const nutrientTableTasks = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('NutrientTableDataImport'),
+    params: NutrientTableDataImport.omit({ file: true }),
+  }),
+  z.object({
+    type: z.literal('NutrientTableMappingImport'),
+    params: NutrientTableMappingImport.omit({ file: true }),
+  }),
+]);
+
+export type NutrientTableTask = z.infer<typeof nutrientTableTasks>;
 
 export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableDataImport'] as const;
 
@@ -246,6 +281,35 @@ export const surveyJobs = [
   'SurveyRespondentsImport',
   'SurveySessionsExport',
 ] as const;
+
+export const surveyTasks = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('SurveyAuthUrlsExport'),
+    params: SurveyAuthUrlsExport,
+  }),
+  z.object({
+    type: z.literal('SurveyDataExport'),
+    params: SurveyDataExport,
+  }),
+  z.object({
+    type: z.literal('SurveyNutrientsRecalculation'),
+    params: SurveyNutrientsRecalculation,
+  }),
+  z.object({
+    type: z.literal('SurveyRatingsExport'),
+    params: SurveyRatingsExport,
+  }),
+  z.object({
+    type: z.literal('SurveyRespondentsImport'),
+    params: SurveyRespondentsImport.omit({ file: true }),
+  }),
+  z.object({
+    type: z.literal('SurveySessionsExport'),
+    params: SurveySessionsExport,
+  }),
+]);
+
+export type SurveyTask = z.infer<typeof surveyTasks>;
 
 export type SurveyJob = (typeof surveyJobs)[number];
 
@@ -283,10 +347,10 @@ export type JobTypeParams = z.infer<typeof jobTypeParams>;
 
 export type GetJobParams<P extends keyof JobParams> = JobParams[P];
 
-export type QueueJob = {
+export type QueueJob<T extends JobType = JobType> = {
   userId: string;
-  type: JobType;
-  params: GetJobParams<JobType>;
+  type: T;
+  params: GetJobParams<T>;
 };
 
 export const defaultJobsParams: JobParams = {

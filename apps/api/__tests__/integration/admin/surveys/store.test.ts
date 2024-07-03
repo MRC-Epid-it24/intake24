@@ -1,20 +1,22 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 
-import type { SurveyRequest } from '@intake24/common/types/http/admin';
+import type { SurveyCreateRequest, SurveyEntry } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/surveys';
   const permissions = ['surveys', 'surveys|create'];
 
-  let input: SurveyRequest;
-  let output: SurveyRequest;
+  let input: SurveyCreateRequest;
+  let output: Partial<SurveyEntry>;
 
   beforeAll(async () => {
     input = mocker.system.survey();
     output = {
       ...input,
+      startDate: input.startDate.toISOString(),
+      endDate: input.endDate.toISOString(),
       supportEmail: input.supportEmail.toLowerCase(),
       userCustomFields: false,
       userPersonalIdentifiers: false,
@@ -42,8 +44,6 @@ export default () => {
         'supportEmail',
         'allowGenUsers',
         'storeUserSessionOnServer',
-        'surveySchemeOverrides',
-        'notifications',
       ]);
     });
 
@@ -54,7 +54,7 @@ export default () => {
         state: 10,
         startDate: 'notValidDate',
         endDate: 100,
-        surveySchemeId: '999999',
+        surveySchemeId: false,
         locale: 10,
         supportEmail: 'thisIsNotValidEmail',
         allowGenUsers: 'no',
@@ -106,7 +106,7 @@ export default () => {
         'storeUserSessionOnServer',
         'maximumDailySubmissions',
         'minimumSubmissionInterval',
-        'notifications',
+        'notifications.0',
         'authCaptcha',
         'authUrlTokenCharset',
         'authUrlTokenLength',
@@ -126,7 +126,8 @@ export default () => {
         'searchSettings.unmatchedWordCost',
         'searchSettings.enableRelevantCategories',
         'searchSettings.relevantCategoryDepth',
-        'surveySchemeOverrides',
+        'surveySchemeOverrides.meals.0',
+        'surveySchemeOverrides.prompts',
       ];
 
       await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput, log: true });

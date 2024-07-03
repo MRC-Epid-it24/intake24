@@ -199,12 +199,12 @@ export default class Survey extends BaseModel<
     defaultValue: '[]',
     type: DataType.TEXT({ length: 'long' }),
   })
-  get notifications(): Notification[] {
+  get notifications(): CreationOptional<Notification[]> {
     const val = this.getDataValue('notifications') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
 
-  set notifications(value: Notification[]) {
+  set notifications(value: CreationOptional<Notification[]>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('notifications', JSON.stringify(value ?? []));
   }
@@ -246,12 +246,12 @@ export default class Survey extends BaseModel<
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get surveySchemeOverrides(): SchemeOverrides {
+  get surveySchemeOverrides(): CreationOptional<SchemeOverrides> {
     const val = this.getDataValue('surveySchemeOverrides') as unknown;
     return val ? JSON.parse(val as string) : defaultOverrides;
   }
 
-  set surveySchemeOverrides(value: SchemeOverrides) {
+  set surveySchemeOverrides(value: CreationOptional<SchemeOverrides>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('surveySchemeOverrides', JSON.stringify(value ?? defaultOverrides));
   }
@@ -260,12 +260,12 @@ export default class Survey extends BaseModel<
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get searchSettings(): SurveySearchSettings {
+  get searchSettings(): CreationOptional<SurveySearchSettings> {
     const val = this.getDataValue('searchSettings') as unknown;
     return val ? JSON.parse(val as string) : defaultSearchSettings;
   }
 
-  set searchSettings(value: SurveySearchSettings) {
+  set searchSettings(value: CreationOptional<SurveySearchSettings>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('searchSettings', JSON.stringify(value ?? defaultSearchSettings));
   }

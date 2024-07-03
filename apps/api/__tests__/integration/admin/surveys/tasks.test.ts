@@ -10,7 +10,7 @@ export default () => {
   const permissions = ['surveys', 'surveys|tasks'];
 
   let input: Omit<QueueJob, 'userId' | 'params'> & {
-    params: { startDate: string; endDate: string };
+    params: { surveyId: string; startDate: string; endDate: string };
   };
   let survey: Survey;
 
@@ -21,16 +21,13 @@ export default () => {
 
   beforeAll(async () => {
     const surveyInput = mocker.system.survey();
-    survey = await Survey.create({
-      ...surveyInput,
-      startDate: new Date(surveyInput.startDate),
-      endDate: new Date(surveyInput.endDate),
-    });
+    survey = await Survey.create(surveyInput);
     const { id, startDate, endDate } = survey;
 
     input = {
       type: 'SurveyDataExport',
       params: {
+        surveyId: id,
         startDate: startDate.toISOString().split('T')[0],
         endDate: endDate.toISOString().split('T')[0],
       },

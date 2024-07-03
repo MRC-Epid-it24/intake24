@@ -1,5 +1,5 @@
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
-import type { SurveyRequest } from '@intake24/common/types/http/admin';
+import type { SurveyCreateRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
@@ -10,18 +10,14 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyRequest;
+  let input: SurveyCreateRequest;
   let survey: Survey;
 
   let securable: SetSecurableOptions;
 
   beforeAll(async () => {
     input = mocker.system.survey();
-    survey = await Survey.create({
-      ...input,
-      startDate: new Date(input.startDate),
-      endDate: new Date(input.endDate),
-    });
+    survey = await Survey.create(input);
 
     securable = { securableId: survey.id, securableType: 'Survey' };
 

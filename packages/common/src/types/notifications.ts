@@ -15,7 +15,7 @@ export type NotificationChannel = (typeof notificationChannels)[number];
 export const emailNotification = z.object({
   type: z.enum(eventTypes),
   channel: z.literal('email'),
-  to: z.string().email(),
+  to: z.string().email().toLowerCase(),
 });
 
 export type EmailNotification = z.infer<typeof emailNotification>;

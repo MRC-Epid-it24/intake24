@@ -1,13 +1,12 @@
-import type { CreateSurveyRequest, SurveyRequest } from '@intake24/common/types/http/admin';
+import type { SurveyAttributes, SurveyCreateRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
-async function refreshSurveyRecord(input?: CreateSurveyRequest): Promise<Survey> {
+async function refreshSurveyRecord(input?: SurveyCreateRequest, overrides: Partial<SurveyAttributes> = {}): Promise<Survey> {
   const mock = input ?? mocker.system.survey();
   return Survey.create({
     ...mock,
-    startDate: new Date(mock.startDate),
-    endDate: new Date(mock.endDate),
+    ...overrides,
   });
 }
 
@@ -18,7 +17,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyRequest;
+  let input: SurveyCreateRequest;
   let survey: Survey;
 
   beforeAll(async () => {
@@ -64,10 +63,10 @@ export default () => {
     });
 
     it('should return 200 and data when owner set', async () => {
-      const { id } = await refreshSurveyRecord({
-        ...mocker.system.survey(),
-        ownerId: suite.data.system.user.id,
-      });
+      const { id } = await refreshSurveyRecord(
+        mocker.system.survey(),
+        { ownerId: suite.data.system.user.id },
+      );
 
       await suite.sharedTests.assertRecordDeleted('delete', `${baseUrl}/${id}`);
     });

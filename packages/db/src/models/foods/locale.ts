@@ -8,6 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
+import { TextDirection } from '@intake24/common/types';
+
 import BaseModel from '../model';
 import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
 
@@ -69,7 +71,7 @@ export default class Locale extends BaseModel<
     defaultValue: 'ltr',
     type: DataType.STRING(8),
   })
-  declare textDirection: CreationOptional<string>;
+  declare textDirection: CreationOptional<TextDirection>;
 
   @Column({
     allowNull: false,

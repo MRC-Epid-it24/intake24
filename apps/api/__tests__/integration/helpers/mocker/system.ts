@@ -8,9 +8,9 @@ import type {
   CreateLanguageRequest,
   CreateLocaleRequest,
   CreateRespondentRequest,
-  CreateSurveyRequest,
   PermissionRequest,
   RoleRequest,
+  SurveyCreateRequest,
   TaskRequest,
   UserRequest,
 } from '@intake24/common/types/http/admin';
@@ -250,29 +250,29 @@ function surveySchemePrompt(): SurveySchemePromptCreationAttributes {
   };
 }
 
-function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): CreateSurveyRequest {
+function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): SurveyCreateRequest {
   const slug = slugify(randomString(16), { strict: true });
   const name = faker.word.words(6);
   const state = 'notStarted';
-  const startDate = new Date().toISOString().split('T')[0];
-  const endDate = faker.date.future({ years: 1 }).toISOString().split('T')[0];
+  const startDate = new Date();
+  const endDate = faker.date.future({ years: 1 });
   const allowGenUsers = faker.datatype.boolean();
   const supportEmail = faker.internet.email();
   const suspensionReason = faker.word.words(10);
 
-  const numberOfSubmissionsForFeedback = faker.number.int(10);
+  const numberOfSubmissionsForFeedback = faker.number.int({ min: 1, max: 10 });
   const sessionLifetime = '12h';
   const storeUserSessionOnServer = faker.datatype.boolean();
 
   const maximumDailySubmissions = faker.number.int({ min: 1, max: 5 });
-  const minimumSubmissionInterval = faker.number.int(5);
+  const minimumSubmissionInterval = faker.number.int({ min: 1, max: 1000000 });
 
   const authCaptcha = faker.datatype.boolean();
   const authUrlDomainOverride = faker.internet.url();
   const authUrlTokenCharset = [
     ...new Set(randomString(30, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ').split('')),
   ].join('');
-  const authUrlTokenLength = faker.number.int({ min: 10, max: 100 });
+  const authUrlTokenLength = faker.number.int({ min: 12, max: 100 });
 
   const searchSettings = {
     collectData: faker.datatype.boolean(),

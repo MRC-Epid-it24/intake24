@@ -2,9 +2,7 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import {
-  NutrientTableDataImport,
-  nutrientTableJobs,
-  NutrientTableMappingImport,
+  nutrientTableTasks,
 } from '@intake24/common/types';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
@@ -90,13 +88,7 @@ export const nutrientTable = initContract().router({
     method: 'POST',
     contentType: 'multipart/form-data',
     path: '/admin/nutrient-tables/:nutrientTableId/tasks',
-    body: z.object({
-      type: z.enum(nutrientTableJobs),
-      params: z.union([
-        NutrientTableDataImport.omit({ file: true }),
-        NutrientTableMappingImport.omit({ file: true }),
-      ]),
-    }),
+    body: nutrientTableTasks,
     responses: {
       200: jobAttributes,
     },

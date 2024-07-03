@@ -30,8 +30,8 @@ export function surveyResponse(survey: Survey): SurveyEntry {
 
   return {
     ...survey.get(),
-    startDate: survey.startDate.toISOString().split('T')[0],
-    endDate: survey.endDate.toISOString().split('T')[0],
+    startDate: survey.startDate.toISOString(),
+    endDate: survey.endDate.toISOString(),
     locale,
     feedbackScheme,
     surveyScheme,

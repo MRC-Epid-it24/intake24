@@ -16,7 +16,7 @@
           <date-picker
             v-model="params.startDate"
             clearable
-            :error-messages="errors.get('startDate')"
+            :error-messages="errors.get('params.startDate')"
             :label="$t('surveys.startDate').toString()"
           />
         </v-col>
@@ -24,7 +24,7 @@
           <date-picker
             v-model="params.endDate"
             clearable
-            :error-messages="errors.get('endDate')"
+            :error-messages="errors.get('params.endDate')"
             :label="$t('surveys.endDate').toString()"
           />
         </v-col>

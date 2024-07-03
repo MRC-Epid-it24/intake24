@@ -15,7 +15,7 @@ import type {
 } from '@intake24/db';
 import { recordVisibilities } from '@intake24/common/security';
 
-import { textDirections } from '../../common';
+import { type TextDirection, textDirections } from '../../common';
 import { languageAttributes } from './languages';
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
@@ -28,7 +28,7 @@ export type LocaleRequest = {
   adminLanguageId: string;
   countryFlagCode: string;
   prototypeLocaleId: string | null;
-  textDirection: string;
+  textDirection: TextDirection;
   foodIndexLanguageBackendId: string;
   foodIndexEnabled?: boolean;
 };

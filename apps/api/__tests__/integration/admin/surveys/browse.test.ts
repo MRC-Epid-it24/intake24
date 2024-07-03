@@ -9,11 +9,7 @@ export default () => {
 
   beforeAll(async () => {
     const input = mocker.system.survey();
-    survey = await Survey.create({
-      ...input,
-      startDate: new Date(input.startDate),
-      endDate: new Date(input.endDate),
-    });
+    survey = await Survey.create(input);
   });
 
   it('missing authentication / authorization', async () => {

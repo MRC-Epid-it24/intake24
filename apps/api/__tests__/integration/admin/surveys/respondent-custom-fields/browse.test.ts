@@ -19,8 +19,6 @@ export default () => {
     const surveyInput = mocker.system.survey();
     survey = await Survey.create({
       ...surveyInput,
-      startDate: new Date(surveyInput.startDate),
-      endDate: new Date(surveyInput.endDate),
       userCustomFields: true,
     });
 

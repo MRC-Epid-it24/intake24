@@ -1,4 +1,4 @@
-import type { SurveyRequest } from '@intake24/common/types/http/admin';
+import type { SurveyCreateRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
@@ -8,9 +8,9 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyRequest;
-  let updateInput: SurveyRequest;
-  let output: SurveyRequest;
+  let input: SurveyCreateRequest;
+  let updateInput: SurveyCreateRequest;
+  let output: SurveyCreateRequest;
   let survey: Survey;
 
   beforeAll(async () => {
@@ -20,11 +20,7 @@ export default () => {
     const { slug } = input;
     output = { ...updateInput, slug, supportEmail: updateInput.supportEmail.toLowerCase() };
 
-    survey = await Survey.create({
-      ...input,
-      startDate: new Date(input.startDate),
-      endDate: new Date(input.endDate),
-    });
+    survey = await Survey.create(input);
 
     url = `${baseUrl}/${survey.id}`;
     invalidUrl = `${baseUrl}/999999`;

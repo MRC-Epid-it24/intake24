@@ -100,8 +100,12 @@ export function nutrientTable() {
       handler: async ({ file, params: { nutrientTableId }, body: { params, type }, req }) => {
         const { userId } = req.scope.cradle.user;
 
-        if (!file)
-          throw new ValidationError('Missing file.', { path: 'params.file' });
+        if (!file) {
+          throw new ValidationError(
+            customTypeValidationMessage('file._', { req, path: 'params.file' }),
+            { path: 'params.file' },
+          );
+        }
 
         const res = multerFile.safeParse(file);
         if (!res.success) {

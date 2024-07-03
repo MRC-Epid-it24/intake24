@@ -7,14 +7,15 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 export default () => {
   const url = '/api/admin/user/jobs';
   let input: Omit<QueueJob, 'userId' | 'params'> & {
-    params: { startDate: string; endDate: string };
+    params: { surveyId: string; startDate: string; endDate: string };
   };
 
   beforeAll(async () => {
-    const { startDate, endDate } = suite.data.system.survey;
+    const { id, startDate, endDate } = suite.data.system.survey;
     input = {
       type: 'SurveyDataExport',
       params: {
+        surveyId: id,
         startDate: startDate.toISOString().split('T')[0],
         endDate: endDate.toISOString().split('T')[0],
       },

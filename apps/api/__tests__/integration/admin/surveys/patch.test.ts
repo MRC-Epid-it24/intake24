@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
-import type { SurveyRequest } from '@intake24/common/types/http/admin';
+import type { SurveyCreateRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { guardedSurveyFields, Survey } from '@intake24/db';
 
@@ -12,13 +12,13 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyRequest;
-  let updateInput: SurveyRequest;
+  let input: SurveyCreateRequest;
+  let updateInput: SurveyCreateRequest;
   let survey: Survey;
 
   let securable: SetSecurableOptions;
 
-  let refreshSurveyRecord: () => SurveyRequest;
+  let refreshSurveyRecord: () => Omit<SurveyCreateRequest, 'startDate' | 'endDate'> & { startDate: string; endDate: string };
 
   beforeAll(async () => {
     input = mocker.system.survey();
@@ -27,14 +27,16 @@ export default () => {
     refreshSurveyRecord = () => {
       const mock = mocker.system.survey();
       const { slug } = input;
-      return { ...mock, slug, supportEmail: mock.supportEmail.toLowerCase() };
+      return {
+        ...mock,
+        startDate: input.startDate.toISOString(),
+        endDate: input.endDate.toISOString(),
+        slug,
+        supportEmail: mock.supportEmail.toLowerCase(),
+      };
     };
 
-    survey = await Survey.create({
-      ...input,
-      startDate: new Date(input.startDate),
-      endDate: new Date(input.endDate),
-    });
+    survey = await Survey.create(input);
 
     securable = { securableId: survey.id, securableType: 'Survey' };
 
@@ -61,7 +63,7 @@ export default () => {
         state: 10,
         startDate: 'notValidDate',
         endDate: 100,
-        surveySchemeId: '999999',
+        surveySchemeId: false,
         localeId: 10,
         supportEmail: 'thisIsNotValidEmail',
         allowGenUsers: 'no',
@@ -89,6 +91,8 @@ export default () => {
           wordOrderCost: -5,
           wordDistanceCost: ['helicopter'],
           unmatchedWordCost: {},
+          enableRelevantCategories: 'nope',
+          relevantCategoryDepth: 10,
         },
         surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
@@ -112,7 +116,7 @@ export default () => {
         'storeUserSessionOnServer',
         'maximumDailySubmissions',
         'minimumSubmissionInterval',
-        'notifications',
+        'notifications.0.channel',
         'authCaptcha',
         'authUrlTokenCharset',
         'authUrlTokenLength',
@@ -130,7 +134,10 @@ export default () => {
         'searchSettings.wordOrderCost',
         'searchSettings.wordDistanceCost',
         'searchSettings.unmatchedWordCost',
-        'surveySchemeOverrides',
+        'searchSettings.enableRelevantCategories',
+        'searchSettings.relevantCategoryDepth',
+        'surveySchemeOverrides.meals.0',
+        'surveySchemeOverrides.prompts',
         'userPersonalIdentifiers',
         'userCustomFields',
       ];

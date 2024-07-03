@@ -1,63 +1,41 @@
+import ms from 'ms';
+import slugify from 'slugify';
+import { isWhitelisted } from 'validator';
 import { z } from 'zod';
 
-import type {
-  FeedbackSchemeAttributes,
-  Pagination,
-  SurveyAttributes,
-  SurveyCreationAttributes,
-  SurveySchemeAttributes,
-  SystemLocaleAttributes,
-  UserSecurableAttributes,
-} from '@intake24/db';
+import { identifierSafeChars } from '@intake24/common/rules';
 import { schemeOverrides, surveySearchSettings, surveyStates } from '@intake24/common/surveys';
 
-import type { FeedbackSchemeRefEntry } from './feedback-schemes';
-import type { LocaleListEntry } from './locales';
-import type { SurveySchemeRefEntry } from './survey-schemes';
-import type { Owner } from './users';
 import { notification } from '../../notifications';
-
-export interface SurveyRequest extends Omit<SurveyCreationAttributes, 'startDate' | 'endDate'> {
-  startDate: string;
-  endDate: string;
-}
-
-export type CreateSurveyRequest = SurveyRequest;
-
-export type UpdateSurveyRequest = SurveyRequest;
-
-export interface SurveyListEntry
-  extends Pick<SurveyAttributes, 'id' | 'slug' | 'name' | 'localeId' | 'surveySchemeId' | 'state'> {
-  locale: Pick<SystemLocaleAttributes, 'code'>;
-  surveyScheme: Pick<SurveySchemeAttributes, 'name'>;
-  securables: UserSecurableAttributes[];
-}
-
-export type SurveysResponse = Pagination<SurveyListEntry>;
+import { feedbackSchemeAttributes } from './feedback-schemes';
+import { systemLocaleAttributes } from './locales';
+import { userSecurableAttributes } from './securables';
+import { surveySchemeAttributes } from './survey-schemes';
+import { owner } from './users';
 
 export const surveyAttributes = z.object({
   id: z.string(),
-  slug: z.string().min(1).max(128),
+  slug: z.string().min(1).max(128).refine(value => isWhitelisted(value, identifierSafeChars)).transform(value => slugify(value, { strict: true })),
   name: z.string().min(1).max(512),
   state: z.enum(surveyStates),
-  startDate: z.date(),
-  endDate: z.date(),
+  startDate: z.union([z.string(), z.date()]).pipe(z.coerce.date()),
+  endDate: z.union([z.string(), z.date()]).pipe(z.coerce.date()),
   surveySchemeId: z.string(),
   localeId: z.string(),
   allowGenUsers: z.boolean(),
   genUserKey: z.string().max(256).nullable(),
-  authUrlDomainOverride: z.string().max(512).nullable(),
-  authUrlTokenCharset: z.string().max(128).nullable(),
-  authUrlTokenLength: z.number().nullable(),
+  authUrlDomainOverride: z.string().max(512).url().nullable(),
+  authUrlTokenCharset: z.string().max(128).nullable().refine(value => !value || value.split('').length === [...new Set(value.split(''))].length),
+  authUrlTokenLength: z.number().min(12).max(128).nullable(),
   authCaptcha: z.boolean(),
   suspensionReason: z.string().max(512).nullable(),
   surveyMonkeyUrl: z.string().max(512).nullable(),
-  supportEmail: z.string().max(512).email(),
+  supportEmail: z.string().max(512).email().toLowerCase(),
   originatingUrl: z.string().max(512).nullable(),
   feedbackSchemeId: z.string().nullable(),
-  numberOfSubmissionsForFeedback: z.number().int(),
+  numberOfSubmissionsForFeedback: z.number().int().min(1),
   notifications: notification.array(),
-  sessionLifetime: z.string().max(32),
+  sessionLifetime: z.string().max(32).refine(value => ms(value)).transform(value => (Number.isNaN(Number(value)) ? value : ms(Number(value)))),
   storeUserSessionOnServer: z.boolean(),
   maximumDailySubmissions: z.number().int().min(1),
   maximumTotalSubmissions: z.number().int().min(1).nullable(),
@@ -71,21 +49,65 @@ export const surveyAttributes = z.object({
   updatedAt: z.date(),
 });
 
-export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDate'> {
-  startDate: string;
-  endDate: string;
-  locale: SystemLocaleAttributes;
-  feedbackScheme?: FeedbackSchemeAttributes;
-  surveyScheme: SurveySchemeAttributes;
-  owner?: Owner;
-  securables?: UserSecurableAttributes[];
-}
+export type SurveyAttributes = z.infer<typeof surveyAttributes>;
 
-export type SurveyRefs = {
-  locales: LocaleListEntry[];
-  surveySchemes: SurveySchemeRefEntry[];
-  feedbackSchemes: FeedbackSchemeRefEntry[];
-};
+export const surveyRequest = surveyAttributes.omit({
+  id: true,
+  ownerId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type SurveyRequest = z.infer<typeof surveyRequest>;
+
+export const surveyPartialRequest = surveyRequest.partial();
+export type SurveyPartialRequest = z.infer<typeof surveyPartialRequest>;
+
+export const surveyCreateRequest = surveyPartialRequest.required({
+  slug: true,
+  name: true,
+  state: true,
+  startDate: true,
+  endDate: true,
+  surveySchemeId: true,
+  localeId: true,
+  allowGenUsers: true,
+  supportEmail: true,
+  storeUserSessionOnServer: true,
+});
+export type SurveyCreateRequest = z.infer<typeof surveyCreateRequest>;
+
+export const surveyEntry = surveyAttributes
+  .extend({
+    startDate: z.string(),
+    endDate: z.string(),
+    locale: systemLocaleAttributes,
+    feedbackScheme: feedbackSchemeAttributes.optional(),
+    surveyScheme: surveySchemeAttributes,
+    owner: owner.optional(),
+    securables: userSecurableAttributes.array().optional(),
+  });
+
+export const surveyListEntry = surveyAttributes.pick({
+  id: true,
+  slug: true,
+  name: true,
+  localeId: true,
+  surveySchemeId: true,
+  state: true,
+})
+  .extend({
+    locale: systemLocaleAttributes.pick({
+      code: true,
+    }),
+    surveyScheme: surveySchemeAttributes.pick({
+      name: true,
+    }),
+    securables: userSecurableAttributes.array().optional(),
+  });
+
+export type SurveyListEntry = z.infer<typeof surveyListEntry>;
+
+export type SurveyEntry = z.infer<typeof surveyEntry>;
 
 export const userSurveySessionAttributes = z.object({
   id: z.string().uuid(),

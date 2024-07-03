@@ -15,11 +15,7 @@ export default () => {
 
   beforeAll(async () => {
     const surveyInput = mocker.system.survey();
-    survey = await Survey.create({
-      ...surveyInput,
-      startDate: new Date(surveyInput.startDate),
-      endDate: new Date(surveyInput.endDate),
-    });
+    survey = await Survey.create(surveyInput);
 
     feedbackScheme = await FeedbackScheme.create(mocker.system.feedbackScheme());
 

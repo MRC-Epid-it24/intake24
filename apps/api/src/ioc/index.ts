@@ -10,7 +10,6 @@ import type {
   AdminGlobalFoodsController,
   AdminLocalCategoriesController,
   AdminLocalFoodsController,
-  AdminSurveyController,
   AsServedImageController,
   AsServedSetController,
   DrinkwareSetController,
@@ -139,9 +138,6 @@ export interface IoC extends Jobs {
   localeSplitListController: LocaleSplitListController;
   localeSplitWordController: LocaleSplitWordController;
   localeSynonymSetController: LocaleSynonymSetController;
-
-  // Survey MGMT
-  adminSurveyController: AdminSurveyController;
 
   // System services
   db: DatabasesInterface;

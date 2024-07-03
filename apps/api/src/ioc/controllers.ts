@@ -27,8 +27,5 @@ export default (container: AwilixContainer): void => {
     localeSplitListController: asFunction(controllers.admin.locales.splitList),
     localeSplitWordController: asFunction(controllers.admin.locales.splitWord),
     localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),
-
-    // Survey MGMT
-    adminSurveyController: asFunction(controllers.admin.surveys.survey),
   });
 };

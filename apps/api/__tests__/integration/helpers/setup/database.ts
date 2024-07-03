@@ -15,6 +15,7 @@ import {
   defaultPrompts,
   defaultSearchSettings,
 } from '@intake24/common/surveys';
+import { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
 import { permissions } from '@intake24/common-backend';
 import {
   FeedbackScheme,
@@ -74,7 +75,7 @@ export async function initDatabase(): Promise<MockData> {
     visibility: 'public',
   });
 
-  const localeInput = {
+  const localeInput: Omit<SystemLocaleAttributes, 'code' | 'id' | 'visibility' | 'ownerId' | 'createdAt' | 'updatedAt'> = {
     englishName: 'United Kingdom',
     localName: 'United Kingdom',
     respondentLanguageId: language.code,

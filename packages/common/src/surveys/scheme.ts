@@ -211,12 +211,12 @@ export const surveySearchSettings = z.object({
   enableEditDistance: z.boolean(),
   enablePhonetic: z.boolean(),
   minWordLengthPhonetic: z.number().int().min(2).max(10),
-  firstWordCost: z.number(),
-  wordOrderCost: z.number(),
-  wordDistanceCost: z.number(),
-  unmatchedWordCost: z.number(),
+  firstWordCost: z.number().int().min(0).max(20),
+  wordOrderCost: z.number().int().min(0).max(10),
+  wordDistanceCost: z.number().int().min(0).max(10),
+  unmatchedWordCost: z.number().int().min(0).max(10),
   enableRelevantCategories: z.boolean(),
-  relevantCategoryDepth: z.number(),
+  relevantCategoryDepth: z.number().int().min(0).max(5),
 });
 export type SurveySearchSettings = z.infer<typeof surveySearchSettings>;
 
