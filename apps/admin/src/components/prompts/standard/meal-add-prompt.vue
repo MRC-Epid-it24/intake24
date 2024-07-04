@@ -8,6 +8,12 @@
           :label="$t('survey-schemes.prompts.meal-add-prompt.custom')"
           @change="update('custom', $event)"
         />
+        <v-switch
+          hide-details="auto"
+          :input-value="unique"
+          :label="$t('survey-schemes.prompts.meal-add-prompt.unique')"
+          @change="update('unique', $event)"
+        />
       </v-col>
     </v-row>
   </v-tab-item>
@@ -29,6 +35,10 @@ export default defineComponent({
   props: {
     custom: {
       type: Boolean as PropType<Prompts['meal-add-prompt']['custom']>,
+      required: true,
+    },
+    unique: {
+      type: Boolean as PropType<Prompts['meal-add-prompt']['unique']>,
       required: true,
     },
   },

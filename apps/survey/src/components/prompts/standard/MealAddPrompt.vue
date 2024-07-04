@@ -124,7 +124,7 @@ export default defineComponent({
       },
     });
 
-    const isValidMeal = (value: any) => !props.meals.includes(value?.toLowerCase().trim());
+    const isValidMeal = (value: any) => !props.prompt.unique || !props.meals.includes(value?.toLowerCase().trim());
     const availableMeals = computed(() => props.defaultMeals.filter(meal => isValidMeal(meal)));
     const hasMeals = computed(() => !!props.meals.length);
 

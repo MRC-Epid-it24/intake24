@@ -364,7 +364,8 @@
     "meal-add-prompt": {
       "title": "Add meal",
       "subtitle": "Add a new meal to the meal list",
-      "custom": "Allow custom meal names"
+      "custom": "Allow custom meal names",
+      "unique": "Allow only unique meal names"
     },
     "meal-duration-prompt": {
       "title": "Meal duration",

@@ -358,7 +358,8 @@
     "meal-add-prompt": {
       "title": "Ajouter un repas",
       "subtitle": "Ajouter un nouveau repas à la liste des repas",
-      "custom": "Autoriser la personnalisation des noms de repas"
+      "custom": "Autoriser la personnalisation des noms de repas",
+      "unique": "Allow only unique meal names"
     },
     "meal-duration-prompt": {
       "title": "Durée du repas",

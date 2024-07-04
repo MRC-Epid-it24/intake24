@@ -322,6 +322,7 @@ const foodSearchPrompt = baseStandardPrompt.merge(foodBrowser).extend({
 const mealAddPrompt = baseStandardPrompt.extend({
   component: z.literal('meal-add-prompt'),
   custom: z.boolean(),
+  unique: z.boolean(),
 });
 
 const mealDurationPrompt = baseStandardPrompt.extend({

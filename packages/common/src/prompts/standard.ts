@@ -49,6 +49,7 @@ export const mealAddPrompt: Prompts['meal-add-prompt'] = copy({
   id: 'meal-add-prompt',
   name: 'Meal Add prompt',
   custom: false,
+  unique: false,
 });
 
 export const mealDurationPrompt: Prompts['meal-duration-prompt'] = copy({
