@@ -75,6 +75,25 @@ async function main() {
           operation.responses['201'].content['application/json'].schema.properties.prompts = { ...defaultRecall };
       }
 
+      if (
+        appRoute.path === '/admin/surveys'
+        || appRoute.path === '/admin/surveys/:surveyId'
+        || appRoute.path === '/admin/surveys/:surveyId/edit'
+      ) {
+        if (operation.requestBody?.content['application/json']?.schema?.properties?.surveySchemeOverrides?.properties?.prompts)
+          operation.requestBody.content['application/json'].schema.properties.surveySchemeOverrides.properties.prompts = { type: 'array' };
+
+        if (operation.responses['200']?.content['application/json'].schema?.properties?.surveySchemeOverrides?.properties?.prompts)
+          operation.responses['200'].content['application/json'].schema.properties.surveySchemeOverrides.properties.prompts = { type: 'array' };
+        if (operation.responses['201']?.content['application/json'].schema?.properties?.surveySchemeOverrides?.properties?.prompts)
+          operation.responses['201'].content['application/json'].schema.properties.surveySchemeOverrides.properties.prompts = { type: 'array' };
+
+        if (operation.responses['200']?.content['application/json'].schema?.properties?.surveyScheme?.properties?.prompts)
+          operation.responses['200'].content['application/json'].schema.properties.surveyScheme.properties.prompts = { ...defaultRecall };
+        if (operation.responses['201']?.content['application/json'].schema?.properties?.surveyScheme?.properties?.prompts)
+          operation.responses['201'].content['application/json'].schema.properties.surveyScheme.properties.prompts = { ...defaultRecall };
+      }
+
       if (appRoute.path === '/admin/survey-scheme-prompts/refs') {
         if (operation.responses['200']?.content['application/json'].schema?.properties?.schemes)
           operation.responses['200'].content['application/json'].schema.properties.schemes = { type: 'array' };

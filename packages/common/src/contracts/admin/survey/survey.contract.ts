@@ -5,9 +5,9 @@ import { surveyTasks } from '@intake24/common/types';
 import { bigIntString as surveyId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   jobAttributes,
-  surveyAttributes,
   surveyCreateRequest,
   surveyEntry,
+  surveyListEntry,
   surveyPartialRequest,
   surveyRequest,
 } from '@intake24/common/types/http/admin';
@@ -19,7 +19,7 @@ export const survey = initContract().router({
     query: paginationRequest,
     responses: {
       200: z.object({
-        data: surveyAttributes.array(),
+        data: surveyListEntry.array(),
         meta: paginationMeta,
       }),
     },

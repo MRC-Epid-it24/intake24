@@ -53,6 +53,7 @@ Prompt to add new meals. Multi-select list of options predefined in the scheme m
 #### Options
 
 - `custom` - allow adding custom meal names
+- `unique` - allow adding only unique meal names
 
 ### Meal duration prompt
 
