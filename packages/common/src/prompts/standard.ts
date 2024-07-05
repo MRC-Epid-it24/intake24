@@ -22,6 +22,16 @@ export const editMealPrompt: Prompts['edit-meal-prompt'] = copy({
   separateDrinks: false,
 });
 
+export const externalSourcePrompt: Prompts['external-source-prompt'] = copy({
+  ...basePrompt,
+  component: 'external-source-prompt',
+  type: 'standard',
+  id: 'external-source-prompt',
+  name: 'External source prompt',
+  source: { type: 'open-food-facts', country: 'world' },
+  barcode: { type: 'none' },
+});
+
 export const finalPrompt: Prompts['final-prompt'] = copy({
   ...basePrompt,
   component: 'final-prompt',
@@ -157,6 +167,7 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
 export const standardPrompts = [
   associatedFoodsPrompt,
   editMealPrompt,
+  externalSourcePrompt,
   finalPrompt,
   foodSearchPrompt,
   mealAddPrompt,

@@ -1,20 +1,36 @@
 <template>
   <v-tab-item key="options" value="options">
-    <v-row class="mb-3">
-      <v-col cols="12" />
+    <v-row>
+      <v-col cols="12" md="6">
+        <barcode-settings
+          v-bind="{ barcode }"
+          @update:barcode="update('barcode', $event)"
+        />
+      </v-col>
     </v-row>
   </v-tab-item>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 
-import { basePrompt } from '../partials';
+import type { Prompts } from '@intake24/common/prompts';
+
+import { BarcodeSettings, basePrompt } from '../partials';
 
 export default defineComponent({
   name: 'MissingFoodPrompt',
 
+  components: { BarcodeSettings },
+
   mixins: [basePrompt],
+
+  props: {
+    barcode: {
+      type: Object as PropType<Prompts['external-source-prompt']['barcode']>,
+      required: true,
+    },
+  },
 });
 </script>
 

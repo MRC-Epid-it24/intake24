@@ -142,6 +142,11 @@ export type PromptStates = {
   };
   // Standard prompts
   'edit-meal-prompt': FoodState[];
+  'external-source-prompt': {
+    searchTerm: string | null;
+    type?: 'selected' | 'missing';
+    data?: object;
+  };
   'associated-foods-prompt': {
     activePrompt: number;
     prompts: AssociatedFoodPrompt[];

@@ -34,7 +34,12 @@
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <barcode-input :model-value.sync="info.barcode" />
+            <component
+              :is="prompt.barcode.type"
+              :model-value.sync="info.barcode"
+              :options="prompt.barcode"
+              outlined
+            />
           </template>
           <v-btn :block="isMobile" color="primary" :disabled="!homemadeValid" @click="confirm">
             {{ $t('common.action.continue') }}
@@ -76,14 +81,14 @@ import type { PromptStates } from '@intake24/common/prompts';
 import type { MissingFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
-import { BarcodeInput } from '@intake24/ui';
+import { barcodes } from '@intake24/ui';
 
 import createBasePortion from './createBasePortion';
 
 export default defineComponent({
   name: 'MissingFoodPrompt',
 
-  components: { BarcodeInput, YesNoToggle },
+  components: { ...barcodes, YesNoToggle },
 
   mixins: [createBasePortion<'missing-food-prompt', MissingFood>()],
 

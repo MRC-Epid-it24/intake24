@@ -9,6 +9,9 @@
     <link rel="icon" href="/icons/icon.svg" sizes="any" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon-180x180.png" />
     <link rel="mask-icon" href="/icons/icon.svg" color="<%- themeColor %>" />
+    <% if (typeof VITE_STRICH_KEY !== 'undefined' && VITE_STRICH_KEY) { %>
+    <link rel="dns-prefetch" href="https://license.strich.io" />
+    <% } %>
     <meta name="theme-color" content="<%- themeColor %>" />
   </head>
   <body>
