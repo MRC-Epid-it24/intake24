@@ -108,6 +108,17 @@
     "foods": "Aliments et boissons",
     "foodsOnly": "Aliments"
   },
+  "externalSource": {
+    "name": "External source",
+    "text": "",
+    "description": "",
+    "search": "Search",
+    "results": "Products found: {count}.",
+    "none": "No products found",
+    "select": "Select",
+    "back": "Back to search",
+    "missing": "Not found"
+  },
   "final": {
     "name": "Dernière page",
     "text": "",

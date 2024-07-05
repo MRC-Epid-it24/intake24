@@ -19,6 +19,7 @@
     "@ericblade/quagga2": "^1.8.4",
     "@hcaptcha/vue-hcaptcha": "^1.3.0",
     "@pinia/plugin-debounce": "^1.0.1",
+    "@pixelverse/strichjs-sdk": "^1.4.8",
     "@vueuse/core": "^10.11.0",
     "axios": "^1.7.2",
     "echarts": "^5.5.1",

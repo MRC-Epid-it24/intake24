@@ -195,7 +195,7 @@
     "section": "Prompts section",
     "preMeals": {
       "title": "Pre-recall prompts",
-      "subtitle": "General prompt asked before the dietary recall, including personal prompts and the initial instructions."
+      "subtitle": "General prompts asked before the dietary recall, including personal prompts and the initial instructions."
     },
     "postMeals": {
       "title": "Post-recall prompts",
@@ -207,11 +207,11 @@
     },
     "preFoods": {
       "title": "Pre-foods meal prompts",
-      "subtitle": "prompts asked about meals before foods are entered, such as the meal time."
+      "subtitle": "Prompts asked about meals before foods are entered, such as the meal time."
     },
     "foods": {
       "title": "Food prompts",
-      "subtitle": "prompts asked about foods, including food database search and portion size estimation."
+      "subtitle": "Prompts asked about foods, including food database search and portion size estimation."
     },
     "postFoods": {
       "title": "Post-foods meal prompts",
@@ -262,6 +262,42 @@
       "noPrompts": "No portion size prompts available for this section"
     },
     "badges": "Show quantity badges",
+    "barcodes": {
+      "_": "Barcode scanner",
+      "title": "Barcode scanner options",
+      "providers": {
+        "_": "Provider",
+        "title": "Providers",
+        "none": "None",
+        "quagga": "Quagga2",
+        "strich": "Strich"
+      },
+      "readers": {
+        "_": "Reader",
+        "title": "Readers"
+      },
+      "feedback": {
+        "_": "Feedback",
+        "audio": "Audio",
+        "vibration": "Vibration"
+      }
+    },
+    "externalSources": {
+      "_": "External source",
+      "title": "External source settings",
+      "sources": {
+        "_": "Source",
+        "title": "Sources",
+        "open-food-facts": "Open Food Facts"
+      },
+      "countries": {
+        "_": "Country",
+        "title": "Countries",
+        "world": "World",
+        "uk": "United Kingdom",
+        "fr": "France"
+      }
+    },
     "foodBrowser": {
       "_": "Food browser settings",
       "categoriesFirst": {
@@ -346,6 +382,10 @@
       "title": "Food list",
       "subtitle": "List or edit foods in this meal as free text descriptions",
       "separateDrinks": "Separate drinks list"
+    },
+    "external-source-prompt": {
+      "title": "External source",
+      "subtitle": "Prompt for external source of food matching"
     },
     "final-prompt": {
       "title": "Final",

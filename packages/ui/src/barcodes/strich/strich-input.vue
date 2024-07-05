@@ -1,30 +1,28 @@
 <template>
-  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ label, name }" outlined>
+  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ name, ...$attrs }" v-on="$listeners">
     <template #append>
       <v-icon @click.stop.prevent="open">
         fas fa-barcode
       </v-icon>
-      <barcode-reader
+      <strich-reader
         :dialog.sync="dialog"
-        :model-value.sync="barcode"
-        v-bind="{ errorThreshold, readers, successfulReads }"
+        v-bind="{ options }"
+        @detected="detected"
       />
     </template>
   </v-text-field>
 </template>
 
 <script lang="ts" setup>
-import type { QuaggaJSCodeReader } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
 import { defineComponent, ref } from 'vue';
 
-import BarcodeReader from './barcode-reader.vue';
+import type { StrichScanner } from '@intake24/common/barcodes';
+
+import StrichReader from './strich-reader.vue';
 
 const props = defineProps({
-  label: {
-    type: String,
-  },
   modelValue: {
     type: String as PropType<string | null>,
     default: '',
@@ -33,18 +31,15 @@ const props = defineProps({
     type: String,
     default: 'barcode',
   },
-  errorThreshold: {
-    type: Number,
-  },
-  readers: {
-    type: Array as PropType<QuaggaJSCodeReader[]>,
-  },
-  successfulReads: {
-    type: Number,
+  options: {
+    type: Object as PropType<StrichScanner>,
   },
 });
 
-const emit = defineEmits(['update:model-value']);
+const emit = defineEmits<{
+  (e: 'detected', value: string): void;
+  (e: 'update:model-value', value: string | null): void;
+}>();
 
 const barcode = useVModel(props, 'modelValue', emit);
 
@@ -57,11 +52,16 @@ function open(event: Event) {
 
   dialog.value = true;
 }
+
+function detected(value: string) {
+  barcode.value = value;
+  emit('detected', value);
+}
 </script>
 
 <script lang="ts">
 export default defineComponent({
-  name: 'BarcodeInput',
+  name: 'StrichInput',
 });
 </script>
 

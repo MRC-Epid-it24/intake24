@@ -90,6 +90,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['preFoods'],
   },
+  'external-source-prompt': {
+    tabs: [...tabs],
+    sections: ['foods'],
+  },
   'final-prompt': {
     tabs: [...tabs],
     sections: ['submission'],

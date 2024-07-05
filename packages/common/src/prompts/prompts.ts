@@ -1,10 +1,11 @@
 import { z } from 'zod';
 
 import type { PortionSizeMethodId } from '../surveys';
-import { localeOptionList } from '../types';
-import { localeTranslation } from './../types';
+import { barcodeScannerOptions } from '../barcodes';
+import { localeOptionList, localeTranslation } from '../types';
 import { actions, promptLayouts } from './actions';
 import { condition } from './conditions';
+import { externalSourceOptions } from './external-sources';
 
 export const radioOrientations = ['column', 'row'] as const;
 export type RadioOrientation = (typeof radioOrientations)[number];
@@ -31,6 +32,7 @@ export type CustomComponentType = (typeof customComponentTypes)[number];
 export const standardComponentTypes = [
   'associated-foods-prompt',
   'edit-meal-prompt',
+  'external-source-prompt',
   'final-prompt',
   'food-search-prompt',
   'meal-add-prompt',
@@ -255,6 +257,7 @@ const milkOnCerealPrompt = basePortionPrompt.extend({
 
 const missingFoodPrompt = basePortionPrompt.extend({
   component: z.literal('missing-food-prompt'),
+  barcode: barcodeScannerOptions,
 });
 
 const parentFoodPortionPrompt = basePortionPrompt.extend({
@@ -293,6 +296,12 @@ const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
 const editMealPrompt = baseStandardPrompt.extend({
   component: z.literal('edit-meal-prompt'),
   separateDrinks: z.boolean(),
+});
+
+const externalSourcePrompt = baseStandardPrompt.extend({
+  component: z.literal('external-source-prompt'),
+  source: externalSourceOptions,
+  barcode: barcodeScannerOptions,
 });
 
 const finalPrompt = baseStandardPrompt.extend({
@@ -388,6 +397,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   // Standard
   associatedFoodsPrompt,
   editMealPrompt,
+  externalSourcePrompt,
   finalPrompt,
   foodSearchPrompt,
   mealAddPrompt,
@@ -442,6 +452,7 @@ export const prompts = z.object({
   // Standard
   'associated-foods-prompt': associatedFoodsPrompt,
   'edit-meal-prompt': editMealPrompt,
+  'external-source-prompt': externalSourcePrompt,
   'final-prompt': finalPrompt,
   'food-search-prompt': foodSearchPrompt,
   'meal-add-prompt': mealAddPrompt,

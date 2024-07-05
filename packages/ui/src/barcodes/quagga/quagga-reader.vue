@@ -20,7 +20,7 @@
         <v-divider class="ml-2" vertical />
         <v-btn
           color="white"
-          :disabled="!deviceCapabilities.torch"
+          :disabled="!hasTorch"
           icon
           title="Torch"
           @click="toggleTorch"
@@ -37,43 +37,43 @@
 </template>
 
 <script lang="ts" setup>
-import type { QuaggaJSCodeReader, QuaggaJSResultObject } from '@ericblade/quagga2';
+import type { QuaggaJSResultObject } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
 import Quagga from '@ericblade/quagga2';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue';
 import { VCard } from 'vuetify/lib';
 
-import { useMessages } from '../stores';
+import { defaultBarcodeScannerOptions, type QuaggaScanner } from '@intake24/common/barcodes';
+
+import { useMessages } from '../../stores';
+import { useTorch } from '../util';
 
 const props = defineProps({
   dialog: {
     type: Boolean,
     default: false,
   },
-  modelValue: {
-    type: String as PropType<string | null>,
-    default: '',
+  options: {
+    type: Object as PropType<QuaggaScanner>,
+    default: () => defaultBarcodeScannerOptions.quagga,
   },
   errorThreshold: {
     type: Number,
     default: 0.2,
   },
-  readers: {
-    type: Array as PropType<QuaggaJSCodeReader[]>,
-    default: () => ['ean_reader', 'ean_8_reader', 'ean_5_reader'],
-  },
   successfulReads: {
     type: Number,
     default: 3,
   },
-  vibrateOnRead: {
-    type: Boolean,
-    default: true,
-  },
 });
 
-const emit = defineEmits(['update:dialog', 'update:model-value']);
+const emit = defineEmits<{
+  (e: 'detected', barcode: string): void;
+  (e: 'update:dialog', value: boolean): void;
+}>();
+
+const { hasTorch, initTorch, toggleTorch } = useTorch();
 
 const dialog = useVModel(props, 'dialog', emit);
 
@@ -84,21 +84,8 @@ const reader = ref<InstanceType<typeof HTMLFormElement>>();
 const { height, width } = useElementSize(card);
 
 const initializing = ref(false);
-const capabilities = ref<MediaTrackCapabilities | null>(null);
-const deviceCapabilities = ref<{ torch: boolean }>({ torch: false });
 const results = ref<QuaggaJSResultObject[]>([]);
 const locate = ref(true);
-
-function initCapabilities() {
-  const track = Quagga.CameraAccess.getActiveTrack();
-  if (!track)
-    return;
-
-  capabilities.value = track.getCapabilities();
-
-  if ('torch' in capabilities.value && typeof capabilities.value.torch === 'boolean')
-    deviceCapabilities.value.torch = true;
-}
 
 function drawScanBox() {
   const ctx = Quagga.canvas.ctx.overlay;
@@ -152,13 +139,6 @@ function drawResult(result: QuaggaJSResultObject) {
       lineWidth: 2,
     });
   }
-}
-
-async function toggleTorch() {
-  const track = Quagga.CameraAccess.getActiveTrack();
-
-  // @ts-expect-error torch is not in the types ?
-  await track?.applyConstraints({ advanced: [{ torch: !track.getSettings().torch }] });
 }
 
 function getMedian(numbers: number[]) {
@@ -216,10 +196,10 @@ async function start() {
       },
       locate: locate.value,
       decoder: {
-        readers: props.readers,
+        readers: props.options.readers,
       },
     },
-    (err) => {
+    async (err) => {
       if (err) {
         console.warn(err);
         useMessages().warning('Could not find suitable camera.');
@@ -228,7 +208,7 @@ async function start() {
 
       // Quagga.onProcessed(this.onProcessed);
       Quagga.onDetected(onDetected);
-      initCapabilities();
+      await initTorch();
 
       if (!locate.value)
         drawScanBox();
@@ -308,21 +288,22 @@ function checkResults() {
 }
 
 function successfulRead(barcode: string) {
-  if (props.vibrateOnRead)
+  if (props.options.feedback.vibration)
     navigator.vibrate(200);
 
-  emit('update:model-value', barcode);
+  toggleTorch(false);
+  emit('detected', barcode);
   close();
 }
 </script>
 
 <script lang="ts">
 export default defineComponent({
-  name: 'BarcodeReader',
+  name: 'QuaggaReader',
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .barcode-reader {
   position: relative;
   min-height: 480px;

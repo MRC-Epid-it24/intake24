@@ -81,6 +81,7 @@ export const missingFoodPrompt: Prompts['missing-food-prompt'] = copy({
   type: 'portion-size',
   id: 'missing-food-prompt',
   name: 'Missing food',
+  barcode: { type: 'none' },
 });
 
 export const parentFoodPortionPrompt: Prompts['parent-food-portion-prompt'] = copy({

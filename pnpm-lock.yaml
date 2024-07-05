@@ -1189,6 +1189,9 @@ importers:
       '@pinia/plugin-debounce':
         specifier: ^1.0.1
         version: 1.0.1
+      '@pixelverse/strichjs-sdk':
+        specifier: ^1.4.8
+        version: 1.4.8
       '@vueuse/core':
         specifier: ^10.11.0
         version: 10.11.0(vue@2.7.16)
@@ -2784,6 +2787,9 @@ packages:
 
   '@pinia/plugin-debounce@1.0.1':
     resolution: {integrity: sha512-/ITYpdvEk8CvUWs/0zpI3eBQkSOoLI/hgTr+WaULxMHdKP9IWBEM+yY2+aqEMa0e48K4y+uVMFYCM9lcv8g/cQ==}
+
+  '@pixelverse/strichjs-sdk@1.4.8':
+    resolution: {integrity: sha512-V5nSDwot+O0HEBspjDsTBDXqS7KNi8OpW25CIWLYvKB7wvmTtZZ8vbzExPq8YHmc5dYg1qI87tW964frCGDuVA==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -11440,6 +11446,8 @@ snapshots:
       tslib: 2.6.3
 
   '@pinia/plugin-debounce@1.0.1': {}
+
+  '@pixelverse/strichjs-sdk@1.4.8': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
