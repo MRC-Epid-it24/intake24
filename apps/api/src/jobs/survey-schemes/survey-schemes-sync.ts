@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { Prompt } from '@intake24/common/prompts';
+import type { SinglePrompt } from '@intake24/common/prompts';
 import type { RecallPrompts } from '@intake24/common/surveys';
 import { customPrompts, portionSizePrompts, standardPrompts } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
@@ -38,7 +38,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
   private getPromptMap() {
     return [...standardPrompts, ...portionSizePrompts, ...customPrompts].reduce<
-      Record<string, Prompt>
+      Record<string, SinglePrompt>
     >((acc, prompt) => {
       acc[prompt.component] = prompt;
       return acc;
@@ -55,7 +55,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
       order: [['id', 'ASC']],
     });
 
-    const mergeCallback = (prompt: Prompt) => merge<Prompt>(promptMap[prompt.component], prompt);
+    const mergeCallback = (prompt: SinglePrompt) => merge<SinglePrompt>(promptMap[prompt.component], prompt);
 
     for (const scheme of schemes) {
       const prompts: RecallPrompts = {

@@ -70,7 +70,7 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['surveySchemeId', 'section', 'prompt'],
+        ['surveySchemeId', 'section', 'prompt.component'],
         {
           input: {
             surveySchemeId: ['123456'],

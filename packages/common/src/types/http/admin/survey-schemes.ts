@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { prompt } from '@intake24/common/prompts';
+import { singlePrompt } from '@intake24/common/prompts';
 import { recordVisibilities } from '@intake24/common/security';
 import { exportField, exportSection, exportSectionIds, meal, recallPrompts, schemeTypes } from '@intake24/common/surveys';
 
@@ -46,13 +46,13 @@ export const surveySchemeEntry = surveySchemeAttributes.extend({
 export type SurveySchemeEntry = z.infer<typeof surveySchemeEntry>;
 
 export const surveySchemeRefs = z.object({
-  templates: prompt.array(),
+  templates: singlePrompt.array(),
 });
 
 export type SurveySchemeRefs = z.infer<typeof surveySchemeRefs>;
 
 export const surveySchemeTemplates = z.object({
-  data: prompt.array(),
+  data: singlePrompt.array(),
   meta: paginationMeta,
 });
 export type SurveySchemeTemplates = z.infer<typeof surveySchemeTemplates>;

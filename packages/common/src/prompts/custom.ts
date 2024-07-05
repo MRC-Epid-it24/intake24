@@ -1,6 +1,6 @@
 import { copy } from '@intake24/common/util';
 
-import type { Prompt, Prompts } from './prompts';
+import type { Prompts } from './prompts';
 import { basePrompt, promptValidation } from './base';
 
 export const checkboxListPrompt: Prompts['checkbox-list-prompt'] = copy({
@@ -105,7 +105,7 @@ export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({
   name: 'Yes / No prompt',
 });
 
-export const customPrompts: Prompt[] = [
+export const customPrompts = [
   checkboxListPrompt,
   datePickerPrompt,
   infoPrompt,

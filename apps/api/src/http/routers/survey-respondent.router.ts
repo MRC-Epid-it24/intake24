@@ -1,7 +1,7 @@
 import { initServer } from '@ts-rest/express';
 import ms from 'ms';
 
-import type { Prompt } from '@intake24/common/prompts';
+import type { SinglePrompt } from '@intake24/common/prompts';
 import type { TokenPayload } from '@intake24/common/security';
 import type {
   SurveyState as SurveyStatus,
@@ -82,7 +82,12 @@ export function surveyRespondent() {
         },
       } = survey;
 
-      let { meals, prompts } = surveyScheme;
+      let {
+        surveyScheme: {
+          meals,
+          prompts: surveySchemePrompts,
+        },
+      } = survey;
 
       let state: SurveyStatus;
       const today = new Date();
@@ -99,7 +104,7 @@ export function surveyRespondent() {
 
       // 2) Prompts - merge by Prompt ID & Prompt Name
       if (surveySchemeOverrides.prompts.length) {
-        const flattenScheme = flattenSchemeWithSection(prompts);
+        const flattenScheme = flattenSchemeWithSection(surveySchemePrompts);
         for (const prompt of surveySchemeOverrides.prompts) {
           const match = flattenScheme.find(
             item => item.id === prompt.id && item.name === prompt.name,
@@ -110,24 +115,24 @@ export function surveyRespondent() {
           const { section } = match;
 
           if (isMealSection(section)) {
-            const index = prompts.meals[section].findIndex(
+            const index = surveySchemePrompts.meals[section].findIndex(
               item => item.id === prompt.id && item.name === prompt.name,
             );
             if (index !== -1)
-              prompts.meals[section].splice(index, 1, merge<Prompt>(match, prompt));
+              surveySchemePrompts.meals[section].splice(index, 1, merge<SinglePrompt>(match, prompt));
           }
           else {
-            const index = prompts[section].findIndex(
+            const index = surveySchemePrompts[section].findIndex(
               item => item.id === prompt.id && item.name === prompt.name,
             );
             if (index !== -1)
-              prompts[section].splice(index, 1, merge<Prompt>(match, prompt));
+              surveySchemePrompts[section].splice(index, 1, merge<SinglePrompt>(match, prompt));
           }
         }
       }
 
       // 3) Crate multi-prompt groups
-      prompts = groupSchemeMultiPrompts(prompts);
+      const prompts = groupSchemeMultiPrompts(surveySchemePrompts);
 
       return {
         status: 200,

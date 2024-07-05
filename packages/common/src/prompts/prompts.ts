@@ -180,19 +180,6 @@ const infoPrompt = baseCustomPrompt.extend({
   component: z.literal('info-prompt'),
 });
 
-const baseMultiPrompt = baseCustomPrompt.extend({
-  component: z.literal('multi-prompt'),
-});
-
-type MultiPrompt = z.infer<typeof baseMultiPrompt> & {
-  prompts: Prompt[];
-};
-
-const multiPrompt: z.ZodType<MultiPrompt> = baseMultiPrompt.extend({
-  // eslint-disable-next-line ts/no-use-before-define
-  prompts: z.lazy(() => prompt.array()),
-});
-
 const noMoreInformationPrompt = baseCustomPrompt.extend({
   component: z.literal('no-more-information-prompt'),
 });
@@ -371,6 +358,59 @@ const submitPrompt = baseStandardPrompt.extend({
   review: z.record(z.enum(promptLayouts), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
 });
 
+export const singlePrompt = z.discriminatedUnion('component', [
+  // Custom
+  checkboxListPrompt,
+  datePickerPrompt,
+  infoPrompt,
+  noMoreInformationPrompt,
+  radioListPrompt,
+  selectPrompt,
+  sliderPrompt,
+  textareaPrompt,
+  timePickerPrompt,
+  yesNoPrompt,
+  // Portion size
+  asServedPrompt,
+  cerealPrompt,
+  directWeightPrompt,
+  drinkScalePrompt,
+  guideImagePrompt,
+  milkInAHotDrinkPrompt,
+  milkOnCerealPrompt,
+  missingFoodPrompt,
+  parentFoodPortionPrompt,
+  pizzaPrompt,
+  pizzaV2Prompt,
+  portionSizeOptionPrompt,
+  recipeBuilderPrompt,
+  standardPortionPrompt,
+  // Standard
+  associatedFoodsPrompt,
+  editMealPrompt,
+  finalPrompt,
+  foodSearchPrompt,
+  mealAddPrompt,
+  mealDurationPrompt,
+  mealGapPrompt,
+  mealTimePrompt,
+  readyMealPrompt,
+  redirectPrompt,
+  reviewConfirmPrompt,
+  sameAsBeforePrompt,
+  splitFoodPrompt,
+  submitPrompt,
+]);
+export type SinglePrompt = z.infer<typeof singlePrompt>;
+
+const multiPrompt = baseCustomPrompt.extend({
+  component: z.literal('multi-prompt'),
+  prompts: singlePrompt.array(),
+});
+
+export const prompt = singlePrompt.or(multiPrompt);
+export type Prompt = z.infer<typeof prompt>;
+
 export const prompts = z.object({
   // Custom
   'checkbox-list-prompt': checkboxListPrompt,
@@ -416,51 +456,4 @@ export const prompts = z.object({
   'submit-prompt': submitPrompt,
 });
 
-export const prompt = z.union([
-  // Custom
-  checkboxListPrompt,
-  datePickerPrompt,
-  infoPrompt,
-  multiPrompt,
-  noMoreInformationPrompt,
-  radioListPrompt,
-  selectPrompt,
-  sliderPrompt,
-  textareaPrompt,
-  timePickerPrompt,
-  yesNoPrompt,
-  // Portion size
-  asServedPrompt,
-  cerealPrompt,
-  directWeightPrompt,
-  drinkScalePrompt,
-  guideImagePrompt,
-  milkInAHotDrinkPrompt,
-  milkOnCerealPrompt,
-  missingFoodPrompt,
-  parentFoodPortionPrompt,
-  pizzaPrompt,
-  pizzaV2Prompt,
-  portionSizeOptionPrompt,
-  recipeBuilderPrompt,
-  standardPortionPrompt,
-  // Standard
-  associatedFoodsPrompt,
-  editMealPrompt,
-  finalPrompt,
-  foodSearchPrompt,
-  mealAddPrompt,
-  mealDurationPrompt,
-  mealGapPrompt,
-  mealTimePrompt,
-  readyMealPrompt,
-  redirectPrompt,
-  reviewConfirmPrompt,
-  sameAsBeforePrompt,
-  splitFoodPrompt,
-  submitPrompt,
-]);
-
 export type Prompts = z.infer<typeof prompts>;
-
-export type Prompt = z.infer<typeof prompt>;

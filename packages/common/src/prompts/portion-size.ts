@@ -1,6 +1,6 @@
 import { copy } from '@intake24/common/util';
 
-import type { ImageMap, Prompt, Prompts } from './prompts';
+import type { ImageMap, Prompts } from './prompts';
 import { basePortionPrompt } from './base';
 
 const imageMap: ImageMap = {
@@ -143,7 +143,7 @@ export const directWeightPrompt: Prompts['direct-weight-prompt'] = copy({
   name: 'Direct weight',
 });
 
-export const portionSizePrompts: Prompt[] = [
+export const portionSizePrompts = [
   asServedPrompt,
   cerealPrompt,
   directWeightPrompt,

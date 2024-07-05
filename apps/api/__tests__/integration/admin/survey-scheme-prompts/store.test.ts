@@ -27,8 +27,8 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['prompt'], {
-        input: { prompt: 'invalidPromptProps' },
+      await suite.sharedTests.assertInvalidInput('post', url, ['prompt.component'], {
+        input: { prompt: { name: 'missingProps' } },
       });
     });
 

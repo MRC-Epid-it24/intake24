@@ -66,7 +66,7 @@ import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { Prompt } from '@intake24/common/prompts';
+import type { SinglePrompt } from '@intake24/common/prompts';
 import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
@@ -81,7 +81,7 @@ export type MoveSection = { value: string; text: string };
 
 export type PromptEvent = {
   index: number;
-  prompt: Prompt;
+  prompt: SinglePrompt;
 };
 
 export interface PromptMoveEvent extends PromptEvent {
@@ -117,11 +117,11 @@ export default defineComponent({
       default: () => [],
     },
     templates: {
-      type: Array as PropType<Prompt[]>,
+      type: Array as PropType<SinglePrompt[]>,
       default: () => [],
     },
     items: {
-      type: Array as PropType<Prompt[]>,
+      type: Array as PropType<SinglePrompt[]>,
       required: true,
     },
   },
@@ -192,7 +192,7 @@ export default defineComponent({
       this.selector?.create();
     },
 
-    load(prompt: Prompt) {
+    load(prompt: SinglePrompt) {
       this.prompts.push(prompt);
     },
 
@@ -210,7 +210,7 @@ export default defineComponent({
       else this.prompts.splice(index, 1, prompt);
     },
 
-    moveSections(prompt: Prompt): MoveSection[] {
+    moveSections(prompt: SinglePrompt): MoveSection[] {
       return this.promptSettings[prompt.component].sections
         .filter(item => item !== this.section)
         .map(item => ({

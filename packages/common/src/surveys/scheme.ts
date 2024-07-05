@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { basePrompt, type Condition, type Prompt, prompt } from '../prompts';
+import { basePrompt, type Condition, type Prompt, prompt, type SinglePrompt, singlePrompt } from '../prompts';
 import { type Meal, meal } from './meals';
 import { searchSortingAlgorithms } from './survey';
 
@@ -31,13 +31,19 @@ export function isSurveySection(section: any): section is SurveyPromptSection {
 
 export type SurveySection = SurveyPromptSection | 'meals';
 
-export const genericPrompts = z.record(z.enum(surveySections), prompt.array());
-export type GenericPrompts = z.infer<typeof genericPrompts>;
-
-export const mealPrompts = z.record(z.enum(mealSections), prompt.array());
-export type MealPrompts = z.infer<typeof mealPrompts>;
-
 export const recallPrompts = z.object({
+  preMeals: singlePrompt.array(),
+  meals: z.object({
+    preFoods: singlePrompt.array(),
+    foods: singlePrompt.array(),
+    postFoods: singlePrompt.array(),
+  }),
+  postMeals: singlePrompt.array(),
+  submission: singlePrompt.array(),
+});
+export type RecallPrompts = z.infer<typeof recallPrompts>;
+
+export const groupedRecallPrompts = z.object({
   preMeals: prompt.array(),
   meals: z.object({
     preFoods: prompt.array(),
@@ -47,7 +53,7 @@ export const recallPrompts = z.object({
   postMeals: prompt.array(),
   submission: prompt.array(),
 });
-export type RecallPrompts = z.infer<typeof recallPrompts>;
+export type GroupedRecallPrompts = z.infer<typeof groupedRecallPrompts>;
 
 export function flattenScheme(scheme: RecallPrompts): Prompt[] {
   return Object.values(scheme).reduce<Prompt[]>((acc, prompts) => {
@@ -70,9 +76,9 @@ export function flattenSchemeWithSection(scheme: RecallPrompts): PromptWithSecti
   }, []);
 }
 
-export function groupMultiPrompts(prompts: Prompt[]) {
+export function groupMultiPrompts(prompts: SinglePrompt[]) {
   const grouped = prompts.reduce<
-    Record<string, { idx: number; prompts: Prompt[]; conditions: Condition[]; inserted: boolean }>
+    Record<string, { idx: number; prompts: SinglePrompt[]; conditions: Condition[]; inserted: boolean }>
   >((acc, item, idx) => {
     if (item.type !== 'custom' || !item.group)
       return acc;
@@ -110,7 +116,7 @@ export function groupMultiPrompts(prompts: Prompt[]) {
   }, []);
 }
 
-export function groupSchemeMultiPrompts(scheme: RecallPrompts): RecallPrompts {
+export function groupSchemeMultiPrompts(scheme: RecallPrompts): GroupedRecallPrompts {
   return {
     preMeals: groupMultiPrompts(scheme.preMeals),
     meals: {
@@ -188,7 +194,7 @@ export const defaultPrompts: RecallPrompts = {
 
 export const schemeOverrides = z.object({
   meals: meal.array(),
-  prompts: prompt.array(),
+  prompts: singlePrompt.array(),
 });
 export type SchemeOverrides = z.infer<typeof schemeOverrides>;
 

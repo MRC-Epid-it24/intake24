@@ -1,6 +1,6 @@
 import { copy } from '@intake24/common/util';
 
-import type { Prompt, Prompts } from './prompts';
+import type { Prompts } from './prompts';
 import { basePrompt } from './base';
 
 export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
@@ -154,7 +154,7 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
   },
 });
 
-export const standardPrompts: Prompt[] = [
+export const standardPrompts = [
   associatedFoodsPrompt,
   editMealPrompt,
   finalPrompt,

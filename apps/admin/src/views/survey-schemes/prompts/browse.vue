@@ -41,7 +41,7 @@
 import { defineComponent } from 'vue';
 
 import type { PromptMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import type { Prompt } from '@intake24/common/prompts';
+import type { SinglePrompt } from '@intake24/common/prompts';
 import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
@@ -99,7 +99,7 @@ export default defineComponent({
     promptIds(): string[] {
       return flattenScheme(this.form.prompts).map(({ id }) => id);
     },
-    templates(): Prompt[] {
+    templates(): SinglePrompt[] {
       if (!this.refsLoaded)
         return [];
 
@@ -125,7 +125,7 @@ export default defineComponent({
       this.form.prompts[section].push(prompt);
     },
 
-    updateItems(section: PromptSection, prompts: Prompt[]) {
+    updateItems(section: PromptSection, prompts: SinglePrompt[]) {
       if (isMealSection(section)) {
         this.form.prompts.meals[section] = prompts;
         return;

@@ -1,10 +1,9 @@
 import { getSupportedRegionCodes, parsePhoneNumber } from 'awesome-phonenumber';
 import { isIn } from 'validator';
 
-import type { SurveySchemeAttributes } from '@intake24/db';
 import {
+  groupedRecallPrompts,
   meal,
-  recallPrompts,
   schemeTypes,
   searchSortingAlgorithms,
   surveyRatings,
@@ -46,8 +45,6 @@ export const publicSurveyEntry = z.object({
 
 export type PublicSurveyEntry = z.infer<typeof publicSurveyEntry>;
 
-export type SchemeEntryResponse = Pick<SurveySchemeAttributes, 'id' | 'type' | 'meals' | 'prompts'>;
-
 export const surveyEntryResponse = z.object({
   id: z.string(),
   slug: z.string(),
@@ -58,7 +55,7 @@ export const surveyEntryResponse = z.object({
     id: z.string(),
     type: z.enum(schemeTypes),
     meals: meal.array(),
-    prompts: recallPrompts,
+    prompts: groupedRecallPrompts,
   }),
   feedbackScheme: feedbackSchemeResponse.optional(),
   numberOfSubmissionsForFeedback: z.number(),
@@ -70,6 +67,7 @@ export const surveyEntryResponse = z.object({
 });
 
 export type SurveyEntryResponse = z.infer<typeof surveyEntryResponse>;
+export type SchemeEntryResponse = SurveyEntryResponse['surveyScheme'];
 
 export const surveyUserInfoResponse = z.object({
   userId: z.string().openapi({ title: 'Internal (numerical) Intake24 user ID' }),

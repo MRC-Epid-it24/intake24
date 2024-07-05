@@ -87,7 +87,7 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { SystemLocaleReferences } from '@intake24/common/types/http/admin';
+import type { LocaleReference } from '@intake24/common/types/http/admin';
 import type { FoodsLocaleAttributes } from '@intake24/db';
 import { useFetchList } from '@intake24/admin/composables';
 
@@ -107,7 +107,7 @@ export default defineComponent({
     const selected = ref<string[]>([]);
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
-      SystemLocaleReferences['data'][number]
+      LocaleReference
     >('admin/references/locales');
 
     return { dialog, loading, items, page, lastPage, search, selected, clear };
