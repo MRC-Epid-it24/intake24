@@ -1,20 +1,22 @@
+import { randomUUID } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { trim } from 'lodash';
-import { v4 as randomUUID } from 'uuid';
 
 import type {
   PkgGlobalCategory,
   PkgLocalCategory,
 } from '@intake24/cli/commands/packager/types/categories';
 import type {
+  PkgAssociatedFood,
   PkgGlobalFood,
   PkgLocalFood,
   PkgPortionSizeMethod,
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
+import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
 import {
   AlbaneAlternativeDescriptionRow,
 } from '@intake24/cli/commands/fr-albane/types/alternative-descriptions';
@@ -77,6 +79,7 @@ export class FrenchAlbaneLocaleBuilder {
   private categoryNames: Record<string, string> | undefined;
 
   private inca3PortionSizeMapping: Record<string, PkgPortionSizeMethod[]> | undefined;
+  private associatedFoodPrompts: Record<string, PkgAssociatedFood[]> | undefined;
 
   constructor(logger: Logger, options: FrenchLocaleOptions) {
     this.sourceDirPath = options.inputPath;
@@ -140,7 +143,7 @@ export class FrenchAlbaneLocaleBuilder {
       const categories = this.foodCategories![row.A_CODE];
 
       if (!categories)
-        console.warn(`Food ${row.A_CODE} is not assigned to any categories`);
+        logger.warn(`Food ${row.A_CODE} is not assigned to any categories`);
 
       globalFoods.push({
         version: randomUUID(),
@@ -170,7 +173,7 @@ export class FrenchAlbaneLocaleBuilder {
         nutrientTableCodes: {
           FR_TEMP: 'FRPH1',
         },
-        associatedFoods: [],
+        associatedFoods: this.associatedFoodPrompts![row.A_CODE] ?? [],
         portionSize: this.inca3PortionSizeMapping![row.A_CODE] ?? [],
         brandNames: [],
       });
@@ -278,22 +281,104 @@ export class FrenchAlbaneLocaleBuilder {
   }
 
   private async readInca3Mapping(): Promise<void> {
-    const inca3MappingRows = await this.readJSON<AlbaneInca3MappingRow[]>('KEY_INCA3_ALBANE.json');
-    const inca3LocalFoods = await this.readJSON<Record<string, PkgLocalFood[]>>('inca3-local-foods.json');
+    const inca3MappingFoodRows
+      = (await this.readJSON<AlbaneInca3MappingRow[]>('KEY_INCA3_ALBANE_F.json'))
+        .filter(row => row.code_INCA3.length > 0)
+        .map(row => ({
+          code_ALBANE: row.code_ALBANE,
+          code_i24: `23FR${row.code_INCA3}`,
+          errorMsg: `Albane food code ${row.code_ALBANE} is mapped to INCA3 food code ${row.code_INCA3}, but it is not in ALIMENTS_FDLIST`,
+        }));
 
-    const filteredRows = inca3MappingRows.filter(row => row.code_INCA3.length > 0);
-    // inca3MappingRows.map(row => [row.code_ALBANE, row.code_INCA3]).filter(row => row[1].length > 0),
+    const inca3MappingRecipeRows
+      = (await this.readJSON<AlbaneInca3MappingRow[]>('KEY_INCA3_ALBANE_R.json'))
+        .filter(row => row.code_INCA3.length > 0)
+        .map(row => ({
+          code_ALBANE: row.code_ALBANE,
+          code_i24: `23FRR${row.code_INCA3}`,
+          errorMsg: `Albane food code ${row.code_ALBANE} is mapped to INCA3 recipe code ${row.code_INCA3}, but it is not in RECETTES_RCPLIST`,
+        }));
+
+    const inca3MappingRows = [...inca3MappingFoodRows, ...inca3MappingRecipeRows];
+
+    const inca3LocalFoods = await this.readJSON<Record<string, PkgLocalFood[]>>('inca3-local-foods.json');
 
     this.inca3PortionSizeMapping = {};
 
-    for (const row of filteredRows) {
-      const i24foodCode = `23FR${row.code_INCA3}`;
-      const food = inca3LocalFoods.fr_ANSES.find(f => f.code === i24foodCode);
+    for (const row of inca3MappingRows) {
+      const food = inca3LocalFoods.fr_ANSES.find(f => f.code === row.code_i24);
 
       if (food === undefined)
-        logger.warn(`Albane food code ${row.code_ALBANE} mapped to INCA3 code ${row.code_INCA3}, but food with code ${i24foodCode} not found in Intake24 package`);
+        logger.warn(row.errorMsg);
       else
-        this.inca3PortionSizeMapping[row.code_INCA3] = food.portionSize;
+        this.inca3PortionSizeMapping[row.code_ALBANE] = food.portionSize;
+    }
+  }
+
+  private async readAssociatedFoodPrompts(): Promise<void> {
+    this.associatedFoodPrompts = {};
+
+    const afpRows = await this.readJSON<AlbaneAfpRow[]>('AFP.json');
+
+    for (let i = 0; i < afpRows.length; i++) {
+      const row = afpRows[i];
+
+      const prompts: PkgAssociatedFood[] = [];
+
+      // Just sense checking
+      if (row.code.length === 0) {
+        logger.warn(`Food code column empty in row ${i + 1} of the associated food prompts file`);
+        continue;
+      }
+
+      if (row.genericName.length === 0) {
+        logger.warn(`Generic name column empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
+        continue;
+      }
+
+      if (row.categoryCode1.length > 0) {
+        if (row.promptText1.length === 0) {
+          logger.warn(`Category code defined but prompt text 1 column is empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
+          continue;
+        }
+
+        prompts.push({
+          linkAsMain: false,
+          genericName: row.genericName,
+          promptText: row.promptText1,
+          categoryCode: row.categoryCode1,
+        });
+      }
+
+      if (row.categoryCode2.length > 0) {
+        if (row.promptText2.length === 0) {
+          logger.warn(`Category code defined but prompt text 2 column is empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
+          continue;
+        }
+
+        prompts.push({
+          linkAsMain: false,
+          genericName: row.genericName,
+          promptText: row.promptText2,
+          categoryCode: row.categoryCode2,
+        });
+      }
+
+      if (row.categoryCode3.length > 0) {
+        if (row.promptText3.length === 0) {
+          logger.warn(`Category code defined but prompt text 3 column is empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
+          continue;
+        }
+
+        prompts.push({
+          linkAsMain: false,
+          genericName: row.genericName,
+          promptText: row.promptText3,
+          categoryCode: row.categoryCode3,
+        });
+      }
+
+      this.associatedFoodPrompts[row.code] = prompts;
     }
   }
 
@@ -301,6 +386,7 @@ export class FrenchAlbaneLocaleBuilder {
     await this.readFoodList();
     await this.readFoodCategories();
     await this.readInca3Mapping();
+    await this.readAssociatedFoodPrompts();
 
     const globalFoods = this.buildGlobalFoods();
     const localFoods = this.buildLocalFoods();
