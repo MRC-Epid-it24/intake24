@@ -1,9 +1,9 @@
+import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import csv from 'csv-parser';
-import { v4 as randomUUID } from 'uuid';
 
 import type logger from '@intake24/common-backend/services/logger/logger';
 import { ApiClientV4 } from '@intake24/api-client-v4';
