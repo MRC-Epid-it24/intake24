@@ -1,6 +1,7 @@
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
-import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
+import type { ExternalSource, PromptStates } from '../prompts';
+import type { ComponentType } from '../prompts/v1';
 import type { CerealType, StandardUnit } from '../surveys';
 import type { Dictionary, Optional, RequiredLocaleTranslation } from './common';
 import type { RecipeFood } from './foods';

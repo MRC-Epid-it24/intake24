@@ -61,6 +61,13 @@ export default class SurveyScheme
   declare type: CreationOptional<SchemeType>;
 
   @Column({
+    allowNull: false,
+    defaultValue: 1,
+    type: DataType.INTEGER,
+  })
+  declare version: number;
+
+  @Column({
     allowNull: true,
     defaultValue: () => JSON.stringify(defaultPrompts),
     type: DataType.TEXT({ length: 'long' }),
