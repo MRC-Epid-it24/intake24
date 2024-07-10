@@ -1,11 +1,22 @@
 import { LGraph } from 'litegraph.js';
 
-import type { ComponentType, Condition, Conditions, Prompt } from '@intake24/common/prompts';
+import type {
+  ComponentType,
+  MealCompletionState,
+  Prompt,
+} from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
-import type { FoodState, MealState, Selection } from '@intake24/common/types';
+import type {
+  FoodFlag,
+  FoodState,
+  MealFlag,
+  MealState,
+  Selection,
+  SurveyFlag,
+} from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import { conditionOps } from '@intake24/common/prompts';
+import { conditionOps, mealCompletionStateOptions } from '@intake24/common/prompts';
 import { type PromptContextNode, PromptNode } from '@intake24/common/prompts/graph/nodes/prompt';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import {
@@ -30,9 +41,14 @@ import {
   getFoodIndexRequired,
   getMealIndexForSelection,
   mealComplete,
+  mealFreeEntryComplete,
   mealPortionSizeComplete,
+  mealSearchComplete,
   missingFoodComplete,
   surveyFreeEntryComplete,
+  surveyMealsComplete,
+  surveyPortionSizeComplete,
+  surveySearchComplete,
 } from '@intake24/survey/util';
 
 import type { SurveyState, SurveyStore } from '../stores';
@@ -69,7 +85,7 @@ function foodDrinks(count: number, food: FoodState): number {
   if (food.linkedFoods.length)
     count += food.linkedFoods.reduce(foodDrinks, count);
 
-  return food.type === 'encoded-food' && food.data.categories.includes('DRNK') ? ++count : count;
+  return food.type === 'encoded-food' && food.data.categories.includes('DRNK') ? count + 1 : count;
 }
 
 function mealDrinks(count: number, meal: MealState): number {
@@ -79,24 +95,6 @@ function mealDrinks(count: number, meal: MealState): number {
 function surveyDrinks(count: number, meals: MealState[]): number {
   return meals.reduce(mealDrinks, count);
 };
-
-function propertyGetter(store: SurveyStore, property: 'recallNumber' | 'userName') {
-  return ({
-    recallNumber: store.recallNumber,
-    userName: store.user?.name ?? null,
-  })[property];
-}
-
-function checkProperty(store: SurveyStore, condition: Conditions['property']) {
-  return conditionOps[condition.op]({
-    answer: propertyGetter(store, condition.props.name),
-    value: condition.value,
-  });
-}
-
-function checkRecallNumber(store: SurveyStore, condition: Condition) {
-  return conditionOps[condition.op]({ answer: store.recallNumber, value: condition.value });
-}
 
 function showPrompt(state: SurveyState, prompt: Prompt, component: ComponentType) {
   return prompt.component === component;
@@ -140,67 +138,6 @@ function checkSurveyStandardConditions(state: SurveyState, prompt: Prompt): bool
     default:
       return state.data.customPromptAnswers[prompt.id] === undefined;
   }
-}
-
-function checkSurveyCustomConditions(store: SurveyStore, prompt: Prompt) {
-  return prompt.conditions.every((condition) => {
-    const { op, props, type, value } = condition;
-
-    switch (type) {
-      case 'drinks': {
-        if (props.section === 'survey')
-          return conditionOps[op]({ value, answer: surveyDrinks(0, store.data.meals) });
-
-        console.error(`Unexpected condition: ${type} & ${props.section}`);
-        return false;
-      }
-      case 'energy': {
-        if (props.section === 'survey')
-          return conditionOps[op]({ value, answer: surveyEnergy(0, store.data.meals) });
-
-        console.error(`Unexpected condition: ${type} & ${props.section}`);
-        return false;
-      }
-      case 'flag': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({ value, answer: store.data.flags });
-          case 'meal':
-            return store.data.meals.every(({ flags }) =>
-              conditionOps[op]({ value, answer: flags }),
-            );
-          case 'food':
-            return store.data.meals.every(meal =>
-              meal.foods.every(({ flags }) => conditionOps[op]({ value, answer: flags })),
-            );
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'meals': {
-        return conditionOps[op]({ value, answer: store.data.meals.length });
-      }
-      case 'promptAnswer': {
-        if (props.section === 'survey') {
-          return conditionOps[op]({
-            value,
-            answer: store.data.customPromptAnswers[props.promptId],
-          });
-        }
-
-        console.error(`Unexpected condition: ${type} & ${props.section}`);
-        return false;
-      }
-      case 'property':
-        return checkProperty(store, condition);
-      case 'recallNumber':
-        return checkRecallNumber(store, condition);
-      default:
-        console.error(`Unexpected condition type: ${condition}`);
-        return false;
-    }
-  });
 }
 
 function checkMealStandardConditions(surveyState: SurveyState, mealState: MealState, withSelection: Selection | null, prompt: Prompt): boolean {
@@ -253,78 +190,6 @@ function checkMealStandardConditions(surveyState: SurveyState, mealState: MealSt
       return mealState.customPromptAnswers[prompt.id] === undefined;
   }
 }
-
-function checkMealCustomConditions(store: SurveyStore, mealState: MealState, prompt: Prompt) {
-  return prompt.conditions.every((condition) => {
-    const { op, props, type, value } = condition;
-
-    switch (type) {
-      case 'drinks': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({ value, answer: surveyDrinks(0, store.data.meals) });
-          case 'meal':
-            return conditionOps[op]({ value, answer: mealDrinks(0, mealState) });
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'energy': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({ value, answer: surveyEnergy(0, store.data.meals) });
-          case 'meal':
-            return conditionOps[op]({ value, answer: mealEnergy(0, mealState) });
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'flag': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({ value, answer: store.data.flags });
-          case 'meal':
-            return conditionOps[op]({ value, answer: mealState.flags });
-          case 'food':
-            return mealState.foods.every(({ flags }) => conditionOps[op]({ value, answer: flags }));
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'meals': {
-        return conditionOps[op]({ value, answer: store.data.meals.length });
-      }
-      case 'promptAnswer': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({
-              value,
-              answer: store.data.customPromptAnswers[props.promptId],
-            });
-          case 'meal':
-            return conditionOps[op]({
-              value,
-              answer: mealState.customPromptAnswers[props.promptId],
-            });
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'property':
-        return checkProperty(store, condition);
-      case 'recallNumber':
-        return checkRecallNumber(store, condition);
-      default:
-        console.error(`Unexpected condition type: ${condition}`);
-        return false;
-    }
-  });
-}
-
 function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodState, withSelection: Selection | null, prompt: Prompt): boolean {
   const { component } = prompt;
   const selection = withSelection || surveyState.data.selection;
@@ -778,89 +643,156 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
   }
 }
 
-function checkFoodCustomConditions(store: SurveyStore, mealState: MealState, foodState: FoodState, prompt: Prompt) {
-  return prompt.conditions.every((condition) => {
-    const { op, props, type, value } = condition;
+function getSurveyCompletionState(store: SurveyStore): MealCompletionState | undefined {
+  if (surveyMealsComplete(store.data))
+    return 'complete';
+  if (surveyPortionSizeComplete(store.data))
+    return 'portionSizeComplete';
+  if (surveySearchComplete(store.data))
+    return 'searchComplete';
+  if (surveyFreeEntryComplete(store.data))
+    return 'freeEntryComplete';
+  return undefined;
+}
 
-    switch (type) {
-      case 'drinks': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({ value, answer: surveyDrinks(0, store.data.meals) });
-          case 'meal':
-            return conditionOps[op]({ value, answer: mealDrinks(0, mealState) });
-          case 'food':
-            return conditionOps[op]({ value, answer: foodDrinks(0, foodState) });
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
+function getMealCompletionState(meal: MealState): MealCompletionState | undefined {
+  if (mealComplete(meal))
+    return 'complete';
+  if (mealPortionSizeComplete(meal))
+    return 'portionSizeComplete';
+  if (mealSearchComplete(meal))
+    return 'searchComplete';
+  if (mealFreeEntryComplete(meal))
+    return 'freeEntryComplete';
+  return undefined;
+}
+
+function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt) {
+  function requireMeal(conditionId: string): MealState {
+    if (mealState === undefined)
+      throw new Error(`Condition "${conditionId}" in prompt "${prompt.id}" refers to the current meal, but a meal is currently not selected`);
+    return mealState;
+  }
+
+  function requireFood(conditionId: string): FoodState {
+    if (foodState === undefined)
+      throw new Error(`Condition "${conditionId}" in prompt "${prompt.id}" refers to the current food, but a food is currently not selected`);
+    return foodState;
+  }
+
+  try {
+    return prompt.conditions.every((condition) => {
+      switch (condition.property.id) {
+        case 'drinks': {
+          let drinksEntered = false;
+          switch (condition.object) {
+            case 'survey':
+              drinksEntered = surveyDrinks(0, store.meals) > 0;
+              break;
+            case 'meal':
+              drinksEntered = mealDrinks(0, requireMeal(condition.property.id)) > 0;
+              break;
+            case 'food':
+              drinksEntered = foodDrinks(0, requireFood(condition.property.id)) > 0;
+              break;
+          }
+          return drinksEntered === condition.property.check.value;
+        }
+        case 'energy': {
+          let energy = 0;
+          switch (condition.object) {
+            case 'survey':
+              energy = surveyEnergy(0, store.meals);
+              break;
+            case 'meal':
+              energy = mealEnergy(0, requireMeal(condition.property.id));
+              break;
+            case 'food':
+              energy = foodEnergy(0, requireFood(condition.property.id));
+              break;
+          }
+          return conditionOps[condition.property.check.op]({
+            answer: energy,
+            value: condition.property.check.value,
+          });
+        }
+        case 'flag': {
+          let flag = false;
+          switch (condition.object) {
+            case 'survey':
+              flag = store.hasFlag(condition.property.check.flagId as SurveyFlag);
+              break;
+            case 'meal':
+              flag = requireMeal(condition.property.id).flags.includes(condition.property.check.flagId as MealFlag);
+              break;
+            case 'food':
+              flag = requireFood(condition.property.id).flags.includes(condition.property.check.flagId as FoodFlag);
+              break;
+          }
+          return flag === condition.property.check.value;
+        }
+        case 'promptAnswer': {
+          let answer;
+          switch (condition.object) {
+            case 'survey':
+              answer = store.data.customPromptAnswers[condition.property.check.promptId];
+              break;
+            case 'meal':
+              answer = requireMeal(condition.property.id).customPromptAnswers[condition.property.check.promptId];
+              break;
+            case 'food':
+              answer = requireFood(condition.property.id).customPromptAnswers[condition.property.check.promptId];
+              break;
+          }
+          return conditionOps[condition.property.check.op]({
+            answer,
+            value: condition.property.check.value,
+          });
+        }
+        case 'recallNumber': {
+          return conditionOps[condition.property.check.op]({
+            answer: store.recallNumber,
+            value: condition.property.check.value,
+          });
+        }
+        case 'userName':
+          return conditionOps[condition.property.check.op]({
+            answer: store.user?.userId ?? null,
+            value: condition.property.check.value,
+          });
+        case 'mealCompletion': {
+          let completionState: MealCompletionState | undefined;
+          switch (condition.object) {
+            case 'survey':
+              completionState = getSurveyCompletionState(store);
+              break;
+            case 'meal':
+              completionState = getMealCompletionState(requireMeal(condition.property.id));
+              break;
+            case 'food':
+              break;
+          }
+          if (completionState === undefined)
             return false;
+          return mealCompletionStateOptions.indexOf(condition.property.check.completionState) <= mealCompletionStateOptions.indexOf(completionState);
+        }
+        case 'foodCategory': {
+          const food = requireFood(condition.property.id);
+          if (food.type !== 'encoded-food')
+            return false;
+          return conditionOps[condition.property.check.op]({
+            answer: food.data.categories,
+            value: condition.property.check.value,
+          });
         }
       }
-      case 'energy': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({ value, answer: surveyEnergy(0, store.data.meals) });
-          case 'meal':
-            return conditionOps[op]({ value, answer: mealEnergy(0, mealState) });
-          case 'food':
-            return conditionOps[op]({ value, answer: foodEnergy(0, foodState) });
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'flag': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({ value, answer: store.data.flags });
-          case 'meal':
-            return conditionOps[op]({ value, answer: mealState.flags });
-          case 'food':
-            return conditionOps[op]({ value, answer: foodState.flags });
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'foodCategory': {
-        if (foodState.type !== 'encoded-food')
-          return false;
-        return conditionOps[op]({ value, answer: foodState.data.categories });
-      }
-      case 'meals': {
-        return conditionOps[op]({ value, answer: store.data.meals.length });
-      }
-      case 'promptAnswer': {
-        switch (props.section) {
-          case 'survey':
-            return conditionOps[op]({
-              value,
-              answer: store.data.customPromptAnswers[props.promptId],
-            });
-          case 'meal':
-            return conditionOps[op]({
-              value,
-              answer: mealState.customPromptAnswers[props.promptId],
-            });
-          case 'food':
-            return conditionOps[op]({
-              value,
-              answer: foodState.customPromptAnswers[props.promptId],
-            });
-          default:
-            console.error(`Unexpected condition: ${type} & ${props.section}`);
-            return false;
-        }
-      }
-      case 'property':
-        return checkProperty(store, condition);
-      case 'recallNumber':
-        return checkRecallNumber(store, condition);
-      default:
-        console.error(`Unexpected condition type: ${condition}`);
-        return false;
-    }
-  });
+      throw new Error(`Prompt condition didn't match any switch branches`);
+    });
+  }
+  catch (e) {
+    console.error(`Invalid prompt condition`, e);
+    return false;
+  }
 }
 
 function checkGraphConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt): boolean {
@@ -879,7 +811,7 @@ function checkGraphConditions(store: SurveyStore, mealState: MealState | undefin
   const propertyNode = propertyNodes[0];
 
   for (const contextNode of graph.findNodesByType<PromptContextNode>('Prompt/Context')) {
-    contextNode.setValues(store.currentState, foodState, mealState);
+    contextNode.setValues(store.recallNumber, store.currentState, foodState, mealState);
   }
 
   graph.runStep();
@@ -915,7 +847,7 @@ export default class PromptManager {
     return this.scheme.prompts.meals.foods.find(
       prompt =>
         prompt.component === type
-        && checkFoodCustomConditions(this.store, mealState, foodState, prompt)
+        && checkPromptCustomConditions(this.store, mealState, foodState, prompt)
         && checkGraphConditions(this.store, mealState, foodState, prompt),
     );
   }
@@ -929,13 +861,13 @@ export default class PromptManager {
     const meal = findMeal(state.data.meals, mealId);
 
     return this.scheme.prompts.meals[section].find(
-      prompt => prompt.component === type && checkMealCustomConditions(this.store, meal, prompt) && checkGraphConditions(this.store, meal, undefined, prompt),
+      prompt => prompt.component === type && checkPromptCustomConditions(this.store, meal, undefined, prompt) && checkGraphConditions(this.store, meal, undefined, prompt),
     );
   }
 
   findSurveyPromptOfType(type: ComponentType, section: SurveyPromptSection): Prompt | undefined {
     return this.scheme.prompts[section].find(
-      prompt => prompt.component === type && checkSurveyCustomConditions(this.store, prompt),
+      prompt => prompt.component === type && checkPromptCustomConditions(this.store, undefined, undefined, prompt) && checkGraphConditions(this.store, undefined, undefined, prompt),
     );
   }
 
@@ -943,7 +875,7 @@ export default class PromptManager {
     return this.scheme.prompts[section].find(
       prompt =>
         checkSurveyStandardConditions(this.store.$state, prompt)
-        && checkSurveyCustomConditions(this.store, prompt)
+        && checkPromptCustomConditions(this.store, undefined, undefined, prompt)
         && checkGraphConditions(this.store, undefined, undefined, prompt),
     );
   }
@@ -964,7 +896,7 @@ export default class PromptManager {
     return this.scheme.prompts.meals[section].find(
       prompt =>
         checkMealStandardConditions(state, meal, withSelection, prompt)
-        && checkMealCustomConditions(this.store, meal, prompt)
+        && checkPromptCustomConditions(this.store, meal, undefined, prompt)
         && checkGraphConditions(this.store, meal, undefined, prompt),
     );
   }
@@ -979,7 +911,7 @@ export default class PromptManager {
     return this.scheme.prompts.meals.foods.find(
       prompt =>
         checkFoodStandardConditions(state, foodState, withSelection, prompt)
-        && checkFoodCustomConditions(this.store, mealState, foodState, prompt)
+        && checkPromptCustomConditions(this.store, mealState, foodState, prompt)
         && checkGraphConditions(this.store, mealState, foodState, prompt),
     );
   }

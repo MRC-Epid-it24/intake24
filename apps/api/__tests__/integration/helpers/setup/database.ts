@@ -167,6 +167,7 @@ export async function initDatabase(): Promise<MockData> {
       name: 'Default',
       type: 'default',
       visibility: 'public',
+      version: 2,
       prompts: defaultPrompts,
       meals: [...defaultMeals],
       dataExport: defaultExport,
