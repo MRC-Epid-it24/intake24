@@ -88,6 +88,7 @@ export type SurveySchemeForm = {
   id: string | null;
   name: string | null;
   type: SchemeType;
+  version: number;
   prompts: RecallPrompts;
   meals: Meal[];
   dataExport: ExportSection[];
@@ -96,7 +97,7 @@ export type SurveySchemeForm = {
 
 export type PatchSurveySchemeForm = Pick<
   SurveySchemeForm,
-  'name' | 'type' | 'meals' | 'visibility'
+  'name' | 'version' | 'type' | 'meals' | 'visibility'
 >;
 
 export default defineComponent({
@@ -126,7 +127,7 @@ export default defineComponent({
       PatchSurveySchemeForm,
       SurveySchemeEntry
     >(props, {
-      data: { name: null, type: 'default', meals: defaultMeals, visibility: 'public' },
+      data: { name: null, version: 2, type: 'default', meals: defaultMeals, visibility: 'public' },
       editMethod: 'patch',
     });
 

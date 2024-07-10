@@ -86,35 +86,59 @@
     "title": "Conditions",
     "add": "New condition",
     "remove": "Remove condition",
-    "properties": {
-      "_": "Property",
-      "title": "Properties",
-      "recallNumber": "Recall number",
-      "userName": "User's name"
+    "object": {
+      "_": "Condition object",
+      "title": "Condition object",
+      "food": "Current food",
+      "meal": "Current meal",
+      "survey": "Current recall"
     },
-    "sections": {
-      "_": "Section",
-      "title": "Sections",
-      "food": "Food",
-      "meal": "Meal",
-      "survey": "Survey"
-    },
-    "types": {
-      "_": "Condition type",
-      "title": "Condition types",
-      "drinks": "Drinks",
-      "energy": "Energy",
+    "property": {
+      "_": "Condition property",
+      "title": "Condition properties",
+      "drinks": "Drinks reported",
+      "energy": "Energy value",
       "flag": "Flag",
       "foodCategory": "Food category",
       "meals": "Meals",
       "promptAnswer": "Prompt answer",
       "property": "Property value",
-      "recallNumber": "Recall number"
+      "recallNumber": "Recall number",
+      "userName": "Participant ID",
+      "mealCompletion": "Completion state"
+    },
+    "mealCompletion": {
+      "freeEntryComplete": "Free text entry complete",
+      "searchComplete": "Identification complete",
+      "portionSizeComplete": "Portion size estimation complete",
+      "complete": "Associated food prompts complete"
+    },
+    "flag": {
+      "id": "Flag ID",
+      "showIfSet": "Show if set"
+    },
+    "summary": {
+      "value": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
+      "boolean": "<em><strong>{property}</strong></em> in <em><strong>{object}</strong></em>: {value}",
+      "mealCompletion": {
+        "freeEntryComplete": "<em><strong>free text entry</em></strong> of foods for the <em><strong>{object}</strong></em> is complete",
+        "searchComplete": "<em><strong>identification</em></strong> of foods in the <em><strong>{object}</strong></em> is complete",
+        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> of foods in the <em><strong>{object}</strong></em> is complete",
+        "complete": "<em><strong>associated food prompts</em></strong> in the <em><strong>{object}</strong></em> are complete"
+      },
+      "flag": {
+        "set": "flag <em><strong>{id}</strong></em> set in <em><strong>{object}</strong></em>",
+        "notSet": "flag <em><strong>{id}</strong></em> not set in <em><strong>{object}</strong></em>"
+      },
+      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>"
+    },
+    "promptAnswer": {
+      "promptId": "Prompt ID"
     },
     "exTypes": {
-      "drinks": "Drinks ({section})",
-      "energy": "Energy ({section})",
-      "flag": "Flag ({section})",
+      "drinks": "Drinks reported in {section}",
+      "energy": "Energy value of {section}",
+      "flag": "Flag {flagId} set in {section}",
       "foodCategory": "Food category",
       "meals": "Meals",
       "promptAnswer": "Prompt answer {section}: {promptId}",
@@ -124,6 +148,7 @@
     "ops": {
       "_": "Operation",
       "eq": "equal",
+      "setEq": "same set of values",
       "ne": "not equal",
       "in": "is in",
       "notIn": "is not in",
@@ -133,8 +158,8 @@
       "lt": "less than"
     },
     "value": "Condition value",
-    "promptId": "Prompt ID",
-    "showIf": "Show prompt if: "
+    "showIf": "Show prompt if: ",
+    "showIfTrue": "Show if true"
   },
   "data-export": {
     "_": "Data export",

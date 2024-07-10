@@ -132,7 +132,7 @@
               :i18n.sync="dialog.prompt.i18n"
             />
             <prompt-actions :actions.sync="dialog.prompt.actions" />
-            <prompt-conditions :conditions.sync="dialog.prompt.conditions" />
+            <prompt-conditions :conditions.sync="dialog.prompt.conditions" :prompt-section="section" />
             <prompt-graph :graph.sync="dialog.prompt.graph" :use-graph.sync="dialog.prompt.useGraph" />
             <prompt-validation
               v-if="

@@ -198,11 +198,12 @@ export function surveyScheme() {
         });
 
         const { name } = body;
-        const { type, visibility, prompts, meals, dataExport } = surveyScheme;
+        const { type, version, visibility, prompts, meals, dataExport } = surveyScheme;
 
         const surveySchemeCopy = await SurveyScheme.create({
           name,
           type,
+          version,
           visibility,
           prompts,
           meals,

@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import type { PortionSizeMethodId } from '../surveys';
-import { localeOptionList, localeTranslation } from '../types';
-import { actions, promptLayouts } from './actions';
+import type { PortionSizeMethodId } from '../../surveys';
+import { localeOptionList, localeTranslation } from '../../types';
+import { actions, promptLayouts } from '../actions';
 import { condition } from './conditions';
 
 export const radioOrientations = ['column', 'row'] as const;
@@ -100,8 +100,6 @@ export const basePrompt = z.object({
   i18n: z.record(localeTranslation),
   actions: actions.optional(),
   conditions: condition.array(),
-  useGraph: z.boolean(),
-  graph: z.any().optional(),
 });
 
 export type BasePrompt = z.infer<typeof basePrompt>;

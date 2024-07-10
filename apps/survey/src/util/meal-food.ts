@@ -118,6 +118,10 @@ export function foodComplete(food: FoodState) {
   return foodTypeChecks[food.type](food);
 }
 
+export function foodSearchComplete(food: FoodState) {
+  return food.type !== 'free-text';
+}
+
 export function mealComplete(meal: MealState) {
   return !!meal.foods.length && meal.foods.every(foodComplete);
 }
@@ -126,10 +130,39 @@ export function mealPortionSizeComplete(meal: MealState) {
   return !!meal.foods.length && meal.foods.every(foodPortionSizeComplete);
 }
 
+export function mealSearchComplete(meal: MealState) {
+  return !!meal.foods.length && meal.foods.every(foodSearchComplete);
+}
+
+export function mealFreeEntryComplete(meal: MealState) {
+  return meal.flags.includes('free-entry-complete');
+}
+
 export function surveyFreeEntryComplete(survey: SurveyState) {
   return (
     !!survey.meals.length
-    && survey.meals.every(meal => meal.flags.includes('free-entry-complete'))
+    && survey.meals.every(meal => mealFreeEntryComplete(meal))
+  );
+}
+
+export function surveyPortionSizeComplete(survey: SurveyState) {
+  return (
+    !!survey.meals.length
+    && survey.meals.every(meal => mealPortionSizeComplete(meal))
+  );
+}
+
+export function surveySearchComplete(survey: SurveyState) {
+  return (
+    !!survey.meals.length
+    && survey.meals.every(meal => mealSearchComplete(meal))
+  );
+}
+
+export function surveyMealsComplete(survey: SurveyState) {
+  return (
+    !!survey.meals.length
+    && survey.meals.every(meal => mealComplete(meal))
   );
 }
 

@@ -1,15 +1,17 @@
-import NoopProps from './noop-props.vue';
-import PromptAnswerProps from './prompt-answer-props.vue';
-import PropertyProps from './property-props.vue';
-import SectionProps from './section-props.vue';
+import BooleanPropertyCheck from './boolean-check.vue';
+import FlagPropertyCheck from './flag-check.vue';
+import MealCompletionPropertyCheck from './meal-completion-check.vue';
+import PromptAnswerPropertyCheck from './prompt-answer-check.vue';
+import Summary from './summary.vue';
+import ValuePropertyCheck from './value-check.vue';
 
 export default {
-  drinks: SectionProps,
-  energy: SectionProps,
-  flag: SectionProps,
-  foodCategory: NoopProps,
-  meals: NoopProps,
-  promptAnswer: PromptAnswerProps,
-  property: PropertyProps,
-  recallNumber: NoopProps,
+  check: {
+    value: ValuePropertyCheck,
+    boolean: BooleanPropertyCheck,
+    mealCompletion: MealCompletionPropertyCheck,
+    flag: FlagPropertyCheck,
+    promptAnswer: PromptAnswerPropertyCheck,
+  },
+  summary: Summary,
 };

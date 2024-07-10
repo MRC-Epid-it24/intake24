@@ -1,6 +1,6 @@
 <template>
   <v-tab-item key="conditions" value="conditions">
-    <v-tabs vertical>
+    <v-tabs v-model="selectedCondition" vertical>
       <v-btn class="my-4" color="primary" @click="add">
         <v-icon left>
           $add
@@ -13,7 +13,7 @@
             <v-icon left>
               fas fa-location-arrow
             </v-icon>
-            {{ $t(`survey-schemes.conditions.types.${condition.type}`) }}
+            {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
           </v-tab>
         </transition-group>
       </draggable>
@@ -23,76 +23,56 @@
             <v-icon left>
               fas fa-location-arrow
             </v-icon>
-            {{ $t(`survey-schemes.conditions.types.${condition.type}`) }}
+            {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
           </v-card-title>
           <v-card-text class="px-0">
-            <code class="pa-5 d-flex">
-              {{ $t(`survey-schemes.conditions.showIf`) }}
-              '{{
-                $t(`survey-schemes.conditions.exTypes.${condition.type}`, {
-                  ...condition.props,
-                })
-              }}'
-              <v-icon left right small>{{ opToIconMap[condition.op] }}</v-icon>
-              '{{ condition.value }}'
-            </code>
+            <condition-summary :condition="condition" />
           </v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
                 <v-select
-                  v-model="condition.type"
                   hide-details="auto"
-                  item-value="type"
-                  :items="conditionSelectList"
-                  :label="$t('survey-schemes.conditions.types._')"
+                  item-value="object"
+                  :items="objectSelectList"
+                  :label="$t('survey-schemes.conditions.object._')"
                   outlined
-                  @change="updatePromptCondition(idx, $event)"
-                />
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-select
-                  v-model="condition.op"
-                  hide-details="auto"
-                  item-value="op"
-                  :items="operationSelectList"
-                  :label="$t('survey-schemes.conditions.ops._')"
-                  outlined
-                  @change="updateValueType(idx)"
-                >
-                  <template #item="{ item }">
-                    <v-icon left>
-                      {{ opToIconMap[item.op] }}
-                    </v-icon>
-                    {{ item.text }}
-                  </template>
-                  <template #selection="{ item }">
-                    <v-icon left>
-                      {{ opToIconMap[item.op] }}
-                    </v-icon>
-                    {{ item.text }}
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="6">
-                <component
-                  :is="comboOps.includes(condition.op) ? 'v-combobox' : 'v-text-field'"
-                  v-model="condition.value"
-                  hide-details="auto"
-                  :label="$t('survey-schemes.conditions.value')"
-                  multiple
-                  outlined
+                  :value="condition.object"
+                  @change="updatePromptConditionObject(idx, $event)"
                 />
               </v-col>
             </v-row>
-            <component :is="condition.type" v-bind.sync="condition.props" />
+            <v-row>
+              <v-col cols="12">
+                <v-select
+                  hide-details="auto"
+                  item-value="type"
+                  :items="propertySelectList[condition.object]"
+                  :label="$t('survey-schemes.conditions.property._')"
+                  outlined
+                  :value="condition.property.id"
+                  @change="updatePromptConditionProperty(idx, $event)"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col class="pa-0" cols="12">
+                <v-card flat>
+                  <v-card-title>Condition</v-card-title>
+                  <v-card-text>
+                    <component :is="condition.property.type" :value.sync="condition.property.check" />
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-container>
           <v-card-actions>
             <v-spacer />
             <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
               <v-icon left>
                 $delete
-              </v-icon>{{ $t('survey-schemes.conditions.remove') }}
+              </v-icon>
+              {{ $t('survey-schemes.conditions.remove') }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -101,102 +81,183 @@
   </v-tab-item>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
+import { mapValues } from 'lodash';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
-import { VCombobox, VTextField } from 'vuetify/lib';
 
-import type { Condition, ConditionOp, ConditionType } from '@intake24/common/prompts';
 import { withIdList } from '@intake24/admin/util';
-import { conditionOps } from '@intake24/common/prompts';
-import { copy, randomString } from '@intake24/common/util';
+import {
+  type BooleanProperty,
+  type Condition,
+  type ConditionObjectId,
+  conditionObjectIds,
+  conditionObjectPropertyIds,
+  type DrinksProperty,
+  type EnergyProperty,
+  type FlagProperty,
+  type ObjectProperty,
+  type ObjectPropertyId,
+  type PromptAnswerProperty,
+  type ValueProperty,
+} from '@intake24/common/prompts';
+import { mealSections, type PromptSection } from '@intake24/common/surveys';
+import { randomString } from '@intake24/common/util';
+import { copy } from '@intake24/common/util/objects';
 
-import conditionProps from './conditions';
+import conditionPartials from './conditions';
 
-const opToIconMap: Record<ConditionOp, string> = {
-  eq: 'fas fa-equals',
-  ne: 'fas fa-not-equal',
-  in: 'far fa-circle-dot',
-  notIn: 'far fa-circle',
-  gte: 'fas fa-greater-than-equal',
-  gt: 'fas fa-greater-than',
-  lte: 'fas fa-less-than-equal',
-  lt: 'fas fa-less-than',
+const valuePropertyDefaults: ValueProperty = {
+  type: 'value',
+  check: {
+    op: 'eq',
+    value: null,
+  },
 };
 
-const promptConditions: Condition[] = [
-  {
-    type: 'drinks',
-    op: 'eq',
-    value: '',
-    props: {
-      section: 'survey',
-    },
+const booleanPropertyDefaults: BooleanProperty = {
+  type: 'boolean',
+  check: {
+    value: true,
   },
-  {
-    type: 'energy',
-    op: 'eq',
-    value: '',
-    props: {
-      section: 'survey',
-    },
+};
+
+type CommonPropertyDefaults = {
+  drinks: DrinksProperty;
+  energy: EnergyProperty;
+  flag: FlagProperty;
+  promptAnswer: PromptAnswerProperty;
+};
+
+const commonPropertyDefaults: CommonPropertyDefaults = {
+  drinks: {
+    id: 'drinks',
+    ...booleanPropertyDefaults,
   },
-  {
+  energy: {
+    id: 'energy',
+    ...valuePropertyDefaults,
+  },
+  flag: {
+    id: 'flag',
     type: 'flag',
-    op: 'eq',
-    value: '',
-    props: {
-      section: 'survey',
+    check: {
+      flagId: '',
+      value: true,
     },
   },
-  {
-    type: 'foodCategory',
-    op: 'eq',
-    value: '',
-    props: {},
-  },
-  {
-    type: 'meals',
-    op: 'eq',
-    value: '',
-    props: {},
-  },
-  {
+  promptAnswer: {
+    id: 'promptAnswer',
     type: 'promptAnswer',
-    op: 'eq',
-    value: '',
-    props: {
+    check: {
       promptId: '',
-      section: 'survey',
+      op: 'eq',
+      value: null,
     },
   },
-  {
-    type: 'recallNumber',
-    op: 'eq',
-    value: '',
-    props: {},
-  },
-  {
-    type: 'property',
-    op: 'eq',
-    value: '',
-    props: {
-      name: 'userName',
+};
+
+type PromptConditionDefaults = {
+  survey: Record<ObjectPropertyId<'survey'>, ObjectProperty<'survey'>>;
+  meal: Record<ObjectPropertyId<'meal'>, ObjectProperty<'meal'>>;
+  food: Record<ObjectPropertyId<'food'>, ObjectProperty<'food'>>;
+};
+
+const promptConditionDefaults: PromptConditionDefaults = {
+  survey: {
+    ...commonPropertyDefaults,
+    mealCompletion: {
+      id: 'mealCompletion',
+      type: 'mealCompletion',
+      check: {
+        completionState: 'searchComplete',
+      },
+    },
+    recallNumber: {
+      id: 'recallNumber',
+      ...valuePropertyDefaults,
+    },
+    userName: {
+      id: 'userName',
+      ...valuePropertyDefaults,
     },
   },
-];
+  meal: {
+    ...commonPropertyDefaults,
+    mealCompletion: {
+      id: 'mealCompletion',
+      type: 'mealCompletion',
+      check: {
+        completionState: 'searchComplete',
+      },
+    },
+  },
+  food: {
+    ...commonPropertyDefaults,
+    foodCategory: {
+      id: 'foodCategory',
+      ...valuePropertyDefaults,
+    },
+  },
+};
+
+function objectHasProperty(objectId: ConditionObjectId, propertyId: string): boolean {
+  const propertyIds = conditionObjectPropertyIds.get(objectId);
+
+  if (propertyIds === undefined)
+    throw new Error(`Unexpected condition object id: ${objectId}, expected one of ${conditionObjectIds.join(', ')}`);
+
+  return (propertyIds as string[]).includes(propertyId);
+}
+
+function getConditionDefaults<T extends ConditionObjectId>(object: T, id: ObjectPropertyId<T>): Condition {
+  // TypeScript won't allow doing simply promptConditionDefaults[object][id]
+  // so have to do this manually
+  switch (object) {
+    case 'survey':
+      return {
+        object: 'survey',
+        property: promptConditionDefaults.survey[id],
+      };
+    case 'meal':
+      return {
+        object: 'meal',
+        property: promptConditionDefaults.meal[id],
+      };
+    case 'food':
+      return {
+        object: 'food',
+        property: promptConditionDefaults.food[id],
+      };
+    default:
+      throw new Error(`Unexpected context argument: ${object}`);
+  }
+}
+
+function getDefaultProperty<T extends ConditionObjectId>(objectId: T): ObjectPropertyId<T> {
+  const propertyIds = conditionObjectPropertyIds.get(objectId);
+
+  if (propertyIds === undefined)
+    throw new Error(`Unexpected condition object id: ${objectId}, expected one of ${conditionObjectIds.join(', ')}`);
+
+  return propertyIds[0] as ObjectPropertyId<T>; // See conditionObjectPropertyIds definition
+}
 
 export default defineComponent({
   name: 'PromptConditions',
 
-  components: { VTextField, VCombobox, Draggable: draggable, ...conditionProps },
+  components: { Draggable: draggable, ...conditionPartials.check, ConditionSummary: conditionPartials.summary },
 
   props: {
     conditions: {
       type: Array as PropType<Condition[]>,
       required: true,
+    },
+    promptSection: {
+      type: String as PropType<PromptSection>,
+      required: false,
     },
   },
 
@@ -204,26 +265,30 @@ export default defineComponent({
 
   data() {
     return {
-      comboOps: ['eq', 'ne', 'in', 'notIn'],
       currentConditions: withIdList(this.conditions),
-      promptConditions,
-      opToIconMap,
+      selectedCondition: 0,
     };
   },
 
   computed: {
-    conditionSelectList(): { type: string; text: string }[] {
-      return this.promptConditions.map(({ type }) => ({
-        type,
-        text: this.$t(`survey-schemes.conditions.types.${type}`).toString(),
-      }));
+    objectSelectList(): { object: ConditionObjectId; text: string }[] {
+      const allowedObjects: ConditionObjectId[] = ['survey'];
+
+      if (this.promptSection !== undefined) {
+        if ((mealSections as readonly string[]).includes(this.promptSection))
+          allowedObjects.push('meal');
+
+        if (this.promptSection === 'foods')
+          allowedObjects.push('food');
+      }
+
+      return allowedObjects.map (object => ({ object, text: this.$t(`survey-schemes.conditions.object.${object}`).toString() }));
     },
-    operationSelectList(): { op: string; text: string }[] {
-      return Object.keys(conditionOps).map(op => ({
-        op,
-        text: this.$t(`survey-schemes.conditions.ops.${op}`).toString(),
-      }));
+
+    propertySelectList(): Record<ConditionObjectId, { type: string; text: string }[]> {
+      return mapValues(promptConditionDefaults, properties => Object.keys(properties).map(id => ({ type: id, text: this.$t(`survey-schemes.conditions.property.${id}`).toString() })));
     },
+
     outputConditions(): Condition[] {
       return this.currentConditions.map(({ id, ...rest }) => rest);
     },
@@ -245,20 +310,53 @@ export default defineComponent({
   },
 
   methods: {
-    updatePromptCondition(idx: number, type: ConditionType) {
-      const condition = this.promptConditions.find(item => item.type === type);
-      if (!condition)
+    updatePromptConditionObject(idx: number, newObjectId: ConditionObjectId) {
+      const currentCondition = this.currentConditions[idx];
+
+      if (currentCondition.object === newObjectId)
+        return;
+
+      // If currently selected property is compatible with the new object, keep current property settings
+      if (objectHasProperty(newObjectId, currentCondition.property.id)) {
+        this.currentConditions.splice(
+          idx,
+          1,
+          // Type cast required since we don't know if new object has the same property at compile time
+          copy({ ...currentCondition, object: newObjectId } as Condition & { id: string }),
+        );
+      }
+      // Otherwise reset it to default property for that object
+      else {
+        this.currentConditions.splice(
+          idx,
+          1,
+          copy({ ...getConditionDefaults(newObjectId, getDefaultProperty(newObjectId)), id: currentCondition.id }),
+        );
+      }
+    },
+
+    updatePromptConditionProperty(idx: number, newPropertyId: string) {
+      const currentCondition = this.currentConditions[idx];
+
+      if (currentCondition.property.id === newPropertyId)
         return;
 
       this.currentConditions.splice(
         idx,
         1,
-        copy({ ...condition, id: this.currentConditions[idx].id }),
+        copy({ ...getConditionDefaults(currentCondition.object, newPropertyId as ObjectPropertyId<ConditionObjectId>), id: currentCondition.id }),
       );
     },
 
     add() {
-      this.currentConditions.push(copy({ ...this.promptConditions[0], id: randomString(6) }));
+      const defaultObject = conditionObjectIds[0];
+
+      const length = this.currentConditions.push(copy({
+        id: randomString(6),
+        ...getConditionDefaults(defaultObject, getDefaultProperty(defaultObject)),
+      }));
+
+      this.selectedCondition = length - 1;
     },
 
     remove(index: number) {
@@ -268,20 +366,8 @@ export default defineComponent({
     update() {
       this.$emit('update:conditions', this.outputConditions);
     },
-
-    updateValueType(idx: number) {
-      const condition = this.currentConditions[idx];
-
-      if (this.comboOps.includes(condition.op) && !Array.isArray(condition.value)) {
-        this.currentConditions[idx].value = condition.value ? [condition.value] : [];
-        return;
-      }
-
-      if (!this.comboOps.includes(condition.op) && typeof condition.value !== 'string')
-        this.currentConditions[idx].value = condition.value.toString();
-    },
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang='scss' scoped></style>

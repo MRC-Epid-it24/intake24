@@ -230,6 +230,7 @@ function surveyScheme(): SurveySchemeCreationAttributes {
     name,
     type,
     visibility,
+    version: 2,
     prompts: defaultPrompts,
     meals: defaultMeals,
     dataExport: defaultExport,
