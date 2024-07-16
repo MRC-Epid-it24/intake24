@@ -2,7 +2,7 @@ import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportSection, Meal, RecallPrompts } from '@intake24/common/surveys';
-import { portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
+import { customPrompts, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { SurveyScheme } from '@intake24/db';
 
@@ -49,7 +49,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
   The migration functions return an update object that will bring the JSON columns to the next (not necessarily
   immediately the latest) version. Again, since all Sequelize model does is JSON.stringify, we can feed it
-  intermediate data that does not match the latest type, as long as we write the correct type in the end.
+  intermediate data that does not match the latest type as long as we write the correct type in the end.
   */
   private async applyMigrations(scheme: SurveyScheme): Promise<void> {
     let nextMigration = migrations[scheme.version];
@@ -62,7 +62,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
   }
 
   private getPromptMap() {
-    return [...standardPrompts, ...portionSizePrompts].reduce<
+    return [...standardPrompts, ...portionSizePrompts, ...customPrompts].reduce<
       Record<string, SinglePrompt>
     >((acc, prompt) => {
       acc[prompt.component] = prompt;
