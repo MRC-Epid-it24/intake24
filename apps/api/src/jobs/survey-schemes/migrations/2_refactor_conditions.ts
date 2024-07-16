@@ -150,31 +150,36 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
 function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): SinglePromptV2 {
   const conditions = prompt.conditions.map(condition => migrateCondition(condition, section));
 
-  return {
-    ...prompt,
-    useGraph: false,
-    conditions,
-  };
+  switch (prompt.component) {
+    case 'missing-food-prompt':
+      return {
+        ...prompt,
+        useGraph: false,
+        conditions,
+        barcode: { type: 'none' },
+      };
+    default:
+      return {
+        ...prompt,
+        useGraph: false,
+        conditions,
+      };
+  }
 }
 
 function migratePrompt(prompt: PromptV1, section: PromptSection): PromptV2 {
-  const conditions = prompt.conditions.map(condition => migrateCondition(condition, section));
-
   if (prompt.component === 'multi-prompt') {
     const subPrompts = prompt.prompts.map(p => migrateSinglePrompt(p, section));
     return {
       ...prompt,
       prompts: subPrompts,
       useGraph: false,
-      conditions,
+      conditions: prompt.conditions.map(condition => migrateCondition(condition, section)),
     };
   }
-
-  return {
-    ...prompt,
-    useGraph: false,
-    conditions,
-  };
+  else {
+    return migrateSinglePrompt(prompt, section);
+  }
 }
 
 function migrateScheme(scheme: SurveyScheme): object {
