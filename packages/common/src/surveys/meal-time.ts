@@ -1,4 +1,4 @@
-import type { Prompts } from '@intake24/common/prompts/v1';
+import type { Prompts } from '@intake24/common/prompts';
 import type { MealState, MealTime } from '@intake24/common/types';
 
 export function fromMealTime(time: MealTime, doubleDigit = true): string {
