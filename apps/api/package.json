@@ -122,7 +122,7 @@
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "nodemon": "^3.1.4",
     "nodemon-webpack-plugin": "^4.8.2",
-    "rimraf": "^5.0.7",
+    "rimraf": "^6.0.1",
     "supertest": "^7.0.0",
     "ts-loader": "^9.5.1",
     "tsconfig-paths": "^4.2.0",
