@@ -95,9 +95,9 @@ export type PkgPortionSizeMethod =
 export interface PkgAssociatedFood {
   foodCode?: string;
   categoryCode?: string;
-  promptText: string;
+  promptText: Record<string, string>;
   linkAsMain: boolean;
-  genericName: string;
+  genericName: Record<string, string>;
 }
 
 export interface PkgLocalFood {

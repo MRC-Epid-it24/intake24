@@ -173,11 +173,11 @@ function packageLocale(locale: LocaleV3): PkgLocale {
   };
 }
 
-function packageAssociatedFood(assocFood: AssociatedFoodWithHeaderV3): PkgAssociatedFood {
+function packageAssociatedFood(language: string, assocFood: AssociatedFoodWithHeaderV3): PkgAssociatedFood {
   return {
     ...parseAssociatedFoodOrCategory(assocFood.foodOrCategoryHeader),
-    genericName: assocFood.genericName,
-    promptText: assocFood.promptText,
+    genericName: { [language]: assocFood.genericName },
+    promptText: { [language]: assocFood.promptText },
     linkAsMain: assocFood.linkAsMain,
   };
 }
@@ -286,14 +286,14 @@ function packagePortionSize(portionSize: PortionSizeMethodV3): PkgPortionSizeMet
   }
 }
 
-function packageLocalFood(code: string, localFood: LocalFoodRecordV3): PkgLocalFood {
+function packageLocalFood(code: string, language: string, localFood: LocalFoodRecordV3): PkgLocalFood {
   return {
     code,
     version: localFood.version ?? undefined,
     localDescription:
       localFood.localDescription.length === 1 ? localFood.localDescription[0] : undefined,
     alternativeNames: {},
-    associatedFoods: localFood.associatedFoods.map(packageAssociatedFood),
+    associatedFoods: localFood.associatedFoods.map(af => packageAssociatedFood(language, af)),
     brandNames: localFood.brandNames,
     nutrientTableCodes: localFood.nutrientTableCodes,
     portionSize: localFood.portionSize.map(packagePortionSize),
