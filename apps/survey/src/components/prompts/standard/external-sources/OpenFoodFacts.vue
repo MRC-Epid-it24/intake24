@@ -89,7 +89,7 @@
                 <div class="pa-2 white rounded">
                   <v-img
                     height="250px"
-                    :src="product.image_front_small_url"
+                    :src="resolveImageUrl(product)"
                   />
                 </div>
                 <v-card-title class="px-0">
@@ -199,6 +199,10 @@ export default defineComponent({
       translatePrompt(['search', 'back', 'results', 'none'], { results: { count: response.value?.count ?? 0 } }),
     );
 
+    const resolveImageUrl = (product: OOFProduct) => {
+      return product.image_front_small_url ?? Object.values(product.selected_images?.front?.small ?? {})[0];
+    };
+
     const getProductName = (product: OOFProduct, withQuantity = false) => {
       const name = product[`product_name_${lang.value}`] || product.product_name_en || product.product_name;
       return withQuantity && product.quantity ? `${name} (${product.quantity})` : name;
@@ -213,7 +217,7 @@ export default defineComponent({
       const genericName = selected.value[`generic_name_${lang.value}`] || selected.value.generic_name_en || selected.value.generic_name;
       const quantity = selected.value.quantity;
       const packaging = selected.value.packaging;
-      const url = selected.value.image_front_small_url;
+      const url = resolveImageUrl(selected.value);
 
       return {
         code,
@@ -260,6 +264,7 @@ export default defineComponent({
     const fetchProducts = async (search: string) => {
       const { data } = await client.get<OOFProductsResponse>(searchBaseUrl.value, {
         params: {
+          ...props.prompt.source.query,
           ...searchParams,
           search_terms: search,
           page: response.value?.page ?? 1,
@@ -320,6 +325,7 @@ export default defineComponent({
       getProductName,
       loading,
       promptI18n,
+      resolveImageUrl,
       response,
       search,
       searchTerm,

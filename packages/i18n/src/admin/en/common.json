@@ -89,6 +89,7 @@
     "title": "Option list",
     "add": "New option",
     "remove": "Remove option",
+    "key": "Key",
     "label": "Label",
     "value": "Value",
     "exclusive": "Exclusive"

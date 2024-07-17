@@ -28,7 +28,7 @@ export const externalSourcePrompt: Prompts['external-source-prompt'] = copy({
   type: 'standard',
   id: 'external-source-prompt',
   name: 'External source prompt',
-  source: { type: 'open-food-facts', country: 'world' },
+  source: { type: 'open-food-facts', country: 'world', query: {} },
   barcode: { type: 'none' },
 });
 

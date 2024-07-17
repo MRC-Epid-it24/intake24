@@ -86,6 +86,7 @@
     "title": "Liste des options",
     "add": "Nouvelle option",
     "remove": "Supprimer l'option",
+    "key": "Key",
     "label": "Libellé",
     "value": "Valeur",
     "exclusive": "Exclusive"

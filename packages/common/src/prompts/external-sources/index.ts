@@ -6,6 +6,7 @@ export type ExternalSource = typeof externalSources[number];
 export const openFoodFactsSource = z.object({
   type: z.literal('open-food-facts'),
   country: z.string(),
+  query: z.record(z.string()),
 });
 export type OpenFoodFactsSource = z.infer<typeof openFoodFactsSource>;
 
@@ -21,5 +22,6 @@ export const defaultExternalSourceOptions: Record<ExternalSource, ExternalSource
   'open-food-facts': {
     type: 'open-food-facts',
     country: 'world',
+    query: {},
   },
 };

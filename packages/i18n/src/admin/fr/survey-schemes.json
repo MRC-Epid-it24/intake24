@@ -257,6 +257,42 @@
       "noPrompts": "Pas d'invites de taille de portion disponibles pour cette section"
     },
     "badges": "Montrer les badges de quantité",
+    "barcodes": {
+      "_": "Barcode scanner",
+      "title": "Barcode scanner options",
+      "providers": {
+        "_": "Provider",
+        "title": "Providers",
+        "none": "None",
+        "quagga": "Quagga2",
+        "strich": "Strich"
+      },
+      "readers": {
+        "_": "Reader",
+        "title": "Readers"
+      },
+      "feedback": {
+        "_": "Feedback",
+        "audio": "Audio",
+        "vibration": "Vibration"
+      }
+    },
+    "externalSources": {
+      "_": "External source",
+      "title": "External source settings",
+      "sources": {
+        "_": "Source",
+        "title": "Sources",
+        "open-food-facts": "Open Food Facts"
+      },
+      "countries": {
+        "_": "Country",
+        "title": "Countries",
+        "world": "World",
+        "uk": "United Kingdom",
+        "fr": "France"
+      }
+    },
     "foodBrowser": {
       "_": "Food browser settings",
       "categoriesFirst": {
@@ -340,6 +376,10 @@
       "title": "Liste d'aliments",
       "subtitle": "Listez ou modifiez des aliments dans ce repas en tant que champ texte libre",
       "separateDrinks": "Séparez la liste des boissons"
+    },
+    "external-source-prompt": {
+      "title": "External source",
+      "subtitle": "Prompt for external source of food matching"
     },
     "final-prompt": {
       "title": "Dernier",

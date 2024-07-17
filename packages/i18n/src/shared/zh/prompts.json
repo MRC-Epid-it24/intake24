@@ -108,6 +108,17 @@
     "foods": "Foods and drinks",
     "foodsOnly": "Foods"
   },
+  "externalSource": {
+    "name": "External source",
+    "text": "",
+    "description": "",
+    "search": "Search",
+    "results": "Products found: {count}.",
+    "none": "No products found",
+    "select": "Select",
+    "back": "Back to search",
+    "missing": "Not found"
+  },
   "final": {
     "name": "最后一页",
     "text": "",
