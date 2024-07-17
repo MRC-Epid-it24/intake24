@@ -8,9 +8,11 @@ import type {
   CreateLocalFoodRequest,
   CreateLocalFoodRequestOptions,
 } from '@intake24/common/types/http/admin';
+import type { AssociatedFood as HttpAssociatedFood } from '@intake24/common/types/http/admin/associated-food';
 import { ConflictError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import {
+  AssociatedFood,
   FoodLocal,
   FoodLocalList,
   FoodNutrient,
@@ -32,6 +34,38 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       orderBy: '1',
       parameters: psm.parameters,
     };
+  }
+
+  function toAssociatedFoodAttrs(
+    localeId: string,
+    foodCode: string,
+    index: number,
+    httpAssociatedFood: HttpAssociatedFood,
+  ): CreationAttributes<AssociatedFood> {
+    return {
+      foodCode,
+      localeId,
+      associatedFoodCode: httpAssociatedFood.foodCode,
+      associatedCategoryCode: httpAssociatedFood.categoryCode,
+      text: httpAssociatedFood.promptText,
+      genericName: httpAssociatedFood.genericName,
+      linkAsMain: httpAssociatedFood.linkAsMain,
+      multiple: httpAssociatedFood.allowMultiple,
+      orderBy: index.toString(),
+    };
+  }
+
+  async function updateAssociatedFoodsImpl(
+    localeId: string,
+    foodCode: string,
+    associatedFoods: HttpAssociatedFood[],
+    transaction: Transaction,
+  ) {
+    const creationAttributes = associatedFoods.map((af, index) => toAssociatedFoodAttrs(localeId, foodCode, index, af));
+
+    await AssociatedFood.destroy({ where: { localeId, foodCode }, transaction });
+
+    await AssociatedFood.bulkCreate(creationAttributes, { transaction });
   }
 
   async function updatePortionSizeMethodsImpl(
@@ -153,7 +187,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
 
     await updateNutrientMappingImpl(instance.id, request.nutrientTableCodes, transaction);
 
-    // TODO: update associated foods
+    await updateAssociatedFoodsImpl(localeId, request.code, request.associatedFoods, transaction);
 
     return created;
   }

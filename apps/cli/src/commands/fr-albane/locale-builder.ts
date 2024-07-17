@@ -132,7 +132,7 @@ export class FrenchAlbaneLocaleBuilder {
     const foodSynonymRecords = await this.readJSON<AlbaneAlternativeDescriptionRow[]>('ALTERNATIVE_FOOD_DESCRIPTION.json');
 
     this.foodSynonyms = Object.fromEntries(
-      foodSynonymRecords.map(r => [r.A_CODE, getSynonyms(r, 'A_')]).filter(a => a[1].length > 0),
+      foodSynonymRecords.map(r => ([r.A_CODE, getSynonyms(r, 'A_')]) as [string, string[]]).filter(a => a[1].length > 0),
     );
   }
 
@@ -232,6 +232,14 @@ export class FrenchAlbaneLocaleBuilder {
         version: '0555155a-8073-4a00-b30c-26691082b7d1',
         isHidden: false,
       },
+      {
+        code: 'FRHPME',
+        attributes: {},
+        englishDescription: 'Chili oil',
+        parentCategories: ['COND'],
+        version: 'eeba6915-790e-42a6-be9d-2fd78ee80567',
+        isHidden: false,
+      },
     ];
   }
 
@@ -267,14 +275,21 @@ export class FrenchAlbaneLocaleBuilder {
         localDescription: 'Jus de citron',
         portionSize: [],
       },
+      {
+        code: 'FRHPME',
+        localDescription: 'Huile pimentée',
+        portionSize: [],
+      },
     ];
 
-    for (const [code, localDescription] of Object.entries(this.categoryNames!)) {
-      localCategories.push({
-        code,
-        localDescription,
-        portionSize: [],
-      });
+    if (this.categoryNames !== undefined) {
+      for (const [code, localDescription] of Object.entries(this.categoryNames)) {
+        localCategories.push({
+          code,
+          localDescription,
+          portionSize: [],
+        });
+      }
     }
 
     return localCategories;
@@ -344,8 +359,8 @@ export class FrenchAlbaneLocaleBuilder {
 
         prompts.push({
           linkAsMain: false,
-          genericName: row.genericName,
-          promptText: row.promptText1,
+          genericName: { fr: row.genericName },
+          promptText: { fr: row.promptText1 },
           categoryCode: row.categoryCode1,
         });
       }
@@ -358,8 +373,8 @@ export class FrenchAlbaneLocaleBuilder {
 
         prompts.push({
           linkAsMain: false,
-          genericName: row.genericName,
-          promptText: row.promptText2,
+          genericName: { fr: row.genericName },
+          promptText: { fr: row.promptText2 },
           categoryCode: row.categoryCode2,
         });
       }
@@ -372,8 +387,8 @@ export class FrenchAlbaneLocaleBuilder {
 
         prompts.push({
           linkAsMain: false,
-          genericName: row.genericName,
-          promptText: row.promptText3,
+          genericName: { fr: row.genericName },
+          promptText: { fr: row.promptText3 },
           categoryCode: row.categoryCode3,
         });
       }
@@ -391,6 +406,13 @@ export class FrenchAlbaneLocaleBuilder {
     const globalFoods = this.buildGlobalFoods();
     const localFoods = this.buildLocalFoods();
 
+    const globalCategories = this.buildGlobalCategories();
+    const localCategories = this.buildLocalCategories();
+
+    const localCategoriesRecord = {
+      [locale.id]: localCategories,
+    };
+
     const localFoodsRecord = {
       [locale.id]: localFoods,
     };
@@ -404,6 +426,8 @@ export class FrenchAlbaneLocaleBuilder {
     await writer.writeLocales([locale]);
     await writer.writeGlobalFoods(globalFoods);
     await writer.writeLocalFoods(localFoodsRecord);
+    await writer.writeGlobalCategories(globalCategories);
+    await writer.writeLocalCategories(localCategoriesRecord);
     await writer.writeEnabledLocalFoods(enabledLocalFoods);
     await writer.writeNutrientTables([dummyNutrientTable]);
   }

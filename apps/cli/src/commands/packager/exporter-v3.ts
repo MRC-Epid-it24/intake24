@@ -162,7 +162,7 @@ export class ExporterV3 {
       return typeConverters.packageDrinkwareSet(drinkwareSet);
   }
 
-  async getLocalFoodData(localeId: string, foodCode: string): Promise<FoodData> {
+  async getLocalFoodData(localeId: string, respondentLanguage: string, foodCode: string): Promise<FoodData> {
     logger.info(`Fetching data for food (${localeId}, ${foodCode})`);
 
     const foodRecord = await this.apiClient.foods.getFoodRecord(localeId, foodCode);
@@ -171,7 +171,7 @@ export class ExporterV3 {
       throw new Error(`Food record not found: (${localeId}, ${foodCode})`);
 
     return {
-      localFood: typeConverters.packageLocalFood(foodRecord.main.code, foodRecord.local),
+      localFood: typeConverters.packageLocalFood(foodRecord.main.code, respondentLanguage, foodRecord.local),
       globalFood: typeConverters.packageGlobalFood(foodRecord.main),
     };
   }
@@ -215,7 +215,7 @@ export class ExporterV3 {
     const foodData = await Promise.all(
       localFoodRecordCodes
         .filter(code => !this.skipFoodCodes.has(code))
-        .map(foodCode => this.getLocalFoodData(localeId, foodCode)),
+        .map(foodCode => this.getLocalFoodData(localeId, properties.respondentLanguage, foodCode)),
     );
 
     const categoryData = await Promise.all(

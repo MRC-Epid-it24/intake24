@@ -1,8 +1,10 @@
+import type { LocaleTranslation } from '../../common';
+
 export interface AssociatedFood {
   foodCode?: string;
   categoryCode?: string;
-  promptText: string;
+  promptText: LocaleTranslation;
   linkAsMain: boolean;
-  genericName: string;
+  genericName: LocaleTranslation;
   allowMultiple: boolean;
 }
