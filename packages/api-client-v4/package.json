@@ -1,6 +1,6 @@
 {
   "name": "@intake24/api-client-v4",
-  "version": "2024.4.0",
+  "version": "2024.4",
   "description": "",
   "author": "",
   "license": "Apache-2.0",
@@ -14,7 +14,7 @@
     "formdata-node": "4.4.1",
     "mime-types": "^2.1.35",
     "p-queue": "^6.6.2",
-    "winston": "^3.13.0"
+    "winston": "^3.13.1"
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",

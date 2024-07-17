@@ -1,7 +1,7 @@
 {
   "name": "@intake24/ui",
   "type": "module",
-  "version": "2024.4.0",
+  "version": "2024.4",
   "private": true,
   "description": "Intake24 UI shared code",
   "author": "",
@@ -36,17 +36,12 @@
     "vuetify": "^2.7.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.6",
-    "@types/node": "^20.14.9",
-    "type-fest": "^4.21.0",
+    "@types/lodash": "^4.17.7",
+    "@types/node": "^20.14.11",
+    "type-fest": "^4.22.0",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3",
+    "vite": "^5.3.4",
     "vite-plugin-pwa": "^0.20.0",
     "workbox-window": "^7.1.0"
-  },
-  "bundledDependencies": [
-    "@intake24/common",
-    "@intake24/i18n",
-    "@intake24/ui"
-  ]
+  }
 }

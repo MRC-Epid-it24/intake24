@@ -1,7 +1,7 @@
 {
   "name": "@intake24/admin",
   "type": "module",
-  "version": "2024.4.0",
+  "version": "2024.4",
   "private": true,
   "description": "Intake24 Admin Tool",
   "license": "Apache-2.0",
@@ -20,7 +20,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "@simplewebauthn/browser": "^10.0.0",
     "@tinymce/tinymce-vue": "^3.2.8",
     "@vueuse/core": "^10.11.0",
@@ -53,29 +53,23 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
-    "@types/lodash": "^4.17.6",
-    "@types/node": "^20.14.9",
+    "@types/lodash": "^4.17.7",
+    "@types/node": "^20.14.11",
     "@types/pluralize": "^0.0.33",
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-vue2": "^2.3.1",
     "jsdom": "^24.1.0",
     "sass": "~1.32.13",
     "typescript": "^5.5.3",
-    "unplugin-vue-components": "^0.27.2",
-    "vite": "^5.3.3",
+    "unplugin-vue-components": "^0.27.3",
+    "vite": "^5.3.4",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-mkcert": "^1.17.5",
     "vite-plugin-pwa": "^0.20.0",
     "vite-plugin-webfont-dl": "^3.9.4",
-    "vitest": "^1.6.0",
-    "vue-tsc": "^2.0.24",
+    "vitest": "^2.0.3",
+    "vue-tsc": "^2.0.26",
     "workbox-window": "^7.1.0",
     "zod": "^3.23.8"
-  },
-  "bundledDependencies": [
-    "@intake24/admin",
-    "@intake24/common",
-    "@intake24/i18n",
-    "@intake24/ui"
-  ]
+  }
 }

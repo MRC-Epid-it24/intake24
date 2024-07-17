@@ -1,3 +1,4 @@
+/* eslint-disable ts/no-empty-object-type */
 import { Readable } from 'node:stream';
 
 import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';

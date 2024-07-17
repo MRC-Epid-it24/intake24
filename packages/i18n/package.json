@@ -1,6 +1,6 @@
 {
   "name": "@intake24/i18n",
-  "version": "2024.4.0",
+  "version": "2024.4",
   "private": true,
   "description": "Intake24 localization",
   "author": "",
@@ -18,17 +18,14 @@
     "i18n:sync": "pnpm tsx scripts/i18n-sync.ts"
   },
   "dependencies": {
-    "dompurify": "^3.1.5",
+    "dompurify": "^3.1.6",
     "lodash": "^4.17.21",
     "vue": "^2.7.16",
     "vue-i18n": "^8.28.2"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
-    "@types/lodash": "^4.17.6",
+    "@types/lodash": "^4.17.7",
     "typescript": "^5.5.3"
-  },
-  "bundledDependencies": [
-    "@intake24/common"
-  ]
+  }
 }

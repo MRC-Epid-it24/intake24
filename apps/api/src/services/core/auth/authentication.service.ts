@@ -239,7 +239,7 @@ function authenticationService({
             return { surveyId, provider: 'captcha' };
           else await captchaCheck(captcha, servicesConfig.captcha);
         }
-        catch (err) {
+        catch {
           throw new UnauthorizedError('Invalid CAPTCHA challenge.');
         }
       }

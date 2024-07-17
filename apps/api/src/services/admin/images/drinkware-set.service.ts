@@ -47,7 +47,7 @@ function drinkwareSetService({
     try {
       return JSON.parse(text); // should validate the result
     }
-    catch (e) {
+    catch {
       logger.warn(`Failed to parse "${text}" as JSON string (expected LocaleTranslation)`);
       return {};
     }

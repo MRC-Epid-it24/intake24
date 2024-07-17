@@ -14,6 +14,7 @@ export type AppState = {
     build: {
       version: string;
       revision: string;
+      fullVersion: string;
       date: string;
     };
   };
@@ -33,6 +34,7 @@ export const useApp = defineStore('app', {
       build: {
         version: import.meta.env.VITE_APP_BUILD_VERSION,
         revision: import.meta.env.VITE_APP_BUILD_REVISION,
+        fullVersion: `${import.meta.env.VITE_APP_BUILD_VERSION}-${import.meta.env.VITE_APP_BUILD_REVISION}`,
         date: import.meta.env.VITE_APP_BUILD_DATE,
       },
     },

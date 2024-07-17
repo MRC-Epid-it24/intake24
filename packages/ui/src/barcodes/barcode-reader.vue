@@ -292,7 +292,10 @@ function checkResults() {
     if (!code)
       return acc;
 
-    acc[code] ? ++acc[code] : (acc[code] = 1);
+    if (acc[code])
+      ++acc[code];
+    else
+      acc[code] = 1;
 
     return acc;
   }, {});

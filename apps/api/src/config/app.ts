@@ -1,3 +1,5 @@
+import childProcess from 'node:child_process';
+
 import type { Environment } from '@intake24/common/types';
 
 import pkg from '../../package.json';
@@ -12,7 +14,10 @@ export type AppConfig = {
   icon?: string;
   fullName: string;
   poweredBy?: string;
+
   version: string;
+  revision: string;
+  fullVersion: string;
 
   host: string;
   port: number;
@@ -34,6 +39,11 @@ const name = process.env.APP_NAME || 'Intake24';
 const icon = process.env.APP_ICON;
 const fullName = [icon, name].filter(item => item).join(' ');
 
+const revision = childProcess
+  .execSync('git rev-parse --short HEAD')
+  .toString()
+  .trim();
+
 const appConfig: AppConfig = {
   env: (process.env.NODE_ENV || 'development') as Environment,
 
@@ -41,7 +51,10 @@ const appConfig: AppConfig = {
   icon,
   fullName,
   poweredBy: process.env.APP_POWERED_BY,
+
   version: pkg.version,
+  revision,
+  fullVersion: `${pkg.version}-${revision}`,
 
   host: process.env.APP_HOST || host,
   port: process.env.APP_PORT ? Number.parseInt(process.env.APP_PORT, 10) : port,

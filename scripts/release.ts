@@ -2,8 +2,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import type { Options } from 'execa';
-// @ts-expect-error missing types
-import calver from 'calver';
+import * as calver from 'calver';
 import execa from 'execa';
 import colors from 'picocolors';
 import prompts from 'prompts';
@@ -30,52 +29,29 @@ function updatePackageVersion(path: string, version: string) {
 }
 
 async function main() {
-  let targetVersion: string;
-
-  const calVerFormat = 'yyyy.minor.patch';
-  const targetVersions = ['calendar', 'minor', 'patch', 'rc', 'beta'].reduce<
+  const targetVersions = (['auto'] as calver.CalVerCycle[]).reduce<
     { title: string; value: string }[]
   >((acc, item) => {
     try {
-      const value = calver.inc(calVerFormat, pkg.version, item);
+      const value = calver.cycle(pkg.version, { cycle: item });
 
       acc.push({ title: `${item} | ${value}`, value });
     }
-    catch (error) {
+    catch {
       //
     }
 
     return acc;
   }, []);
 
-  targetVersions.push({
-    title: 'Custom release type',
-    value: 'custom',
-  });
-
   // Select release type
-  const { version: calVersion } = await prompts({
+  const { version: targetVersion } = await prompts({
     type: 'select',
     name: 'version',
     message: `Select release type for ${colors.bold(pkg.name)}`,
     choices: targetVersions,
-    initial: 2,
+    initial: 0,
   });
-
-  if (calVersion === 'custom') {
-    const { version: customVersion } = await prompts({
-      type: 'text',
-      name: 'version',
-      message: `Provide custom release type for ${colors.bold(pkg.name)}`,
-      initial: pkg.version,
-      validate: value => !!value,
-    });
-
-    targetVersion = customVersion;
-  }
-  else {
-    targetVersion = calVersion;
-  }
 
   if (!targetVersion)
     return;

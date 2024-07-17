@@ -690,7 +690,7 @@ export class ImporterV4 {
     try {
       await fs.access(filePath);
     }
-    catch (e) {
+    catch {
       logger.debug(`File ${filePath} does not exist or is not accessible, skipping`);
       return undefined;
     }

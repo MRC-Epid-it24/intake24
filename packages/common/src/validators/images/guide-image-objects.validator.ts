@@ -11,7 +11,7 @@ export const ajv = new Ajv({
   useDefaults: true,
 });
 
-// eslint-disable-next-line ts/no-var-requires, ts/no-require-imports
+// eslint-disable-next-line ts/no-require-imports
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 
 export type { GuideImageInputObjects };

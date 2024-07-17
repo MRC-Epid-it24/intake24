@@ -6,14 +6,14 @@ import { searchSortingAlgorithms } from '@intake24/common/surveys';
 
 import type { SurveyState } from './recall';
 
-// Not defined in bull-mq
 export const repeatableBullJob = z.object({
   key: z.string(),
   name: z.string(),
-  id: z.string().nullable(),
+  id: z.string().nullish(),
   endDate: z.number().nullable(),
   tz: z.string().nullable(),
-  pattern: z.string(),
+  pattern: z.string().nullable(),
+  every: z.string().nullish(),
   next: z.number(),
 });
 

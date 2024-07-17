@@ -69,7 +69,7 @@ export class PackageWriter {
 
       await this.writeJSON(records, filePath);
     }
-    catch (e) {
+    catch {
       await this.writeJSON(newRecords, filePath);
     }
   }

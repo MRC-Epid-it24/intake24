@@ -47,7 +47,10 @@ export default defineComponent({
 
   async beforeRouteEnter(to, from, next) {
     await useAuth().refresh(false);
-    useUser().isVerified ? next({ name: 'dashboard' }) : next();
+    if (useUser().isVerified)
+      next({ name: 'dashboard' });
+    else
+      next();
   },
 
   setup() {

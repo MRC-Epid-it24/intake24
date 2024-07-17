@@ -40,7 +40,8 @@ export default defineComponent({
     };
 
     function updateServiceWorker() {
-      updateSW.value && updateSW.value(true);
+      if (updateSW.value)
+        updateSW.value(true);
     };
 
     function handleSWManualUpdates(_swRegistration: ServiceWorkerRegistration) {

@@ -23,8 +23,7 @@ export default abstract class Notification<T extends JobType> extends BaseJob<T>
   ) {
     const headers: RawAxiosRequestHeaders = {
       'content-type': 'application/json',
-      'intake24-version': this.appConfig.version,
-      'user-agent': this.appConfig.name,
+      'user-agent': `${this.appConfig.name}/${this.appConfig.fullVersion}`,
     };
 
     if (signOptions) {

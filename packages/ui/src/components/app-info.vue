@@ -10,7 +10,7 @@
       <v-list-item-content>
         <v-list-item-title> {{ $t('common.app._') }}: {{ app.name }} </v-list-item-title>
         <v-list-item-subtitle>
-          {{ $t('common.app.build') }}: {{ app.build.version }} ({{ app.build.revision }})
+          {{ $t('common.app.build') }}: {{ app.build.fullVersion }}
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action v-if="clipboardAvailable">

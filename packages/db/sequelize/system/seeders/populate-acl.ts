@@ -1,4 +1,4 @@
-// eslint-disable-next-line ts/no-var-requires, ts/no-require-imports
+// eslint-disable-next-line ts/no-require-imports
 const { createPermissions } = require('../../utils.js');
 
 /*

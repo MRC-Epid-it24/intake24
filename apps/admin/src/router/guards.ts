@@ -30,7 +30,10 @@ export default (router: Router): void => {
     }
 
     if (!user.isVerified) {
-      to.name === 'verify' ? next() : next({ name: 'verify' });
+      if (to.name === 'verify')
+        next();
+      else
+        next({ name: 'verify' });
       return;
     }
 

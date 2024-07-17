@@ -71,7 +71,7 @@ export default {
       const { data } = await http.get<SurveyUserSessionResponse>(`surveys/${surveyId}/session`);
       return data;
     }
-    catch (err) {
+    catch {
       return undefined;
     }
   },

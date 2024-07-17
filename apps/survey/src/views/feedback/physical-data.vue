@@ -136,9 +136,10 @@ export default defineComponent({
   name: 'FeedbackPhysicalData',
 
   beforeRouteEnter({ params }, from, next) {
-    useSurvey().parameters?.feedbackScheme?.physicalDataFields.length
-      ? next()
-      : next({ name: 'feedback-home', params });
+    if (useSurvey().parameters?.feedbackScheme?.physicalDataFields.length)
+      next();
+    else
+      next({ name: 'feedback-home', params });
   },
 
   props: {
@@ -212,7 +213,7 @@ export default defineComponent({
         ...feedbackData.physicalActivityLevels,
       ];
     }
-    catch (err) {
+    catch {
       this.$router.push({ name: 'feedback-error', params: { surveyId } });
     }
     finally {

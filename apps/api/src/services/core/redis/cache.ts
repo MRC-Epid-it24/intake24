@@ -1,3 +1,4 @@
+/* eslint-disable ts/no-empty-object-type */
 import { mapValues } from 'lodash';
 import ms from 'ms';
 import stringify from 'safe-stable-stringify';

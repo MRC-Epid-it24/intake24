@@ -183,7 +183,7 @@ export default defineComponent({
       try {
         return cronstrue.toString(this.form.cron, { use24HourTimeFormat: true });
       }
-      catch (err) {
+      catch {
         return this.$t('tasks.invalidCron').toString();
       }
     },

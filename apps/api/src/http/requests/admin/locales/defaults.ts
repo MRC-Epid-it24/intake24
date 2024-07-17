@@ -98,7 +98,7 @@ export const defaults: Schema = {
             { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } },
           );
         }
-        catch (err) {
+        catch {
           throw new Error('$restricted');
         }
       },
@@ -127,7 +127,7 @@ export const defaults: Schema = {
             { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } },
           );
         }
-        catch (err) {
+        catch {
           throw new Error('$restricted');
         }
       },
@@ -161,7 +161,7 @@ export const defaults: Schema = {
             { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } },
           );
         }
-        catch (err) {
+        catch {
           throw new Error('$restricted');
         }
       },

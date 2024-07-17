@@ -15,7 +15,10 @@ import { surveyRespondent } from '@intake24/common/security';
  * @param {NextFunction} next
  */
 export function isAccountVerified(req: Request, res: Response, next: NextFunction): void {
-  (req.user as TokenPayload).verified ? next() : next(new ForbiddenError('Account not verified'));
+  if ((req.user as TokenPayload).verified)
+    next();
+  else
+    next(new ForbiddenError('Account not verified'));
 }
 
 /*

@@ -309,7 +309,7 @@ export default defineComponent({
 
         currentCategoryContents.value = { ...contents, header };
       }
-      catch (err) {
+      catch {
         requestInProgress.value = false;
         requestFailed.value = true;
       }
@@ -361,7 +361,7 @@ export default defineComponent({
           requestFailed.value = true;
         }
       }
-      catch (e) {
+      catch {
         requestFailed.value = true;
       }
       finally {

@@ -163,7 +163,7 @@ export default defineComponent({
           await auth.refresh();
           await router.push({ name: 'survey-home', params: { surveyId: props.surveyId } });
         }
-        catch (err) {
+        catch {
           // continue
         }
       }

@@ -29,7 +29,7 @@ const hCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     if (!success)
       throw new Error('Invalid hCaptcha challenge.');
   }
-  catch (err) {
+  catch {
     throw new Error('Invalid hCaptcha challenge.');
   }
 };
@@ -44,7 +44,7 @@ const reCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     if (!success)
       throw new Error('Invalid reCAPTCHA challenge.');
   }
-  catch (err) {
+  catch {
     throw new Error('Invalid reCAPTCHA challenge.');
   }
 };

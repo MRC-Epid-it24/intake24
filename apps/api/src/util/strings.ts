@@ -36,7 +36,7 @@ export function isStringBigInt(value: any): boolean {
     BigInt(value);
     return true;
   }
-  catch (err) {
+  catch {
     throw new Error('Value is not BigInt.');
   }
 }

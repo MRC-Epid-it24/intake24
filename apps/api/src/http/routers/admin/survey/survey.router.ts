@@ -55,7 +55,7 @@ async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<R
         { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } },
       );
     }
-    catch (err) {
+    catch {
       throw new ValidationError(customTypeValidationMessage('restricted._', { req, path: key }), { path: key, code: '$restricted' });
     }
   }
