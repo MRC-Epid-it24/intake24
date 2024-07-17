@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "pnpm build-only",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=3072 pnpm build-only",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
     "generate-pwa-assets": "pwa-assets-generator",
@@ -59,6 +59,7 @@
     "@types/pluralize": "^0.0.33",
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-vue2": "^2.3.1",
+    "cross-env": "^7.0.3",
     "jsdom": "^24.1.0",
     "sass": "~1.32.13",
     "typescript": "^5.5.3",
