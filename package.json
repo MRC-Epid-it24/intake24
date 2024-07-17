@@ -53,7 +53,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.9",
     "@types/prompts": "^2.4.9",
-    "calver": "^22.9.1",
+    "calver": "^24.1.0",
     "conventional-changelog-cli": "^5.0.0",
     "eslint": "^9.6.0",
     "eslint-plugin-format": "^0.1.2",
