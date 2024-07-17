@@ -31,7 +31,6 @@
     "express": "^4.19.2",
     "flag-icons": "^7.2.3",
     "helmet": "^7.1.0",
-    "litegraph.js": "^0.7.18",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
