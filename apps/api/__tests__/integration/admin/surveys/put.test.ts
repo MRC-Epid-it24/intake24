@@ -63,7 +63,6 @@ export default () => {
         'localeId',
         'supportEmail',
         'allowGenUsers',
-        'storeUserSessionOnServer',
         'surveySchemeOverrides',
       ]);
     });
@@ -79,7 +78,6 @@ export default () => {
         supportEmail: 'thisIsNotValidEmail',
         allowGenUsers: 'no',
         numberOfSubmissionsForFeedback: 'number',
-        storeUserSessionOnServer: 'yes',
         maximumDailySubmissions: 'NaN',
         minimumSubmissionInterval: { nan: 5 },
         authCaptcha: 1,
@@ -105,7 +103,6 @@ export default () => {
         'supportEmail',
         'allowGenUsers',
         'numberOfSubmissionsForFeedback',
-        'storeUserSessionOnServer',
         'maximumDailySubmissions',
         'minimumSubmissionInterval',
         'authCaptcha',

@@ -43,7 +43,6 @@ export default () => {
         'localeId',
         'supportEmail',
         'allowGenUsers',
-        'storeUserSessionOnServer',
       ]);
     });
 
@@ -59,8 +58,7 @@ export default () => {
         supportEmail: 'thisIsNotValidEmail',
         allowGenUsers: 'no',
         numberOfSubmissionsForFeedback: 'number',
-        sessionLifetime: 'not-a-ms-duration',
-        storeUserSessionOnServer: 'yes',
+        session: [],
         maximumDailySubmissions: 'NaN',
         minimumSubmissionInterval: { nan: 5 },
         notifications: ['invalid-notification'],
@@ -102,8 +100,7 @@ export default () => {
         'supportEmail',
         'allowGenUsers',
         'numberOfSubmissionsForFeedback',
-        'sessionLifetime',
-        'storeUserSessionOnServer',
+        'session',
         'maximumDailySubmissions',
         'minimumSubmissionInterval',
         'notifications.0',

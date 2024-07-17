@@ -97,7 +97,7 @@ export default class DynamicRecall {
   }
 
   private registerStoreUserSession() {
-    if (!this.store.parameters?.storeUserSessionOnServer)
+    if (!this.store.parameters?.session.store)
       return;
 
     this.store.$onAction((context) => {

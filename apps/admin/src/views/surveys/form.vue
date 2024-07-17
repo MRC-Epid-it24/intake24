@@ -483,21 +483,32 @@
                 {{ $t('surveys.session._') }}
               </div>
               <v-switch
-                v-model="form.storeUserSessionOnServer"
+                v-model="form.session.store"
                 class="my-6"
-                :error-messages="form.errors.get('storeUserSessionOnServer')"
+                :error-messages="form.errors.get('session.store')"
                 hide-details="auto"
-                :label="$t('surveys.session.storeOnServer')"
-                name="storeUserSessionOnServer"
-                @change="form.errors.clear('storeUserSessionOnServer')"
+                :label="$t('surveys.session.store')"
+                name="session.store"
+                @change="form.errors.clear('session.store')"
               />
               <v-text-field
-                v-model="form.sessionLifetime"
-                :error-messages="form.errors.get('sessionLifetime')"
+                v-model="form.session.age"
+                class="mb-4"
+                :error-messages="form.errors.get('session.age')"
                 hide-details="auto"
-                :hint="$t('surveys.session.lifetime.hint')"
-                :label="$t('surveys.session.lifetime._')"
-                name="sessionLifetime"
+                :hint="$t('surveys.session.age.hint')"
+                :label="$t('surveys.session.age._')"
+                name="session.age"
+                outlined
+                prepend-inner-icon="fas fa-stopwatch"
+              />
+              <v-text-field
+                v-model="form.session.fixed"
+                :error-messages="form.errors.get('session.fixed')"
+                hide-details="auto"
+                :hint="$t('surveys.session.fixed.hint')"
+                :label="$t('surveys.session.fixed._')"
+                name="session.fixed"
                 outlined
                 prepend-inner-icon="fas fa-stopwatch"
               />
@@ -551,7 +562,9 @@ import { DatePicker } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import {
   defaultSearchSettings,
+  defaultSessionSettings,
   type SchemeOverrides,
+  type SessionSettings,
   spellingCorrectionPreferences,
   type SurveySearchSettings,
   type SurveyState,
@@ -570,8 +583,7 @@ export type SurveyForm = {
   endDate: string | null;
   supportEmail: string | null;
   suspensionReason: string | null;
-  sessionLifetime: string;
-  storeUserSessionOnServer: boolean;
+  session: SessionSettings;
   numberOfSubmissionsForFeedback: number;
   notifications: Notification[];
   /*
@@ -605,8 +617,7 @@ export const surveyForm: SurveyForm = {
   endDate: null,
   supportEmail: null,
   suspensionReason: null,
-  sessionLifetime: '12h',
-  storeUserSessionOnServer: false,
+  session: defaultSessionSettings,
   numberOfSubmissionsForFeedback: 1,
   notifications: [],
   /* surveyMonkeyUrl: null,

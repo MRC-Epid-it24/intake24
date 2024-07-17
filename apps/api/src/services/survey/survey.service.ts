@@ -1,7 +1,6 @@
 import { URL } from 'node:url';
 
 import { addDays, addMinutes, startOfDay } from 'date-fns';
-import ms from 'ms';
 import { z, ZodError } from 'zod';
 
 import type { IoC } from '@intake24/api/ioc';
@@ -16,7 +15,7 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
 import { strongPassword } from '@intake24/common/schemas';
 import { customField, type JobParams, type SurveyState } from '@intake24/common/types';
-import { randomString } from '@intake24/common/util';
+import { isSessionAgeValid, isSessionFixedPeriodValid, randomString } from '@intake24/common/util';
 import {
   GenUserCounter,
   Op,
@@ -263,27 +262,30 @@ function surveyService({
    */
   const getSession = async (slug: string, userId: string): Promise<UserSurveySession> => {
     const survey = await Survey.findBySlug(slug, {
-      attributes: ['id', 'sessionLifetime', 'storeUserSessionOnServer'],
+      attributes: ['id', 'session'],
     });
     if (!survey)
       throw new NotFoundError();
 
-    const { id: surveyId, sessionLifetime, storeUserSessionOnServer } = survey;
+    const { id: surveyId, session } = survey;
 
-    if (!storeUserSessionOnServer)
+    if (!session.store)
       throw new ForbiddenError();
 
-    const session = await UserSurveySession.findOne({ where: { userId, surveyId } });
-    if (!session)
-      throw new NotFoundError();
-
-    const expiredAt = new Date(Date.now() - ms(sessionLifetime));
-    if (session.updatedAt < expiredAt) {
-      await session.destroy();
+    const userSession = await UserSurveySession.findOne({ where: { userId, surveyId } });
+    if (!userSession?.sessionData.startTime) {
+      await userSession?.destroy();
       throw new NotFoundError();
     }
 
-    return session;
+    const startTime = new Date(userSession.sessionData.startTime);
+
+    if (!isSessionAgeValid(session.age, startTime) || !isSessionFixedPeriodValid(session.fixed, startTime)) {
+      await userSession.destroy();
+      throw new NotFoundError();
+    }
+
+    return userSession;
   };
 
   /**
@@ -300,17 +302,17 @@ function surveyService({
     sessionData: SurveyState,
   ): Promise<UserSurveySession> => {
     const survey = await Survey.findBySlug(slug, {
-      attributes: ['id', 'notifications', 'storeUserSessionOnServer'],
+      attributes: ['id', 'notifications', 'session'],
     });
     if (!survey)
       throw new NotFoundError();
 
-    const { id: surveyId, storeUserSessionOnServer } = survey;
+    const { id: surveyId, session } = survey;
 
-    if (!storeUserSessionOnServer)
+    if (!session.store)
       throw new ForbiddenError();
 
-    const [session] = await UserSurveySession.upsert(
+    const [userSession] = await UserSurveySession.upsert(
       { id: sessionData.uxSessionId, userId, surveyId, sessionData },
       {
         fields: ['id', 'sessionData'],
@@ -325,7 +327,7 @@ function surveyService({
      * - hackish timestamps comparison to determine if the record was inserted
      */
     if (
-      session.createdAt.getTime() === session.updatedAt.getTime()
+      userSession.createdAt.getTime() === userSession.updatedAt.getTime()
       && survey.notifications.length
       && survey.notifications.some(({ type }) => type === 'survey.session.started')
     ) {
@@ -341,7 +343,7 @@ function surveyService({
       });
     }
 
-    return session;
+    return userSession;
   };
 
   /**
@@ -429,6 +431,9 @@ function surveyService({
     const { aliases = [], customFields = [] } = user;
 
     const size = redirectPrompts.length;
+    if (!size)
+      return null;
+
     const urls = redirectPrompts.reduce<string | null | Record<string, string>>(
       (acc, { id, identifier, url }) => {
         let identifierValue: string | null;

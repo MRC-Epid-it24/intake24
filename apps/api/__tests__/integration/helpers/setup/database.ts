@@ -13,7 +13,6 @@ import {
   defaultExport,
   defaultMeals,
   defaultPrompts,
-  defaultSearchSettings,
 } from '@intake24/common/surveys';
 import { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
 import { permissions } from '@intake24/common-backend';
@@ -190,9 +189,7 @@ export async function initDatabase(): Promise<MockData> {
     allowGenUsers: false,
     notifications: [],
     supportEmail: 'testSupportEmail@example.com',
-    storeUserSessionOnServer: false,
     surveySchemeOverrides: { meals: [], prompts: [] },
-    searchSettings: defaultSearchSettings,
   });
 
   await setupPermissions();

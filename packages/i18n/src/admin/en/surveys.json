@@ -124,11 +124,15 @@
   "suspensionReason": "Suspension reason",
   "session": {
     "_": "Session settings",
-    "lifetime": {
-      "_": "Session lifetime",
-      "hint": "Specify session lifetime, e.g. 30m, 12h, 2d."
+    "age": {
+      "_": "Session age",
+      "hint": "Specify session age from survey start, e.g. 30m, 12h, 2d."
     },
-    "storeOnServer": "Store user session on server"
+    "fixed": {
+      "_": "Session fixed duration",
+      "hint": "Specify session fixed duration, e.g. 1d+0h, 2d+4h"
+    },
+    "store": "Store user session on server"
   },
   "feedback": {
     "_": "Feedback settings",

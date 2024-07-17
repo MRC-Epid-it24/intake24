@@ -14,6 +14,8 @@ import {
 } from '../types/http';
 import { z } from '../util';
 
+const tzOffset = z.coerce.number().openapi({ description: 'Client timezone offset in minutes' });
+
 export const surveyRespondent = initContract().router({
   parameters: {
     method: 'GET',
@@ -28,9 +30,7 @@ export const surveyRespondent = initContract().router({
   userInfo: {
     method: 'GET',
     path: '/surveys/:slug/user-info',
-    query: z.object({
-      tzOffset: z.coerce.number().openapi({ description: 'Timezone offset in minutes' }),
-    }),
+    query: z.object({ tzOffset }),
     responses: {
       200: surveyUserInfoResponse,
     },
@@ -99,9 +99,7 @@ export const surveyRespondent = initContract().router({
     headers: z.object({
       'user-agent': z.string().optional().transform(createSanitizer()),
     }),
-    query: z.object({
-      tzOffset: z.coerce.number().openapi({ description: 'Timezone offset in minutes' }),
-    }),
+    query: z.object({ tzOffset }),
     body: z.object({
       // TODO: Define submission schema
       submission: jsonObjectSchema,

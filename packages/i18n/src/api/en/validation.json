@@ -114,7 +114,11 @@
     "searchMinWordLength2": "Minimum word length for 2 spelling corrections",
     "section": "Section",
     "selectionImage": "Selection image",
-    "sessionLifetime": "Session lifetime",
+    "session": {
+      "store": "Server-side session",
+      "age": "Session age",
+      "fixed": "Session fixed duration"
+    },
     "sex": "Sex",
     "slug": "Slug",
     "smsNotifications": "SMS notifications",
@@ -127,7 +131,6 @@
     "surveySchemeId": "Survey scheme ID",
     "surveySchemeOverrides": "Survey scheme overrides",
     "suspensionReason": "Suspension reason",
-    "storeUserSessionOnServer": "Store user session on server",
     "textDirection": "Text direction",
     "text": "Text",
     "terms": "Terms",

@@ -39,10 +39,16 @@
           <td>{{ $t(`common.${entry.userCustomFields}`) }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.session.storeOnServer') }}</th>
-          <td>{{ $t(`common.${entry.storeUserSessionOnServer}`) }}</td>
-          <th>{{ $t('surveys.session.lifetime._') }}</th>
-          <td>{{ entry.sessionLifetime }}</td>
+          <th>{{ $t('surveys.session.age._') }}</th>
+          <td>{{ entry.session.age }}</td>
+          <th>{{ $t('surveys.session.fixed._') }}</th>
+          <td>{{ entry.session.fixed }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('surveys.session.store') }}</th>
+          <td colspan="3">
+            {{ $t(`common.${entry.session.store}`) }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('surveys.submissionLimits.maxDaily') }}</th>

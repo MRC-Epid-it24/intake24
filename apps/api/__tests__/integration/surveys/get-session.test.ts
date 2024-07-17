@@ -27,7 +27,7 @@ export default () => {
   });
 
   it(`should return 403 when user session disabled`, async () => {
-    await suite.data.system.survey.update({ storeUserSessionOnServer: false });
+    await suite.data.system.survey.update({ session: { store: false, age: '12h', fixed: '1d+0h' } });
 
     await suite.sharedTests.assertMissingAuthorization('get', url, {
       bearer: 'respondent',
@@ -36,7 +36,7 @@ export default () => {
 
   describe('user session enabled', () => {
     beforeAll(async () => {
-      await suite.data.system.survey.update({ storeUserSessionOnServer: true });
+      await suite.data.system.survey.update({ session: { store: true, age: '12h', fixed: '1d+0h' } });
     });
 
     it(`should return 404 when no survey session data`, async () => {

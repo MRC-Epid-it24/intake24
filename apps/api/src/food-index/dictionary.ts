@@ -6,7 +6,7 @@ import {
   Synonym,
 } from '@intake24/api/food-index/interpreted-word';
 import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
-import { SpellingCorrectionPreference } from '@intake24/common/surveys/scheme';
+import { SpellingCorrectionPreference } from '@intake24/common/surveys';
 
 export interface SpellingCorrectionParameters {
   spellingCorrectionPreference: SpellingCorrectionPreference;

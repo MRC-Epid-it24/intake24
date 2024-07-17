@@ -6,6 +6,7 @@ import {
   meal,
   schemeTypes,
   searchSortingAlgorithms,
+  sessionSettings,
   surveyRatings,
   surveyStates,
 } from '@intake24/common/surveys';
@@ -59,8 +60,7 @@ export const surveyEntryResponse = z.object({
   }),
   feedbackScheme: feedbackSchemeResponse.optional(),
   numberOfSubmissionsForFeedback: z.number(),
-  sessionLifetime: z.number(),
-  storeUserSessionOnServer: z.boolean(),
+  session: sessionSettings,
   suspensionReason: z.string().nullable(),
   searchSortingAlgorithm: z.enum(searchSortingAlgorithms),
   searchMatchScoreWeight: z.number(),

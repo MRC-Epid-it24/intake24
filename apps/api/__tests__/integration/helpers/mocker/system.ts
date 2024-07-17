@@ -261,8 +261,11 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
   const suspensionReason = faker.word.words(10);
 
   const numberOfSubmissionsForFeedback = faker.number.int({ min: 1, max: 10 });
-  const sessionLifetime = '12h';
-  const storeUserSessionOnServer = faker.datatype.boolean();
+  const session = {
+    store: faker.datatype.boolean(),
+    age: '12h',
+    fixed: '1d+0h',
+  };
 
   const maximumDailySubmissions = faker.number.int({ min: 1, max: 5 });
   const minimumSubmissionInterval = faker.number.int({ min: 1, max: 1000000 });
@@ -318,8 +321,7 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
     suspensionReason,
     feedbackSchemeId,
     numberOfSubmissionsForFeedback,
-    sessionLifetime,
-    storeUserSessionOnServer,
+    session,
     maximumDailySubmissions,
     minimumSubmissionInterval,
     authCaptcha,

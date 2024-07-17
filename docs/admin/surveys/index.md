@@ -147,9 +147,13 @@ Expected JWT payload with claims:
 
 ### Session settings
 
-- `Store user session on server` - If enabled, user partial submission data are sent to server for store and retrieval. If disabled, user partial submission data are only stored locally in client browser
+- `Store user session on server` - If enabled, user partial submission data are sent to server for store / retrieval. If disabled, user partial submission data are only stored locally in client browser.
 
-- `Session lifetime` - Session duration as `ms-formatted` string, e.g. `30m`, `2h`, `1d` (see [ms](https://github.com/vercel/ms) for more information) or number in milliseconds.
+- `Session age` - Session duration as `ms-formatted` string, e.g. `30m`, `2h`, `1d` (see [ms](https://github.com/vercel/ms) for more information).
+
+- `Session fixed duration` - Fixed session duration as `ms-formatted` strings, e.g.
+  - `1d+0h` - resets session next day at midnight
+  - `2d+4h` - resets session in two days at 4am
 
 ### Feedback settings
 

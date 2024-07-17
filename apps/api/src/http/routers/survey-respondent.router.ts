@@ -15,6 +15,7 @@ import {
   groupSchemeMultiPrompts,
   isMealSection,
 } from '@intake24/common/surveys';
+import { SurveyState } from '@intake24/common/types';
 import { merge } from '@intake24/common/util';
 import { Survey } from '@intake24/db';
 
@@ -72,8 +73,7 @@ export function surveyRespondent() {
         surveyScheme,
         feedbackScheme,
         numberOfSubmissionsForFeedback,
-        sessionLifetime,
-        storeUserSessionOnServer,
+        session,
         suspensionReason,
         surveySchemeOverrides,
         searchSettings: {
@@ -145,8 +145,7 @@ export function surveyRespondent() {
           surveyScheme: { id: surveyScheme.id, type: surveyScheme.type, meals, prompts },
           feedbackScheme,
           numberOfSubmissionsForFeedback,
-          sessionLifetime: ms(sessionLifetime) / 1000,
-          storeUserSessionOnServer,
+          session,
           suspensionReason,
           searchSortingAlgorithm,
           searchMatchScoreWeight,
@@ -173,7 +172,7 @@ export function surveyRespondent() {
       const session = await req.scope.cradle.surveyService.setSession(
         slug,
         userId,
-        sessionData as any,
+        sessionData as unknown as SurveyState,
       );
 
       return { status: 200, body: session };

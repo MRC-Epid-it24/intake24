@@ -25,6 +25,7 @@ import {
 
 import type {
   SchemeOverrides,
+  SessionSettings,
   SurveySearchSettings,
   SurveyState,
 } from '@intake24/common/surveys';
@@ -33,6 +34,7 @@ import { surveyPermissions } from '@intake24/common/security';
 import {
   defaultOverrides,
   defaultSearchSettings,
+  defaultSessionSettings,
 } from '@intake24/common/surveys';
 
 import BaseModel from '../model';
@@ -210,17 +212,18 @@ export default class Survey extends BaseModel<
   }
 
   @Column({
-    allowNull: false,
-    defaultValue: '12h',
-    type: DataType.STRING(32),
+    allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
   })
-  declare sessionLifetime: CreationOptional<string>;
+  get session(): CreationOptional<SessionSettings> {
+    const val = this.getDataValue('session') as unknown;
+    return val ? JSON.parse(val as string) : defaultSessionSettings;
+  }
 
-  @Column({
-    allowNull: false,
-    type: DataType.BOOLEAN,
-  })
-  declare storeUserSessionOnServer: boolean;
+  set session(value: CreationOptional<SessionSettings>) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('session', JSON.stringify(value ?? defaultSessionSettings));
+  }
 
   @Column({
     allowNull: false,
@@ -396,8 +399,7 @@ export const updateSurveyFields = [
   'suspensionReason',
   'supportEmail',
   'notifications',
-  'sessionLifetime',
-  'storeUserSessionOnServer',
+  'session',
   'numberOfSubmissionsForFeedback',
   'authCaptcha',
   'authUrlDomainOverride',

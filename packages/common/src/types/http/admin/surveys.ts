@@ -1,10 +1,9 @@
-import ms from 'ms';
 import slugify from 'slugify';
 import { isWhitelisted } from 'validator';
 import { z } from 'zod';
 
 import { identifierSafeChars } from '@intake24/common/rules';
-import { schemeOverrides, surveySearchSettings, surveyStates } from '@intake24/common/surveys';
+import { schemeOverrides, sessionSettings, surveySearchSettings, surveyStates } from '@intake24/common/surveys';
 
 import { notification } from '../../notifications';
 import { feedbackSchemeAttributes } from './feedback-schemes';
@@ -35,8 +34,7 @@ export const surveyAttributes = z.object({
   feedbackSchemeId: z.string().nullable(),
   numberOfSubmissionsForFeedback: z.number().int().min(1),
   notifications: notification.array(),
-  sessionLifetime: z.string().max(32).refine(value => ms(value)).transform(value => (Number.isNaN(Number(value)) ? value : ms(Number(value)))),
-  storeUserSessionOnServer: z.boolean(),
+  session: sessionSettings,
   maximumDailySubmissions: z.number().int().min(1),
   maximumTotalSubmissions: z.number().int().min(1).nullable(),
   minimumSubmissionInterval: z.number().int().min(1),
@@ -72,7 +70,6 @@ export const surveyCreateRequest = surveyPartialRequest.required({
   localeId: true,
   allowGenUsers: true,
   supportEmail: true,
-  storeUserSessionOnServer: true,
 });
 export type SurveyCreateRequest = z.infer<typeof surveyCreateRequest>;
 
