@@ -1,5 +1,3 @@
-import { LGraph } from 'litegraph.js';
-
 import type {
   ComponentType,
   MealCompletionState,
@@ -17,7 +15,6 @@ import type {
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { conditionOps, mealCompletionStateOptions } from '@intake24/common/prompts';
-import { type PromptContextNode, PromptNode } from '@intake24/common/prompts/graph/nodes/prompt';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import {
   asServedComplete,
@@ -795,30 +792,6 @@ function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | 
   }
 }
 
-function checkGraphConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt): boolean {
-  if (!prompt.useGraph || !prompt.graph)
-    return true;
-
-  const graph = new LGraph(prompt.graph); // Perf: cache this
-
-  const propertyNodes = graph.findNodesByType<PromptNode>('Prompt/Properties');
-
-  if (propertyNodes.length !== 1) {
-    console.error(`Prompt graph invalid for prompt ${prompt.id}(${prompt.component}): there must be one and only one node of type Prompt/Properties.`);
-    return true;
-  }
-
-  const propertyNode = propertyNodes[0];
-
-  for (const contextNode of graph.findNodesByType<PromptContextNode>('Prompt/Context')) {
-    contextNode.setValues(store.recallNumber, store.currentState, foodState, mealState);
-  }
-
-  graph.runStep();
-
-  return propertyNode.isEnabled();
-}
-
 export default class PromptManager {
   private scheme;
 
@@ -847,8 +820,7 @@ export default class PromptManager {
     return this.scheme.prompts.meals.foods.find(
       prompt =>
         prompt.component === type
-        && checkPromptCustomConditions(this.store, mealState, foodState, prompt)
-        && checkGraphConditions(this.store, mealState, foodState, prompt),
+        && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
     );
   }
 
@@ -861,13 +833,13 @@ export default class PromptManager {
     const meal = findMeal(state.data.meals, mealId);
 
     return this.scheme.prompts.meals[section].find(
-      prompt => prompt.component === type && checkPromptCustomConditions(this.store, meal, undefined, prompt) && checkGraphConditions(this.store, meal, undefined, prompt),
+      prompt => prompt.component === type && checkPromptCustomConditions(this.store, meal, undefined, prompt),
     );
   }
 
   findSurveyPromptOfType(type: ComponentType, section: SurveyPromptSection): Prompt | undefined {
     return this.scheme.prompts[section].find(
-      prompt => prompt.component === type && checkPromptCustomConditions(this.store, undefined, undefined, prompt) && checkGraphConditions(this.store, undefined, undefined, prompt),
+      prompt => prompt.component === type && checkPromptCustomConditions(this.store, undefined, undefined, prompt),
     );
   }
 
@@ -875,8 +847,8 @@ export default class PromptManager {
     return this.scheme.prompts[section].find(
       prompt =>
         checkSurveyStandardConditions(this.store.$state, prompt)
-        && checkPromptCustomConditions(this.store, undefined, undefined, prompt)
-        && checkGraphConditions(this.store, undefined, undefined, prompt),
+        && checkPromptCustomConditions(this.store, undefined, undefined, prompt),
+
     );
   }
 
@@ -896,8 +868,7 @@ export default class PromptManager {
     return this.scheme.prompts.meals[section].find(
       prompt =>
         checkMealStandardConditions(state, meal, withSelection, prompt)
-        && checkPromptCustomConditions(this.store, meal, undefined, prompt)
-        && checkGraphConditions(this.store, meal, undefined, prompt),
+        && checkPromptCustomConditions(this.store, meal, undefined, prompt),
     );
   }
 
@@ -911,8 +882,7 @@ export default class PromptManager {
     return this.scheme.prompts.meals.foods.find(
       prompt =>
         checkFoodStandardConditions(state, foodState, withSelection, prompt)
-        && checkPromptCustomConditions(this.store, mealState, foodState, prompt)
-        && checkGraphConditions(this.store, mealState, foodState, prompt),
+        && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
     );
   }
 

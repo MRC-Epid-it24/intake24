@@ -133,7 +133,6 @@
             />
             <prompt-actions :actions.sync="dialog.prompt.actions" />
             <prompt-conditions :conditions.sync="dialog.prompt.conditions" :prompt-section="section" />
-            <prompt-graph :graph.sync="dialog.prompt.graph" :use-graph.sync="dialog.prompt.useGraph" />
             <prompt-validation
               v-if="
                 'validation' in dialog.prompt
@@ -180,7 +179,6 @@ import {
   promptSettings,
   standardPrompts,
 } from '@intake24/admin/components/prompts';
-import PromptGraph from '@intake24/admin/components/prompts/partials/prompt-graph.vue';
 import {
   customPrompts as customPromptDefaults,
   portionSizePrompts as portionSizeDefaults,
@@ -212,7 +210,6 @@ export default defineComponent({
   name: 'PromptSelector',
 
   components: {
-    PromptGraph,
     PromptActions,
     PromptConditions,
     PromptContent,
