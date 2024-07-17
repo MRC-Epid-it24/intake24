@@ -67,7 +67,7 @@
     "vite-plugin-mkcert": "^1.17.5",
     "vite-plugin-pwa": "^0.20.0",
     "vite-plugin-webfont-dl": "^3.9.4",
-    "vitest": "^1.6.0",
+    "vitest": "^2.0.3",
     "vue-tsc": "^2.0.24",
     "workbox-window": "^7.1.0",
     "zod": "^3.23.8"
