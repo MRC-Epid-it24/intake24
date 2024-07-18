@@ -171,8 +171,13 @@ export default defineComponent({
     };
 
     const startTimer = () => {
-      if (!timerValue.value || !props.followUpUrl)
+      if (props.prompt.timer === 0 || !props.followUpUrl)
         return;
+
+      if (props.prompt.timer < 0) {
+        redirect();
+        return;
+      }
 
       // @ts-expect-error - node types
       timerInterval.value = setInterval(() => {

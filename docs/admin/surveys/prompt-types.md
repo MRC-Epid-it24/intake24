@@ -130,7 +130,8 @@ Prompt to redirect user to external site with optional user identifier embedded 
   - `_self` - open in the same window
 
 - `timer` - optional timer in seconds when automatic redirection should occur
-  - disabled if set to `0`
+  - if set to `0`, timed redirection is disabled
+  - if set to negative value, redirection is immediate
 
 ### Review confirm prompt
 
