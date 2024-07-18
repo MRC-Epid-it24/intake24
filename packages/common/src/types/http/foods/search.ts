@@ -79,7 +79,7 @@ export const recipeFoodResponse = z.object({
         description: localeTranslation,
         order: z.number(),
         localeId: z.string(),
-        categoryCode: z.string(),
+        categoryCode: z.string().nullable(),
         repeatable: z.boolean(),
         required: z.boolean(),
       }),

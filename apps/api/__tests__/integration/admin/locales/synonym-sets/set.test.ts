@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { LocaleSynonymSetInput } from '@intake24/common/types/http/admin';
+import type { SynonymSetRequest } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
@@ -10,7 +10,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let synonymSets: LocaleSynonymSetInput[];
+  let synonymSets: SynonymSetRequest[];
 
   beforeAll(async () => {
     const { id, code: localeId } = suite.data.system.locale;
@@ -39,7 +39,7 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, [''], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['0.localeId', '0.synonyms'], {
         input: [{ firstWord: [], synonyms: null }],
       });
     });
@@ -74,10 +74,10 @@ export default () => {
       expect(status).toBe(200);
       expect(body).toBeArray();
 
-      const lists = body.map(({ id, ...rest }: LocaleSynonymSetInput) => rest);
+      const lists = body.map(({ id, ...rest }: SynonymSetRequest) => rest);
       expect(lists).toIncludeSameMembers(synonymSets);
 
-      synonymSets = body.map((item: LocaleSynonymSetInput) => ({
+      synonymSets = body.map((item: SynonymSetRequest) => ({
         ...item,
         synonyms: 'updated words',
       }));

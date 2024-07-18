@@ -52,7 +52,7 @@
     "special": "Mot déclencheur",
     "code": "Code de l'ingrédient",
     "step_code": "Code de l'étape (assigné automatiquement)",
-    "synonyms_id": "Synonymes (délimités par des espaces)",
+    "synonymsId": "Synonymes (délimités par des espaces)",
     "steps": "Etapes de le construction de recettes",
     "name": "Nom de l'étape",
     "description": "Description de l'étape",

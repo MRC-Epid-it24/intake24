@@ -51,18 +51,18 @@ import { defineComponent } from 'vue';
 
 import type {
   LocaleEntry,
-  LocaleSplitWord,
-  LocaleSplitWordInput,
+  SplitWordAttributes,
+  SplitWordRequest,
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
-export type LocaleSplitWordsForm = { items: LocaleSplitWordInput[] };
+export type SplitWordsForm = { items: SplitWordRequest[] };
 
 export default defineComponent({
-  name: 'LocaleSplitWords',
+  name: 'SplitWords',
 
   components: { ConfirmDialog },
 
@@ -72,7 +72,7 @@ export default defineComponent({
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
-      LocaleSplitWordsForm,
+      SplitWordsForm,
       LocaleEntry
     >(props, {
       data: { items: [] },
@@ -83,7 +83,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    const { data: items } = await this.$http.get<LocaleSplitWord[]>(
+    const { data: items } = await this.$http.get<SplitWordAttributes[]>(
       `admin/locales/${this.id}/split-words`,
     );
 
@@ -102,7 +102,7 @@ export default defineComponent({
     async save() {
       this.form.items = this.form.items.filter(({ words }) => words);
 
-      const items = await this.form.post<LocaleSplitWord[]>(`admin/locales/${this.id}/split-words`);
+      const items = await this.form.post<SplitWordAttributes[]>(`admin/locales/${this.id}/split-words`);
 
       useStoreEntry().setEntry({ items });
     },

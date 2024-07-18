@@ -6,6 +6,7 @@ import { foodGroup } from './food-group.router';
 import { job } from './job.router';
 import { language } from './language.router';
 import { languageTranslation } from './language-translation.router';
+import locale from './locale';
 import { nutrientTable } from './nutrient-table.router';
 import { nutrientType } from './nutrient-type.router';
 import { nutrientUnit } from './nutrient-unit.router';
@@ -29,6 +30,7 @@ export default {
   job,
   language,
   languageTranslation,
+  locale,
   nutrientTable,
   nutrientType,
   nutrientUnit,

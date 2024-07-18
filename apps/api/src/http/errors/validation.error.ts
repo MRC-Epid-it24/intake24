@@ -1,7 +1,10 @@
+import { HttpStatusCode } from 'axios';
+
 import { ExtendedFieldValidationError } from '../middleware';
 
 export default class ValidationError extends Error {
   public errors: { [name: string]: ExtendedFieldValidationError } = {};
+  public code: HttpStatusCode = 400;
 
   constructor(
     msg: string,
@@ -26,6 +29,18 @@ export default class ValidationError extends Error {
         value: null,
         ...item,
       };
+      this.setHttpStatus(this.errors[path]);
     });
+  }
+
+  setHttpStatus(error: ExtendedFieldValidationError) {
+    switch (error.code) {
+      case '$unique':
+        this.code = 409;
+        break;
+      default:
+        this.code = 400;
+        break;
+    }
   }
 }

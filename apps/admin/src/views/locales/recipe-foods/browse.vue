@@ -60,17 +60,15 @@
               <v-col cols="12" md="8">
                 <v-select
                   v-if="form.synonymsSets"
-                  v-model="item.synonyms"
+                  v-model="item.synonymsId"
                   hide-details="auto"
-                  :hint="`${item.synonyms?.synonyms}, ${item.synonyms?.id}`"
+                  :hint="`${item.synonymSet?.synonyms}, ${item.synonymSet?.id}`"
                   item-text="synonyms"
                   item-value="id"
                   :items="form.synonymsSets"
-                  :label="$t('locales.recipe-foods.synonyms_id')"
+                  :label="$t('locales.recipe-foods.synonymsId')"
                   outlined
-                  return-object
                   single-line
-                  @change="changeSynonyms({ idx, item: item.synonyms?.id })"
                 />
               </v-col>
             </v-row>
@@ -109,7 +107,7 @@
             dialog,
             activeRecipeFoodId,
             activeRecipeFoodCode,
-            locale: { id: parseInt(id), code: item.localeId },
+            locale: { id, code: item.localeId },
             items: activeRecipeFood.steps,
           }"
           @close="toggleDialog"
@@ -125,9 +123,9 @@ import { defineComponent } from 'vue';
 
 import type {
   LocaleEntry,
-  LocaleRecipeFoods,
-  LocaleRecipeFoodsInput,
-  LocaleSynonymSet,
+  RecipeFoodEntry,
+  RecipeFoodRequest,
+  SynonymSetAttributes,
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -136,14 +134,16 @@ import { ConfirmDialog } from '@intake24/ui';
 
 import StepsDialog from './steps-dialog.vue';
 
-export type LocaleRecipeFoodsForm = {
-  items: LocaleRecipeFoodsInput[];
-  synonymsSets: LocaleSynonymSet[];
+export type RecipeFoodItem = RecipeFoodRequest & Partial<{ synonymSet: RecipeFoodEntry['synonymSet']; steps: RecipeFoodEntry['steps'] }>;
+
+export type RecipeFoodsForm = {
+  items: RecipeFoodItem[];
+  synonymsSets: SynonymSetAttributes[];
 };
 export type ChangedSynonyms = { idx: number; item: string };
 
 export default defineComponent({
-  name: 'LocaleRecipeFoods',
+  name: 'RecipeFoods',
 
   components: { ConfirmDialog, StepsDialog },
 
@@ -153,7 +153,7 @@ export default defineComponent({
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
-      LocaleRecipeFoodsForm,
+      RecipeFoodsForm,
       LocaleEntry
     >(props, {
       data: { items: [], synonymsSets: [] },
@@ -176,17 +176,15 @@ export default defineComponent({
       dialog: false,
       activeRecipeFoodId: '',
       activeRecipeFoodCode: '',
-      activeRecipeFood: {} as LocaleRecipeFoodsInput,
+      activeRecipeFood: {} as RecipeFoodItem,
     };
   },
 
   async mounted() {
-    const { data: items } = await this.$http.get<LocaleRecipeFoods[]>(
-      `admin/locales/${this.id}/recipe-foods`,
-    );
-    const { data: synonymsSets } = await this.$http.get<LocaleSynonymSet[]>(
-      `admin/locales/${this.id}/synonym-sets`,
-    );
+    const [{ data: items }, { data: synonymsSets }] = await Promise.all([
+      this.$http.get<RecipeFoodEntry[]>(`admin/locales/${this.id}/recipe-foods`),
+      this.$http.get<SynonymSetAttributes[]>(`admin/locales/${this.id}/synonym-sets`),
+    ]);
 
     this.toForm({ items, synonymsSets });
   },
@@ -205,7 +203,7 @@ export default defineComponent({
     openStepsDialog(
       recipeFoodId: string | undefined,
       recipeFoodCode: string,
-      recipeFood: LocaleRecipeFoodsInput,
+      recipeFood: RecipeFoodRequest,
     ) {
       if (!recipeFoodId)
         return;
@@ -216,19 +214,13 @@ export default defineComponent({
       console.log(recipeFoodId, recipeFoodCode, recipeFood);
     },
 
-    changeSynonyms(changedSynonyms: ChangedSynonyms) {
-      console.log(changedSynonyms);
-      if (changedSynonyms.item)
-        this.form.items[changedSynonyms.idx].synonyms_id = Number.parseInt(changedSynonyms.item);
-    },
-
     add() {
       this.form.items.push({
         localeId: this.id,
         name: '',
         code: '',
         recipeWord: '',
-        synonyms_id: null,
+        synonymsId: null,
       });
     },
 
@@ -236,7 +228,7 @@ export default defineComponent({
       this.form.items.splice(index, 1);
     },
 
-    async updateItemSteps(idx: number, id: string, steps: LocaleRecipeFoodsInput['steps']) {
+    async updateItemSteps(idx: number, id: string, steps: RecipeFoodEntry['steps']) {
       this.toggleDialog();
       const item = this.form.items.find(item => item.id === id);
       if (!item)
@@ -254,7 +246,7 @@ export default defineComponent({
           return item;
         });
       const synonymsSets = this.form.synonymsSets;
-      const items = await this.form.post<LocaleRecipeFoods[]>(
+      const items = await this.form.post<RecipeFoodEntry[]>(
         `admin/locales/${this.id}/recipe-foods`,
       );
 

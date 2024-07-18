@@ -69,7 +69,6 @@ export default () => {
         'respondentLanguageId',
         'adminLanguageId',
         'countryFlagCode',
-        'textDirection',
       ]);
     });
 
@@ -94,7 +93,7 @@ export default () => {
             englishName: { name: 'United Kingdom' },
             localName: ['United Kingdom'],
             respondentLanguageId: 10,
-            adminLanguageId: 'nonLocaleString',
+            adminLanguageId: ['nonLocaleString'],
             countryFlagCode: 'notWellFormedLocale',
             prototypeLocaleId: 'nonExistingLocale',
             textDirection: 'wrongDirection',

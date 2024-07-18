@@ -51,18 +51,18 @@ import { defineComponent } from 'vue';
 
 import type {
   LocaleEntry,
-  LocaleSynonymSet,
-  LocaleSynonymSetInput,
+  SynonymSetAttributes,
+  SynonymSetRequest,
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
-export type LocaleSynonymSetsForm = { items: LocaleSynonymSetInput[] };
+export type SynonymSetsForm = { items: SynonymSetRequest[] };
 
 export default defineComponent({
-  name: 'LocaleSynonymSets',
+  name: 'SynonymSets',
 
   components: { ConfirmDialog },
 
@@ -72,7 +72,7 @@ export default defineComponent({
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
-      LocaleSynonymSetsForm,
+      SynonymSetsForm,
       LocaleEntry
     >(props, {
       data: { items: [] },
@@ -83,7 +83,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    const { data: items } = await this.$http.get<LocaleSynonymSet[]>(
+    const { data: items } = await this.$http.get<SynonymSetAttributes[]>(
       `admin/locales/${this.id}/synonym-sets`,
     );
 
@@ -102,7 +102,7 @@ export default defineComponent({
     async save() {
       this.form.items = this.form.items.filter(({ synonyms }) => synonyms);
 
-      const items = await this.form.post<LocaleSynonymSet[]>(
+      const items = await this.form.post<SynonymSetAttributes[]>(
         `admin/locales/${this.id}/synonym-sets`,
       );
 

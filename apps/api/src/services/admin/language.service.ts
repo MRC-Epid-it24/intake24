@@ -1,7 +1,7 @@
 import type { IoC } from '@intake24/api/ioc';
 import type { Application } from '@intake24/common/types';
 import type {
-  CreateLanguageRequest,
+  LanguageRequest,
   LanguageTranslationAttributes,
   UpdateLanguageRequest,
 } from '@intake24/common/types/http/admin';
@@ -138,11 +138,11 @@ function languageService({
   /**
    * Create language with messages
    *
-   * @param {CreateLanguageRequest} input
+   * @param {LanguageRequest} input
    * @param {string} ownerId
    * @returns {Promise<Language>}
    */
-  const createLanguage = async (input: CreateLanguageRequest, ownerId: string): Promise<Language> => {
+  const createLanguage = async (input: LanguageRequest, ownerId: string): Promise<Language> => {
     const language = await Language.create({ ...input, ownerId });
 
     return language;

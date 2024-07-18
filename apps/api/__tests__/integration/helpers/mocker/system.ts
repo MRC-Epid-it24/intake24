@@ -5,9 +5,9 @@ import { times } from 'lodash';
 import slugify from 'slugify';
 
 import type {
-  CreateLanguageRequest,
-  CreateLocaleRequest,
   CreateRespondentRequest,
+  LanguageRequest,
+  LocaleRequest,
   PermissionRequest,
   RoleRequest,
   SurveyCreateRequest,
@@ -159,7 +159,7 @@ function feedbackScheme(): FeedbackSchemeCreationAttributes {
   };
 }
 
-function language(): CreateLanguageRequest {
+function language(): LanguageRequest {
   const code = faker.location.countryCode();
   const englishName = faker.location.country();
   const localName = faker.location.country();
@@ -177,7 +177,7 @@ function language(): CreateLanguageRequest {
   };
 }
 
-function locale(respLangId: string | undefined, adminLangId: string | undefined): CreateLocaleRequest {
+function locale(respLangId: string | undefined, adminLangId: string | undefined): LocaleRequest {
   const code = faker.location.countryCode();
   const englishName = faker.location.country();
   const localName = faker.location.country();

@@ -60,7 +60,7 @@
     "special": "Trigger word",
     "code": "Recipe Food Code",
     "step_code": "Step Code (assigned automatically)",
-    "synonyms_id": "Synonyms (space-delimited)",
+    "synonymsId": "Synonyms (space-delimited)",
     "steps": "Recipe Builder Steps",
     "name": "Step Name",
     "description": "Step Description",

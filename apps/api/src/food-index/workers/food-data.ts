@@ -1,5 +1,5 @@
 import type { AlternativeFoodNames } from '@intake24/db';
-import { CategoryLocal, FoodLocalList, RecipeFoods, SynonymSet } from '@intake24/db';
+import { CategoryLocal, FoodLocalList, RecipeFood } from '@intake24/db';
 
 import type { RecipeFoodTuple } from '../phrase-index';
 
@@ -85,14 +85,14 @@ export async function fetchLocalCategories(localeId: string): Promise<LocalCateg
  * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
  */
 export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
-  const recipeFoods = await RecipeFoods.findAll({
+  const recipeFoods = await RecipeFood.findAll({
     attributes: ['code', 'name', 'recipeWord'],
     where: { localeId },
-    include: [{ model: SynonymSet, attributes: ['synonyms'] }],
+    include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
   });
 
   const recipeFoodsList: RecipeFoodTuple[] = [];
-  recipeFoods.map((recipeFoodEntry: RecipeFoods) =>
+  recipeFoods.map((recipeFoodEntry: RecipeFood) =>
     recipeFoodsList.push([
       recipeFoodEntry.name.toLowerCase(),
       {
@@ -101,7 +101,7 @@ export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFood
         recipeWord: recipeFoodEntry.recipeWord,
         synonyms: new Set<string>(
           recipeFoodEntry.recipeWord
-            .concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
+            .concat(' ', recipeFoodEntry.synonymSet?.synonyms ?? '')
             .trim()
             .split(/\s+/),
         ),

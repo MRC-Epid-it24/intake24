@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { LocaleSplitWordInput } from '@intake24/common/types/http/admin';
+import type { SplitWordRequest } from '@intake24/common/types/http/admin';
 import ioc from '@intake24/api/ioc';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
@@ -11,7 +11,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let splitWords: LocaleSplitWordInput[];
+  let splitWords: SplitWordRequest[];
 
   beforeAll(async () => {
     const { id, code: localeId } = suite.data.system.locale;
@@ -52,7 +52,7 @@ export default () => {
       expect(status).toBe(200);
       expect(body).toBeArray();
 
-      const lists = body.map(({ id, ...rest }: LocaleSplitWordInput) => rest);
+      const lists = body.map(({ id, ...rest }: SplitWordRequest) => rest);
       expect(lists).toIncludeSameMembers(splitWords);
     });
   });

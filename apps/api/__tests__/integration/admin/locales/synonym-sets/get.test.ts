@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { LocaleSynonymSetInput } from '@intake24/common/types/http/admin';
+import type { SynonymSetRequest } from '@intake24/common/types/http/admin';
 import ioc from '@intake24/api/ioc';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
@@ -11,7 +11,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let synonymSets: LocaleSynonymSetInput[];
+  let synonymSets: SynonymSetRequest[];
 
   beforeAll(async () => {
     const { id, code: localeId } = suite.data.system.locale;
@@ -52,7 +52,7 @@ export default () => {
       expect(status).toBe(200);
       expect(body).toBeArray();
 
-      const lists = body.map(({ id, ...rest }: LocaleSynonymSetInput) => rest);
+      const lists = body.map(({ id, ...rest }: SynonymSetRequest) => rest);
       expect(lists).toIncludeSameMembers(synonymSets);
     });
   });

@@ -1,6 +1,6 @@
 import type {
-  CreateLocaleRequest,
   LocaleEntry,
+  LocaleRequest,
   LocalesResponse,
   UpdateLocaleRequest,
 } from '@intake24/common/types/http/admin';
@@ -35,7 +35,7 @@ export class LocalesApiV4 {
 
   public async create(
     localeId: string,
-    locale: CreateLocaleRequest,
+    locale: LocaleRequest,
   ): Promise<CreateResult<LocaleEntry>> {
     const response = await this.baseClient.postResponse<LocaleEntry>(
       `${LocalesApiV4.apiPath}`,

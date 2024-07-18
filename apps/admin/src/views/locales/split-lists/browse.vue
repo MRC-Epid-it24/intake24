@@ -64,18 +64,18 @@ import { defineComponent } from 'vue';
 
 import type {
   LocaleEntry,
-  LocaleSplitList,
-  LocaleSplitListInput,
+  SplitListAttributes,
+  SplitListRequest,
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
-export type LocaleSplitListsForm = { items: LocaleSplitListInput[] };
+export type SplitListsForm = { items: SplitListRequest[] };
 
 export default defineComponent({
-  name: 'LocaleSplitLists',
+  name: 'SplitLists',
 
   components: { ConfirmDialog },
 
@@ -85,7 +85,7 @@ export default defineComponent({
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
-      LocaleSplitListsForm,
+      SplitListsForm,
       LocaleEntry
     >(props, {
       data: { items: [] },
@@ -96,7 +96,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    const { data: items } = await this.$http.get<LocaleSplitList[]>(
+    const { data: items } = await this.$http.get<SplitListAttributes[]>(
       `admin/locales/${this.id}/split-lists`,
     );
 
@@ -115,7 +115,7 @@ export default defineComponent({
     async save() {
       this.form.items = this.form.items.filter(({ firstWord, words }) => firstWord && words);
 
-      const items = await this.form.post<LocaleSplitList[]>(`admin/locales/${this.id}/split-lists`);
+      const items = await this.form.post<SplitListAttributes[]>(`admin/locales/${this.id}/split-lists`);
 
       useStoreEntry().setEntry({ items });
     },

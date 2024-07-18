@@ -11,29 +11,12 @@ import { compareMessageKeys, defaultI18nMessages, validateTranslations } from '@
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
 
-export const languageRequest = z.object({
+export const languageAttributes = z.object({
+  id: z.string(),
   code: z.string().min(1).max(16).refine(val => isLocale(val)),
   englishName: z.string().min(1).max(512),
   localName: z.string().min(1).max(512),
   countryFlagCode: z.string().min(1).max(16).refine(val => isLocale(val)),
-  textDirection: z.enum(textDirections),
-  visibility: z.enum(recordVisibilities).optional(),
-});
-
-export type LanguageRequest = z.infer<typeof languageRequest>;
-
-export type CreateLanguageRequest = LanguageRequest;
-
-export const updateLanguageRequest = languageRequest.omit({ code: true });
-
-export type UpdateLanguageRequest = z.infer<typeof updateLanguageRequest>;
-
-export const languageAttributes = z.object({
-  id: z.string(),
-  code: z.string().min(1).max(16),
-  englishName: z.string().min(1).max(512),
-  localName: z.string().min(1).max(512),
-  countryFlagCode: z.string().min(1).max(16),
   textDirection: z.enum(textDirections),
   ownerId: z.string().nullable(),
   visibility: z.enum(recordVisibilities),
@@ -42,6 +25,21 @@ export const languageAttributes = z.object({
 });
 
 export type LanguageAttributes = z.infer<typeof languageAttributes>;
+
+export const languageRequest = languageAttributes.omit({
+  id: true,
+  ownerId: true,
+  createdAt: true,
+  updatedAt: true,
+}).partial({
+  visibility: true,
+});
+
+export type LanguageRequest = z.infer<typeof languageRequest>;
+
+export const updateLanguageRequest = languageRequest.omit({ code: true });
+
+export type UpdateLanguageRequest = z.infer<typeof updateLanguageRequest>;
 
 export type LanguagesResponse = Pagination<LanguageAttributes>;
 

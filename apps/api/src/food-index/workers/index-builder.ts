@@ -11,7 +11,7 @@ import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/r
 import { ParentCategoryIndex } from '@intake24/api/food-index/workers/parent-category-index';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { logger as servicesLogger } from '@intake24/common-backend';
-import { Database, FoodsLocale, RecipeFoods, SynonymSet } from '@intake24/db';
+import { Database, FoodsLocale, RecipeFood, SynonymSet } from '@intake24/db';
 
 import type InterpretedPhrase from '../interpreted-phrase';
 import {
@@ -67,14 +67,14 @@ async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
 }
 
 async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]> {
-  const recipeFoods = await RecipeFoods.findAll({
+  const recipeFoods = await RecipeFood.findAll({
     attributes: ['recipeWord'],
     where: { localeId },
-    include: [{ model: SynonymSet, attributes: ['synonyms'] }],
+    include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
   });
   return recipeFoods.map(recipeFoodEntry =>
     parseSynonymSet(
-      recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? ''),
+      recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonymSet?.synonyms ?? ''),
     ),
   );
 }

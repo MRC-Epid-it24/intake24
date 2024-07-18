@@ -15,11 +15,6 @@ import type {
   DrinkwareSetController,
   GuideImageController,
   ImageMapController,
-  LocaleController,
-  LocaleRecipeFoodsController,
-  LocaleSplitListController,
-  LocaleSplitWordController,
-  LocaleSynonymSetController,
 } from '@intake24/api/http/controllers';
 import type { DrinkScaleController } from '@intake24/api/http/controllers/admin/images/drink-scale.controller';
 import type { Jobs } from '@intake24/api/jobs';
@@ -131,13 +126,6 @@ export interface IoC extends Jobs {
   drinkScaleController: DrinkScaleController;
   guideImageController: GuideImageController;
   imageMapController: ImageMapController;
-
-  // Localization
-  localeController: LocaleController;
-  localeRecipeFoodsController: LocaleRecipeFoodsController;
-  localeSplitListController: LocaleSplitListController;
-  localeSplitWordController: LocaleSplitWordController;
-  localeSynonymSetController: LocaleSynonymSetController;
 
   // System services
   db: DatabasesInterface;

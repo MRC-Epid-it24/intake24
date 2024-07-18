@@ -66,8 +66,8 @@ export default (app: Express, { logger }: Ops): void => {
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ValidationError) {
-      const { errors, message } = err;
-      res.status(400).json({ errors, message });
+      const { errors, message, code } = err;
+      res.status(code).json({ errors, message });
       return;
     }
     next(err);

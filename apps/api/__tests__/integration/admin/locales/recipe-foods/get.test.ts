@@ -1,4 +1,4 @@
-import type { LocaleRecipeFoodsInput } from '@intake24/common/types/http/admin';
+import type { RecipeFoodRequest } from '@intake24/common/types/http/admin';
 import ioc from '@intake24/api/ioc';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
@@ -9,7 +9,7 @@ export default () => {
   let url: string;
   // let invalidUrl: string;
 
-  let recipeFoods: LocaleRecipeFoodsInput[];
+  let recipeFoods: RecipeFoodRequest[];
 
   beforeAll(async () => {
     const { id, code: localeId } = suite.data.system.locale;
@@ -20,14 +20,14 @@ export default () => {
         code: 'RF-TST-1',
         name: 'recipe-food-test1',
         recipeWord: 'test-food-1',
-        synonyms_id: null,
+        synonymsId: null,
       },
       {
         localeId,
         code: 'RF-TST-2',
         name: 'recipe-food-test2',
         recipeWord: 'test-food-2',
-        synonyms_id: null,
+        synonymsId: null,
       },
     ];
 
@@ -62,7 +62,7 @@ export default () => {
   //     expect(status).toBe(200);
   //     expect(body).toBeArray();
 
-  //     const lists = body.map(({ id, ...rest }: LocaleRecipeFoodsInput) => rest);
+  //     const lists = body.map(({ id, ...rest }: RecipeFoodRequest) => rest);
   //     expect(lists).toIncludeSameMembers(recipeFoods);
   //   });
   // });

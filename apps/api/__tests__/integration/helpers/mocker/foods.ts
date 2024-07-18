@@ -5,7 +5,7 @@ import slugify from 'slugify';
 
 import type {
   CreateAsServedSetInput,
-  // CreateLocaleRequest,
+  // LocaleRequest,
   NutrientTableRequest,
   NutrientTypeRequest,
   NutrientUnitRequest,
@@ -56,7 +56,7 @@ async function asServedSet(asServedSetId?: string): Promise<CreateAsServedSetInp
 /* const locale = (
   respLangId: string | undefined,
   adminLangId: string | undefined
-): CreateLocaleRequest => {
+): LocaleRequest => {
   const id = faker.location.countryCode();
   const englishName = faker.location.country();
   const localName = faker.location.country();

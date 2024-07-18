@@ -27,7 +27,7 @@ export default () => {
 
     input = {
       type: 'LocaleCopy',
-      params: { localeId: locale.id, sourceLocaleId, subTasks: ['foods'] },
+      params: { localeId: locale.id, sourceLocaleId, subTasks: ['brands'] },
     };
 
     url = `${baseUrl}/${locale.id}/tasks`;
@@ -54,8 +54,8 @@ export default () => {
     });
 
     it('should return 400 for invalid input data #2', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['params.sourceLocaleId', 'params.subTasks'], {
-        input: { type: 'LocaleCopy', params: { nonValidKey: false, subTasks: [] } },
+      await suite.sharedTests.assertInvalidInput('post', url, ['params.localeId', 'params.sourceLocaleId', 'params.subTasks'], {
+        input: { type: 'LocaleCopy', params: { nonValidKey: false, subTasks: {} } },
       });
     });
 

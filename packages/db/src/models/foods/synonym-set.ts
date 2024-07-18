@@ -9,7 +9,7 @@ import type {
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { FoodsLocale, RecipeFoods } from '.';
+import { FoodsLocale, RecipeFood } from '.';
 
 @Table({
   modelName: 'SynonymSet',
@@ -44,8 +44,8 @@ export default class SynonymSet extends BaseModel<
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 
-  @HasMany(() => RecipeFoods, 'id')
-  declare recipeFoods?: NonAttribute<RecipeFoods>;
+  @HasMany(() => RecipeFood, 'id')
+  declare recipeFoods?: NonAttribute<RecipeFood>[];
 }
 
 export type SynonymSetAttributes = Attributes<SynonymSet>;

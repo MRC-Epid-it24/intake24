@@ -1,46 +1,24 @@
+import { isLocale } from 'validator';
 import { z } from 'zod';
 
 import type {
   Pagination,
-  RecipeFoodsAttributes,
-  RecipeFoodsCreationAttributes,
-  RecipeFoodsStepsCreationAttributes,
-  SplitListAttributes,
-  SplitListCreationAttributes,
-  SplitWordAttributes,
-  SplitWordCreationAttributes,
-  SynonymSetAttributes,
-  SynonymSetCreationAttributes,
-  SystemLocaleCreationAttributes,
 } from '@intake24/db';
 import { recordVisibilities } from '@intake24/common/security';
 
-import { type TextDirection, textDirections } from '../../common';
+import { localeTranslation, textDirections } from '../../common';
 import { languageAttributes } from './languages';
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
-
-export type LocaleRequest = {
-  code: string;
-  englishName: string;
-  localName: string;
-  respondentLanguageId: string;
-  adminLanguageId: string;
-  countryFlagCode: string;
-  prototypeLocaleId: string | null;
-  textDirection: TextDirection;
-  foodIndexLanguageBackendId: string;
-  foodIndexEnabled?: boolean;
-};
 
 export const systemLocaleAttributes = z.object({
   id: z.string(),
   code: z.string().min(1).max(16),
   englishName: z.string().min(1).max(64),
   localName: z.string().min(1).max(64),
-  respondentLanguageId: z.string().min(1).max(16),
-  adminLanguageId: z.string().min(1).max(16),
-  countryFlagCode: z.string().min(1).max(16),
+  respondentLanguageId: languageAttributes.shape.code,
+  adminLanguageId: languageAttributes.shape.code,
+  countryFlagCode: z.string().min(1).max(16).refine(val => isLocale(val)),
   prototypeLocaleId: z.string().min(1).max(16).nullable(),
   textDirection: z.enum(textDirections),
   foodIndexEnabled: z.boolean(),
@@ -53,9 +31,23 @@ export const systemLocaleAttributes = z.object({
 
 export type SystemLocaleAttributes = z.infer<typeof systemLocaleAttributes>;
 
-export type CreateLocaleRequest = SystemLocaleCreationAttributes;
+export const localeRequest = systemLocaleAttributes.omit({
+  id: true,
+  ownerId: true,
+  createdAt: true,
+  updatedAt: true,
+}).partial({
+  prototypeLocaleId: true,
+  textDirection: true,
+  foodIndexEnabled: true,
+  foodIndexLanguageBackendId: true,
+  visibility: true,
+});
+export type LocaleRequest = z.infer<typeof localeRequest>;
 
-export type UpdateLocaleRequest = Omit<LocaleRequest, 'code'>;
+export const updateLocaleRequest = localeRequest.omit({ code: true });
+
+export type UpdateLocaleRequest = z.infer<typeof updateLocaleRequest>;
 
 export type LocalesResponse = Pagination<SystemLocaleAttributes>;
 
@@ -69,39 +61,89 @@ export const localeEntry = systemLocaleAttributes.extend({
 
 export type LocaleEntry = z.infer<typeof localeEntry>;
 
-export type LocaleListEntry = Pick<
-  SystemLocaleAttributes,
-  'id' | 'code' | 'englishName' | 'localName' | 'countryFlagCode'
->;
+export const localeListEntry = localeEntry.pick({
+  id: true,
+  code: true,
+  englishName: true,
+  localName: true,
+  countryFlagCode: true,
+});
 
-export type LocaleRefs = {
-  foodIndexLanguageBackends: { id: string; name: string }[];
-  locales: LocaleListEntry[];
-};
+export type LocaleListEntry = z.infer<typeof localeListEntry>;
 
-export interface LocaleSplitListInput extends SplitListCreationAttributes {
-  id?: string;
-}
-export type LocaleSplitList = SplitListAttributes;
+export const localeRefs = z.object({
+  foodIndexLanguageBackends: z.object({
+    id: z.string(),
+    name: z.string(),
+  }).array(),
+  locales: localeListEntry.array(),
+});
 
-export interface LocaleSplitWordInput extends SplitWordCreationAttributes {
-  id?: string;
-}
-export type LocaleSplitWord = SplitWordAttributes;
+export type LocaleRefs = z.infer<typeof localeRefs>;
 
-export interface LocaleSynonymSetInput extends SynonymSetCreationAttributes {
-  id?: string;
-}
-export type LocaleSynonymSet = SynonymSetAttributes;
+export const splitListAttributes = z.object({
+  id: z.string(),
+  localeId: z.string(),
+  firstWord: z.string().min(1).max(64),
+  words: z.string().min(1),
+});
+export type SplitListAttributes = z.infer<typeof splitListAttributes>;
 
-export interface LocaleRecipeFoodsInput extends RecipeFoodsCreationAttributes {
-  id?: string;
-}
+export const splitListRequest = splitListAttributes.partial({ id: true });
+export type SplitListRequest = z.infer<typeof splitListRequest>;
 
-export interface LocaleRecipeFoodStepsInput extends RecipeFoodsStepsCreationAttributes {
-  id?: string;
-}
+export const splitWordAttributes = z.object({
+  id: z.string(),
+  localeId: z.string(),
+  words: z.string().min(1),
+});
+export type SplitWordAttributes = z.infer<typeof splitListAttributes>;
 
-export type LocaleRecipeFoods = RecipeFoodsAttributes;
+export const splitWordRequest = splitWordAttributes.partial({ id: true });
+export type SplitWordRequest = z.infer<typeof splitWordRequest>;
 
-export type LocaleRecipeFoodSteps = RecipeFoodsStepsCreationAttributes;
+export const synonymSetAttributes = z.object({
+  id: z.string(),
+  localeId: z.string(),
+  synonyms: z.string().min(1),
+});
+export type SynonymSetAttributes = z.infer<typeof synonymSetAttributes>;
+
+export const synonymSetRequest = synonymSetAttributes.partial({ id: true });
+export type SynonymSetRequest = z.infer<typeof synonymSetRequest>;
+
+export const recipeFoodStepAttributes = z.object({
+  id: z.string(),
+  recipeFoodsId: z.string(),
+  code: z.string().min(1).max(128),
+  localeId: z.string().min(1).max(16),
+  categoryCode: z.string().max(16).nullable(),
+  name: localeTranslation,
+  description: localeTranslation,
+  order: z.number(),
+  repeatable: z.boolean(),
+  required: z.boolean(),
+});
+export type RecipeFoodStepAttributes = z.infer<typeof recipeFoodStepAttributes>;
+
+export const recipeFoodStepRequest = recipeFoodStepAttributes.partial({ id: true });
+export type RecipeFoodStepRequest = z.infer<typeof recipeFoodStepRequest>;
+
+export const recipeFoodAttributes = z.object({
+  id: z.string(),
+  localeId: z.string().min(1).max(16),
+  code: z.string().min(1).max(16),
+  name: z.string().min(1).max(128),
+  recipeWord: z.string().min(1).max(512),
+  synonymsId: z.string().nullable(),
+});
+export type RecipeFoodAttributes = z.infer<typeof recipeFoodAttributes>;
+
+export const recipeFoodRequest = recipeFoodAttributes.partial({ id: true });
+export type RecipeFoodRequest = z.infer<typeof recipeFoodRequest>;
+
+export const recipeFoodEntry = recipeFoodAttributes.extend({
+  steps: recipeFoodStepAttributes.array(),
+  synonymSet: synonymSetAttributes,
+});
+export type RecipeFoodEntry = z.infer<typeof recipeFoodEntry>;

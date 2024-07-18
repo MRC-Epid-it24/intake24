@@ -160,8 +160,8 @@ import type { PropType } from 'vue';
 import { defineComponent, reactive } from 'vue';
 
 import type {
-  LocaleRecipeFoodSteps,
-  LocaleRecipeFoodStepsInput,
+  RecipeFoodStepAttributes,
+  RecipeFoodStepRequest,
 } from '@intake24/common/types/http/admin';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
@@ -169,11 +169,11 @@ import { createForm } from '@intake24/admin/util';
 import { useI18n } from '@intake24/i18n';
 
 export type LocaleRecipeFoodStepsForm = {
-  items: LocaleRecipeFoodStepsInput[];
+  items: RecipeFoodStepRequest[];
 };
 
 export type Locale = {
-  id: number;
+  id: string;
   code: string;
 };
 
@@ -200,7 +200,7 @@ export default defineComponent({
       required: true,
     },
     items: {
-      type: Array as PropType<LocaleRecipeFoodStepsInput[]>,
+      type: Array as PropType<RecipeFoodStepRequest[]>,
       default: () => [],
     },
   },
@@ -217,7 +217,7 @@ export default defineComponent({
           return item;
         });
 
-      const items = await form.post<LocaleRecipeFoodSteps[]>(
+      const items = await form.post<RecipeFoodStepAttributes[]>(
         `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`,
       );
 
@@ -228,7 +228,7 @@ export default defineComponent({
       form.items.push({
         id: undefined,
         code: `${props.activeRecipeFoodCode.substring(1)}_STP-${form.items.length + 1}`,
-        recipeFoodsId: Number.parseInt(props.activeRecipeFoodId),
+        recipeFoodsId: props.activeRecipeFoodId,
         name: { en: 'Name' },
         description: { en: 'Description' },
         order: form.items.length + 1,

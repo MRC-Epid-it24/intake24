@@ -43,7 +43,6 @@ export default () => {
         'respondentLanguageId',
         'adminLanguageId',
         'countryFlagCode',
-        'textDirection',
       ]);
     });
 
@@ -69,7 +68,7 @@ export default () => {
             code: null,
             englishName: [],
             localName: ['dddsds', 'dffd'],
-            respondentLanguageId: 'nonLocaleString',
+            respondentLanguageId: ['nonLocaleString'],
             adminLanguageId: 5,
             countryFlagCode: 5,
             prototypeLocaleId: 'nonExistingLocale',

@@ -22,7 +22,7 @@ import type { LocaleTranslation } from '@intake24/common/types';
 import { FoodCategory, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
-import RecipeFoods from './recipe-foods';
+import RecipeFood from './recipe-food';
 
 @Scopes(() => ({
   list: {
@@ -40,14 +40,14 @@ import RecipeFoods from './recipe-foods';
   },
 }))
 @Table({
-  modelName: 'RecipeFoodsSteps',
+  modelName: 'RecipeFoodStep',
   tableName: 'recipe_foods_steps',
   freezeTableName: true,
   underscored: true,
 })
-export default class RecipeFoodsSteps extends BaseModel<
-  InferAttributes<RecipeFoodsSteps>,
-  InferCreationAttributes<RecipeFoodsSteps>
+export default class RecipeFoodStep extends BaseModel<
+  InferAttributes<RecipeFoodStep>,
+  InferCreationAttributes<RecipeFoodStep>
 > {
   @Column({
     autoIncrement: true,
@@ -56,13 +56,12 @@ export default class RecipeFoodsSteps extends BaseModel<
   })
   declare id: CreationOptional<string>;
 
-  @ForeignKey(() => RecipeFoods)
+  @ForeignKey(() => RecipeFood)
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
-    unique: false,
   })
-  declare recipeFoodsId: number;
+  declare recipeFoodsId: string;
 
   @Column({
     allowNull: false,
@@ -81,9 +80,8 @@ export default class RecipeFoodsSteps extends BaseModel<
   @Column({
     allowNull: true,
     type: DataType.STRING(16),
-    unique: false,
   })
-  declare categoryCode: string;
+  declare categoryCode: string | null;
 
   @Column({
     allowNull: false,
@@ -151,8 +149,8 @@ export default class RecipeFoodsSteps extends BaseModel<
   @UpdatedAt
   declare readonly updatedAt: CreationOptional<Date>;
 
-  @BelongsTo(() => RecipeFoods, 'recipeFoodsId')
-  declare recipeFoods?: NonAttribute<RecipeFoods>;
+  @BelongsTo(() => RecipeFood, 'recipeFoodsId')
+  declare recipeFood?: NonAttribute<RecipeFood>;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
@@ -161,5 +159,5 @@ export default class RecipeFoodsSteps extends BaseModel<
   declare category?: NonAttribute<FoodCategory>;
 }
 
-export type RecipeFoodsStepsAttributes = Attributes<RecipeFoodsSteps>;
-export type RecipeFoodsStepsCreationAttributes = CreationAttributes<RecipeFoodsSteps>;
+export type RecipeFoodStepAttributes = Attributes<RecipeFoodStep>;
+export type RecipeFoodsStepCreationAttributes = CreationAttributes<RecipeFoodStep>;

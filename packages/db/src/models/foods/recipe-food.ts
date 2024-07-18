@@ -20,25 +20,25 @@ import {
 import { FoodsLocale, SynonymSet } from '@intake24/db';
 
 import BaseModel from '../model';
-import RecipeFoodsSteps from './recipe-foods-steps';
+import RecipeFoodStep from './recipe-food-step';
 
 @Scopes(() => ({
   list: {
     attributes: ['id', 'code', 'name', 'localeId', 'recipeWord', 'synonyms'],
     order: [['name', 'ASC']],
   },
-  steps: { include: [{ model: RecipeFoodsSteps }] },
+  steps: { include: [{ model: RecipeFoodStep }] },
   synonyms: { include: [{ model: SynonymSet }] },
 }))
 @Table({
-  modelName: 'RecipeFoods',
+  modelName: 'RecipeFood',
   tableName: 'recipe_foods',
   freezeTableName: true,
   underscored: true,
 })
-export default class RecipeFoods extends BaseModel<
-  InferAttributes<RecipeFoods>,
-  InferCreationAttributes<RecipeFoods>
+export default class RecipeFood extends BaseModel<
+  InferAttributes<RecipeFood>,
+  InferCreationAttributes<RecipeFood>
 > {
   @Column({
     autoIncrement: true,
@@ -77,7 +77,7 @@ export default class RecipeFoods extends BaseModel<
     type: DataType.BIGINT,
     unique: false,
   })
-  declare synonyms_id: number | null;
+  declare synonymsId: string | null;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
@@ -88,24 +88,24 @@ export default class RecipeFoods extends BaseModel<
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 
-  @BelongsTo(() => SynonymSet, 'synonyms_id')
-  declare synonyms?: Attributes<SynonymSet>;
+  @BelongsTo(() => SynonymSet, 'synonymsId')
+  declare synonymSet?: Attributes<SynonymSet>;
 
-  @HasMany(() => RecipeFoodsSteps, 'recipeFoodsId')
-  steps?: Attributes<RecipeFoodsSteps>[];
+  @HasMany(() => RecipeFoodStep, 'recipeFoodsId')
+  declare steps?: Attributes<RecipeFoodStep>[];
 
-  static async findByCode(code: string): Promise<RecipeFoods | null> {
-    return RecipeFoods.findOne({ where: { code }, include: [{ model: RecipeFoodsSteps }] });
+  static async findByCode(code: string): Promise<RecipeFood | null> {
+    return RecipeFood.findOne({ where: { code }, include: [{ association: 'steps' }] });
   }
 
-  static async findByLocaleId(localeId: string): Promise<RecipeFoods[]> {
-    return RecipeFoods.findAll({ where: { localeId } });
+  static async findByLocaleId(localeId: string): Promise<RecipeFood[]> {
+    return RecipeFood.findAll({ where: { localeId } });
   }
 
-  static async findByLocaleIdAndCode(localeId: string, code: string): Promise<RecipeFoods | null> {
-    return RecipeFoods.findOne({ where: { localeId, code } });
+  static async findByLocaleIdAndCode(localeId: string, code: string): Promise<RecipeFood | null> {
+    return RecipeFood.findOne({ where: { localeId, code } });
   }
 }
 
-export type RecipeFoodsAttributes = Attributes<RecipeFoods>;
-export type RecipeFoodsCreationAttributes = CreationAttributes<RecipeFoods>;
+export type RecipeFoodAttributes = Attributes<RecipeFood>;
+export type RecipeFoodsCreationAttributes = CreationAttributes<RecipeFood>;

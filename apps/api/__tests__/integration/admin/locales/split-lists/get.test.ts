@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { LocaleSplitListInput } from '@intake24/common/types/http/admin';
+import type { SplitListRequest } from '@intake24/common/types/http/admin';
 import ioc from '@intake24/api/ioc';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
@@ -11,7 +11,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let splitLists: LocaleSplitListInput[];
+  let splitLists: SplitListRequest[];
 
   beforeAll(async () => {
     const { id, code: localeId } = suite.data.system.locale;
@@ -52,7 +52,7 @@ export default () => {
       expect(status).toBe(200);
       expect(body).toBeArray();
 
-      const lists = body.map(({ id, ...rest }: LocaleSplitListInput) => rest);
+      const lists = body.map(({ id, ...rest }: SplitListRequest) => rest);
       expect(lists).toIncludeSameMembers(splitLists);
     });
   });

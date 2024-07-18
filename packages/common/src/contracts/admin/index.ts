@@ -6,6 +6,7 @@ import { foodGroup } from './food-group.contract';
 import { job } from './job.contract';
 import { language } from './language.contract';
 import { languageTranslation } from './language-translation.contract';
+import locale from './locale';
 import { nutrientTable } from './nutrient-table.contract';
 import { nutrientType } from './nutrient-type.contract';
 import { nutrientUnit } from './nutrient-unit.contract';
@@ -31,6 +32,7 @@ export default {
   language,
   languageTranslation,
   languageSecurable: securable('Language', '/admin/languages/:languageId'),
+  locale,
   localeSecurable: securable('Locale', '/admin/locales/:localeId'),
   nutrientTable,
   nutrientType,

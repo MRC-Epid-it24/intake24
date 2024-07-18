@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { LocaleSplitWordInput } from '@intake24/common/types/http/admin';
+import type { SplitWordRequest } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
@@ -10,7 +10,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let splitWords: LocaleSplitWordInput[];
+  let splitWords: SplitWordRequest[];
 
   beforeAll(async () => {
     const { id, code: localeId } = suite.data.system.locale;
@@ -39,7 +39,7 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, [''], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['0.localeId', '0.words'], {
         input: [{ firstWord: 19, words: false }],
       });
     });
@@ -74,10 +74,10 @@ export default () => {
       expect(status).toBe(200);
       expect(body).toBeArray();
 
-      const lists = body.map(({ id, ...rest }: LocaleSplitWordInput) => rest);
+      const lists = body.map(({ id, ...rest }: SplitWordRequest) => rest);
       expect(lists).toIncludeSameMembers(splitWords);
 
-      splitWords = body.map((item: LocaleSplitWordInput) => ({
+      splitWords = body.map((item: SplitWordRequest) => ({
         ...item,
         words: 'updated words',
       }));

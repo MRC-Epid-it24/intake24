@@ -20,12 +20,5 @@ export default (container: AwilixContainer): void => {
     drinkScaleController: asFunction(controllers.admin.images.drinkScale),
     guideImageController: asFunction(controllers.admin.images.guide),
     imageMapController: asFunction(controllers.admin.images.map),
-
-    // Locales
-    localeController: asFunction(controllers.admin.locales.locale),
-    localeRecipeFoodsController: asFunction(controllers.admin.locales.recipeFoods),
-    localeSplitListController: asFunction(controllers.admin.locales.splitList),
-    localeSplitWordController: asFunction(controllers.admin.locales.splitWord),
-    localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),
   });
 };
