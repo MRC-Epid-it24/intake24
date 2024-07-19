@@ -10,7 +10,7 @@ import type {
   DrinkwareSetsResponse,
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { DrinkwareSet } from '@intake24/db';
 
@@ -69,9 +69,9 @@ function drinkwareSetController({
     res: Response<DrinkwareSetEntry>,
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
-    const user = req.user as User;
+    const user = req.scope.cradle.user;
 
-    await drinkwareSetService.update(drinkwareSetId, user.id, req.body);
+    await drinkwareSetService.update(drinkwareSetId, user.userId, req.body);
 
     const updated = await drinkwareSetService.getDrinkwareSetOrThrow(drinkwareSetId);
 

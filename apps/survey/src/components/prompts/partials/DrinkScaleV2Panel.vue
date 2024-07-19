@@ -16,7 +16,7 @@
 
       <svg>
         <filter id="drink-scale-blur">
-          <feGaussianBlur stdDeviation="4" />
+          <feGaussianBlur stdDeviation="5" />
         </filter>
         <clipPath id="drink-scale-clip">
           <rect
@@ -101,12 +101,14 @@
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
 import { useElementSize } from '@vueuse/core';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { chunk, maxBy } from 'lodash';
+import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 
 import type { DrinkwareScaleV2Response } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import { calculateVolume, getScaleBounds, toSvgPolygonPoints } from './drink-scale';
+import { calculateFillVolume, getSymmetryShape } from './drink-scale-cylindrical';
 
 export default defineComponent({
   name: 'DrinkScaleV2Panel',
@@ -117,6 +119,11 @@ export default defineComponent({
     maxFillLevel: {
       type: Number,
       default: 1,
+    },
+    cylindricalVolumeStep: {
+      type: Number,
+      required: false,
+      default: 0.05,
     },
     open: {
       type: Boolean,
@@ -149,9 +156,15 @@ export default defineComponent({
       toSvgPolygonPoints(props.scale.outlineCoordinates, width.value, height.value),
     );
 
+    const propRefs = toRefs(props);
+
+    const scaleBounds = computed(() => getScaleBounds(propRefs.scale.value.outlineCoordinates));
+
+    const symmetryShape = computed(() => getSymmetryShape(propRefs.scale.value.outlineCoordinates));
+
     // The bounding box of the sliding scale (full region not accounting for maxFillLevel)
     const scaleBoundsPx = computed(() => {
-      const bounds = getScaleBounds(props.scale.outlineCoordinates);
+      const bounds = scaleBounds.value;
       const w = width.value;
       const h = height.value;
       return {
@@ -232,9 +245,23 @@ export default defineComponent({
 
     const fillLevel = computed(() => sliderValue.value * props.maxFillLevel);
 
-    const fillVolume = computed(() =>
-      Math.round(calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value)),
-    );
+    const maxVolume = computed(() => (maxBy(chunk(propRefs.scale.value.volumeSamplesNormalised, 2), sample => sample[1]) || [0, 0])[1]);
+
+    // eslint-disable-next-line vue/return-in-computed-property
+    const fillVolume = computed(() => {
+      switch (propRefs.scale.value.volumeMethod) {
+        case 'lookUpTable':
+          return Math.round(calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value));
+        case 'cylindrical': {
+          const { minY, maxY } = scaleBounds.value;
+          const scaleHeight = maxY - minY;
+          const fillLineY = maxY - scaleHeight * fillLevel.value;
+          const fullVolume = calculateFillVolume(symmetryShape.value, minY, propRefs.cylindricalVolumeStep.value);
+          const filledVolume = calculateFillVolume(symmetryShape.value, fillLineY, propRefs.cylindricalVolumeStep.value);
+          return Math.round((filledVolume * maxVolume.value) / fullVolume);
+        }
+      }
+    });
 
     const label = computed(() => `${fillVolume.value} ml`);
 
