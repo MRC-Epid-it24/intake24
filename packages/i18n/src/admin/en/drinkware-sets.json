@@ -34,7 +34,7 @@
     "obsolete": "Obsolete sliding scale data",
     "legacy": {
       "p1": "Sliding scale data for this object is not editable because it is in the legacy format.",
-      "p2": "Sliding scales in legacy format can still be used for portion size estimation, however in order to make any changes the sliding scale data needs to be converted into the new format.",
+      "p2": "Sliding scales in legacy format can still be used for portion size estimation, however to make any changes the sliding scale data must be converted into the new format.",
       "p3": "Fillable volume shape (sliding scale outline) <strong>will not</strong> be automatically converted!",
       "p4": "The sliding scale <strong>will be unusable</strong> after conversion until the fillable volume shape is defined.",
       "convert": "Convert"
@@ -52,6 +52,11 @@
   "clearScaleDialog": {
     "title": "Are you sure?",
     "msg": "You're about to delete the sliding scale shape data.\n This action cannot be undone."
+  },
+  "volumeMethod": {
+    "title": "Volume estimation method",
+    "lookUpTable": "Look-up table",
+    "cylindrical": "Cylindrical symmetry (max fill volume)"
   },
   "volumeTable": {
     "title": "Volume measurements",

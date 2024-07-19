@@ -150,6 +150,23 @@
                   @baseImageChanged="onBaseImageChanged"
                 />
 
+                <v-card flat>
+                  <v-card-title>
+                    {{ $t('drinkware-sets.volumeMethod.title') }}
+                  </v-card-title>
+                  <v-card-text>
+                    <v-select
+                      v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1"
+                      v-model="entry.scales[selectedScaleIndex].volumeMethod"
+                      hide-details="auto"
+                      item-value="method"
+                      :items="volumeMethodSelectList"
+                      :label="$t('drinkware-sets.volumeMethod.title')"
+                      outlined
+                    />
+                  </v-card-text>
+                </v-card>
+
                 <volume-samples-table
                   class="mt-4"
                   :scale-index="selectedScaleIndex"
@@ -180,6 +197,7 @@ import resources from '@intake24/admin/router/resources';
 import { httpService } from '@intake24/admin/services';
 import SlidingScaleEditor from '@intake24/admin/views/images/drinkware-sets/components/SlidingScaleEditor.vue';
 import VolumeSamplesTable from '@intake24/admin/views/images/drinkware-sets/components/VolumeSamplesTable.vue';
+import { useI18n } from '@intake24/i18n/index';
 
 import DrinkwareObjectChooser from './components/DrinkwareObjectChooser.vue';
 
@@ -216,6 +234,8 @@ export default defineComponent({
       config: { multipart: true },
       data: { id: null, imageMapId: null, description: null, scales: null, baseImage: {} },
     });
+
+    const { i18n } = useI18n();
 
     const imageMapEntryUrl = resources.find(r => r.name === 'image-maps')?.api;
 
@@ -261,8 +281,10 @@ export default defineComponent({
     onUnmounted(() => {
       releasePreviewObjectURLs();
 
-      for (const scale of entry.value.scales)
-        URL.revokeObjectURL(scale.baseImageUrl);
+      if (entry.value.scales !== undefined) {
+        for (const scale of entry.value.scales)
+          URL.revokeObjectURL(scale.baseImageUrl);
+      }
     });
 
     let loadedImageMapId: string | undefined;
@@ -292,6 +314,7 @@ export default defineComponent({
         label: {},
         volumeSamples: [],
         volumeSamplesNormalised: [],
+        volumeMethod: 'lookUpTable',
         outlineCoordinates: [],
       });
     };
@@ -321,6 +344,7 @@ export default defineComponent({
                 label: v2.label,
                 outlineCoordinates: v2.outlineCoordinates,
                 volumeSamples: v2.volumeSamples,
+                volumeMethod: v2.volumeMethod,
               },
             ];
           }),
@@ -337,6 +361,15 @@ export default defineComponent({
     const onBaseImageChanged = (objectId: string, newBaseImage: File) => {
       baseImageFiles.value[objectId] = newBaseImage;
     };
+
+    const volumeMethodSelectList
+     = [{
+       method: 'lookUpTable',
+       text: i18n.t('drinkware-sets.volumeMethod.lookUpTable'),
+     }, {
+       method: 'cylindrical',
+       text: i18n.t('drinkware-sets.volumeMethod.cylindrical'),
+     }];
 
     return {
       entry,
@@ -358,6 +391,7 @@ export default defineComponent({
       baseImageFiles,
       onBaseImageChanged,
       toUrl,
+      volumeMethodSelectList,
     };
   },
 });

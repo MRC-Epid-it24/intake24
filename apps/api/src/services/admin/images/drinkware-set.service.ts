@@ -10,6 +10,7 @@ import type {
   CreateDrinkwareSetInput,
   DrinkwareScaleEntry,
   DrinkwareScaleV2Entry,
+  DrinkwareScaleVolumeMethod,
   DrinkwareSetEntry,
   DrinkwareSetsResponse,
 } from '@intake24/common/types/http/admin';
@@ -170,6 +171,7 @@ function drinkwareSetService({
               scaleInput.label,
               scaleInput.outlineCoordinates,
               scaleInput.volumeSamples,
+              scaleInput.volumeMethod,
               tx,
             );
           }
@@ -193,6 +195,8 @@ function drinkwareSetService({
 
             const volumeSamples = scaleInput.volumeSamples ?? (v1 ? v1.volumeSamples : []);
 
+            const volumeMethod = scaleInput.volumeMethod ?? 'lookUpTable';
+
             const label = scaleInput.label ?? (v1 ? v1.label : {});
 
             await createDrinkScaleV2(
@@ -203,6 +207,7 @@ function drinkwareSetService({
               label,
               scaleInput.outlineCoordinates || [], // V1 does not store outline coordinates, so default to empty
               volumeSamples,
+              volumeMethod,
               false,
               tx,
             );
@@ -351,6 +356,7 @@ function drinkwareSetService({
         'baseImageId',
         'processedImages.path as baseImagePath',
         'drinkwareScalesV2.label',
+        'drinkwareScalesV2.volumeMethod',
       ])
       .where((eb) => {
         const terms: Expression<SqlBool>[] = [];
@@ -374,10 +380,22 @@ function drinkwareSetService({
     outlineCoordinates: string;
     volumeSamples: string;
     volumeSamplesNormalised: string;
+    volumeMethod: string;
     label: string | null;
     id: string;
     baseImagePath: string | null;
   };
+
+  function parseVolumeMethod(method: string): DrinkwareScaleVolumeMethod {
+    switch (method) {
+      case 'lookUpTable':
+        return method;
+      case 'cylindrical':
+        return method;
+      default:
+        throw new Error(`Unexpected value in colume volume_method: ${method}`);
+    }
+  }
 
   function formatDrinkScaleV2(
     drinkwareSetId: string,
@@ -399,6 +417,7 @@ function drinkwareSetService({
         record.volumeSamplesNormalised,
         'volume_samples_normalised',
       ),
+      volumeMethod: parseVolumeMethod(record.volumeMethod),
       baseImageUrl: getImageUrl(record.baseImagePath),
     };
   }
@@ -532,6 +551,7 @@ function drinkwareSetService({
     label: LocaleTranslation,
     outlineCoordinates: number[],
     volumeSamples: number[],
+    volumeMethod: string,
     updateOnConflict: boolean,
     transaction?: Kysely<FoodsDB>,
   ) => {
@@ -564,6 +584,7 @@ function drinkwareSetService({
           outlineCoordinates: outlineCoordinatesJson,
           volumeSamples: volumeSamplesJson,
           volumeSamplesNormalised: normalisedVolumeSamplesJson,
+          volumeMethod,
         })
         .execute();
     }
@@ -583,6 +604,7 @@ function drinkwareSetService({
     label?: LocaleTranslation,
     outlineCoordinates?: number[],
     volumeSamples?: number[],
+    volumeMethod?: DrinkwareScaleVolumeMethod,
     transaction?: Kysely<FoodsDB>,
   ) => {
     const db = transaction || kyselyDb.foods;
@@ -611,6 +633,10 @@ function drinkwareSetService({
     if (label !== undefined) {
       const labelJson = JSON.stringify(label);
       query = query.set('label', labelJson);
+    }
+
+    if (volumeMethod !== undefined) {
+      query = query.set('volumeMethod', volumeMethod);
     }
 
     if (outlineCoordinates !== undefined) {
