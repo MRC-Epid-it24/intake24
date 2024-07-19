@@ -111,6 +111,7 @@ export interface DrinkwareScalesV2 {
   id: Generated<Int8>;
   label: string | null;
   outlineCoordinates: string;
+  volumeMethod: Generated<string>;
   volumeSamples: string;
   volumeSamplesNormalised: string;
 }

@@ -93,7 +93,7 @@ function drinkScaleController({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     const updateOnConflict = req.query.updateOnConflict === 'true';
     const returning = req.query.return === 'true';
     const file = req.file;
-    const { label, outlineCoordinates, volumeSamples } = req.body;
+    const { label, outlineCoordinates, volumeSamples, volumeMethod } = req.body;
 
     if (!file)
       throw new ValidationError('Drink scale base image file missing.', { path: 'image' });
@@ -106,6 +106,7 @@ function drinkScaleController({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
       label,
       outlineCoordinates,
       volumeSamples,
+      volumeMethod,
       updateOnConflict,
     );
 
