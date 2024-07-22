@@ -199,4 +199,8 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['foods'],
   },
+  'salt-prompt': {
+    tabs: [...tabs],
+    sections: ['submission'],
+  },
 };
