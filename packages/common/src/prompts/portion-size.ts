@@ -144,6 +144,14 @@ export const directWeightPrompt: Prompts['direct-weight-prompt'] = copy({
   name: 'Direct weight',
 });
 
+export const saltPrompt: Prompts['salt-prompt'] = copy({
+  ...basePortionPrompt,
+  component: 'salt-prompt',
+  type: 'portion-size',
+  id: 'salt-prompt',
+  name: 'Salt',
+});
+
 export const portionSizePrompts = [
   asServedPrompt,
   cerealPrompt,
@@ -159,4 +167,5 @@ export const portionSizePrompts = [
   portionSizeOptionPrompt,
   recipeBuilderPrompt,
   standardPortionPrompt,
+  saltPrompt,
 ];

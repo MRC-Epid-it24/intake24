@@ -609,6 +609,10 @@
     "standard-portion-prompt": {
       "title": "Standard portion",
       "subtitle": "Use the \"standard portion\" method to estimate the portion size"
+    },
+    "salt-prompt": {
+      "title": "Salt",
+      "subtitle": "Use the \"salt\" method to estimate the portion size"
     }
   }
 }

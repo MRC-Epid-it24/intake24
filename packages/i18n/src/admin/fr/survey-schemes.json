@@ -576,6 +576,10 @@
     "standard-portion-prompt": {
       "title": "Portion standard",
       "subtitle": "Choisir la méthode \"standard portion\" pour estimer la taille de la portion"
+    },
+    "salt-prompt": {
+      "title": "Salt",
+      "subtitle": "Use the \"salt\" method to estimate the portion size"
     }
   }
 }
