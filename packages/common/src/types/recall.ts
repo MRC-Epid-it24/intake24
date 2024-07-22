@@ -164,6 +164,12 @@ export type PortionSizeStates = {
     quantity: number;
     linkedQuantity: number;
   };
+  salt: PortionSizeStateBase & {
+    method: 'standard-portion';
+    unit: StandardUnit | null;
+    quantity: number;
+    linkedQuantity: number;
+  };
 };
 
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];

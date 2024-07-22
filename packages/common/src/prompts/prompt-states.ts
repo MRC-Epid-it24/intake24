@@ -140,6 +140,12 @@ export type PromptStates = {
     quantityConfirmed: boolean;
     linkedQuantityConfirmed: boolean;
   };
+  'salt-prompt': {
+    portionSize: PortionSizeStates['salt'];
+    panel: number;
+    quantityConfirmed: boolean;
+    linkedQuantityConfirmed: boolean;
+  };
   // Standard prompts
   'edit-meal-prompt': FoodState[];
   'external-source-prompt': {
