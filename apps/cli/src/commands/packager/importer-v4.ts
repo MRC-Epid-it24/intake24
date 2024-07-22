@@ -25,6 +25,8 @@ import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nut
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import logger from '@intake24/common-backend/services/logger/logger';
 
+// import type { CsvColumnStructure } from './types/csv-import';
+// import { processCSVImport } from './convert-to-package';
 import typeConverters from './types/v4-type-conversions';
 
 export type Logger = typeof logger;
@@ -83,6 +85,7 @@ export class ImporterV4 {
   private nutrientTables: PkgNutrientTable[] | undefined;
   private asServedSets: PkgAsServedSet[] | undefined;
   private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
+  // private csvStructure: CsvColumnStructure | undefined;
   private imageMaps: Record<string, PkgImageMap> | undefined;
 
   constructor(
@@ -823,7 +826,6 @@ export class ImporterV4 {
 
   public async import(): Promise<void> {
     await this.unzipPackage();
-
     if (
       this.options.modulesForExecution === undefined
       || this.options.modulesForExecution.length === 0
@@ -833,6 +835,9 @@ export class ImporterV4 {
 
     try {
       await this.specificModuleExecution(this.options.modulesForExecution);
+    }
+    catch (e) {
+      logger.error('Import failed', e);
     }
     finally {
       await this.cleanUpPackage();

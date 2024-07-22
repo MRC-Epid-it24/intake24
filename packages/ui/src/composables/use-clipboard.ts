@@ -1,5 +1,3 @@
-import { computed } from 'vue';
-
 import { useI18n } from '@intake24/i18n';
 
 import { useMessages } from '../stores';
@@ -7,8 +5,6 @@ import { useMessages } from '../stores';
 export function useClipboard() {
   const { i18n } = useI18n();
   const messages = useMessages();
-
-  const clipboardAvailable = computed(() => !!navigator.clipboard);
 
   const defaultMsg = i18n.t('common.clipboard.copied').toString();
 
@@ -23,7 +19,6 @@ export function useClipboard() {
   }
 
   return {
-    clipboardAvailable,
     toClipboard,
   };
 }
