@@ -5,14 +5,14 @@ import type { ApiClientOptionsV4 } from './options';
 import { AsServedApiV4 } from './as-served';
 import { BaseClientV4 } from './base-client-v4';
 import { CategoriesApiV4 } from './categories';
-import { DrinkwareApiV4 } from './drinkware';
+import { DrinkwareApiV4, DrinkwareScaleUpdate } from './drinkware';
 import { FoodsApiV4 } from './foods';
 import { ImageMapApiV4 } from './image-maps';
 import { LocalesApiV4 } from './locales';
 import { NutrientTablesApiV4 } from './nutrient-tables';
 import { getApiClientV4EnvOptions } from './options';
 
-export type { ApiClientOptionsV4, CredentialsV4 };
+export type { ApiClientOptionsV4, CredentialsV4, DrinkwareScaleUpdate };
 
 export { getApiClientV4EnvOptions };
 

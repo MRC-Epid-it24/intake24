@@ -87,6 +87,13 @@ export default class DrinkwareScaleV2 extends BaseModel<
   })
   declare volumeSamplesNormalised: string;
 
+  @Column({
+    allowNull: false,
+    type: DataType.TEXT,
+    defaultValue: 'lookUpTable',
+  })
+  declare volumeMethod: string;
+
   @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')
   declare drinkwareSet?: NonAttribute<DrinkwareSet>;
 }

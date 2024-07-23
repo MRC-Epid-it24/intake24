@@ -11,6 +11,7 @@ import type {
   PkgImageMapObject,
 } from '@intake24/cli/commands/packager/types/image-map';
 import type { ImageMapData } from '@intake24/svg-utils';
+import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { getDrinkScaleOutline, getImageMapData } from '@intake24/svg-utils';
@@ -24,7 +25,9 @@ export interface ConvertDrinkScaleOptions {
   selectionBaseImage: string;
   scalesCsv: string;
   outputDir: string;
+  volumeMethod: 'lookUpTable' | 'cylindrical';
   overwrite: boolean;
+  language: string;
 }
 
 interface DrinkScaleDef {
@@ -80,6 +83,7 @@ async function copyDependencies(
 ) {
   const selectionDestPath = path.join(
     outputDir,
+    PkgConstants.IMAGE_DIRECTORY_NAME,
     setImageDir,
     'selection',
     path.basename(selectionImagePath),
@@ -93,7 +97,7 @@ async function copyDependencies(
 
   for (const scaleDef of drinkScaleDefs) {
     const baseImagePath = path.join(defDir, scaleDef.baseImagePath);
-    const destPath = path.join(outputDir, setImageDir, scaleDef.baseImagePath);
+    const destPath = path.join(outputDir, PkgConstants.IMAGE_DIRECTORY_NAME, setImageDir, scaleDef.baseImagePath);
 
     await fs.mkdir(path.dirname(destPath), { recursive: true });
 
@@ -104,8 +108,10 @@ async function copyDependencies(
 async function convertDrinkScale(
   logger: Logger,
   drinkScaleDef: DrinkScaleDef,
+  volumeMethod: 'lookUpTable' | 'cylindrical',
   defSourcePath: string,
   setImageDir: string,
+  lang: string,
 ): Promise<PkgDrinkScaleV2> {
   // SVG paths are relative to the description CSV path
   const defDir = path.dirname(defSourcePath);
@@ -118,10 +124,11 @@ async function convertDrinkScale(
 
   return {
     version: 2,
-    label: { en: drinkScaleDef.description },
+    label: { [lang]: drinkScaleDef.description },
     baseImagePath: pkgBaseImagePath,
     volumeSamples: drinkScaleDef.volumeSamples.flat(),
     outlineCoordinates,
+    volumeMethod,
   };
 }
 
@@ -171,8 +178,10 @@ export default async (options: ConvertDrinkScaleOptions): Promise<void> => {
     pkgDrinkScales[Number.parseInt(def.id)] = await convertDrinkScale(
       logger,
       def,
+      options.volumeMethod,
       options.scalesCsv,
       setImageDir,
+      options.language,
     );
   }
 
