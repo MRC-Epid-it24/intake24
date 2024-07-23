@@ -18,6 +18,7 @@ export interface PkgDrinkScaleV2 {
   baseImagePath: string;
   outlineCoordinates: number[];
   volumeSamples: number[];
+  volumeMethod: 'lookUpTable' | 'cylindrical';
 }
 
 export type PkgDrinkScale = PkgDrinkScaleV1 | PkgDrinkScaleV2;

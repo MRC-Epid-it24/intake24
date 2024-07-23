@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^2.22.4
-        version: 2.23.0(@vue/compiler-sfc@3.4.27)(eslint-plugin-format@0.1.2)(eslint@9.7.0)(typescript@5.5.3)
+        version: 2.23.0(@vue/compiler-sfc@3.4.32)(eslint-plugin-format@0.1.2)(eslint@9.7.0)(typescript@5.5.3)
       '@jest/types':
         specifier: ^29.6.3
         version: 29.6.3
@@ -505,6 +505,9 @@ importers:
       '@types/webpack-env':
         specifier: ^1.18.5
         version: 1.18.5
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       fork-ts-checker-webpack-plugin:
         specifier: ^9.0.2
         version: 9.0.2(typescript@5.5.3)(webpack@5.93.0)
@@ -934,6 +937,9 @@ importers:
       formdata-node:
         specifier: 4.4.1
         version: 4.4.1
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       mime-types:
         specifier: ^2.1.35
         version: 2.1.35
@@ -947,6 +953,9 @@ importers:
       '@types/cookie':
         specifier: ^0.6.0
         version: 0.6.0
+      '@types/lodash':
+        specifier: ^4.17.7
+        version: 4.17.7
       '@types/mime-types':
         specifier: ^2.1.4
         version: 2.1.4
@@ -1459,7 +1468,7 @@ packages:
       zod: 3.23.8
     dev: false
 
-  /@antfu/eslint-config@2.23.0(@vue/compiler-sfc@3.4.27)(eslint-plugin-format@0.1.2)(eslint@9.7.0)(typescript@5.5.3):
+  /@antfu/eslint-config@2.23.0(@vue/compiler-sfc@3.4.32)(eslint-plugin-format@0.1.2)(eslint@9.7.0)(typescript@5.5.3):
     resolution: {integrity: sha512-+ibN5QHV78JFWRa+Y9ttHj75d8zOb0NQjWXWeRlVwr1+WSns8UnEPd40dqzzUXq0D76FJ9gkMAlzKeEyfubkTQ==}
     hasBin: true
     peerDependencies:
@@ -1532,7 +1541,7 @@ packages:
       eslint-plugin-vitest: 0.5.4(@typescript-eslint/eslint-plugin@8.0.0-alpha.40)(eslint@9.7.0)(typescript@5.5.3)
       eslint-plugin-vue: 9.27.0(eslint@9.7.0)
       eslint-plugin-yml: 1.14.0(eslint@9.7.0)
-      eslint-processor-vue-blocks: 0.1.2(@vue/compiler-sfc@3.4.27)(eslint@9.7.0)
+      eslint-processor-vue-blocks: 0.1.2(@vue/compiler-sfc@3.4.32)(eslint@9.7.0)
       globals: 15.8.0
       jsonc-eslint-parser: 2.4.0
       local-pkg: 0.5.0
@@ -6127,20 +6136,6 @@ packages:
     optionalDependencies:
       prettier: 2.8.8
 
-  /@vue/compiler-sfc@3.4.27:
-    resolution: {integrity: sha512-nDwntUEADssW8e0rrmE0+OrONwmRlegDA1pD6QhVeXxjIytV03yDqTey9SBDiALsvAd5U4ZrEKbMyVXhX6mCGA==}
-    dependencies:
-      '@babel/parser': 7.24.6
-      '@vue/compiler-core': 3.4.27
-      '@vue/compiler-dom': 3.4.27
-      '@vue/compiler-ssr': 3.4.27
-      '@vue/shared': 3.4.27
-      estree-walker: 2.0.2
-      magic-string: 0.30.10
-      postcss: 8.4.39
-      source-map-js: 1.2.0
-    dev: true
-
   /@vue/compiler-sfc@3.4.32:
     resolution: {integrity: sha512-STy9im/WHfaguJnfKjjVpMHukxHUrOKjm2vVCxiojQJyo3Sb6Os8SMXBr/MI+ekpstEGkDONfqAQoSbZhspLYw==}
     dependencies:
@@ -6153,13 +6148,6 @@ packages:
       magic-string: 0.30.10
       postcss: 8.4.39
       source-map-js: 1.2.0
-    dev: true
-
-  /@vue/compiler-ssr@3.4.27:
-    resolution: {integrity: sha512-CVRzSJIltzMG5FcidsW0jKNQnNRYC8bT21VegyMMtHmhW3UOI7knmUehzswXLrExDLE6lQCZdrhD4ogI7c+vuw==}
-    dependencies:
-      '@vue/compiler-dom': 3.4.27
-      '@vue/shared': 3.4.27
     dev: true
 
   /@vue/compiler-ssr@3.4.32:
@@ -9236,13 +9224,13 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-processor-vue-blocks@0.1.2(@vue/compiler-sfc@3.4.27)(eslint@9.7.0):
+  /eslint-processor-vue-blocks@0.1.2(@vue/compiler-sfc@3.4.32)(eslint@9.7.0):
     resolution: {integrity: sha512-PfpJ4uKHnqeL/fXUnzYkOax3aIenlwewXRX8jFinA1a2yCFnLgMuiH3xvCgvHHUlV2xJWQHbCTdiJWGwb3NqpQ==}
     peerDependencies:
       '@vue/compiler-sfc': ^3.3.0
       eslint: ^8.50.0 || ^9.0.0
     dependencies:
-      '@vue/compiler-sfc': 3.4.27
+      '@vue/compiler-sfc': 3.4.32
       eslint: 9.7.0
     dev: true
 
