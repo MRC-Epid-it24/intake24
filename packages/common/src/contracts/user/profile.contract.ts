@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { userPhysicalDataAttributes, userPhysicalDataResponse } from '@intake24/common/types/http';
 
-import { strongPasswordWithConfirm } from '../../schemas';
+import { strongPasswordWithConfirm } from '../../security';
 
 export const profile = initContract().router({
   updatePassword: {

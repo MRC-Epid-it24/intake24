@@ -1,7 +1,7 @@
 import { isInt } from 'validator';
 import { z } from 'zod';
 
-import { strongPasswordWithConfirmOptional } from '@intake24/common/schemas';
+import { strongPasswordWithConfirmOptional } from '@intake24/common/security';
 
 import { customField } from '../..';
 import { permissionAttributes } from './permissions';

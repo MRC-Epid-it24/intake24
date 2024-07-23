@@ -1,11 +1,12 @@
+import { z } from 'zod';
+
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
-import type { ExternalSource, PromptStates } from '../prompts';
-import type { ComponentType } from '../prompts/v1';
+import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
 import type { CerealType, StandardUnit } from '../surveys';
-import type { Dictionary, Optional, RequiredLocaleTranslation } from './common';
 import type { RecipeFood } from './foods';
 import type { UserFoodData } from './http';
+import { type Dictionary, type Optional, requiredLocaleTranslation } from './common';
 
 /*
 Not currently used:
@@ -13,31 +14,54 @@ private static final String FLAG_CONFIRMED_NO_DRINKS = "confirmed-no-drinks";
 private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-complete";
 */
 
-export type SurveyFlag = `${string}-acknowledged`;
+export const staticSurveyFlag = [
+] as const;
+export type StaticSurveyFlag = (typeof staticSurveyFlag)[number];
+export const dynamicSurveyFlag = z.custom<`${string}-acknowledged`>((val) => {
+  return typeof val === 'string' && val.endsWith('-acknowledged');
+});
+export type DynamicSurveyFlag = z.infer<typeof dynamicSurveyFlag>;
+// export const surveyFlag = z.union([z.enum(staticSurveyFlag), dynamicSurveyFlag]);
+export const surveyFlag = dynamicSurveyFlag;
+export type SurveyFlag = z.infer<typeof surveyFlag>;
 
-export type MealFlag =
-  | `food-search:${string}`
-  | 'free-entry-complete'
-  | 'no-meals-after'
-  | 'no-meals-between'
-  | 'no-meals-before'
-  | 'ready-meal-complete'
-  | `${string}-acknowledged`;
+export const staticMealFlag = [
+  'free-entry-complete',
+  'no-meals-after',
+  'no-meals-between',
+  'no-meals-before',
+  'ready-meal-complete',
+] as const;
+export type StaticMealFlag = (typeof staticMealFlag)[number];
+export const dynamicMealFlag = z.custom<`food-search:${string}` | `${string}-acknowledged`>((val) => {
+  return typeof val === 'string' && (val.startsWith('food-search:') || val.endsWith('-acknowledged'));
+});
+export type DynamicMealFlag = z.infer<typeof dynamicMealFlag>;
+export const mealFlag = z.union([z.enum(staticMealFlag), dynamicMealFlag]);
+export type MealFlag = z.infer<typeof mealFlag>;
 
-export type FoodFlag =
-  | 'is-drink'
-  | 'link-as-main'
-  | 'ready-meal'
-  | 'same-as-before-complete'
-  | 'split-food-complete'
-  | 'missing-food-complete'
-  | 'portion-size-option-complete'
-  | 'portion-size-method-complete'
-  | 'recipe-builder-complete'
-  | 'associated-foods-complete'
-  | `${string}-acknowledged`;
+export const staticFoodFlag = [
+  'is-drink',
+  'link-as-main',
+  'ready-meal',
+  'same-as-before-complete',
+  'split-food-complete',
+  'missing-food-complete',
+  'portion-size-option-complete',
+  'portion-size-method-complete',
+  'recipe-builder-complete',
+  'associated-foods-complete',
+] as const;
+export type StaticFoodFlag = (typeof staticFoodFlag)[number];
+export const dynamicFoodFlag = z.custom<`${string}-acknowledged`>((val) => {
+  return typeof val === 'string' && (val.endsWith('-acknowledged'));
+});
+export type DynamicFoodFlag = z.infer<typeof dynamicFoodFlag>;
+export const foodFlag = z.union([z.enum(staticFoodFlag), dynamicFoodFlag]);
+export type FoodFlag = z.infer<typeof foodFlag>;
 
-export type CustomPromptAnswer = string | string[] | number | number[] | null;
+export const customPromptAnswer = z.union([z.string(), z.array(z.string()), z.number(), z.array(z.number()), z.null()]);
+export type CustomPromptAnswer = z.infer<typeof customPromptAnswer>;
 
 export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
 export type PizzaSize = (typeof pizzaSizes)[number];
@@ -167,10 +191,12 @@ export type PortionSizeStates = {
 };
 
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
-export type RecipeBuilderComponent = {
-  order: number;
-  ingredients: string[];
-};
+
+export const recipeBuilderComponent = z.object({
+  order: z.number(),
+  ingredients: z.string().array(),
+});
+export type RecipeBuilderComponent = z.infer<typeof recipeBuilderComponent>;
 
 export type RecipeBuilderLinkedFood = {
   id: string;
@@ -223,53 +249,61 @@ export interface RecipeBuilder extends AbstractFoodState {
 
 export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder;
 
-export interface FoodEntry {
-  text: string;
-  disabled: boolean;
-}
+export const mealTime = z.object({
+  hours: z.number(),
+  minutes: z.number(),
+});
 
-export interface MealTime {
-  hours: number;
-  minutes: number;
-}
+export type MealTime = z.infer<typeof mealTime>;
 
-export interface MealState {
-  id: string;
-  name: RequiredLocaleTranslation;
-  defaultTime: MealTime;
-  time: MealTime | undefined;
-  duration: number | null;
-  flags: MealFlag[];
-  customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  foods: FoodState[];
-}
+export const mealState = z.object({
+  id: z.string(),
+  name: requiredLocaleTranslation,
+  defaultTime: mealTime,
+  time: mealTime.optional(),
+  duration: z.number().nullable(),
+  flags: mealFlag.array(),
+  customPromptAnswers: z.record(z.string(), customPromptAnswer),
+  // TODO: type foods
+  foods: z.custom<FoodState>(() => {
+    return true;
+  }).array(),
+});
+
+export type MealState = z.infer<typeof mealState>;
 
 export type MealCreationState = Optional<
   Pick<MealState, 'name' | 'time' | 'duration' | 'flags'>,
   'flags' | 'time' | 'duration' | 'flags'
 >;
 
-export interface SelectedMeal {
-  type: 'meal';
-  mealId: string;
-}
+export const selectedMeal = z.object({
+  type: z.literal('meal'),
+  mealId: z.string(),
+});
+export type SelectedMeal = z.infer<typeof selectedMeal>;
 
-export interface SelectedFood {
-  type: 'food';
-  foodId: string;
-}
+export const selectedFood = z.object({
+  type: z.literal('food'),
+  foodId: z.string(),
+});
+export type SelectedFood = z.infer<typeof selectedFood>;
 
-export type SelectionMode = 'manual' | 'auto';
+export const selectionModes = ['manual', 'auto'] as const;
+export const selectionMode = z.enum(selectionModes);
 
-export interface Selection {
-  element: SelectedMeal | SelectedFood | null;
-  mode: SelectionMode;
-}
+export type SelectionMode = (typeof selectionModes)[number];
+
+export const selection = z.object({
+  element: z.union([z.null(), selectedMeal, selectedFood]),
+  mode: selectionMode,
+});
+
+export type Selection = z.infer<typeof selection>;
 
 export type PromptAnswerResponse =
   | FoodState[]
   | string
-  | FoodEntry
   | PortionSizeState
   | null
   | number;
@@ -284,19 +318,21 @@ export interface PromptAnswer {
   foodIndex: number | undefined;
 }
 
-export type SurveyState = {
-  id?: string;
-  schemeId: string | null;
-  startTime: Date | null;
-  endTime: Date | null;
-  submissionTime: Date | null;
-  uxSessionId: string;
-  userAgent?: string | null;
-  flags: SurveyFlag[];
-  customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  selection: Selection;
-  meals: MealState[];
-};
+export const surveyState = z.object({
+  id: z.string().uuid().optional(),
+  schemeId: z.string().nullable(),
+  startTime: z.coerce.date().nullable(),
+  endTime: z.coerce.date().nullable(),
+  submissionTime: z.coerce.date().nullable(),
+  uxSessionId: z.string().uuid(),
+  userAgent: z.string().nullish(),
+  flags: z.array(z.string()),
+  customPromptAnswers: z.record(customPromptAnswer),
+  selection,
+  meals: mealState.array(),
+});
+
+export type SurveyState = z.infer<typeof surveyState>;
 
 export function isEncodedFood(food: FoodState): food is EncodedFood {
   return food.type === 'encoded-food';

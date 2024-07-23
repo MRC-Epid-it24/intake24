@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
-import { strongPasswordWithConfirm } from '../schemas';
+import { strongPasswordWithConfirm } from '../security';
 import { captcha } from '../types/http';
 import { z } from '../util';
 

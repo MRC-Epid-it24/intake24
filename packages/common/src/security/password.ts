@@ -1,4 +1,4 @@
-import { isStrongPassword } from 'validator';
+import isStrongPassword from 'validator/lib/isStrongPassword';
 import { z } from 'zod';
 
 export const strongPassword = z.string().refine(val =>

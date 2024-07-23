@@ -1,4 +1,6 @@
-import type { RequiredLocaleTranslation } from '.';
+import { z } from 'zod';
+
+import { requiredLocaleTranslation } from '.';
 
 export const useInRecipeTypes = {
   USE_ANYWHERE: 0,
@@ -10,29 +12,32 @@ export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipe
 
 // Special Foods | Foods Builder section
 
-export type RecipeFood = {
-  code: string;
-  name: string;
-  recipeWord: string;
-  steps: RecipeFoodStepsType[];
-};
+export const recipeFoodStepsType = z.object({
+  order: z.number(),
+  code: z.string(),
+  recipeFoodsCode: z.string(),
+  name: requiredLocaleTranslation,
+  description: requiredLocaleTranslation,
+  localeId: z.string(),
+  categoryCode: z.string(),
+  repeatable: z.boolean(),
+  required: z.boolean(),
+});
+export type RecipeFoodStepsType = z.infer<typeof recipeFoodStepsType>;
 
-export type RecipeFoodsHeader = {
-  code: string;
-  description: string;
-  name: string;
-  synonyms: Set<string>;
-  recipeWord: string;
-};
+export const recipeFood = z.object({
+  code: z.string(),
+  name: z.string(),
+  recipeWord: z.string(),
+  steps: recipeFoodStepsType.array(),
+});
+export type RecipeFood = z.infer<typeof recipeFood>;
 
-export type RecipeFoodStepsType = {
-  order: number;
-  code: string;
-  recipeFoodsCode: string;
-  name: RequiredLocaleTranslation;
-  description: RequiredLocaleTranslation;
-  localeId: string;
-  categoryCode: string;
-  repeatable: boolean;
-  required: boolean;
-};
+export const recipeFoodsHeader = z.object({
+  code: z.string(),
+  description: z.string(),
+  name: z.string(),
+  synonyms: z.set(z.string()),
+  recipeWord: z.string(),
+});
+export type RecipeFoodsHeader = z.infer<typeof recipeFoodsHeader>;

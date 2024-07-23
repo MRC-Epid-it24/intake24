@@ -8,7 +8,7 @@ import { fromError } from 'zod-validation-error';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { CustomField } from '@intake24/common/types';
-import { strongPasswordOptional } from '@intake24/common/schemas';
+import { strongPasswordOptional } from '@intake24/common/security';
 import { User, UserSurveyAlias } from '@intake24/db';
 
 import StreamLockJob from '../stream-lock-job';
