@@ -1,18 +1,27 @@
 import { FormData } from 'formdata-node';
+import { mapValues, pick } from 'lodash';
 
-import type { LocaleTranslation } from '@intake24/common/types';
+import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type {
   CreateDrinkwareSetInput,
   DrinkwareScaleEntry,
   DrinkwareScaleV2Entry,
+  DrinkwareScaleVolumeMethod,
   DrinkwareSetEntry,
-  UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
 
 import type { BaseClientV4 } from './base-client-v4';
 import type { CreateResult } from './create-response';
 import { parseCreateResponse } from './create-response';
 import { fileFromPathWithType } from './form-data-helpers';
+
+export interface DrinkwareScaleUpdate {
+  label: LocaleTranslation;
+  baseImagePath: string;
+  outlineCoordinates: number[];
+  volumeSamples: number[];
+  volumeMethod: DrinkwareScaleVolumeMethod;
+}
 
 export class DrinkwareApiV4 {
   private static readonly apiPath = '/api/admin/images/drinkware-sets';
@@ -30,10 +39,22 @@ export class DrinkwareApiV4 {
     return parseCreateResponse(response, this.baseClient.logger);
   }
 
-  public async update(setId: string, update: UpdateDrinkwareSetInput): Promise<DrinkwareSetEntry> {
+  public async update(setId: string, update: CreateDrinkwareSetInput, scales: Dictionary<DrinkwareScaleUpdate>): Promise<DrinkwareSetEntry> {
+    const formData = new FormData();
+
+    formData.set('id', update.id);
+    formData.set('description', update.description);
+    formData.set('imageMapId', update.imageMapId);
+    formData.set('scales', JSON.stringify(mapValues(scales, scale => pick(scale, ['label', 'outlineCoordinates', 'volumeSamples', 'volumeMethod']))));
+
+    for (const [scaleId, scale] of Object.entries(scales)) {
+      const file = await fileFromPathWithType(scale.baseImagePath);
+      formData.set(`baseImage[${scaleId}]`, file);
+    }
+
     return await this.baseClient.put<DrinkwareSetEntry>(
       `${DrinkwareApiV4.apiPath}/${setId}`,
-      update,
+      formData,
     );
   }
 
@@ -88,6 +109,7 @@ export class DrinkwareApiV4 {
     label: LocaleTranslation,
     outlineCoordinates: number[],
     volumeSamples: number[],
+    volumeMethod: 'lookUpTable' | 'cylindrical',
     returning: boolean = false,
     updateOnConflict: boolean = false,
   ): Promise<CreateResult<DrinkwareScaleV2Entry>> {
@@ -99,6 +121,7 @@ export class DrinkwareApiV4 {
     formData.set('label', JSON.stringify(label));
     formData.set('outlineCoordinates', JSON.stringify(outlineCoordinates));
     formData.set('volumeSamples', JSON.stringify(volumeSamples));
+    formData.set('volumeMethod', volumeMethod);
     formData.set('image', file);
 
     const response = await this.baseClient.postResponse<DrinkwareScaleV2Entry>(

@@ -5,7 +5,7 @@ import path from 'node:path';
 import decompress from 'decompress';
 import { omit } from 'lodash';
 
-import type { ApiClientV4 } from '@intake24/api-client-v4';
+import type { ApiClientV4, DrinkwareScaleUpdate } from '@intake24/api-client-v4';
 import type {
   PkgAsServedImage,
   PkgAsServedSet,
@@ -23,6 +23,7 @@ import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-ma
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
+import { Dictionary } from '@intake24/common/types';
 import logger from '@intake24/common-backend/services/logger/logger';
 
 import typeConverters from './types/v4-type-conversions';
@@ -381,6 +382,7 @@ export class ImporterV4 {
             scale.label,
             scale.outlineCoordinates,
             scale.volumeSamples,
+            scale.volumeMethod,
           );
         default:
           throw new Error(`Unknown drink scale version`);
@@ -388,6 +390,25 @@ export class ImporterV4 {
     });
 
     await Promise.all(ops);
+  }
+
+  private toScaleUpdateInput(scales: Record<number, PkgDrinkScale>): Dictionary<DrinkwareScaleUpdate> {
+    const result: Dictionary<DrinkwareScaleUpdate> = {};
+
+    for (const [scaleId, scale] of Object.entries(scales)) {
+      if (scale.version !== 2)
+        throw new Error('Only sliding scale version 2 is supported by this tool');
+
+      result[scaleId] = {
+        label: scale.label,
+        baseImagePath: path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, scale.baseImagePath),
+        outlineCoordinates: scale.outlineCoordinates,
+        volumeSamples: scale.volumeSamples,
+        volumeMethod: scale.volumeMethod,
+      };
+    }
+
+    return result;
   }
 
   private async importDrinkwareSet(setId: string, pkgSet: PkgDrinkwareSet): Promise<void> {
@@ -411,18 +432,16 @@ export class ImporterV4 {
         }
         case 'overwrite': {
           logger.debug(`Updating existing drinkware set: ${setId}`);
-          logger.warn(`Importing sliding scales is not implemented`);
-          await this.apiClient.portionSize.drinkware.update(setId, {
-            imageMapId: pkgSet.selectionImageMapId,
-            description: pkgSet.description,
-            scales: {},
-          });
           break;
         }
       }
     }
 
-    await this.updateDrinkwareScales(setId, pkgSet.scales);
+    await this.apiClient.portionSize.drinkware.update(setId, {
+      id: setId,
+      imageMapId: pkgSet.selectionImageMapId,
+      description: pkgSet.description,
+    }, this.toScaleUpdateInput(pkgSet.scales));
   }
 
   private async importAsServedSets(): Promise<void> {
