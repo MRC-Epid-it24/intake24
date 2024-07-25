@@ -71,6 +71,9 @@ const dummyNutrientTable: PkgNutrientTable = {
   ],
 };
 
+const householdMeasureDrinkwareIds
+  = ['FR_Baby_Bottles', 'FR_Baby_Cups', 'FR_Beer_Glasses', 'FR_Bowls', 'FR_Cocktail_Glasses', 'FR_Glasses', 'FR_Glasses_2', 'FR_Ice_Cream_Glass', 'FR_Mazagran', 'FR_Mugs', 'FR_Mugs_2', 'FR_Plastic_Cups', 'FR_Ramekins', 'FR_Shot_Glasses', 'FR_Stemmed_Glasses', 'FR_Stemmed_Glasses_2', 'FR_Stemmed_Glasses_Round', 'FR_Verrines'];
+
 function isFoodCode(code: string): boolean {
   return !code.includes('-');
 }
@@ -240,7 +243,7 @@ export class FrenchAnsesLocaleBuilder {
     const foodSynonymRecords = await this.readJSON<INCA3FoodShadowsRow[]>('ALIMENTS_SHADOWS.json');
 
     this.foodSynonyms = Object.fromEntries(
-      foodSynonymRecords.map(r => [r.A_CODE, getSynonyms(r, 'A_')]).filter(a => a[1].length > 0),
+      foodSynonymRecords.map(r => [r.A_CODE, getSynonyms(r, 'A_')] as [string, string[]]).filter(a => a[1].length > 0),
     );
 
     this.foodEnglishDescriptions = Object.fromEntries(
@@ -257,7 +260,7 @@ export class FrenchAnsesLocaleBuilder {
 
     this.recipeSynonyms = Object.fromEntries(
       recipeSynonymRecords
-        .map(r => [r.R_CODE, getSynonyms(r, 'R_')])
+        .map(r => [r.R_CODE, getSynonyms(r, 'R_')] as [string, string[]])
         .filter(a => a[1].length > 0),
     );
 
@@ -302,12 +305,12 @@ export class FrenchAnsesLocaleBuilder {
   private async readQuantificationData(): Promise<void> {
     const fdQuantRows = await this.readJSON<INCA3FoodQuantRow[]>('ALIMENTS_FDQUANT.json');
 
-    this.foodPortionSizeRecords = Object.fromEntries(fdQuantRows.map(row => [row.A_CODE, row]));
+    this.foodPortionSizeRecords = Object.fromEntries(fdQuantRows.map(row => [row.A_CODE, row] as [string, INCA3FoodQuantRow]));
 
     const rcpQuantRows = await this.readJSON<INCA3RecipeQuantRow[]>('RECETTES_RCPQUANT.json');
 
     this.recipePortionSizeRecords = Object.fromEntries(
-      rcpQuantRows.map(row => [row.R_CODE, row]),
+      rcpQuantRows.map(row => [row.R_CODE, row] as [string, INCA3RecipeQuantRow]),
     );
   }
 
@@ -461,30 +464,47 @@ export class FrenchAnsesLocaleBuilder {
           logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDSTD table`);
         }
       }
-    }
-    else {
-      logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDQUANT table`);
-    }
 
-    if (portionSizeMethods.length === 0) {
-      // Temporary fallback method, shouldn't be there in the final version
+      if (
+        portionSizeRow.METHODE_mesure_menagere !== undefined
+        && portionSizeRow.METHODE_mesure_menagere !== '.'
+      ) {
+        for (const householdDrinkwareId of householdMeasureDrinkwareIds) {
+          portionSizeMethods.push({
+            method: 'drink-scale',
+            description: 'use_an_image',
+            useForRecipes: true,
+            conversionFactor: 1,
+            drinkwareId: householdDrinkwareId,
+            initialFillLevel: 0.9,
+            skipFillLevel: false,
+          });
+        }
+      }
+      else {
+        logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDQUANT table`);
+      }
 
-      portionSizeMethods.push({
-        method: 'standard-portion',
-        description: 'use_a_standard_portion',
-        useForRecipes: true,
-        conversionFactor: 1.0,
-        units: [
-          {
-            name: 'pieces',
-            omitFoodDescription: false,
-            weight: 100,
-          },
-        ],
-      });
+      if (portionSizeMethods.length === 0) {
+        // Temporary fallback method, shouldn't be there in the final version
+
+        portionSizeMethods.push({
+          method: 'standard-portion',
+          description: 'use_a_standard_portion',
+          useForRecipes: true,
+          conversionFactor: 1.0,
+          units: [
+            {
+              name: 'pieces',
+              omitFoodDescription: false,
+              weight: 100,
+            },
+          ],
+        });
+      }
+
+      return portionSizeMethods;
     }
-
-    return portionSizeMethods;
   }
 
   private getRecipePortionSizeMethods(recipeCode: string): PkgPortionSizeMethod[] {
