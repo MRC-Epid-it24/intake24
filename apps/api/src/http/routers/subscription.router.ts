@@ -24,10 +24,7 @@ export function subscription() {
     unsubscribe: async ({ req }) => {
       const { userId } = req.scope.cradle.user;
 
-      await req.scope.cradle.pusher.webPush(userId, {
-        title: '🚀 Push notification!',
-        body: `We'll keep you updated whenever your tasks are finished.`,
-      });
+      await UserSubscription.destroy({ where: { userId, type: 'web-push' } });
 
       return { status: 204, body: undefined };
     },
