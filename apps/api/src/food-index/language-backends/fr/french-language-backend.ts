@@ -4,12 +4,13 @@ import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 
 import FrenchPhoneticEncoder from './phonetic';
 
-const sanitiseRegexp = /[.`,/\\\-+)(]|e\.g\.|e\.g|n\.s\.'s/g;
+const sanitiseRegexp = /[.`,/\\\-+)(]|e\.g\.|e\.g|n\.s\.|à partir de|à base de's/g;
 
 export default {
   name: 'French',
   languageCode: 'fr',
-  indexIgnore: ['de', 'au', 'aux', 'pour'],
+  indexIgnore: ['et', 'ou', 'en', 'l\'', 'le', 'la', 'les', 'avec', 'pour', 'd\'', 'de', 'des', 'à', 'au', 'aux', 'dans', 'type'],
+
   phoneticEncoder: new FrenchPhoneticEncoder(),
 
   splitCompound(word: string): Array<string> {
