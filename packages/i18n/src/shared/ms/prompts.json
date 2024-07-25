@@ -28,13 +28,13 @@
     "description": "<p>Kami mempunyai semua maklumat yang diperlukan mengenai <strong>{item}</strong> anda pada masa ini.</p><p>Untuk meneruskan survei, klik butang \"Teruskan\" di bawah dan secara automatik kami akan memilih makanan atau hidangan seterusnya yang masih memerlukan sedikit maklumat.</p><p>Sebagai alternatif, klik pada hidangan atau makanan di sebelah kiri jika anda ingin menumpu pada item tertentu.</p>"
   },
   "select": {
-    "name": "Select value from list",
+    "name": "Sila pilih daripada senarai",
     "text": "",
     "description": "",
-    "label": "Select option"
+    "label": "Sila pilih alternatif"
   },
   "slider": {
-    "name": "Select value on slider",
+    "name": "Sila pilih daripada slider",
     "text": "",
     "description": ""
   },
@@ -75,27 +75,27 @@
     "text": "",
     "description": "",
     "yes": "Ya, saya ada mengambilnya",
-    "yesAnother": "Yes, I had another",
+    "yesAnother": "Ya, saya ambil atau tambah sekali lagi",
     "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "Tidak, saya tidak mengambilnya",
-    "moreFoodsQuestion": "Did you have any other foods from this category?",
-    "databaseLookupTitle": "What was it?",
-    "databaseLookupWithExisting": "If not, what was it?",
-    "existingFoodsTitle": "Was it something you already entered?",
+    "moreFoodsQuestion": "Adakah anda ada mengambil makanan selain daripda kategori yang ada?",
+    "databaseLookupTitle": "Apakah makanan tersebut?",
+    "databaseLookupWithExisting": "Jika bukan, apakan makanan tersebut?",
+    "existingFoodsTitle": "Adakah anda sudah memasukkan ia sebelum ini?",
     "select": {
       "different": "Pilih makanan yang lain",
-      "remove": "Remove"
+      "remove": "Buang"
     },
-    "browse": "Browse all foods",
-    "search": "Search for a food",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Please try refining your search.",
+    "browse": "Layari semua makanan yang ada",
+    "search": "Cari makanan",
+    "root": "Semua kategori makanan",
+    "back": "Pergi balik ke '{category}'",
+    "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again",
+      "label": "Saya tidak jumpa makanan saya",
+      "description": "<p>Sila layari kategori makanan di atas untuk mencari makanan anda.</p><p>Jika anda masih tidak dapat mencari makanan anda 'Laporkan makanan hilang'.</p>",
+      "report": "Laporkan makanan hilang",
+      "tryAgain": "OK, saya mahu mencuba lagi",
       "placeholder": "Missing food"
     }
   },
@@ -103,10 +103,10 @@
     "name": "Sunting hidangan",
     "text": "Sila nyatakan segala makanan dan minuman yang telah anda ambil semasa {meal}. Satu baris, satu makanan/minuman.",
     "description": "Sebagai contoh:<p><ul><li>pisang</li><li>kerepek</li><li>nasi</li><li>teh</li></ul></p><p>Anda boleh menekan Enter pada papan kekunci anda atau butang \"tambah makanan/minuman\" semasa menaip untuk ke baris seterusnya</p><p><strong>Anda tidak perlu </strong> menyatakan jumlah yang diambil, hanya perlu mengisi nama makanan yang telah diambil.",
-    "add": "Add",
-    "drinksOnly": "Drinks",
-    "foods": "Foods and drinks",
-    "foodsOnly": "Foods"
+    "add": "Tambah",
+    "drinksOnly": "Minuman",
+    "foods": "Makanan dan Minuman",
+    "foodsOnly": "Makanan"
   },
   "externalSource": {
     "name": "External source",
@@ -128,23 +128,23 @@
     "name": "Cari Makanan",
     "text": "Senarai makanan di bawah adalah daripada pangkalan data kami yang kelihatan seperti \"{food}\".",
     "description": "<p>Pilih item yang anda ambil atau padanan yang terdekat.</p>",
-    "browse": "Browse all foods",
-    "search": "Search for a food",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Please try refining your search.",
-    "refine": "The search has found a lot of results. You can try refining your search.",
+    "browse": "Layari semua makanan yang ada",
+    "search": "Cari makanan",
+    "root": "Semua kategori makanan",
+    "back": "Pergi balik ke '{category}'",
+    "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
+    "refine": "Terdapat banyak keputusan berdasarkan carian anda. Sila kecilkan carian anda.",
     "pizza": "If your pizza was from a takeaway or restaurant, please select that option in the list.",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again"
+      "label": "Saya tidak jumpa makanan saya",
+      "description": "<p>Kalau makanan yang dicari tiada dalam senarai, sila tukar penyataan dalam kotak carian di atas'.</p>",
+      "report": "Laporkan makanan hilang",
+      "tryAgain": "OK, saya mahu mencuba lagi"
     },
     "confirmDiscardFood": {
-      "label": "Yes",
-      "messageUnsafe": "<p>You have already answered some questions about <strong>\"{discardedFoodName}\"</strong>!</p><p>If you change it to <strong>\"{selectedFoodName}\"</strong> now, you might have to answer some of those questions again.</p><p>Are you sure you would like to replace this food?</p>",
-      "message": "You have already answered some questions about \"{discardedFoodName}\"! If you change it to \"{selectedFoodName}\" now, you might have to answer some of those questions again. Are you sure you would like to replace this food?"
+      "label": "Ya",
+      "messageUnsafe": "<p>Anda sudah menjawab beberapa soalan mengenai <strong>\"{discardedFoodName}\"</strong>!</p><p>Kalau anda tukarkan kepada <strong>\"{selectedFoodName}\"</strong> sekarang, anda mungkin perlu menjawab beberapa soalan itu sekali lagi.</p><p>Adakah anda mahu mengganti makanan ini?</p>",
+      "message": "Anda sudah menjawab beberapa soalan mengenai \"{discardedFoodName}\"! Kalau anda tukarkan kepada \"{selectedFoodName}\" sekarang, anda mungkin perlu menjawab beberapa soalan itu sekali lagi. Adakah anda mahu mengganti makanan ini?"
     }
   },
   "mealAdd": {
@@ -163,40 +163,40 @@
     "noMeal": "Tiada hidangan yang tinggal, tambah sekurang-kurangnya satu hidangan"
   },
   "mealDuration": {
-    "name": "Meal duration",
+    "name": "Masa hidangan",
     "text": "",
-    "description": "<p>How long did it take you to eat <strong>{mealName}</strong>?</p>",
+    "description": "<p>Berapa lama anda makan hidangan <strong>{mealName}</strong>?</p>",
     "minutes": "mins",
-    "confirm": "Continue"
+    "confirm": "Sambung"
   },
   "mealGap": {
-    "name": "Meal gap",
+    "name": "Masa antara hidangan",
     "text": "",
     "description": "",
-    "before": "<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>",
-    "after": "<p>Did you have any meals, snacks or drinks after your <strong>{meal}</strong> at {mealTime}?</p>",
-    "between": "<p>Did you have any meals, snacks or drinks between your <strong>{startMeal}</strong> (at {startMealTime}) and your <strong>{endMeal}</strong> (at {endMealTime})?</p>",
-    "yes": "Yes, add a meal",
-    "no": "No, I did not"
+    "before": "<p>Adakah anda mengambil apa-apa makanan, jajan atau minuman sebelum <strong>{meal}</strong> pada {mealTime}?</p>",
+    "after": "<p>Did you have any meals, snacks or drinks after your <strong>{meal}</strong> pada {mealTime}?</p>",
+    "between": "<p>Did you have any meals, snacks or drinks between your <strong>{startMeal}</strong>  pada {startMealTime}) and your <strong>{endMeal}</strong>  pada {endMealTime})?</p>",
+    "yes": "Ya, saya ada mengambilnya",
+    "no": "Tidak, saya tidak mengambilnya"
   },
   "mealTime": {
     "name": "Sunting masa",
     "text": "",
-    "description": "<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>",
+    "description": "<p>Adakah anda mengambil <strong>{meal}</strong>? Jika ya, bilakan anda mengambilnya?</p>",
     "yes": "Sekitar waktu tersebut",
     "no": "Saya tidak mengambil {meal}"
   },
   "readyMeal": {
     "name": "Hidangan siap sedia",
     "text": "",
-    "description": "<p>Was this a ready-made meal or food?</p>"
+    "description": "<p>Adakah ini makanan atau hidangan siap sedia?</p>"
   },
   "redirect": {
     "name": "Mengubah hala",
     "text": "",
     "description": "",
-    "missingUrl": "Missing redirection URL",
-    "goTo": "Go to questionnaire"
+    "missingUrl": "Hilang URL mengubah hala",
+    "goTo": "Pergi semula ke borang soal selidik"
   },
   "reviewConfirm": {
     "name": "Semak dan Sahkan",
@@ -206,17 +206,17 @@
   "sameAsBefore": {
     "name": "Sama seperti sebelumnya",
     "text": "",
-    "description": "<p>Was this <strong>{food}</strong> the same as the one you had before?</p>",
-    "serving": "{amount} serving size",
-    "leftovers": "Left about {amount}",
+    "description": "<p>Adakah ini <strong>{food}</strong> sama seperti yang anda telah ambil sebelum ini?</p>",
+    "serving": "{amount}saiz hidangan",
+    "leftovers": "Berbaki kira-kira {amount}",
     "noLeftovers": {
-      "drink": "Drank it all",
-      "food": "Ate everything"
+      "drink": "Minum kesemuanya",
+      "food": "Makan kesemuanya"
     },
-    "hadWith": "Had it with:",
-    "noAddedFoods": "Nothing added (e.g. milk, sugar, sauces)",
-    "same": "Yes, I had the same",
-    "notSame": "No, I had a different one"
+    "hadWith": "Ambil bersama:",
+    "noAddedFoods": "Tiada tambahan (e.g. susu, gula, sos)",
+    "same": "Ya, hidangan yang sama",
+    "notSame": "Tidak, saya ambil yang lain"
   },
   "splitFood": {
     "name": "Pemisah makanan",
@@ -237,13 +237,13 @@
     "description": ""
   },
   "quantity": {
-    "_": "Quantity",
+    "_": "Kuantiti",
     "whole": "Keseluruhan",
     "fraction": "Sebahagian",
     "and": "dan",
     "confirm": "Saya telah mengambil sebanyak itu",
-    "more": "More",
-    "less": "Less"
+    "more": "Lebih",
+    "less": "Kurang"
   },
   "portionSizeOption": {
     "name": "Kaedah pembahagian porsi",
@@ -282,7 +282,7 @@
       "in_unwrapped_bars": "Dalam bentuk bar yang tidak berbungkus",
       "in_whole_fruit_vegetables": "Dalam bentuk sebiji buah/sayur",
       "in_wrapped_bars": "Dalam bentuk bar yang berbungkus",
-      "milk_on_cereal": "Milk on cereal",
+      "milk_on_cereal": "Susu dalam bijirin",
       "on_a_knife": "Pada pisau",
       "on_a_plate": "Di atas pinggan",
       "slice_from_a_large_cake": "Potongan daripada sebiji kek besar",
@@ -301,7 +301,7 @@
   },
   "linkedAmount": {
     "label": "Berapa banyak keping (daripada {quantity}) anda telah ambil {food}.?",
-    "unit": "How many slices",
+    "unit": "Berapa keping",
     "all": "pada kesemuanya"
   },
   "asServed": {
@@ -363,7 +363,7 @@
       "more": "Saya telah tinggalkan lebih banyak",
       "confirm": "Saya telah tinggalkan sebanyak itu"
     },
-    "count": "How many of these drinks did you have at this time?"
+    "count": "Berapa banyak minuman ini yang anda ambil pada ketika ini?"
   },
   "guideImage": {
     "name": "Gambar panduan",
@@ -389,48 +389,48 @@
     "milk": "Pilih tahap susu anda (tanpa bijirin)."
   },
   "missingFood": {
-    "name": "Missing food",
+    "name": "Makanan hilang",
     "text": "",
-    "description": "You said you were unable to find a good match for \"{food}\". Please provide as much detail as you can to the following questions, to help us identify your food or drink.",
-    "source": "Was it homemade?",
-    "homemade": "Provide further details e.g. description of dish or ingredients.",
-    "purchased": "Tell us where was it purchased from? Does it have a brand name?",
-    "barcode": "Can you provide the barcode?",
-    "portionSize": "How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc."
+    "description": "Anda tidak dapat mencari carian yang sesuai untuk \"{food}\". Sila terangkan secara terperinci berdasarkan soalan-soalan berikut, untuk membantu kami mengenalpasti makanan atau minuman tersebut.",
+    "source": "Adakah ia masakan dirumah?",
+    "homemade": "Sila berikan butiran terperinci e.g maklumat hidangan atau senarai bahan-bahan yang digunakan.",
+    "purchased": "Di manakah makanan tersebut dibeli? Adakah ia mempunyai brands?",
+    "barcode": "Bolehkan anda menyertakan barkod makanan tersebut?",
+    "portionSize": "Berapa banyak yang anda ambil? E.g. 1 pek, 2 sudu kecil, 1 genggam, 125 gram, ½ cawan etc."
   },
   "recipeBuilder": {
-    "name": "{food} recipe builder",
+    "name": "{food} resipi builder",
     "text": "",
-    "description": "Please follow the steps below to build your own recipe for {food}.",
-    "label": "Add your own {searchTerm}",
-    "browse": "{category} categories",
-    "search": "Search for a food",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
+    "description": "Sila ikuti langkah-langkah di bawah untuk membina resipi anda bagi {food}.",
+    "label": "Tambah sendiri {searchTerm}",
+    "browse": "{category} Kategori",
+    "search": "Cari makanan",
+    "root": "Semua kategori makanan",
+    "back": "Pergi balik ke '{category}'",
     "optional": {
       "confirm": "Yes",
       "reject": "No",
       "infoPrompt": "What was it?"
     },
-    "addMore": "Add more ingredients",
-    "noMore": "No more ingredients",
-    "none": "No food results. Please try refining your search.",
-    "remove": "Remove",
+    "addMore": "Tambah lagi bahan-bahan",
+    "noMore": "Tiada lagi bahan-bahan",
+    "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
+    "remove": "Buang",
     "missingAllIngredients": "Sila tambah sekurang-kurangnya satu bahan untuk meneruskan.",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>Please try browsing the food categories listed above to find your food.</p><p>If you still can't find it, please click the button below to report a missing food.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again",
-      "irrelevantIngredient": "I didn't have any {ingredient}"
+      "label": "Saya tidak jumpa makanan saya",
+      "description": "<p>Sila layari kategori makanan di atas untuk mencari makanan anda.</p><p>Kalau tiada, sila klik butang di bawah untuk 'Laporkan makanan hilang'.</p>",
+      "report": "Laporkan makanan hilang",
+      "tryAgain": "OK, saya mahu mencuba lagi",
+      "irrelevantIngredient": "Saya tidak ada {ingredient}"
     }
   },
   "parentFoodPortion": {
-    "name": "Parent food portion",
+    "name": "Porsi makanan asal",
     "text": "",
     "description": "",
-    "label": "How much {food} did you have in your {parentFood}?",
-    "confirm": "I had that much"
+    "label": "Berapa banyak {food} yang anda telah ambil dalam {parentFood}?",
+    "confirm": "Saya telah mengambil sebanyak itu"
   },
   "pizza": {
     "name": "Piza",
@@ -477,7 +477,7 @@
     }
   },
   "standardPortion": {
-    "name": "Porsi standard",
+    "name": "Porsi piawai",
     "text": "",
     "description": "",
     "label": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
