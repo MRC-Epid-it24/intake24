@@ -481,30 +481,30 @@ export class FrenchAnsesLocaleBuilder {
           });
         }
       }
-      else {
-        logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDQUANT table`);
-      }
-
-      if (portionSizeMethods.length === 0) {
-        // Temporary fallback method, shouldn't be there in the final version
-
-        portionSizeMethods.push({
-          method: 'standard-portion',
-          description: 'use_a_standard_portion',
-          useForRecipes: true,
-          conversionFactor: 1.0,
-          units: [
-            {
-              name: 'pieces',
-              omitFoodDescription: false,
-              weight: 100,
-            },
-          ],
-        });
-      }
-
-      return portionSizeMethods;
     }
+    else {
+      logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDQUANT table`);
+    }
+
+    if (portionSizeMethods.length === 0) {
+      // Temporary fallback method, shouldn't be there in the final version
+
+      portionSizeMethods.push({
+        method: 'standard-portion',
+        description: 'use_a_standard_portion',
+        useForRecipes: true,
+        conversionFactor: 1.0,
+        units: [
+          {
+            name: 'pieces',
+            omitFoodDescription: false,
+            weight: 100,
+          },
+        ],
+      });
+    }
+
+    return portionSizeMethods;
   }
 
   private getRecipePortionSizeMethods(recipeCode: string): PkgPortionSizeMethod[] {
