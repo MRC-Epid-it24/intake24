@@ -1,13 +1,13 @@
 {
-  "_": "召回",
-  "info": "召回信息",
-  "none": "目前没有任何召回。",
-  "startedAt": "召回开始时间：{startedAt}。",
-  "finishedAt": "召回结束时间：{finishedAt}。",
+  "_": "回忆",
+  "info": "回忆信息",
+  "none": "目前没有任何回忆。",
+  "startedAt": "回忆开始时间：{startedAt}。",
+  "finishedAt": "回忆结束时间：{finishedAt}。",
   "submittedAt": "提交时间",
   "limitReached": {
-    "daily": "您已达到每日召回限制。",
-    "total": "您已达到总召回限制。"
+    "daily": "您已达到每日回忆限制。",
+    "total": "您已达到总回忆限制。"
   },
   "rating": {
     "_": "Rate your experience",
@@ -16,14 +16,14 @@
     "send": "Send feedback",
     "sent": "Feedback sent, thank you!"
   },
-  "survey": "Study: {name}",
+  "survey": "研究：{name}",
   "submissions": {
-    "_": "召回日期",
-    "title": "召回日期",
+    "_": "回忆日期",
+    "title": "回忆日期",
     "all": "所有",
-    "past": "过去的召回",
-    "none": "您还没有过去的召回。",
-    "count": "Recall number: {count}"
+    "past": "过去的回忆",
+    "none": "您还没有过去的回忆。",
+    "count": "回忆编号:{count}"
   },
   "start": {
     "_": "开始",
@@ -32,47 +32,47 @@
   "continue": "继续",
   "abort": {
     "_": "中止",
-    "label": "中止召回",
-    "confirm": "中止当前召回？"
+    "label": "中止回忆",
+    "confirm": "中止当前回忆？"
   },
   "surveyInfo": {
-    "recall": "Recall: {number}"
+    "recall": "回忆:  {number}"
   },
   "menu": {
-    "title": "Review panel",
+    "title": "审查小组",
     "mealSuggested": "此餐点是由系统建议的，但您尚未确认您已食用。",
     "food": {
-      "delete": "Delete food",
-      "deleteConfirm": "Do you want to delete {item}?",
-      "change": "Change food",
+      "delete": "删除食物 ",
+      "deleteConfirm": "删除食物 {item}?",
+      "change": "更换食物",
       "free-text": {
         "_": "该食物尚未与我们数据库中的食物匹配。",
         "incomplete": "该食物的份量尚未确定。",
-        "edit": "Edit search"
+        "edit": "编辑搜索"
       },
       "encoded-food": {
         "_": "该食物已与我们数据库中的食物匹配。",
         "complete": "该食物的份量估计已完成。",
         "incomplete": "该食物的份量尚未确定。",
-        "edit": "Edit portion size"
+        "edit": "编辑食物份量"
       },
       "missing-food": {
-        "_": "This food has been marked as missing in our database.",
-        "complete": "Missing information for this food is complete.",
-        "incomplete": "Missing information for this food is not yet known.",
-        "edit": "Edit missing food"
+        "_": "这种食物已被标记为在我们的数据库中找不到食物。",
+        "complete": "此食物的缺失信息已完善。",
+        "incomplete": "此食物的缺失信息尚未知晓。",
+        "edit": "编辑找不到食物"
       },
       "recipe-builder": {
-        "_": "This food has been matched with a recipe from our database.",
-        "complete": "Recipe Steps for this food are complete.",
-        "incomplete": "Recipe Steps for this food are not yet finished.",
-        "edit": "Edit ingredients"
+        "_": "T这种食物已与我们数据库中的食谱相匹配。",
+        "complete": "这种食物的食谱步骤已经完成。",
+        "incomplete": "这种食物的配方步骤还没有完成。",
+        "edit": "编辑成分"
       }
     },
     "meal": {
-      "add": "Add meal",
-      "delete": "删除餐点",
-      "deleteConfirm": "You are about to delete everything you had for {item}.",
+      "add": "添加餐食",
+      "delete": "删除餐食",
+      "deleteConfirm": "您将删除 {item}的所有内容。",
       "editFoods": "编辑/更改食物",
       "editTime": "编辑/更改时间"
     }
@@ -91,26 +91,26 @@
     "next": "继续",
     "submit": "提交召回",
     "reviewed": "Reviewed",
-    "addMeal": "添加餐点",
+    "addMeal": "添加餐食",
     "deleteFood": "删除食物",
-    "deleteMeal": "删除餐点",
-    "editFood": "Edit food",
-    "editMeal": "添加食物",
+    "deleteMeal": "删除餐食",
+    "editFood": "编辑食物",
+    "editMeal": "添加餐食",
     "mealTime": "更改用餐时间",
     "nav": {
       "cancel": "取消",
       "confirm": "确认",
       "feedback": "反馈",
       "next": "下一步",
-      "redirect": "Continue",
+      "redirect": "下一步",
       "remove": "移除",
       "review": "查看",
       "submit": "提交",
       "addMeal": "添加餐点",
       "deleteFood": "删除食物",
-      "deleteMeal": "删除餐点",
-      "editFood": "Edit food",
-      "editMeal": "添加食物",
+      "deleteMeal": "删除餐食",
+      "editFood": "编辑食物",
+      "editMeal": "添加下一步",
       "mealTime": "用餐时间"
     }
   }

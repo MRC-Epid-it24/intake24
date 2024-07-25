@@ -2,26 +2,26 @@
   "_": "Intake24",
   "home": "Utama",
   "dashboard": "Halaman utama",
-  "navigation": "Navigation",
+  "navigation": "Navigasi",
   "welcome": {
     "_": "Selamat datang ke Intake24",
     "subtitle": "Intake24 ialah sistem berkomputer sumber terbuka ingatan semula diet, yang dilengkapi oleh pengguna berdasarkan rekod ingatan semula multiple-pass 24 jam.."
   },
   "legal": {
-    "_": "Legal",
-    "copyright": "{name} by {team} © {year}",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Use",
-    "cookies": "Cookie Preferences"
+    "_": "Hak sah",
+    "copyright": "{name} oleh {team} © {year}",
+    "privacy": "Dasar privasi",
+    "terms": "Syarat penggunaan",
+    "cookies": "Pilihan Cookie"
   },
   "login": {
     "_": "Daftar masuk",
-    "start": "Let's get started",
+    "start": "Jom mula",
     "subtitle": "Daftar masuk dengan nama pengguna & kata laluan anda",
-    "captcha": "Complete the captcha challenge",
+    "captcha": "Sila lengkapkan captcha",
     "back": "Kembali ke log masuk",
     "err": {
-      "captcha": "Invalid captcha challenge response.",
+      "captcha": "Respon captcha tidak sah.",
       "credentials": "Nama pengguna & kata laluan yang diberikan adalah tidak sah.",
       "token": "Token akses yang diberikan adalah tidak sah.",
       "survey": "Survei ini ({surveyId}) tidak kelihatan seperti URL log masuk survei yang sah."
@@ -37,12 +37,12 @@
   "emailConfirm": "Sahkan emel",
   "password": "Kata laluan",
   "phone": "Telefon",
-  "message": "Message",
+  "message": "Mesej",
   "continue": "Teruskan",
   "help": {
     "_": "Bantuan",
     "title": "Mohon bantuan",
-    "text": "Please complete the form below and one of our support staff will get in touch as soon as they can.",
+    "text": "Sila lengkapkan borang di bawah dan staf sokongan kami akan menghubungi anda.",
     "sent": "Permohonan bantuan anda telah dihantar."
   },
   "app": {
@@ -69,7 +69,7 @@
     },
     "ok": "OK",
     "reload": "Muat semula",
-    "remove": "Hapus",
+    "remove": "Buang",
     "reset": "Set semula",
     "start": "Mula",
     "submit": "Hantar",
