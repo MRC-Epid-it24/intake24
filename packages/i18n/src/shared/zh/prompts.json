@@ -28,13 +28,13 @@
     "description": "<p>我们目前已经获取了关于您的 <strong>{item}</strong> 所有需要的信息。</p><p>为了继续进行调查， 请单击下面的“ 继续” 按钮， 我们将自动选择我们仍需要有关其它食物或餐点的信息。</p><p>或者，如果您想专注于某个项目，请单击左侧的餐点或食物。</p>"
   },
   "select": {
-    "name": "Select value from list",
+    "name": "从列表中选择值",
     "text": "",
     "description": "",
-    "label": "Select option"
+    "label": "选择选项"
   },
   "slider": {
-    "name": "Select value on slider",
+    "name": "选择滑块上的值",
     "text": "",
     "description": ""
   },
@@ -75,27 +75,27 @@
     "text": "",
     "description": "",
     "yes": "是的，我有",
-    "yesAnother": "Yes, I had another",
+    "yesAnother": "是的，我还有一个",
     "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
-    "no": "不是的，我没有吃",
-    "moreFoodsQuestion": "Did you have any other foods from this category?",
-    "databaseLookupTitle": "What was it?",
-    "databaseLookupWithExisting": "If not, what was it?",
-    "existingFoodsTitle": "Was it something you already entered?",
+    "no": "不是的，我没有",
+    "moreFoodsQuestion": "你还有食物从这个类别吗?",
+    "databaseLookupTitle": "是什么?",
+    "databaseLookupWithExisting": "如果不是，那是什么?",
+    "existingFoodsTitle": "是你已经输入的东西吗?",
     "select": {
-      "different": "选择其他食物",
-      "remove": "Remove"
+      "different": "选择另一种食物",
+      "remove": "去除"
     },
-    "browse": "Browse all foods",
-    "search": "Search for a food",
+    "browse": "最后一页",
+    "search": "浏览所有食物",
     "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Please try refining your search.",
+    "back": "返回到 '{category}'",
+    "none": "没有食物结果。请尝试优化您的搜索。",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again",
+      "label": "我找不到我的食物",
+      "description": "<p>尝试浏览上面列出的食物类别来查找您的食物</p><p>如果您仍然找不到食物，请选择“报告找不到食物”.</p>",
+      "report": "报告找不到食物",
+      "tryAgain": "好的，让我再试一次 ",
       "placeholder": "Missing food"
     }
   },
@@ -105,8 +105,8 @@
     "description": "例如：<p><ul><li>香蕉</li><li>薯片</li><li>米饭</li><li>茶</li></ul></p><p>您可以在输入时按Enter键或“ 添加食物/ 饮料” 按钮， 以进行下一行。</p><p><strong>不要</strong> 输入您吃了多少， 只需输入食物名称即可。",
     "add": "添加",
     "drinksOnly": "饮料",
-    "foods": "Foods and drinks",
-    "foodsOnly": "Foods"
+    "foods": "食物和饮料",
+    "foodsOnly": "食物"
   },
   "externalSource": {
     "name": "External source",
@@ -127,24 +127,24 @@
   "foodSearch": {
     "name": "搜索食物",
     "text": "",
-    "description": "<p>Below is the list of foods from our database that look like \"<strong>{food}</strong>\".</p><p>Choose the item you had or the closest match.</p>",
-    "browse": "Browse all foods",
-    "search": "Search for a food",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Please try refining your search.",
-    "refine": "The search has found a lot of results. You can try refining your search.",
-    "pizza": "If your pizza was from a takeaway or restaurant, please select that option in the list.",
+    "description": "<p>以下是我们数据库中与 \"<strong>{food}</strong>\"相似的食物列表。</p><p>请选择您所吃的食物或最接近的匹配项。</p>",
+    "browse": "浏览所有食物",
+    "search": "搜索食物",
+    "root": "所有食物类别",
+    "back": "返回到 '{category}'",
+    "none": "没有食物结果。请尝试优化您的搜索。",
+    "refine": "搜索已经找到了很多结果。您可以尝试优化搜索。",
+    "pizza": "如果你的披萨来自外卖店或餐馆，请在列表中选择该选项。",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again"
+      "label": "我找不到我的食物",
+      "description": "<p>如果在列表中找不到您的食物，请尝试在上面的搜索文本框中重新表述描述，然后点击“再次搜索”。</p><p>或者点击“浏览所有食物”并探索食品类别。</p><p>如果您仍然找不到您的食物，请点击“报告缺失的食物。</p>",
+      "report": "报告找不到食物",
+      "tryAgain": "好的，让我再试一次 "
     },
     "confirmDiscardFood": {
-      "label": "Yes",
-      "messageUnsafe": "<p>You have already answered some questions about <strong>\"{discardedFoodName}\"</strong>!</p><p>If you change it to <strong>\"{selectedFoodName}\"</strong> now, you might have to answer some of those questions again.</p><p>Are you sure you would like to replace this food?</p>",
-      "message": "You have already answered some questions about \"{discardedFoodName}\"! If you change it to \"{selectedFoodName}\" now, you might have to answer some of those questions again. Are you sure you would like to replace this food?"
+      "label": "是的",
+      "messageUnsafe": "<p>您已经回答了一些关于 <strong>\"{discardedFoodName}\"</strong>的问题!</p><p>如果现在更改为 <strong>\"{selectedFoodName}\"</strong> 您可能需要重新回答其中一些问题。</p><p>您确定要替换这个食物吗？</p>",
+      "message": "您已经回答了一些关于 \"{discardedFoodName}\"的问题! 如果现在更改为 \"{selectedFoodName}\" 您可能需要重新回答其中一些问题。您确定要替换这个食物吗？"
     }
   },
   "mealAdd": {
@@ -154,7 +154,7 @@
     "label": "选择预定义餐食",
     "custom": {
       "text": "",
-      "description": "<p>您可以输入自己的餐食名称，或者如果合适，请从下面的列表中选择一个。。</p>",
+      "description": "<p>您可以输入自己的餐食名称，或者如果合适，请从下面的列表中选择一个。</p>",
       "label": "选择预定义名称或输入餐食名称"
     },
     "yes": "添加这餐食",
@@ -165,38 +165,38 @@
   "mealDuration": {
     "name": "编辑时间",
     "text": "",
-    "description": "<p>How long did it take you to eat <strong>{mealName}</strong>?</p>",
-    "minutes": "mins",
-    "confirm": "Continue"
+    "description": "<p>摄入了多久 <strong>{mealName}</strong>?</p>",
+    "minutes": "分钟",
+    "confirm": "继续 "
   },
   "mealGap": {
-    "name": "Meal gap",
+    "name": "餐间隙 ",
     "text": "",
     "description": "",
-    "before": "<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>",
-    "after": "<p>Did you have any meals, snacks or drinks after your <strong>{meal}</strong> at {mealTime}?</p>",
-    "between": "<p>Did you have any meals, snacks or drinks between your <strong>{startMeal}</strong> (at {startMealTime}) and your <strong>{endMeal}</strong> (at {endMealTime})?</p>",
-    "yes": "Yes, add a meal",
-    "no": "No, I did not"
+    "before": "<p>在 <strong>{meal}</strong> 的 {mealTime}之前，您有吃任何餐、小吃或饮料吗?</p>",
+    "after": "<p>在 <strong>{meal}</strong> 的 {mealTime}之后，您有吃任何餐、小吃或饮料吗?</p>",
+    "between": "<p>在 <strong>{startMeal}</strong> (at {startMealTime}) 和 <strong>{endMeal}</strong> (at {endMealTime})之间，您有吃任何餐、小吃或饮料吗?</p>",
+    "yes": "是的，添加一餐 ",
+    "no": "不，我没有"
   },
   "mealTime": {
-    "name": "Edit Time",
+    "name": "编辑时间",
     "text": "",
-    "description": "<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>",
-    "yes": "Around that time",
-    "no": "Did not have"
+    "description": "<p>您吃了 <strong>{meal}</strong>吗? 如果是的，这是什么时间？</p>",
+    "yes": "大约那个时间",
+    "no": "我没有吃"
   },
   "readyMeal": {
     "name": "现成食物",
     "text": "",
-    "description": "<p>Was this a ready-made meal or food?</p>"
+    "description": "<p>这是现成的餐食或现成的食物吗?</p>"
   },
   "redirect": {
     "name": "重定向",
     "text": "",
     "description": "",
-    "missingUrl": "Missing redirection URL",
-    "goTo": "Go to questionnaire"
+    "missingUrl": "缺失的重定向 URL",
+    "goTo": "前往问卷"
   },
   "reviewConfirm": {
     "name": "回顾和确认",
@@ -206,24 +206,24 @@
   "sameAsBefore": {
     "name": "和以前一样",
     "text": "",
-    "description": "<p>Was this <strong>{food}</strong> the same as the one you had before?</p>",
-    "serving": "{amount} serving size",
-    "leftovers": "Left about {amount}",
+    "description": "<p>这个 <strong>{food}</strong> 和您之前吃的一样吗？</p>",
+    "serving": "{amount} 份量 ",
+    "leftovers": "留下约  {amount}",
     "noLeftovers": {
-      "drink": "Drank it all",
-      "food": "Ate everything"
+      "drink": "我喝完了那饮料",
+      "food": "我吃完那食物"
     },
-    "hadWith": "Had it with:",
-    "noAddedFoods": "Nothing added (e.g. milk, sugar, sauces)",
-    "same": "Yes, I had the same",
-    "notSame": "No, I had a different one"
+    "hadWith": "伴随着：",
+    "noAddedFoods": "未添加任何东西（例如牛奶、糖、酱料)",
+    "same": "我吃了相同的",
+    "notSame": "我没有吃相同的"
   },
   "splitFood": {
     "name": "拆分食物",
     "text": "",
-    "description": "It looks like you entered more than one food item on the line.",
+    "description": "看起来您在同一行中输入了多个食物项目。",
     "searchTerm": "搜索词：{food}",
-    "split": "Are these separate foods?",
+    "split": "这些是单独的食物吗？?",
     "singleSuggestion": "如果您是指像鸡肉蔬菜汤这样的单一食物，请单击“保留为单一食物”。",
     "singleSuggestionEx": "如果您是指像{food}这样的单一食物，请单击“保留为单一食物”。",
     "separateSuggestion": "如果是鱼和薯条等项目，请单击“分开食物”。",
@@ -237,7 +237,7 @@
     "description": ""
   },
   "quantity": {
-    "_": "Quantity",
+    "_": "数量",
     "whole": "整个",
     "fraction": "分数",
     "and": "和",
@@ -248,7 +248,7 @@
   "portionSizeOption": {
     "name": "分量方法",
     "text": "",
-    "description": "How do you want to estimate your portion?",
+    "description": "您想如何估计您的份量?",
     "selections": {
       "grated": "磨碎的",
       "in_a_bag": "装在袋里的",
@@ -301,7 +301,7 @@
   },
   "linkedAmount": {
     "label": "在 {food} 中，您吃了多少片 ({quantity})?",
-    "unit": "How many slices",
+    "unit": "有几片",
     "all": "全部上"
   },
   "asServed": {
@@ -315,7 +315,7 @@
       "confirm": "我吃了这么多"
     },
     "leftovers": {
-      "header": "Did you leave some of your {food}?",
+      "header": "您有剩下一些{food}吗?",
       "label": "请根据以下图片，选择您剩余了多少{food}。",
       "less": "我剩余的量更少",
       "more": "我剩余的量更多",
@@ -357,11 +357,11 @@
       "confirm": "就是那么多"
     },
     "leftovers": {
-      "header": "Did you leave some of your {food}?",
-      "label": "Use the slider on the right to choose how much you had left.",
-      "less": "我留下了少量",
-      "more": "我留下了大量",
-      "confirm": "就是那么多"
+      "header": "您有剩下一些 {food}吗?",
+      "label": "使用右侧的滑块来选择剩余的数量。",
+      "less": "我剩余的量更少 ",
+      "more": "我剩余的量更多 ",
+      "confirm": "我剩余了这么多 "
     },
     "count": "How many of these drinks did you have at this time?"
   },
@@ -370,7 +370,7 @@
     "text": "",
     "description": "",
     "label": "选择最接近你所吃{food}大小的图片。",
-    "quantity": "Choose how many of {food} you had.",
+    "quantity": "请选择您吃/喝{food} 了多少。",
     "confirm": "我吃了那么多",
     "expand": "展开图片"
   },
@@ -378,59 +378,59 @@
     "name": "热饮中的牛奶",
     "text": "",
     "description": "",
-    "label": "How much {food} did you have in your tea or coffee?",
+    "label": "您在茶或咖啡中加了多少{{food}?",
     "confirm": "我加了那么多"
   },
   "milkOnCereal": {
-    "name": "Milk on cereal",
+    "name": "麦片中的牛奶",
     "text": "",
     "description": "",
     "container": "选择最接近你用来盛放{food}的碗。",
-    "milk": "Choose the level your milk came up to (without cereal)."
+    "milk": "请选择您加的牛奶量（不含麦片）。"
   },
   "missingFood": {
-    "name": "Missing food",
+    "name": "缺失的食物",
     "text": "",
-    "description": "You said you were unable to find a good match for \"{food}\". Please provide as much detail as you can to the following questions, to help us identify your food or drink.",
-    "source": "Was it homemade?",
-    "homemade": "Provide further details e.g. description of dish or ingredients.",
-    "purchased": "Tell us where was it purchased from? Does it have a brand name?",
-    "barcode": "Can you provide the barcode?",
-    "portionSize": "How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc."
+    "description": "您说您找不到一个匹配的 \"{food}\"。 请尽量提供以下问题的详细信息，以帮助我们识别您的食物或饮料。",
+    "source": "是自制的吗？",
+    "homemade": "提供更多细节，例如菜肴描述或配料。",
+    "purchased": "可以告诉我们它是从哪里购买的吗？它有品牌吗?",
+    "barcode": "您能提供条形码吗？",
+    "portionSize": "您吃了多少? E.g. 例如1包,2茶匙, 1把,  125克, ½ ½杯等."
   },
   "recipeBuilder": {
-    "name": "{food} recipe builder",
+    "name": "{food} 食谱建器。",
     "text": "",
-    "description": "Please follow the steps below to build your own recipe for {food}.",
-    "label": "Add your own {searchTerm}",
-    "browse": "{category} categories",
-    "search": "Search for a food",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
+    "description": "请按照以下步骤制作您自己的{food}食谱.",
+    "label": "添加您自己的 {searchTerm}",
+    "browse": "{category} 类别",
+    "search": "搜索食物",
+    "root": "所有食物类别",
+    "back": "返回' '{category}'",
     "optional": {
       "confirm": "Yes",
       "reject": "No",
       "infoPrompt": "What was it?"
     },
-    "addMore": "Add more ingredients",
-    "noMore": "No more ingredients",
-    "none": "No food results. Please try refining your search.",
-    "remove": "Remove",
+    "addMore": "添加更多配料",
+    "noMore": "没有其他的配料",
+    "none": "没有食物结果。请尝试优化您的搜索。",
+    "remove": "去除",
     "missingAllIngredients": "请至少添加一个成分以继续。",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>Please try browsing the food categories listed above to find your food.</p><p>If you still can't find it, please click the button below to report a missing food.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again",
-      "irrelevantIngredient": "I didn't have any {ingredient}"
+      "label": "我找不到我的食物",
+      "description": "<p>请尝试浏览上面列出的食物类别来查找您的食物</p><p>如果您仍然找不到食物，请选择“报告找不到食物”。</p>",
+      "report": "报告您找不到的食物",
+      "tryAgain": "好的，让我再试一次",
+      "irrelevantIngredient": "好的，让我再试一次 {ingredient}"
     }
   },
   "parentFoodPortion": {
-    "name": "Parent food portion",
+    "name": "父食物部分",
     "text": "",
     "description": "",
-    "label": "How much {food} did you have in your {parentFood}?",
-    "confirm": "I had that much"
+    "label": "您在您的{food} 中吃了多少 {parentFood}?",
+    "confirm": "我吃了这么多"
   },
   "pizza": {
     "name": "披萨",
@@ -488,5 +488,15 @@
       "withFood": "你吃了{unit}的{food}"
     },
     "confirm": "我吃了那么多"
+  },
+  "unknown": {
+    "name": "未知",
+    "text": "",
+    "description": "{food}没有当前的份量估计方法。"
+  },
+  "weight": {
+    "name": "重量",
+    "text": "",
+    "description": "输入你吃了多少。"
   }
 }

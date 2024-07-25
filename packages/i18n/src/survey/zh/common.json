@@ -2,26 +2,26 @@
   "_": "Intake24",
   "home": "主页",
   "dashboard": "仪表板",
-  "navigation": "Navigation",
+  "navigation": "导航",
   "welcome": {
     "_": "欢迎来到Intake24",
     "subtitle": "Intake24 是一个基于通过多次 24 小时召回的开源自完成计算机化饮食回忆系统。"
   },
   "legal": {
-    "_": "Legal",
-    "copyright": "{name} by {team} © {year}",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Use",
-    "cookies": "Cookie Preferences"
+    "_": "与法律有关",
+    "copyright": "{name} 的 {team} © {year}",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "cookies": "Cookie首选项"
   },
   "login": {
     "_": "登录",
-    "start": "Let's get started",
+    "start": "让我们开始吧",
     "subtitle": "使用您的用户名和密码登录",
-    "captcha": "Complete the captcha challenge",
+    "captcha": "完成captcha挑战",
     "back": "返回登录",
     "err": {
-      "captcha": "Invalid captcha challenge response.",
+      "captcha": "无效的captcha质询响应。",
       "credentials": "提供的用户名和密码凭据无效。",
       "token": "提供的访问令牌无效。",
       "survey": "此调查（{surveyId}）看起来不是有效的调查登录 URL。"
@@ -37,12 +37,12 @@
   "emailConfirm": "确认电子邮件",
   "password": "密码",
   "phone": "电话",
-  "message": "Message",
+  "message": "短信",
   "continue": "继续",
   "help": {
     "_": "帮助",
     "title": "请求帮助",
-    "text": "Please complete the form below and one of our support staff will get in touch as soon as they can.",
+    "text": "请填写以下表格，我们的一名支持人员将尽快与您取得联系。",
     "sent": "您的帮助请求已发送。"
   },
   "app": {

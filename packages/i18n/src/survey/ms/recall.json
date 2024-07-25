@@ -16,14 +16,14 @@
     "send": "Send feedback",
     "sent": "Feedback sent, thank you!"
   },
-  "survey": "Study: {name}",
+  "survey": "Kajian: {name}",
   "submissions": {
     "_": "Hari ingatan semula",
     "title": "Hari ingatan semula",
     "all": "Semua",
     "past": "Ingatan semula yang lepas",
     "none": "Anda belum mempunyai sebarang ingatan semula yang lepas.",
-    "count": "Recall number: {count}"
+    "count": "Nombor recall: {count}"
   },
   "start": {
     "_": "Mula",
@@ -42,37 +42,37 @@
     "title": "Review panel",
     "mealSuggested": "Hidangan ini dicadangkan oleh sistem tetapi anda masih belum mengesahkan bahawa anda telah mengambilnya",
     "food": {
-      "delete": "Delete food",
-      "deleteConfirm": "Do you want to delete {item}?",
-      "change": "Change food",
+      "delete": "Padam makanan",
+      "deleteConfirm": "Adakah anda mahu memadam {item}?",
+      "change": "Tukar makanan",
       "free-text": {
         "_": "Makanan ini masih belum dipadankan dengan makanan daripada pangkalan data kami.",
         "incomplete": "Saiz porsi untuk makanan ini belum diketahui.",
-        "edit": "Edit search"
+        "edit": "Sunting carian"
       },
       "encoded-food": {
         "_": "Makanan ini telah dipadankan dengan makanan daripada pangkalan data kami.",
         "complete": "Anggaran saiz porsi untuk makanan ini sudah lengkap.",
         "incomplete": "Saiz porsi untuk makanan ini belum diketahui.",
-        "edit": "Edit portion size"
+        "edit": "Sunting saiz porsi"
       },
       "missing-food": {
-        "_": "This food has been marked as missing in our database.",
-        "complete": "Missing information for this food is complete.",
-        "incomplete": "Missing information for this food is not yet known.",
-        "edit": "Edit missing food"
+        "_": "Makanan ini telah ditandakan sebagai as missing dalam database kami.",
+        "complete": "Maklumat yang hilang bagi makanan ini telah lengkap.",
+        "incomplete": "Maklumat yang hilang bagi makanan ini tidak lagi diketahui.",
+        "edit": "Sunting makanan hilang"
       },
       "recipe-builder": {
-        "_": "This food has been matched with a recipe from our database.",
-        "complete": "Recipe Steps for this food are complete.",
-        "incomplete": "Recipe Steps for this food are not yet finished.",
-        "edit": "Edit ingredients"
+        "_": "Makanan ini padan dengan resipi yang sedia ada dalam database kami.",
+        "complete": "Langkah-langkah resipi bagi makanan ini telah lengkap.",
+        "incomplete": "Langkah-langkah resipi bagi makanan ini masih belum lengkap.",
+        "edit": "Sunting bahan-bahan"
       }
     },
     "meal": {
-      "add": "Add meal",
+      "add": "Tambah hidangan",
       "delete": "Padam hidangan",
-      "deleteConfirm": "You are about to delete everything you had for {item}.",
+      "deleteConfirm": "Anda bakal memadam semua ambilan anda bagi {item}.",
       "editFoods": "Sunting/ubah makanan",
       "editTime": "Sunting/ubah masa"
     }
@@ -94,7 +94,7 @@
     "addMeal": "Tambah hidangan",
     "deleteFood": "Padam makanan",
     "deleteMeal": "Padam hidangan",
-    "editFood": "Edit food",
+    "editFood": "Sunting makanan",
     "editMeal": "Tambah makanan",
     "mealTime": "Ubah masa hidangan",
     "nav": {
@@ -102,14 +102,14 @@
       "confirm": "Sahkan",
       "feedback": "Maklum balas",
       "next": "Teruskan",
-      "redirect": "Continue",
-      "remove": "Hapus",
+      "redirect": "Bersambung",
+      "remove": "Buang",
       "review": "Semak",
       "submit": "Hantar",
       "addMeal": "Tambah hidangan",
       "deleteFood": "Padam makanan",
       "deleteMeal": "Padam hidangan",
-      "editFood": "Edit food",
+      "editFood": "Sunting makanan",
       "editMeal": "Tambah makanan",
       "mealTime": "Masa hidangan"
     }

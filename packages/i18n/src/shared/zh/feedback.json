@@ -58,7 +58,7 @@
     "chart": "{nutrient} 最高"
   },
   "meals": {
-    "title": "Meals per-day breakdown",
+    "title": "每日餐食分布",
     "chart": "{nutrient}"
   },
   "rating": {

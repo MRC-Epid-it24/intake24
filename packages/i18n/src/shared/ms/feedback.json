@@ -36,7 +36,7 @@
     }
   },
   "outputs": {
-    "title": "Output",
+    "title": "Hasil",
     "download": {
       "_": "Muat turun",
       "title": "Muat turun sebagai fail PDF",
@@ -58,7 +58,7 @@
     "chart": "Paling tinggi {nutrient}"
   },
   "meals": {
-    "title": "Meals per-day breakdown",
+    "title": "Pecahan hidangan dalam sehari",
     "chart": "{nutrient}"
   },
   "rating": {
