@@ -73,9 +73,9 @@ export const conditionOps = {
   },
 };
 
-export const mealCompletionStateOptions = ['freeEntryComplete', 'searchComplete', 'portionSizeComplete', 'complete'] as const;
+export const foodCompletionStateOptions = ['freeEntryComplete', 'searchComplete', 'portionSizeComplete', 'complete'] as const;
 
-export type MealCompletionState = typeof mealCompletionStateOptions[number];
+export type FoodCompletionState = typeof foodCompletionStateOptions[number];
 
 const valueCheck = z.object({
   op: z.enum(conditionOpCodes),
@@ -120,6 +120,7 @@ const promptAnswerProperty = z.object({
   type: z.literal('promptAnswer'),
   check: valueCheck.extend({
     promptId: z.string(),
+    required: z.boolean(),
   }),
 });
 
@@ -135,7 +136,15 @@ const mealCompletionProperty = z.object({
   id: z.literal('mealCompletion'),
   type: z.literal('mealCompletion'),
   check: z.object({
-    completionState: z.enum(mealCompletionStateOptions),
+    completionState: z.enum(foodCompletionStateOptions),
+  }),
+});
+
+const foodCompletionProperty = z.object({
+  id: z.literal('foodCompletion'),
+  type: z.literal('foodCompletion'),
+  check: z.object({
+    completionState: z.enum(foodCompletionStateOptions),
   }),
 });
 
@@ -166,6 +175,7 @@ export const mealProperties = z.discriminatedUnion('id', [
 export const foodProperties = z.discriminatedUnion('id', [
   ...commonProperties,
   foodCategoryProperty,
+  foodCompletionProperty,
 ]);
 
 const surveyCondition = z.object({ object: z.literal('survey'), property: surveyProperties });

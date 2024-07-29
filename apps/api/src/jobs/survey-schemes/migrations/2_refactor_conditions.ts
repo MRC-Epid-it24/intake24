@@ -98,6 +98,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
             promptId: condition.props.promptId,
             op: condition.op,
             value: condition.value,
+            required: true,
           },
         },
       };

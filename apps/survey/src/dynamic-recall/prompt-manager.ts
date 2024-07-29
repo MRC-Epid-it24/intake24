@@ -1,6 +1,6 @@
 import type {
   ComponentType,
-  MealCompletionState,
+  FoodCompletionState,
   Prompt,
 } from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
@@ -14,7 +14,7 @@ import type {
 } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import { conditionOps, mealCompletionStateOptions } from '@intake24/common/prompts';
+import { conditionOps, foodCompletionStateOptions } from '@intake24/common/prompts';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import {
   asServedComplete,
@@ -33,7 +33,9 @@ import {
 } from '@intake24/common/util/portion-size-checks';
 import {
   findMeal,
+  foodComplete,
   foodPortionSizeComplete,
+  foodSearchComplete,
   getFoodByIndex,
   getFoodIndexRequired,
   getMealIndexForSelection,
@@ -640,7 +642,7 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
   }
 }
 
-function getSurveyCompletionState(store: SurveyStore): MealCompletionState | undefined {
+function getSurveyCompletionState(store: SurveyStore): FoodCompletionState | undefined {
   if (surveyMealsComplete(store.data))
     return 'complete';
   if (surveyPortionSizeComplete(store.data))
@@ -652,7 +654,7 @@ function getSurveyCompletionState(store: SurveyStore): MealCompletionState | und
   return undefined;
 }
 
-function getMealCompletionState(meal: MealState): MealCompletionState | undefined {
+function getMealCompletionState(meal: MealState): FoodCompletionState | undefined {
   if (mealComplete(meal))
     return 'complete';
   if (mealPortionSizeComplete(meal))
@@ -662,6 +664,16 @@ function getMealCompletionState(meal: MealState): MealCompletionState | undefine
   if (mealFreeEntryComplete(meal))
     return 'freeEntryComplete';
   return undefined;
+}
+
+function getFoodCompletionState(food: FoodState): FoodCompletionState {
+  if (foodComplete(food))
+    return 'complete';
+  if (foodPortionSizeComplete(food))
+    return 'portionSizeComplete';
+  if (foodSearchComplete(food))
+    return 'searchComplete';
+  return 'freeEntryComplete';
 }
 
 function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt) {
@@ -741,6 +753,10 @@ function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | 
               answer = requireFood(condition.property.id).customPromptAnswers[condition.property.check.promptId];
               break;
           }
+
+          if (!condition.property.check.required && answer === undefined)
+            return true;
+
           return conditionOps[condition.property.check.op]({
             answer,
             value: condition.property.check.value,
@@ -758,7 +774,7 @@ function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | 
             value: condition.property.check.value,
           });
         case 'mealCompletion': {
-          let completionState: MealCompletionState | undefined;
+          let completionState: FoodCompletionState | undefined;
           switch (condition.object) {
             case 'survey':
               completionState = getSurveyCompletionState(store);
@@ -771,7 +787,11 @@ function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | 
           }
           if (completionState === undefined)
             return false;
-          return mealCompletionStateOptions.indexOf(condition.property.check.completionState) <= mealCompletionStateOptions.indexOf(completionState);
+          return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
+        }
+        case 'foodCompletion': {
+          const completionState = getFoodCompletionState(requireFood(condition.property.id));
+          return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
         }
         case 'foodCategory': {
           const food = requireFood(condition.property.id);
