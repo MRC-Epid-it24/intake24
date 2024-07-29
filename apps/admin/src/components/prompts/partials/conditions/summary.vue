@@ -6,6 +6,9 @@
     <div v-if="showOp">
       <v-icon left right small>{{ opToIconMap[check.op] }}</v-icon>
       <v-label class="align-baseline">{{ check.value || '?' }}</v-label>
+      <v-label
+        v-if="showNotRequired" v-dompurify-html:i18n="$t(`survey-schemes.conditions.summary.notRequired`)" class="ml-2 align-baseline"
+      />
     </div>
   </code>
 </template>
@@ -15,7 +18,7 @@ import { defineComponent, type PropType, ref, toRefs, watch } from 'vue';
 
 import type {
   Condition,
-  ValuePropertyCheck,
+  PromptAnswerPropertyCheck,
 } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
 
@@ -53,6 +56,8 @@ export default defineComponent({
           return i18n.t(`survey-schemes.conditions.summary.promptAnswer`, { object, property, promptId: condition.property.check.promptId || '?' }).toString();
         case 'mealCompletion':
           return i18n.t(`survey-schemes.conditions.summary.mealCompletion.${condition.property.check.completionState}`, { object }).toString();
+        case 'foodCompletion':
+          return i18n.t(`survey-schemes.conditions.summary.foodCompletion.${condition.property.check.completionState}`, { object }).toString();
         default:
           throw new Error(`Unexpected condition property type: ${condition.property.type}`);
       }
@@ -68,21 +73,32 @@ export default defineComponent({
       }
     };
 
+    const getShowNotRequired = (condition: Condition): boolean => {
+      switch (condition.property.type) {
+        case 'promptAnswer':
+          return !condition.property.check.required;
+        default:
+          return false;
+      }
+    };
+
     const conditionRef = toRefs(props).condition;
 
     const summaryHtml = ref(getSummaryHtml(props.condition));
     const showOp = ref(getShowOp(props.condition));
-    const check = ref(props.condition.property.check as ValuePropertyCheck);
+    const showNotRequired = ref(getShowNotRequired(props.condition));
+    const check = ref(props.condition.property.check as PromptAnswerPropertyCheck);
 
     watch (conditionRef, (condition) => {
       summaryHtml.value = getSummaryHtml(condition);
       showOp.value = getShowOp(condition);
-      check.value = condition.property.check as ValuePropertyCheck;
+      showNotRequired.value = getShowNotRequired(condition);
+      check.value = condition.property.check as PromptAnswerPropertyCheck;
     }, { deep: true });
 
-    return { summaryHtml, showOp, check, opToIconMap };
+    return { summaryHtml, showOp, showNotRequired, check, opToIconMap };
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped />

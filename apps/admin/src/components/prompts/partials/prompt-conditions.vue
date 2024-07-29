@@ -155,6 +155,7 @@ const commonPropertyDefaults: CommonPropertyDefaults = {
       promptId: '',
       op: 'eq',
       value: null,
+      required: true,
     },
   },
 };
@@ -183,6 +184,10 @@ const promptConditionDefaults: PromptConditionDefaults = {
       id: 'userName',
       ...valuePropertyDefaults,
     },
+    numberOfMeals: {
+      id: 'numberOfMeals',
+      ...valuePropertyDefaults,
+    },
   },
   meal: {
     ...commonPropertyDefaults,
@@ -199,6 +204,13 @@ const promptConditionDefaults: PromptConditionDefaults = {
     foodCategory: {
       id: 'foodCategory',
       ...valuePropertyDefaults,
+    },
+    foodCompletion: {
+      id: 'foodCompletion',
+      type: 'foodCompletion',
+      check: {
+        completionState: 'searchComplete',
+      },
     },
   },
 };

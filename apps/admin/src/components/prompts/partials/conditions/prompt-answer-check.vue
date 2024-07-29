@@ -10,6 +10,9 @@
           @change="update(currentValue)"
         />
       </v-col>
+      <v-col cols="12" md="6">
+        <v-checkbox v-model="currentValue.required" :label="$t('survey-schemes.conditions.promptAnswer.required')" @change="update(currentValue)" />
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="12" md="6">

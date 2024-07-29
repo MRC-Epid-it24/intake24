@@ -105,9 +105,10 @@
       "property": "Property value",
       "recallNumber": "Recall number",
       "userName": "Participant ID",
-      "mealCompletion": "Completion state"
+      "mealCompletion": "Completion state",
+      "foodCompletion": "Completion state"
     },
-    "mealCompletion": {
+    "foodCompletion": {
       "freeEntryComplete": "Free text entry complete",
       "searchComplete": "Identification complete",
       "portionSizeComplete": "Portion size estimation complete",
@@ -126,14 +127,22 @@
         "portionSizeComplete": "<em><strong>portion size estimation</em></strong> of foods in the <em><strong>{object}</strong></em> is complete",
         "complete": "<em><strong>associated food prompts</em></strong> in the <em><strong>{object}</strong></em> are complete"
       },
+      "foodCompletion": {
+        "freeEntryComplete": "<em><strong>free text entry</em></strong> for the <em><strong>{object}</strong></em> is complete",
+        "searchComplete": "<em><strong>identification</em></strong> of the <em><strong>{object}</strong></em> is complete",
+        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> for the <em><strong>{object}</strong></em> is complete",
+        "complete": "<em><strong>associated food prompts</em></strong> for the <em><strong>{object}</strong></em> are complete"
+      },
       "flag": {
         "set": "flag <em><strong>{id}</strong></em> set in <em><strong>{object}</strong></em>",
         "notSet": "flag <em><strong>{id}</strong></em> not set in <em><strong>{object}</strong></em>"
       },
-      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>"
+      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>",
+      "notRequired": "<strong>OR</strong> not set"
     },
     "promptAnswer": {
-      "promptId": "Prompt ID"
+      "promptId": "Prompt ID",
+      "required": "Prompt answer is required (uncheck if this prompt should trigger if the answer is not known)"
     },
     "exTypes": {
       "drinks": "Drinks reported in {section}",

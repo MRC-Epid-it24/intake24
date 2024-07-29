@@ -6,7 +6,7 @@
         hide-details="auto"
         item-value="state"
         :items="completionStateSelectList"
-        :label="$t('survey-schemes.conditions.property.mealCompletion')"
+        :label="$t('survey-schemes.conditions.property.foodCompletion')"
         outlined
         @change="update(currentValue)"
       />
@@ -21,7 +21,7 @@ import { foodCompletionStateOptions, type MealCompletionPropertyCheck } from '@i
 import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
-  name: 'MealCompletionPropertyCheck',
+  name: 'FoodCompletionPropertyCheck',
 
   props: {
     value: {
