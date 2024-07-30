@@ -157,6 +157,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
         instance.name = request.name;
         instance.simpleName = toSimpleName(request.name);
         instance.altNames = request.altNames ?? {};
+        instance.tags = request.tags ?? [];
         instance.version = randomUUID();
 
         await instance.save({ transaction });
@@ -174,6 +175,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
           foodCode: request.code,
           name: request.name,
           altNames: request.altNames,
+          tags: request.tags,
           version: randomUUID(),
           simpleName: toSimpleName(request.name),
         },

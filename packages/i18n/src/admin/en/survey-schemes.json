@@ -99,6 +99,7 @@
       "drinks": "Drinks reported",
       "energy": "Energy value",
       "flag": "Flag",
+      "tag": "Tag",
       "foodCategory": "Food category",
       "meals": "Meals",
       "promptAnswer": "Prompt answer",
@@ -118,6 +119,10 @@
       "id": "Flag ID",
       "showIfSet": "Show if set"
     },
+    "tag": {
+      "id": "Tag ID",
+      "showIfSet": "Show if tagged"
+    },
     "summary": {
       "value": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
       "boolean": "<em><strong>{property}</strong></em> in <em><strong>{object}</strong></em>: {value}",
@@ -136,6 +141,10 @@
       "flag": {
         "set": "flag <em><strong>{id}</strong></em> set in <em><strong>{object}</strong></em>",
         "notSet": "flag <em><strong>{id}</strong></em> not set in <em><strong>{object}</strong></em>"
+      },
+      "tag": {
+        "present": "<em><strong>{object}</strong></em> is tagged with <em><strong>{id}</strong></em>",
+        "absent": "<em><strong>{object}</strong></em> is <strong>NOT</strong> tagged with <em><strong>{id}</strong></em>"
       },
       "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>",
       "notRequired": "<strong>OR</strong> not set"

@@ -20,6 +20,7 @@ import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
 import {
   AlbaneAlternativeDescriptionRow,
 } from '@intake24/cli/commands/fr-albane/types/alternative-descriptions';
+import { AlbaneFacetsRow } from '@intake24/cli/commands/fr-albane/types/facets';
 import { AlbaneFoodCategoryRow } from '@intake24/cli/commands/fr-albane/types/food-categories';
 import { AlbaneFoodListRow } from '@intake24/cli/commands/fr-albane/types/food-list';
 import { AlbaneInca3MappingRow } from '@intake24/cli/commands/fr-albane/types/inca3-mapping';
@@ -80,6 +81,7 @@ export class FrenchAlbaneLocaleBuilder {
 
   private inca3PortionSizeMapping: Record<string, PkgPortionSizeMethod[]> | undefined;
   private associatedFoodPrompts: Record<string, PkgAssociatedFood[]> | undefined;
+  private facetFlags: Record<string, string[]> | undefined;
 
   constructor(logger: Logger, options: FrenchLocaleOptions) {
     this.sourceDirPath = options.inputPath;
@@ -164,12 +166,14 @@ export class FrenchAlbaneLocaleBuilder {
     for (const row of this.sourceFoodRecords!) {
       const foodSynonyms = this.foodSynonyms![row.A_CODE];
       const alternativeNames = foodSynonyms === undefined ? undefined : { fr: foodSynonyms.map(s => s.substring(0, 128)) };
+      const facetFlags = this.facetFlags![row.A_CODE];
 
       localFoods.push({
         version: randomUUID(),
         code: getIntake24FoodCode(row.A_CODE),
         localDescription: capitalize(row.A_LIBELLE.substring(0, 128)),
         alternativeNames,
+        tags: facetFlags,
         nutrientTableCodes: {
           FR_TEMP: 'FRPH1',
         },
@@ -397,11 +401,24 @@ export class FrenchAlbaneLocaleBuilder {
     }
   }
 
+  private async readFacetFlags(): Promise<void> {
+    const facetsRows
+      = (await this.readJSON<AlbaneFacetsRow[]>('FACETS_EXAMPLE.json'));
+
+    this.facetFlags = {};
+
+    for (const row of facetsRows) {
+      const flags = Object.keys(row).map(k => trim(k)).filter(k => !['A_CODE', 'A_LIBELLE'].includes(k));
+      this.facetFlags[row.A_CODE] = flags;
+    }
+  }
+
   public async buildPackage(): Promise<void> {
     await this.readFoodList();
     await this.readFoodCategories();
     await this.readInca3Mapping();
     await this.readAssociatedFoodPrompts();
+    await this.readFacetFlags();
 
     const globalFoods = this.buildGlobalFoods();
     const localFoods = this.buildLocalFoods();

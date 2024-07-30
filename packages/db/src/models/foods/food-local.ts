@@ -97,6 +97,19 @@ export default class FoodLocal extends BaseModel<
   declare altNames: CreationOptional<AlternativeFoodNames>;
 
   @Column({
+    allowNull: true,
+    type: DataType.STRING(2048),
+    get() {
+      const val = this.getDataValue('tags') as unknown;
+      return val ? JSON.parse(val as string) : [];
+    },
+    set(value: Record<string, any>) {
+      this.setDataValue('tags', JSON.stringify(value ?? []));
+    },
+  })
+  declare tags: CreationOptional<string[]>;
+
+  @Column({
     allowNull: false,
     type: DataType.UUID,
   })

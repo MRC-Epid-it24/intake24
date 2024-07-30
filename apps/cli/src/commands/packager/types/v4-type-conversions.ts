@@ -189,6 +189,7 @@ function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
     code: localFood.code,
     name: localFood.localDescription ?? 'Missing local description!',
     altNames: localFood.alternativeNames,
+    tags: localFood.tags,
     associatedFoods: localFood.associatedFoods.map(af => fromPackageAssociatedFood(af)),
     portionSizeMethods: localFood.portionSize.map(psm => fromPackagePortionSizeMethod(psm)),
     nutrientTableCodes: localFood.nutrientTableCodes,

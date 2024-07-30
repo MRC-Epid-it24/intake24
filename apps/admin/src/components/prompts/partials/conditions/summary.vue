@@ -46,6 +46,11 @@ export default defineComponent({
             ? i18n.t(`survey-schemes.conditions.summary.flag.set`, { id: condition.property.check.flagId || '?', object }).toString()
             : i18n.t(`survey-schemes.conditions.summary.flag.notSet`, { id: condition.property.check.flagId || '?', object }).toString();
         }
+        case 'tag': {
+          return condition.property.check.value
+            ? i18n.t(`survey-schemes.conditions.summary.tag.present`, { id: condition.property.check.tagId || '?', object }).toString()
+            : i18n.t(`survey-schemes.conditions.summary.tag.absent`, { id: condition.property.check.tagId || '?', object }).toString();
+        }
         case 'boolean': {
           const value = (condition.property.check.value ? i18n.t(`common.yes`) : i18n.t(`common.no`)).toString().toLocaleLowerCase();
           return i18n.t(`survey-schemes.conditions.summary.boolean`, { object, property, value }).toString();

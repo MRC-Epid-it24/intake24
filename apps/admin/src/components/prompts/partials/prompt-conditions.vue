@@ -212,6 +212,14 @@ const promptConditionDefaults: PromptConditionDefaults = {
         completionState: 'searchComplete',
       },
     },
+    tag: {
+      id: 'tag',
+      type: 'tag',
+      check: {
+        tagId: '',
+        value: true,
+      },
+    },
   },
 };
 

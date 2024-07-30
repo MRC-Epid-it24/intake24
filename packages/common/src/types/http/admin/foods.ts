@@ -36,6 +36,7 @@ export type CreateLocalFoodRequest = {
   code: string;
   name: string;
   altNames?: Record<string, string[]>;
+  tags?: string[];
   nutrientTableCodes: Record<string, string>;
   portionSizeMethods: PortionSizeMethod[];
   associatedFoods: AssociatedFood[];
