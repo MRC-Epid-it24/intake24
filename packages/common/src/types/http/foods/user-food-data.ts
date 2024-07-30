@@ -39,6 +39,7 @@ export const userFoodData = z.object({
   associatedFoodPrompts: userAssociatedFoodPrompt.array(),
   brandNames: z.array(z.string()),
   categories: z.array(z.string()),
+  tags: z.array(z.string()),
 });
 
 export type UserFoodData = z.infer<typeof userFoodData>;

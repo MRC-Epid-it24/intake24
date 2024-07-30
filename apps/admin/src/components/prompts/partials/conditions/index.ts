@@ -4,6 +4,7 @@ import FoodCompletionPropertyCheck from './food-completion-check.vue';
 import MealCompletionPropertyCheck from './meal-completion-check.vue';
 import PromptAnswerPropertyCheck from './prompt-answer-check.vue';
 import Summary from './summary.vue';
+import TagPropertyCheck from './tag-check.vue';
 import ValuePropertyCheck from './value-check.vue';
 
 export default {
@@ -13,6 +14,7 @@ export default {
     mealCompletion: MealCompletionPropertyCheck,
     foodCompletion: FoodCompletionPropertyCheck,
     flag: FlagPropertyCheck,
+    tag: TagPropertyCheck,
     promptAnswer: PromptAnswerPropertyCheck,
   },
   summary: Summary,

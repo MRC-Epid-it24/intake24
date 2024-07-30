@@ -219,6 +219,7 @@ function foodDataService() {
       reasonableAmount: inheritableAttributes.reasonableAmount,
       sameAsBeforeOption: inheritableAttributes.sameAsBeforeOption,
       categories,
+      tags: foodLocal.tags,
     };
   };
 

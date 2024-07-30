@@ -740,6 +740,14 @@ function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | 
           }
           return flag === condition.property.check.value;
         }
+        case 'tag': {
+          const food = requireFood(condition.property.id);
+
+          if (food.type !== 'encoded-food')
+            return false;
+
+          return food.data.tags.includes(condition.property.check.tagId);
+        }
         case 'promptAnswer': {
           let answer;
           switch (condition.object) {
@@ -753,7 +761,6 @@ function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | 
               answer = requireFood(condition.property.id).customPromptAnswers[condition.property.check.promptId];
               break;
           }
-
           if (!condition.property.check.required && answer === undefined)
             return true;
 

@@ -111,6 +111,15 @@ const flagProperty = z.object({
   }),
 });
 
+const tagProperty = z.object({
+  id: z.literal('tag'),
+  type: z.literal('tag'),
+  check: z.object({
+    tagId: z.string(),
+    value: z.boolean(),
+  }),
+});
+
 const foodCategoryProperty = valueProperty.extend({
   id: z.literal('foodCategory'),
 });
@@ -175,6 +184,7 @@ export const mealProperties = z.discriminatedUnion('id', [
 export const foodProperties = z.discriminatedUnion('id', [
   ...commonProperties,
   foodCategoryProperty,
+  tagProperty,
   foodCompletionProperty,
 ]);
 
@@ -195,12 +205,14 @@ export type BooleanProperty = z.infer<typeof booleanProperty>;
 export type DrinksProperty = z.infer<typeof drinksProperty>;
 export type EnergyProperty = z.infer<typeof energyProperty>;
 export type FlagProperty = z.infer<typeof flagProperty>;
+export type TagProperty = z.infer<typeof tagProperty>;
 export type PromptAnswerProperty = z.infer<typeof promptAnswerProperty>;
 
 export type ValuePropertyCheck = z.infer<typeof valueCheck>;
 export type BooleanPropertyCheck = z.infer<typeof booleanProperty.shape.check>;
 export type MealCompletionPropertyCheck = z.infer<typeof mealCompletionProperty.shape.check>;
 export type FlagPropertyCheck = z.infer<typeof flagProperty.shape.check>;
+export type TagPropertyCheck = z.infer<typeof tagProperty.shape.check>;
 export type PromptAnswerPropertyCheck = z.infer<typeof promptAnswerProperty.shape.check>;
 
 export type Condition = z.infer<typeof condition>;
