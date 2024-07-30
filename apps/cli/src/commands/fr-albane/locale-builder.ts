@@ -403,13 +403,16 @@ export class FrenchAlbaneLocaleBuilder {
 
   private async readFacetFlags(): Promise<void> {
     const facetsRows
-      = (await this.readJSON<AlbaneFacetsRow[]>('FACETS_EXAMPLE.json'));
+      = (await this.readJSON<AlbaneFacetsRow[]>('FACETS_30072024.json'));
 
     this.facetFlags = {};
 
     for (const row of facetsRows) {
-      const flags = Object.keys(row).map(k => trim(k)).filter(k => !['A_CODE', 'A_LIBELLE'].includes(k));
-      this.facetFlags[row.A_CODE] = flags;
+      const flags = Object.keys(row)
+        .map(k => trim(k))
+        .filter(k => !(['code_ALBANE', 'libelle_ALBANE'].includes(k)))
+        .filter(k => row[k] === '1');
+      this.facetFlags[row.code_ALBANE] = flags;
     }
   }
 
