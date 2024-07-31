@@ -31,6 +31,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
   switch (condition.type) {
     case 'drinks':
       return {
+        orPrevious: false,
         object: 'meal',
         property: {
           id: 'drinks',
@@ -42,6 +43,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
       };
     case 'energy':
       return {
+        orPrevious: false,
         object: condition.props.section ?? defaultObjectForSection(section),
         property: {
           id: 'energy',
@@ -54,6 +56,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
       };
     case 'flag':
       return {
+        orPrevious: false,
         object: condition.props.section ?? defaultObjectForSection(section),
         property: {
           id: 'flag',
@@ -66,6 +69,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
       };
     case 'foodCategory':
       return {
+        orPrevious: false,
         object: 'food',
         property: {
           id: 'foodCategory',
@@ -78,6 +82,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
       };
     case 'meals':
       return {
+        orPrevious: false,
         object: 'survey',
         property: {
           id: 'numberOfMeals',
@@ -90,6 +95,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
       };
     case 'promptAnswer':
       return {
+        orPrevious: false,
         object: condition.props.section ?? defaultObjectForSection(section),
         property: {
           id: 'promptAnswer',
@@ -106,6 +112,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
       switch (condition.props.name) {
         case 'recallNumber':
           return {
+            orPrevious: false,
             object: 'survey',
             property: {
               id: 'recallNumber',
@@ -118,6 +125,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
           };
         case 'userName':
           return {
+            orPrevious: false,
             object: 'survey',
             property: {
               id: 'userName',
@@ -132,6 +140,7 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
       break; // TSC correctly detects this as unreachable but ESLint whines about case fallthrough
     case 'recallNumber':
       return {
+        orPrevious: false,
         object: 'survey',
         property: {
           id: 'recallNumber',

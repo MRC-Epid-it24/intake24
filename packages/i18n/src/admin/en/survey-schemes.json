@@ -177,7 +177,8 @@
     },
     "value": "Condition value",
     "showIf": "Show prompt if: ",
-    "showIfTrue": "Show if true"
+    "showIfTrue": "Show if true",
+    "orPrevious": "Or previous"
   },
   "data-export": {
     "_": "Data export",
