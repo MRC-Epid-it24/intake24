@@ -21,7 +21,7 @@ import { defineComponent, type PropType, ref } from 'vue';
 import type { TagPropertyCheck } from '@intake24/common/prompts';
 
 export default defineComponent({
-  name: 'FlagPropertyTest',
+  name: 'TagPropertyCheck',
 
   props: {
     value: {

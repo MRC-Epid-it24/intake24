@@ -3,25 +3,10 @@ import { Condition } from '@intake24/common/prompts/conditions';
 import { SurveyScheme } from '@intake24/db';
 
 function migrateCondition(condition: Condition): Condition {
-  switch (condition.property.type) {
-    case 'promptAnswer':
-      return {
-        orPrevious: false,
-        object: condition.object,
-        property: {
-          id: condition.property.id,
-          type: condition.property.type,
-          check: {
-            promptId: condition.property.check.promptId,
-            op: condition.property.check.op,
-            value: condition.property.check.value,
-            required: condition.property.check.required === undefined ? true : condition.property.check.required,
-          },
-        },
-      };
-    default:
-      return condition;
-  }
+  return {
+    ...condition,
+    orPrevious: condition.orPrevious === undefined ? false : condition.orPrevious,
+  };
 }
 
 function migrateSinglePrompt(prompt: SinglePrompt): SinglePrompt {
@@ -60,7 +45,7 @@ function migrateScheme(scheme: SurveyScheme): object {
   };
 
   return {
-    version: 3,
+    version: 4,
     prompts,
   };
 }

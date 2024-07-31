@@ -10,9 +10,9 @@
       <draggable v-model="currentConditions" @end="update">
         <transition-group name="drag-and-drop" type="transition">
           <v-tab v-for="condition in currentConditions" :key="condition.id">
-            <v-icon left>
-              fas fa-location-arrow
-            </v-icon>
+            <div v-if="condition.orPrevious" style="position: absolute; top: -0.6em;">
+              OR
+            </div>
             {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
           </v-tab>
         </transition-group>
@@ -29,6 +29,18 @@
             <condition-summary :condition="condition" />
           </v-card-text>
           <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-checkbox
+                  v-if="idx !== 0"
+                  v-model="condition.orPrevious"
+                  class="mt-0"
+                  hide-details="auto"
+                  :label="$t(`survey-schemes.conditions.orPrevious`)"
+                  outlined
+                />
+              </v-col>
+            </v-row>
             <v-row>
               <v-col cols="12">
                 <v-select
@@ -239,16 +251,19 @@ function getConditionDefaults<T extends ConditionObjectId>(object: T, id: Object
     case 'survey':
       return {
         object: 'survey',
+        orPrevious: false,
         property: promptConditionDefaults.survey[id],
       };
     case 'meal':
       return {
         object: 'meal',
+        orPrevious: false,
         property: promptConditionDefaults.meal[id],
       };
     case 'food':
       return {
         object: 'food',
+        orPrevious: false,
         property: promptConditionDefaults.food[id],
       };
     default:
@@ -381,6 +396,8 @@ export default defineComponent({
 
     remove(index: number) {
       this.currentConditions.splice(index, 1);
+      if (this.currentConditions.length > 0)
+        this.currentConditions[0].orPrevious = false;
     },
 
     update() {

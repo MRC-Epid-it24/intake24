@@ -188,11 +188,11 @@ export const foodProperties = z.discriminatedUnion('id', [
   foodCompletionProperty,
 ]);
 
-const surveyCondition = z.object({ object: z.literal('survey'), property: surveyProperties });
+const surveyCondition = z.object({ object: z.literal('survey'), orPrevious: z.boolean(), property: surveyProperties });
 
-const mealCondition = z.object({ object: z.literal('meal'), property: mealProperties });
+const mealCondition = z.object({ object: z.literal('meal'), orPrevious: z.boolean(), property: mealProperties });
 
-const foodCondition = z.object({ object: z.literal('food'), property: foodProperties });
+const foodCondition = z.object({ object: z.literal('food'), orPrevious: z.boolean(), property: foodProperties });
 
 export const condition = z.discriminatedUnion('object', [
   surveyCondition,

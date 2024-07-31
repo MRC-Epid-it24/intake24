@@ -1,5 +1,6 @@
 import type {
   ComponentType,
+  Condition,
   FoodCompletionState,
   Prompt,
 } from '@intake24/common/prompts';
@@ -689,129 +690,149 @@ function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | 
     return foodState;
   }
 
+  function evaluateCondition(condition: Condition): boolean {
+    switch (condition.property.id) {
+      case 'drinks': {
+        let drinksEntered = false;
+        switch (condition.object) {
+          case 'survey':
+            drinksEntered = surveyDrinks(0, store.meals) > 0;
+            break;
+          case 'meal':
+            drinksEntered = mealDrinks(0, requireMeal(condition.property.id)) > 0;
+            break;
+          case 'food':
+            drinksEntered = foodDrinks(0, requireFood(condition.property.id)) > 0;
+            break;
+        }
+        return drinksEntered === condition.property.check.value;
+      }
+      case 'energy': {
+        let energy = 0;
+        switch (condition.object) {
+          case 'survey':
+            energy = surveyEnergy(0, store.meals);
+            break;
+          case 'meal':
+            energy = mealEnergy(0, requireMeal(condition.property.id));
+            break;
+          case 'food':
+            energy = foodEnergy(0, requireFood(condition.property.id));
+            break;
+        }
+        return conditionOps[condition.property.check.op]({
+          answer: energy,
+          value: condition.property.check.value,
+        });
+      }
+      case 'flag': {
+        let flag = false;
+        switch (condition.object) {
+          case 'survey':
+            flag = store.hasFlag(condition.property.check.flagId as SurveyFlag);
+            break;
+          case 'meal':
+            flag = requireMeal(condition.property.id).flags.includes(condition.property.check.flagId as MealFlag);
+            break;
+          case 'food':
+            flag = requireFood(condition.property.id).flags.includes(condition.property.check.flagId as FoodFlag);
+            break;
+        }
+        return flag === condition.property.check.value;
+      }
+      case 'tag': {
+        const food = requireFood(condition.property.id);
+
+        if (food.type !== 'encoded-food')
+          return false;
+
+        return food.data.tags.includes(condition.property.check.tagId);
+      }
+      case 'promptAnswer': {
+        let answer;
+        switch (condition.object) {
+          case 'survey':
+            answer = store.data.customPromptAnswers[condition.property.check.promptId];
+            break;
+          case 'meal':
+            answer = requireMeal(condition.property.id).customPromptAnswers[condition.property.check.promptId];
+            break;
+          case 'food':
+            answer = requireFood(condition.property.id).customPromptAnswers[condition.property.check.promptId];
+            break;
+        }
+        if (!condition.property.check.required && answer === undefined)
+          return true;
+
+        return conditionOps[condition.property.check.op]({
+          answer,
+          value: condition.property.check.value,
+        });
+      }
+      case 'recallNumber': {
+        return conditionOps[condition.property.check.op]({
+          answer: store.recallNumber,
+          value: condition.property.check.value,
+        });
+      }
+      case 'userName':
+        return conditionOps[condition.property.check.op]({
+          answer: store.user?.userId ?? null,
+          value: condition.property.check.value,
+        });
+      case 'mealCompletion': {
+        let completionState: FoodCompletionState | undefined;
+        switch (condition.object) {
+          case 'survey':
+            completionState = getSurveyCompletionState(store);
+            break;
+          case 'meal':
+            completionState = getMealCompletionState(requireMeal(condition.property.id));
+            break;
+          case 'food':
+            break;
+        }
+        if (completionState === undefined)
+          return false;
+        return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
+      }
+      case 'foodCompletion': {
+        const completionState = getFoodCompletionState(requireFood(condition.property.id));
+        return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
+      }
+      case 'foodCategory': {
+        const food = requireFood(condition.property.id);
+        if (food.type !== 'encoded-food')
+          return false;
+        return conditionOps[condition.property.check.op]({
+          answer: food.data.categories,
+          value: condition.property.check.value,
+        });
+      }
+    }
+    throw new Error(`Prompt condition didn't match any switch branches`);
+  }
+
   try {
-    return prompt.conditions.every((condition) => {
-      switch (condition.property.id) {
-        case 'drinks': {
-          let drinksEntered = false;
-          switch (condition.object) {
-            case 'survey':
-              drinksEntered = surveyDrinks(0, store.meals) > 0;
-              break;
-            case 'meal':
-              drinksEntered = mealDrinks(0, requireMeal(condition.property.id)) > 0;
-              break;
-            case 'food':
-              drinksEntered = foodDrinks(0, requireFood(condition.property.id)) > 0;
-              break;
-          }
-          return drinksEntered === condition.property.check.value;
+    let currentValue = true;
+    for (let i = 0; i < prompt.conditions.length; ++i) {
+      const condition = prompt.conditions[i];
+      if (i === 0) {
+        currentValue = evaluateCondition(condition);
+      }
+      else {
+        if (condition.orPrevious) {
+          currentValue ||= evaluateCondition(condition);
         }
-        case 'energy': {
-          let energy = 0;
-          switch (condition.object) {
-            case 'survey':
-              energy = surveyEnergy(0, store.meals);
-              break;
-            case 'meal':
-              energy = mealEnergy(0, requireMeal(condition.property.id));
-              break;
-            case 'food':
-              energy = foodEnergy(0, requireFood(condition.property.id));
-              break;
-          }
-          return conditionOps[condition.property.check.op]({
-            answer: energy,
-            value: condition.property.check.value,
-          });
-        }
-        case 'flag': {
-          let flag = false;
-          switch (condition.object) {
-            case 'survey':
-              flag = store.hasFlag(condition.property.check.flagId as SurveyFlag);
-              break;
-            case 'meal':
-              flag = requireMeal(condition.property.id).flags.includes(condition.property.check.flagId as MealFlag);
-              break;
-            case 'food':
-              flag = requireFood(condition.property.id).flags.includes(condition.property.check.flagId as FoodFlag);
-              break;
-          }
-          return flag === condition.property.check.value;
-        }
-        case 'tag': {
-          const food = requireFood(condition.property.id);
-
-          if (food.type !== 'encoded-food')
+        else {
+          if (currentValue === false)
             return false;
 
-          return food.data.tags.includes(condition.property.check.tagId);
-        }
-        case 'promptAnswer': {
-          let answer;
-          switch (condition.object) {
-            case 'survey':
-              answer = store.data.customPromptAnswers[condition.property.check.promptId];
-              break;
-            case 'meal':
-              answer = requireMeal(condition.property.id).customPromptAnswers[condition.property.check.promptId];
-              break;
-            case 'food':
-              answer = requireFood(condition.property.id).customPromptAnswers[condition.property.check.promptId];
-              break;
-          }
-          if (!condition.property.check.required && answer === undefined)
-            return true;
-
-          return conditionOps[condition.property.check.op]({
-            answer,
-            value: condition.property.check.value,
-          });
-        }
-        case 'recallNumber': {
-          return conditionOps[condition.property.check.op]({
-            answer: store.recallNumber,
-            value: condition.property.check.value,
-          });
-        }
-        case 'userName':
-          return conditionOps[condition.property.check.op]({
-            answer: store.user?.userId ?? null,
-            value: condition.property.check.value,
-          });
-        case 'mealCompletion': {
-          let completionState: FoodCompletionState | undefined;
-          switch (condition.object) {
-            case 'survey':
-              completionState = getSurveyCompletionState(store);
-              break;
-            case 'meal':
-              completionState = getMealCompletionState(requireMeal(condition.property.id));
-              break;
-            case 'food':
-              break;
-          }
-          if (completionState === undefined)
-            return false;
-          return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
-        }
-        case 'foodCompletion': {
-          const completionState = getFoodCompletionState(requireFood(condition.property.id));
-          return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
-        }
-        case 'foodCategory': {
-          const food = requireFood(condition.property.id);
-          if (food.type !== 'encoded-food')
-            return false;
-          return conditionOps[condition.property.check.op]({
-            answer: food.data.categories,
-            value: condition.property.check.value,
-          });
+          currentValue = evaluateCondition(condition);
         }
       }
-      throw new Error(`Prompt condition didn't match any switch branches`);
-    });
+    }
+    return currentValue;
   }
   catch (e) {
     console.error(`Invalid prompt condition`, e);
