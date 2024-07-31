@@ -26,8 +26,8 @@ export const opts: Record<FrontEnd, StrategyOptionsWithoutRequest> = {
 };
 
 export function buildJwtStrategy(frontEnd: FrontEnd): Strategy {
-  return new Strategy(opts[frontEnd], async (payload, done) => {
-    const { userId, jti, aud } = payload as TokenPayload;
+  return new Strategy(opts[frontEnd], async (payload: TokenPayload, done) => {
+    const { userId, jti, aud } = payload;
 
     try {
       if (!Array.isArray(aud) || !aud.includes('personal')) {

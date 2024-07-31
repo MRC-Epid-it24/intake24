@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { bigIntString as roleId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   roleAttributes,
+  roleRefs,
   roleRequest,
-  rolRefs,
 } from '@intake24/common/types/http/admin';
 
 export const role = initContract().router({
@@ -36,7 +36,7 @@ export const role = initContract().router({
     method: 'GET',
     path: '/admin/roles/refs',
     responses: {
-      200: rolRefs,
+      200: roleRefs,
     },
     summary: 'Role references',
     description: 'Role reference data',
