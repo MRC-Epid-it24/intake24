@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import { URL, URLSearchParams } from 'node:url';
 
-import type { Protocol } from 'puppeteer';
+import type { CookieParam, CookieSameSite } from 'puppeteer';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { WeightTargetCoefficient } from '@intake24/common/feedback';
@@ -83,7 +83,7 @@ function feedbackService({
 
   const createRefreshCookie = async (
     options: CreateRefreshCookie,
-  ): Promise<Protocol.Network.CookieParam> => {
+  ): Promise<CookieParam> => {
     const { slug, username, userId } = options;
     const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.survey.cookie;
     const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
@@ -100,7 +100,7 @@ function feedbackService({
       domain,
       httpOnly,
       path,
-      sameSite: sameSite as Protocol.Network.CookieSameSite,
+      sameSite: sameSite as CookieSameSite,
       secure,
     };
   };

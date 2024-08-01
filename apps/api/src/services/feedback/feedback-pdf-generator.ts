@@ -1,13 +1,13 @@
 import { Readable } from 'node:stream';
 
-import type { Protocol } from 'puppeteer';
+import type { CookieParam } from 'puppeteer';
 import puppeteer from 'puppeteer';
 
 export default class FeedbackPdfGenerator {
-  readonly url: string;
-  readonly refreshCookie: Protocol.Network.CookieParam;
+  readonly url;
+  readonly refreshCookie;
 
-  constructor(url: string, cookie: Protocol.Network.CookieParam) {
+  constructor(url: string, cookie: CookieParam) {
     this.url = url;
     this.refreshCookie = cookie;
   }

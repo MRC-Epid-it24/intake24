@@ -1,7 +1,14 @@
 import createDOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom';
 
-const DOMPurify = createDOMPurify(new JSDOM('').window);
+/*
+* Vite is trying to load jsdom from node_modules through API contract
+* - loading dynamically although not technically needed
+* - should be fixed in Vite?
+*/
+const DOMPurify = createDOMPurify(
+  // eslint-disable-next-line ts/no-require-imports
+  typeof window === 'undefined' ? new (require('jsdom')).JSDOM().window : window,
+);
 
 export type SanitizeInputOptions = {
   emptyStringToNull?: boolean;
