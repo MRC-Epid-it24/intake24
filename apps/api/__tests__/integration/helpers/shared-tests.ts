@@ -238,8 +238,8 @@ function sharedTests(suite: typeof Suite) {
       call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
-    expect(pick(body, Object.keys(output))).toEqual(output);
     expect(status).toBe(code);
+    expect(pick(body, Object.keys(output))).toEqual(output);
   };
 
   const assertRecordInserted = async (method: Method, url: string, output: any, ops?: Options) => {

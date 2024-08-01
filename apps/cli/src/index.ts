@@ -160,6 +160,11 @@ async function run() {
       await buildFrAlbaneLocaleCommand(options);
     });
 
+  const volumeMethodOption = new Option('-m, --volume-method [volume-method]', 'Volume estimation method')
+    .choices(['lookUpTable', 'cylindrical']);
+
+  volumeMethodOption.mandatory = true;
+
   program
     .command('convert-drink-scale')
     .description('Convert legacy SVG drink scale data to Intake24 package format')
@@ -172,6 +177,8 @@ async function run() {
     )
     .requiredOption('-s, --scales-csv [scales-csv]', 'Drink scales description CSV')
     .requiredOption('-o, --output-dir [output-dir]', 'Output package directory')
+    .addOption(volumeMethodOption)
+    .requiredOption('-l, --language [language]', 'Language code for labels and descriptions')
     .option(
       '-ow, --overwrite',
       'Overwrite existing records in destination package directory',

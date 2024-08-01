@@ -13,6 +13,7 @@ export type UpdateDrinkwareScaleInput = {
   label?: LocaleTranslation;
   outlineCoordinates?: number[];
   volumeSamples?: number[];
+  volumeMethod?: DrinkwareScaleVolumeMethod;
 };
 
 export type UpdateDrinkwareSetInput = {
@@ -50,10 +51,12 @@ export const drinkwareScaleV2Entry = z.object({
   outlineCoordinates: z.array(z.number()),
   volumeSamples: z.array(z.number()),
   volumeSamplesNormalised: z.array(z.number()),
+  volumeMethod: z.enum(['lookUpTable', 'cylindrical']),
   baseImageUrl: z.string(),
 });
 
 export type DrinkwareScaleV2Entry = z.infer<typeof drinkwareScaleV2Entry>;
+export type DrinkwareScaleVolumeMethod = z.infer<typeof drinkwareScaleV2Entry.shape.volumeMethod>;
 
 export const drinkwareSetEntry = z.object({
   id: z.string(),
