@@ -1,8 +1,9 @@
 import type { Job } from 'bullmq';
+import { literal, where } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportSection, Meal, RecallPrompts } from '@intake24/common/surveys';
-import { portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
+import { customPrompts, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { SurveyScheme } from '@intake24/db';
 
@@ -62,7 +63,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
   }
 
   private getPromptMap() {
-    return [...standardPrompts, ...portionSizePrompts].reduce<
+    return [...customPrompts, ...standardPrompts, ...portionSizePrompts].reduce<
       Record<string, SinglePrompt>
     >((acc, prompt) => {
       acc[prompt.component] = prompt;
@@ -74,13 +75,12 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     this.logger.debug(`Synchronization of survey schemes started.`);
 
     const promptMap = this.getPromptMap();
+    const mergeCallback = (prompt: SinglePrompt) => merge<SinglePrompt>(promptMap[prompt.component], prompt);
 
     const schemes = await this.models.system.SurveyScheme.findAll({
       attributes: ['id', 'name', 'prompts', 'version'],
       order: [['id', 'ASC']],
     });
-
-    const mergeCallback = (prompt: SinglePrompt) => merge<SinglePrompt>(promptMap[prompt.component], prompt);
 
     for (const scheme of schemes) {
       await this.applyMigrations(scheme);
@@ -97,6 +97,22 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
       };
 
       await scheme.update({ version: scheme.version, prompts });
+    }
+
+    const surveys = await this.models.system.Survey.findAll({
+      attributes: ['id', 'surveySchemeOverrides'],
+      where: where(literal(`json_array_length(survey_scheme_overrides::json->'prompts')`), '!=', 0),
+      order: [['id', 'ASC']],
+    });
+
+    for (const survey of surveys) {
+      // TODO: Migrate survey scheme overrides
+      // await this.applyMigrations(survey);
+
+      await survey.update({ surveySchemeOverrides: {
+        ...survey.surveySchemeOverrides,
+        prompts: survey.surveySchemeOverrides.prompts.map(mergeCallback),
+      } });
     }
 
     this.logger.debug(`Synchronization of survey schemes finished.`);
