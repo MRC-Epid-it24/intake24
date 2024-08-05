@@ -1,6 +1,8 @@
 import type { BasePortionPrompt, BasePrompt } from './prompts';
+import { CurrentPromptVersion } from './prompts';
 
-export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions' | 'useGraph' | 'graph'> = {
+export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions' | 'useGraph' | 'graph' | 'version'> = {
+  version: CurrentPromptVersion,
   i18n: {},
   conditions: [],
   useGraph: false,
@@ -10,8 +12,9 @@ export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions' | 'u
 
 export const basePortionPrompt: Pick<
   BasePortionPrompt,
-  'i18n' | 'conditions' | 'actions' | 'useGraph' | 'graph' | 'badges'
+  'i18n' | 'conditions' | 'actions' | 'useGraph' | 'graph' | 'version' | 'badges'
 > = {
+  version: CurrentPromptVersion,
   i18n: {},
   conditions: [],
   actions: undefined,

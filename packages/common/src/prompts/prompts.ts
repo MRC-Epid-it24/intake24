@@ -97,9 +97,12 @@ export const promptValidationWithLimits = promptValidation.extend({
   }, { path: ['validation.max'] });
 export type PromptValidationWithLimits = z.infer<typeof promptValidationWithLimits>;
 
+export const CurrentPromptVersion = 4;
+
 export const basePrompt = z.object({
   id: z.string(),
   name: z.string(),
+  version: z.number(),
   i18n: z.record(localeTranslation),
   actions: actions.optional(),
   conditions: condition.array(),

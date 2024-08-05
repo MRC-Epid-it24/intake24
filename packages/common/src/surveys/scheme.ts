@@ -1,7 +1,15 @@
 import { z } from 'zod';
 
 import type { Meal } from './meals';
-import { basePrompt, type Condition, type Prompt, prompt, type SinglePrompt, singlePrompt } from '../prompts';
+import {
+  basePrompt,
+  type Condition,
+  CurrentPromptVersion,
+  type Prompt,
+  prompt,
+  type SinglePrompt,
+  singlePrompt,
+} from '../prompts';
 
 export const schemeTypes = ['default'] as const;
 export type SchemeType = (typeof schemeTypes)[number];
@@ -106,6 +114,7 @@ export function groupMultiPrompts(prompts: SinglePrompt[]) {
         name: `multiple-prompt-${item.group}`,
         component: 'multi-prompt',
         prompts: grouped[item.group].prompts,
+        version: CurrentPromptVersion,
         i18n: {},
         conditions: grouped[item.group].conditions,
         useGraph: false,

@@ -1,9 +1,10 @@
+import { omit } from 'lodash';
+
 import { Condition as ConditionV2 } from '@intake24/common/prompts/conditions';
 import { Prompt as PromptV2, SinglePrompt as SinglePromptV2 } from '@intake24/common/prompts/prompts';
 import { Condition as ConditionV1 } from '@intake24/common/prompts/v1/conditions';
 import { Prompt as PromptV1, SinglePrompt as SinglePromptV1 } from '@intake24/common/prompts/v1/prompts';
 import { PromptSection } from '@intake24/common/surveys';
-import { SurveyScheme } from '@intake24/db';
 
 function defaultObjectForSection(section: PromptSection): any {
   switch (section) {
@@ -157,13 +158,33 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
   }
 }
 
+function migrateLegacyPrompt(prompt: any, section: PromptSection): SinglePromptV2 {
+  return {
+    component: prompt.component,
+    type: prompt.type,
+    id: prompt.id,
+    name: prompt.name,
+    i18n: {
+      ...omit(prompt.props, 'conditions'),
+    },
+    conditions: prompt.props.conditions.map((condition: any) => migrateCondition(condition as ConditionV1, section)),
+    version: 2,
+    useGraph: false,
+  };
+}
+
 function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): SinglePromptV2 {
+  // Older format that still exists in some survey scheme overrides
+  if ((prompt as any).props !== undefined)
+    return migrateLegacyPrompt(prompt, section);
+
   const conditions = prompt.conditions.map(condition => migrateCondition(condition, section));
 
   switch (prompt.component) {
     case 'missing-food-prompt': {
       return {
         ...prompt,
+        version: 2,
         useGraph: false,
         conditions,
         barcode: { type: 'none' },
@@ -172,17 +193,19 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
     default:
       return {
         ...prompt,
+        version: 2,
         useGraph: false,
         conditions,
       };
   }
 }
 
-function migratePrompt(prompt: PromptV1, section: PromptSection): PromptV2 {
+export default function migratePrompt(prompt: PromptV1, section: PromptSection): PromptV2 {
   if (prompt.component === 'multi-prompt') {
     const subPrompts = prompt.prompts.map(p => migrateSinglePrompt(p, section));
     return {
       ...prompt,
+      version: 2,
       prompts: subPrompts,
       useGraph: false,
       conditions: prompt.conditions.map(condition => migrateCondition(condition, section)),
@@ -192,23 +215,3 @@ function migratePrompt(prompt: PromptV1, section: PromptSection): PromptV2 {
     return migrateSinglePrompt(prompt, section);
   }
 }
-
-function migrateScheme(scheme: SurveyScheme): object {
-  const prompts = {
-    preMeals: scheme.prompts.preMeals.map(prompt => migratePrompt(prompt as unknown as PromptV1, 'preMeals')),
-    meals: {
-      preFoods: scheme.prompts.meals.preFoods.map(prompt => migratePrompt(prompt as unknown as PromptV1, 'preFoods')),
-      foods: scheme.prompts.meals.foods.map(prompt => migratePrompt(prompt as unknown as PromptV1, 'foods')),
-      postFoods: scheme.prompts.meals.postFoods.map(prompt => migratePrompt(prompt as unknown as PromptV1, 'postFoods')),
-    },
-    postMeals: scheme.prompts.postMeals.map(prompt => migratePrompt(prompt as unknown as PromptV1, 'postMeals')),
-    submission: scheme.prompts.submission.map(prompt => migratePrompt(prompt as unknown as PromptV1, 'submission')),
-  };
-
-  return {
-    version: 2,
-    prompts,
-  };
-}
-
-export default migrateScheme;

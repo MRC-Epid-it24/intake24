@@ -2,13 +2,13 @@ import type { Job } from 'bullmq';
 import { literal, where } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { ExportSection, Meal, RecallPrompts } from '@intake24/common/surveys';
+import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
 import { customPrompts, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import { SurveyScheme } from '@intake24/db';
+import { Survey, SurveyScheme } from '@intake24/db';
 
 import BaseJob from '../job';
-import migrations from './migrations';
+import promptMigrations from './migrations';
 
 export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
   readonly name = 'SurveySchemesSync';
@@ -38,6 +38,17 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     this.logger.debug('Job finished.');
   }
 
+  private migratePrompt(prompt: { version: number }, section: PromptSection): { version: number } {
+    let nextMigration = promptMigrations[prompt.version];
+
+    while (nextMigration !== undefined) {
+      prompt = nextMigration(prompt, section);
+      nextMigration = promptMigrations[prompt.version];
+    }
+
+    return prompt;
+  }
+
   /*
   Some type system abuse is going on here.
 
@@ -52,14 +63,33 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
   immediately the latest) version. Again, since all Sequelize model does is JSON.stringify, we can feed it
   intermediate data that does not match the latest type, as long as we write the correct type in the end.
   */
-  private async applyMigrations(scheme: SurveyScheme): Promise<void> {
-    let nextMigration = migrations[scheme.version];
+  private async migrateSchemePrompts(scheme: SurveyScheme): Promise<void> {
+    const prompts: RecallPrompts = {
+      preMeals: scheme.prompts.preMeals.map(prompt => this.migratePrompt(prompt, 'preMeals') as unknown as SinglePrompt),
+      meals: {
+        preFoods: scheme.prompts.meals.preFoods.map(prompt => this.migratePrompt(prompt, 'preFoods') as unknown as SinglePrompt),
+        foods: scheme.prompts.meals.foods.map(prompt => this.migratePrompt(prompt, 'foods') as unknown as SinglePrompt),
+        postFoods: scheme.prompts.meals.postFoods.map(prompt => this.migratePrompt(prompt, 'postFoods') as unknown as SinglePrompt),
+      },
+      postMeals: scheme.prompts.postMeals.map(prompt => this.migratePrompt(prompt, 'postMeals') as unknown as SinglePrompt),
+      submission: scheme.prompts.submission.map(prompt => this.migratePrompt(prompt, 'submission') as unknown as SinglePrompt),
+    };
 
-    while (nextMigration !== undefined) {
-      const schemeUpdateRequest = nextMigration(scheme);
-      await scheme.update({ version: schemeUpdateRequest.version, meals: schemeUpdateRequest.meals as Meal[], prompts: schemeUpdateRequest.prompts as RecallPrompts, dataExport: schemeUpdateRequest.dataExport as ExportSection[] });
-      nextMigration = migrations[scheme.version];
-    }
+    scheme.prompts = prompts;
+
+    await scheme.save({ fields: ['prompts'] });
+  }
+
+  private async migrateSchemeOverridePrompts(survey: Survey): Promise<void> {
+    // Override prompts have no section context, but this value is only used to decide some default values
+    // by the migration functions
+    const prompts = survey.surveySchemeOverrides.prompts.map(prompt => this.migratePrompt(prompt, 'preMeals') as unknown as SinglePrompt);
+    survey.surveySchemeOverrides = {
+      ...survey.surveySchemeOverrides,
+      prompts,
+    };
+
+    await survey.save({ fields: ['surveySchemeOverrides'] });
   }
 
   private getPromptMap() {
@@ -78,12 +108,12 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     const mergeCallback = (prompt: SinglePrompt) => merge<SinglePrompt>(promptMap[prompt.component], prompt);
 
     const schemes = await this.models.system.SurveyScheme.findAll({
-      attributes: ['id', 'name', 'prompts', 'version'],
+      attributes: ['id', 'name', 'prompts'],
       order: [['id', 'ASC']],
     });
 
     for (const scheme of schemes) {
-      await this.applyMigrations(scheme);
+      await this.migrateSchemePrompts(scheme);
 
       const prompts: RecallPrompts = {
         preMeals: scheme.prompts.preMeals.map(mergeCallback),
@@ -96,7 +126,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
         submission: scheme.prompts.submission.map(mergeCallback),
       };
 
-      await scheme.update({ version: scheme.version, prompts });
+      await scheme.update({ prompts });
     }
 
     const surveys = await this.models.system.Survey.findAll({
@@ -106,8 +136,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     });
 
     for (const survey of surveys) {
-      // TODO: Migrate survey scheme overrides
-      // await this.applyMigrations(survey);
+      await this.migrateSchemeOverridePrompts(survey);
 
       await survey.update({ surveySchemeOverrides: {
         ...survey.surveySchemeOverrides,
