@@ -141,8 +141,13 @@ export class FrenchAlbaneLocaleBuilder {
   private buildGlobalFoods(): PkgGlobalFood[] {
     const globalFoods: PkgGlobalFood[] = [];
 
+    const saltCodes = ['41154', '41155', '41156', '41157', '41174'];
+
     for (const row of this.sourceFoodRecords!) {
       const categories = this.foodCategories![row.A_CODE];
+
+      if (saltCodes.includes(row.A_CODE))
+        categories.push('FRFSEL');
 
       if (!categories)
         logger.warn(`Food ${row.A_CODE} is not assigned to any categories`);
@@ -244,6 +249,14 @@ export class FrenchAlbaneLocaleBuilder {
         version: 'eeba6915-790e-42a6-be9d-2fd78ee80567',
         isHidden: false,
       },
+      {
+        code: 'FRFSEL',
+        attributes: {},
+        englishDescription: 'Salt (for salt facet)',
+        parentCategories: [],
+        version: '3fa6db23-873a-4726-9a5e-501950692d49',
+        isHidden: true,
+      },
     ];
   }
 
@@ -282,6 +295,11 @@ export class FrenchAlbaneLocaleBuilder {
       {
         code: 'FRHPME',
         localDescription: 'Huile pimentée',
+        portionSize: [],
+      },
+      {
+        code: 'FRFSEL',
+        localDescription: 'Sel (pour la facette)',
         portionSize: [],
       },
     ];
