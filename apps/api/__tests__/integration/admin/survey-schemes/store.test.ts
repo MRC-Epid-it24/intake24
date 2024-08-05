@@ -26,18 +26,17 @@ export default () => {
     });
 
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['name', 'version']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name']);
     });
 
     it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['name', 'type', 'version', 'visibility', 'meals', 'prompts', 'dataExport'],
+        ['name', 'type', 'visibility', 'meals', 'prompts', 'dataExport'],
         {
           input: {
             name: [],
-            version: 'powerful',
             type: 'invalidType',
             visibility: [],
             meals: 5,

@@ -12,7 +12,6 @@ export const surveySchemeAttributes = z.object({
   id: z.string(),
   name: z.string().min(1).max(256),
   type: z.enum(schemeTypes),
-  version: z.number(),
   prompts: recallPrompts,
   meals: meal.array(),
   dataExport: exportSection.array(),
@@ -34,7 +33,7 @@ export type SurveySchemeRequest = z.infer<typeof surveySchemeRequest>;
 export const surveySchemePartialRequest = surveySchemeRequest.partial();
 export type SurveySchemePartialRequest = z.infer<typeof surveySchemePartialRequest>;
 
-export const surveySchemeCreateRequest = surveySchemePartialRequest.required({ name: true, version: true });
+export const surveySchemeCreateRequest = surveySchemePartialRequest.required({ name: true });
 export type SurveySchemeCreateRequest = z.infer<typeof surveySchemeCreateRequest>;
 
 export type SurveySchemeRefEntry = SurveySchemeAttributes;
