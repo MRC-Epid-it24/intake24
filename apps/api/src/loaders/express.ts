@@ -27,8 +27,8 @@ export default (express: Express, { config }: Ops) => {
     throw new Error('Application secret not set.');
 
   // Body parser
-  express.use(json());
-  express.use(urlencoded({ extended: false }));
+  express.use(json({ limit: '10mb' }));
+  express.use(urlencoded({ extended: false, limit: '10mb' }));
 
   // Cookie parser
   express.use(cookieParser(app.secret));
