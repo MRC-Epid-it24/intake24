@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-if="translationsLoaded" v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-if="standardUnitsLoaded" v-model="panel" :tile="isMobile">
       <v-expansion-panel v-show="parameters.units.length !== 1">
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.label`">
@@ -18,7 +18,7 @@
               <template #label>
                 <i18n :path="`prompts.${type}.estimateIn`">
                   <template #unit>
-                    {{ translate(unit.inlineEstimateIn ?? standardUnitRefs[unit.name].estimateIn) }}
+                    {{ getStandardUnitEstimateIn(unit) }}
                   </template>
                 </i18n>
               </template>
@@ -35,11 +35,7 @@
             }`"
           >
             <template #unit>
-              {{
-                translate(
-                  portionSize.unit.inlineHowMany ?? standardUnitRefs[portionSize.unit.name].howMany,
-                )
-              }}
+              {{ getStandardUnitHowMany(portionSize.unit) }}
             </template>
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
@@ -88,7 +84,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
@@ -126,11 +122,21 @@ export default defineComponent({
   setup(props) {
     const { translate } = useI18n();
     const { foodName } = useFoodUtils(props);
-    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+    const {
+      resolveStandardUnits,
+      getStandardUnitEstimateIn,
+      getStandardUnitHowMany,
+      standardUnitsLoaded,
+    } = useStandardUnits();
 
-    const usingStandardTranslations = ref<boolean>(true);
-
-    return { standardUnitRefs, fetchStandardUnits, translate, foodName, usingStandardTranslations };
+    return {
+      resolveStandardUnits,
+      getStandardUnitEstimateIn,
+      getStandardUnitHowMany,
+      translate,
+      foodName,
+      standardUnitsLoaded,
+    };
   },
 
   data() {
@@ -140,10 +146,6 @@ export default defineComponent({
   },
 
   computed: {
-    translationsLoaded(): boolean {
-      return this.usingStandardTranslations ? Object.keys(this.standardUnitRefs).length > 0 : true;
-    },
-
     unitValid() {
       return !!this.portionSize.unit;
     },
@@ -167,10 +169,7 @@ export default defineComponent({
       .filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined)
       .map(({ name }) => name);
 
-    if (names.length > 0)
-      await this.fetchStandardUnits(names);
-    else
-      this.usingStandardTranslations = false;
+    await this.resolveStandardUnits(names);
 
     if (!this.portionSize.unit && this.parameters.units.length === 1) {
       this.portionSize.unit = this.parameters.units[0];

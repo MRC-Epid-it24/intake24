@@ -1,6 +1,6 @@
 <template>
   <v-sheet
-    v-if="translationsLoaded"
+    v-if="standardUnitsLoaded"
     class="d-flex flex-column gr-1 px-3 py-2 standard-portion"
     color="grey lighten-5"
   >
@@ -17,7 +17,7 @@
       </v-icon>
       <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
         <template #unit>
-          {{ translate(unit.inlineEstimateIn ?? standardUnitRefs[unit.name].estimateIn) }}
+          {{ getStandardUnitEstimateIn(unit) }}
         </template>
       </i18n>
     </v-chip>
@@ -29,7 +29,6 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
-import { useI18n } from '@intake24/i18n';
 
 import { useStandardUnits } from '../../partials';
 
@@ -51,18 +50,10 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { translate } = useI18n();
-    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+    const { getStandardUnitEstimateIn, resolveStandardUnits, standardUnitsLoaded } = useStandardUnits();
 
     const interval = ref<undefined | number>(undefined);
     const selectedIndex = ref<undefined | number>(props.timer ? 0 : undefined);
-    const usingStandardTranslations = ref(true);
-
-    const translationsLoaded = computed(() => {
-      return usingStandardTranslations.value
-        ? Object.keys(standardUnitRefs.value).length > 0
-        : true;
-    });
 
     const standardUnits = computed(() => {
       return ('units' in props.method.parameters ? props.method.parameters.units : []).slice(
@@ -96,14 +87,11 @@ export default defineComponent({
       if (!standardUnits.value.length)
         return;
 
-      const namesToTranslate = standardUnits.value
+      const names = standardUnits.value
         .filter(unit => unit.inlineEstimateIn === undefined)
         .map(unit => unit.name);
 
-      if (namesToTranslate.length > 0)
-        await fetchStandardUnits(namesToTranslate);
-      else
-        usingStandardTranslations.value = false;
+      await resolveStandardUnits(names);
 
       selectNextStandardUnit();
       startTimer();
@@ -113,7 +101,12 @@ export default defineComponent({
       clearTimer();
     });
 
-    return { translate, standardUnits, standardUnitRefs, selectedIndex, translationsLoaded };
+    return {
+      getStandardUnitEstimateIn,
+      selectedIndex,
+      standardUnits,
+      standardUnitsLoaded,
+    };
   },
 });
 </script>

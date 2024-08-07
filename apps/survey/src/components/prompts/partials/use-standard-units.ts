@@ -1,8 +1,10 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
+import type { StandardUnit } from '@intake24/common/surveys';
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { StandardUnitResponse } from '@intake24/common/types/http';
-import { httpService } from '@intake24/survey/services';
+import { useI18n } from '@intake24/i18n';
+import { useHttp } from '@intake24/survey/services';
 
 export type StandardUnitRefs = Record<
   string,
@@ -10,10 +12,29 @@ export type StandardUnitRefs = Record<
 >;
 
 export function useStandardUnits() {
-  const standardUnitRefs = ref<StandardUnitRefs>({});
+  const { translate } = useI18n();
+  const http = useHttp();
 
-  const fetchStandardUnits = async (names: string[]) => {
-    const { data } = await httpService.get<StandardUnitResponse[]>('portion-sizes/standard-units', {
+  const standardUnitRefs = ref<StandardUnitRefs>({});
+  const usingStandardTranslations = ref(true);
+
+  const standardUnitsLoaded = computed(() => usingStandardTranslations.value ? !!Object.keys(standardUnitRefs.value).length : true);
+
+  function getStandardUnitHowMany(item: StandardUnit) {
+    return translate(item.inlineHowMany ?? standardUnitRefs.value[item.name]?.howMany ?? item.name);
+  };
+
+  function getStandardUnitEstimateIn(item: StandardUnit) {
+    return translate(item.inlineEstimateIn ?? standardUnitRefs.value[item.name]?.estimateIn ?? item.name);
+  };
+
+  const resolveStandardUnits = async (names: string[]) => {
+    if (!names.length) {
+      usingStandardTranslations.value = false;
+      return;
+    }
+
+    const { data } = await http.get<StandardUnitResponse[]>('portion-sizes/standard-units', {
       params: { id: names },
     });
 
@@ -26,5 +47,11 @@ export function useStandardUnits() {
     }, {});
   };
 
-  return { standardUnitRefs, fetchStandardUnits };
+  return {
+    resolveStandardUnits,
+    getStandardUnitHowMany,
+    getStandardUnitEstimateIn,
+    standardUnitRefs,
+    standardUnitsLoaded,
+  };
 }

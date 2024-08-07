@@ -14,6 +14,28 @@ Prompts / Prompts are divided into three groups:
 
 Prompts with standardized behavior tied to specific functionality. Usually only one can be used per scheme and functionality is often tied to specific scheme section.
 
+### Addon foods prompt
+
+Prompt to add additional foods as linked foods. Prompt can be added be added to `food`, `meal` or `survey` level.
+
+- `multiple` - allow multiple foods to be selected
+
+- `trigger` - trigger options to include food for add-ons
+
+  - `type` - type of trigger
+    - `any` - trigger for any food
+    - `afp` - trigger for associated foods (TBI)
+    - `category` - trigger for food having specified category code
+    - `food` - trigger for food having specified food code
+    - `tag` - trigger for food having specified food tag
+  - `value` - value to trigger on (fill in for `category`, `food` or `tag` trigger types)
+
+- `lookup` - lookup to include food for add-ons
+  - `type` - type of lookup
+    - `category` - look up foods by specified category
+    - `food` - look up specified by food
+  - `value` - value to lookup (fill in for `category` or `food` lookup types)
+
 ### Associated foods prompt
 
 - `multiple` - allow multiple foods to be selected

@@ -70,6 +70,14 @@
     "text": "",
     "description": ""
   },
+  "addonFoods": {
+    "name": "Add-on foods",
+    "text": "",
+    "description": "Have you had any add-on foods with following foods?",
+    "food": "Food",
+    "portion": "Portion",
+    "quantity": "Quantity"
+  },
   "associatedFoods": {
     "name": "Associated foods",
     "text": "",

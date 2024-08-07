@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
 import type { UseInRecipeType } from '@intake24/common/types';
-import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
 import type {
   AssociatedFoodCreationAttributes,
   CategoryAttributes,
@@ -14,6 +13,8 @@ import type {
   NutrientTableRecordAttributes,
   Pagination,
 } from '@intake24/db';
+
+import type { AssociatedFood } from './associated-food';
 
 export type InheritableAttributes = {
   readyMealOption?: boolean;

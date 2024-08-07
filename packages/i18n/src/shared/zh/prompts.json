@@ -70,6 +70,14 @@
     "text": "",
     "description": ""
   },
+  "addonFoods": {
+    "name": "Add-on foods",
+    "text": "",
+    "description": "Have you had any add-on foods with following foods?",
+    "food": "Food",
+    "portion": "Portion",
+    "quantity": "Quantity"
+  },
   "associatedFoods": {
     "name": "相关食物",
     "text": "",
@@ -488,15 +496,5 @@
       "withFood": "你吃了{unit}的{food}"
     },
     "confirm": "我吃了那么多"
-  },
-  "unknown": {
-    "name": "未知",
-    "text": "",
-    "description": "{food}没有当前的份量估计方法。"
-  },
-  "weight": {
-    "name": "重量",
-    "text": "",
-    "description": "输入你吃了多少。"
   }
 }

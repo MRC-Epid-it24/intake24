@@ -30,6 +30,7 @@ export const customComponentTypes = [
 export type CustomComponentType = (typeof customComponentTypes)[number];
 
 export const standardComponentTypes = [
+  'addon-foods-prompt',
   'associated-foods-prompt',
   'edit-meal-prompt',
   'external-source-prompt',
@@ -121,6 +122,9 @@ export const basePortionPrompt = basePrompt.extend({ type: z.literal('portion-si
 export type BasePortionPrompt = z.infer<typeof basePortionPrompt>;
 export const baseStandardPrompt = basePrompt.extend({ type: z.literal('standard') });
 export type BaseStandardPrompt = z.infer<typeof baseStandardPrompt>;
+
+export const addonFoodTriggers = ['any', 'afp', 'category', 'food', 'tag'] as const;
+export type AddonFoodTrigger = (typeof addonFoodTriggers)[number];
 
 export const foodBrowser = z.object({
   categoriesFirst: z.record(z.enum(['browse', 'search']), z.boolean()),
@@ -293,6 +297,19 @@ const standardPortionPrompt = basePortionPrompt.extend({
 });
 
 // Standard
+const addonFoodsPrompt = baseStandardPrompt.extend({
+  component: z.literal('addon-foods-prompt'),
+  lookup: z.object({
+    type: z.enum(['category', 'food']),
+    value: z.string(),
+  }),
+  multiple: z.boolean(),
+  trigger: z.object({
+    type: z.enum(addonFoodTriggers),
+    value: z.string().nullable(),
+  }),
+});
+
 const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
   component: z.literal('associated-foods-prompt'),
   multiple: z.boolean(),
@@ -400,6 +417,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   recipeBuilderPrompt,
   standardPortionPrompt,
   // Standard
+  addonFoodsPrompt,
   associatedFoodsPrompt,
   editMealPrompt,
   externalSourcePrompt,
@@ -455,6 +473,7 @@ export const prompts = z.object({
   'recipe-builder-prompt': recipeBuilderPrompt,
   'standard-portion-prompt': standardPortionPrompt,
   // Standard
+  'addon-foods-prompt': addonFoodsPrompt,
   'associated-foods-prompt': associatedFoodsPrompt,
   'edit-meal-prompt': editMealPrompt,
   'external-source-prompt': externalSourcePrompt,

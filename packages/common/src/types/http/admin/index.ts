@@ -1,4 +1,5 @@
 export * from './as-served';
+export * from './associated-food';
 export * from './categories';
 export * from './drinkware-sets';
 export * from './fdbs';

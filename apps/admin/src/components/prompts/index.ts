@@ -82,6 +82,10 @@ export const promptSettings: PromptSettings = {
     sections: [...promptSectionsExceptSubmission],
   },
   // Standard
+  'addon-foods-prompt': {
+    tabs: [...tabs],
+    sections: ['foods', 'postFoods', 'postMeals'],
+  },
   'associated-foods-prompt': {
     tabs: [...tabs],
     sections: ['foods'],

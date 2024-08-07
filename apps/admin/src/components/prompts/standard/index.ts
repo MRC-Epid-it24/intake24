@@ -1,3 +1,4 @@
+import AddonFoodsPrompt from './addon-foods-prompt.vue';
 import AssociatedFoodsPrompt from './associated-foods-prompt.vue';
 import EditMealPrompt from './edit-meal-prompt.vue';
 import ExternalSourcePrompt from './external-source-prompt.vue';
@@ -15,6 +16,7 @@ import SplitFoodPrompt from './split-food-prompt.vue';
 import SubmitPrompt from './submit-prompt.vue';
 
 export default {
+  AddonFoodsPrompt,
   AssociatedFoodsPrompt,
   EditMealPrompt,
   ExternalSourcePrompt,

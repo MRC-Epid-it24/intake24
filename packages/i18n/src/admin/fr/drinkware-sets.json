@@ -53,6 +53,11 @@
     "title": "Are you sure?",
     "msg": "You're about to delete the sliding scale shape data.\n This action cannot be undone."
   },
+  "volumeMethod": {
+    "title": "Volume estimation method",
+    "lookUpTable": "Look-up table",
+    "cylindrical": "Cylindrical symmetry (max fill volume)"
+  },
   "volumeTable": {
     "title": "Volume measurements",
     "legacy": {

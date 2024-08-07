@@ -33,6 +33,7 @@ import {
   standardPortionComplete,
 } from '@intake24/common/util/portion-size-checks';
 import {
+  addonFoodPromptCheck,
   findMeal,
   foodComplete,
   foodPortionSizeComplete,
@@ -104,6 +105,8 @@ function checkSurveyStandardConditions(state: SurveyState, prompt: Prompt): bool
   const { component } = prompt;
 
   switch (component) {
+    case 'addon-foods-prompt':
+      return !state.data.flags.includes(`${prompt.id}-complete`) && state.data.meals.some(meal => meal.foods.some(addonFoodPromptCheck(prompt)));
     case 'info-prompt':
       return !state.data.flags.includes(`${prompt.id}-acknowledged`);
     case 'submit-prompt':
@@ -168,6 +171,8 @@ function checkMealStandardConditions(surveyState: SurveyState, mealState: MealSt
       return prompt.prompts.some(item =>
         checkMealStandardConditions(surveyState, mealState, withSelection, item),
       );
+    case 'addon-foods-prompt':
+      return !mealState.flags.includes(`${prompt.id}-complete`) && mealState.foods.some(addonFoodPromptCheck(prompt));
     case 'no-more-information-prompt':
       if (selection.mode === 'manual') {
         recallLog().promptCheck(
@@ -549,6 +554,10 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
           : 'Standard portion estimation not selected',
       );
       return false;
+    }
+
+    case 'addon-foods-prompt': {
+      return !foodState.flags.includes(`${prompt.id}-complete`) && addonFoodPromptCheck(prompt)(foodState);
     }
 
     case 'associated-foods-prompt': {

@@ -761,6 +761,11 @@ export const useSurvey = defineStore('survey', {
       this.replaceFood({ foodId: data.foodId, food: { ...foodState, ...data.update } });
     },
 
+    addLinkedFoods(foodId: string, linkedFoods: FoodState[]) {
+      const foodState = findFood(this.meals, foodId);
+      foodState.linkedFoods.push(...linkedFoods);
+    },
+
     deleteFood(foodId: string) {
       /*
       Undo system needs review & a more general solution

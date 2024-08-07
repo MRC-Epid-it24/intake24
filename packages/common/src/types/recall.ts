@@ -17,8 +17,8 @@ private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-c
 export const staticSurveyFlag = [
 ] as const;
 export type StaticSurveyFlag = (typeof staticSurveyFlag)[number];
-export const dynamicSurveyFlag = z.custom<`${string}-acknowledged`>((val) => {
-  return typeof val === 'string' && val.endsWith('-acknowledged');
+export const dynamicSurveyFlag = z.custom<`${string}-acknowledged` | `${string}-complete`>((val) => {
+  return typeof val === 'string' && /-(?:acknowledged|complete)$/.test(val);
 });
 export type DynamicSurveyFlag = z.infer<typeof dynamicSurveyFlag>;
 // export const surveyFlag = z.union([z.enum(staticSurveyFlag), dynamicSurveyFlag]);
@@ -33,8 +33,8 @@ export const staticMealFlag = [
   'ready-meal-complete',
 ] as const;
 export type StaticMealFlag = (typeof staticMealFlag)[number];
-export const dynamicMealFlag = z.custom<`food-search:${string}` | `${string}-acknowledged`>((val) => {
-  return typeof val === 'string' && (val.startsWith('food-search:') || val.endsWith('-acknowledged'));
+export const dynamicMealFlag = z.custom<`food-search:${string}` | `${string}-acknowledged` | `${string}-complete`>((val) => {
+  return typeof val === 'string' && (val.startsWith('food-search:') || /-(?:acknowledged|complete)$/.test(val));
 });
 export type DynamicMealFlag = z.infer<typeof dynamicMealFlag>;
 export const mealFlag = z.union([z.enum(staticMealFlag), dynamicMealFlag]);
@@ -53,8 +53,8 @@ export const staticFoodFlag = [
   'associated-foods-complete',
 ] as const;
 export type StaticFoodFlag = (typeof staticFoodFlag)[number];
-export const dynamicFoodFlag = z.custom<`${string}-acknowledged`>((val) => {
-  return typeof val === 'string' && (val.endsWith('-acknowledged'));
+export const dynamicFoodFlag = z.custom<`${string}-acknowledged` | `${string}-complete`>((val) => {
+  return typeof val === 'string' && /-(?:acknowledged|complete)$/.test(val);
 });
 export type DynamicFoodFlag = z.infer<typeof dynamicFoodFlag>;
 export const foodFlag = z.union([z.enum(staticFoodFlag), dynamicFoodFlag]);
@@ -326,7 +326,7 @@ export const surveyState = z.object({
   submissionTime: z.coerce.date().nullable(),
   uxSessionId: z.string().uuid(),
   userAgent: z.string().nullish(),
-  flags: z.array(z.string()),
+  flags: surveyFlag.array(),
   customPromptAnswers: z.record(customPromptAnswer),
   selection,
   meals: mealState.array(),

@@ -1,3 +1,4 @@
+import AddonFoodsPromptHandler from './AddonFoodsPromptHandler.vue';
 import AssociatedFoodsPromptHandler from './AssociatedFoodsPromptHandler.vue';
 import EditMealPromptHandler from './EditMealPromptHandler.vue';
 import ExternalSourcePromptHandler from './ExternalSourcePromptHandler.vue';
@@ -15,6 +16,7 @@ import SplitFoodPromptHandler from './SplitFoodPromptHandler.vue';
 import SubmitPromptHandler from './SubmitPromptHandler.vue';
 
 export default {
+  AddonFoodsPromptHandler,
   AssociatedFoodsPromptHandler,
   EditMealPromptHandler,
   ExternalSourcePromptHandler,

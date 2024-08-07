@@ -122,7 +122,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { translate, i18n } = useI18n();
     const { action, translatePrompt, type } = usePromptUtils(props, ctx);
-    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+    const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
     const survey = useSurvey();
 
     const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
@@ -227,10 +227,7 @@ export default defineComponent({
         [],
       );
 
-      if (!names.length)
-        return;
-
-      await fetchStandardUnits(names);
+      await resolveStandardUnits(names);
     });
 
     return {

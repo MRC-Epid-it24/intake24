@@ -3,6 +3,23 @@ import { copy } from '@intake24/common/util';
 import type { Prompts } from './prompts';
 import { basePrompt } from './base';
 
+export const addonFoodsPrompt: Prompts['addon-foods-prompt'] = copy({
+  ...basePrompt,
+  component: 'addon-foods-prompt',
+  type: 'standard',
+  id: 'addon-foods-prompt',
+  name: 'Addon foods prompt',
+  lookup: {
+    type: 'category',
+    value: '',
+  },
+  multiple: false,
+  trigger: {
+    type: 'tag',
+    value: '',
+  },
+});
+
 export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   ...basePrompt,
   component: 'associated-foods-prompt',
@@ -165,6 +182,7 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
 });
 
 export const standardPrompts = [
+  addonFoodsPrompt,
   associatedFoodsPrompt,
   editMealPrompt,
   externalSourcePrompt,

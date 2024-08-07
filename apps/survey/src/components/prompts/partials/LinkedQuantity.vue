@@ -81,7 +81,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { foodName } = useFoodUtils(props);
     const { i18n, translate } = useI18n();
-    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+    const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
 
     const linkedQuantityUnit = computed(() => {
       const unit = props.linkedParent.categories[0]?.unit;
@@ -111,9 +111,8 @@ export default defineComponent({
       if (!props.linkedParent.categories.length)
         return;
 
-      const names = props.linkedParent.categories.map(({ unit }) => unit).filter(Boolean);
-      if (names.length)
-        await fetchStandardUnits(names as string[]);
+      const names = props.linkedParent.categories.map(({ unit }) => unit).filter(Boolean) as string[];
+      await resolveStandardUnits(names);
     });
 
     return {

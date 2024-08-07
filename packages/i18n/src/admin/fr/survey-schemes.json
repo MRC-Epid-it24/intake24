@@ -81,30 +81,72 @@
     "title": "Conditions",
     "add": "Nouvelle condition",
     "remove": "Enlever la condition",
-    "properties": {
-      "_": "Property",
-      "title": "Properties",
-      "recallNumber": "Recall number",
-      "userName": "User's name"
+    "object": {
+      "_": "Condition object",
+      "title": "Condition object",
+      "food": "Current food",
+      "meal": "Current meal",
+      "survey": "Current recall"
     },
-    "sections": {
-      "_": "Section",
-      "title": "Sections",
-      "food": "Aliment",
-      "meal": "Repas",
-      "survey": "Enquête"
-    },
-    "types": {
-      "_": "Type de condition",
-      "title": "Types de conditions",
-      "drinks": "Boissons",
-      "energy": "Energie",
-      "flag": "Drapeau",
-      "foodCategory": "Catégorie alimentaire",
-      "meals": "Repas",
-      "promptAnswer": "Réponse",
+    "property": {
+      "_": "Condition property",
+      "title": "Condition properties",
+      "drinks": "Drinks reported",
+      "energy": "Energy value",
+      "flag": "Flag",
+      "tag": "Tag",
+      "foodCategory": "Food category",
+      "meals": "Meals",
+      "promptAnswer": "Prompt answer",
       "property": "Property value",
-      "recallNumber": "Numéro du rappel"
+      "recallNumber": "Recall number",
+      "userName": "Participant ID",
+      "mealCompletion": "Completion state",
+      "foodCompletion": "Completion state"
+    },
+    "foodCompletion": {
+      "freeEntryComplete": "Free text entry complete",
+      "searchComplete": "Identification complete",
+      "portionSizeComplete": "Portion size estimation complete",
+      "complete": "Associated food prompts complete"
+    },
+    "flag": {
+      "id": "Flag ID",
+      "showIfSet": "Show if set"
+    },
+    "tag": {
+      "id": "Tag ID",
+      "showIfSet": "Show if tagged"
+    },
+    "summary": {
+      "value": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
+      "boolean": "<em><strong>{property}</strong></em> in <em><strong>{object}</strong></em>: {value}",
+      "mealCompletion": {
+        "freeEntryComplete": "<em><strong>free text entry</em></strong> of foods for the <em><strong>{object}</strong></em> is complete",
+        "searchComplete": "<em><strong>identification</em></strong> of foods in the <em><strong>{object}</strong></em> is complete",
+        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> of foods in the <em><strong>{object}</strong></em> is complete",
+        "complete": "<em><strong>associated food prompts</em></strong> in the <em><strong>{object}</strong></em> are complete"
+      },
+      "foodCompletion": {
+        "freeEntryComplete": "<em><strong>free text entry</em></strong> for the <em><strong>{object}</strong></em> is complete",
+        "searchComplete": "<em><strong>identification</em></strong> of the <em><strong>{object}</strong></em> is complete",
+        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> for the <em><strong>{object}</strong></em> is complete",
+        "complete": "<em><strong>associated food prompts</em></strong> for the <em><strong>{object}</strong></em> are complete"
+      },
+      "flag": {
+        "set": "flag <em><strong>{id}</strong></em> set in <em><strong>{object}</strong></em>",
+        "notSet": "flag <em><strong>{id}</strong></em> not set in <em><strong>{object}</strong></em>"
+      },
+      "tag": {
+        "present": "<em><strong>{object}</strong></em> is tagged with <em><strong>{id}</strong></em>",
+        "absent": "<em><strong>{object}</strong></em> is <strong>NOT</strong> tagged with <em><strong>{id}</strong></em>"
+      },
+      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>",
+      "notRequired": "<strong>OR</strong> not set"
+    },
+    "promptAnswer": {
+      "promptId": "Prompt ID",
+      "required": "Prompt answer is required (uncheck if this prompt should trigger if the answer is not known)"
     },
     "exTypes": {
       "drinks": "Boissons ({section})",
@@ -119,6 +161,7 @@
     "ops": {
       "_": "Opération",
       "eq": "égal",
+      "setEq": "same set of values",
       "ne": "différent",
       "in": "est inclus dans",
       "notIn": "n'est pas inclus dans",
@@ -128,8 +171,9 @@
       "lt": "moins que"
     },
     "value": "Condition sur la valeur",
-    "promptId": "Identifiant de l'invite",
-    "showIf": "Montrer l'invite si: "
+    "showIf": "Montrer l'invite si: ",
+    "showIfTrue": "Show if true",
+    "orPrevious": "Or previous"
   },
   "data-export": {
     "_": "Export de données",
@@ -365,6 +409,26 @@
       "saveAs": {
         "_": "Sauvegarder en tant que modèle",
         "title": "Sauvegarder l'invite en tant que modèle"
+      }
+    },
+    "addon-foods-prompt": {
+      "title": "Add-on foods",
+      "subtitle": "Suggest foods typically consumed with this food",
+      "multiple": "Allow multiple foods to be selected",
+      "trigger": {
+        "_": "Trigger",
+        "type": "Type",
+        "value": "Value",
+        "any": "Any",
+        "afp": "Associated food prompt",
+        "category": "Category",
+        "food": "Food",
+        "tag": "Tag"
+      },
+      "lookup": {
+        "_": "Lookup",
+        "type": "Type",
+        "value": "Value"
       }
     },
     "associated-foods-prompt": {

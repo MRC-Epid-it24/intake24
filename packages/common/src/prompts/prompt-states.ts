@@ -141,15 +141,22 @@ export type PromptStates = {
     linkedQuantityConfirmed: boolean;
   };
   // Standard prompts
+  'addon-foods-prompt': {
+    foods: Record<string, {
+      confirmed: boolean | null;
+      data: UserFoodData | null;
+      portionSize: PortionSizeStates['standard-portion'];
+    }[]>;
+  };
+  'associated-foods-prompt': {
+    activePrompt: number;
+    prompts: AssociatedFoodPrompt[];
+  };
   'edit-meal-prompt': FoodState[];
   'external-source-prompt': {
     searchTerm: string | null;
     type?: 'selected' | 'missing';
     data?: object;
-  };
-  'associated-foods-prompt': {
-    activePrompt: number;
-    prompts: AssociatedFoodPrompt[];
   };
   'ready-meal-prompt': { id: string; name: string; value: boolean | undefined }[];
 };

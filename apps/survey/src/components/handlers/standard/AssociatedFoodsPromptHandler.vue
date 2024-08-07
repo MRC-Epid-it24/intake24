@@ -25,7 +25,7 @@ import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import { capitalize } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
-import foodSearchService from '@intake24/survey/services/foods.service';
+import { foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
@@ -86,7 +86,7 @@ export default defineComponent({
       // TODO: Show loading
 
       return Promise.all(
-        headers.map(header => foodSearchService.getData(localeId.value, header.code)),
+        headers.map(header => foodsService.getData(localeId.value, header.code)),
       );
     }
 
