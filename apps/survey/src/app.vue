@@ -115,8 +115,7 @@
           <v-icon left small>
             fas fa-tag
           </v-icon>
-          {{ appInfo.build.version }} |
-          {{ appInfo.build.revision }}
+          {{ appInfo.build.fullVersion }}
         </div>
       </template>
     </v-navigation-drawer>

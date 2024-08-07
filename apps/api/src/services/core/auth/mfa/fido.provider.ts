@@ -48,7 +48,7 @@ function fidoProvider({
     userDisplayName?: string,
   ) => {
     const authenticators = await MFAAuthenticator.findAll({
-      include: { association: 'device', where: { userId: userID } },
+      include: [{ association: 'device', where: { userId: userID } }],
     });
 
     return generateRegistrationOptions({

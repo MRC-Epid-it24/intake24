@@ -56,11 +56,11 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     const { surveyId } = this.params;
 
     const total = await SurveySubmissionFood.count({
-      include: {
+      include: [{
         association: 'meal',
         required: true,
         include: [{ association: 'submission', where: { surveyId }, required: true }],
-      },
+      }],
     });
 
     this.initProgress(total);

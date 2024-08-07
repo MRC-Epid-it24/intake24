@@ -3,7 +3,7 @@ import { col, fn, literal, Op } from 'sequelize';
 
 import type { PaginateOptions } from '@intake24/db';
 import { anyPermission } from '@intake24/api/http/middleware';
-import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
+import { imageResponseCollection } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import {
@@ -27,7 +27,7 @@ import {
 } from '@intake24/db';
 
 export function reference() {
-  const responseCollection = imagesResponseCollection(ioc.cradle.imagesBaseUrl);
+  const responseCollection = imageResponseCollection(ioc.cradle.imagesBaseUrl);
 
   return initServer().router(contract.admin.reference, {
     asServedSets: {

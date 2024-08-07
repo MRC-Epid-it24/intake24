@@ -23,7 +23,7 @@ export async function fetchLocalFoods(localeId: string): Promise<LocalFoodData[]
   const localFoods = await FoodLocalList.findAll({
     attributes: ['foodCode'],
     where: { localeId },
-    include: {
+    include: [{
       required: true,
       association: 'foodLocal',
       attributes: ['name', 'altNames'],
@@ -41,7 +41,7 @@ export async function fetchLocalFoods(localeId: string): Promise<LocalFoodData[]
           ],
         },
       ],
-    },
+    }],
   });
 
   return localFoods.map((row) => {
@@ -59,12 +59,19 @@ export async function fetchLocalCategories(localeId: string): Promise<LocalCateg
   const localCategories = await CategoryLocal.findAll({
     where: { localeId },
     attributes: ['categoryCode', 'name'],
-    include: { required: true, association: 'main', attributes: ['code', 'isHidden'], include: [
+    include: [
       {
-        association: 'parentCategories',
-        attributes: ['code'],
+        required: true,
+        association: 'main',
+        attributes: ['code', 'isHidden'],
+        include: [
+          {
+            association: 'parentCategories',
+            attributes: ['code'],
+          },
+        ],
       },
-    ] },
+    ],
   });
 
   return localCategories.map((row) => {

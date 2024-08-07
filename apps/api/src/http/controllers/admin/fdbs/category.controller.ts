@@ -12,7 +12,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { categoryContentsResponse } from '@intake24/api/http/responses/admin/categories';
+import { categoryContentsResponse } from '@intake24/api/http/responses/admin';
 import { CategoryLocal, SystemLocale } from '@intake24/db';
 
 function adminCategoryController({

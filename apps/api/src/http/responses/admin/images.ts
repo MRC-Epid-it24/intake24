@@ -23,7 +23,7 @@ import { InternalServerError } from '@intake24/api/http/errors';
 
 type GuideObjects = { [index: string]: { label: LocaleTranslation; weight: number } };
 
-function imageResponseCollection(baseUrl: string) {
+export function imageResponseCollection(baseUrl: string) {
   /**
    * As served image entry
    *
@@ -263,7 +263,5 @@ function imageResponseCollection(baseUrl: string) {
     mapEntryResponse,
   };
 }
-
-export default imageResponseCollection;
 
 export type ImageResponseCollection = ReturnType<typeof imageResponseCollection>;

@@ -57,7 +57,7 @@ function adminUserService({
    */
   const flushACLCacheByRoleName = async (name: string): Promise<void> => {
     const roleUsers = await RoleUser.findAll({
-      include: { association: 'role', where: { name }, required: true },
+      include: [{ association: 'role', where: { name }, required: true }],
     });
 
     await Promise.all(roleUsers.map(({ userId }) => flushACLCacheByUserId(userId)));

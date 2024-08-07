@@ -6,7 +6,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { AsServedSetEntry, AsServedSetsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
-import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
+import { imageResponseCollection } from '@intake24/api/http/responses/admin';
 import { AsServedSet } from '@intake24/db';
 
 function asServedSetController({
@@ -14,7 +14,7 @@ function asServedSetController({
   asServedService,
   portionSizeService,
 }: Pick<IoC, 'imagesBaseUrl' | 'asServedService' | 'portionSizeService'>) {
-  const responseCollection = imagesResponseCollection(imagesBaseUrl);
+  const responseCollection = imageResponseCollection(imagesBaseUrl);
 
   const entry = async (
     req: Request<{ asServedSetId: string }>,
