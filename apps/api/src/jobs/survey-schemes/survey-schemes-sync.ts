@@ -3,7 +3,7 @@ import { literal, where } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
-import { customPrompts, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
+import { Condition, customPrompts, defaultAction, getConditionDefaults, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { Survey, SurveyScheme } from '@intake24/db';
 
@@ -105,7 +105,20 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     this.logger.debug(`Synchronization of survey schemes started.`);
 
     const promptMap = this.getPromptMap();
-    const mergeCallback = (prompt: SinglePrompt) => merge<SinglePrompt>(promptMap[prompt.component], prompt);
+
+    const mergeCallback = (prompt: SinglePrompt) => {
+      const baseMerge = merge<SinglePrompt>(promptMap[prompt.component], prompt);
+      return {
+        ...baseMerge,
+        actions: baseMerge.actions
+          ? {
+              ...baseMerge.actions,
+              items: baseMerge.actions.items.map(action => merge(defaultAction, action)),
+            }
+          : undefined,
+        conditions: baseMerge.conditions.map(condition => merge<Condition>(getConditionDefaults(condition.object, condition.property.id), condition)),
+      };
+    };
 
     const schemes = await this.models.system.SurveyScheme.findAll({
       attributes: ['id', 'name', 'prompts'],

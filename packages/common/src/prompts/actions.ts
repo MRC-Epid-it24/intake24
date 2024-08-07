@@ -50,3 +50,14 @@ export const actions = z.object({
 });
 
 export type Actions = z.infer<typeof actions>;
+
+export const defaultAction: ActionItem = {
+  type: 'next',
+  text: { en: '' },
+  label: {},
+  color: 'primary',
+  variant: 'text',
+  icon: '$next',
+  layout: ['desktop', 'mobile'],
+  params: {},
+};

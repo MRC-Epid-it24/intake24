@@ -231,3 +231,144 @@ export const conditionObjectPropertyIds: Map<ConditionObjectId, ObjectPropertyId
   const propertyIds = condition.shape.property.options.map(property => property.shape.id.value);
   return [objectId, propertyIds];
 })));
+
+const valuePropertyDefaults: ValueProperty = {
+  type: 'value',
+  check: {
+    op: 'eq',
+    value: null,
+  },
+};
+
+const booleanPropertyDefaults: BooleanProperty = {
+  type: 'boolean',
+  check: {
+    value: true,
+  },
+};
+
+type CommonPropertyDefaults = {
+  drinks: DrinksProperty;
+  energy: EnergyProperty;
+  flag: FlagProperty;
+  promptAnswer: PromptAnswerProperty;
+};
+
+const commonPropertyDefaults: CommonPropertyDefaults = {
+  drinks: {
+    id: 'drinks',
+    ...booleanPropertyDefaults,
+  },
+  energy: {
+    id: 'energy',
+    ...valuePropertyDefaults,
+  },
+  flag: {
+    id: 'flag',
+    type: 'flag',
+    check: {
+      flagId: '',
+      value: true,
+    },
+  },
+  promptAnswer: {
+    id: 'promptAnswer',
+    type: 'promptAnswer',
+    check: {
+      promptId: '',
+      op: 'eq',
+      value: null,
+      required: true,
+    },
+  },
+};
+
+export type PromptConditionDefaults = {
+  survey: Record<ObjectPropertyId<'survey'>, ObjectProperty<'survey'>>;
+  meal: Record<ObjectPropertyId<'meal'>, ObjectProperty<'meal'>>;
+  food: Record<ObjectPropertyId<'food'>, ObjectProperty<'food'>>;
+};
+
+export const promptConditionDefaults: PromptConditionDefaults = {
+  survey: {
+    ...commonPropertyDefaults,
+    mealCompletion: {
+      id: 'mealCompletion',
+      type: 'mealCompletion',
+      check: {
+        completionState: 'searchComplete',
+      },
+    },
+    recallNumber: {
+      id: 'recallNumber',
+      ...valuePropertyDefaults,
+    },
+    userName: {
+      id: 'userName',
+      ...valuePropertyDefaults,
+    },
+    numberOfMeals: {
+      id: 'numberOfMeals',
+      ...valuePropertyDefaults,
+    },
+  },
+  meal: {
+    ...commonPropertyDefaults,
+    mealCompletion: {
+      id: 'mealCompletion',
+      type: 'mealCompletion',
+      check: {
+        completionState: 'searchComplete',
+      },
+    },
+  },
+  food: {
+    ...commonPropertyDefaults,
+    foodCategory: {
+      id: 'foodCategory',
+      ...valuePropertyDefaults,
+    },
+    foodCompletion: {
+      id: 'foodCompletion',
+      type: 'foodCompletion',
+      check: {
+        completionState: 'searchComplete',
+      },
+    },
+    tag: {
+      id: 'tag',
+      type: 'tag',
+      check: {
+        tagId: '',
+        value: true,
+      },
+    },
+  },
+};
+
+export function getConditionDefaults<T extends ConditionObjectId>(object: T, id: ObjectPropertyId<T>): Condition {
+  // TypeScript won't allow doing simply promptConditionDefaults[object][id]
+  // so have to do this manually
+  switch (object) {
+    case 'survey':
+      return {
+        object: 'survey',
+        orPrevious: false,
+        property: promptConditionDefaults.survey[id],
+      };
+    case 'meal':
+      return {
+        object: 'meal',
+        orPrevious: false,
+        property: promptConditionDefaults.meal[id],
+      };
+    case 'food':
+      return {
+        object: 'food',
+        orPrevious: false,
+        property: promptConditionDefaults.food[id],
+      };
+    default:
+      throw new Error(`Unexpected context argument: ${object}`);
+  }
+}
