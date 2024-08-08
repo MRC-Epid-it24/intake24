@@ -209,7 +209,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
 
       const promises: Promise<any>[] = [
-        foodLocal.update(pick(input, ['name']), { transaction }),
+        foodLocal.update(pick(input, ['name', 'altNames', 'tags']), { transaction }),
         foodLocal.$set('nutrientRecords', nutrientRecords, { transaction }),
         updatePortionSizeMethods(foodLocalId, portionSizeMethods, input.portionSizeMethods, {
           transaction,

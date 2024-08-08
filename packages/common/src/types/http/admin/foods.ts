@@ -75,6 +75,7 @@ export type CreateLocalCategoryRequest = {
   version?: string;
   name: string;
   portionSizeMethods: PortionSizeMethod[];
+  tags?: string[];
 };
 
 export type UpdateLocalCategoryRequest = Omit<CreateLocalCategoryRequest, 'code' | 'version'>;
@@ -102,6 +103,8 @@ export type FoodLocalInput = {
     locales?: FoodsLocaleAttributes[];
     parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
+  altNames?: Record<string, string[]>;
+  tags?: string[];
   nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
   portionSizeMethods: FoodPortionSizeMethodCreationAttributes[];
   associatedFoods: AssociatedFoodCreationAttributes[];

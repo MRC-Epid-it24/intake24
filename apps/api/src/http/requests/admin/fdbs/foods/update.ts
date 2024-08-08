@@ -9,6 +9,7 @@ import {
   locales,
   nutrients,
   portionSizeMethods,
+  tags,
 } from '../common';
 import defaults from './defaults';
 
@@ -21,5 +22,6 @@ export default validate(
     ...nutrients,
     ...portionSizeMethods,
     ...associatedFoods,
+    tags,
   }),
 );

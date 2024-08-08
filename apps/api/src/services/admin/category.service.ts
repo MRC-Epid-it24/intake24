@@ -289,7 +289,7 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
     await db.foods.transaction(async (transaction) => {
       await Promise.all([
-        categoryLocal.update(pick(input, ['name']), { transaction }),
+        categoryLocal.update(pick(input, ['name', 'tags']), { transaction }),
         main.update(pick(input.main, ['name', 'isHidden']), { transaction }),
         attributes.update(
           pick(input.main.attributes, [

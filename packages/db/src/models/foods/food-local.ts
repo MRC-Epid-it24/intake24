@@ -84,9 +84,10 @@ export default class FoodLocal extends BaseModel<
   declare simpleName: string | null;
 
   @Column({
-    allowNull: true,
+    allowNull: false,
+    defaultValue: '{}',
     type: DataType.STRING(2048),
-    get() {
+    get(): AlternativeFoodNames {
       const val = this.getDataValue('altNames') as unknown;
       return val ? JSON.parse(val as string) : {};
     },
@@ -97,13 +98,14 @@ export default class FoodLocal extends BaseModel<
   declare altNames: CreationOptional<AlternativeFoodNames>;
 
   @Column({
-    allowNull: true,
+    allowNull: false,
+    defaultValue: '[]',
     type: DataType.STRING(2048),
-    get() {
+    get(): string[] {
       const val = this.getDataValue('tags') as unknown;
       return val ? JSON.parse(val as string) : [];
     },
-    set(value: Record<string, any>) {
+    set(value: string[]) {
       this.setDataValue('tags', JSON.stringify(value ?? []));
     },
   })

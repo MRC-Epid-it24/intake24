@@ -22,6 +22,7 @@ export type CategoryLocalInput = {
     parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
   portionSizeMethods: CategoryPortionSizeMethodCreationAttributes[];
+  tags?: string[];
 };
 
 export type CategoryLocalCopyInput = {

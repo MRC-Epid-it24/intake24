@@ -53,6 +53,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
             localeId,
             name: request.name,
             simpleName: toSimpleName(request.name)!,
+            tags: JSON.stringify(request.tags ?? []),
           })
           .returning('id')
           .executeTakeFirstOrThrow();
@@ -81,6 +82,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
           localeId,
           name: request.name,
           simpleName: toSimpleName(request.name)!,
+          tags: JSON.stringify(request.tags ?? []),
         })
         .where('localeId', '=', localeId)
         .where('categoryCode', '=', categoryCode)

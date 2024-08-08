@@ -8,6 +8,7 @@ import {
   AssociatedFood,
   Brand,
   CategoryCategory,
+  CategoryLocal,
   Food,
   FoodCategory,
   FoodLocal,
@@ -141,6 +142,12 @@ function foodDataService() {
     return [...visited.values()];
   };
 
+  const getAllTags = async (categoryCode: string[], foodTags: string[] = []) => {
+    const categories = await CategoryLocal.findAll({ where: { categoryCode }, attributes: ['tags'] });
+
+    return [...new Set(categories.reduce((acc, { tags }) => acc.concat(tags), foodTags))];
+  };
+
   const resolveAssociatedFoodPrompts = async (
     localeId: string,
     foodCode: string,
@@ -190,20 +197,22 @@ function foodDataService() {
       );
     }
 
+    const categories = await getAllCategories(foodCode);
+
     const [
       associatedFoodPrompts,
       brandNames,
       kcalPer100g,
       portionSizeMethods,
       inheritableAttributes,
-      categories,
+      tags,
     ] = await Promise.all([
       resolveAssociatedFoodPrompts(localeId, foodCode),
       getBrands(localeId, foodCode),
       getNutrientKCalPer100G(localeId, foodCode),
       portionSizeMethodsImpl.resolveUserPortionSizeMethods(localeId, foodCode),
       inheritableAttributesImpl.resolveInheritableAttributes(foodCode),
-      getAllCategories(foodCode),
+      getAllTags(categories, foodLocal.tags),
     ]);
 
     return {
@@ -219,7 +228,7 @@ function foodDataService() {
       reasonableAmount: inheritableAttributes.reasonableAmount,
       sameAsBeforeOption: inheritableAttributes.sameAsBeforeOption,
       categories,
-      tags: foodLocal.tags,
+      tags,
     };
   };
 

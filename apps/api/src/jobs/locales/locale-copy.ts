@@ -132,6 +132,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           eb.val(code).as('localeId'),
           'name',
           'simpleName',
+          'tags',
           'version',
         ]).where('localeId', '=', sourceCode)
         .orderBy('id'),
@@ -184,8 +185,9 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           eb.val(code).as('localeId'),
           'name',
           'simpleName',
-          'version',
           'altNames',
+          'tags',
+          'version',
         ]).where('localeId', '=', sourceCode)
         .orderBy('id'),
       )

@@ -290,3 +290,16 @@ export const associatedFoods: Schema = {
     isInt: true,
   },
 };
+
+export const tags: ParamSchema = {
+  in: ['body'],
+  errorMessage: typeErrorMessage('array._'),
+  isArray: { bail: true },
+  optional: true,
+  custom: {
+    options: async (value: any[], meta): Promise<void> => {
+      if (value.some(item => !item || typeof item !== 'string'))
+        throw new Error(customTypeErrorMessage('array.string', meta));
+    },
+  },
+};

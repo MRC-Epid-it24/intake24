@@ -57,6 +57,20 @@ export default class CategoryLocal extends BaseModel<
 
   @Column({
     allowNull: false,
+    defaultValue: '[]',
+    type: DataType.STRING(2048),
+    get(): string[] {
+      const val = this.getDataValue('tags') as unknown;
+      return val ? JSON.parse(val as string) : [];
+    },
+    set(value: string[]) {
+      this.setDataValue('tags', JSON.stringify(value ?? []));
+    },
+  })
+  declare tags: CreationOptional<string[]>;
+
+  @Column({
+    allowNull: false,
     type: DataType.UUID,
   })
   declare version: string;

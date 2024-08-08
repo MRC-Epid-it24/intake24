@@ -38,7 +38,8 @@
     "local": {
       "_": "Local category settings",
       "id": "Local category ID",
-      "name": "Local name"
+      "name": "Local name",
+      "tags": "Tags"
     },
     "attributes": {
       "_": "Category attributes"
@@ -62,7 +63,8 @@
     "local": {
       "_": "Local food settings",
       "id": "Local food ID",
-      "name": "Local name"
+      "name": "Local name",
+      "tags": "Tags"
     },
     "attributes": {
       "_": "Food attributes"

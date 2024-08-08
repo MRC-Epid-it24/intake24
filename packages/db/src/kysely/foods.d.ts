@@ -77,6 +77,7 @@ export interface CategoryLocals {
   localeId: string;
   name: string;
   simpleName: string;
+  tags: Generated<string>;
   version: string;
 }
 
@@ -157,6 +158,7 @@ export interface FoodLocals {
   localeId: string;
   name: string | null;
   simpleName: string | null;
+  tags: Generated<string>;
   version: string;
 }
 

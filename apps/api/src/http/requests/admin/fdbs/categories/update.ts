@@ -2,7 +2,7 @@ import { checkSchema } from 'express-validator';
 
 import { validate } from '@intake24/api/http/requests/util';
 
-import { attributes, categories, portionSizeMethods } from '../common';
+import { attributes, categories, portionSizeMethods, tags } from '../common';
 import defaults from './defaults';
 
 export default validate(
@@ -11,5 +11,6 @@ export default validate(
     ...attributes,
     'main.parentCategories': categories,
     ...portionSizeMethods,
+    tags,
   }),
 );

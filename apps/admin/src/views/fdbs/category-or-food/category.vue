@@ -66,6 +66,21 @@
                 />
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-combobox
+                  v-model="form.tags"
+                  chips
+                  closable-chips
+                  :error-messages="form.errors.get('tags')"
+                  hide-details="auto"
+                  :label="$t('fdbs.categories.local.tags')"
+                  multiple
+                  name="tags"
+                  outlined
+                />
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
         <attribute-list
@@ -183,6 +198,7 @@ export default defineComponent({
           },
           parentCategories: [],
         },
+        tags: [],
         portionSizeMethods: [],
       },
       config: { extractNestedKeys: true },
