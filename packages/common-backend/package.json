@@ -19,7 +19,7 @@
     "html-to-text": "^9.0.5",
     "jsdom": "^24.1.1",
     "nodemailer": "^6.9.14",
-    "winston": "^3.13.1",
+    "winston": "^3.14.1",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {

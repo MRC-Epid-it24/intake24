@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@anatine/zod-openapi": "^2.2.6",
-    "@ts-rest/core": "^3.49.2",
+    "@ts-rest/core": "^3.49.3",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "awesome-phonenumber": "^6.10.0",
