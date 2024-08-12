@@ -349,8 +349,8 @@ importers:
         specifier: 1.4.5-lts.1
         version: 1.4.5-lts.1
       natural:
-        specifier: ^7.1.0
-        version: 7.1.0(socks@2.8.3)
+        specifier: ^8.0.1
+        version: 8.0.1(socks@2.8.3)
       negotiator:
         specifier: ^0.6.3
         version: 0.6.3
@@ -7021,8 +7021,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  natural@7.1.0:
-    resolution: {integrity: sha512-GBhiRgF0VUX+zPWahBVir1ajARQDZF1Fe6UpQORNzyQT57JQ2KLKYvubecvjIYh/uDaociusmySeRh+WL5OdxQ==}
+  natural@8.0.1:
+    resolution: {integrity: sha512-VVw8O5KrfvwqAFeNZEgBbdgA+AQaBlHcXEootWU7TWDaFWFI0VLfzyKMsRjnfdS3cVCpWmI04xLJonCvEv11VQ==}
     engines: {node: '>=0.4.10'}
 
   ndarray-linear-interpolate@1.0.0:
@@ -16334,7 +16334,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  natural@7.1.0(socks@2.8.3):
+  natural@8.0.1(socks@2.8.3):
     dependencies:
       afinn-165: 1.0.4
       afinn-165-financialmarketnews: 3.0.0
