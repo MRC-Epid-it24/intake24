@@ -20,7 +20,7 @@
           <v-btn
             v-if="$vuetify.breakpoint.smAndUp"
             color="primary"
-            :disabled="!searchTerm.length"
+            :disabled="!searchTerm?.length"
             elevation="0"
             height="initial"
             :title="promptI18n.search"
@@ -30,7 +30,7 @@
             <v-icon left>
               fas fa-turn-down fa-rotate-90
             </v-icon>
-            {{ promptI18n.add }}
+            {{ promptI18n.search }}
           </v-btn>
         </div>
         <template v-if="selectedProductDetails">
@@ -51,19 +51,19 @@
               {{ selectedProductDetails.name }}
             </v-card-title>
             <v-card-text class="px-0">
-              <div class="my-2">
+              <div v-if="selectedProductDetails.code" class="my-2">
                 <span class="font-weight-medium">Code:</span>
                 {{ selectedProductDetails.code }}
               </div>
-              <div class="my-2">
+              <div v-if="selectedProductDetails.genericName" class="my-2">
                 <span class="font-weight-medium">Gen Name:</span>
                 {{ selectedProductDetails.genericName }}
               </div>
-              <div class="my-2">
+              <div v-if="selectedProductDetails.quantity" class="my-2">
                 <span class="font-weight-medium">Quantity:</span>
                 {{ selectedProductDetails.quantity }}
               </div>
-              <div class="my-2">
+              <div v-if="selectedProductDetails.packaging" class="my-2">
                 <span class="font-weight-medium">Packaging:</span>
                 {{ selectedProductDetails.packaging }}
               </div>
@@ -124,7 +124,6 @@ import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { barcodes } from '@intake24/ui';
@@ -132,7 +131,6 @@ import { useApp } from '@intake24/ui/stores';
 
 const searchParams = {
   json: 1,
-  // fields: 'id',
 };
 
 export type OOFProduct = Record<string, any> & {
@@ -180,16 +178,46 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const client = axios.create();
     const app = useApp();
-    const { translate } = useI18n();
     const { translatePrompt } = usePromptUtils(props, ctx);
 
-    const loading = ref(false);
+    const baseUrl = computed(() => `https://${props.prompt.source.country || 'world'}.openfoodfacts.org`);
+    const searchBaseUrl = computed(() => `${baseUrl.value}/cgi/search.pl`);
+    const productBaseUrl = computed(() => `${baseUrl.value}/api/v2/product`);
+    const categoriesTags = computed(() => {
+      if (props.food.type !== 'encoded-food')
+        return [];
 
+      return props.food.data.tags.reduce<string[]>((acc, tag) => {
+        if (tag.startsWith('off:'))
+          acc.push(tag.replace(/^off:/, ''));
+
+        return acc;
+      }, []);
+    });
+
+    const client = axios.create({ baseURL: baseUrl.value });
+
+    const loading = ref(false);
     const lang = computed(() => app.lang);
-    const searchBaseUrl = computed(() => `https://${props.prompt.source.country}.openfoodfacts.org/cgi/search.pl`);
-    const productBaseUrl = computed(() => `https://${props.prompt.source.country}.openfoodfacts.org/api/v2/product`);
+
+    const searchFields = computed(() => [
+      'id',
+      'code',
+      'countries_tags',
+      'generic_name',
+      'generic_name_en',
+      `generic_name_${lang.value}`,
+      'product_name',
+      'product_name_en',
+      `product_name_${lang.value}`,
+      'packaging',
+      'quantity',
+      'image_front_small_url',
+      'selected_images',
+    ]);
+
+    const productFields = computed(() => []);
 
     const response = ref<OOFProductsResponse | undefined>();
     const selected = ref<OOFProduct | undefined>();
@@ -229,27 +257,20 @@ export default defineComponent({
       };
     });
 
-    const back = () => {
-      selected.value = undefined;
-    };
-
-    const select = (product: OOFProduct) => {
-      selected.value = { ...product };
-    };
-
     const fetchProduct = async (barcode: string) => {
-      try {
-        const { data: { product } } = await client.get<OOFProductResponse>(`${productBaseUrl.value}/${barcode}`);
+      if (loading.value)
+        return;
 
-        // selected.value = res.data.product;
-        response.value = {
-          count: 1,
-          page: 1,
-          page_count: 1,
-          page_size: 1,
-          products: [product],
-          skip: 0,
-        };
+      try {
+        loading.value = true;
+
+        const { data: { product } } = await client.get<OOFProductResponse>(`${productBaseUrl.value}/${barcode}`, {
+          params: {
+            fields: productFields.value.length ? productFields.value.join(',') : undefined,
+          },
+        });
+
+        selected.value = product;
       }
       catch (err) {
         if (isAxiosError(err) && err.response?.status === 404) {
@@ -259,18 +280,34 @@ export default defineComponent({
 
         throw err;
       }
+      finally {
+        loading.value = false;
+      }
     };
 
     const fetchProducts = async (search: string) => {
-      const { data } = await client.get<OOFProductsResponse>(searchBaseUrl.value, {
-        params: {
-          ...props.prompt.source.query,
-          ...searchParams,
-          search_terms: search,
-          page: response.value?.page ?? 1,
-        },
-      });
-      response.value = data;
+      if (loading.value)
+        return;
+
+      try {
+        loading.value = true;
+        selected.value = undefined;
+
+        const { data } = await client.get<OOFProductsResponse>(searchBaseUrl.value, {
+          params: {
+            ...searchParams,
+            ...props.prompt.source.query,
+            categories_tags: categoriesTags.value.length ? categoriesTags.value.join('|') : undefined,
+            search_terms: search,
+            fields: searchFields.value.length ? searchFields.value.join(',') : undefined,
+            page: response.value?.page ?? 1,
+          },
+        });
+        response.value = data;
+      }
+      finally {
+        loading.value = false;
+      }
     };
 
     const search = async () => {
@@ -280,21 +317,18 @@ export default defineComponent({
         return;
       }
 
-      if (loading.value)
-        return;
+      if (/^\d+$/.test(searchValue))
+        await fetchProduct(searchValue);
+      else
+        await fetchProducts(searchValue);
+    };
 
-      try {
-        loading.value = true;
-        selected.value = undefined;
+    const back = () => {
+      selected.value = undefined;
+    };
 
-        if (/^\d+$/.test(searchValue))
-          await fetchProduct(searchValue);
-        else
-          await fetchProducts(searchValue);
-      }
-      finally {
-        loading.value = false;
-      }
+    const select = async (product: OOFProduct) => {
+      await fetchProduct(product.code);
     };
 
     onMounted(async () => {
@@ -302,7 +336,7 @@ export default defineComponent({
     });
 
     watch(() => response.value?.page, async (val, oldVal) => {
-      if (!val || val === oldVal)
+      if (!oldVal || !val || val === oldVal)
         return;
 
       await search();
@@ -332,7 +366,6 @@ export default defineComponent({
       select,
       selected,
       selectedProductDetails,
-      translate,
     };
   },
 });
