@@ -51,33 +51,29 @@ export default class PopularityCountersService {
   public async updateLocalCounters(localeId: string, foodCodes: string[]): Promise<void> {
     const occurrences = PopularityCountersService.countOccurrences(foodCodes);
 
-    return this.db.system.transaction(async (tx) => {
+    return this.db.system.transaction(async (transaction) => {
       const counters = await PAOccurrence.findAll({
         where: { localeId, foodCode: foodCodes },
-        transaction: tx,
+        transaction,
       });
 
       const currentCounts = Object.fromEntries(
-        counters.map(row => [row.foodCode, { occurences: row.occurrences, multiplier: row.multiplier }]),
+        counters.map(row => [row.foodCode, row.occurrences]),
       );
 
       for (const k in occurrences) {
-        const count = currentCounts[k].occurences;
+        const count = currentCounts[k];
         if (count)
           occurrences[k] += count;
       }
 
-      const updates = Object.entries(occurrences).map(e => ({
+      const updates = Object.entries(occurrences).map(([foodCode, occurrences]) => ({
         localeId,
-        foodCode: e[0],
-        occurrences: e[1],
-        multiplier: currentCounts[e[0]] ? currentCounts[e[0]].multiplier : 1,
+        foodCode,
+        occurrences,
       }));
 
-      await PAOccurrence.bulkCreate(updates, {
-        updateOnDuplicate: ['occurrences'],
-        transaction: tx,
-      });
+      await PAOccurrence.bulkCreate(updates, { updateOnDuplicate: ['occurrences'], transaction });
     });
   }
 }
