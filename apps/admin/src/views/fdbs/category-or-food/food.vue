@@ -71,7 +71,7 @@
                 <v-combobox
                   v-model="form.tags"
                   chips
-                  closable-chips
+                  deletable-chips
                   :error-messages="form.errors.get('tags')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.local.tags')"

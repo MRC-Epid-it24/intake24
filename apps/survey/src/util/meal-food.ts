@@ -78,9 +78,9 @@ export function findMeal(meals: MealState[], id: string): MealState {
 const addonFoodTriggers: Record<AddonFoodTrigger, (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => boolean> = {
   afp: () => false, // TODO: implement
   any: () => true,
-  category: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => food.data.categories.includes(prompt.trigger.value),
+  category: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => !!(prompt.trigger.value && food.data.categories.includes(prompt.trigger.value)),
   food: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => food.data.code === prompt.trigger.value,
-  tag: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => food.data.tags.includes(prompt.trigger.value),
+  tag: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => !!(prompt.trigger.value && food.data.tags.includes(prompt.trigger.value)),
 };
 
 export function addonFoodPromptCheck(prompt: Prompts['addon-foods-prompt']) {

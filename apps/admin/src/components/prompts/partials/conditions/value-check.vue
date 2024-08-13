@@ -1,42 +1,40 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12" md="6">
-        <v-select
-          v-model="currentValue.op"
-          hide-details="auto"
-          item-value="op"
-          :items="operationSelectList"
-          :label="$t('survey-schemes.conditions.ops._')"
-          outlined
-          @change="update(currentValue)"
-        >
-          <template #item="{ item }">
-            <v-icon left>
-              {{ opToIconMap[item.op] }}
-            </v-icon>
-            {{ item.text }}
-          </template>
-          <template #selection="{ item }">
-            <v-icon left>
-              {{ opToIconMap[item.op] }}
-            </v-icon>
-            {{ item.text }}
-          </template>
-        </v-select>
-      </v-col>
-      <v-col cols="12" md="6">
-        <component
-          :is="comboOps.includes(currentValue.op) ? 'v-combobox' : 'v-text-field'"
-          v-model="currentValue.value"
-          hide-details="auto"
-          :label="$t('survey-schemes.conditions.value')"
-          multiple
-          outlined
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row>
+    <v-col cols="12" md="6">
+      <v-select
+        v-model="currentValue.op"
+        hide-details="auto"
+        item-value="op"
+        :items="operationSelectList"
+        :label="$t('survey-schemes.conditions.ops._')"
+        outlined
+        @change="update(currentValue)"
+      >
+        <template #item="{ item }">
+          <v-icon left>
+            {{ opToIconMap[item.op] }}
+          </v-icon>
+          {{ item.text }}
+        </template>
+        <template #selection="{ item }">
+          <v-icon left>
+            {{ opToIconMap[item.op] }}
+          </v-icon>
+          {{ item.text }}
+        </template>
+      </v-select>
+    </v-col>
+    <v-col cols="12" md="6">
+      <component
+        :is="comboOps.includes(currentValue.op) ? 'v-combobox' : 'v-text-field'"
+        v-model="currentValue.value"
+        hide-details="auto"
+        :label="$t('survey-schemes.conditions.value')"
+        multiple
+        outlined
+      />
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

@@ -1,11 +1,9 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-checkbox v-model="currentValue.value" :label="$t('survey-schemes.conditions.showIfTrue')" @change="update(currentValue)" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row>
+    <v-col cols="12">
+      <v-checkbox v-model="currentValue.value" :label="$t('survey-schemes.conditions.showIfTrue')" @change="update(currentValue)" />
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

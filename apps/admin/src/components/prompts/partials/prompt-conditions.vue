@@ -29,10 +29,10 @@
             <condition-summary :condition="condition" />
           </v-card-text>
           <v-container>
-            <v-row>
-              <v-col cols="12">
+            <v-row v-if="idx !== 0">
+              <v-col cols="12" md="6">
                 <v-checkbox
-                  v-if="idx !== 0"
+
                   v-model="condition.orPrevious"
                   class="mt-0"
                   hide-details="auto"
@@ -42,7 +42,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" md="6">
                 <v-select
                   hide-details="auto"
                   item-value="object"
@@ -53,9 +53,7 @@
                   @change="updatePromptConditionObject(idx, $event)"
                 />
               </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12">
+              <v-col cols="12" md="6">
                 <v-select
                   hide-details="auto"
                   item-value="type"
@@ -67,17 +65,11 @@
                 />
               </v-col>
             </v-row>
-            <v-row>
-              <v-col class="pa-0" cols="12">
-                <v-card flat>
-                  <v-card-title>Condition</v-card-title>
-                  <v-card-text>
-                    <component :is="condition.property.type" :value.sync="condition.property.check" />
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
           </v-container>
+          <v-card-title>{{ $t(`survey-schemes.conditions._`) }}</v-card-title>
+          <v-card-text>
+            <component :is="condition.property.type" :value.sync="condition.property.check" />
+          </v-card-text>
           <v-card-actions>
             <v-spacer />
             <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
