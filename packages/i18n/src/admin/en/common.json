@@ -162,7 +162,7 @@
       "multi": {
         "delete": "Do you want to delete selected items: {count}"
       },
-      "typed": "Please type {name} to confirm."
+      "typed": "Type in {name} to confirm."
     }
   },
 

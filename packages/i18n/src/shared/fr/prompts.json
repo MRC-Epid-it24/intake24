@@ -142,7 +142,7 @@
     "back": "Retour vers '{category}'",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "The search has found a lot of results. Try refining your search.",
-    "pizza": "If your pizza was from a takeaway or restaurant, please select that option in the list.",
+    "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
@@ -424,7 +424,7 @@
     "noMore": "Complet",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "remove": "Enlever",
-    "missingAllIngredients": "Please add at least one ingredient to continue.",
+    "missingAllIngredients": "Add at least one ingredient to continue.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",

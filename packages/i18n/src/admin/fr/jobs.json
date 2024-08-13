@@ -67,7 +67,7 @@
       "warningP1": "The food frequency data is automatically updated by the system as new recalls are received.",
       "warningP2": "Uploading frequency data from a CSV file will override existing records in the database, potentially leading to data loss.",
       "warningP3": "This feature is intended only for initialising new locales or fixing issues with existing frequency data.",
-      "warningP4": "Please double-check that you are in the correct locale before uploading the data."
+      "warningP4": "Double-check that you are in the correct locale before uploading the data."
     },
     "LocaleFoods": {
       "_": "Régional - Exporter les aliments",
