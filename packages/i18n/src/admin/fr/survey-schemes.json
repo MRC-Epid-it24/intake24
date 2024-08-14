@@ -96,7 +96,7 @@
       "flag": "Flag",
       "tag": "Tag",
       "foodCategory": "Food category",
-      "meals": "Meals",
+      "numberOfMeals": "Number of meals",
       "promptAnswer": "Prompt answer",
       "property": "Property value",
       "recallNumber": "Recall number",
@@ -181,7 +181,9 @@
     "title": "Champs de l'export de données",
     "current": "Champs actuels d'export",
     "available": "Champs disponibles d'export",
+    "add": "Add section",
     "edit": "Modifier les champs",
+    "remove": "Remove section",
     "fields": {
       "_": "Modifier le libellé du champ",
       "id": "Identifiant du champ",
@@ -200,7 +202,8 @@
       "foodCustom": "Champs de personnalisation de l'aliment",
       "foodFields": "Champs de composition de l'aliment",
       "foodNutrients": "Champs de nutriments de l'aliment",
-      "portionSizes": "Champs de taille de portion"
+      "portionSizes": "Champs de taille de portion",
+      "externalSources": "External source fields"
     }
   },
   "i18n": {

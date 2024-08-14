@@ -46,9 +46,16 @@ export function submissionScope(scopeOps: SubmissionScope = {}, ops: FindOptions
                 include: [{ association: 'nutrientType' }],
               },
               { association: 'portionSizes', separate: true },
+              { association: 'externalSources', separate: true },
             ],
           },
-          { association: 'missingFoods', separate: true },
+          {
+            association: 'missingFoods',
+            separate: true,
+            include: [
+              { association: 'externalSources' },
+            ],
+          },
         ],
       },
       { association: 'survey', attributes: ['id', 'slug'] },

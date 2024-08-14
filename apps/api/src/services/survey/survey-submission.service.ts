@@ -5,6 +5,7 @@ import type {
   CustomPromptAnswer,
   Dictionary,
   EncodedFood,
+  ExternalSourceRecord,
   FoodState,
   MissingFood,
   RecipeBuilder,
@@ -13,6 +14,7 @@ import type {
 } from '@intake24/common/types';
 import type { SurveySubmissionResponse } from '@intake24/common/types/http';
 import type {
+  SurveySubmissionExternalSourceCreationAttributes,
   SurveySubmissionFieldCreationAttributes,
   SurveySubmissionFoodCreationAttributes,
   SurveySubmissionMissingFoodCreationAttributes,
@@ -20,12 +22,14 @@ import type {
   SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { ExternalSource } from '@intake24/common/prompts';
 import {
   FoodGroup,
   FoodLocal,
   Survey,
   SurveySubmission,
   SurveySubmissionCustomField,
+  SurveySubmissionExternalSource,
   SurveySubmissionField,
   SurveySubmissionFood,
   SurveySubmissionFoodCustomField,
@@ -347,6 +351,29 @@ function surveySubmissionService({
     return customAnswers as CustomAnswers<T>[];
   };
 
+  const collectExternalSources = (
+    foodId: string,
+    foodType: 'food' | 'missing-food',
+    externalSources?: ExternalSourceRecord,
+  ) => {
+    if (!externalSources)
+      return [];
+
+    const externalSourcesData: SurveySubmissionExternalSourceCreationAttributes[] = [];
+
+    for (const [source, info] of Object.entries(externalSources)) {
+      externalSourcesData.push({
+        id: randomUUID(),
+        foodId,
+        foodType,
+        source: source as ExternalSource,
+        ...info,
+      });
+    }
+
+    return externalSourcesData;
+  };
+
   /**
    * Submit recall
    *
@@ -608,6 +635,8 @@ function surveySubmissionService({
             foodMap,
           );
 
+          const externalSources = collectExternalSources(foodId, 'food', foodState.external);
+
           // Store food custom fields, food composition fields, food composition nutrients, PSMs
           await Promise.all(
             [
@@ -619,8 +648,20 @@ function surveySubmissionService({
               portionSizes.length
                 ? SurveySubmissionPortionSizeField.bulkCreate(portionSizes, { transaction })
                 : null,
+              externalSources.length
+                ? SurveySubmissionExternalSource.bulkCreate(externalSources, { transaction })
+                : null,
             ].filter(Boolean),
           );
+        }
+
+        // Process missing foods
+        for (const [idx, foodState] of collectedFoods.missingStates.entries()) {
+          const { id: foodId } = collectedFoods.missingInputs[idx];
+
+          const externalSources = collectExternalSources(foodId, 'missing-food', foodState.external);
+          if (externalSources.length)
+            await SurveySubmissionExternalSource.bulkCreate(externalSources, { transaction });
         }
       }
 

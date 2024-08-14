@@ -27,6 +27,7 @@ import SurveyScheme from './survey-scheme';
 import SurveySchemePrompt from './survey-scheme-prompt';
 import SurveySubmission from './survey-submission';
 import SurveySubmissionCustomField from './survey-submission-custom-field';
+import SurveySubmissionExternalSource from './survey-submission-external-source';
 import SurveySubmissionField from './survey-submission-field';
 import SurveySubmissionFood from './survey-submission-food';
 import SurveySubmissionFoodCustomField from './survey-submission-food-custom-field';
@@ -105,6 +106,8 @@ export { default as SurveySubmission } from './survey-submission';
 export * from './survey-submission';
 export { default as SurveySubmissionCustomField } from './survey-submission-custom-field';
 export * from './survey-submission-custom-field';
+export { default as SurveySubmissionExternalSource } from './survey-submission-external-source';
+export * from './survey-submission-external-source';
 export { default as SurveySubmissionField } from './survey-submission-field';
 export * from './survey-submission-field';
 export { default as SurveySubmissionFood } from './survey-submission-food';
@@ -174,6 +177,7 @@ export const system = {
   SurveySchemePrompt,
   SurveySubmission,
   SurveySubmissionCustomField,
+  SurveySubmissionExternalSource,
   SurveySubmissionField,
   SurveySubmissionFood,
   SurveySubmissionFoodCustomField,

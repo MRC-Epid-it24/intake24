@@ -4,8 +4,8 @@ import { orderBy } from 'lodash';
 import stringify from 'safe-stable-stringify';
 import uaParser from 'ua-parser-js';
 
-import type { Prompt } from '@intake24/common/prompts';
 import type { SurveyScheme } from '@intake24/db';
+import { externalSources as externalSourceProviders, type Prompt } from '@intake24/common/prompts';
 import { type ExportField as BaseExportField, fromMealTime } from '@intake24/common/surveys';
 import {
   NutrientTableCsvMappingField,
@@ -487,6 +487,31 @@ function dataExportFields() {
     { id: 'units-count', label: 'units-count' },
   ];
 
+  const externalSources = async (): Promise<ExportField[]> => externalSourceProviders.reduce<ExportField[]>((acc, source) => {
+    return acc.concat([
+      {
+        id: `${source}:id`,
+        label: `${source}: ID`,
+      },
+      {
+        id: `${source}:source`,
+        label: `${source}: Source`,
+      },
+      {
+        id: `${source}:searchTerm`,
+        label: `${source}: Search term`,
+      },
+      {
+        id: `${source}:type`,
+        label: `${source}: Type`,
+      },
+      {
+        id: `${source}:data`,
+        label: `${source}: Data`,
+      },
+    ]);
+  }, []);
+
   return {
     user,
     userCustom,
@@ -500,6 +525,7 @@ function dataExportFields() {
     foodFields,
     foodNutrients,
     portionSizes,
+    externalSources,
   };
 }
 

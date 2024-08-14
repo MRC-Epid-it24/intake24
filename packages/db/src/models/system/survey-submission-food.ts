@@ -12,6 +12,7 @@ import type { PortionSizeMethodId } from '@intake24/common/surveys';
 
 import BaseModel from '../model';
 import {
+  SurveySubmissionExternalSource,
   SurveySubmissionField,
   SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
@@ -159,6 +160,15 @@ export default class SurveySubmissionFood extends BaseModel<
 
   @HasMany(() => SurveySubmissionPortionSizeField, 'foodId')
   declare portionSizes?: NonAttribute<SurveySubmissionPortionSizeField[]>;
+
+  @HasMany(() => SurveySubmissionExternalSource, {
+    foreignKey: 'foodId',
+    constraints: false,
+    scope: {
+      foodType: 'food',
+    },
+  })
+  declare externalSources?: NonAttribute<SurveySubmissionExternalSource[]>;
 }
 
 export type SurveySubmissionFoodAttributes = Attributes<SurveySubmissionFood>;

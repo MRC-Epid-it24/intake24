@@ -13,6 +13,27 @@
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>
       <v-spacer />
+      <v-menu v-if="availableSections.length" bottom :close-on-content-click="false" left offset-y>
+        <template #activator="{ on, attrs }">
+          <v-btn color="primary" fab small v-bind="attrs" :title="$t('survey-schemes.data-export.add')" v-on="on">
+            <v-icon>$add</v-icon>
+          </v-btn>
+        </template>
+        <v-list dense>
+          <v-list-item v-for="section in availableSections" :key="section.id" link>
+            <v-list-item-content>
+              <v-list-item-title>{{ section.text }}</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-action class="my-1">
+              <v-btn icon :title="$t('survey-schemes.data-export.add')">
+                <v-icon color="secondary lighten-1" @click.stop="add(section.id)">
+                  $add
+                </v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <options-menu>
         <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
           <template #activator="{ attrs, on }">
@@ -39,7 +60,7 @@
       <draggable v-model="form.dataExport" handle=".drag-and-drop__handle">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
-            v-for="section in form.dataExport"
+            v-for="(section, idx) in form.dataExport"
             :key="section.id"
             class="drag-and-drop__item"
             draggable
@@ -64,6 +85,17 @@
                 </v-icon>
               </v-btn>
             </v-list-item-action>
+            <v-list-item-action>
+              <confirm-dialog
+                color="error"
+                icon
+                icon-left="$delete"
+                :label="$t('survey-schemes.data-export.remove').toString()"
+                @confirm="remove(idx)"
+              >
+                {{ $t('common.action.confirm.remove', { name: $t(`survey-schemes.data-export.sections.${section.id}`) }) }}
+              </confirm-dialog>
+            </v-list-item-action>
           </v-list-item>
         </transition-group>
       </draggable>
@@ -72,10 +104,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { ExportField, ExportSection } from '@intake24/common/surveys';
 import type {
   SurveySchemeEntry,
   SurveySchemeExportRefs,
@@ -84,7 +115,11 @@ import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs'
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
+import { type ExportSection, type ExportSectionId, exportSectionIds } from '@intake24/common/surveys';
 import { defaultExport } from '@intake24/common/surveys';
+import { useI18n } from '@intake24/i18n';
+import { ConfirmDialog } from '@intake24/ui';
 
 import type { SurveySchemeForm } from '../form.vue';
 import DataExportSection from './data-export-section.vue';
@@ -94,11 +129,13 @@ export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 export default defineComponent({
   name: 'SurveySchemeDataExport',
 
-  components: { Draggable: draggable, DataExportSection, JsonEditorDialog, OptionsMenu, SelectResource },
+  components: { ConfirmDialog, Draggable: draggable, DataExportSection, JsonEditorDialog, OptionsMenu, SelectResource },
 
   mixins: [formMixin],
 
   setup(props) {
+    const { i18n } = useI18n();
+    const http = useHttp();
     const selected = ref<ExportSection | null>(null);
     const exportRefs = ref<SurveySchemeExportRefs | null>(null);
 
@@ -112,63 +149,84 @@ export default defineComponent({
       editMethod: 'patch',
     });
 
+    const sectionRefFields = computed(() => {
+      if (!selected.value || !exportRefs.value)
+        return [];
+
+      return exportRefs.value[selected.value.id] ?? [];
+    });
+
+    const availableSections = computed(() => {
+      const used = form.dataExport.map(section => section.id);
+
+      return exportSectionIds
+        .filter(id => !used.includes(id))
+        .map(id => ({ id, text: i18n.t(`survey-schemes.data-export.sections.${id}`) }));
+    });
+
+    const add = (section: ExportSectionId) => {
+      form.dataExport.push({ id: section, fields: [] });
+    };
+
+    const edit = (section: ExportSection) => {
+      selected.value = section;
+    };
+
+    const update = (section: ExportSection) => {
+      const match = form.dataExport.find(field => field.id === section.id);
+      if (!match)
+        return;
+
+      match.fields = [...section.fields];
+    };
+
+    const close = () => {
+      selected.value = null;
+    };
+
+    const load = (exportSections: ExportSection[]) => {
+      form.dataExport = [...exportSections];
+    };
+
+    const remove = (idx: number) => {
+      form.dataExport.splice(idx, 1);
+    };
+
+    const fetchExportRefs = async () => {
+      const { data } = await http.get<SurveySchemeExportRefs>(
+        `admin/survey-schemes/${props.id}/data-export`,
+      );
+      exportRefs.value = data;
+    };
+
+    onMounted(async () => {
+      await fetchExportRefs();
+    });
+
     return {
-      selected,
+      add,
+      availableSections,
+      clearError,
+      close,
+      edit,
       exportRefs,
       entry,
       entryLoaded,
       fetch,
-      clearError,
       form,
+      load,
+      remove,
       routeLeave,
+      sectionRefFields,
+      selected,
       submit,
+      update,
     };
-  },
-
-  computed: {
-    sectionRefFields(): ExportField[] {
-      if (!this.selected || !this.exportRefs)
-        return [];
-
-      return this.exportRefs[this.selected.id] ?? [];
-    },
   },
 
   watch: {
     async $route() {
       await this.fetch();
-    },
-  },
-
-  async created() {
-    await this.fetchExportRefs();
-  },
-
-  methods: {
-    async fetchExportRefs(): Promise<void> {
-      const { data } = await this.$http.get<SurveySchemeExportRefs>(
-        `admin/survey-schemes/${this.id}/data-export`,
-      );
-      this.exportRefs = data;
-    },
-
-    edit(section: ExportSection) {
-      this.selected = section;
-    },
-
-    update(section: ExportSection) {
-      const match = this.form.dataExport.find(field => field.id === section.id);
-
-      if (match)
-        match.fields = [...section.fields];
-    },
-
-    close() {
-      this.selected = null;
-    },
-
-    load(exportSections: ExportSection[]) {
-      this.form.dataExport = [...exportSections];
     },
   },
 });

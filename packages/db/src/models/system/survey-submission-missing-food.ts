@@ -6,10 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { SurveySubmissionMeal } from '.';
+import { SurveySubmissionExternalSource, SurveySubmissionMeal } from '.';
 
 @Scopes(() => ({
   meal: { include: [{ model: SurveySubmissionMeal }] },
@@ -87,6 +87,15 @@ export default class SurveySubmissionMissingFood extends BaseModel<
 
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
   declare meal?: NonAttribute<SurveySubmissionMeal>;
+
+  @HasMany(() => SurveySubmissionExternalSource, {
+    foreignKey: 'foodId',
+    constraints: false,
+    scope: {
+      foodType: 'missing-food',
+    },
+  })
+  declare externalSources?: NonAttribute<SurveySubmissionExternalSource[]>;
 }
 
 export type SurveySubmissionMissingFoodAttributes = Attributes<SurveySubmissionMissingFood>;

@@ -160,6 +160,7 @@ export const exportSectionIds = [
   'foodNutrients',
   'foodFields',
   'portionSizes',
+  'externalSources',
 ] as const;
 export type ExportSectionId = (typeof exportSectionIds)[number];
 
@@ -175,20 +176,7 @@ export const exportSection = z.object({
 });
 export type ExportSection = z.infer<typeof exportSection>;
 
-export const defaultExport: ExportSection[] = [
-  { id: 'user', fields: [] },
-  { id: 'userCustom', fields: [] },
-  { id: 'survey', fields: [] },
-  { id: 'submission', fields: [] },
-  { id: 'submissionCustom', fields: [] },
-  { id: 'meal', fields: [] },
-  { id: 'mealCustom', fields: [] },
-  { id: 'food', fields: [] },
-  { id: 'foodCustom', fields: [] },
-  { id: 'foodFields', fields: [] },
-  { id: 'foodNutrients', fields: [] },
-  { id: 'portionSizes', fields: [] },
-];
+export const defaultExport: ExportSection[] = exportSectionIds.map(id => ({ id, fields: [] }));
 
 export const defaultPrompts: RecallPrompts = {
   preMeals: [],

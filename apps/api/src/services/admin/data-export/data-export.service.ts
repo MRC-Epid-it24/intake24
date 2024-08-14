@@ -98,6 +98,7 @@ function dataExportService({
           { association: 'customFields', separate: true },
         ],
       },
+      { association: 'externalSources', separate: true },
     ];
 
     const meals: StreamFindOptions = {

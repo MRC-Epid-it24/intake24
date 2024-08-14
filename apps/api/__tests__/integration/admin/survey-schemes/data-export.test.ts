@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import type { SurveySchemeCreationAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { exportSectionIds } from '@intake24/common/surveys';
 import { SurveyScheme } from '@intake24/db';
 
 export default () => {
@@ -42,20 +43,7 @@ export default () => {
         .set('Authorization', suite.bearer.user);
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys([
-        'user',
-        'userCustom',
-        'survey',
-        'submission',
-        'submissionCustom',
-        'meal',
-        'mealCustom',
-        'food',
-        'foodCustom',
-        'foodFields',
-        'foodNutrients',
-        'portionSizes',
-      ]);
+      expect(body).toContainAllKeys(exportSectionIds);
 
       for (const field of Object.values(body))
         expect(field).toBeArray();

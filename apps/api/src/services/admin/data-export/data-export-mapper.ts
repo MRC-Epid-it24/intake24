@@ -52,6 +52,15 @@ export function portionSizeValue(field: ExportField): ExportFieldTransform {
       : undefined;
 }
 
+export function externalSourceField(field: ExportField): ExportFieldTransform {
+  return ({ food }) => {
+    const [sourceId, fieldId] = field.id.split(':');
+    const record = food.externalSources?.find(item => sourceId === item.source);
+    // @ts-expect-error - TODO: fix this
+    return record && fieldId in record ? record[fieldId] : undefined;
+  };
+}
+
 function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
   /**
    * Map record based fields (Survey submission / meal / food)
@@ -208,6 +217,9 @@ function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
     }));
   };
 
+  const externalSources = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(fields, externalSourceField);
+
   return {
     user,
     userCustom,
@@ -221,6 +233,7 @@ function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
     foodFields,
     foodNutrients,
     portionSizes,
+    externalSources,
   };
 }
 

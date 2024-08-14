@@ -101,7 +101,7 @@
       "flag": "Flag",
       "tag": "Tag",
       "foodCategory": "Food category",
-      "meals": "Meals",
+      "numberOfMeals": "Number of meals",
       "promptAnswer": "Prompt answer",
       "property": "Property value",
       "recallNumber": "Recall number",
@@ -186,7 +186,9 @@
     "title": "Data export fields",
     "current": "Current export fields",
     "available": "Available export fields",
-    "edit": "Edit fields",
+    "add": "Add section",
+    "edit": "Edit section",
+    "remove": "Remove section",
     "fields": {
       "_": "Edit field label",
       "id": "Field ID",
@@ -205,7 +207,8 @@
       "foodCustom": "Food custom fields",
       "foodFields": "Food composition fields",
       "foodNutrients": "Food nutrient fields",
-      "portionSizes": "Portion size fields"
+      "portionSizes": "Portion size fields",
+      "externalSources": "External source fields"
     }
   },
   "i18n": {

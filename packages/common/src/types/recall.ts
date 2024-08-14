@@ -205,13 +205,15 @@ export type RecipeBuilderLinkedFood = {
 
 export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
 
+export type ExternalSourceRecord = Record<ExternalSource, PromptStates['external-source-prompt'] | undefined>;
+
 export interface AbstractFoodState {
   id: string;
   flags: FoodFlag[];
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
   type: 'free-text' | 'encoded-food' | 'missing-food' | 'recipe-builder';
-  external?: Record<ExternalSource, PromptStates['external-source-prompt'] | undefined>;
+  external?: ExternalSourceRecord;
 }
 
 export interface FreeTextFood extends AbstractFoodState {

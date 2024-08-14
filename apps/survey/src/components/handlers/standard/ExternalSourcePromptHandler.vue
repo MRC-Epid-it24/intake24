@@ -41,9 +41,9 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
 
     const getInitialState = computed<PromptStates['external-source-prompt']>(() => ({
-      data: undefined,
       searchTerm: getFoodDescription(food()),
       type: undefined,
+      data: undefined,
     }));
 
     const { state } = usePromptHandlerNoStore(ctx, getInitialState);
