@@ -17,11 +17,9 @@ export function authentication() {
   return initServer().router(contract.admin.authentication, {
     login: {
       middleware: [loginRateLimiter],
-      handler: async ({ req, res }) => {
-        const { email, password } = req.body;
-
+      handler: async ({ body, req, res }) => {
         const result = await req.scope.cradle.authenticationService.adminLogin(
-          { email, password },
+          body,
           { req },
         );
         if ('devices' in result)

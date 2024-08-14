@@ -41,7 +41,7 @@ export function role() {
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 
-        const { name, displayName, description, permissions } = req.body;
+        const { name, displayName, description, permissions } = body;
         const role = await Role.create({ name, displayName, description });
         await role.$set('permissions', permissions);
 

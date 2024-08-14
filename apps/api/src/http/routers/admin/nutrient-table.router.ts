@@ -44,7 +44,7 @@ export function nutrientTable() {
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id, req);
 
-        const nutrientTable = await req.scope.cradle.nutrientTableService.createTable(req.body);
+        const nutrientTable = await req.scope.cradle.nutrientTableService.createTable(body);
 
         return { status: 201, body: nutrientTable };
       },

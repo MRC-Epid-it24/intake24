@@ -139,7 +139,7 @@ export function surveyScheme() {
           });
         }
 
-        const updateInput = pick(req.body, keysToUpdate);
+        const updateInput = pick(body, keysToUpdate);
         if (!Object.keys(updateInput).length)
           throw new ValidationError('Missing body');
 
