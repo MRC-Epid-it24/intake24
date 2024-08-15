@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { singlePrompt } from '@intake24/common/prompts';
 import { recordVisibilities } from '@intake24/common/security';
-import { exportField, exportSection, exportSectionIds, meal, recallPrompts, schemeTypes } from '@intake24/common/surveys';
+import { exportField, exportSection, exportSectionIds, meal, recallPrompts, schemeSettings } from '@intake24/common/surveys';
 
 import { paginationMeta } from '../generic';
 import { userSecurableAttributes } from './securables';
@@ -11,7 +11,7 @@ import { owner } from './users';
 export const surveySchemeAttributes = z.object({
   id: z.string(),
   name: z.string().min(1).max(256),
-  type: z.enum(schemeTypes),
+  settings: schemeSettings,
   prompts: recallPrompts,
   meals: meal.array(),
   dataExport: exportSection.array(),

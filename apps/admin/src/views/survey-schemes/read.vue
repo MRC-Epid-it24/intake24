@@ -14,8 +14,12 @@
           <td>{{ entry.name }}</td>
         </tr>
         <tr>
-          <th>{{ $t('survey-schemes.types._') }}</th>
-          <td>{{ entry.type }}</td>
+          <th>{{ $t('survey-schemes.settings.types._') }}</th>
+          <td>{{ entry.settings.type }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('survey-schemes.settings.flows._') }}</th>
+          <td>{{ entry.settings.flow }}</td>
         </tr>
         <tr>
           <th>{{ $t('securables.visibility._') }}</th>

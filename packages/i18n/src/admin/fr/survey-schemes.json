@@ -13,9 +13,18 @@
     "title": "Copier la configuration de l'enquête",
     "name": "Nom de la nouvelle configuration de l'enquête"
   },
-  "types": {
-    "_": "Type",
-    "default": "Défaut"
+  "settings": {
+    "_": "Settings",
+    "types": {
+      "_": "Type",
+      "default": "Défaut"
+    },
+    "passes": {
+      "_": "Passes",
+      "title": "Passes",
+      "1-pass": "1-pass",
+      "2-pass": "2-pass"
+    }
   },
   "meals": {
     "_": "Repas",

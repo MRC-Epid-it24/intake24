@@ -2,8 +2,8 @@ import type { Job } from 'bullmq';
 import { literal, where } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
 import { Condition, customPrompts, defaultAction, getConditionDefaults, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
+import { defaultSchemeSettings, type PromptSection, type RecallPrompts } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
 import { Survey, SurveyScheme } from '@intake24/db';
 
@@ -121,7 +121,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     };
 
     const schemes = await this.models.system.SurveyScheme.findAll({
-      attributes: ['id', 'name', 'prompts'],
+      attributes: ['id', 'settings', 'prompts'],
       order: [['id', 'ASC']],
     });
 
@@ -138,8 +138,9 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
         postMeals: scheme.prompts.postMeals.map(mergeCallback),
         submission: scheme.prompts.submission.map(mergeCallback),
       };
+      const settings = merge(defaultSchemeSettings, scheme.settings);
 
-      await scheme.update({ prompts });
+      await scheme.update({ prompts, settings });
     }
 
     const surveys = await this.models.system.Survey.findAll({

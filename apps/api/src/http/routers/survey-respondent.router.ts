@@ -41,7 +41,7 @@ export function surveyRespondent() {
 
       const survey = await Survey.findBySlug(slug, {
         include: [
-          { association: 'surveyScheme', attributes: ['id', 'type', 'meals', 'prompts'] },
+          { association: 'surveyScheme', attributes: ['id', 'settings', 'meals', 'prompts'] },
           {
             association: 'feedbackScheme',
             attributes: [
@@ -86,6 +86,7 @@ export function surveyRespondent() {
         surveyScheme: {
           meals,
           prompts: surveySchemePrompts,
+          settings,
         },
       } = survey;
 
@@ -142,7 +143,7 @@ export function surveyRespondent() {
           name,
           state,
           locale,
-          surveyScheme: { id: surveyScheme.id, type: surveyScheme.type, meals, prompts },
+          surveyScheme: { id: surveyScheme.id, meals, prompts, settings },
           feedbackScheme,
           numberOfSubmissionsForFeedback,
           session,

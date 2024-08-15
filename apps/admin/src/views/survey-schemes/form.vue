@@ -8,8 +8,8 @@
       />
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-container fluid>
-        <v-card-text>
+      <v-card-text>
+        <v-container fluid>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
@@ -19,18 +19,6 @@
                 :label="$t('common.name')"
                 name="name"
                 outlined
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="form.type"
-                :error-messages="form.errors.get('type')"
-                hide-details="auto"
-                :items="schemeTypeItems"
-                :label="$t('survey-schemes.types._')"
-                name="type"
-                outlined
-                @change="form.errors.clear('type')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -60,8 +48,37 @@
               </v-select>
             </v-col>
           </v-row>
-        </v-card-text>
-      </v-container>
+          <div class="text-subtitle-1 font-weight-medium py-4">
+            {{ $t('survey-schemes.settings._') }}
+          </div>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.settings.type"
+                :error-messages="form.errors.get('settings.type')"
+                hide-details="auto"
+                :items="schemeTypeItems"
+                :label="$t('survey-schemes.settings.types._')"
+                name="settings.type"
+                outlined
+                @change="form.errors.clear('settings.type')"
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.settings.flow"
+                :error-messages="form.errors.get('settings.flow')"
+                hide-details="auto"
+                :items="recallPassItems"
+                :label="$t('survey-schemes.settings.flows._')"
+                name="settings.flow"
+                outlined
+                @change="form.errors.clear('settings.flow')"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
       <v-divider />
       <meal-list v-model="form.meals" :scheme-id="id" />
       <v-card-text>
@@ -75,19 +92,19 @@
 import { defineComponent, ref } from 'vue';
 
 import type { RecordVisibility } from '@intake24/common/security';
-import type { ExportSection, Meal, RecallPrompts, SchemeType } from '@intake24/common/surveys';
+import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
-import { defaultMeals, schemeTypes } from '@intake24/common/surveys';
+import { defaultMeals, defaultSchemeSettings, recallFlows, schemeTypes } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 
 export type SurveySchemeForm = {
   id: string | null;
   name: string | null;
-  type: SchemeType;
+  settings: SchemeSettings;
   version: number;
   prompts: RecallPrompts;
   meals: Meal[];
@@ -97,7 +114,7 @@ export type SurveySchemeForm = {
 
 export type PatchSurveySchemeForm = Pick<
   SurveySchemeForm,
-  'name' | 'version' | 'type' | 'meals' | 'visibility'
+  'name' | 'settings' | 'meals' | 'visibility'
 >;
 
 export default defineComponent({
@@ -114,7 +131,14 @@ export default defineComponent({
     const schemeTypeItems = ref(
       schemeTypes.map(value => ({
         value,
-        text: i18n.t(`survey-schemes.types.${value}`),
+        text: i18n.t(`survey-schemes.settings.types.${value}`),
+      })),
+    );
+
+    const recallPassItems = ref(
+      recallFlows.map(value => ({
+        value,
+        text: i18n.t(`survey-schemes.settings.flows.${value}`),
       })),
     );
 
@@ -127,7 +151,12 @@ export default defineComponent({
       PatchSurveySchemeForm,
       SurveySchemeEntry
     >(props, {
-      data: { name: null, version: 2, type: 'default', meals: defaultMeals, visibility: 'public' },
+      data: {
+        name: null,
+        settings: defaultSchemeSettings,
+        meals: defaultMeals,
+        visibility: 'public',
+      },
       editMethod: 'patch',
     });
 
@@ -140,6 +169,7 @@ export default defineComponent({
       refsLoaded,
       clearError,
       form,
+      recallPassItems,
       routeLeave,
       submit,
       visibilityList,

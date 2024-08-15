@@ -15,9 +15,18 @@
     "name": "New survey scheme name"
   },
 
-  "types": {
-    "_": "Type",
-    "default": "Default"
+  "settings": {
+    "_": "Settings",
+    "types": {
+      "_": "Type",
+      "default": "Default"
+    },
+    "flows": {
+      "_": "Flow",
+      "title": "Flows",
+      "1-pass": "1-pass",
+      "2-pass": "2-pass"
+    }
   },
 
   "meals": {

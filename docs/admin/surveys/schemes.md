@@ -12,17 +12,27 @@ Edit tab allows to modify selected survey scheme.
 
 - `Name` - `survey-scheme-wide` unique name
 
-- `Type` - Placeholder at the moment for future to allow to define various types of survey schemes
-
 - `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
 
-- `Default meals` - List of predefined meals that will appear at the start of the recall.
+### Settings
 
-  - It allows to:
-    - Create new meals with default time and localized name
-    - Remove meals
-    - Load whole meal list from different scheme
-    - Reset the list to default one
+- `Type` - Placeholder at the moment for future to allow to define various types of survey schemes
+
+- `Flow` - Recall flow, valid options are `1-pass` or `2-pass` (default)
+  - `1-pass` - Flow goes through each meal including foods portion size estimation in order to complete the meal
+  - `2-pass` - Flow goes through each meal two times
+    - first pass - Flow goes through each meal to collect meal info and foods (without portion size estimation)
+    - second pass - Flow goes through each meal to collect portion size estimation
+
+### Default meals
+
+List of predefined meals that will appear at the start of the recall.
+
+- It allows to:
+  - Create new meals with default time and localized name
+  - Remove meals
+  - Load whole meal list from different scheme
+  - Reset the list to default one
 
 ## Prompts
 
@@ -74,6 +84,7 @@ There is a fixed list of possible data export sections
 | Food composition fields  | `key:value` pairs from `nutrient_table_records_fields` table                           |
 | Food nutrient fields     | `nutrient_types` table row based fields                                                |
 | Portion size fields      | `key:value` pairs from `survey_submission_portion_size_fields` table                   |
+| External source fields   | `survey_submission_external_sources` table row based fields                            |
 
 Sections can be re-arranged by drag & drop and they will appear accordingly in export file.
 
@@ -105,6 +116,7 @@ User custom fields are key-value pairs, set up during respondent account creatio
 #### Submission record fields
 
 - `submissionId` - unique submission identifier, UUIDv4
+- `recallDate` - client-recorded recall date, ISO 8601 format
 - `startTime` - client-recorded recall start time, ISO 8601 format
 - `endTime` - client-recorded recall end time, ISO 8601 format
 - `submissionTime` - server-recorded submission time, ISO 8601 format
@@ -124,11 +136,11 @@ Submission-level custom data collected during the recall.
 
 #### Meal record fields
 
-- `mealIndex` - zero-based meal index in the recall generated during data-export based on meal time
+- `mealIndex` - zero-based meal index in the recall generated during data-export based on sorted meal time
 - `mealId` - unique meal identifier, UUIDv4
 - `name` - meal name
 - `time` - meal time (HH:mm)
-- `duration` - meal duration (mins)
+- `duration` - meal duration (mins), calculated from `startTime` and `endTime`
 
 #### Meal custom fields
 
@@ -195,3 +207,13 @@ List of portion size fields based on collection portion size methods
 - `portionWeight` - Calculated portion weight (`servingWeight` - `leftoversWeight`)
 - `servingWeight` - Food weight in grams
 - `leftoversWeight` - Leftovers weight in grams
+
+#### External source fields
+
+List of external source fields. Data can be collected from multiple sources, so Field IDs are in format `{source}:{field}`.
+
+- `{source}:id` - unique external source identifier, UUIDv4
+- `{source}:source` - source identifier (e.g. `'open-food-facts'`)
+- `{source}:searchTerm` - unique external source identifier, UUIDv4
+- `{source}:type` - selection type (`'selected' | 'missing'`)
+- `{source}:data` - json serialized external source data

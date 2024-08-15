@@ -32,6 +32,7 @@ import {
   defaultExport,
   defaultMeals,
   defaultPrompts,
+  defaultSchemeSettings,
   searchSortingAlgorithms,
   spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
@@ -223,12 +224,11 @@ function personalAccessToken() {
 
 function surveyScheme(): SurveySchemeCreationAttributes {
   const name = faker.word.words(3);
-  const type = 'default';
   const visibility = recordVisibilities[faker.number.int({ min: 0, max: 1 })];
 
   return {
     name,
-    type,
+    settings: defaultSchemeSettings,
     visibility,
     prompts: defaultPrompts,
     meals: defaultMeals,

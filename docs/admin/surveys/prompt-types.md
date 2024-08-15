@@ -54,6 +54,23 @@ Edit meal prompt allows initial entry of food and drink before portion-size esti
 
 - `separateDrinks` - show drinks separately
 
+### External source prompt
+
+Prompt to collect external source of food matching.
+
+#### Source options
+
+- `type` - external source type / provider
+  - `open-food-facts` - Open Food Facts
+    - `country` - country code
+    - `query` - key:value pairs of query parameters
+
+#### Barcode options
+
+- `none` - no barcode scanner
+- `quagga` - [Quagga2](https://github.com/ericblade/quagga2) barcode scanner (open-source)
+- `strich` - [Strich](https://strich.io/) barcode scanner (subscription-based)
+
 ### Final prompt
 
 Terminal prompt that is shown at the end of the recall. It offers home button It can offer feedback is applicable (feedback enabled and submission threshold reached).
@@ -103,6 +120,16 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
   - `value` - maximum value
 - `step` - step size in minutes
 
+### Meal gap prompt
+
+Prompt to remind user about meal gap between meals.
+
+#### Options
+
+- `gap` - time gap between meals (minutes)
+- `startTime` - day start time
+- `endTime` - day end time
+
 ### Meal time prompt
 
 Prompt to collect meal time information using standard time picker.
@@ -124,14 +151,6 @@ Prompt to collect recall date information.
 - `current` - highlighted current date offset in days
 - `min` - minimum date offset in days
 - `max` - maximum date offset in days
-
-### Recipe builder prompt
-
-#### Food browser settings
-
-- **Show categories first**
-  - `food browse list` - Show categories first in the browse list
-  - `food search list` - Show categories first in the search list
 
 ### Redirect prompt
 
@@ -326,6 +345,12 @@ Portion size option selection prompt
 ### Recipe builder prompt
 
 Recipe builder prompt for foods with multiple ingredients, such as sandwiches, salads etc. Recipe foods can be defined in [locales recipe-foods](/admin/localization/locales#recipe-foods).
+
+#### Food browser settings
+
+- **Show categories first**
+  - `food browse list` - Show categories first in the browse list
+  - `food search list` - Show categories first in the search list
 
 ### Standard portion prompt
 

@@ -190,6 +190,18 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         barcode: { type: 'none' },
       };
     }
+    case 'date-picker-prompt': {
+      const { futureDates, ...rest } = prompt;
+      return {
+        ...rest,
+        version: 2,
+        useGraph: false,
+        conditions,
+        current: null,
+        min: null,
+        max: null,
+      };
+    }
     default:
       return {
         ...prompt,

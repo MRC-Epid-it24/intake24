@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import Vue from 'vue';
 
 import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
-import type { SessionSettings } from '@intake24/common/surveys';
+import type { RecallFlow, SessionSettings } from '@intake24/common/surveys';
 import type {
   CustomPromptAnswer,
   EncodedFood,
@@ -74,6 +74,24 @@ export interface MealFoodIndex {
 export interface FoodIndex {
   foodIndex: number;
   linkedFoodIndex: number | undefined;
+}
+
+export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass'): MealState {
+  const { name, defaultTime = { hours: 8, minutes: 0 }, time, duration = null, flags = [] } = data;
+
+  if (flow === '1-pass')
+    flags.push('free-entry-complete');
+
+  return {
+    id: getEntityId(),
+    name,
+    defaultTime,
+    time,
+    duration,
+    flags,
+    foods: [],
+    customPromptAnswers: {},
+  };
 }
 
 export function surveyInitialState(): CurrentSurveyState {
@@ -190,9 +208,6 @@ export const useSurvey = defineStore('survey', {
       );
     },
     selection: state => state.data.selection,
-    freeEntryComplete: state =>
-      !!state.data.meals.length
-      && state.data.meals.every(meal => meal.flags.includes('free-entry-complete')),
     selectedMealIndex(): number | undefined {
       const { element } = this.data.selection;
 
@@ -282,16 +297,8 @@ export const useSurvey = defineStore('survey', {
         ...surveyInitialState(),
         schemeId: this.parameters.surveyScheme.id,
         startTime: new Date(),
-        meals: this.parameters.surveyScheme.meals.map(meal => ({
-          id: getEntityId(),
-          name: meal.name,
-          defaultTime: toMealTime(meal.time),
-          time: undefined,
-          duration: null,
-          flags: [],
-          customPromptAnswers: {},
-          foods: [],
-        })),
+        meals: this.parameters.surveyScheme.meals.map(({ name, time }) =>
+          createMeal({ name, defaultTime: toMealTime(time) }, this.parameters?.surveyScheme.settings.flow)),
       };
 
       this.setState(initialState);
@@ -544,27 +551,18 @@ export const useSurvey = defineStore('survey', {
       this.data.meals.splice(data.mealIndex, 0, data.meal);
     },
 
-    addMeal(meal: MealCreationState, locale: string) {
+    addMeal(data: MealCreationState, locale: string) {
       const id = getEntityId();
-      const defaultTime = toMealTime(
-        this.defaultSchemeMeals?.find(item => item.name[locale] === meal.name[locale])?.time
+      const defaultTime = data.time ?? toMealTime(
+        this.defaultSchemeMeals?.find(item => item.name[locale] === data.name[locale])?.time
         ?? '8:00',
       );
 
-      this.data.meals.push({
-        id,
-        defaultTime,
-        time: undefined,
-        duration: null,
-        flags: [],
-        foods: [],
-        customPromptAnswers: {},
-        ...meal,
-      });
+      const meal = createMeal({ ...data, defaultTime }, this.parameters?.surveyScheme.settings.flow);
+      this.data.meals.push(meal);
 
       this.sortMeals();
-
-      this.setSelection({ element: { type: 'meal', mealId: id }, mode: 'manual' });
+      this.setSelection({ element: { type: 'meal', mealId: meal.id }, mode: 'manual' });
 
       return id;
     },

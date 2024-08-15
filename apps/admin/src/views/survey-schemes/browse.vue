@@ -21,7 +21,7 @@ export default defineComponent({
           value: 'name',
         },
         {
-          text: this.$t('survey-schemes.types._'),
+          text: this.$t('survey-schemes.settings.types._'),
           sortable: true,
           value: 'type',
         },

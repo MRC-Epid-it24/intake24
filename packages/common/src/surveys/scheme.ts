@@ -14,6 +14,20 @@ import {
 export const schemeTypes = ['default'] as const;
 export type SchemeType = (typeof schemeTypes)[number];
 
+export const recallFlows = ['1-pass', '2-pass'] as const;
+export type RecallFlow = (typeof recallFlows)[number];
+
+export const schemeSettings = z.object({
+  type: z.enum(schemeTypes),
+  flow: z.enum(recallFlows),
+});
+export type SchemeSettings = z.infer<typeof schemeSettings>;
+
+export const defaultSchemeSettings: SchemeSettings = {
+  type: 'default',
+  flow: '2-pass',
+};
+
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
 export type SurveyPromptSection = (typeof surveySections)[number];
 

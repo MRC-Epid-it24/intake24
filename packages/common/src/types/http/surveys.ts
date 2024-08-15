@@ -4,7 +4,7 @@ import { isIn } from 'validator';
 import {
   groupedRecallPrompts,
   meal,
-  schemeTypes,
+  schemeSettings,
   searchSortingAlgorithms,
   sessionSettings,
   surveyRatings,
@@ -54,7 +54,7 @@ export const surveyEntryResponse = z.object({
   locale: z.object({ id: z.string(), code: z.string() }),
   surveyScheme: z.object({
     id: z.string(),
-    type: z.enum(schemeTypes),
+    settings: schemeSettings,
     meals: meal.array(),
     prompts: groupedRecallPrompts,
   }),

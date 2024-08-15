@@ -19,8 +19,8 @@ import {
 } from 'sequelize-typescript';
 
 import type { RecordVisibility } from '@intake24/common/security';
-import type { ExportSection, Meal, RecallPrompts, SchemeType } from '@intake24/common/surveys';
-import { defaultExport, defaultMeals, defaultPrompts } from '@intake24/common/surveys';
+import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
+import { defaultExport, defaultMeals, defaultPrompts, defaultSchemeSettings } from '@intake24/common/surveys';
 
 import type { HasVisibility } from '..';
 import { BaseModel } from '..';
@@ -55,13 +55,21 @@ export default class SurveyScheme
 
   @Column({
     allowNull: false,
-    defaultValue: 'default',
-    type: DataType.STRING(64),
+    defaultValue: () => JSON.stringify(defaultSchemeSettings),
+    type: DataType.TEXT({ length: 'long' }),
   })
-  declare type: CreationOptional<SchemeType>;
+  get settings(): CreationOptional<SchemeSettings> {
+    const val = this.getDataValue('settings') as unknown;
+    return val ? JSON.parse(val as string) : defaultSchemeSettings;
+  }
+
+  set settings(value: SchemeSettings) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('settings', JSON.stringify(value ?? defaultSchemeSettings));
+  }
 
   @Column({
-    allowNull: true,
+    allowNull: false,
     defaultValue: () => JSON.stringify(defaultPrompts),
     type: DataType.TEXT({ length: 'long' }),
   })
@@ -76,7 +84,7 @@ export default class SurveyScheme
   }
 
   @Column({
-    allowNull: true,
+    allowNull: false,
     defaultValue: () => JSON.stringify(defaultMeals),
     type: DataType.TEXT({ length: 'long' }),
   })
@@ -155,7 +163,7 @@ export default class SurveyScheme
 export type SurveySchemeAttributes = Attributes<SurveyScheme>;
 export type SurveySchemeCreationAttributes = CreationAttributes<SurveyScheme>;
 
-export const updateSurveySchemeFields = ['name', 'type', 'meals', 'visibility'] as const;
+export const updateSurveySchemeFields = ['name', 'settings', 'meals', 'visibility'] as const;
 
 export type UpdateSurveySchemeField = (typeof updateSurveySchemeFields)[number];
 

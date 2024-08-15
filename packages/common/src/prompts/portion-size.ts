@@ -27,6 +27,14 @@ export const cerealPrompt: Prompts['cereal-prompt'] = copy({
   leftovers: false,
 });
 
+export const directWeightPrompt: Prompts['direct-weight-prompt'] = copy({
+  ...basePortionPrompt,
+  component: 'direct-weight-prompt',
+  type: 'portion-size',
+  id: 'direct-weight-prompt',
+  name: 'Direct weight',
+});
+
 export const drinkScalePrompt: Prompts['drink-scale-prompt'] = copy({
   ...basePortionPrompt,
   component: 'drink-scale-prompt',
@@ -134,14 +142,6 @@ export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
   type: 'portion-size',
   id: 'standard-portion-prompt',
   name: 'Standard portion',
-});
-
-export const directWeightPrompt: Prompts['direct-weight-prompt'] = copy({
-  ...basePortionPrompt,
-  component: 'direct-weight-prompt',
-  type: 'portion-size',
-  id: 'direct-weight-prompt',
-  name: 'Direct weight',
 });
 
 export const portionSizePrompts = [

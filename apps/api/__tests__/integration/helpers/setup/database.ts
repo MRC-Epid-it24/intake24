@@ -13,6 +13,7 @@ import {
   defaultExport,
   defaultMeals,
   defaultPrompts,
+  defaultSchemeSettings,
 } from '@intake24/common/surveys';
 import { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
 import { permissions } from '@intake24/common-backend';
@@ -165,9 +166,8 @@ export async function initDatabase(): Promise<MockData> {
     }),
     SurveyScheme.create({
       name: 'Default',
-      type: 'default',
+      settings: defaultSchemeSettings,
       visibility: 'public',
-      version: 2,
       prompts: defaultPrompts,
       meals: [...defaultMeals],
       dataExport: defaultExport,

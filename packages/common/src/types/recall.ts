@@ -275,8 +275,8 @@ export const mealState = z.object({
 export type MealState = z.infer<typeof mealState>;
 
 export type MealCreationState = Optional<
-  Pick<MealState, 'name' | 'time' | 'duration' | 'flags'>,
-  'flags' | 'time' | 'duration' | 'flags'
+  Pick<MealState, 'name' | 'defaultTime' | 'time' | 'duration' | 'flags'>,
+  'defaultTime' | 'time' | 'duration' | 'flags'
 >;
 
 export const selectedMeal = z.object({
