@@ -41615,7 +41615,8 @@
                                   "foodCustom",
                                   "foodNutrients",
                                   "foodFields",
-                                  "portionSizes"
+                                  "portionSizes",
+                                  "externalSources"
                                 ]
                               },
                               "fields": {
@@ -43508,7 +43509,8 @@
                                   "foodCustom",
                                   "foodNutrients",
                                   "foodFields",
-                                  "portionSizes"
+                                  "portionSizes",
+                                  "externalSources"
                                 ]
                               },
                               "fields": {
@@ -45779,7 +45781,8 @@
                                   "foodCustom",
                                   "foodNutrients",
                                   "foodFields",
-                                  "portionSizes"
+                                  "portionSizes",
+                                  "externalSources"
                                 ]
                               },
                               "fields": {
@@ -48080,7 +48083,8 @@
                                   "foodCustom",
                                   "foodNutrients",
                                   "foodFields",
-                                  "portionSizes"
+                                  "portionSizes",
+                                  "externalSources"
                                 ]
                               },
                               "fields": {
@@ -50001,7 +50005,8 @@
                                   "foodCustom",
                                   "foodNutrients",
                                   "foodFields",
-                                  "portionSizes"
+                                  "portionSizes",
+                                  "externalSources"
                                 ]
                               },
                               "fields": {
@@ -53765,7 +53770,8 @@
                             "foodCustom",
                             "foodNutrients",
                             "foodFields",
-                            "portionSizes"
+                            "portionSizes",
+                            "externalSources"
                           ]
                         },
                         "fields": {
@@ -53920,7 +53926,8 @@
                               "foodCustom",
                               "foodNutrients",
                               "foodFields",
-                              "portionSizes"
+                              "portionSizes",
+                              "externalSources"
                             ]
                           },
                           "fields": {
@@ -54213,7 +54220,8 @@
                               "foodCustom",
                               "foodNutrients",
                               "foodFields",
-                              "portionSizes"
+                              "portionSizes",
+                              "externalSources"
                             ]
                           },
                           "fields": {
@@ -54468,7 +54476,8 @@
                             "foodCustom",
                             "foodNutrients",
                             "foodFields",
-                            "portionSizes"
+                            "portionSizes",
+                            "externalSources"
                           ]
                         },
                         "fields": {
@@ -54620,7 +54629,8 @@
                               "foodCustom",
                               "foodNutrients",
                               "foodFields",
-                              "portionSizes"
+                              "portionSizes",
+                              "externalSources"
                             ]
                           },
                           "fields": {
@@ -54875,7 +54885,8 @@
                             "foodCustom",
                             "foodNutrients",
                             "foodFields",
-                            "portionSizes"
+                            "portionSizes",
+                            "externalSources"
                           ]
                         },
                         "fields": {
@@ -55035,7 +55046,8 @@
                               "foodCustom",
                               "foodNutrients",
                               "foodFields",
-                              "portionSizes"
+                              "portionSizes",
+                              "externalSources"
                             ]
                           },
                           "fields": {
@@ -55323,7 +55335,8 @@
                               "foodCustom",
                               "foodNutrients",
                               "foodFields",
-                              "portionSizes"
+                              "portionSizes",
+                              "externalSources"
                             ]
                           },
                           "fields": {
@@ -55604,7 +55617,8 @@
                               "foodCustom",
                               "foodNutrients",
                               "foodFields",
-                              "portionSizes"
+                              "portionSizes",
+                              "externalSources"
                             ]
                           },
                           "fields": {
