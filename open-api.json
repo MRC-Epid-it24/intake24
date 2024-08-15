@@ -3971,10 +3971,26 @@
                         "id": {
                           "type": "string"
                         },
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "default"
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "flow"
                           ]
                         },
                         "meals": {
@@ -4051,7 +4067,7 @@
                       },
                       "required": [
                         "id",
-                        "type",
+                        "settings",
                         "meals",
                         "prompts"
                       ]
@@ -41519,10 +41535,26 @@
                           "minLength": 1,
                           "maxLength": 256
                         },
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "default"
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "flow"
                           ]
                         },
                         "prompts": {
@@ -41667,7 +41699,7 @@
                       "required": [
                         "id",
                         "name",
-                        "type",
+                        "settings",
                         "prompts",
                         "meals",
                         "dataExport",
@@ -43413,10 +43445,26 @@
                           "minLength": 1,
                           "maxLength": 256
                         },
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "default"
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "flow"
                           ]
                         },
                         "prompts": {
@@ -43561,7 +43609,7 @@
                       "required": [
                         "id",
                         "name",
-                        "type",
+                        "settings",
                         "prompts",
                         "meals",
                         "dataExport",
@@ -45685,10 +45733,26 @@
                           "minLength": 1,
                           "maxLength": 256
                         },
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "default"
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "flow"
                           ]
                         },
                         "prompts": {
@@ -45833,7 +45897,7 @@
                       "required": [
                         "id",
                         "name",
-                        "type",
+                        "settings",
                         "prompts",
                         "meals",
                         "dataExport",
@@ -47987,10 +48051,26 @@
                           "minLength": 1,
                           "maxLength": 256
                         },
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "default"
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "flow"
                           ]
                         },
                         "prompts": {
@@ -48135,7 +48215,7 @@
                       "required": [
                         "id",
                         "name",
-                        "type",
+                        "settings",
                         "prompts",
                         "meals",
                         "dataExport",
@@ -49909,10 +49989,26 @@
                           "minLength": 1,
                           "maxLength": 256
                         },
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "default"
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "flow"
                           ]
                         },
                         "prompts": {
@@ -50057,7 +50153,7 @@
                       "required": [
                         "id",
                         "name",
-                        "type",
+                        "settings",
                         "prompts",
                         "meals",
                         "dataExport",
@@ -53674,10 +53770,26 @@
                     "minLength": 1,
                     "maxLength": 256
                   },
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "default"
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "default"
+                        ]
+                      },
+                      "flow": {
+                        "type": "string",
+                        "enum": [
+                          "1-pass",
+                          "2-pass"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "flow"
                     ]
                   },
                   "prompts": {
@@ -53830,10 +53942,26 @@
                       "minLength": 1,
                       "maxLength": 256
                     },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "default"
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default"
+                          ]
+                        },
+                        "flow": {
+                          "type": "string",
+                          "enum": [
+                            "1-pass",
+                            "2-pass"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "flow"
                       ]
                     },
                     "prompts": {
@@ -54043,7 +54171,7 @@
                   "required": [
                     "id",
                     "name",
-                    "type",
+                    "settings",
                     "prompts",
                     "meals",
                     "dataExport",
@@ -54124,10 +54252,26 @@
                       "minLength": 1,
                       "maxLength": 256
                     },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "default"
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default"
+                          ]
+                        },
+                        "flow": {
+                          "type": "string",
+                          "enum": [
+                            "1-pass",
+                            "2-pass"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "flow"
                       ]
                     },
                     "prompts": {
@@ -54337,7 +54481,7 @@
                   "required": [
                     "id",
                     "name",
-                    "type",
+                    "settings",
                     "prompts",
                     "meals",
                     "dataExport",
@@ -54380,10 +54524,26 @@
                     "minLength": 1,
                     "maxLength": 256
                   },
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "default"
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "default"
+                        ]
+                      },
+                      "flow": {
+                        "type": "string",
+                        "enum": [
+                          "1-pass",
+                          "2-pass"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "flow"
                     ]
                   },
                   "prompts": {
@@ -54533,10 +54693,26 @@
                       "minLength": 1,
                       "maxLength": 256
                     },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "default"
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default"
+                          ]
+                        },
+                        "flow": {
+                          "type": "string",
+                          "enum": [
+                            "1-pass",
+                            "2-pass"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "flow"
                       ]
                     },
                     "prompts": {
@@ -54746,7 +54922,7 @@
                   "required": [
                     "id",
                     "name",
-                    "type",
+                    "settings",
                     "prompts",
                     "meals",
                     "dataExport",
@@ -54789,10 +54965,26 @@
                     "minLength": 1,
                     "maxLength": 256
                   },
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "default"
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "default"
+                        ]
+                      },
+                      "flow": {
+                        "type": "string",
+                        "enum": [
+                          "1-pass",
+                          "2-pass"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "flow"
                     ]
                   },
                   "prompts": {
@@ -54924,7 +55116,7 @@
                 },
                 "required": [
                   "name",
-                  "type",
+                  "settings",
                   "prompts",
                   "meals",
                   "dataExport",
@@ -54950,10 +55142,26 @@
                       "minLength": 1,
                       "maxLength": 256
                     },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "default"
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default"
+                          ]
+                        },
+                        "flow": {
+                          "type": "string",
+                          "enum": [
+                            "1-pass",
+                            "2-pass"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "flow"
                       ]
                     },
                     "prompts": {
@@ -55163,7 +55371,7 @@
                   "required": [
                     "id",
                     "name",
-                    "type",
+                    "settings",
                     "prompts",
                     "meals",
                     "dataExport",
@@ -55239,10 +55447,26 @@
                       "minLength": 1,
                       "maxLength": 256
                     },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "default"
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default"
+                          ]
+                        },
+                        "flow": {
+                          "type": "string",
+                          "enum": [
+                            "1-pass",
+                            "2-pass"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "flow"
                       ]
                     },
                     "prompts": {
@@ -55452,7 +55676,7 @@
                   "required": [
                     "id",
                     "name",
-                    "type",
+                    "settings",
                     "prompts",
                     "meals",
                     "dataExport",
@@ -55521,10 +55745,26 @@
                       "minLength": 1,
                       "maxLength": 256
                     },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "default"
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default"
+                          ]
+                        },
+                        "flow": {
+                          "type": "string",
+                          "enum": [
+                            "1-pass",
+                            "2-pass"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "flow"
                       ]
                     },
                     "prompts": {
@@ -55734,7 +55974,7 @@
                   "required": [
                     "id",
                     "name",
-                    "type",
+                    "settings",
                     "prompts",
                     "meals",
                     "dataExport",
