@@ -2,7 +2,7 @@
   <div>
     <v-card :tile="isMobile">
       <v-card-text>
-        <div class="d-flex gc-1">
+        <div class="d-flex gc-2">
           <component
             :is="prompt.barcode.type"
             :clearable="prompt.barcode.type === 'none'"

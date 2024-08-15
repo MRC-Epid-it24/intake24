@@ -126,6 +126,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['postFoods'],
   },
+  'recall-date-prompt': {
+    tabs: [...tabs],
+    sections: ['preMeals'],
+  },
   'redirect-prompt': {
     tabs: [...tabs],
     sections: ['submission'],

@@ -132,6 +132,17 @@ export const readyMealPrompt: Prompts['ready-meal-prompt'] = copy({
   name: 'Ready meal prompt',
 });
 
+export const recallDatePrompt: Prompts['recall-date-prompt'] = copy({
+  ...basePrompt,
+  component: 'recall-date-prompt',
+  type: 'standard',
+  id: 'recall-date-prompt',
+  name: 'Recall date prompt',
+  current: null,
+  min: null,
+  max: null,
+});
+
 export const redirectPrompt: Prompts['redirect-prompt'] = copy({
   ...basePrompt,
   component: 'redirect-prompt',
@@ -193,6 +204,7 @@ export const standardPrompts = [
   mealGapPrompt,
   mealTimePrompt,
   readyMealPrompt,
+  recallDatePrompt,
   redirectPrompt,
   reviewConfirmPrompt,
   sameAsBeforePrompt,

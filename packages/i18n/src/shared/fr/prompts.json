@@ -194,6 +194,11 @@
     "yes": "A peu près cette heure",
     "no": "Je n'en ai pas pris "
   },
+  "recallDate": {
+    "name": "Recall date",
+    "text": "",
+    "description": "Select the date for which you are filling the recall in."
+  },
   "readyMeal": {
     "name": "Plat préparé",
     "text": "",

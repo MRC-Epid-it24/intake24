@@ -74,6 +74,12 @@ export default class SurveySubmission extends BaseModel<
 
   @Column({
     allowNull: true,
+    type: DataType.DATEONLY,
+  })
+  declare recallDate: CreationOptional<string | null>;
+
+  @Column({
+    allowNull: true,
     type: DataType.TEXT,
   })
   declare log: CreationOptional<string | null>;

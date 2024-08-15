@@ -79,6 +79,7 @@ export interface FoodIndex {
 export function surveyInitialState(): CurrentSurveyState {
   return {
     schemeId: null,
+    recallDate: null,
     startTime: null,
     endTime: null,
     submissionTime: null,
@@ -426,6 +427,10 @@ export const useSurvey = defineStore('survey', {
 
     setAutoSelection() {
       this.setSelection({ mode: 'auto', element: null });
+    },
+
+    setRecallDate(date: string | null) {
+      this.data.recallDate = date;
     },
 
     setCustomPromptAnswer(data: { promptId: string; answer: CustomPromptAnswer }) {

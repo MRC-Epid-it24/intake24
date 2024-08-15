@@ -9,6 +9,7 @@ import MealDurationPromptHandler from './MealDurationPromptHandler.vue';
 import MealGapPromptHandler from './MealGapPromptHandler.vue';
 import MealTimePromptHandler from './MealTimePromptHandler.vue';
 import ReadyMealPromptHandler from './ReadyMealPromptHandler.vue';
+import RecallDatePromptHandler from './RecallDatePromptHandler.vue';
 import RedirectPromptHandler from './RedirectPromptHandler.vue';
 import ReviewConfirmPromptHandler from './ReviewConfirmPromptHandler.vue';
 import SameAsBeforePromptHandler from './SameAsBeforePromptHandler.vue';
@@ -27,6 +28,7 @@ export default {
   MealGapPromptHandler,
   MealTimePromptHandler,
   ReadyMealPromptHandler,
+  RecallDatePromptHandler,
   RedirectPromptHandler,
   ReviewConfirmPromptHandler,
   SameAsBeforePromptHandler,

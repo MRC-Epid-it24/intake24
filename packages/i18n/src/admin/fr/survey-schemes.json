@@ -487,6 +487,13 @@
       "title": "Repas tout-prêt",
       "subtitle": "Demander pour les repas tout-prêts"
     },
+    "recall-date-prompt": {
+      "title": "Recall date",
+      "subtitle": "Ask to nominate recall date",
+      "current": "Current date offset",
+      "min": "Number of days before today to allow",
+      "max": "Number of days after today to allow"
+    },
     "redirect-prompt": {
       "title": "Rediriger",
       "subtitle": "Dernière page pour l'utilisateur redirigeant sur le site externe",
@@ -556,7 +563,9 @@
     "date-picker-prompt": {
       "title": "Date",
       "subtitle": "Demander de choisir une date",
-      "futureDates": "Autoriser des dates dans le futur"
+      "current": "Current date offset",
+      "min": "Number of days before today to allow",
+      "max": "Number of days after today to allow"
     },
     "time-picker-prompt": {
       "title": "Heure",

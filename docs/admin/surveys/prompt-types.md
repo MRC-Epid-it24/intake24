@@ -117,6 +117,14 @@ Prompt to collect meal time information using standard time picker.
 
 Prompt to collect ready meal information. Multi-select list of options, for each food within the meal that has `ready-meal` attribute set to `true`.
 
+### Recall date prompt
+
+Prompt to collect recall date information.
+
+- `current` - highlighted current date offset in days
+- `min` - minimum date offset in days
+- `max` - maximum date offset in days
+
 ### Recipe builder prompt
 
 #### Food browser settings
@@ -345,7 +353,9 @@ Multi-select list of options.
 
 Prompt to collect date information.
 
-- `futureDates` - allow future dates to be selected
+- `current` - highlighted current date offset in days
+- `min` - minimum date offset in days
+- `max` - maximum date offset in days
 
 ### Info prompt
 

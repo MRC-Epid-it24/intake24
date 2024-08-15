@@ -59,6 +59,7 @@ export default () => {
         surveyId,
         sessionData: {
           schemeId: 'SurveyState',
+          recallDate: new Date().toISOString().substring(0, 10),
           startTime: new Date(),
           endTime: new Date(),
           submissionTime: null,

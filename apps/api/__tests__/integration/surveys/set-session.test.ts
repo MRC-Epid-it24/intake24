@@ -19,6 +19,7 @@ export default () => {
 
     const sessionData: SurveyState = {
       schemeId: 'schemeId',
+      recallDate: null,
       startTime: new Date(),
       endTime: new Date(),
       submissionTime: null,

@@ -7,7 +7,6 @@
           :label="$t('survey-schemes.prompts.date-picker-prompt.current')"
           name="current"
           outlined
-          prepend-inner-icon="fas fa-hourglass"
           :value="current"
           @input="updateNumber('current', $event)"
         />
@@ -18,7 +17,6 @@
           :label="$t('survey-schemes.prompts.date-picker-prompt.min')"
           name="min"
           outlined
-          prepend-inner-icon="fas fa-hourglass-start"
           :value="min"
           @input="updateNumber('min', $event)"
         />
@@ -29,7 +27,6 @@
           :label="$t('survey-schemes.prompts.date-picker-prompt.max')"
           name="max"
           outlined
-          prepend-inner-icon="fas fa-hourglass-end"
           :value="max"
           @input="updateNumber('max', $event)"
         />
@@ -39,15 +36,14 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
 import { basePrompt } from '../partials';
 
 export default defineComponent({
-  name: 'DatePickerPrompt',
+  name: 'RecallDatePrompt',
 
   mixins: [basePrompt],
 
@@ -57,11 +53,11 @@ export default defineComponent({
       default: null,
     },
     min: {
-      type: Number as PropType<Prompts['date-picker-prompt']['min']>,
+      type: Number as PropType<Prompts['recall-date-prompt']['min']>,
       default: null,
     },
     max: {
-      type: Number as PropType<Prompts['date-picker-prompt']['max']>,
+      type: Number as PropType<Prompts['recall-date-prompt']['max']>,
       default: null,
     },
   },

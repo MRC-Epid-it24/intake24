@@ -1,9 +1,5 @@
 <template>
-  <component
-    :is="customPromptLayout"
-    v-bind="{ food, meal, prompt, section, isValid }"
-    @action="action"
-  >
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-date-picker
         v-model="state"
@@ -18,7 +14,7 @@
     <template #nav-actions>
       <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
-  </component>
+  </card-layout>
 </template>
 
 <script lang="ts">
@@ -31,9 +27,9 @@ import createBasePrompt from '../createBasePrompt';
 import { useDatePicker } from '../partials';
 
 export default defineComponent({
-  name: 'DatePickerPrompt',
+  name: 'RecallDaterPrompt',
 
-  mixins: [createBasePrompt<'date-picker-prompt'>()],
+  mixins: [createBasePrompt<'recall-date-prompt'>()],
 
   props: {
     value: {

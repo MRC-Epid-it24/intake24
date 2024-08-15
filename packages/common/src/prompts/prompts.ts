@@ -41,6 +41,7 @@ export const standardComponentTypes = [
   'meal-duration-prompt',
   'meal-time-prompt',
   'ready-meal-prompt',
+  'recall-date-prompt',
   'redirect-prompt',
   'review-confirm-prompt',
   'same-as-before-prompt',
@@ -167,6 +168,13 @@ export const slider = z.object({
 });
 export type Slider = z.infer<typeof slider>;
 
+export const datePicker = z.object({
+  current: z.coerce.number().int().nullable(),
+  min: z.coerce.number().int().nullable(),
+  max: z.coerce.number().int().nullable(),
+});
+export type DatePicker = z.infer<typeof datePicker>;
+
 export const timePicker = z.object({
   format: z.enum(['ampm', '24hr']),
   allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
@@ -182,9 +190,8 @@ const checkboxListPrompt = baseCustomPrompt
     validation: promptValidationWithLimits,
   });
 
-const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
+const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(datePicker).extend({
   component: z.literal('date-picker-prompt'),
-  futureDates: z.boolean(),
 });
 
 const infoPrompt = baseCustomPrompt.extend({
@@ -363,6 +370,10 @@ const readyMealPrompt = baseStandardPrompt.extend({
   component: z.literal('ready-meal-prompt'),
 });
 
+const recallDatePrompt = baseStandardPrompt.merge(datePicker).extend({
+  component: z.literal('recall-date-prompt'),
+});
+
 const redirectPrompt = baseStandardPrompt.extend({
   component: z.literal('redirect-prompt'),
   rating: z.boolean(),
@@ -428,6 +439,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   mealGapPrompt,
   mealTimePrompt,
   readyMealPrompt,
+  recallDatePrompt,
   redirectPrompt,
   reviewConfirmPrompt,
   sameAsBeforePrompt,
@@ -484,6 +496,7 @@ export const prompts = z.object({
   'meal-gap-prompt': mealGapPrompt,
   'meal-time-prompt': mealTimePrompt,
   'ready-meal-prompt': readyMealPrompt,
+  'recall-date-prompt': recallDatePrompt,
   'redirect-prompt': redirectPrompt,
   'review-confirm-prompt': reviewConfirmPrompt,
   'same-as-before-prompt': sameAsBeforePrompt,

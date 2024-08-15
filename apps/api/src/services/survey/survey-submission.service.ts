@@ -480,7 +480,7 @@ function surveySubmissionService({
     const foodCustomPrompts = foods.filter(({ type }) => type === 'custom').map(({ id }) => id);
 
     await db.system.transaction(async (transaction) => {
-      const { startTime, endTime, userAgent } = state;
+      const { recallDate, startTime, endTime, userAgent } = state;
       const submissionTime = state.submissionTime ?? new Date();
       const id = state.id ?? randomUUID();
 
@@ -498,6 +498,7 @@ function surveySubmissionService({
           id,
           surveyId,
           userId,
+          recallDate,
           startTime: startTime ?? submissionTime,
           endTime: endTime ?? submissionTime,
           submissionTime,

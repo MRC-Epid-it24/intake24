@@ -149,6 +149,11 @@ function dataExportFields() {
       value: ({ food }: ExportRow) => food.meal?.submission?.endTime?.toISOString(),
     },
     {
+      id: 'recallDate',
+      label: 'Recall Date',
+      value: ({ food }: ExportRow) => food.meal?.submission?.recallDate,
+    },
+    {
       id: 'recallDuration',
       label: 'Recall Duration (mins)',
       value: ({ food }: ExportRow) => {

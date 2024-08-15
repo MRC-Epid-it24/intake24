@@ -21,7 +21,9 @@ export const datePickerPrompt: Prompts['date-picker-prompt'] = copy({
   type: 'custom',
   id: 'date-picker-prompt',
   name: 'Date picker prompt',
-  futureDates: false,
+  current: 0,
+  min: 0,
+  max: 0,
 });
 
 export const infoPrompt: Prompts['info-prompt'] = copy({

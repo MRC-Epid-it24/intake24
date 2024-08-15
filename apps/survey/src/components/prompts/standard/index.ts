@@ -11,6 +11,7 @@ export { default as MealGapPrompt } from './MealGapPrompt.vue';
 export { default as MealTimePrompt } from './MealTimePrompt.vue';
 export * from './ReadyMealPrompt.vue';
 export { default as ReadyMealPrompt } from './ReadyMealPrompt.vue';
+export { default as RecallDatePrompt } from './RecallDatePrompt.vue';
 export { default as RedirectPrompt } from './RedirectPrompt.vue';
 export { default as ReviewConfirmPrompt } from './ReviewConfirmPrompt.vue';
 export { default as SameAsBeforePrompt } from './SameAsBeforePrompt.vue';

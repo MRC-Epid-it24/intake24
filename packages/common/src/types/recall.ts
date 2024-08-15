@@ -323,6 +323,7 @@ export interface PromptAnswer {
 export const surveyState = z.object({
   id: z.string().uuid().optional(),
   schemeId: z.string().nullable(),
+  recallDate: z.string().date().nullable(),
   startTime: z.coerce.date().nullable(),
   endTime: z.coerce.date().nullable(),
   submissionTime: z.coerce.date().nullable(),

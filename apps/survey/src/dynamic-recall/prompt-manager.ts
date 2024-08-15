@@ -136,6 +136,8 @@ function checkSurveyStandardConditions(state: SurveyState, prompt: Prompt): bool
     }
     case 'multi-prompt':
       return prompt.prompts.some(item => checkSurveyStandardConditions(state, item));
+    case 'recall-date-prompt':
+      return !state.data.recallDate;
     case 'review-confirm-prompt':
       return false;
     default:

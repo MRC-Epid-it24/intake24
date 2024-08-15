@@ -155,6 +155,13 @@ export const slider = z.object({
 });
 export type Slider = z.infer<typeof slider>;
 
+export const datePicker = z.object({
+  current: z.coerce.number().int().nullable(),
+  min: z.coerce.number().int().nullable(),
+  max: z.coerce.number().int().nullable(),
+});
+export type DatePicker = z.infer<typeof datePicker>;
+
 export const timePicker = z.object({
   format: z.enum(['ampm', '24hr']),
   allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
@@ -170,9 +177,8 @@ const checkboxListPrompt = baseCustomPrompt
     validation: promptValidationWithLimits,
   });
 
-const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
+const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(datePicker).extend({
   component: z.literal('date-picker-prompt'),
-  futureDates: z.boolean(),
 });
 
 const infoPrompt = baseCustomPrompt.extend({
