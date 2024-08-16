@@ -124,7 +124,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of local categories cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('categoryLocals')
-      .columns(['categoryCode', 'localeId', 'name', 'simpleName', 'version'])
+      .columns(['categoryCode', 'localeId', 'name', 'simpleName', 'tags', 'version'])
       .expression(eb => eb
         .selectFrom('categoryLocals')
         .select(eb => [
@@ -177,7 +177,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of local foods cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('foodLocals')
-      .columns(['foodCode', 'localeId', 'name', 'simpleName', 'version', 'altNames'])
+      .columns(['foodCode', 'localeId', 'name', 'simpleName', 'altNames', 'tags', 'version'])
       .expression(eb => eb
         .selectFrom('foodLocals')
         .select(eb => [
