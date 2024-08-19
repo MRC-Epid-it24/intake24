@@ -118,7 +118,8 @@ function surveyService({
       const { name, password, username, redirectUrl, customFields } = z
         .object({
           username: z.string().min(1).max(256),
-          password: strongPassword.optional(),
+          // TODO: revert to strong password policy once SHS can adopt
+          password: ['shs24', 'shs24d'].includes(survey.slug) ? z.string().min(7).optional() : strongPassword.optional(),
           redirectUrl: z.string().url().optional(),
           name: z.string().min(1).max(512).nullish(),
           customFields: customField.array().optional(),
