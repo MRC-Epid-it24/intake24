@@ -9,13 +9,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "axios": "^1.7.3",
+    "axios": "^1.7.4",
     "cookie": "^0.6.0",
     "formdata-node": "4.4.1",
     "lodash": "^4.17.21",
     "mime-types": "^2.1.35",
     "p-queue": "^6.6.2",
-    "winston": "^3.14.1"
+    "winston": "^3.14.2"
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",

@@ -41,7 +41,7 @@
   "devDependencies": {
     "@simplewebauthn/types": "^10.0.0",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^20.14.15",
+    "@types/node": "^20.16.1",
     "@types/pg": "^8.11.6",
     "@types/pg-cursor": "^2.7.2",
     "@types/validator": "^13.12.0",
