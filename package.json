@@ -3,7 +3,7 @@
   "type": "module",
   "version": "2024.4",
   "private": true,
-  "packageManager": "pnpm@9.7.0",
+  "packageManager": "pnpm@9.7.1",
   "description": "Dietary recall system",
   "author": "",
   "license": "Apache-2.0",
@@ -47,11 +47,11 @@
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.25.1",
+    "@antfu/eslint-config": "^2.26.0",
     "@jest/types": "^29.6.3",
-    "@ts-rest/open-api": "^3.49.3",
+    "@ts-rest/open-api": "^3.50.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.14.15",
+    "@types/node": "^20.16.1",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
     "conventional-changelog-cli": "^5.0.0",
@@ -71,8 +71,8 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.17.0",
     "typescript": "^5.5.4",
-    "vite": "^5.4.0",
-    "vitepress": "^1.3.2"
+    "vite": "^5.4.1",
+    "vitepress": "^1.3.3"
   },
   "pnpm": {
     "peerDependencyRules": {
