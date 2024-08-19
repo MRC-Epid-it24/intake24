@@ -342,7 +342,7 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       );
       const categoryLocal = await CategoryLocal.create(
         {
-          ...pick(sourceCategoryLocal, ['localeId', 'name', 'simpleName']),
+          ...pick(sourceCategoryLocal, ['localeId', 'name', 'simpleName', 'tags']),
           categoryCode: category.code,
           name: input.name,
           version: randomUUID(),

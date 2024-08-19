@@ -100,6 +100,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
       { label: 'Food code', value: 'foodCode' },
       { label: 'English name', value: 'englishName' },
       { label: 'Local name', value: 'name' },
+      { label: 'Tags', value: 'tags' },
       { label: 'FCT', value: 'nutrientTableId' },
       { label: 'FCT record ID', value: 'nutrientTableRecordId' },
       { label: 'Attr: Ready Meal', value: 'readyMealOption' },
@@ -183,14 +184,16 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                 associatedFoods = [],
                 nutrientRecords = [],
                 portionSizeMethods: foodPSMs = [],
+                tags,
               } = food;
               const { attributes: datAttributes, categories, portionSizeMethods: datPSMs } = dat;
 
               return {
                 localeId,
                 foodCode,
-                name,
                 englishName,
+                name,
+                tags: tags.join(', '),
                 nutrientTableId: nutrientRecords[0]?.nutrientTableId,
                 nutrientTableRecordId: nutrientRecords[0]?.nutrientTableRecordId,
                 readyMealOption: attributes?.readyMealOption ?? 'Inherited',

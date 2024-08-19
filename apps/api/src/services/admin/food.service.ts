@@ -278,7 +278,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       );
       const foodLocal = await FoodLocal.create(
         {
-          ...pick(sourceFoodLocal, ['localeId', 'name', 'simpleName']),
+          ...pick(sourceFoodLocal, ['localeId', 'name', 'simpleName', 'altNames', 'tags']),
           foodCode: food.code,
           name: input.name,
           version: randomUUID(),
