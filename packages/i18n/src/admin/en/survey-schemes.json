@@ -26,7 +26,8 @@
       "title": "Flows",
       "1-pass": "1-pass",
       "2-pass": "2-pass"
-    }
+    },
+    "recallDate": "Recall date offset"
   },
 
   "meals": {

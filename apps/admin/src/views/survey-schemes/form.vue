@@ -76,6 +76,16 @@
                 @change="form.errors.clear('settings.flow')"
               />
             </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.settings.recallDate"
+                hide-details="auto"
+                :label="$t('survey-schemes.settings.recallDate')"
+                name="recallDate"
+                outlined
+                prepend-inner-icon="fas fa-hourglass-start"
+              />
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -105,7 +115,6 @@ export type SurveySchemeForm = {
   id: string | null;
   name: string | null;
   settings: SchemeSettings;
-  version: number;
   prompts: RecallPrompts;
   meals: Meal[];
   dataExport: ExportSection[];

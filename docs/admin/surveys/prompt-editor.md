@@ -55,6 +55,7 @@ Following variables can be used in the fields:
 - `{mealTime}` - Meal time
 - `{food}` - Food name
 - `{item}` - Food name or Meal name depending on current selection of prompt level type
+- `{recallDate}` - Recall date
 - `{recallNumber}` - Current recall number
 - `{userName}` - User's name (if available)
 

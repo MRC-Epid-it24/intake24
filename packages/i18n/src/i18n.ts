@@ -1,4 +1,4 @@
-import type { LocaleMessageObject } from 'vue-i18n';
+import type { DateTimeFormat, LocaleMessageObject } from 'vue-i18n';
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 
@@ -6,9 +6,20 @@ import type { Application } from '@intake24/common/types';
 
 Vue.use(VueI18n);
 
+const dateFormats: DateTimeFormat = {
+  recallDate: {
+    month: 'short',
+    day: 'numeric',
+    weekday: 'long',
+  },
+};
+
 export const i18n = new VueI18n({
   locale: 'en',
   fallbackLocale: 'en',
+  dateTimeFormats: {
+    en: dateFormats,
+  },
 });
 
 export const defaultMessages = {
@@ -35,6 +46,7 @@ export async function loadAppLanguage(app: Application, lang: string) {
       return;
 
     i18n.setLocaleMessage(lang, { ...app.value.default, ...shared.value.default });
+    i18n.setDateTimeFormat(lang, dateFormats);
     defaultMessages.setMessages(lang, { ...app.value.default, ...shared.value.default });
   });
 }

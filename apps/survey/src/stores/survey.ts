@@ -1,5 +1,6 @@
 import 'lodash/debounce';
 
+import { addDays } from 'date-fns';
 import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import Vue from 'vue';
@@ -201,6 +202,16 @@ export const useSurvey = defineStore('survey', {
       );
 
       return prompt?.linkedQuantity;
+    },
+    recallDate: (state) => {
+      if (state.data.recallDate)
+        return new Date(state.data.recallDate);
+
+      const offset = state.parameters?.surveyScheme.settings.recallDate;
+      if (typeof offset === 'number')
+        return addDays(new Date(), offset);
+
+      return undefined;
     },
     sameAsBeforeAllowed(): boolean {
       return !!this.foodPrompts.find(

@@ -20,12 +20,14 @@ export type RecallFlow = (typeof recallFlows)[number];
 export const schemeSettings = z.object({
   type: z.enum(schemeTypes),
   flow: z.enum(recallFlows),
+  recallDate: z.coerce.number().int().nullable(),
 });
 export type SchemeSettings = z.infer<typeof schemeSettings>;
 
 export const defaultSchemeSettings: SchemeSettings = {
   type: 'default',
   flow: '2-pass',
+  recallDate: null,
 };
 
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
