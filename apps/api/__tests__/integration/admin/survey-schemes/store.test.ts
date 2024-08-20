@@ -33,11 +33,20 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['name', 'settings.type', 'settings.flow', 'visibility', 'meals', 'prompts', 'dataExport'],
+        [
+          'name',
+          'settings.type',
+          'settings.flow',
+          'settings.recallDate',
+          'visibility',
+          'meals',
+          'prompts',
+          'dataExport',
+        ],
         {
           input: {
             name: [],
-            settings: { type: false, flow: '10-pass' },
+            settings: { type: false, flow: '10-pass', recallDate: new Date().toISOString() },
             visibility: [],
             meals: 5,
             prompts: [],

@@ -426,6 +426,10 @@ export const useSurvey = defineStore('survey', {
       this.isSubmitting = true;
       this.data.endTime = new Date();
 
+      const { recallDate } = this.parameters.surveyScheme.settings;
+      if (typeof recallDate === 'number')
+        this.setRecallDate(addDays(new Date(), recallDate).toISOString().substring(0, 10));
+
       try {
         const { submission, ...rest } = await surveyService.submit(this.parameters.slug, this.data);
         this.setUserInfo(rest);

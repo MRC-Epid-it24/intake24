@@ -83,7 +83,6 @@
                 :label="$t('survey-schemes.settings.recallDate')"
                 name="recallDate"
                 outlined
-                prepend-inner-icon="fas fa-hourglass-start"
               />
             </v-col>
           </v-row>
