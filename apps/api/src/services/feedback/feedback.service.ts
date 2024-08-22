@@ -24,9 +24,10 @@ export type CreateRefreshCookie = {
 function feedbackService({
   appConfig,
   fsConfig,
+  pdfConfig,
   securityConfig,
   jwtService,
-}: Pick<IoC, 'appConfig' | 'fsConfig' | 'securityConfig' | 'jwtService'>) {
+}: Pick<IoC, 'appConfig' | 'fsConfig' | 'pdfConfig' | 'securityConfig' | 'jwtService'>) {
   const getNutrientTypes = async (): Promise<NutrientType[]> => {
     const nutrients = await FoodsNutrientType.findAll({
       include: [
@@ -113,7 +114,7 @@ function feedbackService({
     const { url, filename, slug, userId } = await getFeedbackLinks(surveyId, username, submissions);
     const cookie = await createRefreshCookie({ slug, username, userId });
 
-    const pdfStream = await new FeedbackPdfGenerator(url, cookie).getPdfStream();
+    const pdfStream = await new FeedbackPdfGenerator(url, cookie, pdfConfig.puppeteer).getPdfStream();
 
     return { pdfStream, filename, url };
   };
@@ -128,7 +129,7 @@ function feedbackService({
 
     const path = resolve(fsConfig.local.downloads, filename);
 
-    await new FeedbackPdfGenerator(url, cookie).getPdfFile(path);
+    await new FeedbackPdfGenerator(url, cookie, pdfConfig.puppeteer).getPdfFile(path);
 
     return { path, filename, url };
   };

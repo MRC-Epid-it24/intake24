@@ -17,6 +17,7 @@ import type { SessionConfig } from './session';
 import app from './app';
 import cache from './cache';
 import filesystem from './filesystem';
+import pdf, { type PdfConfig } from './pdf';
 import { publisherConfig as publisher, subscriberConfig as subscriber } from './pub-sub';
 import queue from './queue';
 import rateLimiter from './rate-limiter';
@@ -28,6 +29,7 @@ export * from './app';
 export * from './cache';
 export * from './filesystem';
 export * from './image-processor';
+export * from './pdf';
 export * from './queue';
 export * from './rate-limiter';
 export * from './security';
@@ -42,6 +44,7 @@ export type Config = {
   filesystem: FileSystemConfig;
   log: LogConfig;
   mail: MailConfig;
+  pdf: PdfConfig;
   queue: QueueConfig;
   rateLimiter: RateLimiterConfig;
   security: SecurityConfig;
@@ -60,6 +63,7 @@ const config: Config = {
   filesystem,
   log,
   mail,
+  pdf,
   queue,
   rateLimiter,
   security,

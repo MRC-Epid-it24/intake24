@@ -3,17 +3,21 @@ import { Readable } from 'node:stream';
 import type { CookieParam } from 'puppeteer';
 import puppeteer from 'puppeteer';
 
+import { PuppeteerOptions } from '@intake24/api/config';
+
 export default class FeedbackPdfGenerator {
   readonly url;
   readonly refreshCookie;
+  readonly options;
 
-  constructor(url: string, cookie: CookieParam) {
+  constructor(url: string, cookie: CookieParam, options: PuppeteerOptions) {
     this.url = url;
     this.refreshCookie = cookie;
+    this.options = options;
   }
 
   async loadFeedback() {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: this.options.headless });
 
     try {
       const page = await browser.newPage();
@@ -24,7 +28,7 @@ export default class FeedbackPdfGenerator {
       return { browser, page };
     }
     catch (error) {
-      browser.close();
+      await browser.close();
       throw error;
     }
   }

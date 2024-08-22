@@ -95,6 +95,7 @@ export interface IoC extends Jobs {
   fsConfig: Config['filesystem'];
   logConfig: Config['log'];
   mailConfig: Config['mail'];
+  pdfConfig: Config['pdf'];
   queueConfig: Config['queue'];
   rateLimiterConfig: Config['rateLimiter'];
   publisherConfig: Config['publisher'];
@@ -228,6 +229,7 @@ function configureContainer() {
     fsConfig: asValue(config.filesystem),
     logConfig: asValue(config.log),
     mailConfig: asValue(config.mail),
+    pdfConfig: asValue(config.pdf),
     queueConfig: asValue(config.queue),
     rateLimiterConfig: asValue(config.rateLimiter),
     securityConfig: asValue(config.security),
