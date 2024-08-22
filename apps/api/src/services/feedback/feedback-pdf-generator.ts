@@ -1,3 +1,4 @@
+import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 
@@ -22,6 +23,7 @@ export default class FeedbackPdfGenerator {
 
     if (this.options.netLogDir) {
       const fileName = `${Date.now().toString()}.json`;
+      await mkdir(this.options.netLogDir, { recursive: true });
       args.push(`--log-net-log=${path.join(this.options.netLogDir, fileName)}`);
     }
 
