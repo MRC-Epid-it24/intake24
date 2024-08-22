@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { Readable } from 'node:stream';
 
 import type { CookieParam } from 'puppeteer';
@@ -17,7 +18,14 @@ export default class FeedbackPdfGenerator {
   }
 
   async loadFeedback() {
-    const browser = await puppeteer.launch({ headless: this.options.headless });
+    const args: string[] = [];
+
+    if (this.options.netLogDir) {
+      const fileName = `${Date.now().toString()}.json`;
+      args.push(`--log-net-log=${path.join(this.options.netLogDir, fileName)}`);
+    }
+
+    const browser = await puppeteer.launch({ headless: this.options.headless, args });
 
     try {
       const page = await browser.newPage();
