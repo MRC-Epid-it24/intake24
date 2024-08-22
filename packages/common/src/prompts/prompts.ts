@@ -25,6 +25,7 @@ export const customComponentTypes = [
   'slider-prompt',
   'textarea-prompt',
   'yes-no-prompt',
+  'aggregate-choice-prompt',
 ] as const;
 
 export type CustomComponentType = (typeof customComponentTypes)[number];
@@ -194,6 +195,14 @@ export const timePicker = z.object({
   allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
 });
 export type TimePicker = z.infer<typeof timePicker>;
+
+const aggregateChoicePrompt = baseStandardPrompt.extend({
+  component: z.literal('aggregate-choice-prompt'),
+  options: localeOptionList(),
+  foodFilter: condition.optional(),
+});
+
+export type AggregateChoicePrompt = z.infer<typeof aggregateChoicePrompt>;
 
 // Custom
 const checkboxListPrompt = baseCustomPrompt
@@ -459,6 +468,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   sameAsBeforePrompt,
   splitFoodPrompt,
   submitPrompt,
+  aggregateChoicePrompt,
 ]);
 export type SinglePrompt = z.infer<typeof singlePrompt>;
 
@@ -516,6 +526,7 @@ export const prompts = z.object({
   'same-as-before-prompt': sameAsBeforePrompt,
   'split-food-prompt': splitFoodPrompt,
   'submit-prompt': submitPrompt,
+  'aggregate-choice-prompt': aggregateChoicePrompt,
 });
 
 export type Prompts = z.infer<typeof prompts>;

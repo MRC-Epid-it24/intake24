@@ -81,6 +81,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: [...promptSectionsExceptSubmission],
   },
+  'aggregate-choice-prompt': {
+    tabs: [...tabs],
+    sections: ['postMeals'],
+  },
   // Standard
   'addon-foods-prompt': {
     tabs: [...tabs],

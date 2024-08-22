@@ -95,10 +95,11 @@ import draggable from 'vuedraggable';
 import { withIdList } from '@intake24/admin/util';
 import {
   type Condition,
+  conditionObjectHasProperty,
   type ConditionObjectId,
   conditionObjectIds,
-  conditionObjectPropertyIds,
   getConditionDefaults,
+  getDefaultConditionProperty,
   type ObjectPropertyId,
   promptConditionDefaults,
 } from '@intake24/common/prompts';
@@ -107,24 +108,6 @@ import { randomString } from '@intake24/common/util';
 import { copy } from '@intake24/common/util/objects';
 
 import conditionPartials from './conditions';
-
-function objectHasProperty(objectId: ConditionObjectId, propertyId: string): boolean {
-  const propertyIds = conditionObjectPropertyIds.get(objectId);
-
-  if (propertyIds === undefined)
-    throw new Error(`Unexpected condition object id: ${objectId}, expected one of ${conditionObjectIds.join(', ')}`);
-
-  return (propertyIds as string[]).includes(propertyId);
-}
-
-function getDefaultProperty<T extends ConditionObjectId>(objectId: T): ObjectPropertyId<T> {
-  const propertyIds = conditionObjectPropertyIds.get(objectId);
-
-  if (propertyIds === undefined)
-    throw new Error(`Unexpected condition object id: ${objectId}, expected one of ${conditionObjectIds.join(', ')}`);
-
-  return propertyIds[0] as ObjectPropertyId<T>; // See conditionObjectPropertyIds definition
-}
 
 export default defineComponent({
   name: 'PromptConditions',
@@ -198,7 +181,7 @@ export default defineComponent({
         return;
 
       // If currently selected property is compatible with the new object, keep current property settings
-      if (objectHasProperty(newObjectId, currentCondition.property.id)) {
+      if (conditionObjectHasProperty(newObjectId, currentCondition.property.id)) {
         this.currentConditions.splice(
           idx,
           1,
@@ -211,7 +194,7 @@ export default defineComponent({
         this.currentConditions.splice(
           idx,
           1,
-          copy({ ...getConditionDefaults(newObjectId, getDefaultProperty(newObjectId)), id: currentCondition.id }),
+          copy({ ...getConditionDefaults(newObjectId, getDefaultConditionProperty(newObjectId)), id: currentCondition.id }),
         );
       }
     },
@@ -234,7 +217,7 @@ export default defineComponent({
 
       const length = this.currentConditions.push(copy({
         id: randomString(6),
-        ...getConditionDefaults(defaultObject, getDefaultProperty(defaultObject)),
+        ...getConditionDefaults(defaultObject, getDefaultConditionProperty(defaultObject)),
       }));
 
       this.selectedCondition = length - 1;

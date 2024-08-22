@@ -92,18 +92,9 @@ export default defineComponent({
     const disableOption = (value: string) => !props.value.includes(value)
       && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.value.length === props.prompt.validation.max));
 
-    const confirm = () => {
-      if (isValid.value)
-        return true;
-
-      errors.value = [i18n.t(`prompts.${type.value}.validation.required`).toString()];
-      return false;
-    };
-
     const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
       props,
       ctx,
-      confirm,
     );
 
     const update = (option?: ListOption) => {

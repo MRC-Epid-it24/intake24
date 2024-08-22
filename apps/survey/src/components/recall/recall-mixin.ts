@@ -75,7 +75,7 @@ export default defineComponent({
         case 'portion-size':
           return `${prompt.component}-handler`;
         default:
-          throw new Error(`Unexpected prompt type: ${prompt}`);
+          throw new Error(`Unexpected prompt type: ${(prompt as any).type}`);
       }
     },
 

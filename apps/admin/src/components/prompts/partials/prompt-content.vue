@@ -123,9 +123,12 @@ export default defineComponent({
 
     const promptType = computed(() => getPromptType(props.component));
 
-    const keys = computed(() =>
-      getObjectNestedKeys(get(i18n.messages.en, `prompts.${promptType.value}`) as object),
-    );
+    const keys = computed(() => {
+      const messageObject = get(i18n.messages.en, `prompts.${promptType.value}`) as object;
+      if (messageObject === undefined)
+        console.error(`Missing translation object: ${`prompts.${promptType.value}`}`);
+      return getObjectNestedKeys(messageObject);
+    });
 
     const loadLanguage = async (code: string) => {
       await loadAdminLanguage(code);

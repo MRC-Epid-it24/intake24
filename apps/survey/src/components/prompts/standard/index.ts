@@ -1,4 +1,5 @@
 export { default as AddonFoodsPrompt } from './AddonFoodsPrompt.vue';
+export * from './aggregate-choice';
 export { default as AssociatedFoodsPrompt } from './AssociatedFoodsPrompt.vue';
 export { default as EditMealPrompt } from './EditMealPrompt.vue';
 export { default as ExternalSourcePrompt } from './ExternalSourcePrompt.vue';
