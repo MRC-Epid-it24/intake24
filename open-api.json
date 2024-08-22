@@ -3986,11 +3986,16 @@
                                 "1-pass",
                                 "2-pass"
                               ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "type",
-                            "flow"
+                            "flow",
+                            "recallDate"
                           ]
                         },
                         "meals": {
@@ -41550,11 +41555,16 @@
                                 "1-pass",
                                 "2-pass"
                               ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "type",
-                            "flow"
+                            "flow",
+                            "recallDate"
                           ]
                         },
                         "prompts": {
@@ -43460,11 +43470,16 @@
                                 "1-pass",
                                 "2-pass"
                               ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "type",
-                            "flow"
+                            "flow",
+                            "recallDate"
                           ]
                         },
                         "prompts": {
@@ -45748,11 +45763,16 @@
                                 "1-pass",
                                 "2-pass"
                               ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "type",
-                            "flow"
+                            "flow",
+                            "recallDate"
                           ]
                         },
                         "prompts": {
@@ -48066,11 +48086,16 @@
                                 "1-pass",
                                 "2-pass"
                               ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "type",
-                            "flow"
+                            "flow",
+                            "recallDate"
                           ]
                         },
                         "prompts": {
@@ -50004,11 +50029,16 @@
                                 "1-pass",
                                 "2-pass"
                               ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "type",
-                            "flow"
+                            "flow",
+                            "recallDate"
                           ]
                         },
                         "prompts": {
@@ -53785,11 +53815,16 @@
                           "1-pass",
                           "2-pass"
                         ]
+                      },
+                      "recallDate": {
+                        "type": "integer",
+                        "nullable": true
                       }
                     },
                     "required": [
                       "type",
-                      "flow"
+                      "flow",
+                      "recallDate"
                     ]
                   },
                   "prompts": {
@@ -53957,11 +53992,16 @@
                             "1-pass",
                             "2-pass"
                           ]
+                        },
+                        "recallDate": {
+                          "type": "integer",
+                          "nullable": true
                         }
                       },
                       "required": [
                         "type",
-                        "flow"
+                        "flow",
+                        "recallDate"
                       ]
                     },
                     "prompts": {
@@ -54267,11 +54307,16 @@
                             "1-pass",
                             "2-pass"
                           ]
+                        },
+                        "recallDate": {
+                          "type": "integer",
+                          "nullable": true
                         }
                       },
                       "required": [
                         "type",
-                        "flow"
+                        "flow",
+                        "recallDate"
                       ]
                     },
                     "prompts": {
@@ -54539,11 +54584,16 @@
                           "1-pass",
                           "2-pass"
                         ]
+                      },
+                      "recallDate": {
+                        "type": "integer",
+                        "nullable": true
                       }
                     },
                     "required": [
                       "type",
-                      "flow"
+                      "flow",
+                      "recallDate"
                     ]
                   },
                   "prompts": {
@@ -54708,11 +54758,16 @@
                             "1-pass",
                             "2-pass"
                           ]
+                        },
+                        "recallDate": {
+                          "type": "integer",
+                          "nullable": true
                         }
                       },
                       "required": [
                         "type",
-                        "flow"
+                        "flow",
+                        "recallDate"
                       ]
                     },
                     "prompts": {
@@ -54980,11 +55035,16 @@
                           "1-pass",
                           "2-pass"
                         ]
+                      },
+                      "recallDate": {
+                        "type": "integer",
+                        "nullable": true
                       }
                     },
                     "required": [
                       "type",
-                      "flow"
+                      "flow",
+                      "recallDate"
                     ]
                   },
                   "prompts": {
@@ -55157,11 +55217,16 @@
                             "1-pass",
                             "2-pass"
                           ]
+                        },
+                        "recallDate": {
+                          "type": "integer",
+                          "nullable": true
                         }
                       },
                       "required": [
                         "type",
-                        "flow"
+                        "flow",
+                        "recallDate"
                       ]
                     },
                     "prompts": {
@@ -55462,11 +55527,16 @@
                             "1-pass",
                             "2-pass"
                           ]
+                        },
+                        "recallDate": {
+                          "type": "integer",
+                          "nullable": true
                         }
                       },
                       "required": [
                         "type",
-                        "flow"
+                        "flow",
+                        "recallDate"
                       ]
                     },
                     "prompts": {
@@ -55760,11 +55830,16 @@
                             "1-pass",
                             "2-pass"
                           ]
+                        },
+                        "recallDate": {
+                          "type": "integer",
+                          "nullable": true
                         }
                       },
                       "required": [
                         "type",
-                        "flow"
+                        "flow",
+                        "recallDate"
                       ]
                     },
                     "prompts": {
@@ -66175,7 +66250,7 @@
       "name": "Apache-2.0",
       "url": "https://opensource.org/license/apache-2-0"
     },
-    "version": "2024.4"
+    "version": "2024.5"
   },
   "servers": [
     {
