@@ -630,7 +630,10 @@
       "title": "Yes / No choice",
       "subtitle": "Ask to choose yes or no"
     },
-
+    "aggregate-choice-prompt": {
+      "title": "Aggregate food question",
+      "subtitle": "Ask to choose an option for every reported food in a single screen"
+    },
     "as-served-prompt": {
       "title": "As served portion size",
       "subtitle": "Use the \"as served\" method to estimate the portion size"

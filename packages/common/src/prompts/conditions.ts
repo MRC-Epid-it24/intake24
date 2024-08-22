@@ -372,3 +372,21 @@ export function getConditionDefaults<T extends ConditionObjectId>(object: T, id:
       throw new Error(`Unexpected context argument: ${object}`);
   }
 }
+
+export function conditionObjectHasProperty(objectId: ConditionObjectId, propertyId: string): boolean {
+  const propertyIds = conditionObjectPropertyIds.get(objectId);
+
+  if (propertyIds === undefined)
+    throw new Error(`Unexpected condition object id: ${objectId}, expected one of ${conditionObjectIds.join(', ')}`);
+
+  return (propertyIds as string[]).includes(propertyId);
+}
+
+export function getDefaultConditionProperty<T extends ConditionObjectId>(objectId: T): ObjectPropertyId<T> {
+  const propertyIds = conditionObjectPropertyIds.get(objectId);
+
+  if (propertyIds === undefined)
+    throw new Error(`Unexpected condition object id: ${objectId}, expected one of ${conditionObjectIds.join(', ')}`);
+
+  return propertyIds[0] as ObjectPropertyId<T>; // See conditionObjectPropertyIds definition
+}

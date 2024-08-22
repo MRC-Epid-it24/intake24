@@ -508,5 +508,10 @@
       "withFood": "{unit} of {food} did you have?"
     },
     "confirm": "I had that many"
+  },
+  "aggregateChoice": {
+    "name": "Aggregate food question",
+    "text": "",
+    "description": ""
   }
 }

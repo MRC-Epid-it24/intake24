@@ -192,3 +192,15 @@ export function getMealIndexForSelection(
     ? getMealIndexRequired(meals, element.mealId)
     : getFoodIndexRequired(meals, element.foodId).mealIndex;
 }
+
+export function flattenFoods(foods: FoodState[]): FoodState[] {
+  const result = new Array<FoodState>();
+
+  for (const food of foods) {
+    result.push(food);
+    if (food.linkedFoods.length > 0)
+      result.push(...flattenFoods(food.linkedFoods));
+  }
+
+  return result;
+}
