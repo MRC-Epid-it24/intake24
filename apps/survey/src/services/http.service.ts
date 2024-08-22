@@ -1,6 +1,6 @@
 import type { AxiosError, AxiosResponse } from 'axios';
 import axios, { HttpStatusCode } from 'axios';
-import axiosRetry from 'axios-retry';
+import axiosRetry, { linearDelay } from 'axios-retry';
 import trim from 'lodash/trim';
 
 import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
@@ -128,7 +128,7 @@ const httpClient: HttpClient = {
   },
 };
 
-axiosRetry(httpClient.axios, { retries: 5, retryDelay: retryCount => retryCount * 400 });
+axiosRetry(httpClient.axios, { retries: 5, retryDelay: linearDelay(300) });
 
 export default httpClient;
 
