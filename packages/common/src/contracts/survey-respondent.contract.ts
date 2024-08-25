@@ -1,9 +1,9 @@
 import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
+import { surveyState } from '../types';
 import {
   foodSearchResponse,
-  jsonObjectSchema,
   surveyEntryResponse,
   surveyFoodSearchQuery,
   surveyHelpRequest,
@@ -48,14 +48,23 @@ export const surveyRespondent = initContract().router({
     description:
       'Get survey user session (current recall state), if any. Functionality is controlled by survey settings.',
   },
-  setSession: {
+  startSession: {
     method: 'POST',
     path: '/surveys/:slug/session',
-    body: z.object({
-      sessionData: jsonObjectSchema,
-    }),
+    body: z.object({ session: surveyState }),
     responses: {
-      200: surveyUserSessionResponse,
+      200: z.undefined(),
+    },
+    summary: 'Start user session',
+    description:
+      'Start survey user session (current recall state).',
+  },
+  saveSession: {
+    method: 'PUT',
+    path: '/surveys/:slug/session',
+    body: z.object({ session: surveyState }),
+    responses: {
+      200: z.undefined(),
     },
     summary: 'Set user session',
     description:
@@ -66,11 +75,11 @@ export const surveyRespondent = initContract().router({
     path: '/surveys/:slug/session',
     body: null,
     responses: {
-      200: z.undefined(),
+      204: z.undefined(),
     },
     summary: 'Clear user session',
     description:
-      'Clear survey user session (current recall state) on server. Functionality is controlled by survey settings.',
+      'Clear survey user session (current recall state).',
   },
   requestHelp: {
     method: 'POST',
@@ -100,10 +109,7 @@ export const surveyRespondent = initContract().router({
       'user-agent': z.string().optional().transform(createSanitizer()),
     }),
     query: z.object({ tzOffset }),
-    body: z.object({
-      // TODO: Define submission schema
-      submission: jsonObjectSchema,
-    }),
+    body: z.object({ submission: surveyState }),
     responses: {
       200: surveySubmissionResponse,
     },

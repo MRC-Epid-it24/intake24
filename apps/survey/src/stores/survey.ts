@@ -299,20 +299,16 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      const isSubmitted = !!this.data.submissionTime;
       this.clearState();
-      if (isSubmitted)
-        await this.clearUserSession();
-
-      const initialState: CurrentSurveyState = {
+      this.setState({
         ...surveyInitialState(),
         schemeId: this.parameters.surveyScheme.id,
         startTime: new Date(),
         meals: this.parameters.surveyScheme.meals.map(({ name, time }) =>
           createMeal({ name, defaultTime: toMealTime(time) }, this.parameters?.surveyScheme.settings.flow)),
-      };
+      });
 
-      this.setState(initialState);
+      await this.startUserSession();
     },
 
     async cancelRecall() {
@@ -388,16 +384,13 @@ export const useSurvey = defineStore('survey', {
         this.clearState();
     },
 
-    async clearUserSession() {
+    async startUserSession() {
       if (!this.parameters) {
-        console.error(`Survey parameters not loaded. Cannot clear user session.`);
+        console.error(`Survey parameters not loaded. Cannot start user session.`);
         return;
       }
 
-      if (!this.parameters.session.store)
-        return;
-
-      await surveyService.clearUserSession(this.parameters.slug);
+      await surveyService.startUserSession(this.parameters.slug, this.data);
     },
 
     async storeUserSession() {
@@ -409,7 +402,16 @@ export const useSurvey = defineStore('survey', {
       if (this.isSubmitting || !this.parameters.session.store || !canUseUserSession(this.data, this.parameters.session))
         return;
 
-      await surveyService.setUserSession(this.parameters.slug, this.data);
+      await surveyService.saveUserSession(this.parameters.slug, this.data);
+    },
+
+    async clearUserSession() {
+      if (!this.parameters) {
+        console.error(`Survey parameters not loaded. Cannot clear user session.`);
+        return;
+      }
+
+      await surveyService.clearUserSession(this.parameters.slug);
     },
 
     async submitRecall() {
@@ -582,7 +584,7 @@ export const useSurvey = defineStore('survey', {
       return id;
     },
 
-    hasMealFlag(mealId: string, flag: SurveyFlag) {
+    hasMealFlag(mealId: string, flag: MealFlag) {
       const meal = findMeal(this.data.meals, mealId);
 
       return meal.flags.includes(flag);
@@ -629,7 +631,7 @@ export const useSurvey = defineStore('survey', {
       food.customPromptAnswers[data.promptId] = data.answer;
     },
 
-    hasFoodFlag(foodId: string, flag: SurveyFlag) {
+    hasFoodFlag(foodId: string, flag: FoodFlag) {
       const food = findFood(this.data.meals, foodId);
 
       return food.flags.includes(flag);

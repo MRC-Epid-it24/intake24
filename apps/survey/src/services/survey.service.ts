@@ -26,10 +26,7 @@ export default {
     return data;
   },
 
-  generateUser: async (
-    surveyId: string,
-    payload: GenerateUserPayload,
-  ): Promise<GenerateUserResponse> => {
+  generateUser: async (surveyId: string, payload: GenerateUserPayload): Promise<GenerateUserResponse> => {
     const { data } = await http.post<GenerateUserResponse>(
       `surveys/${surveyId}/generate-user`,
       payload,
@@ -76,18 +73,17 @@ export default {
     }
   },
 
-  setUserSession: async (
-    surveyId: string,
-    sessionData: SurveyState,
-  ): Promise<SurveyUserSessionResponse> => {
-    const { data } = await http.post<SurveyUserSessionResponse>(`surveys/${surveyId}/session`, {
-      sessionData,
-    });
-
-    return data;
+  startUserSession: async (surveyId: string, session: SurveyState) => {
+    await http.post<SurveyUserSessionResponse>(`surveys/${surveyId}/session`, { session });
   },
 
-  clearUserSession: async (surveyId: string) => http.delete(`surveys/${surveyId}/session`),
+  saveUserSession: async (surveyId: string, session: SurveyState) => {
+    await http.put<SurveyUserSessionResponse>(`surveys/${surveyId}/session`, { session });
+  },
+
+  clearUserSession: async (surveyId: string) => {
+    await http.delete(`surveys/${surveyId}/session`);
+  },
 
   submit: async (surveyId: string, submission: SurveyState): Promise<SurveySubmissionResponse> => {
     const tzOffset = new Date().getTimezoneOffset();

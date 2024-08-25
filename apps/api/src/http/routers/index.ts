@@ -76,6 +76,7 @@ export function registerRouters(express: Router) {
     express,
     {
       responseValidation,
+      // @ts-expect-error fix types (caused by 204/undefined)
       requestValidationErrorHandler,
       globalMiddleware: [
         passport.authenticate('survey', { session: false }),
@@ -208,7 +209,7 @@ export function registerRouters(express: Router) {
     express,
     {
       responseValidation,
-      // @ts-expect-error fix types
+      // @ts-expect-error fix types (caused by 204/undefined)
       requestValidationErrorHandler,
       globalMiddleware: [
         passport.authenticate('admin', { session: false }),

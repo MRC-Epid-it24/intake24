@@ -89,10 +89,7 @@ function surveyService({
    * @param {string} token
    * @returns {Promise<CreateUserResponse>}
    */
-  const createRespondentWithJWT = async (
-    slug: string,
-    token: string,
-  ): Promise<CreateUserResponse> => {
+  const createRespondentWithJWT = async (slug: string, token: string): Promise<CreateUserResponse> => {
     const survey = await Survey.findBySlug(slug, {
       attributes: [
         'id',
@@ -289,47 +286,26 @@ function surveyService({
   };
 
   /**
-   * Save respondent's survey session / recall state
+   * Start respondent's survey session
    *
    * @param {string} slug
    * @param {string} userId
    * @param {SurveyState} sessionData
-   * @returns {Promise<UserSurveySession>}
    */
-  const setSession = async (
-    slug: string,
-    userId: string,
-    sessionData: SurveyState,
-  ): Promise<UserSurveySession> => {
-    const survey = await Survey.findBySlug(slug, {
-      attributes: ['id', 'notifications', 'session'],
-    });
+  const startSession = async (slug: string, userId: string, sessionData: SurveyState) => {
+    const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications', 'session'] });
     if (!survey)
       throw new NotFoundError();
 
-    const { id: surveyId, session } = survey;
+    const { id: surveyId, notifications, session } = survey;
 
-    if (!session.store)
-      throw new ForbiddenError();
+    await UserSurveySession.destroy({ where: { userId, surveyId } });
 
-    const [userSession] = await UserSurveySession.upsert(
-      { id: sessionData.uxSessionId, userId, surveyId, sessionData },
-      {
-        fields: ['id', 'sessionData'],
-        // @ts-expect-error sequelize incorrectly handles camelCase vs snake_case
-        conflictFields: ['survey_id', 'user_id'],
-      },
-    );
+    if (session.store) {
+      await UserSurveySession.create({ id: sessionData.uxSessionId, userId, surveyId, sessionData });
+    }
 
-    /*
-     * Sequelize upsert doesn't return info about whether the record was inserted or updated
-     * - second tuple element always returns null
-     * - hackish timestamps comparison to determine if the record was inserted
-     */
-    if (
-      userSession.createdAt.getTime() === userSession.updatedAt.getTime()
-      && survey.notifications.length
-      && survey.notifications.some(({ type }) => type === 'survey.session.started')
+    if (notifications.length && notifications.some(({ type }) => type === 'survey.session.started')
     ) {
       await scheduler.jobs.addJob({
         type: 'SurveyEventNotification',
@@ -342,18 +318,43 @@ function surveyService({
         },
       });
     }
-
-    return userSession;
   };
 
   /**
-   * Clear user survey session data
+   * Save respondent's survey session
    *
    * @param {string} slug
    * @param {string} userId
-   * @returns {Promise<void>}
+   * @param {SurveyState} sessionData
    */
-  const clearSession = async (slug: string, userId: string): Promise<void> => {
+  const saveSession = async (slug: string, userId: string, sessionData: SurveyState) => {
+    const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications', 'session'] });
+    if (!survey)
+      throw new NotFoundError();
+
+    const { id: surveyId, session } = survey;
+
+    if (!session.store)
+      throw new ForbiddenError();
+
+    await UserSurveySession.upsert(
+      { id: sessionData.uxSessionId, userId, surveyId, sessionData },
+      {
+        fields: ['id', 'sessionData'],
+        // @ts-expect-error sequelize incorrectly handles camelCase vs snake_case
+        conflictFields: ['survey_id', 'user_id'],
+      },
+    );
+  };
+
+  /**
+   * Clear respondent's survey session
+   *
+   * @param {string} slug
+   * @param {string} userId
+   * @returns
+   */
+  const clearSession = async (slug: string, userId: string) => {
     const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications'] });
     if (!survey)
       throw new NotFoundError();
@@ -390,10 +391,7 @@ function surveyService({
    * @param {FindOptions} [options]
    * @returns {Promise<SurveySubmission[]>}
    */
-  const getSubmissions = async (
-    scopeOptions: SubmissionScope,
-    options: FindOptions = {},
-  ): Promise<SurveySubmission[]> =>
+  const getSubmissions = async (scopeOptions: SubmissionScope, options: FindOptions = {}): Promise<SurveySubmission[]> =>
     SurveySubmission.findAll(submissionScope(scopeOptions, options));
 
   /**
@@ -403,10 +401,7 @@ function surveyService({
    * @param {string} userId
    * @returns {(Promise<string | null | Record<string, string>>)}
    */
-  const getFollowUpUrl = async (
-    survey: Survey,
-    userId: string,
-  ): Promise<string | null | Record<string, string>> => {
+  const getFollowUpUrl = async (survey: Survey, userId: string): Promise<string | null | Record<string, string>> => {
     const { id: surveyId, surveyScheme } = survey;
     if (!surveyScheme)
       throw new NotFoundError();
@@ -478,11 +473,7 @@ function surveyService({
     return urls;
   };
 
-  const followUp = async (
-    slug: string,
-    userId: string,
-    tzOffset: number,
-  ): Promise<SurveyUserInfoResponse> => {
+  const followUp = async (slug: string, userId: string, tzOffset: number): Promise<SurveyUserInfoResponse> => {
     const survey = await Survey.findBySlug(slug, {
       attributes: [
         'id',
@@ -534,7 +525,8 @@ function surveyService({
     createRespondentWithJWT,
     userInfo,
     getSession,
-    setSession,
+    startSession,
+    saveSession,
     clearSession,
     getSubmissions,
     getFollowUpUrl,

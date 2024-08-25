@@ -15,7 +15,6 @@ import {
   groupSchemeMultiPrompts,
   isMealSection,
 } from '@intake24/common/surveys';
-import { SurveyState } from '@intake24/common/types';
 import { merge } from '@intake24/common/util';
 import { Survey } from '@intake24/db';
 
@@ -167,53 +166,41 @@ export function surveyRespondent() {
 
       return { status: 200, body: session };
     },
-    setSession: async ({ body: { sessionData }, params: { slug }, req }) => {
+    startSession: async ({ body: { session }, params: { slug }, req }) => {
       const { userId } = req.scope.cradle.user;
 
-      const session = await req.scope.cradle.surveyService.setSession(
-        slug,
-        userId,
-        sessionData as unknown as SurveyState,
-      );
+      await req.scope.cradle.surveyService.startSession(slug, userId, session);
 
-      return { status: 200, body: session };
+      return { status: 200, body: undefined };
+    },
+    saveSession: async ({ body: { session }, params: { slug }, req }) => {
+      const { userId } = req.scope.cradle.user;
+
+      await req.scope.cradle.surveyService.saveSession(slug, userId, session);
+
+      return { status: 200, body: undefined };
     },
     clearSession: async ({ params: { slug }, req }) => {
       const { userId } = req.scope.cradle.user;
 
       await req.scope.cradle.surveyService.clearSession(slug, userId);
 
-      return { status: 200, body: undefined };
+      return { status: 204, body: undefined };
     },
     rating: {
       middleware: [ratingRateLimiter],
       handler: async ({ body, params: { slug }, req }) => {
-        const { comment, rating, submissionId, type } = body;
         const { userId } = req.scope.cradle.user;
 
-        await req.scope.cradle.surveyService.storeRating(slug, userId, {
-          comment,
-          rating,
-          submissionId,
-          type,
-        });
+        await req.scope.cradle.surveyService.storeRating(slug, userId, body);
 
         return { status: 200, body: undefined };
       },
     },
     requestHelp: async ({ body, params: { slug: surveySlug }, req }) => {
       const { userId } = req.scope.cradle.user;
-      const { name, email, phone, phoneCountry, message } = body;
 
-      await req.scope.cradle.surveyService.requestHelp({
-        surveySlug,
-        userId,
-        name,
-        email,
-        phone,
-        phoneCountry,
-        message,
-      });
+      await req.scope.cradle.surveyService.requestHelp({ surveySlug, userId, ...body });
 
       return { status: 200, body: undefined };
     },
@@ -226,12 +213,7 @@ export function surveyRespondent() {
     }) => {
       const { userId } = req.scope.cradle.user;
 
-      const followUpInfo = await req.scope.cradle.surveySubmissionService.submit(
-        slug,
-        userId,
-        { ...(submission as any), userAgent },
-        tzOffset,
-      );
+      const followUpInfo = await req.scope.cradle.surveySubmissionService.submit(slug, userId, { ...submission, userAgent }, tzOffset);
 
       return { status: 200, body: followUpInfo };
     },
