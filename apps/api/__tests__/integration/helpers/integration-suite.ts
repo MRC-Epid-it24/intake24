@@ -154,12 +154,13 @@ class IntegrationSuite {
     ]);
 
     // Close redis queue connections
-    await Promise.all([this.scheduler.close()]);
+    await this.scheduler.close();
 
     // Close database connections
-    await this.db.close();
-
-    await this.kyselyDb.close();
+    await Promise.all([
+      this.db.close(),
+      this.kyselyDb.close(),
+    ]);
 
     // Close worker threads
     foodIndex.close();

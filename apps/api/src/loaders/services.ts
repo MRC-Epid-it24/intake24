@@ -8,6 +8,11 @@ async function exitSignalHandler() {
    */
   await ioc.cradle.scheduler.closeWorkers();
 
+  await Promise.all([
+    ioc.cradle.db.close(),
+    ioc.cradle.kyselyDb.close(),
+  ]);
+
   process.exit();
 }
 
@@ -16,10 +21,12 @@ export default async (ops: Ops): Promise<void> => {
   ioc.cradle.cache.init();
 
   // Databases
-  ioc.cradle.db.init();
+  await Promise.all([
+    ioc.cradle.db.init(),
+    ioc.cradle.kyselyDb.init(),
+  ]);
   if (ops.config.app.env === 'test')
     await ioc.cradle.db.sync(true);
-  ioc.cradle.kyselyDb.init();
 
   // Local filesystem
   await ioc.cradle.filesystem.init();
