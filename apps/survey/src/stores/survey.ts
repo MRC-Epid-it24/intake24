@@ -140,7 +140,10 @@ export const useSurvey = defineStore('survey', {
     undo: null,
   }),
   debounce: {
-    storeUserSession: 2500,
+    storeUserSession: [
+      3000,
+      { maxWait: 20000 },
+    ],
   },
   persist: {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}survey`,
