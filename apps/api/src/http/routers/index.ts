@@ -16,6 +16,7 @@ import { authentication } from './authentication.router';
 import { category } from './category.router';
 import { feedback } from './feedback.router';
 import { food } from './food.router';
+import { health } from './health.router';
 import { i18n } from './i18n.router';
 import { password } from './password.router';
 import { portionSize } from './portion-size.router';
@@ -33,6 +34,7 @@ export function registerRouters(express: Router) {
     contract.public,
     server.router(contract.public, {
       authentication: authentication(),
+      health: health(),
       i18n: i18n(),
       password: password(),
       survey: survey(),

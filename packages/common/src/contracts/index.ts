@@ -5,6 +5,7 @@ import { authentication } from './authentication.contract';
 import { category } from './category.contract';
 import { feedback } from './feedback.contract';
 import { food } from './food.contract';
+import { health } from './health.contract';
 import { i18n } from './i18n.contract';
 import { password } from './password.contract';
 import { portionSize } from './portion-size.contract';
@@ -18,6 +19,7 @@ const c = initContract();
 export const contract = c.router({
   public: {
     authentication,
+    health,
     i18n,
     password,
     survey,
