@@ -5357,6 +5357,343 @@
         }
       },
       "post": {
+        "description": "Start survey user session (current recall state).",
+        "summary": "Start user session",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "schemeId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "recallDate": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "startTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "endTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "submissionTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "uxSessionId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "userAgent": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "flags": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "nullable": true
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "customPromptAnswers": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            {
+                              "type": "string",
+                              "format": "null",
+                              "nullable": true
+                            }
+                          ],
+                          "nullable": true
+                        }
+                      },
+                      "selection": {
+                        "type": "object",
+                        "properties": {
+                          "element": {
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "format": "null",
+                                "nullable": true
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "meal"
+                                    ]
+                                  },
+                                  "mealId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "mealId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "food"
+                                    ]
+                                  },
+                                  "foodId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "foodId"
+                                ]
+                              }
+                            ],
+                            "nullable": true
+                          },
+                          "mode": {
+                            "type": "string",
+                            "enum": [
+                              "manual",
+                              "auto"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "element",
+                          "mode"
+                        ]
+                      },
+                      "meals": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "en": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "en"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                }
+                              ]
+                            },
+                            "defaultTime": {
+                              "type": "object",
+                              "properties": {
+                                "hours": {
+                                  "type": "number"
+                                },
+                                "minutes": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "hours",
+                                "minutes"
+                              ]
+                            },
+                            "time": {
+                              "type": "object",
+                              "properties": {
+                                "hours": {
+                                  "type": "number"
+                                },
+                                "minutes": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "hours",
+                                "minutes"
+                              ]
+                            },
+                            "duration": {
+                              "type": "number",
+                              "nullable": true
+                            },
+                            "flags": {
+                              "type": "array",
+                              "items": {
+                                "oneOf": [
+                                  {
+                                    "type": "string",
+                                    "enum": [
+                                      "free-entry-complete",
+                                      "no-meals-after",
+                                      "no-meals-between",
+                                      "no-meals-before",
+                                      "ready-meal-complete"
+                                    ]
+                                  },
+                                  {
+                                    "nullable": true
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "customPromptAnswers": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  {
+                                    "type": "string",
+                                    "format": "null",
+                                    "nullable": true
+                                  }
+                                ],
+                                "nullable": true
+                              }
+                            },
+                            "foods": {
+                              "type": "array",
+                              "items": {
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "defaultTime",
+                            "duration",
+                            "flags",
+                            "customPromptAnswers",
+                            "foods"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "schemeId",
+                      "recallDate",
+                      "startTime",
+                      "endTime",
+                      "submissionTime",
+                      "uxSessionId",
+                      "flags",
+                      "customPromptAnswers",
+                      "selection",
+                      "meals"
+                    ]
+                  }
+                },
+                "required": [
+                  "session"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "put": {
         "description": "Save survey user session (current recall state) on server. Functionality is controlled by survey settings.",
         "summary": "Set user session",
         "tags": [
@@ -5380,10 +5717,303 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "sessionData": {}
+                  "session": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "schemeId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "recallDate": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "startTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "endTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "submissionTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "uxSessionId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "userAgent": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "flags": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "nullable": true
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "customPromptAnswers": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            {
+                              "type": "string",
+                              "format": "null",
+                              "nullable": true
+                            }
+                          ],
+                          "nullable": true
+                        }
+                      },
+                      "selection": {
+                        "type": "object",
+                        "properties": {
+                          "element": {
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "format": "null",
+                                "nullable": true
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "meal"
+                                    ]
+                                  },
+                                  "mealId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "mealId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "food"
+                                    ]
+                                  },
+                                  "foodId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "foodId"
+                                ]
+                              }
+                            ],
+                            "nullable": true
+                          },
+                          "mode": {
+                            "type": "string",
+                            "enum": [
+                              "manual",
+                              "auto"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "element",
+                          "mode"
+                        ]
+                      },
+                      "meals": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "en": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "en"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                }
+                              ]
+                            },
+                            "defaultTime": {
+                              "type": "object",
+                              "properties": {
+                                "hours": {
+                                  "type": "number"
+                                },
+                                "minutes": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "hours",
+                                "minutes"
+                              ]
+                            },
+                            "time": {
+                              "type": "object",
+                              "properties": {
+                                "hours": {
+                                  "type": "number"
+                                },
+                                "minutes": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "hours",
+                                "minutes"
+                              ]
+                            },
+                            "duration": {
+                              "type": "number",
+                              "nullable": true
+                            },
+                            "flags": {
+                              "type": "array",
+                              "items": {
+                                "oneOf": [
+                                  {
+                                    "type": "string",
+                                    "enum": [
+                                      "free-entry-complete",
+                                      "no-meals-after",
+                                      "no-meals-between",
+                                      "no-meals-before",
+                                      "ready-meal-complete"
+                                    ]
+                                  },
+                                  {
+                                    "nullable": true
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "customPromptAnswers": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  {
+                                    "type": "string",
+                                    "format": "null",
+                                    "nullable": true
+                                  }
+                                ],
+                                "nullable": true
+                              }
+                            },
+                            "foods": {
+                              "type": "array",
+                              "items": {
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "defaultTime",
+                            "duration",
+                            "flags",
+                            "customPromptAnswers",
+                            "foods"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "schemeId",
+                      "recallDate",
+                      "startTime",
+                      "endTime",
+                      "submissionTime",
+                      "uxSessionId",
+                      "flags",
+                      "customPromptAnswers",
+                      "selection",
+                      "meals"
+                    ]
+                  }
                 },
                 "required": [
-                  "sessionData"
+                  "session"
                 ]
               }
             }
@@ -5394,31 +6024,14 @@
             "description": "200",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "userId": {
-                      "type": "string"
-                    },
-                    "surveyId": {
-                      "type": "string"
-                    },
-                    "sessionData": {
-                      "nullable": true
-                    }
-                  },
-                  "required": [
-                    "userId",
-                    "surveyId"
-                  ]
-                }
+                "schema": {}
               }
             }
           }
         }
       },
       "delete": {
-        "description": "Clear survey user session (current recall state) on server. Functionality is controlled by survey settings.",
+        "description": "Clear survey user session (current recall state).",
         "summary": "Clear user session",
         "tags": [
           "default",
@@ -5435,8 +6048,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "200",
+          "204": {
+            "description": "204",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5621,7 +6234,300 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "submission": {}
+                  "submission": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "schemeId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "recallDate": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "startTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "endTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "submissionTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                      },
+                      "uxSessionId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "userAgent": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "flags": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "nullable": true
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "customPromptAnswers": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            {
+                              "type": "string",
+                              "format": "null",
+                              "nullable": true
+                            }
+                          ],
+                          "nullable": true
+                        }
+                      },
+                      "selection": {
+                        "type": "object",
+                        "properties": {
+                          "element": {
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "format": "null",
+                                "nullable": true
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "meal"
+                                    ]
+                                  },
+                                  "mealId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "mealId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "food"
+                                    ]
+                                  },
+                                  "foodId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "foodId"
+                                ]
+                              }
+                            ],
+                            "nullable": true
+                          },
+                          "mode": {
+                            "type": "string",
+                            "enum": [
+                              "manual",
+                              "auto"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "element",
+                          "mode"
+                        ]
+                      },
+                      "meals": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "en": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "en"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                }
+                              ]
+                            },
+                            "defaultTime": {
+                              "type": "object",
+                              "properties": {
+                                "hours": {
+                                  "type": "number"
+                                },
+                                "minutes": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "hours",
+                                "minutes"
+                              ]
+                            },
+                            "time": {
+                              "type": "object",
+                              "properties": {
+                                "hours": {
+                                  "type": "number"
+                                },
+                                "minutes": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "hours",
+                                "minutes"
+                              ]
+                            },
+                            "duration": {
+                              "type": "number",
+                              "nullable": true
+                            },
+                            "flags": {
+                              "type": "array",
+                              "items": {
+                                "oneOf": [
+                                  {
+                                    "type": "string",
+                                    "enum": [
+                                      "free-entry-complete",
+                                      "no-meals-after",
+                                      "no-meals-between",
+                                      "no-meals-before",
+                                      "ready-meal-complete"
+                                    ]
+                                  },
+                                  {
+                                    "nullable": true
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "customPromptAnswers": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  {
+                                    "type": "string",
+                                    "format": "null",
+                                    "nullable": true
+                                  }
+                                ],
+                                "nullable": true
+                              }
+                            },
+                            "foods": {
+                              "type": "array",
+                              "items": {
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "defaultTime",
+                            "duration",
+                            "flags",
+                            "customPromptAnswers",
+                            "foods"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "schemeId",
+                      "recallDate",
+                      "startTime",
+                      "endTime",
+                      "submissionTime",
+                      "uxSessionId",
+                      "flags",
+                      "customPromptAnswers",
+                      "selection",
+                      "meals"
+                    ]
+                  }
                 },
                 "required": [
                   "submission"
