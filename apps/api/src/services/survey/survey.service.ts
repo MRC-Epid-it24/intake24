@@ -1,6 +1,7 @@
 import { URL } from 'node:url';
 
 import { addDays, addMinutes, startOfDay } from 'date-fns';
+import { Op } from 'sequelize';
 import { z, ZodError } from 'zod';
 
 import type { IoC } from '@intake24/api/ioc';
@@ -18,7 +19,6 @@ import { customField, type JobParams, type SurveyState } from '@intake24/common/
 import { isSessionAgeValid, isSessionFixedPeriodValid, randomString } from '@intake24/common/util';
 import {
   GenUserCounter,
-  Op,
   submissionScope,
   Survey,
   SurveySubmission,
@@ -214,10 +214,19 @@ function surveyService({
       numberOfSubmissionsForFeedback,
     } = survey;
 
-    const user = await User.findByPk(userId, { attributes: ['id', 'name'] });
+    const user = await User.findByPk(userId, {
+      attributes: ['id', 'name'],
+      include: [{
+        association: 'customFields',
+        attributes: ['name', 'value'],
+        required: false,
+        where: { name: 'it24:feedback' },
+      }],
+    });
     if (!user)
       throw new NotFoundError();
     const { name } = user;
+    const userFeedbackDisabled = ['0', 'false'].includes(user.customFields?.at(0)?.value ?? 'true');
 
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
@@ -242,7 +251,7 @@ function surveyService({
       userId,
       name,
       submissions: totalSubmissions,
-      showFeedback: !!(feedbackSchemeId && totalSubmissions >= numberOfSubmissionsForFeedback),
+      showFeedback: !!(!userFeedbackDisabled && feedbackSchemeId && totalSubmissions >= numberOfSubmissionsForFeedback),
       maximumTotalSubmissionsReached:
         maximumTotalSubmissions !== null && totalSubmissions >= maximumTotalSubmissions,
       maximumDailySubmissionsReached:

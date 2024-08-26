@@ -1,3 +1,7 @@
+---
+{ "outline": { "level": [2, 3] } }
+---
+
 # Survey schemes
 
 Survey recall flow is defined by scheme, which has couple of sections.
@@ -19,20 +23,27 @@ Edit tab allows to modify selected survey scheme.
 - `Type` - Placeholder at the moment for future to allow to define various types of survey schemes
 
 - `Flow` - Recall flow, valid options are `1-pass` or `2-pass` (default)
+
   - `1-pass` - Flow goes through each meal including foods portion size estimation in order to complete the meal
   - `2-pass` - Flow goes through each meal two times
     - first pass - Flow goes through each meal to collect meal info and foods (without portion size estimation)
     - second pass - Flow goes through each meal to collect portion size estimation
 
+- `Recall date offset` - Recall date offset in whole days
+  - `empty` - survey won't record recall date
+  - `integer` - survey records recall date with specified offset from start of survey (e.g. `-1` for yesterday)
+  - Respondent can override / nominate their own recall date if [`recall date prompt`](/admin/surveys/prompt-types#recall-date-prompt) is included in the scheme
+
 ### Default meals
 
 List of predefined meals that will appear at the start of the recall.
 
-- It allows to:
-  - Create new meals with default time and localized name
-  - Remove meals
-  - Load whole meal list from different scheme
-  - Reset the list to default one
+Section allows to:
+
+- Create new meals with default time and localized name
+- Remove meals
+- Load whole meal list from different scheme
+- Reset the list to default one
 
 ## Prompts
 
@@ -40,9 +51,7 @@ Prompts tab allows to design dietary survey recall flow and define details about
 
 Prompts are categorized to sections and they are asked in specified fixed order. See table below.
 
-### Recall sections
-
-| Name          | Description                                                  |
+| Section       | Description                                                  |
 | ------------- | ------------------------------------------------------------ |
 | 1. Pre-meal   | Prompts asked about whole recall before dietary data entered |
 | 2. Pre-foods  | Prompts asked about meal before foods were entered           |
@@ -66,11 +75,9 @@ When prompt section is selected, list of prompts appear below:
 
 Data export tab allows to define fields, which will get exported to flattened CSV file having `food-per-row` with all additional fields.
 
-There is a fixed list of possible data export sections
+Data export fields are grouped to sections.
 
-### Sections
-
-| Name                     | Description                                                                            |
+| Section                  | Description                                                                            |
 | ------------------------ | -------------------------------------------------------------------------------------- |
 | User record fields       | `users` table row based fields                                                         |
 | User custom fields       | `key:value` pairs from `user_custom_fields` table                                      |
@@ -111,7 +118,7 @@ User custom fields are key-value pairs, set up during respondent account creatio
 
 - `surveyId` - unique survey identifier, sequence number
 - `username` - survey-unique respondent identifier attached to both user and survey record (aka `user survey alias`)
-- `slug` - unique survey slug(name) used as part of the survey URL (aka `https://intake24.org/{SLUG}/recall`)
+- `slug` - unique survey slug (code), which forms part of the survey URL (aka `https://intake24.org/{SLUG}/recall`)
 
 #### Submission record fields
 
@@ -120,7 +127,7 @@ User custom fields are key-value pairs, set up during respondent account creatio
 - `startTime` - client-recorded recall start time, ISO 8601 format
 - `endTime` - client-recorded recall end time, ISO 8601 format
 - `submissionTime` - server-recorded submission time, ISO 8601 format
-- `recallDuration` - recall duration in mins (rounded to whole number using `truncate`)
+- `recallDuration` - recall duration in mins (calculated value `endTime - startTime`, `truncate`-rounded)
 - `userAgent` - client device raw user agent header
 - `browser` - client device browser name (user-agent parsed)
 - `engine` - client device browser engine name (user-agent parsed)
@@ -140,7 +147,7 @@ Submission-level custom data collected during the recall.
 - `mealId` - unique meal identifier, UUIDv4
 - `name` - meal name
 - `time` - meal time (HH:mm)
-- `duration` - meal duration (mins), calculated from `startTime` and `endTime`
+- `duration` - meal duration (mins)
 
 #### Meal custom fields
 

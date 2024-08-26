@@ -1,3 +1,7 @@
+---
+{ "outline": { "level": [2, 3] } }
+---
+
 # Surveys
 
 Survey section allows to manage surveys.
@@ -149,9 +153,12 @@ Expected JWT payload with claims:
 
 - `Store user session on server` - If enabled, user partial submission data are sent to server for store / retrieval. If disabled, user partial submission data are only stored locally in client browser.
 
-- `Session age` - Session duration as `ms-formatted` string, e.g. `30m`, `2h`, `1d` (see [ms](https://github.com/vercel/ms) for more information).
+- `Session max age` - Session duration from start of the survey (`ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information), e.g.
 
-- `Session fixed duration` - Fixed session duration as `ms-formatted` strings, e.g.
+  - `2h` - resets session after 2 hours from start of the survey
+  - `1d` - resets session after 1 day from start of the survey
+
+- `Session fixed duration` - Fixed day-time session duration (`ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information), e.g.
   - `1d+0h` - resets session next day at midnight
   - `2d+4h` - resets session in two days at 4am
 
@@ -160,6 +167,17 @@ Expected JWT payload with claims:
 - `Feedback scheme` - Associated feedback scheme. If not set, feedback feature is disabled.
 
 - `Number of submissions for feedback` - Minimal number of submissions per respondent account to allow to access the feedback
+
+:::tip
+
+Feedback access can be controlled on user/respondent level by specific `user custom field`. To disable feedback for specific respondent, set `user custom field` with:
+
+- name `it24:feedback`
+- value: `false` or `0`
+
+If `it24:feedback` field is not set, feedback is enabled by default (respects above settings).
+
+:::
 
 ## Overrides
 
