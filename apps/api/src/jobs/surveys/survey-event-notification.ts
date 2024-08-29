@@ -44,10 +44,9 @@ export default class SurveyEventNotification extends NotificationJob<'SurveyEven
 
   private async getEventPayload() {
     switch (this.params.type) {
-      case 'survey.session.started':
-        return this.getSession();
       case 'survey.session.submitted':
         return this.getSubmission(this.params.submissionId);
+      case 'survey.session.started':
       case 'survey.session.cancelled':
       default:
         return undefined;
