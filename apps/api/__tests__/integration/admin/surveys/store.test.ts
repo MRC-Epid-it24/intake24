@@ -125,6 +125,7 @@ export default () => {
         'searchSettings.relevantCategoryDepth',
         'surveySchemeOverrides.meals.0',
         'surveySchemeOverrides.prompts',
+        'surveySchemeOverrides.settings',
       ];
 
       await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput, log: true });

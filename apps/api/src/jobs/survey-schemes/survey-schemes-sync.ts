@@ -152,10 +152,13 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     for (const survey of surveys) {
       await this.migrateSchemeOverridePrompts(survey);
 
-      await survey.update({ surveySchemeOverrides: {
-        ...survey.surveySchemeOverrides,
-        prompts: survey.surveySchemeOverrides.prompts.map(mergeCallback),
-      } });
+      await survey.update({
+        surveySchemeOverrides: {
+          ...survey.surveySchemeOverrides,
+          prompts: survey.surveySchemeOverrides.prompts.map(mergeCallback),
+          settings: survey.surveySchemeOverrides.settings ?? {},
+        },
+      });
     }
 
     this.logger.debug(`Synchronization of survey schemes finished.`);

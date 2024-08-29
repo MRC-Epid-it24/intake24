@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { singlePrompt } from '../prompts';
 import { meal } from './meals';
+import { schemeSettings } from './scheme';
 
 export const surveyRatings = ['recall', 'feedback'] as const;
 export type SurveyRating = (typeof surveyRatings)[number];
@@ -21,12 +22,14 @@ export type SearchSortingAlgorithm = (typeof searchSortingAlgorithms)[number];
 export const schemeOverrides = z.object({
   meals: meal.array(),
   prompts: singlePrompt.array(),
+  settings: schemeSettings.partial(),
 });
 export type SchemeOverrides = z.infer<typeof schemeOverrides>;
 
 export const defaultOverrides: SchemeOverrides = {
   meals: [],
   prompts: [],
+  settings: {},
 };
 
 export const spellingCorrectionPreferences = ['phonetic', 'edit-distance', 'both'] as const;

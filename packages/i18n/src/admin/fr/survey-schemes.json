@@ -15,6 +15,7 @@
   },
   "settings": {
     "_": "Settings",
+    "title": "Settings",
     "types": {
       "_": "Type",
       "default": "Défaut"
@@ -226,6 +227,8 @@
   },
   "overrides": {
     "_": "IDéroger à la configuration",
+    "title": "Scheme overrides",
+    "subtitle": "Override parts of the survey scheme",
     "meals": {
       "title": "Ignorer la liste des repas de la configuration",
       "subtitle": "Ignorer la liste des repas de la configuration. Si laissé vide, la liste de la configuration sera utilisée. Si n'importe quel élément est ajouté, la liste complète sera utilisée."
@@ -233,6 +236,10 @@
     "prompts": {
       "title": "Déroger à certaines invites de la configuration",
       "subtitle": "Déroger à certaines invites spécifiques. Les changements seront fusionnés par identifiant d'invite."
+    },
+    "settings": {
+      "title": "Scheme settings overrides",
+      "subtitle": "Override specific scheme setting."
     }
   },
   "prompts": {

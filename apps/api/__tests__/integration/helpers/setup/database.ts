@@ -190,7 +190,7 @@ export async function initDatabase(): Promise<MockData> {
     allowGenUsers: false,
     notifications: [],
     supportEmail: 'testSupportEmail@example.com',
-    surveySchemeOverrides: { meals: [], prompts: [] },
+    surveySchemeOverrides: { meals: [], prompts: [], settings: {} },
   });
 
   await setupPermissions();

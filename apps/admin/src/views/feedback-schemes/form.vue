@@ -118,7 +118,7 @@
                 class="mb-4"
                 :error-messages="form.errors.get('visibility')"
                 hide-details="auto"
-                :items="visibilityList"
+                :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
                 outlined
@@ -249,7 +249,7 @@ export default defineComponent({
 
   setup(props) {
     const { i18n } = useI18n();
-    const { visibilityList } = useSelects();
+    const { visibilities } = useSelects();
 
     const types = feedbackTypes.map(value => ({
       value,
@@ -371,7 +371,7 @@ export default defineComponent({
       routeLeave,
       submit,
       requiredPhysicalDataFields,
-      visibilityList,
+      visibilities,
     };
   },
 });

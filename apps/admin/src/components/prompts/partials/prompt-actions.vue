@@ -55,7 +55,7 @@
                   <v-select
                     v-model="action.type"
                     hide-details="auto"
-                    :items="actionList"
+                    :items="actions"
                     :label="$t('survey-schemes.actions.types._')"
                     outlined
                   />
@@ -64,7 +64,7 @@
                       {{ $t('survey-schemes.actions.layouts._') }}
                     </div>
                     <v-checkbox
-                      v-for="layout in layoutList"
+                      v-for="layout in layouts"
                       :key="layout.value"
                       v-model="action.layout"
                       class="mr-2"
@@ -76,7 +76,7 @@
                     v-model="action.variant"
                     class="mb-4"
                     hide-details="auto"
-                    :items="actionVariantsList"
+                    :items="actionVariants"
                     :label="$t('survey-schemes.actions.variants._')"
                     outlined
                   />
@@ -201,13 +201,13 @@ export default defineComponent({
   emits: ['update:actions'],
 
   setup() {
-    const { actionList, actionVariantsList, colors, layoutList } = useSelects();
+    const { actions, actionVariants, colors, layouts } = useSelects();
 
     return {
-      actionList,
-      actionVariantsList,
+      actions,
+      actionVariants,
       colors,
-      layoutList,
+      layouts,
     };
   },
 

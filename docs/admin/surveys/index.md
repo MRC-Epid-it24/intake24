@@ -179,29 +179,27 @@ If `it24:feedback` field is not set, feedback is enabled by default (respects ab
 
 :::
 
-## Overrides
+## Scheme overrides
 
 Overrides tab allows to override certain parts of the scheme without a need to create whole new scheme.
 
-There are two sections that can be overridden in limited way, so it doesn't influence the overall scheme flow. UI is the same is in [`prompt editor`](/admin/surveys/schemes), so should feel familiar.
+There are three sections that can be overridden in limited way, so it doesn't influence the overall scheme flow. UI is the same is in [`prompt editor`](/admin/surveys/schemes), so should feel familiar.
 
-### Scheme prompts overrides
+### Settings overrides
+
+Scheme settings overrides section allows to override each field of the scheme.
+
+### Meals overrides
+
+Scheme meals overrides section allows to override whole `default meal list`. If it is left empty, original one from scheme is used. If any entry is entered, it overrides the whole default scheme meal list.
+
+### Prompts overrides
 
 Scheme prompts overrides section allow to override specific survey scheme prompt. When added to the list, user can modify the settings of particular prompt.
 
 ::: warning
 
 New prompt cannot be added or existing prompt cannot be removed from the scheme in this way. It only allows to modify existing prompts in order to retain original scheme flow. If you need to add / remove prompts, clone existing scheme, modify it and assign to the survey.
-
-:::
-
-### Scheme meals overrides
-
-Scheme meals overrides section allows to override whole `default meal list`. If it is left empty, original one from scheme is used. If any entry is
-
-::: warning
-
-Any entry overrides the whole default scheme meal list. This works differently to allow more flexibility as the meal list does not influence the survey flow.
 
 :::
 

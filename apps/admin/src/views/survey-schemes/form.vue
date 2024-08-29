@@ -27,7 +27,7 @@
                 class="mb-4"
                 :error-messages="form.errors.get('visibility')"
                 hide-details="auto"
-                :items="visibilityList"
+                :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
                 outlined
@@ -49,7 +49,7 @@
             </v-col>
           </v-row>
           <div class="text-subtitle-1 font-weight-medium py-4">
-            {{ $t('survey-schemes.settings._') }}
+            {{ $t('survey-schemes.settings.title') }}
           </div>
           <v-row>
             <v-col cols="12" md="6">
@@ -57,7 +57,7 @@
                 v-model="form.settings.type"
                 :error-messages="form.errors.get('settings.type')"
                 hide-details="auto"
-                :items="schemeTypeItems"
+                :items="schemeTypes"
                 :label="$t('survey-schemes.settings.types._')"
                 name="settings.type"
                 outlined
@@ -69,7 +69,7 @@
                 v-model="form.settings.flow"
                 :error-messages="form.errors.get('settings.flow')"
                 hide-details="auto"
-                :items="recallPassItems"
+                :items="recallFlows"
                 :label="$t('survey-schemes.settings.flows._')"
                 name="settings.flow"
                 outlined
@@ -81,7 +81,7 @@
                 v-model="form.settings.recallDate"
                 hide-details="auto"
                 :label="$t('survey-schemes.settings.recallDate')"
-                name="recallDate"
+                name="settings.recallDate"
                 outlined
               />
             </v-col>
@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
@@ -107,8 +107,7 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
-import { defaultMeals, defaultSchemeSettings, recallFlows, schemeTypes } from '@intake24/common/surveys';
-import { useI18n } from '@intake24/i18n';
+import { defaultMeals, defaultSchemeSettings } from '@intake24/common/surveys';
 
 export type SurveySchemeForm = {
   id: string | null;
@@ -133,22 +132,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { i18n } = useI18n();
-    const { visibilityList } = useSelects();
-
-    const schemeTypeItems = ref(
-      schemeTypes.map(value => ({
-        value,
-        text: i18n.t(`survey-schemes.settings.types.${value}`),
-      })),
-    );
-
-    const recallPassItems = ref(
-      recallFlows.map(value => ({
-        value,
-        text: i18n.t(`survey-schemes.settings.flows.${value}`),
-      })),
-    );
+    const { recallFlows, schemeTypes, visibilities } = useSelects();
 
     const { canHandleEntry, entry, entryLoaded, refs, refsLoaded } = useEntry<
       SurveySchemeEntry,
@@ -169,7 +153,6 @@ export default defineComponent({
     });
 
     return {
-      schemeTypeItems,
       canHandleEntry,
       entry,
       entryLoaded,
@@ -177,10 +160,11 @@ export default defineComponent({
       refsLoaded,
       clearError,
       form,
-      recallPassItems,
+      recallFlows,
       routeLeave,
+      schemeTypes,
       submit,
-      visibilityList,
+      visibilities,
     };
   },
 });

@@ -16,7 +16,8 @@
   },
 
   "settings": {
-    "_": "Settings",
+    "_": "Setting",
+    "title": "Settings",
     "types": {
       "_": "Type",
       "default": "Default"
@@ -230,7 +231,9 @@
     "none": "No translation"
   },
   "overrides": {
-    "_": "Scheme overrides",
+    "_": "Scheme override",
+    "title": "Scheme overrides",
+    "subtitle": "Override parts of the survey scheme",
     "meals": {
       "title": "Scheme meals overrides",
       "subtitle": "Override scheme meal list. If left empty, scheme list is used. If any item added, whole list is used."
@@ -238,6 +241,10 @@
     "prompts": {
       "title": "Scheme prompts overrides",
       "subtitle": "Override specific scheme prompt. Changes will get merged by Prompts ID."
+    },
+    "settings": {
+      "title": "Scheme settings overrides",
+      "subtitle": "Override specific scheme setting."
     }
   },
   "prompts": {

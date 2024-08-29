@@ -102,7 +102,7 @@
                 v-model="form.textDirection"
                 :error-messages="form.errors.get('textDirection')"
                 hide-details="auto"
-                :items="textDirectionList"
+                :items="textDirections"
                 :label="$t('languages.textDirections._')"
                 name="textDirection"
                 outlined
@@ -127,7 +127,7 @@
                 v-model="form.visibility"
                 :error-messages="form.errors.get('visibility')"
                 hide-details="auto"
-                :items="visibilityList"
+                :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
                 outlined
@@ -218,7 +218,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { flags, textDirectionList, visibilityList } = useSelects();
+    const { flags, textDirections, visibilities } = useSelects();
 
     const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(
       props,
@@ -252,8 +252,8 @@ export default defineComponent({
       form,
       routeLeave,
       submit,
-      textDirectionList,
-      visibilityList,
+      textDirections,
+      visibilities,
     };
   },
 

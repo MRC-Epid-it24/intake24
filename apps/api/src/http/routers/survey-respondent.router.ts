@@ -72,21 +72,17 @@ export function surveyRespondent() {
         surveyScheme,
         feedbackScheme,
         numberOfSubmissionsForFeedback,
-        session,
-        suspensionReason,
-        surveySchemeOverrides,
         searchSettings: {
           sortingAlgorithm: searchSortingAlgorithm,
           matchScoreWeight: searchMatchScoreWeight,
         },
-      } = survey;
-
-      let {
+        session,
+        suspensionReason,
         surveyScheme: {
-          meals,
           prompts: surveySchemePrompts,
-          settings,
         },
+        surveySchemeOverrides,
+
       } = survey;
 
       let state: SurveyStatus;
@@ -98,11 +94,12 @@ export function surveyRespondent() {
       else state = initialState;
 
       // Merge survey's scheme overrides
-      // 1) Meals - override whole list
-      if (surveySchemeOverrides.meals.length)
-        meals = [...surveySchemeOverrides.meals];
+      // Settings - merge
+      const settings = { ...surveyScheme.settings, ...surveySchemeOverrides.settings };
+      // Meals - override whole list
+      const meals = surveySchemeOverrides.meals.length ? surveySchemeOverrides.meals : surveyScheme.meals;
 
-      // 2) Prompts - merge by Prompt ID & Prompt Name
+      // Prompts - merge by Prompt ID & Prompt Name
       if (surveySchemeOverrides.prompts.length) {
         const flattenScheme = flattenSchemeWithSection(surveySchemePrompts);
         for (const prompt of surveySchemeOverrides.prompts) {
@@ -131,7 +128,7 @@ export function surveyRespondent() {
         }
       }
 
-      // 3) Crate multi-prompt groups
+      // Create multi-prompt groups
       const prompts = groupSchemeMultiPrompts(surveySchemePrompts);
 
       return {

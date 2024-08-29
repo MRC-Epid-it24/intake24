@@ -136,6 +136,7 @@ export default () => {
         'searchSettings.relevantCategoryDepth',
         'surveySchemeOverrides.meals.0',
         'surveySchemeOverrides.prompts',
+        'surveySchemeOverrides.settings',
         'userPersonalIdentifiers',
         'userCustomFields',
       ];

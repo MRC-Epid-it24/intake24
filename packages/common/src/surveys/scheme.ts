@@ -78,8 +78,8 @@ export const groupedRecallPrompts = z.object({
 });
 export type GroupedRecallPrompts = z.infer<typeof groupedRecallPrompts>;
 
-export function flattenScheme(scheme: RecallPrompts): Prompt[] {
-  return Object.values(scheme).reduce<Prompt[]>((acc, prompts) => {
+export function flattenScheme(scheme: RecallPrompts): SinglePrompt[] {
+  return Object.values(scheme).reduce<SinglePrompt[]>((acc, prompts) => {
     // @ts-expect-error fix
     acc.push(...(Array.isArray(prompts) ? prompts : flattenScheme(prompts)));
     return acc;
