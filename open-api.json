@@ -326,6 +326,28 @@
         }
       }
     },
+    "/ping": {
+      "get": {
+        "description": "Send ping to the server to check if it is up and running.",
+        "summary": "Ping",
+        "tags": [
+          "default",
+          "public",
+          "health"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/i18n": {
       "get": {
         "description": "Fetch list of available languages for front-ends.",
@@ -40707,11 +40729,34 @@
                       },
                       "prompts": {
                         "type": "array"
+                      },
+                      "settings": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "default"
+                            ]
+                          },
+                          "flow": {
+                            "type": "string",
+                            "enum": [
+                              "1-pass",
+                              "2-pass"
+                            ]
+                          },
+                          "recallDate": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        }
                       }
                     },
                     "required": [
                       "meals",
-                      "prompts"
+                      "prompts",
+                      "settings"
                     ]
                   },
                   "searchSettings": {
@@ -41106,11 +41151,34 @@
                         },
                         "prompts": {
                           "type": "array"
+                        },
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
                         "meals",
-                        "prompts"
+                        "prompts",
+                        "settings"
                       ]
                     },
                     "searchSettings": {
@@ -43021,11 +43089,34 @@
                         },
                         "prompts": {
                           "type": "array"
+                        },
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
                         "meals",
-                        "prompts"
+                        "prompts",
+                        "settings"
                       ]
                     },
                     "searchSettings": {
@@ -44926,11 +45017,34 @@
                       },
                       "prompts": {
                         "type": "array"
+                      },
+                      "settings": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "default"
+                            ]
+                          },
+                          "flow": {
+                            "type": "string",
+                            "enum": [
+                              "1-pass",
+                              "2-pass"
+                            ]
+                          },
+                          "recallDate": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        }
                       }
                     },
                     "required": [
                       "meals",
-                      "prompts"
+                      "prompts",
+                      "settings"
                     ]
                   },
                   "searchSettings": {
@@ -45314,11 +45428,34 @@
                         },
                         "prompts": {
                           "type": "array"
+                        },
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
                         "meals",
-                        "prompts"
+                        "prompts",
+                        "settings"
                       ]
                     },
                     "searchSettings": {
@@ -47219,11 +47356,34 @@
                       },
                       "prompts": {
                         "type": "array"
+                      },
+                      "settings": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "default"
+                            ]
+                          },
+                          "flow": {
+                            "type": "string",
+                            "enum": [
+                              "1-pass",
+                              "2-pass"
+                            ]
+                          },
+                          "recallDate": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        }
                       }
                     },
                     "required": [
                       "meals",
-                      "prompts"
+                      "prompts",
+                      "settings"
                     ]
                   },
                   "searchSettings": {
@@ -47637,11 +47797,34 @@
                         },
                         "prompts": {
                           "type": "array"
+                        },
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
                         "meals",
-                        "prompts"
+                        "prompts",
+                        "settings"
                       ]
                     },
                     "searchSettings": {
@@ -49580,11 +49763,34 @@
                         },
                         "prompts": {
                           "type": "array"
+                        },
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "default"
+                              ]
+                            },
+                            "flow": {
+                              "type": "string",
+                              "enum": [
+                                "1-pass",
+                                "2-pass"
+                              ]
+                            },
+                            "recallDate": {
+                              "type": "integer",
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
                         "meals",
-                        "prompts"
+                        "prompts",
+                        "settings"
                       ]
                     },
                     "searchSettings": {
