@@ -1,5 +1,4 @@
 import type { Job } from 'bullmq';
-import { literal, where } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import { Condition, customPrompts, defaultAction, getConditionDefaults, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
@@ -145,7 +144,6 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
     const surveys = await this.models.system.Survey.findAll({
       attributes: ['id', 'surveySchemeOverrides'],
-      where: where(literal(`json_array_length(survey_scheme_overrides::json->'prompts')`), '!=', 0),
       order: [['id', 'ASC']],
     });
 
