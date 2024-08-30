@@ -1,4 +1,4 @@
-export interface INCA3PortionSizeImage {
+export interface AlbanePortionSizeImage {
   owner: string;
   copyright: string;
   updateYear: string;
