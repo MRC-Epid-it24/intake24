@@ -1,5 +1,5 @@
 export interface AlbaneFacetsRow {
-  code_ALBANE: string;
-  libelle_ALBANE: string;
+  A_CODE: string;
+  A_LIBELLE: string;
   [k: string]: string;
 }

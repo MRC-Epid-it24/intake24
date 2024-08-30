@@ -35,12 +35,10 @@ import type {
   PkgMilkOnCerealPsm,
   PkgPizzaPsm,
   PkgPortionSizeMethod,
-  PkgPortionSizeMethodType,
   PkgStandardPortionPsm,
   PkgStandardUnit,
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
-import { PortionSizeMethodTypes } from '@intake24/cli/commands/packager/types/foods';
 
 // JSON encoding for Scala's Option type
 // Empty array for None, array with a single element for Some
@@ -79,10 +77,6 @@ function parseEither<T1, T2, L, R>(
         'Unexpected Either type format: first element of array must be either 0 or 1',
       );
   }
-}
-
-function isValidPortionSizeMethod(method: string): method is PkgPortionSizeMethodType {
-  return (PortionSizeMethodTypes as readonly string[]).includes(method);
 }
 
 function getPsmParameter(name: string, parameters: PortionSizeMethodParameterV3[]): string {
@@ -263,9 +257,6 @@ function packageMilkInHotDrink(portionSize: PortionSizeMethodV3): PkgMilkInHotDr
 }
 
 function packagePortionSize(portionSize: PortionSizeMethodV3): PkgPortionSizeMethod {
-  if (!isValidPortionSizeMethod(portionSize.method))
-    throw new Error(`Unexpected portion size estimation method: ${portionSize.method}`);
-
   switch (portionSize.method) {
     case 'as-served':
       return packageAsServed(portionSize);
@@ -283,6 +274,8 @@ function packagePortionSize(portionSize: PortionSizeMethodV3): PkgPortionSizeMet
       return packagePizza(portionSize);
     case 'milk-in-a-hot-drink':
       return packageMilkInHotDrink(portionSize);
+    default:
+      throw new Error(`Unexpected portion size estimation method: ${portionSize.method}`);
   }
 }
 

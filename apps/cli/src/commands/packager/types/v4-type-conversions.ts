@@ -181,6 +181,12 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod): PortionSizeMet
         method: 'pizza',
         parameters: {},
       };
+    case 'direct-weight':
+      return {
+        ...baseFields,
+        method: 'direct-weight',
+        parameters: {},
+      };
   }
 }
 
