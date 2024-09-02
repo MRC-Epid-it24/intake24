@@ -1,0 +1,22 @@
+- name: '{{ app|upper }} | Include shared vars'
+  include_vars: '../instances/{{ instance }}/shared/config.json'
+
+- name: '{{ app|upper }} | Configuration update started | Instance: {{ instance }}'
+  community.general.slack:
+    channel: '{{ slack.channel }}'
+    token: '{{ slack.token }}'
+    msg: '🚀 Configuration update started | *Instance:* {{ instance }}'
+
+- name: '{{ app|upper }} | Copy .env config file'
+  become_user: '{{ env.user }}'
+  copy:
+    src: '{{ apps[app].env_file }}'
+    dest: '{{ env.directory }}/{{ apps[app].path }}/.env'
+    mode: '600'
+
+- name: '{{ app|upper }} | Copy pm2 config file'
+  become_user: '{{ env.user }}'
+  copy:
+    src: '{{ apps[app].pm2_file }}'
+    dest: '{{ env.directory }}/{{ apps[app].path }}/ecosystem.config.js'
+    mode: '644'

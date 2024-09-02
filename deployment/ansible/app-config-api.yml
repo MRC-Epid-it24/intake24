@@ -1,0 +1,10 @@
+---
+- hosts: api
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'api'
+  roles:
+    - role: app-config
+    - role: app-service
+    - role: app-config-end

@@ -1,0 +1,5 @@
+- name: '{{ app|upper }} | Configuration update finished | Instance: {{ instance }}'
+  community.general.slack:
+    channel: '{{ slack.channel }}'
+    token: '{{ slack.token }}'
+    msg: '🏁 Configuration update finished | *Instance:* {{ instance }}'
