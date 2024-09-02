@@ -38,6 +38,7 @@ export const importerSpecificModulesExecutionOptions = [
   'locales',
   'nutrients',
   'global-foods',
+  'verify-local-foods',
   'local-foods',
   'global-categories',
   'local-categories',
@@ -136,6 +137,10 @@ export class ImporterV4 {
       await this.readGlobalFoods();
       await this.importGlobalFoods();
     },
+    'verify-local-foods': async () => {
+      await this.readLocalFoods();
+      await this.verifyPortionSizeImages();
+    },
     'local-foods': async () => {
       await this.readLocalFoods();
       await this.importLocalFoods();
@@ -162,6 +167,32 @@ export class ImporterV4 {
       await this.importEnabledLocalFoods();
     },
   };
+
+  private async batchOperation<T>(
+    objects: T[],
+    batchSize: number,
+    importFn: (object: T) => Promise<void>,
+  ) {
+    const objectCount = objects.length;
+
+    logger.info(`Processing ${objectCount} objects...`);
+
+    let importedCount = 0;
+
+    for (let i = 0; i < objectCount; i += batchSize) {
+      const batch = objects.slice(i, i + batchSize);
+      const ops = batch.map(obj => importFn(obj));
+
+      await Promise.all(ops);
+
+      importedCount += batch.length;
+
+      if (importedCount < objectCount)
+        logger.info(`  ${importedCount}/${objectCount} complete...`);
+    }
+
+    logger.info('Finished');
+  }
 
   private async batchImport<T>(
     objects: T[],
@@ -655,6 +686,39 @@ export class ImporterV4 {
         logger.info(`Importing local food record(s) for locale ${localeId}...`);
         await this.batchImport(localFoods, 'local food record', 50, food =>
           this.importLocalFood(localeId, food));
+      }
+    }
+  }
+
+  private async verifyPortionSizeImagesForFood(localeId: string, food: PkgLocalFood): Promise<void> {
+    for (const psm of food.portionSize) {
+      switch (psm.method) {
+        case 'as-served': {
+          if (await this.apiClient.portionSize.asServed.get(psm.servingImageSet) == null) {
+            logger.error(`Food ${food.code} in locale ${localeId} refers to as served image set ${psm.servingImageSet} that does not exist`);
+          }
+          if (psm.leftoversImageSet && await this.apiClient.portionSize.asServed.get(psm.leftoversImageSet) == null) {
+            logger.error(`Food ${food.code} in locale ${localeId} refers to as served image set ${psm.leftoversImageSet} that does not exist`);
+          }
+          break;
+        }
+        case 'drink-scale': {
+          if (await this.apiClient.portionSize.drinkware.get(psm.drinkwareId) == null) {
+            logger.error(`Food ${food.code} in locale ${localeId} refers to drinkware set ${psm.drinkwareId} that does not exist`);
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    }
+  }
+
+  private async verifyPortionSizeImages(): Promise<void> {
+    if (this.localFoods !== undefined) {
+      for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
+        logger.info(`Verifying portion size image references for ${localeId}...`);
+        await this.batchOperation(localFoods, 50, food => this.verifyPortionSizeImagesForFood(localeId, food));
       }
     }
   }
