@@ -7,4 +7,6 @@ export interface AlbaneFoodCategoryRow {
   name2?: string;
   code3?: string;
   name3?: string;
+  code4?: string;
+  name4?: string;
 }

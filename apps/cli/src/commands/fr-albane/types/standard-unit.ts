@@ -1,6 +1,6 @@
 export interface AlbaneStandardUnitRow {
-  code_ALBANE: string;
-  libelle_ALBANE: string;
+  A_CODE: string;
+  A_LIBELLE: string;
   US_TYPE: string;
   US_NUM: string;
   US_RAWCOOK: string;
