@@ -72,7 +72,7 @@ export const surveyRespondent = initContract().router({
   },
   clearSession: {
     method: 'DELETE',
-    path: '/surveys/:slug/session',
+    path: '/surveys/:slug/session/:sessionId?',
     body: null,
     responses: {
       204: z.undefined(),

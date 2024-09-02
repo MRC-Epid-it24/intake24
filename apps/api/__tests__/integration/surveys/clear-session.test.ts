@@ -48,10 +48,6 @@ export default () => {
     await suite.sharedTests.assertMissingAuthorization('delete', invalidUrl, { bearer: 'respondent' });
   });
 
-  it(`should return 404 when session record doesn't exist`, async () => {
-    await suite.sharedTests.assertMissingRecord('delete', url, { bearer: 'respondent' });
-  });
-
   it('should return 204 and no content', async () => {
     await UserSurveySession.create(input);
 

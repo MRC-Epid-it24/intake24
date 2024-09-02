@@ -11,7 +11,7 @@ import type {
   SurveyRatingRequest,
   SurveyUserInfoResponse,
 } from '@intake24/common/types/http';
-import type { FindOptions, Includeable, SubmissionScope } from '@intake24/db';
+import type { FindOptions, SubmissionScope } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
 import { strongPassword } from '@intake24/common/security';
@@ -307,26 +307,22 @@ function surveyService({
       throw new NotFoundError();
 
     const { id: surveyId, notifications, session } = survey;
+    const { uxSessionId } = sessionData;
 
     await UserSurveySession.destroy({ where: { userId, surveyId } });
 
     if (session.store) {
-      await UserSurveySession.create({ id: sessionData.uxSessionId, userId, surveyId, sessionData });
+      await UserSurveySession.create({ id: uxSessionId, userId, surveyId, sessionData });
     }
 
-    if (notifications.length && notifications.some(({ type }) => type === 'survey.session.started')
-    ) {
-      await scheduler.jobs.addJob({
-        type: 'SurveyEventNotification',
-        userId,
-        params: {
-          type: 'survey.session.started',
-          sessionId: sessionData.uxSessionId,
-          surveyId,
-          userId,
-        },
-      });
-    }
+    if (!notifications.some(({ type }) => type === 'survey.session.started'))
+      return;
+
+    await scheduler.jobs.addJob({
+      type: 'SurveyEventNotification',
+      userId,
+      params: { type: 'survey.session.started', sessionId: uxSessionId, surveyId, userId },
+    });
   };
 
   /**
@@ -361,30 +357,22 @@ function surveyService({
    *
    * @param {string} slug
    * @param {string} userId
+   * @param {string} [clientSessionId]
    * @returns
    */
-  const clearSession = async (slug: string, userId: string) => {
+  const clearSession = async (slug: string, userId: string, clientSessionId?: string) => {
     const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications'] });
     if (!survey)
       throw new NotFoundError();
 
     const session = await UserSurveySession.findOne({ where: { userId, surveyId: survey.id } });
-    if (!session)
-      throw new NotFoundError();
 
-    const {
-      id: sessionId,
-      sessionData: { submissionTime },
-    } = session;
-    await session.destroy();
+    const hasNotifications = survey.notifications.some(({ type }) => type === 'survey.session.cancelled');
+    const sessionId = session?.id ?? clientSessionId;
+    await session?.destroy();
 
-    if (
-      submissionTime
-      || !survey.notifications.length
-      || !survey.notifications.some(({ type }) => type === 'survey.session.cancelled')
-    ) {
+    if (session?.sessionData.submissionTime || !hasNotifications || !sessionId)
       return;
-    }
 
     await scheduler.jobs.addJob({
       type: 'SurveyEventNotification',
@@ -418,25 +406,23 @@ function surveyService({
     const redirectPrompts = surveyScheme.prompts.submission.filter(
       (prompt): prompt is Prompts['redirect-prompt'] => prompt.component === 'redirect-prompt',
     );
-    if (!redirectPrompts.length)
+    const size = redirectPrompts.length;
+    if (!size)
       return null;
 
     const identifiers = redirectPrompts.map(({ identifier }) => identifier);
 
-    const include: Includeable[] = [
-      { association: 'aliases', where: { surveyId }, required: false },
-      { association: 'customFields', where: { name: identifiers }, required: false },
-    ];
-
-    const user = await User.findByPk(userId, { attributes: ['id'], include });
+    const user = await User.findByPk(userId, {
+      attributes: ['id'],
+      include: [
+        { association: 'aliases', where: { surveyId }, required: false },
+        { association: 'customFields', where: { name: identifiers }, required: false },
+      ],
+    });
     if (!user)
       throw new NotFoundError();
 
     const { aliases = [], customFields = [] } = user;
-
-    const size = redirectPrompts.length;
-    if (!size)
-      return null;
 
     const urls = redirectPrompts.reduce<string | null | Record<string, string>>(
       (acc, { id, identifier, url }) => {
@@ -519,8 +505,14 @@ function surveyService({
   };
 
   const getSearchSettings = async (slug: string) => {
-    const survey = await Survey.findBySlug(slug, { attributes: ['searchSettings'], include: ['locale'] });
-    if (!survey || !survey.locale)
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['searchSettings'],
+      include: [{
+        association: 'locale',
+        attributes: ['code'],
+      }],
+    });
+    if (!survey?.locale)
       throw new NotFoundError();
 
     return {

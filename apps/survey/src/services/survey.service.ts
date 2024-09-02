@@ -74,15 +74,15 @@ export default {
   },
 
   startUserSession: async (surveyId: string, session: SurveyState) => {
-    await http.post<SurveyUserSessionResponse>(`surveys/${surveyId}/session`, { session });
+    await http.post(`surveys/${surveyId}/session`, { session });
   },
 
   saveUserSession: async (surveyId: string, session: SurveyState) => {
-    await http.put<SurveyUserSessionResponse>(`surveys/${surveyId}/session`, { session });
+    await http.put(`surveys/${surveyId}/session`, { session });
   },
 
-  clearUserSession: async (surveyId: string) => {
-    await http.delete(`surveys/${surveyId}/session`);
+  clearUserSession: async (surveyId: string, sessionId?: string) => {
+    await http.delete(sessionId ? `surveys/${surveyId}/session/${sessionId}` : `surveys/${surveyId}/session`);
   },
 
   submit: async (surveyId: string, submission: SurveyState): Promise<SurveySubmissionResponse> => {

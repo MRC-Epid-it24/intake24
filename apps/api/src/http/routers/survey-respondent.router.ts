@@ -177,10 +177,10 @@ export function surveyRespondent() {
 
       return { status: 200, body: undefined };
     },
-    clearSession: async ({ params: { slug }, req }) => {
+    clearSession: async ({ params: { slug, sessionId }, req }) => {
       const { userId } = req.scope.cradle.user;
 
-      await req.scope.cradle.surveyService.clearSession(slug, userId);
+      await req.scope.cradle.surveyService.clearSession(slug, userId, sessionId);
 
       return { status: 204, body: undefined };
     },

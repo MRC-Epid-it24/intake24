@@ -315,8 +315,10 @@ export const useSurvey = defineStore('survey', {
     },
 
     async cancelRecall() {
+      const { uxSessionId } = this.data;
+
       this.clearState();
-      await this.clearUserSession();
+      await this.clearUserSession(uxSessionId);
     },
 
     setState(payload: CurrentSurveyState) {
@@ -408,13 +410,13 @@ export const useSurvey = defineStore('survey', {
       await surveyService.saveUserSession(this.parameters.slug, this.data);
     },
 
-    async clearUserSession() {
+    async clearUserSession(sessionId?: string) {
       if (!this.parameters) {
         console.error(`Survey parameters not loaded. Cannot clear user session.`);
         return;
       }
 
-      await surveyService.clearUserSession(this.parameters.slug);
+      await surveyService.clearUserSession(this.parameters.slug, sessionId);
     },
 
     async submitRecall() {
