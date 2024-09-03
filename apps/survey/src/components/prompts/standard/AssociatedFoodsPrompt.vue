@@ -1,16 +1,16 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="activePrompt" :tile="isMobile" @change="updatePrompts">
-      <v-expansion-panel v-for="(assocPrompt, index) in prompts" :key="index">
+      <v-expansion-panel v-for="(promptState, index) in promptStates" :key="index">
         <v-expansion-panel-header>
           {{ promptHeader(index) }}
           <template #actions>
-            <expansion-panel-actions :valid="isPromptValid(assocPrompt)" />
+            <expansion-panel-actions :valid="isPromptValid(promptState)" />
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-radio-group
-            v-model="assocPrompt.mainFoodConfirmed"
+            v-model="promptState.mainFoodConfirmed"
             :row="!isMobile"
             @change="onConfirmStateChanged(index)"
           >
@@ -33,67 +33,72 @@
             <div
               v-if="
                 !associatedFoodPrompts[index].foodCode
-                  && assocPrompt.mainFoodConfirmed
-                  && assocPrompt.foods.length > 0
+                  && promptState.mainFoodConfirmed
+                  && promptState.foods.length > 0
                   && !showFoodChooser(index)
               "
             >
               <v-card
-                v-for="(foodItem, foodIndex) in assocPrompt.foods"
+                v-for="(foodItem, foodIndex) in promptState.foods"
                 :key="foodIndex"
                 class="mb-3"
                 color="grey lighten-4"
                 flat
               >
-                <div class="d-flex flex-column flex-sm-row justify-space-between px-3 py-2 ga-3">
-                  <div class="align-self-start align-self-sm-center font-weight-medium">
-                    <v-icon left>
-                      $food
-                    </v-icon>
-                    {{ associatedFoodDescription(foodItem) }}
-                  </div>
-                  <div class="align-self-end align-self-sm-center">
-                    <v-btn
-                      color="primary lighten-1"
-                      depressed
-                      :title="promptI18n['select.different']"
-                      @click="replaceFood(index, foodIndex)"
-                    >
-                      <v-icon left>
-                        $edit
-                      </v-icon>
-                      {{ promptI18n['select.different'] }}
-                    </v-btn>
-                    <confirm-dialog
-                      v-if="allowMultiple && associatedFoodPrompts[index].multiple"
-                      :label="promptI18n['select.remove']"
-                      @confirm="removeFood(index, foodIndex)"
-                    >
-                      <template #activator="{ on, attrs }">
+                <v-card-text class="pa-0">
+                  <v-container fluid>
+                    <v-row>
+                      <v-col class="text-h6 ma-0" cols="7">
+                        <v-icon left>
+                          $food
+                        </v-icon>
+                        {{ associatedFoodDescription(foodItem) }}
+                      </v-col>
+                      <v-col class="food-buttons" cols="5">
                         <v-btn
-                          v-bind="attrs"
-                          class="ml-2"
+                          class="food-button"
                           color="primary lighten-1"
                           depressed
-                          :title="promptI18n['select.remove']"
-                          v-on="on"
+                          :title="promptI18n['select.different']"
+                          @click="replaceFood(index, foodIndex)"
                         >
                           <v-icon left>
-                            $delete
+                            $edit
                           </v-icon>
-                          {{ promptI18n['select.remove'] }}
+                          {{ promptI18n['select.different'] }}
                         </v-btn>
-                      </template>
-                      <i18n path="recall.menu.food.deleteConfirm">
-                        <template #item>
-                          <span class="font-weight-medium">
-                            {{ associatedFoodDescription(foodItem) }}
-                          </span>
-                        </template>
-                      </i18n>
-                    </confirm-dialog>
-                  </div>
-                </div>
+                        <confirm-dialog
+                          v-if="allowMultiple && associatedFoodPrompts[index].multiple"
+                          :label="promptI18n['select.remove']"
+                          @confirm="removeFood(index, foodIndex)"
+                        >
+                          <template #activator="{ on, attrs }">
+                            <v-btn
+                              v-bind="attrs"
+                              class="food-button"
+                              color="primary lighten-1"
+                              depressed
+                              :title="promptI18n['select.remove']"
+                              v-on="on"
+                            >
+                              <v-icon left>
+                                $delete
+                              </v-icon>
+                              {{ promptI18n['select.remove'] }}
+                            </v-btn>
+                          </template>
+                          <i18n path="recall.menu.food.deleteConfirm">
+                            <template #item>
+                              <span class="font-weight-medium">
+                                {{ associatedFoodDescription(foodItem) }}
+                              </span>
+                            </template>
+                          </i18n>
+                        </confirm-dialog>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
               </v-card>
             </div>
           </v-expand-transition>
@@ -104,7 +109,7 @@
               <v-card-title>{{ promptI18n.moreFoodsQuestion }}</v-card-title>
               <v-card-text>
                 <v-radio-group
-                  v-model="assocPrompt.additionalFoodConfirmed"
+                  v-model="promptState.additionalFoodConfirmed"
                   :row="!isMobile"
                   @change="onConfirmStateChanged(index)"
                 >
@@ -224,6 +229,10 @@ export default defineComponent({
       type: Object as PropType<EncodedFood>,
       required: true,
     },
+    prompts: {
+      type: Array as PropType<Array<UserAssociatedFoodPrompt>>,
+      required: true,
+    },
     localeId: {
       type: String,
       required: true,
@@ -259,11 +268,11 @@ export default defineComponent({
     );
 
     const activePrompt = ref(props.value.activePrompt);
-    const prompts = ref(props.value.prompts);
+    const promptStates = ref(props.value.promptStates);
     const allowMultiple = computed(() => props.prompt.multiple);
 
     const replaceFoodIndex = ref(
-      props.food.data.associatedFoodPrompts.map(() => undefined as number | undefined),
+      props.prompts.map(() => undefined as number | undefined),
     );
 
     // React to changes to the meal's foods list and filter out references to foods (created
@@ -277,8 +286,8 @@ export default defineComponent({
     watch(
       () => props.meal?.foods,
       (newFoods) => {
-        for (let i = 0; i < prompts.value.length; ++i) {
-          const prompt = prompts.value[i];
+        for (let i = 0; i < promptStates.value.length; ++i) {
+          const prompt = promptStates.value[i];
 
           const update = {
             ...prompt,
@@ -287,7 +296,7 @@ export default defineComponent({
             ),
           };
 
-          set(prompts.value, i, update);
+          set(promptStates.value, i, update);
         }
       },
       { deep: true, immediate: true },
@@ -297,7 +306,7 @@ export default defineComponent({
       action,
       activePrompt,
       promptI18n,
-      prompts,
+      promptStates,
       replaceFoodIndex,
       allowMultiple,
       translate,
@@ -308,15 +317,15 @@ export default defineComponent({
   computed: {
 
     associatedFoodPrompts(): UserAssociatedFoodPrompt[] {
-      return this.food.data.associatedFoodPrompts;
+      return this.prompts;
     },
 
     isValid(): boolean {
-      return this.prompts.every(isPromptValid);
+      return this.promptStates.every(isPromptValid);
     },
 
     usedExistingFoodIds(): string[] {
-      const result = this.prompts.flatMap(prompt =>
+      const result = this.promptStates.flatMap(prompt =>
         prompt.foods
           .filter(food => food.type === 'existing' && food.existingFoodId !== undefined)
           .map(food => food.existingFoodId!),
@@ -375,7 +384,7 @@ export default defineComponent({
     },
 
     showFoodChooser(promptIndex: number): boolean {
-      const prompt = this.prompts[promptIndex];
+      const prompt = this.promptStates[promptIndex];
 
       return !!(
         this.replaceFoodIndex[promptIndex] !== undefined
@@ -386,14 +395,14 @@ export default defineComponent({
 
     showMoreFoodsQuestion(promptIndex: number): boolean {
       const associatedPrompt = this.associatedFoodPrompts[promptIndex];
-      const prompt = this.prompts[promptIndex];
+      const state = this.promptStates[promptIndex];
 
       return !!(
         !associatedPrompt.foodCode
         && this.allowMultiple
         && this.associatedFoodPrompts[promptIndex].multiple
-        && prompt.mainFoodConfirmed
-        && prompt.foods.length > 0
+        && state.mainFoodConfirmed
+        && state.foods.length > 0
         && this.replaceFoodIndex[promptIndex] === undefined
       );
     },
@@ -418,14 +427,14 @@ export default defineComponent({
     },
 
     removeFood(promptIndex: number, foodIndex: number) {
-      const prompt = this.prompts[promptIndex];
+      const state = this.promptStates[promptIndex];
 
       const update = {
-        ...prompt,
-        foods: prompt.foods.slice(0, foodIndex).concat(prompt.foods.slice(foodIndex + 1)),
+        ...state,
+        foods: state.foods.slice(0, foodIndex).concat(state.foods.slice(foodIndex + 1)),
       };
 
-      this.prompts.splice(promptIndex, 1, update);
+      this.promptStates.splice(promptIndex, 1, update);
 
       this.updatePrompts();
     },
@@ -443,10 +452,10 @@ export default defineComponent({
     },
 
     onFoodSelected(selectedFood: AssociatedFoodPromptItem, promptIndex: number): void {
-      const prompt = this.prompts[promptIndex];
+      const state = this.promptStates[promptIndex];
       const replaceIndex = this.replaceFoodIndex[promptIndex];
 
-      const foods = prompt.foods.slice();
+      const foods = state.foods.slice();
 
       if (replaceIndex !== undefined) {
         foods[replaceIndex] = selectedFood;
@@ -457,24 +466,24 @@ export default defineComponent({
       }
 
       const update = {
-        ...prompt,
+        ...state,
         additionalFoodConfirmed:
-          prompt.additionalFoodConfirmed === true ? undefined : prompt.additionalFoodConfirmed,
+          state.additionalFoodConfirmed === true ? undefined : state.additionalFoodConfirmed,
         foods,
       };
 
-      this.prompts.splice(promptIndex, 1, update);
+      this.promptStates.splice(promptIndex, 1, update);
 
       this.goToNextIfCan(promptIndex);
       this.updatePrompts();
     },
 
     onConfirmStateChanged(index: number) {
-      const assocPrompt = this.associatedFoodPrompts[index];
-      const prompt = this.prompts[index];
-      if (prompt.mainFoodConfirmed && assocPrompt.foodCode && !prompt.foods.length) {
+      const prompt = this.associatedFoodPrompts[index];
+      const state = this.promptStates[index];
+      if (state.mainFoodConfirmed && prompt.foodCode && !state.foods.length) {
         this.foodSelected(
-          { code: assocPrompt.foodCode, name: this.translate(assocPrompt.genericName) },
+          { code: prompt.foodCode, name: this.translate(prompt.genericName) },
           index,
         );
       }
@@ -483,19 +492,31 @@ export default defineComponent({
     },
 
     goToNextIfCan(index: number) {
-      if (!isPromptValid(this.prompts[index]))
+      if (!isPromptValid(this.promptStates[index]))
         return;
 
-      this.activePrompt = getNextPrompt(this.prompts);
+      this.activePrompt = getNextPrompt(this.promptStates);
     },
 
     updatePrompts() {
-      const { activePrompt, prompts } = this;
+      const { activePrompt, promptStates } = this;
 
-      this.$emit('input', { activePrompt, prompts });
+      this.$emit('input', { activePrompt, promptStates });
     },
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="css" scoped>
+.food-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  justify-content: flex-end;
+  padding-left: 0;
+}
+
+.food-button {
+  min-width: 150px !important;
+}
+</style>

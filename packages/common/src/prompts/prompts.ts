@@ -33,6 +33,7 @@ export type CustomComponentType = (typeof customComponentTypes)[number];
 export const standardComponentTypes = [
   'addon-foods-prompt',
   'associated-foods-prompt',
+  'general-associated-foods-prompt',
   'edit-meal-prompt',
   'external-source-prompt',
   'final-prompt',
@@ -345,6 +346,15 @@ const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
   multiple: z.boolean(),
 });
 
+const generalAssociatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
+  component: z.literal('general-associated-foods-prompt'),
+  categoryCode: z.string(),
+  promptText: localeTranslation,
+  genericName: localeTranslation,
+  multiple: z.boolean(),
+  skipPortionSize: z.boolean(),
+});
+
 const editMealPrompt = baseStandardPrompt.extend({
   component: z.literal('edit-meal-prompt'),
   separateDrinks: z.boolean(),
@@ -453,6 +463,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   // Standard
   addonFoodsPrompt,
   associatedFoodsPrompt,
+  generalAssociatedFoodsPrompt,
   editMealPrompt,
   externalSourcePrompt,
   finalPrompt,
@@ -511,6 +522,7 @@ export const prompts = z.object({
   // Standard
   'addon-foods-prompt': addonFoodsPrompt,
   'associated-foods-prompt': associatedFoodsPrompt,
+  'general-associated-foods-prompt': generalAssociatedFoodsPrompt,
   'edit-meal-prompt': editMealPrompt,
   'external-source-prompt': externalSourcePrompt,
   'final-prompt': finalPrompt,

@@ -1,7 +1,9 @@
 <template>
   <v-card class="mb-4" v-bind="{ disabled, flat, outlined, tile }">
-    <v-toolbar color="grey lighten-4" v-bind="{ flat, tile }">
-      <v-toolbar-title>{{ label }}</v-toolbar-title>
+    <v-toolbar color="grey lighten-4" v-bind="{ flat, tile }" flat>
+      <v-toolbar-title class="toolbar">
+        {{ label }}
+      </v-toolbar-title>
       <v-spacer />
       <v-menu bottom left>
         <template #activator="{ attrs, on }">
@@ -170,4 +172,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.toolbar {
+  font-size: 110%;
+}
+</style>

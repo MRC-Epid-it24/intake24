@@ -584,6 +584,20 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
       );
     }
 
+    case 'general-associated-foods-prompt': {
+      if (foodState.type !== 'encoded-food')
+        return false;
+      if (!foodPortionSizeComplete(foodState))
+        return false;
+
+      const mealIndex = getMealIndexForSelection(surveyState.data.meals, selection);
+
+      if (mealIndex !== undefined && !mealPortionSizeComplete(surveyState.data.meals[mealIndex]))
+        return false;
+
+      return !(foodState.flags.includes(`${prompt.id}-complete`) || foodState.flags.includes('disable-general-associated-foods'));
+    }
+
     case 'no-more-information-prompt': {
       if (selection.mode === 'manual') {
         if (selection.element?.type === 'meal') {

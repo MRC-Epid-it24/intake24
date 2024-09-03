@@ -94,6 +94,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['foods'],
   },
+  'general-associated-foods-prompt': {
+    tabs: [...tabs],
+    sections: ['foods'],
+  },
   'edit-meal-prompt': {
     tabs: [...tabs],
     sections: ['preFoods'],
