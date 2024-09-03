@@ -51,6 +51,7 @@ export default await antfu({
     'ts/consistent-type-definitions': 'off',
     'ts/no-explicit-any': 'off',
     'ts/no-use-before-define': 'warn',
+    'unicorn/consistent-function-scoping': 'off',
     'vue/attributes-order': ['error', { alphabetical: true }],
     'vue/block-order': ['error', { order: [['script', 'template'], 'style'] }],
     'vue/component-name-in-template-casing': ['error', 'kebab-case'],
