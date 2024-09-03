@@ -150,7 +150,12 @@ export type PromptStates = {
   };
   'associated-foods-prompt': {
     activePrompt: number;
-    prompts: AssociatedFoodPrompt[];
+    promptStates: AssociatedFoodPrompt[];
+  };
+  'generalised-associated-foods-prompt': {
+    mainFoodConfirmed?: boolean;
+    additionalFoodConfirmed?: boolean;
+    foods: AssociatedFoodPromptItem[];
   };
   'edit-meal-prompt': FoodState[];
   'external-source-prompt': {

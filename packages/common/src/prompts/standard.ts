@@ -204,9 +204,24 @@ export const aggregateChoicePrompt: Prompts['aggregate-choice-prompt'] = copy({
   foodFilter: undefined,
 });
 
+export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-prompt'] = copy({
+  ...basePrompt,
+  component: 'general-associated-foods-prompt',
+  type: 'standard',
+  id: 'general-associated-foods-prompt',
+  name: 'Generalised associated foods prompt',
+  categoryCode: '',
+  promptText: {},
+  genericName: {},
+  categoriesFirst: { browse: false, search: false },
+  multiple: false,
+  skipPortionSize: false,
+});
+
 export const standardPrompts = [
   addonFoodsPrompt,
   associatedFoodsPrompt,
+  generalAssociatedFoodsPrompt,
   editMealPrompt,
   externalSourcePrompt,
   finalPrompt,

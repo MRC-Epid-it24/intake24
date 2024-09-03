@@ -7,6 +7,7 @@
       localeId,
       surveySlug,
       prompt,
+      prompts: associatedFoodPrompts,
       section,
     }"
     @action="action"
@@ -16,7 +17,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { AssociatedFoodPrompt, Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -75,10 +76,12 @@ export default defineComponent({
 
     const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
       activePrompt: 0,
-      prompts: food().data.associatedFoodPrompts.map(prompt =>
+      promptStates: food().data.associatedFoodPrompts.map(prompt =>
         initialPromptState(props.prompt.multiple && prompt.multiple),
       ),
     });
+
+    const associatedFoodPrompts = computed(() => food().data.associatedFoodPrompts);
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
@@ -158,7 +161,7 @@ export default defineComponent({
       const missingFoods: MissingFood[] = [];
       const existingFoods: LinkAsMainExisting[] = [];
 
-      state.value.prompts.forEach((prompt, idx) => {
+      state.value.promptStates.forEach((prompt, idx) => {
         const promptDef = food().data.associatedFoodPrompts[idx];
 
         if (prompt.mainFoodConfirmed) {
@@ -304,6 +307,7 @@ export default defineComponent({
       action,
       update,
       searchParameters: survey.searchParameters,
+      associatedFoodPrompts,
     };
   },
 });

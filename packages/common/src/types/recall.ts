@@ -51,6 +51,7 @@ export const staticFoodFlag = [
   'portion-size-method-complete',
   'recipe-builder-complete',
   'associated-foods-complete',
+  'disable-general-associated-foods',
 ] as const;
 export type StaticFoodFlag = (typeof staticFoodFlag)[number];
 export const dynamicFoodFlag = z.custom<`${string}-acknowledged` | `${string}-complete`>((val) => {
@@ -60,7 +61,7 @@ export type DynamicFoodFlag = z.infer<typeof dynamicFoodFlag>;
 export const foodFlag = z.union([z.enum(staticFoodFlag), dynamicFoodFlag, z.string()]);
 export type FoodFlag = z.infer<typeof foodFlag>;
 
-export const customPromptAnswer = z.union([z.string(), z.array(z.string()), z.number(), z.array(z.number()), z.null()]);
+export const customPromptAnswer = z.union([z.string(), z.array(z.string()), z.number(), z.array(z.number()), z.boolean(), z.array(z.boolean()), z.null()]);
 export type CustomPromptAnswer = z.infer<typeof customPromptAnswer>;
 
 export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;

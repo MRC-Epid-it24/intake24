@@ -2,6 +2,7 @@
   <v-tab-item key="options" value="options">
     <language-selector
       :default="[]"
+      flat
       :label="$t('common.options.title').toString()"
       :value="options"
       @input="update('options', $event)"
