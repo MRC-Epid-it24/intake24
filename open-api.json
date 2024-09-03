@@ -4692,6 +4692,16 @@
                                         "nullable": true
                                       }
                                     },
+                                    "intake": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "enum": [
+                                          "summary",
+                                          "description"
+                                        ]
+                                      }
+                                    },
                                     "range": {
                                       "type": "object",
                                       "properties": {
@@ -4725,6 +4735,7 @@
                                     "name",
                                     "summary",
                                     "description",
+                                    "intake",
                                     "range",
                                     "sentiment"
                                   ]
@@ -6051,7 +6062,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/surveys/{slug}/session/{sessionId}?": {
       "delete": {
         "description": "Clear survey user session (current recall state).",
         "summary": "Clear user session",
@@ -6062,6 +6075,14 @@
         "parameters": [
           {
             "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
             "in": "path",
             "required": true,
             "schema": {
@@ -11008,6 +11029,16 @@
                                           "nullable": true
                                         }
                                       },
+                                      "intake": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string",
+                                          "enum": [
+                                            "summary",
+                                            "description"
+                                          ]
+                                        }
+                                      },
                                       "range": {
                                         "type": "object",
                                         "properties": {
@@ -11041,6 +11072,7 @@
                                       "name",
                                       "summary",
                                       "description",
+                                      "intake",
                                       "range",
                                       "sentiment"
                                     ]
@@ -12238,6 +12270,16 @@
                                   "nullable": true
                                 }
                               },
+                              "intake": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "summary",
+                                    "description"
+                                  ]
+                                }
+                              },
                               "range": {
                                 "type": "object",
                                 "properties": {
@@ -12271,6 +12313,7 @@
                               "name",
                               "summary",
                               "description",
+                              "intake",
                               "range",
                               "sentiment"
                             ]
@@ -13328,6 +13371,16 @@
                                     "nullable": true
                                   }
                                 },
+                                "intake": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "summary",
+                                      "description"
+                                    ]
+                                  }
+                                },
                                 "range": {
                                   "type": "object",
                                   "properties": {
@@ -13361,6 +13414,7 @@
                                 "name",
                                 "summary",
                                 "description",
+                                "intake",
                                 "range",
                                 "sentiment"
                               ]
@@ -14622,6 +14676,16 @@
                                     "nullable": true
                                   }
                                 },
+                                "intake": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "summary",
+                                      "description"
+                                    ]
+                                  }
+                                },
                                 "range": {
                                   "type": "object",
                                   "properties": {
@@ -14655,6 +14719,7 @@
                                 "name",
                                 "summary",
                                 "description",
+                                "intake",
                                 "range",
                                 "sentiment"
                               ]
@@ -15817,6 +15882,16 @@
                                   "nullable": true
                                 }
                               },
+                              "intake": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "summary",
+                                    "description"
+                                  ]
+                                }
+                              },
                               "range": {
                                 "type": "object",
                                 "properties": {
@@ -15850,6 +15925,7 @@
                               "name",
                               "summary",
                               "description",
+                              "intake",
                               "range",
                               "sentiment"
                             ]
@@ -16904,6 +16980,16 @@
                                     "nullable": true
                                   }
                                 },
+                                "intake": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "summary",
+                                      "description"
+                                    ]
+                                  }
+                                },
                                 "range": {
                                   "type": "object",
                                   "properties": {
@@ -16937,6 +17023,7 @@
                                 "name",
                                 "summary",
                                 "description",
+                                "intake",
                                 "range",
                                 "sentiment"
                               ]
@@ -18099,6 +18186,16 @@
                                   "nullable": true
                                 }
                               },
+                              "intake": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "summary",
+                                    "description"
+                                  ]
+                                }
+                              },
                               "range": {
                                 "type": "object",
                                 "properties": {
@@ -18132,6 +18229,7 @@
                               "name",
                               "summary",
                               "description",
+                              "intake",
                               "range",
                               "sentiment"
                             ]
@@ -19199,6 +19297,16 @@
                                     "nullable": true
                                   }
                                 },
+                                "intake": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "summary",
+                                      "description"
+                                    ]
+                                  }
+                                },
                                 "range": {
                                   "type": "object",
                                   "properties": {
@@ -19232,6 +19340,7 @@
                                 "name",
                                 "summary",
                                 "description",
+                                "intake",
                                 "range",
                                 "sentiment"
                               ]
@@ -20427,6 +20536,16 @@
                                     "nullable": true
                                   }
                                 },
+                                "intake": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "summary",
+                                      "description"
+                                    ]
+                                  }
+                                },
                                 "range": {
                                   "type": "object",
                                   "properties": {
@@ -20460,6 +20579,7 @@
                                 "name",
                                 "summary",
                                 "description",
+                                "intake",
                                 "range",
                                 "sentiment"
                               ]
@@ -21648,6 +21768,16 @@
                                     "nullable": true
                                   }
                                 },
+                                "intake": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "summary",
+                                      "description"
+                                    ]
+                                  }
+                                },
                                 "range": {
                                   "type": "object",
                                   "properties": {
@@ -21681,6 +21811,7 @@
                                 "name",
                                 "summary",
                                 "description",
+                                "intake",
                                 "range",
                                 "sentiment"
                               ]
@@ -36967,6 +37098,16 @@
                                           "nullable": true
                                         }
                                       },
+                                      "intake": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string",
+                                          "enum": [
+                                            "summary",
+                                            "description"
+                                          ]
+                                        }
+                                      },
                                       "range": {
                                         "type": "object",
                                         "properties": {
@@ -37000,6 +37141,7 @@
                                       "name",
                                       "summary",
                                       "description",
+                                      "intake",
                                       "range",
                                       "sentiment"
                                     ]
@@ -42354,6 +42496,16 @@
                                         "nullable": true
                                       }
                                     },
+                                    "intake": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "enum": [
+                                          "summary",
+                                          "description"
+                                        ]
+                                      }
+                                    },
                                     "range": {
                                       "type": "object",
                                       "properties": {
@@ -42387,6 +42539,7 @@
                                     "name",
                                     "summary",
                                     "description",
+                                    "intake",
                                     "range",
                                     "sentiment"
                                   ]
@@ -44292,6 +44445,16 @@
                                         "nullable": true
                                       }
                                     },
+                                    "intake": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "enum": [
+                                          "summary",
+                                          "description"
+                                        ]
+                                      }
+                                    },
                                     "range": {
                                       "type": "object",
                                       "properties": {
@@ -44325,6 +44488,7 @@
                                     "name",
                                     "summary",
                                     "description",
+                                    "intake",
                                     "range",
                                     "sentiment"
                                   ]
@@ -46631,6 +46795,16 @@
                                         "nullable": true
                                       }
                                     },
+                                    "intake": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "enum": [
+                                          "summary",
+                                          "description"
+                                        ]
+                                      }
+                                    },
                                     "range": {
                                       "type": "object",
                                       "properties": {
@@ -46664,6 +46838,7 @@
                                     "name",
                                     "summary",
                                     "description",
+                                    "intake",
                                     "range",
                                     "sentiment"
                                   ]
@@ -49000,6 +49175,16 @@
                                         "nullable": true
                                       }
                                     },
+                                    "intake": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "enum": [
+                                          "summary",
+                                          "description"
+                                        ]
+                                      }
+                                    },
                                     "range": {
                                       "type": "object",
                                       "properties": {
@@ -49033,6 +49218,7 @@
                                     "name",
                                     "summary",
                                     "description",
+                                    "intake",
                                     "range",
                                     "sentiment"
                                   ]
@@ -50966,6 +51152,16 @@
                                         "nullable": true
                                       }
                                     },
+                                    "intake": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "enum": [
+                                          "summary",
+                                          "description"
+                                        ]
+                                      }
+                                    },
                                     "range": {
                                       "type": "object",
                                       "properties": {
@@ -50999,6 +51195,7 @@
                                     "name",
                                     "summary",
                                     "description",
+                                    "intake",
                                     "range",
                                     "sentiment"
                                   ]
