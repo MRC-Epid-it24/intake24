@@ -211,10 +211,6 @@
     "type": "Card type",
     "options": "Card options",
     "color": "Card color",
-    "name": "Card name",
-    "required": "Card name is required.",
-    "summary": "Card summary",
-    "description": "Card description",
     "showRecommendations": "Show feedback recommendations",
 
     "tabs": {
@@ -262,13 +258,16 @@
     "create": "New demographic group",
     "edit": "Edit demographic group",
     "remove": "Remove demographic group",
-
+    "name": "Name",
+    "required": "Name is required.",
+    "summary": "Summary",
+    "description": "Description",
+    "intake": "Show intake in",
     "tabs": {
       "general": "General",
       "sectors": "Scale sectors",
       "json": "JSON"
     },
-
     "sectors": {
       "_": "Scale sector",
       "title": "Scale sectors",

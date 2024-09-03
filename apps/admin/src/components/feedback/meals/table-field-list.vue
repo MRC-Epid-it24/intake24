@@ -169,7 +169,6 @@
                   <v-card outlined>
                     <language-selector
                       v-model="dialog.item.header"
-                      flat
                       :label="$t('feedback-schemes.meals.fields.header').toString()"
                       :outlined="false"
                       required
@@ -190,7 +189,6 @@
                   <v-card outlined>
                     <language-selector
                       v-model="dialog.item.value"
-                      flat
                       :label="$t('feedback-schemes.meals.fields.value').toString()"
                       :outlined="false"
                       required

@@ -2,7 +2,7 @@
   <div>
     <v-btn
       block
-      class="button-bottom"
+      class="button-bottom rounded-t-0"
       :class="textColor"
       :color="detail.color"
       elevation="0"
@@ -31,27 +31,32 @@
             {{ detail.name }}
           </v-toolbar-title>
         </v-toolbar>
-        <v-card-text class="flex-grow-0 flex-shrink-0 pt-2 pb-1">
-          <div class="text-subtitle-1">
-            <span class="font-weight-medium">{{ $t('feedback.intake.estimated') }}: </span>
-            <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
-          </div>
-          <div v-if="detail.recommendedIntake" class="text-subtitle-1">
-            <span class="font-weight-medium">{{ $t('feedback.intake.recommended') }}: </span>
-            {{ detail.recommendedIntake.toString() }}
-            {{ detail.unit }}
-          </div>
-        </v-card-text>
-        <v-card-text class="flex-grow-0 flex-shrink-0 pt-1 pb-2">
-          <div v-html="detail.unitDescription" />
-        </v-card-text>
-        <v-divider class="mx-4 mb-4" />
-        <v-card-text class="overflow-y-auto">
+        <template v-if="detail.showIntake.includes('description') || detail.unitDescription">
+          <v-card-text v-if="detail.showIntake.includes('description')" class="flex-grow-0 flex-shrink-0 pt-4 pb-0">
+            <div class="text-subtitle-1">
+              <span class="font-weight-medium">{{ $t('feedback.intake.estimated') }}: </span>
+              <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
+            </div>
+            <div v-if="detail.recommendedIntake" class="text-subtitle-1">
+              <span class="font-weight-medium">{{ $t('feedback.intake.recommended') }}: </span>
+              {{ detail.recommendedIntake.toString() }}
+              {{ detail.unit }}
+            </div>
+          </v-card-text>
+          <v-card-text v-if="detail.unitDescription" class="flex-grow-0 flex-shrink-0 pt-4 pb-0">
+            <div v-html="detail.unitDescription" />
+          </v-card-text>
+          <v-divider class="mx-4 mt-2" />
+        </template>
+        <v-card-text v-if="detail.description" class="pt-4 overflow-y-auto">
           <div v-html="detail.description" />
         </v-card-text>
         <v-btn
           block
-          class="button-bottom font-weight-bold flex-grow-0 flex-shrink-0"
+          class="button-bottom rounded-t-0 font-weight-bold flex-grow-0 flex-shrink-0"
+          :class="{
+            'rounded-b-0': $vuetify.breakpoint.smAndDown,
+          }"
           color="secondary lighten-2"
           large
           :title="$t('common.action.ok')"
@@ -108,9 +113,6 @@ export default defineComponent({
 }
 
 .button-bottom {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-
   &::after {
     content: '';
     position: absolute;

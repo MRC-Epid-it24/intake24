@@ -22,7 +22,7 @@
         </v-card-title>
         <v-container fluid>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12" lg="4" md="6">
               <v-select
                 v-model="sector.sentiment"
                 hide-details="auto"
@@ -31,7 +31,17 @@
                 outlined
               />
             </v-col>
-            <v-col class="d-flex justify-end" cols="12" md="6">
+            <v-col cols="12" lg="4" md="6">
+              <v-select
+                v-model="sector.intake"
+                hide-details="auto"
+                :items="intakes"
+                :label="$t('feedback-schemes.demographic-groups.intake')"
+                multiple
+                outlined
+              />
+            </v-col>
+            <v-col class="d-flex justify-end" cols="12" lg="4" md="6">
               <div class="mr-4 subtitle-1">
                 <v-icon left>
                   fas fa-left-right
@@ -59,14 +69,14 @@
             <v-col cols="12">
               <language-selector
                 v-model="sector.name"
-                :label="$t('feedback-schemes.cards.name').toString()"
+                :label="$t('feedback-schemes.demographic-groups.name').toString()"
               >
                 <template v-for="lang in Object.keys(sector.name)" #[`lang.${lang}`]>
                   <v-text-field
                     :key="lang"
                     v-model="sector.name[lang]"
                     hide-details="auto"
-                    :label="$t('feedback-schemes.cards.name')"
+                    :label="$t('feedback-schemes.demographic-groups.name')"
                     outlined
                     :rules="nameRules"
                   />
@@ -76,7 +86,7 @@
             <v-col cols="12">
               <language-selector
                 v-model="sector.summary"
-                :label="$t('feedback-schemes.cards.summary').toString()"
+                :label="$t('feedback-schemes.demographic-groups.summary').toString()"
               >
                 <template v-for="lang in Object.keys(sector.summary)" #[`lang.${lang}`]>
                   <html-editor :key="lang" v-model="sector.summary[lang]" />
@@ -86,14 +96,13 @@
             <v-col cols="12">
               <language-selector
                 v-model="sector.description"
-                :label="$t('feedback-schemes.cards.description').toString()"
+                :label="$t('feedback-schemes.demographic-groups.description').toString()"
               >
                 <template v-for="lang in Object.keys(sector.description)" #[`lang.${lang}`]>
                   <html-editor :key="lang" v-model="sector.description[lang]" />
                 </template>
               </language-selector>
             </v-col>
-
             <v-col cols="12">
               <v-btn
                 block
@@ -145,6 +154,10 @@ export default defineComponent({
     return {
       demographicGroupScaleSectorDefaults,
       sectors: this.value,
+      intakes: ['summary', 'description'].map(value => ({
+        text: this.$t(`feedback-schemes.demographic-groups.${value}`),
+        value,
+      })),
       sentiments: sentiments.map(value => ({
         text: this.$t(`feedback-schemes.sentiments.${value}`),
         value,
@@ -156,7 +169,7 @@ export default defineComponent({
     nameRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string =>
-          !!value || this.$t('feedback-schemes.cards.required').toString(),
+          !!value || this.$t('feedback-schemes.demographic-groups.required').toString(),
       ];
     },
   },

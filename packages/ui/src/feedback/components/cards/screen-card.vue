@@ -2,7 +2,7 @@
   <v-card class="card-screen d-flex flex-column" :color="detail.color" height="100%">
     <v-img :aspect-ratio="16 / 9" :src="backgroundImage" />
     <!-- <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div> -->
-    <v-card-subtitle class="font-weight-medium" :class="textColor">
+    <v-card-subtitle v-if="detail.showIntake.includes('summary')" class="font-weight-medium" :class="textColor">
       <i18n class="mb-2" path="feedback.intake.your" tag="div">
         <template #nutrient>
           <span>{{ detail.name.toLowerCase() }}</span>
@@ -20,7 +20,7 @@
         <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
       </div>
     </v-card-subtitle>
-    <v-card-text class="flex-grow-1" :class="textColor">
+    <v-card-text v-if="detail.summary" class="flex-grow-1" :class="textColor">
       <div class="card-screen__summary" v-html="detail.summary" />
     </v-card-text>
     <tell-me-more v-bind="{ detail, textColor }" />

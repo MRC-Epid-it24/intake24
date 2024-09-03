@@ -1,25 +1,27 @@
-import type { DemographicGroupScaleSector, Sentiment } from '@intake24/common/feedback';
-import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
 
 import DemographicRange from './demographic-range';
 
 export default class DemographicScaleSector {
-  readonly name: RequiredLocaleTranslation;
-  readonly summary: LocaleTranslation;
-  readonly description: LocaleTranslation;
-  readonly sentiment: Sentiment;
+  readonly name: DemographicGroupScaleSector['name'];
+  readonly summary: DemographicGroupScaleSector['summary'];
+  readonly description: DemographicGroupScaleSector['description'];
+  readonly intake: DemographicGroupScaleSector['intake'];
   readonly range: DemographicRange;
+  readonly sentiment: DemographicGroupScaleSector['sentiment'];
 
   constructor(
-    name: RequiredLocaleTranslation,
-    summary: LocaleTranslation,
-    description: LocaleTranslation,
+    name: DemographicGroupScaleSector['name'],
+    summary: DemographicGroupScaleSector['summary'],
+    description: DemographicGroupScaleSector['description'],
+    intake: DemographicGroupScaleSector['intake'],
     range: DemographicRange,
-    sentiment: Sentiment,
+    sentiment: DemographicGroupScaleSector['sentiment'],
   ) {
     this.name = name;
     this.summary = summary;
     this.description = description;
+    this.intake = intake;
     this.range = range;
     this.sentiment = sentiment;
   }
@@ -29,6 +31,7 @@ export default class DemographicScaleSector {
       sector.name,
       sector.summary,
       sector.description,
+      sector.intake,
       DemographicRange.fromJson(sector.range.start, sector.range.end) as DemographicRange,
       sector.sentiment,
     );
@@ -39,6 +42,7 @@ export default class DemographicScaleSector {
       this.name,
       this.summary,
       this.description,
+      this.intake,
       this.range,
       this.sentiment,
     );

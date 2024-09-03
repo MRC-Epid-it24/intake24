@@ -112,7 +112,6 @@
         <v-form ref="form" @submit.prevent="save">
           <language-selector
             v-model="dialog.meal.name"
-            flat
             :label="$t('survey-schemes.meals.name').toString()"
             :outlined="false"
           >

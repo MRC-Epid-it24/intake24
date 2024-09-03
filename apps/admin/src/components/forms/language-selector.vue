@@ -89,6 +89,7 @@ export default defineComponent({
     },
     flat: {
       type: Boolean,
+      default: true,
     },
     outlined: {
       type: Boolean,

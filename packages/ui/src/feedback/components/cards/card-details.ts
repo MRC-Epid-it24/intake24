@@ -12,6 +12,7 @@ export type FeedbackDetails = {
   name: string;
   summary: string | null;
   description: string | null;
+  showIntake: ('summary' | 'description')[];
   intake: number;
   recommendedIntake: DemographicRange | null;
   unit: string;
@@ -78,13 +79,14 @@ function getCharacterDetail(parameters: CharacterParameters): FeedbackDetails {
       resultedDemographicGroup: { nutrientRuleType, nutrient, scaleSectors },
     } = result;
 
-    const { name, summary, description, range, sentiment } = scaleSectors[0];
+    const { name, summary, description, intake: showIntake, range, sentiment } = scaleSectors[0];
 
     return {
       name: translate(name),
       summary: translate(summary),
       description: translate(description),
       intake: round(intake),
+      showIntake,
       recommendedIntake: showRecommendations
         ? new DemographicRange(round(range.start), round(range.end))
         : null,
@@ -109,7 +111,7 @@ function getFiveADayDetail(parameters: FiveADayParameters): FeedbackDetails {
     unit,
     portions,
     color,
-    scaleSector: { name, summary, description },
+    scaleSector: { name, summary, description, intake: showIntake },
     showRecommendations,
   } = parameters;
   const sentiment = null;
@@ -119,6 +121,7 @@ function getFiveADayDetail(parameters: FiveADayParameters): FeedbackDetails {
     summary: translate(summary),
     description: translate(description),
     intake: portions,
+    showIntake,
     recommendedIntake: showRecommendations
       ? new DemographicRange(high?.threshold ?? 5, high?.threshold ?? 5)
       : null,
@@ -141,7 +144,7 @@ function getNutrientGroupDetail(parameters: NutrientGroupParameters): FeedbackDe
     intake,
     recommendedIntake,
     color,
-    scaleSector: { name, summary, description },
+    scaleSector: { name, summary, description, intake: showIntake },
     showRecommendations,
   } = parameters;
   const sentiment = null;
@@ -158,6 +161,7 @@ function getNutrientGroupDetail(parameters: NutrientGroupParameters): FeedbackDe
     summary: translate(summary),
     description: translate(description),
     intake: round(intake),
+    showIntake,
     recommendedIntake: showRecommendations
       ? new DemographicRange(round(recommendedIntake.start), round(recommendedIntake.end))
       : null,

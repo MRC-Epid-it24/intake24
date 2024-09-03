@@ -191,10 +191,6 @@
     "type": "Type de carte",
     "options": "Options de carte",
     "color": "Card color",
-    "name": "Nom de la carte",
-    "required": "Le nom de la carte est requis.",
-    "summary": "Card summary",
-    "description": "Description",
     "showRecommendations": "Montrer les recommandations du bilan",
     "tabs": {
       "general": "Général",
@@ -237,6 +233,11 @@
     "create": "Nouveau groupe démographique",
     "edit": "Modifier le groupe démographique",
     "remove": "Enlever le groupe démographique",
+    "name": "Nom",
+    "required": "Le nom de la carte est requis.",
+    "summary": "Summary",
+    "description": "Description",
+    "intake": "Show intake in",
     "tabs": {
       "general": "Général",
       "sectors": "Secteurs d'échelonnage",

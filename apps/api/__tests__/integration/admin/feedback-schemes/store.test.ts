@@ -81,6 +81,7 @@ export default () => {
         'demographicGroups.0.weight',
         'demographicGroups.0.nutrientRuleType',
         'demographicGroups.0.scaleSectors.0.summary',
+        'demographicGroups.0.scaleSectors.0.intake',
         'henryCoefficients.0.id',
         'henryCoefficients.0.sex',
         'henryCoefficients.0.age',

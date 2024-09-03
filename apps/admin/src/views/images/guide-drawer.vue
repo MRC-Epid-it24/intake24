@@ -87,7 +87,6 @@
                       <language-selector
                         v-model="object.label"
                         :disabled="disabled"
-                        flat
                         :label="$t('guide-images.objects.label._').toString()"
                       >
                         <template v-for="lang in Object.keys(object.label)" #[`lang.${lang}`]>

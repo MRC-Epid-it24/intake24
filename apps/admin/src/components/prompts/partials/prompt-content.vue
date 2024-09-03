@@ -47,7 +47,6 @@
             <language-selector
               v-if="items[key]"
               v-model="items[key]"
-              flat
               :label="$t(`survey-schemes.i18n.custom`, { key }).toString()"
               :outlined="false"
               tile

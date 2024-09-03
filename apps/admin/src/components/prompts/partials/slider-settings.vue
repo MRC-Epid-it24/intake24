@@ -47,7 +47,6 @@
                   <language-selector
                     v-if="slider[item].label"
                     v-model="slider[item].label"
-                    flat
                     :label="$t(`survey-schemes.prompts.slider.${tab}.label`).toString()"
                   >
                     <template v-for="lang in Object.keys(slider[item].label)" #[`lang.${lang}`]>

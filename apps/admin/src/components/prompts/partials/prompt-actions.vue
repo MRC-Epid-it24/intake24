@@ -201,11 +201,11 @@ export default defineComponent({
   emits: ['update:actions'],
 
   setup() {
-    const { actions, actionVariants, colors, layouts } = useSelects();
+    const { actions: availableActions, actionVariants, colors, layouts } = useSelects();
 
     return {
-      actions,
       actionVariants,
+      availableActions,
       colors,
       layouts,
     };

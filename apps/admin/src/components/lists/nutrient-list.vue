@@ -109,7 +109,6 @@
           </v-card-text>
           <language-selector
             v-model="dialog.item.name"
-            flat
             :label="$t('nutrient-types.label').toString()"
             :outlined="false"
             required

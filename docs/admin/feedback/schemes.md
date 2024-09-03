@@ -172,7 +172,14 @@ Allows selection of:
 
 ### Scale sectors
 
-Allows addition of detailed feedback in the `Description` box. `ADD SCALE SECTOR` allows addition of customised feedback based on a range of intakes e.g. 'low' or 'high'. `Range` and `Sentiment` need to be set.
+Scale sections allow further customization of the feedback based on a range of intakes.
+
+- `Sentiment` - Sentiment to be used for feedback calculation
+- `Range` - Range to match actual intake24 with the scale sector
+- `Show intake in` - sections where to display the intake, possible values are `summary` and `description`
+- `Summary` - Summary of the scale sector displayed in card's summary below the image
+- `Name` - Name of the scale sector displayed in card's pop-up title
+- `Description` - Description of the scale sector displayed in card's pop-up body
 
 ## Henry coefficients
 

@@ -7,6 +7,7 @@ export const demographicGroupScaleSector = z.object({
   name: requiredLocaleTranslation,
   summary: localeTranslation,
   description: localeTranslation,
+  intake: z.enum(['summary', 'description']).array(),
   range,
   sentiment: z.enum(sentiments),
 });
@@ -32,6 +33,7 @@ export const demographicGroupScaleSectorDefaults: DemographicGroupScaleSector = 
   name: { en: 'Energy' },
   summary: { en: '' },
   description: { en: '' },
+  intake: ['summary', 'description'],
   range: { start: 0, end: 10 },
   sentiment: 'good',
 };

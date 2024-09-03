@@ -141,6 +141,7 @@ function feedbackScheme(): FeedbackSchemeCreationAttributes {
             description: {
               en: '<p>It is recommended that the energy (or calories)...</p>',
             },
+            intake: ['summary', 'description'],
             range: { start: 0, end: 100 },
             sentiment: 'good',
           },
