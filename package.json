@@ -47,7 +47,7 @@
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.26.0",
+    "@antfu/eslint-config": "^3.0.0",
     "@jest/types": "^29.6.3",
     "@ts-rest/open-api": "^3.50.0",
     "@types/jest": "^29.5.12",
