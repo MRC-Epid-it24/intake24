@@ -34,7 +34,7 @@
     "express": "^4.19.2",
     "fs-extra": "^11.2.0",
     "helmet": "^7.1.0",
-    "jsdom": "^24.1.1",
+    "jsdom": "^25.0.0",
     "morgan": "^1.10.0",
     "nunjucks": "^3.2.4",
     "sitemap": "^8.0.0"
