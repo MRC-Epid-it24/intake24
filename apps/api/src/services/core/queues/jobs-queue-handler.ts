@@ -1,4 +1,4 @@
-import type { ConnectionOptions, Job as BullJob, JobsOptions } from 'bullmq';
+import type { Job as BullJob, JobsOptions } from 'bullmq';
 import { Queue, Worker } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
@@ -8,7 +8,7 @@ import ioc from '@intake24/api/ioc';
 import { Job as DbJob, Op } from '@intake24/db';
 
 import type { PushPayload } from '..';
-import type { QueueHandler } from './queue-handler';
+import { QueueHandler } from './queue-handler';
 
 export type JobInput<T extends JobType> = {
   type: T;
@@ -22,18 +22,10 @@ export type NotificationPayload = {
   message?: string;
 };
 
-export default class JobsQueueHandler implements QueueHandler<JobData> {
-  readonly name = 'it24-jobs';
-
-  private readonly config;
-
-  private readonly logger;
+export default class JobsQueueHandler extends QueueHandler<JobData> {
+  readonly name = 'jobs';
 
   private readonly pusher;
-
-  queue!: Queue<JobData>;
-
-  workers: Worker<JobData>[] = [];
 
   /**
    * Creates an instance of JobsQueueHandler
@@ -42,31 +34,20 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   constructor({ queueConfig, logger, pusher }: Pick<IoC, 'queueConfig' | 'logger' | 'pusher'>) {
-    this.config = queueConfig;
-    this.logger = logger.child({ service: 'JobsQueueHandler' });
+    super(queueConfig, logger.child({ service: 'JobsQueueHandler' }));
     this.pusher = pusher;
-  }
-
-  private logEventError(err: unknown) {
-    if (err instanceof Error) {
-      const { message, name, stack } = err;
-      this.logger.error(`${name}: ${message}`, { stack });
-      return;
-    }
-
-    this.logger.error(`Unknown event error: ${err}`);
   }
 
   /**
    * Initialize JobsQueueHandler
    *
-   * @param {ConnectionOptions} connection
-   * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  public async init(connection: ConnectionOptions): Promise<void> {
+  public async init() {
+    const options = this.getOptions();
+
     this.queue = new Queue(this.name, {
-      connection,
+      ...options,
       defaultJobOptions: {
         delay: 500,
         removeOnComplete: { age: 3600 },
@@ -78,7 +59,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     });
 
     for (let i = 0; i < this.config.workers; i++) {
-      const worker = new Worker(this.name, this.processor, { connection });
+      const worker = new Worker(this.name, this.processor, options);
 
       worker
         .on('progress', async (job, progress: number | object) => {
@@ -179,29 +160,13 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     this.logger.info(`Queue ${this.name} has been loaded.`);
   }
 
-  public async closeWorkers(force = false): Promise<void> {
-    await Promise.all(this.workers.map(worker => worker.close(force)));
-  }
-
-  /**
-   * Close queue connections
-   *
-   * @returns {Promise<void>}
-   * @memberof JobsQueueHandler
-   */
-  public async close(): Promise<void> {
-    await this.closeWorkers();
-    await this.queue.close();
-  }
-
   /**
    * Queue job processor
    *
    * @param {BullJob<JobData>} job
-   * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  async processor(job: BullJob<JobData>): Promise<void> {
+  async processor(job: BullJob<JobData>) {
     const { id, name } = job;
 
     if (!id) {
@@ -228,15 +193,16 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @private
    * @param {DbJob} job
    * @param {JobsOptions} [options]
-   * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  private async queueJob(job: DbJob, options: JobsOptions = {}): Promise<void> {
+  private async queueJob(job: DbJob, options: JobsOptions = {}) {
     const { id, type, params } = job;
 
-    await this.queue.add(type, { params }, { ...options, jobId: `db-${id}` });
+    const bullJob = await this.queue.add(type, { params }, { ...options, jobId: `db-${id}` });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
+
+    return bullJob;
   }
 
   /**
@@ -263,10 +229,9 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    *
    * @param {(string | null)} userId
    * @param {NotificationPayload} payload
-   * @returns {Promise<void>}
    * @memberof JobsQueueHandler
    */
-  public async notify(userId: string | null, payload: NotificationPayload): Promise<void> {
+  public async notify(userId: string | null, payload: NotificationPayload) {
     if (!userId)
       return;
 
@@ -282,6 +247,6 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
       url: `jobs/${payload.jobId}`,
     };
 
-    await this.pusher.webPush(userId, pushPayload);
+    return await this.pusher.webPush(userId, pushPayload);
   }
 }

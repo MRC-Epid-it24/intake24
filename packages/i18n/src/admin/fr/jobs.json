@@ -21,6 +21,7 @@
       "stores": {
         "_": "Magasin Redis",
         "cache": "Cache",
+        "rateLimiter": "Rate limiter",
         "session": "Session"
       }
     },

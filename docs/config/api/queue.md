@@ -6,19 +6,40 @@ Queueing system is handled by [Redis](https://redis.io) & [bullmq](https://githu
 
 ## Redis instance
 
+### URL
+
+- object-path: `redis.url`
+- dotenv var: `QUEUE_REDIS_URL | REDIS_URL`
+- type: `string`
+- default: `undefined`
+
 ### Host
 
 - object-path: `redis.host`
-- dotenv var: `QUEUE_REDIS_HOST`
+- dotenv var: `QUEUE_REDIS_HOST | REDIS_HOST`
 - type: `string`
 - default: `'localhost'`
 
 ### Port
 
 - object-path: `redis.port`
-- dotenv var: `QUEUE_REDIS_PORT`
+- dotenv var: `QUEUE_REDIS_PORT | REDIS_PORT`
 - type: `number`
 - default: `6379`
+
+### Database
+
+- object-path: `redis.db`
+- dotenv var: `QUEUE_REDIS_DATABASE | REDIS_DATABASE`
+- type: `number`
+- default: `0`
+
+### Key prefix
+
+- object-path: `redis.keyPrefix`
+- dotenv var: `QUEUE_REDIS_PREFIX`
+- type: `string`
+- default: `'it24:queue'`
 
 ### Workers
 

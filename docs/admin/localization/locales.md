@@ -67,7 +67,7 @@ Tasks section allows to submit resource specific tasks into the job queue with a
 
 Jobs that can be submitted:
 
-- [Copy locale data](/admin/system/job-types.html#localecopy)
+- [Copy locale](/admin/system/job-types.html#localecopy)
 
 - [Export foods](/admin/system/job-types.html#localefoods)
 

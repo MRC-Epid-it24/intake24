@@ -32,6 +32,7 @@ export * from './image-processor';
 export * from './pdf';
 export * from './queue';
 export * from './rate-limiter';
+export * from './redis';
 export * from './security';
 export * from './services';
 export * from './session';

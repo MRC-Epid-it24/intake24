@@ -21,6 +21,7 @@
       "stores": {
         "_": "Redis store",
         "cache": "Cache",
+        "rateLimiter": "Rate limiter",
         "session": "Session"
       }
     },

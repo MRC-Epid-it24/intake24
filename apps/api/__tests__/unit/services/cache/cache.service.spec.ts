@@ -28,7 +28,7 @@ describe('cache', () => {
   });
 
   afterEach(async () => {
-    await cache.flushAll();
+    await cache.flushdb();
   });
 
   afterAll(() => {

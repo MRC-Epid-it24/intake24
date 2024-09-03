@@ -12,23 +12,35 @@ Time window to track the requests is defined as `ms-formatted` string, see [ms](
 
 ## Redis instance
 
+### URL
+
+- object-path: `redis.url`
+- dotenv var: `RATE_LIMITER_REDIS_URL | REDIS_URL`
+- type: `string`
+- default: `undefined`
+
 ### Host
 
 - object-path: `redis.host`
-- dotenv var: `RATE_LIMITER_REDIS_HOST`
+- dotenv var: `RATE_LIMITER_REDIS_HOST | REDIS_HOST`
 - type: `string`
 - default: `'localhost'`
 
 ### Port
 
 - object-path: `redis.port`
-- dotenv var: `RATE_LIMITER_REDIS_PORT`
+- dotenv var: `RATE_LIMITER_REDIS_PORT | REDIS_PORT`
 - type: `number`
 - default: `6379`
 
-### Prefix
+### Database
 
-Prefix string which is pre-pended to each key to identify cache data.
+- object-path: `redis.db`
+- dotenv var: `RATE_LIMITER_REDIS_DATABASE | REDIS_DATABASE`
+- type: `number`
+- default: `0`
+
+### Key prefix
 
 - object-path: `redis.keyPrefix`
 - dotenv var: `RATE_LIMITER_REDIS_PREFIX`

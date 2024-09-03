@@ -1,6 +1,7 @@
 import type { Options } from 'express-rate-limit';
-import type { RedisOptions } from 'ioredis';
 import ms from 'ms';
+
+import type { RedisOptions } from './redis';
 
 export type RateLimit = {
   windowMs: number;
@@ -18,8 +19,10 @@ export interface RateLimiterConfig extends RateLimits {
 
 const rateLimiterConfig: RateLimiterConfig = {
   redis: {
-    host: process.env.RATE_LIMITER_REDIS_HOST || 'localhost',
-    port: Number.parseInt(process.env.RATE_LIMITER_REDIS_PORT || '6379', 10),
+    url: process.env.RATE_LIMITER_REDIS_URL || process.env.REDIS_URL || undefined,
+    host: process.env.RATE_LIMITER_REDIS_HOST || process.env.REDIS_HOST || 'localhost',
+    port: Number.parseInt(process.env.RATE_LIMITER_REDIS_PORT || process.env.REDIS_PORT || '6379', 10),
+    db: Number.parseInt(process.env.RATE_LIMITER_REDIS_DATABASE || process.env.REDIS_DATABASE || '0', 10),
     keyPrefix: process.env.RATE_LIMITER_REDIS_PREFIX || 'it24:rate-limiter:',
   },
   generic: {

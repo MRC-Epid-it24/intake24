@@ -1,7 +1,7 @@
-import type { RedisOptions } from 'ioredis';
 import ms from 'ms';
 
 import type { CookieSettings, SameSiteCookieOptions } from './common';
+import type { RedisOptions } from './redis';
 
 export type SessionConfig = {
   redis: RedisOptions;
@@ -10,8 +10,10 @@ export type SessionConfig = {
 
 const sessionConfig: SessionConfig = {
   redis: {
-    host: process.env.SESSION_REDIS_HOST || 'localhost',
-    port: Number.parseInt(process.env.SESSION_REDIS_PORT || '6379', 10),
+    url: process.env.SESSION_REDIS_URL || process.env.REDIS_URL || undefined,
+    host: process.env.SESSION_REDIS_HOST || process.env.REDIS_HOST || 'localhost',
+    port: Number.parseInt(process.env.SESSION_REDIS_PORT || process.env.REDIS_PORT || '6379', 10),
+    db: Number.parseInt(process.env.SESSION_REDIS_DATABASE || process.env.REDIS_DATABASE || '0', 10),
     keyPrefix: process.env.SESSION_REDIS_PREFIX || 'it24:session:',
   },
   cookie: {

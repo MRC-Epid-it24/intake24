@@ -8,23 +8,35 @@ Redis is also used for other parts of system (cache, queue, rate limiter), they 
 
 ## Redis instance
 
+### URL
+
+- object-path: `redis.url`
+- dotenv var: `SESSION_REDIS_URL | REDIS_URL`
+- type: `string`
+- default: `undefined`
+
 ### Host
 
 - object-path: `redis.host`
-- dotenv var: `SESSION_REDIS_HOST`
+- dotenv var: `SESSION_REDIS_HOST | REDIS_HOST`
 - type: `string`
 - default: `'localhost'`
 
 ### Port
 
 - object-path: `redis.port`
-- dotenv var: `SESSION_REDIS_PORT`
+- dotenv var: `SESSION_REDIS_PORT | REDIS_PORT`
 - type: `number`
 - default: `6379`
 
-### Prefix
+### Database
 
-Prefix string which is pre-pended to each key to identify cache data.
+- object-path: `redis.db`
+- dotenv var: `SESSION_REDIS_DATABASE | REDIS_DATABASE`
+- type: `number`
+- default: `0`
+
+### Key prefix
 
 - object-path: `redis.keyPrefix`
 - dotenv var: `SESSION_REDIS_PREFIX`

@@ -8,22 +8,21 @@ import BaseJob from '../job';
 export default class CleanRedisStore extends BaseJob<'CleanRedisStore'> {
   readonly name = 'CleanRedisStore';
 
-  private readonly stores: Record<'cache' | 'session', RedisStore>;
+  private readonly stores: Record<'cache' | 'rateLimiter' | 'session', RedisStore>;
 
-  constructor({ cache, logger, session }: Pick<IoC, 'logger' | 'cache' | 'session'>) {
+  constructor({ cache, logger, rateLimiter, session }: Pick<IoC, 'logger' | 'cache' | 'rateLimiter' | 'session'>) {
     super({ logger });
 
-    this.stores = { cache, session };
+    this.stores = { cache, rateLimiter, session };
   }
 
   /**
    * Run the task
    *
    * @param {Job} job
-   * @returns {Promise<void>}
    * @memberof CleanRedisStore
    */
-  public async run(job: Job): Promise<void> {
+  public async run(job: Job) {
     this.init(job);
 
     this.logger.debug('Job started.');
@@ -37,10 +36,10 @@ export default class CleanRedisStore extends BaseJob<'CleanRedisStore'> {
    * Clean redis store
    *
    * @private
-   * @returns {Promise<void>}
    * @memberof CleanRedisStore
    */
-  private async cleanStore(): Promise<void> {
-    await this.stores[this.params.store].flush();
+  private async cleanStore() {
+    for (const store of this.params.store)
+      await this.stores[store].flush();
   }
 }

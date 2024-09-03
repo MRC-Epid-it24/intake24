@@ -1,8 +1,6 @@
 import type { IoC } from '@intake24/api/ioc';
 
 export default class Scheduler {
-  private readonly queueConfig;
-
   private readonly logger;
 
   public readonly jobs;
@@ -10,12 +8,10 @@ export default class Scheduler {
   public readonly tasks;
 
   constructor({
-    queueConfig,
     logger,
     jobsQueueHandler,
     tasksQueueHandler,
-  }: Pick<IoC, 'queueConfig' | 'logger' | 'jobsQueueHandler' | 'tasksQueueHandler'>) {
-    this.queueConfig = queueConfig;
+  }: Pick<IoC, 'logger' | 'jobsQueueHandler' | 'tasksQueueHandler'>) {
     this.logger = logger.child({ service: 'Scheduler' });
 
     this.jobs = jobsQueueHandler;
@@ -25,36 +21,31 @@ export default class Scheduler {
   /**
    * Initialize scheduler
    *
-   * @returns {Promise<void>}
    * @memberof Scheduler
    */
-  public async init(): Promise<void> {
-    const { redis } = this.queueConfig;
+  public async init() {
+    await Promise.all([this.jobs.init(), this.tasks.init()]);
 
-    await Promise.all([this.jobs.init(redis), this.tasks.init(redis)]);
-
-    this.logger.info(`Scheduler has been loaded.`);
+    this.logger.info('Scheduler has been loaded.');
   }
 
   /**
-   * Close all connections
+   * Close all connections (queues, workers, etc.)
    *
-   * @returns {Promise<void>}
    * @memberof Scheduler
    */
-  public async close(): Promise<void> {
+  public async close() {
     await Promise.all([this.jobs.close(), this.tasks.close()]);
 
-    this.logger.info(`Scheduler has closed all connections.`);
+    this.logger.info('Scheduler has closed all connections.');
   }
 
   /**
    * Close all workers before shutdown
    *
-   * @returns {Promise<void>}
    * @memberof Scheduler
    */
-  public async closeWorkers(): Promise<void> {
+  public async closeWorkers() {
     await Promise.all([this.jobs.closeWorkers(), this.tasks.closeWorkers()]);
 
     this.logger.info('Scheduler workers were shutdown.');

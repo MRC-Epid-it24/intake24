@@ -21,8 +21,11 @@ export type RepeatableBullJob = z.infer<typeof repeatableBullJob>;
 
 export type JobData<T = any> = { params: T };
 
+export const redisStoreTypes = ['cache', 'rateLimiter', 'session'] as const;
+export type RedisStoreType = (typeof redisStoreTypes)[number];
+
 export const CleanRedisStore = z.object({
-  store: z.union([z.literal('cache'), z.literal('session')]),
+  store: z.enum(redisStoreTypes).array(),
 });
 export const CleanStorageFiles = z.record(z.never());
 export const FeedbackSchemesSync = z.record(z.never());
@@ -354,7 +357,7 @@ export type QueueJob<T extends JobType = JobType> = {
 };
 
 export const defaultJobsParams: JobParams = {
-  CleanRedisStore: { store: 'cache' },
+  CleanRedisStore: { store: ['cache'] },
   CleanStorageFiles: {},
   FeedbackSchemesSync: {},
   LanguageTranslationsSync: {},

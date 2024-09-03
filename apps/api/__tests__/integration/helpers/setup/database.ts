@@ -50,9 +50,10 @@ export type MockData = {
   };
 };
 
-export async function wipeRedis(): Promise<void> {
-  const redis = new Redis(ioc.cradle.config.queue.redis);
-  await redis.flushall();
+export async function wipeRedis() {
+  const { path, ...rest } = ioc.cradle.config.queue.redis;
+  const redis = path ? new Redis(path, rest) : new Redis(rest);
+  await redis.flushdb();
   redis.disconnect();
 }
 

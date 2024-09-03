@@ -9,6 +9,7 @@
             :error-messages="errors.get('params.store')"
             :items="stores"
             :label="$t('jobs.types.CleanRedisStore.stores._')"
+            multiple
             name="store"
             outlined
           />
@@ -21,7 +22,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { JobParams } from '@intake24/common/types';
+import { type JobParams, redisStoreTypes } from '@intake24/common/types';
 
 import jobParams from './job-params';
 
@@ -32,7 +33,7 @@ export default defineComponent({
 
   data() {
     return {
-      stores: ['cache', 'session'].map(value => ({
+      stores: redisStoreTypes.map(value => ({
         value,
         text: this.$t(`jobs.types.CleanRedisStore.stores.${value}`).toString(),
       })),

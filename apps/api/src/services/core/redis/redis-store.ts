@@ -1,6 +1,6 @@
-import type { RedisOptions } from 'ioredis';
 import { Redis } from 'ioredis';
 
+import type { RedisOptions } from '@intake24/api/config';
 import type { Logger } from '@intake24/common-backend';
 
 export type RedisStoreOps = {
@@ -24,10 +24,11 @@ export default abstract class RedisStore {
    * Initialize Redis connection
    *
    * @returns {Redis}
-   * @memberof HasRedisClient
+   * @memberof RedisStore
    */
   init(): Redis {
-    this.redis = new Redis(this.config);
+    const { url, ...options } = this.config;
+    this.redis = url ? new Redis(url, options) : new Redis(options);
 
     this.logger.info(`Redis connection (${this.constructor.name}) has been initialized.`);
 
@@ -37,9 +38,9 @@ export default abstract class RedisStore {
   /**
    * Close Redis connection
    *
-   * @memberof HasRedisClient
+   * @memberof RedisStore
    */
-  close(): void {
+  close() {
     this.redis.disconnect();
 
     this.logger.info('Redis connection has been closed.');
@@ -50,7 +51,7 @@ export default abstract class RedisStore {
    *
    * @param {string} [pattern]
    * @returns {Promise<boolean>}
-   * @memberof HasRedisClient
+   * @memberof RedisStore
    */
   async flush(pattern = '*'): Promise<boolean> {
     const { keyPrefix } = this.config;
@@ -67,17 +68,17 @@ export default abstract class RedisStore {
   }
 
   /**
-   * Flush whole redis store
+   * Flush whole redis database
    * This includes other parts if system if using same redis instance:
    * 1) cache data
    * 2) queue data
    * 3) session data
    *
    * @returns {Promise<boolean>}
-   * @memberof HasRedisClient
+   * @memberof RedisStore
    */
-  async flushAll(): Promise<boolean> {
-    const result = await this.redis.flushall();
+  async flushdb(): Promise<boolean> {
+    const result = await this.redis.flushdb();
 
     return !!result;
   }
