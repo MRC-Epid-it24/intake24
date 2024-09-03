@@ -53,6 +53,9 @@
     "retry": "Le bilan nutritionnel a déjà été demandé récemment, réessayez dans {secs} s.",
     "print": "Imprimer"
   },
+  "cards": {
+    "title": "Summary of your intake"
+  },
   "topFoods": {
     "title": "Aliments contribuant le plus à vos apports nutritionnels",
     "chart": "Le plus riche en {nutrient}"

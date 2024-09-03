@@ -53,6 +53,9 @@
     "retry": "Output maklum balas baru sahaja dipohon, cuba lagi dalam {secs}.",
     "print": "Cetak"
   },
+  "cards": {
+    "title": "Summary of your intake"
+  },
   "topFoods": {
     "title": "Makanan yang paling banyak menyumbang kepada pengambilan nutrien anda",
     "chart": "Paling tinggi {nutrient}"

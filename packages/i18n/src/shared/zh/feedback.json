@@ -53,6 +53,9 @@
     "retry": "最近已请求反馈输出，请在 {secs} 秒后重试。",
     "print": "打印"
   },
+  "cards": {
+    "title": "Summary of your intake"
+  },
   "topFoods": {
     "title": "对您的营养摄入量做出最大贡献的食物",
     "chart": "{nutrient} 最高"

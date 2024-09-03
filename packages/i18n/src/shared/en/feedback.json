@@ -53,6 +53,9 @@
     "retry": "Dietary feedback output has been recently requested, try again in {secs} s.",
     "print": "Print"
   },
+  "cards": {
+    "title": "Summary of your intake"
+  },
   "topFoods": {
     "title": "Foods contributing most to your nutrient intakes",
     "chart": "Highest in {nutrient}"
