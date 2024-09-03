@@ -37,7 +37,7 @@
     "@simplewebauthn/server": "^10.0.1",
     "@ts-rest/core": "^3.50.0",
     "@ts-rest/express": "^3.50.0",
-    "awilix": "^10.0.2",
+    "awilix": "^11.0.0",
     "axios": "^1.7.4",
     "body-parser": "^1.20.2",
     "bullmq": "^5.12.9",
