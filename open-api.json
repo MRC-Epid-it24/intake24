@@ -24028,11 +24028,15 @@
                                 "type": "object",
                                 "properties": {
                                   "store": {
-                                    "type": "string",
-                                    "enum": [
-                                      "cache",
-                                      "session"
-                                    ]
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "cache",
+                                        "rateLimiter",
+                                        "session"
+                                      ]
+                                    }
                                   }
                                 },
                                 "required": [
@@ -24782,11 +24786,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -25552,11 +25560,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -30819,11 +30831,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -34102,11 +34118,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -51902,11 +51922,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -58764,11 +58788,15 @@
                                 "type": "object",
                                 "properties": {
                                   "store": {
-                                    "type": "string",
-                                    "enum": [
-                                      "cache",
-                                      "session"
-                                    ]
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "cache",
+                                        "rateLimiter",
+                                        "session"
+                                      ]
+                                    }
                                   }
                                 },
                                 "required": [
@@ -59404,11 +59432,15 @@
                         "type": "object",
                         "properties": {
                           "store": {
-                            "type": "string",
-                            "enum": [
-                              "cache",
-                              "session"
-                            ]
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "cache",
+                                "rateLimiter",
+                                "session"
+                              ]
+                            }
                           }
                         },
                         "required": [
@@ -59989,11 +60021,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -60602,11 +60638,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -61249,11 +61289,15 @@
                         "type": "object",
                         "properties": {
                           "store": {
-                            "type": "string",
-                            "enum": [
-                              "cache",
-                              "session"
-                            ]
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "cache",
+                                "rateLimiter",
+                                "session"
+                              ]
+                            }
                           }
                         },
                         "required": [
@@ -61834,11 +61878,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -62516,11 +62564,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -63179,11 +63231,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -64026,11 +64082,15 @@
                                 "type": "object",
                                 "properties": {
                                   "store": {
-                                    "type": "string",
-                                    "enum": [
-                                      "cache",
-                                      "session"
-                                    ]
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "enum": [
+                                        "cache",
+                                        "rateLimiter",
+                                        "session"
+                                      ]
+                                    }
                                   }
                                 },
                                 "required": [
@@ -64827,11 +64887,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
@@ -65542,11 +65606,15 @@
                           "type": "object",
                           "properties": {
                             "store": {
-                              "type": "string",
-                              "enum": [
-                                "cache",
-                                "session"
-                              ]
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "cache",
+                                  "rateLimiter",
+                                  "session"
+                                ]
+                              }
                             }
                           },
                           "required": [
