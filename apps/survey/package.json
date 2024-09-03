@@ -24,7 +24,7 @@
     "@flatten-js/core": "^1.6.1",
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@vueuse/core": "^10.11.1",
-    "awesome-phonenumber": "^6.10.0",
+    "awesome-phonenumber": "^7.0.1",
     "axios": "^1.7.4",
     "axios-retry": "^4.5.0",
     "date-fns": "^3.6.0",
