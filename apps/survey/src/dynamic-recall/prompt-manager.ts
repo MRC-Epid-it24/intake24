@@ -4,7 +4,7 @@ import type {
   FoodCompletionState,
   Prompt,
 } from '@intake24/common/prompts';
-import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { FoodSection, MealSection, SurveyPromptSection } from '@intake24/common/surveys';
 import type {
   FoodFlag,
   FoodState,
@@ -875,9 +875,12 @@ export default class PromptManager {
 
   private store;
 
+  public deferredPromptsEnabled: boolean;
+
   constructor(store: SurveyStore, scheme: SchemeEntryResponse) {
     this.scheme = scheme;
     this.store = store;
+    this.deferredPromptsEnabled = false;
   }
 
   findMealPromptById(promptId: string): PromptInstance | null {
@@ -950,6 +953,20 @@ export default class PromptManager {
     );
   }
 
+  nextFoodSectionPrompt(section: FoodSection, foodId: string, withSelection: Selection | null): Prompt | undefined {
+    const state = this.store.$state;
+
+    const foodIndex = getFoodIndexRequired(state.data.meals, foodId);
+    const foodState = getFoodByIndex(state.data.meals, foodIndex);
+    const mealState = state.data.meals[foodIndex.mealIndex];
+
+    return this.scheme.prompts.meals[section].find(
+      prompt =>
+        checkFoodStandardConditions(state, foodState, withSelection, prompt)
+        && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
+    );
+  }
+
   nextFoodsPrompt(foodId: string, withSelection: Selection | null): Prompt | undefined {
     const state = this.store.$state;
 
@@ -957,7 +974,19 @@ export default class PromptManager {
     const foodState = getFoodByIndex(state.data.meals, foodIndex);
     const mealState = state.data.meals[foodIndex.mealIndex];
 
-    return this.scheme.prompts.meals.foods.find(
+    const foodsPrompt = this.scheme.prompts.meals.foods.find(
+      prompt =>
+        checkFoodStandardConditions(state, foodState, withSelection, prompt)
+        && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
+    );
+
+    if (foodsPrompt !== undefined)
+      return foodsPrompt;
+
+    if (!this.deferredPromptsEnabled)
+      return undefined;
+
+    return this.scheme.prompts.meals.foodsDeferred.find(
       prompt =>
         checkFoodStandardConditions(state, foodState, withSelection, prompt)
         && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
