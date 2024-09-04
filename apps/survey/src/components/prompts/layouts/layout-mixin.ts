@@ -62,14 +62,20 @@ export default defineComponent({
     const loadPromptTranslations = () => {
       const locale = i18n.locale;
       const messages = i18n.getLocaleMessage(locale);
+
       const defaultPromptMessages = get(
         defaultMessages.getMessages(locale),
         `prompts.${type.value}`,
       );
 
-      Object.entries(defaultPromptMessages).forEach(([key, value]) => {
-        set(messages, `prompts.${type.value}.${key}`, props.prompt.i18n[key]?.[locale] ?? value);
-      });
+      if (defaultPromptMessages === undefined) {
+        console.error(`Failed to load default translation messages using key "prompts.${type.value}", locale "${locale}". Please update the translation files!`);
+      }
+      else {
+        Object.entries(defaultPromptMessages).forEach(([key, value]) => {
+          set(messages, `prompts.${type.value}.${key}`, props.prompt.i18n[key]?.[locale] ?? value);
+        });
+      }
 
       i18n.setLocaleMessage(locale, messages);
     };
