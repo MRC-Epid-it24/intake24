@@ -23,6 +23,7 @@ import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-ma
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
+import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import { Dictionary } from '@intake24/common/types';
 import logger from '@intake24/common-backend/services/logger/logger';
 
@@ -34,6 +35,7 @@ export const conflictResolutionOptions = ['skip', 'overwrite', 'abort'] as const
 export const importerSpecificModulesExecutionOptions = [
   'as-served-images',
   'image-maps',
+  'guide-images',
   'drinkware-sets',
   'locales',
   'nutrients',
@@ -86,6 +88,7 @@ export class ImporterV4 {
   private asServedSets: PkgAsServedSet[] | undefined;
   private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
   private imageMaps: Record<string, PkgImageMap> | undefined;
+  private guideImages: Record<string, PkgGuideImage> | undefined;
 
   constructor(
     apiClient: ApiClientV4,
@@ -124,6 +127,10 @@ export class ImporterV4 {
     'image-maps': async () => {
       await this.readImageMaps();
       await this.importImageMaps();
+    },
+    'guide-images': async () => {
+      await this.readGuideImages();
+      await this.importGuideImages();
     },
     'global-categories': async () => {
       await this.readGlobalCategories();
@@ -298,6 +305,58 @@ export class ImporterV4 {
     if (this.imageMaps !== undefined) {
       await this.batchImportRecord(this.imageMaps, 'image map', 10, (id, obj) =>
         this.importImageMap(id, obj));
+    }
+  }
+
+  private async importGuideImage(guideImageId: string, guideImage: PkgGuideImage): Promise<void> {
+    const existing = await this.apiClient.portionSize.guideImages.get(guideImageId);
+
+    if (existing !== null) {
+      switch (this.options.onConflict) {
+        case 'skip':
+          logger.info(`Guide image already exists, skipping: ${guideImageId}`);
+          return Promise.resolve();
+        case 'abort': {
+          const message = `Guide image already exists: ${guideImageId}`;
+          logger.error(message);
+          return Promise.reject(new Error(message));
+        }
+        case 'overwrite': {
+          logger.debug(`Updating existing guide image: ${guideImageId}`);
+          const objects = typeConverters.fromPackageGuideImageObjects(guideImage.objectWeights);
+
+          await this.apiClient.portionSize.guideImages.update(
+            guideImageId,
+            existing.description,
+            objects,
+          );
+
+          break;
+        }
+      }
+    }
+    else {
+      logger.info(`Creating new guide image: ${guideImageId}`);
+      const objects = typeConverters.fromPackageGuideImageObjects(guideImage.objectWeights);
+
+      await this.apiClient.portionSize.guideImages.create(
+        guideImageId,
+        guideImage.description,
+        guideImage.imageMapId,
+      );
+
+      await this.apiClient.portionSize.guideImages.update(
+        guideImageId,
+        guideImage.description,
+        objects,
+      );
+    }
+  }
+
+  private async importGuideImages(): Promise<void> {
+    if (this.guideImages !== undefined) {
+      await this.batchImportRecord(this.guideImages, 'guide image', 10, (id, obj) =>
+        this.importGuideImage(id, obj));
     }
   }
 
@@ -837,6 +896,13 @@ export class ImporterV4 {
     );
   }
 
+  private async readGuideImages(): Promise<void> {
+    logger.info('Loading guide images');
+    this.guideImages = await this.readJSON(
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.GUIDE_IMAGE_FILE_NAME),
+    );
+  }
+
   public async readPackage(): Promise<void> {
     await Promise.all([
       this.readLocales(),
@@ -845,6 +911,7 @@ export class ImporterV4 {
       this.readEnabledLocalFoods(),
       this.readNutrientTables(),
       this.readImageMaps(),
+      this.readGuideImages(),
       this.readAsServedSets(),
       this.readDrinkwareSets(),
     ]);
