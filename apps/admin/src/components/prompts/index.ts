@@ -14,6 +14,7 @@ export const promptSections: PromptSection[] = [
   'preFoods',
   'foods',
   'postFoods',
+  'foodsDeferred',
   'postMeals',
   'submission',
 ];
@@ -23,10 +24,11 @@ export const promptSectionsExceptSubmission: PromptSection[] = [
   'preFoods',
   'foods',
   'postFoods',
+  'foodsDeferred',
   'postMeals',
 ];
 
-export const foodsAndMeals: MealSection[] = ['foods', 'preFoods', 'postFoods'];
+export const foodsAndMeals: MealSection[] = ['foods', 'preFoods', 'postFoods', 'foodsDeferred'];
 
 export type PromptSettingsRecord = {
   tabs: string[];
@@ -88,7 +90,7 @@ export const promptSettings: PromptSettings = {
   // Standard
   'addon-foods-prompt': {
     tabs: [...tabs],
-    sections: ['foods', 'postFoods', 'postMeals'],
+    sections: ['foods', 'postFoods', 'postMeals', 'foodsDeferred'],
   },
   'associated-foods-prompt': {
     tabs: [...tabs],
@@ -96,7 +98,7 @@ export const promptSettings: PromptSettings = {
   },
   'general-associated-foods-prompt': {
     tabs: [...tabs],
-    sections: ['foods'],
+    sections: ['foods', 'foodsDeferred'],
   },
   'edit-meal-prompt': {
     tabs: [...tabs],
@@ -104,7 +106,7 @@ export const promptSettings: PromptSettings = {
   },
   'external-source-prompt': {
     tabs: [...tabs],
-    sections: ['foods'],
+    sections: ['foods', 'foodsDeferred'],
   },
   'final-prompt': {
     tabs: [...tabs],

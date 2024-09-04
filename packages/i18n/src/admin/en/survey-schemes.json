@@ -281,6 +281,10 @@
       "title": "Post-foods meal prompts",
       "subtitle": "Prompts asked about meals after the portion size estimation is complete for all foods in the meal."
     },
+    "foodsDeferred": {
+      "title": "Deferred food prompts",
+      "subtitle": "Additional questions asked about foods after the post-food meal prompts have been completed."
+    },
     "internal": {
       "_": "Internal identifiers",
       "id": {

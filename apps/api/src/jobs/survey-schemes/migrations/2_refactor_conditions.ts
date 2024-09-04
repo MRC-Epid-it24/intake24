@@ -12,19 +12,16 @@ function defaultObjectForSection(section: PromptSection): any {
       return 'survey';
     case 'postMeals':
       return 'survey';
-      break;
     case 'submission':
       return 'survey';
-      break;
     case 'preFoods':
       return 'meal';
-      break;
     case 'foods':
       return 'food';
-      break;
+    case 'foodsDeferred':
+      return 'food';
     case 'postFoods':
       return 'meal';
-      break;
   }
 }
 

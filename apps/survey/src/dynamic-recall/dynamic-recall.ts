@@ -33,6 +33,7 @@ export default class DynamicRecall {
     this.selectionManager = new SelectionManager(store, this.promptManager);
     this.resetSelectionOnFreeEntryComplete();
     this.resetSelectionOnPortionSizeComplete();
+    this.registerDeferredPromptsCheck();
     this.registerStoreUserSession();
   }
 
@@ -96,6 +97,29 @@ export default class DynamicRecall {
     });
   }
 
+  private deferredPromptsCheck(surveyState: SurveyState) {
+    return surveyState.data.meals.length > 0 && surveyState.data.meals.every(meal =>
+      this.promptManager.nextMealSectionPrompt('preFoods', meal.id, null) === undefined
+      && this.promptManager.nextMealSectionPrompt('postFoods', meal.id, null) === undefined
+      && meal.foods.every(food => this.promptManager.nextFoodSectionPrompt('foods', food.id, null) === undefined));
+  }
+
+  // Checks if the preFoods, foods and postFoods prompts are complete and sets the deferredPromptsEnabled
+  // flag on the promptManager accordingly. Additionally, resets the selection to first available item when
+  // deferredPromptsEnabled becomes true.
+  private registerDeferredPromptsCheck() {
+    this.store.$onAction((context) => {
+      const store = context.store;
+      const enabledBefore = this.promptManager.deferredPromptsEnabled;
+
+      context.after(() => {
+        this.promptManager.deferredPromptsEnabled = this.deferredPromptsCheck(store.$state);
+        if (!enabledBefore && this.promptManager.deferredPromptsEnabled)
+          store.setSelection(this.selectionManager.firstAvailableSelection());
+      });
+    });
+  }
+
   private registerStoreUserSession() {
     if (!this.store.parameters?.session.store)
       return;
@@ -139,7 +163,7 @@ export default class DynamicRecall {
         }
         case 'food': {
           const { foodId } = recallState.selection.element;
-          const foodPrompt = this.promptManager.nextFoodsPrompt(foodId, null);
+          const foodPrompt = this.promptManager.nextFoodSectionPrompt('foods', foodId, null);
 
           if (foodPrompt) {
             return {
@@ -147,6 +171,18 @@ export default class DynamicRecall {
               section: 'foods',
             };
           }
+
+          if (this.promptManager.deferredPromptsEnabled) {
+            const deferredFoodPrompt = this.promptManager.nextFoodSectionPrompt('foodsDeferred', foodId, null);
+
+            if (deferredFoodPrompt) {
+              return {
+                prompt: deferredFoodPrompt,
+                section: 'foodsDeferred',
+              };
+            }
+          }
+
           break;
         }
         default:

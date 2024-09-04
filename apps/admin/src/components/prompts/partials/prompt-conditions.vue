@@ -103,7 +103,7 @@ import {
   type ObjectPropertyId,
   promptConditionDefaults,
 } from '@intake24/common/prompts';
-import { mealSections, type PromptSection } from '@intake24/common/surveys';
+import { foodSections, mealSections, type PromptSection } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
 import { copy } from '@intake24/common/util/objects';
 
@@ -142,7 +142,7 @@ export default defineComponent({
         if ((mealSections as readonly string[]).includes(this.promptSection))
           allowedObjects.push('meal');
 
-        if (this.promptSection === 'foods')
+        if ((foodSections as readonly string[]).includes(this.promptSection))
           allowedObjects.push('food');
       }
 

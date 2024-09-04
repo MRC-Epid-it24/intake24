@@ -79,7 +79,7 @@ export type FoodCompletionState = typeof foodCompletionStateOptions[number];
 
 const valueCheck = z.object({
   op: z.enum(conditionOpCodes),
-  value: z.union([z.string().or(z.number()), z.string().or(z.number()).array()]).nullable(),
+  value: z.union([z.string().or(z.number()).or(z.boolean()), z.string().or(z.number()).or(z.boolean()).array()]).nullable(),
 });
 
 const valueProperty = z.object({

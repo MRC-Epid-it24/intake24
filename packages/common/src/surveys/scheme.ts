@@ -33,8 +33,11 @@ export const defaultSchemeSettings: SchemeSettings = {
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
 export type SurveyPromptSection = (typeof surveySections)[number];
 
-export const mealSections = ['preFoods', 'foods', 'postFoods'] as const;
+export const mealSections = ['preFoods', 'foods', 'postFoods', 'foodsDeferred'] as const;
 export type MealSection = (typeof mealSections)[number];
+
+export const foodSections = ['foods', 'foodsDeferred'] as const;
+export type FoodSection = (typeof foodSections)[number];
 
 export const promptSections = [...surveySections, ...mealSections] as const;
 export type PromptSection = (typeof promptSections)[number];
@@ -60,6 +63,7 @@ export const recallPrompts = z.object({
     preFoods: singlePrompt.array(),
     foods: singlePrompt.array(),
     postFoods: singlePrompt.array(),
+    foodsDeferred: singlePrompt.array(),
   }),
   postMeals: singlePrompt.array(),
   submission: singlePrompt.array(),
@@ -72,6 +76,7 @@ export const groupedRecallPrompts = z.object({
     preFoods: prompt.array(),
     foods: prompt.array(),
     postFoods: prompt.array(),
+    foodsDeferred: prompt.array(),
   }),
   postMeals: prompt.array(),
   submission: prompt.array(),
@@ -148,6 +153,7 @@ export function groupSchemeMultiPrompts(scheme: RecallPrompts): GroupedRecallPro
       preFoods: groupMultiPrompts(scheme.meals.preFoods),
       foods: groupMultiPrompts(scheme.meals.foods),
       postFoods: groupMultiPrompts(scheme.meals.postFoods),
+      foodsDeferred: groupMultiPrompts(scheme.meals.foodsDeferred),
     },
     postMeals: groupMultiPrompts(scheme.postMeals),
     submission: groupMultiPrompts(scheme.submission),
@@ -200,6 +206,7 @@ export const defaultPrompts: RecallPrompts = {
     preFoods: [],
     foods: [],
     postFoods: [],
+    foodsDeferred: [],
   },
   postMeals: [],
   submission: [],
