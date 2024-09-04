@@ -5,6 +5,7 @@ import { Argument, Command, Option } from 'commander';
 import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
 import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
+import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
 
 import pkg from '../package.json';
 import {
@@ -186,6 +187,23 @@ async function run() {
     )
     .action(async (options) => {
       await convertDrinkScale(options);
+    });
+
+  program
+    .command('convert-image-map')
+    .description('Convert legacy SVG image map data to Intake24 package format')
+    .requiredOption('-id, --id [image map ID]>', 'Image map ID')
+    .requiredOption('-d, --description [description]', 'Image map description')
+    .requiredOption('-svg, --svg-path [SVG path]', 'Image map SVG')
+    .requiredOption('-img, --base-image-path [base image path]', 'Image map base image')
+    .requiredOption('-o, --output-dir [output directory]', 'Output package directory')
+    .option(
+      '-ow, --overwrite',
+      'Overwrite existing records in destination package directory',
+      false,
+    )
+    .action(async (options) => {
+      await convertImageMap(options);
     });
 
   program

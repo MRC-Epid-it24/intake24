@@ -18,6 +18,7 @@ import type {
   CreateGlobalFoodRequest,
   CreateLocalCategoryRequest,
   CreateLocalFoodRequest,
+  GuideImageInputObjects,
   ImageMapEntryObject,
   LocaleRequest,
   NutrientTableRecordRequest,
@@ -35,6 +36,16 @@ function fromPackageImageMapObjects(
     navigationIndex: obj.navigationIndex,
     outlineCoordinates: obj.outlineCoordinates,
     label: { en: obj.description },
+  }));
+}
+
+function fromPackageGuideImageObjects(
+  objects: Record<number, number>,
+): GuideImageInputObjects {
+  return Object.entries(objects).map(([objId, weight]) => ({
+    id: objId,
+    label: { en: 'No description ' },
+    weight,
   }));
 }
 
@@ -232,6 +243,7 @@ function fromPackageNutrientTableRecords(nutrientTable: PkgNutrientTable): Nutri
 
 export default {
   fromPackageImageMapObjects,
+  fromPackageGuideImageObjects,
   fromPackageLocale,
   fromPackageGlobalFood,
   fromPackageLocalFood,
