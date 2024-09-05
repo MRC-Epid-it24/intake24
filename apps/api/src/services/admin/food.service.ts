@@ -164,7 +164,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       let main = await Food.findByPk(input.code, { transaction });
       if (!main) {
         main = await Food.create({ ...input, version: randomUUID() }, { transaction });
-        await FoodAttribute.create({ foodCode: main.code }, { transaction });
 
         if (input.parentCategories?.length) {
           const categories = input.parentCategories.map(({ code }) => code);
@@ -201,10 +200,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     if (!main || !associatedFoods || !portionSizeMethods)
       throw new NotFoundError();
 
-    const { attributes } = main;
-    if (!attributes)
-      throw new NotFoundError();
-
     await db.foods.transaction(async (transaction) => {
       const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
 
@@ -232,17 +227,18 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         }
 
         if (input.main.attributes) {
-          promises.push(
-            attributes.update(
-              pick(input.main.attributes, [
-                'sameAsBeforeOption',
-                'readyMealOption',
-                'reasonableAmount',
-                'useInRecipes',
-              ]),
-              { transaction },
-            ),
-          );
+          const attributesInput = pick(input.main.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+          if (Object.values(attributesInput).every(item => item === null)) {
+            if (main.attributes)
+              promises.push(main.attributes.destroy({ transaction }));
+          }
+          else {
+            promises.push(
+              main.attributes
+                ? main.attributes.update(attributesInput, { transaction })
+                : FoodAttribute.create({ foodCode: main.code, ...attributesInput }, { transaction }),
+            );
+          }
         }
       }
 
@@ -286,20 +282,19 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         { transaction },
       );
 
-      const promises: Promise<any>[] = [
-        FoodAttribute.create(
-          {
-            ...pick(sourceFoodLocal.main!.attributes!, [
-              'sameAsBeforeOption',
-              'readyMealOption',
-              'reasonableAmount',
-              'useInRecipes',
-            ]),
-            foodCode: food.code,
-          },
-          { transaction },
-        ),
-      ];
+      const promises: Promise<any>[] = [];
+
+      if (sourceFoodLocal.main?.attributes) {
+        promises.push(
+          FoodAttribute.create(
+            {
+              ...pick(sourceFoodLocal.main.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
+              foodCode: food.code,
+            },
+            { transaction },
+          ),
+        );
+      }
 
       if (sourceFoodLocal.main?.locales?.length) {
         const locales = sourceFoodLocal.main.locales.map(({ id }) => id);

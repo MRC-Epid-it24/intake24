@@ -243,7 +243,6 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       let main = await Category.findByPk(input.code, { transaction });
       if (!main) {
         main = await Category.create({ ...input, version: randomUUID() }, { transaction });
-        await CategoryAttribute.create({ categoryCode: main.code }, { transaction });
 
         if (input.parentCategories?.length) {
           const categories = input.parentCategories.map(({ code }) => code);
@@ -281,30 +280,34 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     if (!main || !portionSizeMethods)
       throw new NotFoundError();
 
-    const { attributes } = main;
-    if (!attributes)
-      throw new NotFoundError();
-
     const categories = (input.main.parentCategories ?? []).map(cat => cat.code);
 
     await db.foods.transaction(async (transaction) => {
-      await Promise.all([
+      const promises: Promise<any>[] = [
         categoryLocal.update(pick(input, ['name', 'tags']), { transaction }),
         main.update(pick(input.main, ['name', 'isHidden']), { transaction }),
-        attributes.update(
-          pick(input.main.attributes, [
-            'sameAsBeforeOption',
-            'readyMealOption',
-            'reasonableAmount',
-            'useInRecipes',
-          ]),
-          { transaction },
-        ),
         main.$set('parentCategories', categories, { transaction }),
         updatePortionSizeMethods(categoryLocalId, portionSizeMethods, input.portionSizeMethods, {
           transaction,
         }),
-      ]);
+      ];
+
+      if (input.main.attributes) {
+        const attributesInput = pick(input.main.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+        if (Object.values(attributesInput).every(item => item === null)) {
+          if (main.attributes)
+            promises.push(main.attributes.destroy({ transaction }));
+        }
+        else {
+          promises.push(
+            main.attributes
+              ? main.attributes.update(attributesInput, { transaction })
+              : CategoryAttribute.create({ categoryCode: main.code, ...attributesInput }, { transaction }),
+          );
+        }
+      }
+
+      await Promise.all(promises);
 
       if (main.code !== input.main.code) {
         await Category.update(
@@ -350,20 +353,19 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         { transaction },
       );
 
-      const promises: Promise<any>[] = [
-        CategoryAttribute.create(
-          {
-            ...pick(sourceCategoryLocal.main!.attributes!, [
-              'sameAsBeforeOption',
-              'readyMealOption',
-              'reasonableAmount',
-              'useInRecipes',
-            ]),
-            categoryCode: category.code,
-          },
-          { transaction },
-        ),
-      ];
+      const promises: Promise<any>[] = [];
+
+      if (sourceCategoryLocal.main?.attributes) {
+        promises.push(
+          CategoryAttribute.create(
+            {
+              ...pick(sourceCategoryLocal.main.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
+              categoryCode: category.code,
+            },
+            { transaction },
+          ),
+        );
+      }
 
       if (sourceCategoryLocal.main?.parentCategories?.length) {
         const categories = sourceCategoryLocal.main.parentCategories.map(({ code }) => code);
