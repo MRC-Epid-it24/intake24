@@ -77,15 +77,21 @@ export default defineComponent({
 
   setup(props) {
     const { i18n } = useI18n();
-
     const jobTypeList = computed(() =>
       surveyJobs.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`) })),
     );
     const jobQuery = computed(() => ({ surveyId: props.id }));
 
+    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
+    useEntryFetch(props);
+
     const defaultJobsParams = computed<Pick<JobParams, SurveyJob>>(() => ({
       SurveyAuthUrlsExport: { surveyId: props.id },
-      SurveyDataExport: { surveyId: props.id, startDate: undefined, endDate: undefined },
+      SurveyDataExport: {
+        surveyId: props.id,
+        startDate: new Date(entry.value.startDate),
+        endDate: new Date(entry.value.endDate),
+      },
       SurveyNutrientsRecalculation: { surveyId: props.id },
       SurveyRatingsExport: { surveyId: props.id },
       SurveyRespondentsImport: { surveyId: props.id, file: '' },
@@ -101,8 +107,6 @@ export default defineComponent({
       SurveySessionsExport: { surveyId: true },
     };
 
-    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
-    useEntryFetch(props);
     const { clearError, form } = useForm<SurveyTasksForm>({
       data: { type: surveyJobs[0], params: defaultJobsParams.value[surveyJobs[0]] },
       config: { multipart: true, resetOnSubmit: false },
@@ -118,13 +122,6 @@ export default defineComponent({
     const updateJob = () => {
       form.errors.clear();
       form.params = defaultJobsParams.value[form.type];
-
-      if (form.type === 'SurveyDataExport') {
-        // @ts-expect-error TS does not narrow the type of form.params
-        form.params.startDate = entry.value.startDate;
-        // @ts-expect-error TS does not narrow the type of form.params
-        form.params.endDate = entry.value.endDate;
-      }
     };
 
     const submit = async () => {

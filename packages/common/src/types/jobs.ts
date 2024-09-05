@@ -96,8 +96,15 @@ export const SurveyAuthUrlsExport = z.object({
 export const SurveyDataExport = z.object({
   id: z.union([z.string(), z.array(z.string())]).optional(),
   surveyId: z.string(),
-  startDate: z.coerce.date().transform(val => startOfDay(val)).optional(),
-  endDate: z.coerce.date().transform(val => endOfDay(val)).optional(),
+  // TODO: Fix this - multiform data are not cleaned of empty strings
+  startDate: z.union([
+    z.string().length(0).transform(val => val || undefined),
+    z.coerce.date(),
+  ]).nullish().transform(val => val ? startOfDay(val) : undefined),
+  endDate: z.union([
+    z.string().length(0).transform(val => val || undefined),
+    z.coerce.date(),
+  ]).nullish().transform(val => val ? endOfDay(val) : undefined),
   userId: z.string().optional(),
 });
 
