@@ -1,7 +1,7 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <template #actions>
-      <preview :feedback-scheme="currentFeedbackScheme" />
+      <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
     <demographic-group-list
       v-model="form.demographicGroups"
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
@@ -40,13 +40,9 @@ export default defineComponent({
       editMethod: 'patch',
     });
 
-    return { entry, entryLoaded, refs, form, routeLeave, submit };
-  },
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData(true) }));
 
-  computed: {
-    currentFeedbackScheme(): FeedbackSchemeEntry {
-      return { ...this.entry, ...this.form.getData(true) } as FeedbackSchemeEntry;
-    },
+    return { currentFeedbackScheme, entry, entryLoaded, refs, form, routeLeave, submit };
   },
 });
 </script>

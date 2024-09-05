@@ -74,7 +74,7 @@
         </transition-group>
       </draggable>
     </v-list>
-    <card-selector ref="selector" @save="save" />
+    <card-selector ref="selector" :images="images" @save="save" />
   </v-card>
 </template>
 
@@ -85,7 +85,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Card } from '@intake24/common/feedback';
-import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
+import type { FeedbackImage, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { ConfirmDialog } from '@intake24/ui';
@@ -110,6 +110,10 @@ export default defineComponent({
   },
 
   props: {
+    images: {
+      type: Array as PropType<FeedbackImage[]>,
+      default: () => [],
+    },
     nutrientTypes: {
       type: Array as PropType<NutrientTypeResponse[]>,
       default: () => [],
@@ -146,13 +150,13 @@ export default defineComponent({
       const { image } = card;
 
       if (!('nutrientTypeIds' in card))
-        return this.$t(`feedback-schemes.images.${image}`).toString();
+        return image;
 
       const nutrients = this.nutrientTypes
         .filter(({ id }) => card.nutrientTypeIds.includes(id))
         .map(item => item.description);
 
-      return `${this.$t(`feedback-schemes.images.${image}`)} | ${nutrients.join(' | ')}`;
+      return `${image} | ${nutrients.join(' | ')}`;
     },
 
     add() {

@@ -35,8 +35,9 @@ export function surveyRespondent() {
   const surveySettingsCacheTTL = ioc.cradle.config.cache.surveySettingsTTL;
 
   return initServer().router(contract.surveyRespondent, {
-    parameters: async ({ params }) => {
+    parameters: async ({ params, req }) => {
       const { slug } = params;
+      const { imagesBaseUrl } = req.scope.cradle;
 
       const survey = await Survey.findBySlug(slug, {
         include: [
@@ -140,7 +141,15 @@ export function surveyRespondent() {
           state,
           locale,
           surveyScheme: { id: surveyScheme.id, meals, prompts, settings },
-          feedbackScheme,
+          feedbackScheme: feedbackScheme
+            ? {
+                ...feedbackScheme.get(),
+                cards: feedbackScheme.cards.map(card => ({
+                  ...card,
+                  image: `${imagesBaseUrl}/feedback/${card.image}.jpg`,
+                })),
+              }
+            : undefined,
           numberOfSubmissionsForFeedback,
           session,
           suspensionReason,

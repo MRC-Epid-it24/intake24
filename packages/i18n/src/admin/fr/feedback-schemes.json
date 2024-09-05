@@ -81,25 +81,6 @@
     "bit_high": "Un peu haut",
     "too_high": "Trop haut"
   },
-  "images": {
-    "_": "Image",
-    "battery": "Battery",
-    "beef": "Beef",
-    "bread": "Bread",
-    "candy": "Candy",
-    "salmon": "Salmon",
-    "sausage": "Sausage",
-    "egg": "Egg",
-    "apple": "Apple",
-    "strawberry": "Strawberry",
-    "burger": "Burger",
-    "fries": "Fries",
-    "milk": "Milk",
-    "iron": "Iron",
-    "folate": "Folate",
-    "co2": "CO2",
-    "fruitVeg": "Fruit & Vegetables"
-  },
   "characterSentimentTypes": {
     "_": "Type d'appréciation du caractère",
     "title": "Types d'appréciations du caractère",
@@ -191,6 +172,7 @@
     "type": "Type de carte",
     "options": "Options de carte",
     "color": "Card color",
+    "image": "Image",
     "showRecommendations": "Montrer les recommandations du bilan",
     "tabs": {
       "general": "Général",

@@ -6,7 +6,7 @@
     @save="submit"
   >
     <template #actions>
-      <preview :feedback-scheme="currentFeedbackScheme" />
+      <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
     <v-toolbar color="grey lighten-5" flat tile>
       <v-icon color="secondary" left>
@@ -140,10 +140,7 @@ export default defineComponent({
         Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required').toString(),
     ]);
 
-    const currentFeedbackScheme = computed<FeedbackSchemeEntry>(() => ({
-      ...entry.value,
-      ...form.getData(true),
-    }));
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData(true) }));
 
     const updateColorList = () => {
       const size = form.topFoods.max + 1;

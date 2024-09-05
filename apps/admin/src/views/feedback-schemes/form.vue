@@ -6,7 +6,7 @@
         resource="feedback-schemes"
         :scheme-id="id"
       />
-      <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme" />
+      <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-container fluid>
@@ -206,7 +206,7 @@ import type {
   TopFoods,
 } from '@intake24/common/feedback';
 import type { RecordVisibility } from '@intake24/common/security';
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
@@ -268,7 +268,7 @@ export default defineComponent({
       })),
     );
 
-    const { canHandleEntry, entry, entryLoaded, isCreate } = useEntry<FeedbackSchemeEntry>(props);
+    const { canHandleEntry, entry, entryLoaded, isCreate, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
       PatchFeedbackSchemeForm,
@@ -368,6 +368,7 @@ export default defineComponent({
       isCreate,
       clearError,
       form,
+      refs,
       routeLeave,
       submit,
       requiredPhysicalDataFields,

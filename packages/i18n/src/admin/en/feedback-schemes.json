@@ -94,26 +94,6 @@
     "too_high": "Too high"
   },
 
-  "images": {
-    "_": "Image",
-    "battery": "Battery",
-    "beef": "Beef",
-    "bread": "Bread",
-    "candy": "Candy",
-    "salmon": "Salmon",
-    "sausage": "Sausage",
-    "egg": "Egg",
-    "apple": "Apple",
-    "strawberry": "Strawberry",
-    "burger": "Burger",
-    "fries": "Fries",
-    "milk": "Milk",
-    "iron": "Iron",
-    "folate": "Folate",
-    "co2": "CO2",
-    "fruitVeg": "Fruit & Vegetables"
-  },
-
   "characterSentimentTypes": {
     "_": "Character sentiment type",
     "title": "Character sentiment types",
@@ -211,6 +191,7 @@
     "type": "Card type",
     "options": "Card options",
     "color": "Card color",
+    "image": "Image",
     "showRecommendations": "Show feedback recommendations",
 
     "tabs": {

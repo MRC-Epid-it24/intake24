@@ -102,19 +102,18 @@
                               <v-select
                                 v-model="dialog.card.image"
                                 hide-details="auto"
+                                item-text="id"
+                                item-value="id"
                                 :items="images"
-                                :label="$t('feedback-schemes.images._')"
+                                :label="$t('feedback-schemes.cards.image')"
                                 name="image"
                                 outlined
                               >
                                 <template #item="{ item }">
                                   <v-avatar class="mr-4 my-2" tile>
-                                    <v-img
-                                      :alt="item.value"
-                                      :src="characterImageMap[item.value]"
-                                    />
+                                    <v-img :alt="item.id" :src="item.url" />
                                   </v-avatar>
-                                  {{ $t(`feedback-schemes.images.${item.value}`) }}
+                                  {{ item.id }}
                                 </template>
                               </v-select>
                             </v-col>
@@ -175,16 +174,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, type PropType, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
+import type { FeedbackImage } from '@intake24/common/types/http/admin';
 import { useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { cardDefaults, images as characterTypesRef } from '@intake24/common/feedback';
+import { cardDefaults } from '@intake24/common/feedback';
 import { copy, merge, randomString } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n/index';
-import { characterImageMap } from '@intake24/ui/feedback';
 
 import { cardSettings } from './card';
 import cardTypes from './card-types';
@@ -201,6 +199,10 @@ export default defineComponent({
   components: { LanguageSelector, ...cardTypes },
 
   props: {
+    images: {
+      type: Array as PropType<FeedbackImage[]>,
+      default: () => [],
+    },
     textRequired: {
       type: Boolean,
       default: true,
@@ -211,15 +213,9 @@ export default defineComponent({
 
   setup() {
     useTinymce();
-    const { i18n } = useI18n();
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-    const images = characterTypesRef.map(value => ({
-      value,
-      text: i18n.t(`feedback-schemes.images.${value}`),
-    }));
-
-    return { images, characterImageMap, form };
+    return { form };
   },
 
   data() {

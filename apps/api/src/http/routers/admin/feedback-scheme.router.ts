@@ -1,7 +1,10 @@
+import path from 'node:path';
+
 import type { AppRoute, AppRouter } from '@ts-rest/core';
 import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
+import fs from 'fs-extra';
 import { pick } from 'lodash';
 import { col, fn, Op } from 'sequelize';
 
@@ -77,13 +80,26 @@ export function feedbackScheme() {
     },
     refs: {
       middleware: [permission('feedback-schemes')],
-      handler: async () => {
-        const [nutrientTypes, physicalActivityLevels] = await Promise.all([
+      handler: async ({ req }) => {
+        const { fsConfig, imagesBaseUrl } = req.scope.cradle;
+
+        const [nutrientTypes, physicalActivityLevels, files] = await Promise.all([
           SystemNutrientType.scope('list').findAll(),
           PhysicalActivityLevel.scope('list').findAll(),
+          fs.readdir(path.resolve(fsConfig.local.images, 'feedback')),
         ]);
 
-        return { status: 200, body: { nutrientTypes, physicalActivityLevels } };
+        const images = files.map((file) => {
+          const ext = path.extname(file);
+          const name = path.basename(file);
+
+          return {
+            id: path.basename(file, ext),
+            url: `${imagesBaseUrl}/feedback/${name}`,
+          };
+        });
+
+        return { status: 200, body: { nutrientTypes, physicalActivityLevels, images } };
       },
     },
     read: {

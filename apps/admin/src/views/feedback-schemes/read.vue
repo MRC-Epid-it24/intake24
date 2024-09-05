@@ -6,7 +6,7 @@
         resource="feedback-schemes"
         :scheme-id="id"
       />
-      <preview :feedback-scheme="entry" />
+      <preview :feedback-scheme="entry" :images="refs.images" />
     </template>
     <v-simple-table>
       <tbody>
@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
@@ -60,10 +60,10 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { canHandleEntry, entry, entryLoaded } = useEntry<FeedbackSchemeEntry>(props);
+    const { canHandleEntry, entry, entryLoaded, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
 
-    return { canHandleEntry, entry, entryLoaded };
+    return { canHandleEntry, entry, entryLoaded, refs };
   },
 });
 </script>

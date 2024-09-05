@@ -20,26 +20,6 @@ export enum NutrientTypeIdEnum {
   AOACFibre = '242',
 }
 
-export const images = [
-  'battery',
-  'beef',
-  'bread',
-  'candy',
-  'salmon',
-  // 'sausage',
-  'egg',
-  'apple',
-  'strawberry',
-  'burger',
-  'fries',
-  'milk',
-  'iron',
-  'folate',
-  'co2',
-  'fruitVeg',
-] as const;
-export type CharacterType = (typeof images)[number];
-
 export const characterSentimentTypes = ['danger', 'warning', 'happy', 'exciting'] as const;
 export type CharacterSentimentType = (typeof characterSentimentTypes)[number];
 

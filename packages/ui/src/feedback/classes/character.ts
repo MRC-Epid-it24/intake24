@@ -1,7 +1,6 @@
 import type {
   Character,
   CharacterSentiment,
-  CharacterType,
   Sentiment,
 } from '@intake24/common/feedback';
 import { sentiments as defaultSentiments } from '@intake24/common/feedback';
@@ -15,7 +14,7 @@ import type UserDemographic from './user-demographic';
 export type CharacterParameters = {
   readonly id: string;
   readonly type: 'character';
-  readonly image: CharacterType;
+  readonly image: string;
   readonly sentiment: CharacterSentiment | null;
   readonly results: DemographicResult[];
   readonly color: string;
@@ -27,7 +26,7 @@ export class CharacterRules implements Character {
 
   readonly type = 'character' as const;
 
-  readonly image: CharacterType;
+  readonly image: string;
 
   readonly nutrientTypeIds: string[];
 

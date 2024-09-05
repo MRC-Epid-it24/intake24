@@ -1,6 +1,6 @@
 import { localeTranslation, requiredLocaleTranslation } from '../types';
 import { z } from '../util';
-import { characterSentiment, images } from './characters';
+import { characterSentiment } from './characters';
 
 export const foodGroupThreshold = z.object({
   threshold: z.number(),
@@ -12,7 +12,7 @@ export type FoodGroupThreshold = z.infer<typeof foodGroupThreshold>;
 export const baseCard = z.object({
   id: z.string(),
   color: z.string(),
-  image: z.enum(images),
+  image: z.string(),
   sentiments: z.array(characterSentiment),
   showRecommendations: z.boolean(),
 });

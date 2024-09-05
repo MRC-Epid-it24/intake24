@@ -68,9 +68,17 @@ export const feedbackSchemeEntry = feedbackSchemeAttributes.extend({
 
 export type FeedbackSchemeEntry = z.infer<typeof feedbackSchemeEntry>;
 
+export const feedbackImage = z.object({
+  id: z.string(),
+  url: z.string(),
+});
+
+export type FeedbackImage = z.infer<typeof feedbackImage>;
+
 export const feedbackSchemeRefs = z.object({
   nutrientTypes: nutrientTypeResponse.array(),
   physicalActivityLevels: physicalActivityLevelAttributes.array(),
+  images: feedbackImage.array(),
 });
 
 export type FeedbackSchemeRefs = z.infer<typeof feedbackSchemeRefs>;

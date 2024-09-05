@@ -56,9 +56,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackImage, FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import { feedbackService } from '@intake24/admin/services';
 import {
   buildCardParams,
@@ -71,13 +71,6 @@ import {
 
 import * as previewData from './preview-data';
 
-export type Submission = {
-  id: string;
-  number: number;
-  endDate: string;
-  endTime: string;
-};
-
 export default defineComponent({
   name: 'FeedbackPreview',
 
@@ -88,86 +81,83 @@ export default defineComponent({
       type: Object as PropType<FeedbackSchemeEntry>,
       required: true,
     },
+    images: {
+      type: Array as PropType<FeedbackImage[]>,
+      default: () => [],
+    },
   },
 
   setup(props) {
     const dialog = ref(false);
 
-    const scheme = computed(() => props.feedbackScheme);
+    const imageMap = computed(() => props.images.reduce<Record<string, string>>((acc, item) => {
+      acc[item.id] = item.url;
+      return acc;
+    }, {}));
+
+    const scheme = computed(() => ({
+      ...props.feedbackScheme,
+      cards: props.feedbackScheme.cards.map(card => ({ ...card, image: imageMap.value[card.image] })),
+    }));
 
     const { cards, feedbackDicts, getSectionOrder, topFoods, showCards, showMeals, showTopFoods }
       = useFeedback(scheme);
 
+    const buildFeedback = async () => {
+      const results = await feedbackService.getFeedbackResults({
+        cards: scheme.value.cards,
+        groups: scheme.value.demographicGroups,
+        henryCoefficients: scheme.value.henryCoefficients,
+        physicalData: previewData.physicalData,
+        submissions: previewData.submissions,
+      });
+
+      feedbackDicts.value = results.feedbackDicts;
+
+      const {
+        surveyStats,
+        feedbackData: { nutrientTypes },
+      } = feedbackDicts.value;
+
+      const selected = previewData.submissions.map(({ id }) => id);
+
+      const foods = surveyStats.getReducedFoods(selected);
+      const averageIntake = surveyStats.getAverageIntake(selected);
+      const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(selected);
+
+      cards.value = buildCardParams(results.feedbackDicts.cards, {
+        foods,
+        userDemographic: results.userDemographic,
+        averageIntake,
+        fruitAndVegPortions,
+      });
+      topFoods.value = buildTopFoods(scheme.value.topFoods, foods, nutrientTypes);
+    };
+
+    const close = () => {
+      dialog.value = false;
+    };
+
+    onMounted(async () => {
+      await buildFeedback();
+    });
+
+    watch(scheme, async () => {
+      await buildFeedback();
+    }, { deep: true });
+
     return {
       dialog,
-      ...previewData,
       cards,
+      close,
       feedbackDicts,
       getSectionOrder,
       topFoods,
       showCards,
       showMeals,
       showTopFoods,
+      ...previewData,
     };
-  },
-
-  watch: {
-    feedbackScheme: {
-      async handler() {
-        await this.buildFeedback();
-      },
-      deep: true,
-    },
-  },
-
-  async mounted() {
-    await this.buildFeedback();
-  },
-
-  methods: {
-    async buildFeedback() {
-      const {
-        feedbackScheme: { cards, demographicGroups: groups, henryCoefficients, topFoods },
-        physicalData,
-        submissions,
-      } = this;
-
-      const { feedbackDicts, userDemographic } = await feedbackService.getFeedbackResults({
-        cards,
-        groups,
-        henryCoefficients,
-        physicalData,
-        submissions,
-      });
-
-      if (!feedbackDicts || !userDemographic)
-        return;
-
-      this.feedbackDicts = feedbackDicts;
-
-      const {
-        surveyStats,
-        feedbackData: { nutrientTypes },
-      } = feedbackDicts;
-
-      const selected = submissions.map(({ id }) => id);
-
-      const foods = surveyStats.getReducedFoods(selected);
-      const averageIntake = surveyStats.getAverageIntake(selected);
-      const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(selected);
-
-      this.cards = buildCardParams(feedbackDicts.cards, {
-        foods,
-        userDemographic,
-        averageIntake,
-        fruitAndVegPortions,
-      });
-      this.topFoods = buildTopFoods(topFoods, foods, nutrientTypes);
-    },
-
-    close() {
-      this.dialog = false;
-    },
   },
 });
 </script>
