@@ -103,7 +103,7 @@ export function getScaleBounds(outlineCoordinates: number[]) {
   return { minX, maxX, minY, maxY };
 }
 
-export function toSvgPolygonPoints(outlineCoordinates: number[], widthPx: number, heightPx: number): string {
+export function toSvgPolygonPoints(outlineCoordinates: number[], widthPx: number, heightPx: number, horizontalOffsetPx: number, verticalOffsetPx: number): string {
   const pointCount = Math.floor(outlineCoordinates.length / 2);
 
   // String concatenation seems to be OK performance-wise
@@ -112,7 +112,7 @@ export function toSvgPolygonPoints(outlineCoordinates: number[], widthPx: number
   for (let i = 0; i < pointCount; ++i) {
     if (i !== 0)
       pointsStr += ' ';
-    pointsStr += `${outlineCoordinates[i * 2] * widthPx},${outlineCoordinates[i * 2 + 1] * heightPx}`;
+    pointsStr += `${outlineCoordinates[i * 2] * widthPx + horizontalOffsetPx},${outlineCoordinates[i * 2 + 1] * heightPx + verticalOffsetPx}`;
   }
   return pointsStr;
 }
