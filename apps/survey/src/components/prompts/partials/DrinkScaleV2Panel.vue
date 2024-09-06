@@ -2,9 +2,13 @@
   <div ref="wrapper" class="drink-scale-wrapper">
     <div class="drink-scale-drawer" :class="{ selected: cursorInScale }">
       <v-img
+        :key="imgKey"
         ref="imgDrink"
+        :aspect-ratio="containerAspectRatio"
         class="drink-scale-image"
+        :contain="true"
         :src="scale.baseImageUrl"
+        @load="onImageLoad"
         @mousedown="onMouseDown"
         @mousemove="onMouseMove"
         @touchmove="onTouchMove"
@@ -57,7 +61,7 @@
       </div>
     </div>
     <v-row class="drink-scale-controls">
-      <v-col cols="6" sm>
+      <v-col cols="12" sm="6">
         <v-btn
           block
           color="primary"
@@ -71,7 +75,7 @@
           {{ $t(`prompts.drinkScale.${type}.less`) }}
         </v-btn>
       </v-col>
-      <v-col cols="6" sm>
+      <v-col cols="12" sm="6">
         <v-btn
           block
           color="primary"
@@ -141,6 +145,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    minAspectRatio: {
+      type: Number,
+      default: 1.2,
+    },
   },
 
   emits: ['confirm', 'input'],
@@ -148,13 +156,47 @@ export default defineComponent({
   setup(props, { emit }) {
     const wrapper = ref<InstanceType<typeof HTMLFormElement>>();
     const imgDrink = ref<InstanceType<typeof VImg>>();
+
     // @ts-expect-error should allow vue instance?
-    const { height, width } = useElementSize(imgDrink);
+    const { height: imgContainerHeight, width: imgContainerWidth } = useElementSize(imgDrink);
+
+    const originalImageHeight = ref(1);
+    const originalImageWidth = ref(1);
+
+    const containerAspectRatio = computed(() => {
+      const imageAspect = originalImageWidth.value / originalImageHeight.value;
+      return Math.max(imageAspect, props.minAspectRatio);
+    });
+
+    const onImageLoad = () => {
+      const vueImageElement = imgDrink.value?.$el;
+      if (vueImageElement) {
+        const imgEl = (vueImageElement as any).__vue__.image as HTMLImageElement; // stupid hack to get to the otherwise inaccessible naturalWidth/naturalHeight values
+        originalImageHeight.value = imgEl.naturalHeight;
+        originalImageWidth.value = imgEl.naturalWidth;
+      }
+    };
 
     // Outline coordinates converted into a format compatible with the svg polygon's points attribute
-    const outlinePoints = computed(() =>
-      toSvgPolygonPoints(props.scale.outlineCoordinates, width.value, height.value),
-    );
+    const outlinePoints = computed(() => {
+      const originalImageAspect = originalImageWidth.value / originalImageHeight.value;
+      const imgContainerAspect = imgContainerWidth.value / imgContainerHeight.value;
+
+      const scaleWidth = originalImageAspect >= imgContainerAspect ? imgContainerWidth.value : imgContainerHeight.value * originalImageAspect;
+      const scaleHeight = originalImageAspect > imgContainerAspect ? imgContainerWidth.value / originalImageAspect : imgContainerHeight.value;
+
+      // The scale offset calculations are correct, but they are not applied to the slider,
+      // and the slider will not be drawn correctly in case if the original image is wider than
+      // the container.
+      //
+      // However, since the aspect ratio is clamped to the image aspect ratio, effectively only
+      // taller images are constrained and wide images are not and thus this case does not apply.
+
+      const scaleHorizontalOffset = (imgContainerWidth.value - scaleWidth) * 0.5;
+      const scaleVerticalOffset = (imgContainerHeight.value - scaleHeight) * 0.5;
+
+      return toSvgPolygonPoints(props.scale.outlineCoordinates, scaleWidth, scaleHeight, scaleHorizontalOffset, scaleVerticalOffset);
+    });
 
     const propRefs = toRefs(props);
 
@@ -165,8 +207,8 @@ export default defineComponent({
     // The bounding box of the sliding scale (full region not accounting for maxFillLevel)
     const scaleBoundsPx = computed(() => {
       const bounds = scaleBounds.value;
-      const w = width.value;
-      const h = height.value;
+      const w = imgContainerWidth.value;
+      const h = imgContainerHeight.value;
       return {
         left: bounds.minX * w,
         right: bounds.maxX * w,
@@ -190,7 +232,7 @@ export default defineComponent({
 
     // Vertical offset from the bottom of the image to the start of the sliding scale region in pixels.
     // Used to position the slider element.
-    const sliderBottomOffset = computed(() => `${height.value - scaleBoundsPx.value.bottom}px`);
+    const sliderBottomOffset = computed(() => `${imgContainerHeight.value - scaleBoundsPx.value.bottom}px`);
 
     const isInScale = (x: number, y: number) => {
       const bounds = scaleBoundsPx.value;
@@ -251,19 +293,19 @@ export default defineComponent({
     const fillVolume = computed(() => {
       switch (propRefs.scale.value.volumeMethod) {
         case 'lookUpTable':
-          return Math.round(calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value));
+          return calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value);
         case 'cylindrical': {
           const { minY, maxY } = scaleBounds.value;
           const scaleHeight = maxY - minY;
           const fillLineY = maxY - scaleHeight * fillLevel.value;
           const fullVolume = calculateFillVolume(symmetryShape.value, minY, propRefs.cylindricalVolumeStep.value);
           const filledVolume = calculateFillVolume(symmetryShape.value, fillLineY, propRefs.cylindricalVolumeStep.value);
-          return Math.round((filledVolume * maxVolume.value) / fullVolume);
+          return (filledVolume * maxVolume.value) / fullVolume;
         }
       }
     });
 
-    const label = computed(() => `${fillVolume.value} ml`);
+    const label = computed(() => `${Math.round(fillVolume.value ?? 0)} ml`);
 
     const confirm = () => {
       emit('confirm');
@@ -283,11 +325,17 @@ export default defineComponent({
       },
     );
 
+    const imgKey = ref(0);
+
+    watch(() => props.scale.baseImageUrl, () => {
+      // Element size fails to update on image change sometimes, this seems to fix it
+      ++imgKey.value;
+    });
+
     return {
       wrapper,
       imgDrink,
-      height,
-      width,
+      height: imgContainerHeight,
       confirm,
       isInScale,
       cursorInScale,
@@ -302,6 +350,9 @@ export default defineComponent({
       onTouchMove,
       label,
       outlinePoints,
+      imgKey,
+      onImageLoad,
+      containerAspectRatio,
     };
   },
 

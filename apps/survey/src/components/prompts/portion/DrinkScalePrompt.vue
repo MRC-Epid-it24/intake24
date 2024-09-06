@@ -151,20 +151,43 @@ import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
-import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
+import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
+import type { DrinkwareScaleV2Response, DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import {
-  calculateVolume,
+  calculateVolume as calculateVolumeLUT,
   DrinkScalePanel,
   DrinkScaleV2Panel,
+  getScaleBounds,
   ImageMapSelector,
   QuantityBadge,
   QuantityCard,
   QuantitySlider,
 } from '../partials';
+import { calculateFillVolume, getSymmetryShape } from '../partials/drink-scale-cylindrical';
 import createBasePortion from './createBasePortion';
+
+function calculateVolume(scale: DrinkwareScaleEntry | DrinkwareScaleV2Response, fillLevel: number): number {
+  if (scale.version === 1)
+    return calculateVolumeLUT(scale.volumeSamples, fillLevel);
+
+  if (scale.volumeMethod === 'lookUpTable')
+    return calculateVolumeLUT(scale.volumeSamplesNormalised, fillLevel);
+
+  // This is redundant, but the state handling code in this prompt is quite complicated
+  // so it's easier to just do it again here instead of refactoring the data flow :(
+
+  const symmetryShape = getSymmetryShape(scale.outlineCoordinates);
+  const scaleBounds = getScaleBounds(scale.outlineCoordinates);
+  const { minY, maxY } = scaleBounds;
+  const scaleHeight = maxY - minY;
+  const fillLineY = maxY - scaleHeight * fillLevel;
+  const fullVolume = calculateFillVolume(symmetryShape, minY, 0.05);
+  const filledVolume = calculateFillVolume(symmetryShape, fillLineY, 0.05);
+  return (filledVolume * scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1]) / fullVolume;
+}
 
 export default defineComponent({
   name: 'DrinkScalePrompt',
@@ -239,7 +262,9 @@ export default defineComponent({
         if (!scale)
           return '';
 
-        const volume = scale.volumeSamples[scale.volumeSamples.length - 1];
+        const volume = scale.version === 1
+          ? scale.volumeSamples[scale.volumeSamples.length - 1]
+          : scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1];
 
         return (
           this.translate(scale.label, { params: { volume } })
@@ -260,10 +285,6 @@ export default defineComponent({
 
     skipFillLevel() {
       return this.parameters.skipFillLevel;
-    },
-
-    volumes(): number[] | undefined {
-      return this.scale?.volumeSamples;
     },
 
     objectValid() {
@@ -357,8 +378,7 @@ export default defineComponent({
       this.clearQuantity();
       this.clearLeftovers();
 
-      if (this.volumes)
-        this.portionSize.servingWeight = calculateVolume(this.volumes, this.portionSize.fillLevel);
+      this.portionSize.servingWeight = calculateVolume(drinkwareSetData.scales[idx], this.portionSize.fillLevel);
 
       this.update();
     },
@@ -419,12 +439,11 @@ export default defineComponent({
     },
 
     update() {
-      const { volumes } = this;
-      if (volumes) {
+      if (this.scale) {
         this.portionSize.servingWeight
-          = calculateVolume(volumes, this.portionSize.fillLevel) * this.portionSize.count;
+          = calculateVolume(this.scale, this.portionSize.fillLevel) * this.portionSize.count;
         this.portionSize.leftoversWeight
-          = calculateVolume(volumes, this.portionSize.leftoversLevel) * this.portionSize.count;
+          = calculateVolume(this.scale, this.portionSize.leftoversLevel) * this.portionSize.count;
       }
 
       const state: PromptStates['drink-scale-prompt'] = {
