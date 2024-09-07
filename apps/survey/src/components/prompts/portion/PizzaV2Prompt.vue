@@ -133,7 +133,7 @@
               <v-col cols="12" sm="6">
                 <quantity-card
                   v-model="state.portionSize.quantity"
-                  @update:confirm="confirmType('quantity', $event)"
+                  @update:confirmed="confirmType('quantity', $event)"
                 />
               </v-col>
             </v-row>

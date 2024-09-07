@@ -386,8 +386,19 @@
       "column": "Colonne",
       "row": "Ligne"
     },
+    "counter": {
+      "_": "Counter",
+      "title": "Counter settings",
+      "current": "Current value",
+      "min": "Minimum value",
+      "max": "Maximum value",
+      "confirm": "Require confirmation",
+      "fraction": "Use fractions",
+      "whole": "Use whole numbers"
+    },
     "slider": {
-      "_": "Paramètres du curseur",
+      "_": "Curseur",
+      "title": "Paramètres du curseur",
       "current": {
         "label": "Current label",
         "value": "Current value",
@@ -401,6 +412,7 @@
         "label": "Maximum label",
         "value": "Maximum value"
       },
+      "confirm": "Require confirmation",
       "step": "Incrémentation"
     },
     "timePicker": {

@@ -5,12 +5,12 @@
       color="secondary"
       hide-details
       :label="$t('prompts.quantity._')"
-      :max="slider.max.value"
-      :min="slider.min.value"
-      :step="slider.step"
-      :style="{ 'padding-top': `${slider.current.size + 10}px` }"
-      :thumb-label="slider.current ? `always` : false"
-      :thumb-size="slider.current.size"
+      :max="max.value"
+      :min="min.value"
+      :step="step"
+      :style="{ 'padding-top': `${current.size + 10}px` }"
+      :thumb-label="current ? `always` : false"
+      :thumb-size="current.size"
       :value="value"
       @input="updateValue($event)"
     >
@@ -30,9 +30,9 @@
         </div>
       </template>
     </v-slider>
-    <v-row>
+    <v-row v-if="confirm">
       <v-col cols="12" sm="auto">
-        <v-btn :block="isMobile" color="primary" @click="confirm">
+        <v-btn :block="isMobile" color="primary" @click="updateConfirmed(true)">
           {{ $t('common.action.continue') }}
         </v-btn>
       </v-col>
@@ -50,8 +50,28 @@ export default defineComponent({
   name: 'QuantitySlider',
 
   props: {
-    slider: {
-      type: Object as PropType<Slider>,
+    confirm: {
+      type: Boolean,
+      default: true,
+    },
+    confirmed: {
+      type: Boolean,
+      default: true,
+    },
+    current: {
+      type: Object as PropType<Slider['current']>,
+      required: true,
+    },
+    min: {
+      type: Object as PropType<Slider['min']>,
+      required: true,
+    },
+    max: {
+      type: Object as PropType<Slider['max']>,
+      required: true,
+    },
+    step: {
+      type: Number as PropType<Slider['step']>,
       required: true,
     },
     value: {
@@ -60,29 +80,32 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'confirm'],
+  emits: ['input', 'update:confirmed'],
 
   setup(props, { emit }) {
-    const confirm = () => {
-      emit('confirm');
+    const updateConfirmed = (value: boolean) => {
+      emit('update:confirmed', value);
     };
 
     const updateValue = (value: number) => {
       emit('input', value);
+
+      if (props.confirmed)
+        updateConfirmed(false);
     };
 
     const decrement = () => {
-      updateValue(props.value - props.slider.step);
+      updateValue(props.value - props.step);
     };
 
     const increment = () => {
-      updateValue(props.value + props.slider.step);
+      updateValue(props.value + props.step);
     };
 
     return {
-      confirm,
       decrement,
       increment,
+      updateConfirmed,
       updateValue,
     };
   },

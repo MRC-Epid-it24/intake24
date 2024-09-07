@@ -4,6 +4,7 @@
       <v-col cols="12">
         <slider-settings
           class="mt-4"
+          :hide-confirm="true"
           :model-value="slider"
           @update:model-value="update('slider', $event)"
         />

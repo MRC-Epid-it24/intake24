@@ -13,17 +13,17 @@
         </template>
       </i18n>
       <template #actions>
-        <expansion-panel-actions :valid="confirm" />
+        <expansion-panel-actions :valid="confirmed" />
       </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <quantity-card
-        :confirm="confirm"
+        :confirmed="confirmed"
         :max="parentQuantity"
         :show-all="!!linkedParent.categories.length"
         :value="value"
         @input="updateQuantity"
-        @update:confirm="updateConfirm"
+        @update:confirmed="updateConfirmed"
       />
     </v-expansion-panel-content>
   </v-expansion-panel>
@@ -54,7 +54,7 @@ export default defineComponent({
   components: { ExpansionPanelActions, QuantityCard },
 
   props: {
-    confirm: {
+    confirmed: {
       type: Boolean,
       required: true,
     },
@@ -76,7 +76,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'update:confirm'],
+  emits: ['input', 'update:confirmed'],
 
   setup(props, { emit }) {
     const { foodName } = useFoodUtils(props);
@@ -103,8 +103,8 @@ export default defineComponent({
       emit('input', value);
     };
 
-    const updateConfirm = (value: boolean) => {
-      emit('update:confirm', value);
+    const updateConfirmed = (value: boolean) => {
+      emit('update:confirmed', value);
     };
 
     onMounted(async () => {
@@ -120,7 +120,7 @@ export default defineComponent({
       parentQuantity,
       linkedQuantityUnit,
       updateQuantity,
-      updateConfirm,
+      updateConfirmed,
     };
   },
 });

@@ -5,7 +5,7 @@
         fas fa-sliders
       </v-icon>
       <v-toolbar-title>
-        {{ $t('survey-schemes.prompts.slider._') }}
+        {{ $t('survey-schemes.prompts.slider.title') }}
       </v-toolbar-title>
     </v-toolbar>
     <v-container>
@@ -85,6 +85,12 @@
               outlined
               :rules="isNumber"
             />
+            <v-switch
+              v-if="!hideConfirm"
+              v-model="slider.confirm"
+              hide-details="auto"
+              :label="$t('survey-schemes.prompts.slider.confirm')"
+            />
           </v-card-text>
         </v-col>
       </v-row>
@@ -105,6 +111,9 @@ export default defineComponent({
   components: { LanguageSelector },
 
   props: {
+    hideConfirm: {
+      type: Boolean as PropType<boolean>,
+    },
     modelValue: {
       type: Object as PropType<Slider>,
       required: true,

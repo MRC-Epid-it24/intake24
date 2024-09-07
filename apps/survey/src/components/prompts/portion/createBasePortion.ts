@@ -84,6 +84,9 @@ export default <
       validConditions(): boolean[] {
         return [false];
       },
+      nextStepConditions(): boolean[] {
+        return this.validConditions;
+      },
 
       isValid(): boolean {
         return this.validConditions.every(conditions => conditions);
@@ -117,7 +120,7 @@ export default <
       },
 
       updatePanel() {
-        for (const [index, condition] of Object.entries(this.validConditions)) {
+        for (const [index, condition] of Object.entries(this.nextStepConditions)) {
           if (!condition) {
             this.panel = Number.parseInt(index);
             return;

@@ -69,6 +69,7 @@
   "surveyMgmt": "Gestion des enquêtes",
   "acl": "Contrôle d'accès",
   "system": "Système",
+  "disabled": "Disabled",
   "yes": "Oui",
   "true": "Oui",
   "no": "Non",

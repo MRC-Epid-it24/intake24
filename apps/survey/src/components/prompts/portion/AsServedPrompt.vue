@@ -75,9 +75,9 @@
           prompt,
         }"
         v-model="portionSize.linkedQuantity"
-        :confirm.sync="linkedQuantityConfirmed"
+        :confirmed.sync="linkedQuantityConfirmed"
         @input="selectLinkedQuantity"
-        @update:confirm="confirmLinkedQuantity"
+        @update:confirmed="confirmLinkedQuantity"
       />
     </v-expansion-panels>
     <template #actions>

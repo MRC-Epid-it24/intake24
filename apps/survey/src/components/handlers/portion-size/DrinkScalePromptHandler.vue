@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -50,6 +50,13 @@ export default defineComponent({
       parentFoodOptional: parentFood,
     } = useFoodPromptUtils<'drink-scale'>();
 
+    const currentValue = computed(() => {
+      if (!props.prompt.multiple)
+        return 1;
+
+      return (props.prompt.multiple.type === 'counter' ? props.prompt.multiple.current : props.prompt.multiple.current.value) ?? 1;
+    });
+
     const getInitialState = (): PromptStates['drink-scale-prompt'] => ({
       portionSize: encodedFoodPortionSizeData() ?? {
         method: 'drink-scale',
@@ -64,7 +71,7 @@ export default defineComponent({
         leftoversLevel: 0,
         leftoversWeight: 0,
         leftovers: false,
-        count: 1,
+        count: currentValue.value,
       },
       panel: 0,
       objectConfirmed: false,

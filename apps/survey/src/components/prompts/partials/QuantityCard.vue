@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col cols="auto">
-      <div class="d-flex flex-column">
+      <div class="d-flex flex-column align-center">
         <div v-if="showAll" class="pa-2">
           <v-btn block @click.stop="setAll">
             {{ $t('prompts.linkedAmount.all') }}
@@ -40,7 +40,7 @@
           <div v-if="whole && fraction" class="d-flex flex-column justify-center align-center mx-6">
             <span class="font-weight-medium">{{ $t('prompts.quantity.and') }}</span>
           </div>
-          <div v-if="whole" class="d-flex flex-column align-center">
+          <div v-if="fraction" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5 rounded-pill">
               <v-btn
                 color="secondary"
@@ -70,16 +70,16 @@
             </v-card>
           </div>
         </div>
-        <div class="px-3 d-flex flex-row justify-space-between">
-          <span class="font-weight-medium text-button">
+        <div v-if="whole && fraction" class="px-3 d-flex flex-row justify-space-between align-self-stretch">
+          <span v-if="whole" class="font-weight-medium text-button">
             {{ $t('prompts.quantity.whole') }}
           </span>
-          <span class="font-weight-medium text-button">
+          <span v-if="fraction" class="font-weight-medium text-button">
             {{ $t('prompts.quantity.fraction') }}
           </span>
         </div>
-        <div class="pa-3">
-          <v-btn block color="primary" @click="updateConfirm(true)">
+        <div v-if="confirm" class="pa-3">
+          <v-btn block color="primary" @click="updateConfirmed(true)">
             {{ $t('prompts.quantity.confirm') }}
           </v-btn>
         </div>
@@ -95,6 +95,10 @@ export default defineComponent({
   name: 'QuantityCard',
 
   props: {
+    confirm: {
+      type: Boolean,
+      default: true,
+    },
     min: {
       type: Number,
       default: 0.25,
@@ -111,7 +115,7 @@ export default defineComponent({
       type: Number,
       default: 1,
     },
-    confirm: {
+    confirmed: {
       type: Boolean,
       default: true,
     },
@@ -125,7 +129,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'update:confirm'],
+  emits: ['input', 'update:confirmed'],
 
   data() {
     return {
@@ -174,7 +178,7 @@ export default defineComponent({
   methods: {
     setAll() {
       this.update(this.max);
-      this.updateConfirm(true);
+      this.updateConfirmed(true);
     },
 
     update(value: number) {
@@ -182,12 +186,12 @@ export default defineComponent({
 
       this.updateValue();
 
-      if (this.confirm)
-        this.updateConfirm(false);
+      if (this.confirmed)
+        this.updateConfirmed(false);
     },
 
-    updateConfirm(value: boolean) {
-      this.$emit('update:confirm', value);
+    updateConfirmed(value: boolean) {
+      this.$emit('update:confirmed', value);
     },
 
     updateValue() {

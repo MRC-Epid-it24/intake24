@@ -48,9 +48,9 @@
         <v-expansion-panel-content>
           <quantity-card
             v-model="portionSize.quantity"
-            :confirm.sync="quantityConfirmed"
+            :confirmed.sync="quantityConfirmed"
             @input="selectQuantity"
-            @update:confirm="confirmQuantity"
+            @update:confirmed="confirmQuantity"
           />
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -58,9 +58,9 @@
         v-if="linkedParent && !linkedParent.auto"
         v-bind="{ disabled: !quantityValid, food, linkedParent, prompt }"
         v-model="portionSize.linkedQuantity"
-        :confirm.sync="linkedQuantityConfirmed"
+        :confirmed.sync="linkedQuantityConfirmed"
         @input="selectLinkedQuantity"
-        @update:confirm="confirmLinkedQuantity"
+        @update:confirmed="confirmLinkedQuantity"
       />
     </v-expansion-panels>
     <template #actions>

@@ -16,11 +16,11 @@ Prompts with standardized behavior tied to specific functionality. Usually only 
 
 ### Addon foods prompt
 
-Prompt to add additional foods as linked foods. Prompt can be added be added to `food`, `meal` or `survey` level.
+Prompt to add additional foods as linked foods. Prompt can be added to `food`, `meal` or `survey` level.
 
 - `multiple` - allow multiple foods to be selected
 
-- `trigger` - trigger options to include food for add-ons
+- `trigger` - trigger options for which foods to trigger addon foods prompt
 
   - `type` - type of trigger
     - `any` - trigger for any food
@@ -106,7 +106,7 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
 
 :::
 
-#### Slider options
+#### Slider settings
 
 - `current` - current duration in minutes
   - `label` - label to be displayed
@@ -244,7 +244,33 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
   - `image map labels` - show image map labels
   - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
-- `multiple` - allow multiple item to be selected. When enabled, additional slider options are available:
+- `multiple` - allow multiple item to be selected. When enabled, additional options are available:
+  - `false` - disable multiple selection
+  - `counter` - counter-style multiple selection
+  - `slider` - slider-style multiple selection
+
+#### Counter settings
+
+- `current` - current value
+- `min` - minimum value
+- `max` - maximum value
+- `confirm` - require confirmation
+- `whole`- use whole numbers
+- `fraction` - use fractions
+
+#### Slider settings
+
+- `current` - current value settings
+  - `label` - label to be displayed
+  - `value` - current value
+  - `size` - droplet size (in `px`) of the label
+- `min` - minimum value settings
+  - `label` - label to be displayed at the start of the slider (min value) (use `{value}` to insert variable value into the label)
+  - `value` - minimum value
+- `max` - maximum value settings
+  - `label` - label to be displayed at the end of the slider (max value) (use `{value}` to insert variable value into the label)
+  - `value` - maximum value
+- `confirm` - require confirmation
 
 #### Slider options
 
@@ -258,6 +284,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 - `max` - maximum value settings
   - `label` - label to be displayed at the end of the slider (max value) (use `{value}` to insert variable value into the label)
   - `value` - maximum value
+- `confirm` - require confirmation
 
 :::tip
 Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slider-prompt), but it is more constrained, keep in mind that:

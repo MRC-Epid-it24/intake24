@@ -9,18 +9,23 @@
           @change="update('badges', $event)"
         />
         <v-switch
+          class="mt-4"
           hide-details="auto"
           :input-value="leftovers"
           :label="$t('survey-schemes.prompts.leftovers')"
           @change="update('leftovers', $event)"
         />
-        <v-switch
+        <v-select
+          class="mt-4"
           hide-details="auto"
-          :input-value="multiple"
+          :items="multipleItems"
           :label="$t('survey-schemes.prompts.drink-scale-prompt.multiple')"
+          outlined
+          :value="typeof multiple === 'boolean' ? false : multiple.type"
           @change="updateMultiple($event)"
         />
-        <slider-settings
+        <component
+          :is="multiple.type"
           v-if="multiple"
           class="mt-4"
           :model-value="multiple"
@@ -39,16 +44,19 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import { drinkScalePrompt } from '@intake24/common/prompts';
+import { counterDefaults, drinkScalePrompt, sliderDefaults } from '@intake24/common/prompts';
+import { useI18n } from '@intake24/i18n';
 
-import { basePrompt, ImageMapSettings, SliderSettings } from '../partials';
+import { CounterSettings, ImageMapSettings, SliderSettings, useBasePrompt } from '../partials';
 
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { ImageMapSettings, SliderSettings },
-
-  mixins: [basePrompt],
+  components: {
+    Counter: CounterSettings,
+    ImageMapSettings,
+    Slider: SliderSettings,
+  },
 
   props: {
     badges: {
@@ -69,14 +77,24 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    return { drinkScalePrompt };
-  },
+  setup(props, ctx) {
+    const { i18n } = useI18n();
+    const { update } = useBasePrompt(props, ctx);
+    const multiDefaults = {
+      counter: counterDefaults,
+      slider: sliderDefaults,
+    };
+    const multipleTypes = [false, 'slider', 'counter'] as const;
+    const multipleItems = multipleTypes.map(value => ({
+      value,
+      text: value ? i18n.t(`survey-schemes.prompts.${value}._`) : i18n.t('common.disabled'),
+    }));
 
-  methods: {
-    updateMultiple(value: boolean) {
-      this.update('multiple', value ? this.drinkScalePrompt.multiple : false);
-    },
+    const updateMultiple = (value: typeof multipleTypes[number]) => {
+      update('multiple', value ? multiDefaults[value] : value);
+    };
+
+    return { drinkScalePrompt, multipleItems, update, updateMultiple };
   },
 });
 </script>

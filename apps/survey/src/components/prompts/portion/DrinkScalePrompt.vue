@@ -124,12 +124,14 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <quantity-slider
+          <component
+            :is="prompt.multiple.type"
             v-if="prompt.multiple"
             v-model="portionSize.count"
-            :slider="prompt.multiple"
-            @confirm="confirmCount"
+            :confirmed.sync="countConfirmed"
+            v-bind="multipleProps"
             @input="updateCount"
+            @update:confirmed="confirmCount"
           />
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -159,6 +161,7 @@ import {
   DrinkScaleV2Panel,
   ImageMapSelector,
   QuantityBadge,
+  QuantityCard,
   QuantitySlider,
 } from '../partials';
 import createBasePortion from './createBasePortion';
@@ -171,7 +174,8 @@ export default defineComponent({
     DrinkScaleV2Panel,
     ImageMapSelector,
     QuantityBadge,
-    QuantitySlider,
+    Slider: QuantitySlider,
+    Counter: QuantityCard,
     YesNoToggle,
   },
 
@@ -203,6 +207,14 @@ export default defineComponent({
   },
 
   computed: {
+    multipleProps() {
+      if (!this.prompt.multiple)
+        return undefined;
+
+      const { type, ...rest } = this.prompt.multiple;
+
+      return rest;
+    },
     multipleEnabled(): boolean {
       return !!this.prompt.multiple && !!this.parameters.multiple;
     },
@@ -271,7 +283,10 @@ export default defineComponent({
     },
 
     countValid() {
-      return this.countConfirmed;
+      if (!this.prompt.multiple)
+        return true;
+
+      return !this.prompt.multiple.confirm || this.countConfirmed;
     },
 
     validConditions(): boolean[] {
@@ -282,6 +297,18 @@ export default defineComponent({
 
       if (this.multipleEnabled)
         conditions.push(this.countValid);
+
+      return conditions;
+    },
+
+    nextStepConditions(): boolean[] {
+      const conditions = [this.objectValid, this.quantityValid];
+
+      if (this.leftoversEnabled)
+        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
+
+      if (this.multipleEnabled)
+        conditions.push(this.countConfirmed);
 
       return conditions;
     },

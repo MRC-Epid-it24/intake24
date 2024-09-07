@@ -161,12 +161,26 @@ export const sliderValue = z.object({
 export type SliderValue = z.infer<typeof sliderValue>;
 
 export const slider = z.object({
+  type: z.literal('slider'),
   current: sliderValue.extend({ size: z.number() }),
   min: sliderValue,
   max: sliderValue,
   step: z.number(),
+  confirm: z.boolean(),
 });
 export type Slider = z.infer<typeof slider>;
+
+const counterValue = z.number().positive().multipleOf(0.25).nullish().transform(val => val ?? undefined);
+export const counter = z.object({
+  type: z.literal('counter'),
+  current: counterValue,
+  min: counterValue,
+  max: counterValue,
+  confirm: z.boolean(),
+  whole: z.boolean(),
+  fraction: z.boolean(),
+});
+export type Counter = z.infer<typeof counter>;
 
 export const datePicker = z.object({
   current: z.coerce.number().int().nullable(),
@@ -252,7 +266,7 @@ const drinkScalePrompt = basePortionPrompt.extend({
   component: z.literal('drink-scale-prompt'),
   imageMap,
   leftovers: z.boolean(),
-  multiple: z.union([z.literal(false), slider]),
+  multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)),
 });
 
 const guideImagePrompt = basePortionPrompt.extend({

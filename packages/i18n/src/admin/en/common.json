@@ -71,6 +71,7 @@
   "acl": "Access Control",
   "system": "System",
 
+  "disabled": "Disabled",
   "yes": "Yes",
   "true": "Yes",
   "no": "No",

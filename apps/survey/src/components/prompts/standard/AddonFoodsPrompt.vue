@@ -16,7 +16,7 @@
                 <v-btn-toggle
                   color="primary"
                   :value="addon.confirmed"
-                  @change="updateConfirm(food.id, idx, $event)"
+                  @change="updateConfirmed(food.id, idx, $event)"
                 >
                   <v-btn class="px-4" height="40" :value="false">
                     No
@@ -187,7 +187,7 @@ export default defineComponent({
       update();
     };
 
-    async function updateConfirm(foodId: string, idx: number, confirmed: boolean) {
+    async function updateConfirmed(foodId: string, idx: number, confirmed: boolean) {
       foods.value[foodId][idx].confirmed = typeof confirmed === 'boolean' ? confirmed : null;
 
       if (confirmed === false) {
@@ -242,7 +242,7 @@ export default defineComponent({
       isAddonFoodValid,
       isValid,
       promptI18n,
-      updateConfirm,
+      updateConfirmed,
       updateFood,
       updateUnit,
       updateQuantity,

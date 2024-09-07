@@ -72,10 +72,12 @@ export const sliderPrompt: Prompts['slider-prompt'] = copy({
   id: 'slider-prompt',
   name: 'Slider prompt',
   slider: {
+    type: 'slider',
     current: { value: 50, label: false, size: 75 },
     min: { value: 0, label: false },
     max: { value: 100, label: false },
     step: 1,
+    confirm: false,
   },
 });
 

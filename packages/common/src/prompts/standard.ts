@@ -86,6 +86,7 @@ export const mealDurationPrompt: Prompts['meal-duration-prompt'] = copy({
   id: 'meal-duration-prompt',
   name: 'Meal Duration prompt',
   slider: {
+    type: 'slider',
     current: {
       value: 30,
       label: { en: 'minutes' },
@@ -100,6 +101,7 @@ export const mealDurationPrompt: Prompts['meal-duration-prompt'] = copy({
       label: false,
     },
     step: 5,
+    confirm: false,
   },
 });
 

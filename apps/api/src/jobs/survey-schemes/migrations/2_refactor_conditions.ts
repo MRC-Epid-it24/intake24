@@ -202,6 +202,37 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         max: null,
       };
     }
+    case 'meal-duration-prompt':
+    case 'slider-prompt': {
+      const { slider, ...rest } = prompt;
+      return {
+        ...rest,
+        version: 2,
+        useGraph: false,
+        conditions,
+        slider: {
+          ...slider,
+          type: 'slider',
+          confirm: false,
+        },
+      };
+    }
+    case 'drink-scale-prompt': {
+      const { multiple, ...rest } = prompt;
+      return {
+        ...rest,
+        version: 2,
+        useGraph: false,
+        conditions,
+        multiple: typeof multiple === 'boolean'
+          ? multiple
+          : {
+              ...multiple,
+              type: 'slider',
+              confirm: false,
+            },
+      };
+    }
     default:
       return {
         ...prompt,
