@@ -4122,24 +4122,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -4222,24 +4205,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -4403,24 +4369,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -10459,24 +10408,7 @@
                                       "type": "string"
                                     },
                                     "image": {
-                                      "type": "string",
-                                      "enum": [
-                                        "battery",
-                                        "beef",
-                                        "bread",
-                                        "candy",
-                                        "salmon",
-                                        "egg",
-                                        "apple",
-                                        "strawberry",
-                                        "burger",
-                                        "fries",
-                                        "milk",
-                                        "iron",
-                                        "folate",
-                                        "co2",
-                                        "fruitVeg"
-                                      ]
+                                      "type": "string"
                                     },
                                     "sentiments": {
                                       "type": "array",
@@ -10559,24 +10491,7 @@
                                       "type": "string"
                                     },
                                     "image": {
-                                      "type": "string",
-                                      "enum": [
-                                        "battery",
-                                        "beef",
-                                        "bread",
-                                        "candy",
-                                        "salmon",
-                                        "egg",
-                                        "apple",
-                                        "strawberry",
-                                        "burger",
-                                        "fries",
-                                        "milk",
-                                        "iron",
-                                        "folate",
-                                        "co2",
-                                        "fruitVeg"
-                                      ]
+                                      "type": "string"
                                     },
                                     "sentiments": {
                                       "type": "array",
@@ -10740,24 +10655,7 @@
                                       "type": "string"
                                     },
                                     "image": {
-                                      "type": "string",
-                                      "enum": [
-                                        "battery",
-                                        "beef",
-                                        "bread",
-                                        "candy",
-                                        "salmon",
-                                        "egg",
-                                        "apple",
-                                        "strawberry",
-                                        "burger",
-                                        "fries",
-                                        "milk",
-                                        "iron",
-                                        "folate",
-                                        "co2",
-                                        "fruitVeg"
-                                      ]
+                                      "type": "string"
                                     },
                                     "sentiments": {
                                       "type": "array",
@@ -11700,24 +11598,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -11800,24 +11681,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -11981,24 +11845,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -12801,24 +12648,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -12901,24 +12731,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -13082,24 +12895,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -13682,11 +13478,30 @@
                           "coefficient"
                         ]
                       }
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "url"
+                        ]
+                      }
                     }
                   },
                   "required": [
                     "nutrientTypes",
-                    "physicalActivityLevels"
+                    "physicalActivityLevels",
+                    "images"
                   ]
                 }
               }
@@ -14106,24 +13921,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -14206,24 +14004,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -14387,24 +14168,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -15312,24 +15076,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -15412,24 +15159,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -15593,24 +15323,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -16410,24 +16123,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -16510,24 +16206,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -16691,24 +16370,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -17616,24 +17278,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -17716,24 +17361,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -17897,24 +17525,7 @@
                               "type": "string"
                             },
                             "image": {
-                              "type": "string",
-                              "enum": [
-                                "battery",
-                                "beef",
-                                "bread",
-                                "candy",
-                                "salmon",
-                                "egg",
-                                "apple",
-                                "strawberry",
-                                "burger",
-                                "fries",
-                                "milk",
-                                "iron",
-                                "folate",
-                                "co2",
-                                "fruitVeg"
-                              ]
+                              "type": "string"
                             },
                             "sentiments": {
                               "type": "array",
@@ -18727,24 +18338,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -18827,24 +18421,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -19008,24 +18585,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -19966,24 +19526,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -20066,24 +19609,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -20247,24 +19773,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -21198,24 +20707,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -21298,24 +20790,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -21479,24 +20954,7 @@
                                 "type": "string"
                               },
                               "image": {
-                                "type": "string",
-                                "enum": [
-                                  "battery",
-                                  "beef",
-                                  "bread",
-                                  "candy",
-                                  "salmon",
-                                  "egg",
-                                  "apple",
-                                  "strawberry",
-                                  "burger",
-                                  "fries",
-                                  "milk",
-                                  "iron",
-                                  "folate",
-                                  "co2",
-                                  "fruitVeg"
-                                ]
+                                "type": "string"
                               },
                               "sentiments": {
                                 "type": "array",
@@ -24266,13 +23724,33 @@
                                     "type": "string"
                                   },
                                   "startDate": {
-                                    "type": "string",
-                                    "format": "date-time",
+                                    "oneOf": [
+                                      {
+                                        "type": "string",
+                                        "minLength": 0,
+                                        "maxLength": 0
+                                      },
+                                      {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                      }
+                                    ],
                                     "nullable": true
                                   },
                                   "endDate": {
-                                    "type": "string",
-                                    "format": "date-time",
+                                    "oneOf": [
+                                      {
+                                        "type": "string",
+                                        "minLength": 0,
+                                        "maxLength": 0
+                                      },
+                                      {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                      }
+                                    ],
                                     "nullable": true
                                   },
                                   "userId": {
@@ -25024,13 +24502,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -25798,13 +25296,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -31069,13 +30587,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -34356,13 +33894,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -36548,24 +36106,7 @@
                                       "type": "string"
                                     },
                                     "image": {
-                                      "type": "string",
-                                      "enum": [
-                                        "battery",
-                                        "beef",
-                                        "bread",
-                                        "candy",
-                                        "salmon",
-                                        "egg",
-                                        "apple",
-                                        "strawberry",
-                                        "burger",
-                                        "fries",
-                                        "milk",
-                                        "iron",
-                                        "folate",
-                                        "co2",
-                                        "fruitVeg"
-                                      ]
+                                      "type": "string"
                                     },
                                     "sentiments": {
                                       "type": "array",
@@ -36648,24 +36189,7 @@
                                       "type": "string"
                                     },
                                     "image": {
-                                      "type": "string",
-                                      "enum": [
-                                        "battery",
-                                        "beef",
-                                        "bread",
-                                        "candy",
-                                        "salmon",
-                                        "egg",
-                                        "apple",
-                                        "strawberry",
-                                        "burger",
-                                        "fries",
-                                        "milk",
-                                        "iron",
-                                        "folate",
-                                        "co2",
-                                        "fruitVeg"
-                                      ]
+                                      "type": "string"
                                     },
                                     "sentiments": {
                                       "type": "array",
@@ -36829,24 +36353,7 @@
                                       "type": "string"
                                     },
                                     "image": {
-                                      "type": "string",
-                                      "enum": [
-                                        "battery",
-                                        "beef",
-                                        "bread",
-                                        "candy",
-                                        "salmon",
-                                        "egg",
-                                        "apple",
-                                        "strawberry",
-                                        "burger",
-                                        "fries",
-                                        "milk",
-                                        "iron",
-                                        "folate",
-                                        "co2",
-                                        "fruitVeg"
-                                      ]
+                                      "type": "string"
                                     },
                                     "sentiments": {
                                       "type": "array",
@@ -41946,24 +41453,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -42046,24 +41536,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -42227,24 +41700,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -43895,24 +43351,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -43995,24 +43434,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -44176,24 +43598,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -46245,24 +45650,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -46345,24 +45733,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -46526,24 +45897,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -48625,24 +47979,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -48725,24 +48062,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -48906,24 +48226,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -50602,24 +49905,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -50702,24 +49988,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -50883,24 +50152,7 @@
                                     "type": "string"
                                   },
                                   "image": {
-                                    "type": "string",
-                                    "enum": [
-                                      "battery",
-                                      "beef",
-                                      "bread",
-                                      "candy",
-                                      "salmon",
-                                      "egg",
-                                      "apple",
-                                      "strawberry",
-                                      "burger",
-                                      "fries",
-                                      "milk",
-                                      "iron",
-                                      "folate",
-                                      "co2",
-                                      "fruitVeg"
-                                    ]
+                                    "type": "string"
                                   },
                                   "sentiments": {
                                     "type": "array",
@@ -51715,13 +50967,33 @@
                             "type": "string"
                           },
                           "startDate": {
-                            "type": "string",
-                            "format": "date-time",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "minLength": 0,
+                                "maxLength": 0
+                              },
+                              {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              }
+                            ],
                             "nullable": true
                           },
                           "endDate": {
-                            "type": "string",
-                            "format": "date-time",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "minLength": 0,
+                                "maxLength": 0
+                              },
+                              {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              }
+                            ],
                             "nullable": true
                           },
                           "userId": {
@@ -52160,13 +51432,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -59026,13 +58318,33 @@
                                     "type": "string"
                                   },
                                   "startDate": {
-                                    "type": "string",
-                                    "format": "date-time",
+                                    "oneOf": [
+                                      {
+                                        "type": "string",
+                                        "minLength": 0,
+                                        "maxLength": 0
+                                      },
+                                      {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                      }
+                                    ],
                                     "nullable": true
                                   },
                                   "endDate": {
-                                    "type": "string",
-                                    "format": "date-time",
+                                    "oneOf": [
+                                      {
+                                        "type": "string",
+                                        "minLength": 0,
+                                        "maxLength": 0
+                                      },
+                                      {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                      }
+                                    ],
                                     "nullable": true
                                   },
                                   "userId": {
@@ -59670,13 +58982,33 @@
                             "type": "string"
                           },
                           "startDate": {
-                            "type": "string",
-                            "format": "date-time",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "minLength": 0,
+                                "maxLength": 0
+                              },
+                              {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              }
+                            ],
                             "nullable": true
                           },
                           "endDate": {
-                            "type": "string",
-                            "format": "date-time",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "minLength": 0,
+                                "maxLength": 0
+                              },
+                              {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              }
+                            ],
                             "nullable": true
                           },
                           "userId": {
@@ -60259,13 +59591,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -60876,13 +60228,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -61527,13 +60899,33 @@
                             "type": "string"
                           },
                           "startDate": {
-                            "type": "string",
-                            "format": "date-time",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "minLength": 0,
+                                "maxLength": 0
+                              },
+                              {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              }
+                            ],
                             "nullable": true
                           },
                           "endDate": {
-                            "type": "string",
-                            "format": "date-time",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "minLength": 0,
+                                "maxLength": 0
+                              },
+                              {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              }
+                            ],
                             "nullable": true
                           },
                           "userId": {
@@ -62116,13 +61508,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -62802,13 +62214,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -63469,13 +62901,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -64320,13 +63772,33 @@
                                     "type": "string"
                                   },
                                   "startDate": {
-                                    "type": "string",
-                                    "format": "date-time",
+                                    "oneOf": [
+                                      {
+                                        "type": "string",
+                                        "minLength": 0,
+                                        "maxLength": 0
+                                      },
+                                      {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                      }
+                                    ],
                                     "nullable": true
                                   },
                                   "endDate": {
-                                    "type": "string",
-                                    "format": "date-time",
+                                    "oneOf": [
+                                      {
+                                        "type": "string",
+                                        "minLength": 0,
+                                        "maxLength": 0
+                                      },
+                                      {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                      }
+                                    ],
                                     "nullable": true
                                   },
                                   "userId": {
@@ -65125,13 +64597,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
@@ -65844,13 +65336,33 @@
                               "type": "string"
                             },
                             "startDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "endDate": {
-                              "type": "string",
-                              "format": "date-time",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0,
+                                  "maxLength": 0
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "nullable": true
+                                }
+                              ],
                               "nullable": true
                             },
                             "userId": {
