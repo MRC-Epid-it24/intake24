@@ -155,9 +155,6 @@ importers:
       tinymce:
         specifier: ^7.3.0
         version: 7.3.0
-      vanilla-jsoneditor:
-        specifier: ^0.23.8
-        version: 0.23.8(@lezer/common@1.2.1)
       vue:
         specifier: ^2.7.16
         version: 2.7.16

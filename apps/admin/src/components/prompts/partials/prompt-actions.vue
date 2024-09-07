@@ -55,7 +55,7 @@
                   <v-select
                     v-model="action.type"
                     hide-details="auto"
-                    :items="actions"
+                    :items="availableActions"
                     :label="$t('survey-schemes.actions.types._')"
                     outlined
                   />

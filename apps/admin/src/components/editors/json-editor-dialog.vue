@@ -36,7 +36,7 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-container fluid>
-        <json-editor-vue v-model="content" />
+        <json-editor-vue v-model="content" :stringified="false" />
       </v-container>
     </v-card>
   </v-dialog>
@@ -76,7 +76,7 @@ export default defineComponent({
     };
 
     const confirm = () => {
-      emit('input', typeof content.value === 'string' ? JSON.parse(content.value) : content.value);
+      emit('input', content.value);
       close();
     };
 

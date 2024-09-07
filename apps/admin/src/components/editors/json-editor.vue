@@ -1,5 +1,5 @@
 <template>
-  <json-editor-vue v-bind="{ readOnly, value }" @input="input" />
+  <json-editor-vue v-bind="{ readOnly, stringified: false, value }" @input="input" />
 </template>
 
 <script lang="ts">
@@ -26,7 +26,7 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const input = (value: string | object) => {
-      emit('input', typeof value === 'string' ? JSON.parse(value) : value);
+      emit('input', value);
     };
 
     return { input };
