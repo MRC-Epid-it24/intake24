@@ -57,7 +57,7 @@ export const defaultBarcodeScannerOptions: Record<BarcodeScanner, BarcodeScanner
   },
   strich: {
     type: 'strich',
-    readers: ['ean13', 'ean8', 'ean5', 'ean2'],
+    readers: ['ean13', 'ean8'],
     feedback: { audio: false, vibration: true },
   },
 };

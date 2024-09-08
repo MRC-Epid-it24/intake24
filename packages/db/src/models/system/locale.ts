@@ -19,7 +19,7 @@ import {
 } from 'sequelize-typescript';
 
 import type { RecordVisibility } from '@intake24/common/security';
-import { TextDirection } from '@intake24/common/types';
+import type { TextDirection } from '@intake24/common/types';
 
 import type { HasVisibility } from '..';
 import BaseModel from '../model';

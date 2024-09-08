@@ -8,7 +8,7 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
-import { TextDirection } from '@intake24/common/types';
+import type { TextDirection } from '@intake24/common/types';
 
 import BaseModel from '../model';
 import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';

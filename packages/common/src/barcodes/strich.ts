@@ -1,8 +1,6 @@
 export const strichReaders = [
   'ean13',
   'ean8',
-  'ean5',
-  'ean2',
   'upca',
   'upce',
   'databar',
