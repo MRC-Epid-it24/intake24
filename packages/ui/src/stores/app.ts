@@ -41,7 +41,7 @@ export const useApp = defineStore('app', {
   }),
   persist: {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}app`,
-    paths: ['lang'],
+    pick: ['lang'],
   },
   actions: {
     setLanguage(language: string) {

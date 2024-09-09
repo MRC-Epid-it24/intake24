@@ -20,7 +20,7 @@ export const useResource = defineStore('resource', {
   }),
   persist: {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}resource`,
-    paths: ['filter'],
+    pick: ['filter'],
   },
   getters: {
     getFilter: (state): Dictionary => {
