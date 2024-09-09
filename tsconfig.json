@@ -6,6 +6,9 @@
     "baseUrl": ".",
     "module": "commonjs",
     "moduleResolution": "node",
+    "paths": {
+      "@intake24/common/*": ["packages/common/src/*"]
+    },
     "resolveJsonModule": true,
     "types": ["node", "jest", "jest-extended"],
     "strict": true,

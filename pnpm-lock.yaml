@@ -114,8 +114,8 @@ importers:
         specifier: ^7.1.0
         version: 7.1.0
       json-editor-vue:
-        specifier: ^0.15.2
-        version: 0.15.2(@lezer/common@1.2.1)(vue@2.7.16)
+        specifier: ^0.16.0
+        version: 0.16.0(@lezer/common@1.2.1)(vue@2.7.16)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -6606,8 +6606,8 @@ packages:
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
 
-  json-editor-vue@0.15.2:
-    resolution: {integrity: sha512-MQQPiz+tKTqIMhbYk9mS8lr3DeJaR6n5uDshuxgDnsLGJhgYooZ8bDgbCJ3SUt1M25tKSy793KqUQb7BSZkdYg==}
+  json-editor-vue@0.16.0:
+    resolution: {integrity: sha512-8axbIR1DD6cf/AAXDkEYkPHDbWzEQDP762j2GiX3fFnHmE5+RzkcCFV2J/TGr6Mlw9sdZpQVMPHtt+7qYJ8Xyg==}
     peerDependencies:
       '@vue/composition-api': '>=1'
       vue: 2||3
@@ -16117,7 +16117,7 @@ snapshots:
 
   json-buffer@3.0.1: {}
 
-  json-editor-vue@0.15.2(@lezer/common@1.2.1)(vue@2.7.16):
+  json-editor-vue@0.16.0(@lezer/common@1.2.1)(vue@2.7.16):
     dependencies:
       vanilla-jsoneditor: 0.23.8(@lezer/common@1.2.1)
       vue: 2.7.16
