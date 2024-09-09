@@ -352,6 +352,15 @@ export function getFoodDescription(food: FoodState): string {
   }
 }
 
+export function getSearchTerm(food: FoodState) {
+  switch (food.type) {
+    case 'free-text':
+      return food.description;
+    default:
+      return food.searchTerm;
+  }
+}
+
 export function isSelectionEqual(s1: Selection, s2: Selection): boolean {
   if (s1.mode === s2.mode) {
     if (s1.element !== null) {

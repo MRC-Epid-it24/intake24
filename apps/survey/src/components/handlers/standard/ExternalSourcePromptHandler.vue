@@ -12,7 +12,7 @@ import { computed, defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import { getFoodDescription } from '@intake24/common/types';
+import { getSearchTerm } from '@intake24/common/types';
 import { ExternalSourcePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -41,7 +41,7 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
 
     const getInitialState = computed<PromptStates['external-source-prompt']>(() => ({
-      searchTerm: getFoodDescription(food()),
+      searchTerm: getSearchTerm(food()),
       type: undefined,
       data: undefined,
     }));
