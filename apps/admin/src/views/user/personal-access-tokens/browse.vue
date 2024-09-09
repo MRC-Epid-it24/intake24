@@ -159,7 +159,7 @@ import type {
 import { useDateTime, useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useMessages } from '@intake24/admin/stores';
-import { useI18n } from '@intake24/i18n/index';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui/components';
 import { useClipboard } from '@intake24/ui/composables';
 

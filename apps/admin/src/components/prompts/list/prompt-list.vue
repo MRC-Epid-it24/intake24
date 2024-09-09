@@ -211,12 +211,10 @@ export default defineComponent({
     },
 
     moveSections(prompt: SinglePrompt): MoveSection[] {
-      return this.promptSettings[prompt.component].sections
-        .filter(item => item !== this.section)
-        .map(item => ({
-          value: item,
-          text: this.$t(`survey-schemes.prompts.${item}.title`).toString(),
-        }));
+      return this.promptSettings[prompt.component].sections.filter(item => item !== this.section).map(item => ({
+        value: item,
+        text: this.$t(`survey-schemes.prompts.${item}.title`).toString(),
+      }));
     },
 
     move(event: PromptMoveEvent) {

@@ -196,7 +196,7 @@ import resources from '@intake24/admin/router/resources';
 import { httpService } from '@intake24/admin/services';
 import SlidingScaleEditor from '@intake24/admin/views/images/drinkware-sets/components/SlidingScaleEditor.vue';
 import VolumeSamplesTable from '@intake24/admin/views/images/drinkware-sets/components/VolumeSamplesTable.vue';
-import { useI18n } from '@intake24/i18n/index';
+import { useI18n } from '@intake24/i18n';
 
 import DrinkwareObjectChooser from './components/DrinkwareObjectChooser.vue';
 

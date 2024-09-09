@@ -165,9 +165,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    const names = this.parameters.units
-      .filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined)
-      .map(({ name }) => name);
+    const names = this.parameters.units.filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined).map(({ name }) => name);
 
     await this.resolveStandardUnits(names);
 

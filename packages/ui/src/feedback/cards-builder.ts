@@ -56,7 +56,8 @@ export function buildCharacterParams(characterRule: CharacterRules, { foods, use
 export function buildNutrientGroupParams(card: NutrientGroupCardWithDemGroups, { averageIntake, userDemographic }: BuildCardOps): NutrientGroupParameters | undefined {
   const scaleSector = card.demographicGroups
     .filter(dg => dg.matchesUserDemographic(userDemographic))
-    .at(0)?.scaleSectors[0];
+    .at(0)
+    ?.scaleSectors[0];
   if (!scaleSector)
     return undefined;
 
@@ -79,7 +80,8 @@ export function buildNutrientGroupParams(card: NutrientGroupCardWithDemGroups, {
 export function buildFiveADayParams(card: FiveADayCardWithDemGroups, { fruitAndVegPortions, userDemographic }: BuildCardOps): FiveADayParameters | undefined {
   const scaleSector = card.demographicGroups
     .filter(dg => dg.matchesUserDemographic(userDemographic))
-    .at(0)?.scaleSectors[0];
+    .at(0)
+    ?.scaleSectors[0];
 
   if (!scaleSector)
     return undefined;

@@ -58,9 +58,7 @@ export default defineComponent({
 
     const isValid = true;
     const rootCategory = computed(() => {
-      const foodSearch = props.meal?.flags
-        ?.find(flag => flag.startsWith('food-search:'))
-        ?.split(':')[1];
+      const foodSearch = props.meal?.flags?.find(flag => flag.startsWith('food-search:'))?.split(':')[1];
 
       if (!foodSearch)
         return undefined;

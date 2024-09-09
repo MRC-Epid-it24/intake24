@@ -43,7 +43,8 @@ export default defineComponent({
     // TODO: use server-side implementation for split words & lists
     const suggestions = computed(() =>
       freeTextFood()
-        .description.split(/(?:,| and | with )+/)
+        .description
+        .split(/(?:,| and | with )+/)
         .map(item => item.trim()),
     );
 

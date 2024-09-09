@@ -111,7 +111,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'foodCode',
           eb.val(code).as('localeId'),
           'name',
-        ]).where('localeId', '=', sourceCode)
+        ])
+        .where('localeId', '=', sourceCode)
         .orderBy('id'),
       )
       .executeTakeFirst();
@@ -134,7 +135,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'simpleName',
           'tags',
           'version',
-        ]).where('localeId', '=', sourceCode)
+        ])
+        .where('localeId', '=', sourceCode)
         .orderBy('id'),
       )
       .executeTakeFirst();
@@ -165,7 +167,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'cpsm.conversionFactor',
           'cpsm.orderBy',
           'cpsm.parameters',
-        ]).orderBy('cpsm.id'),
+        ])
+        .orderBy('cpsm.id'),
       )
       .executeTakeFirst();
 
@@ -188,7 +191,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'altNames',
           'tags',
           'version',
-        ]).where('localeId', '=', sourceCode)
+        ])
+        .where('localeId', '=', sourceCode)
         .orderBy('id'),
       )
       .executeTakeFirst();
@@ -277,7 +281,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'foodGroupId',
           eb.val(code).as('localeId'),
           'name',
-        ]).where('localeId', '=', sourceCode)
+        ])
+        .where('localeId', '=', sourceCode)
         .orderBy('id'),
       )
       .executeTakeFirst();
@@ -389,7 +394,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           eb.lit(null).as('synonymsId'),
           eb.val(new Date()).as('createdAt'),
           eb.val(new Date()).as('updatedAt'),
-        ]).where('localeId', '=', sourceCode)
+        ])
+        .where('localeId', '=', sourceCode)
         .orderBy('id'),
       )
       .executeTakeFirst();
@@ -424,7 +430,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'rfs.required',
           eb.val(new Date()).as('createdAt'),
           eb.val(new Date()).as('updatedAt'),
-        ]).orderBy('rfs.id'),
+        ])
+        .orderBy('rfs.id'),
       )
       .executeTakeFirst();
 
@@ -443,7 +450,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'foodCode',
           eb.val(code).as('localeId'),
           'rank',
-        ]).where('localeId', '=', sourceCode)
+        ])
+        .where('localeId', '=', sourceCode)
         .orderBy('id'),
       )
       .executeTakeFirst();
@@ -470,7 +478,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
             eb.val(code).as('localeId'),
             'foodCode',
             'occurrences',
-          ]).where('localeId', '=', sourceCode)
+          ])
+          .where('localeId', '=', sourceCode)
           .orderBy('foodCode'),
         )
         .executeTakeFirst(),
@@ -483,7 +492,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
             'antecedentFoodCode',
             'consequentFoodCode',
             'occurrences',
-          ]).where('localeId', '=', sourceCode)
+          ])
+          .where('localeId', '=', sourceCode)
           .orderBy('antecedentFoodCode'),
         )
         .executeTakeFirst(),
@@ -494,7 +504,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           .select(eb => [
             eb.val(code).as('localeId'),
             'transactionsCount',
-          ]).where('localeId', '=', sourceCode),
+          ])
+          .where('localeId', '=', sourceCode),
         )
         .executeTakeFirst(),
     ]);

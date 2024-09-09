@@ -120,7 +120,7 @@ import { defineComponent, ref } from 'vue';
 
 import type { Notification, Notifications } from '@intake24/common/types';
 import { eventTypes, notificationChannels } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n/index';
+import { useI18n } from '@intake24/i18n';
 
 const defaultNotifications: Notifications = {
   webhook: {

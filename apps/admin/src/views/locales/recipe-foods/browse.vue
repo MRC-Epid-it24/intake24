@@ -239,12 +239,10 @@ export default defineComponent({
     },
 
     async save() {
-      this.form.items = this.form.items
-        .filter(({ name }) => name)
-        .map((item) => {
-          item.code = this.dollarSignAdd(item.code);
-          return item;
-        });
+      this.form.items = this.form.items.filter(({ name }) => name).map((item) => {
+        item.code = this.dollarSignAdd(item.code);
+        return item;
+      });
       const synonymsSets = this.form.synonymsSets;
       const items = await this.form.post<RecipeFoodEntry[]>(
         `admin/locales/${this.id}/recipe-foods`,
