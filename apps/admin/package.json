@@ -39,7 +39,7 @@
     "nanoid": "^3.3.7",
     "object-to-formdata": "^4.5.1",
     "pinia": "^2.2.2",
-    "pinia-plugin-persistedstate": "^3.2.3",
+    "pinia-plugin-persistedstate": "^4.0.0",
     "pluralize": "^8.0.0",
     "tinymce": "^7.3.0",
     "vue": "^2.7.16",
