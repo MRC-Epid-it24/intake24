@@ -9,6 +9,7 @@
         <v-label v-if="$t(`prompts.${type}.label`)">
           {{ $t(`prompts.${type}.label`) }}
         </v-label>
+        <!-- @vue-expect-error vuetify2 uses both model/value -->
         <v-checkbox
           v-for="option in localeOptions"
           :key="option.value"

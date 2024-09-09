@@ -16,6 +16,7 @@
               @update:context-id="updateContextId"
             />
             <div class="d-flex flex-column pa-4 ga-4">
+              <!-- @vue-expect-error vuetify2 uses both model/value -->
               <v-checkbox
                 v-if="review === 'checkbox'"
                 v-model="reviewed"

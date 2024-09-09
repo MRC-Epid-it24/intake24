@@ -10,6 +10,7 @@
           <v-list-item v-for="food in meal.foods" :key="food.id">
             <v-list-item-content>
               <v-list-item-title class="mb-4">
+                <!-- @vue-expect-error TODO: improve type (encoded foods filtered in handler) -->
                 {{ food.data.localName }}
               </v-list-item-title>
               <div v-for="(addon, idx) in foods[food.id]" :key="idx" class="d-flex flex-column flex-md-row align-stretch align-md-center ga-2">
@@ -34,6 +35,7 @@
                   :value="addon.data"
                   @input="updateFood(food.id, idx, $event)"
                 />
+                <!-- @vue-expect-error vuetify2 not typed closure -->
                 <v-select
                   v-model="addon.portionSize.unit"
                   dense

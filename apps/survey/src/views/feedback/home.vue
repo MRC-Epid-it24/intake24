@@ -11,6 +11,7 @@
         <v-row class="d-print-none" justify="center">
           <v-col cols="12" lg="7" md="8" xl="6">
             <v-row justify="space-around">
+              <!-- @vue-expect-error class prop issues -->
               <feedback-user-info
                 v-if="userDemographic?.hasData()"
                 v-bind="{ surveyId, userDemographic }"
@@ -86,6 +87,7 @@
       </v-container>
     </v-sheet>
     <div v-if="feedbackScheme && feedbackDicts" class="d-flex flex-column">
+      <!-- @vue-expect-error class prop issues -->
       <feedback-cards
         v-if="showCards"
         v-bind="{ cards }"
@@ -94,6 +96,7 @@
       <v-sheet v-if="showTopFoods" :class="`order-${getSectionOrder('topFoods')}`" color="white">
         <feedback-top-foods v-bind="{ topFoods }" class="feedback-area" />
       </v-sheet>
+      <!-- @vue-expect-error class prop issues -->
       <feedback-meals
         v-if="showMeals"
         :class="`feedback-area order-${getSectionOrder('meals')}`"
@@ -309,6 +312,7 @@ export default defineComponent({
       const averageIntake = surveyStats.getAverageIntake(selected);
       const fruitAndVegPortions = surveyStats.getFruitAndVegPortions(selected);
 
+      // @ts-expect-error - TODO: fix types
       this.cards = buildCardParams(cards, {
         foods,
         userDemographic,
