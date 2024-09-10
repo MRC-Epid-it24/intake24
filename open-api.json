@@ -2330,6 +2330,13 @@
         ],
         "parameters": [
           {
+            "name": "lang",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "survey",
             "in": "query",
             "required": true,
@@ -2370,27 +2377,7 @@
           "user",
           "feedback"
         ],
-        "parameters": [
-          {
-            "name": "survey",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "submissions",
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "description": "Body",
           "content": {
@@ -2398,6 +2385,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "lang": {
+                    "type": "string"
+                  },
+                  "survey": {
+                    "type": "string"
+                  },
+                  "submissions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
                   "email": {
                     "type": "string",
                     "format": "email"
@@ -2408,6 +2408,7 @@
                   }
                 },
                 "required": [
+                  "survey",
                   "email",
                   "emailConfirm"
                 ]
@@ -23865,6 +23866,9 @@
                                       "type": "string"
                                     }
                                   },
+                                  "lang": {
+                                    "type": "string"
+                                  },
                                   "to": {
                                     "type": "string"
                                   },
@@ -24642,6 +24646,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
@@ -25436,6 +25443,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
@@ -30728,6 +30738,9 @@
                                 "type": "string"
                               }
                             },
+                            "lang": {
+                              "type": "string"
+                            },
                             "to": {
                               "type": "string"
                             },
@@ -34034,6 +34047,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
@@ -51573,6 +51589,9 @@
                                 "type": "string"
                               }
                             },
+                            "lang": {
+                              "type": "string"
+                            },
                             "to": {
                               "type": "string"
                             },
@@ -52510,6 +52529,13 @@
             "schema": {}
           },
           {
+            "name": "lang",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "submissions",
             "in": "query",
             "schema": {
@@ -52557,17 +52583,6 @@
             "in": "path",
             "required": true,
             "schema": {}
-          },
-          {
-            "name": "submissions",
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
           }
         ],
         "requestBody": {
@@ -52577,6 +52592,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "lang": {
+                    "type": "string"
+                  },
+                  "submissions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
                   "email": {
                     "type": "string",
                     "format": "email"
@@ -58459,6 +58484,9 @@
                                       "type": "string"
                                     }
                                   },
+                                  "lang": {
+                                    "type": "string"
+                                  },
                                   "to": {
                                     "type": "string"
                                   },
@@ -59123,6 +59151,9 @@
                               "type": "string"
                             }
                           },
+                          "lang": {
+                            "type": "string"
+                          },
                           "to": {
                             "type": "string"
                           },
@@ -59731,6 +59762,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
@@ -60368,6 +60402,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
@@ -61040,6 +61077,9 @@
                               "type": "string"
                             }
                           },
+                          "lang": {
+                            "type": "string"
+                          },
                           "to": {
                             "type": "string"
                           },
@@ -61648,6 +61688,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
@@ -62355,6 +62398,9 @@
                                 "type": "string"
                               }
                             },
+                            "lang": {
+                              "type": "string"
+                            },
                             "to": {
                               "type": "string"
                             },
@@ -63041,6 +63087,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
@@ -63913,6 +63962,9 @@
                                       "type": "string"
                                     }
                                   },
+                                  "lang": {
+                                    "type": "string"
+                                  },
                                   "to": {
                                     "type": "string"
                                   },
@@ -64738,6 +64790,9 @@
                                 "type": "string"
                               }
                             },
+                            "lang": {
+                              "type": "string"
+                            },
                             "to": {
                               "type": "string"
                             },
@@ -65476,6 +65531,9 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "lang": {
+                              "type": "string"
                             },
                             "to": {
                               "type": "string"
