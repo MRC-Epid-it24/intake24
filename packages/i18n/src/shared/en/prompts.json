@@ -121,11 +121,17 @@
     "text": "",
     "description": "",
     "search": "Search",
-    "results": "Products found: {count}.",
-    "none": "No products found",
-    "select": "Select",
     "back": "Back to search",
-    "missing": "Not found"
+    "select": "Select",
+    "missing": "Not found",
+    "products": {
+      "results": "Products found: {count}.",
+      "none": "No products found",
+      "name": "Name",
+      "code": "Code",
+      "quantity": "Quantity",
+      "packaging": "Packaging"
+    }
   },
   "final": {
     "name": "Final page",

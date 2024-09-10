@@ -52,19 +52,26 @@
             </v-card-title>
             <v-card-text class="px-0">
               <div v-if="selectedProductDetails.code" class="my-2">
-                <span class="font-weight-medium">Code:</span>
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.code'] }}:
+                </span>
                 {{ selectedProductDetails.code }}
               </div>
-              <div v-if="selectedProductDetails.genericName" class="my-2">
-                <span class="font-weight-medium">Gen Name:</span>
-                {{ selectedProductDetails.genericName }}
+              <div v-if="selectedProductDetails.name || selectedProductDetails.genericName" class="my-2">
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.name'] }}:
+                </span>
+                {{ selectedProductDetails.name || selectedProductDetails.genericName }}
               </div>
               <div v-if="selectedProductDetails.quantity" class="my-2">
-                <span class="font-weight-medium">Quantity:</span>
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.quantity'] }}:
+                </span>
                 {{ selectedProductDetails.quantity }}
               </div>
               <div v-if="selectedProductDetails.packaging" class="my-2">
-                <span class="font-weight-medium">Packaging:</span>
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.packaging'] }}:</span>
                 {{ selectedProductDetails.packaging }}
               </div>
             </v-card-text>
@@ -74,7 +81,7 @@
         <v-container v-if="!loading && !selected && response?.products.length" class="px-0" fluid>
           <div class="d-flex flex-column flex-md-row justify-space-between align-center py-3 gr-2">
             <div>
-              {{ promptI18n.results }}
+              {{ promptI18n['products.results'] }}
             </div>
             <v-pagination
               v-model="response.page"
@@ -109,7 +116,7 @@
           </div>
         </v-container>
         <v-alert v-if="response?.products.length === 0" class="my-4" type="warning">
-          {{ promptI18n.none }}
+          {{ promptI18n['products.none'] }}
         </v-alert>
       </v-card-text>
     </v-card>
@@ -224,7 +231,18 @@ export default defineComponent({
     const searchTerm = ref(props.value.searchTerm);
 
     const promptI18n = computed(() =>
-      translatePrompt(['search', 'back', 'results', 'none'], { results: { count: response.value?.count ?? 0 } }),
+      translatePrompt([
+        'search',
+        'back',
+        'products.results',
+        'products.none',
+        'products.name',
+        'products.code',
+        'products.quantity',
+        'products.packaging',
+      ], {
+        'products.results': { count: response.value?.count ?? 0 },
+      }),
     );
 
     const resolveImageUrl = (product: OOFProduct) => {
@@ -233,7 +251,10 @@ export default defineComponent({
 
     const getProductName = (product: OOFProduct, withQuantity = false) => {
       const name = product[`product_name_${lang.value}`] || product.product_name_en || product.product_name;
-      return withQuantity && product.quantity ? `${name} (${product.quantity})` : name;
+      const genericName = product[`generic_name_${lang.value}`] || product.generic_name_en || product.generic_name;
+      const finalName = name || genericName;
+
+      return withQuantity && product.quantity ? `${finalName} (${product.quantity})` : finalName;
     };
 
     const selectedProductDetails = computed(() => {
