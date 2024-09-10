@@ -1,16 +1,20 @@
 import { Readable } from 'node:stream';
 
 import { initContract } from '@ts-rest/core';
+import { isLocale } from 'validator';
 import { z } from 'zod';
+
+const pdfFeedbackRequest = z.object({
+  lang: z.string().refine(val => isLocale(val)).optional(),
+  survey: z.string(),
+  submissions: z.array(z.string().uuid()).optional(),
+});
 
 export const feedback = initContract().router({
   download: {
     method: 'GET',
     path: '/user/feedback',
-    query: z.object({
-      survey: z.string(),
-      submissions: z.array(z.string().uuid()).optional(),
-    }),
+    query: pdfFeedbackRequest,
     responses: {
       200: z.instanceof(Readable),
     },
@@ -20,12 +24,8 @@ export const feedback = initContract().router({
   email: {
     method: 'POST',
     path: '/user/feedback',
-    query: z.object({
-      survey: z.string(),
-      submissions: z.array(z.string().uuid()).optional(),
-    }),
-    body: z
-      .object({
+    body: pdfFeedbackRequest
+      .extend({
         email: z.string().email().toLowerCase(),
         emailConfirm: z.string().email().toLowerCase(),
       })

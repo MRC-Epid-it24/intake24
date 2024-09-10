@@ -21,6 +21,13 @@ export type CreateRefreshCookie = {
   userId: string;
 };
 
+type FeedbackOptions = {
+  surveyId: string;
+  username: string;
+  submissions?: string[];
+  lang?: string;
+};
+
 function feedbackService({
   appConfig,
   fsConfig,
@@ -51,11 +58,7 @@ function feedbackService({
 
   const getWeightTargets = async (): Promise<WeightTargetCoefficient[]> => weightTargetsData;
 
-  const getFeedbackLinks = async (
-    surveyId: string,
-    username: string,
-    submissions: string[] = [],
-  ) => {
+  const getFeedbackLinks = async ({ surveyId, submissions = [], username }: Omit<FeedbackOptions, 'lang'>) => {
     const alias = await UserSurveyAlias.findOne({
       where: { surveyId, username },
       include: [{ association: 'survey', attributes: ['id', 'slug'] }],
@@ -106,30 +109,24 @@ function feedbackService({
     };
   };
 
-  const getFeedbackStream = async (
-    surveyId: string,
-    username: string,
-    submissions: string[] = [],
-  ) => {
-    const { url, filename, slug, userId } = await getFeedbackLinks(surveyId, username, submissions);
+  const getFeedbackStream = async (options: FeedbackOptions) => {
+    const { lang, surveyId, submissions, username } = options;
+    const { url, filename, slug, userId } = await getFeedbackLinks({ surveyId, username, submissions });
     const cookie = await createRefreshCookie({ slug, username, userId });
 
-    const pdfStream = await new FeedbackPdfGenerator(url, cookie, pdfConfig.puppeteer).getPdfStream();
+    const pdfStream = await new FeedbackPdfGenerator(url, cookie, { ...pdfConfig.puppeteer, lang }).getPdfStream();
 
     return { pdfStream, filename, url };
   };
 
-  const getFeedbackFile = async (
-    surveyId: string,
-    username: string,
-    submissions: string[] = [],
-  ) => {
-    const { url, filename, slug, userId } = await getFeedbackLinks(surveyId, username, submissions);
+  const getFeedbackFile = async (options: FeedbackOptions) => {
+    const { lang, surveyId, submissions, username } = options;
+    const { url, filename, slug, userId } = await getFeedbackLinks({ surveyId, username, submissions });
     const cookie = await createRefreshCookie({ slug, username, userId });
 
     const path = resolve(fsConfig.local.downloads, filename);
 
-    await new FeedbackPdfGenerator(url, cookie, pdfConfig.puppeteer).getPdfFile(path);
+    await new FeedbackPdfGenerator(url, cookie, { ...pdfConfig.puppeteer, lang }).getPdfFile(path);
 
     return { path, filename, url };
   };

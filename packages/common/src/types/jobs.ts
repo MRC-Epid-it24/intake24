@@ -130,6 +130,7 @@ export const SurveyFeedbackNotification = z.object({
   surveyId: z.string(),
   username: z.string(),
   submissions: z.array(z.string()).optional(),
+  lang: z.string().optional(),
   to: z.string(),
   cc: z.string().optional(),
   bcc: z.string().optional(),

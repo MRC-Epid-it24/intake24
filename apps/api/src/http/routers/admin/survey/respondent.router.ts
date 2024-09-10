@@ -119,7 +119,7 @@ export function respondent() {
           where: { id: surveyId },
         });
 
-        const { pdfStream, filename } = await req.scope.cradle.feedbackService.getFeedbackStream(surveyId, username, submissions);
+        const { pdfStream, filename } = await req.scope.cradle.feedbackService.getFeedbackStream({ surveyId, username, submissions });
 
         res.set('content-disposition', `attachment; filename=${filename}`);
 

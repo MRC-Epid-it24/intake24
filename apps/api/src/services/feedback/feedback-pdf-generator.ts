@@ -17,7 +17,12 @@ export default class FeedbackPdfGenerator {
   }
 
   async loadFeedback() {
-    const browser = await puppeteer.launch({ headless: this.options.headless });
+    const args = [];
+
+    if (this.options.lang)
+      args.push(`--lang=${this.options.lang}`);
+
+    const browser = await puppeteer.launch({ headless: this.options.headless, args });
 
     try {
       const page = await browser.newPage();

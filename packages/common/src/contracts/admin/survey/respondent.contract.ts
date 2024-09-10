@@ -1,11 +1,17 @@
 import { Readable } from 'node:stream';
 
 import { initContract } from '@ts-rest/core';
+import { isLocale } from 'validator';
 import { z } from 'zod';
 
 import { emailCopy } from '@intake24/common/types';
 import { bigIntString as surveyId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { createRespondentRequest, respondentEntry, respondentListEntry, respondentRequest } from '@intake24/common/types/http/admin';
+
+const pdfFeedbackRequest = z.object({
+  lang: z.string().refine(val => isLocale(val)).optional(),
+  submissions: z.array(z.string().uuid()).optional(),
+});
 
 export const respondent = initContract().router({
   browse: {
@@ -69,9 +75,7 @@ export const respondent = initContract().router({
     method: 'GET',
     path: '/admin/surveys/:surveyId/respondents/:username/feedback',
     pathParams: z.object({ surveyId }),
-    query: z.object({
-      submissions: z.array(z.string().uuid()).optional(),
-    }),
+    query: pdfFeedbackRequest,
     responses: {
       200: z.instanceof(Readable),
     },
@@ -82,14 +86,10 @@ export const respondent = initContract().router({
     method: 'POST',
     path: '/admin/surveys/:surveyId/respondents/:username/feedback',
     pathParams: z.object({ surveyId }),
-    query: z.object({
-      submissions: z.array(z.string().uuid()).optional(),
+    body: pdfFeedbackRequest.extend({
+      email: z.string().email().toLowerCase(),
+      copy: z.enum(emailCopy),
     }),
-    body: z
-      .object({
-        email: z.string().email().toLowerCase(),
-        copy: z.enum(emailCopy),
-      }),
     responses: {
       200: z.undefined(),
     },

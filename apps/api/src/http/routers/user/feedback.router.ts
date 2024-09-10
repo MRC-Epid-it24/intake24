@@ -17,7 +17,7 @@ export function feedback() {
     download: {
       middleware: [feedbackRateLimiter],
       handler: async ({ query, req, res }) => {
-        const { survey: slug, submissions } = query;
+        const { lang, survey: slug, submissions } = query;
         const { userId } = req.scope.cradle.user;
 
         const alias = await UserSurveyAlias.findOne({
@@ -38,11 +38,7 @@ export function feedback() {
         if (!survey.feedbackScheme?.outputs.includes('download'))
           throw new ForbiddenError();
 
-        const { pdfStream } = await req.scope.cradle.feedbackService.getFeedbackStream(
-          survey.id,
-          username,
-          submissions,
-        );
+        const { pdfStream } = await req.scope.cradle.feedbackService.getFeedbackStream({ surveyId: survey.id, username, submissions, lang });
         const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
 
         res.set('content-disposition', `attachment; filename=${filename}`);
@@ -52,9 +48,8 @@ export function feedback() {
     },
     email: {
       middleware: [feedbackRateLimiter],
-      handler: async ({ body, query, req }) => {
-        const { email: to } = body;
-        const { survey: slug, submissions } = query;
+      handler: async ({ body, req }) => {
+        const { email: to, lang, survey: slug, submissions } = body;
         const { userId } = req.scope.cradle.user;
 
         const alias = await UserSurveyAlias.findOne({
@@ -78,7 +73,7 @@ export function feedback() {
         await req.scope.cradle.scheduler.jobs.addJob({
           type: 'SurveyFeedbackNotification',
           userId,
-          params: { surveyId: survey.id, username, to, submissions },
+          params: { surveyId: survey.id, username, to, lang, submissions },
         });
 
         return { status: 200, body: undefined };

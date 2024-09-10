@@ -249,9 +249,10 @@ export default defineComponent({
 
       try {
         const { surveyId: survey, submissions } = this;
+        const lang = this.$i18n.locale;
 
         const res = await this.$http.get(`user/feedback`, {
-          params: { survey, submissions },
+          params: { lang, survey, submissions },
           responseType: 'arraybuffer',
           headers: { accept: 'application/pdf' },
         });
@@ -284,8 +285,9 @@ export default defineComponent({
           surveyId: survey,
           submissions,
         } = this;
+        const lang = this.$i18n.locale;
 
-        await this.$http.post(`user/feedback`, { ...form }, { params: { survey, submissions } });
+        await this.$http.post(`user/feedback`, { ...form, lang, survey, submissions });
 
         this.email.form = { email: '', emailConfirm: '' };
         this.message = this.$t('feedback.outputs.email.sent').toString();
