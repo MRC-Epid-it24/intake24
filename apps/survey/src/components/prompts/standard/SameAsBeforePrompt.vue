@@ -29,6 +29,14 @@
               <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item v-if="count" class="pl-0" dense>
+            <v-list-item-avatar class="my-auto mr-2">
+              <v-icon>fas fa-caret-right</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ promptI18n.count }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
         <v-list v-if="linkedFoods.length" class="px-4" color="grey lighten-4">
           <v-subheader>{{ promptI18n.hadWith }}</v-subheader>
@@ -128,6 +136,8 @@ export default defineComponent({
     const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
     const isValid = true;
 
+    const foodCount = (food: EncodedFood) => food.portionSize?.method === 'drink-scale' ? food.portionSize.count : 1;
+
     const foodAmount = (food: EncodedFood) => {
       if (food.portionSize?.method === 'milk-in-a-hot-drink')
         return (food.portionSize?.milkVolumePercentage ?? 0) * 100;
@@ -145,7 +155,7 @@ export default defineComponent({
           ) as EncodedFood | undefined
         )?.portionSize?.servingWeight ?? 0;
 
-      return Math.round(servingWeight + linkedServingWeight);
+      return Math.round((servingWeight + linkedServingWeight) / foodCount(food));
     };
 
     const foodUnit = (food: EncodedFood) => {
@@ -179,6 +189,8 @@ export default defineComponent({
       }),
     );
 
+    const count = computed(() => i18n.t(`prompts.${type.value}.count`, { count: foodCount(props.sabFood.food) }));
+
     const serving = computed(() => {
       const amount = foodAmount(props.sabFood.food);
       const unit = foodUnit(props.sabFood.food);
@@ -206,6 +218,7 @@ export default defineComponent({
     const promptI18n = computed(() => ({
       serving: serving.value,
       leftovers: leftovers.value,
+      count: count.value,
       ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
     }));
 
@@ -232,6 +245,7 @@ export default defineComponent({
 
     return {
       action,
+      count,
       isValid,
       linkedFoods,
       promptI18n,

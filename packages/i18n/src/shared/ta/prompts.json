@@ -228,6 +228,7 @@
     "description": "<p>Was this <strong>{food}</strong> the same as the one you had before?</p>",
     "serving": "{amount} serving size",
     "leftovers": "Left about {amount}",
+    "count": "{count} servings",
     "noLeftovers": {
       "drink": "Drank it all",
       "food": "Ate everything"
@@ -382,7 +383,7 @@
       "more": "நான் அதிகமாக விட்டுவிட்டேன்",
       "confirm": "அந்த அளவுக்கு விட்டுவிட்டேன்"
     },
-    "count": "How many of these drinks did you have at this time?"
+    "count": "How many of these drinks did you have?"
   },
   "guideImage": {
     "name": "வழிகாட்டி படம்",

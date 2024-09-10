@@ -228,6 +228,7 @@
     "description": "<p>Est-ce que l'aliment <strong>{food}</strong> était le même que celui consommé précédemment?</p>",
     "serving": "portion de {amount}",
     "leftovers": "restes de {amount}",
+    "count": "{count} servings",
     "noLeftovers": {
       "drink": "Bu entièrement",
       "food": "Mangé entièrement"
