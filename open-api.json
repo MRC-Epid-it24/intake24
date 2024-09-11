@@ -5070,7 +5070,8 @@
                               "cards",
                               "meals",
                               "topFoods",
-                              "rating"
+                              "rating",
+                              "submissions"
                             ]
                           }
                         },
@@ -10046,7 +10047,8 @@
                                 "cards",
                                 "meals",
                                 "topFoods",
-                                "rating"
+                                "rating",
+                                "submissions"
                               ]
                             }
                           },
@@ -11236,7 +11238,8 @@
                         "cards",
                         "meals",
                         "topFoods",
-                        "rating"
+                        "rating",
+                        "submissions"
                       ]
                     }
                   },
@@ -12286,7 +12289,8 @@
                           "cards",
                           "meals",
                           "topFoods",
-                          "rating"
+                          "rating",
+                          "submissions"
                         ]
                       }
                     },
@@ -13559,7 +13563,8 @@
                           "cards",
                           "meals",
                           "topFoods",
-                          "rating"
+                          "rating",
+                          "submissions"
                         ]
                       }
                     },
@@ -14714,7 +14719,8 @@
                         "cards",
                         "meals",
                         "topFoods",
-                        "rating"
+                        "rating",
+                        "submissions"
                       ]
                     }
                   },
@@ -15761,7 +15767,8 @@
                           "cards",
                           "meals",
                           "topFoods",
-                          "rating"
+                          "rating",
+                          "submissions"
                         ]
                       }
                     },
@@ -16916,7 +16923,8 @@
                         "cards",
                         "meals",
                         "topFoods",
-                        "rating"
+                        "rating",
+                        "submissions"
                       ]
                     }
                   },
@@ -17976,7 +17984,8 @@
                           "cards",
                           "meals",
                           "topFoods",
-                          "rating"
+                          "rating",
+                          "submissions"
                         ]
                       }
                     },
@@ -19164,7 +19173,8 @@
                           "cards",
                           "meals",
                           "topFoods",
-                          "rating"
+                          "rating",
+                          "submissions"
                         ]
                       }
                     },
@@ -20345,7 +20355,8 @@
                           "cards",
                           "meals",
                           "topFoods",
-                          "rating"
+                          "rating",
+                          "submissions"
                         ]
                       }
                     },
@@ -35759,7 +35770,8 @@
                                 "cards",
                                 "meals",
                                 "topFoods",
-                                "rating"
+                                "rating",
+                                "submissions"
                               ]
                             }
                           },
@@ -41106,7 +41118,8 @@
                               "cards",
                               "meals",
                               "topFoods",
-                              "rating"
+                              "rating",
+                              "submissions"
                             ]
                           }
                         },
@@ -43004,7 +43017,8 @@
                               "cards",
                               "meals",
                               "topFoods",
-                              "rating"
+                              "rating",
+                              "submissions"
                             ]
                           }
                         },
@@ -45303,7 +45317,8 @@
                               "cards",
                               "meals",
                               "topFoods",
-                              "rating"
+                              "rating",
+                              "submissions"
                             ]
                           }
                         },
@@ -47632,7 +47647,8 @@
                               "cards",
                               "meals",
                               "topFoods",
-                              "rating"
+                              "rating",
+                              "submissions"
                             ]
                           }
                         },
@@ -49558,7 +49574,8 @@
                               "cards",
                               "meals",
                               "topFoods",
-                              "rating"
+                              "rating",
+                              "submissions"
                             ]
                           }
                         },
