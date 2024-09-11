@@ -41,7 +41,7 @@
             <feedback-top-foods v-bind="{ topFoods }" class="feedback-area" />
           </v-sheet>
           <feedback-meals
-            v-if="showTopFoods"
+            v-if="showMeals"
             :class="`feedback-area order-${getSectionOrder('meals')}`"
             :config="feedbackScheme.meals"
             :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"

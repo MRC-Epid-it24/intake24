@@ -33,10 +33,10 @@ Edit tab allows modification of selected feedback scheme.
 
   - `Birth date` required for age specific feedback
 
-- `Sections` - LList of feedback sections included in feedback
+- `Sections` - List of feedback sections included in feedback
 
-  - drag & drop re-ordering of sections
-  - tick / untick to include / exclude section from feedback
+  - `drag & drop` for re-ordering of sections (note that `submissions` section is always on the top)
+  - `tick` / `untick` to include / exclude sections from feedback
 
   - available sections are:
 
@@ -47,6 +47,8 @@ Edit tab allows modification of selected feedback scheme.
     - `meals` – shows information on e.g. contribution to total energy intake from meals
 
     - `rating` - 5-star rating with optional comment to be submitted by user
+
+    - `submissions` - shows submission history selection
 
 ## Top foods
 

@@ -272,5 +272,9 @@
   "rating": {
     "_": "Rating",
     "title": "Rating"
+  },
+  "submissions": {
+    "_": "Submission",
+    "title": "Submissions"
   }
 }

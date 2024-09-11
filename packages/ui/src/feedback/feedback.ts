@@ -22,6 +22,7 @@ export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefin
   });
 
   const showRating = computed(() => scheme.value?.sections.includes('rating'));
+  const showSubmissions = computed(() => scheme.value?.sections.includes('submissions'));
 
   const showTopFoods = computed(() => {
     if (!scheme.value?.sections.includes('topFoods'))
@@ -40,6 +41,7 @@ export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefin
     showMeals,
     showTopFoods,
     showRating,
+    showSubmissions,
     getSectionOrder,
   };
 }

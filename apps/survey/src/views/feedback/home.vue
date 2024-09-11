@@ -30,7 +30,7 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row class="d-print-none" justify="center">
+        <v-row v-if="showSubmissions" class="d-print-none" justify="center">
           <v-col cols="12" lg="7" md="8" xl="6">
             <v-expansion-panels focusable>
               <v-expansion-panel>
@@ -178,6 +178,7 @@ export default defineComponent({
       showCards,
       showMeals,
       showRating,
+      showSubmissions,
       showTopFoods,
     } = useFeedback(feedbackScheme);
 
@@ -193,6 +194,7 @@ export default defineComponent({
       showCards,
       showMeals,
       showRating,
+      showSubmissions,
       showTopFoods,
       parameters,
       feedbackScheme,
