@@ -7,6 +7,7 @@ import type {
   SurveySubmissionFoodCustomFieldAttributes,
   SurveySubmissionMealAttributes,
   SurveySubmissionMealCustomFieldAttributes,
+  SurveySubmissionMissingFoodAttributes,
   SurveySubmissionNutrientAttributes,
   SurveySubmissionPortionSizeFieldAttributes,
   UserAttributes,
@@ -24,6 +25,7 @@ export interface SurveySubmissionMealEntry extends SurveySubmissionMealAttribute
   submission: SurveySubmissionAttributes;
   customFields: SurveySubmissionMealCustomFieldAttributes[];
   foods: SurveySubmissionFoodEntry[];
+  missingFoods: SurveySubmissionMissingFoodAttributes[];
 }
 
 export interface SurveySubmissionEntry extends SurveySubmissionAttributes {

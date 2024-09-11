@@ -77,7 +77,7 @@
             </v-expansion-panels>
           </v-col>
         </v-row>
-        <v-row justify="center">
+        <v-row v-if="hasMissingFoods" justify="center">
           <v-col cols="12" lg="7" md="8" xl="6">
             <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation" text>
               {{ $t('feedback.missingFoods') }}
@@ -183,8 +183,11 @@ export default defineComponent({
     } = useFeedback(feedbackScheme);
 
     const submissions = computed(() => feedbackDicts.value?.surveyStats.submissions ?? []);
+    const hasMissingFoods = computed(() => !!submissions.value.reduce((acc, curr) =>
+      acc + curr.meals.reduce((a, b) => a + b.missingFoods.length, 0), 0));
 
     return {
+      hasMissingFoods,
       userDemographic,
       selectedSubmissions,
       cards,
