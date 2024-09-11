@@ -28,6 +28,15 @@ export default class FeedbackPdfGenerator {
       const page = await browser.newPage();
       await page.setCookie(this.refreshCookie);
       await page.emulateMediaType('print');
+
+      if (this.options.lang) {
+        const store = JSON.stringify({ lang: this.options.lang });
+        await page.evaluateOnNewDocument((store) => {
+          // TODO: hardcoded default prefix
+          window.localStorage.setItem('it24s_app', store);
+        }, store);
+      }
+
       await page.goto(this.url, { waitUntil: 'networkidle0' });
 
       return { browser, page };
