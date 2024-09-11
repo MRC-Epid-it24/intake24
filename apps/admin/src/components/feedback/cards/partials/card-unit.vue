@@ -16,7 +16,7 @@
       </template>
     </language-selector>
     <language-selector
-      v-model="internalUnit.name"
+      v-model="internalUnit.description"
       :label="$t('feedback-schemes.cards.unit.description').toString()"
     >
       <template v-for="lang in Object.keys(internalUnit.description)" #[`lang.${lang}`]>
@@ -81,6 +81,9 @@ export default defineComponent({
     },
     internalUnit: {
       handler() {
+        if (deepEqual(this.unit, this.internalUnit))
+          return;
+
         this.$emit('update:unit', this.internalUnit);
       },
       deep: true,
