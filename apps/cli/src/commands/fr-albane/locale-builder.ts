@@ -680,6 +680,7 @@ export class FrenchAlbaneLocaleBuilder {
           description: 'use_an_image',
           useForRecipes: true,
           conversionFactor: 1.0,
+          multiple: true,
         });
       }
 

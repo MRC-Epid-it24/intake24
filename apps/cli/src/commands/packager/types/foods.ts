@@ -55,6 +55,7 @@ export interface PkgDrinkScalePsm extends PkgPortionSizeMethodBase {
   drinkwareId: string;
   initialFillLevel: number;
   skipFillLevel: boolean;
+  multiple?: boolean;
 }
 
 export interface PkgStandardUnit {

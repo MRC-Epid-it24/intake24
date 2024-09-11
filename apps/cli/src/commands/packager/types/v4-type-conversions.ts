@@ -148,6 +148,7 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod): PortionSizeMet
           drinkwareId: psm.drinkwareId,
           skipFillLevel: psm.skipFillLevel,
           initialFillLevel: psm.initialFillLevel,
+          multiple: psm.multiple,
         },
       };
     case 'standard-portion':
