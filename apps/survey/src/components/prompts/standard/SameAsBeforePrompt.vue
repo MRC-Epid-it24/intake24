@@ -29,7 +29,7 @@
               <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item v-if="count" class="pl-0" dense>
+          <v-list-item v-if="count > 1" class="pl-0" dense>
             <v-list-item-avatar class="my-auto mr-2">
               <v-icon>fas fa-caret-right</v-icon>
             </v-list-item-avatar>
@@ -189,7 +189,8 @@ export default defineComponent({
       }),
     );
 
-    const count = computed(() => i18n.t(`prompts.${type.value}.count`, { count: foodCount(props.sabFood.food) }));
+    const count = computed(() => foodCount(props.sabFood.food));
+    const servingCount = computed(() => i18n.t(`prompts.${type.value}.count`, { count: foodCount(props.sabFood.food) }));
 
     const serving = computed(() => {
       const amount = foodAmount(props.sabFood.food);
@@ -218,7 +219,7 @@ export default defineComponent({
     const promptI18n = computed(() => ({
       serving: serving.value,
       leftovers: leftovers.value,
-      count: count.value,
+      count: servingCount.value,
       ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
     }));
 

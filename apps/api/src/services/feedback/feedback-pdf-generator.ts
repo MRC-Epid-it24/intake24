@@ -17,7 +17,7 @@ export default class FeedbackPdfGenerator {
   }
 
   async loadFeedback() {
-    const args = [];
+    const args: string[] = [];
 
     if (this.options.lang)
       args.push(`--lang=${this.options.lang}`);
