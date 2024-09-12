@@ -276,6 +276,10 @@
       "title": "Invites de repas post-aliments",
       "subtitle": "Invites au sujet des repas affichées après que l'étape de quantification soit complétée pour tous les aliments du repas."
     },
+    "foodsDeferred": {
+      "title": "Questions différées sur les aliments",
+      "subtitle": "Questions supplémentaires posées sur les aliments après que les questions après l'aliment aient été répondues."
+    },
     "internal": {
       "_": "Identifiants internes",
       "id": {
@@ -468,6 +472,15 @@
       "subtitle": "Suggérer des aliments souvent consommés ensemble",
       "multiple": "Permettre la sélection de plusieurs aliments"
     },
+    "general-associated-foods-prompt": {
+      "title": "Aliments associés",
+      "subtitle": "Proposer des aliments classiquement consommés ensemble. Les aliments suggérés sont définis au niveau de cet affichage, et leur pertinence est déterminée par des conditions.",
+      "multiple": "Permettre la sélection de plusieurs aliments",
+      "skipPortionSize": "Passer l'estimation de la taille de portion pour ces aliments",
+      "categoryCode": "Catégorie des aliments associés",
+      "promptText": "Texte affiché",
+      "genericName": "Nom générique pour les aliments associés"
+    },
     "edit-meal-prompt": {
       "title": "Liste d'aliments",
       "subtitle": "Listez ou modifiez des aliments dans ce repas en tant que champ texte libre",
@@ -623,6 +636,10 @@
     "yes-no-prompt": {
       "title": "Choix OUI/NON",
       "subtitle": "Demander de choisir oui ou non"
+    },
+    "aggregate-choice-prompt": {
+      "title": "Question agregée sur plusieurs aliments",
+      "subtitle": "Demander de choisir une option pour chaque aliment déclaré sur un seul écran"
     },
     "as-served-prompt": {
       "title": "Photo de portions",

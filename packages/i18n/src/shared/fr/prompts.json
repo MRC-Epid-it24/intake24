@@ -28,13 +28,13 @@
     "description": "<p> Nous avons toutes les informations dont nous avons besoin au sujet de <strong>{item}</strong> à l'heure actuelle.</p><p>Pour poursuivre cette enquête, sélectionnez le bouton \"Continuer\" ci-dessous et nous sélectionnerons automatiquement le prochain aliment ou repas pour lequel nous avons encore besoin de précisions.</p><p>Vous pouvez aussi sélectionner un repas ou un aliment sur la gauche si vous souhaitez apporter des précisions sur un élément particulier.</p>"
   },
   "select": {
-    "name": "Select value from list",
+    "name": "Sélectionnez une valeur dans la liste",
     "text": "",
     "description": "",
-    "label": "Select option"
+    "label": "Option de sélection"
   },
   "slider": {
-    "name": "Select value on slider",
+    "name": "Sélectionnez une valeur sur le curseur",
     "text": "",
     "description": ""
   },
@@ -71,12 +71,13 @@
     "description": ""
   },
   "addonFoods": {
-    "name": "Add-on foods",
+    "name": "Ajout de sel",
     "text": "",
-    "description": "Have you had any add-on foods with following foods?",
-    "food": "Food",
-    "portion": "Portion",
-    "quantity": "Quantity"
+    "description": "Avez-vous ajouté du sel sur les aliments suivants ?",
+    "food": "Type de sel",
+    "portion": "Type de portion",
+    "quantity": "Quantité consommée",
+    "didNotHave": "Non"
   },
   "associatedFoods": {
     "name": "Aliments associés",
@@ -146,20 +147,20 @@
     "foodsOnly": "Aliments"
   },
   "externalSource": {
-    "name": "External source",
+    "name": "Source externe",
     "text": "",
     "description": "",
-    "search": "Search",
-    "back": "Back to search",
-    "select": "Select",
-    "missing": "Not found",
+    "search": "Rechercher",
+    "back": "Retour en arrière",
+    "select": "Sélectionner",
+    "missing": "Je n'ai pas trouvé mon produit",
     "products": {
-      "results": "Products found: {count}.",
-      "none": "No products found",
-      "name": "Name",
+      "results": "Produits trouvés : {count}.",
+      "none": "Pas de produits trouvés",
+      "name": "Nom",
       "code": "Code",
-      "quantity": "Quantity",
-      "packaging": "Packaging"
+      "quantity": "Quantité",
+      "packaging": "Emballage"
     }
   },
   "final": {
@@ -173,11 +174,17 @@
     "description": "<p>La liste ci-dessous correspond aux aliments de notre base de données qui ressemblent à \"<strong>{food}</strong>\".</p><p>Choisissez l'aliment que vous avez consommé ou celui qui lui ressemble le plus.</p>",
     "browse": "Parcourir tous les aliments",
     "search": "Chercher un aliment",
+    "searchResults": "résultats de recherche",
+    "relatedCategories": "Catégories / sous-catégories associées",
+    "showLess": "Afficher moins",
+    "showAll": "Afficher toutes les catégories associées",
     "root": "toutes les catégories alimentaires",
     "back": "Retour vers '{category}'",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
-    "refine": "The search has found a lot of results. Try refining your search.",
-    "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
+    "refine": "Cette recherche a généré beaucoup de résultats. Essayez d’affiner votre recherche.",
+    "error": "Il y a eu un problème :(",
+    "retry": "Réessayer",
+    "pizza": "Si votre pizza provient d'un plat à emporter ou d'un restaurant, sélectionnez cette option dans la liste.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
@@ -230,9 +237,9 @@
     "no": "Je n'en ai pas pris "
   },
   "recallDate": {
-    "name": "Recall date",
+    "name": "Jour de l'enquête",
     "text": "",
-    "description": "Select the date for which you are filling the recall in."
+    "description": "Sélectionnez le jour pour lequel vous remplissez l'enquête alimentaire."
   },
   "readyMeal": {
     "name": "Plat préparé",
@@ -257,7 +264,7 @@
     "description": "<p>Est-ce que l'aliment <strong>{food}</strong> était le même que celui consommé précédemment?</p>",
     "serving": "portion de {amount}",
     "leftovers": "restes de {amount}",
-    "count": "{count} servings",
+    "count": "{count} portions",
     "noLeftovers": {
       "drink": "Bu entièrement",
       "food": "Mangé entièrement"
@@ -286,13 +293,13 @@
     "description": ""
   },
   "quantity": {
-    "_": "Quantity",
+    "_": "Quantité",
     "whole": "Entier",
     "fraction": "Fraction",
     "and": "et",
     "confirm": "C'est la quantité que j'ai consommée.",
-    "more": "More",
-    "less": "Less"
+    "more": "Plus",
+    "less": "Moins"
   },
   "portionSizeOption": {
     "name": "Méthode de quantification",
@@ -502,27 +509,27 @@
     "text": "",
     "description": "",
     "sizes": {
-      "label": "What size pizza did you have?",
-      "personal": "Personal 7\"",
-      "small": "Small 9.5\"",
-      "medium": "Medium 11.5\"",
-      "large": "Large 13.5\"",
+      "label": "Quelle taille de pizza avez-vous consommé ?",
+      "personal": "Individuelle 7\"",
+      "small": "Petite 9.5\"",
+      "medium": "Moyenne 11.5\"",
+      "large": "Grande 13.5\"",
       "xxl": "Extra large 15.5\""
     },
     "crusts": {
-      "label": "What type of pizza crust did you have?",
-      "classic": "Classic",
-      "italian-thin": "Italian / Thin",
-      "stuffed": "Stuffed"
+      "label": "Quelle type de croûte possédait votre pizza ?",
+      "classic": "Classique",
+      "italian-thin": "Italienne / Fine",
+      "stuffed": "Fourrée"
     },
     "units": {
-      "label": "How do you want to estimate your portion?",
-      "slice": "In slices",
-      "whole": "In whole pizzas"
+      "label": "Comment souhaitez-vous estimer votre portion ?",
+      "slice": "En tranches",
+      "whole": "En pizzas entières"
     },
     "quantity": {
-      "slice": "How many slices did you have?",
-      "whole": "How many whole pizzas did you have?"
+      "slice": "Combien de tranches avez-vous consommées ?",
+      "whole": "Combien de pizzas avez-vous consommées ?"
     }
   },
   "standardPortion": {
@@ -537,5 +544,10 @@
       "withFood": "{unit} de {food} avez-vous consommé ?"
     },
     "confirm": "J'en ai consommé cette quantité"
+  },
+  "aggregateChoice": {
+    "name": "Question agregée sur plusieurs aliments",
+    "text": "",
+    "description": ""
   }
 }
