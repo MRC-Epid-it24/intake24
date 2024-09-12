@@ -8,11 +8,11 @@
     "subtitle": "Intake24 est un logiciel libre d'accès d'enregistrement de rappels alimentaires en ligne.  Il permet la passation de plusieurs rappels autoadministrés de 24 h."
   },
   "legal": {
-    "_": "Legal",
-    "copyright": "{name} by {team} © {year}",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Use",
-    "cookies": "Cookie Preferences"
+    "_": "Crédits",
+    "copyright": "{name} par {team} © {year}",
+    "privacy": "Politique de Confidentialité",
+    "terms": "Conditions d'Utilisation",
+    "cookies": "Préférences pour les cookies"
   },
   "login": {
     "_": "Se connecter",

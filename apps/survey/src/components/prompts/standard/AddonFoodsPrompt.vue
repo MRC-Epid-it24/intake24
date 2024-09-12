@@ -3,7 +3,7 @@
     <div class="py-4">
       <div v-for="meal in meals" :key="meal.id">
         <div class="subtitle-1 font-weight-medium px-4 py-2">
-          {{ meal.name.en }}
+          {{ translate(meal.name) }}
         </div>
         <v-divider />
         <v-list dense>
@@ -20,7 +20,7 @@
                   @change="updateConfirmed(food.id, idx, $event)"
                 >
                   <v-btn class="px-4" height="40" :value="false">
-                    No
+                    {{ promptI18n.didNotHave }}
                   </v-btn>
                 </v-btn-toggle>
                 <v-select
@@ -91,6 +91,7 @@ import type { PortionSizeParameters, StandardUnit } from '@intake24/common/surve
 import type { MealState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 
@@ -122,12 +123,14 @@ export default defineComponent({
   setup(props, ctx) {
     const { action, translatePrompt } = usePromptUtils(props, ctx);
     const { resolveStandardUnits, getStandardUnitEstimateIn } = useStandardUnits();
+    const { translate } = useI18n();
 
     const promptI18n = computed(() =>
       translatePrompt([
         'food',
         'portion',
         'quantity',
+        'didNotHave',
       ]),
     );
 
@@ -248,6 +251,7 @@ export default defineComponent({
       updateFood,
       updateUnit,
       updateQuantity,
+      translate,
     };
   },
 });

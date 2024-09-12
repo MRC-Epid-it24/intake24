@@ -28,7 +28,7 @@
       </v-alert>
     </div>
     <v-subheader v-if="contents.subcategories.length">
-      Related Categories/Subcategories
+      {{ i18n.relatedCategories }}
     </v-subheader>
     <v-chip-group v-if="contents.subcategories.length" column>
       <v-chip
@@ -50,7 +50,7 @@
       text
       @click="showAll = !showAll"
     >
-      {{ showAll ? 'Show Less' : 'Show All Related Categories' }}
+      {{ showAll ? i18n.showLess : i18n.showAll }}
     </v-btn>
     <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
       <v-list-item

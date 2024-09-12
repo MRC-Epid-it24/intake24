@@ -21,12 +21,12 @@
           <v-card v-if="requestFailed" flat>
             <v-card-text>
               <v-alert type="error">
-                Something went wrong :(
+                {{ promptI18n.error }}
               </v-alert>
             </v-card-text>
             <v-card-actions>
               <v-btn large @click="browseCategory(retryCode, false)">
-                Try again
+                {{ promptI18n.retry }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -105,6 +105,7 @@ import type {
   FoodHeader,
   FoodSearchResponse,
 } from '@intake24/common/types/http';
+import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 
@@ -173,6 +174,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, ctx);
+    const { i18n } = useI18n();
 
     const searchTerm = ref(props.value);
     const searchRef = ref<InstanceType<typeof VTextField>>();
@@ -203,7 +205,7 @@ export default defineComponent({
         const last = navigationHistory.value[navigationHistory.value.length - 1];
 
         if (last === 'search')
-          return 'Search results';
+          return i18n.t(`prompts.${type.value}.searchResults`).toString();
 
         return last.name;
       }
@@ -219,7 +221,11 @@ export default defineComponent({
             'back',
             'none',
             'refine',
+            'error',
             'pizza',
+            'relatedCategories',
+            'showLess',
+            'showAll',
             'missing.label',
             'missing.description',
             'missing.report',

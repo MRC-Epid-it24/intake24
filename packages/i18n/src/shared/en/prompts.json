@@ -76,7 +76,8 @@
     "description": "Have you had any add-on foods with following foods?",
     "food": "Food",
     "portion": "Portion",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "didNotHave": "No"
   },
   "associatedFoods": {
     "name": "Associated foods",
@@ -173,10 +174,15 @@
     "description": "<p>Below is the list of foods from our database that look like \"<strong>{food}</strong>\".</p><p>Choose the item you had or the closest match.</p>",
     "browse": "Browse all foods",
     "search": "Search for a food",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
     "root": "all food categories",
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
     "refine": "The search has found a lot of results. You can try refining your search.",
+    "error": "Something went wrong :(",
+    "retry": "Try again",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
     "missing": {
       "label": "I can't find my food",
