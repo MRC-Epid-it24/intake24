@@ -76,7 +76,8 @@
     "description": "Have you had any add-on foods with following foods?",
     "food": "Food",
     "portion": "Portion",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "didNotHave": "No"
   },
   "associatedFoods": {
     "name": "தொடர்புடைய உணவுகள்",
@@ -92,6 +93,38 @@
     "existingFoodsTitle": "Was it something you already entered?",
     "select": {
       "different": "வேறு உணவைத் தேர்ந்தெடுக்கவும்",
+      "remove": "Remove"
+    },
+    "browse": "Browse all foods",
+    "search": "Search for a food",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
+    "root": "all food categories",
+    "back": "Back to '{category}'",
+    "none": "No food results. Try refining your search.",
+    "missing": {
+      "label": "I can't find my food",
+      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
+      "report": "Report a missing food",
+      "tryAgain": "OK, let me try again",
+      "placeholder": "Missing food"
+    }
+  },
+  "generalAssociatedFoods": {
+    "name": "Associated foods (general)",
+    "text": "",
+    "description": "",
+    "yes": "Yes, I had some",
+    "yesAnother": "Yes, I had another",
+    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
+    "no": "No, I did not",
+    "moreFoodsQuestion": "Did you have any other foods from this category?",
+    "databaseLookupTitle": "What was it?",
+    "databaseLookupWithExisting": "If not, what was it?",
+    "existingFoodsTitle": "Was it something you already entered?",
+    "select": {
+      "different": "Change",
       "remove": "Remove"
     },
     "browse": "Browse all foods",
@@ -144,10 +177,15 @@
     "description": "<p>Below is the list of foods from our database that look like \"<strong>{food}</strong>\".</p><p>Choose the item you had or the closest match.</p>",
     "browse": "Browse all foods",
     "search": "Search for a food",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
     "root": "all food categories",
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
     "refine": "The search has found a lot of results. You can try refining your search.",
+    "error": "Something went wrong :(",
+    "retry": "Try again",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
     "missing": {
       "label": "I can't find my food",
@@ -508,5 +546,10 @@
       "withFood": "உங்களிடம் {food} {unit} உண்டா?"
     },
     "confirm": "நான் அவ்வளவு எடுத்து கொண்டேன்"
+  },
+  "aggregateChoice": {
+    "name": "Aggregate food question",
+    "text": "",
+    "description": ""
   }
 }

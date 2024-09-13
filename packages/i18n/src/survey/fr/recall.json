@@ -1,7 +1,7 @@
 {
   "_": "Rappel",
-  "info": "Informations sur le rappel",
-  "none": "Pas de rappel en cours actuellement.",
+  "info": "Informations sur la journée d'enquête",
+  "none": "Pas de journée d'enquête en cours actuellement.",
   "startedAt": "Rappel commencé à: {startedAt}.",
   "finishedAt": "Rappel terminé à: {finishedAt}.",
   "submittedAt": "Soumis à",
@@ -21,9 +21,9 @@
     "_": "Jour du rappel",
     "title": "Jours des rappels",
     "all": "tous",
-    "past": "Rappels antérieurs",
-    "none": "Vous n'avez pas encore terminé de rappels.",
-    "count": "Numéro du rappel: {count}"
+    "past": "Journées d'enquête passées",
+    "none": "Vous n'avez pas encore terminé de journées d'enquête.",
+    "count": "Numero de la journee d'enquête: {count}"
   },
   "start": {
     "_": "Commencer",
@@ -90,7 +90,7 @@
     "feedback": "Bilan nutritionnel",
     "next": "Continuer",
     "submit": "Soumettre le rappel",
-    "reviewed": "Revu",
+    "reviewed": "Confirmé",
     "addMeal": "Ajouter un repas",
     "deleteFood": "Supprimer un aliment",
     "deleteMeal": "Supprimer un repas",

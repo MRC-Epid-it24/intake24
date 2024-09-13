@@ -76,7 +76,8 @@
     "description": "Have you had any add-on foods with following foods?",
     "food": "Food",
     "portion": "Portion",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "didNotHave": "No"
   },
   "associatedFoods": {
     "name": "相关食物",
@@ -96,6 +97,9 @@
     },
     "browse": "最后一页",
     "search": "浏览所有食物",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
     "root": "all food categories",
     "back": "返回到 '{category}'",
     "none": "没有食物结果。请尝试优化您的搜索。",
@@ -104,6 +108,35 @@
       "description": "<p>尝试浏览上面列出的食物类别来查找您的食物</p><p>如果您仍然找不到食物，请选择“报告找不到食物”.</p>",
       "report": "报告找不到食物",
       "tryAgain": "好的，让我再试一次 ",
+      "placeholder": "Missing food"
+    }
+  },
+  "generalAssociatedFoods": {
+    "name": "Associated foods (general)",
+    "text": "",
+    "description": "",
+    "yes": "Yes, I had some",
+    "yesAnother": "Yes, I had another",
+    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
+    "no": "No, I did not",
+    "moreFoodsQuestion": "Did you have any other foods from this category?",
+    "databaseLookupTitle": "What was it?",
+    "databaseLookupWithExisting": "If not, what was it?",
+    "existingFoodsTitle": "Was it something you already entered?",
+    "select": {
+      "different": "Change",
+      "remove": "Remove"
+    },
+    "browse": "Browse all foods",
+    "search": "Search for a food",
+    "root": "all food categories",
+    "back": "Back to '{category}'",
+    "none": "No food results. Try refining your search.",
+    "missing": {
+      "label": "I can't find my food",
+      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
+      "report": "Report a missing food",
+      "tryAgain": "OK, let me try again",
       "placeholder": "Missing food"
     }
   },
@@ -144,10 +177,15 @@
     "description": "<p>以下是我们数据库中与 \"<strong>{food}</strong>\"相似的食物列表。</p><p>请选择您所吃的食物或最接近的匹配项。</p>",
     "browse": "浏览所有食物",
     "search": "搜索食物",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
     "root": "所有食物类别",
     "back": "返回到 '{category}'",
     "none": "没有食物结果。请尝试优化您的搜索。",
     "refine": "搜索已经找到了很多结果。您可以尝试优化搜索。",
+    "error": "Something went wrong :(",
+    "retry": "Try again",
     "pizza": "如果你的披萨来自外卖店或餐馆，请在列表中选择该选项。",
     "missing": {
       "label": "我找不到我的食物",
@@ -508,5 +546,10 @@
       "withFood": "你吃了{unit}的{food}"
     },
     "confirm": "我吃了那么多"
+  },
+  "aggregateChoice": {
+    "name": "Aggregate food question",
+    "text": "",
+    "description": ""
   }
 }
