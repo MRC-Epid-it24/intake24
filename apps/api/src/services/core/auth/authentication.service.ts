@@ -356,7 +356,7 @@ function authenticationService({
     const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
 
     return processLogin(
-      { user, password, captcha, subject, frontEnd: 'survey', survey: user?.aliases?.[0]?.survey },
+      { user, password, captcha, subject, frontEnd: 'survey', survey: user?.aliases?.at(0)?.survey },
       meta,
     );
   };
@@ -398,7 +398,7 @@ function authenticationService({
         captcha,
         subject,
         frontEnd: 'survey',
-        survey: user?.aliases?.[0]?.survey,
+        survey: user?.aliases?.at(0)?.survey,
       },
       meta,
     );

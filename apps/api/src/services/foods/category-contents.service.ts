@@ -77,7 +77,7 @@ function categoryContentsService({
 
     return {
       code: categoryCode,
-      name: category.locals?.[0].name ?? category.prototypeLocals?.[0].name ?? '# Name missing!',
+      name: category.locals?.at(0)?.name ?? category.prototypeLocals?.at(0)?.name ?? '# Name missing!',
     };
   };
 
@@ -154,13 +154,13 @@ function categoryContentsService({
     });
 
     const foodHeaders = foods.map((row) => {
-      const name = row.food?.locals?.[0].name ?? row.food?.prototypeLocals?.[0].name;
+      const name = row.food?.locals?.at(0)?.name ?? row.food?.prototypeLocals?.at(0)?.name;
 
       return { code: row.foodCode, name };
     });
 
     const categoryHeaders = (category?.subCategories ?? []).map((row) => {
-      const name = row.locals?.[0].name ?? row.prototypeLocals?.[0].name;
+      const name = row.locals?.at(0)?.name ?? row.prototypeLocals?.at(0)?.name;
 
       return { code: row.code, name };
     });
