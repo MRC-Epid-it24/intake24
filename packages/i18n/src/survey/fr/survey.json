@@ -1,10 +1,10 @@
 {
   "_": "Enquête",
   "welcome": {
-    "_": "Bienvenue à Intake24",
+    "_": "Bienvenue sur Intake24",
     "subtitle": "Intake24 est utilisé dans des études de recherche pour collecter des informations sur ce que les gens mangent et boivent."
   },
-  "info": "Informations sur l'enquête'",
+  "info": "Informations sur l'enquête",
   "states": {
     "_": "Statut",
     "notStarted": "Le recueil des données n'a pas commencé.",

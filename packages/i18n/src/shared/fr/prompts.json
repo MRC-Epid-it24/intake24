@@ -18,7 +18,7 @@
     }
   },
   "info": {
-    "name": "Information / confirmation",
+    "name": "Informations / confirmations",
     "text": "",
     "description": ""
   },
@@ -97,6 +97,9 @@
     },
     "browse": "Parcourir tous les aliments",
     "search": "Chercher un aliment",
+    "relatedCategories": "Catégories / sous-catégories associées",
+    "showLess": "Afficher moins",
+    "showAll": "Afficher toutes les catégories associées",
     "root": "toutes les catégories alimentaires",
     "back": "Retour vers '{category}'",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
@@ -174,7 +177,6 @@
     "description": "<p>La liste ci-dessous correspond aux aliments de notre base de données qui ressemblent à \"<strong>{food}</strong>\".</p><p>Choisissez l'aliment que vous avez consommé ou celui qui lui ressemble le plus.</p>",
     "browse": "Parcourir tous les aliments",
     "search": "Chercher un aliment",
-    "searchResults": "résultats de recherche",
     "relatedCategories": "Catégories / sous-catégories associées",
     "showLess": "Afficher moins",
     "showAll": "Afficher toutes les catégories associées",
