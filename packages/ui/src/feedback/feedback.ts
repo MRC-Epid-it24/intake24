@@ -1,9 +1,10 @@
 import type { ComputedRef } from 'vue';
 import { computed, ref } from 'vue';
 
-import type { FeedbackSection } from '@intake24/common/feedback';
+import type { FeedbackCustomSection, FeedbackStandardSection } from '@intake24/common/feedback';
 import type { FeedbackSchemeResponse } from '@intake24/common/types/http';
 import type { FeedbackCardParameters, FeedbackDictionaries } from '@intake24/ui/feedback';
+import { copy } from '@intake24/common/util';
 import { buildTopFoods } from '@intake24/ui/feedback';
 
 export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefined>) {
@@ -31,17 +32,51 @@ export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefin
     return !!topFoods.value.chartData.length;
   });
 
-  const getSectionOrder = (section: FeedbackSection) => scheme.value?.sections.indexOf(section);
+  const sections = computed(() => {
+    const items = copy(scheme.value?.sections ?? []);
+    const foundIdx = items.findIndex(item => item === 'submissions');
+    if (foundIdx > 0) {
+      items.splice(foundIdx, 1);
+      items.unshift('submissions');
+    }
+
+    return items;
+  });
+  const hasSubmissionsSection = computed(() => sections.value.includes('submissions'));
+
+  const customSections = computed(() => sections.value.reduce<(FeedbackCustomSection & { class: string[] })[]>((acc, item, idx) => {
+    if (typeof item === 'string')
+      return acc;
+
+    const colorIdx = hasSubmissionsSection.value ? idx : idx + 1;
+
+    acc.push({ ...item, class: [`order-${idx}`, `${colorIdx % 2 ? 'grey lighten-4' : 'white'}`] });
+    return acc;
+  }, []) ?? []);
+
+  const standardSections = computed(() =>
+    sections.value.reduce<Record<FeedbackStandardSection, string[]>>((acc, item, idx) => {
+      if (typeof item !== 'string')
+        return acc;
+
+      const colorIdx = hasSubmissionsSection.value ? idx : idx + 1;
+
+      acc[item] = [`order-${idx}`, `${colorIdx % 2 ? 'grey lighten-4' : 'white'}`];
+
+      return acc;
+    }, {} as Record<FeedbackStandardSection, string[]>),
+  );
 
   return {
-    feedbackDicts,
     cards,
-    topFoods,
+    customSections,
+    feedbackDicts,
+    standardSections,
     showCards,
     showMeals,
     showTopFoods,
     showRating,
     showSubmissions,
-    getSectionOrder,
+    topFoods,
   };
 }

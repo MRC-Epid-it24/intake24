@@ -38,9 +38,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Range } from '@intake24/common/feedback';
-
-export type RangeType = 'age' | 'height' | 'weight';
+import type { Range, RangeType } from '@intake24/common/feedback';
 
 export default defineComponent({
   name: 'DemographicGroupRange',
@@ -51,7 +49,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: Object as PropType<Range>,
+      type: Object as PropType<Range | null>,
       default: null,
     },
   },

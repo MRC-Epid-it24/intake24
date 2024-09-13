@@ -17,7 +17,7 @@ export type ListOps<I, O = I> = {
 
 // TODO: fix generic types casting
 
-export function useListWithDialog<I, O>(props: ListProps<O>, context: SetupContext, ops: ListOps<I, O>) {
+export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupContext, ops: ListOps<I, O>) {
   const { value } = toRefs(props);
   const { newItem, transformIn, transformOut } = ops;
   const form = ref<InstanceType<typeof HTMLFormElement>>();

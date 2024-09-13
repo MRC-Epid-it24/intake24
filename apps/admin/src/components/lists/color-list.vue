@@ -125,13 +125,13 @@ export default defineComponent({
     const transformIn = (color: string) => ({ _id: randomString(6), color });
     const transformOut = ({ color }: { _id: string; color: string }) => color;
 
-    const { dialog, form, items, newDialog, edit, reset, save, update } = useListWithDialog(
+    const { dialog, form, items, edit, reset, save, update } = useListWithDialog(
       props,
       context,
       { newItem, transformIn, transformOut },
     );
 
-    return { colors, dialog, form, items, newDialog, edit, reset, save, update };
+    return { colors, dialog, form, items, edit, reset, save, update };
   },
 });
 </script>

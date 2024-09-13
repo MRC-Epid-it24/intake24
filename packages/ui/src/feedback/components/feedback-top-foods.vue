@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-sheet class="feedback-section">
     <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.topFoods.title') }}
     </h2>
@@ -22,7 +22,7 @@
         <chart autoresize class="chart-print" :option="chart" />
       </div>
     </div>
-  </div>
+  </v-sheet>
 </template>
 
 <script lang="ts">

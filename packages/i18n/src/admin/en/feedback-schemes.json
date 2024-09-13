@@ -36,11 +36,6 @@
     "weightTarget": "Weight target"
   },
 
-  "sections": {
-    "_": "Section",
-    "title": "Sections"
-  },
-
   "copy": {
     "_": "Copy",
     "title": "Copy feedback scheme",
@@ -126,6 +121,25 @@
   "physicalActivityLevels": {
     "_": "Physical activity level",
     "title": "Physical activity levels"
+  },
+
+  "sections": {
+    "_": "Section",
+    "title": "Sections",
+    "add": "Add section",
+    "edit": "Edit section",
+    "remove": "Remove section",
+    "tabs": {
+      "general": "General",
+      "json": "JSON"
+    }
+  },
+
+  "custom": {
+    "_": "Custom section",
+    "title": "Custom section",
+    "header": "Header",
+    "content": "Content"
   },
 
   "top-foods": {

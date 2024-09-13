@@ -3,6 +3,9 @@ import { z } from '../util';
 import { cardTypes } from './cards';
 import { nutrientRuleTypes, range, sentiments, sexes } from './shared';
 
+export const rangeType = ['age', 'height', 'weight'] as const;
+export type RangeType = (typeof rangeType)[number];
+
 export const demographicGroupScaleSector = z.object({
   name: requiredLocaleTranslation,
   summary: localeTranslation,

@@ -1,0 +1,30 @@
+{
+  "_": "Notification",
+  "title": "Notifications",
+  "add": "Add notification",
+  "edit": "Edit notification",
+  "remove": "Remove notification",
+
+  "channels": {
+    "_": "Channel",
+    "title": "Channels",
+    "email": "Email",
+    "slack": "Slack",
+    "webhook": "Webhook",
+    "channelId": "Channel ID",
+    "url": "URL",
+    "to": "Email address"
+  },
+
+  "events": {
+    "_": "Event",
+    "title": "Events",
+    "survey": {
+      "session": {
+        "started": "Survey session started",
+        "submitted": "Survey session submitted",
+        "cancelled": "Survey session cancelled"
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-sheet class="feedback-section">
     <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.meals.title') }}
     </h2>
@@ -38,16 +38,13 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row class="mb-6" justify="center">
-        <v-col cols="12" sm="auto" />
-      </v-row>
     </v-container>
     <div class="d-none d-print-block">
       <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
         <chart autoresize class="chart-print" :option="chart" />
       </div>
     </div>
-  </div>
+  </v-sheet>
 </template>
 
 <script lang="ts">

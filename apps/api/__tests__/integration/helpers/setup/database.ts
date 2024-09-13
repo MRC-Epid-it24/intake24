@@ -7,7 +7,7 @@ import {
   defaultTopFoods as defaultFeedbackTopFoods,
   feedbackOutputs as defaultFeedbackOutputs,
   feedbackPhysicalDataFields,
-  feedbackSections as defaultFeedbackSections,
+  feedbackStandardSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
 import {
   defaultExport,

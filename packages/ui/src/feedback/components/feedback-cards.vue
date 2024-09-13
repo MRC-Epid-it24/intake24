@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-sheet class="feedback-section">
     <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.cards.title') }}
     </h2>
@@ -13,7 +13,7 @@
         <print-card :parameters="card" />
       </div>
     </v-container>
-  </div>
+  </v-sheet>
 </template>
 
 <script lang="ts">

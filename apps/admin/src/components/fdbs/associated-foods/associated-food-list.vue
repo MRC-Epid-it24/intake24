@@ -254,7 +254,7 @@ export default defineComponent({
       _id: randomString(6),
     });
 
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update }
+    const { dialog, form, items, add, edit, load, remove, reset, save, update }
       = useListWithDialog(props, context, {
         newItem,
         transformIn: withIdAndOrder,
@@ -280,7 +280,6 @@ export default defineComponent({
       form,
       translate,
       items,
-      newDialog,
       add,
       edit,
       load,

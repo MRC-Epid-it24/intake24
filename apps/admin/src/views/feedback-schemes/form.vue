@@ -15,16 +15,16 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.name"
-                class="mb-4"
                 :error-messages="form.errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
                 outlined
               />
+            </v-col>
+            <v-col cols="12" md="6">
               <v-select
                 v-model="form.type"
-                class="mb-4"
                 :error-messages="form.errors.get('type')"
                 hide-details="auto"
                 :items="types"
@@ -33,9 +33,10 @@
                 outlined
                 @change="form.errors.clear('type')"
               />
+            </v-col>
+            <v-col cols="12" md="6">
               <v-select
                 v-model="form.outputs"
-                class="mb-4"
                 :error-messages="form.errors.get('outputs')"
                 hide-details="auto"
                 :items="outputs"
@@ -55,6 +56,33 @@
                   </template>
                 </template>
               </v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.visibility"
+                :error-messages="form.errors.get('visibility')"
+                hide-details="auto"
+                :items="visibilities"
+                :label="$t('securables.visibility._')"
+                name="visibility"
+                outlined
+                @change="form.errors.clear('visibility')"
+              >
+                <template #item="{ item }">
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <v-icon left>
+                    {{ item.icon }}
+                  </v-icon>
+                  {{ item.text }}
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="12" md="6">
               <v-select
                 v-model="form.physicalDataFields"
                 class="mb-2"
@@ -112,77 +140,10 @@
                 </v-alert>
               </template>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="form.visibility"
-                class="mb-4"
-                :error-messages="form.errors.get('visibility')"
-                hide-details="auto"
-                :items="visibilities"
-                :label="$t('securables.visibility._')"
-                name="visibility"
-                outlined
-                @change="form.errors.clear('visibility')"
-              >
-                <template #item="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
-                </template>
-                <template #selection="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
-                </template>
-              </v-select>
-              <v-card outlined>
-                <v-toolbar color="grey lighten-3" dense flat tile>
-                  <v-icon color="secondary" left>
-                    fas fa-bars-staggered
-                  </v-icon>
-                  <v-toolbar-title class="font-weight-medium">
-                    {{ $t('feedback-schemes.sections.title') }}
-                  </v-toolbar-title>
-                  <v-spacer />
-                </v-toolbar>
-                <v-list class="py-0">
-                  <draggable
-                    v-model="sections"
-                    handle=".drag-and-drop__handle"
-                    @end="updateSectionOrder"
-                  >
-                    <transition-group name="drag-and-drop" type="transition">
-                      <v-list-item
-                        v-for="section in sections"
-                        :key="section.value"
-                        class="drag-and-drop__item"
-                        draggable
-                        link
-                      >
-                        <v-list-item-avatar class="drag-and-drop__handle">
-                          <v-icon>fas fa-grip-vertical</v-icon>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>{{ section.text }}</v-list-item-title>
-                        </v-list-item-content>
-                        <v-list-item-action>
-                          <v-checkbox
-                            v-model="form.sections"
-                            color="secondary"
-                            :value="section.value"
-                          />
-                        </v-list-item-action>
-                      </v-list-item>
-                    </transition-group>
-                  </draggable>
-                </v-list>
-              </v-card>
-            </v-col>
           </v-row>
         </v-card-text>
       </v-container>
+      <feedback-sections v-model="form.sections" />
       <v-card-text>
         <submit-footer :disabled="form.errors.any()" />
       </v-card-text>
@@ -191,8 +152,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { computed, defineComponent } from 'vue';
 
 import type {
   Card,
@@ -214,11 +174,11 @@ import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/adm
 import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
-  feedbackSections,
   feedbackTypes,
 } from '@intake24/common/feedback';
-import { kebabCase } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
+
+import FeedbackSections from './sections.vue';
 
 export type FeedbackSchemeForm = {
   id: string | null;
@@ -243,7 +203,7 @@ export type PatchFeedbackSchemeForm = Pick<
 export default defineComponent({
   name: 'SchemeForm',
 
-  components: { CopySchemeDialog, Draggable: draggable, Preview },
+  components: { CopySchemeDialog, FeedbackSections, Preview },
 
   mixins: [formMixin],
 
@@ -261,13 +221,6 @@ export default defineComponent({
       text: i18n.t(`feedback-schemes.outputs.${value}`),
     }));
 
-    const sections = ref(
-      feedbackSections.map(value => ({
-        value,
-        text: i18n.t(`feedback-schemes.${kebabCase(value)}.title`),
-      })),
-    );
-
     const { canHandleEntry, entry, entryLoaded, isCreate, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
@@ -277,33 +230,13 @@ export default defineComponent({
       data: {
         name: null,
         type: 'default',
-        outputs: [...feedbackOutputs],
-        sections: [...feedbackSections],
+        outputs: [],
+        sections: [],
         physicalDataFields: [...feedbackPhysicalDataFields],
         visibility: 'public',
       },
       editMethod: 'patch',
-      loadCallback: (entry: FeedbackSchemeEntry) => {
-        sections.value.sort((a, b) => {
-          const aIdx = entry.sections.indexOf(a.value);
-          const bIdx = entry.sections.indexOf(b.value);
-
-          if (aIdx === -1)
-            return 1;
-          if (bIdx === -1)
-            return -1;
-
-          return aIdx - bIdx;
-        });
-        return entry;
-      },
     });
-
-    const updateSectionOrder = () => {
-      form.sections = sections.value
-        .filter(section => form.sections.includes(section.value))
-        .map(section => section.value);
-    };
 
     const physicalDataFields = feedbackPhysicalDataFields.map(value => ({
       value,
@@ -360,8 +293,6 @@ export default defineComponent({
       currentFeedbackScheme,
       entry,
       entryLoaded,
-      updateSectionOrder,
-      sections,
       types,
       outputs,
       physicalDataFields,

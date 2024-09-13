@@ -1,4 +1,5 @@
 export { default as FeedbackCards } from './feedback-cards.vue';
+export { default as FeedbackCustomSection } from './feedback-custom-section.vue';
 export { default as FeedbackMeals } from './feedback-meals.vue';
 export { default as FeedbackOutputs } from './feedback-outputs.vue';
 export { default as FeedbackTopFoods } from './feedback-top-foods.vue';

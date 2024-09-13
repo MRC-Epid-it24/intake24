@@ -35,20 +35,17 @@ Edit tab allows modification of selected feedback scheme.
 
 - `Sections` - List of feedback sections included in feedback
 
-  - `drag & drop` for re-ordering of sections (note that `submissions` section is always on the top)
-  - `tick` / `untick` to include / exclude sections from feedback
+  - `submissions` - shows submission history selection (section is always on the top)
 
-  - available sections are:
+  - `cards` – shows intake of selected nutrients, energy and foods
 
-    - `topFoods` – shows top foods contributing to selected nutrient intake as pie charts
+  - `meals` – shows information on e.g. contribution to total energy intake from meals
 
-    - `cards` – shows intake of selected nutrients, energy and foods
+  - `topFoods` – shows top foods contributing to selected nutrient intake as pie charts
 
-    - `meals` – shows information on e.g. contribution to total energy intake from meals
+  - `rating` - 5-star rating with optional comment to be submitted by user
 
-    - `rating` - 5-star rating with optional comment to be submitted by user
-
-    - `submissions` - shows submission history selection
+  - `custom section` - custom section to allow insertion of custom content
 
 ## Top foods
 

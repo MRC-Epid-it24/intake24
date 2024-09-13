@@ -226,10 +226,10 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update }
+    const { dialog, form, items, add, edit, load, remove, reset, save, update }
       = useListWithDialog(props, context, { newItem: getHenryCoefficientDefaults });
 
-    return { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update };
+    return { dialog, form, items, add, edit, load, remove, reset, save, update };
   },
 
   data() {

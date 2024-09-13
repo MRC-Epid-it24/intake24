@@ -24,29 +24,32 @@
         <v-toolbar-title>{{ $t('feedback-schemes.preview.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-container class="pa-0" fluid>
-        <h1 class="text-h1 font-weight-medium text-center">
+        <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">
           {{ $t('feedback.title') }}
-        </h1>
-        <div v-if="feedbackDicts" class="d-flex flex-column">
+        </h2>
+        <div v-if="feedbackScheme && feedbackDicts && standardSections" class="d-flex flex-column">
+          <!-- @vue-expect-error class prop issues -->
           <feedback-cards
             v-if="showCards"
-            v-bind="{ cards }"
-            :class="`feedback-area order-${getSectionOrder('cards')}`"
+            v-bind="{ class: standardSections.cards, cards }"
           />
-          <v-sheet
+          <feedback-top-foods
             v-if="showTopFoods"
-            :class="`order-${getSectionOrder('topFoods')}`"
-            color="white"
-          >
-            <feedback-top-foods v-bind="{ topFoods }" class="feedback-area" />
-          </v-sheet>
+            v-bind="{ class: standardSections.topFoods, topFoods }"
+          />
+          <!-- @vue-expect-error class prop issues -->
           <feedback-meals
             v-if="showMeals"
-            :class="`feedback-area order-${getSectionOrder('meals')}`"
+            :class="standardSections.meals"
             :config="feedbackScheme.meals"
             :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
             :submissions="submissions"
             :survey-stats="feedbackDicts.surveyStats"
+          />
+          <feedback-custom-section
+            v-for="section in customSections"
+            :key="`custom-${section.id}`"
+            v-bind="{ class: section.class, section }"
           />
         </div>
       </v-container>
@@ -64,6 +67,7 @@ import {
   buildCardParams,
   buildTopFoods,
   FeedbackCards,
+  FeedbackCustomSection,
   FeedbackMeals,
   FeedbackTopFoods,
   useFeedback,
@@ -74,7 +78,7 @@ import * as previewData from './preview-data';
 export default defineComponent({
   name: 'FeedbackPreview',
 
-  components: { FeedbackCards, FeedbackMeals, FeedbackTopFoods },
+  components: { FeedbackCards, FeedbackCustomSection, FeedbackMeals, FeedbackTopFoods },
 
   props: {
     feedbackScheme: {
@@ -100,7 +104,16 @@ export default defineComponent({
       cards: props.feedbackScheme.cards.map(card => ({ ...card, image: imageMap.value[card.image] })),
     }));
 
-    const { cards, feedbackDicts, getSectionOrder, topFoods, showCards, showMeals, showTopFoods }
+    const {
+      cards,
+      customSections,
+      feedbackDicts,
+      standardSections,
+      showCards,
+      showMeals,
+      showTopFoods,
+      topFoods,
+    }
       = useFeedback(scheme);
 
     const buildFeedback = async () => {
@@ -149,13 +162,14 @@ export default defineComponent({
     return {
       dialog,
       cards,
+      customSections,
       close,
       feedbackDicts,
-      getSectionOrder,
-      topFoods,
+      standardSections,
       showCards,
       showMeals,
       showTopFoods,
+      topFoods,
       ...previewData,
     };
   },
@@ -163,8 +177,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.feedback-area {
-  padding: 16px 0 !important;
+.feedback-section {
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
 
   @media print {
     padding: 0 !important;

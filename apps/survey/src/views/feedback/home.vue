@@ -86,20 +86,20 @@
         </v-row>
       </v-container>
     </v-sheet>
-    <div v-if="feedbackScheme && feedbackDicts" class="d-flex flex-column">
+    <div v-if="feedbackScheme && feedbackDicts && standardSections" class="d-flex flex-column">
       <!-- @vue-expect-error class prop issues -->
       <feedback-cards
         v-if="showCards"
-        v-bind="{ cards }"
-        :class="`feedback-area order-${getSectionOrder('cards')}`"
+        v-bind="{ class: standardSections.cards, cards }"
       />
-      <v-sheet v-if="showTopFoods" :class="`order-${getSectionOrder('topFoods')}`" color="white">
-        <feedback-top-foods v-bind="{ topFoods }" class="feedback-area" />
-      </v-sheet>
+      <feedback-top-foods
+        v-if="showTopFoods"
+        v-bind="{ class: standardSections.topFoods, topFoods }"
+      />
       <!-- @vue-expect-error class prop issues -->
       <feedback-meals
         v-if="showMeals"
-        :class="`feedback-area order-${getSectionOrder('meals')}`"
+        :class="standardSections.meals"
         :config="feedbackScheme.meals"
         :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
         :submissions="submissions"
@@ -107,8 +107,12 @@
       />
       <survey-rating
         v-if="showRating"
-        v-bind="{ surveyId, type: 'feedback' }"
-        :class="`feedback-area order-${getSectionOrder('rating')} d-print-none`"
+        v-bind="{ class: standardSections.rating, surveyId, type: 'feedback' }"
+      />
+      <feedback-custom-section
+        v-for="section in customSections"
+        :key="`custom-${section.id}`"
+        v-bind="{ class: section.class, section }"
       />
     </div>
   </div>
@@ -125,6 +129,7 @@ import {
   buildCardParams,
   buildTopFoods,
   FeedbackCards,
+  FeedbackCustomSection,
   FeedbackMeals,
   FeedbackOutputs,
   FeedbackTopFoods,
@@ -137,6 +142,7 @@ export default defineComponent({
 
   components: {
     FeedbackCards,
+    FeedbackCustomSection,
     FeedbackMeals,
     FeedbackOutputs,
     FeedbackTopFoods,
@@ -165,21 +171,21 @@ export default defineComponent({
     const userName = computed(() => survey.user?.name);
     const feedbackScheme = computed(() => parameters.value?.feedbackScheme);
     const outputs = computed(() => feedbackScheme.value?.outputs ?? []);
-    const sections = computed(() => feedbackScheme.value?.sections ?? []);
 
     const userDemographic = ref<UserDemographic | null>(null);
     const selectedSubmissions = ref<string[]>([]);
 
     const {
       cards,
+      customSections,
       feedbackDicts,
-      getSectionOrder,
-      topFoods,
+      standardSections,
       showCards,
       showMeals,
       showRating,
       showSubmissions,
       showTopFoods,
+      topFoods,
     } = useFeedback(feedbackScheme);
 
     const submissions = computed(() => feedbackDicts.value?.surveyStats.submissions ?? []);
@@ -191,8 +197,9 @@ export default defineComponent({
       userDemographic,
       selectedSubmissions,
       cards,
+      customSections,
       feedbackDicts,
-      getSectionOrder,
+      standardSections,
       topFoods,
       showCards,
       showMeals,
@@ -202,7 +209,6 @@ export default defineComponent({
       parameters,
       feedbackScheme,
       outputs,
-      sections,
       surveyName,
       submissions,
       userName,
@@ -331,7 +337,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.feedback-area {
+.feedback-section {
   padding-top: 32px !important;
   padding-bottom: 32px !important;
 

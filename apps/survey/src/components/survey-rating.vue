@@ -1,5 +1,5 @@
 <template>
-  <v-sheet>
+  <v-sheet :class="{ 'feedback-section': type === 'feedback' }">
     <h2 class="text-h2 font-weight-medium text-center mb-4">
       {{ $t(`${type}.rating.title`) }}
     </h2>

@@ -194,7 +194,7 @@
                         prepend-inner-icon="fas fa-running"
                       />
                     </v-col>
-                    <v-col v-for="item in ['age', 'height', 'weight']" :key="item" cols="12" md="6">
+                    <v-col v-for="item in rangeType" :key="item" cols="12" md="6">
                       <demographic-group-range
                         v-model="dialog.item[item]"
                         :type="item"
@@ -241,14 +241,13 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
-import { cardTypes as cardTypesRef, nutrientRuleTypes, sexes } from '@intake24/common/feedback';
+import { cardTypes as cardTypesRef, type DemographicGroup, nutrientRuleTypes, rangeType, sexes } from '@intake24/common/feedback';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -284,7 +283,7 @@ export default defineComponent({
   setup(props, context) {
     useTinymce();
     const { i18n } = useI18n();
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset: resetItem, save, update }
+    const { dialog, form, items, add, edit, load, remove, reset: resetItem, save, update }
       = useListWithDialog(props, context, { newItem: getDemographicGroupDefaults });
 
     const tab = ref('general');
@@ -308,9 +307,9 @@ export default defineComponent({
       items,
       tab,
       add,
-      newDialog,
       edit,
       load,
+      rangeType,
       remove,
       reset,
       save,
