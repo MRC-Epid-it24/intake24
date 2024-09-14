@@ -33,18 +33,20 @@ export default class SurveySubmissionCustomField extends BaseModel<
   @Column({
     allowNull: false,
     type: DataType.UUID,
+    unique: 'survey_submission_custom_fields_unique',
   })
   declare surveySubmissionId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
+    unique: 'survey_submission_custom_fields_unique',
   })
   declare name: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(512),
+    type: DataType.STRING(2048),
   })
   declare value: string;
 

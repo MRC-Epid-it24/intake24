@@ -90,6 +90,7 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
+    unique: true,
   })
   declare email: CreationOptional<string | null>;
 

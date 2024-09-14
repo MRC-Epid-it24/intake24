@@ -35,12 +35,14 @@ export default class UserCustomField extends BaseModel<
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
+    unique: 'user_custom_fields_unique',
   })
   declare userId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
+    unique: 'user_custom_fields_unique',
   })
   declare name: string;
 
