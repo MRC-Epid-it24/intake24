@@ -5065,13 +5065,44 @@
                         "sections": {
                           "type": "array",
                           "items": {
-                            "type": "string",
-                            "enum": [
-                              "cards",
-                              "meals",
-                              "topFoods",
-                              "rating",
-                              "submissions"
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "cards",
+                                  "meals",
+                                  "topFoods",
+                                  "rating",
+                                  "submissions"
+                                ]
+                              }
                             ]
                           }
                         },
@@ -5438,6 +5469,15 @@
                               }
                             },
                             {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "boolean"
+                              }
+                            },
+                            {
                               "type": "string",
                               "format": "null",
                               "nullable": true
@@ -5615,6 +5655,15 @@
                                     "type": "array",
                                     "items": {
                                       "type": "number"
+                                    }
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "boolean"
                                     }
                                   },
                                   {
@@ -5775,6 +5824,15 @@
                               }
                             },
                             {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "boolean"
+                              }
+                            },
+                            {
                               "type": "string",
                               "format": "null",
                               "nullable": true
@@ -5952,6 +6010,15 @@
                                     "type": "array",
                                     "items": {
                                       "type": "number"
+                                    }
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "boolean"
                                     }
                                   },
                                   {
@@ -6302,6 +6369,15 @@
                               }
                             },
                             {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "boolean"
+                              }
+                            },
+                            {
                               "type": "string",
                               "format": "null",
                               "nullable": true
@@ -6479,6 +6555,15 @@
                                     "type": "array",
                                     "items": {
                                       "type": "number"
+                                    }
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "boolean"
                                     }
                                   },
                                   {
@@ -10042,13 +10127,44 @@
                           "sections": {
                             "type": "array",
                             "items": {
-                              "type": "string",
-                              "enum": [
-                                "cards",
-                                "meals",
-                                "topFoods",
-                                "rating",
-                                "submissions"
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "content": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "content"
+                                  ]
+                                },
+                                {
+                                  "type": "string",
+                                  "enum": [
+                                    "cards",
+                                    "meals",
+                                    "topFoods",
+                                    "rating",
+                                    "submissions"
+                                  ]
+                                }
                               ]
                             }
                           },
@@ -11233,13 +11349,44 @@
                   "sections": {
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "enum": [
-                        "cards",
-                        "meals",
-                        "topFoods",
-                        "rating",
-                        "submissions"
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "content": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "content"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "cards",
+                            "meals",
+                            "topFoods",
+                            "rating",
+                            "submissions"
+                          ]
+                        }
                       ]
                     }
                   },
@@ -12284,13 +12431,44 @@
                     "sections": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "enum": [
-                          "cards",
-                          "meals",
-                          "topFoods",
-                          "rating",
-                          "submissions"
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "content": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "cards",
+                              "meals",
+                              "topFoods",
+                              "rating",
+                              "submissions"
+                            ]
+                          }
                         ]
                       }
                     },
@@ -13558,13 +13736,44 @@
                     "sections": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "enum": [
-                          "cards",
-                          "meals",
-                          "topFoods",
-                          "rating",
-                          "submissions"
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "content": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "cards",
+                              "meals",
+                              "topFoods",
+                              "rating",
+                              "submissions"
+                            ]
+                          }
                         ]
                       }
                     },
@@ -14714,13 +14923,44 @@
                   "sections": {
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "enum": [
-                        "cards",
-                        "meals",
-                        "topFoods",
-                        "rating",
-                        "submissions"
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "content": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "content"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "cards",
+                            "meals",
+                            "topFoods",
+                            "rating",
+                            "submissions"
+                          ]
+                        }
                       ]
                     }
                   },
@@ -15762,13 +16002,44 @@
                     "sections": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "enum": [
-                          "cards",
-                          "meals",
-                          "topFoods",
-                          "rating",
-                          "submissions"
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "content": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "cards",
+                              "meals",
+                              "topFoods",
+                              "rating",
+                              "submissions"
+                            ]
+                          }
                         ]
                       }
                     },
@@ -16918,13 +17189,44 @@
                   "sections": {
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "enum": [
-                        "cards",
-                        "meals",
-                        "topFoods",
-                        "rating",
-                        "submissions"
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "content": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "content"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "cards",
+                            "meals",
+                            "topFoods",
+                            "rating",
+                            "submissions"
+                          ]
+                        }
                       ]
                     }
                   },
@@ -17979,13 +18281,44 @@
                     "sections": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "enum": [
-                          "cards",
-                          "meals",
-                          "topFoods",
-                          "rating",
-                          "submissions"
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "content": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "cards",
+                              "meals",
+                              "topFoods",
+                              "rating",
+                              "submissions"
+                            ]
+                          }
                         ]
                       }
                     },
@@ -19168,13 +19501,44 @@
                     "sections": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "enum": [
-                          "cards",
-                          "meals",
-                          "topFoods",
-                          "rating",
-                          "submissions"
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "content": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "cards",
+                              "meals",
+                              "topFoods",
+                              "rating",
+                              "submissions"
+                            ]
+                          }
                         ]
                       }
                     },
@@ -20350,13 +20714,44 @@
                     "sections": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "enum": [
-                          "cards",
-                          "meals",
-                          "topFoods",
-                          "rating",
-                          "submissions"
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "content": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "cards",
+                              "meals",
+                              "topFoods",
+                              "rating",
+                              "submissions"
+                            ]
+                          }
                         ]
                       }
                     },
@@ -35765,13 +36160,44 @@
                           "sections": {
                             "type": "array",
                             "items": {
-                              "type": "string",
-                              "enum": [
-                                "cards",
-                                "meals",
-                                "topFoods",
-                                "rating",
-                                "submissions"
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "content": {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "content"
+                                  ]
+                                },
+                                {
+                                  "type": "string",
+                                  "enum": [
+                                    "cards",
+                                    "meals",
+                                    "topFoods",
+                                    "rating",
+                                    "submissions"
+                                  ]
+                                }
                               ]
                             }
                           },
@@ -41113,13 +41539,44 @@
                         "sections": {
                           "type": "array",
                           "items": {
-                            "type": "string",
-                            "enum": [
-                              "cards",
-                              "meals",
-                              "topFoods",
-                              "rating",
-                              "submissions"
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "cards",
+                                  "meals",
+                                  "topFoods",
+                                  "rating",
+                                  "submissions"
+                                ]
+                              }
                             ]
                           }
                         },
@@ -43012,13 +43469,44 @@
                         "sections": {
                           "type": "array",
                           "items": {
-                            "type": "string",
-                            "enum": [
-                              "cards",
-                              "meals",
-                              "topFoods",
-                              "rating",
-                              "submissions"
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "cards",
+                                  "meals",
+                                  "topFoods",
+                                  "rating",
+                                  "submissions"
+                                ]
+                              }
                             ]
                           }
                         },
@@ -45312,13 +45800,44 @@
                         "sections": {
                           "type": "array",
                           "items": {
-                            "type": "string",
-                            "enum": [
-                              "cards",
-                              "meals",
-                              "topFoods",
-                              "rating",
-                              "submissions"
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "cards",
+                                  "meals",
+                                  "topFoods",
+                                  "rating",
+                                  "submissions"
+                                ]
+                              }
                             ]
                           }
                         },
@@ -47642,13 +48161,44 @@
                         "sections": {
                           "type": "array",
                           "items": {
-                            "type": "string",
-                            "enum": [
-                              "cards",
-                              "meals",
-                              "topFoods",
-                              "rating",
-                              "submissions"
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "cards",
+                                  "meals",
+                                  "topFoods",
+                                  "rating",
+                                  "submissions"
+                                ]
+                              }
                             ]
                           }
                         },
@@ -49569,13 +50119,44 @@
                         "sections": {
                           "type": "array",
                           "items": {
-                            "type": "string",
-                            "enum": [
-                              "cards",
-                              "meals",
-                              "topFoods",
-                              "rating",
-                              "submissions"
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "cards",
+                                  "meals",
+                                  "topFoods",
+                                  "rating",
+                                  "submissions"
+                                ]
+                              }
                             ]
                           }
                         },
@@ -57385,7 +57966,8 @@
                       "submission",
                       "preFoods",
                       "foods",
-                      "postFoods"
+                      "postFoods",
+                      "foodsDeferred"
                     ]
                   },
                   "prompt": {
