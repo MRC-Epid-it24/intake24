@@ -103,6 +103,7 @@
     "root": "all food categories",
     "back": "返回到 '{category}'",
     "none": "没有食物结果。请尝试优化您的搜索。",
+    "refine": "The search has found a lot of results. You can try refining your search.",
     "missing": {
       "label": "我找不到我的食物",
       "description": "<p>尝试浏览上面列出的食物类别来查找您的食物</p><p>如果您仍然找不到食物，请选择“报告找不到食物”.</p>",
@@ -184,8 +185,6 @@
     "back": "返回到 '{category}'",
     "none": "没有食物结果。请尝试优化您的搜索。",
     "refine": "搜索已经找到了很多结果。您可以尝试优化搜索。",
-    "error": "Something went wrong :(",
-    "retry": "Try again",
     "pizza": "如果你的披萨来自外卖店或餐馆，请在列表中选择该选项。",
     "missing": {
       "label": "我找不到我的食物",
@@ -463,8 +462,13 @@
     "label": "添加您自己的 {searchTerm}",
     "browse": "{category} 类别",
     "search": "搜索食物",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
     "root": "所有食物类别",
     "back": "返回' '{category}'",
+    "none": "没有食物结果。请尝试优化您的搜索。",
+    "refine": "The search has found a lot of results. You can try refining your search.",
     "optional": {
       "confirm": "Yes",
       "reject": "No",
@@ -472,7 +476,6 @@
     },
     "addMore": "添加更多配料",
     "noMore": "没有其他的配料",
-    "none": "没有食物结果。请尝试优化您的搜索。",
     "remove": "去除",
     "missingAllIngredients": "请至少添加一个成分以继续。",
     "missing": {

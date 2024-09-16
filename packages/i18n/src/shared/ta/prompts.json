@@ -103,6 +103,7 @@
     "root": "all food categories",
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
+    "refine": "The search has found a lot of results. You can try refining your search.",
     "missing": {
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -184,8 +185,6 @@
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
     "refine": "The search has found a lot of results. You can try refining your search.",
-    "error": "Something went wrong :(",
-    "retry": "Try again",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
     "missing": {
       "label": "I can't find my food",
@@ -463,8 +462,13 @@
     "label": "Add your own {searchTerm}",
     "browse": "{category} categories",
     "search": "Search for a food",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
     "root": "all food categories",
     "back": "Back to '{category}'",
+    "none": "No food results. Try refining your search.",
+    "refine": "The search has found a lot of results. You can try refining your search.",
     "optional": {
       "confirm": "Yes",
       "reject": "No",
@@ -472,7 +476,6 @@
     },
     "addMore": "Add more ingredients",
     "noMore": "No more ingredients",
-    "none": "No food results. Try refining your search.",
     "remove": "Remove",
     "missingAllIngredients": "தொடர்வதற்கு குறைந்தபட்சம் ஒரு பொருளை சேர்க்கவும்.",
     "missing": {

@@ -81,6 +81,7 @@
     "selected": "தேர்ந்தெடுக்கப்படவில்லை"
   },
   "errors": {
-    "expansionIncomplete": "குறிக்கப்பட்ட அனைத்து பிரிவுகளையும் முடிக்கவும் !"
+    "500": "Something went wrong :(",
+    "retry": "Try again"
   }
 }

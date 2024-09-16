@@ -90,6 +90,7 @@
   },
 
   "errors": {
-    "expansionIncomplete": "Complete all sections marked with !"
+    "500": "Something went wrong :(",
+    "retry": "Try again"
   }
 }

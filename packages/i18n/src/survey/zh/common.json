@@ -81,6 +81,7 @@
     "selected": "未选择"
   },
   "errors": {
-    "expansionIncomplete": "完成标有 ! 部分"
+    "500": "Something went wrong :(",
+    "retry": "Try again"
   }
 }

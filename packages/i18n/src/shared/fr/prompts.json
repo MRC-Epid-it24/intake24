@@ -103,6 +103,7 @@
     "root": "toutes les catégories alimentaires",
     "back": "Retour vers '{category}'",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
+    "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p> Essayez de parcourir les catégories alimentaires listées ci-dessus pour trouver votre aliment.</p><p>Si vous ne le trouvez toujours pas, sélectionnez 'Signaler un aliment manquant'.</p>",
@@ -183,9 +184,7 @@
     "root": "toutes les catégories alimentaires",
     "back": "Retour vers '{category}'",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
-    "refine": "Cette recherche a généré beaucoup de résultats. Essayez d’affiner votre recherche.",
-    "error": "Il y a eu un problème :(",
-    "retry": "Réessayer",
+    "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "pizza": "Si votre pizza provient d'un plat à emporter ou d'un restaurant, sélectionnez cette option dans la liste.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
@@ -461,10 +460,15 @@
     "text": "",
     "description": "Veuillez suivre les étapes ci-dessous pour créer votre propre recette de {food}.",
     "label": "Add your own {searchTerm}",
-    "browse": "Parcourir tous les aliments",
+    "browse": "{category} catégories",
     "search": "Chercher un aliment",
+    "relatedCategories": "Catégories / sous-catégories associées",
+    "showLess": "Afficher moins",
+    "showAll": "Afficher toutes les catégories associées",
     "root": "toutes les catégories alimentaires",
     "back": "Retour vers '{category}'",
+    "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
+    "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "optional": {
       "confirm": "Oui",
       "reject": "Non",
@@ -472,7 +476,6 @@
     },
     "addMore": "Ajouter un autre",
     "noMore": "Complet",
-    "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "remove": "Enlever",
     "missingAllIngredients": "Add at least one ingredient to continue.",
     "missing": {

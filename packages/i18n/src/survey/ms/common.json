@@ -81,6 +81,7 @@
     "selected": "Tidak dipilih"
   },
   "errors": {
-    "expansionIncomplete": "Lengkapkan semua bahagian yang ditanda dengan !"
+    "500": "Something went wrong :(",
+    "retry": "Try again"
   }
 }

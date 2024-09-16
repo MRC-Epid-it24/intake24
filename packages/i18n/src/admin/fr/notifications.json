@@ -4,7 +4,6 @@
   "add": "Add notification",
   "edit": "Edit notification",
   "remove": "Remove notification",
-
   "channels": {
     "_": "Channel",
     "title": "Channels",
@@ -15,7 +14,6 @@
     "url": "URL",
     "to": "Email address"
   },
-
   "events": {
     "_": "Event",
     "title": "Events",

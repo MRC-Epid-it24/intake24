@@ -54,7 +54,7 @@
     "print": "Imprimer"
   },
   "cards": {
-    "title": "Summary of your intake"
+    "title": "Synthèse de vos consommations"
   },
   "topFoods": {
     "title": "Aliments contribuant le plus à vos apports nutritionnels",
@@ -67,7 +67,7 @@
   "rating": {
     "_": "Evaluez votre expérience",
     "title": "Comment évaluerez-vous cette synthèse des consommations ?",
-    "comment": "Dites nous plus à propos de la note qu evous avez donnée à cette synthèse.",
+    "comment": "Dites nous plus à propos de la note que vous avez donnée à cette synthèse.",
     "send": "Envoyer votre évaluation",
     "sent": "Evaluation envoyée, merci!"
   },

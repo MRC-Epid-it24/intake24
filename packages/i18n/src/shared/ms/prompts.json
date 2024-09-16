@@ -103,6 +103,7 @@
     "root": "Semua kategori makanan",
     "back": "Pergi balik ke '{category}'",
     "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
+    "refine": "The search has found a lot of results. You can try refining your search.",
     "missing": {
       "label": "Saya tidak jumpa makanan saya",
       "description": "<p>Sila layari kategori makanan di atas untuk mencari makanan anda.</p><p>Jika anda masih tidak dapat mencari makanan anda 'Laporkan makanan hilang'.</p>",
@@ -184,8 +185,6 @@
     "back": "Pergi balik ke '{category}'",
     "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
     "refine": "Terdapat banyak keputusan berdasarkan carian anda. Sila kecilkan carian anda.",
-    "error": "Something went wrong :(",
-    "retry": "Try again",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
     "missing": {
       "label": "Saya tidak jumpa makanan saya",
@@ -463,8 +462,13 @@
     "label": "Tambah sendiri {searchTerm}",
     "browse": "{category} Kategori",
     "search": "Cari makanan",
+    "relatedCategories": "Related Categories/Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Show All Related Categories",
     "root": "Semua kategori makanan",
     "back": "Pergi balik ke '{category}'",
+    "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
+    "refine": "The search has found a lot of results. You can try refining your search.",
     "optional": {
       "confirm": "Yes",
       "reject": "No",
@@ -472,7 +476,6 @@
     },
     "addMore": "Tambah lagi bahan-bahan",
     "noMore": "Tiada lagi bahan-bahan",
-    "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
     "remove": "Buang",
     "missingAllIngredients": "Sila tambah sekurang-kurangnya satu bahan untuk meneruskan.",
     "missing": {

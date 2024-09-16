@@ -32,10 +32,6 @@
     "birthdate": "Date de naissance",
     "weightTarget": "Poids cible"
   },
-  "sections": {
-    "_": "Section",
-    "title": "Sections"
-  },
   "copy": {
     "_": "Copier",
     "title": "Copier la configuration du bilan",
@@ -110,6 +106,23 @@
   "physicalActivityLevels": {
     "_": "Niveau d'activité physique",
     "title": "Niveaux d'activité physique"
+  },
+  "sections": {
+    "_": "Section",
+    "title": "Sections",
+    "add": "Add section",
+    "edit": "Edit section",
+    "remove": "Remove section",
+    "tabs": {
+      "general": "General",
+      "json": "JSON"
+    }
+  },
+  "custom": {
+    "_": "Custom section",
+    "title": "Custom section",
+    "header": "Header",
+    "content": "Content"
   },
   "top-foods": {
     "_": "Aliments principaux",

@@ -21,12 +21,12 @@
           <v-card v-if="requestFailed" flat>
             <v-card-text>
               <v-alert type="error">
-                {{ promptI18n.error }}
+                {{ $t('common.errors.500') }}
               </v-alert>
             </v-card-text>
             <v-card-actions>
               <v-btn large @click="browseCategory(retryCode, false)">
-                {{ promptI18n.retry }}
+                {{ $t('common.errors.retry') }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -217,15 +217,14 @@ export default defineComponent({
           [
             'browse',
             'search',
+            'relatedCategories',
+            'showLess',
+            'showAll',
             'root',
             'back',
             'none',
             'refine',
-            'error',
             'pizza',
-            'relatedCategories',
-            'showLess',
-            'showAll',
             'missing.label',
             'missing.description',
             'missing.report',

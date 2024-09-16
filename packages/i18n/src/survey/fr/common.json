@@ -81,6 +81,7 @@
     "selected": "Non sélectionné"
   },
   "errors": {
-    "expansionIncomplete": "Veuillez compléter toutes les sections avec un point d'exclamation."
+    "500": "Il y a eu un problème :(",
+    "retry": "Réessayer"
   }
 }
