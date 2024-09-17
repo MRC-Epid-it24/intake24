@@ -3,7 +3,7 @@
   "info": "Informations sur la synthèse",
   "status": {
     "available": "La synthèse des consommations est disponible.",
-    "lowRecalls": "La synthèse des consommations sera disponible quand vous aurez soumis au moins {minRecalls} rappels.",
+    "lowRecalls": "La synthèse des consommations sera disponible quand vous aurez soumis au moins {minRecalls} journées d'enquête.",
     "notAvailable": "La synthèse des consommations n'est pas disponible pour cette enquête."
   },
   "title": "Synthèse des consommations à partir des journées d'enquête de {name} ",

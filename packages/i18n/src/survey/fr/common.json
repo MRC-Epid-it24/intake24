@@ -4,8 +4,8 @@
   "dashboard": "Tableau de bord",
   "navigation": "Navigation",
   "welcome": {
-    "_": "Bienvenue à Intake24",
-    "subtitle": "Intake24 est un logiciel libre d'accès d'enregistrement de rappels alimentaires en ligne.  Il permet la passation de plusieurs rappels autoadministrés de 24 h."
+    "_": "Bienvenue sur Intake24",
+    "subtitle": "Intake24 est un outil utilisé dans le cadre d'études pour collecter des informations sur ce que les gens mangent et boivent."
   },
   "legal": {
     "_": "Crédits",
@@ -42,7 +42,7 @@
   "help": {
     "_": "Aide",
     "title": "Demander de l'aide",
-    "text": "Veuillez compléter le formulaire ci-dessous et une de nos équipes d'appui vous contactera dès que possible.",
+    "text": "Veuillez compléter le formulaire ci-dessous et une de nos diététiciennes vous contactera dès que possible. Ne renseignez pas vos coordonnées (numéro de téléphone, adresse mail, prénom), saisissez uniquement le message.",
     "sent": "Votre demande d'aide a été envoyée."
   },
   "app": {

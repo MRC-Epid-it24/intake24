@@ -18,7 +18,7 @@
     }
   },
   "info": {
-    "name": "Informations / confirmations",
+    "name": "Information / confirmation",
     "text": "",
     "description": ""
   },
@@ -185,7 +185,7 @@
     "back": "Retour vers '{category}'",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
-    "pizza": "Si votre pizza provient d'un plat à emporter ou d'un restaurant, sélectionnez cette option dans la liste.",
+    "pizza": " ",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
@@ -210,7 +210,7 @@
     },
     "yes": "Ajouter ce repas",
     "no": "Annuler",
-    "exists": "Entered meal already exists, select another meal.",
+    "exists": "Le repas renseigné exsite déjà, veuillez en sélectionner un autre.",
     "noMeal": "Plus de repas restants, en ajouter au moins un"
   },
   "mealDuration": {
@@ -459,7 +459,7 @@
     "name": "Créateur de recettes pour {food}",
     "text": "",
     "description": "Veuillez suivre les étapes ci-dessous pour créer votre propre recette de {food}.",
-    "label": "Add your own {searchTerm}",
+    "label": "Ajoutez votre propre {searchTerm}",
     "browse": "{category} catégories",
     "search": "Chercher un aliment",
     "relatedCategories": "Catégories / sous-catégories associées",
@@ -477,13 +477,13 @@
     "addMore": "Ajouter un autre",
     "noMore": "Complet",
     "remove": "Enlever",
-    "missingAllIngredients": "Add at least one ingredient to continue.",
+    "missingAllIngredients": "Ajoutez au moins un ingrédient pour continuer.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
       "report": "Signaler un aliment manquant",
       "tryAgain": "Ok, laissez-moi réessayer",
-      "irrelevantIngredient": "I didn't have any {ingredient}"
+      "irrelevantIngredient": "Je n'ai pas consommé de {ingredient}"
     }
   },
   "parentFoodPortion": {

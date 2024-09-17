@@ -2,7 +2,7 @@
   "_": "Enquête",
   "welcome": {
     "_": "Bienvenue sur Intake24",
-    "subtitle": "Intake24 est utilisé dans des études de recherche pour collecter des informations sur ce que les gens mangent et boivent."
+    "subtitle": "Intake24 est un outil utilisé dans le cadre d'études pour collecter des informations sur ce que les gens mangent et boivent."
   },
   "info": "Informations sur l'enquête",
   "states": {
@@ -28,7 +28,7 @@
     "subtitle": "Ceci est une étude en libre accès, vous pouvez y accéder gratuitement.",
     "link": "lien",
     "info1": "Sélectionnez 'Accéder à l'étude' pour générer de nouveaux identifiants. Il vous faudra retenir ces identifiants si vous souhaitez reprendre votre session plus tard.",
-    "info2": "Ce rappel va durer approximativement vingt minutes.",
-    "info3": "Si vous fermez la fenêtre de votre navigateur, vous pouvez revenir en utilisant ce {action}."
+    "info2": "Cette enquête va durer approximativement trente minutes.",
+    "info3": "Si vous fermez la fenêtre de votre navigateur, vous pouvez revenir en utilisant {action}."
   }
 }

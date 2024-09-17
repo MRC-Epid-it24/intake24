@@ -1,42 +1,42 @@
 {
-  "_": "Rappel",
+  "_": "Enquête",
   "info": "Informations sur la journée d'enquête",
   "none": "Pas de journée d'enquête en cours actuellement.",
-  "startedAt": "Rappel commencé à: {startedAt}.",
-  "finishedAt": "Rappel terminé à: {finishedAt}.",
-  "submittedAt": "Soumis à",
+  "startedAt": "Journée d'enquête commencée à: {startedAt}.",
+  "finishedAt": "Journée d'enquête terminée à: {finishedAt}.",
+  "submittedAt": "Soumise à",
   "limitReached": {
-    "daily": "Vous avez atteint la limite quotidienne de rappels.",
-    "total": "Vous avez atteint la limite de rappels."
+    "daily": "Vous avez atteint la limite quotidienne d'enquêtes'.",
+    "total": "Vous avez atteint la limite d'enquêtes."
   },
   "rating": {
     "_": "Évaluez votre expérience",
-    "title": "Comment évalueriez-vous le rappel ?",
-    "comment": "Dites-nous en plus sur la note que vous avez attribuée au rappel",
+    "title": "Comment évalueriez-vous l'enquête alimentaire ?",
+    "comment": "Dites-nous en plus sur la note que vous avez attribuée à l'enquête alimentaire",
     "send": "Envoyer des commentaires",
     "sent": "Commentaires envoyés, merci !"
   },
   "survey": "Enquête: {name}",
   "submissions": {
-    "_": "Jour du rappel",
-    "title": "Jours des rappels",
+    "_": "Jour d'enquête",
+    "title": "Jours d'enquête",
     "all": "tous",
     "past": "Journées d'enquête passées",
     "none": "Vous n'avez pas encore terminé de journées d'enquête.",
-    "count": "Numero de la journee d'enquête: {count}"
+    "count": "Numero de l'enquête: {count}"
   },
   "start": {
     "_": "Commencer",
-    "another": "Commencer un nouveau rappel"
+    "another": "Commencer une nouvelle enquête"
   },
   "continue": "Continuer",
   "abort": {
     "_": "Annuler",
-    "label": "Annuler le rappel",
-    "confirm": "Souhaitez-vous annuler le rappel en cours ?"
+    "label": "Annuler l'enquête",
+    "confirm": "Souhaitez-vous annuler la journée d'enquête en cours ?"
   },
   "surveyInfo": {
-    "recall": "Rappel: {number}"
+    "recall": "Jour d'enquête : {number}"
   },
   "menu": {
     "title": "Panneau d'avancement",
@@ -87,9 +87,9 @@
     "changeTime": "Modifier l'horaire"
   },
   "actions": {
-    "feedback": "Bilan nutritionnel",
+    "feedback": "Synthèse alimentaire",
     "next": "Continuer",
-    "submit": "Soumettre le rappel",
+    "submit": "Soumettre l'enquête",
     "reviewed": "Confirmé",
     "addMeal": "Ajouter un repas",
     "deleteFood": "Supprimer un aliment",
@@ -100,7 +100,7 @@
     "nav": {
       "cancel": "Supprimer",
       "confirm": "Confirmer",
-      "feedback": "Bilan nutritionnel",
+      "feedback": "Synthèse alimentaire",
       "next": "Continuer",
       "redirect": "Continuer",
       "remove": "Supprimer",
