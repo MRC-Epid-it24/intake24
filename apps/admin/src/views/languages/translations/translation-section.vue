@@ -2,6 +2,7 @@
 import type { CreateElement, PropType, VNode, VNodeChildren } from 'vue';
 import type { LocaleMessageObject } from 'vue-i18n';
 import has from 'lodash/has';
+import isPlainObject from 'lodash/isPlainObject';
 import pick from 'lodash/pick';
 import { defineComponent } from 'vue';
 import {
@@ -146,7 +147,7 @@ export default defineComponent({
       const inputs = items.map((item) => {
         const fullPath = [section, ...path, item].join('.');
 
-        if (typeof translations[item] !== 'string')
+        if (isPlainObject(translations[item]))
           return this.createInputs(h, translations[item] as LocaleMessageObject, [...path, item]);
 
         return h(VCol, { props: { cols: 12 } }, [

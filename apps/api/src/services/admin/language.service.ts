@@ -12,9 +12,9 @@ import type {
 import type { LocaleMessages } from '@intake24/i18n';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';
-import { admin, api, compareMessageKeys, defaultI18nMessages, mergeTranslations, shared, survey } from '@intake24/i18n';
+import { admin, api, compareMessageKeys, mergeTranslations, shared, survey } from '@intake24/i18n';
 
-export function createMessages(language: string) {
+export function getDefaultI18nMessages(language = 'en') {
   return {
     admin: admin[language] ?? admin.en,
     api: api[language] ?? api.en,
@@ -40,23 +40,23 @@ function languageService({
   ): Promise<Record<Application, LocaleMessages>> => {
     const language = await Language.findByPk(languageId, { attributes: ['id', 'code'] });
     if (!language)
-      return defaultI18nMessages;
+      return getDefaultI18nMessages();
 
     // 1.: check if the exact match for the language exists in the code (without the dialect)
     if (i18nStore.hasExactLanguage(language.code.toLowerCase()))
-      return createMessages(language.code);
+      return getDefaultI18nMessages(language.code);
 
     const [languageCode] = language.code.toLowerCase().split(/[-_]/);
     // 2.: check if the language exists in the code (without the dialect)
     if (i18nStore.hasExactLanguage(languageCode))
-      return createMessages(languageCode);
+      return getDefaultI18nMessages(languageCode);
 
     // 3.: check if the language exists in the code (with some other dialect). Picking the first one
     const languageWithDialect = i18nStore.hasLanguageWithSomeDialect(languageCode);
     if (languageWithDialect)
-      return createMessages(languageWithDialect);
+      return getDefaultI18nMessages(languageWithDialect);
 
-    return defaultI18nMessages;
+    return getDefaultI18nMessages();
   };
 
   /**
@@ -270,19 +270,19 @@ function languageService({
       if (!language.translations)
         throw new NotFoundError();
 
-      const { id: languageId, translations } = language;
+      const { id: languageId, code, translations } = language;
 
-      if (!translations.length) {
-        await createLanguageTranslations(languageId);
+      // Translations are not initialized for the language
+      if (!translations.length)
         continue;
-      }
 
       const inserts: LanguageTranslationCreationAttributes[] = [];
       const promises: PromiseLike<any>[] = [];
       // added check for existing languages with the same code in the source code
       // const languageMessagesForInitialization = await languageForInitialization(languageId);
 
-      for (const [app, appMessages] of Object.entries(defaultI18nMessages)) {
+      const defaultLangMessages = getDefaultI18nMessages(code);
+      for (const [app, appMessages] of Object.entries(defaultLangMessages)) {
         const application = app as Application;
 
         for (const [section, messages] of Object.entries(appMessages)) {
