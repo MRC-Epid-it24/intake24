@@ -30,6 +30,21 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <options-menu>
+        <select-resource resource="feedback-schemes" return-object="sections" @input="load">
+          <template #activator="{ attrs, on }">
+            <v-list-item v-bind="attrs" link v-on="on">
+              <v-list-item-title>
+                <v-icon left>
+                  $download
+                </v-icon>
+                {{ $t('feedback-schemes.load') }}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
+        </select-resource>
+        <json-editor-dialog v-model="items" @input="update" />
+      </options-menu>
     </v-toolbar>
     <v-list class="py-0">
       <draggable
@@ -178,7 +193,8 @@ import type {
   FeedbackSection,
   FeedbackStandardSection,
 } from '@intake24/common/feedback';
-import { HtmlEditor, JsonEditor, useTinymce } from '@intake24/admin/components/editors';
+import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
+import { HtmlEditor, JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
 import {
@@ -191,7 +207,16 @@ import { ConfirmDialog } from '@intake24/ui';
 export default defineComponent({
   name: 'FeedbackSections',
 
-  components: { ConfirmDialog, Draggable, HtmlEditor, JsonEditor, LanguageSelector },
+  components: {
+    ConfirmDialog,
+    Draggable,
+    HtmlEditor,
+    JsonEditor,
+    JsonEditorDialog,
+    LanguageSelector,
+    OptionsMenu,
+    SelectResource,
+  },
 
   props: {
     value: {
@@ -208,7 +233,7 @@ export default defineComponent({
 
     const newCustomSection = () => ({ id: randomString(6), title: { en: null }, content: { en: null } });
 
-    const { dialog, form, items, add: addCustomSection, edit: editCustomSection, remove, reset: resetItem, save, update }
+    const { dialog, form, items, add: addCustomSection, edit: editCustomSection, load, remove, reset: resetItem, save, update }
       = useListWithDialog<FeedbackSection>(props, ctx, { newItem: newCustomSection });
 
     const tab = ref('general');
@@ -262,6 +287,7 @@ export default defineComponent({
       edit,
       form,
       items,
+      load,
       remove,
       reset,
       save,
