@@ -6,6 +6,7 @@ import type { I18nLanguageListEntry } from '@intake24/common/types/http';
 export type AppState = {
   lang: string;
   langs: I18nLanguageListEntry[];
+  restrictedLangs: string[];
   app: {
     api: string;
     host: string;
@@ -22,8 +23,9 @@ export type AppState = {
 
 export const useApp = defineStore('app', {
   state: (): AppState => ({
-    lang: navigator.language || navigator.userLanguage,
+    lang: '',
     langs: [],
+    restrictedLangs: [],
     app: {
       name: import.meta.env.VITE_APP_NAME,
       host: window.location.host,
@@ -43,12 +45,25 @@ export const useApp = defineStore('app', {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}app`,
     pick: ['lang'],
   },
+  getters: {
+    availableLanguages: state =>
+      state.restrictedLangs.length ? state.langs.filter(item => state.restrictedLangs.includes(item.code)) : state.langs,
+  },
   actions: {
     setLanguage(language: string) {
-      this.lang = language;
+      if (!this.restrictedLangs.length) {
+        this.lang = language;
+        return;
+      }
+
+      this.lang = this.restrictedLangs.includes(language) ? language : this.restrictedLangs[0];
     },
     setLanguages(languages: I18nLanguageListEntry[]) {
       this.langs = languages;
+    },
+    restrictLanguages(languages: string[]) {
+      this.restrictedLangs = languages;
+      this.setLanguage(this.lang);
     },
   },
 });

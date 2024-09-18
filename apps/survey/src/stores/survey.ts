@@ -39,7 +39,7 @@ import {
   getMealIndexForSelection,
   getMealIndexRequired,
 } from '@intake24/survey/util';
-import { useLoading } from '@intake24/ui/stores';
+import { useApp, useLoading } from '@intake24/ui/stores';
 
 import { surveyService } from '../services';
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
@@ -343,6 +343,8 @@ export const useSurvey = defineStore('survey', {
 
     setParameters(parameters: SurveyEntryResponse) {
       this.parameters = parameters;
+
+      useApp().restrictLanguages(parameters.surveyScheme.settings.languages);
     },
 
     setUserInfo(user: SurveyUserInfoResponse) {

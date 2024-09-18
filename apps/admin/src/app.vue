@@ -156,7 +156,10 @@ import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';
 import { useApp, useAuth, useEntry, useUser } from '@intake24/admin/stores';
-import { ConfirmDialog, Loader, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
+import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
+
+import { vuetify } from './plugins';
+import { useHttp } from './services';
 
 type Breadcrumbs = {
   disabled?: boolean;
@@ -172,7 +175,12 @@ export default defineComponent({
 
   components: { ConfirmDialog, Loader, MenuTree, MessageBox, ServiceWorker },
 
-  mixins: [setsLanguage, webPush],
+  mixins: [webPush],
+
+  setup() {
+    const http = useHttp();
+    useLanguage('admin', http, vuetify.framework);
+  },
 
   data() {
     return {
@@ -223,8 +231,6 @@ export default defineComponent({
 
   async created() {
     this.$http.init(this.$router, useAuth);
-
-    await this.setLanguage('admin');
   },
 
   async mounted() {

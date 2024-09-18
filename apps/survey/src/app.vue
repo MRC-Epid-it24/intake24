@@ -212,8 +212,10 @@ import { mapState } from 'pinia';
 import { computed, defineComponent, ref } from 'vue';
 
 import { Navigation } from '@intake24/survey/components/layouts';
-import { ConfirmDialog, Loader, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
+import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 
+import { vuetify } from './plugins';
+import { useHttp } from './services';
 import { useApp, useAuth, useSurvey } from './stores';
 
 export default defineComponent({
@@ -221,9 +223,10 @@ export default defineComponent({
 
   components: { ConfirmDialog, Loader, MessageBox, Navigation, ServiceWorker },
 
-  mixins: [setsLanguage],
-
   setup() {
+    const http = useHttp();
+    useLanguage('survey', http, vuetify.framework);
+
     const appInfo = computed(() => useApp().app);
     const sidebar = ref(false);
 
@@ -277,10 +280,6 @@ export default defineComponent({
       },
       immediate: true,
     },
-  },
-
-  async created() {
-    await this.setLanguage('survey');
   },
 
   methods: {

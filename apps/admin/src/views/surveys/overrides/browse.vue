@@ -51,6 +51,22 @@
                   outlined
                 />
               </override-field>
+              <override-field v-model="switches.languages" @change="toggle('languages', $event)">
+                <v-select
+                  v-model="form.surveySchemeOverrides.settings.languages"
+                  :disabled="!switches.languages"
+                  :error-messages="form.errors.get('settings.languages')"
+                  hide-details="auto"
+                  item-text="englishName"
+                  item-value="code"
+                  :items="languages"
+                  :label="$t('survey-schemes.settings.languages')"
+                  multiple
+                  name="settings.languages"
+                  outlined
+                  @change="form.errors.clear('settings.languages')"
+                />
+              </override-field>
             </v-row>
           </v-card-text>
         </v-card>
@@ -89,6 +105,7 @@ import { MealList } from '@intake24/admin/components/lists';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
 import { defaultOverrides, defaultSchemeSettings, flattenScheme } from '@intake24/common/surveys';
+import { useApp } from '@intake24/ui/stores';
 
 import OverrideField from './override-field.vue';
 
@@ -110,10 +127,13 @@ export default defineComponent({
       { data: { surveySchemeOverrides: defaultOverrides }, editMethod: 'patch' },
     );
 
+    const languages = computed(() => useApp().langs);
+
     const switches = computed(() => ({
       type: 'type' in form.surveySchemeOverrides.settings,
       flow: 'flow' in form.surveySchemeOverrides.settings,
       recallDate: 'recallDate' in form.surveySchemeOverrides.settings,
+      languages: 'languages' in form.surveySchemeOverrides.settings,
     }));
     const tab = ref('settings');
 
@@ -136,6 +156,7 @@ export default defineComponent({
       entryLoaded,
       clearError,
       form,
+      languages,
       prompts,
       promptIds,
       recallFlows,

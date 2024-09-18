@@ -56,13 +56,13 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-select
-                  v-model="language"
                   hide-details="auto"
                   item-text="englishName"
                   item-value="code"
                   :items="languages"
                   :label="$t('profile.languages._')"
                   outlined
+                  :value="language"
                   @change="updateLanguage"
                 >
                   <template #item="{ item }">
@@ -109,17 +109,16 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useRouter } from 'vue-router/composables';
 
-import { useAuth, useSurvey, useUser } from '@intake24/survey/stores';
-import { AppInfo, ConfirmDialog, setsLanguage } from '@intake24/ui';
+import { useApp, useAuth, useSurvey, useUser } from '@intake24/survey/stores';
+import { AppInfo, ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
   name: 'SurveyUserProfile',
 
   components: { AppInfo, ConfirmDialog },
-
-  mixins: [setsLanguage],
 
   props: {
     surveyId: {
@@ -128,23 +127,36 @@ export default defineComponent({
     },
   },
 
+  setup(props) {
+    const app = useApp();
+    const router = useRouter();
+
+    const language = computed(() => app.lang);
+    const languages = computed(() => app.availableLanguages);
+
+    const updateLanguage = async (languageId: string) => {
+      useApp().setLanguage(languageId);
+    };
+
+    const logout = async () => {
+      await useAuth().logout(true);
+      const { surveyId } = props;
+      await router.push(
+        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' },
+      );
+    };
+
+    return {
+      language,
+      languages,
+      logout,
+      updateLanguage,
+    };
+  },
+
   computed: {
     ...mapState(useUser, ['profile']),
     ...mapState(useSurvey, ['user']),
-  },
-
-  methods: {
-    async updateLanguage(languageId: string) {
-      await this.setLanguage('survey', languageId);
-    },
-
-    async logout() {
-      await useAuth().logout(true);
-      const { surveyId } = this;
-      await this.$router.push(
-        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' },
-      );
-    },
   },
 });
 </script>

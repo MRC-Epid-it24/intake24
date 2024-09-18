@@ -1,3 +1,4 @@
+import { isLocale } from 'validator';
 import { z } from 'zod';
 
 import type { Meal } from './meals';
@@ -21,6 +22,7 @@ export const schemeSettings = z.object({
   type: z.enum(schemeTypes),
   flow: z.enum(recallFlows),
   recallDate: z.coerce.number().int().nullable(),
+  languages: z.string().refine(val => isLocale(val)).array(),
 });
 export type SchemeSettings = z.infer<typeof schemeSettings>;
 
@@ -28,6 +30,7 @@ export const defaultSchemeSettings: SchemeSettings = {
   type: 'default',
   flow: '2-pass',
   recallDate: null,
+  languages: [],
 };
 
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;

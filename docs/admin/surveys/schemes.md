@@ -30,9 +30,12 @@ Edit tab allows to modify selected survey scheme.
     - second pass - Flow goes through each meal to collect portion size estimation
 
 - `Recall date offset` - Recall date offset in whole days
+
   - `empty` - survey won't record recall date
   - `integer` - survey records recall date with specified offset from start of survey (e.g. `-1` for yesterday)
   - Respondent can override / nominate their own recall date if [`recall date prompt`](/admin/surveys/prompt-types#recall-date-prompt) is included in the scheme
+
+- `Languages` - Languages participants can select to complete the survey in
 
 ### Default meals
 

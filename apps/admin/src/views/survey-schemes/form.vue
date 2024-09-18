@@ -85,6 +85,21 @@
                 outlined
               />
             </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.settings.languages"
+                :error-messages="form.errors.get('settings.language')"
+                hide-details="auto"
+                item-text="englishName"
+                item-value="code"
+                :items="languages"
+                :label="$t('survey-schemes.settings.languages')"
+                multiple
+                name="settings.languages"
+                outlined
+                @change="form.errors.clear('settings.languages')"
+              />
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -98,7 +113,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
@@ -108,6 +123,7 @@ import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
 import { defaultMeals, defaultSchemeSettings } from '@intake24/common/surveys';
+import { useApp } from '@intake24/ui/stores';
 
 export type SurveySchemeForm = {
   id: string | null;
@@ -133,6 +149,7 @@ export default defineComponent({
 
   setup(props) {
     const { recallFlows, schemeTypes, visibilities } = useSelects();
+    const languages = computed(() => useApp().langs);
 
     const { canHandleEntry, entry, entryLoaded, refs, refsLoaded } = useEntry<
       SurveySchemeEntry,
@@ -160,6 +177,7 @@ export default defineComponent({
       refsLoaded,
       clearError,
       form,
+      languages,
       recallFlows,
       routeLeave,
       schemeTypes,

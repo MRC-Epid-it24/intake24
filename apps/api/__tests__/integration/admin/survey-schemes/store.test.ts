@@ -38,6 +38,7 @@ export default () => {
           'settings.type',
           'settings.flow',
           'settings.recallDate',
+          'settings.languages',
           'visibility',
           'meals',
           'prompts',
@@ -46,7 +47,12 @@ export default () => {
         {
           input: {
             name: [],
-            settings: { type: false, flow: '10-pass', recallDate: new Date().toISOString() },
+            settings: {
+              type: false,
+              flow: '10-pass',
+              recallDate: new Date().toISOString(),
+              languages: 'not-a-locale',
+            },
             visibility: [],
             meals: 5,
             prompts: [],

@@ -28,7 +28,8 @@
       "1-pass": "1-pass",
       "2-pass": "2-pass"
     },
-    "recallDate": "Recall date offset"
+    "recallDate": "Recall date offset",
+    "languages": "Allowed languages"
   },
 
   "meals": {

@@ -101,13 +101,13 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-select
-                  v-model="language"
                   hide-details="auto"
                   item-text="englishName"
                   item-value="code"
                   :items="languages"
                   :label="$t('user.languages._')"
                   outlined
+                  :value="language"
                   @change="updateLanguage"
                 >
                   <template #item="{ item }">
@@ -134,27 +134,36 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import { UserMfa, UserPassword } from '@intake24/admin/components/user';
-import { useUser } from '@intake24/admin/stores';
-import { AppInfo, setsLanguage } from '@intake24/ui';
+import { useApp, useUser } from '@intake24/admin/stores';
+import { AppInfo } from '@intake24/ui';
 
 export default defineComponent({
   name: 'UserProfile',
 
   components: { AppInfo, UserMfa, UserPassword },
 
-  mixins: [setsLanguage],
+  setup() {
+    const app = useApp();
+
+    const language = computed(() => app.lang);
+    const languages = computed(() => app.availableLanguages);
+
+    const updateLanguage = async (languageId: string) => {
+      useApp().setLanguage(languageId);
+    };
+
+    return {
+      language,
+      languages,
+      updateLanguage,
+    };
+  },
 
   computed: {
     ...mapState(useUser, ['profile', 'permissions', 'roles']),
-  },
-
-  methods: {
-    async updateLanguage(languageId: string) {
-      await this.setLanguage('admin', languageId);
-    },
   },
 });
 </script>
