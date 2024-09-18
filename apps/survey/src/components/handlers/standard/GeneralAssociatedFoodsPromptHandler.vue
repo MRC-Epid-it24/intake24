@@ -63,7 +63,7 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
-    const getInitialState = (): PromptStates['generalised-associated-foods-prompt'] =>
+    const getInitialState = (): PromptStates['general-associated-foods-prompt'] =>
       initialPromptState(props.prompt.multiple);
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);

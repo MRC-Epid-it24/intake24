@@ -32,6 +32,7 @@ export type CustomComponentType = (typeof customComponentTypes)[number];
 
 export const standardComponentTypes = [
   'addon-foods-prompt',
+  'aggregate-choice-prompt',
   'associated-foods-prompt',
   'general-associated-foods-prompt',
   'edit-meal-prompt',

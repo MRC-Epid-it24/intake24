@@ -152,7 +152,7 @@ export type PromptStates = {
     activePrompt: number;
     promptStates: AssociatedFoodPrompt[];
   };
-  'generalised-associated-foods-prompt': {
+  'general-associated-foods-prompt': {
     mainFoodConfirmed?: boolean;
     additionalFoodConfirmed?: boolean;
     foods: AssociatedFoodPromptItem[];
