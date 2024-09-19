@@ -41,16 +41,6 @@ export const permission = initContract().router({
     summary: 'Get permission',
     description: 'Get permission by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/permissions/:permissionId/edit',
-    pathParams: z.object({ permissionId }),
-    responses: {
-      200: permissionAttributes,
-    },
-    summary: 'Get permission for edit',
-    description: 'Get permission by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/permissions/:permissionId',

@@ -71,16 +71,6 @@ export function role() {
         return { status: 200, body: role };
       },
     },
-    edit: {
-      middleware: [permission('acl', 'roles', 'roles|edit')],
-      handler: async ({ params: { roleId } }) => {
-        const role = await Role.scope('permissions').findByPk(roleId);
-        if (!role)
-          throw new NotFoundError();
-
-        return { status: 200, body: role };
-      },
-    },
     update: {
       middleware: [permission('acl', 'roles', 'roles|edit')],
       handler: async ({ body, params: { roleId }, req }) => {

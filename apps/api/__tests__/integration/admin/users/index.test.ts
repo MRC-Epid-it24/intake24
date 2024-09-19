@@ -1,6 +1,5 @@
 import browse from './browse.test';
 import destroy from './destroy.test';
-import edit from './edit.test';
 import permissions from './permissions.test';
 import read from './read.test';
 import refs from './refs.test';
@@ -13,7 +12,6 @@ export default () => {
   describe('post /api/admin/users', store);
   describe('get /api/admin/users/refs', refs);
   describe('get /api/admin/users/:userId', read);
-  describe('get /api/admin/users/:userId/edit', edit);
   describe('put /api/admin/users/:userId', update);
   describe('delete /api/admin/users/:userId', destroy);
   describe('get /api/admin/users/:userId/permissions', permissions);

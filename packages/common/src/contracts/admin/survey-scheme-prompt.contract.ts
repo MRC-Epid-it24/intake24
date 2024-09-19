@@ -52,16 +52,6 @@ export const surveySchemePrompt = initContract().router({
     summary: 'Get survey scheme prompt',
     description: 'Get survey scheme prompt by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/survey-scheme-prompts/:surveySchemePromptId/edit',
-    pathParams: z.object({ surveySchemePromptId }),
-    responses: {
-      200: surveySchemePromptAttributes,
-    },
-    summary: 'Get survey scheme prompt for edit',
-    description: 'Get survey scheme prompt by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/survey-scheme-prompts/:surveySchemePromptId',

@@ -43,16 +43,6 @@ export const language = initContract().router({
     summary: 'Get language',
     description: 'Get language by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/languages/:languageId/edit',
-    pathParams: z.object({ languageId }),
-    responses: {
-      200: languageEntry,
-    },
-    summary: 'Get language for edit',
-    description: 'Get language by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/languages/:languageId',

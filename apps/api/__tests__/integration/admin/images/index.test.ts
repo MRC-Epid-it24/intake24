@@ -14,7 +14,6 @@ export default () => {
   describe('get /api/admin/images/as-served-sets', asServed.browse);
   describe('post /api/admin/images/as-served-sets', asServed.store);
   describe('get /api/admin/images/as-served-sets/:asServedSetId', asServed.read);
-  describe('get /api/admin/images/as-served-sets/:asServedSetId/edit', asServed.edit);
   describe('put /api/admin/images/as-served-sets/:asServedSetId', asServed.update);
   describe('delete /api/admin/images/as-served-sets/:asServedSetId', asServed.destroy);
 
@@ -50,7 +49,6 @@ export default () => {
   describe('get /api/admin/images/drinkware-sets', drinkwareSets.browse);
   describe('post /api/admin/images/drinkware-sets', drinkwareSets.store);
   describe('get /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.read);
-  describe('get /api/admin/images/drinkware-sets/:drinkwareSetId/edit', drinkwareSets.edit);
   /* describe('PUT /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.update);
   describe('DELETE /api/admin/images/guide-images/:drinkwareSetId', drinkwareSets.destroy); */
 
@@ -58,7 +56,6 @@ export default () => {
   describe('get /api/admin/images/guide-images', guideImages.browse);
   describe('post /api/admin/images/guide-images', guideImages.store);
   describe('get /api/admin/images/guide-images/:guideImageId', guideImages.read);
-  describe('get /api/admin/images/guide-images/:guideImageId/edit', guideImages.edit);
   describe('put /api/admin/images/guide-images/:guideImageId', guideImages.update);
   describe('delete /api/admin/images/guide-images/:guideImageId', guideImages.destroy);
 
@@ -66,7 +63,6 @@ export default () => {
   describe('get /api/admin/images/image-maps', imageMaps.browse);
   describe('post /api/admin/images/image-maps', imageMaps.store);
   describe('get /api/admin/images/image-maps/:imageMapId', imageMaps.read);
-  describe('get /api/admin/images/image-maps/:imageMapId/edit', imageMaps.edit);
   describe('put /api/admin/images/image-maps/:imageMapId', imageMaps.update);
   describe('delete /api/admin/images/image-maps/:imageMapId', imageMaps.destroy);
 };

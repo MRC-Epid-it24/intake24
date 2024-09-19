@@ -155,21 +155,6 @@ export function locale() {
         return { status: 200, body: localeResponse(locale) };
       },
     },
-    edit: {
-      middleware: [permission('locales')],
-      handler: async ({ params: { localeId }, req }) => {
-        const locale = await req.scope.cradle.aclService.findAndCheckRecordAccess(SystemLocale, 'edit', {
-          where: { id: localeId },
-          include: [
-            { association: 'parent' },
-            { association: 'adminLanguage' },
-            { association: 'respondentLanguage' },
-          ],
-        });
-
-        return { status: 200, body: localeResponse(locale) };
-      },
-    },
     update: {
       middleware: [permission('locales')],
       handler: async ({ body, params: { localeId }, req }) => {

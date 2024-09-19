@@ -1,4 +1,4 @@
-import { onBeforeRouteLeave, useRoute } from 'vue-router/composables';
+import { onBeforeRouteLeave } from 'vue-router/composables';
 
 import resources from '@intake24/admin/router/resources';
 import { useEntry } from '@intake24/admin/stores';
@@ -7,12 +7,11 @@ import type { UseStoreEntryProps } from './use-entry';
 
 export function useEntryFetch(props: UseStoreEntryProps) {
   const { requestEntry } = useEntry();
-  const { meta: { action } = {} } = useRoute();
 
   const fetch = async (id?: string, module?: string) => {
     const api = module ? resources.find(({ name }) => name === module)?.api : undefined;
 
-    await requestEntry({ id: id ?? props.id, api, action });
+    await requestEntry({ id: id ?? props.id, api });
   };
 
   fetch();

@@ -112,16 +112,6 @@ export function feedbackScheme() {
         return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
       },
     },
-    edit: {
-      middleware: [permission('feedback-schemes')],
-      handler: async ({ params: { feedbackSchemeId }, req }) => {
-        const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
-          where: { id: feedbackSchemeId },
-        });
-
-        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
-      },
-    },
     patch: {
       middleware: [permission('feedback-schemes')],
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {

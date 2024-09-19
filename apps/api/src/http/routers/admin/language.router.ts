@@ -75,16 +75,6 @@ export function language() {
         return { status: 200, body: languageResponse(language) };
       },
     },
-    edit: {
-      middleware: [permission('languages')],
-      handler: async ({ params: { languageId }, req }) => {
-        const language = await req.scope.cradle.aclService.findAndCheckRecordAccess(Language, 'edit', {
-          where: { id: languageId },
-        });
-
-        return { status: 200, body: languageResponse(language) };
-      },
-    },
     update: {
       middleware: [permission('languages')],
       handler: async ({ body, params: { languageId }, req }) => {

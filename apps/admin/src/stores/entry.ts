@@ -32,12 +32,10 @@ export const useEntry = defineStore('entry', {
     async requestEntry({
       id,
       api = useResource().api,
-      action,
       query,
     }: {
       id: string;
       api?: string;
-      action?: string;
       query?: any;
     }) {
       this.clearEntry();
@@ -48,7 +46,7 @@ export const useEntry = defineStore('entry', {
         return;
       }
 
-      const apiUrl = [api, id, action === 'edit' ? action : null].filter(Boolean).join('/');
+      const apiUrl = [api, id].join('/');
 
       const { data } = await httpService.get(apiUrl, { params: query, withLoading: true });
       this.setEntry(data);

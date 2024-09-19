@@ -43,16 +43,6 @@ export const task = initContract().router({
     summary: 'Get task',
     description: 'Get task by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/tasks/:taskId/edit',
-    pathParams: z.object({ taskId }),
-    responses: {
-      200: taskResponse,
-    },
-    summary: 'Get task for edit',
-    description: 'Get task by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/tasks/:taskId',

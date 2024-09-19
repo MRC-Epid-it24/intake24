@@ -1,6 +1,5 @@
 import browse from './browse.test';
 import destroy from './destroy.test';
-import edit from './edit.test';
 import read from './read.test';
 // import recipeFoods from './recipe-foods/index.test';
 import refs from './refs.test';
@@ -16,7 +15,6 @@ export default () => {
   describe('post /api/admin/locales', store);
   describe('get /api/admin/locales/refs', refs);
   describe('get /api/admin/locales/:localeId', read);
-  describe('get /api/admin/locales/:localeId/edit', edit);
   describe('put /api/admin/locales/:localeId', update);
   describe('delete /api/admin/locales/:localeId', destroy);
 

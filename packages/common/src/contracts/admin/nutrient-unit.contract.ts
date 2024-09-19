@@ -38,16 +38,6 @@ export const nutrientUnit = initContract().router({
     summary: 'Get nutrient unit',
     description: 'Get nutrient unit by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/nutrient-units/:nutrientUnitId/edit',
-    pathParams: z.object({ nutrientUnitId }),
-    responses: {
-      200: nutrientUnitAttributes,
-    },
-    summary: 'Get nutrient unit for edit',
-    description: 'Get nutrient unit by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/nutrient-units/:nutrientUnitId',

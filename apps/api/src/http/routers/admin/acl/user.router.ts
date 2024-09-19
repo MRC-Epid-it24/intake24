@@ -98,18 +98,6 @@ export function user() {
         return { status: 200, body: userEntryResponse(user) };
       },
     },
-    edit: {
-      middleware: [permission('acl', 'users', 'users|edit')],
-      handler: async ({ params: { userId } }) => {
-        const user = await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
-          userId,
-        );
-        if (!user)
-          throw new NotFoundError();
-
-        return { status: 200, body: userEntryResponse(user) };
-      },
-    },
     update: {
       middleware: [permission('acl', 'users', 'users|edit')],
       handler: async ({ body, params: { userId }, req }) => {

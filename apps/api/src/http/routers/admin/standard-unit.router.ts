@@ -70,16 +70,6 @@ export function standardUnit() {
         return { status: 200, body: standardUnit };
       },
     },
-    edit: {
-      middleware: [permission('standard-units', 'standard-units|edit')],
-      handler: async ({ params: { standardUnitId } }) => {
-        const standardUnit = await StandardUnit.findByPk(standardUnitId);
-        if (!standardUnit)
-          throw new NotFoundError();
-
-        return { status: 200, body: standardUnit };
-      },
-    },
     update: {
       middleware: [permission('standard-units', 'standard-units|edit')],
       handler: async ({ body, params: { standardUnitId } }) => {

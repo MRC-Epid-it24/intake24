@@ -16,19 +16,6 @@ function asServedSetController({
 }: Pick<IoC, 'imagesBaseUrl' | 'asServedService' | 'portionSizeService'>) {
   const responseCollection = imageResponseCollection(imagesBaseUrl);
 
-  const entry = async (
-    req: Request<{ asServedSetId: string }>,
-    res: Response<AsServedSetEntry>,
-  ): Promise<void> => {
-    const { asServedSetId } = req.params;
-
-    const asServedSet = await portionSizeService.getAsServedSet(asServedSetId);
-    if (!asServedSet)
-      throw new NotFoundError();
-
-    res.json(responseCollection.asServedSetEntryResponse(asServedSet));
-  };
-
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<AsServedSetsResponse>,
@@ -63,12 +50,15 @@ function asServedSetController({
   const read = async (
     req: Request<{ asServedSetId: string }>,
     res: Response<AsServedSetEntry>,
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const { asServedSetId } = req.params;
 
-  const edit = async (
-    req: Request<{ asServedSetId: string }>,
-    res: Response<AsServedSetEntry>,
-  ): Promise<void> => entry(req, res);
+    const asServedSet = await portionSizeService.getAsServedSet(asServedSetId);
+    if (!asServedSet)
+      throw new NotFoundError();
+
+    res.json(responseCollection.asServedSetEntryResponse(asServedSet));
+  };
 
   const update = async (
     req: Request<{ asServedSetId: string }>,
@@ -101,7 +91,6 @@ function asServedSetController({
     browse,
     store,
     read,
-    edit,
     update,
     destroy,
     refs,

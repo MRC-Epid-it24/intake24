@@ -51,16 +51,6 @@ export const nutrientType = initContract().router({
     summary: 'Get nutrient type',
     description: 'Get nutrient type by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/nutrient-types/:nutrientTypeId/edit',
-    pathParams: z.object({ nutrientTypeId }),
-    responses: {
-      200: nutrientTypeResponse,
-    },
-    summary: 'Get nutrient type for edit',
-    description: 'Get nutrient type by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/nutrient-types/:nutrientTypeId',

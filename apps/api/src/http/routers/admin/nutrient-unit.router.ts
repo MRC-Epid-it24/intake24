@@ -55,15 +55,6 @@ export function nutrientUnit() {
         return { status: 200, body: nutrientUnit };
       },
     },
-    edit: {
-      middleware: [permission('nutrient-units', 'nutrient-units|edit')],
-      handler: async ({ params: { nutrientUnitId }, req }) => {
-        const nutrientUnit
-          = await req.scope.cradle.nutrientUnitService.getNutrientUnit(nutrientUnitId);
-
-        return { status: 200, body: nutrientUnit };
-      },
-    },
     update: {
       middleware: [permission('nutrient-units', 'nutrient-units|edit')],
       handler: async ({ body, params: { nutrientUnitId }, req }) => {

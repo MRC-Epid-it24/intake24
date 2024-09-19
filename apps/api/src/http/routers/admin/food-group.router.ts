@@ -55,16 +55,6 @@ export function foodGroup() {
         return { status: 200, body: foodGroup };
       },
     },
-    edit: {
-      middleware: [permission('food-groups', 'food-groups|edit')],
-      handler: async ({ params: { foodGroupId } }) => {
-        const foodGroup = await FoodGroup.findByPk(foodGroupId);
-        if (!foodGroup)
-          throw new NotFoundError();
-
-        return { status: 200, body: foodGroup };
-      },
-    },
     update: {
       middleware: [permission('food-groups', 'food-groups|edit')],
       handler: async ({ body, params: { foodGroupId }, req }) => {

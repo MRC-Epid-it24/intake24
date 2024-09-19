@@ -79,16 +79,6 @@ export function surveySchemePrompt() {
         return { status: 200, body: schemePrompt };
       },
     },
-    edit: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|edit')],
-      handler: async ({ params: { surveySchemePromptId } }) => {
-        const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
-        if (!schemePrompt)
-          throw new NotFoundError();
-
-        return { status: 200, body: schemePrompt };
-      },
-    },
     update: {
       middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|edit')],
       handler: async ({ body, params: { surveySchemePromptId }, req }) => {

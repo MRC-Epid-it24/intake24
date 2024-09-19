@@ -41,16 +41,6 @@ export const foodGroup = initContract().router({
     summary: 'Get food group',
     description: 'Get food group by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/food-groups/:foodGroupId/edit',
-    pathParams: z.object({ foodGroupId }),
-    responses: {
-      200: foodGroupAttributes,
-    },
-    summary: 'Get food group for edit',
-    description: 'Get food group by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/food-groups/:foodGroupId',

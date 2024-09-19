@@ -46,16 +46,6 @@ export const survey = initContract().router({
     summary: 'Get survey',
     description: 'Get survey by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/surveys/:surveyId/edit',
-    pathParams: z.object({ surveyId }),
-    responses: {
-      200: surveyEntry,
-    },
-    summary: 'Get survey for edit',
-    description: 'Get survey by id for edit',
-  },
   patch: {
     method: 'PATCH',
     path: '/admin/surveys/:surveyId',

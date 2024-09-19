@@ -51,16 +51,6 @@ export const user = initContract().router({
     summary: 'Get user',
     description: 'Get user by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/users/:userId/edit',
-    pathParams: z.object({ userId }),
-    responses: {
-      200: userAttributes,
-    },
-    summary: 'Get user for edit',
-    description: 'Get user by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/users/:userId',

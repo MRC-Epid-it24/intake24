@@ -41,12 +41,6 @@ export default () => {
     )
     .delete(permission('as-served-sets|delete'), wrapAsync(asServedSetController.destroy));
 
-  router.get(
-    '/:asServedSetId/edit',
-    permission('as-served-sets|edit'),
-    wrapAsync(asServedSetController.edit),
-  );
-
   router.use('/:asServedSetId/images', asServedImages());
 
   return router;

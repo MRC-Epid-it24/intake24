@@ -55,15 +55,6 @@ export const nutrientTable = initContract().router({
     summary: 'Get nutrient table',
     description: 'Get nutrient table by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/nutrient-tables/:nutrientTableId/edit',
-    responses: {
-      200: nutrientTableResponse,
-    },
-    summary: 'Get nutrient table for edit',
-    description: 'Get nutrient table by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/nutrient-tables/:nutrientTableId',

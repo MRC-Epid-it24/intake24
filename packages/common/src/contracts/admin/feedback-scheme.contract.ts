@@ -53,16 +53,6 @@ export const feedbackScheme = initContract().router({
     summary: 'Get feedback scheme',
     description: 'Get feedback scheme by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/feedback-schemes/:feedbackSchemeId/edit',
-    pathParams: z.object({ feedbackSchemeId }),
-    responses: {
-      200: feedbackSchemeEntry,
-    },
-    summary: 'Get feedback scheme for edit',
-    description: 'Get feedback scheme by id for edit',
-  },
   patch: {
     method: 'PATCH',
     path: '/admin/feedback-schemes/:feedbackSchemeId',

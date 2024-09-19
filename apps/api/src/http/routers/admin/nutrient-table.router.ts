@@ -65,14 +65,6 @@ export function nutrientTable() {
         return { status: 200, body: nutrientTable };
       },
     },
-    edit: {
-      middleware: [permission('nutrient-tables', 'nutrient-tables|edit')],
-      handler: async ({ params: { nutrientTableId }, req }) => {
-        const nutrientTable = await req.scope.cradle.nutrientTableService.getTable(nutrientTableId);
-
-        return { status: 200, body: nutrientTable };
-      },
-    },
     update: {
       middleware: [permission('nutrient-tables', 'nutrient-tables|edit')],
       handler: async ({ body, params: { nutrientTableId }, req }) => {

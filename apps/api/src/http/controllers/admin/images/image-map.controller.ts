@@ -16,19 +16,6 @@ function imageMapController({
 }: Pick<IoC, 'imagesBaseUrl' | 'imageMapService' | 'portionSizeService'>) {
   const responseCollection = imageResponseCollection(imagesBaseUrl);
 
-  const entry = async (
-    req: Request<{ imageMapId: string }>,
-    res: Response<ImageMapEntry>,
-  ): Promise<void> => {
-    const { imageMapId } = req.params;
-
-    const image = await portionSizeService.getImageMap(imageMapId);
-    if (!image)
-      throw new NotFoundError();
-
-    res.json(responseCollection.mapEntryResponse(image));
-  };
-
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<ImageMapsResponse>,
@@ -70,12 +57,15 @@ function imageMapController({
   const read = async (
     req: Request<{ imageMapId: string }>,
     res: Response<ImageMapEntry>,
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const { imageMapId } = req.params;
 
-  const edit = async (
-    req: Request<{ imageMapId: string }>,
-    res: Response<ImageMapEntry>,
-  ): Promise<void> => entry(req, res);
+    const image = await portionSizeService.getImageMap(imageMapId);
+    if (!image)
+      throw new NotFoundError();
+
+    res.json(responseCollection.mapEntryResponse(image));
+  };
 
   const update = async (
     req: Request<{ imageMapId: string }>,
@@ -126,7 +116,6 @@ function imageMapController({
     browse,
     store,
     read,
-    edit,
     update,
     updateImage,
     destroy,

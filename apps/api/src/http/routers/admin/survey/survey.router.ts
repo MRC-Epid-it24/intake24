@@ -145,21 +145,6 @@ export function survey() {
         return { status: 200, body: surveyResponse(survey) };
       },
     },
-    edit: {
-      middleware: [permission('surveys')],
-      handler: async ({ params: { surveyId }, req }) => {
-        const survey = await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'edit', {
-          where: { id: surveyId },
-          include: [
-            { association: 'locale' },
-            { association: 'feedbackScheme' },
-            { association: 'surveyScheme' },
-          ],
-        });
-
-        return { status: 200, body: surveyResponse(survey) };
-      },
-    },
     patch: {
       middleware: [permission('surveys')],
       handler: async ({ body, params: { surveyId }, req }) => {

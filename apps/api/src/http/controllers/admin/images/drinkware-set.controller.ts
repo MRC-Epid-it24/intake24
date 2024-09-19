@@ -3,7 +3,6 @@ import { HttpStatusCode } from 'axios';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
-import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import type {
   CreateDrinkwareSetInput,
   DrinkwareSetEntry,
@@ -21,19 +20,6 @@ export type UpdateDrinkwareSetInputWithFiles = UpdateDrinkwareSetInput & {
 function drinkwareSetController({
   drinkwareSetService,
 }: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService' | 'drinkwareSetService'>) {
-  const entry = async (
-    req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>,
-  ): Promise<void> => {
-    const { drinkwareSetId } = req.params;
-
-    const drinkwareSet = await drinkwareSetService.getDrinkwareSet(drinkwareSetId);
-    if (!drinkwareSet)
-      throw new NotFoundError();
-
-    res.json(drinkwareSet);
-  };
-
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<DrinkwareSetsResponse>,
@@ -56,13 +42,16 @@ function drinkwareSetController({
 
   const read = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetResponse>,
-  ): Promise<void> => entry(req, res);
-
-  const edit = async (
-    req: Request<{ drinkwareSetId: string }>,
     res: Response<DrinkwareSetEntry>,
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const { drinkwareSetId } = req.params;
+
+    const drinkwareSet = await drinkwareSetService.getDrinkwareSet(drinkwareSetId);
+    if (!drinkwareSet)
+      throw new NotFoundError();
+
+    res.json(drinkwareSet);
+  };
 
   const update = async (
     req: Request<{ drinkwareSetId: string }, any, UpdateDrinkwareSetInputWithFiles>,
@@ -101,7 +90,6 @@ function drinkwareSetController({
     browse,
     store,
     read,
-    edit,
     update,
     destroy,
     refs,

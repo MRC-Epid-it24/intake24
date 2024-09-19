@@ -32,11 +32,5 @@ export default () => {
     .put(permission('guide-images|edit'), validation.update, wrapAsync(guideImageController.update))
     .delete(permission('guide-images|delete'), wrapAsync(guideImageController.destroy));
 
-  router.get(
-    '/:guideImageId/edit',
-    permission('guide-images|edit'),
-    wrapAsync(guideImageController.edit),
-  );
-
   return router;
 };

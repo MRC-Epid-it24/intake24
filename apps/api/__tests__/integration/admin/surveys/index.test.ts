@@ -1,7 +1,6 @@
 import browse from './browse.test';
 // import put from './put.test';
 import destroy from './destroy.test';
-import edit from './edit.test';
 import patch from './patch.test';
 import read from './read.test';
 import respondentCustomFields from './respondent-custom-fields/index.test';
@@ -14,7 +13,6 @@ export default () => {
   describe('get /api/admin/surveys', browse);
   describe('post /api/admin/surveys', store);
   describe('get /api/admin/surveys/:surveyId', read);
-  describe('get /api/admin/surveys/:surveyId/edit', edit);
   describe('patch /api/admin/surveys/:surveyId', patch);
   // describe('PUT /api/admin/surveys/:surveyId', put);
   describe('delete /api/admin/surveys/:surveyId', destroy);

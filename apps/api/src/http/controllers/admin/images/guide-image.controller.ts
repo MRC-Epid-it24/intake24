@@ -16,19 +16,6 @@ function guideImageController({
 }: Pick<IoC, 'imagesBaseUrl' | 'guideImageService' | 'portionSizeService'>) {
   const responseCollection = imageResponseCollection(imagesBaseUrl);
 
-  const entry = async (
-    req: Request<{ guideImageId: string }>,
-    res: Response<GuideImageEntry>,
-  ): Promise<void> => {
-    const { guideImageId } = req.params;
-
-    const guideImage = await portionSizeService.getGuideImage(guideImageId);
-    if (!guideImage)
-      throw new NotFoundError();
-
-    res.json(responseCollection.guideEntryResponse(guideImage));
-  };
-
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<GuideImagesResponse>,
@@ -59,12 +46,15 @@ function guideImageController({
   const read = async (
     req: Request<{ guideImageId: string }>,
     res: Response<GuideImageEntry>,
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const { guideImageId } = req.params;
 
-  const edit = async (
-    req: Request<{ guideImageId: string }>,
-    res: Response<GuideImageEntry>,
-  ): Promise<void> => entry(req, res);
+    const guideImage = await portionSizeService.getGuideImage(guideImageId);
+    if (!guideImage)
+      throw new NotFoundError();
+
+    res.json(responseCollection.guideEntryResponse(guideImage));
+  };
 
   const update = async (
     req: Request<{ guideImageId: string }>,
@@ -100,7 +90,6 @@ function guideImageController({
     browse,
     store,
     read,
-    edit,
     update,
     destroy,
     refs,

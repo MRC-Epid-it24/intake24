@@ -65,16 +65,6 @@ export const locale = initContract().router({
     summary: 'Get locale by code',
     description: 'Get locale by code',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/locales/:localeId/edit',
-    pathParams: z.object({ localeId }),
-    responses: {
-      200: localeEntry,
-    },
-    summary: 'Get locale for edit',
-    description: 'Get locale by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/locales/:localeId',

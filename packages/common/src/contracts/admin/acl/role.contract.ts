@@ -51,16 +51,6 @@ export const role = initContract().router({
     summary: 'Get role',
     description: 'Get role by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/roles/:roleId/edit',
-    pathParams: z.object({ roleId }),
-    responses: {
-      200: roleAttributes,
-    },
-    summary: 'Get role for edit',
-    description: 'Get role by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/roles/:roleId',

@@ -58,18 +58,6 @@ export function task() {
         return { status: 200, body: { ...task.get(), bullJob } };
       },
     },
-    edit: {
-      middleware: [permission('tasks', 'tasks|edit')],
-      handler: async ({ params: { taskId }, req }) => {
-        const task = await Task.findByPk(taskId);
-        if (!task)
-          throw new NotFoundError();
-
-        const bullJob = await req.scope.cradle.scheduler.tasks.getRepeatableJobById(taskId);
-
-        return { status: 200, body: { ...task.get(), bullJob } };
-      },
-    },
     update: {
       middleware: [permission('tasks', 'tasks|edit')],
       handler: async ({ body, params: { taskId }, req }) => {

@@ -42,15 +42,6 @@ export const standardUnit = initContract().router({
     summary: 'Get standard unit',
     description: 'Get standard unit by id',
   },
-  edit: {
-    method: 'GET',
-    path: '/admin/standard-units/:standardUnitId/edit',
-    responses: {
-      200: standardUnitAttributes,
-    },
-    summary: 'Get standard unit for edit',
-    description: 'Get standard unit by id for edit',
-  },
   update: {
     method: 'PUT',
     path: '/admin/standard-units/:standardUnitId',

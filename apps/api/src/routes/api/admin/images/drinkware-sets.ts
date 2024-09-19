@@ -45,12 +45,6 @@ export default () => {
     )
     .delete(permission('drinkware-sets|delete'), wrapAsync(drinkwareSetController.destroy));
 
-  router.get(
-    '/:drinkwareSetId/edit',
-    permission('drinkware-sets|edit'),
-    wrapAsync(drinkwareSetController.edit),
-  );
-
   router.use('/:drinkwareSetId/scales', drinkScales());
 
   return router;

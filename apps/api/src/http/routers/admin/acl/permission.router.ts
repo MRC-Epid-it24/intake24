@@ -58,16 +58,6 @@ export function permission() {
         return { status: 200, body: permission };
       },
     },
-    edit: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|edit')],
-      handler: async ({ params: { permissionId } }) => {
-        const permission = await Permission.findByPk(permissionId);
-        if (!permission)
-          throw new NotFoundError();
-
-        return { status: 200, body: permission };
-      },
-    },
     update: {
       middleware: [permissionMiddleware('acl', 'permissions', 'permissions|edit')],
       handler: async ({ body, params: { permissionId } }) => {

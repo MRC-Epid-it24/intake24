@@ -31,12 +31,6 @@ export default () => {
     .put(permission('image-maps|edit'), validation.update, wrapAsync(imageMapController.update))
     .delete(permission('image-maps|delete'), wrapAsync(imageMapController.destroy));
 
-  router.get(
-    '/:imageMapId/edit',
-    permission('image-maps|edit'),
-    wrapAsync(imageMapController.edit),
-  );
-
   router.put(
     '/:imageMapId/base-image',
     permission('image-maps|edit'),

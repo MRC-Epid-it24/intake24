@@ -89,15 +89,6 @@ export function nutrientType() {
         return { status: 200, body: toNutrientTypeResponse(nutrientType) };
       },
     },
-    edit: {
-      middleware: [permission('nutrient-types', 'nutrient-types|edit')],
-      handler: async ({ params: { nutrientTypeId }, req }) => {
-        const nutrientType
-          = await req.scope.cradle.nutrientTypeService.getNutrientType(nutrientTypeId);
-
-        return { status: 200, body: toNutrientTypeResponse(nutrientType) };
-      },
-    },
     update: {
       middleware: [permission('nutrient-types', 'nutrient-types|edit')],
       handler: async ({ body, params: { nutrientTypeId }, req }) => {
