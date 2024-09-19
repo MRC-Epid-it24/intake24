@@ -22,7 +22,7 @@ Edit tab allows to modify selected language.
 
 - `Text direction` - Read / write direction of text. Valid options are `ltr` or `rlt`
 
-- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
+- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables#record-visibility)).
 
 ## Translations
 

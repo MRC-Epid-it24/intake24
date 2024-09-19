@@ -84,7 +84,7 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 **2. JWT secret is set**
 
-- API endpoint can be used to create new respondent accounts. See [API docs](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"} for more details.
+- API endpoint can be used to create new respondent accounts. See [API docs](/open-api#tag/survey/post/surveys/{slug}/create-user){target="blank"} for more details.
 
 ### Notifications
 
@@ -254,14 +254,14 @@ Tasks section allows to submit resource specific tasks into the job queue with a
 
 Jobs that can be submitted:
 
-- [Authentication URLs export](/admin/system/job-types.html#surveyauthurlsexport)
+- [Authentication URLs export](/admin/system/job-types#surveyauthurlsexport)
 
-- [Nutrient recalculation](/admin/system/job-types.html#surveynutrientsrecalculation)
+- [Nutrient recalculation](/admin/system/job-types#surveynutrientsrecalculation)
 
-- [Ratings export](/admin/system/job-types.html#surveyratingsexport)
+- [Ratings export](/admin/system/job-types#surveyratingsexport)
 
-- [Respondents import](/admin/system/job-types.html#surveyrespondentsimport)
+- [Respondents import](/admin/system/job-types#surveyrespondentsimport)
 
-- [Submission data export](/admin/system/job-types.html#surveydataexport)
+- [Submission data export](/admin/system/job-types#surveydataexport)
 
-- [Sessions export](/admin/system/job-types.html#surveysessionsexport)
+- [Sessions export](/admin/system/job-types#surveysessionsexport)

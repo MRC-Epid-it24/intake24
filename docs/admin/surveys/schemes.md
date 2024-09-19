@@ -16,7 +16,7 @@ Edit tab allows to modify selected survey scheme.
 
 - `Name` - `survey-scheme-wide` unique name
 
-- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
+- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables#record-visibility)).
 
 ### Settings
 

@@ -1,7 +1,7 @@
 # Portion size methods
 
 This page describes the portion size estimation methods used in Intake24 with respect to user interaction. See [the API
-documentation](/open-api.html#tag/portionsize){target="blank"} for the related API functions and data structure description.
+documentation](/open-api#tag/portionsize){target="blank"} for the related API functions and data structure description.
 
 ## Portion size estimation option selection
 
@@ -21,7 +21,7 @@ between 2 and 5.
 
 If there is only one portion size estimation option associated with a food, this screen is not shown.
 
-See also the [get food data](/open-api.html#tag/food){target="blank"} API function and the
+See also the [get food data](/open-api#tag/food){target="blank"} API function and the
 [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/ChoosePortionSizeMethodPrompt.java).
 
 ## As served
@@ -61,7 +61,7 @@ portion size is calculated as `(serving weight) - (leftovers weight)`.
 - `leftovers-image-set`: reference to an as served image sequence used to estimate the amount of food left by the
   respondent.
 
-See also [get as served data](/open-api.html#tag/portionsize/get/portion-sizes/as-served-sets/{id}){target="blank"} API function
+See also [get as served data](/open-api#tag/portionsize/get/portion-sizes/as-served-sets/{id}){target="blank"} API function
 and the [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/AsServedPrompt2.java)
 
 ## Guide image
@@ -94,7 +94,7 @@ identified as one of the more confusing ones and needs a redesign.
 
 `guide-image-id`: reference to a guide image definition
 
-See also [get guide image data](/open-api.html#tag/portionsize/get/portion-sizes/guide-images/{id}){target="blank"} API function
+See also [get guide image data](/open-api#tag/portionsize/get/portion-sizes/guide-images/{id}){target="blank"} API function
 and the [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/GuidePrompt.java).
 
 ## Drink scale
@@ -132,7 +132,7 @@ to the initial fill level reported in the previous step:
   system will proceed directly to “how much you had left”. This is useful when the initial fill level is
   standard, e.g. for takeaway cups.
 
-See also [get sliding scale data](/open-api.html#tag/portionsize/get/portion-sizes/drinkware-sets/{id}){target="blank"} API function
+See also [get sliding scale data](/open-api#tag/portionsize/get/portion-sizes/drinkware-sets/{id}){target="blank"} API function
 and the [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/DrinkScalePrompt.java).
 
 ## Standard portion

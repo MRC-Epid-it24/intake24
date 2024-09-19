@@ -8,4 +8,4 @@ User can submit specific jobs that are available based on assigned user's permis
 
 Jobs that can be submitted:
 
-- [Resource export](/admin/system/job-types.html#resourceexport)
+- [Resource export](/admin/system/job-types#resourceexport)

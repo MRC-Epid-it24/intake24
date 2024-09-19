@@ -52,7 +52,7 @@ Please check that relevant intake24 instance is available, configured and that u
 
 - create Web SDK application in Duo Security admin panel
 
-- configure intake24 to use [Duo Security as an authentication provider](/config/api/security.html#duo-provider-settings)
+- configure intake24 to use [Duo Security as an authentication provider](/config/api/security#duo-provider-settings)
 
 - user's `email` is passed to Duo Security as a primary identifier -> Duo user accounts need to hold the email as primary identifier or as an additional alias
   :::

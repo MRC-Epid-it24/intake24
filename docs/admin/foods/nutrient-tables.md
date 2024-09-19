@@ -8,6 +8,6 @@ Tasks section allows to submit resource specific tasks into the job queue with a
 
 Jobs that can be submitted:
 
-- [Import nutrient data](/admin/system/job-types.html#nutrienttabledataimport)
+- [Import nutrient data](/admin/system/job-types#nutrienttabledataimport)
 
-- [Import nutrient mapping](/admin/system/job-types.html#nutrienttablemappingimport)
+- [Import nutrient mapping](/admin/system/job-types#nutrienttablemappingimport)

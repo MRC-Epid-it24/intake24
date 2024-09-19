@@ -27,11 +27,11 @@ Survey can be enabled with respondent account generation using shared secret. To
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
 :::
 
-Once enabled, two options listed below can be used to create respondent accounts. Regardless of the selected option, [JWT token](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"} with payload must be created.
+Once enabled, two options listed below can be used to create respondent accounts. Regardless of the selected option, [JWT token](/open-api#tag/survey/post/surveys/{slug}/create-user){target="blank"} with payload must be created.
 
 #### A) API endpoint
 
-- use [create user API endpoint](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"}
+- use [create user API endpoint](/open-api#tag/survey/post/surveys/{slug}/create-user){target="blank"}
 - create JWT token with desired payload according the specification
 
 #### Token specifications
@@ -41,12 +41,12 @@ Once enabled, two options listed below can be used to create respondent accounts
 
 #### Standard JWT claims
 
-Use standard JWT claims to help identify JWT and limit its lifetime.
+Standard JWT claims to help identify JWT and limit its lifetime. Please see [RFC 7519 Chapter 4.1](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1) for more details.
 
 - `iat` - issued at timestamp (NumericDate in seconds)
 - `exp` - expiration timestamp (NumericDate in seconds)
 - `aud` - API resource server, e.g. `https://api.example.com`
-- `sub` - survey identifier -> `surveyId`
+- `sub` - survey identifier -> `survey code/slug`
 - `iss` - issuer of the token
 
 :::warning
@@ -59,22 +59,22 @@ Tokens without standard claims limit their identifiability and may pose increase
 - `password` (optional) - password for `username:password` login, can be omitted if only authentication URL is intended to be used
 - `name` (optional) - user's name for personalisation
 - `customFields` (optional) - user's custom fields
-- `redirectUrl` (optional) - redirect URL for user redirection after recall completion
 
 #### JWT payload
 
 ```json
 {
+  // Standard JWT claims
   "iat"?: number,
   "exp"?: number,
   "aud"?: string | string[],
   "sub"?: string,
   "iss"?: string,
+  // User creation claims
   "username": string,
   "password"?: string,
   "name"?: string,
   "customFields"?: [{"name": string, "value": string}],
-  "redirectUrl"?: string
 }
 ```
 
@@ -96,7 +96,7 @@ Intake24 can notify 3<sup>rd</sup> party system about survey progression using r
 
 ## Redirection to 3<sup>rd</sup> party system
 
-Intake24 can redirect respondent to 3<sup>rd</sup> party system upon survey recall completion. To enable this feature, survey scheme needs to set up with terminal `redirect prompt` including desired parameters to form the `redirect URL`. Please see [redirect prompt](/admin/surveys/prompt-types.html#redirect-prompt) for more details.
+Intake24 can redirect respondent to 3<sup>rd</sup> party system upon survey recall completion. To enable this feature, survey scheme needs to set up with terminal `redirect prompt` including desired parameters to form the `redirect URL`. Please see [redirect prompt](/admin/surveys/prompt-types#redirect-prompt) for more details.
 
 ## Missing integration?
 

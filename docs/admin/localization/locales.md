@@ -26,7 +26,7 @@ Edit tab allows to modify selected locale.
 
 - `Food index language backend` - Language backend for food index
 
-- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
+- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables#record-visibility)).
 
 ## Deletion
 
@@ -67,10 +67,26 @@ Tasks section allows to submit resource specific tasks into the job queue with a
 
 Jobs that can be submitted:
 
-- [Copy locale](/admin/system/job-types.html#localecopy)
+- [Copy locale](/admin/system/job-types#localecopy)
 
-- [Export foods](/admin/system/job-types.html#localefoods)
+- [Export foods](/admin/system/job-types#localefoods)
 
-- [Export foods nutrients mapping](/admin/system/job-types.html#localefoodnutrientmapping)
+- [Export foods nutrients mapping](/admin/system/job-types#localefoodnutrientmapping)
 
-- [Food ranking upload](/admin/system/job-types.html#localefoodrankingupload)
+- [Food ranking upload](/admin/system/job-types#localefoodrankingupload)
+
+### New locale setup
+
+1. Within the [`locales`](/admin/localization/locales) section, click on the `New locale` button.
+
+2. Complete all fields and ensure `Food index enabled` is toggled on. Click `save` to create the new locale.
+
+3. Go to the [`Tasks`](/admin/localization/locales#tasks) tab.
+
+4. From the drop-down list, select `Locale - Copy data` job.
+
+5. Under the `Job Parameters` section, click in the box `Source Locale ID`, then select the locale you want to clone e.g. United Kingdom (current) and confirm.
+
+6. Leave the `Subtasks` list as it is (all items ticked), unless you specifically want to exclude some items from the copy process.
+
+7. `Submit` and then `Save`.
