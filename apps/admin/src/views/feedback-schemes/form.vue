@@ -247,7 +247,7 @@ export default defineComponent({
       () =>
         ({
           ...entry.value,
-          ...form.getData(true),
+          ...form.getData(),
         }) as FeedbackSchemeEntry,
     );
 

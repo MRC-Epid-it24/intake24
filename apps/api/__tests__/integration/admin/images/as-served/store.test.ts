@@ -35,7 +35,6 @@ export default () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
         'id',
         'description',
-        'selectionImage',
       ]);
     });
 
@@ -45,12 +44,25 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('id', '../../asServedSet_001')
-        .field('description', [])
+        .field('description', []);
+
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
+      expect(body.errors).toContainAllKeys(['id', 'description']);
+    });
+
+    it('should return 400 for invalid input file', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .field('id', id)
+        .field('description', description)
         .field('selectionImage', 'notAFile');
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
-      expect(body.errors).toContainAllKeys(['id', 'description', 'selectionImage']);
+      expect(body.errors).toContainAllKeys(['selectionImage']);
     });
 
     it('should return 201 and new resource', async () => {

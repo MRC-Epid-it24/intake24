@@ -3,9 +3,8 @@ import path from 'node:path';
 import type { Expression, Kysely, SqlBool } from 'kysely';
 import { groupBy, mapValues } from 'lodash';
 
-import type { UpdateDrinkwareSetInputWithFiles } from '@intake24/api/http/controllers';
 import type { IoC } from '@intake24/api/ioc';
-import type { LocaleTranslation } from '@intake24/common/types';
+import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type {
   CreateDrinkwareSetInput,
   DrinkwareScaleEntry,
@@ -13,11 +12,17 @@ import type {
   DrinkwareScaleVolumeMethod,
   DrinkwareSetEntry,
   DrinkwareSetsResponse,
+  ImageMulterFile,
+  UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
 import type { FoodsDB, PaginateQuery, ProcessedImage } from '@intake24/db';
 import { ApplicationError, NotFoundError } from '@intake24/api/http/errors';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
 import { DrinkwareSet, executeWithPagination } from '@intake24/db';
+
+export type UpdateDrinkwareSetInputWithFiles = UpdateDrinkwareSetInput & {
+  baseImageFiles: Dictionary<ImageMulterFile>;
+};
 
 function drinkwareSetService({
   kyselyDb,
@@ -293,7 +298,7 @@ function drinkwareSetService({
     return {
       version: 1,
       label: parseLocaleTranslation(record.label),
-      choiceId: Number.parseInt(record.choiceId),
+      choiceId: record.choiceId,
       width: record.width,
       height: record.height,
       fullLevel: record.fullLevel,
@@ -328,7 +333,7 @@ function drinkwareSetService({
     return records.map(record => ({
       version: 1,
       label: parseLocaleTranslation(record.label),
-      choiceId: Number.parseInt(record.choiceId),
+      choiceId: record.choiceId,
       width: record.width,
       height: record.height,
       fullLevel: record.fullLevel,
@@ -409,7 +414,7 @@ function drinkwareSetService({
 
     return {
       version: 2,
-      choiceId: Number.parseInt(record.choiceId),
+      choiceId: record.choiceId,
       label: parseLocaleTranslation(record.label),
       outlineCoordinates: parseFloatArray(record.outlineCoordinates, 'outline_coordinates'),
       volumeSamples: parseFloatArray(record.volumeSamples, 'volume_samples'),
@@ -496,7 +501,7 @@ function drinkwareSetService({
   const processDrinkScaleImage = async (
     id: string,
     uploader: string,
-    fileOrPath: Express.Multer.File | string,
+    fileOrPath: ImageMulterFile | Express.Multer.File | string,
   ): Promise<ProcessedImage> => {
     const sourceImage = await sourceImageService.uploadSourceImage(
       {
@@ -547,7 +552,7 @@ function drinkwareSetService({
     drinkwareSetId: string,
     choiceId: string,
     uploaderId: string,
-    baseImageFile: Express.Multer.File | string,
+    baseImageFile: ImageMulterFile | Express.Multer.File | string,
     label: LocaleTranslation,
     outlineCoordinates: number[],
     volumeSamples: number[],
@@ -600,7 +605,7 @@ function drinkwareSetService({
     drinkwareSetId: string,
     choiceId: string,
     imageUploaderId: string,
-    baseImageFile?: Express.Multer.File,
+    baseImageFile?: ImageMulterFile,
     label?: LocaleTranslation,
     outlineCoordinates?: number[],
     volumeSamples?: number[],

@@ -1,11 +1,10 @@
 import slugify from 'slugify';
-import { isWhitelisted } from 'validator';
 import { z } from 'zod';
 
-import { identifierSafeChars } from '@intake24/common/rules';
 import { schemeOverrides, sessionSettings, surveySearchSettings, surveyStates } from '@intake24/common/surveys';
 
 import { notification } from '../../notifications';
+import { safeIdentifier } from '../generic';
 import { feedbackSchemeAttributes } from './feedback-schemes';
 import { systemLocaleAttributes } from './locales';
 import { userSecurableAttributes } from './securables';
@@ -14,7 +13,7 @@ import { owner } from './users';
 
 export const surveyAttributes = z.object({
   id: z.string(),
-  slug: z.string().min(1).max(128).refine(value => isWhitelisted(value, identifierSafeChars)).transform(value => slugify(value, { strict: true })),
+  slug: safeIdentifier.max(128).transform(value => slugify(value, { strict: true })),
   name: z.string().min(1).max(512),
   state: z.enum(surveyStates),
   startDate: z.union([z.string(), z.date()]).pipe(z.coerce.date()),

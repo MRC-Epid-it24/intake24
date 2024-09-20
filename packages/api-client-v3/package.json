@@ -12,5 +12,8 @@
     "axios": "^1.7.7",
     "p-limit": "^3.1.0",
     "winston": "^3.14.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4"
   }
 }

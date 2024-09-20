@@ -49,7 +49,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { ImageMapEntry } from '@intake24/common/types/http/admin';
+import type { ImageMapEntry, ImageMapEntryObject } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
@@ -57,6 +57,7 @@ type CreateImageMapForm = {
   id: string | null;
   description: string | null;
   baseImage: File | null;
+  objects: ImageMapEntryObject[];
 };
 
 export default defineComponent({
@@ -71,7 +72,12 @@ export default defineComponent({
       CreateImageMapForm,
       ImageMapEntry
     >(props, {
-      data: { id: null, description: null, baseImage: null },
+      data: {
+        id: null,
+        description: null,
+        baseImage: null,
+        objects: [],
+      },
       config: { multipart: true },
     });
 

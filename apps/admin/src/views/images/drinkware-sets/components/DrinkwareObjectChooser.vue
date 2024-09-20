@@ -36,8 +36,8 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 
 import type { ImageMap } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
+import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 
-import ImagePlaceholder from '../../../../components/util/ImagePlaceholder.vue';
 import { useImageMap } from '../use-image-map';
 
 export type ImageMapObject = {
@@ -133,7 +133,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../../../scss/variables';
+@import 'src/scss/variables';
 
 .guide-drawer {
   position: relative;

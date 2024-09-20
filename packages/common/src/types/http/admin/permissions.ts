@@ -1,11 +1,8 @@
-import { isWhitelisted } from 'validator';
 import { z } from 'zod';
-
-import { identifierSafeChars } from '@intake24/common/rules';
 
 export const permissionAttributes = z.object({
   id: z.string(),
-  name: z.string().min(1).max(128).refine(value => isWhitelisted(value, `${identifierSafeChars}|`)),
+  name: z.string().min(1).max(128).regex(/^[\w|-]*$/),
   displayName: z.string().min(1).max(128),
   description: z.string().nullish(),
   createdAt: z.date(),

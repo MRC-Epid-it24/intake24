@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/cookie": "^0.6.0",
     "@types/lodash": "^4.17.7",
-    "@types/mime-types": "^2.1.4"
+    "@types/mime-types": "^2.1.4",
+    "@types/node": "^22.5.4"
   }
 }

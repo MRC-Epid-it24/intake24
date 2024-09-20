@@ -1,41 +1,70 @@
 import { z } from 'zod';
 
-import type { ImageMapObjectAttributes, Pagination } from '@intake24/db';
+import { localeTranslation } from '../../common';
+import { safeIdentifier } from '../generic';
+import { sourceFileInput } from './source-images';
 
-import type { SourceFileInput } from './source-images';
-
-export type ImageMapEntryObject = Pick<
-  ImageMapObjectAttributes,
-  'id' | 'description' | 'outlineCoordinates' | 'label' | 'navigationIndex'
->;
-
-export type ImageMapInputObjects = ImageMapEntryObject[];
-
-export interface CreateImageMapInput {
-  id: string;
-  baseImage: SourceFileInput;
-  description: string;
-  objects: ImageMapEntryObject[];
-  uploader: string;
-}
-
-export type UpdateImageMapInput = {
-  description: string;
-  objects: ImageMapEntryObject[];
-};
-
-export const imageMapListEntry = z.object({
+export const imageMapObjectAttributes = z.object({
   id: z.string(),
+  imageMapId: z.string(),
   description: z.string(),
+  navigationIndex: z.coerce.number().int(),
+  outlineCoordinates: z.coerce.number().array(),
+  overlayImageId: z.string().nullable(),
+  label: localeTranslation,
+});
+export type ImageMapObjectAttributes = z.infer<typeof imageMapObjectAttributes>;
+
+export const imageMapEntryObject = imageMapObjectAttributes.pick({
+  id: true,
+  description: true,
+  outlineCoordinates: true,
+  label: true,
+  navigationIndex: true,
+});
+export type ImageMapEntryObject = z.infer<typeof imageMapEntryObject>;
+
+export const imageMapAttributes = z.object({
+  id: safeIdentifier.max(32),
+  description: z.string().min(1).max(512),
+  baseImageId: z.string(),
+});
+export type ImageMapAttributes = z.infer<typeof imageMapAttributes>;
+
+export const createImageMapRequest = imageMapAttributes.pick({
+  id: true,
+  description: true,
+}).extend({
+  objects: imageMapEntryObject.array().default([]),
+});
+export type CreateImageMapRequest = z.infer<typeof createImageMapRequest>;
+
+export const createImageMapInput = createImageMapRequest.extend({
+  baseImage: sourceFileInput,
+  uploader: z.string(),
+});
+export type CreateImageMapInput = z.infer<typeof createImageMapInput>;
+
+export const updateImageMapInput = createImageMapInput.pick({
+  description: true,
+}).extend({
+  objects: imageMapEntryObject.array(),
+});
+export type UpdateImageMapInput = z.infer<typeof updateImageMapInput>;
+
+export const imageMapListEntry = imageMapAttributes.pick({
+  id: true,
+  description: true,
+}).extend({
   imageUrl: z.string(),
 });
 export type ImageMapListEntry = z.infer<typeof imageMapListEntry>;
 
-export type ImageMapsResponse = Pagination<ImageMapListEntry>;
-
-export type ImageMapEntry = {
-  id: string;
-  description: string;
-  baseImageUrl: string;
-  objects: ImageMapEntryObject[];
-};
+export const imageMapEntry = imageMapObjectAttributes.pick({
+  id: true,
+  description: true,
+}).extend({
+  baseImageUrl: z.string(),
+  objects: imageMapEntryObject.array(),
+});
+export type ImageMapEntry = z.infer<typeof imageMapEntry>;

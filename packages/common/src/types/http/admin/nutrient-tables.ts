@@ -1,16 +1,12 @@
-import { isWhitelisted } from 'validator';
 import { z } from 'zod';
 
 import type { NutrientTableRecordAttributes, Pagination } from '@intake24/db';
-import { identifierSafeChars } from '@intake24/common/rules';
 
+import { safeIdentifier } from '../generic';
 import { nutrientTypeResponse } from './nutrient-types';
 
 export const nutrientTableAttributes = z.object({
-  id: z
-    .string()
-    .max(32)
-    .refine(value => isWhitelisted(value, identifierSafeChars)),
+  id: safeIdentifier.max(32),
   description: z.string().max(512),
 });
 

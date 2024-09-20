@@ -42,12 +42,18 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'imageMapId'], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description'], {
         input: {
           id: './guideImage_001',
-          imageMapId: 'nonExistingImageMapId',
+          imageMapId: input.imageMapId,
           description: { key: 'invalidDescription' },
         },
+      });
+    });
+
+    it('should return 400 for invalid input data (imageMapId)', async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['imageMapId'], {
+        input: { ...input, imageMapId: 'nonExistingImageMapId' },
       });
     });
 
@@ -55,8 +61,8 @@ export default () => {
       await suite.sharedTests.assertRecordInserted('post', url, output, { input });
     });
 
-    it('should return 400 for duplicate id', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id'], { input });
+    it('should return 409 for duplicate id', async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['id'], { input, code: 409 });
     });
   });
 };

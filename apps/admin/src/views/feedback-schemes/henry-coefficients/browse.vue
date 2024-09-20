@@ -37,7 +37,7 @@ export default defineComponent({
       editMethod: 'patch',
     });
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData(true) }));
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData() }));
 
     return { currentFeedbackScheme, entry, entryLoaded, form, refs, routeLeave, submit };
   },

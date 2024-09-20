@@ -187,7 +187,7 @@ import { mapValues } from 'lodash';
 import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
-import type { DrinkwareScaleV2Entry, DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
@@ -204,7 +204,7 @@ type EditDrinkwareSetForm = {
   id: string | null;
   description: string | null;
   imageMapId: string | null;
-  scales: string | null;
+  scales: UpdateDrinkwareScaleInput[];
   baseImage: Record<string, File>;
 };
 
@@ -231,7 +231,7 @@ export default defineComponent({
       submit: formSubmit,
     } = useEntryForm<EditDrinkwareSetForm, DrinkwareSetEntry>(props, {
       config: { multipart: true },
-      data: { id: null, imageMapId: null, description: null, scales: null, baseImage: {} },
+      data: { id: null, imageMapId: null, description: null, scales: [], baseImage: {} },
     });
 
     const { i18n } = useI18n();
@@ -308,7 +308,7 @@ export default defineComponent({
     const createSlidingScale = (objectId: string) => {
       entry.value.scales.push({
         version: 2,
-        choiceId: Number.parseInt(objectId),
+        choiceId: objectId,
         baseImageUrl: baseImagePreviewUrls.value[objectId] || '',
         label: {},
         volumeSamples: [],
@@ -331,28 +331,22 @@ export default defineComponent({
     };
 
     const submit = () => {
-      const scaleFields = Object.fromEntries(
-        entry.value.scales
-          .filter(s => s.version === 2)
-          .map((s) => {
-            const v2 = s as DrinkwareScaleV2Entry;
+      const scaleFields = entry.value.scales.filter(s => s.version === 2).map((s) => {
+        const v2 = s as DrinkwareScaleV2Entry;
 
-            return [
-              v2.choiceId,
-              {
-                label: v2.label,
-                outlineCoordinates: v2.outlineCoordinates,
-                volumeSamples: v2.volumeSamples,
-                volumeMethod: v2.volumeMethod,
-              },
-            ];
-          }),
-      );
+        return {
+          choiceId: v2.choiceId,
+          label: v2.label,
+          outlineCoordinates: v2.outlineCoordinates,
+          volumeSamples: v2.volumeSamples,
+          volumeMethod: v2.volumeMethod,
+        };
+      });
 
       for (const [objectId, baseImageFile] of Object.entries(baseImageFiles.value))
-        form.data.baseImage[objectId] = baseImageFile;
+        form.data.baseImage[`choiceId-${objectId}`] = baseImageFile;
 
-      form.data.scales = JSON.stringify(scaleFields);
+      form.data.scales = scaleFields;
 
       formSubmit();
     };

@@ -10,13 +10,8 @@ import type {
   AdminGlobalFoodsController,
   AdminLocalCategoriesController,
   AdminLocalFoodsController,
-  AsServedImageController,
-  AsServedSetController,
-  DrinkwareSetController,
-  GuideImageController,
-  ImageMapController,
+  DrinkScaleController,
 } from '@intake24/api/http/controllers';
-import type { DrinkScaleController } from '@intake24/api/http/controllers/admin/images/drink-scale.controller';
 import type { Jobs } from '@intake24/api/jobs';
 import type {
   ACLCache,
@@ -121,12 +116,7 @@ export interface IoC extends Jobs {
   adminLocalCategoriesController: AdminLocalCategoriesController;
 
   // Images
-  asServedSetController: AsServedSetController;
-  asServedImageController: AsServedImageController;
-  drinkwareSetController: DrinkwareSetController;
   drinkScaleController: DrinkScaleController;
-  guideImageController: GuideImageController;
-  imageMapController: ImageMapController;
 
   // System services
   db: DatabasesInterface;

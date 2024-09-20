@@ -1,36 +1,62 @@
 import { z } from 'zod';
 
-import type { Pagination } from '@intake24/db';
+import { localeTranslation } from '../../common';
+import { safeIdentifier } from '../generic';
+import { imageMapEntry, imageMapEntryObject } from './image-maps';
 
-import type { ImageMapEntry, ImageMapEntryObject } from './image-maps';
-
-export interface GuideImageEntryObject extends ImageMapEntryObject {
-  weight: number;
-}
-
-export type GuideImageInputObjects = Pick<GuideImageEntryObject, 'id' | 'weight' | 'label'>[];
-
-export type CreateGuideImageInput = {
-  id: string;
-  description: string;
-  imageMapId: string;
-};
-
-export type UpdateGuideImageInput = {
-  description: string;
-  objects: GuideImageInputObjects;
-};
-
-export const guideImageListEntry = z.object({
+export const guideImageObjectAttributes = z.object({
   id: z.string(),
-  description: z.string(),
+  guideImageId: z.string(),
+  weight: z.coerce.number(),
+  imageMapObjectId: z.string(),
+  label: localeTranslation,
+});
+export type GuideImageObjectAttributes = z.infer<typeof guideImageObjectAttributes>;
+
+export const guideImageAttributes = z.object({
+  id: safeIdentifier.max(32),
+  description: z.string().min(1).max(128),
+  imageMapId: z.string(),
+  selectionImageId: z.string(),
+});
+export type GuideImageAttributes = z.infer<typeof guideImageAttributes>;
+
+export const guideImageEntryObject = imageMapEntryObject.extend({
+  weight: z.coerce.number(),
+});
+export type GuideImageEntryObject = z.infer<typeof guideImageEntryObject>;
+
+export const guideImageInputObject = guideImageEntryObject.pick({
+  id: true,
+  weight: true,
+  label: true,
+});
+export type GuideImageInputObject = z.infer<typeof guideImageInputObject>;
+
+export const createGuideImageInput = guideImageAttributes.pick({
+  id: true,
+  description: true,
+  imageMapId: true,
+});
+export type CreateGuideImageInput = z.infer<typeof createGuideImageInput>;
+
+export const updateGuideImageInput = createGuideImageInput.pick({
+  description: true,
+}).extend({
+  objects: guideImageInputObject.array(),
+});
+export type UpdateGuideImageInput = z.infer<typeof updateGuideImageInput>;
+
+export const guideImageListEntry = guideImageAttributes.pick({
+  id: true,
+  description: true,
+}).extend({
   imageUrl: z.string(),
 });
 export type GuideImageListEntry = z.infer<typeof guideImageListEntry>;
 
-export type GuideImagesResponse = Pagination<GuideImageListEntry>;
-
-export interface GuideImageEntry extends ImageMapEntry {
-  imageMapId: string;
-  objects: GuideImageEntryObject[];
-}
+export const guideImageEntry = imageMapEntry.extend({
+  imageMapId: z.string(),
+  objects: guideImageEntryObject.array(),
+});
+export type GuideImageEntry = z.infer<typeof guideImageEntry>;

@@ -14,11 +14,6 @@ export default (container: AwilixContainer): void => {
     adminLocalCategoriesController: asFunction(controllers.admin.categories.localCategories),
 
     // Images
-    asServedSetController: asFunction(controllers.admin.images.asServedSet),
-    asServedImageController: asFunction(controllers.admin.images.asServedImage),
-    drinkwareSetController: asFunction(controllers.admin.images.drinkwareSet),
     drinkScaleController: asFunction(controllers.admin.images.drinkScale),
-    guideImageController: asFunction(controllers.admin.images.guide),
-    imageMapController: asFunction(controllers.admin.images.map),
   });
 };

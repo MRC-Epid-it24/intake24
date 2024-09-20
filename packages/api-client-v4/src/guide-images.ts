@@ -1,5 +1,5 @@
 import type {
-  GuideImageInputObjects,
+  GuideImageInputObject,
 } from '@intake24/common/types/http/admin';
 import { GuideImage } from '@intake24/db';
 
@@ -29,7 +29,7 @@ export class GuideImageApiV4 {
   public async update(
     id: string,
     description: string,
-    objects: GuideImageInputObjects,
+    objects: GuideImageInputObject[],
   ): Promise<GuideImage> {
     return this.baseClient.put<GuideImage>(`${GuideImageApiV4.apiPath}/${id}`, {
       id,

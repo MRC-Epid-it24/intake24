@@ -1,6 +1,5 @@
 import axios, { HttpStatusCode } from 'axios';
 import pick from 'lodash/pick';
-import { serialize } from 'object-to-formdata';
 
 import type { Dictionary } from '@intake24/common/types';
 import type { HttpRequestConfig } from '@intake24/ui/types/http';
@@ -80,22 +79,18 @@ export default <T extends object = Dictionary>(
       this.data = copy(this.initData);
     },
 
-    getData(object = false): T | FormData {
-      if (object)
-        return this.data;
-
-      return this.config.multipart ? serialize<T>(this.data) : this.data;
+    getData(): T {
+      return this.data;
     },
 
     async submit<R>(config: HttpRequestConfig): Promise<R> {
-      const { transform } = this.config;
-      const output
-        = transform && !this.config.multipart ? transform(this.getData() as T) : this.getData();
+      const { transform, multipart } = this.config;
 
       try {
         const { data } = await httpService.request<R>({
-          data: output,
+          data: transform ? transform(this.getData() as T) : this.getData(),
           withLoading: true,
+          headers: multipart ? { 'Content-Type': 'multipart/form-data' } : undefined,
           ...config,
         });
 

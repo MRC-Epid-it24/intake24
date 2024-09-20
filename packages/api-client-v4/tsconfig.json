@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@intake24/common/*": ["../common/src/*"],
+      "@intake24/common-backend/*": ["../common-backend/src/*"],
+      "@intake24/*": ["../*/src"]
+    },
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "__tests__/**/*.ts"],
+  "exclude": ["node_modules"]
+}

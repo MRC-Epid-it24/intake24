@@ -18,7 +18,7 @@ import type {
   CreateGlobalFoodRequest,
   CreateLocalCategoryRequest,
   CreateLocalFoodRequest,
-  GuideImageInputObjects,
+  GuideImageInputObject,
   ImageMapEntryObject,
   LocaleRequest,
   NutrientTableRecordRequest,
@@ -41,7 +41,7 @@ function fromPackageImageMapObjects(
 
 function fromPackageGuideImageObjects(
   objects: Record<number, number>,
-): GuideImageInputObjects {
+): GuideImageInputObject[] {
   return Object.entries(objects).map(([objId, weight]) => ({
     id: objId,
     label: { en: 'No description ' },

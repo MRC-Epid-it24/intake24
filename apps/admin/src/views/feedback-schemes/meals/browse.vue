@@ -152,7 +152,7 @@ export default defineComponent({
         Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required').toString(),
     ]);
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData(true) }));
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData() }));
 
     const updateColorList = () => {
       if (colorMax.value < form.meals.chart.colors.length) {

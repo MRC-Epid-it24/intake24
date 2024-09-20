@@ -1,7 +1,8 @@
-import { z } from 'zod';
+import { z } from '../../util';
 
 export const bigIntString = z.bigint().or(z.number().or(z.string()).pipe(z.coerce.number().int())).pipe(z.coerce.string());
 export const uuid = z.string().uuid();
+export const safeIdentifier = z.string().min(1).regex(/^[\w-]*$/);
 
 const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
 type Literal = z.infer<typeof literalSchema>;
@@ -50,3 +51,4 @@ export const multerFile = z.object({
   filename: z.string(),
   path: z.string(),
 });
+export type MulterFile = z.infer<typeof multerFile>;

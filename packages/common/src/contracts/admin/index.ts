@@ -3,6 +3,7 @@ import { authentication } from './authentication.contract';
 import { feedbackScheme } from './feedback-scheme.contract';
 import { foodDb } from './food-db.contract';
 import { foodGroup } from './food-group.contract';
+import images from './images';
 import { job } from './job.contract';
 import { language } from './language.contract';
 import { languageTranslation } from './language-translation.contract';
@@ -28,6 +29,7 @@ export default {
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   foodDb,
   foodGroup,
+  images,
   job,
   language,
   languageTranslation,

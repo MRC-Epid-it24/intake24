@@ -51,7 +51,7 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
     const commonKeys = entryKeys.filter(key => formKeys.includes(key));
 
     const original = pick(originalEntry.value, commonKeys);
-    const updated = pick(form.getData(true), commonKeys);
+    const updated = pick(form.getData(), commonKeys);
 
     return !deepEqual(original, updated);
   });
@@ -102,7 +102,7 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
     // Creating new record
     // TODO: might be better to load full blank templates directly in store
     if (deepEqual(val, { id: null })) {
-      originalEntry.value = copy(form.getData(true));
+      originalEntry.value = copy(form.getData());
       return;
     }
 

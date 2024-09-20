@@ -173,9 +173,9 @@ import chunk from 'lodash/chunk';
 import Vue, { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue';
 
 import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 
-import ImagePlaceholder from '../../../../components/util/ImagePlaceholder.vue';
 import { closestSegmentIndex, closestVertexIndex } from '../../math-helpers';
 
 export default defineComponent({
@@ -368,7 +368,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../../../scss/variables';
+@import 'src/scss/variables';
 
 .wrap-actions {
   flex-wrap: wrap;

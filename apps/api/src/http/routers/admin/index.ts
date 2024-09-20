@@ -3,6 +3,7 @@ import { authentication } from './authentication.router';
 import { feedbackScheme } from './feedback-scheme.router';
 import { foodDb } from './food-db.router';
 import { foodGroup } from './food-group.router';
+import images from './images';
 import { job } from './job.router';
 import { language } from './language.router';
 import { languageTranslation } from './language-translation.router';
@@ -27,6 +28,7 @@ export default {
   feedbackScheme,
   foodDb,
   foodGroup,
+  images,
   job,
   language,
   languageTranslation,

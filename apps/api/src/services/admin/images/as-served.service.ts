@@ -16,10 +16,7 @@ function asServedService({
     const { id, weight } = input;
 
     const sourceImage = await sourceImageService.uploadSourceImage(input, 'as_served');
-    const [image, thumbnailImage] = await processedImageService.createAsServedImages(
-      id,
-      sourceImage,
-    );
+    const [image, thumbnailImage] = await processedImageService.createAsServedImages(id, sourceImage);
 
     return AsServedImage.create({
       asServedSetId: id,

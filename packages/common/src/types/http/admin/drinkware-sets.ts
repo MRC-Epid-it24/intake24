@@ -1,67 +1,115 @@
 import { z } from 'zod';
 
 import type { Pagination } from '@intake24/db';
-import { type Dictionary, type LocaleTranslation, localeTranslation } from '@intake24/common/types';
+import { localeTranslation } from '@intake24/common/types';
 
-export type CreateDrinkwareSetInput = {
-  id: string;
-  description: string;
-  imageMapId: string;
-};
+import { safeIdentifier } from '../generic';
 
-export type UpdateDrinkwareScaleInput = {
-  label?: LocaleTranslation;
-  outlineCoordinates?: number[];
-  volumeSamples?: number[];
-  volumeMethod?: DrinkwareScaleVolumeMethod;
-};
+export const drinkwareScaleVolumeMethod = ['lookUpTable', 'cylindrical'] as const;
+export type DrinkwareScaleVolumeMethod = typeof drinkwareScaleVolumeMethod[number];
 
-export type UpdateDrinkwareSetInput = {
-  description: string;
-  imageMapId: string;
-  scales: Dictionary<UpdateDrinkwareScaleInput>;
-};
+export const drinkwareSetAttributes = z.object({
+  id: safeIdentifier.max(32),
+  description: z.string().min(1).max(128),
+  imageMapId: z.string(),
+});
+export type DrinkwareSetAttributes = z.infer<typeof drinkwareSetAttributes>;
 
-export const drinkwareSetListEntry = z.object({
-  id: z.string(),
-  description: z.string(),
+export const createDrinkwareSetInput = drinkwareSetAttributes.pick({
+  id: true,
+  description: true,
+  imageMapId: true,
+});
+export type CreateDrinkwareSetInput = z.infer<typeof createDrinkwareSetInput>;
+
+export const drinkwareSetListEntry = drinkwareSetAttributes.pick({
+  id: true,
+  description: true,
+}).extend({
   imageUrl: z.string(),
 });
 export type DrinkwareSetListEntry = z.infer<typeof drinkwareSetListEntry>;
 
-export const drinkwareScaleEntry = z.object({
-  baseImageUrl: z.string(),
-  emptyLevel: z.number(),
-  fullLevel: z.number(),
-  height: z.number(),
-  overlayImageUrl: z.string(),
-  width: z.number(),
-  version: z.literal(1),
-  choiceId: z.number(),
+export const drinkwareScaleAttributes = z.object({
+  id: z.string(),
+  drinkwareSetId: z.string(),
+  width: z.coerce.number(),
+  height: z.coerce.number(),
+  emptyLevel: z.coerce.number(),
+  fullLevel: z.coerce.number(),
+  choiceId: z.string(),
+  baseImageUrl: z.string().max(512),
+  overlayImageUrl: z.string().max(512),
   label: localeTranslation,
+});
+export type DrinkwareScaleAttributes = z.infer<typeof drinkwareScaleAttributes>;
+
+export const drinkwareScaleEntry = drinkwareScaleAttributes.pick({
+  choiceId: true,
+  width: true,
+  height: true,
+  emptyLevel: true,
+  fullLevel: true,
+  baseImageUrl: true,
+  overlayImageUrl: true,
+  label: true,
+}).extend({
+  version: z.literal(1),
   volumeSamples: z.array(z.number()),
 });
-
 export type DrinkwareScaleEntry = z.infer<typeof drinkwareScaleEntry>;
 
-export const drinkwareScaleV2Entry = z.object({
-  version: z.literal(2),
-  choiceId: z.number(),
-  label: localeTranslation,
-  outlineCoordinates: z.array(z.number()),
-  volumeSamples: z.array(z.number()),
-  volumeSamplesNormalised: z.array(z.number()),
-  volumeMethod: z.enum(['lookUpTable', 'cylindrical']),
-  baseImageUrl: z.string(),
-});
-
-export type DrinkwareScaleV2Entry = z.infer<typeof drinkwareScaleV2Entry>;
-export type DrinkwareScaleVolumeMethod = z.infer<typeof drinkwareScaleV2Entry.shape.volumeMethod>;
-
-export const drinkwareSetEntry = z.object({
+export const drinkwareScaleV2Attributes = z.object({
   id: z.string(),
-  description: z.string(),
-  imageMapId: z.string(),
+  drinkwareSetId: z.string(),
+  choiceId: z.string(),
+  baseImageUrl: z.string().max(512),
+  label: localeTranslation,
+  outlineCoordinates: z.coerce.number().array(),
+  volumeSamples: z.coerce.number().array(),
+  volumeSamplesNormalised: z.coerce.number().array(),
+  volumeMethod: z.enum(drinkwareScaleVolumeMethod),
+});
+export type DrinkwareScaleV2Attributes = z.infer<typeof drinkwareScaleV2Attributes>;
+
+export const drinkwareScaleV2Entry = drinkwareScaleV2Attributes.pick({
+  choiceId: true,
+  baseImageUrl: true,
+  label: true,
+  outlineCoordinates: true,
+  volumeSamples: true,
+  volumeSamplesNormalised: true,
+  volumeMethod: true,
+}).extend({
+  version: z.literal(2),
+});
+export type DrinkwareScaleV2Entry = z.infer<typeof drinkwareScaleV2Entry>;
+
+export const updateDrinkwareScaleInput = drinkwareScaleV2Entry.pick({
+  choiceId: true,
+  label: true,
+  outlineCoordinates: true,
+  volumeSamples: true,
+  volumeMethod: true,
+}).partial({
+  label: true,
+  outlineCoordinates: true,
+  volumeSamples: true,
+  volumeMethod: true,
+});
+export type UpdateDrinkwareScaleInput = z.infer<typeof updateDrinkwareScaleInput>;
+
+export const updateDrinkwareSetInput = drinkwareSetAttributes.pick({
+  description: true,
+  imageMapId: true,
+}).extend({
+  scales: updateDrinkwareScaleInput.array()
+    .transform<Record<string, UpdateDrinkwareScaleInput>>(val =>
+      val.reduce((acc, cur) => ({ ...acc, [cur.choiceId]: cur }), {})),
+});
+export type UpdateDrinkwareSetInput = z.infer<typeof updateDrinkwareSetInput>;
+
+export const drinkwareSetEntry = drinkwareSetAttributes.extend({
   scales: z.union([drinkwareScaleEntry, drinkwareScaleV2Entry]).array(),
 });
 

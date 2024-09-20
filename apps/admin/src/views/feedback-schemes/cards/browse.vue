@@ -39,7 +39,7 @@ export default defineComponent({
 
     const currentFeedbackScheme = computed(() => ({
       ...entry.value,
-      ...form.getData(true),
+      ...form.getData(),
     }));
 
     return { currentFeedbackScheme, entry, entryLoaded, refs, form, routeLeave, submit };

@@ -126,10 +126,15 @@ export function registerRouters(express: Router) {
 
   // Admin endpoints - authenticated & verified
   const adminAuthVerifiedContract = {
+    asServedImage: contract.admin.images.asServedImage,
+    asServedSet: contract.admin.images.asServedSet,
+    drinkwareSet: contract.admin.images.drinkwareSet,
     feedbackScheme: contract.admin.feedbackScheme,
     feedbackSchemeSecurable: contract.admin.feedbackSchemeSecurable,
     foodDb: contract.admin.foodDb,
     foodGroup: contract.admin.foodGroup,
+    guideImage: contract.admin.images.guideImage,
+    imageMap: contract.admin.images.imageMap,
     job: contract.admin.job,
     language: contract.admin.language,
     languageSecurable: contract.admin.languageSecurable,
@@ -169,10 +174,15 @@ export function registerRouters(express: Router) {
   createExpressEndpoints(
     adminAuthVerifiedContract,
     server.router(adminAuthVerifiedContract, {
+      asServedImage: admin.images.asServedImage(),
+      asServedSet: admin.images.asServedSet(),
+      drinkwareSet: admin.images.drinkwareSet(),
       feedbackScheme: admin.feedbackScheme(),
       feedbackSchemeSecurable: admin.securable(FeedbackScheme)(),
       foodDb: admin.foodDb(),
       foodGroup: admin.foodGroup(),
+      guideImage: admin.images.guideImage(),
+      imageMap: admin.images.imageMap(),
       job: admin.job(),
       language: admin.language(),
       languageTranslation: admin.languageTranslation(),

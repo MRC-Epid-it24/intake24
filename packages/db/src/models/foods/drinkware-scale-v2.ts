@@ -9,6 +9,7 @@ import type {
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
+import type { DrinkwareScaleVolumeMethod } from '@intake24/common/types/http/admin';
 
 import BaseModel from '../model';
 import { DrinkwareSet, ProcessedImage } from '.';
@@ -73,26 +74,50 @@ export default class DrinkwareScaleV2 extends BaseModel<
     allowNull: false,
     type: DataType.TEXT,
   })
-  declare outlineCoordinates: string;
+  get outlineCoordinates(): number[] {
+    const val = this.getDataValue('outlineCoordinates') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set outlineCoordinates(value: number[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('outlineCoordinates', JSON.stringify(value));
+  }
 
   @Column({
     allowNull: false,
     type: DataType.TEXT,
   })
-  declare volumeSamples: string;
+  get volumeSamples(): number[] {
+    const val = this.getDataValue('volumeSamples') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set volumeSamples(value: number[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('volumeSamples', JSON.stringify(value));
+  }
 
   @Column({
     allowNull: false,
     type: DataType.TEXT,
   })
-  declare volumeSamplesNormalised: string;
+  get volumeSamplesNormalised(): number[] {
+    const val = this.getDataValue('volumeSamplesNormalised') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set volumeSamplesNormalised(value: number[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('volumeSamplesNormalised', JSON.stringify(value));
+  }
 
   @Column({
     allowNull: false,
     type: DataType.TEXT,
     defaultValue: 'lookUpTable',
   })
-  declare volumeMethod: string;
+  declare volumeMethod: DrinkwareScaleVolumeMethod;
 
   @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')
   declare drinkwareSet?: NonAttribute<DrinkwareSet>;

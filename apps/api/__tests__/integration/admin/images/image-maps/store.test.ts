@@ -32,7 +32,7 @@ export default () => {
     });
 
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'baseImage']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description']);
     });
 
     it('should return 400 for invalid input data', async () => {
@@ -41,12 +41,25 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('id', '/etc/imageMap_001')
-        .field('description', [])
-        .field('baseImage', 'notAFile');
+        .field('description', []);
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
-      expect(body.errors).toContainAllKeys(['id', 'description', 'baseImage']);
+      expect(body.errors).toContainAllKeys(['id', 'description']);
+    });
+
+    it('should return 400 for invalid input file', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .field('id', id)
+        .field('description', description)
+        .field('baseImage', 'not-a-file');
+
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
+      expect(body.errors).toContainAllKeys(['baseImage']);
     });
 
     it('should return 201 and new resource', async () => {
@@ -62,7 +75,7 @@ export default () => {
       expect(pick(body, Object.keys(output))).toEqual(output);
     });
 
-    it('should return 400 for duplicate id', async () => {
+    it('should return 409 for duplicate id', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -71,7 +84,7 @@ export default () => {
         .field('description', description)
         .attach('baseImage', fs.createReadStream(filePath), fileName);
 
-      expect(status).toBe(400);
+      expect(status).toBe(409);
       expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['id']);
     });

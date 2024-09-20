@@ -43,7 +43,7 @@ export default () => {
     });
 
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['image', 'weight']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['weight']);
     });
 
     it('should return 400 for invalid input data', async () => {
@@ -56,7 +56,20 @@ export default () => {
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
-      expect(body.errors).toContainAllKeys(['image', 'weight']);
+      expect(body.errors).toContainAllKeys(['weight']);
+    });
+
+    it('should return 400 for invalid input file', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .field('weight', weight)
+        .field('image', 'notAFile');
+
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
+      expect(body.errors).toContainAllKeys(['image']);
     });
 
     it('should return 201 and new resource', async () => {
