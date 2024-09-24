@@ -2935,7 +2935,10 @@
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[\\w-]*$",
+                        "maxLength": 32
                       },
                       "imageMapId": {
                         "type": "string"
@@ -2947,32 +2950,32 @@
                             {
                               "type": "object",
                               "properties": {
-                                "baseImageUrl": {
-                                  "type": "string"
-                                },
-                                "emptyLevel": {
-                                  "type": "number"
-                                },
-                                "fullLevel": {
-                                  "type": "number"
-                                },
-                                "height": {
-                                  "type": "number"
-                                },
-                                "overlayImageUrl": {
+                                "choiceId": {
                                   "type": "string"
                                 },
                                 "width": {
-                                  "type": "number"
-                                },
-                                "version": {
                                   "type": "number",
-                                  "enum": [
-                                    1
-                                  ]
+                                  "nullable": true
                                 },
-                                "choiceId": {
-                                  "type": "number"
+                                "height": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "emptyLevel": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "fullLevel": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "baseImageUrl": {
+                                  "type": "string",
+                                  "maxLength": 512
+                                },
+                                "overlayImageUrl": {
+                                  "type": "string",
+                                  "maxLength": 512
                                 },
                                 "label": {
                                   "type": "object",
@@ -2980,6 +2983,12 @@
                                     "type": "string",
                                     "nullable": true
                                   }
+                                },
+                                "version": {
+                                  "type": "number",
+                                  "enum": [
+                                    1
+                                  ]
                                 },
                                 "volumeSamples": {
                                   "type": "array",
@@ -2989,29 +2998,27 @@
                                 }
                               },
                               "required": [
-                                "baseImageUrl",
+                                "choiceId",
+                                "width",
+                                "height",
                                 "emptyLevel",
                                 "fullLevel",
-                                "height",
+                                "baseImageUrl",
                                 "overlayImageUrl",
-                                "width",
-                                "version",
-                                "choiceId",
                                 "label",
+                                "version",
                                 "volumeSamples"
                               ]
                             },
                             {
                               "type": "object",
                               "properties": {
-                                "version": {
-                                  "type": "number",
-                                  "enum": [
-                                    2
-                                  ]
-                                },
                                 "choiceId": {
-                                  "type": "number"
+                                  "type": "string"
+                                },
+                                "baseImageUrl": {
+                                  "type": "string",
+                                  "maxLength": 512
                                 },
                                 "label": {
                                   "type": "object",
@@ -3023,13 +3030,15 @@
                                 "outlineCoordinates": {
                                   "type": "array",
                                   "items": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "nullable": true
                                   }
                                 },
                                 "volumeSamplesNormalised": {
                                   "type": "array",
                                   "items": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "nullable": true
                                   }
                                 },
                                 "volumeMethod": {
@@ -3039,18 +3048,21 @@
                                     "cylindrical"
                                   ]
                                 },
-                                "baseImageUrl": {
-                                  "type": "string"
+                                "version": {
+                                  "type": "number",
+                                  "enum": [
+                                    2
+                                  ]
                                 }
                               },
                               "required": [
-                                "version",
                                 "choiceId",
+                                "baseImageUrl",
                                 "label",
                                 "outlineCoordinates",
                                 "volumeSamplesNormalised",
                                 "volumeMethod",
-                                "baseImageUrl"
+                                "version"
                               ]
                             }
                           ]
@@ -3097,7 +3109,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "type": "string"
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
+                      "maxLength": 32
                     },
                     "imageMapId": {
                       "type": "string"
@@ -3109,32 +3124,32 @@
                           {
                             "type": "object",
                             "properties": {
-                              "baseImageUrl": {
-                                "type": "string"
-                              },
-                              "emptyLevel": {
-                                "type": "number"
-                              },
-                              "fullLevel": {
-                                "type": "number"
-                              },
-                              "height": {
-                                "type": "number"
-                              },
-                              "overlayImageUrl": {
+                              "choiceId": {
                                 "type": "string"
                               },
                               "width": {
-                                "type": "number"
-                              },
-                              "version": {
                                 "type": "number",
-                                "enum": [
-                                  1
-                                ]
+                                "nullable": true
                               },
-                              "choiceId": {
-                                "type": "number"
+                              "height": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "emptyLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "fullLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "overlayImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
                               },
                               "label": {
                                 "type": "object",
@@ -3142,6 +3157,12 @@
                                   "type": "string",
                                   "nullable": true
                                 }
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  1
+                                ]
                               },
                               "volumeSamples": {
                                 "type": "array",
@@ -3151,29 +3172,27 @@
                               }
                             },
                             "required": [
-                              "baseImageUrl",
+                              "choiceId",
+                              "width",
+                              "height",
                               "emptyLevel",
                               "fullLevel",
-                              "height",
+                              "baseImageUrl",
                               "overlayImageUrl",
-                              "width",
-                              "version",
-                              "choiceId",
                               "label",
+                              "version",
                               "volumeSamples"
                             ]
                           },
                           {
                             "type": "object",
                             "properties": {
-                              "version": {
-                                "type": "number",
-                                "enum": [
-                                  2
-                                ]
-                              },
                               "choiceId": {
-                                "type": "number"
+                                "type": "string"
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
                               },
                               "label": {
                                 "type": "object",
@@ -3185,13 +3204,15 @@
                               "outlineCoordinates": {
                                 "type": "array",
                                 "items": {
-                                  "type": "number"
+                                  "type": "number",
+                                  "nullable": true
                                 }
                               },
                               "volumeSamplesNormalised": {
                                 "type": "array",
                                 "items": {
-                                  "type": "number"
+                                  "type": "number",
+                                  "nullable": true
                                 }
                               },
                               "volumeMethod": {
@@ -3201,18 +3222,21 @@
                                   "cylindrical"
                                 ]
                               },
-                              "baseImageUrl": {
-                                "type": "string"
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  2
+                                ]
                               }
                             },
                             "required": [
-                              "version",
                               "choiceId",
+                              "baseImageUrl",
                               "label",
                               "outlineCoordinates",
                               "volumeSamplesNormalised",
                               "volumeMethod",
-                              "baseImageUrl"
+                              "version"
                             ]
                           }
                         ]
@@ -4013,12 +4037,19 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "type",
                             "flow",
-                            "recallDate"
+                            "recallDate",
+                            "languages"
                           ]
                         },
                         "meals": {
@@ -6882,7 +6913,8 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 128
+                            "maxLength": 128,
+                            "pattern": "^[\\w|-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -6977,7 +7009,8 @@
                   "name": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 128
+                    "maxLength": 128,
+                    "pattern": "^[\\w|-]*$"
                   },
                   "displayName": {
                     "type": "string",
@@ -7011,7 +7044,8 @@
                     "name": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 128
+                      "maxLength": 128,
+                      "pattern": "^[\\w|-]*$"
                     },
                     "displayName": {
                       "type": "string",
@@ -7077,7 +7111,8 @@
                     "name": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 128
+                      "maxLength": 128,
+                      "pattern": "^[\\w|-]*$"
                     },
                     "displayName": {
                       "type": "string",
@@ -7165,7 +7200,8 @@
                     "name": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 128
+                      "maxLength": 128,
+                      "pattern": "^[\\w|-]*$"
                     },
                     "displayName": {
                       "type": "string",
@@ -7301,7 +7337,8 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 128
+                            "maxLength": 128,
+                            "pattern": "^[\\w|-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -7451,7 +7488,8 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 128
+                            "maxLength": 128,
+                            "pattern": "^[\\w|-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -7595,6 +7633,7 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 128
                           },
                           "displayName": {
@@ -7690,6 +7729,7 @@
                   "name": {
                     "type": "string",
                     "minLength": 1,
+                    "pattern": "^[\\w-]*$",
                     "maxLength": 128
                   },
                   "displayName": {
@@ -7731,6 +7771,7 @@
                     "name": {
                       "type": "string",
                       "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 128
                     },
                     "displayName": {
@@ -7792,7 +7833,8 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 128
+                            "maxLength": 128,
+                            "pattern": "^[\\w|-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -7853,6 +7895,7 @@
                     "name": {
                       "type": "string",
                       "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 128
                     },
                     "displayName": {
@@ -7948,6 +7991,7 @@
                     "name": {
                       "type": "string",
                       "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 128
                     },
                     "displayName": {
@@ -8084,6 +8128,7 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 128
                           },
                           "displayName": {
@@ -8234,6 +8279,7 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 128
                           },
                           "displayName": {
@@ -8679,7 +8725,8 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 128
+                            "maxLength": 128,
+                            "pattern": "^[\\w|-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -8705,6 +8752,7 @@
                           "name": {
                             "type": "string",
                             "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 128
                           },
                           "displayName": {
@@ -21558,6 +21606,8 @@
                         "properties": {
                           "id": {
                             "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 32
                           },
                           "description": {
@@ -22297,6 +22347,2777 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/as-served-sets/{asServedSetId}/images": {
+      "get": {
+        "description": "Browse as served images (paginated list)",
+        "summary": "Browse as served images",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedImage"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": "number"
+                          },
+                          "mainImageUrl": {
+                            "type": "string"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "weight",
+                          "mainImageUrl",
+                          "thumbnailUrl"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new as served image",
+        "summary": "Create as served image",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedImage"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "weight": {
+                    "type": "number",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "weight"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "weight": {
+                      "type": "number"
+                    },
+                    "mainImageUrl": {
+                      "type": "string"
+                    },
+                    "thumbnailUrl": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "weight",
+                    "mainImageUrl",
+                    "thumbnailUrl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete all as served image of as served set",
+        "summary": "Delete as served images",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedImage"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/as-served-sets/{asServedSetId}/images/{asServedImageId}": {
+      "get": {
+        "description": "Get as served image by id",
+        "summary": "Get as served image",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedImage"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "asServedImageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "weight": {
+                      "type": "number"
+                    },
+                    "mainImageUrl": {
+                      "type": "string"
+                    },
+                    "thumbnailUrl": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "weight",
+                    "mainImageUrl",
+                    "thumbnailUrl"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete as served image by id",
+        "summary": "Delete as served image",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedImage"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "asServedImageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/as-served-sets": {
+      "get": {
+        "description": "Browse as served sets (paginated list)",
+        "summary": "Browse as served sets",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedSet"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "imageUrl"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new as served set",
+        "summary": "Create as served set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedSet"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[\\w-]*$",
+                    "maxLength": 32
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "required": [
+                  "id",
+                  "description"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
+                      "maxLength": 32
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "selectionImageUrl": {
+                      "type": "string"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": "number"
+                          },
+                          "mainImageUrl": {
+                            "type": "string"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "weight",
+                          "mainImageUrl",
+                          "thumbnailUrl"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "selectionImageUrl",
+                    "images"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/as-served-sets/{asServedSetId}": {
+      "get": {
+        "description": "Get as served set by id",
+        "summary": "Get as served set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedSet"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
+                      "maxLength": 32
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "selectionImageUrl": {
+                      "type": "string"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": "number"
+                          },
+                          "mainImageUrl": {
+                            "type": "string"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "weight",
+                          "mainImageUrl",
+                          "thumbnailUrl"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "selectionImageUrl",
+                    "images"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update as served set by id",
+        "summary": "Update as served set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedSet"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "weight": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "weight"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "description",
+                  "images"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
+                      "maxLength": 32
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "selectionImageUrl": {
+                      "type": "string"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": "number"
+                          },
+                          "mainImageUrl": {
+                            "type": "string"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "weight",
+                          "mainImageUrl",
+                          "thumbnailUrl"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "selectionImageUrl",
+                    "images"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete as served set by id",
+        "summary": "Delete as served set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "asServedSet"
+        ],
+        "parameters": [
+          {
+            "name": "asServedSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/drinkware-sets": {
+      "get": {
+        "description": "Browse drinkware sets (paginated list)",
+        "summary": "Browse drinkware sets",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "drinkwareSet"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "imageUrl"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new drinkware set",
+        "summary": "Create drinkware set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "drinkwareSet"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[\\w-]*$",
+                    "maxLength": 32
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "imageMapId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "description",
+                  "imageMapId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
+                      "maxLength": 32
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "imageMapId": {
+                      "type": "string"
+                    },
+                    "scales": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "choiceId": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "height": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "emptyLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "fullLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "overlayImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  1
+                                ]
+                              },
+                              "volumeSamples": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "required": [
+                              "choiceId",
+                              "width",
+                              "height",
+                              "emptyLevel",
+                              "fullLevel",
+                              "baseImageUrl",
+                              "overlayImageUrl",
+                              "label",
+                              "version",
+                              "volumeSamples"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "choiceId": {
+                                "type": "string"
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "outlineCoordinates": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeSamples": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeSamplesNormalised": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeMethod": {
+                                "type": "string",
+                                "enum": [
+                                  "lookUpTable",
+                                  "cylindrical"
+                                ]
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  2
+                                ]
+                              }
+                            },
+                            "required": [
+                              "choiceId",
+                              "baseImageUrl",
+                              "label",
+                              "outlineCoordinates",
+                              "volumeSamples",
+                              "volumeSamplesNormalised",
+                              "volumeMethod",
+                              "version"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "imageMapId",
+                    "scales"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/drinkware-sets/{drinkwareSetId}": {
+      "get": {
+        "description": "Get drinkware set by id",
+        "summary": "Get drinkware set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "drinkwareSet"
+        ],
+        "parameters": [
+          {
+            "name": "drinkwareSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
+                      "maxLength": 32
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "imageMapId": {
+                      "type": "string"
+                    },
+                    "scales": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "choiceId": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "height": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "emptyLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "fullLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "overlayImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  1
+                                ]
+                              },
+                              "volumeSamples": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "required": [
+                              "choiceId",
+                              "width",
+                              "height",
+                              "emptyLevel",
+                              "fullLevel",
+                              "baseImageUrl",
+                              "overlayImageUrl",
+                              "label",
+                              "version",
+                              "volumeSamples"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "choiceId": {
+                                "type": "string"
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "outlineCoordinates": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeSamples": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeSamplesNormalised": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeMethod": {
+                                "type": "string",
+                                "enum": [
+                                  "lookUpTable",
+                                  "cylindrical"
+                                ]
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  2
+                                ]
+                              }
+                            },
+                            "required": [
+                              "choiceId",
+                              "baseImageUrl",
+                              "label",
+                              "outlineCoordinates",
+                              "volumeSamples",
+                              "volumeSamplesNormalised",
+                              "volumeMethod",
+                              "version"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "imageMapId",
+                    "scales"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update drinkware set by id",
+        "summary": "Update drinkware set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "drinkwareSet"
+        ],
+        "parameters": [
+          {
+            "name": "drinkwareSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "imageMapId": {
+                    "type": "string"
+                  },
+                  "scales": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "choiceId": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "outlineCoordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "volumeSamples": {
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "volumeMethod": {
+                          "type": "string",
+                          "enum": [
+                            "lookUpTable",
+                            "cylindrical"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "choiceId"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "description",
+                  "imageMapId",
+                  "scales"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
+                      "maxLength": 32
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "imageMapId": {
+                      "type": "string"
+                    },
+                    "scales": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "choiceId": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "height": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "emptyLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "fullLevel": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "overlayImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  1
+                                ]
+                              },
+                              "volumeSamples": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "required": [
+                              "choiceId",
+                              "width",
+                              "height",
+                              "emptyLevel",
+                              "fullLevel",
+                              "baseImageUrl",
+                              "overlayImageUrl",
+                              "label",
+                              "version",
+                              "volumeSamples"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "choiceId": {
+                                "type": "string"
+                              },
+                              "baseImageUrl": {
+                                "type": "string",
+                                "maxLength": 512
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "outlineCoordinates": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeSamples": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeSamplesNormalised": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeMethod": {
+                                "type": "string",
+                                "enum": [
+                                  "lookUpTable",
+                                  "cylindrical"
+                                ]
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  2
+                                ]
+                              }
+                            },
+                            "required": [
+                              "choiceId",
+                              "baseImageUrl",
+                              "label",
+                              "outlineCoordinates",
+                              "volumeSamples",
+                              "volumeSamplesNormalised",
+                              "volumeMethod",
+                              "version"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "imageMapId",
+                    "scales"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete drinkware set by id",
+        "summary": "Delete drinkware set",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "drinkwareSet"
+        ],
+        "parameters": [
+          {
+            "name": "drinkwareSetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/guide-images": {
+      "get": {
+        "description": "Browse guide images (paginated list)",
+        "summary": "Browse guide images",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "guideImage"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "imageUrl"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new guide image",
+        "summary": "Create guide image",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "guideImage"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[\\w-]*$",
+                    "maxLength": 32
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "imageMapId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "description",
+                  "imageMapId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "weight": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "outlineCoordinates",
+                          "label",
+                          "navigationIndex",
+                          "weight"
+                        ]
+                      }
+                    },
+                    "imageMapId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects",
+                    "imageMapId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/guide-images/{guideImageId}": {
+      "get": {
+        "description": "Get guide image by id",
+        "summary": "Get guide image",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "guideImage"
+        ],
+        "parameters": [
+          {
+            "name": "guideImageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "weight": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "outlineCoordinates",
+                          "label",
+                          "navigationIndex",
+                          "weight"
+                        ]
+                      }
+                    },
+                    "imageMapId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects",
+                    "imageMapId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update guide image by id",
+        "summary": "Update guide image",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "guideImage"
+        ],
+        "parameters": [
+          {
+            "name": "guideImageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "objects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "weight": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "label": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "weight",
+                        "label"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "description",
+                  "objects"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "weight": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "outlineCoordinates",
+                          "label",
+                          "navigationIndex",
+                          "weight"
+                        ]
+                      }
+                    },
+                    "imageMapId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects",
+                    "imageMapId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete guide image by id",
+        "summary": "Delete guide image",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "guideImage"
+        ],
+        "parameters": [
+          {
+            "name": "guideImageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/image-maps": {
+      "get": {
+        "description": "Browse image maps (paginated list)",
+        "summary": "Browse image maps",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "imageMap"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 512
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "imageUrl"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new image map",
+        "summary": "Create image map",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "imageMap"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[\\w-]*$",
+                    "maxLength": 32
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 512
+                  },
+                  "objects": {
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "outlineCoordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "label": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "navigationIndex": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "description",
+                        "outlineCoordinates",
+                        "label",
+                        "navigationIndex"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "description"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "outlineCoordinates",
+                          "label",
+                          "navigationIndex"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/image-maps/{imageMapId}": {
+      "get": {
+        "description": "Get image map by id",
+        "summary": "Get image map",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "imageMap"
+        ],
+        "parameters": [
+          {
+            "name": "imageMapId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "outlineCoordinates",
+                          "label",
+                          "navigationIndex"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update image map by id",
+        "summary": "Update image map",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "imageMap"
+        ],
+        "parameters": [
+          {
+            "name": "imageMapId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 512
+                  },
+                  "objects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "outlineCoordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "label": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "navigationIndex": {
+                          "type": "integer",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "description",
+                        "outlineCoordinates",
+                        "label",
+                        "navigationIndex"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "description",
+                  "objects"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "outlineCoordinates",
+                          "label",
+                          "navigationIndex"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete image map by id",
+        "summary": "Delete image map",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "imageMap"
+        ],
+        "parameters": [
+          {
+            "name": "imageMapId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/images/image-maps/{imageMapId}/base-image": {
+      "put": {
+        "description": "Update base image of image map by id",
+        "summary": "Update base image of image map",
+        "tags": [
+          "default",
+          "admin",
+          "images",
+          "imageMap"
+        ],
+        "parameters": [
+          {
+            "name": "imageMapId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "integer",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "outlineCoordinates",
+                          "label",
+                          "navigationIndex"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects"
+                  ]
+                }
               }
             }
           }
@@ -30935,6 +33756,8 @@
                         "properties": {
                           "id": {
                             "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 32
                           },
                           "description": {
@@ -31099,6 +33922,8 @@
                 "properties": {
                   "id": {
                     "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[\\w-]*$",
                     "maxLength": 32
                   },
                   "description": {
@@ -31190,6 +34015,8 @@
                   "properties": {
                     "id": {
                       "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 32
                     },
                     "description": {
@@ -31393,6 +34220,8 @@
                   "properties": {
                     "id": {
                       "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 32
                     },
                     "description": {
@@ -31610,6 +34439,8 @@
                   "properties": {
                     "id": {
                       "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 32
                     },
                     "description": {
@@ -33489,10 +36320,15 @@
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
                           },
                           "description": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
                           },
                           "imageUrl": {
                             "type": "string"
@@ -33735,10 +36571,15 @@
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
                           },
                           "description": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
                           },
                           "imageUrl": {
                             "type": "string"
@@ -35373,10 +38214,15 @@
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
                           },
                           "description": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
                           },
                           "imageUrl": {
                             "type": "string"
@@ -35498,10 +38344,15 @@
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
+                            "maxLength": 32
                           },
                           "description": {
-                            "type": "string"
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 512
                           },
                           "imageUrl": {
                             "type": "string"
@@ -35894,6 +38745,8 @@
                         "properties": {
                           "id": {
                             "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 32
                           },
                           "description": {
@@ -36467,6 +39320,7 @@
                           "slug": {
                             "type": "string",
                             "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 128
                           }
                         },
@@ -38046,6 +40900,7 @@
                           "slug": {
                             "type": "string",
                             "minLength": 1,
+                            "pattern": "^[\\w-]*$",
                             "maxLength": 128
                           },
                           "name": {
@@ -38217,6 +41072,7 @@
                   "slug": {
                     "type": "string",
                     "minLength": 1,
+                    "pattern": "^[\\w-]*$",
                     "maxLength": 128
                   },
                   "name": {
@@ -38488,6 +41344,12 @@
                           "recallDate": {
                             "type": "integer",
                             "nullable": true
+                          },
+                          "languages": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         }
                       }
@@ -38635,6 +41497,7 @@
                     "slug": {
                       "type": "string",
                       "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 128
                     },
                     "name": {
@@ -38910,6 +41773,12 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           }
                         }
@@ -40264,12 +43133,19 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "type",
                             "flow",
-                            "recallDate"
+                            "recallDate",
+                            "languages"
                           ]
                         },
                         "prompts": {
@@ -40565,6 +43441,7 @@
                     "slug": {
                       "type": "string",
                       "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 128
                     },
                     "name": {
@@ -40840,6 +43717,12 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           }
                         }
@@ -42194,12 +45077,19 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "type",
                             "flow",
-                            "recallDate"
+                            "recallDate",
+                            "languages"
                           ]
                         },
                         "prompts": {
@@ -42489,6 +45379,7 @@
                   "slug": {
                     "type": "string",
                     "minLength": 1,
+                    "pattern": "^[\\w-]*$",
                     "maxLength": 128
                   },
                   "name": {
@@ -42760,6 +45651,12 @@
                           "recallDate": {
                             "type": "integer",
                             "nullable": true
+                          },
+                          "languages": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         }
                       }
@@ -42896,6 +45793,7 @@
                     "slug": {
                       "type": "string",
                       "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 128
                     },
                     "name": {
@@ -43171,6 +46069,12 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           }
                         }
@@ -44525,12 +47429,19 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "type",
                             "flow",
-                            "recallDate"
+                            "recallDate",
+                            "languages"
                           ]
                         },
                         "prompts": {
@@ -44820,6 +47731,7 @@
                   "slug": {
                     "type": "string",
                     "minLength": 1,
+                    "pattern": "^[\\w-]*$",
                     "maxLength": 128
                   },
                   "name": {
@@ -45091,6 +48003,12 @@
                           "recallDate": {
                             "type": "integer",
                             "nullable": true
+                          },
+                          "languages": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         }
                       }
@@ -45257,6 +48175,7 @@
                     "slug": {
                       "type": "string",
                       "minLength": 1,
+                      "pattern": "^[\\w-]*$",
                       "maxLength": 128
                     },
                     "name": {
@@ -45532,6 +48451,12 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           }
                         }
@@ -46886,12 +49811,19 @@
                             "recallDate": {
                               "type": "integer",
                               "nullable": true
+                            },
+                            "languages": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "type",
                             "flow",
-                            "recallDate"
+                            "recallDate",
+                            "languages"
                           ]
                         },
                         "prompts": {
@@ -50753,12 +53685,19 @@
                       "recallDate": {
                         "type": "integer",
                         "nullable": true
+                      },
+                      "languages": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       }
                     },
                     "required": [
                       "type",
                       "flow",
-                      "recallDate"
+                      "recallDate",
+                      "languages"
                     ]
                   },
                   "prompts": {
@@ -50930,12 +53869,19 @@
                         "recallDate": {
                           "type": "integer",
                           "nullable": true
+                        },
+                        "languages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "type",
                         "flow",
-                        "recallDate"
+                        "recallDate",
+                        "languages"
                       ]
                     },
                     "prompts": {
@@ -51245,12 +54191,19 @@
                         "recallDate": {
                           "type": "integer",
                           "nullable": true
+                        },
+                        "languages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "type",
                         "flow",
-                        "recallDate"
+                        "recallDate",
+                        "languages"
                       ]
                     },
                     "prompts": {
@@ -51522,12 +54475,19 @@
                       "recallDate": {
                         "type": "integer",
                         "nullable": true
+                      },
+                      "languages": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       }
                     },
                     "required": [
                       "type",
                       "flow",
-                      "recallDate"
+                      "recallDate",
+                      "languages"
                     ]
                   },
                   "prompts": {
@@ -51696,12 +54656,19 @@
                         "recallDate": {
                           "type": "integer",
                           "nullable": true
+                        },
+                        "languages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "type",
                         "flow",
-                        "recallDate"
+                        "recallDate",
+                        "languages"
                       ]
                     },
                     "prompts": {
@@ -51973,12 +54940,19 @@
                       "recallDate": {
                         "type": "integer",
                         "nullable": true
+                      },
+                      "languages": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       }
                     },
                     "required": [
                       "type",
                       "flow",
-                      "recallDate"
+                      "recallDate",
+                      "languages"
                     ]
                   },
                   "prompts": {
@@ -52155,12 +55129,19 @@
                         "recallDate": {
                           "type": "integer",
                           "nullable": true
+                        },
+                        "languages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "type",
                         "flow",
-                        "recallDate"
+                        "recallDate",
+                        "languages"
                       ]
                     },
                     "prompts": {
@@ -52485,12 +55466,19 @@
                         "recallDate": {
                           "type": "integer",
                           "nullable": true
+                        },
+                        "languages": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "type",
                         "flow",
-                        "recallDate"
+                        "recallDate",
+                        "languages"
                       ]
                     },
                     "prompts": {
