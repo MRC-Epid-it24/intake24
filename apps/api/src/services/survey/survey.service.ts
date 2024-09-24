@@ -128,7 +128,7 @@ function surveyService({
             association: 'user',
             attributes: ['id', 'name'],
             required: true,
-            include: [{ association: 'customFields', attributes: ['name', 'value'] }],
+            include: [{ association: 'customFields' }],
           }],
           where: { surveyId, username },
         },
