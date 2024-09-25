@@ -101,7 +101,7 @@
     "showLess": "Afficher moins",
     "showAll": "Afficher toutes les catégories associées",
     "root": "toutes les catégories alimentaires",
-    "back": "Retour vers '{category}'",
+    "back": "Retour vers les résultats",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "missing": {
@@ -131,7 +131,7 @@
     "browse": "Parcourir tous les aliments",
     "search": "Chercher un aliment",
     "root": "toutes les catégories alimentaires",
-    "back": "Retour vers '{category}'",
+    "back": "Retour vers les résultats",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
@@ -182,7 +182,7 @@
     "showLess": "Afficher moins",
     "showAll": "Afficher toutes les catégories associées",
     "root": "toutes les catégories alimentaires",
-    "back": "Retour vers '{category}'",
+    "back": "Retour vers les résultats",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "pizza": " ",
@@ -263,7 +263,7 @@
     "name": "Comme précédemment",
     "text": "",
     "description": "<p>Est-ce que l'aliment <strong>{food}</strong> était le même que celui consommé précédemment?</p>",
-    "serving": "portion de {amount}",
+    "serving": "portion unitaire de {amount}",
     "leftovers": "restes de {amount}",
     "count": "{count} portions",
     "noLeftovers": {
@@ -357,8 +357,8 @@
     "unknown": "Il n'y a actuellement aucune méthode d'estimation de la taille de portion pour {food}."
   },
   "linkedAmount": {
-    "label": "{unit} (par rapport à {quantity}) l'aliment {food} couvrait quel pourcentage ?",
-    "unit": "Combien de tranches",
+    "label": "L'aliment {food} couvrait {unit} (par rapport aux {quantity} déclarées) ?",
+    "unit": "combien de tranches",
     "all": "Sur toutes"
   },
   "asServed": {
@@ -466,7 +466,7 @@
     "showLess": "Afficher moins",
     "showAll": "Afficher toutes les catégories associées",
     "root": "toutes les catégories alimentaires",
-    "back": "Retour vers '{category}'",
+    "back": "Retour vers les résultats",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "optional": {
