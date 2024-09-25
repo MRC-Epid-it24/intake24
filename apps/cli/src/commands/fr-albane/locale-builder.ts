@@ -119,7 +119,7 @@ export class FrenchAlbaneLocaleBuilder {
     for (const row of categoryRecords) {
       const categoryCodes: string[] = [];
 
-      for (const code of [row.code1, row.code2, row.code3, row.code4]) {
+      for (const code of [row.code1, row.code2, row.code3, row.code4, row.code5]) {
         if (code === undefined)
           continue;
         const trimmed = trim(code);
