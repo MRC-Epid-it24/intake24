@@ -159,15 +159,20 @@ export default defineComponent({
     };
 
     const foodUnit = (food: EncodedFood) => {
-      if (food.portionSize?.method === 'drink-scale')
-        return 'ml';
-      if (food.portionSize?.method === 'milk-in-a-hot-drink')
-        return '%';
+      switch (food.portionSize?.method) {
+        case 'drink-scale':
+          return 'ml';
+        case 'milk-in-a-hot-drink':
+          return '%';
+        case 'standard-portion':
+          if (food.portionSize.unit) {
+            if (food.portionSize.unit.inlineEstimateIn)
+              return food.portionSize.unit.inlineEstimateIn;
 
-      if (food.portionSize?.method === 'standard-portion' && food.portionSize?.unit) {
-        const unit = standardUnitRefs.value[food.portionSize.unit.name]?.estimateIn;
-        if (unit)
-          return translate(unit);
+            const unit = standardUnitRefs.value[food.portionSize.unit.name]?.estimateIn;
+            if (unit)
+              return translate(unit);
+          }
       }
 
       return 'g';
