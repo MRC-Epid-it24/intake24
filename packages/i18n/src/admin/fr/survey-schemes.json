@@ -26,7 +26,8 @@
       "1-pass": "1-pass",
       "2-pass": "2-pass"
     },
-    "recallDate": "Recall date offset"
+    "recallDate": "Recall date offset",
+    "languages": "Allowed languages"
   },
   "meals": {
     "_": "Repas",
@@ -111,7 +112,7 @@
       "promptAnswer": "Prompt answer",
       "property": "Property value",
       "recallNumber": "Recall number",
-      "userName": "Participant ID",
+      "userField": "User field",
       "mealCompletion": "Completion state",
       "foodCompletion": "Completion state"
     },
@@ -153,21 +154,15 @@
         "absent": "<em><strong>{object}</strong></em> is <strong>NOT</strong> tagged with <em><strong>{id}</strong></em>"
       },
       "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>",
+      "userField": "<em><strong>{property} ({field})</strong></em> for <em><strong>{object}</strong></em>",
       "notRequired": "<strong>OR</strong> not set"
     },
     "promptAnswer": {
       "promptId": "Prompt ID",
       "required": "Prompt answer is required (uncheck if this prompt should trigger if the answer is not known)"
     },
-    "exTypes": {
-      "drinks": "Boissons ({section})",
-      "energy": "Energie ({section})",
-      "flag": "Drapeau ({section})",
-      "foodCategory": "Catégorie alimentaire",
-      "meals": "Repas",
-      "promptAnswer": "Réponse {section}: {promptId}",
-      "property": "Property value {name}",
-      "recallNumber": "Numéro du rappel"
+    "userField": {
+      "field": "Field"
     },
     "ops": {
       "_": "Opération",

@@ -1,6 +1,6 @@
 import type { ConditionOpCode } from '@intake24/common/prompts';
 
-const map: Record<ConditionOpCode, string> = {
+export const opToIconMap: Record<ConditionOpCode, string> = {
   eq: 'fas fa-equals',
   ne: 'fas fa-not-equal',
   in: 'far fa-circle-dot',
@@ -11,4 +11,3 @@ const map: Record<ConditionOpCode, string> = {
   lte: 'fas fa-less-than-equal',
   lt: 'fas fa-less-than',
 };
-export default map;

@@ -65,10 +65,11 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'patch',
         url,
-        ['value'],
+        ['value', 'public'],
         {
           input: {
             value: [new Date()],
+            public: 'false',
           },
         },
       );

@@ -1,4 +1,5 @@
 export * from './entry';
+export * from './op-icon-map';
 export * from './use-datetime';
 export * from './use-fetch-list';
 export * from './use-form';

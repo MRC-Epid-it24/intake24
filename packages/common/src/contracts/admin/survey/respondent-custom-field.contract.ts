@@ -1,8 +1,9 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
+import { userCustomField } from '@intake24/common/types';
 import { bigIntString as surveyId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
-import { userCustomField } from '@intake24/common/types/http/admin';
+import { userCustomFieldAttributes } from '@intake24/common/types/http/admin';
 
 export const respondentCustomField = initContract().router({
   browse: {
@@ -12,7 +13,7 @@ export const respondentCustomField = initContract().router({
     query: paginationRequest,
     responses: {
       200: z.object({
-        data: userCustomField.array(),
+        data: userCustomFieldAttributes.array(),
         meta: paginationMeta,
       }),
     },
@@ -23,9 +24,9 @@ export const respondentCustomField = initContract().router({
     method: 'POST',
     path: '/admin/surveys/:surveyId/respondents/:username/custom-fields',
     pathParams: z.object({ surveyId }),
-    body: userCustomField.pick({ name: true, value: true }),
+    body: userCustomField,
     responses: {
-      201: userCustomField,
+      201: userCustomFieldAttributes,
     },
     summary: 'Create respondent custom field',
     description: 'Create new respondent custom field',
@@ -35,7 +36,7 @@ export const respondentCustomField = initContract().router({
     path: '/admin/surveys/:surveyId/respondents/:username/custom-fields/:field',
     pathParams: z.object({ surveyId }),
     responses: {
-      200: userCustomField,
+      200: userCustomFieldAttributes,
     },
     summary: 'Get respondent custom field',
     description: 'Get survey respondent custom field',
@@ -44,9 +45,9 @@ export const respondentCustomField = initContract().router({
     method: 'PATCH',
     path: '/admin/surveys/:surveyId/respondents/:username/custom-fields/:field',
     pathParams: z.object({ surveyId }),
-    body: userCustomField.pick({ value: true }),
+    body: userCustomField.pick({ value: true, public: true }),
     responses: {
-      200: userCustomField,
+      200: userCustomFieldAttributes,
     },
     summary: 'Update respondent custom field',
     description: 'Update survey respondent custom field',
@@ -55,10 +56,10 @@ export const respondentCustomField = initContract().router({
     method: 'PUT',
     path: '/admin/surveys/:surveyId/respondents/:username/custom-fields/:field',
     pathParams: z.object({ surveyId }),
-    body: userCustomField.pick({ value: true }),
+    body: userCustomField.pick({ value: true, public: true }),
     responses: {
-      200: userCustomField,
-      201: userCustomField,
+      200: userCustomFieldAttributes,
+      201: userCustomFieldAttributes,
     },
     summary: 'Create or update respondent custom field',
     description: 'Create or update survey respondent custom field',

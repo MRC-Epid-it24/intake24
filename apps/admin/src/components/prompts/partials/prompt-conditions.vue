@@ -28,7 +28,7 @@
           <v-card-text class="px-0">
             <condition-summary :condition="condition" />
           </v-card-text>
-          <v-container>
+          <v-card-text>
             <v-row v-if="idx !== 0">
               <v-col cols="12" md="6">
                 <v-checkbox
@@ -65,7 +65,7 @@
                 />
               </v-col>
             </v-row>
-          </v-container>
+          </v-card-text>
           <v-card-title>{{ $t(`survey-schemes.conditions._`) }}</v-card-title>
           <v-card-text>
             <component :is="condition.property.type" :value.sync="condition.property.check" />

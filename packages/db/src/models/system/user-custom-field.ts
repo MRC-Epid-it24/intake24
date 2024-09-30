@@ -52,6 +52,13 @@ export default class UserCustomField extends BaseModel<
   })
   declare value: string;
 
+  @Column({
+    allowNull: false,
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  declare public: CreationOptional<boolean>;
+
   @BelongsTo(() => User, 'userId')
   declare user?: NonAttribute<User>;
 }

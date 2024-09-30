@@ -3,9 +3,16 @@ import { z } from 'zod';
 
 import { strongPasswordWithConfirmOptional } from '@intake24/common/security';
 
-import { customField } from '../..';
+import { customField, userCustomField } from '../..';
 import { permissionAttributes } from './permissions';
 import { roleAttributes } from './roles';
+
+export const userCustomFieldAttributes = customField.extend({
+  id: z.string(),
+  userId: z.string(),
+  public: z.boolean(),
+});
+export type UserCustomFieldAttributes = z.infer<typeof userCustomFieldAttributes>;
 
 export const userRequest = z.object({
   disabledAt: z.coerce.date().nullish(),
@@ -18,9 +25,8 @@ export const userRequest = z.object({
   verifiedAt: z.coerce.date().nullish(),
   permissions: z.string().refine(value => isInt(value)).array().optional(),
   roles: z.string().refine(value => isInt(value)).array().optional(),
-  customFields: customField.array().optional(),
+  customFields: userCustomField.array().optional(),
 }).merge(strongPasswordWithConfirmOptional);
-
 export type UserRequest = z.infer<typeof userRequest>;
 
 export const userInput = userRequest.omit({
@@ -42,13 +48,7 @@ export const userAttributes = z.object({
   updatedAt: z.date(),
   verifiedAt: z.date().nullable(),
 });
-
 export type UserAttributes = z.infer<typeof userAttributes>;
-
-export const userCustomField = customField.extend({
-  id: z.string(),
-  userId: z.string(),
-});
 
 export const userSurveyAliasAttributes = z.object({
   id: z.string(),
@@ -59,7 +59,6 @@ export const userSurveyAliasAttributes = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
 });
-
 export type UserSurveyAliasAttributes = z.infer<typeof userSurveyAliasAttributes>;
 
 export const userEntry = userAttributes.extend({
@@ -68,7 +67,6 @@ export const userEntry = userAttributes.extend({
   permissions: permissionAttributes.array(),
   roles: roleAttributes.array(),
 });
-
 export type UserEntry = z.infer<typeof userEntry>;
 
 export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;

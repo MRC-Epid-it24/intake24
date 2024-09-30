@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { CustomField } from '@intake24/common/types';
+import type { UserCustomField as UserCustomFieldInput } from '@intake24/common/types';
 import type { UserInput } from '@intake24/common/types/http/admin';
 import type { Transaction, UserPasswordAttributes } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
@@ -131,14 +131,14 @@ function adminUserService({
    *
    * @param {string} userId
    * @param {UserCustomField[]} userCustomFields
-   * @param {CustomField[]} customFields
+   * @param {UserCustomFieldInput[]} customFields
    * @param {Transaction} [transaction]
    * @returns {Promise<void>}
    */
   const updateUserCustomFields = async (
     userId: string,
     userCustomFields: UserCustomField[],
-    customFields: CustomField[],
+    customFields: UserCustomFieldInput[],
     transaction?: Transaction,
   ): Promise<void> => {
     // 1) remove fields that are not present
@@ -152,7 +152,7 @@ function adminUserService({
       return;
 
     for (const customField of customFields) {
-      const { name, value } = customField;
+      const { name, ...rest } = customField;
 
       const matchIdx = userCustomFields.findIndex(field => field.name === name);
 
@@ -163,7 +163,7 @@ function adminUserService({
       }
 
       // 3) update existing fields
-      await userCustomFields[matchIdx].update({ value }, { transaction });
+      await userCustomFields[matchIdx].update(rest, { transaction });
     }
   };
 

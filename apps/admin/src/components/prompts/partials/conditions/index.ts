@@ -5,6 +5,7 @@ import MealCompletionPropertyCheck from './meal-completion-check.vue';
 import PromptAnswerPropertyCheck from './prompt-answer-check.vue';
 import Summary from './summary.vue';
 import TagPropertyCheck from './tag-check.vue';
+import UserFieldPropertyCheck from './user-field-check.vue';
 import ValuePropertyCheck from './value-check.vue';
 
 export default {
@@ -16,6 +17,7 @@ export default {
     flag: FlagPropertyCheck,
     tag: TagPropertyCheck,
     promptAnswer: PromptAnswerPropertyCheck,
+    userField: UserFieldPropertyCheck,
   },
   summary: Summary,
 };

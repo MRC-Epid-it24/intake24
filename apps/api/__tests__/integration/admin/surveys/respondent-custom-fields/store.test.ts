@@ -63,11 +63,12 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['name', 'value'],
+        ['name', 'value', 'public'],
         {
           input: {
             name: false,
             value: ['array'],
+            public: '0',
           },
         },
       );

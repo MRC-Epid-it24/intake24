@@ -36,7 +36,7 @@ import {
   searchSortingAlgorithms,
   spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
-import { CustomField, jobTypes } from '@intake24/common/types';
+import { jobTypes, UserCustomField } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
 
 function permission(): PermissionRequest {
@@ -85,8 +85,12 @@ function user(): UserRequest {
   };
 }
 
-function customField(): CustomField {
-  return { name: randomString(10), value: faker.word.words(5) };
+function customField(): UserCustomField {
+  return {
+    name: randomString(10),
+    value: faker.word.words(5),
+    public: faker.datatype.boolean(),
+  };
 }
 
 function respondent(): CreateRespondentRequest {

@@ -1,11 +1,14 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      <v-text-field
-        v-model="currentValue.promptId"
+      <v-combobox
+        v-model="currentValue.field"
+        deletable-chips
         hide-details="auto"
-        :label="$t('survey-schemes.conditions.promptAnswer.promptId')"
+        :items="standardUserFields"
+        :label="$t('survey-schemes.conditions.userField.field')"
         outlined
+        small-chips
         @change="update(currentValue)"
       />
     </v-col>
@@ -45,9 +48,6 @@
         outlined
       />
     </v-col>
-    <v-col cols="12" md="6">
-      <v-checkbox v-model="currentValue.required" :label="$t('survey-schemes.conditions.promptAnswer.required')" @change="update(currentValue)" />
-    </v-col>
   </v-row>
 </template>
 
@@ -55,19 +55,20 @@
 import { defineComponent, type PropType, ref } from 'vue';
 import { VCombobox, VTextField } from 'vuetify/lib';
 
-import type {
-  PromptAnswerPropertyCheck,
-} from '@intake24/common/prompts';
 import { useSelects } from '@intake24/admin/composables';
+import {
+  standardUserFields,
+  type UserFieldPropertyCheck,
+} from '@intake24/common/prompts';
 
 export default defineComponent({
-  name: 'PromptAnswerPropertyCheck',
+  name: 'UserFieldPropertyCheck',
 
   components: { VTextField, VCombobox },
 
   props: {
     value: {
-      type: Object as PropType<PromptAnswerPropertyCheck>,
+      type: Object as PropType<UserFieldPropertyCheck>,
       required: true,
     },
   },
@@ -77,13 +78,13 @@ export default defineComponent({
 
     const currentValue = ref(props.value);
 
-    const update = (value: PromptAnswerPropertyCheck) => {
+    const update = (value: UserFieldPropertyCheck) => {
       emit('update:value', value);
     };
 
     const comboOps = ['setEq', 'in', 'notIn'];
 
-    return { conditionOps, update, currentValue, comboOps };
+    return { conditionOps, update, currentValue, comboOps, standardUserFields };
   },
 });
 </script>
