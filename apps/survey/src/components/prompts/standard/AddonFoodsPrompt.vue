@@ -25,6 +25,7 @@
                 </v-btn-toggle>
                 <v-select
                   dense
+                  :disabled="addon.confirmed === false"
                   hide-details="auto"
                   item-text="localName"
                   item-value="code"
@@ -39,7 +40,7 @@
                 <v-select
                   v-model="addon.portionSize.unit"
                   dense
-                  :disabled="!addon.data"
+                  :disabled="addon.confirmed === false || !addon.data"
                   hide-details="auto"
                   :item-text="(item) => getStandardUnitEstimateIn(item)"
                   item-value="name"
@@ -52,7 +53,7 @@
                 <v-select
                   v-model="addon.portionSize.quantity"
                   dense
-                  :disabled="!addon.data"
+                  :disabled="addon.confirmed === false || !addon.data"
                   hide-details="auto"
                   :items="[0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
                   :label="promptI18n.quantity"
