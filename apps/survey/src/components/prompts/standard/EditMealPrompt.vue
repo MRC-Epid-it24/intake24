@@ -23,6 +23,7 @@
     />
     <template #actions>
       <v-btn
+        v-if="!meal.flags.includes('meal-time:disabled')"
         class="px-4"
         color="primary"
         large
@@ -65,6 +66,7 @@
     </template>
     <template #nav-actions>
       <v-btn
+        v-if="!meal.flags.includes('meal-time:disabled')"
         color="primary"
         text
         :title="$t('recall.actions.nav.mealTime')"

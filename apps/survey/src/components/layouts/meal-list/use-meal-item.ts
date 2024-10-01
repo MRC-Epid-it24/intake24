@@ -34,6 +34,7 @@ export function useMealItem(props: UseMealItemProps, { emit }: SetupContext) {
           name: i18n.t('recall.menu.meal.editTime').toString(),
           action: 'mealTime',
           icon: '$mealTime',
+          if: (meal: MealState) => !meal.flags.includes('meal-time:disabled'),
         },
         {
           name: i18n.t('recall.menu.meal.delete').toString(),

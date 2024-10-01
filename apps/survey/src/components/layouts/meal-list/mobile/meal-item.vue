@@ -13,7 +13,7 @@
           {{ mealName }}
         </v-list-item-title>
       </v-list-item-content>
-      <v-list-item-action v-if="meal.time">
+      <v-list-item-action v-if="meal.time && !meal.flags.includes('meal-time:hidden')">
         <v-list-item-action-text>
           {{ mealTime }}
         </v-list-item-action-text>

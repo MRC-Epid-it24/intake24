@@ -8,10 +8,10 @@
         {{ mealName }}
       </v-list-item-title>
       <v-list-item-action>
-        <v-list-item-action-text v-if="mealTime?.length">
+        <v-list-item-action-text v-if="mealTime && !meal.flags.includes('meal-time:hidden')">
           {{ mealTime }}
         </v-list-item-action-text>
-        <v-tooltip v-else bottom>
+        <v-tooltip v-else-if="!mealTime" bottom>
           <template #activator="{ on, attrs }">
             <v-icon v-bind="attrs" small v-on="on">
               $question
