@@ -21,12 +21,23 @@
     "urlAuthToken": "URL Auth Token",
     "none": "No survey alias defined"
   },
+  "identifiers": {
+    "_": "Identifier",
+    "title": "Identifiers"
+  },
+  "personalIdentifiers": {
+    "_": "Personal identifier",
+    "title": "Personal identifiers"
+  },
   "customFields": {
     "_": "Custom field",
     "title": "Custom fields",
+    "add": "New field",
+    "remove": "Remove field",
     "name": "Field name",
     "value": "Field value",
-    "none": "No custom field defined"
+    "none": "No custom field defined",
+    "public": "Public"
   },
   "permissions": {
     "_": "Permission",

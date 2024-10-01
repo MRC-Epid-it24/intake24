@@ -23,7 +23,7 @@ export default defineComponent({
         {
           text: this.$t('survey-schemes.settings.types._'),
           sortable: true,
-          value: 'type',
+          value: 'settings.type',
         },
         {
           text: this.$t('common.action._'),

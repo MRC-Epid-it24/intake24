@@ -24,87 +24,136 @@
                 {{ $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`) }}
               </v-toolbar-title>
             </v-toolbar>
-            <v-form autocomplete="off" @keydown.native="clearError" @submit.prevent="save">
+            <v-form autocomplete="off" @keydown.native="clearError" @submit.prevent="saveRespondent">
+              <v-card-title>
+                {{ $t('users.identifiers.title') }}
+              </v-card-title>
               <v-card-text>
-                <v-container fluid>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="form.username"
-                        autocomplete="username"
-                        :disabled="!isCreate"
-                        :error-messages="form.errors.get('username')"
-                        hide-details="auto"
-                        :label="$t('users.username')"
-                        name="username"
-                        outlined
-                        prepend-inner-icon="fas fa-user-secret"
-                      />
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="form.password"
-                        autocomplete="new-password"
-                        :error-messages="form.errors.get('password')"
-                        hide-details="auto"
-                        :label="$t('common.password._')"
-                        name="password"
-                        outlined
-                        prepend-inner-icon="fas fa-unlock"
-                        type="password"
-                      />
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="form.passwordConfirm"
-                        autocomplete="new-password"
-                        :error-messages="form.errors.get('passwordConfirm')"
-                        hide-details="auto"
-                        :label="$t('common.password.confirm')"
-                        name="passwordConfirm"
-                        outlined
-                        prepend-inner-icon="fas fa-unlock"
-                        type="password"
-                      />
-                    </v-col>
-                    <template v-if="entry.userPersonalIdentifiers">
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="form.name"
-                          :error-messages="form.errors.get('name')"
-                          hide-details="auto"
-                          :label="$t('users.name')"
-                          name="name"
-                          outlined
-                          prepend-inner-icon="fas fa-user"
-                        />
-                      </v-col>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="form.email"
-                          :error-messages="form.errors.get('email')"
-                          hide-details="auto"
-                          :label="$t('common.email')"
-                          name="email"
-                          outlined
-                          prepend-inner-icon="fas fa-at"
-                        />
-                      </v-col>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="form.phone"
-                          :error-messages="form.errors.get('phone')"
-                          hide-details="auto"
-                          :label="$t('common.phone')"
-                          name="phone"
-                          outlined
-                          prepend-inner-icon="fas fa-phone"
-                        />
-                      </v-col>
-                    </template>
-                  </v-row>
-                </v-container>
+                <v-text-field
+                  v-model="form.username"
+                  autocomplete="username"
+                  class="mb-4"
+                  :disabled="!isCreate"
+                  :error-messages="form.errors.get('username')"
+                  hide-details="auto"
+                  :label="$t('users.username')"
+                  name="username"
+                  outlined
+                  prepend-inner-icon="fas fa-user-secret"
+                />
+                <v-text-field
+                  v-model="form.password"
+                  autocomplete="new-password"
+                  class="mb-4"
+                  :error-messages="form.errors.get('password')"
+                  hide-details="auto"
+                  :label="$t('common.password._')"
+                  name="password"
+                  outlined
+                  prepend-inner-icon="fas fa-unlock"
+                  type="password"
+                />
+                <v-text-field
+                  v-model="form.passwordConfirm"
+                  autocomplete="new-password"
+                  :error-messages="form.errors.get('passwordConfirm')"
+                  hide-details="auto"
+                  :label="$t('common.password.confirm')"
+                  name="passwordConfirm"
+                  outlined
+                  prepend-inner-icon="fas fa-unlock"
+                  type="password"
+                />
               </v-card-text>
+              <template v-if="entry.userPersonalIdentifiers">
+                <v-card-title>
+                  {{ $t('users.personalIdentifiers.title') }}
+                </v-card-title>
+                <v-card-text>
+                  <v-text-field
+                    v-model="form.name"
+                    class="mb-4"
+                    :error-messages="form.errors.get('name')"
+                    hide-details="auto"
+                    :label="$t('users.name')"
+                    name="name"
+                    outlined
+                    prepend-inner-icon="fas fa-user"
+                  />
+                  <v-text-field
+                    v-model="form.email"
+                    class="mb-4"
+                    :error-messages="form.errors.get('email')"
+                    hide-details="auto"
+                    :label="$t('common.email')"
+                    name="email"
+                    outlined
+                    prepend-inner-icon="fas fa-at"
+                  />
+                  <v-text-field
+                    v-model="form.phone"
+                    :error-messages="form.errors.get('phone')"
+                    hide-details="auto"
+                    :label="$t('common.phone')"
+                    name="phone"
+                    outlined
+                    prepend-inner-icon="fas fa-phone"
+                  />
+                </v-card-text>
+              </template>
+              <template v-if="entry.userCustomFields">
+                <v-toolbar dense flat tile>
+                  <div class="font-weight-medium">
+                    {{ $t('users.customFields.title') }}
+                  </div>
+                  <v-spacer />
+                  <v-btn color="primary" fab small :title="$t('users.customFields.add')" @click.stop="addCustomField">
+                    <v-icon small>
+                      $add
+                    </v-icon>
+                  </v-btn>
+                </v-toolbar>
+                <v-card-text>
+                  <template v-for="(field, idx) in form.customFields">
+                    <v-row :key="`r1-${idx}`" dense>
+                      <v-col cols="12" md="4">
+                        <v-text-field
+                          v-model="field.name"
+                          dense
+                          :error-messages="form.errors.get(`customFields.${idx}.name`)"
+                          hide-details="auto"
+                          :label="$t('users.customFields.name')"
+                          outlined
+                        />
+                      </v-col>
+                      <v-col cols="12" md="8">
+                        <v-text-field
+                          v-model="field.value"
+                          dense
+                          :error-messages="form.errors.get(`customFields.${idx}.value`)"
+                          hide-details="auto"
+                          :label="$t('users.customFields.value')"
+                          outlined
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row :key="`r2-${idx}`" dense justify="space-between">
+                      <v-col cols="auto">
+                        <v-checkbox v-model="field.public" class="mt-0" hide-details="auto" :label="$t('users.customFields.public')" />
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-btn color="error" text :title="$t('users.customFields.remove')" @click.stop="removeCustomField(idx)">
+                          <v-icon color="error" left>
+                            $delete
+                          </v-icon>
+                          {{ $t('common.action.remove') }}
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </v-card-text>
+              </template>
+              <v-divider />
               <v-card-actions>
                 <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
                   <v-icon left>
@@ -160,7 +209,7 @@
             <respondent-feedback :survey-id="id" :user="item" />
           </v-list>
         </v-menu>
-        <v-btn color="secondary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
+        <v-btn color="secondary" icon :title="$t('common.action.edit')" @click.stop="editRespondent(item)">
           <v-icon dark>
             $edit
           </v-icon>
@@ -170,7 +219,7 @@
           icon
           icon-left="$delete"
           :label="$t('common.action.delete').toString()"
-          @confirm="remove(item)"
+          @confirm="removeRespondent(item)"
         >
           {{ $t('common.action.confirm.delete', { name: item.username }) }}
         </confirm-dialog>
@@ -180,8 +229,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
+import type { UserCustomField } from '@intake24/common/types';
 import type {
   RespondentEntry,
   RespondentListEntry,
@@ -190,6 +240,7 @@ import type {
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog, useClipboard } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
@@ -206,6 +257,7 @@ export type SurveyRespondentsForm = {
   name: string | null;
   email: string | null;
   phone: string | null;
+  customFields: UserCustomField[];
 };
 
 export default defineComponent({
@@ -225,6 +277,7 @@ export default defineComponent({
     const dialog = ref(false);
     const loading = ref(false);
 
+    const http = useHttp();
     const { i18n } = useI18n();
     const clipboard = useClipboard();
 
@@ -280,81 +333,103 @@ export default defineComponent({
         name: null,
         email: null,
         phone: null,
+        customFields: [],
       },
     });
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    return { dialog, headers, loading, entry, entryLoaded, table, form, clearError, toClipboard };
-  },
+    const isCreate = computed(() => !form.userId);
 
-  computed: {
-    isCreate(): boolean {
-      return !this.form.userId;
-    },
-  },
+    function addCustomField() {
+      const size = form.customFields.length + 1;
+      form.customFields.push({ name: `name-${size}`, value: `value-${size}` });
+    };
 
-  methods: {
-    async fetchUser(username: string) {
-      const { data } = await this.$http.get<RespondentEntry>(
-        `admin/surveys/${this.id}/respondents/${username}`,
+    function removeCustomField(index: number) {
+      form.customFields.splice(index, 1);
+    };
+
+    async function fetchRespondent(username: string) {
+      const { data } = await http.get<RespondentEntry>(
+        `admin/surveys/${props.id}/respondents/${username}`,
       );
 
       return data;
-    },
+    };
 
-    add() {
-      this.form.reset();
-      this.dialog = true;
-    },
+    function addRespondent() {
+      form.reset();
+      dialog.value = true;
+    };
 
-    async edit(item: RespondentListEntry) {
-      this.loading = true;
-      this.dialog = true;
+    async function editRespondent(item: RespondentListEntry) {
+      loading.value = true;
+      dialog.value = true;
 
       try {
-        const user = await this.fetchUser(item.username);
-        this.form.load(user);
+        const user = await fetchRespondent(item.username);
+        form.load(user);
       }
       finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
+    };
 
-    reset() {
-      this.form.reset();
-      this.dialog = false;
-    },
+    function reset() {
+      form.reset();
+      dialog.value = false;
+    };
 
-    async updateTable() {
-      await this.table?.fetch();
-    },
+    async function updateTable() {
+      await table.value?.fetch();
+    };
 
-    async save() {
-      if (this.form.userId) {
-        const { username: name } = await this.form.patch<RespondentEntry>(
-          `admin/surveys/${this.id}/respondents/${this.form.username}`,
+    async function saveRespondent() {
+      if (form.userId) {
+        const { username: name } = await form.patch<RespondentEntry>(
+          `admin/surveys/${props.id}/respondents/${form.username}`,
         );
 
-        useMessages().success(this.$t('common.msg.updated', { name }).toString());
+        useMessages().success(i18n.t('common.msg.updated', { name }).toString());
       }
       else {
-        const { username: name } = await this.form.post<RespondentEntry>(
-          `admin/surveys/${this.id}/respondents`,
+        const { username: name } = await form.post<RespondentEntry>(
+          `admin/surveys/${props.id}/respondents`,
         );
 
-        useMessages().success(this.$t('common.msg.created', { name }).toString());
+        useMessages().success(i18n.t('common.msg.created', { name }).toString());
       }
 
-      this.dialog = false;
-      await this.updateTable();
-    },
+      dialog.value = false;
+      await updateTable();
+    };
 
-    async remove({ username: name }: RespondentListEntry) {
-      await this.$http.delete(`admin/surveys/${this.id}/respondents/${name}`);
-      useMessages().success(this.$t('common.msg.deleted', { name }).toString());
+    async function removeRespondent({ username: name }: RespondentListEntry) {
+      await http.delete(`admin/surveys/${props.id}/respondents/${name}`);
+      useMessages().success(i18n.t('common.msg.deleted', { name }).toString());
 
-      await this.updateTable();
-    },
+      await updateTable();
+    };
+
+    return {
+      addCustomField,
+      addRespondent,
+      dialog,
+      editRespondent,
+      isCreate,
+      headers,
+      loading,
+      entry,
+      entryLoaded,
+      table,
+      form,
+      clearError,
+      removeCustomField,
+      removeRespondent,
+      reset,
+      saveRespondent,
+      toClipboard,
+    };
   },
 });
 </script>
