@@ -111,11 +111,6 @@ export const CsvFoodRecords = {
   },
 } as const;
 
-//* * Type conversions */
-// type GenerateTypeFromProperty<T, P extends keyof CsvRecordStructure> = {
-//   [K in keyof T]: T[K] extends { [key in P]: infer U } ? U : never;
-// }[keyof T];
-
 type GenerateTypeFromPropertyWithRequired<T> = {
   [K in keyof T]: string;
 };
@@ -125,11 +120,9 @@ type EnforceCsvRecordStructure<T> = {
 };
 
 type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
-//* * Type conversions */
 
 type CsvFoodRecordType = EnforceCsvRecordStructure<typeof CsvFoodRecords>;
 
-// export type CSVHeaders = GenerateTypeFromProperty<CsvFoodRecord, 'header'>;
 export type CSVHeaders = CsvFoodRecordType[keyof CsvFoodRecordType]['header'];
 
 export type CSVFields = GenerateTypeFromPropertyWithRequired<CsvFoodRecordType>;

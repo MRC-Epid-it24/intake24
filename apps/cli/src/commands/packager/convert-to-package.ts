@@ -104,8 +104,8 @@ export class ConvertorToPackage {
     try {
       await fs.access(filePath);
     }
-    catch (e) {
-      this.logger.debug(`File ${filePath} does not exist or is not accessible, skipping`);
+    catch (e: unknown) {
+      this.logger.debug(`File ${filePath} does not exist or is not accessible, skipping\n ${e}`);
       return undefined;
     }
 
@@ -260,8 +260,8 @@ export class ConvertorToPackage {
         associatedFoods.push({
           foodCode: category,
           linkAsMain: false,
-          promptText: '',
-          genericName: '',
+          promptText: { en: '' },
+          genericName: { en: '' },
         });
       });
 
