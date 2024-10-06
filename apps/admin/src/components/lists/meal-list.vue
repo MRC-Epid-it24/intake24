@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey lighten-2" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-2" flat tile>
+      <v-icon color="secondary" end start>
         fas fa-hamburger
       </v-icon>
       <div class="d-flex flex-column">
@@ -11,41 +11,32 @@
         <span v-if="subtitle" class="text-subtitle-2">{{ subtitle }}</span>
       </div>
       <v-spacer />
-      <v-btn color="primary" fab small :title="$t('survey-schemes.meals.create')" @click.stop="add">
-        <v-icon small>
-          $add
-        </v-icon>
-      </v-btn>
+      <v-btn color="primary" icon="$add" size="small" :title="$t('survey-schemes.meals.create')" @click.stop="add" />
       <confirm-dialog
         color="error"
-        :label="$t('survey-schemes.meals.reset._').toString()"
+        :label="$t('survey-schemes.meals.reset._')"
         @confirm="resetList"
       >
-        <template #activator="{ attrs, on }">
+        <template #activator="{ props }">
           <v-btn
             class="ml-3"
             color="error"
-            fab
-            small
+            icon="$sync"
+            size="small"
             :title="$t('survey-schemes.meals.reset._')"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon small>
-              $sync
-            </v-icon>
-          </v-btn>
+            v-bind="props"
+          />
         </template>
         {{ $t('survey-schemes.meals.reset.text') }}
       </confirm-dialog>
       <options-menu>
-        <select-resource resource="survey-schemes" return-object="meals" @input="load">
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+        <select-resource resource="survey-schemes" return-object="meals" @update:model-value="load">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('survey-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -54,56 +45,50 @@
         <json-editor-dialog v-model="meals" />
       </options-menu>
     </v-toolbar>
-    <v-list two-line>
-      <draggable v-model="meals" handle=".drag-and-drop__handle">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(meal, index) in meals"
-            :key="meal.name.en"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ meal.name.en }}</v-list-item-title>
-              <v-list-item-subtitle>{{ meal.time }}</v-list-item-subtitle>
-            </v-list-item-content>
+    <v-list lines="two">
+      <vue-draggable
+        v-model="meals"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+      >
+        <v-list-item
+          v-for="(meal, index) in meals"
+          :key="meal.name.en"
+          class="drag-and-drop__item"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title>{{ meal.name.en }}</v-list-item-title>
+          <v-list-item-subtitle>{{ meal.time }}</v-list-item-subtitle>
+          <template #append>
             <v-list-item-action>
-              <v-btn icon :title="$t('survey-schemes.meals.edit')" @click.stop="edit(index, meal)">
-                <v-icon color="secondary lighten-2">
-                  $edit
-                </v-icon>
-              </v-btn>
+              <v-btn icon="$edit" :title="$t('survey-schemes.meals.edit')" @click.stop="edit(index, meal)" />
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('survey-schemes.meals.remove').toString()"
+                :label="$t('survey-schemes.meals.remove')"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: meal.name.en }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <v-dialog
       v-model="dialog.show"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
+      :fullscreen="$vuetify.display.smAndDown"
       max-width="600px"
       persistent
     >
-      <v-card :tile="$vuetify.breakpoint.smAndDown">
+      <v-card :tile="$vuetify.display.smAndDown">
         <v-toolbar color="secondary" dark flat>
-          <v-icon dark left>
-            fas fa-hamburger
-          </v-icon>
+          <v-icon icon="fas fa-hamburger" start />
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
@@ -112,39 +97,33 @@
         <v-form ref="form" @submit.prevent="save">
           <language-selector
             v-model="dialog.meal.name"
-            :label="$t('survey-schemes.meals.name').toString()"
+            :label="$t('survey-schemes.meals.name')"
             :outlined="false"
           >
-            <template v-for="lang in Object.keys(dialog.meal.name)" #[`lang.${lang}`]>
+            <template v-for="lang in Object.keys(dialog.meal.name)" :key="lang" #[`lang.${lang}`]>
               <v-text-field
-                :key="lang"
                 v-model="dialog.meal.name[lang]"
                 hide-details="auto"
                 :label="$t('survey-schemes.meals.name')"
-                outlined
                 :rules="rules(lang)"
+                variant="outlined"
               />
             </template>
           </language-selector>
-          <v-card-text>
+          <v-card-text class="d-flex justify-center align-center pa-0">
             <v-time-picker
               v-model="dialog.meal.time"
-              format="24hr"
               full-width
-              :landscape="$vuetify.breakpoint.smAndUp"
+              :landscape="$vuetify.display.smAndUp"
             />
           </v-card-text>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>
-                $cancel
-              </v-icon>{{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer />
-            <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -156,7 +135,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { Meal, Meals } from '@intake24/common/surveys';
 import { defaultMeals } from '@intake24/common/surveys';
@@ -178,11 +157,11 @@ export default defineComponent({
 
   components: {
     ConfirmDialog,
-    Draggable: draggable,
     JsonEditorDialog,
     LanguageSelector,
     OptionsMenu,
     SelectResource,
+    VueDraggable,
   },
 
   props: {
@@ -194,13 +173,13 @@ export default defineComponent({
       type: String as PropType<'full' | 'override'>,
       default: 'full',
     },
-    value: {
+    modelValue: {
       type: Array as PropType<Meal[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup() {
     const form = ref<InstanceType<typeof HTMLFormElement>>();
@@ -218,7 +197,7 @@ export default defineComponent({
     return {
       dialog: dialog(),
       newDialog: dialog,
-      meals: [...this.value],
+      meals: [...this.modelValue],
       defaultMeals,
     };
   },
@@ -230,19 +209,19 @@ export default defineComponent({
     title(): string {
       return this.$t(
         this.isOverrideMode ? 'survey-schemes.overrides.meals.title' : 'survey-schemes.meals.title',
-      ).toString();
+      );
     },
     subtitle() {
       if (!this.isOverrideMode)
         return undefined;
 
-      return this.$t('survey-schemes.overrides.meals.subtitle').toString();
+      return this.$t('survey-schemes.overrides.meals.subtitle');
     },
   },
 
   watch: {
     meals(val) {
-      this.$emit('input', val);
+      this.$emit('update:modelValue', val);
     },
   },
 
@@ -251,14 +230,14 @@ export default defineComponent({
       return [
         (value: string | null): boolean | string => {
           if (!value)
-            return this.$t('survey-schemes.meals.validation.required').toString();
+            return this.$t('survey-schemes.meals.validation.required');
 
           const { index } = this.dialog;
           const match = this.meals.find(
             (meal, idx) => value === meal.name[langId] && index !== idx,
           );
 
-          return match ? this.$t('survey-schemes.meals.validation.unique').toString() : true;
+          return match ? this.$t('survey-schemes.meals.validation.unique') : true;
         },
       ];
     },

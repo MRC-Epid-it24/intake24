@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-card-text>
       <v-row>
         <v-col cols="12" md="6">
@@ -16,7 +16,7 @@
         </v-col>
       </v-row>
     </v-card-text>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

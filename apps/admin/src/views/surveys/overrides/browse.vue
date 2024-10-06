@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-card-title>{{ $t('survey-schemes.overrides.title') }}</v-card-title>
     <v-card-subtitle>
       {{ $t('survey-schemes.overrides.subtitle') }}
@@ -9,8 +9,8 @@
         {{ $t(`survey-schemes.${item}.title`) }}
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item key="settings" value="settings">
+    <v-tabs-window v-model="tab">
+      <v-tabs-window-item key="settings" value="settings">
         <v-card>
           <v-card-title>{{ $t('survey-schemes.overrides.settings.title') }}</v-card-title>
           <v-card-text>
@@ -24,8 +24,8 @@
                   :items="schemeTypes"
                   :label="$t('survey-schemes.settings.types._')"
                   name="settings.type"
-                  outlined
-                  @change="form.errors.clear('settings.type')"
+                  variant="outlined"
+                  @update:model-value="form.errors.clear('settings.type')"
                 />
               </override-field>
               <override-field v-model="switches.flow" @change="toggle('flow', $event)">
@@ -37,8 +37,8 @@
                   :items="recallFlows"
                   :label="$t('survey-schemes.settings.flows._')"
                   name="settings.flow"
-                  outlined
-                  @change="form.errors.clear('settings.flow')"
+                  variant="outlined"
+                  @update:model-value="form.errors.clear('settings.flow')"
                 />
               </override-field>
               <override-field v-model="switches.recallDate" @change="toggle('recallDate', $event)">
@@ -48,7 +48,7 @@
                   hide-details="auto"
                   :label="$t('survey-schemes.settings.recallDate')"
                   name="settings.recallDate"
-                  outlined
+                  variant="outlined"
                 />
               </override-field>
               <override-field v-model="switches.languages" @change="toggle('languages', $event)">
@@ -57,36 +57,38 @@
                   :disabled="!switches.languages"
                   :error-messages="form.errors.get('settings.languages')"
                   hide-details="auto"
-                  item-text="englishName"
+                  item-title="englishName"
                   item-value="code"
                   :items="languages"
                   :label="$t('survey-schemes.settings.languages')"
                   multiple
                   name="settings.languages"
-                  outlined
-                  @change="form.errors.clear('settings.languages')"
+                  variant="outlined"
+                  @update:model-value="form.errors.clear('settings.languages')"
                 />
               </override-field>
             </v-row>
           </v-card-text>
         </v-card>
-      </v-tab-item>
-      <v-tab-item key="prompts" value="prompts">
-        <prompt-list
-          v-bind="{ mode: 'override', promptIds, templates: prompts }"
-          :items.sync="form.surveySchemeOverrides.prompts"
-        />
-      </v-tab-item>
-      <v-tab-item key="meals" value="meals">
+      </v-tabs-window-item>
+      <v-tabs-window-item key="prompts" value="prompts">
+        <v-expansion-panels v-model="panels" flat>
+          <prompt-list
+            v-bind="{ mode: 'override', promptIds, templates: prompts }"
+            v-model:items="form.surveySchemeOverrides.prompts"
+          />
+        </v-expansion-panels>
+      </v-tabs-window-item>
+      <v-tabs-window-item key="meals" value="meals">
         <meal-list
           v-model="form.surveySchemeOverrides.meals"
           mode="override"
           :scheme-id="entry.surveySchemeId"
         />
-      </v-tab-item>
-    </v-tabs-items>
+      </v-tabs-window-item>
+    </v-tabs-window>
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
@@ -148,6 +150,7 @@ export default defineComponent({
       form.surveySchemeOverrides.settings = rest;
     };
 
+    const panels = ref(['override']);
     const promptIds = computed(() => form.surveySchemeOverrides.prompts.map(({ id }) => id));
     const prompts = computed(() => entryLoaded.value ? flattenScheme(entry.value.surveyScheme.prompts) : []);
 
@@ -157,6 +160,7 @@ export default defineComponent({
       clearError,
       form,
       languages,
+      panels,
       prompts,
       promptIds,
       recallFlows,

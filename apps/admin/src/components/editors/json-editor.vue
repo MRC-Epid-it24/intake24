@@ -1,15 +1,15 @@
 <template>
-  <json-editor-vue v-bind="{ readOnly, stringified: false, value }" @input="input" />
+  <json-editor-vue v-bind="{ readOnly, stringified: false, modelValue }" @update:model-value="input" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineAsyncComponent, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'JsonEditor',
 
   components: {
-    JsonEditorVue: () => import('json-editor-vue'),
+    JsonEditorVue: defineAsyncComponent(() => import('json-editor-vue')),
   },
 
   props: {
@@ -17,16 +17,16 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    value: {
+    modelValue: {
       type: [Array, Object],
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
     const input = (value: string | object) => {
-      emit('input', value);
+      emit('update:modelValue', value);
     };
 
     return { input };

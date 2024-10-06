@@ -7,7 +7,7 @@
         ref="captcha"
         :sitekey="sitekey"
         size="invisible"
-        @challengeExpired="expired"
+        @challenge-expired="expired"
         @expired="expired"
         @verify="verified"
       />
@@ -30,53 +30,52 @@
   </div>
 </template>
 
-<script lang="ts">
-import HCaptcha from '@hcaptcha/vue-hcaptcha';
-import { defineComponent, ref } from 'vue';
-import ReCaptcha from 'vue-recaptcha';
+<script lang="ts" setup>
+import HCaptcha from '@hcaptcha/vue3-hcaptcha';
+import { ref } from 'vue';
+import { VueRecaptcha as ReCaptcha } from 'vue-recaptcha';
 
 import type { CaptchaProvider } from '@intake24/common/security';
 
-export default defineComponent({
+defineOptions({
   name: 'Captcha',
+});
 
-  components: { HCaptcha, ReCaptcha },
+const emit = defineEmits(['expired', 'verified']);
 
-  emits: ['expired', 'verified'],
+const captcha = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
+const provider = ref<CaptchaProvider | null>(import.meta.env.VITE_CAPTCHA_PROVIDER || null);
+const sitekey = ref<string>(import.meta.env.VITE_CAPTCHA_SITEKEY || '');
 
-  setup(props, { emit }) {
-    const captcha = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
-    const provider = ref<CaptchaProvider | null>(import.meta.env.VITE_CAPTCHA_PROVIDER || null);
-    const sitekey = ref<string>(import.meta.env.VITE_CAPTCHA_SITEKEY || '');
+function execute() {
+  captcha.value?.execute();
+}
 
-    const execute = () => {
-      captcha.value?.execute();
-    };
+function reset() {
+  captcha.value?.reset();
+}
 
-    const reset = () => {
-      captcha.value?.reset();
-    };
+function expired() {
+  emit('expired');
+  reset();
+}
 
-    const expired = () => {
-      emit('expired');
-      reset();
-    };
+function verified(token?: string) {
+  emit('verified', token);
+}
 
-    const verified = (token?: string /* , eKey: string */) => {
-      emit('verified', token);
-    };
+function executeIfCan() {
+  if (!provider.value) {
+    verified();
+    return;
+  }
 
-    const executeIfCan = () => {
-      if (!provider.value) {
-        verified();
-        return;
-      }
+  execute();
+}
 
-      execute();
-    };
-
-    return { captcha, provider, sitekey, execute, executeIfCan, expired, reset, verified };
-  },
+defineExpose({
+  executeIfCan,
+  reset,
 });
 </script>
 

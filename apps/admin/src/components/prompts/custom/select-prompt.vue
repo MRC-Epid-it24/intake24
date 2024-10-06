@@ -1,31 +1,30 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row class="mb-3">
       <v-col cols="12">
         <v-switch
           hide-details="auto"
-          :input-value="multiple"
           :label="$t('survey-schemes.prompts.multiple')"
-          @change="update('multiple', $event)"
+          :model-value="multiple"
+          @update:model-value="update('multiple', $event)"
         />
       </v-col>
     </v-row>
     <language-selector
       :default="[]"
-      :label="$t('common.options.title').toString()"
+      :label="$t('common.options.title')"
+      :model-value="options"
       :required="true"
-      :value="options"
-      @input="update('options', $event)"
+      @update:model-value="update('options', $event)"
     >
-      <template v-for="lang in Object.keys(options)" #[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(options)" :key="lang" #[`lang.${lang}`]>
         <options-list
-          :key="lang"
           :options="options[lang]"
           @update:options="updateLanguage('options', lang, $event)"
         />
       </template>
     </language-selector>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

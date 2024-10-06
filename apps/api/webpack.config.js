@@ -11,7 +11,10 @@ module.exports = (env) => {
   const inspectBreak = !!NODE_INSPECT_BREAK;
   const mode = NODE_ENV === 'test' ? 'none' : NODE_ENV;
 
-  const plugins = [new ForkTsCheckerWebpackPlugin(), new WebpackBar({ name: 'Server' })];
+  const plugins = [
+    new ForkTsCheckerWebpackPlugin({ typescript: { memoryLimit: 3072 } }),
+    new WebpackBar({ name: 'Server' }),
+  ];
 
   if (isDev) {
     plugins.push(

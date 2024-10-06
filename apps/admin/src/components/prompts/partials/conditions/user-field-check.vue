@@ -3,13 +3,12 @@
     <v-col cols="12" md="6">
       <v-combobox
         v-model="currentValue.field"
-        deletable-chips
+        closable-chips
         hide-details="auto"
         :items="standardUserFields"
         :label="$t('survey-schemes.conditions.userField.field')"
-        outlined
-        small-chips
-        @change="update(currentValue)"
+        variant="outlined"
+        @update:model-value="update(currentValue)"
       />
     </v-col>
     <v-col cols="12" md="6">
@@ -19,20 +18,20 @@
         item-value="op"
         :items="conditionOps"
         :label="$t('survey-schemes.conditions.ops._')"
-        outlined
-        @change="update(currentValue)"
+        variant="outlined"
+        @update:model-value="update(currentValue)"
       >
-        <template #item="{ item }">
-          <v-icon left>
-            {{ item.icon }}
-          </v-icon>
-          {{ item.text }}
+        <template #item="{ item, props }">
+          <v-list-item v-bind="props">
+            <template #prepend>
+              <v-icon :icon="item.raw.icon" start />
+            </template>
+            <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+          </v-list-item>
         </template>
         <template #selection="{ item }">
-          <v-icon left>
-            {{ item.icon }}
-          </v-icon>
-          {{ item.text }}
+          <v-icon :icon="item.raw.icon" start />
+          {{ item.raw.title }}
         </template>
       </v-select>
     </v-col>
@@ -53,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, type PropType, ref } from 'vue';
-import { VCombobox, VTextField } from 'vuetify/lib';
+import { VCombobox, VTextField } from 'vuetify/components';
 
 import { useSelects } from '@intake24/admin/composables';
 import {
@@ -67,19 +66,21 @@ export default defineComponent({
   components: { VTextField, VCombobox },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<UserFieldPropertyCheck>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
     const { conditionOps } = useSelects();
 
-    const currentValue = ref(props.value);
+    const currentValue = ref(props.modelValue);
 
     const update = (value: UserFieldPropertyCheck) => {
-      emit('update:value', value);
+      emit('update:modelValue', value);
     };
 
     const comboOps = ['setEq', 'in', 'notIn'];

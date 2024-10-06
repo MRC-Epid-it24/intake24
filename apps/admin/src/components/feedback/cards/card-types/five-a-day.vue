@@ -1,14 +1,14 @@
 <template>
   <div>
-    <card-unit v-bind="{ unit: value.unit }" @update:unit="update('unit', $event)" />
+    <card-unit v-bind="{ unit: modelValue.unit }" @update:unit="update('unit', $event)" />
     <card-thresholds
-      :thresholds="{ high: value.high, low: value.low }"
+      :thresholds="{ high: modelValue.high, low: modelValue.low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
     />
-    <v-tab-item key="json" value="json">
-      <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
-    </v-tab-item>
+    <v-tabs-window-item key="json" value="json">
+      <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+    </v-tabs-window-item>
   </div>
 </template>
 
@@ -27,15 +27,17 @@ export default defineComponent({
   components: { CardThresholds, CardUnit, JsonEditor },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<FiveADayCard>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
     const update = (field: string, value: any) => {
-      emit('input', { ...props.value, [field]: value });
+      emit('update:modelValue', { ...props.modelValue, [field]: value });
     };
 
     return { update };

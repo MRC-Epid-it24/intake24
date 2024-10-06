@@ -5,14 +5,12 @@
         block
         :color="color"
         :disabled="disabled || isAppLoading"
-        :title="label"
+        size="x-large"
+        :title="label ?? $t('common.action.save')"
         type="submit"
-        x-large
       >
-        <v-icon left>
-          {{ icon }}
-        </v-icon>
-        {{ label }}
+        <v-icon :icon="icon" start />
+        {{ label ?? $t('common.action.save') }}
       </v-btn>
     </v-col>
   </v-row>
@@ -39,9 +37,6 @@ export default defineComponent({
     },
     label: {
       type: String,
-      default() {
-        return this.$t('common.action.save');
-      },
     },
     disabled: {
       type: Boolean,

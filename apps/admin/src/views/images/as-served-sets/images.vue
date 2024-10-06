@@ -3,7 +3,7 @@
     <v-card-title>{{ $t('as-served-sets.images.title') }}</v-card-title>
     <v-row>
       <v-col v-for="image in images" :key="image.id" cols="12" md="4" sm="6">
-        <v-card flat min-height="200px" outlined>
+        <v-card border flat min-height="200px">
           <v-img :src="image.mainImageUrl" />
           <v-divider />
           <v-card-text>
@@ -14,9 +14,9 @@
                   :disabled="disabled"
                   hide-details="auto"
                   :label="$t('as-served-sets.weight')"
-                  name="description"
-                  outlined
-                  @input="updateImages"
+                  :name="`description-${image.id}`"
+                  variant="outlined"
+                  @update:model-value="updateImages"
                 />
               </v-col>
               <v-col align-self="center" class="d-flex justify-end" cols="3">
@@ -25,16 +25,12 @@
                   color="error"
                   icon
                   icon-left="$delete"
-                  :label="$t('as-served-sets.images.delete').toString()"
+                  :label="$t('as-served-sets.images.delete')"
                   @confirm="removeImage(image.id)"
                 >
                   {{ $t('common.action.confirm.delete', { name: 'selected image' }) }}
-                  <template #activator="{ attrs, on }">
-                    <v-btn class="ml-auto" icon large v-bind="attrs" v-on="on">
-                      <v-icon color="error">
-                        $delete
-                      </v-icon>
-                    </v-btn>
+                  <template #activator="{ props }">
+                    <v-btn class="ml-auto" v-bind="props" color="error" icon="$delete" size="large" variant="text" />
                   </template>
                 </confirm-dialog>
               </v-col>
@@ -44,18 +40,16 @@
       </v-col>
       <v-col v-if="!disabled" cols="12" md="4" sm="6">
         <v-card
+          border
           flat
           height="100%"
           link
           :loading="loading"
-          outlined
           :title="$t('as-served-sets.images.add')"
           @click.stop="addImage"
         >
           <div class="d-flex justify-center align-center upload-input-wrapper">
-            <v-btn color="primary" fab x-large>
-              <v-icon>$add</v-icon>
-            </v-btn>
+            <v-btn color="primary" icon="$add" size="x-large" />
           </div>
         </v-card>
         <label class="d-none" for="fileInput">

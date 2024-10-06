@@ -6,9 +6,14 @@
       </v-col>
       <v-divider vertical />
       <v-col cols="7" lg="8" xl="8">
-        <v-scroll-y-transition mode="out-in">
+        <!-- <v-scroll-y-transition mode="out-in">
           <router-view />
-        </v-scroll-y-transition>
+        </v-scroll-y-transition> -->
+        <router-view v-slot="{ Component }">
+          <v-scroll-y-transition mode="out-in">
+            <component :is="Component" />
+          </v-scroll-y-transition>
+        </router-view>
       </v-col>
     </v-row>
   </layout>

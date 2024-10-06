@@ -84,7 +84,10 @@
       "_": "Autre action",
       "title": "Autres actions",
       "elevated": "Elevé",
+      "flat": "Flat",
       "outlined": "Esquissé",
+      "plain": "Plain",
+      "tonal": "Tonal",
       "text": "Texte"
     }
   },

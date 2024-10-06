@@ -1,29 +1,29 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="activePrompt" :tile="isMobile" @change="updatePrompts">
+    <v-expansion-panels v-model="activePrompt" :tile="$vuetify.display.mobile" @update:model-value="updatePrompts">
       <v-expansion-panel v-for="(promptState, index) in promptStates" :key="index">
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ promptHeader(index) }}
           <template #actions>
             <expansion-panel-actions :valid="isPromptValid(promptState)" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <v-radio-group
             v-model="promptState.mainFoodConfirmed"
-            :row="!isMobile"
-            @change="onConfirmStateChanged(index)"
+            :inline="!$vuetify.display.mobile"
+            @update:model-value="onConfirmStateChanged(index)"
           >
             <v-radio
+              false-icon="fa-regular fa-circle"
               :label="promptI18n.no"
-              off-icon="fa-regular fa-circle"
-              on-icon="$yes"
+              true-icon="$yes"
               :value="false"
             />
             <v-radio
+              false-icon="fa-regular fa-circle"
               :label="promptI18n.yes"
-              off-icon="fa-regular fa-circle"
-              on-icon="$yes"
+              true-icon="$yes"
               :value="true"
             />
           </v-radio-group>
@@ -42,14 +42,14 @@
                 v-for="(foodItem, foodIndex) in promptState.foods"
                 :key="foodIndex"
                 class="mb-3"
-                color="grey lighten-4"
+                color="grey-lighten-4"
                 flat
               >
                 <v-card-text class="pa-0">
                   <v-container fluid>
-                    <v-row>
+                    <v-row align="center">
                       <v-col class="text-h6 ma-0" cols="7">
-                        <v-icon left>
+                        <v-icon start>
                           $food
                         </v-icon>
                         {{ associatedFoodDescription(foodItem) }}
@@ -57,12 +57,12 @@
                       <v-col class="food-buttons" cols="5">
                         <v-btn
                           class="food-button"
-                          color="primary lighten-1"
-                          depressed
+                          color="primary"
                           :title="promptI18n['select.different']"
+                          variant="flat"
                           @click="replaceFood(index, foodIndex)"
                         >
-                          <v-icon left>
+                          <v-icon start>
                             $edit
                           </v-icon>
                           {{ promptI18n['select.different'] }}
@@ -72,28 +72,27 @@
                           :label="promptI18n['select.remove']"
                           @confirm="removeFood(index, foodIndex)"
                         >
-                          <template #activator="{ on, attrs }">
+                          <template #activator="{ props }">
                             <v-btn
-                              v-bind="attrs"
+                              v-bind="props"
                               class="food-button"
-                              color="primary lighten-1"
-                              depressed
+                              color="primary-lighten-1"
                               :title="promptI18n['select.remove']"
-                              v-on="on"
+                              variant="flat"
                             >
-                              <v-icon left>
+                              <v-icon start>
                                 $delete
                               </v-icon>
                               {{ promptI18n['select.remove'] }}
                             </v-btn>
                           </template>
-                          <i18n path="recall.menu.food.deleteConfirm">
+                          <i18n-t keypath="recall.menu.food.deleteConfirm">
                             <template #item>
                               <span class="font-weight-medium">
                                 {{ associatedFoodDescription(foodItem) }}
                               </span>
                             </template>
-                          </i18n>
+                          </i18n-t>
                         </confirm-dialog>
                       </v-col>
                     </v-row>
@@ -110,19 +109,19 @@
               <v-card-text>
                 <v-radio-group
                   v-model="promptState.additionalFoodConfirmed"
-                  :row="!isMobile"
-                  @change="onConfirmStateChanged(index)"
+                  :inline="!$vuetify.display.mobile"
+                  @update:model-value="onConfirmStateChanged(index)"
                 >
                   <v-radio
+                    false-icon="fa-regular fa-circle"
                     :label="promptI18n.no"
-                    off-icon="fa-regular fa-circle"
-                    on-icon="$yes"
+                    true-icon="$yes"
                     :value="false"
                   />
                   <v-radio
+                    false-icon="fa-regular fa-circle"
                     :label="promptI18n.yesAnother"
-                    off-icon="fa-regular fa-circle"
-                    on-icon="$yes"
+                    true-icon="$yes"
                     :value="true"
                   />
                 </v-radio-group>
@@ -174,7 +173,7 @@
               </v-card-text>
             </v-card>
           </v-expand-transition>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
@@ -188,7 +187,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref, set, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 
 import type {
   AssociatedFoodPrompt,
@@ -198,7 +197,7 @@ import type {
 import type { EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { getFoodDescription } from '@intake24/common/types';
-import { translate, useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFoodChooser.vue';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -209,8 +208,8 @@ import createBasePrompt from '../createBasePrompt';
 function isPromptValid(prompt: AssociatedFoodPrompt): boolean {
   return prompt.mainFoodConfirmed === false
     || (prompt.mainFoodConfirmed === true
-    && prompt.foods.length > 0
-    && prompt.additionalFoodConfirmed === false);
+      && prompt.foods.length > 0
+      && prompt.additionalFoodConfirmed === false);
 }
 
 function getNextPrompt(prompts: AssociatedFoodPrompt[]) {
@@ -240,13 +239,13 @@ export default defineComponent({
     surveySlug: {
       type: String,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<PromptStates['associated-foods-prompt']>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { translate } = useI18n();
@@ -267,8 +266,8 @@ export default defineComponent({
       ]),
     );
 
-    const activePrompt = ref(props.value.activePrompt);
-    const promptStates = ref(props.value.promptStates);
+    const activePrompt = ref(props.modelValue.activePrompt);
+    const promptStates = ref(props.modelValue.promptStates);
     const allowMultiple = computed(() => props.prompt.multiple);
 
     const replaceFoodIndex = ref(
@@ -296,7 +295,7 @@ export default defineComponent({
             ),
           };
 
-          set(promptStates.value, i, update);
+          promptStates.value.splice(i, 1, update);
         }
       },
       { deep: true, immediate: true },
@@ -315,7 +314,6 @@ export default defineComponent({
   },
 
   computed: {
-
     associatedFoodPrompts(): UserAssociatedFoodPrompt[] {
       return this.prompts;
     },
@@ -376,7 +374,7 @@ export default defineComponent({
     isPromptValid,
 
     promptHeader(index: number): string {
-      const promptText = translate(this.associatedFoodPrompts[index].promptText);
+      const promptText = this.translate(this.associatedFoodPrompts[index].promptText);
       if (this.availableFoods[index].length > 0)
         return `${promptText} ${this.promptI18n.existingFoodHint}`;
       else
@@ -413,7 +411,7 @@ export default defineComponent({
       if (food.type === 'existing' && food.existingFoodId !== undefined)
         return this.existingFoodDescription(food.existingFoodId);
       if (food.type === 'missing')
-        return this.$t(`prompts.${this.type}.missing.placeholder`).toString();
+        return this.$t(`prompts.${this.type}.missing.placeholder`);
       return 'No food selected';
     },
 
@@ -423,7 +421,7 @@ export default defineComponent({
     },
 
     replaceFood(promptIndex: number, foodIndex: number) {
-      set(this.replaceFoodIndex, promptIndex, foodIndex);
+      this.replaceFoodIndex.splice(promptIndex, 1, foodIndex);
     },
 
     removeFood(promptIndex: number, foodIndex: number) {
@@ -459,7 +457,7 @@ export default defineComponent({
 
       if (replaceIndex !== undefined) {
         foods[replaceIndex] = selectedFood;
-        set(this.replaceFoodIndex, promptIndex, undefined);
+        this.replaceFoodIndex.splice(promptIndex, 1);
       }
       else {
         foods.push(selectedFood);
@@ -501,7 +499,7 @@ export default defineComponent({
     updatePrompts() {
       const { activePrompt, promptStates } = this;
 
-      this.$emit('input', { activePrompt, promptStates });
+      this.$emit('update:modelValue', { activePrompt, promptStates });
     },
   },
 });

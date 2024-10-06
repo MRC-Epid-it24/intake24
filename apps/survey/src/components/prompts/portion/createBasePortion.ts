@@ -1,5 +1,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import { useGoTo } from 'vuetify';
 
 import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -49,30 +50,28 @@ export default <
         type: String as PropType<PromptSection>,
         required: true,
       },
-      value: {
+      modelValue: {
         type: Object as PropType<PromptStates[P]>,
         required: true,
       },
     },
 
-    emits: ['action'],
-
-    setup(props) {
-      const { translate } = useI18n();
-
-      // InferPropType<T> fails on generic types: https://github.com/vuejs/core/pull/9652
-      const food = props.food as unknown as F;
-      const parentFood = props.parentFood as unknown as PF;
-
-      const { foodName } = useFoodUtils({ food, parentFood });
-
-      return { foodName, translate };
-    },
+    emits: ['action', 'update:modelValue'],
 
     data() {
+      const goTo = useGoTo();
+      const food = this.food as unknown as F;
+      const parentFood = this.parentFood as unknown as PF;
+
+      const { foodName } = useFoodUtils({ food, parentFood });
+      const { translate } = useI18n();
+
       return {
+        foodName,
+        goTo,
         errors: [] as string[],
         panel: 0,
+        translate,
       };
     },
 
@@ -111,7 +110,7 @@ export default <
           return;
 
         setTimeout(async () => {
-          await this.$vuetify.goTo('#actions', { duration: 1000 });
+          await this.goTo('#actions', { duration: 1000 });
         }, 100);
       },
 

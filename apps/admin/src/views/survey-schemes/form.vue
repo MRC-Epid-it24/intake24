@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
@@ -7,7 +7,7 @@
         :scheme-id="id"
       />
     </template>
-    <v-form @keydown.native="clearError" @submit.prevent="submit">
+    <v-form @keydown="clearError" @submit.prevent="submit">
       <v-card-text>
         <v-container fluid>
           <v-row>
@@ -18,7 +18,7 @@
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -30,20 +30,20 @@
                 :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
-                outlined
-                @change="form.errors.clear('visibility')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('visibility')"
               >
-                <template #item="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <v-icon :icon="item.raw.icon" start />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                  <v-icon :icon="item.raw.icon" start />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -60,8 +60,8 @@
                 :items="schemeTypes"
                 :label="$t('survey-schemes.settings.types._')"
                 name="settings.type"
-                outlined
-                @change="form.errors.clear('settings.type')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('settings.type')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -72,8 +72,8 @@
                 :items="recallFlows"
                 :label="$t('survey-schemes.settings.flows._')"
                 name="settings.flow"
-                outlined
-                @change="form.errors.clear('settings.flow')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('settings.flow')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -82,7 +82,7 @@
                 hide-details="auto"
                 :label="$t('survey-schemes.settings.recallDate')"
                 name="settings.recallDate"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -90,14 +90,14 @@
                 v-model="form.settings.languages"
                 :error-messages="form.errors.get('settings.language')"
                 hide-details="auto"
-                item-text="englishName"
+                item-title="englishName"
                 item-value="code"
                 :items="languages"
                 :label="$t('survey-schemes.settings.languages')"
                 multiple
                 name="settings.languages"
-                outlined
-                @change="form.errors.clear('settings.languages')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('settings.languages')"
               />
             </v-col>
           </v-row>

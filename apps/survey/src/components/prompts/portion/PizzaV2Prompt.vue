@@ -1,19 +1,19 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="state.panel" :tile="isMobile">
+    <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel>
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.sizes.label`) }}
           <template #actions>
             <expansion-panel-actions :valid="sizeValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <div class="d-flex flex-column">
             <v-radio-group
               v-model="state.portionSize.size"
               hide-details="auto"
-              @change="confirmType('size', false)"
+              @update:model-value="confirmType('size', false)"
             >
               <v-radio
                 v-for="option in sizeOptions"
@@ -23,7 +23,7 @@
               />
             </v-radio-group>
             <v-btn
-              :block="isMobile"
+              :block="$vuetify.display.mobile"
               class="align-self-stretch align-self-md-start mt-6"
               color="primary"
               :disabled="!state.portionSize.size"
@@ -32,21 +32,21 @@
               {{ $t('common.action.continue') }}
             </v-btn>
           </div>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!sizeValid">
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.crusts.label`) }}
           <template #actions>
             <expansion-panel-actions :valid="crustValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <div class="d-flex flex-column gr-4">
             <v-radio-group
               v-model="state.portionSize.crust"
               hide-details="auto"
-              @change="confirmType('crust', false)"
+              @update:model-value="confirmType('crust', false)"
             >
               <v-radio
                 v-for="option in crustOptions"
@@ -56,7 +56,7 @@
               />
             </v-radio-group>
             <v-btn
-              :block="isMobile"
+              :block="$vuetify.display.mobile"
               class="align-self-stretch align-self-md-start"
               color="primary"
               :disabled="!state.portionSize.crust"
@@ -65,16 +65,16 @@
               {{ $t('common.action.continue') }}
             </v-btn>
           </div>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!crustValid">
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.units.label`) }}
           <template #actions>
             <expansion-panel-actions :valid="unitValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <v-item-group
             v-model="state.portionSize.unit"
             class="d-flex flex-row gc-2"
@@ -83,15 +83,15 @@
             <v-container>
               <v-row>
                 <v-col v-for="unit in unitOptions" :key="unit.value" cols="6">
-                  <v-item v-slot="{ active, toggle }" :value="unit.value">
-                    <v-hover v-slot="{ hover }">
+                  <v-item v-slot="{ isSelected, toggle }" :value="unit.value">
+                    <v-hover v-slot="{ isHovering }">
                       <v-card
                         class="d-flex flex-column gr-5 align-stretch justify-center pa-5 text-center rounded-xxl"
-                        :color="active || hover ? 'ternary' : ''"
+                        :color="isSelected || isHovering ? 'ternary' : ''"
                         flat
                         @click="
                           () => {
-                            toggle();
+                            toggle && toggle();
                             confirmType('unit', true);
                           }
                         "
@@ -112,16 +112,16 @@
               </v-row>
             </v-container>
           </v-item-group>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!unitValid">
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.quantity.${state.portionSize.unit ?? 'slice'}`) }}
           <template #actions>
             <expansion-panel-actions :valid="quantityValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <v-container>
             <v-row>
               <v-col class="d-none d-sm-flex justify-center align-center" cols="6">
@@ -138,7 +138,7 @@
               </v-col>
             </v-row>
           </v-container>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
@@ -201,19 +201,19 @@ export default defineComponent({
       type: Object as PropType<PortionSizeParameters['pizza-v2']>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<PromptStates['pizza-v2-prompt']>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { translate, i18n } = useI18n();
+    const { i18n: { t } } = useI18n();
     const { action, type } = usePromptUtils(props, ctx);
 
-    const state = ref(copy(props.value));
+    const state = ref(copy(props.modelValue));
 
     const sizeValid = computed(() => state.value.confirmed.size);
     const crustValid = computed(() => state.value.confirmed.crust);
@@ -231,21 +231,21 @@ export default defineComponent({
 
     const sizeOptions = computed(() =>
       pizzaSizes.map(value => ({
-        label: i18n.t(`prompts.${type.value}.sizes.${value}`).toString(),
+        label: t(`prompts.${type.value}.sizes.${value}`),
         value,
       })),
     );
 
     const crustOptions = computed(() =>
       pizzaCrusts.map(value => ({
-        label: i18n.t(`prompts.${type.value}.crusts.${value}`),
+        label: t(`prompts.${type.value}.crusts.${value}`),
         value,
       })),
     );
 
     const unitOptions = computed(() =>
       pizzaUnits.map(value => ({
-        label: i18n.t(`prompts.${type.value}.units.${value}`),
+        label: t(`prompts.${type.value}.units.${value}`),
         value,
       })),
     );
@@ -255,12 +255,12 @@ export default defineComponent({
       if ([size, crust, unit, quantity].every(item => item)) {
         state.value.portionSize.servingWeight
           = ((baseWeight * pizzaDefs[size!].multiplier * crustDefs[crust!])
-          / (unit === 'slice' ? pizzaDefs[size!].slices : 1))
-          * quantity
-          * props.conversionFactor;
+            / (unit === 'slice' ? pizzaDefs[size!].slices : 1))
+            * quantity
+            * props.conversionFactor;
       }
 
-      ctx.emit('input', state.value);
+      ctx.emit('update:modelValue', state.value);
     };
 
     const confirmType = (type: 'size' | 'crust' | 'unit' | 'quantity', value: boolean) => {
@@ -279,7 +279,6 @@ export default defineComponent({
       sizeOptions,
       sizeValid,
       state,
-      translate,
       type,
       unitOptions,
       unitValid,

@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12">
@@ -12,7 +12,7 @@
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12">
@@ -22,7 +22,7 @@
                 hide-details="auto"
                 :label="$t('common.displayName')"
                 name="displayName"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12">
@@ -32,8 +32,8 @@
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
-                outlined
                 prepend-inner-icon="$description"
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -57,11 +57,11 @@
               </v-card>
             </v-col>
           </v-row>
-          <template v-for="group in ['resources', 'surveys', 'fdbs']">
-            <v-card-title :key="`${group}-title`" cols="12">
+          <template v-for="group in ['resources', 'surveys', 'fdbs']" :key="`${group}-title`">
+            <v-card-title cols="12">
               <v-card-title>{{ $t(`permissions.groups.${group}`) }}</v-card-title>
             </v-card-title>
-            <v-row :key="`${group}-content`">
+            <v-row>
               <v-col v-for="(pModule, key) in permissions[group]" :key="key" cols="4">
                 <v-card height="100%">
                   <v-card-title>

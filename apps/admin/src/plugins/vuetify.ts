@@ -1,23 +1,89 @@
-// import type { Icons } from 'vuetify';
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import 'vuetify/styles';
 
-import type { Dictionary } from '@intake24/common/types';
+import type { IconAliases } from 'vuetify';
+import { createVuetify } from 'vuetify';
+import * as directives from 'vuetify/directives';
+import { aliases, fa } from 'vuetify/iconsets/fa';
+import { VDateInput } from 'vuetify/labs/VDateInput';
+import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/VStepperVertical';
+import { VTimePicker } from 'vuetify/labs/VTimePicker';
+import { VTreeview } from 'vuetify/labs/VTreeview';
+
 import { colors } from '@intake24/common/theme';
 
 import resources from '../router/resources';
 
-const resourceIcons = resources.reduce<Dictionary>((acc, resource) => {
+const resourceIcons = resources.reduce<Partial<IconAliases>>((acc, resource) => {
   acc[resource.name] = resource.icon;
   return acc;
 }, {});
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+export default createVuetify({
+  components: {
+    VDateInput,
+    VStepperVertical,
+    VStepperVerticalItem,
+    VTimePicker,
+    VTreeview,
+  },
+  directives,
+  defaults: {
+    VAlert: {
+      variant: 'tonal',
+    },
+    /* VBtn: {
+      variant: 'elevated',
+      elevation: 0,
+    }, */
+    VCombobox: {
+      variant: 'outlined',
+    },
+    VDataTableServer: {
+      VBtn: {
+        icon: true,
+        variant: 'text',
+        size: 'small',
+      },
+    },
+    VFileInput: {
+      variant: 'outlined',
+    },
+    VListItemAction: {
+      VBtn: {
+        variant: 'text',
+        size: 'small',
+      },
+    },
+    VSelect: {
+      variant: 'outlined',
+    },
+    VSwitch: {
+      color: 'primary',
+    },
+    VTextField: {
+      variant: 'outlined',
+    },
+    VTextarea: {
+      variant: 'outlined',
+    },
+    VTimePicker: {
+      format: '24hr',
+      title: '',
+    },
+    VToolbar: {
+      class: ['px-2'],
+      VBtn: {
+        variant: 'flat',
+      },
+    },
+  },
+  display: {
+    mobileBreakpoint: 'md',
+  },
   icons: {
-    iconfont: 'fa',
-    values: {
+    defaultSet: 'fa',
+    aliases: {
+      ...aliases,
       add: 'fas fa-plus',
       cancel: 'fas fa-circle-xmark',
       check: 'fas fa-check-circle',
@@ -52,11 +118,14 @@ export default new Vuetify({
       categories: 'fas fa-list',
       foods: 'fas fa-drumstick-bite',
     },
+    sets: {
+      fa,
+    },
   },
   theme: {
     themes: {
       light: {
-        ...colors,
+        colors,
       },
     },
   },

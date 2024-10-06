@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { VImg } from 'vuetify/lib';
+import type { VImg } from 'vuetify/components';
 import { useElementSize } from '@vueuse/core';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 
@@ -125,7 +125,7 @@ export default defineComponent({
     select(idx: number, id: string) {
       this.$emit('select', idx, id);
 
-      if (!this.isMobile)
+      if (!this.$vuetify.display.mobile)
         this.confirm();
     },
   },

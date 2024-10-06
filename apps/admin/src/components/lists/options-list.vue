@@ -8,61 +8,56 @@
           </div>
         </v-toolbar-title>
         <v-spacer />
-        <v-btn color="primary" fab small :title="$t('common.options.add')" @click.stop="add">
-          <v-icon small>
-            $add
-          </v-icon>
-        </v-btn>
+        <v-btn color="primary" icon="$add" size="small" :title="$t('common.options.add')" @click.stop="add" />
       </v-toolbar>
       <v-divider />
-      <v-list dense>
-        <draggable v-model="currentOptions" handle=".drag-and-drop__handle" @end="update">
-          <transition-group name="drag-and-drop" type="transition">
-            <v-list-item
-              v-for="(option, idx) in currentOptions"
-              :key="option.id"
-              class="drag-and-drop__item"
-              draggable
-              link
-              :ripple="false"
-            >
-              <v-list-item-avatar class="drag-and-drop__handle">
-                <v-icon>$handle</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content class="options-list__item flex-column flex-lg-row align-stretch align-lg-stretch">
-                <v-text-field
-                  v-model="option.label"
-                  dense
-                  hide-details="auto"
-                  :label="$t('common.options.label')"
-                  outlined
-                />
-                <v-text-field
-                  v-model="option.value"
-                  dense
-                  hide-details="auto"
-                  :label="$t('common.options.value')"
-                  outlined
-                  :rules="optionValueRules"
-                />
-                <v-switch
-                  v-if="exclusive"
-                  v-model="option.exclusive"
-                  class="mt-0"
-                  hide-details="auto"
-                  :label="$t('common.options.exclusive')"
-                />
-              </v-list-item-content>
+      <v-list density="compact">
+        <vue-draggable
+          v-model="currentOptions"
+          :animation="300"
+          handle=".drag-and-drop__handle"
+          @end="update"
+        >
+          <v-list-item
+            v-for="(option, idx) in currentOptions"
+            :key="option.id"
+            class="drag-and-drop__item"
+            :ripple="false"
+          >
+            <template #prepend>
+              <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            </template>
+            <div class="options-list__item flex-column flex-lg-row align-stretch align-lg-stretch">
+              <v-text-field
+                v-model="option.label"
+                density="compact"
+                hide-details="auto"
+                :label="$t('common.options.label')"
+                variant="outlined"
+              />
+              <v-text-field
+                v-model="option.value"
+                density="compact"
+                hide-details="auto"
+                :label="$t('common.options.value')"
+                :rules="optionValueRules"
+                variant="outlined"
+              />
+              <v-switch
+                v-if="exclusive"
+                v-model="option.exclusive"
+                class="mt-0"
+                hide-details="auto"
+                :label="$t('common.options.exclusive')"
+              />
+            </div>
+            <template #append>
               <v-list-item-action>
-                <v-btn icon :title="$t('common.options.remove')" @click.stop="remove(idx)">
-                  <v-icon color="error">
-                    $delete
-                  </v-icon>
-                </v-btn>
+                <v-btn color="error" icon="$delete" :title="$t('common.options.remove')" @click.stop="remove(idx)" />
               </v-list-item-action>
-            </v-list-item>
-          </transition-group>
-        </draggable>
+            </template>
+          </v-list-item>
+        </vue-draggable>
       </v-list>
     </v-col>
   </v-row>
@@ -73,7 +68,7 @@ import type { PropType } from 'vue';
 import type { ZodNumber, ZodString } from 'zod';
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { ListOption } from '@intake24/common/types';
@@ -82,7 +77,7 @@ import { toIndexedList } from '@intake24/admin/util';
 export default defineComponent({
   name: 'OptionsList',
 
-  components: { Draggable: draggable },
+  components: { VueDraggable },
 
   props: {
     exclusive: {

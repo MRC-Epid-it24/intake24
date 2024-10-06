@@ -1,3 +1,4 @@
+import type { ComponentPublicInstance } from 'vue';
 import axios, { HttpStatusCode } from 'axios';
 import { defineStore } from 'pinia';
 
@@ -15,11 +16,11 @@ export type ErrorsState = {
 export const useErrors = defineStore('errors', {
   state: (): ErrorsState => ({ items: [] }),
   actions: {
-    captureError(err: Error, vm: Vue, info: string) {
+    captureError(err: unknown, vm: ComponentPublicInstance | null, info: string) {
       this.processError(err, vm, info);
     },
 
-    processError(err: Error, vm: Vue, info: string) {
+    processError(err: unknown, vm: ComponentPublicInstance | null, info: string) {
       if (axios.isAxiosError(err)) {
         const { response } = err;
         if (response) {
@@ -40,7 +41,9 @@ export const useErrors = defineStore('errors', {
         return;
       }
 
-      useMessages().error(err.message);
+      if (err instanceof Error)
+        useMessages().error(err.message);
+
       console.error(err);
       console.error(vm);
       console.error(info);
@@ -49,11 +52,11 @@ export const useErrors = defineStore('errors', {
       // this.items.push({ err, info });
     },
 
-    captureWarn(msg: string, vm: Vue, trace: string) {
+    captureWarn(msg: string, vm: ComponentPublicInstance | null, trace: string) {
       this.processWarn(msg, vm, trace);
     },
 
-    processWarn(msg: string, vm: Vue, trace: string) {
+    processWarn(msg: string, vm: ComponentPublicInstance | null, trace: string) {
       console.warn(msg);
       console.warn(vm);
       console.warn(trace);

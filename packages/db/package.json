@@ -35,12 +35,12 @@
     "pg-cursor": "^2.12.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
-    "sequelize": "^6.37.3",
+    "sequelize": "^6.37.4",
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
     "@simplewebauthn/types": "^10.0.0",
-    "@types/lodash": "^4.17.9",
+    "@types/lodash": "^4.17.10",
     "@types/node": "^22.7.4",
     "@types/pg": "^8.11.10",
     "@types/pg-cursor": "^2.7.2",

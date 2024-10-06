@@ -1,11 +1,11 @@
 <template>
   <v-list-item link :to="{ name: item.name }">
-    <v-list-item-action>
-      <v-icon>{{ item.icon }}</v-icon>
-    </v-list-item-action>
-    <v-list-item-content>
-      <v-list-item-title>{{ title }}</v-list-item-title>
-    </v-list-item-content>
+    <template #prepend>
+      <v-icon size="small">
+        {{ item.icon }}
+      </v-icon>
+    </template>
+    <v-list-item-title>{{ title }}</v-list-item-title>
   </v-list-item>
 </template>
 
@@ -23,19 +23,16 @@ export default defineComponent({
       type: Object as PropType<Resource>,
       required: true,
     },
-    active: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   computed: {
     title(): string {
       const { name, title } = this.item;
-      return this.$t(title ?? `${name}.title`).toString();
+      return this.$t(title ?? `${name}.title`);
     },
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+</style>

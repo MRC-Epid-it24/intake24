@@ -5,7 +5,7 @@ import { computed, ref, toRefs, watch } from 'vue';
 import { copy } from '@intake24/common/util';
 
 export type ListProps<O> = {
-  value: O[];
+  modelValue: O[];
   defaults?: O[];
 };
 
@@ -18,11 +18,11 @@ export type ListOps<I, O = I> = {
 // TODO: fix generic types casting
 
 export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupContext, ops: ListOps<I, O>) {
-  const { value } = toRefs(props);
+  const { modelValue } = toRefs(props);
   const { newItem, transformIn, transformOut } = ops;
   const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-  const items = ref(copy(transformIn ? value.value.map(transformIn) : value.value)) as Ref<
+  const items = ref(copy(transformIn ? modelValue.value.map(transformIn) : modelValue.value)) as Ref<
     UnwrapRef<I>[]
   >;
 
@@ -40,7 +40,7 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupC
     item: newItem(),
   });
 
-  watch(value, (val) => {
+  watch(modelValue, (val) => {
     if (deepEqual(val, outputItems.value))
       return;
 
@@ -56,7 +56,7 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupC
   };
 
   const update = () => {
-    context.emit('input', outputItems.value);
+    context.emit('update:modelValue', outputItems.value);
   };
 
   const load = (list: UnwrapRef<I>[]) => {

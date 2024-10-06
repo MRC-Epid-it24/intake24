@@ -9,7 +9,7 @@ import type {
 import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { Application } from '@intake24/common/types';
-import type { LocaleMessageObject } from '@intake24/i18n';
+import type { LocaleMessageDictionary } from '@intake24/i18n';
 
 import BaseModel from '../model';
 import { Language } from '.';
@@ -56,12 +56,12 @@ export default class LanguageTranslation extends BaseModel<
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get messages(): LocaleMessageObject {
+  get messages(): LocaleMessageDictionary<any> {
     const val = this.getDataValue('messages') as unknown;
     return JSON.parse(val as string);
   }
 
-  set messages(value: LocaleMessageObject) {
+  set messages(value: LocaleMessageDictionary<any>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('messages', JSON.stringify(value));
   }

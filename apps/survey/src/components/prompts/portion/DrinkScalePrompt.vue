@@ -1,18 +1,18 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel>
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.container`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.container`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="objectValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <image-map-selector
             v-if="imageMapData"
             v-bind="{
@@ -25,15 +25,15 @@
             @confirm="confirmObject"
             @select="selectObject"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.serving.header`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.serving.header`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="quantityConfirmed">
               <quantity-badge
@@ -48,8 +48,8 @@
               />
             </expansion-panel-actions>
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <component
             :is="scale.version === 1 ? 'drink-scale-panel' : 'drink-scale-v2-panel'"
             v-if="scale"
@@ -57,17 +57,17 @@
             :open="panel === 1"
             :scale="scale"
             @confirm="confirmQuantity"
-            @input="updateQuantity"
+            @update:model-value="updateQuantity"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel v-if="leftoversEnabled" :disabled="!quantityConfirmed">
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.leftovers.header`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.leftovers.header`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="leftoversPrompt === false || leftoversConfirmed">
               <quantity-badge
@@ -82,15 +82,15 @@
               />
             </expansion-panel-actions>
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory />
           <template v-if="leftoversPrompt">
-            <i18n class="mb-4" :path="`prompts.${type}.leftovers.label`" tag="div">
+            <i18n-t class="mb-4" :keypath="`prompts.${type}.leftovers.label`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
-            </i18n>
+            </i18n-t>
             <component
               :is="scale.version === 1 ? 'drink-scale-panel' : 'drink-scale-v2-panel'"
               v-if="scale"
@@ -100,18 +100,18 @@
               :scale="scale"
               type="leftovers"
               @confirm="confirmLeftovers"
-              @input="updateLeftovers"
+              @update:model-value="updateLeftovers"
             />
           </template>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel v-if="multipleEnabled" :disabled="!quantityConfirmed">
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.count`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.count`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="countConfirmed">
               <quantity-badge
@@ -122,18 +122,18 @@
               />
             </expansion-panel-actions>
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <component
             :is="prompt.multiple.type"
             v-if="prompt.multiple"
             v-model="portionSize.count"
-            :confirmed.sync="countConfirmed"
+            v-model:confirmed="countConfirmed"
             v-bind="multipleProps"
-            @input="updateCount"
             @update:confirmed="confirmCount"
+            @update:model-value="updateCount"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
@@ -211,10 +211,10 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
-    const state = copy(this.value);
+    const state = copy(this.modelValue);
     state.portionSize.drinkwareId = this.parameters.drinkwareId;
     state.portionSize.initialFillLevel = this.parameters.initialFillLevel;
     state.portionSize.skipFillLevel = this.parameters.skipFillLevel;
@@ -456,7 +456,7 @@ export default defineComponent({
         countConfirmed: this.countConfirmed,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

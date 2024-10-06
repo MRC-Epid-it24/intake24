@@ -3,7 +3,7 @@
     v-model="state"
     v-bind="{ meal, prompt, section }"
     @action="action"
-    @input="update"
+    @update:model-value="update"
   />
 </template>
 

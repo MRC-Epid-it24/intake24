@@ -1,5 +1,5 @@
 // Vars
-@import 'vuetify/src/styles/styles.sass';
+@use 'settings';
 @import 'variables';
 
 // Libs
@@ -13,10 +13,9 @@
 @import 'print';
 @import 'common';
 
-.v-application {
-  p {
-    margin-bottom: $spacer * 3;
-  }
+p {
+  margin-bottom: settings.$spacer * 3;
+  //margin-bottom: 1rem;
 }
 
 .container-max {
@@ -42,7 +41,7 @@
 }
 
 .list-item-border {
-  border-bottom: 1px solid map-get($grey, 'lighten-3');
+  border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
 }
 
 // ConfirmDialog wrapped actions buttons
@@ -52,7 +51,11 @@
   }
 }
 
-@media #{map-get($display-breakpoints, 'sm-and-down')} {
+.v-picker-title {
+  display: none;
+}
+
+@media #{map-get(settings.$display-breakpoints, 'sm-and-down')} {
   .iframe-container {
     position: relative;
     padding-bottom: 56.25%;

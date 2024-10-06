@@ -1,70 +1,75 @@
 <template>
-  <v-stepper v-model="open" class="pb-6" flat non-linear tile vertical>
-    <v-stepper-step v-bind="{ step }" class="py-2 pointer" @click.stop="toggle">
-      <v-toolbar flat tile>
-        <v-toolbar-title class="font-weight-medium">
-          {{ title }}
+  <v-expansion-panel :value="isOverrideMode ? 'override' : section">
+    <v-expansion-panel-title>
+      <div class="d-flex flex-row justify-content-space-between">
+        <v-avatar class="mr-3" color="primary" size="28">
+          <span class="text-white font-weight-medium text-h6">{{ step }}</span>
+        </v-avatar>
+        <div class="d-flex flex-column">
+          <div class="text-h6">
+            {{ title }}
+          </div>
           <div class="text-subtitle-2">
             {{ subtitle }}
           </div>
-        </v-toolbar-title>
-        <v-spacer />
-        <template v-if="isOpened">
-          <v-btn
-            v-if="!isOverrideMode"
-            color="primary"
-            fab
-            small
-            :title="$t('survey-schemes.prompts.create')"
-            @click.stop="create"
-          >
-            <v-icon small>
-              $add
-            </v-icon>
-          </v-btn>
-          <options-menu>
-            <load-prompt-dialog
-              :items="isOverrideMode ? templates : undefined"
-              :prompt-ids="promptIds"
-              :scheme-id="$route.params.id"
-              @load="load"
+        </div>
+      </div>
+      <template #actions="{ expanded }">
+        <div class="d-flex align-center">
+          <template v-if="expanded">
+            <v-btn
+              v-if="!isOverrideMode"
+              color="primary"
+              icon="$add"
+              size="small"
+              :title="$t('survey-schemes.prompts.create')"
+              @click.stop="create"
             />
-            <json-editor-dialog v-model="prompts" />
-          </options-menu>
-        </template>
-        <v-icon :class="{ 'fa-rotate-180': isOpened, 'ml-4': isOpened }">
-          $expand
-        </v-icon>
-      </v-toolbar>
-    </v-stepper-step>
-    <v-stepper-content v-bind="{ step }">
-      <v-list two-line>
-        <draggable v-model="prompts" handle=".drag-and-drop__handle">
-          <transition-group name="drag-and-drop" type="transition">
-            <prompt-list-item
-              v-for="(prompt, index) in prompts"
-              :key="`${prompt.id}:${prompt.name}`"
-              v-bind="{ mode, prompt, index, templates }"
-              :move-sections="moveSections(prompt)"
-              @prompt:copy="copy"
-              @prompt:edit="edit"
-              @prompt:move="move"
-              @prompt:remove="remove"
-              @prompt:sync="sync"
-            />
-          </transition-group>
-        </draggable>
+            <options-menu>
+              <load-prompt-dialog
+                :items="isOverrideMode ? templates : undefined"
+                :prompt-ids="promptIds"
+                :scheme-id="$route.params.id"
+                @load="load"
+              />
+              <json-editor-dialog v-model="prompts" />
+            </options-menu>
+          </template>
+          <v-icon class="ms-2" :icon="expanded ? '$expand' : '$collapse'" />
+        </div>
+      </template>
+    </v-expansion-panel-title>
+    <v-expansion-panel-text>
+      <v-list lines="two">
+        <vue-draggable
+          v-model="prompts"
+          :animation="300"
+          handle=".drag-and-drop__handle"
+        >
+          <prompt-list-item
+            v-for="(prompt, index) in prompts"
+            :key="`${prompt.id}:${prompt.name}`"
+            v-bind="{ mode, prompt, index, templates }"
+            :move-sections="moveSections(prompt)"
+            @prompt:copy="copy"
+            @prompt:edit="edit"
+            @prompt:move="move"
+            @prompt:remove="remove"
+            @prompt:sync="sync"
+          />
+        </vue-draggable>
       </v-list>
-    </v-stepper-content>
-    <prompt-selector ref="selector" v-bind="{ mode, section, promptIds }" @save="save" />
-  </v-stepper>
+      <prompt-selector ref="selector" v-bind="{ mode, section, promptIds }" @save="save" />
+    </v-expansion-panel-text>
+  </v-expansion-panel>
+  <v-divider />
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { SinglePrompt } from '@intake24/common/prompts';
 import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
@@ -77,7 +82,7 @@ import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';
 
-export type MoveSection = { value: string; text: string };
+export type MoveSection = { value: string; title: string };
 
 export type PromptEvent = {
   index: number;
@@ -92,12 +97,12 @@ export default defineComponent({
   name: 'PromptList',
 
   components: {
-    Draggable: draggable,
     JsonEditorDialog,
     LoadPromptDialog,
     OptionsMenu,
     PromptListItem,
     PromptSelector,
+    VueDraggable,
   },
 
   props: {
@@ -154,14 +159,14 @@ export default defineComponent({
         this.isOverrideMode
           ? `survey-schemes.overrides.prompts.title`
           : `survey-schemes.prompts.${this.section}.title`,
-      ).toString();
+      );
     },
     subtitle(): string {
       return this.$t(
         this.isOverrideMode
           ? `survey-schemes.overrides.prompts.subtitle`
           : `survey-schemes.prompts.${this.section}.subtitle`,
-      ).toString();
+      );
     },
   },
 
@@ -213,7 +218,7 @@ export default defineComponent({
     moveSections(prompt: SinglePrompt): MoveSection[] {
       return this.promptSettings[prompt.component].sections.filter(item => item !== this.section).map(item => ({
         value: item,
-        text: this.$t(`survey-schemes.prompts.${item}.title`).toString(),
+        title: this.$t(`survey-schemes.prompts.${item}.title`),
       }));
     },
 
@@ -244,7 +249,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.pointer {
-  cursor: pointer;
-}
 </style>

@@ -9,47 +9,42 @@
   </data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'SchemePromptList',
+defineOptions({ name: 'SchemePromptList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
 
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('survey-schemes.prompts.internal.id._'),
-          sortable: true,
-          value: 'promptId',
-        },
-        {
-          text: this.$t('survey-schemes.prompts.internal.name._'),
-          sortable: true,
-          value: 'name',
-        },
-        {
-          text: this.$t('survey-schemes.prompts.type'),
-          sortable: false,
-          value: 'type',
-        },
-        {
-          text: this.$t('survey-schemes.prompts.component'),
-          sortable: false,
-          value: 'component',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers = ref<DataTableHeader[]>([
+  {
+    title: t('survey-schemes.prompts.internal.id._'),
+    sortable: true,
+    key: 'promptId',
   },
-});
+  {
+    title: t('survey-schemes.prompts.internal.name._'),
+    sortable: true,
+    key: 'name',
+  },
+  {
+    title: t('survey-schemes.prompts.type'),
+    sortable: false,
+    key: 'type',
+  },
+  {
+    title: t('survey-schemes.prompts.component'),
+    sortable: false,
+    key: 'component',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+]);
 </script>

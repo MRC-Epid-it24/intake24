@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-4" flat tile>
+      <v-icon color="secondary" end>
         fas fa-square-root-alt
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
@@ -10,63 +10,58 @@
       <v-spacer />
       <v-btn
         color="primary"
-        fab
-        small
+        icon="$add"
+        size="small"
         :title="$t('feedback-schemes.henry-coefficients.create')"
         @click.stop="add"
-      >
-        <v-icon small>
-          $add
-        </v-icon>
-      </v-btn>
+      />
       <options-menu>
         <select-resource
           resource="feedback-schemes"
           return-object="henryCoefficients"
-          @input="load"
+          @update:model-value="load"
         >
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="items" @input="update" />
+        <json-editor-dialog v-model="items" @update:model-value="update" />
       </options-menu>
     </v-toolbar>
-    <v-list two-line>
-      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(coefficient, index) in items"
-            :key="coefficient.id"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-icon class="my-auto">
-              <v-icon>{{ getListItemIcon(coefficient) }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium">
-                {{ getListItemTitle(coefficient) }}
-              </v-list-item-title>
-            </v-list-item-content>
+    <v-list lines="two">
+      <vue-draggable
+        v-model="items"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+        @end="update"
+      >
+        <v-list-item
+          v-for="(coefficient, index) in items"
+          :key="coefficient.id"
+          class="drag-and-drop__item"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-icon>{{ getListItemIcon(coefficient) }}</v-icon>
+          </template>
+          <v-list-item-title class="font-weight-medium">
+            {{ getListItemTitle(coefficient) }}
+          </v-list-item-title>
+          <template #append>
             <v-list-item-action>
               <v-btn
                 icon
                 :title="$t('feedback-schemes.henry-coefficients.edit')"
                 @click.stop="edit(index, coefficient)"
               >
-                <v-icon color="secondary lighten-2">
+                <v-icon color="secondary-lighten-2">
                   $edit
                 </v-icon>
               </v-btn>
@@ -76,27 +71,25 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('feedback-schemes.henry-coefficients.remove').toString()"
+                :label="$t('feedback-schemes.henry-coefficients.remove')"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: getListItemTitle(coefficient) }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <v-dialog
       v-model="dialog.show"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
+      :fullscreen="$vuetify.display.smAndDown"
       max-width="600px"
       persistent
     >
-      <v-card :tile="$vuetify.breakpoint.smAndDown">
+      <v-card :tile="$vuetify.display.smAndDown">
         <v-toolbar color="secondary" dark flat>
-          <v-icon dark left>
-            fas fa-square-root-alt
-          </v-icon>
+          <v-icon icon="fas fa-square-root-alt" start />
           <v-toolbar-title>
             {{
               $t(`feedback-schemes.henry-coefficients.${dialog.index === -1 ? 'create' : 'edit'}`)
@@ -115,15 +108,19 @@
                     :items="sexes"
                     :label="$t('feedback-schemes.sexes._')"
                     name="sex"
-                    outlined
+                    variant="outlined"
                   >
-                    <template #item="{ item }">
-                      <span :class="`${item.icon} mr-3`" />
-                      {{ item.text }}
+                    <template #item="{ item, props }">
+                      <v-list-item v-bind="props">
+                        <template #prepend>
+                          <v-icon :icon="item.raw.icon" start />
+                        </template>
+                        <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                      </v-list-item>
                     </template>
                     <template #selection="{ item }">
-                      <span :class="`${item.icon} mr-3`" />
-                      {{ item.text }}
+                      <v-icon :icon="item.raw.icon" start />
+                      {{ item.raw.title }}
                     </template>
                   </v-select>
                 </v-col>
@@ -138,7 +135,7 @@
                     hide-details="auto"
                     :label="$t('feedback-schemes.age.start')"
                     name="age.start"
-                    outlined
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
@@ -147,7 +144,7 @@
                     hide-details="auto"
                     :label="$t('feedback-schemes.age.end')"
                     name="age.end"
-                    outlined
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
@@ -156,7 +153,7 @@
                     hide-details="auto"
                     :label="$t('feedback-schemes.henry-coefficients.weightCoefficient')"
                     name="weightCoefficient"
-                    outlined
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
@@ -165,7 +162,7 @@
                     hide-details="auto"
                     :label="$t('feedback-schemes.henry-coefficients.heightCoefficient')"
                     name="heightCoefficient"
-                    outlined
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
@@ -174,23 +171,19 @@
                     hide-details="auto"
                     :label="$t('feedback-schemes.henry-coefficients.constant')"
                     name="constant"
-                    outlined
+                    variant="outlined"
                   />
                 </v-col>
               </v-row>
             </v-container>
           </v-card-text>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>
-                $cancel
-              </v-icon>{{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer />
-            <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -202,7 +195,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
@@ -216,10 +209,10 @@ import { getHenryCoefficientDefaults } from './henry-coefficient';
 export default defineComponent({
   name: 'HenryCoefficientList',
 
-  components: { ConfirmDialog, Draggable: draggable, JsonEditorDialog, OptionsMenu, SelectResource },
+  components: { ConfirmDialog, JsonEditorDialog, OptionsMenu, SelectResource, VueDraggable },
 
   props: {
-    value: {
+    modelValue: {
       type: Array as PropType<HenryCoefficient[]>,
       required: true,
     },
@@ -235,7 +228,7 @@ export default defineComponent({
   data() {
     return {
       sexes: sexes.map(value => ({
-        text: this.$t(`feedback-schemes.sexes.${value}`),
+        title: this.$t(`feedback-schemes.sexes.${value}`),
         value,
         icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
       })),

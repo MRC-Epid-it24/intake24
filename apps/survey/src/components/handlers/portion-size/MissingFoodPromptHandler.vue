@@ -8,7 +8,7 @@
       section,
     }"
     @action="action"
-    @input="update"
+    @update:model-value="update"
   />
 </template>
 

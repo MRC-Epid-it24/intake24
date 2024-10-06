@@ -1,7 +1,7 @@
 <template>
   <layout v-if="entryLoaded && refsLoaded" v-bind="{ id, entry }">
     <v-card-title>{{ $t('nutrient-tables._') }}</v-card-title>
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('common.id') }}</th>
@@ -12,9 +12,9 @@
           <td>{{ entry.description }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
     <v-card-title>{{ $t('nutrient-tables.mapping.source._') }}</v-card-title>
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('nutrient-tables.mapping.source.idColumnOffset') }}</th>
@@ -33,9 +33,9 @@
           <td>{{ entry.csvMapping.rowOffset }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
     <v-card-title>{{ $t('nutrient-tables.mapping.fields._') }}</v-card-title>
-    <v-simple-table>
+    <v-table>
       <thead>
         <tr>
           <th>{{ $t('nutrient-tables.mapping.fields.fieldName') }}</th>
@@ -48,9 +48,9 @@
           <td>{{ offsetToExcelColumn(field.columnOffset) }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
     <v-card-title>{{ $t('nutrient-tables.mapping.nutrients._') }}</v-card-title>
-    <v-simple-table>
+    <v-table>
       <thead>
         <tr>
           <th>{{ $t('nutrient-tables.mapping.nutrients.nutrient') }}</th>
@@ -63,7 +63,7 @@
           <td>{{ offsetToExcelColumn(nutrient.columnOffset) }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

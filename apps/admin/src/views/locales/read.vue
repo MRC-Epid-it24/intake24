@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('locales.code') }}</th>
@@ -59,7 +59,7 @@
           <td>{{ $t(`securables.visibility.${entry.visibility}`) }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

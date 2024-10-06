@@ -1,5 +1,3 @@
-import type { LocaleMessages } from 'vue-i18n';
-
 import asServedSets from './as-served-sets.json';
 import common from './common.json';
 import dashboard from './dashboard.json';
@@ -28,7 +26,7 @@ import tasks from './tasks.json';
 import user from './user.json';
 import users from './users.json';
 
-const messages: LocaleMessages = {
+const messages = {
   common,
   dashboard,
   'drinkware-sets': drinkwareSets,

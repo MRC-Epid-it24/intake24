@@ -1,7 +1,7 @@
 <template>
   <app-entry-screen
-    :subtitle="$t('common.verify.subtitle').toString()"
-    :title="$t('common.verify._').toString()"
+    :subtitle="$t('common.verify.subtitle')"
+    :title="$t('common.verify._')"
   >
     <v-card-text class="px-6">
       <p class="text-subtitle-2">
@@ -17,9 +17,9 @@
               block
               color="primary"
               :disabled="isAppLoading"
-              outlined
               rounded
-              x-large
+              size="x-large"
+              variant="outlined"
               @click="resend"
             >
               {{ $t('common.verify.resend') }}
@@ -71,7 +71,7 @@ export default defineComponent({
   methods: {
     async resend() {
       await this.$http.post('admin/user/verify', {}, { withLoading: true });
-      useMessages().success(this.$t('common.verify.resent').toString());
+      useMessages().success(this.$t('common.verify.resent'));
     },
 
     async verify(token: string) {

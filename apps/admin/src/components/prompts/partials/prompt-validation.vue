@@ -1,31 +1,30 @@
 <template>
-  <v-tab-item key="validation" value="validation">
+  <v-tabs-window-item key="validation" value="validation">
     <v-row>
       <v-col cols="12">
         <v-switch
           hide-details="auto"
-          :input-value="validation.required"
           :label="$t('survey-schemes.prompts.validation.required')"
+          :model-value="validation.required"
           name="validation.required"
-          @change="update('required', $event)"
+          @update:model-value="update('required', $event)"
         />
       </v-col>
       <v-col cols="12">
         <language-selector
           :disabled="!validation.required"
-          :label="$t('survey-schemes.prompts.validation.message').toString()"
-          :value="validation.message"
-          @input="update('message', $event)"
+          :label="$t('survey-schemes.prompts.validation.message')"
+          :model-value="validation.message"
+          @update:model-value="update('message', $event)"
         >
-          <template v-for="lang in Object.keys(validation.message)" #[`lang.${lang}`]>
+          <template v-for="lang in Object.keys(validation.message)" :key="lang" #[`lang.${lang}`]>
             <v-text-field
-              :key="lang"
               :disabled="!validation.required"
               hide-details="auto"
               :label="$t('survey-schemes.prompts.validation.message')"
-              outlined
-              :value="validation.message[lang]"
-              @input="updateLanguage('message', lang, $event)"
+              :model-value="validation.message[lang]"
+              variant="outlined"
+              @update:model-value="updateLanguage('message', lang, $event)"
             />
           </template>
         </language-selector>
@@ -35,25 +34,25 @@
           <v-text-field
             hide-details="auto"
             :label="$t('survey-schemes.prompts.validation.min')"
+            :model-value="validation.min"
             name="validation.min"
-            outlined
-            :value="validation.min"
-            @input="update('min', toInteger($event))"
+            variant="outlined"
+            @update:model-value="update('min', toInteger($event))"
           />
         </v-col>
         <v-col cols="6">
           <v-text-field
             hide-details="auto"
             :label="$t('survey-schemes.prompts.validation.max')"
+            :model-value="validation.max"
             name="validation.max"
-            outlined
-            :value="validation.max"
-            @input="update('max', toInteger($event))"
+            variant="outlined"
+            @update:model-value="update('max', toInteger($event))"
           />
         </v-col>
       </template>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">
@@ -79,6 +78,8 @@ export default defineComponent({
       required: true,
     },
   },
+
+  emits: ['update:validation'],
 
   setup(props, { emit }) {
     const toInteger = (value: string): number | null => {

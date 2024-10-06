@@ -1,20 +1,18 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
-      <v-list-item v-bind="attrs" :disabled="disabled" link v-on="on">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
+      <v-list-item :disabled="disabled" link v-bind="props">
         <v-list-item-title>
-          <v-icon :disabled="disabled" left>
+          <v-icon :disabled="disabled" start>
             $save
           </v-icon>
           {{ $t('survey-schemes.prompts.templates.saveAs._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
-    <v-card :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="cancel" />
         <v-toolbar-title>
           {{ $t('survey-schemes.prompts.templates.saveAs.title') }}
         </v-toolbar-title>
@@ -29,7 +27,7 @@
               :label="$t('survey-schemes.prompts.internal.id._')"
               :messages="$t('survey-schemes.prompts.internal.id.hint')"
               name="id"
-              outlined
+              variant="outlined"
             />
           </v-col>
           <v-col cols="12">
@@ -40,26 +38,22 @@
               :label="$t('survey-schemes.prompts.internal.name._')"
               :messages="$t('survey-schemes.prompts.internal.name.hint')"
               name="name"
-              outlined
+              variant="outlined"
             />
           </v-col>
           <v-col cols="12">
-            <v-checkbox v-model="redirect" :label="$t('common.redirect')" />
+            <v-checkbox-btn v-model="redirect" :label="$t('common.redirect')" />
           </v-col>
         </v-row>
       </v-card-text>
       <error-list :errors="nonInputErrors" tag="v-card-text" />
       <v-card-actions class="pb-4">
-        <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
-          <v-icon left>
-            $cancel
-          </v-icon>{{ $t('common.action.cancel') }}
+        <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="cancel">
+          <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer />
-        <v-btn class="font-weight-bold" color="info" text @click.stop="confirm">
-          <v-icon left>
-            $success
-          </v-icon>{{ $t('survey-schemes.prompts.templates.saveAs._') }}
+        <v-btn class="font-weight-bold" color="info" variant="text" @click.stop="confirm">
+          <v-icon icon="$success" start />{{ $t('survey-schemes.prompts.templates.saveAs._') }}
         </v-btn>
       </v-card-actions>
     </v-card>
