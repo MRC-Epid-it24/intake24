@@ -1,11 +1,11 @@
-import { randomString } from '@intake24/common/util';
+import { copy, randomString } from '@intake24/common/util';
 
 export function toIndexedList<T extends object>(items: T[]): (T & { id: number })[] {
   return items.map((item, idx) => ({ ...item, id: idx }));
 }
 
 export function withIdList<T extends object>(items: T[]): (T & { id: string })[] {
-  return items.map(item => ({ ...item, id: randomString(6) }));
+  return items.map(item => copy({ ...item, id: randomString(6) }));
 }
 
 export const withId = <T>(item: T): T & { _id: string } => ({ ...item, _id: randomString(6) });

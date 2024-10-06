@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
       <copy-scheme-dialog
         v-if="canHandleEntry('copy')"
@@ -8,7 +8,7 @@
       />
       <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
-    <v-form @keydown.native="clearError" @submit.prevent="submit">
+    <v-form @keydown="clearError" @submit.prevent="submit">
       <v-container fluid>
         <v-card-text>
           <v-row>
@@ -19,7 +19,7 @@
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -30,8 +30,8 @@
                 :items="types"
                 :label="$t('feedback-schemes.types._')"
                 name="type"
-                outlined
-                @change="form.errors.clear('type')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('type')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -43,13 +43,13 @@
                 :label="$t('feedback-schemes.outputs.title')"
                 multiple
                 name="outputs"
-                outlined
                 prepend-inner-icon="fas fa-right-from-bracket"
-                @change="form.errors.clear('outputs')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('outputs')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.outputs.length === 1">{{ item.text }}</span>
+                    <span v-if="form.outputs.length === 1">{{ item.raw.title }}</span>
                     <span v-if="form.outputs.length > 1">
                       {{ $t('common.selected', { count: form.outputs.length }) }}
                     </span>
@@ -65,20 +65,20 @@
                 :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
-                outlined
-                @change="form.errors.clear('visibility')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('visibility')"
               >
-                <template #item="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <v-icon :icon="item.raw.icon" start />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                  <v-icon :icon="item.raw.icon" start />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -92,51 +92,48 @@
                 :label="$t('feedback-schemes.physicalDataFields.title')"
                 multiple
                 name="physicalDataFields"
-                outlined
                 prepend-inner-icon="fas fa-person-circle-question"
-                @change="form.errors.clear('physicalDataFields')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('physicalDataFields')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.physicalDataFields.length === 1">{{ item.text }}</span>
+                    <span v-if="form.physicalDataFields.length === 1">{{ item.raw.title }}</span>
                     <span v-if="form.physicalDataFields.length > 1">
                       {{ $t('common.selected', { count: form.physicalDataFields.length }) }}
                     </span>
                   </template>
                 </template>
               </v-select>
-              <template v-for="(value, key) in requiredPhysicalDataFields">
+              <template v-for="(value, key) in requiredPhysicalDataFields" :key="key">
                 <v-alert
                   v-if="!value && form.physicalDataFields.includes(key)"
-                  :key="key"
-                  class="text-caption"
-                  dense
-                  text
+                  class="text-caption mb-1"
+                  density="compact"
                   type="info"
                 >
-                  <i18n path="feedback-schemes.physicalDataFields.notRequired">
+                  <i18n-t keypath="feedback-schemes.physicalDataFields.notRequired">
                     <template #field>
                       <span class="font-weight-medium">
                         "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
                       </span>
                     </template>
-                  </i18n>
+                  </i18n-t>
                 </v-alert>
                 <v-alert
                   v-if="value && !form.physicalDataFields.includes(key)"
                   :key="key"
-                  class="text-caption"
-                  dense
-                  text
+                  class="text-caption mb-1"
+                  density="compact"
                   type="warning"
                 >
-                  <i18n path="feedback-schemes.physicalDataFields.required">
+                  <i18n-t keypath="feedback-schemes.physicalDataFields.required">
                     <template #field>
                       <span class="font-weight-medium">
                         "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
                       </span>
                     </template>
-                  </i18n>
+                  </i18n-t>
                 </v-alert>
               </template>
             </v-col>
@@ -213,12 +210,12 @@ export default defineComponent({
 
     const types = feedbackTypes.map(value => ({
       value,
-      text: i18n.t(`feedback-schemes.types.${value}`),
+      title: i18n.t(`feedback-schemes.types.${value}`),
     }));
 
     const outputs = feedbackOutputs.map(value => ({
       value,
-      text: i18n.t(`feedback-schemes.outputs.${value}`),
+      title: i18n.t(`feedback-schemes.outputs.${value}`),
     }));
 
     const { canHandleEntry, entry, entryLoaded, isCreate, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
@@ -240,7 +237,7 @@ export default defineComponent({
 
     const physicalDataFields = feedbackPhysicalDataFields.map(value => ({
       value,
-      text: i18n.t(`feedback-schemes.physicalDataFields.${value}`),
+      title: i18n.t(`feedback-schemes.physicalDataFields.${value}`),
     }));
 
     const currentFeedbackScheme = computed<FeedbackSchemeEntry>(

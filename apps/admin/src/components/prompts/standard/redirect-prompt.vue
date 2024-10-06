@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row>
       <v-col cols="12" md="6">
         <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
@@ -12,11 +12,11 @@
             hide-details="auto"
             :hint="$t('survey-schemes.prompts.redirect-prompt.url.hint')"
             :label="$t('survey-schemes.prompts.redirect-prompt.url._')"
+            :model-value="url"
             name="url"
-            outlined
             persistent-hint
-            :value="url"
-            @input="update('url', $event)"
+            variant="outlined"
+            @update:model-value="update('url', $event)"
           />
           <v-combobox
             class="mb-4"
@@ -24,49 +24,47 @@
             :hint="$t('survey-schemes.prompts.redirect-prompt.identifier.hint')"
             :items="identifiers"
             :label="$t('survey-schemes.prompts.redirect-prompt.identifier._')"
-            outlined
+            :model-value="identifier"
             persistent-hint
-            :value="identifier"
-            @change="updateIdentifier"
+            variant="outlined"
+            @update:model-value="updateIdentifier"
           />
           <v-text-field
             class="mb-4"
             hide-details="auto"
             :label="$t('survey-schemes.prompts.redirect-prompt.timer._')"
+            :model-value="timer"
             name="timer"
-            outlined
             :rules="timerRules"
-            :value="timer"
-            @input="updateTimerValue"
+            variant="outlined"
+            @update:model-value="updateTimerValue"
           />
           <v-select
             :items="targets"
             :label="$t('survey-schemes.prompts.redirect-prompt.target._')"
-            outlined
+            :model-value="target"
             prepend-inner-icon="fa-solid fa-arrow-up-right-from-square"
-            :value="target"
-            @change="update('target', $event)"
+            variant="outlined"
+            @update:model-value="update('target', $event)"
           />
         </v-card-text>
       </v-col>
       <v-col cols="12" md="6">
         <v-card-title>
-          <v-icon left>
-            fas fa-star-half-stroke
-          </v-icon>
+          <v-icon icon="fas fa-star-half-stroke" start />
           {{ $t('survey-schemes.prompts.final-prompt.rating.title') }}
         </v-card-title>
         <v-card-text>
           <v-switch
             hide-details="auto"
-            :input-value="rating"
             :label="$t('survey-schemes.prompts.final-prompt.rating._')"
-            @change="update('rating', $event)"
+            :model-value="rating"
+            @update:model-value="update('rating', $event)"
           />
         </v-card-text>
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">
@@ -110,11 +108,11 @@ export default defineComponent({
   setup() {
     const { i18n } = useI18n();
     const identifiers = ['userId', 'username', 'urlAuthToken'].map(value => ({
-      text: i18n.t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
+      title: i18n.t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
       value,
     }));
     const targets = ['_self', '_blank'].map(value => ({
-      text: i18n.t(`survey-schemes.prompts.redirect-prompt.target.${value}`),
+      title: i18n.t(`survey-schemes.prompts.redirect-prompt.target.${value}`),
       value,
     }));
 

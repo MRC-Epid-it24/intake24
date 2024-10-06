@@ -4,14 +4,14 @@
     class="mb-3"
     clearable
     hide-details="auto"
-    item-text="description"
+    item-title="description"
     item-value="id"
     :items="nutrientTables"
     :label="$t('nutrient-tables._')"
     name="nutrientTableId"
-    outlined
     prepend-inner-icon="$nutrient-tables"
-    @change="fetchNutrientTypes"
+    variant="outlined"
+    @update:model-value="fetchNutrientTypes"
   />
 </template>
 
@@ -27,13 +27,13 @@ export default defineComponent({
   name: 'DataExportNutrients',
 
   props: {
-    value: {
+    modelValue: {
       type: Array as PropType<ExportField[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
     const http = useHttp();
@@ -59,7 +59,7 @@ export default defineComponent({
       });
 
       const types = data.map(({ id, description }) => ({ id, label: description }));
-      emit('input', types);
+      emit('update:modelValue', types);
     };
 
     onMounted(async () => {

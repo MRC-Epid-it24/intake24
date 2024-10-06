@@ -11,12 +11,13 @@
             <v-select
               v-model="state"
               hide-details="auto"
-              item-text="label"
+              item-title="label"
               item-value="value"
               :items="localeOptions"
               :label="promptI18n.label"
+              min-width="300px"
               :multiple="prompt.multiple"
-              outlined
+              variant="outlined"
             />
           </v-col>
         </v-row>
@@ -46,28 +47,28 @@ export default defineComponent({
   mixins: [createBasePrompt<'select-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: [String, Number, Array] as PropType<string | number | string[] | number[]>,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n, translate } = useI18n();
+    const { i18n: { locale, t } } = useI18n();
     const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
 
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
 
     const promptI18n = computed(() => ({
-      label: i18n.t(`prompts.${type.value}.label`),
+      label: t(`prompts.${type.value}.label`),
     }));
 
     const isValid = computed(() => {
@@ -80,10 +81,10 @@ export default defineComponent({
       return typeof state.value !== 'undefined' && state.value !== null;
     });
     const localeOptions = computed(
-      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
+      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
     );
 
-    return { action, customPromptLayout, isValid, localeOptions, promptI18n, state, translate };
+    return { action, customPromptLayout, isValid, localeOptions, promptI18n, state };
   },
 });
 </script>

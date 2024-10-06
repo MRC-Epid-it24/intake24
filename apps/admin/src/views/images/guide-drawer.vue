@@ -33,27 +33,26 @@
       <v-container fluid>
         <v-row>
           <v-col v-for="(object, idx) in objects" :key="object.id" cols="12" lg="4" sm="6">
-            <v-item v-slot="{ active }">
-              <v-card flat min-height="200px" outlined>
+            <v-item v-slot="{ isSelected }">
+              <v-card border flat min-height="200px">
                 <v-toolbar
-                  :color="active ? `primary` : `ternary`"
-                  :dark="active"
+                  :color="isSelected ? `primary` : `ternary`"
+                  :dark="isSelected"
                   flat
                   :style="{ cursor: 'pointer' }"
                   @click="selectObject(idx)"
                 >
-                  <v-icon left>
-                    fas fa-draw-polygon
-                  </v-icon>{{ $t('guide-images.objects.id') }}:
+                  <v-icon icon="fas fa-draw-polygon" start />{{ $t('guide-images.objects.id') }}:
                   {{ object.id }}
                   <v-spacer />
                   <confirm-dialog
                     v-if="isImageMap && !disabled"
                     color="error"
                     icon
-                    :icon-color="active ? `white` : `error`"
+                    :icon-color="isSelected ? `white` : `error`"
                     icon-left="$delete"
-                    :label="$t('guide-images.objects.delete').toString()"
+                    :label="$t('guide-images.objects.delete')"
+                    variant="text"
                     @confirm="removeObject(idx)"
                   >
                     {{ $t('common.action.confirm.delete', { name: entry.id }) }}
@@ -68,8 +67,8 @@
                         :disabled="isGuideImage || disabled"
                         hide-details="auto"
                         :label="$t('common.description')"
-                        name="description"
-                        outlined
+                        :name="`description-${object.id}`"
+                        variant="outlined"
                       />
                     </v-col>
                     <v-col v-if="isGuideImage" cols="12">
@@ -78,27 +77,27 @@
                         :disabled="isImageMap || disabled"
                         hide-details="auto"
                         :label="$t('guide-images.objects.weight')"
-                        name="weight"
-                        outlined
+                        :name="`weight-${object.id}`"
                         prepend-inner-icon="fas fa-scale-balanced"
+                        variant="outlined"
                       />
                     </v-col>
                     <v-col cols="12">
                       <language-selector
                         v-model="object.label"
+                        border
                         :disabled="disabled"
-                        :label="$t('guide-images.objects.label._').toString()"
+                        :label="$t('guide-images.objects.label._')"
                       >
-                        <template v-for="lang in Object.keys(object.label)" #[`lang.${lang}`]>
+                        <template v-for="lang in Object.keys(object.label)" :key="lang" #[`lang.${lang}`]>
                           <v-text-field
-                            :key="lang"
                             v-model="object.label[lang]"
                             hide-details="auto"
                             :hint="isGuideImage ? $t('guide-images.objects.label.hint') : undefined"
                             :label="$t('guide-images.objects.label._')"
-                            outlined
                             :persistent-hint="isGuideImage"
-                            @input="updateObjects"
+                            variant="outlined"
+                            @update:model-value="updateObjects"
                           />
                         </template>
                       </language-selector>
@@ -110,18 +109,16 @@
           </v-col>
           <v-col v-if="isImageMap && !disabled" cols="12" lg="4" sm="6">
             <v-card
+              border
               class="d-flex justify-center align-center"
               flat
               height="100%"
               link
               min-height="200px"
-              outlined
               :title="$t('guide-images.objects.add')"
               @click.stop="addObject"
             >
-              <v-btn color="primary" fab x-large>
-                <v-icon>$add</v-icon>
-              </v-btn>
+              <v-btn color="primary" icon="$add" size="x-large" />
             </v-card>
           </v-col>
         </v-row>
@@ -132,7 +129,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { VImg } from 'vuetify/lib';
+import type { VImg } from 'vuetify/components';
 import { useElementSize, watchDebounced } from '@vueuse/core';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';

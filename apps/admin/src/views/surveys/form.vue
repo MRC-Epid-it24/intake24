@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form autocomplete="off" @keydown.native="clearError" @submit.prevent="submit">
+      <v-form autocomplete="off" @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -12,7 +12,7 @@
                 hide-details="auto"
                 :label="$t('surveys.id')"
                 name="slug"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -22,7 +22,7 @@
                 hide-details="auto"
                 :label="$t('surveys.name')"
                 name="name"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -34,7 +34,7 @@
                 :label="$t('locales._')"
                 name="localeId"
                 resource="locales"
-                @input="form.errors.clear('localeId')"
+                @update:model-value="form.errors.clear('localeId')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -45,14 +45,14 @@
                 :label="$t('survey-schemes._')"
                 name="surveySchemeId"
                 resource="survey-schemes"
-                @input="form.errors.clear('surveySchemeId')"
+                @update:model-value="form.errors.clear('surveySchemeId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <date-picker
                 v-model="form.startDate"
                 :error-messages="form.errors.get('startDate')"
-                :label="$t('surveys.startDate').toString()"
+                :label="$t('surveys.startDate')"
                 @change="form.errors.clear('startDate')"
               />
             </v-col>
@@ -60,7 +60,7 @@
               <date-picker
                 v-model="form.endDate"
                 :error-messages="form.errors.get('endDate')"
-                :label="$t('surveys.endDate').toString()"
+                :label="$t('surveys.endDate')"
                 @change="form.errors.clear('endDate')"
               />
             </v-col>
@@ -72,8 +72,8 @@
                 hide-details="auto"
                 :label="$t('surveys.supportEmail')"
                 name="supportEmail"
-                outlined
                 prepend-inner-icon="fas fa-envelope"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -84,9 +84,9 @@
                 :items="surveyStates"
                 :label="$t('surveys.states._')"
                 name="state"
-                outlined
                 prepend-inner-icon="fas fa-spinner"
-                @change="form.errors.clear('state')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('state')"
               />
             </v-col>
             <v-col v-show="form.state === 'suspended'" cols="12">
@@ -96,7 +96,7 @@
                 hide-details="auto"
                 :label="$t('surveys.suspensionReason')"
                 name="suspensionReason"
-                outlined
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -113,7 +113,7 @@
                 hide-details="auto"
                 :label="$t('surveys.search.collectData')"
                 name="searchCollectData"
-                @change="form.errors.clear('searchSettings.collectData')"
+                @update:model-value="form.errors.clear('searchSettings.collectData')"
               />
               <v-slider
                 v-model.number="form.searchSettings.maxResults"
@@ -133,7 +133,7 @@
                 <v-icon
                   @click="showInformationPopup('sortingAlgorithmInfo')"
                 >
-                  fa-circle-question
+                  fas fa-circle-question
                 </v-icon>
                 <v-label class="ml-2">
                   {{ $t('surveys.search.sortingAlgorithm') }}
@@ -142,20 +142,20 @@
               <v-select
                 v-model="form.searchSettings.sortingAlgorithm"
                 class="mt-2"
-                dense
+                density="compact"
                 :error-messages="form.errors.get('searchSettings.sortingAlgorithm')"
                 hide-details="auto"
                 :items="searchSortingAlgorithms"
                 name="searchSortingAlgorithm"
-                outlined
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
-                @change="form.errors.clear('searchSettings.sortingAlgorithm')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('searchSettings.sortingAlgorithm')"
               />
               <div class="mt-4">
                 <v-icon
                   @click="showInformationPopup('matchScoreWeightInfo')"
                 >
-                  fa-circle-question
+                  fas fa-circle-question
                 </v-icon>
                 <v-label class="ml-2">
                   {{ $t('surveys.search.matchScoreWeight') }}
@@ -172,10 +172,10 @@
                 thumb-label
               >
                 <template #prepend>
-                  <v-subheader>{{ $t('surveys.search.foodOrdering') }}</v-subheader>
+                  <v-list-subheader>{{ $t('surveys.search.foodOrdering') }}</v-list-subheader>
                 </template>
                 <template #append>
-                  <v-subheader>{{ $t('surveys.search.matchQuality') }}</v-subheader>
+                  <v-list-subheader>{{ $t('surveys.search.matchQuality') }}</v-list-subheader>
                 </template>
               </v-slider>
               <div class="text-h6 mb-10 mt-4 underline">
@@ -183,7 +183,7 @@
                   class="mr-3"
                   @click="showInformationPopup('matchQualityInfo')"
                 >
-                  fa-circle-question
+                  fas fa-circle-question
                 </v-icon>{{ $t('surveys.search.matchQualityCriteria') }}
               </div>
               <v-slider
@@ -235,7 +235,7 @@
                   class="mr-3"
                   @click="showInformationPopup('spellingCorrectionInfo')"
                 >
-                  fa-circle-question
+                  fas fa-circle-question
                 </v-icon>{{ $t('surveys.search.spellingCorrection') }}
               </div>
               <v-switch
@@ -245,7 +245,7 @@
                 hide-details="auto"
                 :label="$t('surveys.search.enableEditDistance')"
                 name="searchEnableEditDistance"
-                @change="form.errors.clear('searchSettings.enableEditDistance')"
+                @update:model-value="form.errors.clear('searchSettings.enableEditDistance')"
               />
               <v-slider
                 v-model.number="form.searchSettings.minWordLength1"
@@ -255,7 +255,7 @@
                 :label="$t('surveys.search.minWordLength1')"
                 max="10"
                 min="2"
-                name="searchMatchScoreWeight"
+                name="searchMinWordLength1"
                 thumb-label="always"
               />
               <v-slider
@@ -266,10 +266,9 @@
                 :label="$t('surveys.search.minWordLength2')"
                 max="10"
                 min="3"
-                name="searchMatchScoreWeight"
+                name="searchMinWordLength2"
                 thumb-label="always"
               />
-
               <v-switch
                 v-model="form.searchSettings.enablePhonetic"
                 class="my-6"
@@ -277,7 +276,7 @@
                 hide-details="auto"
                 :label="$t('surveys.search.enablePhonetic')"
                 name="searchEnablePhonetic"
-                @change="form.errors.clear('searchSettings.enablePhonetic')"
+                @update:model-value="form.errors.clear('searchSettings.enablePhonetic')"
               />
               <v-slider
                 v-model.number="form.searchSettings.minWordLengthPhonetic"
@@ -296,21 +295,21 @@
               <v-select
                 v-model="form.searchSettings.spellingCorrectionPreference"
                 class="mt-2"
-                dense
+                density="compact"
                 :error-messages="form.errors.get('searchSettings.spellingCorrectionPreference')"
                 hide-details="auto"
                 :items="spellingCorrectionOptions"
                 name="searchSpellingCorrectionPreference"
-                outlined
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
-                @change="form.errors.clear('searchSettings.spellingCorrectionPreference')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('searchSettings.spellingCorrectionPreference')"
               />
               <div class="text-h6 mb-4 mt-4 underline">
                 <v-icon
                   class="mr-3"
                   @click="showInformationPopup('relevantCategoriesInfo')"
                 >
-                  fa-circle-question
+                  fas fa-circle-question
                 </v-icon>{{ $t('surveys.search.relevantCategories') }}
               </div>
               <v-switch
@@ -320,7 +319,7 @@
                 hide-details="auto"
                 :label="$t('surveys.search.enableRelevantCategories')"
                 name="searchEnableRelevantCategories"
-                @change="form.errors.clear('searchSettings.enableRelevantCategories')"
+                @update:model-value="form.errors.clear('searchSettings.enableRelevantCategories')"
               />
               <v-slider
                 v-model.number="form.searchSettings.relevantCategoryDepth"
@@ -335,8 +334,8 @@
               />
               <information-popup v-if="infoComponentType" :component-type="`${infoComponentType}`" :open="infoPopupOpen" :title="$t(`surveys.search.information.${infoComponentType}.title`)" @close="hideInformationPopup" />
             </v-col>
-            <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
-              <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
+            <v-col :cols="$vuetify.display.mdAndUp ? `auto` : '12'">
+              <v-divider :vertical="$vuetify.display.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
               <div class="text-h5 mb-4">
@@ -348,7 +347,7 @@
                 hide-details="auto"
                 :label="$t('surveys.users.personalIdentifiers')"
                 name="userPersonalIdentifiers"
-                @change="form.errors.clear('userPersonalIdentifiers')"
+                @update:model-value="form.errors.clear('userPersonalIdentifiers')"
               />
               <v-switch
                 v-model="form.userCustomFields"
@@ -356,7 +355,7 @@
                 hide-details="auto"
                 :label="$t('surveys.users.customFields')"
                 name="userCustomFields"
-                @change="form.errors.clear('userCustomFields')"
+                @update:model-value="form.errors.clear('userCustomFields')"
               />
             </v-col>
           </v-row>
@@ -373,7 +372,7 @@
                 hide-details="auto"
                 :label="$t('surveys.auth.captcha')"
                 name="authCaptcha"
-                @change="form.errors.clear('authCaptcha')"
+                @update:model-value="form.errors.clear('authCaptcha')"
               />
               <v-text-field
                 v-model="form.authUrlTokenCharset"
@@ -382,8 +381,8 @@
                 hide-details="auto"
                 :label="$t('surveys.auth.urlTokenCharset')"
                 name="authUrlTokenCharset"
-                outlined
                 prepend-inner-icon="fas fa-font"
+                variant="outlined"
               />
               <v-text-field
                 v-model.number="form.authUrlTokenLength"
@@ -392,8 +391,8 @@
                 hide-details="auto"
                 :label="$t('surveys.auth.urlTokenLength')"
                 name="authUrlTokenLength"
-                outlined
                 prepend-inner-icon="fas fa-ruler-horizontal"
+                variant="outlined"
               />
               <v-text-field
                 v-model="form.authUrlDomainOverride"
@@ -401,12 +400,12 @@
                 hide-details="auto"
                 :label="$t('surveys.auth.urlDomainOverride')"
                 name="authUrlDomainOverride"
-                outlined
                 prepend-inner-icon="fas fa-up-right-from-square"
+                variant="outlined"
               />
             </v-col>
-            <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
-              <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
+            <v-col :cols="$vuetify.display.mdAndUp ? `auto` : '12'">
+              <v-divider :vertical="$vuetify.display.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
               <div class="text-h5 mb-4">
@@ -419,7 +418,7 @@
                 hide-details="auto"
                 :label="$t('surveys.submissionLimits.maxDaily')"
                 name="maximumDailySubmissions"
-                outlined
+                variant="outlined"
               />
               <v-text-field
                 v-model.number="form.maximumTotalSubmissions"
@@ -428,7 +427,7 @@
                 hide-details="auto"
                 :label="$t('surveys.submissionLimits.maxTotal')"
                 name="maximumTotalSubmissions"
-                outlined
+                variant="outlined"
               />
               <v-text-field
                 v-model.number="form.minimumSubmissionInterval"
@@ -436,7 +435,7 @@
                 hide-details="auto"
                 :label="$t('surveys.submissionLimits.minInterval')"
                 name="minimumSubmissionInterval"
-                outlined
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -453,7 +452,7 @@
                 hide-details="auto"
                 :label="$t('surveys.externalComm.allowGenUsers')"
                 name="allowGenUsers"
-                @change="form.errors.clear('allowGenUsers')"
+                @update:model-value="form.errors.clear('allowGenUsers')"
               />
               <v-text-field
                 v-model="form.genUserKey"
@@ -464,19 +463,19 @@
                 hide-details="auto"
                 :label="$t('surveys.externalComm.genUserKey')"
                 name="genUserKey"
-                outlined
                 :type="showGenUserKey ? 'text' : 'password'"
+                variant="outlined"
                 @click:append="showGenUserKey = !showGenUserKey"
               />
               <event-notifications
                 v-model="form.notifications"
                 :error-messages="form.errors.get('notifications')"
                 name="notifications"
-                @input="form.errors.clear('notifications')"
+                @update:model-value="form.errors.clear('notifications')"
               />
             </v-col>
-            <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
-              <v-divider :vertical="$vuetify.breakpoint.mdAndUp" />
+            <v-col :cols="$vuetify.display.mdAndUp ? `auto` : '12'">
+              <v-divider :vertical="$vuetify.display.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
               <div class="text-h5 mb-4">
@@ -489,7 +488,7 @@
                 hide-details="auto"
                 :label="$t('surveys.session.store')"
                 name="session.store"
-                @change="form.errors.clear('session.store')"
+                @update:model-value="form.errors.clear('session.store')"
               />
               <v-text-field
                 v-model="form.session.age"
@@ -499,8 +498,8 @@
                 :hint="$t('surveys.session.age.hint')"
                 :label="$t('surveys.session.age._')"
                 name="session.age"
-                outlined
                 prepend-inner-icon="fas fa-stopwatch"
+                variant="outlined"
               />
               <v-text-field
                 v-model="form.session.fixed"
@@ -509,8 +508,8 @@
                 :hint="$t('surveys.session.fixed.hint')"
                 :label="$t('surveys.session.fixed._')"
                 name="session.fixed"
-                outlined
                 prepend-inner-icon="fas fa-stopwatch"
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -528,7 +527,7 @@
                 :label="$t('feedback-schemes._')"
                 name="feedbackSchemeId"
                 resource="feedback-schemes"
-                @input="form.errors.clear('feedbackSchemeId')"
+                @update:model-value="form.errors.clear('feedbackSchemeId')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -539,7 +538,7 @@
                 hide-details="auto"
                 :label="$t('surveys.feedback.numberOfSubmissions')"
                 name="numberOfSubmissionsForFeedback"
-                outlined
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -650,20 +649,10 @@ export default defineComponent({
     const infoComponentType = ref(undefined as string | undefined);
     const infoPopupOpen = ref(false);
 
-    const loadCallback = (data: SurveyEntry) => {
-      const { startDate, endDate, ...rest } = data;
-      return {
-        ...rest,
-        startDate: new Date(data.startDate).toISOString().split('T')[0],
-        endDate: new Date(data.endDate).toISOString().split('T')[0],
-      };
-    };
-
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
       data: surveyForm,
       editMethod: 'patch',
-      loadCallback,
     });
 
     const showInformationPopup = (type: string) => {
@@ -698,15 +687,15 @@ export default defineComponent({
       showGenUserKey: false,
       surveyStates: surveyStates.map(value => ({
         value,
-        text: this.$t(`surveys.states.${value}`),
+        title: this.$t(`surveys.states.${value}`),
       })),
       searchSortingAlgorithms: searchSortingAlgorithms.map(value => ({
         value,
-        text: this.$t(`surveys.search.algorithms.${value}`),
+        title: this.$t(`surveys.search.algorithms.${value}`),
       })),
       spellingCorrectionOptions: spellingCorrectionPreferences.map(value => ({
         value,
-        text: this.$t(`surveys.search.spellingCorrectionOptions.${value}`),
+        title: this.$t(`surveys.search.spellingCorrectionOptions.${value}`),
       })),
     };
   },

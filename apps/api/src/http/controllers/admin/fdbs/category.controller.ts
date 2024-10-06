@@ -103,7 +103,7 @@ function adminCategoryController({
     const canUpdateMain = !!(
       main?.code
       && ((await aclService.hasPermission('locales|food-list'))
-      || (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
+        || (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
     );
 
     const categoryLocal = await adminCategoryService.updateCategory(

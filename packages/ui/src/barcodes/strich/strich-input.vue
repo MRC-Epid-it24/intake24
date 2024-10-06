@@ -1,11 +1,11 @@
 <template>
-  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ name, ...$attrs }" v-on="$listeners">
-    <template #append>
+  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ name, ...$attrs }">
+    <template #append-inner>
       <v-icon @click.stop.prevent="open">
         fas fa-barcode
       </v-icon>
       <strich-reader
-        :dialog.sync="dialog"
+        v-model:dialog="dialog"
         v-bind="{ options }"
         @detected="detected"
       />
@@ -38,7 +38,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (e: 'detected', value: string): void;
-  (e: 'update:model-value', value: string | null): void;
+  (e: 'update:modelValue', value: string | null): void;
 }>();
 
 const barcode = useVModel(props, 'modelValue', emit);

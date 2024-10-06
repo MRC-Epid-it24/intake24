@@ -1,6 +1,6 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
+  <v-card border flat>
+    <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         <slot name="title">
           {{ $t('fdbs.locales.title') }}
@@ -11,36 +11,33 @@
     </v-toolbar>
     <v-expansion-panels flat>
       <v-expansion-panel>
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t('fdbs.locales.description', { count: items.length }) }}
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-list class="py-0" dense>
-            <template v-for="(item, idx) in items">
-              <v-list-item :key="item.id" link>
-                <v-list-item-icon>
-                  <v-icon>$locales</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.englishName }}</v-list-item-title>
-                </v-list-item-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <v-list class="list-border py-0" density="compact">
+            <v-list-item v-for="item in items" :key="item.id" link>
+              <template #prepend>
+                <v-icon>$locales</v-icon>
+              </template>
+              <v-list-item-title>{{ item.englishName }}</v-list-item-title>
+              <template #append>
                 <v-list-item-action v-if="!disabled" class="my-0">
                   <confirm-dialog
                     color="error"
                     icon
                     icon-left="$delete"
-                    :label="$t('fdbs.locales.remove').toString()"
+                    :label="$t('fdbs.locales.remove')"
                     small
                     @confirm="remove(item.id)"
                   >
                     {{ $t('common.action.confirm.remove', { name: item.englishName }) }}
                   </confirm-dialog>
                 </v-list-item-action>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`" />
-            </template>
+              </template>
+            </v-list-item>
           </v-list>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <v-messages
@@ -76,21 +73,21 @@ export default defineComponent({
       type: Object as PropType<Errors>,
       default: () => new Errors(),
     },
-    value: {
+    modelValue: {
       type: Array as PropType<FoodsLocaleAttributes[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
     const items = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(val) {
-        emit('input', val);
+        emit('update:modelValue', val);
       },
     });
 

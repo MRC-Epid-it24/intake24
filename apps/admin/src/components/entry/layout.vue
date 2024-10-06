@@ -1,143 +1,146 @@
 <template>
-  <div>
-    <v-card class="mb-4" outlined>
-      <v-toolbar flat>
-        <v-btn color="white" :title="$t(`common.action.back`)" :to="{ name: resource.name }">
-          <v-icon left>
-            $back
-          </v-icon>{{ $t(`common.action.back`) }}
-        </v-btn>
-        <v-btn
-          v-if="editsResource"
-          class="ml-3"
-          color="secondary"
-          :title="$t(`common.action.save`)"
-          @click="$emit('save')"
-        >
-          <v-icon left>
-            $save
-          </v-icon>{{ $t(`common.action.save`) }}
-        </v-btn>
-        <slot name="actions" />
-        <v-spacer />
-        <confirm-dialog
-          v-if="canHandleEntry('delete')"
-          color="error"
-          icon-left="$delete"
-          :label="$t('common.action.delete').toString()"
-          :typed-confirm="['surveys'].includes(resource.name) ? entry.name : undefined"
-          @confirm="remove"
-        >
-          {{ $t('common.action.confirm.delete', { name: entry.name ? entry.name : entry.id }) }}
-        </confirm-dialog>
-      </v-toolbar>
-    </v-card>
-    <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
-      <v-tabs background-color="primary" dark>
-        <v-tab
-          v-for="tab in tabs"
-          :key="tab"
-          :title="tabTitle(tab)"
-          :to="{ name: `${resource.name}-${tab}`, params: { id } }"
-        >
-          {{ tabTitle(tab) }}
-        </v-tab>
-      </v-tabs>
-      <slot />
-    </v-card>
-    <slot name="addons" />
-    <confirm-leave-dialog
-      :value="routeLeave"
-      @input="$emit('update:routeLeave', $event)"
-    />
-  </div>
+  <v-card
+    class="mb-5 px-2"
+    :flat="$vuetify.display.mobile"
+    :rounded="$vuetify.display.mobile ? 0 : undefined"
+  >
+    <v-toolbar color="white">
+      <v-btn color="grey-darken-1" :title="$t(`common.action.back`)" :to="{ name: resource.name }" variant="flat">
+        <v-icon icon="$back" start />{{ $t(`common.action.back`) }}
+      </v-btn>
+      <v-btn
+        v-if="editsResource"
+        class="ml-3"
+        color="secondary"
+        :title="$t(`common.action.save`)"
+        variant="flat"
+        @click="$emit('save')"
+      >
+        <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
+      </v-btn>
+      <slot name="actions" />
+      <v-spacer />
+      <confirm-dialog
+        v-if="canHandleEntry('delete')"
+        color="error"
+        icon-left="$delete"
+        :label="$t('common.action.delete')"
+        :typed-confirm="['surveys'].includes(resource.name) ? entry.name : undefined"
+        variant="flat"
+        @confirm="remove"
+      >
+        {{ $t('common.action.confirm.delete', { name: entry.name ? entry.name : entry.id }) }}
+      </confirm-dialog>
+    </v-toolbar>
+  </v-card>
+  <v-card :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
+    <v-tabs bg-color="primary">
+      <v-tab
+        v-for="tab in tabs"
+        :key="tab"
+        :title="tabTitle(tab)"
+        :to="{ name: `${resource.name}-${tab}`, params: tab === 'create' ? undefined : { id } }"
+        :value="tab"
+      >
+        {{ tabTitle(tab) }}
+      </v-tab>
+    </v-tabs>
+    <slot />
+  </v-card>
+  <slot name="addons" />
+  <confirm-leave-dialog
+    :model-value="routeLeave"
+    @update:model-value="$emit('update:routeLeave', $event)"
+  />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import has from 'lodash/has';
-import { defineComponent } from 'vue';
+import { computed, inject } from 'vue';
+import { useRouter } from 'vue-router';
 
 import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
-import { resource } from '@intake24/admin/mixins';
-import { useMessages } from '@intake24/admin/stores';
+import resources from '@intake24/admin/router/resources';
+import { useHttp } from '@intake24/admin/services';
+import { useMessages, useResource, useUser } from '@intake24/admin/stores';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
 import ConfirmLeaveDialog from './confirm-leave-dialog.vue';
 
-export default defineComponent({
-  name: 'EntryLayout',
+defineOptions({ name: 'EntryLayout' });
 
-  components: { ConfirmDialog, ConfirmLeaveDialog },
-
-  mixins: [resource],
-
-  inject: {
-    editsResource: { default: false },
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
   },
-
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    entry: {
-      type: Object as PropType<Dictionary>,
-      required: true,
-    },
-    routeLeave: {
-      type: Object as PropType<RouteLeave>,
-      default: () => ({
-        dialog: false,
-        to: null,
-        confirmed: false,
-      }),
-    },
+  entry: {
+    type: Object as PropType<Dictionary>,
+    required: true,
   },
-
-  emits: ['save', 'update:routeLeave'],
-
-  computed: {
-    isCreate(): boolean {
-      return this.id === 'create';
-    },
-    tabs(): string[] {
-      if (this.isCreate)
-        return ['create'];
-
-      const { securables, ownerId } = this.entry;
-      const { name, module } = this.resource;
-
-      return this.resource.routes.filter(
-        item =>
-          item !== 'create'
-          && this.can({ resource: module ?? name, action: item, securables, ownerId }),
-      );
-    },
-  },
-
-  methods: {
-    canHandleEntry(action: string) {
-      if (this.isCreate)
-        return false;
-
-      const { securables, ownerId } = this.entry;
-      return this.can({ action, securables, ownerId });
-    },
-
-    tabTitle(tab: string) {
-      const check = has(this.$i18n.messages[this.$i18n.locale], `${this.module}.${tab}.tab`);
-      return this.$t(check ? `${this.module}.${tab}.tab` : `common.action.${tab}`);
-    },
-
-    async remove(): Promise<void> {
-      const { id, name } = this.entry;
-
-      await this.$http.delete(`${this.resource.api}/${this.id}`);
-      useMessages().success(this.$t('common.msg.deleted', { name: name ?? id }).toString());
-      await this.$router.push({ name: this.resource.name });
-    },
+  routeLeave: {
+    type: Object as PropType<RouteLeave>,
+    default: () => ({
+      dialog: false,
+      to: null,
+      confirmed: false,
+    }),
   },
 });
+
+defineEmits(['save', 'update:routeLeave']);
+
+const editsResource = inject('editsResource', false);
+
+const { i18n: { t, locale, messages } } = useI18n();
+const resource = useResource();
+const { can } = useUser();
+const http = useHttp();
+const router = useRouter();
+
+const resourceDef = computed(
+  () => resources.find(item => item.name === resource.name),
+);
+
+const isCreate = computed(() => props.id === 'create');
+const tabs = computed(() => {
+  if (isCreate.value)
+    return ['create'];
+
+  if (!resourceDef.value)
+    return [];
+
+  const { securables, ownerId } = props.entry;
+  const { name, module, routes } = resourceDef.value;
+
+  return routes.filter(
+    item =>
+      item !== 'create'
+      && can({ resource: module ?? name, action: item, securables, ownerId }),
+  );
+});
+
+function canHandleEntry(action: string) {
+  if (isCreate.value)
+    return false;
+
+  const { securables, ownerId } = props.entry;
+  return can({ action, securables, ownerId });
+};
+
+function tabTitle(tab: string) {
+  const check = has(messages.value[locale.value], `${resource.name}.${tab}.tab`);
+  return t(check ? `${resource.name}.${tab}.tab` : `common.action.${tab}`);
+};
+
+async function remove() {
+  const { id, name } = props.entry;
+
+  await http.delete(`${resource.api}/${props.id}`);
+  useMessages().success(t('common.msg.deleted', { name: name ?? id }));
+  await router.push({ name: resource.name });
+};
 </script>

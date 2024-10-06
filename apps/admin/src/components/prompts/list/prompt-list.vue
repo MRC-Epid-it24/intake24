@@ -1,83 +1,89 @@
 <template>
-  <v-stepper v-model="open" class="pb-6" flat non-linear tile vertical>
-    <v-stepper-step v-bind="{ step }" class="py-2 pointer" @click.stop="toggle">
-      <v-toolbar flat tile>
-        <v-toolbar-title class="font-weight-medium">
-          {{ title }}
+  <v-expansion-panel :value="isOverrideMode ? 'override' : section">
+    <v-expansion-panel-title>
+      <div class="d-flex flex-row justify-content-space-between">
+        <v-avatar class="mr-3" color="primary" size="28">
+          <span class="text-white font-weight-medium text-h6">{{ step }}</span>
+        </v-avatar>
+        <div class="d-flex flex-column">
+          <div class="text-h6">
+            {{ title }}
+          </div>
           <div class="text-subtitle-2">
             {{ subtitle }}
           </div>
-        </v-toolbar-title>
-        <v-spacer />
-        <template v-if="isOpened">
-          <v-btn
-            v-if="!isOverrideMode"
-            color="primary"
-            fab
-            small
-            :title="$t('survey-schemes.prompts.create')"
-            @click.stop="create"
-          >
-            <v-icon small>
-              $add
-            </v-icon>
-          </v-btn>
-          <options-menu>
-            <load-prompt-dialog
-              :items="isOverrideMode ? templates : undefined"
-              :prompt-ids="promptIds"
-              :scheme-id="$route.params.id"
-              @load="load"
+        </div>
+      </div>
+      <template #actions="{ expanded }">
+        <div class="d-flex align-center">
+          <template v-if="expanded">
+            <v-btn
+              v-if="!isOverrideMode"
+              color="primary"
+              icon="$add"
+              size="small"
+              :title="$t('survey-schemes.prompts.create')"
+              @click.stop="create"
             />
-            <json-editor-dialog v-model="prompts" />
-          </options-menu>
-        </template>
-        <v-icon :class="{ 'fa-rotate-180': isOpened, 'ml-4': isOpened }">
-          $expand
-        </v-icon>
-      </v-toolbar>
-    </v-stepper-step>
-    <v-stepper-content v-bind="{ step }">
-      <v-list two-line>
-        <draggable v-model="prompts" handle=".drag-and-drop__handle">
-          <transition-group name="drag-and-drop" type="transition">
-            <prompt-list-item
-              v-for="(prompt, index) in prompts"
-              :key="`${prompt.id}:${prompt.name}`"
-              v-bind="{ mode, prompt, index, templates }"
-              :move-sections="moveSections(prompt)"
-              @prompt:copy="copy"
-              @prompt:edit="edit"
-              @prompt:move="move"
-              @prompt:remove="remove"
-              @prompt:sync="sync"
-            />
-          </transition-group>
-        </draggable>
+            <options-menu>
+              <load-prompt-dialog
+                :items="isOverrideMode ? templates : undefined"
+                :prompt-ids="promptIds"
+                :scheme-id="$route.params.id"
+                @load="load"
+              />
+              <json-editor-dialog v-model="prompts" />
+            </options-menu>
+          </template>
+          <v-icon class="ms-2" :icon="expanded ? '$expand' : '$collapse'" />
+        </div>
+      </template>
+    </v-expansion-panel-title>
+    <v-expansion-panel-text>
+      <v-list class="list-border" lines="two">
+        <vue-draggable
+          v-model="prompts"
+          :animation="300"
+          handle=".drag-and-drop__handle"
+        >
+          <prompt-list-item
+            v-for="(prompt, index) in prompts"
+            :key="`${prompt.id}:${prompt.name}`"
+            v-bind="{ mode, prompt, index, templates }"
+            :move-sections="moveSections(prompt)"
+            @prompt:copy="copy"
+            @prompt:edit="edit"
+            @prompt:move="move"
+            @prompt:remove="remove"
+            @prompt:sync="sync"
+          />
+        </vue-draggable>
       </v-list>
-    </v-stepper-content>
-    <prompt-selector ref="selector" v-bind="{ mode, section, promptIds }" @save="save" />
-  </v-stepper>
+      <prompt-selector ref="selector" v-bind="{ mode, section, promptIds }" @save="save" />
+    </v-expansion-panel-text>
+  </v-expansion-panel>
+  <v-divider />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
-import { defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { computed, ref, watch } from 'vue';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { SinglePrompt } from '@intake24/common/prompts';
 import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
-import { copy } from '@intake24/common/util';
+import { copy as copyObject } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n/index';
 
 import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';
 
-export type MoveSection = { value: string; text: string };
+export type MoveSection = { value: string; title: string };
 
 export type PromptEvent = {
   index: number;
@@ -88,163 +94,124 @@ export interface PromptMoveEvent extends PromptEvent {
   section: MealSection | SurveyPromptSection;
 }
 
-export default defineComponent({
-  name: 'PromptList',
+defineOptions({ name: 'PromptList' });
 
-  components: {
-    Draggable: draggable,
-    JsonEditorDialog,
-    LoadPromptDialog,
-    OptionsMenu,
-    PromptListItem,
-    PromptSelector,
+const props = defineProps({
+  mode: {
+    type: String as PropType<'full' | 'override'>,
+    default: 'full',
   },
-
-  props: {
-    mode: {
-      type: String as PropType<'full' | 'override'>,
-      default: 'full',
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-    },
-    step: {
-      type: Number,
-      default: 1,
-    },
-    promptIds: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
-    templates: {
-      type: Array as PropType<SinglePrompt[]>,
-      default: () => [],
-    },
-    items: {
-      type: Array as PropType<SinglePrompt[]>,
-      required: true,
-    },
+  section: {
+    type: String as PropType<PromptSection>,
   },
-
-  emits: ['update:items', 'move'],
-
-  setup() {
-    const selector = ref<InstanceType<typeof PromptSelector>>();
-
-    return { selector };
+  step: {
+    type: Number,
+    default: 1,
   },
-
-  data() {
-    return {
-      prompts: this.items,
-      promptSettings,
-      open: this.step,
-    };
+  promptIds: {
+    type: Array as PropType<string[]>,
+    default: () => [],
   },
-
-  computed: {
-    isOverrideMode(): boolean {
-      return this.mode === 'override';
-    },
-    isOpened(): boolean {
-      return this.open === this.step;
-    },
-    title(): string {
-      return this.$t(
-        this.isOverrideMode
-          ? `survey-schemes.overrides.prompts.title`
-          : `survey-schemes.prompts.${this.section}.title`,
-      ).toString();
-    },
-    subtitle(): string {
-      return this.$t(
-        this.isOverrideMode
-          ? `survey-schemes.overrides.prompts.subtitle`
-          : `survey-schemes.prompts.${this.section}.subtitle`,
-      ).toString();
-    },
+  templates: {
+    type: Array as PropType<SinglePrompt[]>,
+    default: () => [],
   },
-
-  watch: {
-    items(val) {
-      if (deepEqual(val, this.prompts))
-        return;
-
-      this.prompts = [...val];
-    },
-    prompts(val) {
-      if (deepEqual(val, this.items))
-        return;
-
-      this.update();
-    },
-  },
-
-  methods: {
-    toggle() {
-      this.open = this.open === this.step ? 0 : this.step;
-    },
-
-    create() {
-      if (this.isOverrideMode)
-        return;
-
-      this.selector?.create();
-    },
-
-    load(prompt: SinglePrompt) {
-      this.prompts.push(prompt);
-    },
-
-    copy({ prompt, index }: PromptEvent) {
-      this.prompts.splice(index + 1, 0, { ...copy(prompt), name: `${prompt.name} (copy)` });
-    },
-
-    edit({ prompt, index }: PromptEvent) {
-      this.selector?.edit(index, prompt);
-    },
-
-    save({ prompt, index }: PromptEvent) {
-      if (index === -1)
-        this.prompts.push(prompt);
-      else this.prompts.splice(index, 1, prompt);
-    },
-
-    moveSections(prompt: SinglePrompt): MoveSection[] {
-      return this.promptSettings[prompt.component].sections.filter(item => item !== this.section).map(item => ({
-        value: item,
-        text: this.$t(`survey-schemes.prompts.${item}.title`).toString(),
-      }));
-    },
-
-    move(event: PromptMoveEvent) {
-      if (this.isOverrideMode)
-        return;
-
-      this.$emit('move', event);
-      this.prompts.splice(event.index, 1);
-    },
-
-    remove(index: number) {
-      this.prompts.splice(index, 1);
-    },
-
-    sync({ prompt, index }: PromptEvent) {
-      if (this.isOverrideMode)
-        return;
-
-      this.prompts.splice(index, 1, prompt);
-    },
-
-    update() {
-      this.$emit('update:items', this.prompts);
-    },
+  modelValue: {
+    type: Array as PropType<SinglePrompt[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue', 'move']);
+
+const { i18n } = useI18n();
+
+const selector = ref<InstanceType<typeof PromptSelector>>();
+const prompts = ref(copyObject(props.modelValue));
+
+const isOverrideMode = computed(() => props.mode === 'override');
+const title = computed(() => i18n.t(
+  isOverrideMode.value
+    ? `survey-schemes.overrides.prompts.title`
+    : `survey-schemes.prompts.${props.section}.title`,
+));
+const subtitle = computed(() => i18n.t(
+  isOverrideMode.value
+    ? `survey-schemes.overrides.prompts.subtitle`
+    : `survey-schemes.prompts.${props.section}.subtitle`,
+));
+
+function create() {
+  if (isOverrideMode.value)
+    return;
+
+  selector.value?.create();
+};
+
+function load(prompt: SinglePrompt) {
+  prompts.value.push(prompt);
+};
+
+function copy({ prompt, index }: PromptEvent) {
+  prompts.value.splice(index + 1, 0, { ...copyObject(prompt), id: `${prompt.id}-copy`, name: `${prompt.name} (copy)` });
+};
+
+function edit({ prompt, index }: PromptEvent) {
+  selector.value?.edit(index, prompt);
+};
+
+function save({ prompt, index }: PromptEvent) {
+  if (index === -1)
+    prompts.value.push(prompt);
+  else prompts.value.splice(index, 1, prompt);
+};
+
+function moveSections(prompt: SinglePrompt): MoveSection[] {
+  return promptSettings[prompt.component].sections
+    .filter(item => item !== props.section)
+    .map(item => ({
+      value: item,
+      title: i18n.t(`survey-schemes.prompts.${item}.title`),
+    }));
+};
+
+function move(event: PromptMoveEvent) {
+  if (isOverrideMode.value)
+    return;
+
+  emit('move', event);
+  prompts.value.splice(event.index, 1);
+};
+
+function remove(index: number) {
+  prompts.value.splice(index, 1);
+};
+
+function sync({ prompt, index }: PromptEvent) {
+  if (isOverrideMode.value)
+    return;
+
+  prompts.value.splice(index, 1, prompt);
+};
+
+function update() {
+  emit('update:modelValue', prompts.value);
+};
+
+watch(() => props.modelValue, (val) => {
+  if (deepEqual(val, prompts.value))
+    return;
+
+  prompts.value = [...val];
+});
+
+watch(prompts, (val) => {
+  if (deepEqual(val, props.modelValue))
+    return;
+
+  update();
+}, { deep: true });
 </script>
 
 <style lang="scss">
-.pointer {
-  cursor: pointer;
-}
 </style>

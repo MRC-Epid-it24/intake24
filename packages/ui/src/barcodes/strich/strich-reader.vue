@@ -2,15 +2,13 @@
   <v-dialog
     v-model="dialog"
     eager
-    :fullscreen="$vuetify.breakpoint.mobile"
-    :max-width="$vuetify.breakpoint.mobile ? undefined : '640px'"
-    :min-height="$vuetify.breakpoint.mobile ? undefined : '480px'"
+    :fullscreen="$vuetify.display.mobile"
+    :max-width="$vuetify.display.mobile ? undefined : '640px'"
+    :min-height="$vuetify.display.mobile ? undefined : '480px'"
   >
-    <v-card ref="card" :tile="$vuetify.breakpoint.mobile">
+    <v-card ref="card" :tile="$vuetify.display.mobile">
       <v-toolbar color="secondary" dark flat>
-        <v-btn icon :title="$t('common.action.close')" @click.stop="close">
-          <v-icon>$close</v-icon>
-        </v-btn>
+        <v-btn icon="$close" :title="$t('common.action.close')" @click.stop="close" />
         <v-toolbar-title>Scan barcode</v-toolbar-title>
         <v-spacer />
         <v-btn
@@ -33,7 +31,7 @@ import type { PropType } from 'vue';
 import { BarcodeReader, StrichSDK } from '@pixelverse/strichjs-sdk';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue';
-import { VCard } from 'vuetify/lib';
+import { VCard } from 'vuetify/components';
 
 import { defaultBarcodeScannerOptions, type StrichScanner } from '@intake24/common/barcodes';
 
@@ -62,7 +60,6 @@ const dialog = useVModel(props, 'dialog', emit);
 const card = ref<InstanceType<typeof VCard>>();
 const reader = ref<InstanceType<typeof HTMLFormElement>>();
 
-// @ts-expect-error should allow vue instance?
 const { height, width } = useElementSize(card);
 
 let barcodeReader: BarcodeReader | undefined;

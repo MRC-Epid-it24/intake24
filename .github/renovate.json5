@@ -11,29 +11,9 @@
         "formdata-node", // ESM-only since 5.x.x
         "nanoid", // ESM-only since 4.x.x
         "p-limit", // ESM-only since 4.x.x
-        "p-queue", // ESM-only since 7.x.x
-
-        // Bump after Vue.js v3 upgrade
-        "@tinymce/tinymce-vue",
-        "@vue/compiler-sfc",
-        "vue",
-        "vue-dompurify-html",
-        "vue-gtag",
-        "vue-i18n",
-        "vue-router",
-        "vue-recaptcha",
-        "vuetify"
+        "p-queue" // ESM-only since 7.x.x
       ],
       "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
-    // Ignore major/minor
-    {
-      "matchPackageNames": [
-        // Bump with Vuetify3
-        "sass"
-      ],
-      "matchUpdateTypes": ["major", "minor"],
       "enabled": false
     },
     // Typescript (major/minor)

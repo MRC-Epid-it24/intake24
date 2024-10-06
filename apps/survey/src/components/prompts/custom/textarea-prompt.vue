@@ -11,7 +11,6 @@
           hide-details="auto"
           :hint="translate(prompt.i18n.hint)"
           :label="translate(prompt.i18n.label)"
-          outlined
           :rules="rules"
         />
       </v-form>
@@ -26,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import type { VForm } from 'vuetify/lib';
+import type { VForm } from 'vuetify/components';
 import { computed, defineComponent, ref } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
@@ -40,29 +39,28 @@ export default defineComponent({
   mixins: [createBasePrompt<'textarea-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: String,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n, translate } = useI18n();
+    const { i18n: { t }, translate } = useI18n();
 
     const form = ref<InstanceType<typeof VForm>>();
-    const isValid = computed(() => !props.prompt.validation.required || !!props.value);
+    const isValid = computed(() => !props.prompt.validation.required || !!props.modelValue);
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
 
     const confirm = () => {
-      // @ts-expect-error - not typed vuetify component
       const isValid = form.value?.validate();
       return isValid;
     };
@@ -75,7 +73,7 @@ export default defineComponent({
             (v: string | null) =>
               !!v
               || (translate(props.prompt.validation.message)
-              ?? i18n.t(`prompts.${type.value}.validation.required`)),
+                ?? t(`prompts.${type.value}.validation.required`)),
           ]
         : [],
     );

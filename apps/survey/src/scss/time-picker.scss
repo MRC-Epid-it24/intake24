@@ -1,0 +1,23 @@
+.time-picker {
+  .v-picker-title {
+    display: none;
+  }
+
+  .v-time-picker-controls {
+    margin-bottom: 16px;
+  }
+
+  // Vuetify landscape is broken
+  .v-picker--landscape {
+    grid-template-areas: 'header body';
+    width: unset !important;
+
+    .v-picker__header {
+      height: 100%;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

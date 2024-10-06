@@ -8,12 +8,11 @@
       <v-form @submit.prevent="action('next')">
         <v-radio-group
           v-model="selected"
-          :column="prompt.orientation === 'column'"
           :error="hasErrors"
           hide-details="auto"
+          :inline="prompt.orientation === 'row'"
           :label="$t(`prompts.${type}.label`)"
-          :row="prompt.orientation === 'row'"
-          @change="update"
+          @update:model-value="update"
         >
           <v-radio
             v-for="option in localeOptions"
@@ -21,18 +20,17 @@
             :label="option.label"
             :value="option.value"
           />
-          <v-row v-if="prompt.other" align="center" no-gutters>
-            <v-radio class="my-auto" hide-details value="other" />
+          <div v-if="prompt.other" class="d-flex flex-row align-center">
+            <v-radio class="flex-grow-0" hide-details value="other" />
             <v-text-field
               v-model.trim="otherValue"
               :error="hasErrors"
               hide-details="auto"
               :label="$t(`prompts.${type}.other`)"
-              outlined
               @focus="selected = 'other'"
-              @input="update"
+              @update:model-value="update"
             />
-          </v-row>
+          </div>
         </v-radio-group>
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
       </v-form>
@@ -60,18 +58,18 @@ export default defineComponent({
   mixins: [createBasePrompt<'radio-list-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: String,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n } = useI18n();
+    const { i18n: { locale, t } } = useI18n();
 
     const otherValue = ref('');
-    const selected = ref(props.value);
+    const selected = ref(props.modelValue);
 
     const state = computed(() =>
       selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value,
@@ -82,14 +80,14 @@ export default defineComponent({
         || (!!state.value && (selected.value !== 'other' || !!otherValue.value)),
     );
     const localeOptions = computed(
-      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
+      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
     );
 
     const confirm = () => {
       if (isValid.value)
         return true;
 
-      errors.value = [i18n.t(`prompts.${type.value}.validation.required`).toString()];
+      errors.value = [t(`prompts.${type.value}.validation.required`)];
       return false;
     };
 
@@ -102,7 +100,7 @@ export default defineComponent({
     const update = () => {
       clearErrors();
 
-      ctx.emit('input', state.value);
+      ctx.emit('update:modelValue', state.value);
     };
 
     return {

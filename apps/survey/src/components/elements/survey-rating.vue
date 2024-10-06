@@ -1,49 +1,60 @@
 <template>
-  <v-sheet :class="{ 'feedback-section': type === 'feedback' }">
+  <v-sheet class="d-flex flex-column align-center" :class="{ 'feedback-section': type === 'feedback' }">
     <h2 class="text-h2 font-weight-medium text-center mb-4">
       {{ $t(`${type}.rating.title`) }}
     </h2>
-    <div class="d-flex flex-column justify-center">
-      <v-rating
-        v-model="form.rating"
-        class="text-center my-4"
-        color="primary"
-        hover
-        length="5"
-        :readonly="sent"
-        :size="$vuetify.breakpoint.smAndDown ? 32 : 48"
-        @input="dialog = true"
-      />
-    </div>
+    <v-rating
+      v-model="form.rating"
+      class="my-4"
+      color="primary"
+      hover
+      length="5"
+      :readonly="sent"
+      @update:model-value="dialog = true"
+    >
+      <template #item="{ props }">
+        <v-icon
+          v-bind="props"
+          class="mx-4"
+          color="primary"
+          :size="$vuetify.display.smAndDown ? 24 : 42"
+        />
+      </template>
+    </v-rating>
     <v-dialog
       v-model="dialog"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
+      :fullscreen="$vuetify.display.smAndDown"
       max-width="600px"
       transition="dialog-bottom-transition"
     >
-      <v-card :tile="isMobile">
+      <v-card :tile="$vuetify.display.mobile">
         <v-toolbar color="secondary" dark>
-          <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-            <v-icon>$cancel</v-icon>
-          </v-btn>
+          <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="close" />
           <v-toolbar-title>{{ $t(`${type}.rating._`) }}</v-toolbar-title>
         </v-toolbar>
         <h3 class="text-h3 font-weight-medium text-center mt-3">
           {{ $t(`${type}.rating.title`) }}
         </h3>
-        <v-form @keydown.native="errors.clear()" @submit.prevent="rate">
+        <v-form @keydown="errors.clear()" @submit.prevent="rate">
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12">
+                <v-col class="d-flex justify-center" cols="12">
                   <v-rating
                     v-model="form.rating"
-                    class="text-center my-4"
                     color="primary"
                     hover
                     length="5"
-                    :size="$vuetify.breakpoint.smAndDown ? 32 : 48"
-                  />
+                  >
+                    <template #item="{ props }">
+                      <v-icon
+                        v-bind="props"
+                        class="mx-4"
+                        color="primary"
+                        :size="$vuetify.display.smAndDown ? 24 : 42"
+                      />
+                    </template>
+                  </v-rating>
                 </v-col>
                 <v-col cols="12">
                   <v-textarea
@@ -53,7 +64,6 @@
                     hide-details="auto"
                     :label="$t(`${type}.rating.comment`)"
                     name="comment"
-                    outlined
                     prepend-inner-icon="fas fa-message"
                   />
                 </v-col>
@@ -64,11 +74,11 @@
                     block
                     color="primary"
                     :disabled="errors.any()"
-                    outlined
                     rounded
+                    size="x-large"
                     :title="$t(`${type}.rating.send`)"
                     type="submit"
-                    x-large
+                    variant="outlined"
                   >
                     {{ $t(`${type}.rating.send`) }}
                   </v-btn>
@@ -92,8 +102,8 @@ import type { SurveyRatingRequest } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
-import { surveyService } from '../services';
-import { useLoading, useMessages } from '../stores';
+import { surveyService } from '../../services';
+import { useLoading, useMessages } from '../../stores';
 
 export default defineComponent({
   name: 'SurveyRating',
@@ -113,7 +123,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { i18n } = useI18n();
+    const { i18n: { t } } = useI18n();
 
     const dialog = ref(false);
     const errors = ref(new Errors());
@@ -142,7 +152,7 @@ export default defineComponent({
 
       try {
         await surveyService.storeRating(props.surveyId, form.value);
-        useMessages().info(i18n.t(`${props.type}.rating.sent`).toString());
+        useMessages().info(t(`${props.type}.rating.sent`));
         sent.value = true;
         close();
       }

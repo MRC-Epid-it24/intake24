@@ -483,7 +483,7 @@
       "description": "<p>请尝试浏览上面列出的食物类别来查找您的食物</p><p>如果您仍然找不到食物，请选择“报告找不到食物”。</p>",
       "report": "报告您找不到的食物",
       "tryAgain": "好的，让我再试一次",
-      "irrelevantIngredient": "好的，让我再试一次 {ingredient}"
+      "irrelevantIngredient": "好的，让我再试一次"
     }
   },
   "parentFoodPortion": {

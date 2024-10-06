@@ -1,24 +1,23 @@
 <template>
   <v-list-group
     :class="{ 'selected': isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
-    :sub-group="true"
     :value="true"
     @click="action('selectMeal', meal.id)"
   >
-    <template #prependIcon>
+    <template #prepend>
       <v-icon :class="{ rotate: isSelected || selectedFoodInMeal }">
         $expand
       </v-icon>
     </template>
     <template #activator>
-      <v-list-item-title class="font-weight-bold text-wrap">
+      <v-list-item-title class="text-body-2 font-weight-medium text-wrap">
         {{ mealName }}
       </v-list-item-title>
       <v-list-item-action>
-        <v-list-item-action-text v-if="mealTime?.length">
+        <span v-if="mealTime?.length">
           {{ mealTime }}
-        </v-list-item-action-text>
-        <v-icon v-else small>
+        </span>
+        <v-icon v-else size="small">
           $question
         </v-icon>
       </v-list-item-action>

@@ -1,20 +1,22 @@
 <template>
   <v-dialog v-model="dialog" :max-width="maxWidth" :persistent="persistent">
-    <template v-if="!external" #activator="{ on, attrs }">
-      <slot name="activator" v-bind="{ on, attrs }">
+    <template v-if="!external" #activator="{ props: dProps }">
+      <slot name="activator" v-bind="{ props: dProps }">
         <v-btn
           v-if="show"
-          v-bind="attrs"
-          :class="activatorClass"
-          :color="iconColor ? iconColor : color"
-          :disabled="disabled"
-          :fab="fab"
-          :icon="icon"
-          :small="small"
-          :title="label"
-          v-on="on"
+          v-bind="{
+            ...dProps,
+            class: activatorClass,
+            color: iconColor ? iconColor : color,
+            disabled,
+            icon,
+            rounded,
+            size,
+            title: label,
+            variant,
+          }"
         >
-          <v-icon :left="!icon && !!iconLeft">
+          <v-icon :start="!icon && !!iconLeft">
             {{ iconLeft }}
           </v-icon>
           <template v-if="!icon">
@@ -37,18 +39,17 @@
       <template v-if="typedConfirm">
         <v-divider />
         <v-card-text class="px-6 py-4">
-          <i18n class="text-subtitle-1 mb-2" path="common.action.confirm.typed" tag="p">
+          <i18n-t class="text-subtitle-1 mb-2" keypath="common.action.confirm.typed" tag="p">
             <template #name>
-              <code class="font-weight-bold error--text">{{ `DELETE ${typedConfirm}` }}</code>
+              <code class="font-weight-bold text-error">{{ `DELETE ${typedConfirm}` }}</code>
             </template>
-          </i18n>
+          </i18n-t>
           <v-text-field
             v-model="confirmInput"
-            class="error--text"
+            class="text-error"
             color="error"
-            dense
+            density="compact"
             hide-details="auto"
-            outlined
           />
         </v-card-text>
       </template>
@@ -59,18 +60,18 @@
             block
             class="mb-3"
             :color="color"
-            large
+            size="large"
             :title="confirmLabel"
             @click.stop="confirm"
           >
-            <v-icon v-if="confirmIcon" left>
+            <v-icon v-if="confirmIcon" start>
               {{ confirmIcon }}
             </v-icon>{{ confirmLabel }}
           </v-btn>
         </v-expand-transition>
 
-        <v-btn block :color="color" large outlined :title="cancelLabel" @click.stop="cancel">
-          <v-icon v-if="cancelIcon" left>
+        <v-btn block :color="color" size="large" :title="cancelLabel" variant="outlined" @click.stop="cancel">
+          <v-icon v-if="cancelIcon" start>
             {{ cancelIcon }}
           </v-icon>{{ cancelLabel }}
         </v-btn>
@@ -79,145 +80,133 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'ConfirmDialog',
+defineOptions({ name: 'ConfirmDialog' });
 
-  props: {
-    activatorClass: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
-    color: {
-      type: String,
-      default: 'info',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    external: {
-      type: Boolean,
-      default: false,
-    },
-    fab: {
-      type: Boolean,
-      default: false,
-    },
-    icon: {
-      type: Boolean,
-      default: false,
-    },
-    iconColor: {
-      type: String,
-    },
-    iconLeft: {
-      type: String,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    confirmIcon: {
-      type: String,
-    },
-    confirmText: {
-      type: String,
-    },
-    cancelIcon: {
-      type: String,
-    },
-    cancelText: {
-      type: String,
-    },
-    maxWidth: {
-      type: String,
-      default: '350px',
-    },
-    persistent: {
-      type: Boolean,
-      default: false,
-    },
-    show: {
-      type: Boolean,
-      default: true,
-    },
-    small: {
-      type: Boolean,
-    },
-    titleText: {
-      type: String,
-    },
-    typedConfirm: {
-      type: String,
-    },
-    value: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  activatorClass: {
+    type: Array as PropType<string[]>,
+    default: () => [],
   },
-
-  emits: ['cancel', 'close', 'confirm', 'input'],
-
-  setup(props, { emit }) {
-    const { i18n } = useI18n();
-
-    const dialog = ref(props.value);
-
-    const cancelLabel = computed(
-      () => props.cancelText ?? i18n.t('common.action.cancel').toString(),
-    );
-    const confirmLabel = computed(() => props.confirmText ?? props.label);
-    const titleLabel = computed(
-      () => props.titleText ?? i18n.t('common.action.confirm.title').toString(),
-    );
-
-    const confirmInput = ref('');
-    const canConfirm = computed(
-      () => !props.typedConfirm || `DELETE ${props.typedConfirm}` === confirmInput.value,
-    );
-
-    const close = () => {
-      dialog.value = false;
-    };
-
-    const cancel = () => {
-      close();
-      emit('cancel');
-    };
-
-    const confirm = () => {
-      close();
-      emit('confirm');
-    };
-
-    watch(
-      () => props.value,
-      (val) => {
-        dialog.value = val;
-      },
-    );
-
-    watch(dialog, (val) => {
-      if (!val)
-        emit('close');
-    });
-
-    return {
-      canConfirm,
-      confirm,
-      confirmInput,
-      cancel,
-      dialog,
-      cancelLabel,
-      confirmLabel,
-      titleLabel,
-    };
+  color: {
+    type: String,
+    default: 'info',
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  external: {
+    type: Boolean,
+    default: false,
+  },
+  icon: {
+    type: Boolean,
+    default: false,
+  },
+  iconColor: {
+    type: String,
+  },
+  iconLeft: {
+    type: String,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  confirmIcon: {
+    type: String,
+  },
+  confirmText: {
+    type: String,
+  },
+  cancelIcon: {
+    type: String,
+  },
+  cancelText: {
+    type: String,
+  },
+  maxWidth: {
+    type: String,
+    default: '350px',
+  },
+  persistent: {
+    type: Boolean,
+    default: false,
+  },
+  show: {
+    type: Boolean,
+    default: true,
+  },
+  rounded: {
+    type: [Boolean, String],
+    default: 'md',
+  },
+  size: {
+    type: String,
+  },
+  variant: {
+    type: String as PropType<'flat' | 'elevated' | 'outlined' | 'text' | 'plain' | 'tonal'>,
+  },
+  titleText: {
+    type: String,
+  },
+  typedConfirm: {
+    type: String,
+  },
+  modelValue: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['cancel', 'close', 'confirm', 'update:modelValue']);
+
+const dialog = ref(props.modelValue);
+
+const { i18n: { t } } = useI18n();
+
+const cancelLabel = computed(
+  () => props.cancelText ?? t('common.action.cancel'),
+);
+const confirmLabel = computed(() => props.confirmText ?? props.label);
+const titleLabel = computed(
+  () => props.titleText ?? t('common.action.confirm.title'),
+);
+
+const confirmInput = ref('');
+const canConfirm = computed(
+  () => !props.typedConfirm || `DELETE ${props.typedConfirm}` === confirmInput.value,
+);
+
+function close() {
+  dialog.value = false;
+}
+
+function cancel() {
+  close();
+  emit('cancel');
+}
+
+function confirm() {
+  close();
+  emit('confirm');
+}
+
+watch(() => props.modelValue, (val) => {
+  dialog.value = val;
+});
+
+watch(dialog, (val) => {
+  if (props.modelValue !== val)
+    emit('update:modelValue', val);
+
+  if (!val)
+    emit('close');
 });
 </script>

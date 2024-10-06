@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-checkbox v-model="currentValue.value" :label="$t('survey-schemes.conditions.showIfTrue')" @change="update(currentValue)" />
+      <v-checkbox-btn v-model="currentValue.value" :label="$t('survey-schemes.conditions.showIfTrue')" @update:model-value="update(currentValue)" />
     </v-col>
   </v-row>
 </template>
@@ -15,17 +15,19 @@ export default defineComponent({
   name: 'BooleanPropertyCheck',
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<BooleanPropertyCheck>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
-    const currentValue = ref(props.value);
+    const currentValue = ref(props.modelValue);
 
     const update = (value: BooleanPropertyCheck) => {
-      emit('update:value', value);
+      emit('update:modelValue', value);
     };
     return { update, currentValue };
   },

@@ -1,43 +1,49 @@
 <template>
-  <div class="d-flex flex-column">
-    <div v-if="!contents.subcategories.length && !contents.foods.length" class="py-4">
-      <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
-        {{ i18n.none }}
-      </v-alert>
-    </div>
-    <div v-if="containsPizza" class="py-4">
-      <v-alert
-        border="left"
-        class="smaller-padding"
-        color="primary lighten-4 mb-0"
-        icon="fas fa-bell"
-        rounded="lg"
-      >
-        {{ i18n.pizza }}
-      </v-alert>
-    </div>
-    <div v-if="contents.foods.length >= 50 && type === 'foodSearch'" class="py-4">
-      <v-alert
-        border="left"
-        class="smaller-padding"
-        color="primary lighten-4 mb-0"
-        icon="fas fa-bell"
-        rounded="lg"
-      >
-        {{ i18n.refine }}
-      </v-alert>
-    </div>
-    <v-subheader v-if="contents.subcategories.length">
+  <div class="d-flex flex-column gr-4">
+    <v-alert
+      v-if="!contents.subcategories.length && !contents.foods.length"
+      border="start"
+      class="py-2"
+      icon="fas fa-triangle-exclamation"
+      type="info"
+    >
+      {{ i18n.none }}
+    </v-alert>
+    <v-alert
+      v-if="containsPizza"
+      border="start"
+      class="py-2"
+      icon="fas fa-bell"
+      rounded="lg"
+      type="info"
+    >
+      {{ i18n.pizza }}
+    </v-alert>
+    <v-alert
+      v-if="contents.foods.length >= 50 && type === 'foodSearch'"
+      border="start"
+      class="py-2"
+      icon="fas fa-bell"
+      rounded="lg"
+      type="info"
+    >
+      {{ i18n.refine }}
+    </v-alert>
+    <div v-if="contents.subcategories.length" class="text-body-2 mt-2">
       {{ i18n.relatedCategories }}
-    </v-subheader>
-    <v-chip-group v-if="contents.subcategories.length" column>
+    </div>
+    <v-chip-group
+      v-if="contents.subcategories.length"
+      class="text-primary py-0"
+      color="primary"
+      column
+      variant="outlined"
+    >
       <v-chip
         v-for="category in showAll ? contents.subcategories : firstCategories"
         :key="category.code"
         class="my-1"
         clickable
-        color="primary"
-        outlined
         @click="categorySelected(category)"
       >
         <span class="font-weight-medium">{{ category.name }}</span>
@@ -45,26 +51,22 @@
     </v-chip-group>
     <v-btn
       v-if="contents.subcategories.length > threshold"
-      class="my-1 mb-2 show-all-toggle-chip"
       color="info"
-      text
+      variant="text"
       @click="showAll = !showAll"
     >
       {{ showAll ? i18n.showLess : i18n.showAll }}
     </v-btn>
-    <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
+    <v-list v-if="contents.foods.length" class="list-border list__no-wrap py-0" slim>
       <v-list-item
         v-for="food in contents.foods"
         :key="food.code"
-        class="list-item-border"
         @click="foodSelected(food)"
       >
-        <v-list-item-icon>
-          <v-icon>$food</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ food.name }}</v-list-item-title>
-        </v-list-item-content>
+        <template #prepend>
+          <v-icon icon="$food" />
+        </template>
+        <v-list-item-title>{{ food.name }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </div>
@@ -141,8 +143,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.smaller-padding {
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
 </style>

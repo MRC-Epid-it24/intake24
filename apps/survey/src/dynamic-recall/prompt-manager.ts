@@ -323,7 +323,7 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
       if (
         foodState.type === 'encoded-food'
         && (foodState.portionSizeMethodIndex === null
-        || !foodState.flags.includes('portion-size-option-complete'))
+          || !foodState.flags.includes('portion-size-option-complete'))
       ) {
         recallLog().promptCheck(
           component,

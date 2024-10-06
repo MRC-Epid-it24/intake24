@@ -1,9 +1,7 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
-      <v-icon left>
-        fas fa-globe
-      </v-icon>
+  <v-card border flat>
+    <v-toolbar color="grey-lighten-4">
+      <v-icon icon="fas fa-globe" start />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.externalSources.title') }}
       </v-toolbar-title>
@@ -12,20 +10,20 @@
       <v-select
         :items="sources"
         :label="$t('survey-schemes.prompts.externalSources.sources._')"
+        :model-value="source.type"
         name="source"
-        outlined
-        :value="source.type"
-        @input="update('type', $event)"
+        variant="outlined"
+        @update:model-value="update('type', $event)"
       />
       <template v-if="source.type === 'open-food-facts'">
         <v-combobox
 
           :items="countries"
           :label="$t('survey-schemes.prompts.externalSources.countries._')"
+          :model-value="source.country"
           name="country"
-          outlined
-          :value="source.country"
-          @input="update('country', $event)"
+          variant="outlined"
+          @update:model-value="update('country', $event)"
         />
         <v-toolbar flat tile>
           <v-toolbar-title class="font-weight-medium">
@@ -34,8 +32,8 @@
             </div>
           </v-toolbar-title>
           <v-spacer />
-          <v-btn color="primary" fab small :title="$t('common.options.add')" @click.stop="addQuery">
-            <v-icon small>
+          <v-btn color="primary" size="small" :title="$t('common.options.add')" @click.stop="addQuery">
+            <v-icon size="small">
               $add
             </v-icon>
           </v-btn>
@@ -47,29 +45,27 @@
           link
           :ripple="false"
         >
-          <v-list-item-content class="d-flex flex-row align-stretch ga-2">
+          <div class="d-flex flex-row align-stretch ga-2">
             <v-text-field
               v-model="item.key"
-              dense
+              density="compact"
               hide-details="auto"
               :label="$t('common.options.key')"
-              outlined
+              variant="outlined"
             />
             <v-text-field
               v-model="item.value"
-              dense
+              density="compact"
               hide-details="auto"
               :label="$t('common.options.value')"
-              outlined
+              variant="outlined"
             />
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-btn icon :title="$t('common.options.remove')" @click.stop="removeQuery(idx)">
-              <v-icon color="error">
-                $delete
-              </v-icon>
-            </v-btn>
-          </v-list-item-action>
+          </div>
+          <template #append>
+            <v-list-item-action>
+              <v-btn color="error" icon="$delete" :title="$t('common.options.remove')" @click.stop="removeQuery(idx)" />
+            </v-list-item-action>
+          </template>
         </v-list-item>
       </template>
     </v-card-text>
@@ -101,7 +97,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const sources = externalSources.map(value => ({
-      text: i18n.t(`survey-schemes.prompts.externalSources.sources.${value}`).toString(),
+      title: i18n.t(`survey-schemes.prompts.externalSources.sources.${value}`),
       value,
     }));
 

@@ -2,11 +2,10 @@
   <v-btn
     v-if="downloadUrlAvailable(item)"
     color="secondary"
-    icon
     :title="internalTitle"
     @click="download(item)"
   >
-    <v-icon dark>
+    <v-icon>
       {{ icon }}
     </v-icon>
   </v-btn>

@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'MilkOnCerealParameters',
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<PortionSizeParameters['milk-on-cereal']>,
       required: true,
     },

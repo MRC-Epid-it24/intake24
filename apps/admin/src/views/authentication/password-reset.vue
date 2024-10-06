@@ -1,9 +1,9 @@
 <template>
   <app-entry-screen
-    :subtitle="$t('common.password.reset.subtitle').toString()"
-    :title="$t('common.password.reset._').toString()"
+    :subtitle="$t('common.password.reset.subtitle')"
+    :title="$t('common.password.reset._')"
   >
-    <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
+    <v-form @keydown="form.errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>
         <v-container>
           <v-row>
@@ -15,9 +15,9 @@
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
-                outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12">
@@ -28,10 +28,10 @@
                 hide-details="auto"
                 :label="$t('common.password._')"
                 name="password"
-                outlined
                 prepend-inner-icon="fas fa-key"
                 required
                 type="password"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12">
@@ -42,17 +42,17 @@
                 hide-details="auto"
                 :label="$t('common.password.confirm')"
                 name="passwordConfirm"
-                outlined
                 prepend-inner-icon="fas fa-key"
                 required
                 type="password"
+                variant="outlined"
               />
             </v-col>
             <error-list :errors="nonInputErrors" tag="v-col" />
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn block color="primary" :disabled="isAppLoading" rounded type="submit" x-large>
+              <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
                 {{ $t('common.password.reset._') }}
               </v-btn>
             </v-col>
@@ -61,10 +61,8 @@
       </v-card-text>
     </v-form>
     <v-card-actions>
-      <v-btn color="info" exact text :to="{ name: 'login' }">
-        <v-icon left>
-          fas fa-angles-left
-        </v-icon>
+      <v-btn color="info" exact :to="{ name: 'login' }" variant="text">
+        <v-icon icon="fas fa-angles-left" start />
         {{ $t('common.login.back') }}
       </v-btn>
     </v-card-actions>
@@ -123,7 +121,7 @@ export default defineComponent({
   methods: {
     async submit() {
       await this.form.post('password/reset');
-      useMessages().success(this.$t('common.password.changed').toString());
+      useMessages().success(this.$t('common.password.changed'));
       await this.$router.push({ name: 'login' });
     },
   },

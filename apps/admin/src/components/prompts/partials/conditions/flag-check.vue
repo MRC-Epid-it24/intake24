@@ -5,12 +5,12 @@
         v-model="currentValue.flagId"
         hide-details="auto"
         :label="$t('survey-schemes.conditions.flag.id')"
-        outlined
+        variant="outlined"
         @change="update(currentValue)"
       />
     </v-col>
     <v-col cols="12" md="6">
-      <v-checkbox v-model="currentValue.value" :label="$t('survey-schemes.conditions.flag.showIfSet')" @change="update(currentValue)" />
+      <v-checkbox-btn v-model="currentValue.value" :label="$t('survey-schemes.conditions.flag.showIfSet')" @update:model-value="update(currentValue)" />
     </v-col>
   </v-row>
 </template>
@@ -24,17 +24,19 @@ export default defineComponent({
   name: 'FlagPropertyCheck',
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<FlagPropertyCheck>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
-    const currentValue = ref(props.value);
+    const currentValue = ref(props.modelValue);
 
     const update = (value: FlagPropertyCheck) => {
-      emit('update:value', value);
+      emit('update:modelValue', value);
     };
     return { update, currentValue };
   },

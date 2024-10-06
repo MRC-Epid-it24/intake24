@@ -7,10 +7,10 @@
             v-if="prompt.timer"
             class="mb-6"
             color="secondary"
+            :model-value="timerValue"
             :rotate="-90"
-            :size="200"
-            :value="timerValue"
-            :width="20"
+            :size="150"
+            :width="30"
           >
             <div class="d-flex align-center flex-column">
               <span class="font-weight-bold text-h1">{{ timerSecs }}</span>
@@ -22,11 +22,11 @@
         <v-btn
           class="px-4"
           color="secondary"
-          large
-          outlined
+          size="large"
           :to="{ name: 'survey-home', params: { surveyId } }"
+          variant="outlined"
         >
-          <v-icon left>
+          <v-icon start>
             $home
           </v-icon>
           {{ $t('common.home') }}
@@ -36,11 +36,11 @@
           class="px-4"
           color="primary"
           :disabled="!feedbackAvailable"
-          large
-          outlined
+          size="large"
           :to="{ name: 'feedback-home', params: { surveyId } }"
+          variant="outlined"
         >
-          <v-icon left>
+          <v-icon start>
             $feedback
           </v-icon>
           {{ $t('recall.actions.feedback') }}
@@ -51,12 +51,12 @@
             class="px-4"
             color="primary"
             :href="followUpUrl"
-            large
-            outlined
+            size="large"
             :target="prompt.target"
             :title="promptI18n.goTo"
+            variant="outlined"
           >
-            <v-icon left>
+            <v-icon start>
               $redirect
             </v-icon>
             {{ promptI18n.goTo }}
@@ -77,8 +77,8 @@
           v-if="feedbackEnabled"
           color="primary"
           :disabled="!feedbackAvailable"
-          text
           :to="{ name: 'feedback-home', params: { surveyId } }"
+          variant="text"
         >
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.feedback') }}
@@ -88,7 +88,7 @@
           </v-icon>
         </v-btn>
         <v-divider vertical />
-        <v-btn v-if="followUpUrl" color="primary" :href="followUpUrl" :target="prompt.target" text>
+        <v-btn v-if="followUpUrl" color="primary" :href="followUpUrl" :target="prompt.target" variant="text">
           <span class="text-overline font-weight-medium">
             {{ promptI18n.goTo }}
           </span>
@@ -101,7 +101,7 @@
     <survey-rating
       v-if="prompt.rating"
       v-bind="{ submissionId, surveyId, type: 'recall' }"
-      class="grey lighten-4 pt-6"
+      class="bg-grey-lighten-4 pt-6"
     />
   </div>
 </template>
@@ -109,7 +109,7 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { SurveyRating } from '@intake24/survey/components';
+import { SurveyRating } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
@@ -139,6 +139,8 @@ export default defineComponent({
       required: true,
     },
   },
+
+  emits: ['action'],
 
   setup(props, ctx) {
     const { action, translatePrompt } = usePromptUtils(props, ctx);

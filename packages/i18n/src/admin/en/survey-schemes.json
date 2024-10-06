@@ -88,7 +88,10 @@
       "_": "Action variant",
       "title": "Action variants",
       "elevated": "Elevated",
+      "flat": "Flat",
       "outlined": "Outlined",
+      "plain": "Plain",
+      "tonal": "Tonal",
       "text": "Text"
     }
   },
@@ -433,8 +436,11 @@
     "validation": {
       "required": "Prompt is required to be filled in",
       "message": "Error message to be displayed",
-      "min": "Minimum number of answers",
-      "max": "Maximum number of answers"
+      "limits": {
+        "_": "Answer limits",
+        "min": "Minimum number of answers",
+        "max": "Maximum number of answers"
+      }
     },
     "templates": {
       "_": "Prompt Template",

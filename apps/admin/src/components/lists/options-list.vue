@@ -1,161 +1,127 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <v-toolbar flat tile>
-        <v-toolbar-title class="font-weight-medium">
-          <div class="text-h5">
-            {{ $t('common.options._') }}
-          </div>
-        </v-toolbar-title>
-        <v-spacer />
-        <v-btn color="primary" fab small :title="$t('common.options.add')" @click.stop="add">
-          <v-icon small>
-            $add
-          </v-icon>
-        </v-btn>
-      </v-toolbar>
-      <v-divider />
-      <v-list dense>
-        <draggable v-model="currentOptions" handle=".drag-and-drop__handle" @end="update">
-          <transition-group name="drag-and-drop" type="transition">
-            <v-list-item
-              v-for="(option, idx) in currentOptions"
-              :key="option.id"
-              class="drag-and-drop__item"
-              draggable
-              link
-              :ripple="false"
-            >
-              <v-list-item-avatar class="drag-and-drop__handle">
-                <v-icon>$handle</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content class="options-list__item flex-column flex-lg-row align-stretch align-lg-stretch">
-                <v-text-field
-                  v-model="option.label"
-                  dense
-                  hide-details="auto"
-                  :label="$t('common.options.label')"
-                  outlined
-                />
-                <v-text-field
-                  v-model="option.value"
-                  dense
-                  hide-details="auto"
-                  :label="$t('common.options.value')"
-                  outlined
-                  :rules="optionValueRules"
-                />
-                <v-switch
-                  v-if="exclusive"
-                  v-model="option.exclusive"
-                  class="mt-0"
-                  hide-details="auto"
-                  :label="$t('common.options.exclusive')"
-                />
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn icon :title="$t('common.options.remove')" @click.stop="remove(idx)">
-                  <v-icon color="error">
-                    $delete
-                  </v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </transition-group>
-        </draggable>
-      </v-list>
-    </v-col>
-  </v-row>
+  <v-toolbar flat tile>
+    <v-toolbar-title class="font-weight-medium">
+      <div class="text-h5">
+        {{ $t('common.options._') }}
+      </div>
+    </v-toolbar-title>
+    <v-spacer />
+    <v-btn color="primary" icon="$add" size="small" :title="$t('common.options.add')" @click.stop="add" />
+  </v-toolbar>
+  <v-divider />
+  <v-list class="list-border" density="compact">
+    <vue-draggable
+      v-model="currentOptions"
+      :animation="300"
+      handle=".drag-and-drop__handle"
+      @end="update"
+    >
+      <v-list-item
+        v-for="(option, idx) in currentOptions"
+        :key="option.id"
+        :ripple="false"
+      >
+        <template #prepend>
+          <v-avatar class="drag-and-drop__handle" icon="$handle" />
+        </template>
+        <div class="d-flex flex-column align-stretch align-lg-stretch gr-2 pa-2">
+          <v-text-field
+            v-model="option.label"
+            density="compact"
+            hide-details="auto"
+            :label="$t('common.options.label')"
+            variant="outlined"
+          />
+          <v-text-field
+            v-model="option.value"
+            density="compact"
+            hide-details="auto"
+            :label="$t('common.options.value')"
+            :rules="optionValueRules"
+            variant="outlined"
+          />
+          <v-switch
+            v-if="exclusive"
+            v-model="option.exclusive"
+            hide-details="auto"
+            :label="$t('common.options.exclusive')"
+          />
+        </div>
+        <template #append>
+          <v-list-item-action>
+            <v-btn color="error" icon="$delete" :title="$t('common.options.remove')" @click.stop="remove(idx)" />
+          </v-list-item-action>
+        </template>
+      </v-list-item>
+    </vue-draggable>
+  </v-list>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { ZodNumber, ZodString } from 'zod';
 import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { computed, ref, watch } from 'vue';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { ListOption } from '@intake24/common/types';
 import { toIndexedList } from '@intake24/admin/util';
 
-export default defineComponent({
-  name: 'OptionsList',
+defineOptions({ name: 'OptionsList' });
 
-  components: { Draggable: draggable },
-
-  props: {
-    exclusive: {
-      type: Boolean,
-    },
-    options: {
-      type: Array as PropType<ListOption<ZodString | ZodNumber>[]>,
-      required: true,
-    },
-    rules: {
-      type: Array as PropType<RuleCallback[]>,
-      default: () => [],
-    },
+const props = defineProps({
+  exclusive: {
+    type: Boolean,
   },
-
-  emits: ['update:options'],
-
-  data() {
-    const currentOptions = toIndexedList(this.options);
-
-    const defaultValueRules = [
-      (value: string | null): boolean | string => {
-        const values = currentOptions.filter(item => item.value === value);
-        return values.length < 2 || 'Value is already used.';
-      },
-    ];
-
-    return { currentOptions, defaultValueRules };
+  options: {
+    type: Array as PropType<ListOption<ZodString | ZodNumber>[]>,
+    required: true,
   },
-
-  computed: {
-    outputOptions(): ListOption<ZodString | ZodNumber>[] {
-      return this.currentOptions.map(({ id, ...rest }) => (rest));
-    },
-    optionValueRules(): RuleCallback[] {
-      return [...this.defaultValueRules, ...this.rules];
-    },
-  },
-
-  watch: {
-    options(val) {
-      if (deepEqual(val, this.outputOptions))
-        return;
-
-      this.currentOptions = toIndexedList(val);
-    },
-    outputOptions: {
-      deep: true,
-      handler() {
-        this.update();
-      },
-    },
-  },
-
-  methods: {
-    add() {
-      const size = this.currentOptions.length + 1;
-      this.currentOptions.push({ id: size, label: `label-${size}`, value: `value-${size}` });
-    },
-
-    remove(index: number) {
-      this.currentOptions.splice(index, 1);
-    },
-
-    update() {
-      this.$emit('update:options', this.outputOptions);
-    },
+  rules: {
+    type: Array as PropType<RuleCallback[]>,
+    default: () => [],
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const currentOptions = ref(toIndexedList(props.options));
+
+const defaultValueRules = [
+  (value: string | null): boolean | string => {
+    const values = currentOptions.value.filter(item => item.value === value);
+    return values.length < 2 || 'Value is already used.';
+  },
+];
+
+const outputOptions = computed<ListOption<ZodString | ZodNumber>[]>(() => currentOptions.value.map(({ id, ...rest }) => (rest)));
+const optionValueRules = computed<RuleCallback[]>(() => [...defaultValueRules, ...props.rules]);
+
+function add() {
+  const size = currentOptions.value.length + 1;
+  currentOptions.value.push({ id: size, label: `label-${size}`, value: `value-${size}` });
+};
+
+function remove(index: number) {
+  currentOptions.value.splice(index, 1);
+};
+
+function update() {
+  emit('update:options', outputOptions.value);
+};
+
+watch(() => props.options, (val) => {
+  if (deepEqual(val, outputOptions.value))
+    return;
+
+  currentOptions.value = toIndexedList(val);
+});
+
+watch(outputOptions, () => {
+  update();
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped>
-.options-list__item {
-  gap: 0.5rem;
-}
 </style>

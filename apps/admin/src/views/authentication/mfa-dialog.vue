@@ -1,24 +1,22 @@
 <template>
-  <v-dialog v-bind="{ value }" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <v-card :tile="$vuetify.breakpoint.smAndDown">
+  <v-dialog v-bind="{ modelValue }" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>{{ $t('common.mfa.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-row no-gutters>
         <v-col cols="12" sm="6">
-          <v-sheet color="grey lighten-3 fill-height">
+          <v-sheet color="grey-lighten-3">
             <v-card-text class="d-flex justify-center align-center">
               <v-card v-if="provider === 'duo'" flat tile>
-                <v-sheet class="d-flex flex-column align-center py-6" color="grey lighten-3">
+                <v-sheet class="d-flex flex-column align-center py-6" color="grey-lighten-3">
                   <v-progress-circular
                     class="mb-4"
                     color="primary"
+                    :model-value="duo.value"
                     :rotate="-90"
                     :size="200"
-                    :value="duo.value"
                     :width="20"
                   >
                     <div class="d-flex align-center flex-column">
@@ -34,7 +32,7 @@
                 </v-sheet>
               </v-card>
               <v-card v-if="provider === 'fido'" flat link tile @click="fidoChallenge">
-                <v-sheet class="d-flex flex-column align-center py-6" color="grey lighten-3">
+                <v-sheet class="d-flex flex-column align-center py-6" color="grey-lighten-3">
                   <v-icon class="provider-icon mb-6" color="secondary">
                     $fido
                   </v-icon>
@@ -59,7 +57,7 @@
                     hide-details="auto"
                     length="6"
                     name="token"
-                    @input="otp.errors.clear('token')"
+                    @update:model-value="otp.errors.clear('token')"
                   />
                   <v-btn block color="secondary" rounded type="submit">
                     {{ $t('common.action.confirm._') }}
@@ -70,29 +68,23 @@
           </v-sheet>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-list-item-group
-            active-class="grey--text lighten-3"
-            :value="deviceId"
+          <v-list
+            v-model="deviceId"
+            class="list-border"
+            lines="two"
             @change="selectDevice"
           >
-            <v-list subheader two-line>
-              <v-subheader>{{ $t('common.mfa.devices') }}</v-subheader>
-              <template v-for="(device, idx) in authData.devices">
-                <v-list-item :key="device.id" link :value="device.id">
-                  <v-list-item-avatar>
-                    <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
-                      {{ `$${device.provider}` }}
-                    </v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ device.name }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ device.provider }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider v-if="idx < authData.devices.length + 1" :key="`div-${device.id}`" />
+            <v-list-subheader>{{ $t('common.mfa.devices') }}</v-list-subheader>
+            <v-list-item v-for="device in authData.devices" :key="device.id" link :value="device.id">
+              <template #prepend>
+                <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
+                  {{ `$${device.provider}` }}
+                </v-icon>
               </template>
-            </v-list>
-          </v-list-item-group>
+              <v-list-item-title>{{ device.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ device.provider }}</v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
         </v-col>
       </v-row>
     </v-card>
@@ -117,7 +109,7 @@ export default defineComponent({
       type: Object as PropType<MFAAuthResponse>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Boolean,
       required: true,
     },
@@ -146,7 +138,7 @@ export default defineComponent({
   },
 
   watch: {
-    value: {
+    modelValue: {
       immediate: true,
       async handler(val, oldVal) {
         if (!val || oldVal || !this.authData.challenge)
@@ -165,7 +157,7 @@ export default defineComponent({
     },
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.clearDuoInterval();
   },
 
@@ -175,7 +167,7 @@ export default defineComponent({
     },
 
     fail() {
-      useMessages().error(this.$t('common.mfa.error').toString());
+      useMessages().error(this.$t('common.mfa.error'));
       this.close();
     },
 
@@ -228,7 +220,7 @@ export default defineComponent({
         await this.finalizeLogin();
       }
       catch {
-        useMessages().error(this.$t('common.mfa.error').toString());
+        useMessages().error(this.$t('common.mfa.error'));
       }
     },
 

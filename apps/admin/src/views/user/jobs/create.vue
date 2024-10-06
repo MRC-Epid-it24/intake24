@@ -1,22 +1,20 @@
 <template>
   <div>
-    <v-card class="mb-4" outlined>
-      <v-toolbar flat>
-        <v-btn color="white" :title="$t(`common.action.back`)" :to="{ name: 'user.jobs' }">
-          <v-icon left>
-            $back
-          </v-icon>{{ $t(`common.action.back`) }}
+    <v-card class="mb-5 px-2" :flat="$vuetify.display.mobile">
+      <v-toolbar color="white">
+        <v-btn color="grey-darken-1" :title="$t(`common.action.back`)" :to="{ name: 'user.jobs' }">
+          <v-icon icon="$back" start />{{ $t(`common.action.back`) }}
         </v-btn>
       </v-toolbar>
     </v-card>
-    <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
-      <v-tabs background-color="primary" dark>
+    <v-card :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
+      <v-tabs bg-color="primary">
         <v-tab :key="$t('user.jobs.create')" :title="$t('user.jobs.create')">
           {{ $t('user.jobs.create') }}
         </v-tab>
       </v-tabs>
       <v-container fluid>
-        <v-form @keydown.native="clearError" @submit.prevent="submit">
+        <v-form @keydown="clearError" @submit.prevent="submit">
           <v-row>
             <v-col cols="12" md="6">
               <v-card-title>{{ $t('user.jobs.title') }}</v-card-title>
@@ -27,9 +25,9 @@
                   :items="jobTypeList"
                   :label="$t('user.jobs._')"
                   name="job"
-                  outlined
                   prepend-inner-icon="$jobs"
-                  @change="updateJob"
+                  variant="outlined"
+                  @update:model-value="updateJob"
                 />
               </v-card-text>
             </v-col>
@@ -41,7 +39,7 @@
                 :disabled="disabledJobParams[form.type]"
                 :errors="form.errors"
                 name="params"
-                @input="form.errors.clear(paramErrors)"
+                @update:model-value="form.errors.clear(paramErrors)"
               />
             </v-col>
           </v-row>
@@ -51,13 +49,11 @@
                 block
                 color="primary"
                 :disabled="form.errors.any() || jobInProgress || isAppLoading"
+                size="x-large"
                 :title="$t('common.action.upload')"
                 type="submit"
-                x-large
               >
-                <v-icon left>
-                  fas fa-play
-                </v-icon>{{ $t('common.action.submit') }}
+                <v-icon icon="fas fa-play" start />{{ $t('common.action.submit') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -95,7 +91,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const jobTypeList = computed(() =>
-      userJobs.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`) })),
+      userJobs.map(value => ({ value, title: i18n.t(`jobs.types.${value}._`) })),
     );
 
     const defaultJobsParams = computed<Pick<JobParams, UserJob>>(() => ({

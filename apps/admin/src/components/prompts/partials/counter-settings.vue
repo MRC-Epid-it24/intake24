@@ -1,9 +1,7 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
-      <v-icon left>
-        fas fa-calculator
-      </v-icon>
+  <v-card border flat>
+    <v-toolbar color="grey-lighten-4">
+      <v-icon icon="fas fa-calculator" start />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.counter.title') }}
       </v-toolbar-title>
@@ -17,8 +15,8 @@
               hide-details="auto"
               :label="$t('survey-schemes.prompts.counter.current')"
               name="current"
-              outlined
               :rules="isNumber"
+              variant="outlined"
             />
             <v-text-field
               v-model.number="counter.min"
@@ -26,8 +24,8 @@
               hide-details="auto"
               :label="$t('survey-schemes.prompts.counter.min')"
               name="min"
-              outlined
               :rules="isNumber"
+              variant="outlined"
             />
             <v-text-field
               v-model.number="counter.max"
@@ -35,8 +33,8 @@
               hide-details="auto"
               :label="$t('survey-schemes.prompts.counter.max')"
               name="max"
-              outlined
               :rules="isNumber"
+              variant="outlined"
             />
           </v-card-text>
         </v-col>

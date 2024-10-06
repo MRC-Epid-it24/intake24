@@ -1,9 +1,7 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
-      <v-icon left>
-        fas fa-sliders
-      </v-icon>
+  <v-card border flat>
+    <v-toolbar color="grey-lighten-4">
+      <v-icon icon="fas fa-sliders" start />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.slider.title') }}
       </v-toolbar-title>
@@ -23,15 +21,15 @@
               </v-tab>
             </v-tabs>
             <v-card-text>
-              <v-tabs-items v-model="tab" class="pt-1">
-                <v-tab-item v-for="item in tabs" :key="item" :value="item">
+              <v-tabs-window v-model="tab" class="pt-1">
+                <v-tabs-window-item v-for="item in tabs" :key="item" :value="item">
                   <v-text-field
                     hide-details="auto"
                     :label="$t(`survey-schemes.prompts.slider.${item}.value`)"
-                    :name="item"
-                    outlined
-                    :value="slider[item].value"
-                    @input="
+                    :model-value="slider[item].value"
+                    :name="`${item}.value`"
+                    variant="outlined"
+                    @update:model-value="
                       slider[item].value = Number.isNaN(parseFloat($event))
                         ? null
                         : parseFloat($event)
@@ -40,23 +38,23 @@
                   <v-switch
                     class="mb-4"
                     hide-details="auto"
-                    :input-value="slider[item].label"
                     :label="$t(`survey-schemes.prompts.slider.${item}.label`)"
-                    @change="updateLabel(item, $event)"
+                    :model-value="slider[item].label"
+                    @update:model-value="updateLabel(item, $event)"
                   />
                   <language-selector
                     v-if="slider[item].label"
                     v-model="slider[item].label"
-                    :label="$t(`survey-schemes.prompts.slider.${tab}.label`).toString()"
+                    :label="$t(`survey-schemes.prompts.slider.${item}.label`)"
                   >
-                    <template v-for="lang in Object.keys(slider[item].label)" #[`lang.${lang}`]>
+                    <template v-for="lang in Object.keys(slider[item].label)" :key="lang" #[`lang.${lang}`]>
                       <v-text-field
-                        :key="lang"
+
                         v-model="slider[item].label[lang]"
                         hide-details="auto"
                         :label="$t(`survey-schemes.prompts.slider.${item}.label`)"
-                        :name="`${item}.${lang}`"
-                        outlined
+                        :name="`${item}.label.${lang}`"
+                        variant="outlined"
                       />
                     </template>
                   </language-selector>
@@ -65,12 +63,12 @@
                     v-model.number="slider[item].size"
                     hide-details="auto"
                     :label="$t(`survey-schemes.prompts.slider.${item}.size`)"
-                    name="current"
-                    outlined
+                    :name="`${item}.size`"
                     :rules="isNumber"
+                    variant="outlined"
                   />
-                </v-tab-item>
-              </v-tabs-items>
+                </v-tabs-window-item>
+              </v-tabs-window>
             </v-card-text>
           </v-card>
         </v-col>
@@ -82,8 +80,8 @@
               hide-details="auto"
               :label="$t('survey-schemes.prompts.slider.step')"
               name="step"
-              outlined
               :rules="isNumber"
+              variant="outlined"
             />
             <v-switch
               v-if="!hideConfirm"

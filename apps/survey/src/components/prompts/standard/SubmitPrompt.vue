@@ -1,14 +1,14 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <review-meal-list
-      v-if="!$vuetify.breakpoint.mobile && prompt.review.desktop"
+      v-if="!$vuetify.display.mobile && prompt.review.desktop"
       v-bind="{ meals, review: prompt.review.desktop }"
       @action="action"
       @bottom-reached="updateBottomReached('desktop', $event)"
       @reviewed="updateReviewed('desktop', $event)"
     />
     <review-meal-list-mobile
-      v-if="$vuetify.breakpoint.mobile && prompt.review.mobile"
+      v-if="$vuetify.display.mobile && prompt.review.mobile"
       v-bind="{ meals, review: prompt.review.mobile }"
       @action="action"
       @bottom-reached="updateBottomReached('mobile', $event)"
@@ -20,7 +20,7 @@
       </next>
     </template>
     <template #nav-actions>
-      <v-btn color="primary" text @click.stop="action('addMeal')">
+      <v-btn color="primary" variant="text" @click.stop="action('addMeal')">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.addMeal') }}
         </span>

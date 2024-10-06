@@ -1,6 +1,6 @@
 <template>
   <v-expand-transition>
-    <v-card v-show="value" ref="card" class="my-4" color="red lighten-4" outlined>
+    <v-card v-show="modelValue" ref="card" border class="my-4" color="red-lighten-4">
       <v-card-text class="px-6">
         {{ message }}
       </v-card-text>
@@ -8,45 +8,40 @@
   </v-expand-transition>
 </template>
 
-<script lang="ts">
-import type { TranslateResult } from 'vue-i18n';
-import type { VCard } from 'vuetify/lib';
-import { defineComponent, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { useTemplateRef, watch } from 'vue';
+import { useGoTo } from 'vuetify';
 
-export default defineComponent({
-  name: 'MissingAllRecipeIngridients',
+defineOptions({ name: 'MissingAllRecipeIngredients' });
 
-  props: {
-    message: {
-      type: String as () => TranslateResult,
-      required: true,
-    },
-    value: {
-      type: Boolean,
-      required: true,
-    },
+const props = defineProps({
+  message: {
+    type: String,
+    required: true,
   },
-
-  setup(props) {
-    const card = ref<InstanceType<typeof VCard>>();
-    watch(
-      () => props.value,
-      (value) => {
-        if (!value)
-          return;
-
-        setTimeout(async () => {
-          if (!card.value)
-            return;
-
-          await card.value.$vuetify.goTo(card.value.$el as HTMLElement, { duration: 1000 });
-        }, 100);
-      },
-    );
-
-    return { card };
+  modelValue: {
+    type: Boolean,
+    required: true,
   },
 });
+
+const card = useTemplateRef('card');
+const goTo = useGoTo();
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (!value)
+      return;
+
+    setTimeout(async () => {
+      if (!card.value)
+        return;
+
+      await goTo(card.value, { duration: 500 });
+    }, 100);
+  },
+);
 </script>
 
 <style lang="scss" scoped></style>

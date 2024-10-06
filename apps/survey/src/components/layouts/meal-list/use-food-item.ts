@@ -20,8 +20,8 @@ export type UseFoodItemProps = {
   meal: MealState;
 };
 
-export function useFoodItem(props: UseFoodItemProps, { emit }: SetupContext) {
-  const { i18n } = useI18n();
+export function useFoodItem(props: UseFoodItemProps, { emit }: SetupContext<'action'[]>) {
+  const { i18n: { t } } = useI18n();
   const { foodName } = useFoodUtils(props);
 
   const isPortionSizeComplete = computed(() => foodPortionSizeComplete(props.food));
@@ -30,18 +30,18 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: SetupContext) {
     (
       [
         {
-          name: i18n.t('recall.menu.food.change').toString(),
+          name: t('recall.menu.food.change'),
           action: 'changeFood',
           icon: '$meal',
         },
         {
-          name: i18n.t(`recall.menu.food.${props.food.type}.edit`).toString(),
+          name: t(`recall.menu.food.${props.food.type}.edit`),
           action: 'editFood',
           icon: '$food',
           if: (food: FoodState) => foodComplete(food),
         },
         {
-          name: i18n.t('recall.menu.food.delete').toString(),
+          name: t('recall.menu.food.delete'),
           action: 'deleteFood',
           dialog: true,
           icon: '$delete',

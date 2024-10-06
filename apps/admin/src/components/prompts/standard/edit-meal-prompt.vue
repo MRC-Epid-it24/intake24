@@ -1,16 +1,16 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row>
       <v-col cols="12">
         <v-switch
           hide-details="auto"
-          :input-value="separateDrinks"
           :label="$t('survey-schemes.prompts.edit-meal-prompt.separateDrinks')"
-          @change="update('separateDrinks', $event)"
+          :model-value="separateDrinks"
+          @update:model-value="update('separateDrinks', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

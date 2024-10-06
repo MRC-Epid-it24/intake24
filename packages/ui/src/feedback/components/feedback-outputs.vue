@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" sm="auto">
     <v-card height="100%">
-      <v-toolbar color="grey lighten-4" flat tile>
+      <v-toolbar color="grey-lighten-4" flat tile>
         <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
           {{ $t('feedback.outputs.title') }}
         </v-toolbar-title>
@@ -11,50 +11,40 @@
           v-if="outputs.includes('print')"
           class="mb-3"
           color="secondary"
-          link
-          outlined
           rounded
           :title="$t('feedback.outputs.print')"
+          variant="outlined"
           @click="printFeedback"
         >
-          <v-icon left>
-            fas fa-print
-          </v-icon>
+          <v-icon icon="fas fa-print" start />
           {{ $t('feedback.outputs.print') }}
         </v-btn>
         <v-dialog
           v-if="outputs.includes('email')"
           v-model="email.dialog"
-          :fullscreen="$vuetify.breakpoint.smAndDown"
+          :fullscreen="$vuetify.display.smAndDown"
           max-width="500px"
         >
-          <template #activator="{ attrs, on }">
+          <template #activator="{ props }">
             <v-btn
-              v-bind="attrs"
               class="mb-3"
               color="secondary"
-              link
-              outlined
               rounded
               :title="$t('feedback.outputs.email._')"
-              v-on="on"
+              variant="outlined"
+              v-bind="props"
             >
-              <v-icon left>
-                fas fa-envelope
-              </v-icon>
+              <v-icon icon="fas fa-envelope" start />
               {{ $t('feedback.outputs.email._') }}
             </v-btn>
           </template>
-          <v-card :tile="$vuetify.breakpoint.smAndDown">
+          <v-card :tile="$vuetify.display.smAndDown">
             <v-toolbar color="secondary" dark>
               <v-btn
-                dark
-                icon
+                icon="$close"
                 :title="$t('common.action.close')"
                 @click.stop="email.dialog = false"
-              >
-                <v-icon>$close</v-icon>
-              </v-btn>
+              />
               <v-toolbar-title>{{ $t('feedback.outputs.email.title') }}</v-toolbar-title>
             </v-toolbar>
             <v-card-text class="pa-4">
@@ -68,9 +58,8 @@
                         hide-details="auto"
                         :label="$t('common.email')"
                         name="email"
-                        outlined
                         prepend-inner-icon="fas fa-envelope"
-                        @input="email.errors.clear('email')"
+                        @update:model-value="email.errors.clear('email')"
                       />
                     </v-col>
                     <v-col cols="12">
@@ -80,28 +69,25 @@
                         hide-details="auto"
                         :label="$t('common.emailConfirm')"
                         name="emailConfirm"
-                        outlined
                         prepend-inner-icon="fas fa-envelope"
-                        @input="email.errors.clear('emailConfirm')"
+                        @update:model-value="email.errors.clear('emailConfirm')"
                       />
                     </v-col>
                     <v-col cols="12">
-                      <v-alert v-if="message" outlined type="success">
+                      <v-alert v-if="message" type="success" variant="outlined">
                         {{ message }}
                       </v-alert>
-                      <v-alert v-if="retry.retryIn" outlined type="warning">
+                      <v-alert v-if="retry.retryIn" type="warning" variant="outlined">
                         {{ retryMessage }}
                       </v-alert>
                       <v-btn
                         block
                         color="secondary"
                         :disabled="!!retry.retryIn || email.errors.any()"
+                        size="x-large"
                         type="submit"
-                        x-large
                       >
-                        <v-icon left>
-                          fas fa-paper-plane
-                        </v-icon>
+                        <v-icon icon="fas fa-paper-plane" start />
                         {{ $t('feedback.outputs.email.send') }}
                       </v-btn>
                     </v-col>
@@ -114,36 +100,30 @@
         <v-dialog
           v-if="outputs.includes('download')"
           v-model="download.dialog"
-          :fullscreen="$vuetify.breakpoint.smAndDown"
+          :fullscreen="$vuetify.display.smAndDown"
           max-width="500px"
         >
-          <template #activator="{ attrs, on }">
+          <template #activator="{ props }">
             <v-btn
-              v-bind="attrs"
+
               class="mb-3"
               color="secondary"
-              link
-              outlined
               rounded
               :title="$t('feedback.outputs.download._')"
-              v-on="on"
+              variant="outlined"
+              v-bind="props"
             >
-              <v-icon left>
-                $download
-              </v-icon>
+              <v-icon icon="$download" start />
               {{ $t('feedback.outputs.download._') }}
             </v-btn>
           </template>
-          <v-card :tile="$vuetify.breakpoint.smAndDown">
+          <v-card :tile="$vuetify.display.smAndDown">
             <v-toolbar color="secondary" dark>
               <v-btn
-                dark
-                icon
+                icon="$close"
                 :title="$t('common.action.close')"
                 @click.stop="download.dialog = false"
-              >
-                <v-icon>$close</v-icon>
-              </v-btn>
+              />
               <v-toolbar-title>{{ $t('feedback.outputs.download.title') }}</v-toolbar-title>
             </v-toolbar>
             <v-card-text class="pa-4">
@@ -155,22 +135,20 @@
                     </div>
                   </v-col>
                   <v-col cols="12">
-                    <v-alert v-if="message" outlined type="success">
+                    <v-alert v-if="message" type="success" variant="outlined">
                       {{ message }}
                     </v-alert>
-                    <v-alert v-if="retry.retryIn" outlined type="warning">
+                    <v-alert v-if="retry.retryIn" type="warning" variant="outlined">
                       {{ retryMessage }}
                     </v-alert>
                     <v-btn
                       block
                       color="secondary"
                       :disabled="!!retry.retryIn"
-                      x-large
+                      size="x-large"
                       @click.stop="downloadFeedback"
                     >
-                      <v-icon left>
-                        fas fa-paper-plane
-                      </v-icon>
+                      <v-icon icon="fas fa-paper-plane" start />
                       {{ $t('feedback.outputs.download.send') }}
                     </v-btn>
                   </v-col>
@@ -234,11 +212,11 @@ export default defineComponent({
 
   computed: {
     retryMessage(): string {
-      return this.$t('feedback.outputs.retry', { secs: this.retry.retryIn }).toString();
+      return this.$t('feedback.outputs.retry', { secs: this.retry.retryIn });
     },
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.clearFeedbackInterval();
   },
 
@@ -258,7 +236,7 @@ export default defineComponent({
         });
         downloadFile(res, `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`);
 
-        this.message = this.$t('feedback.outputs.download.sent').toString();
+        this.message = this.$t('feedback.outputs.download.sent');
       }
       catch (err) {
         this.message = null;
@@ -290,7 +268,7 @@ export default defineComponent({
         await this.$http.post(`user/feedback`, { ...form, lang, survey, submissions });
 
         this.email.form = { email: '', emailConfirm: '' };
-        this.message = this.$t('feedback.outputs.email.sent').toString();
+        this.message = this.$t('feedback.outputs.email.sent');
       }
       catch (err) {
         this.message = null;

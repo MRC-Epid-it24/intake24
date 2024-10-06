@@ -1,11 +1,14 @@
 <template>
-  <v-card v-if="currentActions.length" class="mb-4" outlined>
-    <v-toolbar>
-      <template v-for="action in ['create', 'read', 'edit']">
+  <v-card
+    v-if="currentActions.length" class="mb-5 px-2"
+    :flat="$vuetify.display.mobile"
+    :rounded="$vuetify.display.mobile ? 0 : undefined"
+  >
+    <v-toolbar color="white">
+      <template v-for="action in ['create', 'read', 'edit']" :key="action">
         <component
           :is="action"
           v-if="currentActions.includes(action)"
-          :key="action"
           :action="action"
           class="mr-2"
           :disabled="selected.length !== 1"
@@ -18,7 +21,8 @@
         color="error"
         :disabled="!selected.length"
         icon-left="$delete"
-        :label="$t('common.action.delete').toString()"
+        :label="$t('common.action.delete')"
+        variant="flat"
         @confirm="onDelete"
       >
         {{ $t('common.action.confirm.multi.delete', { count: selected.length }) }}
@@ -29,7 +33,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { Location } from 'vue-router';
 import upperFirst from 'lodash/upperFirst';
 import { defineComponent } from 'vue';
 
@@ -63,9 +66,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    routePrefix: {
-      type: String,
-    },
   },
 
   emits: ['refresh'],
@@ -74,8 +74,8 @@ export default defineComponent({
     currentActions(): string[] {
       return this.actions.filter(action => this.can({ action }));
     },
-    route(): string | null | undefined {
-      return this.routePrefix ?? this.$route.name;
+    route() {
+      return this.$route.name?.toString() ?? this.module;
     },
   },
 
@@ -90,7 +90,7 @@ export default defineComponent({
       if (!id)
         return;
 
-      await this.$router.push({ name: `${this.route}-read`, params: { id } } as Location);
+      await this.$router.push({ name: `${this.route}-read`, params: { id } });
     },
 
     async onEdit() {
@@ -98,7 +98,7 @@ export default defineComponent({
       if (!id)
         return;
 
-      await this.$router.push({ name: `${this.route}-edit`, params: { id } } as Location);
+      await this.$router.push({ name: `${this.route}-edit`, params: { id } });
     },
 
     async onDelete() {
@@ -107,13 +107,13 @@ export default defineComponent({
         return;
 
       await this.$http.delete(this.api, { params: { id } });
-      useMessages().success(this.$t('common.msg.multi.deleted').toString());
+      useMessages().success(this.$t('common.msg.multi.deleted'));
       this.onDraw();
     },
 
     getOneSelected() {
       if (this.selected.length !== 1) {
-        useMessages().info(this.$t('Select one item to view/edit details.').toString());
+        useMessages().info(this.$t('Select one item to view/edit details.'));
         return false;
       }
       return this.selected[0];
@@ -121,7 +121,7 @@ export default defineComponent({
 
     getAtLeastOneSelected() {
       if (!this.selected.length) {
-        useMessages().info(this.$t('Select at least one item.').toString());
+        useMessages().info(this.$t('Select at least one item.'));
         return false;
       }
       return this.selected;

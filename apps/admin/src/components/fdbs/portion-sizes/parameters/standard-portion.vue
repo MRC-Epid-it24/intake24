@@ -4,17 +4,15 @@
       <v-btn
         class="mb-4 align-self-end"
         color="secondary"
-        outlined
         rounded
         :title="$t('standard-units.add')"
+        variant="outlined"
         @click="add"
       >
-        <v-icon left>
-          $add
-        </v-icon>
+        <v-icon icon="$add" start />
         {{ $t('standard-units.add') }}
       </v-btn>
-      <v-simple-table>
+      <v-table>
         <thead>
           <tr>
             <th />
@@ -24,8 +22,13 @@
             <th />
           </tr>
         </thead>
-        <draggable v-model="parameters.units" handle=".drag-and-drop__handle" tag="tbody">
-          <tr v-for="(unit, idx) in parameters.units" :key="unit.name" class="drag-and-drop__item">
+        <vue-draggable
+          v-model="parameters.units"
+          :animation="300"
+          handle=".drag-and-drop__handle"
+          tag="tbody"
+        >
+          <tr v-for="(unit, idx) in parameters.units" :key="unit.name">
             <td>
               <v-icon class="drag-and-drop__handle">
                 $handle
@@ -33,11 +36,9 @@
             </td>
             <td>
               <select-resource v-model="unit.name" resource="standard-units">
-                <template #activator="{ attrs, on }">
-                  <v-btn v-bind="attrs" text :title="$t('standard-units.add')" v-on="on">
-                    <v-icon left>
-                      $standard-units
-                    </v-icon>
+                <template #activator="{ props }">
+                  <v-btn v-bind="props" :title="$t('standard-units.add')" variant="text">
+                    <v-icon icon="$standard-units" start />
                     {{ unit.name }}
                   </v-btn>
                 </template>
@@ -46,7 +47,7 @@
             <td>
               <v-text-field
                 v-model.number="unit.weight"
-                dense
+                density="compact"
                 hide-details="auto"
                 :name="`unit${idx}-weight`"
                 :rules="weightRules"
@@ -64,15 +65,17 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('standard-units.remove').toString()"
+                :label="$t('standard-units.remove')"
+                size="small"
+                variant="text"
                 @confirm="remove(idx)"
               >
                 {{ $t('common.action.confirm.delete', { name: unit.name }) }}
               </confirm-dialog>
             </td>
           </tr>
-        </draggable>
-      </v-simple-table>
+        </vue-draggable>
+      </v-table>
     </v-col>
   </v-row>
 </template>
@@ -80,7 +83,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import { SelectResource } from '@intake24/admin/components/dialogs';
@@ -91,10 +94,10 @@ import { useParameters } from './use-parameters';
 export default defineComponent({
   name: 'StandardPortionParameters',
 
-  components: { ConfirmDialog, Draggable: draggable, SelectResource },
+  components: { ConfirmDialog, SelectResource, VueDraggable },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<PortionSizeParameters['standard-portion']>,
       required: true,
     },

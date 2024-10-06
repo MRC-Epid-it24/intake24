@@ -483,7 +483,7 @@
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find it, click the button below to report a missing food.</p>",
       "report": "Report a missing food",
       "tryAgain": "OK, let me try again",
-      "irrelevantIngredient": "I didn't have any {ingredient}"
+      "irrelevantIngredient": "I didn't have any"
     }
   },
   "parentFoodPortion": {

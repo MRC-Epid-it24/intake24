@@ -5,17 +5,17 @@
         <food-search v-bind="{ localeId }" />
         <add-food-dialog v-bind="{ localeId }" />
       </div>
-      <v-menu bottom :close-on-content-click="false" left :nudge-width="200" offset-y>
-        <template #activator="{ on, attrs }">
-          <v-btn color="primary" fab small v-bind="attrs" v-on="on">
-            <v-icon>$options</v-icon>
-          </v-btn>
+      <v-menu :close-on-content-click="false" location="bottom left">
+        <template #activator="{ props }">
+          <v-btn color="primary" icon="$options" size="small" v-bind="props" />
         </template>
         <v-list>
           <v-list-item>
-            <v-list-item-action>
-              <v-switch v-model="showGlobalName" />
-            </v-list-item-action>
+            <template #prepend>
+              <v-list-item-action>
+                <v-switch v-model="showGlobalName" />
+              </v-list-item-action>
+            </template>
             <v-list-item-title>{{ $t('fdbs.showGlobalName') }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -23,20 +23,23 @@
     </div>
     <v-divider class="my-3" />
     <v-treeview
+      v-model:opened="opened"
+      v-model:selected="selected"
       activatable
-      :active.sync="active"
       color="primary"
       dense
-      item-key="key"
+      item-title="name"
+      item-value="key"
       :items="items"
       :load-children="fetchCategoryContent"
-      :open.sync="open"
       transition
     >
-      <template #label="{ item }">
-        <v-icon v-if="!item.children" left>
+      <template #prepend="{ item }">
+        <v-icon v-if="item.type === 'foods'" start>
           $foods
         </v-icon>
+      </template>
+      <template #title="{ item }">
         <a @click="openItem(item)">{{ item[itemText] }}</a>
       </template>
     </v-treeview>
@@ -45,7 +48,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router/composables';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 
 import type {
   CategoryContentsResponse,
@@ -83,8 +86,8 @@ export default defineComponent({
     const http = useHttp();
     const { i18n } = useI18n();
 
-    const active = ref<string[]>([]);
-    const open = ref<string[]>([]);
+    const selected = ref<string[]>([]);
+    const opened = ref<string[]>([]);
     const items = ref<TreeItem[]>([]);
     const showGlobalName = ref<boolean>(false);
     const selectedEntryId = ref<string | null>(null);
@@ -103,8 +106,8 @@ export default defineComponent({
         id: 'no-category',
         code: 'no-category',
         localeId: props.localeId,
-        name: i18n.t('fdbs.categories.noCategory').toString(),
-        englishName: i18n.t('fdbs.categories.noCategory').toString(),
+        name: i18n.t('fdbs.categories.noCategory'),
+        englishName: i18n.t('fdbs.categories.noCategory'),
         isHidden: false,
         children: [],
       };
@@ -137,7 +140,11 @@ export default defineComponent({
           type: 'categories',
           children: [],
         })),
-        ...foods.map(item => ({ ...item, key: randomString(8), type: 'foods' })),
+        ...foods.map(item => ({
+          ...item,
+          key: randomString(8),
+          type: 'foods',
+        })),
       );
     };
 
@@ -160,13 +167,13 @@ export default defineComponent({
 
       for (const child of children) {
         if (selectedEntryId.value === child.id) {
-          active.value = [child.key];
+          selected.value = [child.key];
           return true;
         }
 
         if (selectedEntryCategories.value.includes(child.code)) {
           await fetchCategoryContent(child);
-          open.value.push(child.key);
+          opened.value.push(child.key);
 
           if (!('children' in child) || !child.children.length)
             continue;
@@ -205,12 +212,12 @@ export default defineComponent({
     });
 
     return {
-      active,
       fetchCategoryContent,
       items,
       itemText,
-      open,
+      opened,
       openItem,
+      selected,
       showGlobalName,
       selectedEntryId,
       selectedEntryCategories,

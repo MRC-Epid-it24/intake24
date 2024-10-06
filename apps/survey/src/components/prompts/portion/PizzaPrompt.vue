@@ -1,14 +1,14 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel>
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.typeLabel`) }}
           <template #actions>
             <expansion-panel-actions :valid="confirmed.type" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <image-map-selector
             v-if="imageMaps.type"
             v-bind="{
@@ -21,16 +21,16 @@
             @confirm="confirmType('type')"
             @select="(idx, id) => selectType('type', idx, id)"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.thicknessLabel`) }}
           <template #actions>
             <expansion-panel-actions :valid="confirmed.thickness" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <image-map-selector
             v-if="imageMaps.thickness"
             v-bind="{
@@ -43,16 +43,16 @@
             @confirm="confirmType('thickness')"
             @select="(idx, id) => selectType('thickness', idx, id)"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.type">
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.sizeLabel`) }}
           <template #actions>
             <expansion-panel-actions :valid="confirmed.slice" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <image-map-selector
             v-if="imageMaps.slice"
             v-bind="{
@@ -70,8 +70,6 @@
               <v-btn
                 class="ma-2 font-weight-medium"
                 :color="isWholeSelected ? 'info' : ''"
-                :dark="isWholeSelected"
-                link
                 rounded
                 :title="$t(`prompts.${type}.whole.confirm`)"
                 @click="selectType('slice', 0, '0')"
@@ -80,23 +78,23 @@
               </v-btn>
             </template>
           </image-map-selector>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.slice">
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t(`prompts.${type}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
           <template #actions>
             <expansion-panel-actions :valid="confirmed.quantity" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <quantity-card
             v-model="portionSize.slice.quantity"
-            :confirmed.sync="confirmed.quantity"
-            @input="selectQuantity"
+            v-model:confirmed="confirmed.quantity"
             @update:confirmed="confirmType('quantity', $event)"
+            @update:model-value="selectQuantity"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
@@ -160,7 +158,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     const typeImageMapId = 'gpizza';
@@ -181,7 +179,7 @@ export default defineComponent({
         slice: null,
       } as Record<PizzaImageMap, ImageMapResponse | null>,
 
-      ...copy(this.value),
+      ...copy(this.modelValue),
     };
   },
 
@@ -313,7 +311,7 @@ export default defineComponent({
       if (type === 'slice') {
         this.confirmType('quantity', false);
 
-        if (!this.isMobile)
+        if (!this.$vuetify.display.mobile)
           this.confirmType(type);
       }
     },
@@ -351,7 +349,7 @@ export default defineComponent({
         confirmed: this.confirmed,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

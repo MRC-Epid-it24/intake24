@@ -1,106 +1,101 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
-    <v-toolbar bottom color="grey lighten-5" flat tile>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
+    <v-toolbar color="grey-lighten-4" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.recipe-foods.title') }}
       </v-toolbar-title>
       <v-spacer />
       <v-btn
-        class="ml-3"
         color="secondary"
-        fab
-        small
+        icon="$add"
+        size="small"
         :title="$t('locales.recipe-foods.add')"
         @click.stop="add"
-      >
-        <v-icon>$add</v-icon>
-      </v-btn>
+      />
     </v-toolbar>
-    <v-list>
-      <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
-        <v-list-item-avatar>
+    <v-list class="list-border">
+      <v-list-item v-for="(item, idx) in form.items" :key="idx">
+        <template #prepend>
           <v-icon>fas fa-bowl-food</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-container class="px-0">
-            <div class="text-h4 font-weight-medium mb-4">
-              {{ item.name }}
-            </div>
-            <v-row col="12">
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model.trim="item.name"
-                  hide-details="auto"
-                  :label="$t('locales.recipe-foods.title')"
-                  name="special"
-                  outlined
-                />
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model.trim="item.code"
-                  hide-details="auto"
-                  :label="$t('locales.recipe-foods.code')"
-                  name="code"
-                  outlined
-                  prepend-inner-icon="fa-sharp fa-regular fa-dollar-sign"
-                />
-              </v-col>
-            </v-row>
-            <v-row justify="center">
-              <v-col cols="12" md="4">
-                <v-text-field
-                  v-model.trim="item.recipeWord"
-                  hide-details="auto"
-                  :label="$t('locales.recipe-foods.special')"
-                  name="special"
-                  outlined
-                />
-              </v-col>
-              <v-col cols="12" md="8">
-                <v-select
-                  v-if="form.synonymsSets"
-                  v-model="item.synonymsId"
-                  hide-details="auto"
-                  :hint="`${item.synonymSet?.synonyms}, ${item.synonymSet?.id}`"
-                  item-text="synonyms"
-                  item-value="id"
-                  :items="form.synonymsSets"
-                  :label="$t('locales.recipe-foods.synonymsId')"
-                  outlined
-                  single-line
-                />
-              </v-col>
-            </v-row>
-            <v-row justify="center">
-              <v-col cols="12" md="4">
-                <v-btn
-                  block
-                  color="primary"
-                  :disabled="form.errors.any() || isAppLoading || !item.id"
-                  :title="$t('locales.recipe-foods.steps')"
-                  type="button"
-                  @click.stop="() => openStepsDialog(item.id, item.code, item)"
-                >
-                  <v-icon left>
-                    fas fa-arrow-down-1-9
-                  </v-icon>{{ $t('locales.recipe-foods.steps') }}
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-list-item-content>
-        <v-list-item-action>
-          <confirm-dialog
-            color="error"
-            icon
-            icon-left="$delete"
-            :label="$t('locales.recipe-foods.remove').toString()"
-            @confirm="remove(idx)"
-          >
-            {{ $t('common.action.confirm.delete', { name: item.recipeWord }) }}
-          </confirm-dialog>
-        </v-list-item-action>
+        </template>
+        <v-container class="px-0">
+          <div class="text-h4 font-weight-medium mb-4">
+            {{ item.name }}
+          </div>
+          <v-row col="12">
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model.trim="item.name"
+                hide-details="auto"
+                :label="$t('locales.recipe-foods.title')"
+                name="special"
+                variant="outlined"
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model.trim="item.code"
+                hide-details="auto"
+                :label="$t('locales.recipe-foods.code')"
+                name="code"
+                prepend-inner-icon="fa-sharp fa-regular fa-dollar-sign"
+                variant="outlined"
+              />
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col cols="12" md="4">
+              <v-text-field
+                v-model.trim="item.recipeWord"
+                hide-details="auto"
+                :label="$t('locales.recipe-foods.special')"
+                name="special"
+                variant="outlined"
+              />
+            </v-col>
+            <v-col cols="12" md="8">
+              <v-select
+                v-if="form.synonymsSets"
+                v-model="item.synonymsId"
+                hide-details="auto"
+                :hint="`${item.synonymSet?.synonyms}, ${item.synonymSet?.id}`"
+                item-title="synonyms"
+                item-value="id"
+                :items="form.synonymsSets"
+                :label="$t('locales.recipe-foods.synonymsId')"
+                single-line
+                variant="outlined"
+              />
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col cols="12" md="4">
+              <v-btn
+                block
+                color="primary"
+                :disabled="form.errors.any() || isAppLoading || !item.id"
+                :title="$t('locales.recipe-foods.steps')"
+                type="button"
+                @click.stop="() => openStepsDialog(item.id, item.code, item)"
+              >
+                <v-icon icon="fas fa-arrow-down-1-9" start />{{ $t('locales.recipe-foods.steps') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+        <template #append>
+          <v-list-item-action>
+            <confirm-dialog
+              color="error"
+              icon
+              icon-left="$delete"
+              :label="$t('locales.recipe-foods.remove')"
+              @confirm="remove(idx)"
+            >
+              {{ $t('common.action.confirm.delete', { name: item.recipeWord }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </template>
         <steps-dialog
           v-if="dialog && item.id === activeRecipeFoodId"
           v-bind="{

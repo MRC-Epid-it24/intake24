@@ -1,28 +1,28 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row class="mb-3">
       <v-col cols="12" md="6">
         <v-switch
           hide-details="auto"
-          :input-value="badges"
           :label="$t('survey-schemes.prompts.badges')"
-          @change="update('badges', $event)"
+          :model-value="badges"
+          @update:model-value="update('badges', $event)"
         />
         <v-switch
           class="mt-4"
           hide-details="auto"
-          :input-value="leftovers"
           :label="$t('survey-schemes.prompts.leftovers')"
-          @change="update('leftovers', $event)"
+          :model-value="leftovers"
+          @update:model-value="update('leftovers', $event)"
         />
         <v-select
           class="mt-4"
           hide-details="auto"
           :items="multipleItems"
           :label="$t('survey-schemes.prompts.drink-scale-prompt.multiple')"
-          outlined
-          :value="typeof multiple === 'boolean' ? false : multiple.type"
-          @change="updateMultiple($event)"
+          :model-value="typeof multiple === 'boolean' ? false : multiple.type"
+          variant="outlined"
+          @update:model-value="updateMultiple($event)"
         />
         <component
           :is="multiple.type"
@@ -33,10 +33,10 @@
         />
       </v-col>
       <v-col cols="12" md="6">
-        <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)" />
+        <image-map-settings :image-map="imageMap" @update:image-map="update('imageMap', $event)" />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">
@@ -87,7 +87,7 @@ export default defineComponent({
     const multipleTypes = [false, 'slider', 'counter'] as const;
     const multipleItems = multipleTypes.map(value => ({
       value,
-      text: value ? i18n.t(`survey-schemes.prompts.${value}._`) : i18n.t('common.disabled'),
+      title: value ? i18n.t(`survey-schemes.prompts.${value}._`) : i18n.t('common.disabled'),
     }));
 
     const updateMultiple = (value: typeof multipleTypes[number]) => {

@@ -3,54 +3,55 @@
     <v-list-item
       :class="{
         'selected': contextId ? food.id === contextId : food.id === selectedFoodId,
-        'pl-4': !linked,
-        'pl-8': linked,
+        'ps-4': !linked,
+        'ps-8': linked,
       }"
       link
       @click="updateContextId(food.id)"
     >
-      <v-list-item-title class="text-wrap">
+      <v-list-item-title class="text-body-2 text-wrap">
         {{ foodName }}
       </v-list-item-title>
-      <v-list-item-action class="d-flex flex-row">
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon
-              v-if="food.type === 'free-text'"
-              v-bind="attrs"
-              class="mr-1"
-              color="grey"
-              small
-              v-on="on"
-            >
-              $question
-            </v-icon>
-            <v-icon v-else v-bind="attrs" class="mr-1" color="green darken-2" small v-on="on">
-              $ok
-            </v-icon>
-          </template>
-          <span>{{ $t(`recall.menu.food.${food.type}._`) }}</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon
-              v-bind="attrs"
-              :color="isPortionSizeComplete ? 'green darken-2' : undefined"
-              small
-              v-on="on"
-            >
-              {{ isPortionSizeComplete ? '$ok' : '$question' }}
-            </v-icon>
-          </template>
-          <span>
-            {{
-              $t(
-                `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`,
-              )
-            }}
-          </span>
-        </v-tooltip>
-      </v-list-item-action>
+      <template #append>
+        <v-list-item-action class="d-flex flex-row">
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-icon
+                v-if="food.type === 'free-text'"
+                v-bind="props"
+                class="me-1"
+                color="grey"
+                size="small"
+              >
+                $question
+              </v-icon>
+              <v-icon v-else class="me-1" color="green-darken-2" size="small" v-bind="props">
+                $ok
+              </v-icon>
+            </template>
+            <span>{{ $t(`recall.menu.food.${food.type}._`) }}</span>
+          </v-tooltip>
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-icon
+
+                :color="isPortionSizeComplete ? 'green darken-2' : undefined"
+                size="small"
+                v-bind="props"
+              >
+                {{ isPortionSizeComplete ? '$ok' : '$question' }}
+              </v-icon>
+            </template>
+            <span>
+              {{
+                $t(
+                  `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`,
+                )
+              }}
+            </span>
+          </v-tooltip>
+        </v-list-item-action>
+      </template>
     </v-list-item>
     <context-menu v-bind="{ contextId, food, meal, menu }" @action="action" />
     <food-item
@@ -98,6 +99,8 @@ export default defineComponent({
       required: false,
     },
   },
+
+  emits: ['action', 'update:context-id'],
 
   setup(props, ctx) {
     const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);

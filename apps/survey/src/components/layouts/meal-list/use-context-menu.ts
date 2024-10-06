@@ -11,7 +11,7 @@ export type UseContextMenuProps = {
   meal: MealState;
 };
 
-export function useContextMenu(props: UseContextMenuProps, { emit }: SetupContext) {
+export function useContextMenu(props: UseContextMenuProps, { emit }: SetupContext<'action'[]>) {
   const { foodName } = useFoodUtils(props);
   const { mealName } = useMealUtils(props);
 

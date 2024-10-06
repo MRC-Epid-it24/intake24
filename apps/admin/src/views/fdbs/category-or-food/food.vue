@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="isEntryLoaded">
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
-        <v-card class="mb-6" outlined>
-          <v-toolbar color="grey lighten-4" flat>
+      <v-form @keydown="clearError" @submit.prevent="submit">
+        <v-card border class="mb-6" flat>
+          <v-toolbar color="grey-lighten-4">
             <v-toolbar-title class="font-weight-medium">
               {{ $t('fdbs.foods.global._') }}
             </v-toolbar-title>
@@ -18,7 +18,7 @@
                   hide-details="auto"
                   :label="$t('fdbs.foods.global.code')"
                   name="main.code"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="12">
@@ -29,7 +29,7 @@
                   hide-details="auto"
                   :label="$t('fdbs.foods.global.name')"
                   name="main.name"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="12">
@@ -41,14 +41,14 @@
                   :label="$t('fdbs.foods.global.foodGroup')"
                   name="main.foodGroup"
                   resource="food-groups"
-                  @input="form.errors.clear('main.foodGroupId')"
+                  @update:model-value="form.errors.clear('main.foodGroupId')"
                 />
               </v-col>
             </v-row>
           </v-card-text>
         </v-card>
-        <v-card class="mb-6" outlined>
-          <v-toolbar color="grey lighten-4" flat>
+        <v-card border class="mb-6" flat>
+          <v-toolbar color="grey-lighten-4">
             <v-toolbar-title class="font-weight-medium">
               {{ $t('fdbs.foods.local._') }}
             </v-toolbar-title>
@@ -62,7 +62,7 @@
                   hide-details="auto"
                   :label="$t('fdbs.foods.local.name')"
                   name="name"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
             </v-row>
@@ -71,13 +71,13 @@
                 <v-combobox
                   v-model="form.tags"
                   chips
-                  deletable-chips
+                  closable-chips
                   :error-messages="form.errors.get('tags')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.local.tags')"
                   multiple
                   name="tags"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
             </v-row>
@@ -124,17 +124,15 @@
         />
       </v-form>
       <div class="d-flex">
-        <v-btn color="secondary" outlined type="submit" @click="submit">
-          <v-icon left>
-            $save
-          </v-icon>{{ $t(`common.action.save`) }}
+        <v-btn color="secondary" type="submit" variant="outlined" @click="submit">
+          <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
         </v-btn>
         <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
         <v-spacer />
         <confirm-dialog
           color="error"
           icon-left="$delete"
-          :label="$t('common.action.delete').toString()"
+          :label="$t('common.action.delete')"
           @confirm="remove"
         >
           {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
@@ -151,7 +149,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { onBeforeRouteUpdate, useRouter } from 'vue-router/composables';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
 import type {
   FoodDatabaseRefs,
@@ -276,14 +274,14 @@ export default defineComponent({
 
       const { name, main: { name: englishName = 'record' } = {} } = data;
 
-      useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }).toString());
+      useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }));
     };
 
     const remove = async () => {
       await http.delete(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
 
       useMessages().success(
-        i18n.t('common.msg.deleted', { name: entry.value?.main?.name }).toString(),
+        i18n.t('common.msg.deleted', { name: entry.value?.main?.name }),
       );
 
       await router.push({

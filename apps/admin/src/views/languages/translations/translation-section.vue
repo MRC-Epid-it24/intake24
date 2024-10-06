@@ -1,10 +1,9 @@
 <script lang="ts">
-import type { CreateElement, PropType, VNode, VNodeChildren } from 'vue';
-import type { LocaleMessageObject } from 'vue-i18n';
+import type { PropType, VNodeChild } from 'vue';
 import has from 'lodash/has';
 import isPlainObject from 'lodash/isPlainObject';
 import pick from 'lodash/pick';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, h, ref, watch } from 'vue';
 import {
   VBtn,
   VCard,
@@ -17,12 +16,12 @@ import {
   VSpacer,
   VTextField,
   VToolbar,
-  VToolbarItems,
   VToolbarTitle,
-} from 'vuetify/lib';
+} from 'vuetify/components';
 
 import type { LanguageTranslationAttributes } from '@intake24/db';
 import { copy } from '@intake24/common/util';
+import { type LocaleMessageDictionary, useI18n } from '@intake24/i18n';
 
 import IntersectableSkeleton from './intersectable-skeleton.vue';
 
@@ -39,108 +38,75 @@ export default defineComponent({
 
   emits: ['close', 'update'],
 
-  data() {
-    return {
-      dialog: false,
-      messages: {
-        chunk: 10,
-        all: {} as LocaleMessageObject,
-        loaded: {} as LocaleMessageObject,
-      },
-    };
-  },
+  setup(props, { emit }) {
+    const { i18n } = useI18n();
 
-  computed: {
-    allKeys(): string[] {
-      return Object.keys(this.messages.all);
-    },
-    loadedKeys(): string[] {
-      return Object.keys(this.messages.loaded);
-    },
-    messagesAvailableToLoad(): boolean {
-      return this.loadedKeys.length < this.allKeys.length;
-    },
-  },
+    const dialog = ref(false);
+    const chunk = 10;
+    const allMessages = ref<LocaleMessageDictionary<any>>({});
+    const loadedMessages = ref<LocaleMessageDictionary<any>>({});
 
-  watch: {
-    dialog(val: boolean) {
-      if (!val)
-        this.$emit('close');
-    },
-    translation(val: LanguageTranslationAttributes | null) {
-      if (!val)
-        return;
-
-      this.messages = {
-        chunk: 10,
-        all: copy(val.messages),
-        loaded: {},
-      };
-      this.dialog = true;
-    },
-  },
-
-  methods: {
-    loadMoreMessages(entries: IntersectionObserverEntry[]) {
-      if (entries[0].isIntersecting && this.messagesAvailableToLoad) {
-        const startIndex = this.loadedKeys.length;
-        const endIndex
-          = startIndex + this.messages.chunk > this.allKeys.length
-            ? this.allKeys.length
-            : startIndex + this.messages.chunk;
-
-        const items = this.allKeys.slice(startIndex, endIndex);
-        this.messages.loaded = { ...this.messages.loaded, ...pick(this.messages.all, items) };
-      }
-    },
-
-    close() {
-      this.dialog = false;
-    },
-
-    cancel(event: Event) {
-      event.stopPropagation();
-
-      this.close();
-    },
-
-    save(event: Event) {
-      event.stopPropagation();
-
-      if (!this.translation)
-        return;
-
-      const {
-        translation: { id },
-        messages: { all, loaded },
-      } = this;
-
-      this.$emit('update', { id, messages: { ...all, ...loaded } });
-      this.close();
-    },
-
-    getSectionTitle(): string {
-      const key = this.translation?.section;
+    const sectionTitle = computed(() => {
+      const key = props.translation?.section;
       if (!key)
         return '';
 
-      const check = has(this.$i18n.messages[this.$i18n.locale], `${key}.title`);
+      const check = has(i18n.messages.value[i18n.locale.value], `${key}.title`);
       if (check)
-        return this.$t(`${key}.title`).toString();
+        return i18n.t(`${key}.title`);
 
-      return this.$t(`languages.translations.sections.${key}`).toString();
-    },
+      return i18n.t(`languages.translations.sections.${key}`);
+    });
 
-    createInputs(
-      h: CreateElement,
-      translations: LocaleMessageObject,
+    const allKeys = computed(() => Object.keys(allMessages.value));
+    const loadedKeys = computed(() => Object.keys(loadedMessages.value));
+    const messagesAvailableToLoad = computed(() => loadedKeys.value.length < allKeys.value.length);
+
+    function loadMoreMessages(isIntersecting: boolean) {
+      if (!isIntersecting || !messagesAvailableToLoad.value)
+        return;
+
+      const startIndex = loadedKeys.value.length;
+      const endIndex
+          = startIndex + chunk > allKeys.value.length
+            ? allKeys.value.length
+            : startIndex + chunk;
+
+      const items = allKeys.value.slice(startIndex, endIndex);
+      loadedMessages.value = { ...loadedMessages.value, ...pick(allMessages.value, items) };
+    };
+
+    function close() {
+      dialog.value = false;
+    };
+
+    function cancel(event: Event) {
+      event.stopPropagation();
+
+      close();
+    };
+
+    function save(event: Event) {
+      event.stopPropagation();
+
+      if (!props.translation)
+        return;
+
+      const { translation: { id } } = props;
+
+      emit('update', { id, messages: { ...allMessages.value, ...loadedMessages.value } });
+      close();
+    };
+
+    function createInputs(
+      translations: LocaleMessageDictionary<any>,
       path: string[] = [],
-    ): VNodeChildren {
+    ): VNodeChild[] {
       const items = Object.keys(translations);
-      if (!items.length || this.translation === null)
+      if (!items.length || props.translation === null)
         return [];
 
-      const section = this.translation?.section;
+      const section = props.translation?.section;
       if (!section)
         return [];
 
@@ -148,107 +114,115 @@ export default defineComponent({
         const fullPath = [section, ...path, item].join('.');
 
         if (isPlainObject(translations[item]))
-          return this.createInputs(h, translations[item] as LocaleMessageObject, [...path, item]);
+          return createInputs(translations[item], [...path, item]);
 
-        return h(VCol, { props: { cols: 12 } }, [
-          h(VTextField, {
-            props: {
-              messages: this.$t(fullPath).toString(),
-              label: fullPath,
-              outlined: true,
-              value: translations[item],
-            },
-            on: {
-              input: (event: string) => {
-                translations[item] = event;
-              },
-            },
-          }),
-        ]);
+        return h(VCol, { cols: 12 }, () => h(VTextField, {
+          messages: i18n.t(fullPath),
+          label: fullPath,
+          outlined: true,
+          modelValue: translations[item],
+          'onUpdate:modelValue': (event: string) => {
+            translations[item] = event;
+          },
+        }));
       });
 
       return inputs;
-    },
-  },
+    };
 
-  render(h: CreateElement): VNode {
-    return h(
+    watch(dialog, (val) => {
+      if (!val)
+        emit('close');
+    });
+
+    watch(() => props.translation, (val) => {
+      if (!val)
+        return;
+
+      allMessages.value = copy(val.messages);
+      loadedMessages.value = {};
+      dialog.value = true;
+    });
+
+    return () => h(
       VDialog,
       {
-        props: {
-          fullscreen: true,
-          hideOverlay: true,
-          value: this.dialog,
-          transition: 'dialog-bottom-transition',
-        },
-        on: {
-          input: (event: boolean) => {
-            this.dialog = event;
-          },
+        fullscreen: true,
+        hideOverlay: true,
+        modelValue: dialog.value,
+        transition: 'dialog-bottom-transition',
+        'onUpdate:modelValue': (event: boolean) => {
+          dialog.value = event;
         },
       },
-      [
-        h(VCard, { props: { tile: true } }, [
-          h(VToolbar, { props: { dark: true, color: 'secondary' } }, [
-            h(
-              VBtn,
-              {
-                props: {
-                  title: this.$t('common.action.cancel'),
-                  icon: true,
-                  dark: true,
-                },
-                on: {
-                  click: this.cancel,
-                },
-              },
-              [h(VIcon, '$cancel')],
-            ),
-            h(VToolbarTitle, this.getSectionTitle()),
-            h(VSpacer),
-            h(VToolbarItems, [
+      {
+        default: () => [
+          h(VCard, {
+            tile: true,
+          }, {
+            default: () => [
               h(
-                VBtn,
+                VToolbar,
+                { color: 'secondary' },
                 {
-                  props: {
-                    title: this.$t('common.action.ok'),
-                    dark: true,
-                    text: true,
-                  },
-                  on: {
-                    click: this.save,
-                  },
-                },
-                [
-                  h(VIcon, { props: { left: true } }, '$success'),
-                  this.$t('common.action.ok').toString(),
-                ],
-              ),
-            ]),
-          ]),
-          h(VContainer, [
-            h(
-              VCardTitle,
-              `${this.$t('languages.translations.title').toString()} - ${this.getSectionTitle()}`,
-            ),
-            h(VRow, [
-              this.createInputs(h, this.messages.loaded),
-              ...[
-                this.messagesAvailableToLoad
-                  ? h(VCol, { props: { cols: 12 } }, [
-                    h(IntersectableSkeleton, {
-                      props: { type: 'list-item' },
-                      on: {
-                        intersected: this.loadMoreMessages,
+                  default: () => [
+                    h(
+                      VBtn,
+                      {
+                        title: i18n.t('common.action.cancel'),
+                        icon: '$cancel',
+                        variant: 'plain',
+                        onClick: cancel,
                       },
-                    }),
-                  ])
-                  : undefined,
-              ].filter(Boolean),
-            ]),
-          ]),
-        ]),
-      ],
+                    ),
+                    h(VToolbarTitle, () => sectionTitle.value),
+                    h(VSpacer),
+                    h(
+                      VBtn,
+                      {
+                        title: i18n.t('common.action.ok'),
+                        variant: 'text',
+                        onClick: save,
+                      },
+                      {
+                        default: () => [
+                          h(VIcon, { start: true }, () => '$success'),
+                          i18n.t('common.action.ok'),
+                        ],
+                      },
+                    ),
+                  ],
+                },
+              ),
+              h(VContainer, null, {
+                default: () => [
+                  h(
+                    VCardTitle,
+                    () => `${i18n.t('languages.translations.title')} - ${sectionTitle.value}`,
+                  ),
+                  h(VRow, null, {
+                    default: () => [
+                      createInputs(loadedMessages.value),
+                      ...[
+                        messagesAvailableToLoad.value
+                          ? h(VCol, { cols: 12 }, {
+                            default: () => [
+                              h(IntersectableSkeleton, {
+                                type: 'list-item',
+                                onIntersected: loadMoreMessages,
+                              }),
+                            ],
+                          })
+                          : undefined,
+                      ].filter(Boolean),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
     );
   },
 });

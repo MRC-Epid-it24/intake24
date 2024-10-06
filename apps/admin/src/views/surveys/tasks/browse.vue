@@ -1,7 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-row>
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('surveys.tasks.title') }}</v-card-title>
@@ -12,9 +12,9 @@
                 :items="jobTypeList"
                 :label="$t('surveys.tasks._')"
                 name="job"
-                outlined
                 prepend-inner-icon="$jobs"
-                @change="updateJob"
+                variant="outlined"
+                @update:model-value="updateJob"
               />
             </v-card-text>
           </v-col>
@@ -26,7 +26,7 @@
               :disabled="disabledJobParams[form.type]"
               :errors="form.errors"
               name="params"
-              @input="form.errors.clear(paramErrors)"
+              @update:model-value="form.errors.clear(paramErrors)"
             />
           </v-col>
         </v-row>
@@ -36,13 +36,11 @@
               block
               color="primary"
               :disabled="form.errors.any() || jobInProgress || isAppLoading"
+              size="x-large"
               :title="$t('common.action.upload')"
               type="submit"
-              x-large
             >
-              <v-icon left>
-                fas fa-play
-              </v-icon>{{ $t('common.action.submit') }}
+              <v-icon icon="fas fa-play" start />{{ $t('common.action.submit') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -78,7 +76,7 @@ export default defineComponent({
   setup(props) {
     const { i18n } = useI18n();
     const jobTypeList = computed(() =>
-      surveyJobs.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`) })),
+      surveyJobs.map(value => ({ value, title: i18n.t(`jobs.types.${value}._`) })),
     );
     const jobQuery = computed(() => ({ surveyId: props.id }));
 
@@ -89,8 +87,8 @@ export default defineComponent({
       SurveyAuthUrlsExport: { surveyId: props.id },
       SurveyDataExport: {
         surveyId: props.id,
-        startDate: new Date(entry.value.startDate),
-        endDate: new Date(entry.value.endDate),
+        startDate: entry.value.startDate,
+        endDate: entry.value.endDate,
       },
       SurveyNutrientsRecalculation: { surveyId: props.id },
       SurveyRatingsExport: { surveyId: props.id },

@@ -483,7 +483,7 @@
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
       "report": "Signaler un aliment manquant",
       "tryAgain": "Ok, laissez-moi réessayer",
-      "irrelevantIngredient": "Je n'ai pas consommé de {ingredient}"
+      "irrelevantIngredient": "Je n'ai pas consommé"
     }
   },
   "parentFoodPortion": {

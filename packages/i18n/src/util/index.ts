@@ -1,3 +1,4 @@
+import type { DefaultLocaleMessageSchema, LocaleMessageValue, useI18n } from 'vue-i18n';
 import dompurify from 'dompurify';
 import has from 'lodash/has';
 
@@ -7,8 +8,6 @@ import type {
   RequiredLocaleTranslation,
 } from '@intake24/common/types';
 import { getObjectNestedKeys } from '@intake24/common/util';
-
-import { i18n } from '../i18n';
 
 /**
  * Merges two translations files together
@@ -48,11 +47,11 @@ export function mergeTranslations(target: any, source: any) {
  * @returns {boolean}
  */
 export function compareMessageKeys<
-  T1 extends Dictionary = Dictionary,
-  T2 extends Dictionary = Dictionary,
+  T1 extends LocaleMessageValue = LocaleMessageValue,
+  T2 extends LocaleMessageValue = T1,
 >(x: T1, y: T2): boolean {
-  const xKeys = getObjectNestedKeys(x);
-  const yKeys = getObjectNestedKeys(y);
+  const xKeys = typeof x === 'string' ? [x] : getObjectNestedKeys(x);
+  const yKeys = typeof y === 'string' ? [y] : getObjectNestedKeys(y);
 
   return xKeys.length === yKeys.length && xKeys.every(key => yKeys.includes(key));
 }
@@ -110,42 +109,49 @@ export function sanitizeParams(content: Dictionary<string | number>) {
   }, {} as Dictionary<string>);
 }
 
-export function translate(
-  content?: LocaleTranslation | RequiredLocaleTranslation | string,
-  options: LocaleContentOptions = {},
-): string {
-  const { path, sanitize = false } = options;
-  let { params = {} } = options;
+export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMessageSchema, 'en' | string>>) {
+  return (
+    content?: LocaleTranslation | RequiredLocaleTranslation | string,
+    options: LocaleContentOptions = {},
+  ) => {
+    const { t, locale, messages } = i18n;
+    const { path, sanitize = false } = options;
+    let { params = {} } = options;
 
-  if (sanitize)
-    params = sanitizeParams(params as Dictionary<string | number>);
+    if (sanitize)
+      params = sanitizeParams(params as Dictionary<string | number>);
 
-  if (typeof content === 'string')
-    return replaceParams(content, params);
+    if (typeof content === 'string')
+      return replaceParams(content, params);
 
-  const localeContent = content ? content[i18n.locale] : undefined;
-  if (localeContent)
-    return replaceParams(localeContent, params);
+    const localeContent = content ? content[locale.value] : undefined;
+    if (localeContent)
+      return replaceParams(localeContent, params);
 
-  if (path && has(i18n.messages[i18n.locale], path))
-    return i18n.t(path, params).toString();
+    if (path && has(messages.value[locale.value], path))
+      return t(path, params);
 
-  const enContent = content?.en;
-  if (enContent)
-    return replaceParams(enContent, params);
+    const enContent = content?.en;
+    if (enContent)
+      return replaceParams(enContent, params);
 
-  if (path && has(i18n.messages.en, path))
-    return i18n.t(path, params).toString();
+    if (path && has(messages.value.en, path))
+      return t(path, params);
 
-  return '';
+    return '';
+  };
 }
 
-export function translatePath(
-  path: string,
-  params: Dictionary<string | number> = {},
-  sanitize: boolean = false,
-) {
-  if (sanitize)
-    params = sanitizeParams(params as Dictionary<string | number>);
-  return i18n.t(path, params).toString();
+export function createTranslatePath(i18n: ReturnType<typeof useI18n<DefaultLocaleMessageSchema, 'en' | string>>) {
+  return (
+    path: string,
+    params: Dictionary<string | number> = {},
+    sanitize: boolean = false,
+  ) => {
+    const { t } = i18n;
+
+    if (sanitize)
+      params = sanitizeParams(params as Dictionary<string | number>);
+    return t(path, params);
+  };
 }

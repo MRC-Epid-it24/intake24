@@ -11,8 +11,8 @@
             :items="items"
             :label="$t('jobs.types.ResourceExport.resource')"
             name="resource"
-            outlined
             prepend-inner-icon="fas fa-list"
+            variant="outlined"
           />
         </v-col>
       </v-row>
@@ -39,7 +39,7 @@ export default defineComponent({
     const { can } = useUser();
 
     const items = resources.filter(item => can(`${item.split('.')[0]}|browse`)).map(value => ({
-      text: i18n.t(`${value}.title`).toString(),
+      title: i18n.t(`${value}.title`),
       value,
     }));
 

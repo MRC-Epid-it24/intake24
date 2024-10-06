@@ -1,112 +1,99 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="800px">
-    <template #activator="{ attrs, on }">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="800px">
+    <template #activator="{ props }">
       <v-btn
-        v-bind="attrs"
         block
         color="primary"
-        large
-        outlined
         rounded
+        size="large"
         :title="$t('notifications.title')"
-        v-on="on"
+        variant="outlined"
+        v-bind="props"
       >
-        <v-icon left>
-          fas fa-paper-plane
-        </v-icon> {{ $t('notifications.title') }}
+        <v-icon icon="fas fa-paper-plane" start /> {{ $t('notifications.title') }}
       </v-btn>
     </template>
     <v-card tile>
       <v-toolbar color="secondary" dark>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('notifications.title') }}
         </v-toolbar-title>
       </v-toolbar>
       <div class="d-flex justify-end pa-4">
-        <v-btn color="primary" large rounded :title="$t('notifications.add')" @click="add">
-          <v-icon left>
-            fas fa-paper-plane
-          </v-icon> {{ $t('notifications.add') }}
+        <v-btn color="primary" rounded size="large" :title="$t('notifications.add')" @click="add">
+          <v-icon icon="fas fa-paper-plane" start /> {{ $t('notifications.add') }}
         </v-btn>
       </div>
-      <v-list class="py-0">
-        <template v-for="(item, idx) in items">
-          <v-list-item :key="idx">
-            <v-list-item-avatar>
-              <v-icon>fas fa-paper-plane</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" md="6">
-                    <v-select
-                      v-model="item.type"
-                      hide-details="auto"
-                      :items="events"
-                      name="type"
-                      outlined
-                      :title="$t('notifications.events._')"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-select
-                      v-model="item.channel"
-                      hide-details="auto"
-                      :items="channels"
-                      name="type"
-                      outlined
-                      :title="$t('notifications.channels._')"
-                      @change="updateProps(idx)"
-                    />
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-text-field
-                      v-if="item.channel === 'webhook'"
-                      v-model="item.url"
-                      hide-details="auto"
-                      :label="$t('notifications.channels.url')"
-                      outlined
-                    />
-                    <v-text-field
-                      v-else-if="item.channel === 'email'"
-                      v-model="item.to"
-                      hide-details="auto"
-                      :label="$t('notifications.channels.to')"
-                      outlined
-                    />
-                    <v-text-field
-                      v-else-if="item.channel === 'slack'"
-                      v-model="item.channelId"
-                      hide-details="auto"
-                      :label="$t('notifications.channels.channelId')"
-                      outlined
-                    />
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-list-item-content>
+      <v-list class="list-border py-0">
+        <v-list-item v-for="(item, idx) in items" :key="idx">
+          <template #prepend>
+            <v-icon>fas fa-paper-plane</v-icon>
+          </template>
+          <v-container>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="item.type"
+                  hide-details="auto"
+                  :items="events"
+                  :name="`type-${idx}`"
+                  :title="$t('notifications.events._')"
+                  variant="outlined"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="item.channel"
+                  hide-details="auto"
+                  :items="channels"
+                  :name="`channel-${idx}`"
+                  :title="$t('notifications.channels._')"
+                  variant="outlined"
+                  @update:model-value="updateProps(idx)"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-if="item.channel === 'webhook'"
+                  v-model="item.url"
+                  hide-details="auto"
+                  :label="$t('notifications.channels.url')"
+                  :name="`url-${idx}`"
+                  variant="outlined"
+                />
+                <v-text-field
+                  v-else-if="item.channel === 'email'"
+                  v-model="item.to"
+                  hide-details="auto"
+                  :label="$t('notifications.channels.to')"
+                  :name="`to-${idx}`"
+                  variant="outlined"
+                />
+                <v-text-field
+                  v-else-if="item.channel === 'slack'"
+                  v-model="item.channelId"
+                  hide-details="auto"
+                  :label="$t('notifications.channels.channelId')"
+                  :name="`channelId-${idx}`"
+                  variant="outlined"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+          <template #append>
             <v-list-item-action>
-              <v-btn icon :title="$t('notifications.remove')" @click.stop="remove(idx)">
-                <v-icon color="secondary lighten-2">
-                  $delete
-                </v-icon>
-              </v-btn>
+              <v-btn color="error" icon="$delete" :title="$t('notifications.remove')" @click.stop="remove(idx)" />
             </v-list-item-action>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < items.length" :key="`div-${idx}`" />
-        </template>
+          </template>
+        </v-list-item>
       </v-list>
       <v-card-actions>
         <v-spacer />
-        <v-btn class="font-weight-bold" color="info" text @click.stop="close">
-          <v-icon left>
-            $success
-          </v-icon>{{ $t('common.action.ok') }}
+        <v-btn class="font-weight-bold" color="info" variant="text" @click.stop="close">
+          <v-icon icon="$success" start /> {{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -144,7 +131,7 @@ export default defineComponent({
   name: 'EventNotifications',
 
   props: {
-    value: {
+    modelValue: {
       type: Array as PropType<Notification[]>,
       required: true,
     },
@@ -152,19 +139,18 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { i18n } = useI18n();
-    const items = useVModel(props, 'value', emit, {
-      eventName: 'input',
+    const items = useVModel(props, 'modelValue', emit, {
       passive: true,
       deep: true,
     });
 
     const channels = notificationChannels.map(value => ({
       value,
-      text: i18n.t(`notifications.channels.${value}`).toString(),
+      title: i18n.t(`notifications.channels.${value}`),
     }));
     const events = eventTypes.map(value => ({
       value,
-      text: i18n.t(`notifications.events.${value}`).toString(),
+      title: i18n.t(`notifications.events.${value}`),
     }));
 
     const dialog = ref(false);

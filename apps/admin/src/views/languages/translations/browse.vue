@@ -1,6 +1,6 @@
 <template>
-  <layout v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
-    <v-toolbar bottom color="grey lighten-5" flat tile>
+  <layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
+    <v-toolbar color="grey-lighten-4" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>
@@ -8,20 +8,21 @@
       <template v-if="form.translations.length">
         <confirm-dialog
           color="primary"
-          fab
           icon
           icon-left="fas fa-rotate"
-          :label="$t('common.action.sync').toString()"
+          :label="$t('common.action.sync')"
+          size="small"
           @confirm="sync"
         >
           {{ $t('languages.translations.sync') }}
         </confirm-dialog>
         <confirm-dialog
+          class="ms-2"
           color="error"
-          fab
           icon
           icon-left="$delete"
-          :label="$t('common.action.delete').toString()"
+          :label="$t('common.action.delete')"
+          size="small"
           @confirm="remove"
         >
           {{ $t('languages.translations.delete') }}
@@ -29,29 +30,24 @@
       </template>
     </v-toolbar>
     <error-list :errors="nonInputErrors" tag="v-card-text" />
-    <v-list v-if="form.translations.length" two-line>
+    <v-list v-if="form.translations.length" class="list-border" lines="two">
       <v-list-item
         v-for="translation in form.translations"
         :key="translation.id"
-        class="list-item-border"
         link
       >
-        <v-list-item-avatar>
+        <template #prepend>
           <v-icon>fas fa-language</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ $t(`languages.translations.applications.${translation.application}`) }} |
-            {{ getSectionTitle(translation.section) }}
-          </v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn icon :title="$t('languages.translations.edit')" @click.stop="edit(translation)">
-            <v-icon color="secondary lighten-2">
-              $edit
-            </v-icon>
-          </v-btn>
-        </v-list-item-action>
+        </template>
+        <v-list-item-title>
+          {{ $t(`languages.translations.applications.${translation.application}`) }} |
+          {{ getSectionTitle(translation.section) }}
+        </v-list-item-title>
+        <template #append>
+          <v-list-item-action>
+            <v-btn icon="$edit" :title="$t('languages.translations.edit')" @click.stop="edit(translation)" />
+          </v-list-item-action>
+        </template>
       </v-list-item>
     </v-list>
     <v-card v-else flat link min-height="100px" @click="create">
@@ -59,9 +55,7 @@
         {{ $t('languages.translations.create') }}
       </v-card-title>
       <v-card-text class="d-flex justify-center align-center">
-        <v-btn color="secondary" fab x-large>
-          <v-icon>$add</v-icon>
-        </v-btn>
+        <v-btn color="secondary" icon="$add" size="x-large" />
       </v-card-text>
     </v-card>
     <translation-section
@@ -84,6 +78,7 @@ import type { LanguageTranslationAttributes } from '@intake24/db';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -99,6 +94,8 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const { i18n } = useI18n();
+
     const messages = useMessages();
     const { entry, entryLoaded } = useEntry<LanguageEntry>(props);
     useEntryFetch(props);
@@ -110,7 +107,24 @@ export default defineComponent({
       nonInputErrorKeys: ['translations'],
     });
 
-    return { entry, entryLoaded, form, nonInputErrors, routeLeave, toForm, messages };
+    function getSectionTitle(key: string) {
+      const check = has(i18n.messages.value[i18n.locale.value], `${key}.title`);
+      if (check)
+        return i18n.t(`${key}.title`);
+
+      return i18n.t(`languages.translations.sections.${key}`);
+    };
+
+    return {
+      entry,
+      entryLoaded,
+      form,
+      nonInputErrors,
+      routeLeave,
+      toForm,
+      messages,
+      getSectionTitle,
+    };
   },
 
   data() {
@@ -128,14 +142,6 @@ export default defineComponent({
   },
 
   methods: {
-    getSectionTitle(key: string): string {
-      const check = has(this.$i18n.messages[this.$i18n.locale], `${key}.title`);
-      if (check)
-        return this.$t(`${key}.title`).toString();
-
-      return this.$t(`languages.translations.sections.${key}`).toString();
-    },
-
     edit(translation: LanguageTranslationAttributes) {
       this.selected = translation;
     },
@@ -153,7 +159,7 @@ export default defineComponent({
 
     notify(action: string) {
       this.messages.success(
-        this.$t(`languages.translations.${action}`, { name: this.entry.englishName }).toString(),
+        this.$t(`languages.translations.${action}`, { name: this.entry.englishName }),
       );
     },
 

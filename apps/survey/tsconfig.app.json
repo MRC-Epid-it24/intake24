@@ -1,0 +1,27 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@intake24/survey/*": ["./src/*"],
+      "@intake24/common/*": ["../../packages/common/src/*"],
+      "@intake24/i18n/*": ["../../packages/i18n/src/*"],
+      "@intake24/ui/*": ["../../packages/ui/src/*"],
+      "@intake24/*": ["../../packages/*/src"]
+    }
+  },
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "src/**/__tests__/*"
+  ]
+}

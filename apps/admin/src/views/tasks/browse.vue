@@ -14,59 +14,51 @@
   </data-table>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import cronstrue from 'cronstrue';
-import { defineComponent } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'TaskList',
+defineOptions({ name: 'TaskList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
 
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('common.name'),
-          sortable: true,
-          value: 'name',
-        },
-        {
-          text: this.$t('tasks.job'),
-          sortable: true,
-          value: 'job',
-        },
-        {
-          text: this.$t('tasks.schedule'),
-          sortable: false,
-          value: 'schedule',
-        },
-        {
-          text: this.$t('tasks.cron'),
-          sortable: false,
-          value: 'cron',
-        },
-        {
-          text: this.$t('common.action.active'),
-          sortable: false,
-          value: 'active',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers: DataTableHeader[] = [
+  {
+    title: t('common.name'),
+    sortable: true,
+    key: 'name',
   },
-
-  methods: {
-    readableCron(cron: string): string {
-      return cronstrue.toString(cron, { use24HourTimeFormat: true });
-    },
+  {
+    title: t('tasks.job'),
+    sortable: true,
+    key: 'job',
   },
-});
+  {
+    title: t('tasks.schedule'),
+    sortable: false,
+    key: 'schedule',
+  },
+  {
+    title: t('tasks.cron'),
+    sortable: false,
+    key: 'cron',
+  },
+  {
+    title: t('common.action.active'),
+    sortable: false,
+    key: 'active',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+];
+
+function readableCron(cron: string) {
+  return cronstrue.toString(cron, { use24HourTimeFormat: true });
+}
 </script>

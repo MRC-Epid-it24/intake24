@@ -11,7 +11,7 @@
       section,
     }"
     @action="action"
-    @input="updateState"
+    @update:model-value="updateState"
   />
 </template>
 
@@ -240,7 +240,6 @@ export default defineComponent({
 
     return {
       food,
-      translate,
       localeId,
       surveySlug,
       meal,
