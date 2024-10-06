@@ -2,31 +2,27 @@
   <v-dialog
     v-model="dialog.show"
     fullscreen
-    hide-overlay
     no-click-animation
     persistent
     :retain-focus="false"
+    :scrim="false"
     transition="dialog-bottom-transition"
   >
     <v-card tile>
       <v-toolbar color="secondary" dark>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`survey-schemes.prompts.${dialog.index === -1 ? 'create' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
-          <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-            <v-icon left>
-              $success
-            </v-icon>{{ $t('common.action.ok') }}
+          <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+            <v-icon icon="$success" start />{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
         <template #extension>
-          <v-container :fluid="$vuetify.breakpoint.mdAndDown">
-            <v-tabs v-model="tab" background-color="secondary" dark>
+          <v-container :fluid="$vuetify.display.mdAndDown">
+            <v-tabs v-model="tab" bg-color="secondary">
               <v-tab
                 v-for="item in promptSettings[dialog.prompt.component].tabs"
                 :key="item"
@@ -39,17 +35,17 @@
         </template>
       </v-toolbar>
       <v-form ref="form" @submit.prevent="save">
-        <v-container class="prompt-container" :fluid="$vuetify.breakpoint.mdAndDown">
-          <v-tabs-items v-model="tab" class="pt-1 flex-grow-1">
-            <v-tab-item key="general" value="general">
+        <v-container class="prompt-container" :fluid="$vuetify.display.mdAndDown">
+          <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
+            <v-tabs-window-item key="general" value="general">
               <v-row>
                 <v-col cols="12">
-                  <v-card outlined>
-                    <v-toolbar color="grey lighten-4" flat>
+                  <v-card border>
+                    <v-toolbar color="grey-lighten-4" flat>
+                      <v-icon end>
+                        fas fa-fingerprint
+                      </v-icon>
                       <v-toolbar-title>
-                        <v-icon left>
-                          fas fa-fingerprint
-                        </v-icon>
                         {{ $t('survey-schemes.prompts.internal._') }}
                       </v-toolbar-title>
                     </v-toolbar>
@@ -62,7 +58,7 @@
                             hide-details="auto"
                             :label="$t('survey-schemes.prompts.internal.id._')"
                             :messages="$t('survey-schemes.prompts.internal.id.hint')"
-                            outlined
+                            variant="outlined"
                           />
                         </v-col>
                         <v-col cols="12" md="6">
@@ -72,7 +68,7 @@
                             hide-details="auto"
                             :label="$t('survey-schemes.prompts.internal.name._')"
                             :messages="$t('survey-schemes.prompts.internal.name.hint')"
-                            outlined
+                            variant="outlined"
                           />
                         </v-col>
                         <v-col v-if="dialog.prompt.type === 'custom'" cols="12" md="6">
@@ -82,7 +78,7 @@
                             hide-details="auto"
                             :label="$t('survey-schemes.prompts.internal.group._')"
                             :messages="$t('survey-schemes.prompts.internal.group.hint')"
-                            outlined
+                            variant="outlined"
                           />
                         </v-col>
                       </v-row>
@@ -90,12 +86,12 @@
                   </v-card>
                 </v-col>
                 <v-col v-if="!isOverrideMode" cols="12">
-                  <v-card outlined>
-                    <v-toolbar color="grey lighten-4" flat>
+                  <v-card border>
+                    <v-toolbar color="grey-lighten-4" flat>
+                      <v-icon end>
+                        fas fa-circle-question
+                      </v-icon>
                       <v-toolbar-title>
-                        <v-icon left>
-                          fas fa-circle-question
-                        </v-icon>
                         {{ $t(`survey-schemes.prompts.type`) }}
                       </v-toolbar-title>
                       <template #extension>
@@ -112,53 +108,50 @@
                     </v-toolbar>
                     <v-item-group
                       v-model="dialog.prompt.component"
-                      active-class="primary"
-                      @change="updatePromptProps"
+                      selected-class="primary"
+                      @update:model-value="updatePromptProps"
                     >
-                      <v-tabs-items v-model="promptTypeTab">
+                      <v-tabs-window v-model="promptTypeTab">
                         <prompt-type-selector
                           v-for="(items, type) in availableGroupedPrompts"
                           :key="type"
                           v-bind="{ prompts: items, type }"
                         />
-                      </v-tabs-items>
+                      </v-tabs-window>
                     </v-item-group>
                   </v-card>
                 </v-col>
               </v-row>
-            </v-tab-item>
+            </v-tabs-window-item>
             <prompt-content
+              v-model:i18n="dialog.prompt.i18n"
               :component="dialog.prompt.component"
-              :i18n.sync="dialog.prompt.i18n"
             />
-            <prompt-actions :actions.sync="dialog.prompt.actions" />
-            <prompt-conditions :conditions.sync="dialog.prompt.conditions" :prompt-section="section" />
+            <prompt-actions v-model:actions="dialog.prompt.actions" />
+            <prompt-conditions v-model:conditions="dialog.prompt.conditions" :prompt-section="section" />
             <prompt-validation
               v-if="
                 'validation' in dialog.prompt
                   && promptSettings[dialog.prompt.component].tabs.includes('validation')
               "
+              v-model:validation="dialog.prompt.validation"
               :limits="dialog.prompt.component === 'checkbox-list-prompt'"
-              :validation.sync="dialog.prompt.validation"
             />
             <component
               :is="dialog.prompt.component"
-              v-bind.sync="dialog.prompt"
+              v-bind="dialog.prompt"
+              @update:options="updateOptions"
               @validate="validate"
             />
             <prompt-json v-model="dialog.prompt" />
-          </v-tabs-items>
+          </v-tabs-window>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>
-                $cancel
-              </v-icon>{{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer />
-            <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -384,6 +377,10 @@ export default defineComponent({
       this.promptTypeTab = 0;
       this.dialog = this.newDialog();
       this.form?.resetValidation();
+    },
+
+    updateOptions(options: Partial<Prompt>) {
+      this.dialog.prompt = merge<Prompt>(this.dialog.prompt, options);
     },
 
     validate() {

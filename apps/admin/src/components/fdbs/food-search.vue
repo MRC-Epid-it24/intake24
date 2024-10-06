@@ -1,17 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="1000px">
-    <template #activator="{ attrs, on }">
-      <v-btn v-bind="attrs" color="primary" rounded :title="$t('fdbs.search._')" v-on="on">
-        <v-icon left>
-          $search
-        </v-icon> {{ $t('fdbs.search._') }}
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="1000px">
+    <template #activator="{ props: dProps }">
+      <v-btn color="primary" rounded :title="$t('fdbs.search._')" v-bind="dProps">
+        <v-icon icon="$search" start /> {{ $t('fdbs.search._') }}
       </v-btn>
     </template>
-    <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('fdbs.search.title') }}
         </v-toolbar-title>
@@ -25,8 +21,8 @@
           hide-details="auto"
           :label="$t('common.search._')"
           :loading="loading"
-          outlined
           prepend-inner-icon="$search"
+          variant="outlined"
           @click:clear="clear"
         />
         <v-data-table
@@ -47,9 +43,9 @@
 
 <script lang="ts" setup>
 import { watchDebounced } from '@vueuse/core';
-import { defineComponent, nextTick, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router/composables';
-import { VTextField } from 'vuetify/lib';
+import { nextTick, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { VTextField } from 'vuetify/components';
 
 import type {
   CategoriesResponse,
@@ -59,10 +55,14 @@ import type {
 import { useHttp } from '@intake24/admin/services';
 import { useI18n } from '@intake24/i18n';
 
+import type { DataTableHeader } from '../data-tables';
+
 export type Category = CategoryListEntry & { resource: 'categories' };
 export type Food = FoodsResponse['data'][number] & { resource: 'foods' };
 
 export type FoodSearchItem = Category | Food;
+
+defineOptions({ name: 'FoodExplorerSearch' });
 
 const props = defineProps({
   localeId: {
@@ -85,11 +85,11 @@ const categories = ref<CategoriesResponse['data']>([]);
 const foods = ref<FoodsResponse['data']>([]);
 const items = ref<FoodSearchItem[]>([]);
 
-const headers = [
-  { text: '', value: 'resource', sortable: false },
-  { text: i18n.t('fdbs.foods.global.code'), value: 'code' },
-  { text: i18n.t('fdbs.foods.global.name'), value: 'englishName' },
-  { text: i18n.t('fdbs.foods.local.name'), value: 'name' },
+const headers: DataTableHeader[] = [
+  { title: '', key: 'resource', sortable: false },
+  { title: i18n.t('fdbs.foods.global.code'), key: 'code' },
+  { title: i18n.t('fdbs.foods.global.name'), key: 'englishName' },
+  { title: i18n.t('fdbs.foods.local.name'), key: 'name' },
 ];
 
 async function clear() {
@@ -141,18 +141,18 @@ async function fetchItems() {
   }
 }
 
-async function selectItem(item: FoodSearchItem) {
+async function selectItem(event: PointerEvent, ops: { item: FoodSearchItem }) {
+  const { item: { id: entryId, resource } } = ops;
   dialog.value = false;
 
-  const name = `fdbs-${item.resource}`;
-  const entryId = item.id;
+  const name = `fdbs-${resource}`;
 
   if (route.name === name && route.params.entryId === entryId)
     return;
 
   await router.push({
-    name: `fdbs-${item.resource}`,
-    params: { id: props.localeId, entryId: item.id },
+    name: `fdbs-${resource}`,
+    params: { id: props.localeId, entryId },
   });
 }
 
@@ -169,14 +169,7 @@ watch(dialog, async (val) => {
     return;
 
   await nextTick();
-  // @ts-expect-error - vuetify types
   searchRef.value?.focus();
-});
-</script>
-
-<script lang="ts">
-export default defineComponent({
-  name: 'FoodExplorerSearch',
 });
 </script>
 

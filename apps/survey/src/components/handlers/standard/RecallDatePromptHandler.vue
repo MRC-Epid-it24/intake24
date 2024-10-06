@@ -40,7 +40,6 @@ export default defineComponent({
 
     const getInitialState = computed(
       () => survey.data.recallDate,
-      // typeof props.prompt.current === 'number' ? addDays(new Date(), props.prompt.current).toISOString().substring(0, 10) : null,
     );
 
     const { state } = usePromptHandlerNoStore(ctx, getInitialState);

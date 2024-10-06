@@ -1,20 +1,16 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
-      <v-list-item key="respondentsFeedback" v-bind="attrs" link v-on="on">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
+      <v-list-item key="respondentsFeedback" link v-bind="props">
         <v-list-item-title>
-          <v-icon left>
-            fas fa-comments
-          </v-icon>
+          <v-icon icon="fas fa-comments" start />
           {{ $t('surveys.respondents.feedback._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
-    <v-card :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t(`surveys.respondents.feedback.title`) }}
         </v-toolbar-title>
@@ -22,30 +18,26 @@
       <v-card-title>
         {{ $t(`surveys.respondents.feedback.details`) }}
       </v-card-title>
-      <v-simple-table class="mx-4">
+      <v-table class="mx-4">
         <tbody>
           <tr>
             <th>{{ $t(`users.username`) }}</th>
             <th>{{ user.username }}</th>
           </tr>
         </tbody>
-      </v-simple-table>
+      </v-table>
       <v-container>
         <v-card-text>
           <v-row>
             <v-col cols="12" sm="6">
-              <v-btn block :href="user.feedbackAuthUrl" outlined target="_blank" x-large>
-                <v-icon left>
-                  fas fa-up-right-from-square
-                </v-icon>
+              <v-btn block :href="user.feedbackAuthUrl" size="x-large" target="_blank" variant="outlined">
+                <v-icon icon="fas fa-up-right-from-square" start />
                 {{ $t(`surveys.respondents.feedback.open`) }}
               </v-btn>
             </v-col>
             <v-col cols="12" sm="6">
-              <v-btn block outlined x-large @click.stop="download">
-                <v-icon left>
-                  $download
-                </v-icon>
+              <v-btn block size="x-large" variant="outlined" @click.stop="download">
+                <v-icon icon="$download" start />
                 {{ $t(`surveys.respondents.feedback.download`) }}
               </v-btn>
             </v-col>
@@ -67,20 +59,20 @@
                   hide-details="auto"
                   :label="$t('common.email')"
                   name="email"
-                  outlined
                   prepend-inner-icon="fas fa-envelope"
-                  @input="form.errors.clear('email')"
+                  variant="outlined"
+                  @update:model-value="form.errors.clear('email')"
                 />
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-radio-group
                   v-model="form.copy"
                   :error-messages="form.errors.get('copy')"
+                  inline
                   :label="$t('surveys.respondents.feedback.email.copy._')"
                   mandatory
                   name="copy"
-                  row
-                  @change="form.errors.clear('copy')"
+                  @update:model-value="form.errors.clear('copy')"
                 >
                   <v-radio :label="$t('surveys.respondents.feedback.email.copy.none')" value="none" />
                   <v-radio :label="$t('surveys.respondents.feedback.email.copy.cc')" value="cc" />
@@ -88,10 +80,8 @@
                 </v-radio-group>
               </v-col>
               <v-col class="ml-auto" cols="12" sm="auto">
-                <v-btn block color="primary" :disabled="form.errors.any()" type="submit" x-large>
-                  <v-icon left>
-                    fas fa-envelope
-                  </v-icon>
+                <v-btn block color="primary" :disabled="form.errors.any()" size="x-large" type="submit">
+                  <v-icon icon="fas fa-envelope" start />
                   {{ $t('surveys.respondents.feedback.email.sent') }}
                 </v-btn>
               </v-col>
@@ -100,7 +90,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn class="font-weight-bold" color="info" text @click.stop="close">
+          <v-btn class="font-weight-bold" color="info" variant="text" @click.stop="close">
             {{ $t('common.action.close') }}
           </v-btn>
         </v-card-actions>

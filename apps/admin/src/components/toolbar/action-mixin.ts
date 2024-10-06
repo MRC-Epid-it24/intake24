@@ -10,9 +10,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    routePrefix: {
-      type: String,
-    },
   },
 
   emits: ['action'],
@@ -21,8 +18,8 @@ export default defineComponent({
     icon(): string {
       return `$${this.action}`;
     },
-    route(): string | null | undefined {
-      return this.routePrefix ?? this.$route.name;
+    route(): string | undefined {
+      return this.$route.name?.toString();
     },
   },
 

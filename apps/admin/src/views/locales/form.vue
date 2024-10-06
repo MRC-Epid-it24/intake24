@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -12,8 +12,8 @@
                 hide-details="auto"
                 :label="$t('locales.code')"
                 name="code"
-                outlined
                 prepend-inner-icon="$locales"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -27,7 +27,7 @@
                 :label="$t('locales.prototypeLocaleId')"
                 name="prototypeLocaleId"
                 resource="locales"
-                @input="form.errors.clear('prototypeLocaleId')"
+                @update:model-value="form.errors.clear('prototypeLocaleId')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -37,7 +37,7 @@
                 hide-details="auto"
                 :label="$t('locales.englishName')"
                 name="englishName"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -47,7 +47,7 @@
                 hide-details="auto"
                 :label="$t('locales.localName')"
                 name="localName"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -60,7 +60,7 @@
                 :label="$t('locales.respondentLanguageId')"
                 name="respondentLanguageId"
                 resource="languages"
-                @input="form.errors.clear('respondentLanguageId')"
+                @update:model-value="form.errors.clear('respondentLanguageId')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -73,7 +73,7 @@
                 :label="$t('locales.adminLanguageId')"
                 name="adminLanguageId"
                 resource="languages"
-                @input="form.errors.clear('adminLanguageId')"
+                @update:model-value="form.errors.clear('adminLanguageId')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -84,16 +84,20 @@
                 :items="flags"
                 :label="$t('locales.countryFlagCode')"
                 name="countryFlagCode"
-                outlined
-                @change="form.errors.clear('countryFlagCode')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('countryFlagCode')"
               >
-                <template #item="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <span :class="`fi fi-${item.raw.value} mr-3`" />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.text }}
+                  <span :class="`fi fi-${item.raw.value} mr-3`" />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -105,20 +109,20 @@
                 :items="textDirections"
                 :label="$t('languages.textDirections._')"
                 name="textDirection"
-                outlined
-                @change="form.errors.clear('textDirection')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('textDirection')"
               >
-                <template #item="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <v-icon :icon="item.raw.icon" start />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                  <v-icon :icon="item.raw.icon" start />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -130,20 +134,20 @@
                 :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
-                outlined
-                @change="form.errors.clear('visibility')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('visibility')"
               >
-                <template #item="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <v-icon :icon="item.raw.icon" start />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                  <v-icon :icon="item.raw.icon" start />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -164,17 +168,21 @@
                 hide-details="auto"
                 :items="foodIndexLanguageBackends"
                 :label="$t('locales.foodIndex.languageBackend')"
-                name="textDirection"
-                outlined
-                @change="form.errors.clear('foodIndexLanguageBackendId')"
+                name="foodIndexLanguageBackendId"
+                variant="outlined"
+                @update:model-value="form.errors.clear('foodIndexLanguageBackendId')"
               >
-                <template #item="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <span :class="`fi fi-${item.raw.value} mr-3`" />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.text }}
+                  <span :class="`fi fi-${item.raw.value} mr-3`" />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -260,11 +268,11 @@ export default defineComponent({
   computed: {
     foodIndexLanguageBackends() {
       if (!this.refs.foodIndexLanguageBackends)
-        return [{ value: 'en', text: this.$t('common.none').toString() }];
+        return [{ value: 'en', title: this.$t('common.none') }];
 
       return this.refs.foodIndexLanguageBackends.map(backend => ({
         value: backend.id,
-        text: backend.name,
+        title: backend.name,
       }));
     },
   },

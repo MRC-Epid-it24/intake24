@@ -26,11 +26,6 @@
       ]
     },
     "resolveJsonModule": true,
-    "types": [
-      "vite/client",
-      "vite-plugin-pwa/client",
-      "vuetify"
-    ],
     "strict": true,
     "noImplicitThis": true,
     "sourceMap": true,
@@ -40,9 +35,6 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
-  },
-  "vueCompilerOptions": {
-    "target": 2.7
   },
   "include": [
     "src/**/*.ts",

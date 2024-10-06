@@ -1,14 +1,14 @@
 <template>
   <v-container>
     <v-row>
-      <v-img :aspect-ratio="16 / 9" class="align-end" :src="image">
+      <v-img :aspect-ratio="16 / 9" class="align-end" cover :src="image">
         <template #placeholder>
           <image-placeholder />
         </template>
         <v-row>
-          <v-col class="d-flex justify-end mr-auto">
+          <v-col class="d-flex justify-end me-auto">
             <v-chip
-              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
+              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold text-secondary border-secondary-1"
             >
               {{ thumbnailWeight }}
             </v-chip>
@@ -16,51 +16,55 @@
         </v-row>
         <as-served-weight-factor
           v-bind="weightFactorProps"
-          @input="updateWeightFactor"
+          @update:model-value="updateWeightFactor"
         />
       </v-img>
     </v-row>
     <v-row v-if="asServedData" class="mt-4">
-      <v-col class="pa-1 rounded-lg" :class="{ 'border-primary-2': isLessWeightFactorActive }" cols="3" lg="auto" sm="2">
+      <v-col class="pa-1 rounded-lg" :class="{ 'border-primary-2': isLessWeightFactorActive }" cols="3" lg sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
-          <v-img :src="firstThumbnail" />
-          <v-overlay absolute>
+          <v-img cover :src="firstThumbnail" />
+          <v-overlay absolute class="align-center justify-center" contained :model-value="true">
             <v-btn
+              color="transparent"
               :disabled="isLessWeightFactorActive"
               icon
+              size="x-large"
               :title="$t(`prompts.asServed.${type}.less`)"
-              x-large
             >
-              <v-icon>$decrement</v-icon>
+              <v-icon color="white" size="large">
+                $decrement
+              </v-icon>
             </v-btn>
           </v-overlay>
         </v-card>
       </v-col>
-      <template v-for="(images, idx) in asServedData.images">
-        <v-col
-          :key="idx"
-          class="pa-1 rounded-lg"
-          :class="{ 'border-primary-2': isSelected(idx) }"
-          cols="3"
-          lg="auto"
-          sm="2"
-        >
-          <v-card @click="setSelection(idx)">
-            <v-img :src="images.thumbnailUrl" />
-          </v-card>
-        </v-col>
-      </template>
-      <v-col v-if="showMoreWeightFactor" class="pa-1 rounded-lg" :class="{ 'border-primary-2': isMoreWeightFactorActive }" cols="3" lg="auto" sm="2">
+      <v-col
+        v-for="(images, idx) in asServedData.images" :key="idx"
+        class="pa-1 rounded-lg"
+        :class="{ 'border-primary-2': isSelected(idx) }"
+        cols="3"
+        lg
+        sm="2"
+      >
+        <v-card @click="setSelection(idx)">
+          <v-img cover :src="images.thumbnailUrl" />
+        </v-card>
+      </v-col>
+      <v-col v-if="showMoreWeightFactor" class="pa-1 rounded-lg" :class="{ 'border-primary-2': isMoreWeightFactorActive }" cols="3" lg sm="2">
         <v-card :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
-          <v-img :src="lastThumbnail" />
-          <v-overlay absolute>
+          <v-img cover :src="lastThumbnail" />
+          <v-overlay absolute class="align-center justify-center" contained :model-value="true">
             <v-btn
+              color="transparent"
               :disabled="isMoreWeightFactorActive"
               icon
+              size="x-large"
               :title="$t(`prompts.asServed.${type}.more`)"
-              x-large
             >
-              <v-icon>$increment</v-icon>
+              <v-icon color="white" size="large">
+                $increment
+              </v-icon>
             </v-btn>
           </v-overlay>
         </v-card>
@@ -68,7 +72,7 @@
     </v-row>
     <v-row>
       <v-col class="px-1" cols="12" sm="auto">
-        <v-btn :block="isMobile" color="primary" @click="confirm">
+        <v-btn :block="$vuetify.display.mobile" color="primary" @click="confirm">
           {{ $t(`prompts.asServed.${type}.confirm`) }}
         </v-btn>
       </v-col>
@@ -104,13 +108,13 @@ export default defineComponent({
       type: String as PropType<'serving' | 'leftovers'>,
       default: 'serving',
     },
-    value: {
+    modelValue: {
       type: Object as PropType<SelectedAsServedImage | null>,
       default: null,
     },
   },
 
-  emits: ['confirm', 'input'],
+  emits: ['confirm', 'update:modelValue'],
 
   setup(props) {
     const denominator = 4;
@@ -125,13 +129,13 @@ export default defineComponent({
       maxNumerator: denominator,
       denominator,
       weight,
-      value: denominator,
+      modelValue: denominator,
     });
 
     const lessWeightFactor = (
       show: boolean,
       weight: number,
-      value?: number,
+      modelValue?: number,
     ): WeightFactorProps => ({
       show,
       type: props.type,
@@ -140,10 +144,10 @@ export default defineComponent({
       maxNumerator: denominator - 1,
       denominator,
       weight,
-      value: value ?? denominator - 1,
+      modelValue: modelValue ?? denominator - 1,
     });
 
-    const moreWeightFactor = (show: boolean, weight: number, value?: number): WeightFactorProps => {
+    const moreWeightFactor = (show: boolean, weight: number, modelValue?: number): WeightFactorProps => {
       let minNumerator = denominator + 1;
       let maxNumerator = denominator * 5;
 
@@ -151,7 +155,7 @@ export default defineComponent({
         if ((minNumerator / denominator) * weight >= props.maxWeight) {
           minNumerator = denominator;
           maxNumerator = denominator;
-          value = denominator;
+          modelValue = denominator;
         }
         else {
           maxNumerator = denominator;
@@ -173,7 +177,7 @@ export default defineComponent({
         maxNumerator,
         denominator,
         weight,
-        value: value ?? denominator + 1,
+        modelValue: modelValue ?? denominator + 1,
       };
     };
 
@@ -233,7 +237,7 @@ export default defineComponent({
       return ((this.denominator + 1) / this.denominator) * weight < this.maxWeight;
     },
     weightFactor(): number {
-      return this.weightFactorProps.value / this.weightFactorProps.denominator;
+      return this.weightFactorProps.modelValue / this.weightFactorProps.denominator;
     },
   },
 
@@ -274,14 +278,14 @@ export default defineComponent({
         );
       }
 
-      if (this.value?.index !== undefined)
-        this.setSelection(this.value.index, true);
+      if (this.modelValue?.index !== undefined)
+        this.setSelection(this.modelValue.index, true);
       else this.setSelection(Math.floor(this.asServedData.images.length / 2));
     },
 
     initWeightFactor(asServedData: AsServedSetResponse, objectIdx: number) {
       const objectWeight = asServedData.images[objectIdx].weight;
-      const initWeight = this.value?.weight;
+      const initWeight = this.modelValue?.weight;
 
       if (initWeight === undefined)
         return;
@@ -348,7 +352,7 @@ export default defineComponent({
     },
 
     updateWeightFactor(value: number) {
-      this.weightFactorProps.value = value;
+      this.weightFactorProps.modelValue = value;
       this.update();
     },
 
@@ -371,7 +375,7 @@ export default defineComponent({
         imageUrl: asServedData.images[objectIdx].mainImageUrl,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
 
     confirm() {

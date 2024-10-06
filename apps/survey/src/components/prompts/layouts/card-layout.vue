@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mb-4" :tile="isMobile">
+    <v-card class="mb-4" :tile="$vuetify.display.mobile">
       <breadcrumbs v-bind="{ food, meal, promptName: i18n.name }" />
       <slot name="prompt-text">
         <v-card-text v-if="i18n.text" class="pt-0">
@@ -9,7 +9,7 @@
         </v-card-text>
       </slot>
     </v-card>
-    <v-card :tile="isMobile">
+    <v-card :tile="$vuetify.display.mobile">
       <slot name="prompt-description">
         <div
           v-if="i18n.description"
@@ -20,7 +20,7 @@
       </slot>
       <slot />
       <v-card-actions
-        v-if="!isMobile || prompt.actions?.both"
+        v-if="!$vuetify.display.mobile || prompt.actions?.both"
         id="actions"
         class="px-4 pt-0 pb-4 d-flex flex-column-reverse flex-md-row align-stretch ga-3"
       >
@@ -29,15 +29,14 @@
             v-for="item in desktopActions"
             :key="item.type"
             class="px-4"
-            :color="item.color"
+            :color="item.color ?? undefined"
             :disabled="item.type === 'next' && !isValid"
-            large
-            :outlined="item.variant === 'outlined'"
-            :text="item.variant === 'text'"
+            size="large"
             :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
+            :variant="item.variant"
             @click="action(item.type, foodOrMealId, item.params)"
           >
-            <v-icon v-if="item.icon" left>
+            <v-icon v-if="item.icon" start>
               {{ item.icon }}
             </v-icon>
             {{ translate(item.text) }}
@@ -47,22 +46,21 @@
           <slot name="actions" />
         </template>
       </v-card-actions>
-      <div v-if="!isInMultiPrompt && isMobile" id="actions" class="bottom-navigation">
+      <div v-if="!isInMultiPrompt && $vuetify.display.mobile" id="actions" class="bottom-navigation">
         <div v-if="showSummary" class="bottom-navigation__summary">
           <meal-list-mobile v-bind="{ meals }" @action="action" />
         </div>
         <div v-if="mobileActions.length || hasNavActionsSlot" class="bottom-navigation__actions">
           <template v-if="mobileActions.length">
-            <template v-for="(item, idx) in mobileActions">
+            <template v-for="(item, idx) in mobileActions" :key="item.type">
               <v-btn
-                :key="item.type"
-                :color="item.color"
+                :color="item.color ?? undefined"
                 :disabled="item.type === 'next' && !isValid"
-                :text="['outlined', 'text'].includes(item.variant)"
                 :title="
                   Object.keys(item.label).length ? translate(item.label) : translate(item.text)
                 "
                 :value="item.type"
+                :variant="['outlined', 'text'].includes(item.variant) ? 'text' : undefined"
                 @click="action(item.type, foodOrMealId, item.params)"
               >
                 <span class="text-overline font-weight-medium">
@@ -88,20 +86,58 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { type PropType, useSlots } from 'vue';
 
+import type { Prompt } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
+import type { FoodState, MealState } from '@intake24/common/types';
 import { MealListMobile } from '@intake24/survey/components/layouts/meal-list';
 
-import layoutMixin from './layout-mixin';
+import Breadcrumbs from './breadcrumbs.vue';
+import { useLayout } from './use-layout';
 
-export default defineComponent({
-  name: 'CardLayout',
+defineOptions({ name: 'CardLayout' });
 
-  components: { MealListMobile },
+const props = defineProps(
+  {
+    prompt: {
+      type: Object as PropType<Prompt>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
+    food: {
+      type: Object as PropType<FoodState>,
+    },
+    meal: {
+      type: Object as PropType<MealState>,
+    },
+    isValid: {
+      type: Boolean,
+      default: false,
+    },
+  },
+);
 
-  mixins: [layoutMixin],
-});
+const emit = defineEmits(['action']);
+const slots = useSlots();
+
+const {
+  action,
+  desktopActions,
+  foodOrMealId,
+  hasDefaultSlot,
+  hasNavActionsSlot,
+  i18n,
+  isInMultiPrompt,
+  meals,
+  mobileActions,
+  showSummary,
+  translate,
+} = useLayout(props, { emit, slots });
 </script>
 
 <style lang="scss"></style>

@@ -88,7 +88,10 @@
       "_": "Action variant",
       "title": "Action variants",
       "elevated": "Elevated",
+      "flat": "Flat",
       "outlined": "Outlined",
+      "plain": "Plain",
+      "tonal": "Tonal",
       "text": "Text"
     }
   },

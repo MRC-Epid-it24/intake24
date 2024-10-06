@@ -1,6 +1,4 @@
 import type { ComputedRef, Ref } from 'vue';
-import type { TranslateResult } from 'vue-i18n';
-import type { DataOptions } from 'vuetify';
 import { computed, ref, watch } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
@@ -8,11 +6,18 @@ import type { Pagination, PaginationMeta } from '@intake24/db';
 import { useHttp } from '@intake24/admin/services';
 import { useResource } from '@intake24/admin/stores';
 
+export type DataTableOptions = {
+  itemsPerPage: number;
+  page: number;
+  sortBy: { key: string; order: string }[];
+  groupBy: { key: string; order: string }[];
+};
+
 export type DataTableHeader = {
-  text: string | TranslateResult;
-  value: string;
+  key: string;
+  title: string;
   sortable?: boolean;
-  align?: string;
+  align?: 'start' | 'center' | 'end';
 };
 
 export type DataTableProps = {
@@ -29,7 +34,7 @@ export function useDataTable(props: DataTableProps, filter: ComputedRef<Dictiona
 
   const items = ref<Dictionary[]>([]);
   const meta = ref<Partial<PaginationMeta>>({ total: 0 });
-  const options = ref<DataOptions>({} as DataOptions);
+  const options = ref<DataTableOptions>({} as DataTableOptions);
   const selected = ref<Dictionary[]>([]);
 
   const tracked = computed<string[] | number[]>(() =>
@@ -40,11 +45,10 @@ export function useDataTable(props: DataTableProps, filter: ComputedRef<Dictiona
     const {
       page,
       itemsPerPage: limit,
-      sortBy: [column],
-      sortDesc: [desc],
+      sortBy: [sortItem],
     } = options.value;
 
-    const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : undefined;
+    const sort = sortItem ? `${sortItem.key}|${sortItem.order}` : undefined;
 
     const { data } = await http.get<Pagination>(api.value, {
       params: { limit, page, sort, ...filter.value },

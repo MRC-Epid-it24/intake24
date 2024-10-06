@@ -1,12 +1,12 @@
 <template>
-  <v-dialog :fullscreen="$vuetify.breakpoint.smAndDown" max-width="800px" :value="open" @click:outside="close">
+  <v-dialog :fullscreen="$vuetify.display.smAndDown" max-width="800px" :model-value="open" @click:outside="close">
     <v-card>
       <v-card-text class="pa-0">
         <component :is="componentType" />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn class="font-weight-bold" color="info" text @click.stop="close">
+        <v-btn class="font-weight-bold" color="info" variant="text" @click.stop="close">
           {{ $t('common.action.close') }}
         </v-btn>
       </v-card-actions>
@@ -37,6 +37,8 @@ export default defineComponent({
       defaultValue: false,
     },
   },
+
+  emits: ['close'],
 
   setup(props, { emit }) {
     const close = () => {

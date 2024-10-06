@@ -157,17 +157,17 @@ export function usePortionSizeMethods() {
 
   const estimationMethods = psmDefaults.map(({ method: value }) => ({
     value,
-    text: i18n.t(`fdbs.portionSizes.methods.${value}._`).toString(),
+    title: i18n.t(`fdbs.portionSizes.methods.${value}._`),
   }));
 
   const selections = Object.keys(portionSizeSelectionImages)
     .map(value => ({
       value,
-      text: i18n.t(`prompts.portionSizeOption.selections.${value}`).toString(),
+      title: i18n.t(`prompts.portionSizeOption.selections.${value}`),
     }))
-    .sort((a, b) => a.text.localeCompare(b.text)) as {
+    .sort((a, b) => a.title.localeCompare(b.title)) as {
     value: PortionSizeSelectionImage;
-    text: string;
+    title: string;
   }[];
 
   return { estimationMethods, selections };

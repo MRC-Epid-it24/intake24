@@ -2,37 +2,30 @@
   <data-table :headers="headers" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+defineOptions({ name: 'FeedbackSchemeList' });
 
-export default defineComponent({
-  name: 'FeedbackSchemeList',
+const { i18n: { t } } = useI18n();
 
-  components: { DataTable },
-
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('common.name'),
-          sortable: true,
-          value: 'name',
-        },
-        {
-          text: this.$t('feedback-schemes.types._'),
-          sortable: true,
-          value: 'type',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers: DataTableHeader[] = [
+  {
+    title: t('common.name'),
+    sortable: true,
+    key: 'name',
   },
-});
+  {
+    title: t('feedback-schemes.types._'),
+    sortable: true,
+    key: 'type',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+];
 </script>

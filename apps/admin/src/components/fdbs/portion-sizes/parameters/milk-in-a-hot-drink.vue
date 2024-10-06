@@ -4,12 +4,11 @@
       <language-selector
         v-model="parameters.options"
         :default="[]"
-        :label="$t('fdbs.portionSizes.methods.parent-food-portion.options').toString()"
+        :label="$t('fdbs.portionSizes.methods.parent-food-portion.options')"
         :required="true"
       >
-        <template v-for="lang in Object.keys(parameters.options)" #[`lang.${lang}`]>
+        <template v-for="lang in Object.keys(parameters.options)" :key="lang" #[`lang.${lang}`]>
           <options-list
-            :key="lang"
             :options="parameters.options[lang]"
             :rules="rules"
             @update:options="updateOption(lang, $event)"
@@ -37,7 +36,7 @@ export default defineComponent({
   components: { LanguageSelector, OptionsList },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<PortionSizeParameters['milk-in-a-hot-drink']>,
       required: true,
     },

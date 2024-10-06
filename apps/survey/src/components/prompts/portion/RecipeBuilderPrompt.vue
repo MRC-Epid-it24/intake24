@@ -1,19 +1,19 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }">
-    <v-expansion-panels v-model="activeStep" :tile="isMobile" @change="updateActiveStep">
+    <v-expansion-panels v-model="activeStep" :tile="$vuetify.display.mobile" @update:model-value="updateActiveStep">
       <v-expansion-panel v-for="(step, index) in recipeSteps" :key="index">
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           <div>
-            <v-avatar class="mr-2" color="primary" size="28">
-              <span class="white--text font-weight-medium">{{ step.order + 1 }}</span>
+            <v-avatar class="me-2" color="primary" size="28">
+              <span class="text-white font-weight-medium">{{ step.order + 1 }}</span>
             </v-avatar>
             {{ translate(step.name) }}
           </div>
           <template #actions>
             <expansion-panel-actions :valid="isStepValid(step)" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <v-sheet class="mb-4">
             {{ translate(step.description) }}
           </v-sheet>
@@ -22,19 +22,19 @@
             <v-radio-group
               v-if="!step.required"
               v-model="step.confirmed"
-              row
-              @change="onConfirmToggleIngredients(index)"
+              inline
+              @update:model-value="onConfirmToggleIngredients(index)"
             >
               <v-radio
+                false-icon="fa-regular fa-circle"
                 :label="$t('prompts.recipeBuilder.optional.confirm')"
-                off-icon="fa-regular fa-circle"
-                on-icon="$yes"
+                true-icon="$yes"
                 value="yes"
               />
               <v-radio
+                false-icon="fa-regular fa-circle"
                 :label="$t('prompts.recipeBuilder.optional.reject')"
-                off-icon="fa-regular fa-circle"
-                on-icon="$no"
+                true-icon="$no"
                 value="no"
               />
             </v-radio-group>
@@ -55,14 +55,14 @@
           <v-btn-toggle
             v-if="(step.required || step.confirmed === 'yes') && step.repeat && step.foods.length > 0"
             v-model="step.anotherFoodConfirmed"
-            color="primary" dense
-            :row="!isMobile"
-            @change="onToggleStepAddMore(index)"
+            color="primary" density="compact"
+            :row="!$vuetify.display.mobile"
+            @update:model-value="onToggleStepAddMore(index)"
           >
-            <v-btn large :value="true">
+            <v-btn size="large" :value="true">
               {{ $t('prompts.recipeBuilder.addMore') }}
             </v-btn>
-            <v-btn large :value="false">
+            <v-btn size="large" :value="false">
               {{ $t('prompts.recipeBuilder.noMore') }}
             </v-btn>
           </v-btn-toggle>
@@ -84,7 +84,7 @@
             @food-selected="(food) => foodSelected(index, food)"
             @food-skipped="foodSkipped(index)"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <missing-all-recipe-ingredients
@@ -92,7 +92,7 @@
         value: allConfirmed && !atLeastOneFoodSelected,
         message: $t('prompts.recipeBuilder.missingAllIngredients'),
       }"
-      :class="{ 'mt-4': isMobile }"
+      :class="{ 'mt-4': $vuetify.display.mobile }"
     />
     <template #actions>
       <next :disabled="!isValid" @click="updateStepsIngredients" />
@@ -117,12 +117,6 @@ import type { RecipeBuilder } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-import {
-  ExpansionPanelActions,
-  FoodBrowser,
-  MissingAllRecipeIngredients,
-  SelectedFoodList,
-} from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
 import { getEntityId } from '@intake24/survey/util';
 
@@ -144,7 +138,7 @@ function getNextStep(steps: RecipeBuilderStepState[]) {
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
 
-  components: { ExpansionPanelActions, FoodBrowser, SelectedFoodList, MissingAllRecipeIngredients },
+  // components: { ExpansionPanelActions, FoodBrowser, SelectedFoodList, MissingAllRecipeIngredients },
 
   mixins: [createBasePrompt<'recipe-builder-prompt', RecipeBuilder>()],
 
@@ -156,13 +150,13 @@ export default defineComponent({
     surveySlug: {
       type: String,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<PromptStates['recipe-builder-prompt']>,
       required: true,
     },
   },
 
-  emits: ['input', 'add-food', 'action'],
+  emits: ['action', 'update:modelValue', 'add-food'],
 
   setup() {
     const { translate } = useI18n();
@@ -175,7 +169,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...copy(this.value),
+      ...copy(this.modelValue),
     };
   },
 
@@ -216,7 +210,7 @@ export default defineComponent({
         recipe: this.recipe,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
 
     foodSelected(index: number, selectedFood: SelectedFoodRecipeBuilderItemState): void {
@@ -289,7 +283,7 @@ export default defineComponent({
 
     updateActiveStep(index: number) {
       const { recipeSteps } = this;
-      this.$emit('input', { activeStep: index, recipeSteps });
+      this.$emit('update:modelValue', { activeStep: index, recipeSteps });
       this.activeStep = index;
     },
 

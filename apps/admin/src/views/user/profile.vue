@@ -3,123 +3,99 @@
     <h2 class="mb-4">
       {{ $t('user.profile') }}
     </h2>
-    <v-card v-if="profile" :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
-      <v-list subheader two-line>
-        <v-subheader>{{ $t('user.info') }}</v-subheader>
+    <v-card v-if="profile" :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
+      <v-list lines="two">
+        <v-list-subheader>{{ $t('user.info') }}</v-list-subheader>
         <v-list-item>
-          <v-list-item-avatar>
-            <v-icon class="secondary" dark>
-              fas fa-envelope
-            </v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{ $t('user.email') }}</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ profile.email || $t('common.not.provided') }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
+          <template #prepend>
+            <v-avatar color="secondary" icon="fas fa-envelope" />
+          </template>
+          <v-list-item-title>{{ $t('user.email') }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ profile.email || $t('common.not.provided') }}
+          </v-list-item-subtitle>
         </v-list-item>
         <v-list-item>
-          <v-list-item-avatar>
-            <v-icon class="secondary" dark>
-              fas fa-user
-            </v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{ $t('user.name') }}</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ profile.name || $t('common.not.provided') }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
+          <template #prepend>
+            <v-avatar color="secondary" icon="fas fa-user" />
+          </template>
+          <v-list-item-title>{{ $t('user.name') }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ profile.name || $t('common.not.provided') }}
+          </v-list-item-subtitle>
         </v-list-item>
         <v-list-item>
-          <v-list-item-avatar>
-            <v-icon class="secondary" dark>
-              fas fa-phone
-            </v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{ $t('user.phone') }}</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ profile.phone ?? $t('common.not.provided') }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
+          <template #prepend>
+            <v-avatar color="secondary" icon="fas fa-phone" />
+          </template>
+          <v-list-item-title>{{ $t('user.phone') }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ profile.phone ?? $t('common.not.provided') }}
+          </v-list-item-subtitle>
         </v-list-item>
         <v-list-item>
-          <v-list-item-avatar>
-            <v-icon class="secondary" dark>
-              fas fa-key
-            </v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>
-              <user-password :email="profile.email" />
-            </v-list-item-title>
-          </v-list-item-content>
+          <template #prepend>
+            <v-avatar color="secondary" icon="fas fa-key" />
+          </template>
+          <v-list-item-title>
+            <user-password :email="profile.email" />
+          </v-list-item-title>
         </v-list-item>
       </v-list>
       <v-divider />
-      <v-list subheader two-line>
-        <v-subheader>{{ $t('user.access') }}</v-subheader>
+      <v-list lines="two">
+        <v-list-subheader>{{ $t('user.access') }}</v-list-subheader>
         <v-list-item>
-          <v-list-item-avatar>
-            <v-icon class="secondary" dark>
-              fas fa-users
-            </v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{ $t('user.roles') }}</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ roles.length ? roles.join(', ') : '' }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
+          <template #prepend>
+            <v-avatar color="secondary" icon="fas fa-users" />
+          </template>
+          <v-list-item-title>{{ $t('user.roles') }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ roles.length ? roles.join(', ') : '' }}
+          </v-list-item-subtitle>
         </v-list-item>
         <v-list-item>
-          <v-list-item-avatar>
-            <v-icon class="secondary" dark>
-              fas fa-eye-slash
-            </v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{ $t('user.permissions') }}</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ permissions.length ? permissions.join(', ') : '' }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
+          <template #prepend>
+            <v-avatar color="secondary" icon="fas fa-eye-slash" />
+          </template>
+          <v-list-item-title>{{ $t('user.permissions') }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ permissions.length ? permissions.join(', ') : '' }}
+          </v-list-item-subtitle>
         </v-list-item>
       </v-list>
       <v-divider />
       <v-row no-gutters>
         <v-col cols="12" md="6">
-          <v-list flat subheader two-line>
-            <v-subheader>{{ $t('user.settings') }}</v-subheader>
+          <v-list lines="two">
+            <v-list-subheader>{{ $t('user.settings') }}</v-list-subheader>
             <v-list-item>
-              <v-list-item-avatar>
-                <v-icon class="secondary" dark>
-                  fas fa-language
-                </v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-select
-                  hide-details="auto"
-                  item-text="englishName"
-                  item-value="code"
-                  :items="languages"
-                  :label="$t('user.languages._')"
-                  outlined
-                  :value="language"
-                  @change="updateLanguage"
-                >
-                  <template #item="{ item }">
-                    <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
-                    {{ item.englishName }}
-                  </template>
-                  <template #selection="{ item }">
-                    <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
-                    {{ item.englishName }}
-                  </template>
-                </v-select>
-              </v-list-item-content>
+              <template #prepend>
+                <v-avatar color="secondary" icon="fas fa-language" />
+              </template>
+              <v-select
+                hide-details="auto"
+                item-title="englishName"
+                item-value="code"
+                :items="languages"
+                :label="$t('user.languages._')"
+                :model-value="language"
+                variant="outlined"
+                @update:model-value="updateLanguage"
+              >
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <span :class="`fi fi-${item.raw.countryFlagCode} mr-3`" />
+                    </template>
+                    <v-list-item-title>{{ item.raw.englishName }}</v-list-item-title>
+                  </v-list-item>
+                </template>
+                <template #selection="{ item }">
+                  <span :class="`fi fi-${item.raw.countryFlagCode} mr-3`" />
+                  {{ item.raw.englishName }}
+                </template>
+              </v-select>
             </v-list-item>
           </v-list>
         </v-col>

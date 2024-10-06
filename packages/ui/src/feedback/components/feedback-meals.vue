@@ -14,7 +14,7 @@
             :label="$t('recall.submissions._')"
             name="submissions"
             prepend-inner-icon="fas fa-calendar-day"
-            solo
+            variant="solo"
           />
           <v-data-table
             class="elevation-1"
@@ -92,7 +92,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { i18n, translate } = useI18n();
+    const { i18n: { t }, translate } = useI18n();
 
     const selected = ref(props.submissions.length ? props.submissions[0].id : null);
 
@@ -106,7 +106,7 @@ export default defineComponent({
 
     const submissionItems = computed(() =>
       props.submissions.map((item, idx) => ({
-        text: `${i18n.t('recall.submissions._')} ${idx + 1}  | ${new Date(
+        title: `${t('recall.submissions._')} ${idx + 1}  | ${new Date(
           item.endTime,
         ).toLocaleDateString()}`,
         value: item.id,
@@ -115,8 +115,8 @@ export default defineComponent({
 
     const headers = computed(() =>
       mealStats.value.table.fields.map(({ header, fieldId }) => ({
-        text: translate(header),
-        value: fieldId,
+        title: translate(header),
+        key: fieldId,
       })),
     );
 
@@ -126,8 +126,9 @@ export default defineComponent({
       } = mealStats.value;
 
       const chartOptions: EChartsOption[] = chartData.map((item) => {
-        const { name, unit, data } = item;
+        const { unit, data } = item;
         const id = item.id.join(':');
+        const name = translate(item.name);
 
         return {
           textStyle: {
@@ -135,7 +136,7 @@ export default defineComponent({
           },
           id,
           title: {
-            text: i18n.t('feedback.meals.chart', { nutrient: name }).toString(),
+            text: t('feedback.meals.chart', { nutrient: name }),
             left: 'center',
             textStyle: {
               fontWeight: 'bolder',
@@ -206,7 +207,6 @@ export default defineComponent({
 
     return {
       charts,
-      translate,
       headers,
       mealStats,
       selected,

@@ -1,9 +1,9 @@
 <template>
   <v-card class="card-screen d-flex flex-column" :color="detail.color" height="100%">
-    <v-img :aspect-ratio="16 / 9" :src="backgroundImage" />
+    <v-img :aspect-ratio="16 / 9" cover :src="backgroundImage" />
     <!-- <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div> -->
-    <v-card-subtitle v-if="detail.showIntake.includes('summary')" class="font-weight-medium" :class="textColor">
-      <i18n class="mb-2" path="feedback.intake.your" tag="div">
+    <v-card-subtitle v-if="detail.showIntake.includes('summary')" class="pa-4 font-weight-medium" :class="textColor">
+      <i18n-t class="mb-2" keypath="feedback.intake.your" tag="div">
         <template #nutrient>
           <span>{{ detail.name.toLowerCase() }}</span>
         </template>
@@ -12,12 +12,11 @@
             {{ formatOutput(detail.intake, detail.unit) }}
           </span>
         </template>
-      </i18n>
+      </i18n-t>
       <div v-if="detail.recommendedIntake" :class="textColor ?? detail.textClass">
-        <v-icon left>
-          {{ detail.iconClass }}
+        <v-icon :icon="detail.iconClass" start>
+          <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
         </v-icon>
-        <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
       </div>
     </v-card-subtitle>
     <v-card-text v-if="detail.summary" class="flex-grow-1" :class="textColor">
@@ -58,7 +57,7 @@ export default defineComponent({
     const { backgroundImage, detail, formatOutput } = useCard(props);
 
     const textColor = computed(() =>
-      getContrastYIQ(detail.value.color) < 128 ? 'white--text' : undefined,
+      getContrastYIQ(detail.value.color) < 128 ? 'text-white' : undefined,
     );
 
     /* const colorMap = computed(() => [

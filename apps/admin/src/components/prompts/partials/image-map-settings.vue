@@ -1,9 +1,7 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
-      <v-icon left>
-        $image-maps
-      </v-icon>
+  <v-card border>
+    <v-toolbar color="grey-lighten-4" flat>
+      <v-icon icon="$image-maps" start />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.imageMap._') }}
       </v-toolbar-title>
@@ -11,15 +9,15 @@
     <v-card-text>
       <v-switch
         hide-details="auto"
-        :input-value="imageMap.labels"
         :label="$t('survey-schemes.prompts.imageMap.labels')"
-        @change="update('labels', $event)"
+        :model-value="imageMap.labels"
+        @update:model-value="update('labels', $event)"
       />
       <v-switch
         hide-details="auto"
-        :input-value="imageMap.pinchZoom"
         :label="$t('survey-schemes.prompts.imageMap.pinchZoom')"
-        @change="update('pinchZoom', $event)"
+        :model-value="imageMap.pinchZoom"
+        @update:model-value="update('pinchZoom', $event)"
       />
     </v-card-text>
   </v-card>

@@ -10,68 +10,69 @@ import { useI18n } from '@intake24/i18n';
 import { opToIconMap } from './op-icon-map';
 
 export function useSelects() {
-  const { i18n } = useI18n();
+  const { i18n: { messages, locale, t } } = useI18n();
 
   const actions = actionTypeRefs.map(value => ({
     value,
-    text: i18n.t(`survey-schemes.actions.types.${value}`).toString(),
+    title: t(`survey-schemes.actions.types.${value}`),
   }));
 
   const actionVariants = actionVariantRefs.map(value => ({
     value,
-    text: i18n.t(`survey-schemes.actions.variants.${value}`).toString(),
+    title: t(`survey-schemes.actions.variants.${value}`),
   }));
 
   const colors = Object.entries(themeColors).map(([key, color]) => ({
     value: key,
-    text: key.toUpperCase(),
+    title: key.toUpperCase(),
     color,
   }));
 
-  const conditionOps: { icon: string; op: ConditionOpCode; text: string }[] = conditionOpCodes.map(op => ({
+  const conditionOps: { icon: string; op: ConditionOpCode; title: string }[] = conditionOpCodes.map(op => ({
     icon: opToIconMap[op],
     op,
-    text: i18n.t(`survey-schemes.conditions.ops.${op}`).toString(),
+    title: t(`survey-schemes.conditions.ops.${op}`),
   }));
 
   const flags = orderBy(
-    Object.entries(i18n.messages[i18n.locale].flags).map(([key, value]) => ({
+    // @ts-expect-error - i18n messages
+    Object.entries(messages.value[locale.value].flags).map(([key, value]) => ({
       value: key,
-      text: value,
+      title: value,
     })),
-    'text',
+    'title',
   );
 
   const layouts = promptLayouts.map(value => ({
     value,
-    text: i18n.t(`survey-schemes.actions.layouts.${value}`).toString(),
+    title: t(`survey-schemes.actions.layouts.${value}`),
   }));
 
   const orientations = ['column', 'row'].map(value => ({
-    text: i18n.t(`survey-schemes.prompts.orientation.${value}`),
+    title: t(`survey-schemes.prompts.orientation.${value}`),
     value,
   }));
 
   const textDirections = textDirectionRefs.map(value => ({
     value,
-    text: i18n.t(`languages.textDirections.${value}`).toString(),
+    title: t(`languages.textDirections.${value}`),
     icon: value === 'ltr' ? 'fas fa-right-long' : 'fas fa-left-long',
   }));
 
   const visibilities = recordVisibilities.map(value => ({
     value,
-    text: i18n.t(`securables.visibility.${value}`).toString(),
+    title: t(`securables.visibility.${value}`),
     icon: value === 'restricted' ? 'fas fa-eye-slash' : 'fas fa-eye',
   }));
 
   const schemeTypes = schemeTypeRefs.map(value => ({
     value,
-    text: i18n.t(`survey-schemes.settings.types.${value}`),
+    title: t(`survey-schemes.settings.types.${value}`),
   }));
 
   const recallFlows = recallFlowRefs.map(value => ({
     value,
-    text: i18n.t(`survey-schemes.settings.flows.${value}`),
+    title: t(`survey-schemes.settings.flows.${value}`),
   }));
 
   return {

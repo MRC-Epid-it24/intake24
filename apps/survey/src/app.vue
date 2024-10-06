@@ -1,165 +1,147 @@
 <template>
-  <v-app :class="{ mobile: isMobile }">
+  <v-app :class="{ mobile: $vuetify.display.mobile }">
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-model="sidebar" app :height="windowInnerHeight">
+    <v-navigation-drawer v-model="sidebar">
       <template v-if="loggedIn && surveyId">
         <v-list>
           <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
-            <v-list-item-avatar>
-              <v-icon color="info" large>
-                fas fa-circle-user
-              </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium text-h6">
-                {{ userName ?? $t('profile._') }}
-              </v-list-item-title>
-            </v-list-item-content>
+            <template #prepend>
+              <v-icon color="info" icon="fas fa-circle-user" size="30" />
+            </template>
+            <v-list-item-title class="font-weight-medium text-h6">
+              {{ userName ?? $t('profile._') }}
+            </v-list-item-title>
           </v-list-item>
         </v-list>
         <v-divider />
       </template>
-      <v-list dense nav>
-        <v-list-item-group>
-          <v-list-item
-            link
-            :to="
-              loggedIn && surveyId
-                ? { name: 'survey-home', params: { surveyId } }
-                : { name: 'home' }
-            "
-          >
-            <v-list-item-action>
-              <v-icon>$home</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ $t('common.home') }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <template v-if="loggedIn && surveyId">
-            <v-list-item
-              v-if="recallAllowed"
-              link
-              :to="{ name: 'survey-recall', params: { surveyId } }"
-            >
-              <v-list-item-action>
-                <v-icon>$survey</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t('recall._') }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              v-if="feedbackAllowed"
-              link
-              :to="{ name: 'feedback-home', params: { surveyId } }"
-            >
-              <v-list-item-action>
-                <v-icon>$feedback</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+      <v-list density="compact" nav>
+        <v-list-item
+          link
+          :to="
+            loggedIn && surveyId
+              ? { name: 'survey-home', params: { surveyId } }
+              : { name: 'home' }
+          "
+        >
+          <template #prepend>
+            <v-icon icon="$home" />
           </template>
-        </v-list-item-group>
+          <v-list-item-title>{{ $t('common.home') }}</v-list-item-title>
+        </v-list-item>
+        <template v-if="loggedIn && surveyId">
+          <v-list-item
+            v-if="recallAllowed"
+            link
+            :to="{ name: 'survey-recall', params: { surveyId } }"
+          >
+            <template #prepend>
+              <v-icon icon="$survey" />
+            </template>
+            <v-list-item-title>{{ $t('recall._') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-if="feedbackAllowed"
+            link
+            :to="{ name: 'feedback-home', params: { surveyId } }"
+          >
+            <template #prepend>
+              <v-icon icon="$feedback" />
+            </template>
+            <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
+          </v-list-item>
+        </template>
       </v-list>
       <template #append>
         <div v-if="loggedIn" class="pa-2">
           <confirm-dialog
-            :label="$t('common.logout._').toString()"
+            :label="$t('common.logout._')"
             @confirm="logout"
           >
-            <template #activator="{ attrs, on }">
-              <v-btn v-bind="attrs" block color="grey darken-2" rounded text v-on="on">
-                <v-icon left>
-                  $logout
-                </v-icon>
-                <span class="mr-2">{{ $t('common.logout._') }}</span>
+            <template #activator="{ props }">
+              <v-btn v-bind="props" block color="grey-darken-2" rounded variant="tonal">
+                <v-icon icon="$logout" start />
+                <span class="me-2">{{ $t('common.logout._') }}</span>
               </v-btn>
             </template>
             {{ $t('common.logout.text') }}
           </confirm-dialog>
         </div>
         <v-divider />
-        <v-list v-if="isMobile" class="py-0" dense>
+        <v-list v-if="$vuetify.display.mobile" class="py-0" density="compact">
           <v-list-group>
-            <template #activator>
-              <v-list-item-title>
+            <template #activator="{ props }">
+              <v-list-item v-bind="props">
                 {{ $t('common.legal._') }}
-              </v-list-item-title>
+              </v-list-item>
             </template>
             <v-list-item :href="legal.privacy" link target="_blank">
               <v-list-item-title>
                 {{ $t('common.legal.privacy') }}
               </v-list-item-title>
-              <v-list-item-action>
-                <v-icon small>
-                  $redirect
-                </v-icon>
-              </v-list-item-action>
+              <template #append>
+                <v-list-item-action>
+                  <v-icon icon="$redirect" size="x-small" />
+                </v-list-item-action>
+              </template>
             </v-list-item>
             <v-list-item :href="legal.terms" link target="_blank">
               <v-list-item-title>
                 {{ $t('common.legal.terms') }}
               </v-list-item-title>
-              <v-list-item-action>
-                <v-icon small>
-                  $redirect
-                </v-icon>
-              </v-list-item-action>
+              <template #append>
+                <v-list-item-action>
+                  <v-icon icon="$redirect" size="x-small" />
+                </v-list-item-action>
+              </template>
             </v-list-item>
           </v-list-group>
         </v-list>
         <div class="text--secondary text-caption px-4 py-2">
-          <v-icon left small>
-            fas fa-tag
-          </v-icon>
+          <v-icon icon="fas fa-tag" size="small" start />
           {{ appInfo.build.fullVersion }}
         </div>
       </template>
     </v-navigation-drawer>
-    <v-app-bar app color="primary" dark flat hide-on-scroll>
+    <v-app-bar color="primary" flat scroll-behavior="hide">
       <v-app-bar-nav-icon :title="$t('common.navigation')" @click.stop="toggleSidebar" />
       <template v-if="loggedIn">
         <div v-if="surveyName" class="app-bar-survey-info">
-          <i18n path="recall.survey" tag="span">
+          <i18n-t keypath="recall.survey" tag="span">
             <template #name>
               <span class="font-weight-medium">{{ surveyName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template v-if="recallAllowed">
-            <v-divider v-if="$vuetify.breakpoint.smAndUp" class="grey mx-4" vertical />
-            <i18n path="recall.submissions.count" tag="span">
+            <v-divider v-if="$vuetify.display.smAndUp" class="bg-grey mx-4" vertical />
+            <i18n-t keypath="recall.submissions.count" tag="span">
               <template #count>
                 <span class="font-weight-medium">{{ recallNumber }}</span>
               </template>
-            </i18n>
+            </i18n-t>
           </template>
         </div>
-        <v-spacer v-if="$vuetify.breakpoint.smAndUp" />
+        <v-spacer v-if="$vuetify.display.smAndUp" />
         <v-btn
           v-if="surveyId"
-          :icon="isMobile"
-          :large="isMobile"
-          :text="!isMobile"
+          :icon="$vuetify.display.mobile"
+          :size="$vuetify.display.mobile ? 'large' : undefined"
           :title="$t('profile._')"
           :to="{ name: 'survey-profile', params: { surveyId } }"
+          :variant="!$vuetify.display.mobile ? 'text' : undefined"
         >
-          <span v-if="!isMobile" class="mr-2">{{ $t('profile._') }}</span>
+          <span v-if="!$vuetify.display.mobile" class="me-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
         <confirm-dialog
-          v-if="!isMobile"
-          :label="$t('common.logout._').toString()"
+          v-if="!$vuetify.display.mobile"
+          :label="$t('common.logout._')"
           @confirm="logout"
         >
-          <template #activator="{ attrs, on }">
-            <v-btn text v-bind="attrs" v-on="on">
-              <span v-if="!isMobile" class="mr-2">{{ $t('common.logout._') }}</span>
-              <v-icon right>
-                $logout
-              </v-icon>
+          <template #activator="{ props }">
+            <v-btn variant="text" v-bind="props">
+              <span v-if="!$vuetify.display.mobile" class="me-2">{{ $t('common.logout._') }}</span>
+              <v-icon end icon="$logout" />
             </v-btn>
           </template>
           {{ $t('common.logout.text') }}
@@ -178,11 +160,11 @@
     />
     <service-worker />
     <message-box />
-    <v-footer v-if="!isMobile" class="justify-center pa-4" color="white">
+    <v-footer v-if="!$vuetify.display.mobile" class="justify-center pa-4 flex-grow-0">
       <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-2">
-        <i18n path="common.legal.copyright">
+        <i18n-t keypath="common.legal.copyright" tag="span">
           <template #name>
-            <a class="text-decoration-none" :href="legal.home" target="_blank">
+            <a class="text-decoration-none text-primary" :href="legal.home" target="_blank">
               {{ $t('common._') }}
             </a>
           </template>
@@ -192,13 +174,13 @@
           <template #year>
             {{ new Date().getFullYear() }}
           </template>
-        </i18n>
+        </i18n-t>
         <span class="d-none d-md-flex mx-2">|</span>
-        <a class="text-decoration-none" :href="legal.privacy" target="_blank">
+        <a class="text-decoration-none text-primary" :href="legal.privacy" target="_blank">
           {{ $t('common.legal.privacy') }}
         </a>
         <span class="d-none d-md-flex mx-2">|</span>
-        <a class="text-decoration-none" :href="legal.terms" target="_blank">
+        <a class="text-decoration-none text-primary" :href="legal.terms" target="_blank">
           {{ $t('common.legal.terms') }}
         </a>
       </div>
@@ -210,11 +192,11 @@
 import type { TranslateResult } from 'vue-i18n';
 import { mapState } from 'pinia';
 import { computed, defineComponent, ref } from 'vue';
+import { useLocale } from 'vuetify';
 
 import { Navigation } from '@intake24/survey/components/layouts';
 import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 
-import { vuetify } from './plugins';
 import { useHttp } from './services';
 import { useApp, useAuth, useSurvey } from './stores';
 
@@ -225,7 +207,8 @@ export default defineComponent({
 
   setup() {
     const http = useHttp();
-    useLanguage('survey', http, vuetify.framework);
+    const vI18n = useLocale();
+    useLanguage('survey', http, vI18n);
 
     const appInfo = computed(() => useApp().app);
     const sidebar = ref(false);

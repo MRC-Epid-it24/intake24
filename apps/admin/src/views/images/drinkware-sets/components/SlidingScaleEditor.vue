@@ -28,14 +28,14 @@
       </v-card>
       <v-card v-if="scale.version === 2" flat>
         <v-card-subtitle class="pa-0">
-          <v-alert class="pa-2" color="#ddd" dense icon="fas fa-info-circle">
+          <v-alert class="pa-2" color="#ddd" density="compact" icon="fas fa-info-circle">
             <span v-html="$t('drinkware-sets.slidingScale.editInstructions')" />
           </v-alert>
         </v-card-subtitle>
         <v-switch
           v-if="overlayImageUrl"
           v-model="showOverlayImage"
-          dense
+          density="compact"
           :label="$t('drinkware-sets.slidingScale.fillableAreaToggle')"
         />
         <v-card-actions class="wrap-actions">
@@ -46,26 +46,24 @@
           </v-btn>
           <v-spacer />
           <v-dialog v-model="clearScaleDialog" width="500px">
-            <template #activator="{ on, attrs }">
+            <template #activator="{ props }">
               <v-btn
-                v-bind="attrs"
                 color="error"
                 :disabled="outlineCoordinates.length === 0"
-                v-on="on"
+                v-bind="props"
               >
                 <v-icon class="mr-2">
                   fas fa-x
                 </v-icon>{{ $t('drinkware-sets.slidingScale.deleteAll') }}
               </v-btn>
             </template>
-
             <template #default>
               <v-card>
                 <v-card-title class="h2 justify-center">
                   {{ $t('drinkware-sets.clearScaleDialog.title') }}
                 </v-card-title>
                 <v-card-text class="px-6 py-4 d-flex justify-center">
-                  <div class="subtitle-1">
+                  <div class="text-subtitle-1">
                     {{ $t('drinkware-sets.clearScaleDialog.msg') }}
                   </div>
                 </v-card-text>
@@ -74,8 +72,7 @@
                     block
                     class="mb-2"
                     color="warning"
-                    dark
-                    large
+                    size="large"
                     :title="$t('common.action.delete')"
                     @click="clearScale()"
                   >
@@ -84,9 +81,9 @@
                   <v-btn
                     block
                     color="warning"
-                    large
-                    outlined
+                    size="large"
                     :title="$t('common.action.cancel')"
+                    variant="outlined"
                     @click="clearScaleDialog = false"
                   >
                     {{ $t('common.action.cancel') }}
@@ -140,18 +137,18 @@
 
     <v-expansion-panels v-if="scale.version === 2" flat>
       <v-expansion-panel>
-        <v-expansion-panel-header>
+        <v-expansion-panel-title>
           {{ $t('drinkware-sets.slidingScale.replaceBaseImage') }}
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <v-file-input
             v-model="newBaseImageFile"
             hide-details="auto"
             :label="$t('image-maps.baseImage')"
             name="baseImage"
-            outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
+            variant="outlined"
           />
           <v-btn class="mt-4" :disabled="!newBaseImageFile" @click="replaceBaseImage">
             <v-icon class="mr-2">
@@ -159,18 +156,18 @@
             </v-icon>
             {{ $t('drinkware-sets.slidingScale.replaceButtonLabel') }}
           </v-btn>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
   </v-card>
 </template>
 
 <script lang="ts">
-import type { VImg } from 'vuetify/lib';
+import type { VImg } from 'vuetify/components';
 import { useElementSize } from '@vueuse/core';
 import { flatten, uniqueId } from 'lodash';
 import chunk from 'lodash/chunk';
-import Vue, { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue';
+import { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue';
 
 import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
@@ -253,7 +250,7 @@ export default defineComponent({
 
       overlayImageUrl.value = v1.overlayImageUrl;
 
-      Vue.set(entry.scales, scaleIndex.value, {
+      entry.scales.splice(scaleIndex.value, 1, {
         version: 2,
         choiceId: v1.choiceId,
         label: v1.label,
@@ -305,7 +302,7 @@ export default defineComponent({
 
     const onScaleMouseMove = (e: MouseEvent) => {
       if (dragging) {
-        Vue.set(outlineCoordinates.value, selectedVertexIndex.value, [
+        outlineCoordinates.value.splice(selectedVertexIndex.value, 1, [
           e.offsetX / width.value,
           e.offsetY / height.value,
         ]);

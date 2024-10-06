@@ -7,7 +7,7 @@ export * from './quagga';
 export * from './strich';
 
 export const barcodes = {
-  none: NoneInput,
-  quagga: QuaggaInput,
-  strich: StrichInput,
+  NoneInput,
+  QuaggaInput,
+  StrichInput,
 };

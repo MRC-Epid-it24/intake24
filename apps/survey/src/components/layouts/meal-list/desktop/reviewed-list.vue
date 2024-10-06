@@ -5,22 +5,18 @@
     </v-card-title>
     <v-divider />
     <v-card-actions>
-      <v-hover v-slot="{ hover }">
-        <v-btn
-          class="ma-2"
-          :color="hover ? 'primary' : 'inherit'"
-          depressed
-          :title="$t('recall.menu.meal.add')"
-          @click="action('addMeal')"
-        >
-          <v-icon left>
-            $add
-          </v-icon>
-          {{ $t('recall.menu.meal.add') }}
-        </v-btn>
-      </v-hover>
+      <v-btn
+        class="px-4"
+        color="primary"
+        :title="$t('recall.menu.meal.add')"
+        variant="tonal"
+        @click="action('addMeal')"
+      >
+        <v-icon icon="$add" start />
+        {{ $t('recall.menu.meal.add') }}
+      </v-btn>
     </v-card-actions>
-    <v-list class="meal-list__list pt-0" dense flat tile>
+    <v-list class="meal-list__list pt-0" density="compact" tile>
       <div v-for="meal in meals" :key="meal.id">
         <component
           :is="expandable ? 'meal-item-expandable' : 'meal-item'"
@@ -29,7 +25,6 @@
           @action="action"
         />
         <div class="d-flex flex-row pa-4 ga-4">
-          <!-- @vue-expect-error vuetify2 uses both model/value -->
           <v-checkbox
             v-if="review === 'checkbox'"
             v-model="reviewed"
@@ -38,17 +33,15 @@
             :label="$t('recall.actions.reviewed')"
             :value="meal.id"
           />
-          <v-hover v-slot="{ hover }">
-            <v-btn
-              :color="hover ? 'primary' : 'inherit'"
-              depressed
-              small
-              :title="$t('recall.menu.meal.editFoods')"
-              @click="action('editMeal', meal.id)"
-            >
-              {{ $t('recall.menu.meal.editFoods') }}
-            </v-btn>
-          </v-hover>
+          <v-btn
+            color="primary"
+            size="small"
+            :title="$t('recall.menu.meal.editFoods')"
+            variant="tonal"
+            @click="action('editMeal', meal.id)"
+          >
+            {{ $t('recall.menu.meal.editFoods') }}
+          </v-btn>
         </div>
       </div>
     </v-list>
@@ -61,15 +54,15 @@
       />
     </v-card-text>
     <v-card-actions v-if="!bottomReached" v-intersect="bottomIntersect">
-      <v-hover v-slot="{ hover }">
+      <v-hover v-slot="{ isHovering }">
         <v-btn
           block
-          :color="hover ? 'primary' : 'inherit'"
-          depressed
+          :color="isHovering ? 'primary' : 'inherit'"
           :title="$t('recall.menu.meal.add')"
+          variant="flat"
           @click="action('addMeal')"
         >
-          <v-icon left>
+          <v-icon start>
             $add
           </v-icon>
           {{ $t('recall.menu.meal.add') }}

@@ -1,47 +1,39 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
       <v-btn
         class="font-weight-bold"
         color="secondary"
-        outlined
-        v-bind="attrs"
-        v-on="on"
+        variant="outlined"
+
+        v-bind="props"
         @click.stop="add"
       >
-        <v-icon left>
-          fas fa-user-plus
-        </v-icon>{{ $t('securables.add') }}
+        <v-icon icon="fas fa-user-plus" start />{{ $t('securables.add') }}
       </v-btn>
     </template>
-    <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :loading="isLoading" :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`securables.${isEdit ? 'edit' : 'add'}`) }}
         </v-toolbar-title>
         <template v-if="!isEdit" #extension>
           <v-tabs v-model="tab" grow>
             <v-tab key="search">
-              <v-icon left>
-                $search
-              </v-icon>
+              <v-icon icon="$search" start />
               {{ $t('securables.search') }}
             </v-tab>
             <v-tab key="create">
-              <v-icon left>
-                fas fa-user-plus
-              </v-icon>
+              <v-icon icon="fas fa-user-plus" start />
               {{ $t('securables.create') }}
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
-      <v-form @keydown.native="clearError" @submit.prevent="save">
-        <v-tabs-items v-model="tab">
-          <v-tab-item key="search">
+      <v-form @keydown="clearError" @submit.prevent="save">
+        <v-tabs-window v-model="tab">
+          <v-tabs-window-item key="search">
             <v-card-text>
               <v-row>
                 <v-col cols="12">
@@ -51,10 +43,10 @@
                       :error-messages="form.errors.get('userId')"
                       hide-details="auto"
                       :label="$t('common.email')"
+                      :model-value="`${selected.email} / ${selected.name}`"
                       name="userId"
-                      outlined
                       prepend-inner-icon="fas fa-user"
-                      :value="`${selected.email} / ${selected.name}`"
+                      variant="outlined"
                     />
                   </template>
                   <template v-else>
@@ -65,19 +57,19 @@
                       :error-messages="form.errors.get('userId')"
                       hide-no-data
                       hide-selected
-                      item-text="email"
+                      item-title="email"
                       item-value="id"
-                      :label="$t('common.email').toString()"
+                      :label="$t('common.email')"
                       name="userId"
                       prepend-inner-icon="fas fa-users"
-                      @input="form.errors.clear('userId')"
+                      @update:model-value="form.errors.clear('userId')"
                     />
                   </template>
                 </v-col>
               </v-row>
             </v-card-text>
-          </v-tab-item>
-          <v-tab-item key="create">
+          </v-tabs-window-item>
+          <v-tabs-window-item key="create">
             <v-card flat>
               <v-card-text>
                 <v-row>
@@ -88,8 +80,8 @@
                       hide-details="auto"
                       :label="$t('common.email')"
                       name="email"
-                      outlined
                       prepend-inner-icon="fas fa-at"
+                      variant="outlined"
                     />
                   </v-col>
                   <v-col cols="12">
@@ -99,8 +91,8 @@
                       hide-details="auto"
                       :label="$t('users.name')"
                       name="name"
-                      outlined
                       prepend-inner-icon="fas fa-user"
+                      variant="outlined"
                     />
                   </v-col>
                   <v-col cols="12">
@@ -110,50 +102,46 @@
                       hide-details="auto"
                       :label="$t('common.phone')"
                       name="phone"
-                      outlined
                       prepend-inner-icon="fas fa-phone"
+                      variant="outlined"
                     />
                   </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
-          </v-tab-item>
-        </v-tabs-items>
+          </v-tabs-window-item>
+        </v-tabs-window>
+        <v-card-title>{{ $t('securables.actions.title') }}</v-card-title>
         <v-card-text>
-          <v-card-title>{{ $t('securables.actions.title') }}</v-card-title>
-          <v-row no-gutters>
+          <v-row dense>
             <v-col v-for="action in actions" :key="action" cols="12" sm="6">
-              <v-checkbox
+              <v-checkbox-btn
                 v-model="form.actions"
-                dense
+                hide-details="auto"
                 :label="$t(`securables.actions.${action}`)"
                 :prepend-inner-icon="
                   form.actions.includes(action) ? `fas fa-unlock` : `fas fa-lock`
                 "
                 :value="action"
-                @change="form.errors.clear('actions')"
+                @update:model-value="form.errors.clear('actions')"
               />
             </v-col>
           </v-row>
           <error-list :errors="nonInputErrors" />
         </v-card-text>
         <v-card-actions>
-          <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-            <v-icon left>
-              $cancel
-            </v-icon>{{ $t('common.action.cancel') }}
+          <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+            <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
           </v-btn>
           <v-spacer />
           <v-btn
             class="font-weight-bold"
             color="info"
             :disabled="form.errors.any()"
-            text
             type="submit"
+            variant="text"
           >
-            <v-icon left>
-              $save
-            </v-icon>{{ $t('common.action.save') }}
+            <v-icon icon="$save" start />{{ $t('common.action.save') }}
           </v-btn>
         </v-card-actions>
       </v-form>

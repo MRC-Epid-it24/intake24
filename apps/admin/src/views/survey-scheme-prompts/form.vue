@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -12,7 +12,7 @@
                 :label="$t('survey-schemes.prompts.internal.id._')"
                 :messages="$t('survey-schemes.prompts.internal.id.hint')"
                 name="id"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -23,14 +23,12 @@
                 :label="$t('survey-schemes.prompts.internal.name._')"
                 :messages="$t('survey-schemes.prompts.internal.name.hint')"
                 name="name"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col align="center">
-              <v-btn class="pa-6" color="secondary" outlined x-large @click="edit">
-                <v-icon left>
-                  $edit
-                </v-icon>{{ $t('survey-scheme-prompts.editTemplate') }}
+              <v-btn class="pa-6" color="secondary" size="x-large" variant="outlined" @click="edit">
+                <v-icon icon="$edit" start />{{ $t('survey-scheme-prompts.editTemplate') }}
               </v-btn>
             </v-col>
           </v-row>

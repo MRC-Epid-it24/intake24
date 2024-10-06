@@ -1,53 +1,43 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 d-flex">
-      <v-card flat outlined width="100%">
-        <v-list class="px-4" color="grey lighten-4">
-          <v-subheader>{{ translate(sabFood.food.data.localName) }}</v-subheader>
+      <v-card border flat width="100%">
+        <v-list class="px-4" color="grey-lighten-4">
+          <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
           <v-divider />
-          <v-list-item class="pl-0" dense>
-            <v-list-item-avatar class="my-auto mr-2">
+          <v-list-item class="ps-0" density="compact">
+            <template #prepend>
               <v-icon>fas fa-caret-right</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ promptI18n.serving }}</v-list-item-title>
-            </v-list-item-content>
+            </template>
+            <v-list-item-title>{{ promptI18n.serving }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="showLeftovers" class="pl-0" dense>
-            <v-list-item-avatar class="my-auto mr-2">
+          <v-list-item v-if="showLeftovers" class="ps-0" density="compact">
+            <template #prepend>
               <v-icon>fas fa-caret-right</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
-            </v-list-item-content>
+            </template>
+            <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="!linkedFoods.length" class="pl-0" dense>
-            <v-list-item-avatar class="my-auto mr-2">
+          <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
+            <template #prepend>
               <v-icon>fas fa-caret-right</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
-            </v-list-item-content>
+            </template>
+            <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="count > 1" class="pl-0" dense>
-            <v-list-item-avatar class="my-auto mr-2">
+          <v-list-item v-if="count > 1" class="ps-0" density="compact">
+            <template #prepend>
               <v-icon>fas fa-caret-right</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ promptI18n.count }}</v-list-item-title>
-            </v-list-item-content>
+            </template>
+            <v-list-item-title>{{ promptI18n.count }}</v-list-item-title>
           </v-list-item>
         </v-list>
-        <v-list v-if="linkedFoods.length" class="px-4" color="grey lighten-4">
-          <v-subheader>{{ promptI18n.hadWith }}</v-subheader>
+        <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
+          <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
-          <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="pl-0" dense>
-            <v-list-item-avatar class="my-auto mr-2">
+          <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
+            <template #prepend>
               <v-icon>fas fa-caret-right</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ linkedFood.text }}</v-list-item-title>
-            </v-list-item-content>
+            </template>
+            <v-list-item-title>{{ linkedFood.text }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-card>
@@ -56,12 +46,12 @@
       <v-btn
         class="px-4"
         color="primary"
-        large
-        text
+        size="large"
         :title="promptI18n.notSame"
+        variant="text"
         @click.stop="action('notSame')"
       >
-        <v-icon left>
+        <v-icon start>
           $no
         </v-icon>
         {{ promptI18n.notSame }}
@@ -69,19 +59,19 @@
       <v-btn
         class="px-4"
         color="primary"
-        large
-        text
+        size="large"
         :title="promptI18n.same"
+        variant="text"
         @click.stop="action('same')"
       >
-        <v-icon left>
+        <v-icon start>
           $yes
         </v-icon>
         {{ promptI18n.same }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn color="primary" text :title="$t('common.action.no')" @click.stop="action('notSame')">
+      <v-btn color="primary" :title="$t('common.action.no')" variant="text" @click.stop="action('notSame')">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
@@ -90,7 +80,7 @@
         </v-icon>
       </v-btn>
       <v-divider vertical />
-      <v-btn color="primary" text title="$t('common.action.yes')" @click.stop="action('same')">
+      <v-btn color="primary" title="$t('common.action.yes')" variant="text" @click.stop="action('same')">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>
@@ -128,7 +118,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { translate, i18n } = useI18n();
+    const { i18n: { t }, translate } = useI18n();
     const { action, translatePrompt, type } = usePromptUtils(props, ctx);
     const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
     const survey = useSurvey();
@@ -195,23 +185,23 @@ export default defineComponent({
     );
 
     const count = computed(() => foodCount(props.sabFood.food));
-    const servingCount = computed(() => i18n.t(`prompts.${type.value}.count`, { count: foodCount(props.sabFood.food) }));
+    const servingCount = computed(() => t(`prompts.${type.value}.count`, { count: foodCount(props.sabFood.food) }));
 
     const serving = computed(() => {
       const amount = foodAmount(props.sabFood.food);
       const unit = foodUnit(props.sabFood.food);
 
-      return i18n.t(`prompts.${type.value}.serving`, { amount: `${amount} ${unit}` });
+      return t(`prompts.${type.value}.serving`, { amount: `${amount} ${unit}` });
     });
 
     const leftovers = computed(() => {
       const { leftoversWeight, servingWeight } = props.sabFood.food.portionSize ?? {};
       if (!servingWeight || !leftoversWeight)
-        return i18n.t(`prompts.${type.value}.noLeftovers.${isDrink.value ? 'drink' : 'food'}`);
+        return t(`prompts.${type.value}.noLeftovers.${isDrink.value ? 'drink' : 'food'}`);
 
       const leftoversPercentage = Math.round(leftoversWeight / (servingWeight / 100));
 
-      return i18n.t(`prompts.${type.value}.leftovers`, { amount: `${leftoversPercentage}%` });
+      return t(`prompts.${type.value}.leftovers`, { amount: `${leftoversPercentage}%` });
     });
 
     const leftoversEnabled = computed(() => {

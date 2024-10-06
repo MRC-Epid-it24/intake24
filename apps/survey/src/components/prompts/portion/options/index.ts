@@ -12,6 +12,7 @@ export default {
   'milk-in-a-hot-drink': PortionOptions,
   'parent-food-portion': PortionOptions,
   pizza: PortionImage,
+  pizzaV2: PortionImage,
   'standard-portion': StandardUnits,
   weight: PortionImage,
 };

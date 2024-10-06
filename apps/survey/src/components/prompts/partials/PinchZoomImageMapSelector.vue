@@ -1,7 +1,7 @@
 <template>
   <v-bottom-sheet v-model="dialog" persistent>
-    <template #activator="{ on, attrs }">
-      <slot name="activator" v-bind="{ on, attrs }" />
+    <template #activator="{ props }">
+      <slot name="activator" v-bind="{ props }" />
     </template>
     <v-sheet class="text-center pa-3">
       <v-row dense no-gutter>
@@ -16,7 +16,7 @@
           >
             <div v-if="label" class="label">
               <v-chip
-                class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
+                class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold text-secondary border-secondary-1"
               >
                 {{ label }}
               </v-chip>
@@ -36,12 +36,12 @@
           </pinch-scroll-zoom>
         </v-col>
         <v-col cols="12">
-          <v-btn :block="isMobile" color="primary" @click="confirm">
+          <v-btn :block="$vuetify.display.mobile" color="primary" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn :block="isMobile" color="primary" text @click="resetScale">
+          <v-btn :block="$vuetify.display.mobile" color="primary" variant="text" @click="resetScale">
             {{ $t('common.action.reset') }}
           </v-btn>
         </v-col>
@@ -58,11 +58,6 @@ import { defineComponent, ref, toRef } from 'vue';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 
 import { useImageMap } from './use-image-map';
-
-export type ImageMapObject = {
-  id: string;
-  polygon: string;
-};
 
 export default defineComponent({
   name: 'PinchZoomImageMapSelector',

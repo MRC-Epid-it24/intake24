@@ -8,25 +8,21 @@
           align="baseline"
           class="pa-0"
         >
-          <v-alert class="flex-grow-1 pa-0 ml-1" dense icon="$food">
+          <v-alert class="flex-grow-1 pa-0 ms-1" density="compact" icon="$food">
             {{ step.foods[foodIndex].name }}
             <template #prepend>
-              <v-icon left>
-                $food
-              </v-icon>
+              <v-icon icon="$food" start />
             </template>
             <template #append>
               <v-btn
                 class="btn-truncate"
-                color="primary lighten-1"
-                depressed
+                color="primary"
                 title="Change/Delete"
+                variant="flat"
                 @click="remove(index, foodIndex)"
               >
-                <v-icon left>
-                  $delete
-                </v-icon>
-                {{ $t(`prompts.${type}.remove`).toString() }}
+                <v-icon icon="$delete" start />
+                {{ $t(`prompts.${type}.remove`) }}
               </v-btn>
               <slot />
             </template>
@@ -43,7 +39,6 @@ import { computed, defineComponent } from 'vue';
 
 import type { Prompt, RecipeBuilderStepState } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
 import { promptType } from '@intake24/ui';
 
 export default defineComponent({
@@ -74,14 +69,13 @@ export default defineComponent({
   emits: ['action', 'remove'],
 
   setup(props, { emit }) {
-    const { translate } = useI18n();
     const type = computed(() => promptType(props.prompt.component));
 
     const remove = (index: number, foodIndex: number) => {
       emit('remove', { index, foodIndex });
     };
 
-    return { remove, type, translate };
+    return { remove, type };
   },
 });
 </script>

@@ -2,11 +2,9 @@
   <v-btn
     color="primary"
     :title="$t(`${module}.create`)"
-    :to="{ name: `${route}-create`, params: { id: 'create' } }"
+    :to="{ name: `${route}-create` }"
   >
-    <v-icon left>
-      {{ icon }}
-    </v-icon>
+    <v-icon :icon="icon" start />
     {{ $t(`${module}.create`) }}
   </v-btn>
 </template>

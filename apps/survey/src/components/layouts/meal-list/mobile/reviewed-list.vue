@@ -1,13 +1,13 @@
 <template>
   <div content-class="meal-list-mobile__sheet" scrollable>
     <v-card class="meal-list-mobile__card" flat>
-      <div class="py-4 pl-4 pr-3 d-flex flex-row justify-space-between align-center">
+      <div class="py-4 ps-4 pe-3 d-flex flex-row justify-space-between align-center">
         <div class="text-h6 font-weight-medium">
           {{ $t('recall.menu.title') }}
         </div>
       </div>
       <v-card-text class="pa-0">
-        <v-list class="meal-list__list" dense subheader>
+        <v-list class="meal-list__list" density="compact">
           <div v-for="meal in meals" :key="meal.id">
             <meal-item
               v-bind="{ contextId, meal, selectedMealId, selectedFoodId }"
@@ -16,7 +16,6 @@
               @update:context-id="updateContextId"
             />
             <div class="d-flex flex-column pa-4 ga-4">
-              <!-- @vue-expect-error vuetify2 uses both model/value -->
               <v-checkbox
                 v-if="review === 'checkbox'"
                 v-model="reviewed"
@@ -25,12 +24,12 @@
                 :label="$t('recall.actions.reviewed')"
                 :value="meal.id"
               />
-              <v-hover v-slot="{ hover }">
+              <v-hover v-slot="{ isHovering }">
                 <v-btn
-                  :color="hover ? 'primary' : 'inherit'"
-                  depressed
-                  small
+                  :color="isHovering ? 'primary' : 'inherit'"
+                  size="small"
                   :title="$t('recall.menu.meal.editFoods')"
+                  variant="flat"
                   @click="action('editMeal', meal.id)"
                 >
                   {{ $t('recall.menu.meal.editFoods') }}

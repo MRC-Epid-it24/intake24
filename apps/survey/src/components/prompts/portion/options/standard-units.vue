@@ -1,25 +1,24 @@
 <template>
   <v-sheet
     v-if="standardUnitsLoaded"
-    class="d-flex flex-column gr-1 px-3 py-2 standard-portion"
-    color="grey lighten-5"
+    class="d-flex flex-column gr-3 px-3 py-2 standard-portion"
+    color="grey-lighten-5"
   >
     <v-chip
       v-for="(unit, index) in standardUnits"
       :key="unit.name"
-      class="d-flex flex-grow-1 px-6"
-      color="ternary"
-      :input-value="index === selectedIndex"
-      pill
+      class="px-6 font-weight-medium"
+      color="primary"
+      :value="index === selectedIndex"
     >
-      <v-icon color="primary" left small>
+      <v-icon color="primary" size="small" start>
         {{ index !== selectedIndex ? 'far fa-circle' : 'far fa-circle-dot' }}
       </v-icon>
-      <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
+      <i18n-t keypath="prompts.standardPortion.estimateIn">
         <template #unit>
           {{ getStandardUnitEstimateIn(unit) }}
         </template>
-      </i18n>
+      </i18n-t>
     </v-chip>
   </v-sheet>
 </template>

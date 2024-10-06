@@ -1,68 +1,68 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel>
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.source`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.source`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="homemadeValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <yes-no-toggle v-model="homemadePrompt" class="mb-4" mandatory />
           <template v-if="homemadePrompt === true">
-            <i18n class="mb-4" :path="`prompts.${type}.homemade`" tag="div">
+            <i18n-t class="mb-4" :keypath="`prompts.${type}.homemade`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
-            </i18n>
-            <v-textarea v-model="info.description" outlined @input="update" />
+            </i18n-t>
+            <v-textarea v-model="info.description" variant="outlined" @update:model-value="update" />
           </template>
           <template v-if="homemadePrompt === false">
-            <i18n class="mb-4" :path="`prompts.${type}.purchased`" tag="div">
+            <i18n-t class="mb-4" :keypath="`prompts.${type}.purchased`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
-            </i18n>
-            <v-text-field v-model="info.brand" outlined @input="update" />
-            <i18n class="mb-4" :path="`prompts.${type}.barcode`" tag="div">
+            </i18n-t>
+            <v-text-field v-model="info.brand" variant="outlined" @update:model-value="update" />
+            <i18n-t class="mb-4" :keypath="`prompts.${type}.barcode`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
-            </i18n>
+            </i18n-t>
             <component
-              :is="prompt.barcode.type"
-              :model-value.sync="info.barcode"
+              :is="`${prompt.barcode.type}-input`"
+              v-model:model-value="info.barcode"
               :options="prompt.barcode"
               outlined
             />
           </template>
-          <v-btn :block="isMobile" color="primary" :disabled="!homemadeValid" @click="confirm">
+          <v-btn :block="$vuetify.display.mobile" color="primary" :disabled="!homemadeValid" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.portionSize`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.portionSize`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="!!info.portionSize" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-textarea v-model="info.portionSize" outlined @input="update" />
-          <v-btn :block="isMobile" color="primary" :disabled="!info.portionSize" @click="confirm">
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <v-textarea v-model="info.portionSize" variant="outlined" @update:model-value="update" />
+          <v-btn :block="$vuetify.display.mobile" color="primary" :disabled="!info.portionSize" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
@@ -92,16 +92,16 @@ export default defineComponent({
 
   mixins: [createBasePortion<'missing-food-prompt', MissingFood>()],
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
       ...copy({
-        ...this.value,
+        ...this.modelValue,
         homemadePrompt:
-          !this.value.info.description && !this.value.info.brand
+          !this.modelValue.info.description && !this.modelValue.info.brand
             ? undefined
-            : !!this.value.info.description,
+            : !!this.modelValue.info.description,
       }),
     };
   },
@@ -130,7 +130,7 @@ export default defineComponent({
         homemadePrompt: this.homemadePrompt,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

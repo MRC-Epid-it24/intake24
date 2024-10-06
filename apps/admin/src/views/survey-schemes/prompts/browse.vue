@@ -1,18 +1,18 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
-    <v-toolbar color="grey lighten-5" flat tile>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+    <v-toolbar color="grey-lighten-4" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.prompts.title`) }}
       </v-toolbar-title>
       <v-spacer />
       <options-menu>
-        <select-resource resource="survey-schemes" return-object="prompts" @input="load">
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+        <select-resource resource="survey-schemes" return-object="prompts" @update:model-value="load">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('survey-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -21,24 +21,30 @@
         <json-editor-dialog v-model="form.prompts" />
       </options-menu>
     </v-toolbar>
-    <prompt-list
-      v-for="(section, index) in promptSections"
-      :key="section"
-      v-bind="{
-        section,
-        step: index + 1,
-        promptIds,
-        templates,
-        items: isMealSection(section) ? form.prompts.meals[section] : form.prompts[section],
-      }"
-      @move="move"
-      @update:items="updateItems(section, $event)"
-    />
+    <v-expansion-panels
+      v-model="panels"
+      flat
+      multiple
+    >
+      <prompt-list
+        v-for="(section, index) in promptSections"
+        :key="section"
+        v-bind="{
+          section,
+          step: index + 1,
+          promptIds,
+          templates,
+          modelValue: isMealSection(section) ? form.prompts.meals[section] : form.prompts[section],
+        }"
+        @move="move"
+        @update:model-value="updateItems(section, $event)"
+      />
+    </v-expansion-panels>
   </layout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { PromptMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import type { SinglePrompt } from '@intake24/common/prompts';
@@ -82,6 +88,8 @@ export default defineComponent({
       loadCallback,
     });
 
+    const panels = ref([...promptSections]);
+
     return {
       promptSections,
       entry,
@@ -90,6 +98,7 @@ export default defineComponent({
       refsLoaded,
       clearError,
       form,
+      panels,
       routeLeave,
       submit,
     };

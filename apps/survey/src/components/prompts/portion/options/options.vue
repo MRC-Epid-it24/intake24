@@ -1,14 +1,14 @@
 <template>
-  <v-sheet class="d-flex flex-column gr-1 px-3 py-2 portion-options" color="grey lighten-5">
+  <v-sheet class="d-flex flex-column gr-1 px-3 py-2 portion-options" color="grey-lighten-5">
     <v-chip
       v-for="option in localeOptions"
       :key="option.value"
       class="d-flex flex-grow-1 px-6"
       color="ternary"
-      :input-value="selected !== undefined && option.value === localeOptions[selected].value"
+      :model-value="selected !== undefined && option.value === localeOptions[selected].value"
       pill
     >
-      <v-icon color="primary" left small>
+      <v-icon color="primary" size="small" start>
         {{
           selected === undefined || option.value !== localeOptions[selected].value
             ? 'far fa-circle'
@@ -61,7 +61,7 @@ export default defineComponent({
       }) as LocaleOptionList<ZodNumber>;
     });
     const localeOptions = computed(() =>
-      (options.value[i18n.locale] ?? options.value.en).slice(0, props.max),
+      (options.value[i18n.locale.value] ?? options.value.en).slice(0, props.max),
     );
 
     const selectNext = () => {

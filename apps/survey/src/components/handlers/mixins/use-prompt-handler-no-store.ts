@@ -1,7 +1,7 @@
 import type { ComputedRef, Ref, SetupContext } from 'vue';
 import { ref, watch } from 'vue';
 
-export function usePromptHandlerNoStore<T>({ emit }: SetupContext<any>, getInitialState: ComputedRef<T>, commitAnswer?: () => void) {
+export function usePromptHandlerNoStore<T>({ emit }: SetupContext<'action'[]>, getInitialState: ComputedRef<T>, commitAnswer?: () => void) {
   const state = ref(getInitialState.value) as Ref<T>;
 
   watch(getInitialState, (initialState) => {

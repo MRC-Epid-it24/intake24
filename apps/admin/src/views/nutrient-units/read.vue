@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('nutrient-units.id') }}</th>
@@ -15,7 +15,7 @@
           <td>{{ entry.symbol }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

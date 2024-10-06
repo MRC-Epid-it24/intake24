@@ -8,10 +8,10 @@
             hide-details="auto"
             :label="$t('prompts.quantity._')"
             name="quantity"
-            outlined
             prepend-inner-icon="fas fa-weight-scale"
             :rules="rules"
-            @input="update"
+            variant="outlined"
+            @update:model-value="update"
           />
         </v-col>
       </v-row>
@@ -56,7 +56,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props) {
     const validateInput = (value: any) => isNumber(value) && value > 0 && value < props.max;
@@ -66,7 +66,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...copy(this.value),
+      ...copy(this.modelValue),
     };
   },
 
@@ -97,7 +97,7 @@ export default defineComponent({
         portionSize: this.portionSize,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

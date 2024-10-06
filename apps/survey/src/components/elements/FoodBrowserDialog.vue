@@ -1,15 +1,13 @@
 <template>
   <v-dialog
     fullscreen
+    :model-value="modelValue"
     transition="dialog-bottom-transition"
-    :value="dialog"
-    @input="toggle($event)"
+    @update:model-value="toggle($event)"
   >
     <v-sheet class="food-browser-dialog-wrapper" color="secondary">
       <v-card-title class="flex-grow-0" dark>
-        <v-icon color="white" :title="$t('common.action.cancel')" @click="toggle(false)">
-          $cancel
-        </v-icon>
+        <v-icon color="white" icon="$cancel" :title="$t('common.action.cancel')" @click="toggle(false)" />
       </v-card-title>
       <v-card class="food-browser-dialog-content">
         <slot />
@@ -25,14 +23,16 @@ export default defineComponent({
   name: 'FoodBrowserDialog',
 
   props: {
-    dialog: {
+    modelValue: {
       type: Boolean,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
     const toggle = (value: boolean) => {
-      emit('update:dialog', value);
+      emit('update:modelValue', value);
     };
 
     return {

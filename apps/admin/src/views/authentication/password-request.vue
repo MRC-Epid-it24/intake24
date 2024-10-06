@@ -1,7 +1,7 @@
 <template>
   <app-entry-screen
-    :subtitle="$t('common.password.request.subtitle').toString()"
-    :title="$t('common.password.request._').toString()"
+    :subtitle="$t('common.password.request.subtitle')"
+    :title="$t('common.password.request._')"
   >
     <v-card-text v-if="submitted" class="pa-6">
       <p class="text-h5 ma-4">
@@ -11,7 +11,7 @@
         {{ $t('common.spam') }}
       </p>
     </v-card-text>
-    <v-form v-else @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
+    <v-form v-else @keydown="form.errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>
         <v-container>
           <v-row>
@@ -22,15 +22,15 @@
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
-                outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
+                variant="outlined"
               />
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn block color="primary" :disabled="isAppLoading" rounded type="submit" x-large>
+              <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
                 {{ $t('common.password.request.send') }}
               </v-btn>
             </v-col>
@@ -40,10 +40,8 @@
       <captcha ref="captchaEl" @expired="expired" @verified="verified" />
     </v-form>
     <v-card-actions>
-      <v-btn color="info" exact text :to="{ name: 'login' }">
-        <v-icon left>
-          fas fa-angles-left
-        </v-icon>
+      <v-btn color="info" exact :to="{ name: 'login' }" variant="text">
+        <v-icon icon="fas fa-angles-left" start />
         {{ $t('common.login.back') }}
       </v-btn>
     </v-card-actions>
@@ -103,7 +101,7 @@ export default defineComponent({
       catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
-          useMessages().error(this.$t('common.password.request.captcha').toString());
+          useMessages().error(this.$t('common.password.request.captcha'));
         }
         else {
           throw err;

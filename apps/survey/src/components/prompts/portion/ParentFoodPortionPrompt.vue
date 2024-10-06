@@ -1,28 +1,27 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel>
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.label`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.label`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
             <template #parentFood>
               <span class="font-weight-medium">{{ parentFoodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="!!portionSize.portionValue" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <v-radio-group
             v-model="portionSize.portionValue"
-            :column="prompt.orientation === 'column'"
             :error="hasErrors"
             hide-details="auto"
-            :row="prompt.orientation === 'row'"
-            @change="clearErrors"
+            :inline="prompt.orientation === 'row'"
+            @update:model-value="clearErrors"
           >
             <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
               <template #label>
@@ -39,7 +38,7 @@
             </v-radio>
           </v-radio-group>
           <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
@@ -82,7 +81,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props) {
     const { foodName, parentFoodName } = useFoodUtils(props);
@@ -92,7 +91,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...copy(this.value),
+      ...copy(this.modelValue),
     };
   },
 
@@ -147,7 +146,7 @@ export default defineComponent({
 
       const state: PromptStates['parent-food-portion-prompt'] = { portionSize, panel };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

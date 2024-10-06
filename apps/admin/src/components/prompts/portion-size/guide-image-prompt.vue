@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-tab-item key="options" value="options">
+    <v-tabs-window-item key="options" value="options">
       <v-row class="mb-3">
         <v-col cols="12" md="6">
-          <v-card outlined>
-            <v-toolbar color="grey lighten-4" flat>
+          <v-card border>
+            <v-toolbar color="grey-lighten-4" flat>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('survey-schemes.prompts.linkedQuantity.title') }}
               </v-toolbar-title>
@@ -15,59 +15,53 @@
             <v-card-text>
               <v-switch
                 hide-details="auto"
-                :input-value="linkedQuantity.auto"
                 :label="$t('survey-schemes.prompts.linkedQuantity.auto')"
-                @change="update('linkedQuantity', { ...linkedQuantity, auto: $event })"
+                :model-value="linkedQuantity.auto"
+                @update:model-value="update('linkedQuantity', { ...linkedQuantity, auto: $event })"
               />
             </v-card-text>
             <category-list
               class="mb-6"
               flat
+              :model-value="linkedQuantity.source.map((code) => ({ code, name: code }))"
               tile
-              :value="linkedQuantity.source.map((code) => ({ code, name: code }))"
-              @input="updateLQSource"
+              @update:model-value="updateLQSource"
             >
               <template #title>
                 {{ $t('survey-schemes.prompts.linkedQuantity.source') }}
               </template>
               <template #[`item.content`]="{ item }">
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ $t('fdbs.categories._') }}: {{ item.code }}
-                  </v-list-item-title>
-                </v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('fdbs.categories._') }}: {{ item.code }}
+                </v-list-item-title>
               </template>
             </category-list>
             <category-list
               flat
+              :model-value="linkedQuantity.parent.map((item) => ({ name: item.code, ...item }))"
               tile
-              :value="linkedQuantity.parent.map((item) => ({ name: item.code, ...item }))"
-              @input="updateLQParent"
+              @update:model-value="updateLQParent"
             >
               <template #title>
                 {{ $t('survey-schemes.prompts.linkedQuantity.parent') }}
               </template>
               <template #[`item.content`]="{ item }">
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ $t('fdbs.categories._') }}: {{ item.code }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{ $t('standard-units._') }}: {{ item.unit ?? $t('common.not.assigned') }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('fdbs.categories._') }}: {{ item.code }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ $t('standard-units._') }}: {{ item.unit ?? $t('common.not.assigned') }}
+                </v-list-item-subtitle>
               </template>
               <template #[`item.action`]="{ item }">
                 <select-resource
                   v-if="!item.unit"
                   item-name="id"
                   resource="standard-units"
-                  @input="updateLQUnit(item.code, $event)"
+                  @update:model-value="updateLQUnit(item.code, $event)"
                 >
-                  <template #activator="{ attrs, on }">
-                    <v-btn icon v-bind="attrs" :title="$t('standard-units.add')" v-on="on">
-                      <v-icon>$standard-units</v-icon>
-                    </v-btn>
+                  <template #activator="{ props }">
+                    <v-btn icon="$standard-units" v-bind="props" :title="$t('standard-units.add')" />
                   </template>
                 </select-resource>
               </template>
@@ -75,18 +69,18 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="6">
-          <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)" />
+          <image-map-settings :image-map="imageMap" @update:image-map="update('imageMap', $event)" />
         </v-col>
         <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
-            :input-value="badges"
             :label="$t('survey-schemes.prompts.badges')"
-            @change="update('badges', $event)"
+            :model-value="badges"
+            @update:model-value="update('badges', $event)"
           />
         </v-col>
       </v-row>
-    </v-tab-item>
+    </v-tabs-window-item>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 import axios, { HttpStatusCode } from 'axios';
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router/composables';
+import { useRouter } from 'vue-router';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import type { Captcha } from '@intake24/ui';
@@ -15,7 +15,7 @@ export type UseLoginProps = {
 
 export function useLogin(props: UseLoginProps) {
   const auth = useAuth();
-  const { i18n } = useI18n();
+  const { i18n: { t } } = useI18n();
   const router = useRouter();
 
   const username = ref('');
@@ -87,7 +87,7 @@ export function useLogin(props: UseLoginProps) {
           errors.value.record(data.errors);
 
         if (statusCode === HttpStatusCode.Unauthorized)
-          useMessages().error(data.message ?? i18n.t('common.login.err.credentials').toString());
+          useMessages().error(data.message ?? t('common.login.err.credentials'));
 
         return;
       }

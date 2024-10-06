@@ -1,9 +1,7 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
-      <v-icon left>
-        fas fa-barcode
-      </v-icon>
+  <v-card border>
+    <v-toolbar color="grey-lighten-4" flat>
+      <v-icon icon="fas fa-barcode" start />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.barcodes.title') }}
       </v-toolbar-title>
@@ -12,35 +10,35 @@
       <v-select
         :items="barcodes"
         :label="$t('survey-schemes.prompts.barcodes.providers._')"
+        :model-value="barcode.type"
         name="barcode"
-        outlined
-        :value="barcode.type"
-        @input="update('type', $event)"
+        variant="outlined"
+        @update:model-value="update('type', $event)"
       />
       <template v-if="barcode.type !== 'none'">
         <v-select
 
           :items="readers"
           :label="$t('survey-schemes.prompts.barcodes.readers._')"
+          :model-value="barcode.readers"
           multiple
           name="readers"
-          outlined
-          :value="barcode.readers"
-          @input="update('readers', $event)"
+          variant="outlined"
+          @update:model-value="update('readers', $event)"
         />
         <v-label>{{ $t('survey-schemes.prompts.barcodes.feedback._') }}</v-label>
         <v-switch
           hide-details="auto"
-          :input-value="barcode.feedback.vibration"
           :label="$t('survey-schemes.prompts.barcodes.feedback.vibration')"
-          @change="update('feedback', { ...barcode.feedback, vibration: $event })"
+          :model-value="barcode.feedback.vibration"
+          @update:model-value="update('feedback', { ...barcode.feedback, vibration: $event })"
         />
         <v-switch
           disabled
           hide-details="auto"
-          :input-value="barcode.feedback.audio"
           :label="$t('survey-schemes.prompts.barcodes.feedback.audio')"
-          @change="update('feedback', { ...barcode.feedback, audio: $event })"
+          :model-value="barcode.feedback.audio"
+          @update:model-value="update('feedback', { ...barcode.feedback, audio: $event })"
         />
       </template>
     </v-card-text>
@@ -72,7 +70,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const barcodes = barcodeScanners.map(value => ({
-      text: i18n.t(`survey-schemes.prompts.barcodes.providers.${value}`).toString(),
+      title: i18n.t(`survey-schemes.prompts.barcodes.providers.${value}`),
       value,
     }));
 

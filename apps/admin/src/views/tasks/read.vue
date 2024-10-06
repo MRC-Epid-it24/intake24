@@ -6,13 +6,13 @@
         :activator-class="['ml-2']"
         color="primary"
         icon-left="fas fa-play"
-        :label="$t('tasks.run._').toString()"
+        :label="$t('tasks.run._')"
         @confirm="triggerJob"
       >
         {{ $t('tasks.run.confirm') }}
       </confirm-dialog>
     </template>
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('common.name') }}</th>
@@ -31,10 +31,10 @@
         <tr>
           <th>{{ $t('common.action.active') }}</th>
           <td>
-            <v-icon v-if="entry.active" color="success" left>
+            <v-icon v-if="entry.active" color="success" start>
               $check
             </v-icon>
-            <v-icon v-else color="error" left>
+            <v-icon v-else color="error" start>
               $times
             </v-icon>
             {{ $t(`common.${entry.active}`) }}
@@ -49,7 +49,7 @@
           <td>{{ entry.description }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

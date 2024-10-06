@@ -12,22 +12,24 @@
         </template>
       </v-img>
       <v-img class="drink-scale-overlay" :src="scale.overlayImageUrl" :style="overlayVars" />
-      <div class="drink-scale-slider mr-6" :style="{ bottom: sliderBottom }">
+      <div class="drink-scale-slider me-6" :style="{ bottom: sliderBottom, top: sliderTop }">
         <v-slider
           v-model="sliderValue"
           color="secondary"
-          :height="sliderHeight"
+          direction="vertical"
           hide-details
           :label="$t('prompts.quantity._')"
           :max="sliderMax"
           :min="sliderMin"
+          :ripple="false"
+          :style="sliderVars"
           thumb-color="secondary"
-          vertical
+          track-color="primary"
         />
       </div>
       <div class="drink-scale-label">
         <v-chip
-          class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
+          class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold text-secondary border-secondary-1"
         >
           {{ label }}
         </v-chip>
@@ -39,10 +41,10 @@
           block
           color="primary"
           :disabled="sliderValue <= sliderMin"
-          outlined
+          variant="outlined"
           @click="updateSlider(-sliderStep)"
         >
-          <v-icon left>
+          <v-icon start>
             fas fa-circle-down
           </v-icon>
           {{ $t(`prompts.drinkScale.${type}.less`) }}
@@ -53,10 +55,10 @@
           block
           color="primary"
           :disabled="sliderValue >= sliderMax"
-          outlined
+          variant="outlined"
           @click="updateSlider(sliderStep)"
         >
-          <v-icon left>
+          <v-icon start>
             fas fa-circle-up
           </v-icon>
           {{ $t(`prompts.drinkScale.${type}.more`) }}
@@ -64,7 +66,7 @@
       </v-col>
       <v-col cols="12" sm>
         <v-btn block color="primary" @click="confirm">
-          <v-icon left>
+          <v-icon start>
             $yes
           </v-icon>
           {{ $t(`prompts.drinkScale.${type}.confirm`) }}
@@ -74,24 +76,24 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { VImg } from 'vuetify/lib';
 import { useElementSize } from '@vueuse/core';
 import debounce from 'lodash/debounce';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
+import { useGoTo } from 'vuetify';
 
 import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import { calculateVolume } from './drink-scale';
 
-export default defineComponent({
+defineOptions({
   name: 'DrinkScalePanel',
+});
 
-  components: { ImagePlaceholder },
-
-  props: {
+const props = defineProps(
+  {
     maxFillLevel: {
       type: Number,
       default: 1,
@@ -108,142 +110,119 @@ export default defineComponent({
       type: String as PropType<'serving' | 'leftovers'>,
       default: 'serving',
     },
-    value: {
+    modelValue: {
       type: Number,
       required: true,
     },
   },
+);
+const emit = defineEmits(['confirm', 'update:modelValue']);
 
-  emits: ['confirm', 'input'],
+const goTo = useGoTo();
+const wrapper = useTemplateRef('wrapper');
+const imgDrink = useTemplateRef('imgDrink');
+// @ts-expect-error should allow vue instance?
+const { height } = useElementSize(imgDrink);
 
-  setup(props, { emit }) {
-    const wrapper = ref<InstanceType<typeof HTMLFormElement>>();
-    const imgDrink = ref<InstanceType<typeof VImg>>();
-    // @ts-expect-error should allow vue instance?
-    const { height, width } = useElementSize(imgDrink);
+const imgScale = computed(() => height.value / props.scale.height);
 
-    const imgScale = computed(() => height.value / props.scale.height);
+const cursorInScale = ref(false);
+const sliderMax = ref(props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel));
+const sliderMin = ref(0);
+const sliderStep = ref(Math.round(sliderMax.value / 6));
+const sliderValue = ref(sliderMax.value * props.modelValue);
+const sliderBottom = computed(() => `${props.scale.emptyLevel * imgScale.value}px`);
+const sliderHeight = computed(() => sliderMax.value * imgScale.value);
+const sliderTop = computed(() => `${sliderBottom.value + sliderHeight.value}px`);
 
-    const cursorInScale = ref(false);
-    const sliderMax = ref(props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel));
-    const sliderMin = ref(0);
-    const sliderStep = ref(Math.round(sliderMax.value / 6));
-    const sliderValue = ref(sliderMax.value * props.value);
-    const sliderBottom = computed(() => `${props.scale.emptyLevel * imgScale.value}px`);
-    const sliderHeight = computed(() => sliderMax.value * imgScale.value);
+function isInScale(y: number) {
+  return y >= sliderMin.value + props.scale.emptyLevel
+    && y <= sliderMax.value + props.scale.emptyLevel;
+}
 
-    const isInScale = (y: number) =>
-      y >= sliderMin.value + props.scale.emptyLevel
-      && y <= sliderMax.value + props.scale.emptyLevel;
+function updateSlider(value: number) {
+  sliderValue.value = Math.min(
+    sliderMax.value,
+    Math.max(sliderMin.value, sliderValue.value + value),
+  );
+}
 
-    const updateSlider = (value: number) => {
-      sliderValue.value = Math.min(
-        sliderMax.value,
-        Math.max(sliderMin.value, sliderValue.value + value),
-      );
-    };
+function touchUpdateSlider(event: MouseEvent) {
+  if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__'))
+    return;
 
-    const touchUpdateSlider = (event: MouseEvent) => {
-      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__'))
-        return;
+  const position = props.scale.height - event.offsetY / imgScale.value;
+  if (!isInScale(position))
+    return;
 
-      const position = props.scale.height - event.offsetY / imgScale.value;
-      if (!isInScale(position))
-        return;
+  sliderValue.value = Math.round(position - props.scale.emptyLevel);
+}
 
-      sliderValue.value = Math.round(position - props.scale.emptyLevel);
-    };
+function trackOverlay(event: MouseEvent) {
+  const position = props.scale.height - event.offsetY / imgScale.value;
+  cursorInScale.value = isInScale(position);
+}
 
-    const trackOverlay = (event: MouseEvent) => {
-      const position = props.scale.height - event.offsetY / imgScale.value;
-      cursorInScale.value = isInScale(position);
-    };
+const onTrackOverlay = debounce((event: MouseEvent) => {
+  trackOverlay(event);
+}, 100);
 
-    const onTrackOverlay = debounce((event: MouseEvent) => {
-      trackOverlay(event);
-    }, 100);
+const fillLevel = computed(() => (sliderValue.value / sliderMax.value) * props.maxFillLevel);
 
-    const fillLevel = computed(() => (sliderValue.value / sliderMax.value) * props.maxFillLevel);
+const fillVolume = computed(() =>
+  Math.round(calculateVolume(props.scale.volumeSamples, fillLevel.value)),
+);
 
-    const fillVolume = computed(() =>
-      Math.round(calculateVolume(props.scale.volumeSamples, fillLevel.value)),
-    );
+const label = computed(() => `${fillVolume.value} ml`);
 
-    const label = computed(() => `${fillVolume.value} ml`);
+const imgClip = computed(
+  () => (props.scale.height - props.scale.fullLevel) * 0.75 * imgScale.value,
+);
 
-    const imgClip = computed(
-      () => (props.scale.height - props.scale.fullLevel) * 0.75 * imgScale.value,
-    );
+const imgVars = computed(() => ({ '--img-clip': `${imgClip.value}px` }));
+const sliderVars = computed(() => ({ '--sliderHeight': `${sliderHeight.value}px` }));
 
-    const imgVars = computed(() => ({ '--img-clip': `${imgClip.value}px` }));
+const overlayVars = computed(() => ({
+  '--overlay-clip': `${
+    height.value - (props.scale.emptyLevel + sliderValue.value) * imgScale.value
+  }px`,
+}));
 
-    const overlayVars = computed(() => ({
-      '--overlay-clip': `${
-        height.value - (props.scale.emptyLevel + sliderValue.value) * imgScale.value
-      }px`,
-    }));
+function confirm() {
+  emit('confirm');
+}
 
-    const confirm = () => {
-      emit('confirm');
-    };
+watch(fillLevel, (val) => {
+  if (!props.open)
+    return;
 
-    watch(fillLevel, (val) => {
-      if (!props.open)
-        return;
-
-      emit('input', val);
-    });
-
-    watch(
-      () => props.open,
-      () => {
-        sliderMax.value = props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel);
-        sliderValue.value = sliderMax.value * props.value;
-      },
-    );
-
-    return {
-      wrapper,
-      imgDrink,
-      height,
-      width,
-      confirm,
-      imgScale,
-      isInScale,
-      cursorInScale,
-      sliderMax,
-      sliderMin,
-      sliderStep,
-      sliderValue,
-      sliderBottom,
-      sliderHeight,
-      updateSlider,
-      touchUpdateSlider,
-      onTrackOverlay,
-      label,
-      imgVars,
-      overlayVars,
-    };
-  },
-
-  watch: {
-    height() {
-      if (this.open)
-        this.scrollTo();
-    },
-  },
-
-  methods: {
-    scrollTo() {
-      setTimeout(async () => {
-        if (!this.wrapper)
-          return;
-
-        await this.$vuetify.goTo(this.wrapper);
-      }, 100);
-    },
-  },
+  emit('update:modelValue', val);
 });
+
+watch(
+  () => props.open,
+  () => {
+    sliderMax.value = props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel);
+    sliderValue.value = sliderMax.value * props.modelValue;
+  },
+);
+
+function scrollTo() {
+  setTimeout(async () => {
+    if (!wrapper.value)
+      return;
+
+    await goTo(wrapper.value);
+  }, 100);
+};
+
+watch(
+  height,
+  () => {
+    if (props.open)
+      scrollTo();
+  },
+);
 </script>
 
 <style lang="scss">
@@ -267,6 +246,7 @@ export default defineComponent({
     .drink-scale-image {
       clip-path: inset(var(--img-clip) 0px 0px 0px);
       margin-top: calc(var(--img-clip) * -1);
+      max-height: unset !important;
     }
 
     .drink-scale-overlay {
@@ -275,6 +255,7 @@ export default defineComponent({
       left: 0;
       width: 100%;
       clip-path: inset(var(--overlay-clip) 0px 0px 0px);
+      max-height: unset !important;
     }
 
     .drink-scale-slider {
@@ -288,9 +269,15 @@ export default defineComponent({
       }
 
       .v-slider {
-        height: 100%;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        height: var(--sliderHeight) !important;
 
-        .v-slider__track-container {
+        .v-input__prepend {
+          margin-block-start: 0;
+        }
+
+        .v-slider-track {
           cursor: pointer;
           width: 12px;
 
@@ -304,10 +291,9 @@ export default defineComponent({
           }
         }
 
-        .v-slider__thumb-container {
-          cursor: pointer;
-
-          .v-slider__thumb {
+        .v-slider-thumb {
+          .v-slider-thumb__surface {
+            cursor: pointer;
             width: 30px;
             height: 14px;
             position: absolute;
@@ -336,8 +322,10 @@ export default defineComponent({
         }
       }
 
-      .v-slider--vertical {
-        min-height: unset;
+      .v-input--vertical {
+        .v-input__control {
+          min-height: unset;
+        }
       }
     }
 

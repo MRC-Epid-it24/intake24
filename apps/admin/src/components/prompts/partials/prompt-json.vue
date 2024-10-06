@@ -1,7 +1,7 @@
 <template>
-  <v-tab-item key="json" value="json">
-    <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
-  </v-tab-item>
+  <v-tabs-window-item key="json" value="json">
+    <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">
@@ -17,11 +17,13 @@ export default defineComponent({
   components: { JsonEditor },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<Prompt>,
       required: true,
     },
   },
+
+  emits: ['update:modelValue'],
 });
 </script>
 

@@ -1,21 +1,20 @@
 <template>
-  <v-dialog max-width="350px" :value="value.dialog" @input="handleLeave">
+  <v-dialog max-width="350px" :model-value="modelValue.dialog" @update:model-value="handleLeave">
     <v-card>
       <v-card-title class="h2 justify-center">
         {{ $t('common.action.confirm.title') }}
       </v-card-title>
       <v-card-text class="px-6 py-4 d-flex justify-center">
-        <div class="subtitle-1">
+        <div class="text-subtitle-1">
           {{ $t('common.action.confirm.msg') }}
         </div>
       </v-card-text>
-      <v-container class="pa-6">
+      <v-card-text>
         <v-btn
           block
-          class="mb-2"
+          class="mb-4"
           color="warning"
-          dark
-          large
+          size="large"
           :title="$t('common.action.continue')"
           @click.stop="confirmLeave"
         >
@@ -24,14 +23,14 @@
         <v-btn
           block
           color="warning"
-          large
-          outlined
+          size="large"
           :title="$t('common.action.cancel')"
+          variant="outlined"
           @click.stop="cancelLeave"
         >
           {{ $t('common.action.cancel') }}
         </v-btn>
-      </v-container>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
@@ -46,13 +45,13 @@ export default defineComponent({
   name: 'ConfirmLeaveDialog',
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<RouteLeave>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   methods: {
     handleLeave(value: boolean) {
@@ -63,16 +62,16 @@ export default defineComponent({
     },
 
     cancelLeave() {
-      this.$emit('input', { dialog: false, to: null, confirmed: false });
+      this.$emit('update:modelValue', { dialog: false, to: null, confirmed: false });
     },
 
     async confirmLeave() {
-      const { dialog, to } = this.value;
+      const { dialog, to } = this.modelValue;
 
       if (!to)
         return;
 
-      this.$emit('input', { dialog, to, confirmed: true });
+      this.$emit('update:modelValue', { dialog, to, confirmed: true });
       // TODO: vue-router RawLocation and Route types are incompatible (RawLocation:name cannot be null)
       await this.$router.push({ ...to, name: to.name ?? undefined });
     },

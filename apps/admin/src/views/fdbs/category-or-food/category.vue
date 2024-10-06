@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="isEntryLoaded" flat>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
-        <v-card class="mb-6" outlined>
-          <v-toolbar color="grey lighten-4" flat>
+      <v-form @keydown="clearError" @submit.prevent="submit">
+        <v-card border class="mb-6">
+          <v-toolbar color="grey-lighten-4" flat>
             <v-toolbar-title class="font-weight-medium">
               {{ $t('fdbs.categories.global._') }}
             </v-toolbar-title>
@@ -18,7 +18,7 @@
                   hide-details="auto"
                   :label="$t('fdbs.categories.global.code')"
                   name="main.code"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="12">
@@ -29,7 +29,7 @@
                   hide-details="auto"
                   :label="$t('fdbs.categories.global.name')"
                   name="main.name"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
               <v-col align-self="center" cols="12" md="6">
@@ -41,14 +41,14 @@
                   hide-details="auto"
                   :label="$t('fdbs.categories.global.isHidden')"
                   name="main.isHidden"
-                  @change="form.errors.clear('allowGenUsers')"
+                  @update:model-value="form.errors.clear('allowGenUsers')"
                 />
               </v-col>
             </v-row>
           </v-card-text>
         </v-card>
-        <v-card class="mb-6" outlined>
-          <v-toolbar color="grey lighten-4" flat>
+        <v-card border class="mb-6">
+          <v-toolbar color="grey-lighten-4" flat>
             <v-toolbar-title class="font-weight-medium">
               {{ $t('fdbs.categories.local._') }}
             </v-toolbar-title>
@@ -62,7 +62,7 @@
                   hide-details="auto"
                   :label="$t('fdbs.categories.local.name')"
                   name="name"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
             </v-row>
@@ -71,13 +71,13 @@
                 <v-combobox
                   v-model="form.tags"
                   chips
-                  deletable-chips
+                  closable-chips
                   :error-messages="form.errors.get('tags')"
                   hide-details="auto"
                   :label="$t('fdbs.categories.local.tags')"
                   multiple
                   name="tags"
-                  outlined
+                  variant="outlined"
                 />
               </v-col>
             </v-row>
@@ -105,10 +105,8 @@
         />
       </v-form>
       <div class="d-flex">
-        <v-btn color="secondary" outlined @click="submit">
-          <v-icon left>
-            $save
-          </v-icon>{{ $t(`common.action.save`) }}
+        <v-btn color="secondary" variant="outlined" @click="submit">
+          <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
         </v-btn>
         <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
         <v-spacer />
@@ -124,7 +122,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { onBeforeRouteUpdate } from 'vue-router/composables';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 import type {
   CategoryLocalEntry,
@@ -232,7 +230,7 @@ export default defineComponent({
 
       const { name, main: { name: englishName = 'record' } = {} } = data;
 
-      useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }).toString());
+      useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }));
     };
 
     onMounted(async () => {

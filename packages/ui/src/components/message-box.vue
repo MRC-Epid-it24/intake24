@@ -7,11 +7,11 @@
       :color="message.type"
       :style="{ 'margin-bottom': calculateMargin(idx) }"
       :timeout="message.timeout"
-      @input="clean($event, message.id)"
+      @update:model-value="clean($event, message.id)"
     >
       {{ message.text }}
-      <template #action="{ attrs }">
-        <v-btn dark icon v-bind="attrs" @click="dismiss(message.id)">
+      <template #actions>
+        <v-btn icon @click="dismiss(message.id)">
           <v-icon>fas fa-times</v-icon>
         </v-btn>
       </template>

@@ -6,7 +6,7 @@
       :selected="tracked"
       @refresh="refresh"
     />
-    <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
+    <v-card :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
       <v-card-text>
         <data-table-filter
           :count="meta.total"
@@ -16,12 +16,12 @@
       </v-card-text>
     </v-card>
     <div v-show="meta.total" class="py-4 text-center">
-      <v-pagination v-model="page" circle :length="meta.lastPage" />
+      <v-pagination v-model="page" :length="meta.lastPage" rounded />
     </div>
     <v-container class="px-0">
       <v-row>
         <v-col v-for="item in items" :key="item.id" cols="12" lg="3" md="4" sm="6">
-          <v-card :flat="isMobile" height="100%" :outlined="!isMobile" :tile="isMobile">
+          <v-card :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" height="100%" :tile="$vuetify.display.mobile">
             <router-link :to="{ name: `${module}-read`, params: { id: item.id } }">
               <v-img :src="item[imageUrl]" />
             </router-link>
@@ -42,12 +42,10 @@
                 v-if="can({ action: 'edit' })"
                 class="font-weight-bold"
                 color="info"
-                text
                 :to="{ name: `${module}-edit`, params: { id: item.id } }"
+                variant="text"
               >
-                <v-icon left>
-                  $edit
-                </v-icon>{{ $t(`common.action.edit`) }}
+                <v-icon icon="$edit" start />{{ $t(`common.action.edit`) }}
               </v-btn>
               <v-spacer />
               <confirm-dialog
@@ -55,7 +53,8 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('common.action.delete').toString()"
+                :label="$t('common.action.delete')"
+                variant="text"
                 @confirm="remove(item)"
               >
                 {{ $t('common.action.confirm.delete', { name: item.id }) }}
@@ -65,7 +64,7 @@
         </v-col>
       </v-row>
       <div v-show="meta.total" class="py-4 text-center">
-        <v-pagination v-model="page" circle :length="meta.lastPage" />
+        <v-pagination v-model="page" :length="meta.lastPage" rounded />
       </div>
     </v-container>
   </div>
@@ -179,7 +178,7 @@ export default defineComponent({
       const { id, name } = item;
 
       await this.$http.delete(`${this.resource.api}/${id}`);
-      useMessages().success(this.$t('common.msg.deleted', { name: name ?? id }).toString());
+      useMessages().success(this.$t('common.msg.deleted', { name: name ?? id }));
       this.refresh();
     },
   },

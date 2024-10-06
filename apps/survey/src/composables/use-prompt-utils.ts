@@ -29,8 +29,8 @@ export function usePromptUtils<
   P extends keyof Prompts,
   F extends FoodState | undefined,
   FP extends EncodedFood | RecipeBuilder | undefined,
->(props: UsePromptProps<P, F, FP>, { emit }: SetupContext<any>, confirmCallback?: () => boolean) {
-  const { i18n } = useI18n();
+>(props: UsePromptProps<P, F, FP>, { emit }: SetupContext<'action'[]>, confirmCallback?: () => boolean) {
+  const { i18n: { d, t } } = useI18n();
   const survey = useSurvey();
   const surveySlug = computed(() => survey.parameters?.slug);
   const { mealName, mealTime } = useMealUtils(props);
@@ -59,7 +59,7 @@ export function usePromptUtils<
     const build: Record<string, string | number> = {
       recallNumber: survey.recallNumber,
       userName: survey.user?.name ?? '',
-      recallDate: survey.recallDate ? i18n.d(survey.recallDate, 'recallDate') : '',
+      recallDate: survey.recallDate ? d(survey.recallDate, 'recallDate') : '',
     };
 
     if (foodName.value) {
@@ -97,7 +97,7 @@ export function usePromptUtils<
   ) => {
     return keys.reduce(
       (acc, key) => {
-        acc[key] = i18n.t(`prompts.${type.value}.${key}`, params[key] ?? {}).toString();
+        acc[key] = t(`prompts.${type.value}.${key}`, params[key] ?? {});
         return acc;
       },
       {} as Record<T, string>,

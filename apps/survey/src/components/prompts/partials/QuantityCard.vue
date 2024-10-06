@@ -14,8 +14,8 @@
                 color="secondary"
                 :disabled="maxDisabled"
                 icon
+                size="x-large"
                 :title="$t('prompts.quantity.more')"
-                x-large
                 @click="update(1)"
               >
                 <v-icon aria-hidden="false">
@@ -27,8 +27,8 @@
                 color="secondary"
                 :disabled="minDisabled"
                 icon
+                size="x-large"
                 :title="$t('prompts.quantity.less')"
-                x-large
                 @click="update(-1)"
               >
                 <v-icon aria-hidden="false">
@@ -46,8 +46,8 @@
                 color="secondary"
                 :disabled="maxDisabled"
                 icon
+                size="x-large"
                 :title="$t('prompts.quantity.more')"
-                x-large
                 @click="update(0.25)"
               >
                 <v-icon aria-hidden="false">
@@ -59,8 +59,8 @@
                 color="secondary"
                 :disabled="minDisabled"
                 icon
+                size="x-large"
                 :title="$t('prompts.quantity.less')"
-                x-large
                 @click="update(-0.25)"
               >
                 <v-icon aria-hidden="false">
@@ -111,7 +111,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    value: {
+    modelValue: {
       type: Number,
       default: 1,
     },
@@ -129,11 +129,11 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'update:confirmed'],
+  emits: ['update:modelValue', 'update:confirmed'],
 
   data() {
     return {
-      currentValue: Math.min(this.max, Math.max(this.min, this.value)),
+      currentValue: Math.min(this.max, Math.max(this.min, this.modelValue)),
     };
   },
 
@@ -195,7 +195,7 @@ export default defineComponent({
     },
 
     updateValue() {
-      this.$emit('input', this.currentValue);
+      this.$emit('update:modelValue', this.currentValue);
     },
   },
 });
