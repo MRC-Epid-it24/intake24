@@ -4,8 +4,8 @@
       class="mt-0"
       :disabled="disabled"
       hide-details="auto"
-      :input-value="value"
-      @change="input"
+      :model-value="modelValue"
+      @update:model-value="input"
     />
     <slot />
   </v-col>
@@ -22,16 +22,18 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    value: {
+    modelValue: {
       type: Boolean,
       required: true,
     },
   },
 
+  emits: ['change', 'update:modelValue'],
+
   setup(props, { emit }) {
     const input = (value: boolean) => {
       emit('change', value);
-      emit('input', value);
+      emit('update:modelValue', value);
     };
 
     return { input };

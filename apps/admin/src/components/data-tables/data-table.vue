@@ -1,46 +1,48 @@
 <template>
-  <div>
-    <tool-bar v-bind="{ actions, api, selected: tracked }" @refresh="onRefresh" />
-    <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
-      <v-card-text>
-        <data-table-filter
-          :count="meta.total"
-          @filter-reset="resetFilter"
-          @filter-set="setFilter"
-        />
-        <v-data-table
-          v-model="selected"
-          :footer-props="{
-            'items-per-page-options': [25, 50, 100],
-          }"
-          :headers="headers"
-          item-key="id"
-          :items="items"
-          :items-per-page="50"
-          :loading="isAppLoading"
-          :options.sync="options"
-          :server-items-length="meta.total"
-          show-select
-        >
-          <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">
-            <slot :name="scopedSlotName" v-bind="slotData" />
-          </template>
-          <template
-            v-if="!Object.keys($scopedSlots).includes('item.action')"
-            #[`item.action`]="{ item }"
-          >
+  <tool-bar
+    v-if="actions.length"
+    v-bind="{ actions, api, selected: tracked }"
+    @refresh="onRefresh"
+  />
+  <v-card
+    v-bind="{ variant }"
+    :flat="$vuetify.display.mobile"
+    :rounded="$vuetify.display.mobile ? 0 : undefined"
+  >
+    <v-card-text>
+      <data-table-filter
+        :count="meta.total"
+        @filter-reset="resetFilter"
+        @filter-set="setFilter"
+      />
+      <v-data-table-server
+        v-model="selected"
+        v-model:options="options"
+        :headers="headers"
+        :item-value="trackBy"
+        :items="items"
+        :items-length="meta.total ?? 0"
+        :items-per-page="50"
+        :loading="isAppLoading"
+        return-object
+        show-select
+      >
+        <template v-for="(_, scopedSlotName) in $slots" #[scopedSlotName]="slotData">
+          <slot :name="scopedSlotName" v-bind="slotData" />
+        </template>
+        <template #item.action="{ item }">
+          <slot name="action" v-bind="{ item }">
             <action-bar
               :actions="actions.filter((action) => action !== 'create')"
               :api="api"
-              class="text-right"
               :item="item"
               @refresh="onRefresh"
             />
-          </template>
-        </v-data-table>
-      </v-card-text>
-    </v-card>
-  </div>
+          </slot>
+        </template>
+      </v-data-table-server>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -77,6 +79,10 @@ export default defineComponent({
     trackBy: {
       type: String,
       default: 'id',
+    },
+    variant: {
+      type: String as PropType<'flat' | 'text' | 'elevated' | 'tonal' | 'outlined' | 'plain'>,
+      default: 'elevated',
     },
   },
 

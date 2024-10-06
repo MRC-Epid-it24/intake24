@@ -1,20 +1,16 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
-      <v-btn large v-bind="attrs" v-on="on">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
+      <v-btn size="large" v-bind="props">
         <v-list-item-title>
-          <v-icon left>
-            fas fa-upload
-          </v-icon>
+          <v-icon icon="$upload" start />
           {{ label }}
         </v-list-item-title>
       </v-btn>
     </template>
-    <v-card :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-icon dark left>
-          $upload
-        </v-icon>
+        <v-icon end icon="$upload" />
         <v-toolbar-title>
           {{ dialogTitle }}
         </v-toolbar-title>
@@ -30,17 +26,15 @@
                   hide-details="auto"
                   :label="$t('common.file.csv')"
                   name="file"
-                  outlined
                   prepend-icon=""
                   prepend-inner-icon="fas fa-file-csv"
+                  variant="outlined"
                   @change="form.errors.clear('file')"
                 />
               </v-col>
               <v-col cols="12" sm="auto">
-                <v-btn block color="primary" :disabled="jobInProgress" type="submit" x-large>
-                  <v-icon left>
-                    $upload
-                  </v-icon>
+                <v-btn block color="primary" :disabled="jobInProgress" size="x-large" type="submit">
+                  <v-icon icon="$upload" start />
                   {{ $t('common.action.upload') }}
                 </v-btn>
               </v-col>
@@ -50,7 +44,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn class="font-weight-bold" color="info" text @click.stop="close">
+          <v-btn class="font-weight-bold" color="info" variant="text" @click.stop="close">
             {{ $t('common.action.close') }}
           </v-btn>
         </v-card-actions>

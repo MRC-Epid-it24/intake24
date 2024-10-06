@@ -4,31 +4,31 @@
       <v-switch
         class="my-4"
         hide-details="auto"
-        :input-value="!!value"
         :label="$t(`feedback-schemes.${type}._`)"
+        :model-value="!!modelValue"
         :prepend-inner-icon="getIcon(type)"
-        @change="toggleRange($event)"
+        @update:model-value="toggleRange($event)"
       />
     </v-col>
-    <v-col v-if="value" cols="12" md="6">
+    <v-col v-if="modelValue" cols="12" md="6">
       <v-text-field
         class="mb-4"
-        dense
+        density="compact"
         hide-details="auto"
         :label="$t('feedback-schemes.ranges.start')"
-        name="range.start"
-        outlined
-        :value="value.start"
-        @input="updateRange('start', $event)"
+        :model-value="modelValue.start"
+        :name="`${type}.range.start`"
+        variant="outlined"
+        @update:model-value="updateRange('start', $event)"
       />
       <v-text-field
-        dense
+        density="compact"
         hide-details="auto"
         :label="$t('feedback-schemes.ranges.end')"
-        name="range.end"
-        outlined
-        :value="value.end"
-        @input="updateRange('end', $event)"
+        :model-value="modelValue.end"
+        :name="`${type}.range.end`"
+        variant="outlined"
+        @update:model-value="updateRange('end', $event)"
       />
     </v-col>
   </v-row>
@@ -48,13 +48,13 @@ export default defineComponent({
       type: String as PropType<RangeType>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<Range | null>,
       default: null,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     const defaultRange: Range = { start: 0, end: 0 };
@@ -74,13 +74,13 @@ export default defineComponent({
     },
 
     toggleRange(value: boolean) {
-      this.$emit('input', value ? this.defaultRange : null);
+      this.$emit('update:modelValue', value ? this.defaultRange : null);
     },
 
     updateRange(field: keyof Range, value: string) {
-      const range = { ...(this.value ?? this.defaultRange), [field]: Number.parseFloat(value) };
+      const range = { ...(this.modelValue ?? this.defaultRange), [field]: Number.parseFloat(value) };
 
-      this.$emit('input', range);
+      this.$emit('update:modelValue', range);
     },
   },
 });

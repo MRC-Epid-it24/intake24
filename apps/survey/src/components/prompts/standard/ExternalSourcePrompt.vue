@@ -1,25 +1,25 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <component :is="prompt.source.type" v-bind="{ food, prompt, value }" @input="select" />
+    <component :is="prompt.source.type" v-bind="{ food, prompt, modelValue }" @update:model-value="select" />
     <template #actions>
       <v-btn
         class="px-4"
         color="primary"
-        large
-        outlined
+        size="large"
         :title="promptI18n.missing"
+        variant="outlined"
         @click="action('missing')"
       >
-        <v-icon left>
+        <v-icon start>
           $no
         </v-icon>
         {{ promptI18n.missing }}
       </v-btn>
       <v-spacer />
-      <next v-if="value.data" :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
+      <next v-if="modelValue.data" :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
     </template>
     <template #nav-actions>
-      <v-btn color="primary" text :title="promptI18n.missing" @click="action('missing')">
+      <v-btn color="primary" :title="promptI18n.missing" variant="text" @click="action('missing')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.missing }}
         </span>
@@ -27,7 +27,7 @@
           $no
         </v-icon>
       </v-btn>
-      <next-mobile v-if="value.data" :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
+      <next-mobile v-if="modelValue.data" :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -38,7 +38,6 @@ import { computed, defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
@@ -56,23 +55,24 @@ export default defineComponent({
       type: Object as PropType<FoodState>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<PromptStates['external-source-prompt']>,
       required: true,
     },
   },
 
+  emits: ['action', 'update:modelValue'],
+
   setup(props, ctx) {
-    const { translate } = useI18n();
     const { action, translatePrompt } = usePromptUtils(props, ctx);
 
-    const isValid = computed(() => !!props.value);
+    const isValid = computed(() => !!props.modelValue);
 
     const promptI18n = computed(() => translatePrompt(['select', 'missing']),
     );
 
     const select = (data: PromptStates['external-source-prompt']) => {
-      ctx.emit('input', data);
+      ctx.emit('update:modelValue', data);
     };
 
     return {
@@ -80,7 +80,6 @@ export default defineComponent({
       isValid,
       promptI18n,
       select,
-      translate,
     };
   },
 });

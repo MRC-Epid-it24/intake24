@@ -2,7 +2,7 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12">
-        <v-simple-table>
+        <v-table>
           <tbody>
             <tr>
               <th>{{ $t('drinkware-sets.id') }}</th>
@@ -14,10 +14,10 @@
             </tr>
             <tr>
               <th>{{ $t('guide-images._') }}</th>
-              <td>{{ entry.guideImageId }}</td>
+              <td>{{ entry.imageMapId }}</td>
             </tr>
           </tbody>
-        </v-simple-table>
+        </v-table>
       </v-col>
     </v-row>
   </layout>

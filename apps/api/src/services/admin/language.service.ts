@@ -9,19 +9,9 @@ import type {
   LanguageTranslationCreationAttributes,
   WhereOptions,
 } from '@intake24/db';
-import type { LocaleMessages } from '@intake24/i18n';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';
-import { admin, api, compareMessageKeys, mergeTranslations, shared, survey } from '@intake24/i18n';
-
-export function getDefaultI18nMessages(language = 'en') {
-  return {
-    admin: admin[language] ?? admin.en,
-    api: api[language] ?? api.en,
-    shared: shared[language] ?? shared.en,
-    survey: survey[language] ?? survey.en,
-  };
-}
+import { compareMessageKeys, getDefaultI18nMessages, mergeTranslations } from '@intake24/i18n';
 
 function languageService({
   i18nStore,
@@ -33,11 +23,11 @@ function languageService({
    * Get the in-code language for initialization (en or any other existing language)
    *
    * @param {string} languageId
-   * @returns {Record<Application, LocaleMessages>}
+   * @returns
    */
   const languageForInitialization = async (
     languageId: string,
-  ): Promise<Record<Application, LocaleMessages>> => {
+  ) => {
     const language = await Language.findByPk(languageId, { attributes: ['id', 'code'] });
     if (!language)
       return getDefaultI18nMessages();

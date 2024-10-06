@@ -1,27 +1,20 @@
 <template>
   <div>
-    <v-menu :close-delay="250" close-on-click close-on-content-click offset-x open-on-hover>
-      <template #activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on" @click.stop>
-          <v-icon small>
-            $edit
-          </v-icon>
-        </v-btn>
+    <v-menu :close-delay="250" close-on-content-click open-on-hover :persistent="false">
+      <template #activator="{ props: cmProps }">
+        <v-icon v-bind="cmProps" size="small" @click.stop>
+          $edit
+        </v-icon>
       </template>
-      <v-list dense>
-        <template v-for="(item, idx) in menu">
+      <v-list density="compact">
+        <template v-for="(item, idx) in menu" :key="item.name">
           <v-list-item
-            :key="item.name"
             @click="item.dialog ? openDialog(item.action) : action(item.action)"
           >
-            <v-list-item-icon v-if="item.icon">
-              <v-icon small>
-                {{ item.icon }}
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.name }}</v-list-item-title>
-            </v-list-item-content>
+            <template v-if="item.icon" #prepend>
+              <v-icon :icon="item.icon" size="small" />
+            </template>
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item>
           <v-divider v-if="idx + 1 < menu.length" :key="`div-${item.name}`" />
         </template>
@@ -30,14 +23,14 @@
     <confirm-dialog
       v-model="dialog"
       external
-      :label="$t(`recall.menu.${isMeal ? 'meal' : 'food'}.delete`).toString()"
+      :label="$t(`recall.menu.${isMeal ? 'meal' : 'food'}.delete`)"
       @confirm="action(isMeal ? 'deleteMeal' : 'deleteFood')"
     >
-      <i18n :path="`recall.menu.${isMeal ? 'meal' : 'food'}.deleteConfirm`">
+      <i18n-t :keypath="`recall.menu.${isMeal ? 'meal' : 'food'}.deleteConfirm`" tag="span">
         <template #item>
           <span class="font-weight-medium">{{ entityName }}</span>
         </template>
-      </i18n>
+      </i18n-t>
     </confirm-dialog>
   </div>
 </template>

@@ -7,7 +7,6 @@ export type PromptLayout = (typeof promptLayouts)[number];
 
 export const genericActionTypes = ['addMeal', 'next', 'review'] as const;
 export const mealActionTypes = [
-  'addMeal',
   'deleteMeal',
   'editMeal',
   'mealTime',
@@ -27,7 +26,7 @@ export type MealActionType = (typeof mealActionTypes)[number];
 export type FoodActionType = (typeof foodActionTypes)[number];
 export type ActionType = (typeof actionTypes)[number];
 
-export const actionVariants = ['elevated', 'outlined', 'text'] as const;
+export const actionVariants = ['flat', 'text', 'elevated', 'tonal', 'outlined', 'plain'] as const;
 
 export type ActionVariant = (typeof actionVariants)[number];
 

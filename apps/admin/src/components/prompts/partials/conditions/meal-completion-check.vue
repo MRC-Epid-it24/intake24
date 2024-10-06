@@ -7,8 +7,8 @@
         item-value="state"
         :items="completionStateSelectList"
         :label="$t('survey-schemes.conditions.property.mealCompletion')"
-        outlined
-        @change="update(currentValue)"
+        variant="outlined"
+        @update:model-value="update(currentValue)"
       />
     </v-col>
   </v-row>
@@ -24,21 +24,23 @@ export default defineComponent({
   name: 'MealCompletionPropertyCheck',
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<MealCompletionPropertyCheck>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
     const { i18n } = useI18n();
 
-    const currentValue = ref(props.value);
+    const currentValue = ref(props.modelValue);
 
-    const completionStateSelectList = foodCompletionStateOptions.map(state => ({ state, text: i18n.t(`survey-schemes.conditions.foodCompletion.${state}`).toString() }));
+    const completionStateSelectList = foodCompletionStateOptions.map(state => ({ state, title: i18n.t(`survey-schemes.conditions.foodCompletion.${state}`) }));
 
     const update = (value: MealCompletionPropertyCheck) => {
-      emit('update:value', value);
+      emit('update:modelValue', value);
     };
     return { completionStateSelectList, update, currentValue };
   },

@@ -1,26 +1,22 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
-      <v-btn class="ml-3" link text v-bind="attrs" v-on="on">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
+      <v-btn class="ml-3" variant="text" v-bind="props">
         <v-icon class="mr-2">
           fas fa-user-shield
         </v-icon>
         {{ owner ? owner.name : $t('common.none') }}
       </v-btn>
     </template>
-    <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :loading="isLoading" :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t('securables.owner.title') }}
         </v-toolbar-title>
         <template #extension>
           <div class="mx-auto">
-            <v-icon left>
-              $search
-            </v-icon>{{ $t('securables.search') }}
+            <v-icon icon="$search" start />{{ $t('securables.search') }}
           </div>
         </template>
       </v-toolbar>
@@ -36,13 +32,13 @@
                   :error-messages="form.errors.get('userId')"
                   hide-no-data
                   hide-selected
-                  item-text="email"
+                  item-title="email"
                   item-value="id"
-                  :label="$t('common.email').toString()"
+                  :label="$t('common.email')"
                   name="userId"
                   prepend-inner-icon="fas fa-user-shield"
                   :selected="owner"
-                  @input="form.errors.clear('userId')"
+                  @update:model-value="form.errors.clear('userId')"
                   @update:object="internalOwner = $event"
                 />
               </v-col>
@@ -50,22 +46,18 @@
           </v-card-text>
         </v-container>
         <v-card-actions>
-          <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-            <v-icon left>
-              $cancel
-            </v-icon>{{ $t('common.action.cancel') }}
+          <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+            <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
           </v-btn>
           <v-spacer />
           <v-btn
             class="font-weight-bold"
             color="info"
             :disabled="form.errors.any()"
-            text
             type="submit"
+            variant="text"
           >
-            <v-icon left>
-              $save
-            </v-icon>{{ $t('common.action.save') }}
+            <v-icon icon="$save" start />{{ $t('common.action.save') }}
           </v-btn>
         </v-card-actions>
       </v-form>

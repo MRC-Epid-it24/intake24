@@ -3,7 +3,6 @@ import 'lodash/debounce';
 import { addDays } from 'date-fns';
 import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
-import Vue from 'vue';
 
 import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
 import type { RecallFlow, SessionSettings } from '@intake24/common/surveys';
@@ -156,8 +155,25 @@ export const useSurvey = defineStore('survey', {
     },
   },
   getters: {
-    parametersLoaded: state => !!state.parameters && !!state.user,
     currentState: state => state.data,
+    defaultSchemeMeals: state => state.parameters?.surveyScheme.meals,
+    feedbackEnabled: state => !!state.parameters?.feedbackScheme,
+    feedbackAvailable: state => !!state.user?.showFeedback,
+    foodPrompts: state => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
+    hasMeals: state => !!state.data.meals.length,
+    hasFinished: state => !!state.data.endTime,
+    hasStarted: state => !!state.data.startTime,
+    isSubmitted: state => !!state.data.submissionTime,
+    localeId: state => state.parameters?.locale.code ?? 'en_GB',
+    slug: state => state.parameters?.slug,
+    meals: state => state.data.meals,
+    parametersLoaded: state => !!state.parameters && !!state.user,
+    searchParameters: (state) => {
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight }
+        = state.parameters ?? {};
+
+      return { matchScoreWeight, rankingAlgorithm };
+    },
     surveyEnabled: state => state.parameters?.state === 'active',
     dailyLimitReached: state => !!state.user?.maximumDailySubmissionsReached,
     totalLimitReached: state => !!state.user?.maximumTotalSubmissionsReached,
@@ -172,26 +188,9 @@ export const useSurvey = defineStore('survey', {
     recallNumber(): number {
       return (this.user?.submissions ?? 1) + (this.isSubmitted ? 0 : 1);
     },
-    feedbackEnabled: state => !!state.parameters?.feedbackScheme,
-    feedbackAvailable: state => !!state.user?.showFeedback,
     feedbackAllowed(): boolean {
       return this.feedbackEnabled && this.feedbackAvailable;
     },
-    hasStarted: state => !!state.data.startTime,
-    hasFinished: state => !!state.data.endTime,
-    isSubmitted: state => !!state.data.submissionTime,
-    localeId: state => state.parameters?.locale.code ?? 'en_GB',
-    slug: state => state.parameters?.slug,
-    meals: state => state.data.meals,
-    hasMeals: state => !!state.data.meals.length,
-    defaultSchemeMeals: state => state.parameters?.surveyScheme.meals,
-    searchParameters: (state) => {
-      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight }
-        = state.parameters ?? {};
-
-      return { matchScoreWeight, rankingAlgorithm };
-    },
-    foodPrompts: state => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
     registeredPortionSizeMethods(): string[] {
       return (
         this.foodPrompts
@@ -566,7 +565,7 @@ export const useSurvey = defineStore('survey', {
       };
       const entityIds = this.data.meals[mealIndex].foods.reduce(collectEntityIdCallback, [mealId]);
 
-      Vue.delete(this.data.meals, mealIndex);
+      this.data.meals.splice(mealIndex, 1);
       this.sortMeals();
       this.clearEntityPromptStores(entityIds);
     },
@@ -701,8 +700,8 @@ export const useSurvey = defineStore('survey', {
       if (
         originalFood.type !== food.type
         || (originalFood.type === 'encoded-food'
-        && food.type === 'encoded-food'
-        && originalFood.data.code !== food.data.code)
+          && food.type === 'encoded-food'
+          && originalFood.data.code !== food.data.code)
       ) {
         this.clearEntityPromptStores(foodId);
       }
@@ -729,7 +728,7 @@ export const useSurvey = defineStore('survey', {
         || !associatedFoodPromptsComplete(mainFood)
         // 4) associated foods portion size estimations are not finished
         || (mainFood.linkedFoods.length
-        && mainFood.linkedFoods.some(item => !portionSizeComplete(item)))
+          && mainFood.linkedFoods.some(item => !portionSizeComplete(item)))
       ) {
         return;
       }

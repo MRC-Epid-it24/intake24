@@ -6,9 +6,7 @@ export default await antfu({
     semi: true,
   },
   markdown: false,
-  vue: {
-    vueVersion: 2,
-  },
+  vue: true,
   formatters: true,
   ignores: [
     'deployment',

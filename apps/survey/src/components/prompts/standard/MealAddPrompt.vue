@@ -9,6 +9,7 @@
           <component
             :is="prompt.custom ? 'v-combobox' : 'v-select'"
             v-model="state"
+            v-model:search-input="state"
             autofocus
             class="meal-add-prompt__combobox"
             clearable
@@ -17,7 +18,6 @@
             :label="promptI18n.label"
             outlined
             :rules="rules"
-            :search-input.sync="state"
           />
         </v-col>
       </v-row>
@@ -27,12 +27,12 @@
         class="px-4"
         color="primary"
         :disabled="!hasMeals"
-        large
-        text
+        size="large"
         :title="promptI18n.no"
+        variant="text"
         @click.stop="action('cancel')"
       >
-        <v-icon left>
+        <v-icon start>
           $cancel
         </v-icon>
         {{ promptI18n.no }}
@@ -41,11 +41,11 @@
         class="px-4"
         color="primary"
         :disabled="!isValid"
-        large
+        size="large"
         :title="promptI18n.yes"
         @click="action('next')"
       >
-        <v-icon left>
+        <v-icon start>
           $add
         </v-icon>
         {{ promptI18n.yes }}
@@ -55,8 +55,8 @@
       <v-btn
         color="primary"
         :disabled="!hasMeals"
-        text
         :title="promptI18n.no"
+        variant="text"
         @click="action('cancel')"
       >
         <span class="text-overline font-weight-medium">
@@ -81,7 +81,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
-import { VCombobox, VSelect } from 'vuetify/lib';
+import { VCombobox, VSelect } from 'vuetify/components';
 
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -104,23 +104,23 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: String,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n, translatePath } = useI18n();
+    const { i18n: { t }, translatePath } = useI18n();
     const { action, params, type } = usePromptUtils(props, ctx);
 
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
 
@@ -134,11 +134,11 @@ export default defineComponent({
       () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`,
     );
     const promptI18n = computed(() => ({
-      exists: i18n.t(`prompts.${type.value}.exists`),
-      no: i18n.t(`prompts.${type.value}.no`),
-      yes: i18n.t(`prompts.${type.value}.yes`),
+      exists: t(`prompts.${type.value}.exists`),
+      no: t(`prompts.${type.value}.no`),
+      yes: t(`prompts.${type.value}.yes`),
       description: translatePath(`${i18nPrefix.value}.description`, params.value, true),
-      label: i18n.t(`${i18nPrefix.value}.label`),
+      label: t(`${i18nPrefix.value}.label`),
     }));
 
     const rules = [

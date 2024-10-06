@@ -2,7 +2,7 @@ import axios, { HttpStatusCode } from 'axios';
 import { defineStore } from 'pinia';
 
 import type { Dictionary } from '@intake24/common/types';
-import type { UserSecurableAttributes } from '@intake24/db';
+import type { UserSecurableAttributes } from '@intake24/common/types/http/admin';
 
 import { httpService } from '../services';
 import { useResource } from './resource';

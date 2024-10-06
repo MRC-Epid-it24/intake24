@@ -10,35 +10,31 @@
       <template #[`item.action`]="{ item }">
         <v-btn
           color="secondary"
-          icon
+          icon="$read"
           :title="$t('common.action.read')"
           @click.stop="detail(item.id)"
-        >
-          <v-icon>$read</v-icon>
-        </v-btn>
+        />
         <confirm-dialog
           color="error"
           icon
           icon-left="$delete"
-          :label="$t('common.action.delete').toString()"
+          :label="$t('common.action.delete')"
           @confirm="remove(item.id)"
         >
           {{ $t('common.action.confirm.delete', { name: item.id }) }}
         </confirm-dialog>
       </template>
     </embedded-data-table>
-    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
       <v-card tile>
         <v-toolbar color="secondary" dark>
-          <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-            <v-icon>$cancel</v-icon>
-          </v-btn>
+          <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
           <v-toolbar-title>
             {{ selected.id }}
           </v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
-          <json-editor v-bind="{ readOnly: true, value: selected }" />
+          <json-editor v-bind="{ readOnly: true, modelValue: selected }" />
         </v-container>
       </v-card>
     </v-dialog>
@@ -49,10 +45,11 @@
 import { defineComponent, ref } from 'vue';
 
 import type { SurveyEntry, SurveySubmissionEntry } from '@intake24/common/types/http/admin';
-import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -64,10 +61,50 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
+    const { i18n: { t } } = useI18n();
     const { formatDateTime } = useDateTime();
 
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
+
+    const headers: DataTableHeader[] = [
+      {
+        title: t('surveys.submissions.id'),
+        sortable: true,
+        key: 'id',
+        align: 'start',
+      },
+      {
+        title: t('users.id'),
+        sortable: true,
+        key: 'userId',
+        align: 'start',
+      },
+      {
+        title: t('users.aliases.username'),
+        sortable: true,
+        key: 'username',
+        align: 'start',
+      },
+      {
+        title: t('surveys.submissions.startTime'),
+        sortable: true,
+        key: 'startTime',
+        align: 'start',
+      },
+      {
+        title: t('surveys.submissions.endTime'),
+        sortable: true,
+        key: 'endTime',
+        align: 'start',
+      },
+      {
+        title: t('common.action._'),
+        sortable: false,
+        key: 'action',
+        align: 'end',
+      },
+    ];
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
@@ -75,50 +112,13 @@ export default defineComponent({
       formatDateTime,
       entry,
       entryLoaded,
+      headers,
       table,
     };
   },
 
   data() {
     return {
-      headers: [
-        {
-          text: this.$t('surveys.submissions.id'),
-          sortable: true,
-          value: 'id',
-          align: 'start',
-        },
-        {
-          text: this.$t('users.id'),
-          sortable: true,
-          value: 'userId',
-          align: 'start',
-        },
-        {
-          text: this.$t('users.aliases.username'),
-          sortable: true,
-          value: 'username',
-          align: 'start',
-        },
-        {
-          text: this.$t('surveys.submissions.startTime'),
-          sortable: true,
-          value: 'startTime',
-          align: 'start',
-        },
-        {
-          text: this.$t('surveys.submissions.endTime'),
-          sortable: true,
-          value: 'endTime',
-          align: 'start',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
       dialog: false,
       selected: {} as SurveySubmissionEntry,
     };
@@ -152,7 +152,7 @@ export default defineComponent({
 
     async remove(submissionId: string) {
       await this.$http.delete(`${this.baseAPI}/${submissionId}`);
-      useMessages().success(this.$t(`common.msg.deleted`, { name: submissionId }).toString());
+      useMessages().success(this.$t(`common.msg.deleted`, { name: submissionId }));
       await this.table?.fetch();
     },
   },

@@ -9,24 +9,25 @@
         <v-slider
           class="quantity-slider__slider px-8"
           color="secondary"
-          :max="prompt.slider.max.value"
-          :min="prompt.slider.min.value"
+          :max="prompt.slider.max.value ?? undefined"
+          :min="prompt.slider.min.value ?? undefined"
+          :model-value="state"
           :step="prompt.slider.step"
-          :style="{ 'padding-top': `${prompt.slider.current.size + 10}px` }"
           :thumb-label="prompt.slider.current ? `always` : false"
-          :thumb-size="prompt.slider.current.size"
-          :value="state"
-          @change="state = $event"
+          :thumb-size="25"
+          track-color="primary"
+          track-size="12"
           @start="initialize"
+          @update:model-value="state = $event"
         >
-          <template #thumb-label="{ value }">
-            <div v-if="isInitialized" class="d-flex flex-column align-center">
-              <span class="text-h5 font-weight-bold">{{ value }}</span>
+          <template #thumb-label="{ modelValue: thumbValue }">
+            <div v-if="isInitialized" class="d-flex flex-column align-center pa-2">
+              <span class="text-h5 font-weight-bold">{{ thumbValue }}</span>
               <span v-if="prompt.slider.current.label" class="text-h6 font-weight-bold">
                 {{ translate(prompt.slider.current.label) }}
               </span>
             </div>
-            <v-icon v-else class="fa-beat" color="white">
+            <v-icon v-else class="fa-beat pa-4" color="white">
               fas fa-circle
             </v-icon>
           </template>
@@ -73,12 +74,12 @@ export default defineComponent({
   mixins: [createBasePrompt<'slider-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: Number as PropType<number>,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { translate } = useI18n();
@@ -90,10 +91,10 @@ export default defineComponent({
      */
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', typeof value === 'undefined' || value === null ? undefined : value);
+        ctx.emit('update:modelValue', typeof value === 'undefined' || value === null ? undefined : value);
       },
     });
 
@@ -108,10 +109,10 @@ export default defineComponent({
       state.value = value;
     };
 
-    const isValid = computed(() => typeof props.value !== 'undefined');
+    const isValid = computed(() => typeof props.modelValue !== 'undefined');
 
     onMounted(() => {
-      if (typeof props.value === 'undefined')
+      if (typeof props.modelValue === 'undefined')
         state.value = props.prompt.slider.current.value ?? undefined;
     });
 

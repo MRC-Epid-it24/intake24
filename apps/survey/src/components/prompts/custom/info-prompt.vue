@@ -26,13 +26,13 @@ export default defineComponent({
   mixins: [createBasePrompt<'info-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: 'next',
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { action, customPromptLayout } = usePromptUtils(props, ctx);
@@ -40,10 +40,10 @@ export default defineComponent({
     const isValid = true;
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
 

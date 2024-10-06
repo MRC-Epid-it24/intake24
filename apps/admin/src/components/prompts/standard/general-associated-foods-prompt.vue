@@ -1,12 +1,12 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-container>
       <v-row>
         <v-col cols="12" md="6">
           <v-text-field
             hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.categoryCode')"
-            :value="categoryCode"
+            :model-value="categoryCode"
             @change="update('categoryCode', $event)"
           />
         </v-col>
@@ -15,18 +15,17 @@
         <v-col cols="12" md="6">
           <language-selector
             :default="[]"
-            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.promptText').toString()"
-            :value="promptText"
-            @input="update('promptText', $event)"
+            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.promptText')"
+            :model-value="promptText"
+            @update:model-value="update('promptText', $event)"
           >
-            <template v-for="lang in Object.keys(promptText)" #[`lang.${lang}`]>
+            <template v-for="lang in Object.keys(promptText)" :key="lang" #[`lang.${lang}`]>
               <v-text-field
-                :key="lang"
                 hide-details="auto"
+                :model-value="promptText[lang]"
                 :name="`promptText.${lang}`"
-                outlined
-                :value="promptText[lang]"
-                @input="updateLanguage('promptText', lang, $event)"
+                variant="outlined"
+                @update:model-value="updateLanguage('promptText', lang, $event)"
               />
             </template>
           </language-selector>
@@ -36,18 +35,17 @@
         <v-col cols="12" md="6">
           <language-selector
             :default="[]"
-            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.genericName').toString()"
-            :value="genericName"
-            @input="update('genericName', $event)"
+            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.genericName')"
+            :model-value="genericName"
+            @update:model-value="update('genericName', $event)"
           >
-            <template v-for="lang in Object.keys(genericName)" #[`lang.${lang}`]>
+            <template v-for="lang in Object.keys(genericName)" :key="lang" #[`lang.${lang}`]>
               <v-text-field
-                :key="lang"
                 hide-details="auto"
+                :model-value="genericName[lang]"
                 :name="`genericName.${lang}`"
-                outlined
-                :value="genericName[lang]"
-                @input="updateLanguage('genericName', lang, $event)"
+                variant="outlined"
+                @update:model-value="updateLanguage('genericName', lang, $event)"
               />
             </template>
           </language-selector>
@@ -57,9 +55,9 @@
         <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
-            :input-value="multiple"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.multiple')"
-            @change="update('multiple', $event)"
+            :model-value="multiple"
+            @update:model-value="update('multiple', $event)"
           />
         </v-col>
       </v-row>
@@ -67,9 +65,9 @@
         <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
-            :input-value="skipPortionSize"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.skipPortionSize')"
-            @change="update('skipPortionSize', $event)"
+            :model-value="skipPortionSize"
+            @update:model-value="update('skipPortionSize', $event)"
           />
         </v-col>
       </v-row>
@@ -78,12 +76,12 @@
         <v-col cols="12" md="6">
           <food-browser-settings
             :categories-first="categoriesFirst"
-            @update:categoriesFirst="update('categoriesFirst', $event)"
+            @update:categories-first="update('categoriesFirst', $event)"
           />
         </v-col>
       </v-row>
     </v-container>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

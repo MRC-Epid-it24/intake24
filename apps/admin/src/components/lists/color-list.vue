@@ -1,49 +1,43 @@
 <template>
   <div>
-    <v-list>
-      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(item, idx) in items"
-            :key="item._id"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-icon
+    <v-list class="list-border">
+      <vue-draggable
+        v-model="items"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+        @end="update"
+      >
+        <v-list-item
+          v-for="(item, idx) in items"
+          :key="item._id"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-icon
               class="mx-2 my-auto pa-4 rounded-circle"
               :style="{ backgroundColor: item.color }"
             />
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium">
-                {{ item.color }} ({{ lastLabel && idx + 1 === items.length ? lastLabel : idx + 1 }})
-              </v-list-item-title>
-            </v-list-item-content>
+          </template>
+          <v-list-item-title class="font-weight-medium">
+            {{ item.color }} ({{ lastLabel && idx + 1 === items.length ? lastLabel : idx + 1 }})
+          </v-list-item-title>
+          <template #append>
             <v-list-item-action>
-              <v-btn icon :title="$t('feedback-schemes.colors.edit')" @click.stop="edit(idx, item)">
-                <v-icon color="secondary lighten-2">
-                  $edit
-                </v-icon>
-              </v-btn>
+              <v-btn icon="$edit" :title="$t('feedback-schemes.colors.edit')" @click.stop="edit(idx, item)" />
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <v-dialog
       v-model="dialog.show"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
+      :fullscreen="$vuetify.display.smAndDown"
       max-width="600px"
       persistent
     >
-      <v-card :tile="$vuetify.breakpoint.smAndDown">
+      <v-card :tile="$vuetify.display.smAndDown">
         <v-toolbar color="secondary" dark flat>
-          <v-icon dark left>
-            fas fa-palette
-          </v-icon>
+          <v-icon icon="fas fa-palette" start />
           <v-toolbar-title>
             {{ $t('feedback-schemes.colors.edit') }}
           </v-toolbar-title>
@@ -60,15 +54,15 @@
                     link
                     @click="dialog.item.color = color"
                   >
-                    <v-list-item-icon
-                      class="mx-2 my-auto pa-4 rounded-circle"
-                      :style="{ backgroundColor: color }"
-                    />
-                    <v-list-item-content>
-                      <v-list-item-title class="font-weight-medium text-uppercase">
-                        {{ key }}
-                      </v-list-item-title>
-                    </v-list-item-content>
+                    <template #prepend>
+                      <v-icon
+                        class="mx-2 my-auto pa-4 rounded-circle"
+                        :style="{ backgroundColor: color }"
+                      />
+                    </template>
+                    <v-list-item-title class="font-weight-medium text-uppercase">
+                      {{ key }}
+                    </v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-col>
@@ -78,16 +72,12 @@
             </v-row>
           </v-card-text>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>
-                $cancel
-              </v-icon>{{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer />
-            <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -99,7 +89,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import { useListWithDialog } from '@intake24/admin/composables';
 import { colors } from '@intake24/common/theme';
@@ -108,13 +98,13 @@ import { randomString } from '@intake24/common/util';
 export default defineComponent({
   name: 'ColorList',
 
-  components: { Draggable: draggable },
+  components: { VueDraggable },
 
   props: {
     lastLabel: {
       type: String,
     },
-    value: {
+    modelValue: {
       type: Array as PropType<string[]>,
       required: true,
     },

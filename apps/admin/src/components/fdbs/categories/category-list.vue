@@ -1,6 +1,6 @@
 <template>
   <v-card v-bind="{ flat, outlined, tile }">
-    <v-toolbar color="grey lighten-4" flat>
+    <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         <slot name="title">
           {{ $t('fdbs.categories.title') }}
@@ -14,32 +14,29 @@
         @add="add"
       />
     </v-toolbar>
-    <v-list class="py-0">
-      <template v-for="(item, idx) in items">
-        <v-list-item :key="item.code" link>
-          <v-list-item-avatar>
-            <v-icon>$categories</v-icon>
-          </v-list-item-avatar>
-          <slot name="item.content" v-bind="{ item }">
-            <v-list-item-content>
-              <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
-            </v-list-item-content>
-          </slot>
+    <v-list class="list-border py-0">
+      <v-list-item v-for="item in items" :key="item.code" link>
+        <template #prepend>
+          <v-icon>$categories</v-icon>
+        </template>
+        <slot name="item.content" v-bind="{ item }">
+          <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
+        </slot>
+        <template #append>
           <slot name="item.action" v-bind="{ item }" />
           <v-list-item-action v-if="!disabled">
             <confirm-dialog
               color="error"
               icon
               icon-left="$delete"
-              :label="$t('fdbs.categories.remove').toString()"
+              :label="$t('fdbs.categories.remove')"
               @confirm="remove(item.code)"
             >
               {{ $t('common.action.confirm.remove', { name: item.name }) }}
             </confirm-dialog>
           </v-list-item-action>
-        </v-list-item>
-        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`" />
-      </template>
+        </template>
+      </v-list-item>
     </v-list>
     <v-messages
       v-if="errors.has('main.parentCategories')"
@@ -87,17 +84,16 @@ export default defineComponent({
     tile: {
       type: Boolean,
     },
-    value: {
+    modelValue: {
       type: Array as PropType<CategoryListItem[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const items = useVModel(props, 'value', emit, {
-      eventName: 'input',
+    const items = useVModel(props, 'modelValue', emit, {
       passive: true,
       deep: true,
     });

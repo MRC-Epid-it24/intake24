@@ -7,24 +7,20 @@
       track-by="userId"
     >
       <template #header-add>
-        <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-          <template #activator="{ attrs, on }">
-            <v-btn class="font-weight-bold" color="secondary" text v-bind="attrs" v-on="on">
-              <v-icon left>
-                fas fa-user-plus
-              </v-icon>{{ $t('surveys.respondents.add') }}
+        <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+          <template #activator="{ props }">
+            <v-btn class="font-weight-bold" color="secondary" variant="text" v-bind="props">
+              <v-icon icon="fas fa-user-plus" start />{{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
-          <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
+          <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
             <v-toolbar color="secondary" dark flat>
-              <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-                <v-icon>$cancel</v-icon>
-              </v-btn>
+              <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
               <v-toolbar-title>
                 {{ $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`) }}
               </v-toolbar-title>
             </v-toolbar>
-            <v-form autocomplete="off" @keydown.native="clearError" @submit.prevent="saveRespondent">
+            <v-form autocomplete="off" @keydown="clearError" @submit.prevent="saveRespondent">
               <v-card-title>
                 {{ $t('users.identifiers.title') }}
               </v-card-title>
@@ -38,8 +34,8 @@
                   hide-details="auto"
                   :label="$t('users.username')"
                   name="username"
-                  outlined
                   prepend-inner-icon="fas fa-user-secret"
+                  variant="outlined"
                 />
                 <v-text-field
                   v-model="form.password"
@@ -49,9 +45,9 @@
                   hide-details="auto"
                   :label="$t('common.password._')"
                   name="password"
-                  outlined
                   prepend-inner-icon="fas fa-unlock"
                   type="password"
+                  variant="outlined"
                 />
                 <v-text-field
                   v-model="form.passwordConfirm"
@@ -60,9 +56,9 @@
                   hide-details="auto"
                   :label="$t('common.password.confirm')"
                   name="passwordConfirm"
-                  outlined
                   prepend-inner-icon="fas fa-unlock"
                   type="password"
+                  variant="outlined"
                 />
               </v-card-text>
               <template v-if="entry.userPersonalIdentifiers">
@@ -77,8 +73,8 @@
                     hide-details="auto"
                     :label="$t('users.name')"
                     name="name"
-                    outlined
                     prepend-inner-icon="fas fa-user"
+                    variant="outlined"
                   />
                   <v-text-field
                     v-model="form.email"
@@ -87,8 +83,8 @@
                     hide-details="auto"
                     :label="$t('common.email')"
                     name="email"
-                    outlined
                     prepend-inner-icon="fas fa-at"
+                    variant="outlined"
                   />
                   <v-text-field
                     v-model="form.phone"
@@ -96,8 +92,8 @@
                     hide-details="auto"
                     :label="$t('common.phone')"
                     name="phone"
-                    outlined
                     prepend-inner-icon="fas fa-phone"
+                    variant="outlined"
                   />
                 </v-card-text>
               </template>
@@ -107,43 +103,39 @@
                     {{ $t('users.customFields.title') }}
                   </div>
                   <v-spacer />
-                  <v-btn color="primary" fab small :title="$t('users.customFields.add')" @click.stop="addCustomField">
-                    <v-icon small>
-                      $add
-                    </v-icon>
-                  </v-btn>
+                  <v-btn color="primary" icon="$add" size="small" :title="$t('users.customFields.add')" @click.stop="addCustomField" />
                 </v-toolbar>
                 <v-card-text>
-                  <template v-for="(field, idx) in form.customFields">
-                    <v-row :key="`r1-${idx}`" dense>
+                  <template v-for="(field, idx) in form.customFields" :key="`r-${idx}`">
+                    <v-row dense>
                       <v-col cols="12" md="4">
                         <v-text-field
                           v-model="field.name"
-                          dense
+                          density="compact"
                           :error-messages="form.errors.get(`customFields.${idx}.name`)"
                           hide-details="auto"
                           :label="$t('users.customFields.name')"
-                          outlined
+                          variant="outlined"
                         />
                       </v-col>
                       <v-col cols="12" md="8">
                         <v-text-field
                           v-model="field.value"
-                          dense
+                          density="compact"
                           :error-messages="form.errors.get(`customFields.${idx}.value`)"
                           hide-details="auto"
                           :label="$t('users.customFields.value')"
-                          outlined
+                          variant="outlined"
                         />
                       </v-col>
                     </v-row>
-                    <v-row :key="`r2-${idx}`" dense justify="space-between">
+                    <v-row dense justify="space-between">
                       <v-col cols="auto">
-                        <v-checkbox v-model="field.public" class="mt-0" hide-details="auto" :label="$t('users.customFields.public')" />
+                        <v-checkbox-btn v-model="field.public" hide-details="auto" :label="$t('users.customFields.public')" />
                       </v-col>
                       <v-col cols="auto">
-                        <v-btn color="error" text :title="$t('users.customFields.remove')" @click.stop="removeCustomField(idx)">
-                          <v-icon color="error" left>
+                        <v-btn color="error" :title="$t('users.customFields.remove')" variant="text" @click.stop="removeCustomField(idx)">
+                          <v-icon color="error" start>
                             $delete
                           </v-icon>
                           {{ $t('common.action.remove') }}
@@ -155,26 +147,20 @@
               </template>
               <v-divider />
               <v-card-actions>
-                <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                  <v-icon left>
-                    $cancel
-                  </v-icon>{{ $t('common.action.cancel') }}
+                <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+                  <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
                 </v-btn>
                 <v-spacer />
-                <v-btn class="font-weight-bold" color="info" text type="submit">
-                  <v-icon left>
-                    $save
-                  </v-icon>{{ $t('common.action.save') }}
+                <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+                  <v-icon icon="$save" start />{{ $t('common.action.save') }}
                 </v-btn>
               </v-card-actions>
             </v-form>
           </v-card>
         </v-dialog>
-        <v-menu close-on-click close-on-content-click offset-y>
-          <template #activator="{ attrs, on }">
-            <v-btn class="font-weight-bold" color="secondary" v-bind="attrs" icon v-on="on">
-              <v-icon>$options</v-icon>
-            </v-btn>
+        <v-menu close-on-content-click :persistent="false">
+          <template #activator="{ props }">
+            <v-btn class="font-weight-bold" color="secondary" icon="$options" v-bind="props" variant="text" />
           </template>
           <v-list>
             <respondents-upload :survey-id="id" />
@@ -183,42 +169,32 @@
         </v-menu>
       </template>
       <template #[`item.surveyAuthUrl`]="{ item }">
-        <v-btn :href="item.surveyAuthUrl" icon link target="_blank">
+        <v-btn :href="item.surveyAuthUrl" icon target="_blank">
           <v-icon>fas fa-arrow-up-right-from-square</v-icon>
         </v-btn>
-        <v-btn icon @click="toClipboard(item.surveyAuthUrl)">
-          <v-icon>fas fa-clipboard</v-icon>
-        </v-btn>
+        <v-btn icon="fas fa-clipboard" @click="toClipboard(item.surveyAuthUrl)" />
       </template>
       <template #[`item.feedbackAuthUrl`]="{ item }">
-        <v-btn :href="item.feedbackAuthUrl" icon link target="_blank">
+        <v-btn :href="item.feedbackAuthUrl" icon target="_blank">
           <v-icon>fas fa-arrow-up-right-from-square</v-icon>
         </v-btn>
-        <v-btn icon @click="toClipboard(item.feedbackAuthUrl)">
-          <v-icon>fas fa-clipboard</v-icon>
-        </v-btn>
+        <v-btn icon="fas fa-clipboard" @click="toClipboard(item.feedbackAuthUrl)" />
       </template>
       <template #[`item.action`]="{ item }">
-        <v-menu close-on-click close-on-content-click offset-y>
-          <template #activator="{ attrs, on }">
-            <v-btn class="font-weight-bold" color="secondary" v-bind="attrs" icon v-on="on">
-              <v-icon>$options</v-icon>
-            </v-btn>
+        <v-menu close-on-content-click :persistent="false">
+          <template #activator="{ props }">
+            <v-btn class="font-weight-bold" color="secondary" icon="$options" v-bind="props" />
           </template>
           <v-list>
             <respondent-feedback :survey-id="id" :user="item" />
           </v-list>
         </v-menu>
-        <v-btn color="secondary" icon :title="$t('common.action.edit')" @click.stop="editRespondent(item)">
-          <v-icon dark>
-            $edit
-          </v-icon>
-        </v-btn>
+        <v-btn color="secondary" icon="$edit" :title="$t('common.action.edit')" @click.stop="editRespondent(item)" />
         <confirm-dialog
           color="error"
           icon
           icon-left="$delete"
-          :label="$t('common.action.delete').toString()"
+          :label="$t('common.action.delete')"
           @confirm="removeRespondent(item)"
         >
           {{ $t('common.action.confirm.delete', { name: item.username }) }}
@@ -237,7 +213,7 @@ import type {
   RespondentListEntry,
   SurveyEntry,
 } from '@intake24/common/types/http/admin';
-import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
@@ -284,40 +260,40 @@ export default defineComponent({
     async function toClipboard(data: string) {
       await clipboard.toClipboard(
         data,
-        i18n.t('surveys.respondents.authUrls.copiedToClipboard').toString(),
+        i18n.t('surveys.respondents.authUrls.copiedToClipboard'),
       );
     }
 
-    const headers = [
+    const headers: DataTableHeader[] = [
       {
-        text: i18n.t('users.aliases.username'),
+        title: i18n.t('users.aliases.username'),
         sortable: true,
-        value: 'username',
+        key: 'username',
         align: 'start',
       },
       {
-        text: i18n.t('users.aliases.urlAuthToken'),
+        title: i18n.t('users.aliases.urlAuthToken'),
         sortable: false,
-        value: 'urlAuthToken',
+        key: 'urlAuthToken',
         align: 'start',
       },
       {
-        text: i18n.t('surveys.respondents.authUrls.surveyAuthUrl'),
+        title: i18n.t('surveys.respondents.authUrls.surveyAuthUrl'),
         sortable: false,
-        value: 'surveyAuthUrl',
+        key: 'surveyAuthUrl',
         align: 'start',
       },
       {
-        text: i18n.t('surveys.respondents.authUrls.feedbackAuthUrl'),
+        title: i18n.t('surveys.respondents.authUrls.feedbackAuthUrl'),
         sortable: false,
-        value: 'feedbackAuthUrl',
+        key: 'feedbackAuthUrl',
         align: 'start',
       },
       {
-        text: i18n.t('common.action._'),
+        title: i18n.t('common.action._'),
         sortable: false,
-        value: 'action',
-        align: 'right',
+        key: 'action',
+        align: 'end',
       },
     ];
 
@@ -390,14 +366,14 @@ export default defineComponent({
           `admin/surveys/${props.id}/respondents/${form.username}`,
         );
 
-        useMessages().success(i18n.t('common.msg.updated', { name }).toString());
+        useMessages().success(i18n.t('common.msg.updated', { name }));
       }
       else {
         const { username: name } = await form.post<RespondentEntry>(
           `admin/surveys/${props.id}/respondents`,
         );
 
-        useMessages().success(i18n.t('common.msg.created', { name }).toString());
+        useMessages().success(i18n.t('common.msg.created', { name }));
       }
 
       dialog.value = false;
@@ -406,7 +382,7 @@ export default defineComponent({
 
     async function removeRespondent({ username: name }: RespondentListEntry) {
       await http.delete(`admin/surveys/${props.id}/respondents/${name}`);
-      useMessages().success(i18n.t('common.msg.deleted', { name }).toString());
+      useMessages().success(i18n.t('common.msg.deleted', { name }));
 
       await updateTable();
     };

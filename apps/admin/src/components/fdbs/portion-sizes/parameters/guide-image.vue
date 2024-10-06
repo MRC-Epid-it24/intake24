@@ -34,7 +34,7 @@ export default defineComponent({
   components: { SelectResource },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<PortionSizeParameters['guide-image']>,
       required: true,
     },

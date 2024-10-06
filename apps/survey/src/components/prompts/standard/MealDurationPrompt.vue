@@ -6,16 +6,17 @@
           v-model="state"
           class="quantity-slider__slider px-8"
           color="secondary"
-          :max="prompt.slider.max.value"
-          :min="prompt.slider.min.value"
+          :max="prompt.slider.max.value ?? undefined"
+          :min="prompt.slider.min.value ?? undefined"
           :step="prompt.slider.step"
-          :style="{ 'padding-top': `${prompt.slider.current.size + 10}px` }"
           :thumb-label="prompt.slider.current ? `always` : false"
-          :thumb-size="prompt.slider.current.size"
+          :thumb-size="25"
+          track-color="primary"
+          track-size="12"
         >
-          <template #thumb-label="{ value }">
+          <template #thumb-label="{ modelValue: thumbValue }">
             <div class="d-flex flex-column align-center">
-              <span class="text-h5 font-weight-bold">{{ value }}</span>
+              <span class="text-h5 font-weight-bold">{{ thumbValue }}</span>
               <span v-if="prompt.slider.current.label" class="text-h6 font-weight-bold">
                 {{ translate(prompt.slider.current.label) }}
               </span>
@@ -67,12 +68,12 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Number,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { translate } = useI18n();
@@ -80,10 +81,10 @@ export default defineComponent({
 
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
 
@@ -91,7 +92,7 @@ export default defineComponent({
     const promptI18n = computed(() => translatePrompt(['minutes', 'confirm']));
 
     onMounted(() => {
-      if (typeof props.value === 'undefined')
+      if (typeof props.modelValue === 'undefined')
         state.value = props.prompt.slider.current.value ?? props.prompt.slider.min.value ?? 0;
     });
 

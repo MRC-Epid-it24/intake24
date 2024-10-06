@@ -9,31 +9,28 @@
         <v-label v-if="$t(`prompts.${type}.label`)">
           {{ $t(`prompts.${type}.label`) }}
         </v-label>
-        <!-- @vue-expect-error vuetify2 uses both model/value -->
-        <v-checkbox
+        <v-checkbox-btn
           v-for="option in localeOptions"
           :key="option.value"
           v-model="selected"
-          class="mt-2"
           :disabled="disableOption(option.value)"
           :error="hasErrors"
           hide-details="auto"
           :label="option.label"
           :value="option.value"
-          @change="update(option)"
+          @update:model-value="update(option)"
         />
-        <v-row v-if="prompt.other" align="center" class="mt-2" no-gutters>
-          <v-checkbox v-model="otherEnabled" class="my-auto" :disabled="disableOption(otherOutput)" hide-details />
+        <div v-if="prompt.other" class="d-flex flex-row align-center">
+          <v-checkbox-btn v-model="otherEnabled" class="flex-grow-0" :disabled="disableOption(otherOutput)" hide-details />
           <v-text-field
             v-model.trim="otherValue"
             :disabled="!otherEnabled || disableOption(otherOutput)"
             :error="hasErrors && otherEnabled"
             hide-details="auto"
             :label="$t(`prompts.${type}.other`)"
-            outlined
-            @input="update"
+            @update:model-value="update()"
           />
-        </v-row>
+        </div>
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
       </v-form>
     </v-card-text>
@@ -62,35 +59,35 @@ export default defineComponent({
   mixins: [createBasePrompt<'checkbox-list-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: Array as PropType<string[]>,
       default: () => [] as string[],
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n } = useI18n();
+    const { i18n: { locale } } = useI18n();
 
     const otherEnabled = ref(false);
     const otherValue = ref('');
     const otherOutput = computed(() => otherValue.value.length ? `Other: ${otherValue.value}` : '');
 
-    const selected = ref(Array.isArray(props.value) ? props.value : []);
+    const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
     const state = computed(() => [...selected.value, otherOutput.value].filter(Boolean));
 
     const localeOptions = computed(
-      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
+      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
     );
-    const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.value.includes(option.value)));
-    const isMinSatisfied = computed(() => !props.prompt.validation.min || props.value.length >= props.prompt.validation.min);
-    const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.value.length <= props.prompt.validation.max);
-    const isRequiredSatisfied = computed(() => !props.prompt.validation.required || !!props.value.length);
+    const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.modelValue.includes(option.value)));
+    const isMinSatisfied = computed(() => !props.prompt.validation.min || props.modelValue.length >= props.prompt.validation.min);
+    const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.modelValue.length <= props.prompt.validation.max);
+    const isRequiredSatisfied = computed(() => !props.prompt.validation.required || !!props.modelValue.length);
     const isValid = computed(() => isRequiredSatisfied.value && (isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value)));
 
-    const disableOption = (value: string) => !props.value.includes(value)
-      && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.value.length === props.prompt.validation.max));
+    const disableOption = (value: string) => !props.modelValue.includes(value)
+      && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.modelValue.length === props.prompt.validation.max));
 
     const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
       props,
@@ -105,7 +102,7 @@ export default defineComponent({
 
       clearErrors();
 
-      ctx.emit('input', [...state.value]);
+      ctx.emit('update:modelValue', [...state.value]);
     };
 
     watch(otherEnabled, (val) => {

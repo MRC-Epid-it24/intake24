@@ -1,26 +1,23 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey lighten-3" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-3" flat tile>
+      <v-icon color="secondary" end>
         fas fa-bars-staggered
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.sections.title') }}
       </v-toolbar-title>
       <v-spacer />
-      <v-menu close-on-click left offset-y>
-        <template #activator="{ attrs, on }">
+      <v-menu location="left" :persistent="false">
+        <template #activator="{ props }">
           <v-btn
-            v-bind="attrs"
             class="ml-3"
             color="primary"
-            fab
-            small
+            icon="$add"
+            size="small"
             :title=" $t('feedback-schemes.sections.add')"
-            v-on="on"
-          >
-            <v-icon>$add</v-icon>
-          </v-btn>
+            v-bind="props"
+          />
         </template>
         <v-list>
           <v-list-item v-for="section in availableSections" :key="section.id" link @click="add(section.id)">
@@ -31,48 +28,44 @@
         </v-list>
       </v-menu>
       <options-menu>
-        <select-resource resource="feedback-schemes" return-object="sections" @input="load">
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+        <select-resource resource="feedback-schemes" return-object="sections" @update:model-value="load">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="items" @input="update" />
+        <json-editor-dialog v-model="items" @update:model-value="update" />
       </options-menu>
     </v-toolbar>
-    <v-list class="py-0">
-      <draggable
+    <v-list class="list-border py-0">
+      <vue-draggable
         v-model="items"
+        :animation="300"
         handle=".drag-and-drop__handle"
         @end="update"
       >
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(section, index) in sections"
-            :key="section.id"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>fas fa-grip-vertical</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ section.title }}</v-list-item-title>
-            </v-list-item-content>
+        <v-list-item
+          v-for="(section, index) in sections"
+          :key="section.id"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title>{{ section.title }}</v-list-item-title>
+          <template #append>
             <v-list-item-action>
               <v-btn
                 icon
                 :title="$t('feedback-schemes.sections.edit')"
                 @click.stop="edit(index, items[index])"
               >
-                <v-icon color="secondary lighten-2">
+                <v-icon color="secondary-lighten-2">
                   $edit
                 </v-icon>
               </v-btn>
@@ -82,48 +75,42 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('feedback-schemes.sections.remove').toString()"
+                :label="$t('feedback-schemes.sections.remove')"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: section.title }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <v-dialog
       v-if="typeof dialog.item !== 'string'"
       v-model="dialog.show"
       fullscreen
-      hide-overlay
       persistent
+      :scrim="false"
       transition="dialog-bottom-transition"
     >
       <v-card tile>
         <v-toolbar color="secondary" dark>
-          <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-            <v-icon>$cancel</v-icon>
-          </v-btn>
+          <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
-            <v-icon dark left>
-              fas fa-bars-staggered
-            </v-icon>
+            <v-icon icon="fas fa-bars-staggered" start />
             {{
               $t(`feedback-schemes.sections.${dialog.index === -1 ? 'add' : 'edit'}`)
             }}
           </v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
-            <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
           <template #extension>
             <v-container>
-              <v-tabs v-model="tab" background-color="secondary" dark>
+              <v-tabs v-model="tab" bg-color="secondary">
                 <v-tab v-for="item in ['general', 'json']" :key="item" :tab-value="item">
                   {{ $t(`feedback-schemes.sections.tabs.${item}`) }}
                 </v-tab>
@@ -133,48 +120,46 @@
         </v-toolbar>
         <v-form ref="form" @submit.prevent="save">
           <v-container>
-            <v-tabs-items v-model="tab" class="pt-1">
-              <v-tab-item key="general" value="general">
+            <v-tabs-window v-model="tab" class="pt-1">
+              <v-tabs-window-item key="general" value="general">
                 <language-selector
                   v-model="dialog.item.title"
-                  :label="$t('feedback-schemes.custom.header').toString()"
+                  border
+                  class="mb-4"
+                  :label="$t('feedback-schemes.custom.header')"
                 >
-                  <template v-for="lang in Object.keys(dialog.item.title)" #[`lang.${lang}`]>
+                  <template v-for="lang in Object.keys(dialog.item.title)" :key="lang" #[`lang.${lang}`]>
                     <v-text-field
-                      :key="lang"
                       v-model="dialog.item.title[lang]"
                       hide-details="auto"
                       :label="$t('feedback-schemes.custom.header')"
-                      outlined
+                      variant="outlined"
                     />
                   </template>
                 </language-selector>
                 <language-selector
                   v-model="dialog.item.content"
-                  :label="$t('feedback-schemes.custom.content').toString()"
+                  border
+                  :label="$t('feedback-schemes.custom.content')"
                 >
-                  <template v-for="lang in Object.keys(dialog.item.content)" #[`lang.${lang}`]>
-                    <html-editor :key="lang" v-model="dialog.item.content[lang]" />
+                  <template v-for="lang in Object.keys(dialog.item.content)" :key="lang" #[`lang.${lang}`]>
+                    <html-editor v-model="dialog.item.content[lang]" />
                   </template>
                 </language-selector>
-              </v-tab-item>
-              <v-tab-item key="json" value="json">
+              </v-tabs-window-item>
+              <v-tabs-window-item key="json" value="json">
                 <v-container>
                   <json-editor v-model="dialog.item" />
                 </v-container>
-              </v-tab-item>
-            </v-tabs-items>
+              </v-tabs-window-item>
+            </v-tabs-window>
             <v-card-actions>
-              <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>
-                  $cancel
-                </v-icon>{{ $t('common.action.cancel') }}
+              <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+                <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
               </v-btn>
               <v-spacer />
-              <v-btn class="font-weight-bold" color="info" text type="submit">
-                <v-icon left>
-                  $success
-                </v-icon>{{ $t('common.action.ok') }}
+              <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+                <v-icon icon="$success" start />{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>
@@ -186,8 +171,8 @@
 
 <script lang="ts">
 import { computed, defineComponent, type PropType, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router/composables';
-import Draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
+import { useRoute, useRouter } from 'vue-router';
 
 import type {
   FeedbackSection,
@@ -209,17 +194,17 @@ export default defineComponent({
 
   components: {
     ConfirmDialog,
-    Draggable,
     HtmlEditor,
     JsonEditor,
     JsonEditorDialog,
     LanguageSelector,
     OptionsMenu,
     SelectResource,
+    VueDraggable,
   },
 
   props: {
-    value: {
+    modelValue: {
       type: Array as PropType<FeedbackSection[]>,
       required: true,
     },
@@ -268,10 +253,10 @@ export default defineComponent({
     };
 
     const availableSections = computed(() => {
-      const usedSections = props.value.filter(section => typeof section === 'string');
+      const usedSections = props.modelValue.filter(section => typeof section === 'string');
       return ['custom', ...feedbackStandardSections.filter(section => !usedSections.includes(section))].map(id => ({
         id,
-        title: i18n.t(`feedback-schemes.${kebabCase(id)}.title`).toString(),
+        title: i18n.t(`feedback-schemes.${kebabCase(id)}.title`),
       }) as { id: FeedbackStandardSection | 'custom'; title: string });
     });
 

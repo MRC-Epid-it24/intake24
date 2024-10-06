@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -12,8 +12,8 @@
                 hide-details="auto"
                 :label="$t('standard-units.id')"
                 name="id"
-                outlined
                 prepend-inner-icon="$standard-units"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -23,24 +23,24 @@
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12">
               <language-selector
                 v-model="form.estimateIn"
-                :label="$t('standard-units.estimateIn').toString()"
+                border
+                :label="$t('standard-units.estimateIn')"
                 required
               >
-                <template v-for="lang in Object.keys(form.estimateIn)" #[`lang.${lang}`]>
+                <template v-for="lang in Object.keys(form.estimateIn)" :key="lang" #[`lang.${lang}`]>
                   <v-text-field
-                    :key="lang"
                     v-model="form.estimateIn[lang]"
                     :error-messages="form.errors.get(`estimateIn.${lang}`)"
                     hide-details="auto"
                     :name="`estimateIn.${lang}`"
-                    outlined
-                    @input="form.errors.clear(`estimateIn.${lang}`)"
+                    variant="outlined"
+                    @update:model-value="form.errors.clear(`estimateIn.${lang}`)"
                   />
                 </template>
               </language-selector>
@@ -48,18 +48,18 @@
             <v-col cols="12">
               <language-selector
                 v-model="form.howMany"
-                :label="$t('standard-units.howMany').toString()"
+                border
+                :label="$t('standard-units.howMany')"
                 required
               >
-                <template v-for="lang in Object.keys(form.howMany)" #[`lang.${lang}`]>
+                <template v-for="lang in Object.keys(form.howMany)" :key="lang" #[`lang.${lang}`]>
                   <v-text-field
-                    :key="lang"
                     v-model="form.howMany[lang]"
                     :error-messages="form.errors.get(`howMany.${lang}`)"
                     hide-details="auto"
                     :name="`howMany.${lang}`"
-                    outlined
-                    @input="form.errors.clear(`howMany.${lang}`)"
+                    variant="outlined"
+                    @update:model-value="form.errors.clear(`howMany.${lang}`)"
                   />
                 </template>
               </language-selector>

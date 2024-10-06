@@ -1,184 +1,190 @@
 <template>
-  <v-tab-item key="actions" value="actions">
-    <v-col cols="12">
-      <v-switch
-        v-model="toggle"
-        hide-details="auto"
-        :label="$t('survey-schemes.actions.enable')"
-        @change="changeToggle"
-      />
-    </v-col>
-    <template v-if="currentActions">
-      <v-col cols="12">
-        <v-switch
-          v-model="currentActions.both"
-          hide-details="auto"
-          :label="$t('survey-schemes.actions.both')"
-        />
-      </v-col>
-      <v-card-subtitle>
-        {{ $t(`survey-schemes.actions.title`) }}
-      </v-card-subtitle>
-      <v-tabs vertical>
-        <v-btn class="mb-4" color="primary" @click="add">
-          <v-icon left>
-            $add
-          </v-icon>
-          {{ $t(`survey-schemes.actions.add`) }}
-        </v-btn>
-        <draggable v-model="currentActions.items" handle=".drag-and-drop__handle" @end="update">
-          <transition-group name="drag-and-drop" type="transition">
-            <v-tab v-for="(item, idx) in currentActions.items" :key="item.id" class="d-flex ga-3">
-              <v-icon class="drag-and-drop__handle flex-grow-0">
-                $handle
-              </v-icon>
-              <div class="flex-grow-1">
-                <v-icon left>
-                  fas fa-location-arrow
-                </v-icon>
-                {{ $t(`survey-schemes.actions.types.${item.type}`) }}({{ idx + 1 }})
-              </div>
-            </v-tab>
-          </transition-group>
-        </draggable>
-        <v-tab-item v-for="(action, idx) in currentActions.items" :key="action.id">
-          <v-card class="mx-4" outlined>
-            <v-card-title>
-              <v-icon left>
-                fas fa-location-arrow
-              </v-icon>
-              {{ $t(`survey-schemes.actions.types._`) }} #{{ idx + 1 }}
-            </v-card-title>
-            <v-container>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <v-select
-                    v-model="action.type"
-                    hide-details="auto"
-                    :items="availableActions"
-                    :label="$t('survey-schemes.actions.types._')"
-                    outlined
-                  />
-                  <div class="d-flex flex-row align-center">
-                    <div class="mr-4">
-                      {{ $t('survey-schemes.actions.layouts._') }}
-                    </div>
-                    <v-checkbox
-                      v-for="layout in layouts"
-                      :key="layout.value"
-                      v-model="action.layout"
-                      class="mr-2"
-                      :label="layout.text"
-                      :value="layout.value"
-                    />
-                  </div>
-                  <v-select
-                    v-model="action.variant"
-                    class="mb-4"
-                    hide-details="auto"
-                    :items="actionVariants"
-                    :label="$t('survey-schemes.actions.variants._')"
-                    outlined
-                  />
-                  <v-select
-                    v-model="action.color"
-                    class="mb-4"
-                    hide-details="auto"
-                    :items="colors"
-                    :label="$t('survey-schemes.actions.color')"
-                    outlined
-                  >
-                    <template #item="{ item }">
-                      <span
-                        class="mr-2 pa-4 rounded-circle"
-                        :style="{ backgroundColor: item.color }"
-                      />
-                      {{ item.text }}
-                    </template>
-                    <template #selection="{ item }">
-                      <span
-                        class="mr-2 pa-4 rounded-circle"
-                        :style="{ backgroundColor: item.color }"
-                      />
-                      {{ item.text }}
-                    </template>
-                  </v-select>
-                  <v-text-field
-                    v-model="action.icon"
-                    hide-details="auto"
-                    :label="$t('survey-schemes.actions.icon')"
-                    outlined
-                  />
-                </v-col>
-                <v-col cols="12" md="6">
-                  <language-selector
-                    v-model="action.text"
-                    :label="$t('survey-schemes.actions.text').toString()"
-                    :required="true"
-                  >
-                    <template v-for="lang in Object.keys(action.text)" #[`lang.${lang}`]>
-                      <v-text-field
-                        :key="lang"
-                        v-model="action.text[lang]"
+  <v-tabs-window-item key="actions" value="actions">
+    <v-container>
+      <v-row>
+        <v-col cols="6">
+          <v-switch
+            v-model="toggle"
+            hide-details="auto"
+            :label="$t('survey-schemes.actions.enable')"
+            @update:model-value="changeToggle"
+          />
+        </v-col>
+        <v-col v-if="currentActions" cols="6">
+          <v-switch
+            v-model="currentActions.both"
+            hide-details="auto"
+            :label="$t('survey-schemes.actions.both')"
+          />
+        </v-col>
+      </v-row>
+      <div v-if="currentActions" class="mt-4">
+        <div class="text-h5 mb-4">
+          {{ $t(`survey-schemes.actions.title`) }}
+        </div>
+        <div class="d-flex flex-row ga-2">
+          <div>
+            <v-btn class="mb-4" color="primary" @click="add">
+              <v-icon icon="$add" start />
+              {{ $t(`survey-schemes.actions.add`) }}
+            </v-btn>
+            <v-tabs v-model="selectedAction" direction="vertical">
+              <vue-draggable
+                v-model="currentActions.items"
+                :animation="300"
+                handle=".drag-and-drop__handle"
+                @end="update"
+              >
+                <v-tab v-for="(action, idx) in currentActions.items" :key="action.id" class="d-flex ga-3" :value="action.id">
+                  <v-icon class="drag-and-drop__handle">
+                    $handle
+                  </v-icon>
+                  {{ $t(`survey-schemes.actions.types.${action.type}`) }}({{ idx + 1 }})
+                </v-tab>
+              </vue-draggable>
+            </v-tabs>
+          </div>
+          <v-tabs-window v-model="selectedAction" class="flex-grow-1">
+            <v-tabs-window-item v-for="(action, idx) in currentActions.items" :key="action.id" :value="action.id">
+              <v-card border flat>
+                <v-card-title>
+                  <v-icon icon="fas fa-location-arrow" start />
+                  {{ $t(`survey-schemes.actions.types._`) }} #{{ idx + 1 }}
+                </v-card-title>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="action.type"
                         hide-details="auto"
+                        :items="availableActions"
+                        :label="$t('survey-schemes.actions.types._')"
+                        variant="outlined"
+                      />
+                    </v-col>
+                    <v-col class="my-auto" cols="12" md="6">
+                      <v-select
+                        v-model="action.layout"
+                        hide-details="auto"
+                        :items="layouts"
+                        :label="$t('survey-schemes.actions.layouts._')"
+                        multiple
+                        variant="outlined"
+                      />
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="action.variant"
+                        hide-details="auto"
+                        :items="actionVariants"
+                        :label="$t('survey-schemes.actions.variants._')"
+                        variant="outlined"
+                      />
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="action.color"
+                        hide-details="auto"
+                        :items="colors"
+                        :label="$t('survey-schemes.actions.color')"
+                        variant="outlined"
+                      >
+                        <template #item="{ item, props }">
+                          <v-list-item v-bind="props">
+                            <template #prepend>
+                              <span
+                                class="mr-2 pa-4 rounded-circle"
+                                :style="{ backgroundColor: item.raw.color }"
+                              />
+                            </template>
+                            <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                          </v-list-item>
+                        </template>
+                        <template #selection="{ item }">
+                          <span
+                            class="mr-2 pa-2 rounded-circle"
+                            :style="{ backgroundColor: item.raw.color }"
+                          />
+                          {{ item.raw.title }}
+                        </template>
+                      </v-select>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-text-field
+                        v-model="action.icon"
+                        hide-details="auto"
+                        :label="$t('survey-schemes.actions.icon')"
+                        variant="outlined"
+                      />
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <json-editor-dialog v-model="action.params">
+                        <template #activator="{ props }">
+                          <v-btn v-bind="props" block class="h-100" size="large" variant="tonal">
+                            <v-icon icon="fas fa-code" start />
+                            {{ $t('survey-schemes.actions.parameters') }}
+                          </v-btn>
+                        </template>
+                      </json-editor-dialog>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <language-selector
+                        v-model="action.text"
+                        border
                         :label="$t('survey-schemes.actions.text')"
-                        outlined
-                        :rules="[]"
-                      />
-                    </template>
-                  </language-selector>
-                  <language-selector
-                    v-model="action.label"
-                    :label="$t('survey-schemes.actions.label').toString()"
-                  >
-                    <template v-for="lang in Object.keys(action.label)" #[`lang.${lang}`]>
-                      <v-text-field
-                        :key="lang"
-                        v-model="action.label[lang]"
-                        hide-details="auto"
+                        :required="true"
+                      >
+                        <template v-for="lang in Object.keys(action.text)" :key="lang" #[`lang.${lang}`]>
+                          <v-text-field
+                            v-model="action.text[lang]"
+                            hide-details="auto"
+                            :label="$t('survey-schemes.actions.text')"
+                            :rules="[]"
+                            variant="outlined"
+                          />
+                        </template>
+                      </language-selector>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <language-selector
+                        v-model="action.label"
+                        border
                         :label="$t('survey-schemes.actions.label')"
-                        outlined
-                        :rules="[]"
-                      />
-                    </template>
-                  </language-selector>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <json-editor-dialog v-model="action.params">
-                    <template #activator="{ attrs, on }">
-                      <v-btn v-bind="attrs" large outlined text v-on="on">
-                        <v-icon left>
-                          fas fa-code
-                        </v-icon>
-                        {{ $t('survey-schemes.actions.parameters') }}
-                      </v-btn>
-                    </template>
-                  </json-editor-dialog>
-                </v-col>
-              </v-row>
-            </v-container>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
-                <v-icon left>
-                  $delete
-                </v-icon>{{ $t('survey-schemes.actions.remove') }}
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-tab-item>
-      </v-tabs>
-    </template>
-  </v-tab-item>
+                      >
+                        <template v-for="lang in Object.keys(action.label)" :key="lang" #[`lang.${lang}`]>
+                          <v-text-field
+                            v-model="action.label[lang]"
+                            hide-details="auto"
+                            :label="$t('survey-schemes.actions.label')"
+                            :rules="[]"
+                            variant="outlined"
+                          />
+                        </template>
+                      </language-selector>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn class="font-weight-bold" color="error" variant="text" @click="remove(idx)">
+                    <v-icon icon="$delete" start />
+                    {{ $t('survey-schemes.actions.remove') }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-tabs-window-item>
+          </v-tabs-window>
+        </div>
+      </div>
+    </v-container>
+  </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { computed, ref, watch } from 'vue';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
@@ -187,91 +193,67 @@ import { withIdList } from '@intake24/admin/util';
 import { type Actions, defaultAction } from '@intake24/common/prompts';
 import { copy, randomString } from '@intake24/common/util';
 
-export default defineComponent({
-  name: 'PromptActions',
+defineOptions({ name: 'PromptActions' });
 
-  components: { Draggable: draggable, JsonEditorDialog, LanguageSelector },
-
-  props: {
-    actions: {
-      type: Object as PropType<Actions>,
-    },
-  },
-
-  emits: ['update:actions'],
-
-  setup() {
-    const { actions: availableActions, actionVariants, colors, layouts } = useSelects();
-
-    return {
-      actionVariants,
-      availableActions,
-      colors,
-      layouts,
-    };
-  },
-
-  data() {
-    return {
-      toggle: !!this.actions,
-      currentActions: this.actions
-        ? { ...this.actions, items: withIdList(this.actions.items) }
-        : undefined,
-    };
-  },
-
-  computed: {
-    outputActions(): Actions | undefined {
-      const { currentActions } = this;
-      if (!currentActions)
-        return undefined;
-
-      return {
-        ...currentActions,
-        items: currentActions.items.map(({ id, ...rest }) => rest),
-      };
-    },
-  },
-
-  watch: {
-    actions(val) {
-      if (deepEqual(val, this.outputActions))
-        return;
-
-      this.currentActions = val ? { ...val, items: withIdList(val.items) } : undefined;
-      this.toggle = !!val;
-    },
-    outputActions: {
-      handler() {
-        this.update();
-      },
-      deep: true,
-    },
-  },
-
-  methods: {
-    changeToggle(enable: boolean) {
-      if (!enable) {
-        this.currentActions = undefined;
-        return;
-      }
-
-      this.currentActions = { both: false, items: [] };
-    },
-
-    add() {
-      this.currentActions?.items.push(copy({ ...defaultAction, id: randomString(6) }));
-    },
-
-    remove(index: number) {
-      this.currentActions?.items.splice(index, 1);
-    },
-
-    update() {
-      this.$emit('update:actions', this.outputActions);
-    },
+const props = defineProps({
+  actions: {
+    type: Object as PropType<Actions>,
   },
 });
+
+const emit = defineEmits(['update:actions']);
+
+const { actions: availableActions, actionVariants, colors, layouts } = useSelects();
+
+const currentActions = ref(props.actions ? { ...props.actions, items: withIdList(props.actions.items) } : undefined);
+const selectedAction = ref(currentActions.value?.items.length ? currentActions.value.items[0].id : undefined);
+const toggle = ref(!!props.actions);
+
+const outputActions = computed(() => {
+  if (!currentActions.value)
+    return undefined;
+
+  return {
+    ...currentActions.value,
+    items: currentActions.value.items.map(({ id, ...rest }) => copy(rest)),
+  };
+});
+
+function changeToggle(enable: boolean) {
+  if (!enable) {
+    currentActions.value = undefined;
+    return;
+  }
+
+  currentActions.value = { both: false, items: [] };
+};
+
+function add() {
+  const id = randomString(6);
+  currentActions.value?.items.push(copy({ ...defaultAction, id }));
+
+  selectedAction.value = id;
+};
+
+function remove(index: number) {
+  currentActions.value?.items.splice(index, 1);
+};
+
+function update() {
+  emit('update:actions', outputActions.value);
+};
+
+watch(() => props.actions, (val) => {
+  if (deepEqual(val, outputActions.value))
+    return;
+
+  currentActions.value = val ? { ...val, items: withIdList(val.items) } : undefined;
+  toggle.value = !!val;
+});
+
+watch(outputActions, () => {
+  update();
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped></style>

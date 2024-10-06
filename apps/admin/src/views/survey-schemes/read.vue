@@ -7,7 +7,7 @@
         :scheme-id="id"
       />
     </template>
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('common.name') }}</th>
@@ -26,7 +26,7 @@
           <td>{{ $t(`securables.visibility.${entry.visibility}`) }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

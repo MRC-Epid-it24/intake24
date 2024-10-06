@@ -6,54 +6,54 @@
       }}
     </v-card-title>
     <v-card-text v-if="!schemes.length">
-      <v-alert color="secondary" text type="info">
+      <v-alert color="secondary" type="info">
         {{ $t(`survey-scheme-prompts.sync.noSchemes`) }}
       </v-alert>
     </v-card-text>
-    <v-list two-line>
+    <v-list lines="two">
       <v-list-item
         v-for="scheme in schemes"
         :key="scheme.id"
         :class="scheme.synced ? `green lighten-5` : `ternary`"
       >
-        <v-list-item-avatar>
+        <template #prepend>
           <v-icon>fas fa-route</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title class="mb-2">
-            {{ $t('survey-schemes._') }}: {{ scheme.name }}
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ $t('common.status') }}: {{ $t(`survey-scheme-prompts.sync.${scheme.synced}`) }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-icon
-            v-if="scheme.synced"
-            color="success"
-            large
-            :title="$t('survey-scheme-prompts.sync.true')"
-          >
-            fa-check-circle
-          </v-icon>
-          <confirm-dialog
-            v-else
-            color="warning"
-            icon
-            icon-left="$sync"
-            :label="$t('survey-scheme-prompts.sync.synchronize').toString()"
-            @confirm="sync(scheme)"
-          >
-            <template #activator="{ attrs, on }">
-              <v-btn v-bind="attrs" icon :title="$t('survey-scheme-prompts.sync.false')" v-on="on">
-                <v-icon color="warning" large>
-                  $sync
-                </v-icon>
-              </v-btn>
-            </template>
-            {{ $t('survey-scheme-prompts.sync.confirm') }}
-          </confirm-dialog>
-        </v-list-item-action>
+        </template>
+        <v-list-item-title class="mb-2">
+          {{ $t('survey-schemes._') }}: {{ scheme.name }}
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          {{ $t('common.status') }}: {{ $t(`survey-scheme-prompts.sync.${scheme.synced}`) }}
+        </v-list-item-subtitle>
+        <template #append>
+          <v-list-item-action>
+            <v-icon
+              v-if="scheme.synced"
+              color="success"
+              size="large"
+              :title="$t('survey-scheme-prompts.sync.true')"
+            >
+              fa-check-circle
+            </v-icon>
+            <confirm-dialog
+              v-else
+              color="warning"
+              icon
+              icon-left="$sync"
+              :label="$t('survey-scheme-prompts.sync.synchronize')"
+              @confirm="sync(scheme)"
+            >
+              <template #activator="{ props }">
+                <v-btn v-bind="props" icon :title="$t('survey-scheme-prompts.sync.false')">
+                  <v-icon color="warning" size="large">
+                    $sync
+                  </v-icon>
+                </v-btn>
+              </template>
+              {{ $t('survey-scheme-prompts.sync.confirm') }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </template>
       </v-list-item>
     </v-list>
   </layout>

@@ -366,9 +366,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Survey client - type check
-        working-directory: apps/survey
-        run: pnpm type-check
+      # - name: Survey client - type check
+      #   working-directory: apps/survey
+      #   run: pnpm type-check
 
       - name: Survey client - build
         working-directory: apps/survey

@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import type { NutrientTableRecordAttributes, Pagination } from '@intake24/db';
-
 import { safeIdentifier } from '../generic';
 import { nutrientTypeResponse } from './nutrient-types';
 
@@ -76,8 +74,6 @@ export const nutrientTableRequest = nutrientTableAttributes.extend({
 
 export type NutrientTableRequest = z.infer<typeof nutrientTableRequest>;
 
-export type NutrientTablesResponse = Pagination<NutrientTableAttributes>;
-
 export type NutrientTableEntry = NutrientTableAttributes & {
   csvMapping: NutrientTableCsvMappingAttributes;
   csvMappingFields: NutrientTableCsvMappingFieldAttributes[];
@@ -97,7 +93,13 @@ export const nutrientTableRecordRequest = z.object({
   nutrients: z.array(z.tuple([z.string(), z.number()])),
   fields: z.array(z.tuple([z.string(), z.string()])),
 });
-
 export type NutrientTableRecordRequest = z.infer<typeof nutrientTableRecordRequest>;
 
-export type NutrientTableRecordsResponse = Pagination<NutrientTableRecordAttributes>;
+export const nutrientTableRecordAttributes = z.object({
+  id: z.string(),
+  name: z.string(),
+  localName: z.string(),
+  nutrientTableId: z.string(),
+  nutrientTableRecordId: z.string(),
+});
+export type NutrientTableRecordAttributes = z.infer<typeof nutrientTableRecordAttributes>;

@@ -6,38 +6,37 @@
     </v-col>
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <v-card dense flat>
-        <v-list class="flex-grow-1 flex-shrink-0" dense>
+        <v-list class="flex-grow-1 flex-shrink-0" density="compact">
           <v-list-item v-for="meal in meals" :key="meal.id" :inactive="true" link :ripple="false">
-            <v-list-item-icon>
-              <v-icon> $meal</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-group :value="meal.time ? true : false">
-                <template #activator>
+            <template #prepend>
+              <v-icon>$meal</v-icon>
+            </template>
+            <v-list-group :value="meal.time ? true : false">
+              <template #activator>
+                <v-list-item-title
+                  class="font-weight-bold text-wrap"
+                  @click="chooseMeal(meal.id, meal.name.en, meal.foods, 'meal')"
+                >
+                  {{ meal.name[$i18n.locale] }}
+                </v-list-item-title>
+                <v-list-item-action>
+                  <span v-if="meal.time">
+                    {{ stringTime(meal.time) }}
+                  </span>
+                  <v-icon v-else size="x-small">
+                    $question
+                  </v-icon>
+                </v-list-item-action>
+              </template>
+              <v-list v-if="meal.foods.length && meal.time ? true : false">
+                <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
                   <v-list-item-title
-                    class="font-weight-bold text-wrap"
-                    @click="chooseMeal(meal.id, meal.name.en, meal.foods, 'meal')"
+                    class="text-wrap"
+                    @click="chooseFood(food.id, foodDisplayName(food), 'food')"
                   >
-                    {{ meal.name[$i18n.locale] }}
+                    {{ foodDisplayName(food) }}
                   </v-list-item-title>
-                  <v-list-item-action>
-                    <v-list-item-action-text v-if="meal.time">
-                      {{ stringTime(meal.time) }}
-                    </v-list-item-action-text>
-                    <v-icon v-else x-small>
-                      $question
-                    </v-icon>
-                  </v-list-item-action>
-                </template>
-                <v-list v-if="meal.foods.length && meal.time ? true : false">
-                  <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
-                    <v-list-item-title
-                      class="text-wrap"
-                      @click="chooseFood(food.id, foodDisplayName(food), 'food')"
-                    >
-                      {{ foodDisplayName(food) }}
-                    </v-list-item-title>
-                    <!-- <v-list-item-action>
+                  <!-- <v-list-item-action>
                       <v-icon v-if="food.data" color="success" x-small>
                         $ok
                       </v-icon>
@@ -47,10 +46,9 @@
                         $ok
                       </v-icon>
                     </v-list-item-action> -->
-                  </v-list-item>
-                </v-list>
-              </v-list-group>
-            </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-list-group>
           </v-list-item>
         </v-list>
       </v-card>
@@ -83,7 +81,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['meal-selected', 'food-selected'],
+  emits: ['action', 'meal-selected', 'food-selected'],
 
   setup(props, ctx) {
     const { action } = usePromptUtils(props, ctx);

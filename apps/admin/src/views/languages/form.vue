@@ -1,7 +1,7 @@
 <template>
-  <layout v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -12,8 +12,8 @@
                 hide-details="auto"
                 :label="$t('languages.code')"
                 name="code"
-                outlined
                 prepend-inner-icon="$languages"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -24,16 +24,20 @@
                 :items="flags"
                 :label="$t('languages.countryFlagCode')"
                 name="countryFlagCode"
-                outlined
-                @change="form.errors.clear('countryFlagCode')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('countryFlagCode')"
               >
-                <template #item="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <span :class="`fi fi-${item.raw.value} mr-3`" />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.text }}
+                  <span :class="`fi fi-${item.raw.value} mr-3`" />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -44,7 +48,7 @@
                 hide-details="auto"
                 :label="$t('languages.englishName')"
                 name="englishName"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -54,7 +58,7 @@
                 hide-details="auto"
                 :label="$t('languages.localName')"
                 name="localName"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -65,20 +69,20 @@
                 :items="textDirections"
                 :label="$t('languages.textDirections._')"
                 name="textDirection"
-                outlined
-                @change="form.errors.clear('textDirection')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('textDirection')"
               >
-                <template #item="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <v-icon :icon="item.raw.icon" start />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                  <v-icon :icon="item.raw.icon" start />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>
@@ -90,20 +94,20 @@
                 :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
-                outlined
-                @change="form.errors.clear('visibility')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('visibility')"
               >
-                <template #item="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                <template #item="{ item, props }">
+                  <v-list-item v-bind="props">
+                    <template #prepend>
+                      <v-icon :icon="item.raw.icon" start />
+                    </template>
+                    <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                  </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon left>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ item.text }}
+                  <v-icon :icon="item.raw.icon" start />
+                  {{ item.raw.title }}
                 </template>
               </v-select>
             </v-col>

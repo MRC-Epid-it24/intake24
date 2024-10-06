@@ -1,10 +1,10 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-card-title class="pa-4">
       {{ $t('recall.menu.title') }}
     </v-card-title>
     <v-divider />
-    <v-list class="meal-list__list pt-0" dense flat tile>
+    <v-list class="meal-list__list pt-0" density="compact" tile>
       <component
         :is="expandable ? 'meal-item-expandable' : 'meal-item'"
         v-for="meal in meals"
@@ -15,20 +15,16 @@
       />
     </v-list>
     <v-card-actions>
-      <v-hover v-slot="{ hover }">
-        <v-btn
-          block
-          :color="hover ? 'primary' : 'inherit'"
-          depressed
-          :title="$t('recall.menu.meal.add')"
-          @click="action('addMeal')"
-        >
-          <v-icon left>
-            $add
-          </v-icon>
-          {{ $t('recall.menu.meal.add') }}
-        </v-btn>
-      </v-hover>
+      <v-btn
+        block
+        color="primary"
+        :title="$t('recall.menu.meal.add')"
+        variant="tonal"
+        @click="action('addMeal')"
+      >
+        <v-icon icon="$add" start />
+        {{ $t('recall.menu.meal.add') }}
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

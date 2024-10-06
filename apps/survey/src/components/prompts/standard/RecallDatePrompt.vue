@@ -4,7 +4,7 @@
       <v-date-picker
         v-model="state"
         full-width
-        :landscape="!isMobile"
+        :landscape="!$vuetify.display.mobile"
         v-bind="datePickerProps"
       />
     </v-card-text>
@@ -32,13 +32,13 @@ export default defineComponent({
   mixins: [createBasePrompt<'recall-date-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: String as PropType<string | null>,
       default: null,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { action, customPromptLayout } = usePromptUtils(props, ctx);
