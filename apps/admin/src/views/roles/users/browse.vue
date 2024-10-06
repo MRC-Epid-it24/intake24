@@ -18,7 +18,7 @@
 import { defineComponent } from 'vue';
 
 import type { RoleEntry } from '@intake24/common/types/http/admin';
-import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { Edit, Read } from '@intake24/admin/components/data-tables/action-bar';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
@@ -38,10 +38,10 @@ export default defineComponent({
 
     const actions = ['read', 'edit'].filter(action => user.can(`users|${action}`));
 
-    const headers = [
-      { text: i18n.t('users.name'), sortable: true, value: 'name' },
-      { text: i18n.t('common.email'), sortable: true, value: 'email' },
-      { text: i18n.t('common.action._'), sortable: false, value: 'action', align: 'right' },
+    const headers: DataTableHeader[] = [
+      { title: i18n.t('users.name'), sortable: true, key: 'name' },
+      { title: i18n.t('common.email'), sortable: true, key: 'email' },
+      { title: i18n.t('common.action._'), sortable: false, key: 'action', align: 'end' },
     ];
 
     const { entry, entryLoaded } = useEntry<RoleEntry>(props);

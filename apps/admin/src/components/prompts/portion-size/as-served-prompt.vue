@@ -1,22 +1,22 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row class="mb-3">
       <v-col cols="12" md="6">
         <v-switch
           hide-details="auto"
-          :input-value="badges"
           :label="$t('survey-schemes.prompts.badges')"
-          @change="update('badges', $event)"
+          :model-value="badges"
+          @update:model-value="update('badges', $event)"
         />
         <v-switch
           hide-details="auto"
-          :input-value="leftovers"
           :label="$t('survey-schemes.prompts.leftovers')"
-          @change="update('leftovers', $event)"
+          :model-value="leftovers"
+          @update:model-value="update('leftovers', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

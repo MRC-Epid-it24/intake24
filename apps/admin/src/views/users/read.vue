@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('users.name') }}</th>
@@ -39,11 +39,11 @@
           <td>{{ entry.smsNotifications ? $t('common.yes') : $t('common.no') }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
     <v-card-title>
       {{ $t('users.customFields.title') }}
     </v-card-title>
-    <v-simple-table>
+    <v-table>
       <thead>
         <tr>
           <th>{{ $t('users.customFields.name') }}</th>
@@ -63,11 +63,11 @@
           </td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
     <v-card-title>
       {{ $t('users.aliases.title') }}
     </v-card-title>
-    <v-simple-table>
+    <v-table>
       <thead>
         <tr>
           <th>{{ $t('users.aliases.surveyId') }}</th>
@@ -89,7 +89,7 @@
           </td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

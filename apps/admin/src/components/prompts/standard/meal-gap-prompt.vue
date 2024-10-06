@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-card-text>
       <v-row>
         <v-col cols="12" md="6">
@@ -7,12 +7,11 @@
             {{ $t('survey-schemes.prompts.meal-gap-prompt.startTime') }}
           </v-card-title>
           <v-time-picker
-            format="24hr"
             full-width
             :label="$t('survey-schemes.prompts.meal-gap-prompt.startTime')"
-            :landscape="$vuetify.breakpoint.smAndUp"
-            :value="startTime"
-            @input="update('startTime', $event)"
+            :landscape="$vuetify.display.smAndUp"
+            :model-value="startTime"
+            @update:model-value="update('startTime', $event)"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -20,12 +19,11 @@
             {{ $t('survey-schemes.prompts.meal-gap-prompt.endTime') }}
           </v-card-title>
           <v-time-picker
-            format="24hr"
             full-width
             :label="$t('survey-schemes.prompts.meal-gap-prompt.endTime')"
-            :landscape="$vuetify.breakpoint.smAndUp"
-            :value="endTime"
-            @input="update('endTime', $event)"
+            :landscape="$vuetify.display.smAndUp"
+            :model-value="endTime"
+            @update:model-value="update('endTime', $event)"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -33,16 +31,16 @@
           <v-text-field
             hide-details="auto"
             :label="$t('survey-schemes.prompts.meal-gap-prompt.gap')"
+            :model-value="gap"
             name="gap"
-            outlined
             :rules="gapRules"
-            :value="gap"
-            @input="updateGapValue"
+            variant="outlined"
+            @update:model-value="updateGapValue"
           />
         </v-col>
       </v-row>
     </v-card-text>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

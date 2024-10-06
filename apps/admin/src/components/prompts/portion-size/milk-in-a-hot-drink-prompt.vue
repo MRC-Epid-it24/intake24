@@ -1,12 +1,12 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row class="mb-3">
       <v-col cols="12" md="6">
         <v-switch
           hide-details="auto"
-          :input-value="badges"
           :label="$t('survey-schemes.prompts.badges')"
-          @change="update('badges', $event)"
+          :model-value="badges"
+          @update:model-value="update('badges', $event)"
         />
       </v-col>
       <v-col cols="12" md="6">
@@ -14,13 +14,13 @@
           hide-details="auto"
           :items="orientations"
           :label="$t('survey-schemes.prompts.orientation._')"
-          outlined
-          :value="orientation"
-          @change="update('orientation', $event)"
+          :model-value="orientation"
+          variant="outlined"
+          @update:model-value="update('orientation', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

@@ -2,42 +2,35 @@
   <data-table :headers="headers" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+defineOptions({ name: 'NutrientUnitList' });
 
-export default defineComponent({
-  name: 'NutrientUnitList',
+const { i18n: { t } } = useI18n();
 
-  components: { DataTable },
-
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('nutrient-units.id'),
-          sortable: true,
-          value: 'id',
-        },
-        {
-          text: this.$t('common.description'),
-          sortable: true,
-          value: 'description',
-        },
-        {
-          text: this.$t('nutrient-units.symbol'),
-          sortable: true,
-          value: 'symbol',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers: DataTableHeader[] = [
+  {
+    title: t('nutrient-units.id'),
+    sortable: true,
+    key: 'id',
   },
-});
+  {
+    title: t('common.description'),
+    sortable: true,
+    key: 'description',
+  },
+  {
+    title: t('nutrient-units.symbol'),
+    sortable: true,
+    key: 'symbol',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+];
 </script>

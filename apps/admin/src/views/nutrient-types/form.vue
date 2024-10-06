@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -12,8 +12,8 @@
                 hide-details="auto"
                 :label="$t('nutrient-types.id')"
                 name="id"
-                outlined
                 prepend-inner-icon="$nutrient-types"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -23,8 +23,8 @@
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
-                outlined
                 prepend-inner-icon="$description"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -32,14 +32,14 @@
                 v-model="form.unitId"
                 :error-messages="form.errors.get('unitId')"
                 hide-details="auto"
-                item-text="description"
+                item-title="description"
                 item-value="id"
                 :items="nutrientUnits"
                 :label="$t('nutrient-units._')"
                 name="unitId"
-                outlined
                 prepend-inner-icon="$nutrient-units"
-                @change="form.errors.clear('unitId')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('unitId')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -49,8 +49,8 @@
                 hide-details="auto"
                 :label="$t('nutrient-types.kcalPerUnit')"
                 name="kcalPerUnit"
-                outlined
                 prepend-inner-icon="fas fa-bolt"
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -108,7 +108,7 @@ export default defineComponent({
 
   computed: {
     nutrientUnits() {
-      const nutrientUnits = [{ id: null, description: this.$t('common.none').toString() }];
+      const nutrientUnits = [{ id: null, description: this.$t('common.none') }];
 
       if (!this.refs.units)
         return nutrientUnits;

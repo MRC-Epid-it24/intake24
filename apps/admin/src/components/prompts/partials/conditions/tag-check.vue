@@ -5,12 +5,12 @@
         v-model="currentValue.tagId"
         hide-details="auto"
         :label="$t('survey-schemes.conditions.tag.id')"
-        outlined
+        variant="outlined"
         @change="update(currentValue)"
       />
     </v-col>
     <v-col cols="12" md="6">
-      <v-checkbox v-model="currentValue.value" :label="$t('survey-schemes.conditions.tag.showIfSet')" @change="update(currentValue)" />
+      <v-checkbox-btn v-model="currentValue.value" :label="$t('survey-schemes.conditions.tag.showIfSet')" @update:model-value="update(currentValue)" />
     </v-col>
   </v-row>
 </template>
@@ -24,17 +24,19 @@ export default defineComponent({
   name: 'TagPropertyCheck',
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<TagPropertyCheck>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
-    const currentValue = ref(props.value);
+    const currentValue = ref(props.modelValue);
 
     const update = (value: TagPropertyCheck) => {
-      emit('update:value', value);
+      emit('update:modelValue', value);
     };
     return { update, currentValue };
   },

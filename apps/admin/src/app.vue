@@ -1,54 +1,37 @@
 <template>
   <v-app>
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" app color="secondary" dark>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="my-1">
-            {{ $t('common._') }}
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider />
-      <v-list dense nav>
-        <v-list-group color="grey lighten-1" prepend-icon="fas fa-fw fa-user" value="true">
-          <template #activator>
-            <v-list-item-title>{{ $t('user._') }}</v-list-item-title>
+    <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" color="secondary">
+      <v-list>
+        <v-list-item link to="/">
+          <template #prepend>
+            <v-avatar :image="logo" rounded="0" />
           </template>
-          <v-list-item-group>
-            <v-list-item link :to="{ name: 'dashboard' }">
-              <v-list-item-action>
-                <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
-              </v-list-item-content>
+          <v-list-item-title class="my-1 text-h6">
+            {{ app.name }}
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <v-divider />
+      <v-list density="compact" nav>
+        <v-list-group color="grey-lighten-1" prepend-icon="fas fa-fw fa-user" :value="true">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props">
+              <v-list-item-title>{{ $t('user._') }}</v-list-item-title>
             </v-list-item>
-            <v-list-item link :to="{ name: 'user' }">
-              <v-list-item-action>
-                <v-icon>fas fa-circle-user</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t('user.profile') }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item link :to="{ name: 'user.personal-access-tokens' }">
-              <v-list-item-action>
-                <v-icon>fas fa-key</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t('user.personalAccessTokens.title') }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item link :to="{ name: 'user.jobs' }">
-              <v-list-item-action>
-                <v-icon>$jobs</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t('user.jobs.title') }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
+          </template>
+          <v-list-item link prepend-icon="fas fa-fw fa-tachometer-alt" :to="{ name: 'dashboard' }">
+            <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item link prepend-icon="fas fa-circle-user" :to="{ name: 'user' }">
+            <v-list-item-title>{{ $t('user.profile') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item link prepend-icon="fas fa-key" :to="{ name: 'user.personal-access-tokens' }">
+            <v-list-item-title>{{ $t('user.personalAccessTokens.title') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item link prepend-icon="$jobs" :to="{ name: 'user.jobs' }">
+            <v-list-item-title>{{ $t('user.jobs.title') }}</v-list-item-title>
+          </v-list-item>
         </v-list-group>
       </v-list>
       <menu-tree
@@ -99,27 +82,27 @@
       />
     </v-navigation-drawer>
 
-    <v-app-bar v-if="loggedIn" app color="primary" dark fixed>
+    <v-app-bar v-if="loggedIn" color="primary">
       <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar" />
       <v-spacer />
-      <v-btn :href="app.docs" target="_blank" text :title="$t('common.docs')">
-        <v-icon :left="!isMobile">
+      <v-btn :href="app.docs" target="_blank" :title="$t('common.docs')" variant="text">
+        <v-icon :start="!$vuetify.display.mobile">
           $docs
         </v-icon>
         <span class="d-none d-sm-block">{{ $t('common.docs') }}</span>
       </v-btn>
-      <v-btn v-if="isVerified" text :to="{ name: 'user' }">
-        <v-icon :left="!isMobile">
+      <v-btn v-if="isVerified" :to="{ name: 'user' }" variant="text">
+        <v-icon :start="!$vuetify.display.mobile">
           $user
         </v-icon>
         <span class="d-none d-sm-block">{{ $t('user.profile') }}</span>
       </v-btn>
       <v-divider class="mx-2" vertical />
-      <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
-        <template #activator="{ attrs, on }">
-          <v-btn text v-bind="attrs" v-on="on">
+      <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
+        <template #activator="{ props }">
+          <v-btn variant="text" v-bind="props">
             <span class="d-none d-sm-block">{{ $t('common.logout._') }}</span>
-            <v-icon :right="!isMobile">
+            <v-icon :end="!$vuetify.display.mobile">
               $logout
             </v-icon>
           </v-btn>
@@ -129,8 +112,8 @@
     </v-app-bar>
 
     <v-main>
-      <v-container :class="{ 'pa-0': isMobile }" fluid>
-        <v-breadcrumbs v-if="breadcrumbs.length" class="px-1 py-2" :items="breadcrumbs" large>
+      <v-container :class="{ 'pa-0': $vuetify.display.mobile }" fluid>
+        <v-breadcrumbs v-if="breadcrumbs.length" class="px-1 py-2" :items="breadcrumbs">
           <template #divider>
             <v-icon>fas fa-caret-right</v-icon>
           </template>
@@ -145,20 +128,21 @@
 </template>
 
 <script lang="ts">
-import type { Location } from 'vue-router';
+import type { RouteLocationRaw } from 'vue-router';
 import groupBy from 'lodash/groupBy';
 import { mapState } from 'pinia';
 import pluralize from 'pluralize';
 import { defineComponent } from 'vue';
+import { useDisplay, useLocale } from 'vuetify';
 
-import type { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';
 import { useApp, useAuth, useEntry, useUser } from '@intake24/admin/stores';
+import { iconWhite } from '@intake24/common/theme/assets';
 import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 
-import { vuetify } from './plugins';
 import { useHttp } from './services';
 
 type Breadcrumbs = {
@@ -166,8 +150,8 @@ type Breadcrumbs = {
   exact?: boolean;
   href?: string;
   link?: boolean;
-  text: string | number;
-  to?: string | Location;
+  title: string;
+  to?: string | RouteLocationRaw;
 };
 
 export default defineComponent({
@@ -179,13 +163,15 @@ export default defineComponent({
 
   setup() {
     const http = useHttp();
-    useLanguage('admin', http, vuetify.framework);
-  },
+    const vI18n = useLocale();
+    const display = useDisplay();
 
-  data() {
+    useLanguage('admin', http, vI18n);
+
     return {
       resources: groupBy(resources, 'group'),
-      sidebar: this.$vuetify.breakpoint.lgAndUp,
+      sidebar: display.lgAndUp,
+      logo: iconWhite,
     };
   },
 
@@ -207,16 +193,16 @@ export default defineComponent({
     title(): string {
       const { meta: { title } = {} } = this.$route;
       if (title)
-        return this.$t(title).toString();
+        return this.$t(title);
 
       const { module } = this;
       if (!module)
-        return this.$t('common._').toString();
+        return this.$t('common._');
 
       const { id, name, englishName, description } = this.entry;
 
       // TODO: we should resole breadcrumb name in better way based on entry field
-      return name ?? englishName ?? description ?? id ?? this.$t(`${module}.title`).toString();
+      return name ?? englishName ?? description ?? id ?? this.$t(`${module}.title`);
     },
   },
 
@@ -284,7 +270,7 @@ export default defineComponent({
       if (parent)
         params.id = id;
 
-      items.push({ ...defaults, text: this.$t(`${title}.title`).toString(), to: { name } });
+      items.push({ ...defaults, title: this.$t(`${title}.title`), to: { name } });
 
       if (!currentId)
         return items;
@@ -292,7 +278,7 @@ export default defineComponent({
       if (currentId === 'create') {
         items.push({
           ...defaults,
-          text: this.$t(`${title}.${action}`).toString(),
+          title: this.$t(`${title}.${action}`),
           to: { name: `${name}-${action}`, params },
         });
         return items;
@@ -304,14 +290,14 @@ export default defineComponent({
 
       items.push({
         ...defaults,
-        text: parent ? this.$t(`${title}.${action}`) : text,
+        title: parent ? this.$t(`${title}.${action}`) : text,
         to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
       });
 
       if (['edit'].includes(action)) {
         items.push({
           ...defaults,
-          text: this.$t(`${title}.${action}`).toString(),
+          title: this.$t(`${title}.${action}`),
           to: { name: `${name}-${action}`, params },
         });
       }

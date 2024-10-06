@@ -1,24 +1,22 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row>
       <v-col cols="12" md="6">
         <v-card-title>
-          <v-icon left>
-            fas fa-star-half-stroke
-          </v-icon>
+          <v-icon icon="fas fa-star-half-stroke" start />
           {{ $t('survey-schemes.prompts.final-prompt.rating.title') }}
         </v-card-title>
         <v-card-text>
           <v-switch
             hide-details="auto"
-            :input-value="rating"
             :label="$t('survey-schemes.prompts.final-prompt.rating._')"
-            @change="update('rating', $event)"
+            :model-value="rating"
+            @update:model-value="update('rating', $event)"
           />
         </v-card-text>
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

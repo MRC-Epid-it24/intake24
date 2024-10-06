@@ -11,7 +11,7 @@
     }"
     @action="action"
     @add-food="addingIngredientsAsALinkedFood"
-    @input="update"
+    @update:model-value="update"
   />
 </template>
 

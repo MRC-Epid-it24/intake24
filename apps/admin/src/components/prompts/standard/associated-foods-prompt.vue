@@ -1,22 +1,22 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row>
       <v-col cols="12" md="6">
         <v-switch
           hide-details="auto"
-          :input-value="multiple"
           :label="$t('survey-schemes.prompts.associated-foods-prompt.multiple')"
-          @change="update('multiple', $event)"
+          :model-value="multiple"
+          @update:model-value="update('multiple', $event)"
         />
       </v-col>
       <v-col cols="12" md="6">
         <food-browser-settings
           :categories-first="categoriesFirst"
-          @update:categoriesFirst="update('categoriesFirst', $event)"
+          @update:categories-first="update('categoriesFirst', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

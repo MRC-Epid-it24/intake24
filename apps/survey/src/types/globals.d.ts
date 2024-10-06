@@ -1,14 +1,11 @@
 import type { HttpClient } from '@intake24/ui/types';
 
-declare module 'vue/types/vue' {
-  interface Vue {
+declare module 'vue' {
+  interface ComponentCustomProperties {
     $http: HttpClient;
 
     // loading mixin
-    isAppLoading: () => boolean;
-
-    // platform mixin
-    isMobile: boolean;
+    isAppLoading: boolean;
   }
 }
 

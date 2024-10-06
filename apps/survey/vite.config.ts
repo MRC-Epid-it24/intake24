@@ -1,16 +1,18 @@
 import childProcess from 'node:child_process';
 import { fileURLToPath, URL } from 'node:url';
 
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import viteLegacy from '@vitejs/plugin-legacy';
-import vue from '@vitejs/plugin-vue2';
+import vue from '@vitejs/plugin-vue';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
-import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
+import vueDevToolsPlugin from 'vite-plugin-vue-devtools';
+import vuetify from 'vite-plugin-vuetify';
 import webfontDownload from 'vite-plugin-webfont-dl';
 
 import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/common/src/security';
@@ -38,6 +40,7 @@ export default defineConfig(({ mode }) => {
     LEGACY,
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
+    VUE_DEV_TOOLS,
   } = loadEnv(mode, process.cwd(), '');
 
   const disablePwa = !!(DISABLE_PWA === 'true');
@@ -45,6 +48,7 @@ export default defineConfig(({ mode }) => {
   const https = !!(DEV_HTTPS === 'true');
   const legacy = !!(LEGACY === 'true');
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
+  const vueDevTools = !!(VUE_DEV_TOOLS === 'true');
 
   if (captchaProvider && !isCaptchaProvider(captchaProvider))
     throw new Error('Invalid Captcha provider');
@@ -56,17 +60,6 @@ export default defineConfig(({ mode }) => {
         '@intake24/common': fileURLToPath(new URL('../../packages/common/src', import.meta.url)),
         '@intake24/i18n': fileURLToPath(new URL('../../packages/i18n/src', import.meta.url)),
         '@intake24/ui': fileURLToPath(new URL('../../packages/ui/src', import.meta.url)),
-      },
-    },
-    css: {
-      preprocessorOptions: {
-        sass: {
-          additionalData: [
-            '@import "./src/scss/vuetify"',
-            '@import "vuetify/src/styles/settings/_variables"',
-            '',
-          ].join('\n'),
-        },
       },
     },
     base,
@@ -106,16 +99,22 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
+      vuetify({
+        autoImport: true,
+        styles: { configFile: 'src/scss/settings.scss' },
+      }),
+      VueI18nPlugin(),
       Components({
-        resolvers: [IconsResolver(), VuetifyResolver()],
+        resolvers: [IconsResolver()],
         directoryAsNamespace: true,
       }),
       Icons({ autoInstall: true, compiler: 'vue3' }),
-      legacy ? viteLegacy() : undefined,
-      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
       webfontDownload([
         'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
       ]),
+      legacy ? viteLegacy() : undefined,
+      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
+      vueDevTools ? vueDevToolsPlugin() : undefined,
       createHtmlPlugin({
         inject: {
           data: {

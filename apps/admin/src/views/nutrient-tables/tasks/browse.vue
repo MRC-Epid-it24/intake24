@@ -1,7 +1,7 @@
 <template>
   <layout v-bind="{ id, entry }">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-row>
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('nutrient-tables.tasks.title') }}</v-card-title>
@@ -12,9 +12,9 @@
                 :items="jobTypeList"
                 :label="$t('nutrient-tables.tasks._')"
                 name="job"
-                outlined
                 prepend-inner-icon="$jobs"
-                @change="updateJob"
+                variant="outlined"
+                @update:model-value="updateJob"
               />
             </v-card-text>
           </v-col>
@@ -27,7 +27,7 @@
               :errors="form.errors"
               name="params"
               :refs="refs"
-              @input="form.errors.clear(paramErrors)"
+              @update:model-value="form.errors.clear(paramErrors)"
             />
           </v-col>
         </v-row>
@@ -37,13 +37,11 @@
               block
               color="primary"
               :disabled="form.errors.any() || jobInProgress || isAppLoading"
+              size="x-large"
               :title="$t('common.action.upload')"
               type="submit"
-              x-large
             >
-              <v-icon left>
-                fas fa-play
-              </v-icon>{{ $t('common.action.submit') }}
+              <v-icon icon="fas fa-play" start />{{ $t('common.action.submit') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -84,7 +82,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const jobTypeList = computed(() =>
-      nutrientTableJobs.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`) })),
+      nutrientTableJobs.map(value => ({ value, title: i18n.t(`jobs.types.${value}._`) })),
     );
     const jobQuery = computed(() => ({ nutrientTableId: props.id }));
 

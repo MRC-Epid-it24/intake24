@@ -1,22 +1,22 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row>
       <v-col cols="12">
         <v-switch
           hide-details="auto"
-          :input-value="custom"
           :label="$t('survey-schemes.prompts.meal-add-prompt.custom')"
-          @change="update('custom', $event)"
+          :model-value="custom"
+          @update:model-value="update('custom', $event)"
         />
         <v-switch
           hide-details="auto"
-          :input-value="unique"
           :label="$t('survey-schemes.prompts.meal-add-prompt.unique')"
-          @change="update('unique', $event)"
+          :model-value="unique"
+          @update:model-value="update('unique', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

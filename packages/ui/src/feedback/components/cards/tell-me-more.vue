@@ -4,30 +4,28 @@
       block
       class="button-bottom rounded-t-0"
       :class="textColor"
-      :color="detail.color"
-      elevation="0"
-      large
+      :color="isWhite ? 'grey-lighten-3' : detail.color"
+      size="large"
+      variant="flat"
       @click.stop="open"
     >
       {{ $t('feedback.intake.tellMeMore') }}
     </v-btn>
     <v-dialog
       v-model="dialog"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
+      :fullscreen="$vuetify.display.smAndDown"
       max-width="600px"
       scrollable
     >
-      <v-card :tile="$vuetify.breakpoint.smAndDown">
+      <v-card :tile="$vuetify.display.smAndDown">
         <v-toolbar
           class="font-weight-medium text-h3 tell-me-more-title flex-grow-0"
-          color="secondary lighten-1"
+          color="secondary"
           dark
           flat
         >
-          <v-btn dark icon :title="$t('common.action.ok')" @click.stop="close">
-            <v-icon>$close</v-icon>
-          </v-btn>
-          <v-toolbar-title class="pl-2">
+          <v-btn icon="$close" :title="$t('common.action.ok')" @click.stop="close" />
+          <v-toolbar-title class="ps-2">
             {{ detail.name }}
           </v-toolbar-title>
         </v-toolbar>
@@ -55,16 +53,14 @@
           block
           class="button-bottom rounded-t-0 font-weight-bold flex-grow-0 flex-shrink-0"
           :class="{
-            'rounded-b-0': $vuetify.breakpoint.smAndDown,
+            'rounded-b-0': $vuetify.display.smAndDown,
           }"
-          color="secondary lighten-2"
-          large
+          color="secondary"
+          size="large"
           :title="$t('common.action.ok')"
           @click.stop="close"
         >
-          <v-icon left>
-            fas fa-thumbs-up
-          </v-icon>
+          <v-icon icon="fas fa-thumbs-up" start />
           {{ $t('feedback.intake.gotIt') }}
         </v-btn>
       </v-card>
@@ -74,9 +70,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
-import type { FeedbackDetails } from './card-details';
+import type { FeedbackDetails } from './use-card';
 
 export default defineComponent({
   name: 'TellMeMore',
@@ -91,8 +87,10 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
     const dialog = ref(false);
+
+    const isWhite = computed(() => ['#fff', '#ffffff', '#ffffffff'].includes(props.detail.color.toLowerCase()));
 
     const open = () => {
       dialog.value = true;
@@ -102,7 +100,7 @@ export default defineComponent({
       dialog.value = false;
     };
 
-    return { dialog, open, close };
+    return { dialog, isWhite, open, close };
   },
 });
 </script>

@@ -17,7 +17,7 @@
             v-model="params.startDate"
             clearable
             :error-messages="errors.get('params.startDate')"
-            :label="$t('surveys.startDate').toString()"
+            :label="$t('surveys.startDate')"
           />
         </v-col>
         <v-col cols="12">
@@ -25,7 +25,7 @@
             v-model="params.endDate"
             clearable
             :error-messages="errors.get('params.endDate')"
-            :label="$t('surveys.endDate').toString()"
+            :label="$t('surveys.endDate')"
           />
         </v-col>
       </v-row>

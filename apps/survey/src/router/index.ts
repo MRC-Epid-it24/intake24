@@ -1,6 +1,4 @@
-import type { RouteConfig } from 'vue-router';
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 
 import views from '@intake24/survey/views';
 
@@ -13,9 +11,7 @@ import {
   surveyParametersGuard,
 } from './guards';
 
-Vue.use(VueRouter);
-
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
@@ -26,6 +22,7 @@ const routes: RouteConfig[] = [
     path: '/a/:token',
     name: 'authentication',
     meta: { module: 'login', title: 'common.login._' },
+    component: views.survey.login,
     beforeEnter: authGuard,
   },
   {
@@ -52,6 +49,7 @@ const routes: RouteConfig[] = [
   {
     path: '/:surveyId/create-user/:token',
     name: 'survey-create-user',
+    component: views.survey.login,
     meta: { module: 'public' },
     beforeEnter: createUserGuard,
   },
@@ -113,17 +111,16 @@ const routes: RouteConfig[] = [
     props: true,
   },
   // Catch any unmatched routes
-  {
+  // TODO V3
+  /* {
     path: '*',
     name: '404',
     component: views.home,
     meta: { module: 'public', title: 'common._' },
-  },
+  }, */
 ];
-
-const router = new VueRouter({
-  mode: 'history',
-  base: import.meta.env.VITE_APP_BASE_URL ?? '/',
+const router = createRouter({
+  history: createWebHistory(import.meta.env.VITE_APP_BASE_URL ?? '/'),
   routes,
 });
 

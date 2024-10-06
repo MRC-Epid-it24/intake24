@@ -28,6 +28,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   setup(props, { emit }) {
     const survey = useSurvey();
 

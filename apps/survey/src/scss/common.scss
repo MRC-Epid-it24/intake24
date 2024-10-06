@@ -1,13 +1,81 @@
+.v-application {
+  ul,
+  ol {
+    padding-left: settings.$spacer * 6;
+  }
+
+  p {
+    margin-bottom: settings.$spacer * 3;
+  }
+}
+
 .btn-truncate {
-  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 0 1 auto;
 
   .v-btn__content {
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+.container-max {
+  max-width: 1280px !important;
+}
+
+.border-secondary-1 {
+  border: 1px solid $secondary !important;
+}
+
+.border-primary-2 {
+  border: 2px solid $primary !important;
+}
+
+.border-info-2 {
+  border: 2px solid $info !important;
+}
+
+.list__no-wrap {
+  .v-list-item-title {
+    white-space: initial !important;
+  }
+}
+
+.list-border {
+  .v-list-item:not(:last-child) {
+    border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
+  }
+}
+
+.list-item-border:not(:last-child) {
+  border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
+}
+
+// ConfirmDialog wrapped actions buttons
+.v-card__actions {
+  > .v-btn + .v-dialog__container + .v-btn {
+    margin-left: 8px;
+  }
+}
+
+@media #{map-get(settings.$display-breakpoints, 'sm-and-down')} {
+  .iframe-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   }
 }

@@ -1,20 +1,20 @@
 <template>
-  <v-bottom-navigation v-if="isMobile" app class="d-print-none" color="primary" fixed grow>
+  <v-bottom-navigation v-if="$vuetify.display.mobile" class="d-print-none" color="primary" grow>
     <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
-      <span>{{ $t('common.home') }}</span>
       <v-icon>$home</v-icon>
+      <span>{{ $t('common.home') }}</span>
     </v-btn>
     <v-btn v-if="recall" :to="{ name: 'survey-recall', params: { surveyId } }">
-      <span>{{ $t('recall._') }}</span>
       <v-icon>$survey</v-icon>
+      <span>{{ $t('recall._') }}</span>
     </v-btn>
     <v-btn v-if="feedback" :to="{ name: 'feedback-home', params: { surveyId } }">
-      <span>{{ $t('feedback._') }}</span>
       <v-icon>$feedback</v-icon>
+      <span>{{ $t('feedback._') }}</span>
     </v-btn>
     <v-btn :to="{ name: 'survey-profile' }">
-      <span>{{ $t('profile._') }}</span>
       <v-icon>$profile</v-icon>
+      <span>{{ $t('profile._') }}</span>
     </v-btn>
   </v-bottom-navigation>
 </template>

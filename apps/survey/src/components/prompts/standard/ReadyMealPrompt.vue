@@ -1,10 +1,10 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
-      <v-card v-for="(food, idx) in state" :key="food.id" class="mb-3" outlined>
+      <v-card v-for="(food, idx) in state" :key="food.id" border class="mb-3">
         <v-card-text class="d-flex flex-column flex-sm-row justify-space-between gr-2">
           <div class="d-flex align-center">
-            <v-btn class="secondary font-weight-medium mr-2" dark icon readonly size="x-small">
+            <v-btn class="bg-secondary font-weight-medium me-2" icon readonly size="x-small">
               {{ idx + 1 }}
             </v-btn>
             <span class="text-subtitle-1 font-weight-medium">{{ food.name }}</span>
@@ -45,23 +45,23 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Array as PropType<PromptStates['ready-meal-prompt']>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { action } = usePromptUtils(props, ctx);
 
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
     const isValid = computed(() => state.value.every(food => food.value !== undefined));

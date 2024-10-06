@@ -79,6 +79,7 @@ export const languageTranslationRequest = languageTranslationAttributes.omit({
   if (!validateTranslations(val.messages))
     return false;
 
+  // @ts-expect-error - i18n types
   const defMessages = defaultI18nMessages[val.application][val.section];
   if (!defMessages)
     return false;

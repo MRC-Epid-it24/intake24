@@ -3,7 +3,7 @@
     <v-label class="mr-2">{{ $t(`survey-schemes.conditions.showIf`) }}</v-label>
     <v-label v-dompurify-html:i18n="info.summaryHtml" />
     <div v-if="info.showOp">
-      <v-icon left right small>{{ info.icon }}</v-icon>
+      <v-icon end size="small" start>{{ info.icon }}</v-icon>
       <v-label class="align-baseline">{{ info.check.value || '?' }}</v-label>
       <v-label
         v-if="info.showNotRequired" v-dompurify-html:i18n="$t(`survey-schemes.conditions.summary.notRequired`)" class="ml-2 align-baseline"
@@ -34,34 +34,34 @@ export default defineComponent({
   setup(props) {
     const { i18n } = useI18n();
     const getSummaryHtml = (condition: Condition): string => {
-      const object = i18n.t(`survey-schemes.conditions.object.${condition.object}`).toString().toLocaleLowerCase();
-      const property = i18n.t(`survey-schemes.conditions.property.${condition.property.id}`).toString().toLocaleLowerCase();
+      const object = i18n.t(`survey-schemes.conditions.object.${condition.object}`).toLocaleLowerCase();
+      const property = i18n.t(`survey-schemes.conditions.property.${condition.property.id}`).toLocaleLowerCase();
 
       switch (condition.property.type) {
         case 'flag': {
           return condition.property.check.value
-            ? i18n.t(`survey-schemes.conditions.summary.flag.set`, { id: condition.property.check.flagId || '?', object }).toString()
-            : i18n.t(`survey-schemes.conditions.summary.flag.notSet`, { id: condition.property.check.flagId || '?', object }).toString();
+            ? i18n.t(`survey-schemes.conditions.summary.flag.set`, { id: condition.property.check.flagId || '?', object })
+            : i18n.t(`survey-schemes.conditions.summary.flag.notSet`, { id: condition.property.check.flagId || '?', object });
         }
         case 'tag': {
           return condition.property.check.value
-            ? i18n.t(`survey-schemes.conditions.summary.tag.present`, { id: condition.property.check.tagId || '?', object }).toString()
-            : i18n.t(`survey-schemes.conditions.summary.tag.absent`, { id: condition.property.check.tagId || '?', object }).toString();
+            ? i18n.t(`survey-schemes.conditions.summary.tag.present`, { id: condition.property.check.tagId || '?', object })
+            : i18n.t(`survey-schemes.conditions.summary.tag.absent`, { id: condition.property.check.tagId || '?', object });
         }
         case 'boolean': {
-          const value = (condition.property.check.value ? i18n.t(`common.yes`) : i18n.t(`common.no`)).toString().toLocaleLowerCase();
-          return i18n.t(`survey-schemes.conditions.summary.boolean`, { object, property, value }).toString();
+          const value = (condition.property.check.value ? i18n.t(`common.yes`) : i18n.t(`common.no`)).toLocaleLowerCase();
+          return i18n.t(`survey-schemes.conditions.summary.boolean`, { object, property, value });
         }
         case 'value':
-          return i18n.t(`survey-schemes.conditions.summary.value`, { object, property }).toString();
+          return i18n.t(`survey-schemes.conditions.summary.value`, { object, property });
         case 'promptAnswer':
-          return i18n.t(`survey-schemes.conditions.summary.promptAnswer`, { object, property, promptId: condition.property.check.promptId || '?' }).toString();
+          return i18n.t(`survey-schemes.conditions.summary.promptAnswer`, { object, property, promptId: condition.property.check.promptId || '?' });
         case 'userField':
-          return i18n.t(`survey-schemes.conditions.summary.userField`, { object, property, field: condition.property.check.field || '?' }).toString();
+          return i18n.t(`survey-schemes.conditions.summary.userField`, { object, property, field: condition.property.check.field || '?' });
         case 'mealCompletion':
-          return i18n.t(`survey-schemes.conditions.summary.mealCompletion.${condition.property.check.completionState}`, { object }).toString();
+          return i18n.t(`survey-schemes.conditions.summary.mealCompletion.${condition.property.check.completionState}`, { object });
         case 'foodCompletion':
-          return i18n.t(`survey-schemes.conditions.summary.foodCompletion.${condition.property.check.completionState}`, { object }).toString();
+          return i18n.t(`survey-schemes.conditions.summary.foodCompletion.${condition.property.check.completionState}`, { object });
         default:
           throw new Error(`Unexpected condition property type: ${condition.property.type}`);
       }

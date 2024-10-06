@@ -1,28 +1,28 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row>
       <v-col cols="12" md="6">
         <v-switch
           hide-details="auto"
-          :input-value="allowBrowsing"
           :label="$t('survey-schemes.prompts.food-search-prompt.allowBrowsing')"
-          @change="update('allowBrowsing', $event)"
+          :model-value="allowBrowsing"
+          @update:model-value="update('allowBrowsing', $event)"
         />
         <v-switch
           hide-details="auto"
-          :input-value="dualLanguage"
           :label="$t('survey-schemes.prompts.food-search-prompt.dualLanguage')"
-          @change="update('dualLanguage', $event)"
+          :model-value="dualLanguage"
+          @update:model-value="update('dualLanguage', $event)"
         />
       </v-col>
       <v-col cols="12" md="6">
         <food-browser-settings
           :categories-first="categoriesFirst"
-          @update:categoriesFirst="update('categoriesFirst', $event)"
+          @update:categories-first="update('categoriesFirst', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

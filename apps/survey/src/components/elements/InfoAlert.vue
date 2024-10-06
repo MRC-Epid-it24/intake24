@@ -1,11 +1,10 @@
 <template>
   <v-alert
-    border="left"
+    border="start"
     class="undoAlert ma-0"
+    closable
     color="grey"
-    dismissible
     elevation="5"
-    transition="slide-x-transition"
     type="info"
     :value="alert"
   >

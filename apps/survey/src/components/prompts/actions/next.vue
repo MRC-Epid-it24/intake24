@@ -1,16 +1,18 @@
 <template>
-  <v-btn class="px-4" :color="color" :disabled="disabled" large :title="label" v-on="$listeners">
-    <v-icon v-if="icon" left>
+  <v-btn class="px-4" :color="color" :disabled="disabled" size="large" :title="currentLabel">
+    <v-icon v-if="icon" start>
       {{ icon }}
     </v-icon>
     <slot>
-      {{ label }}
+      {{ currentLabel }}
     </slot>
   </v-btn>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+
+import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
   name: 'PromptActionNext',
@@ -30,10 +32,15 @@ export default defineComponent({
     },
     label: {
       type: String,
-      default() {
-        return this.$t('recall.actions.next');
-      },
     },
+  },
+
+  setup(props) {
+    const { i18n: { t } } = useI18n();
+
+    const currentLabel = computed(() => props.label ?? t('recall.actions.next'));
+
+    return { currentLabel };
   },
 });
 </script>

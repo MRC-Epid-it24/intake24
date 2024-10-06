@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" :no-gutters="isMobile">
+  <v-row justify="center" :no-gutters="$vuetify.display.mobile">
     <v-slide-x-transition mode="out-in">
       <v-col v-if="showMealList" cols="3">
         <meal-list v-bind="{ meals }" @action="action" />
@@ -25,6 +25,11 @@ import { defineComponent } from 'vue';
 
 import { MealList } from '../layouts';
 import recallMixin from './recall-mixin';
+
+/* defineOptions({
+  name: 'RecallDesktop',
+  mixins: [recallMixin],
+}); */
 
 export default defineComponent({
   name: 'RecallDesktop',

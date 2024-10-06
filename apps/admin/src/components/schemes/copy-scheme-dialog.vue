@@ -1,23 +1,18 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
       <v-btn
-        v-bind="attrs"
         class="ml-3"
         color="secondary"
         :title="$t(`${resource}.copy._`)"
-        v-on="on"
+        v-bind="props"
       >
-        <v-icon left>
-          fas fa-copy
-        </v-icon>{{ $t(`${resource}.copy._`) }}
+        <v-icon icon="fas fa-copy" start />{{ $t(`${resource}.copy._`) }}
       </v-btn>
     </template>
-    <v-card :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t(`${resource}.copy.title`) }}
         </v-toolbar-title>
@@ -31,31 +26,27 @@
               hide-details="auto"
               :label="$t(`${resource}.copy.name`)"
               name="name"
-              outlined
+              variant="outlined"
             />
           </v-col>
           <!-- <v-col cols="12">
-            <v-checkbox v-model="redirect" :label="$t('common.redirect')"></v-checkbox>
+            <v-checkbox-btn v-model="redirect" :label="$t('common.redirect')"></v-checkbox-btn>
           </v-col> -->
         </v-row>
       </v-card-text>
       <v-card-actions class="pb-4">
-        <v-btn class="font-weight-bold" color="error" text @click.stop="close">
-          <v-icon left>
-            $cancel
-          </v-icon>{{ $t('common.action.cancel') }}
+        <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="close">
+          <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
           :disabled="form.errors.any()"
-          text
+          variant="text"
           @click.stop="confirm"
         >
-          <v-icon left>
-            $success
-          </v-icon>{{ $t(`${resource}.copy._`) }}
+          <v-icon icon="$success" start />{{ $t(`${resource}.copy._`) }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -64,7 +55,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router/composables';
+import { useRoute, useRouter } from 'vue-router';
 
 import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { createForm } from '@intake24/admin/util';
@@ -108,7 +99,7 @@ export default defineComponent({
       const { id } = await form.post<SurveySchemeEntry>(`admin/${resource}/${schemeId}/copy`);
 
       close();
-      useMessages().success(i18n.t('common.msg.created', { name }).toString());
+      useMessages().success(i18n.t('common.msg.created', { name }));
 
       if (redirect.value)
         await router.push({ name: name ?? `${resource}-read`, params: { id } });

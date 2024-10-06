@@ -11,7 +11,7 @@
             :label="$t('jobs.types.CleanRedisStore.stores._')"
             multiple
             name="store"
-            outlined
+            variant="outlined"
           />
         </v-col>
       </v-row>
@@ -35,7 +35,7 @@ export default defineComponent({
     return {
       stores: redisStoreTypes.map(value => ({
         value,
-        text: this.$t(`jobs.types.CleanRedisStore.stores.${value}`).toString(),
+        title: this.$t(`jobs.types.CleanRedisStore.stores.${value}`),
       })),
     };
   },

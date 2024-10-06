@@ -1,15 +1,15 @@
 <template>
   <div>
-    <v-card :tile="isMobile">
+    <v-card :tile="$vuetify.display.mobile">
       <v-card-text>
         <div class="d-flex gc-2">
           <component
-            :is="prompt.barcode.type"
+            :is="`${prompt.barcode.type}-input`"
+            v-model:model-value="searchTerm"
             :clearable="prompt.barcode.type === 'none'"
             flat
             hide-details
             :label="promptI18n.search"
-            :model-value.sync="searchTerm"
             :options="prompt.barcode"
             outlined
             :placeholder="promptI18n.search"
@@ -18,30 +18,30 @@
             @keydown.enter="search"
           />
           <v-btn
-            v-if="$vuetify.breakpoint.smAndUp"
+            v-if="$vuetify.display.smAndUp"
             color="primary"
             :disabled="!searchTerm?.length"
             elevation="0"
             height="initial"
+            size="x-large"
             :title="promptI18n.search"
-            x-large
             @click="search"
           >
-            <v-icon left>
+            <v-icon start>
               fas fa-turn-down fa-rotate-90
             </v-icon>
             {{ promptI18n.search }}
           </v-btn>
         </div>
         <template v-if="selectedProductDetails">
-          <v-btn class="my-4" color="grey lighten-2" elevation="0" large @click="back">
-            <v-icon left>
+          <v-btn class="my-4" color="grey-lighten-2" elevation="0" size="large" @click="back">
+            <v-icon start>
               fas fa-turn-up fa-flip-horizontal
             </v-icon>
             {{ promptI18n.back }}
           </v-btn>
           <v-card class="off-product-card pa-3">
-            <div class="pa-2 white rounded">
+            <div class="pa-2 bg-white rounded">
               <v-img
                 height="250px"
                 :src="selectedProductDetails.url"
@@ -85,15 +85,15 @@
             </div>
             <v-pagination
               v-model="response.page"
-              circle
               :length="Math.ceil(response.count / response.page_size)"
+              rounded
               :total-visible="5"
             />
           </div>
           <v-row justify="center">
             <v-col v-for="product in response.products" :key="product.code" cols="12" md="4" sm="6">
               <v-card class="off-product-card off-product-card--result pa-3" height="100%" link @click="select(product)">
-                <div class="pa-2 white rounded">
+                <div class="pa-2 bg-white rounded">
                   <v-img
                     height="250px"
                     :src="resolveImageUrl(product)"
@@ -108,9 +108,9 @@
           <div v-if="response.products.length > 9" class="d-flex justify-end align-center py-3">
             <v-pagination
               v-model="response.page"
-              circle
               :length="Math.ceil(response.count / response.page_size)"
               outlined
+              rounded
               :total-visible="7"
             />
           </div>
@@ -178,11 +178,13 @@ export default defineComponent({
       type: Object as PropType<Prompts['external-source-prompt']>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<PromptStates['external-source-prompt']>,
       required: true,
     },
   },
+
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const app = useApp();
@@ -228,7 +230,7 @@ export default defineComponent({
 
     const response = ref<OOFProductsResponse | undefined>();
     const selected = ref<OOFProduct | undefined>();
-    const searchTerm = ref(props.value.searchTerm);
+    const searchTerm = ref(props.modelValue.searchTerm);
 
     const promptI18n = computed(() =>
       translatePrompt([
@@ -364,13 +366,13 @@ export default defineComponent({
     });
 
     watch(selected, (data) => {
-      ctx.emit('input', { ...props.value, data });
+      ctx.emit('update:modelValue', { ...props.modelValue, data });
     });
 
     watchDebounced(
       searchTerm,
       async (searchTerm) => {
-        ctx.emit('input', { ...props.value, searchTerm });
+        ctx.emit('update:modelValue', { ...props.modelValue, searchTerm });
       },
       { debounce: 500, maxWait: 2000 },
     );

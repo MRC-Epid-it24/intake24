@@ -1,12 +1,10 @@
-import type { RouteConfig } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
 import { singular } from 'pluralize';
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 import views from '@intake24/admin/views';
 
 import type { Resource } from '../types';
-import guards from './guards';
 import resources from './resources';
 
 export interface GenerateRoutesOps extends Resource {
@@ -17,7 +15,9 @@ function isVueComponent(object: any) {
   if (typeof object === 'function')
     return true;
 
-  const { render } = object;
+  const { render, setup } = object;
+  if (setup && typeof setup === 'function')
+    return true;
   if (render && typeof render === 'function')
     return true;
 
@@ -26,7 +26,7 @@ function isVueComponent(object: any) {
 
 function generateResourceRoutes(resourceName: string, pathSegments: string[], viewsPath: any, options: GenerateRoutesOps) {
   const { parent, securable } = options;
-  const routerRoutes: RouteConfig[] = [];
+  const routerRoutes: RouteRecordRaw[] = [];
 
   const resourceRoutes = Object.keys(viewsPath);
   const name = parent ? `${parent}-${resourceName}` : resourceName;
@@ -89,11 +89,9 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
   return routerRoutes;
 }
 
-Vue.use(VueRouter);
-
 const { authentication } = views;
 
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'login',
@@ -229,14 +227,7 @@ resources.forEach((item) => {
   routes.push(...generateResourceRoutes(name, [`/${first}`, ...rest], resourceViews, item));
 });
 
-routes.push({ path: '*', name: '404', redirect: '/' });
-
-const router = new VueRouter({
-  mode: 'history',
-  base: import.meta.env.VITE_APP_BASE_URL ?? '/',
+export default createRouter({
+  history: createWebHistory(import.meta.env.VITE_APP_BASE_URL ?? '/'),
   routes,
 });
-
-guards(router);
-
-export default router;
