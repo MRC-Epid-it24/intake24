@@ -19,9 +19,9 @@
             hide-details="auto"
             :label="$t('common.file.csv')"
             name="file"
-            outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
+            variant="outlined"
             @change="errors.clear('params.file')"
           />
         </v-col>

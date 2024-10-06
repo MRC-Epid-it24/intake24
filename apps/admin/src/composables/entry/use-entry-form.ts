@@ -2,7 +2,7 @@ import type { Method } from 'axios';
 import { deepEqual } from 'fast-equals';
 import pick from 'lodash/pick';
 import { computed, reactive, ref, toRefs, watch } from 'vue';
-import { useRouter } from 'vue-router/composables';
+import { useRouter } from 'vue-router';
 
 import type { FormConfig } from '@intake24/admin/util';
 import {
@@ -74,7 +74,7 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
       data = await form[editMethod]<EntryState>(`${resource.api}/${entryId.value}`);
 
       const { id, name } = data;
-      useMessages().success(i18n.t('common.msg.updated', { name: name ?? id }).toString());
+      useMessages().success(i18n.t('common.msg.updated', { name: name ?? id }));
     }
     else {
       data = await form.post<EntryState>(`${resource.api}`);
@@ -82,7 +82,7 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
       const { id, name } = data;
       await router.push({ name: `${resource.name}-edit`, params: { id } });
 
-      useMessages().success(i18n.t('common.msg.created', { name: name ?? id }).toString());
+      useMessages().success(i18n.t('common.msg.created', { name: name ?? id }));
     }
 
     setEntry(data);

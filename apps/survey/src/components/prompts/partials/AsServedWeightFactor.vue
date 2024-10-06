@@ -1,26 +1,33 @@
 <template>
-  <v-overlay absolute :dark="false" :opacity="0.2" :value="show">
-    <v-card class="card-overlay" flat :tile="isMobile">
+  <v-overlay
+    absolute
+    class="align-center justify-center"
+    contained
+    :model-value="show"
+    :opacity="0.2"
+    scroll-strategy="none"
+  >
+    <v-card class="card-overlay" flat :tile="$vuetify.display.mobile">
       <v-card-text class="d-flex flex-column align-center">
         <v-btn
-          v-if="!isMobile"
+          v-if="!$vuetify.display.mobile"
           class="mb-3"
           color="secondary"
           :disabled="numerator === maxNumerator"
           icon
-          large
-          outlined
+          size="large"
           :title="$t(`prompts.asServed.${type}.more`)"
+          variant="outlined"
           @click="update(1)"
         >
           <v-icon aria-hidden="false">
             $increment
           </v-icon>
         </v-btn>
-        <v-chip color="grey lighten-1">
-          <i18n
+        <v-chip color="grey-lighten-1">
+          <i18n-t
             class="font-weight-medium text-h6"
-            :path="`prompts.asServed.weightFactor.${type}.${subType}`"
+            :keypath="`prompts.asServed.weightFactor.${type}.${subType}`"
           >
             <template #whole>
               <span class="font-weight-bold">{{ whole }}</span>
@@ -28,7 +35,7 @@
             <template #fraction>
               <span class="font-weight-bold">{{ fraction }}</span>
             </template>
-          </i18n>
+          </i18n-t>
         </v-chip>
         <span class="my-1 font-weight-medium text-h6">
           {{ $t(`prompts.asServed.weightFactor.${subType}`) }}
@@ -41,9 +48,9 @@
             color="secondary"
             :disabled="numerator === minNumerator"
             icon
-            large
-            outlined
+            size="large"
             :title="$t(`prompts.asServed.${type}.less`)"
+            variant="outlined"
             @click="update(-1)"
           >
             <v-icon aria-hidden="false">
@@ -51,14 +58,14 @@
             </v-icon>
           </v-btn>
           <v-btn
-            v-if="isMobile"
-            class="ml-6"
+            v-if="$vuetify.display.mobile"
+            class="ms-6"
             color="secondary"
             :disabled="numerator === maxNumerator"
             icon
-            large
-            outlined
+            size="large"
             :title="$t(`prompts.asServed.${type}.more`)"
+            variant="outlined"
             @click="update(1)"
           >
             <v-icon aria-hidden="false">
@@ -74,7 +81,6 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { VChip } from 'vuetify/lib';
 
 export type WeightFactorProps = {
   show: boolean;
@@ -84,13 +90,11 @@ export type WeightFactorProps = {
   maxNumerator: number;
   denominator: number;
   weight: number;
-  value: number;
+  modelValue: number;
 };
 
 export default defineComponent({
   name: 'AsServedWeightFactor',
-
-  components: { VChip },
 
   props: {
     show: {
@@ -121,17 +125,17 @@ export default defineComponent({
       type: Number as PropType<WeightFactorProps['weight']>,
       required: true,
     },
-    value: {
-      type: Number as PropType<WeightFactorProps['value']>,
+    modelValue: {
+      type: Number as PropType<WeightFactorProps['modelValue']>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
-      numerator: this.value,
+      numerator: this.modelValue,
     };
   },
 
@@ -163,7 +167,7 @@ export default defineComponent({
       if (!val)
         return;
 
-      this.numerator = this.value;
+      this.numerator = this.modelValue;
     },
   },
 
@@ -174,7 +178,7 @@ export default defineComponent({
           ? Math.min(this.maxNumerator, this.numerator + value)
           : Math.max(this.minNumerator, this.numerator + value);
 
-      this.$emit('input', this.numerator);
+      this.$emit('update:modelValue', this.numerator);
     },
   },
 });

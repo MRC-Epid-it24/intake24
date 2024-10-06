@@ -1,5 +1,4 @@
-import type { PropType } from 'vue';
-import type { Location } from 'vue-router';
+import type { RouteLocationRaw } from 'vue-router';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -12,14 +11,8 @@ export default defineComponent({
       type: Object,
       required: true,
     },
-    routePrefix: {
-      type: String,
-    },
     title: {
       type: String,
-    },
-    to: {
-      type: Object as PropType<Location>,
     },
   },
 
@@ -30,23 +23,19 @@ export default defineComponent({
       return `$${this.action}`;
     },
     route(): string | null | undefined {
-      return this.routePrefix ?? this.$route.name;
+      return this.$route.name?.toString();
     },
     internalTitle(): string {
-      return this.title ?? this.$t(`common.action.${this.action}`).toString();
+      return this.title ?? this.$t(`common.action.${this.action}`);
     },
-    internalTo(): Location {
-      const { to } = this;
-      if (to)
-        return to;
-
+    internalTo(): RouteLocationRaw {
       const {
         action,
         item: { id },
         route,
       } = this;
 
-      return { name: `${route}-${action}`, params: { id } };
+      return { name: `${route}-${action}`, params: id ? { id } : undefined };
     },
   },
 

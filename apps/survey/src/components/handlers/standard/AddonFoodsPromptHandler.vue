@@ -20,7 +20,6 @@ import { computed, defineComponent } from 'vue';
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, PromptSection } from '@intake24/common/surveys';
 import type { FoodState } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
 import { AddonFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { addonFoodPromptCheck, getEntityId } from '@intake24/survey/util';
@@ -46,7 +45,6 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props, ctx) {
-    const { translate } = useI18n();
     const { encodedFoodOptional: food, localeId } = useFoodPromptUtils();
     const { mealOptional: meal } = useMealPromptUtils();
     const survey = useSurvey();
@@ -156,7 +154,6 @@ export default defineComponent({
 
     return {
       food,
-      translate,
       localeId,
       meal,
       meals,

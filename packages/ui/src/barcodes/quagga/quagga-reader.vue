@@ -1,15 +1,13 @@
 <template>
   <v-dialog
     v-model="dialog"
-    :fullscreen="$vuetify.breakpoint.mobile"
-    :max-width="$vuetify.breakpoint.mobile ? undefined : '640px'"
-    :min-height="$vuetify.breakpoint.mobile ? undefined : '480px'"
+    :fullscreen="$vuetify.display.mobile"
+    :max-width="$vuetify.display.mobile ? undefined : '640px'"
+    :min-height="$vuetify.display.mobile ? undefined : '480px'"
   >
-    <v-card ref="card" :tile="$vuetify.breakpoint.mobile">
+    <v-card ref="card" :tile="$vuetify.display.mobile">
       <v-toolbar color="secondary" dark flat>
-        <v-btn icon :title="$t('common.action.close')" @click.stop="close">
-          <v-icon>$close</v-icon>
-        </v-btn>
+        <v-btn icon="$close" :title="$t('common.action.close')" @click.stop="close" />
         <v-toolbar-title>Scan barcode</v-toolbar-title>
         <v-spacer />
         <v-switch v-model="locate" class="mt-0" hide-details name="locate">
@@ -17,7 +15,7 @@
             <v-icon>fas fa-crosshairs</v-icon>
           </template>
         </v-switch>
-        <v-divider class="ml-2" vertical />
+        <v-divider class="ms-2" vertical />
         <v-btn
           color="white"
           :disabled="!hasTorch"
@@ -42,7 +40,7 @@ import type { PropType } from 'vue';
 import Quagga from '@ericblade/quagga2';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue';
-import { VCard } from 'vuetify/lib';
+import { VCard } from 'vuetify/components';
 
 import { defaultBarcodeScannerOptions, type QuaggaScanner } from '@intake24/common/barcodes';
 
@@ -80,7 +78,6 @@ const dialog = useVModel(props, 'dialog', emit);
 const card = ref<InstanceType<typeof VCard>>();
 const reader = ref<InstanceType<typeof HTMLFormElement>>();
 
-// @ts-expect-error should allow vue instance?
 const { height, width } = useElementSize(card);
 
 const initializing = ref(false);

@@ -3,7 +3,7 @@
     v-bind="{ food, meal, prompt: prompt.prompts[panel ?? 0], section, isValid }"
     @action="action"
   >
-    <v-expansion-panels v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
       <component
         :is="item.component"
         v-for="(item, idx) in prompt.prompts"
@@ -46,13 +46,13 @@ export default defineComponent({
   mixins: [createBasePrompt<'multi-prompt', FoodState>()],
 
   props: {
-    value: {
+    modelValue: {
       type: Array as PropType<(CustomPromptAnswer | undefined)[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const isAnswerRequired = (prompt: Prompt) =>
@@ -60,15 +60,15 @@ export default defineComponent({
 
     const isValid = computed(
       () =>
-        !props.value.some(
+        !props.modelValue.some(
           (answer, idx) => answer === undefined && isAnswerRequired(props.prompt.prompts[idx]),
         ),
     );
     const panel = ref<number | undefined>(0);
 
     const state = computed({
-      get: () => props.value,
-      set: value => ctx.emit('input', value),
+      get: () => props.modelValue,
+      set: value => ctx.emit('update:modelValue', value),
     });
 
     const confirm = () => {
@@ -82,7 +82,7 @@ export default defineComponent({
       if (state.value[idx] === undefined && !isAnswerRequired(prompt))
         state.value[idx] = null;
 
-      for (const [index, answer] of Object.entries(props.value)) {
+      for (const [index, answer] of Object.entries(props.modelValue)) {
         if (answer === undefined) {
           panel.value = Number.parseInt(index);
           return;

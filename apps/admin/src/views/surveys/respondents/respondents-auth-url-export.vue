@@ -1,20 +1,16 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
-      <v-list-item key="authUrls" v-bind="attrs" link v-on="on">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
+      <v-list-item key="authUrls" link v-bind="props">
         <v-list-item-title>
-          <v-icon left>
-            $download
-          </v-icon>
+          <v-icon icon="$download" start />
           {{ $t('surveys.respondents.authUrls._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
-    <v-card :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-icon dark left>
-          $download
-        </v-icon>
+        <v-icon icon="$download" start />
         <v-toolbar-title>
           {{ $t(`surveys.respondents.authUrls.title`) }}
         </v-toolbar-title>
@@ -23,10 +19,8 @@
         <v-container>
           <v-row justify="center">
             <v-col cols="12" md="6" sm="8">
-              <v-btn block color="primary" :disabled="jobInProgress" x-large @click="submit">
-                <v-icon left>
-                  $download
-                </v-icon>
+              <v-btn block color="primary" :disabled="jobInProgress" size="x-large" @click="submit">
+                <v-icon icon="$download" start />
                 {{ $t('surveys.respondents.authUrls.submit') }}
               </v-btn>
             </v-col>
@@ -36,7 +30,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn class="font-weight-bold" color="info" text @click.stop="close">
+        <v-btn class="font-weight-bold" color="info" variant="text" @click.stop="close">
           {{ $t('common.action.close') }}
         </v-btn>
       </v-card-actions>

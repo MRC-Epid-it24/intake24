@@ -1,5 +1,5 @@
 <template>
-  <v-chip v-if="amount" class="font-weight-medium" :color="color" link small>
+  <v-chip v-if="amount" class="font-weight-medium" :color="color" link size="small">
     {{ amountWithUnit }}
   </v-chip>
 </template>

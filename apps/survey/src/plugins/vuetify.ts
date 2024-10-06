@@ -1,14 +1,76 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import 'vuetify/styles';
+
+import { createVuetify } from 'vuetify';
+import * as directives from 'vuetify/directives';
+import { aliases, fa } from 'vuetify/iconsets/fa';
+import { VTimePicker } from 'vuetify/labs/VTimePicker';
 
 import { colors } from '@intake24/common/theme';
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+export default createVuetify({
+  components: {
+    VTimePicker,
+  },
+  directives,
+  defaults: {
+    VAutocomplete: {
+      color: 'primary',
+      variant: 'outlined',
+    },
+    VAlert: {
+      variant: 'tonal',
+    },
+    VBtn: {
+      variant: 'flat',
+    },
+    VCardActions: {
+      VBtn: {
+        variant: 'flat',
+      },
+    },
+    VCheckbox: {
+      color: 'primary',
+    },
+    VCheckboxBtn: {
+      color: 'primary',
+    },
+    VCombobox: {
+      color: 'primary',
+      variant: 'outlined',
+    },
+    VExpansionPanels: {
+      eager: true,
+    },
+    VFileInput: {
+      color: 'primary',
+      variant: 'outlined',
+    },
+    VRadioGroup: {
+      color: 'primary',
+    },
+    VSelect: {
+      color: 'primary',
+      variant: 'outlined',
+    },
+    VSwitch: {
+      color: 'primary',
+    },
+    VTextField: {
+      color: 'primary',
+      variant: 'outlined',
+    },
+    VTextarea: {
+      color: 'primary',
+      variant: 'outlined',
+    },
+  },
+  display: {
+    mobileBreakpoint: 'md',
+  },
   icons: {
-    iconfont: 'fa',
-    values: {
+    defaultSet: 'fa',
+    aliases: {
+      ...aliases,
       add: 'fas fa-circle-plus',
       back: 'fas fa-arrow-left',
       cancel: 'fas fa-xmark',
@@ -48,11 +110,14 @@ export default new Vuetify({
       survey: 'fas fa-poll-h',
       yes: 'far fa-circle-check',
     },
+    sets: {
+      fa,
+    },
   },
   theme: {
     themes: {
       light: {
-        ...colors,
+        colors,
       },
     },
   },

@@ -2,37 +2,30 @@
   <data-table :headers="headers" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+defineOptions({ name: 'FoodGroupList' });
 
-export default defineComponent({
-  name: 'FoodGroupList',
+const { i18n: { t } } = useI18n();
 
-  components: { DataTable },
-
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('common.id'),
-          sortable: true,
-          value: 'id',
-        },
-        {
-          text: this.$t('common.name'),
-          sortable: true,
-          value: 'name',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers: DataTableHeader[] = [
+  {
+    title: t('common.id'),
+    sortable: true,
+    key: 'id',
   },
-});
+  {
+    title: t('common.name'),
+    sortable: true,
+    key: 'name',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+];
 </script>

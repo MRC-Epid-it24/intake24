@@ -1,38 +1,38 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row>
       <v-col cols="12" md="6">
         <v-text-field
           hide-details="auto"
           :label="$t('survey-schemes.prompts.date-picker-prompt.current')"
+          :model-value="current"
           name="current"
-          outlined
-          :value="current"
-          @input="updateNumber('current', $event)"
+          variant="outlined"
+          @update:model-value="updateNumber('current', $event)"
         />
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
           hide-details="auto"
           :label="$t('survey-schemes.prompts.date-picker-prompt.min')"
+          :model-value="min"
           name="min"
-          outlined
-          :value="min"
-          @input="updateNumber('min', $event)"
+          variant="outlined"
+          @update:model-value="updateNumber('min', $event)"
         />
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
           hide-details="auto"
           :label="$t('survey-schemes.prompts.date-picker-prompt.max')"
+          :model-value="max"
           name="max"
-          outlined
-          :value="max"
-          @input="updateNumber('max', $event)"
+          variant="outlined"
+          @update:model-value="updateNumber('max', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

@@ -12,7 +12,7 @@ export default <T>() =>
         type: Object as PropType<Errors>,
         required: true,
       },
-      value: {
+      modelValue: {
         type: Object as PropType<T>,
         required: true,
       },
@@ -22,15 +22,15 @@ export default <T>() =>
       },
     },
 
-    emits: ['input'],
+    emits: ['update:modelValue'],
 
     computed: {
       params: {
         get() {
-          return this.value;
+          return this.modelValue;
         },
         set(value: T) {
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         },
       },
     },

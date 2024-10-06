@@ -1,6 +1,6 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
+  <v-card border flat>
+    <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.portionSizes.title') }}
       </v-toolbar-title>
@@ -8,61 +8,49 @@
       <v-btn
         v-if="!disabled"
         color="primary"
-        fab
-        small
+        icon="$add"
+        size="small"
         :title="$t('fdbs.portionSizes.add')"
         @click.stop="add"
-      >
-        <v-icon small>
-          $add
-        </v-icon>
-      </v-btn>
+      />
     </v-toolbar>
-    <v-list class="py-0" two-line>
-      <draggable v-model="items" handle=".drag-and-drop__handle">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(item, index) in items"
-            :key="item._id"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t(`prompts.portionSizeOption.selections.${item.description}`) }}
-              </v-list-item-title>
-              <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
-              <v-messages
-                v-if="errors.has('portionSizeMethods', index)"
-                color="error"
-                :value="errors.get('portionSizeMethods', index)"
-              />
-            </v-list-item-content>
+    <v-list class="list-border py-0" lines="two">
+      <vue-draggable
+        v-model="items"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+      >
+        <v-list-item v-for="(item, index) in items" :key="item._id">
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title>
+            {{ $t(`prompts.portionSizeOption.selections.${item.description}`) }}
+          </v-list-item-title>
+          <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
+          <v-messages
+            v-if="errors.has('portionSizeMethods', index)"
+            color="error"
+            :value="errors.get('portionSizeMethods', index)"
+          />
+          <template #append>
             <v-list-item-action v-if="!disabled">
-              <v-btn icon :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })">
-                <v-icon color="secondary lighten-1">
-                  $edit
-                </v-icon>
-              </v-btn>
+              <v-btn icon="$edit" :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })" />
             </v-list-item-action>
             <v-list-item-action v-if="!disabled">
               <confirm-dialog
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('fdbs.portionSizes.remove').toString()"
+                :label="$t('fdbs.portionSizes.remove')"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.remove', { name: item.description }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <portion-size-method-selector ref="selector" @save="save" />
   </v-card>
@@ -72,7 +60,7 @@
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { Errors } from '@intake24/common/util';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
@@ -88,7 +76,7 @@ import PortionSizeMethodSelector from './portion-size-method-selector.vue';
 export default defineComponent({
   name: 'PortionSizeMethodList',
 
-  components: { ConfirmDialog, Draggable: draggable, PortionSizeMethodSelector },
+  components: { ConfirmDialog, PortionSizeMethodSelector, VueDraggable },
 
   props: {
     disabled: {
@@ -103,16 +91,16 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Array as PropType<PortionSizeMethodItem[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props) {
-    const items = ref(props.value.map(withIdAndOrder));
+    const items = ref(props.modelValue.map(withIdAndOrder));
     const selector = ref<InstanceType<typeof PortionSizeMethodSelector>>();
 
     return { items, selector };
@@ -132,10 +120,10 @@ export default defineComponent({
       this.items = val.map(withIdAndOrder);
     },
     outputItems(val: PortionSizeMethodItem[]) {
-      if (deepEqual(val, this.value))
+      if (deepEqual(val, this.modelValue))
         return;
 
-      this.$emit('input', [...val]);
+      this.$emit('update:modelValue', [...val]);
     },
   },
 

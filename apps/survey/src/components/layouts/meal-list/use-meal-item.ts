@@ -15,8 +15,8 @@ export type UseMealItemProps = {
   selectedMealId?: string;
 };
 
-export function useMealItem(props: UseMealItemProps, { emit }: SetupContext) {
-  const { i18n, translate } = useI18n();
+export function useMealItem(props: UseMealItemProps, { emit }: SetupContext<'action'[]>) {
+  const { i18n: { t } } = useI18n();
   const { mealName, mealTime } = useMealUtils(props);
 
   const isSelected = computed(() => props.selectedMealId === props.meal.id);
@@ -25,19 +25,19 @@ export function useMealItem(props: UseMealItemProps, { emit }: SetupContext) {
     (
       [
         {
-          name: i18n.t('recall.menu.meal.editFoods').toString(),
+          name: t('recall.menu.meal.editFoods'),
           action: 'editMeal',
           icon: '$meal',
           if: (meal: MealState) => meal.flags.includes('free-entry-complete'),
         },
         {
-          name: i18n.t('recall.menu.meal.editTime').toString(),
+          name: t('recall.menu.meal.editTime'),
           action: 'mealTime',
           icon: '$mealTime',
           if: (meal: MealState) => !meal.flags.includes('meal-time:disabled'),
         },
         {
-          name: i18n.t('recall.menu.meal.delete').toString(),
+          name: t('recall.menu.meal.delete'),
           action: 'deleteMeal',
           dialog: true,
           icon: '$delete',
@@ -50,5 +50,5 @@ export function useMealItem(props: UseMealItemProps, { emit }: SetupContext) {
     emit('action', type, id);
   };
 
-  return { action, isSelected, translate, menu, mealName, mealTime };
+  return { action, isSelected, menu, mealName, mealTime };
 }

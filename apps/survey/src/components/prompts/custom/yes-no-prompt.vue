@@ -8,7 +8,7 @@
       <yes-no-toggle v-model="state" />
     </template>
     <template #nav-actions>
-      <v-btn color="primary" text :title="$t('common.action.no')" @click.stop="state = false">
+      <v-btn color="primary" :title="$t('common.action.no')" variant="text" @click.stop="state = false">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
@@ -17,7 +17,7 @@
         </v-icon>
       </v-btn>
       <v-divider vertical />
-      <v-btn color="primary" text :title="$t('common.action.yes')" @click.stop="state = true">
+      <v-btn color="primary" :title="$t('common.action.yes')" variant="text" @click.stop="state = true">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>
@@ -45,24 +45,24 @@ export default defineComponent({
   mixins: [createBasePrompt<'yes-no-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: undefined,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { action, customPromptLayout } = usePromptUtils(props, ctx);
 
-    const isValid = computed(() => props.value !== undefined);
+    const isValid = computed(() => props.modelValue !== undefined);
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
 
         if (typeof value === 'boolean')
           action('next');

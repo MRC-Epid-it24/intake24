@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -11,7 +11,7 @@
                 hide-details="auto"
                 :label="$t('image-maps.id')"
                 name="id"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -21,9 +21,9 @@
                 hide-details="auto"
                 :label="$t('image-maps.baseImage')"
                 name="baseImage"
-                outlined
                 prepend-icon=""
                 prepend-inner-icon="fas fa-paperclip"
+                variant="outlined"
                 @change="form.errors.clear('baseImage')"
               />
             </v-col>
@@ -34,8 +34,8 @@
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
-                outlined
                 prepend-inner-icon="$description"
+                variant="outlined"
               />
             </v-col>
           </v-row>

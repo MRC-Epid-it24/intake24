@@ -1,37 +1,34 @@
 <template>
   <div>
-    <card-unit v-bind="{ unit: value.unit }" @update:unit="update('unit', $event)" />
+    <card-unit v-bind="{ unit: modelValue.unit }" @update:unit="update('unit', $event)" />
     <card-thresholds
-      :thresholds="{ high: value.high, low: value.low }"
+      :thresholds="{ high: modelValue.high, low: modelValue.low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
     />
-    <v-tab-item key="nutrients" value="nutrients">
+    <v-tabs-window-item key="nutrients" value="nutrients">
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('nutrient-types.current') }}</v-card-title>
-            <v-list>
+            <v-list class="list-border">
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="(nutrientType, idx) in currentNutrientTypes"
                   :key="nutrientType.id"
-                  class="list-item-border"
                   link
                 >
-                  <v-list-item-avatar>
+                  <template #prepend>
                     <v-icon>$nutrient-types</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
+                  </template>
+                  <v-list-item-title>
                     {{ nutrientType.description }}
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn icon :title="$t('nutrient-types.remove')" @click.stop="remove(idx)">
-                      <v-icon color="error">
-                        $delete
-                      </v-icon>
-                    </v-btn>
-                  </v-list-item-action>
+                  </v-list-item-title>
+                  <template #append>
+                    <v-list-item-action>
+                      <v-btn color="error" icon="$delete" :title="$t('nutrient-types.remove')" @click.stop="remove(idx)" />
+                    </v-list-item-action>
+                  </template>
                 </v-list-item>
               </transition-group>
             </v-list>
@@ -44,34 +41,35 @@
               clearable
               hide-details="auto"
               :label="$t('nutrient-types._')"
-              outlined
               prepend-inner-icon="$search"
+              variant="outlined"
             />
-            <v-list>
+            <v-list class="list-border">
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="nutrientType in visibleNutrientTypes"
                   :key="nutrientType.id"
-                  class="list-item-border"
                   link
                 >
-                  <v-list-item-avatar>
+                  <template #prepend>
                     <v-icon>$nutrient-types</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
+                  </template>
+                  <v-list-item-title>
                     {{ nutrientType.description }}
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn
-                      icon
-                      :title="$t('nutrient-types.add')"
-                      @click.stop="add(nutrientType.id)"
-                    >
-                      <v-icon color="info">
-                        $add
-                      </v-icon>
-                    </v-btn>
-                  </v-list-item-action>
+                  </v-list-item-title>
+                  <template #append>
+                    <v-list-item-action>
+                      <v-btn
+                        icon
+                        :title="$t('nutrient-types.add')"
+                        @click.stop="add(nutrientType.id)"
+                      >
+                        <v-icon color="info">
+                          $add
+                        </v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </template>
                 </v-list-item>
               </transition-group>
               <v-skeleton-loader
@@ -83,17 +81,17 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-tab-item>
-    <v-tab-item key="json" value="json">
-      <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
-    </v-tab-item>
+    </v-tabs-window-item>
+    <v-tabs-window-item key="json" value="json">
+      <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+    </v-tabs-window-item>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import type { NutrientGroupCard } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
@@ -102,127 +100,109 @@ import { useEntry } from '@intake24/admin/stores';
 
 import { CardThresholds, CardUnit } from '../partials';
 
-export default defineComponent({
-  name: 'NutrientGroupCard',
+defineOptions({ name: 'NutrientGroupCard' });
 
-  components: { CardThresholds, CardUnit, JsonEditor },
-
-  props: {
-    value: {
-      type: Object as PropType<NutrientGroupCard>,
-      required: true,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<NutrientGroupCard>,
+    required: true,
   },
+});
 
-  setup(props, { emit }) {
-    const currentNutrientTypeIds = ref([...props.value.nutrientTypes]);
-    const search = ref<string | null>(null);
-    const filteredNutrientTypes = ref<NutrientTypeResponse[]>([]);
-    const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
+const emit = defineEmits(['update:modelValue']);
 
-    const allNutrientTypes = computed<NutrientTypeResponse[]>(
-      () => useEntry().refs.nutrientTypes ?? [],
-    );
+const currentNutrientTypeIds = ref([...props.modelValue.nutrientTypes]);
+const search = ref<string | null>(null);
+const filteredNutrientTypes = ref<NutrientTypeResponse[]>([]);
+const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
 
-    const availableNutrientTypes = computed(() =>
-      allNutrientTypes.value.filter(
-        nutrient => !currentNutrientTypeIds.value.includes(nutrient.id),
-      ),
-    );
+const allNutrientTypes = computed<NutrientTypeResponse[]>(
+  () => useEntry().refs.nutrientTypes ?? [],
+);
 
-    const currentNutrientTypes = computed(() =>
-      currentNutrientTypeIds.value.reduce<NutrientTypeResponse[]>((acc, nutrientId) => {
-        const match = allNutrientTypes.value.find(nutrient => nutrient.id === nutrientId);
+const availableNutrientTypes = computed(() =>
+  allNutrientTypes.value.filter(
+    nutrient => !currentNutrientTypeIds.value.includes(nutrient.id),
+  ),
+);
 
-        if (match)
-          acc.push(match);
+const currentNutrientTypes = computed(() =>
+  currentNutrientTypeIds.value.reduce<NutrientTypeResponse[]>((acc, nutrientId) => {
+    const match = allNutrientTypes.value.find(nutrient => nutrient.id === nutrientId);
 
-        return acc;
-      }, []),
-    );
+    if (match)
+      acc.push(match);
 
-    const loadMoreNutrientTypes = () => {
-      const startIndex = visibleNutrientTypes.value.length;
-      const endIndex
+    return acc;
+  }, []),
+);
+
+function loadMoreNutrientTypes() {
+  const startIndex = visibleNutrientTypes.value.length;
+  const endIndex
         = startIndex + 15 > filteredNutrientTypes.value.length
           ? filteredNutrientTypes.value.length
           : startIndex + 15;
 
-      const items = filteredNutrientTypes.value.slice(startIndex, endIndex);
-      visibleNutrientTypes.value.push(...items);
-    };
+  const items = filteredNutrientTypes.value.slice(startIndex, endIndex);
+  visibleNutrientTypes.value.push(...items);
+}
 
-    const loadFilteredNutrientTypes = () => {
-      filteredNutrientTypes.value = search.value
-        ? availableNutrientTypes.value.filter(
-          nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
-        )
-        : [...availableNutrientTypes.value];
+function loadFilteredNutrientTypes() {
+  filteredNutrientTypes.value = search.value
+    ? availableNutrientTypes.value.filter(
+      nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
+    )
+    : [...availableNutrientTypes.value];
 
-      visibleNutrientTypes.value = [];
-      loadMoreNutrientTypes();
-    };
+  visibleNutrientTypes.value = [];
+  loadMoreNutrientTypes();
+}
 
-    const nutrientTypesAvailableToLoad = computed(
-      () => visibleNutrientTypes.value.length < filteredNutrientTypes.value.length,
-    );
+const nutrientTypesAvailableToLoad = computed(
+  () => visibleNutrientTypes.value.length < filteredNutrientTypes.value.length,
+);
 
-    const tryLoadMoreNutrientTypes = (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && nutrientTypesAvailableToLoad)
-        loadMoreNutrientTypes();
-    };
+function tryLoadMoreNutrientTypes(isIntersecting: boolean) {
+  if (!isIntersecting || !nutrientTypesAvailableToLoad.value)
+    return;
 
-    const update = (field: string, value: any) => {
-      emit('input', { ...props.value, [field]: value });
-    };
+  loadMoreNutrientTypes();
+}
 
-    watch(
-      allNutrientTypes,
-      () => {
-        loadFilteredNutrientTypes();
-      },
-      { immediate: true },
-    );
+function update(field: string, value: any) {
+  emit('update:modelValue', { ...props.modelValue, [field]: value });
+}
 
-    watchDebounced(
-      search,
-      () => {
-        loadFilteredNutrientTypes();
-      },
-      { debounce: 500, maxWait: 1000 },
-    );
+function add(nutrientTypeId: string) {
+  currentNutrientTypeIds.value.push(nutrientTypeId);
 
-    return {
-      currentNutrientTypeIds,
-      currentNutrientTypes,
-      allNutrientTypes,
-      availableNutrientTypes,
-      nutrientTypesAvailableToLoad,
-      search,
-      visibleNutrientTypes,
-      loadFilteredNutrientTypes,
-      loadMoreNutrientTypes,
-      tryLoadMoreNutrientTypes,
-      update,
-    };
+  loadFilteredNutrientTypes();
+
+  update('nutrientTypes', currentNutrientTypeIds.value);
+};
+
+function remove(index: number) {
+  currentNutrientTypeIds.value.splice(index, 1);
+
+  loadFilteredNutrientTypes();
+
+  update('nutrientTypes', currentNutrientTypeIds.value);
+};
+
+watch(
+  allNutrientTypes,
+  () => {
+    loadFilteredNutrientTypes();
   },
+  { immediate: true },
+);
 
-  methods: {
-    add(nutrientTypeId: string) {
-      this.currentNutrientTypeIds.push(nutrientTypeId);
-
-      this.loadFilteredNutrientTypes();
-
-      this.update('nutrientTypes', this.currentNutrientTypeIds);
-    },
-
-    remove(index: number) {
-      this.currentNutrientTypeIds.splice(index, 1);
-
-      this.loadFilteredNutrientTypes();
-
-      this.update('nutrientTypes', this.currentNutrientTypeIds);
-    },
+watchDebounced(
+  search,
+  () => {
+    loadFilteredNutrientTypes();
   },
-});
+  { debounce: 500, maxWait: 1000 },
+);
 </script>

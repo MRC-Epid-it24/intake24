@@ -1,66 +1,67 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
-    <v-toolbar bottom color="grey lighten-5" flat tile>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
+    <v-toolbar color="grey-lighten-4" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.split-lists.title') }}
       </v-toolbar-title>
       <v-spacer />
       <v-btn
-        class="ml-3"
         color="primary"
-        fab
-        small
+        icon="$add"
+        size="small"
         :title="$t('locales.split-lists.add')"
         @click.stop="add"
-      >
-        <v-icon>$add</v-icon>
-      </v-btn>
+      />
     </v-toolbar>
-    <v-list>
-      <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
-        <v-list-item-avatar>
+    <v-list class="list-border">
+      <v-list-item v-for="(item, idx) in form.items" :key="idx">
+        <template #prepend>
           <v-icon>fas fa-arrows-split-up-and-left</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-row>
-            <v-col cols="12" md="4">
-              <v-text-field
-                v-model.trim="item.firstWord"
-                hide-details="auto"
-                :label="$t('locales.split-lists.firstWord')"
-                name="firstWord"
-                outlined
-              />
-            </v-col>
-            <v-col cols="12" md>
-              <v-text-field
-                v-model.trim="item.words"
-                hide-details="auto"
-                :label="$t('locales.split-lists.words')"
-                name="words"
-                outlined
-              />
-            </v-col>
-          </v-row>
-        </v-list-item-content>
-        <v-list-item-action>
-          <confirm-dialog
-            color="error"
-            icon
-            icon-left="$delete"
-            :label="$t('locales.split-lists.remove').toString()"
-            @confirm="remove(idx)"
-          >
-            {{ $t('common.action.confirm.delete', { name: item.firstWord }) }}
-          </confirm-dialog>
-        </v-list-item-action>
+        </template>
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-text-field
+              v-model.trim="item.firstWord"
+              class="my-1"
+              density="compact"
+              hide-details="auto"
+              :label="$t('locales.split-lists.firstWord')"
+              name="firstWord"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md>
+            <v-text-field
+              v-model.trim="item.words"
+              class="my-1"
+              density="compact"
+              hide-details="auto"
+              :label="$t('locales.split-lists.words')"
+              name="words"
+              variant="outlined"
+            />
+          </v-col>
+        </v-row>
+        <template #append>
+          <v-list-item-action>
+            <confirm-dialog
+              color="error"
+              icon
+              icon-left="$delete"
+              :label="$t('locales.split-lists.remove')"
+              @confirm="remove(idx)"
+            >
+              {{ $t('common.action.confirm.delete', { name: item.firstWord }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </template>
       </v-list-item>
     </v-list>
   </layout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 
 import type {
   LocaleEntry,
@@ -69,6 +70,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -82,6 +84,8 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const http = useHttp();
+
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
@@ -92,33 +96,41 @@ export default defineComponent({
       config: { transform: ({ items }) => items },
     });
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit, toForm };
-  },
+    function add() {
+      form.items.push({ localeId: props.id, firstWord: '', words: '' });
+    };
 
-  async mounted() {
-    const { data: items } = await this.$http.get<SplitListAttributes[]>(
-      `admin/locales/${this.id}/split-lists`,
-    );
+    function remove(index: number) {
+      form.items.splice(index, 1);
+    };
 
-    this.toForm({ items });
-  },
+    async function save() {
+      form.items = form.items.filter(({ firstWord, words }) => firstWord && words);
 
-  methods: {
-    add() {
-      this.form.items.push({ localeId: this.id, firstWord: '', words: '' });
-    },
-
-    remove(index: number) {
-      this.form.items.splice(index, 1);
-    },
-
-    async save() {
-      this.form.items = this.form.items.filter(({ firstWord, words }) => firstWord && words);
-
-      const items = await this.form.post<SplitListAttributes[]>(`admin/locales/${this.id}/split-lists`);
+      const items = await form.post<SplitListAttributes[]>(`admin/locales/${props.id}/split-lists`);
 
       useStoreEntry().setEntry({ items });
-    },
+    };
+
+    onMounted(async () => {
+      const { data: items } = await http.get<SplitListAttributes[]>(
+        `admin/locales/${props.id}/split-lists`,
+      );
+
+      toForm({ items });
+    });
+
+    return {
+      add,
+      entry,
+      entryLoaded,
+      clearError,
+      form,
+      remove,
+      routeLeave,
+      save,
+      submit,
+    };
   },
 });
 </script>

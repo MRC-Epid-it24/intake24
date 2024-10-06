@@ -1,47 +1,39 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-card-title>{{ $t('survey-schemes.data-export.title') }}</v-card-title>
     <v-card-text>
-      <ul>
-        <li>List of export sections to be exported</li>
-        <li>Export sections can be re-ordered using drag & drop</li>
-        <li>Each section can be modified to define specific fields and order for export</li>
-      </ul>
+      <p>List of export sections to be exported.</p>
+      <p>Export sections can be re-ordered using drag & drop.</p>
+      <p>Each section can be modified to define specific fields and order for export.</p>
     </v-card-text>
-    <v-toolbar color="grey lighten-2" flat tile>
+    <v-toolbar color="grey-lighten-2" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>
       <v-spacer />
-      <v-menu v-if="availableSections.length" bottom :close-on-content-click="false" left offset-y>
-        <template #activator="{ on, attrs }">
-          <v-btn color="primary" fab small v-bind="attrs" :title="$t('survey-schemes.data-export.add')" v-on="on">
-            <v-icon>$add</v-icon>
-          </v-btn>
+      <v-menu v-if="availableSections.length" :close-on-content-click="false" location="bottom left">
+        <template #activator="{ props }">
+          <v-btn color="primary" icon="$add" size="small" :title="$t('survey-schemes.data-export.add')" v-bind="props" />
         </template>
-        <v-list dense>
+        <v-list density="compact">
           <v-list-item v-for="section in availableSections" :key="section.id" link>
-            <v-list-item-content>
-              <v-list-item-title>{{ section.text }}</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action class="my-1">
-              <v-btn icon :title="$t('survey-schemes.data-export.add')">
-                <v-icon color="secondary lighten-1" @click.stop="add(section.id)">
-                  $add
-                </v-icon>
-              </v-btn>
-            </v-list-item-action>
+            <v-list-item-title>{{ section.title }}</v-list-item-title>
+            <template #append>
+              <v-list-item-action class="my-1">
+                <v-btn icon="$add" :title="$t('survey-schemes.data-export.add')" @click.stop="add(section.id)" />
+              </v-list-item-action>
+            </template>
           </v-list-item>
         </v-list>
       </v-menu>
       <options-menu>
-        <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+        <select-resource resource="survey-schemes" return-object="dataExport" @update:model-value="load">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('survey-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -56,31 +48,30 @@
       @close="close"
       @update="update"
     />
-    <v-list two-line>
-      <draggable v-model="form.dataExport" handle=".drag-and-drop__handle">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(section, idx) in form.dataExport"
-            :key="section.id"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ $t(`survey-schemes.data-export.sections.${section.id}`) }}
-              </v-list-item-title>
-            </v-list-item-content>
+    <v-list class="list-border" lines="two">
+      <vue-draggable
+        v-model="form.dataExport"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+      >
+        <v-list-item
+          v-for="(section, idx) in form.dataExport"
+          :key="section.id"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title>
+            {{ $t(`survey-schemes.data-export.sections.${section.id}`) }}
+          </v-list-item-title>
+          <template #append>
             <v-list-item-action>
               <v-btn
                 icon
                 :title="$t('survey-schemes.data-export.edit')"
                 @click.stop="edit(section)"
               >
-                <v-icon color="secondary lighten-2">
+                <v-icon color="secondary-lighten-2">
                   $edit
                 </v-icon>
               </v-btn>
@@ -90,22 +81,22 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('survey-schemes.data-export.remove').toString()"
+                :label="$t('survey-schemes.data-export.remove')"
                 @confirm="remove(idx)"
               >
                 {{ $t('common.action.confirm.remove', { name: $t(`survey-schemes.data-export.sections.${section.id}`) }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
   </layout>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type {
   SurveySchemeEntry,
@@ -129,7 +120,14 @@ export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 export default defineComponent({
   name: 'SurveySchemeDataExport',
 
-  components: { ConfirmDialog, Draggable: draggable, DataExportSection, JsonEditorDialog, OptionsMenu, SelectResource },
+  components: {
+    ConfirmDialog,
+    DataExportSection,
+    JsonEditorDialog,
+    OptionsMenu,
+    SelectResource,
+    VueDraggable,
+  },
 
   mixins: [formMixin],
 
@@ -161,7 +159,7 @@ export default defineComponent({
 
       return exportSectionIds
         .filter(id => !used.includes(id))
-        .map(id => ({ id, text: i18n.t(`survey-schemes.data-export.sections.${id}`) }));
+        .map(id => ({ id, title: i18n.t(`survey-schemes.data-export.sections.${id}`) }));
     });
 
     const add = (section: ExportSectionId) => {

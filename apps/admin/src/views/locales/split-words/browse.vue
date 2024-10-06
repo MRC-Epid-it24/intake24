@@ -1,46 +1,45 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
-    <v-toolbar bottom color="grey lighten-5" flat tile>
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
+    <v-toolbar color="grey-lighten-4" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.split-words.title') }}
       </v-toolbar-title>
       <v-spacer />
       <v-btn
-        class="ml-3"
         color="primary"
-        fab
-        small
+        icon="$add"
+        size="small"
         :title="$t('locales.split-words.add')"
         @click.stop="add"
-      >
-        <v-icon>$add</v-icon>
-      </v-btn>
+      />
     </v-toolbar>
-    <v-list>
-      <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
-        <v-list-item-avatar>
+    <v-list class="list-border">
+      <v-list-item v-for="(item, idx) in form.items" :key="idx">
+        <template #prepend>
           <v-icon>fas fa-arrows-split-up-and-left</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-text-field
-            v-model="item.words"
-            hide-details="auto"
-            :label="$t('locales.split-words.words')"
-            name="words"
-            outlined
-          />
-        </v-list-item-content>
-        <v-list-item-action>
-          <confirm-dialog
-            color="error"
-            icon
-            icon-left="$delete"
-            :label="$t('locales.split-words.remove').toString()"
-            @confirm="remove(idx)"
-          >
-            {{ $t('common.action.confirm.delete', { name: item.words }) }}
-          </confirm-dialog>
-        </v-list-item-action>
+        </template>
+        <v-text-field
+          v-model="item.words"
+          class="my-1"
+          density="compact"
+          hide-details="auto"
+          :label="$t('locales.split-words.words')"
+          name="words"
+          variant="outlined"
+        />
+        <template #append>
+          <v-list-item-action>
+            <confirm-dialog
+              color="error"
+              icon
+              icon-left="$delete"
+              :label="$t('locales.split-words.remove')"
+              @confirm="remove(idx)"
+            >
+              {{ $t('common.action.confirm.delete', { name: item.words }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </template>
       </v-list-item>
     </v-list>
   </layout>

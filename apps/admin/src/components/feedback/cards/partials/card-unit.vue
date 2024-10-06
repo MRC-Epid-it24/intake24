@@ -1,29 +1,31 @@
 <template>
-  <v-tab-item key="unit" value="unit">
+  <v-tabs-window-item key="unit" value="unit">
     <language-selector
       v-model="internalUnit.name"
-      :label="$t('feedback-schemes.cards.unit.name').toString()"
+      border
+      class="mb-4"
+      :label="$t('feedback-schemes.cards.unit.name')"
     >
-      <template v-for="lang in Object.keys(internalUnit.name)" #[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(internalUnit.name)" :key="lang" #[`lang.${lang}`]>
         <v-text-field
-          :key="lang"
           v-model="internalUnit.name[lang]"
           hide-details="auto"
           :label="$t('feedback-schemes.cards.unit.name')"
-          outlined
           :rules="nameRules"
+          variant="outlined"
         />
       </template>
     </language-selector>
     <language-selector
       v-model="internalUnit.description"
-      :label="$t('feedback-schemes.cards.unit.description').toString()"
+      border
+      :label="$t('feedback-schemes.cards.unit.description')"
     >
-      <template v-for="lang in Object.keys(internalUnit.description)" #[`lang.${lang}`]>
-        <html-editor :key="lang" v-model="internalUnit.description[lang]" />
+      <template v-for="lang in Object.keys(internalUnit.description)" :key="lang" #[`lang.${lang}`]>
+        <html-editor v-model="internalUnit.description[lang]" />
       </template>
     </language-selector>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">
@@ -66,7 +68,7 @@ export default defineComponent({
       return this.nameRequired
         ? [
             (value: string | null): boolean | string =>
-              !!value || this.$t('feedback-schemes.cards.unit.required').toString(),
+              !!value || this.$t('feedback-schemes.cards.unit.required'),
           ]
         : [];
     },

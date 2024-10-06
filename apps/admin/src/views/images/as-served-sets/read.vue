@@ -2,7 +2,7 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12" md="6">
-        <v-simple-table>
+        <v-table>
           <tbody>
             <tr>
               <th>{{ $t('as-served-sets.id') }}</th>
@@ -13,7 +13,7 @@
               <td>{{ entry.description }}</td>
             </tr>
           </tbody>
-        </v-simple-table>
+        </v-table>
       </v-col>
       <v-col cols="12" md="6">
         <v-card-title>{{ $t('as-served-sets.selectionImage') }}</v-card-title>

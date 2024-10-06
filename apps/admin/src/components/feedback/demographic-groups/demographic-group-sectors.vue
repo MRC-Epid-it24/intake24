@@ -1,133 +1,129 @@
 <template>
-  <v-tabs vertical>
-    <v-btn class="my-4" color="secondary" @click="add">
-      <v-icon left>
-        $add
-      </v-icon>
-      {{ $t(`feedback-schemes.demographic-groups.sectors.add`) }}
-    </v-btn>
-    <v-tab v-for="(sector, index) in sectors" :key="index">
-      <v-icon left>
-        fas fa-scale-balanced
-      </v-icon>
-      {{ `${$t(`feedback-schemes.demographic-groups.sectors._`)} ${index + 1}` }}
-    </v-tab>
-    <v-tab-item v-for="(sector, index) in sectors" :key="index">
-      <v-card tile>
-        <v-card-title>
-          <v-icon left>
-            fas fa-scale-balanced
-          </v-icon>
-          {{ `${$t(`feedback-schemes.demographic-groups.sectors._`)} ${index + 1}` }}
-        </v-card-title>
-        <v-container fluid>
-          <v-row>
-            <v-col cols="12" lg="4" md="6">
-              <v-select
-                v-model="sector.sentiment"
-                hide-details="auto"
-                :items="sentiments"
-                :label="$t('feedback-schemes.sentiments._')"
-                outlined
-              />
-            </v-col>
-            <v-col cols="12" lg="4" md="6">
-              <v-select
-                v-model="sector.intake"
-                hide-details="auto"
-                :items="intakes"
-                :label="$t('feedback-schemes.demographic-groups.intake')"
-                multiple
-                outlined
-              />
-            </v-col>
-            <v-col class="d-flex justify-end" cols="12" lg="4" md="6">
-              <div class="mr-4 subtitle-1">
-                <v-icon left>
-                  fas fa-left-right
-                </v-icon>
-                {{ $t('feedback-schemes.ranges._') }}
-              </div>
-              <div>
-                <v-text-field
-                  v-model.number="sector.range.start"
-                  class="mb-4"
-                  dense
+  <div class="d-flex flex-row ga-2">
+    <v-tabs v-model="selectedSector" direction="vertical">
+      <v-btn class="my-4" color="secondary" @click="add">
+        <v-icon icon="$add" start />
+        {{ $t(`feedback-schemes.demographic-groups.sectors.add`) }}
+      </v-btn>
+      <v-tab v-for="(sector, index) in sectors" :key="index">
+        <v-icon icon="fas fa-scale-balanced" start />
+        {{ `${$t(`feedback-schemes.demographic-groups.sectors._`)} ${index + 1}` }}
+      </v-tab>
+    </v-tabs>
+    <v-tabs-window v-model="selectedSector" class="flex-grow-1">
+      <v-tabs-window-item v-for="(sector, index) in sectors" :key="index">
+        <v-card tile>
+          <v-card-title>
+            <v-icon icon="fas fa-scale-balanced" start />
+            {{ `${$t(`feedback-schemes.demographic-groups.sectors._`)} ${index + 1}` }}
+          </v-card-title>
+          <v-container fluid>
+            <v-row>
+              <v-col cols="12" lg="4" md="6">
+                <v-select
+                  v-model="sector.sentiment"
                   hide-details="auto"
-                  :label="$t('feedback-schemes.ranges.start')"
-                  outlined
+                  :items="sentiments"
+                  :label="$t('feedback-schemes.sentiments._')"
+                  variant="outlined"
                 />
-                <v-text-field
-                  v-model.number="sector.range.end"
-                  dense
+              </v-col>
+              <v-col cols="12" lg="4" md="6">
+                <v-select
+                  v-model="sector.intake"
                   hide-details="auto"
-                  :label="$t('feedback-schemes.ranges.end')"
-                  outlined
+                  :items="intakes"
+                  :label="$t('feedback-schemes.demographic-groups.intake')"
+                  multiple
+                  variant="outlined"
                 />
-              </div>
-            </v-col>
-            <v-col cols="12">
-              <language-selector
-                v-model="sector.name"
-                :label="$t('feedback-schemes.demographic-groups.name').toString()"
-              >
-                <template v-for="lang in Object.keys(sector.name)" #[`lang.${lang}`]>
+              </v-col>
+              <v-col class="d-flex justify-end" cols="12" lg="4" md="6">
+                <div class="mr-4 text-subtitle-1">
+                  <v-icon icon="fas fa-left-right" start />
+                  {{ $t('feedback-schemes.ranges._') }}
+                </div>
+                <div>
                   <v-text-field
-                    :key="lang"
-                    v-model="sector.name[lang]"
+                    v-model.number="sector.range.start"
+                    class="mb-4"
+                    density="compact"
                     hide-details="auto"
-                    :label="$t('feedback-schemes.demographic-groups.name')"
-                    outlined
-                    :rules="nameRules"
+                    :label="$t('feedback-schemes.ranges.start')"
+                    variant="outlined"
                   />
-                </template>
-              </language-selector>
-            </v-col>
-            <v-col cols="12">
-              <language-selector
-                v-model="sector.summary"
-                :label="$t('feedback-schemes.demographic-groups.summary').toString()"
-              >
-                <template v-for="lang in Object.keys(sector.summary)" #[`lang.${lang}`]>
-                  <html-editor :key="lang" v-model="sector.summary[lang]" />
-                </template>
-              </language-selector>
-            </v-col>
-            <v-col cols="12">
-              <language-selector
-                v-model="sector.description"
-                :label="$t('feedback-schemes.demographic-groups.description').toString()"
-              >
-                <template v-for="lang in Object.keys(sector.description)" #[`lang.${lang}`]>
-                  <html-editor :key="lang" v-model="sector.description[lang]" />
-                </template>
-              </language-selector>
-            </v-col>
-            <v-col cols="12">
-              <v-btn
-                block
-                color="error"
-                large
-                :title="$t(`feedback-schemes.demographic-groups.sectors.remove`)"
-                @click.stop="remove"
-              >
-                <v-icon left>
-                  $delete
-                </v-icon>
-                {{ $t(`feedback-schemes.demographic-groups.sectors.remove`) }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card>
-    </v-tab-item>
-  </v-tabs>
+                  <v-text-field
+                    v-model.number="sector.range.end"
+                    density="compact"
+                    hide-details="auto"
+                    :label="$t('feedback-schemes.ranges.end')"
+                    variant="outlined"
+                  />
+                </div>
+              </v-col>
+              <v-col cols="12">
+                <language-selector
+                  v-model="sector.name"
+                  border
+                  :label="$t('feedback-schemes.demographic-groups.name')"
+                >
+                  <template v-for="lang in Object.keys(sector.name)" :key="lang" #[`lang.${lang}`]>
+                    <v-text-field
+                      v-model="sector.name[lang]"
+                      hide-details="auto"
+                      :label="$t('feedback-schemes.demographic-groups.name')"
+                      :rules="nameRules"
+                      variant="outlined"
+                    />
+                  </template>
+                </language-selector>
+              </v-col>
+              <v-col cols="12">
+                <language-selector
+                  v-model="sector.summary"
+                  border
+                  :label="$t('feedback-schemes.demographic-groups.summary')"
+                >
+                  <template v-for="lang in Object.keys(sector.summary)" :key="lang" #[`lang.${lang}`]>
+                    <html-editor v-model="sector.summary[lang]" />
+                  </template>
+                </language-selector>
+              </v-col>
+              <v-col cols="12">
+                <language-selector
+                  v-model="sector.description"
+                  border
+                  :label="$t('feedback-schemes.demographic-groups.description')"
+                >
+                  <template v-for="lang in Object.keys(sector.description)" :key="lang" #[`lang.${lang}`]>
+                    <html-editor v-model="sector.description[lang]" />
+                  </template>
+                </language-selector>
+              </v-col>
+              <v-col cols="12">
+                <v-btn
+                  block
+                  color="error"
+                  size="large"
+                  :title="$t(`feedback-schemes.demographic-groups.sectors.remove`)"
+                  @click.stop="remove"
+                >
+                  <v-icon icon="$delete" start />
+                  {{ $t(`feedback-schemes.demographic-groups.sectors.remove`) }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-tabs-window-item>
+    </v-tabs-window>
+  </div>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
@@ -142,24 +138,32 @@ export default defineComponent({
   components: { HtmlEditor, LanguageSelector },
 
   props: {
-    value: {
+    modelValue: {
       type: Array as PropType<DemographicGroupScaleSector[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
+
+  setup() {
+    const selectedSector = ref(0);
+
+    return {
+      selectedSector,
+    };
+  },
 
   data() {
     return {
       demographicGroupScaleSectorDefaults,
-      sectors: this.value,
+      sectors: this.modelValue,
       intakes: ['summary', 'description'].map(value => ({
-        text: this.$t(`feedback-schemes.demographic-groups.${value}`),
+        title: this.$t(`feedback-schemes.demographic-groups.${value}`),
         value,
       })),
       sentiments: sentiments.map(value => ({
-        text: this.$t(`feedback-schemes.sentiments.${value}`),
+        title: this.$t(`feedback-schemes.sentiments.${value}`),
         value,
       })),
     };
@@ -169,7 +173,7 @@ export default defineComponent({
     nameRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string =>
-          !!value || this.$t('feedback-schemes.demographic-groups.required').toString(),
+          !!value || this.$t('feedback-schemes.demographic-groups.required'),
       ];
     },
   },
@@ -199,7 +203,7 @@ export default defineComponent({
     },
 
     update() {
-      this.$emit('input', this.sectors);
+      this.$emit('update:modelValue', this.sectors);
     },
   },
 });

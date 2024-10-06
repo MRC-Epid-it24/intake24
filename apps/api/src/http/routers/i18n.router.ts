@@ -2,7 +2,7 @@ import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash';
 
 import type { Includeable } from '@intake24/db';
-import type { LocaleMessageObject } from '@intake24/i18n';
+import type { LocaleMessageDictionary } from '@intake24/i18n';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import { Language } from '@intake24/db';
@@ -45,7 +45,7 @@ export function i18n() {
           'textDirection',
         ]),
         messages:
-          language.translations?.reduce<LocaleMessageObject>((acc, { section, messages }) => {
+          language.translations?.reduce<LocaleMessageDictionary<any>>((acc, { section, messages }) => {
             acc[section] = messages;
             return acc;
           }, {}) ?? {},

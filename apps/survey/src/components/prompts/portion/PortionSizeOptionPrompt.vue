@@ -4,7 +4,7 @@
       v-if="availableMethods.length"
       v-model="option"
       :mandatory="optionValid"
-      @change="change"
+      @update:model-value="change"
     >
       <v-container>
         <v-row>
@@ -15,24 +15,25 @@
             md="4"
             sm="6"
           >
-            <v-item v-slot="{ active, toggle }" :value="availableMethod.index">
+            <v-item v-slot="{ isSelected, toggle }" :value="availableMethod.index">
               <v-card
+                border
                 border-color="secondary"
                 class="d-flex flex-column justify-space-between"
-                :elevation="active ? '4' : undefined"
+                :elevation="isSelected ? '4' : undefined"
                 height="100%"
                 hover
-                outlined
                 @click="click(toggle)"
               >
                 <component :is="availableMethod.method" :method="availableMethod" />
                 <v-card-actions
                   class="d-flex justify-end"
-                  :class="{ 'grey lighten-4': !active, 'ternary': active }"
+                  :class="{ 'bg-grey-lighten-4': !isSelected, 'bg-ternary': isSelected }"
                 >
                   <v-chip
                     class="font-weight-medium px-4"
                     :color="option === availableMethod.index ? 'info' : 'primary'"
+                    variant="flat"
                   >
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>
@@ -44,7 +45,7 @@
       </v-container>
     </v-item-group>
     <v-card-text v-else>
-      <v-alert border="left" outlined type="warning">
+      <v-alert border="start" type="warning" variant="outlined">
         {{ $t(`prompts.${type}.unknown`, { food: foodName }) }}
       </v-alert>
     </v-card-text>
@@ -75,11 +76,11 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
-      option: this.value.option ?? undefined,
+      option: this.modelValue.option ?? undefined,
     };
   },
 
@@ -102,8 +103,8 @@ export default defineComponent({
   },
 
   methods: {
-    click(toggle: () => void) {
-      toggle();
+    click(toggle?: () => void) {
+      toggle?.();
 
       if (!this.optionValid)
         return;
@@ -123,7 +124,7 @@ export default defineComponent({
     update() {
       const state: PromptStates['portion-size-option-prompt'] = { option: this.option ?? null };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

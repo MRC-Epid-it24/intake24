@@ -2,11 +2,11 @@
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text>
       <food-browser
-        v-bind="{ localeId, surveySlug, prompt, section, rootCategory, value }"
+        v-bind="{ localeId, surveySlug, prompt, section, rootCategory, modelValue }"
         @food-missing="foodMissing"
         @food-selected="foodSelected"
-        @input="$emit('input', $event)"
         @recipe-builder="recipeBuilder"
+        @update:model-value="$emit('update:modelValue', $event)"
       />
     </v-card-text>
   </card-layout>
@@ -45,13 +45,13 @@ export default defineComponent({
     surveySlug: {
       type: String,
     },
-    value: {
+    modelValue: {
       type: String as PropType<string | null>,
       required: true,
     },
   },
 
-  emits: ['food-missing', 'food-selected', 'input', 'recipe-builder'],
+  emits: ['action', 'food-missing', 'food-selected', 'update:modelValue', 'recipe-builder'],
 
   setup(props, ctx) {
     const { action } = usePromptUtils(props, ctx);

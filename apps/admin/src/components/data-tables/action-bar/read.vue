@@ -1,6 +1,10 @@
 <template>
-  <v-btn color="secondary" icon :title="internalTitle" :to="internalTo">
-    <v-icon dark>
+  <v-btn
+    color="secondary"
+    :title="internalTitle"
+    :to="internalTo"
+  >
+    <v-icon>
       {{ icon }}
     </v-icon>
   </v-btn>

@@ -7,8 +7,8 @@
           clearable
           hide-details="auto"
           :label="$t('common.search._')"
-          outlined
           prepend-inner-icon="$search"
+          variant="outlined"
           @click:clear="resetFilter"
           @click:prepend="setFilter"
           @keyup.enter="setFilter"

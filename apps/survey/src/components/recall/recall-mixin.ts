@@ -1,5 +1,6 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
+import { useGoTo } from 'vuetify';
 
 import type {
   ComponentType,
@@ -12,7 +13,6 @@ import type { MealCreationState, MealState, Selection } from '@intake24/common/t
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { isSelectionEqual } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
 import {
   customHandlers,
   portionSizeHandlers,
@@ -35,11 +35,11 @@ export default defineComponent({
   },
 
   data() {
-    const { translate } = useI18n();
+    const goTo = useGoTo();
     const survey = useSurvey();
 
     return {
-      translate,
+      goTo,
       survey,
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
@@ -123,7 +123,7 @@ export default defineComponent({
 
   watch: {
     currentPrompt() {
-      this.$vuetify.goTo(0);
+      this.goTo(0);
     },
   },
 
@@ -142,7 +142,7 @@ export default defineComponent({
     await this.nextPrompt();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     removeEventListener('popstate', this.onPopState);
   },
 

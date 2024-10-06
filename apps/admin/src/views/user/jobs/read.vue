@@ -6,13 +6,13 @@
         :activator-class="['ml-2']"
         color="primary"
         icon-left="fas fa-play"
-        :label="$t('jobs.repeat._').toString()"
+        :label="$t('jobs.repeat._')"
         @confirm="repeat"
       >
         {{ $t('jobs.repeat.confirm') }}
       </confirm-dialog>
     </template>
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('common.id') }}</th>
@@ -34,8 +34,7 @@
               v-if="downloadUrlAvailable(entry)"
               class="ml-2"
               icon
-              large
-              link
+              size="large"
               :title="$t('common.action.download')"
               @click="download(entry)"
             >
@@ -52,10 +51,10 @@
           <td>{{ entry.progress }}</td>
           <th>{{ $t('jobs.successful') }}</th>
           <td>
-            <v-icon v-if="entry.successful" color="success" left>
+            <v-icon v-if="entry.successful" color="success" start>
               $check
             </v-icon>
-            <v-icon v-else color="error" left>
+            <v-icon v-else color="error" start>
               $times
             </v-icon>
             {{ $t(`common.${entry.successful}`) }}
@@ -94,7 +93,7 @@
           </td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 
