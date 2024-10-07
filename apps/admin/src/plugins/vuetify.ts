@@ -31,10 +31,14 @@ export default createVuetify({
     VAlert: {
       variant: 'tonal',
     },
-    /* VBtn: {
-      variant: 'elevated',
-      elevation: 0,
-    }, */
+    VBtn: {
+      variant: 'flat',
+    },
+    VCardActions: {
+      VBtn: {
+        variant: 'flat',
+      },
+    },
     VCombobox: {
       variant: 'outlined',
     },

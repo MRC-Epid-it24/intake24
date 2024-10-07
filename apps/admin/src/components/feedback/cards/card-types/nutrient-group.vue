@@ -90,10 +90,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import type { NutrientGroupCard } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
@@ -102,129 +102,109 @@ import { useEntry } from '@intake24/admin/stores';
 
 import { CardThresholds, CardUnit } from '../partials';
 
-export default defineComponent({
-  name: 'NutrientGroupCard',
+defineOptions({ name: 'NutrientGroupCard' });
 
-  components: { CardThresholds, CardUnit, JsonEditor },
-
-  props: {
-    modelValue: {
-      type: Object as PropType<NutrientGroupCard>,
-      required: true,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<NutrientGroupCard>,
+    required: true,
   },
+});
 
-  emits: ['update:modelValue'],
+const emit = defineEmits(['update:modelValue']);
 
-  setup(props, { emit }) {
-    const currentNutrientTypeIds = ref([...props.modelValue.nutrientTypes]);
-    const search = ref<string | null>(null);
-    const filteredNutrientTypes = ref<NutrientTypeResponse[]>([]);
-    const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
+const currentNutrientTypeIds = ref([...props.modelValue.nutrientTypes]);
+const search = ref<string | null>(null);
+const filteredNutrientTypes = ref<NutrientTypeResponse[]>([]);
+const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
 
-    const allNutrientTypes = computed<NutrientTypeResponse[]>(
-      () => useEntry().refs.nutrientTypes ?? [],
-    );
+const allNutrientTypes = computed<NutrientTypeResponse[]>(
+  () => useEntry().refs.nutrientTypes ?? [],
+);
 
-    const availableNutrientTypes = computed(() =>
-      allNutrientTypes.value.filter(
-        nutrient => !currentNutrientTypeIds.value.includes(nutrient.id),
-      ),
-    );
+const availableNutrientTypes = computed(() =>
+  allNutrientTypes.value.filter(
+    nutrient => !currentNutrientTypeIds.value.includes(nutrient.id),
+  ),
+);
 
-    const currentNutrientTypes = computed(() =>
-      currentNutrientTypeIds.value.reduce<NutrientTypeResponse[]>((acc, nutrientId) => {
-        const match = allNutrientTypes.value.find(nutrient => nutrient.id === nutrientId);
+const currentNutrientTypes = computed(() =>
+  currentNutrientTypeIds.value.reduce<NutrientTypeResponse[]>((acc, nutrientId) => {
+    const match = allNutrientTypes.value.find(nutrient => nutrient.id === nutrientId);
 
-        if (match)
-          acc.push(match);
+    if (match)
+      acc.push(match);
 
-        return acc;
-      }, []),
-    );
+    return acc;
+  }, []),
+);
 
-    const loadMoreNutrientTypes = () => {
-      const startIndex = visibleNutrientTypes.value.length;
-      const endIndex
+function loadMoreNutrientTypes() {
+  const startIndex = visibleNutrientTypes.value.length;
+  const endIndex
         = startIndex + 15 > filteredNutrientTypes.value.length
           ? filteredNutrientTypes.value.length
           : startIndex + 15;
 
-      const items = filteredNutrientTypes.value.slice(startIndex, endIndex);
-      visibleNutrientTypes.value.push(...items);
-    };
+  const items = filteredNutrientTypes.value.slice(startIndex, endIndex);
+  visibleNutrientTypes.value.push(...items);
+}
 
-    const loadFilteredNutrientTypes = () => {
-      filteredNutrientTypes.value = search.value
-        ? availableNutrientTypes.value.filter(
-          nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
-        )
-        : [...availableNutrientTypes.value];
+function loadFilteredNutrientTypes() {
+  filteredNutrientTypes.value = search.value
+    ? availableNutrientTypes.value.filter(
+      nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
+    )
+    : [...availableNutrientTypes.value];
 
-      visibleNutrientTypes.value = [];
-      loadMoreNutrientTypes();
-    };
+  visibleNutrientTypes.value = [];
+  loadMoreNutrientTypes();
+}
 
-    const nutrientTypesAvailableToLoad = computed(
-      () => visibleNutrientTypes.value.length < filteredNutrientTypes.value.length,
-    );
+const nutrientTypesAvailableToLoad = computed(
+  () => visibleNutrientTypes.value.length < filteredNutrientTypes.value.length,
+);
 
-    const tryLoadMoreNutrientTypes = (isIntersecting: boolean, entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && nutrientTypesAvailableToLoad)
-        loadMoreNutrientTypes();
-    };
+function tryLoadMoreNutrientTypes(isIntersecting: boolean) {
+  if (!isIntersecting || !nutrientTypesAvailableToLoad.value)
+    return;
 
-    const update = (field: string, value: any) => {
-      emit('update:modelValue', { ...props.modelValue, [field]: value });
-    };
+  loadMoreNutrientTypes();
+}
 
-    watch(
-      allNutrientTypes,
-      () => {
-        loadFilteredNutrientTypes();
-      },
-      { immediate: true },
-    );
+function update(field: string, value: any) {
+  emit('update:modelValue', { ...props.modelValue, [field]: value });
+}
 
-    watchDebounced(
-      search,
-      () => {
-        loadFilteredNutrientTypes();
-      },
-      { debounce: 500, maxWait: 1000 },
-    );
+function add(nutrientTypeId: string) {
+  currentNutrientTypeIds.value.push(nutrientTypeId);
 
-    return {
-      currentNutrientTypeIds,
-      currentNutrientTypes,
-      allNutrientTypes,
-      availableNutrientTypes,
-      nutrientTypesAvailableToLoad,
-      search,
-      visibleNutrientTypes,
-      loadFilteredNutrientTypes,
-      loadMoreNutrientTypes,
-      tryLoadMoreNutrientTypes,
-      update,
-    };
+  loadFilteredNutrientTypes();
+
+  update('nutrientTypes', currentNutrientTypeIds.value);
+};
+
+function remove(index: number) {
+  currentNutrientTypeIds.value.splice(index, 1);
+
+  loadFilteredNutrientTypes();
+
+  update('nutrientTypes', currentNutrientTypeIds.value);
+};
+
+watch(
+  allNutrientTypes,
+  () => {
+    loadFilteredNutrientTypes();
   },
+  { immediate: true },
+);
 
-  methods: {
-    add(nutrientTypeId: string) {
-      this.currentNutrientTypeIds.push(nutrientTypeId);
-
-      this.loadFilteredNutrientTypes();
-
-      this.update('nutrientTypes', this.currentNutrientTypeIds);
-    },
-
-    remove(index: number) {
-      this.currentNutrientTypeIds.splice(index, 1);
-
-      this.loadFilteredNutrientTypes();
-
-      this.update('nutrientTypes', this.currentNutrientTypeIds);
-    },
+watchDebounced(
+  search,
+  () => {
+    loadFilteredNutrientTypes();
   },
-});
+  { debounce: 500, maxWait: 1000 },
+);
 </script>

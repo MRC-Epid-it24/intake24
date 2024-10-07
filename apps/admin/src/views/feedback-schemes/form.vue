@@ -108,7 +108,7 @@
               <template v-for="(value, key) in requiredPhysicalDataFields" :key="key">
                 <v-alert
                   v-if="!value && form.physicalDataFields.includes(key)"
-                  class="text-caption"
+                  class="text-caption mb-1"
                   density="compact"
                   type="info"
                 >
@@ -123,7 +123,7 @@
                 <v-alert
                   v-if="value && !form.physicalDataFields.includes(key)"
                   :key="key"
-                  class="text-caption"
+                  class="text-caption mb-1"
                   density="compact"
                   type="warning"
                 >

@@ -8,20 +8,21 @@
       <template v-if="form.translations.length">
         <confirm-dialog
           color="primary"
-          fab
           icon
           icon-left="fas fa-rotate"
           :label="$t('common.action.sync')"
+          size="small"
           @confirm="sync"
         >
           {{ $t('languages.translations.sync') }}
         </confirm-dialog>
         <confirm-dialog
+          class="ms-2"
           color="error"
-          fab
           icon
           icon-left="$delete"
           :label="$t('common.action.delete')"
+          size="small"
           @confirm="remove"
         >
           {{ $t('languages.translations.delete') }}
@@ -78,6 +79,7 @@ import type { LanguageTranslationAttributes } from '@intake24/db';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -93,6 +95,8 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const { i18n } = useI18n();
+
     const messages = useMessages();
     const { entry, entryLoaded } = useEntry<LanguageEntry>(props);
     useEntryFetch(props);
@@ -104,7 +108,24 @@ export default defineComponent({
       nonInputErrorKeys: ['translations'],
     });
 
-    return { entry, entryLoaded, form, nonInputErrors, routeLeave, toForm, messages };
+    function getSectionTitle(key: string) {
+      const check = has(i18n.messages.value[i18n.locale.value], `${key}.title`);
+      if (check)
+        return i18n.t(`${key}.title`);
+
+      return i18n.t(`languages.translations.sections.${key}`);
+    };
+
+    return {
+      entry,
+      entryLoaded,
+      form,
+      nonInputErrors,
+      routeLeave,
+      toForm,
+      messages,
+      getSectionTitle,
+    };
   },
 
   data() {
@@ -122,14 +143,6 @@ export default defineComponent({
   },
 
   methods: {
-    getSectionTitle(key: string): string {
-      const check = has(this.$i18n.messages[this.$i18n.locale], `${key}.title`);
-      if (check)
-        return this.$t(`${key}.title`);
-
-      return this.$t(`languages.translations.sections.${key}`);
-    },
-
     edit(translation: LanguageTranslationAttributes) {
       this.selected = translation;
     },

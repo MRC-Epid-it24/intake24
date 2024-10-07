@@ -83,7 +83,6 @@
             color="primary"
             rounded
             :title="$t('nutrient-tables.mapping.fields.create')"
-            variant="outlined"
             @click.stop="addField"
           >
             <v-icon icon="$add" start />{{ $t('nutrient-tables.mapping.fields.create') }}
@@ -109,7 +108,7 @@
                     density="compact"
                     hide-details="auto"
                     :label="$t('nutrient-tables.mapping.fields.fieldName')"
-                    name="fieldName"
+                    :name="`fieldName-${idx}`"
                     variant="outlined"
                   />
                 </td>
@@ -119,7 +118,7 @@
                     density="compact"
                     hide-details="auto"
                     :label="$t('nutrient-tables.mapping.fields.columnOffset')"
-                    name="columnOffset"
+                    :name="`field-columnOffset-${idx}`"
                     variant="outlined"
                   />
                 </td>
@@ -145,7 +144,6 @@
             color="primary"
             rounded
             :title="$t('nutrient-tables.mapping.nutrients.create')"
-            variant="outlined"
             @click.stop="addNutrient"
           >
             <v-icon icon="$add" start />{{ $t('nutrient-tables.mapping.nutrients.create') }}
@@ -168,7 +166,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(nutrient, idx) in nutrients.items" :key="`csv-mapping-nutrients-${idx}`">
+              <tr v-for="(nutrient, idx) in nutrients" :key="nutrient.nutrientTypeId">
                 <td class="py-2">
                   <v-select
                     v-model="nutrient.nutrientTypeId"
@@ -178,7 +176,7 @@
                     item-value="id"
                     :items="refs.nutrientTypes"
                     :label="$t('nutrient-tables.mapping.nutrients.nutrient')"
-                    name="nutrient"
+                    :name="`nutrient-${idx}`"
                     variant="outlined"
                   />
                 </td>
@@ -188,7 +186,7 @@
                     density="compact"
                     hide-details="auto"
                     :label="$t('nutrient-tables.mapping.nutrients.columnOffset')"
-                    name="columnOffset"
+                    :name="`nutrient-columnOffset-${idx}`"
                     variant="outlined"
                   />
                 </td>
@@ -219,7 +217,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
@@ -325,81 +323,70 @@ export default defineComponent({
       config: { transform: transformOut },
     });
 
+    const chunk = 10;
+    const nutrients = ref<CsvMappingNutrient[]>([]);
+
+    const nutrientsAvailableToLoad = computed(() => nutrients.value.length < form.data.csvMappingNutrients.length);
+
+    function loadMoreNutrients(isIntersecting: boolean) {
+      if (!isIntersecting || !nutrientsAvailableToLoad.value)
+        return;
+
+      const startIndex = nutrients.value.length;
+      const endIndex
+          = startIndex + chunk > form.data.csvMappingNutrients.length
+            ? form.data.csvMappingNutrients.length
+            : startIndex + chunk;
+
+      const items = form.csvMappingNutrients.slice(startIndex, endIndex);
+      nutrients.value.push(...items);
+    };
+
+    function addField() {
+      form.csvMappingFields.push({ fieldName: 'new_field', columnOffset: 'A' });
+    };
+
+    function removeField(index: number) {
+      form.csvMappingFields.splice(index, 1);
+    };
+
+    function addNutrient() {
+      form.csvMappingNutrients.push({
+        nutrientTypeId: refs.value.nutrientTypes[0].id,
+        columnOffset: 'A',
+      });
+    };
+
+    function removeNutrient(index: number) {
+      form.csvMappingNutrients.splice(index, 1);
+    };
+
+    watch(() => form.csvMappingFields, () => {
+      form.errors.clear('csvMappingFields');
+    });
+
+    watch(() => form.data.csvMappingNutrients, () => {
+      form.errors.clear('csvMappingNutrients');
+    });
+
     return {
+      addField,
+      addNutrient,
       entry,
       entryLoaded,
       isEdit,
+      loadMoreNutrients,
+      nutrientsAvailableToLoad,
+      nutrients,
       refs,
       refsLoaded,
       clearError,
       form,
+      removeField,
+      removeNutrient,
       routeLeave,
       submit,
     };
-  },
-
-  data() {
-    return {
-      nutrients: {
-        chunk: 10,
-        items: [] as CsvMappingNutrient[],
-      },
-    };
-  },
-
-  computed: {
-    nutrientsAvailableToLoad(): boolean {
-      return this.nutrients.items.length < this.form.csvMappingNutrients.length;
-    },
-  },
-
-  watch: {
-    'form.csvMappingFields': {
-      handler() {
-        this.form.errors.clear('csvMappingFields');
-      },
-      deep: true,
-    },
-    'form.csvMappingNutrients': {
-      handler() {
-        this.form.errors.clear('csvMappingNutrients');
-      },
-      deep: true,
-    },
-  },
-
-  methods: {
-    loadMoreNutrients(isIntersecting: boolean, entries: IntersectionObserverEntry[]) {
-      if (entries[0].isIntersecting && this.nutrientsAvailableToLoad) {
-        const startIndex = this.nutrients.items.length;
-        const endIndex
-          = startIndex + this.nutrients.chunk > this.form.csvMappingNutrients.length
-            ? this.form.csvMappingNutrients.length
-            : startIndex + this.nutrients.chunk;
-
-        const items = this.form.csvMappingNutrients.slice(startIndex, endIndex);
-        this.nutrients.items.push(...items);
-      }
-    },
-
-    addField() {
-      this.form.csvMappingFields.push({ fieldName: 'new_field', columnOffset: 'A' });
-    },
-
-    removeField(index: number) {
-      this.form.csvMappingFields.splice(index, 1);
-    },
-
-    addNutrient() {
-      this.form.csvMappingNutrients.push({
-        nutrientTypeId: this.refs.nutrientTypes[0].id,
-        columnOffset: 'A',
-      });
-    },
-
-    removeNutrient(index: number) {
-      this.form.csvMappingNutrients.splice(index, 1);
-    },
   },
 });
 </script>

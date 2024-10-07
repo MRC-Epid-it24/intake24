@@ -13,6 +13,9 @@ export default createVuetify({
   },
   directives,
   defaults: {
+    VAlert: {
+      variant: 'tonal',
+    },
     VBtn: {
       variant: 'flat',
     },
