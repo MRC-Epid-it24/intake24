@@ -33,12 +33,12 @@
             :label="$t('jobs.types.LocaleCopy.subTasks._')"
             multiple
             name="subTasks"
-            outlined
             prepend-inner-icon="fas fa-list"
+            variant="outlined"
           >
             <template #selection="{ item, index }">
               <template v-if="index === 0">
-                <span v-if="params.subTasks.length === 1">{{ item.text }}</span>
+                <span v-if="params.subTasks.length === 1">{{ item.raw.title }}</span>
                 <span v-if="params.subTasks.length > 1">
                   {{ $t('common.selected', { count: params.subTasks.length }) }}
                 </span>
@@ -71,7 +71,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const subTasks = localeCopySubTasks.map(value => ({
-      text: i18n.t(`jobs.types.LocaleCopy.subTasks.${value}`).toString(),
+      title: i18n.t(`jobs.types.LocaleCopy.subTasks.${value}`),
       value,
     }));
 

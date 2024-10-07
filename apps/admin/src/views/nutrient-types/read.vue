@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('nutrient-types.id') }}</th>
@@ -19,7 +19,7 @@
           <td>{{ entry.kcalPerUnit || $t('common.none') }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

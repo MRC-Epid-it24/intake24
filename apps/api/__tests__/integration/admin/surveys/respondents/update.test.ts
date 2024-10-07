@@ -31,10 +31,7 @@ async function assertRespondentResponse(url: string, input: RespondentRequest) {
 
   // 2) non-order specific comparison
   if (outputCustomFields) {
-    const fields = resCustomFields.map(({ name, value }: CustomField) => ({
-      name,
-      value,
-    }));
+    const fields = resCustomFields.map((field: CustomField) => pick(field, ['name', 'value', 'public']));
     expect(fields).toIncludeSameMembers(outputCustomFields);
   }
 }

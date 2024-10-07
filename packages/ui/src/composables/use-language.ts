@@ -1,5 +1,5 @@
+import type { useLocale } from 'vuetify';
 import { computed, onMounted, watch } from 'vue';
-import Vuetify from 'vuetify/lib';
 
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
 import { defaultMessages, loadAppLanguage, useI18n } from '@intake24/i18n';
@@ -7,19 +7,18 @@ import { defaultMessages, loadAppLanguage, useI18n } from '@intake24/i18n';
 import type { HttpClient } from '../types';
 import { useApp } from '../stores';
 
-export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vuetify: Vuetify['framework']) {
+export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: ReturnType<typeof useLocale>) {
   const appStore = useApp();
   const { i18n } = useI18n();
 
   const fallbackLanguages = computed(() => {
-    const { fallbackLocale } = i18n;
-    if (!fallbackLocale)
+    if (!i18n.fallbackLocale.value)
       return [];
 
-    if (typeof fallbackLocale === 'string')
-      return [fallbackLocale];
+    if (typeof i18n.fallbackLocale.value === 'string')
+      return [i18n.fallbackLocale.value];
 
-    return Array.isArray(fallbackLocale) ? fallbackLocale : Object.keys(fallbackLocale);
+    return Array.isArray(i18n.fallbackLocale.value) ? i18n.fallbackLocale.value : Object.keys(i18n.fallbackLocale.value);
   });
 
   const getLanguages = (languageId: string): string[] => [
@@ -30,21 +29,23 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vuetify: 
 
   const hasLanguage = (languageId: string) => i18n.availableLocales.includes(languageId);
 
-  const isRrlLanguage = (languageId: string) => ['ar'].includes(languageId);
-
   const updateAppWithLanguage = (languageId: string, isRtl?: boolean) => {
-    i18n.locale = languageId;
-    vuetify.rtl = typeof isRtl !== 'undefined' ? isRtl : isRrlLanguage(languageId);
+    i18n.locale.value = languageId;
+    vI18n.current.value = languageId;
+
+    if (typeof isRtl !== 'undefined')
+      vI18n.isRtl.value = isRtl;
+
     document.querySelector('html')?.setAttribute('lang', languageId);
     http.axios.defaults.headers.common['Accept-Language'] = languageId;
   };
 
   const setLanguage = async (languageId: string) => {
-    if (languageId === i18n.locale)
+    if (languageId === i18n.locale.value)
       return;
 
     let language = languageId || appStore.lang;
-    let isRrl = isRrlLanguage(language);
+    let isRrl: boolean | undefined;
 
     try {
       const {

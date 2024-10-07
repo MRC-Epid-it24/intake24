@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }">
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('languages.code') }}</th>
@@ -30,7 +30,7 @@
           <td>{{ $t(`securables.visibility.${entry.visibility}`) }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
   </layout>
 </template>
 

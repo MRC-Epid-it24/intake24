@@ -1,7 +1,7 @@
 import type { ComputedRef, Ref } from 'vue';
 import type { NavigationGuardNext, Route } from 'vue-router';
 import { computed, ref } from 'vue';
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router/composables';
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
 import { copy } from '@intake24/common/util';
 

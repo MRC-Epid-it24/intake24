@@ -1,6 +1,6 @@
 <template>
-  <v-card outlined>
-    <v-toolbar color="grey lighten-4" flat>
+  <v-card border>
+    <v-toolbar color="grey-lighten-4" flat>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.attributes.title') }}
       </v-toolbar-title>
@@ -8,7 +8,7 @@
     <v-card-text>
       <v-row>
         <v-col cols="auto">
-          <v-btn :disabled="disabled" outlined @click="toggleInherit('sameAsBeforeOption')">
+          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('sameAsBeforeOption')">
             {{ title('sameAsBeforeOption') }}
           </v-btn>
         </v-col>
@@ -21,13 +21,13 @@
             hide-details="auto"
             :label="$t('fdbs.attributes.sameAsBeforeOption')"
             name="attributes.sameAsBeforeOption"
-            @change="errors.clear('main.attributes.sameAsBeforeOption')"
+            @update:model-value="errors.clear('main.attributes.sameAsBeforeOption')"
           />
         </v-col>
       </v-row>
       <v-row>
         <v-col align-self="center" cols="auto">
-          <v-btn :disabled="disabled" outlined @click="toggleInherit('readyMealOption')">
+          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('readyMealOption')">
             {{ title('readyMealOption') }}
           </v-btn>
         </v-col>
@@ -40,48 +40,48 @@
             hide-details="auto"
             :label="$t('fdbs.attributes.readyMealOption')"
             name="attributes.readyMealOption"
-            @change="errors.clear('main.attributes.readyMealOption')"
+            @update:model-value="errors.clear('main.attributes.readyMealOption')"
           />
         </v-col>
       </v-row>
       <v-row>
         <v-col align-self="center" cols="auto">
-          <v-btn :disabled="disabled" outlined @click="toggleInherit('reasonableAmount')">
+          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('reasonableAmount')">
             {{ title('reasonableAmount') }}
           </v-btn>
         </v-col>
         <v-col align-self="center">
           <v-text-field
             v-model.number="attributes.reasonableAmount"
-            dense
+            density="compact"
             :disabled="disabled || isInherited('reasonableAmount')"
             :error-messages="errors.get('main.attributes.reasonableAmount')"
             hide-details="auto"
             :label="$t('fdbs.attributes.reasonableAmount')"
             name="attributes.reasonableAmount"
-            outlined
-            @input="errors.clear('main.attributes.reasonableAmount')"
+            variant="outlined"
+            @update:model-value="errors.clear('main.attributes.reasonableAmount')"
           />
         </v-col>
       </v-row>
       <v-row>
         <v-col align-self="center" cols="auto">
-          <v-btn :disabled="disabled" outlined @click="toggleInherit('useInRecipes')">
+          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('useInRecipes')">
             {{ title('useInRecipes') }}
           </v-btn>
         </v-col>
         <v-col align-self="center" cols>
           <v-select
             v-model="attributes.useInRecipes"
-            dense
+            density="compact"
             :disabled="disabled || isInherited('useInRecipes')"
             :error-messages="errors.get('main.attributes.useInRecipes')"
             hide-details="auto"
             :items="useInRecipeTypeItems"
             :label="$t('fdbs.attributes.useInRecipes._')"
             name="attributes.useInRecipes"
-            outlined
-            @change="errors.clear('main.attributes.useInRecipes')"
+            variant="outlined"
+            @update:model-value="errors.clear('main.attributes.useInRecipes')"
           />
         </v-col>
       </v-row>
@@ -125,30 +125,30 @@ export default defineComponent({
       type: Object as PropType<Errors>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<Nullable<Attributes>>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
     const { i18n } = useI18n();
 
     const attributes = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(val) {
-        emit('input', val);
+        emit('update:modelValue', val);
       },
     });
 
     const useInRecipeTypeItems = computed(() =>
       Object.values(useInRecipeTypes).map(value => ({
         value,
-        text: i18n.t(`fdbs.attributes.useInRecipes.${value}`),
+        title: i18n.t(`fdbs.attributes.useInRecipes.${value}`),
       })),
     );
 
@@ -166,7 +166,7 @@ export default defineComponent({
 
     title(attribute: AttributeType): string {
       const key = this.attributes[attribute] === null ? 'override' : 'inherit';
-      return this.$t(`fdbs.attributes.${key}`).toString();
+      return this.$t(`fdbs.attributes.${key}`);
     },
 
     toggleInherit(attribute: AttributeType) {

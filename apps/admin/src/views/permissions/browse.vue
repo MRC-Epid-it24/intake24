@@ -1,47 +1,44 @@
 <template>
   <data-table :headers="headers">
     <template #[`item.createdAt`]="{ item }">
-      {{ new Date(item.createdAt).toLocaleString() }}
+      {{ formatDateTime(item.createdAt) }}
     </template>
   </data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useDateTime } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'PermissionList',
+defineOptions({ name: 'PermissionList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
+const { formatDateTime } = useDateTime();
 
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('common.name'),
-          sortable: true,
-          value: 'name',
-        },
-        {
-          text: this.$t('common.displayName'),
-          sortable: true,
-          value: 'displayName',
-        },
-        {
-          text: this.$t('common.createdAt'),
-          sortable: true,
-          value: 'createdAt',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers = ref<DataTableHeader[]>([
+  {
+    title: t('common.name'),
+    sortable: true,
+    key: 'name',
   },
-});
+  {
+    title: t('common.displayName'),
+    sortable: true,
+    key: 'displayName',
+  },
+  {
+    title: t('common.createdAt'),
+    sortable: true,
+    key: 'createdAt',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+]);
 </script>

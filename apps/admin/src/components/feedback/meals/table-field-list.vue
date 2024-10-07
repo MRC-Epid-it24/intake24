@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-4" flat tile>
+      <v-icon color="secondary" end>
         fas fa-table-list
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
@@ -10,63 +10,55 @@
       <v-spacer />
       <v-btn
         color="primary"
-        fab
-        small
+        icon="$add"
+        size="small"
         :title="$t('feedback-schemes.meals.fields.create')"
         @click.stop="add"
-      >
-        <v-icon small>
-          $add
-        </v-icon>
-      </v-btn>
+      />
       <confirm-dialog
         color="error"
-        :label="$t('feedback-schemes.meals.fields.reset._').toString()"
+        :label="$t('feedback-schemes.meals.fields.reset._')"
         @confirm="resetList"
       >
-        <template #activator="{ attrs, on }">
+        <template #activator="{ props }">
           <v-btn
             class="ml-3"
             color="error"
-            fab
-            small
+            icon="$sync"
+            size="small"
             :title="$t('feedback-schemes.meals.fields.reset._')"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon small>
-              $sync
-            </v-icon>
-          </v-btn>
+            v-bind="props"
+          />
         </template>
         {{ $t('feedback-schemes.meals.fields.reset.text') }}
       </confirm-dialog>
     </v-toolbar>
-    <v-list two-line>
-      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(item, index) in items"
-            :key="item.fieldId"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium">
-                {{ item.header.en }}
-              </v-list-item-title>
-            </v-list-item-content>
+    <v-list lines="two">
+      <vue-draggable
+        v-model="items"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+        @end="update"
+      >
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="item.fieldId"
+          class="drag-and-drop__item"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title class="font-weight-medium">
+            {{ item.header.en }}
+          </v-list-item-title>
+          <template #append>
             <v-list-item-action>
               <v-btn
                 icon
                 :title="$t('feedback-schemes.meals.fields.edit')"
                 @click.stop="edit(index, item)"
               >
-                <v-icon color="secondary lighten-2">
+                <v-icon color="secondary-lighten-2">
                   $edit
                 </v-icon>
               </v-btn>
@@ -76,40 +68,34 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('feedback-schemes.meals.fields.remove').toString()"
+                :label="$t('feedback-schemes.meals.fields.remove')"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: item.header.en }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <v-dialog
       v-model="dialog.show"
       fullscreen
-      hide-overlay
       persistent
+      :scrim="false"
       transition="dialog-bottom-transition"
     >
       <v-card tile>
         <v-toolbar color="secondary" dark>
-          <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-            <v-icon>$cancel</v-icon>
-          </v-btn>
+          <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
-            <v-icon dark left>
-              fas fa-table-list
-            </v-icon>
+            <v-icon icon="fas fa-table-list" start />
             {{ $t(`feedback-schemes.meals.fields.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
-            <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
@@ -124,8 +110,8 @@
                     :items="tableFieldTypes"
                     :label="$t('feedback-schemes.meals.fields.types._')"
                     name="type"
-                    outlined
-                    @change="updateProps"
+                    variant="outlined"
+                    @update:model-value="updateProps"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
@@ -133,16 +119,16 @@
                     <v-autocomplete
                       v-model="dialog.item.types"
                       hide-details="auto"
-                      item-text="description"
+                      item-title="description"
                       item-value="id"
                       :items="nutrientTypes"
                       :label="$t('nutrient-types.title')"
                       multiple
                       name="nutrientTypeId"
-                      outlined
                       prepend-inner-icon="$nutrient-types"
                       :rules="nutrientRules"
-                      @change="updateNutrientFields"
+                      variant="outlined"
+                      @update:model-value="updateNutrientFields"
                     />
                   </template>
                   <v-select
@@ -152,8 +138,8 @@
                     :items="tableFieldStandardIds"
                     :label="$t('feedback-schemes.meals.fields.id')"
                     name="fieldId"
-                    outlined
                     :rules="fieldIdRules"
+                    variant="outlined"
                   />
                   <v-text-field
                     v-else
@@ -161,45 +147,43 @@
                     :disabled="dialog.item.type === 'nutrient'"
                     hide-details="auto"
                     :label="$t('feedback-schemes.meals.fields.id')"
-                    outlined
                     :rules="fieldIdRules"
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-card outlined>
+                  <v-card border>
                     <language-selector
                       v-model="dialog.item.header"
-                      :label="$t('feedback-schemes.meals.fields.header').toString()"
+                      :label="$t('feedback-schemes.meals.fields.header')"
                       :outlined="false"
                       required
                     >
-                      <template v-for="lang in Object.keys(dialog.item.header)" #[`lang.${lang}`]>
+                      <template v-for="lang in Object.keys(dialog.item.header)" :key="lang" #[`lang.${lang}`]>
                         <v-text-field
-                          :key="lang"
                           v-model="dialog.item.header[lang]"
                           hide-details="auto"
                           :label="$t('feedback-schemes.meals.fields.header')"
-                          outlined
+                          variant="outlined"
                         />
                       </template>
                     </language-selector>
                   </v-card>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-card outlined>
+                  <v-card border>
                     <language-selector
                       v-model="dialog.item.value"
-                      :label="$t('feedback-schemes.meals.fields.value').toString()"
+                      :label="$t('feedback-schemes.meals.fields.value')"
                       :outlined="false"
                       required
                     >
-                      <template v-for="lang in Object.keys(dialog.item.value)" #[`lang.${lang}`]>
+                      <template v-for="lang in Object.keys(dialog.item.value)" :key="lang" #[`lang.${lang}`]>
                         <v-text-field
-                          :key="lang"
                           v-model="dialog.item.value[lang]"
                           hide-details="auto"
                           :label="$t('feedback-schemes.meals.fields.value')"
-                          outlined
+                          variant="outlined"
                         />
                       </template>
                     </language-selector>
@@ -208,16 +192,12 @@
               </v-row>
             </v-container>
             <v-card-actions>
-              <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>
-                  $cancel
-                </v-icon>{{ $t('common.action.cancel') }}
+              <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+                <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
               </v-btn>
               <v-spacer />
-              <v-btn class="font-weight-bold" color="info" text type="submit">
-                <v-icon left>
-                  $success
-                </v-icon>{{ $t('common.action.ok') }}
+              <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+                <v-icon icon="$success" start />{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>
@@ -230,7 +210,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { MealTableField } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
@@ -245,7 +225,7 @@ import { getTableFieldDefaults } from './table-field';
 export default defineComponent({
   name: 'TableFieldList',
 
-  components: { ConfirmDialog, Draggable: draggable, LanguageSelector },
+  components: { ConfirmDialog, LanguageSelector, VueDraggable },
 
   props: {
     nutrientTypes: {
@@ -256,7 +236,7 @@ export default defineComponent({
       type: Array as PropType<MealTableField[]>,
       default: () => [],
     },
-    value: {
+    modelValue: {
       type: Array as PropType<MealTableField[]>,
       required: true,
     },
@@ -283,19 +263,19 @@ export default defineComponent({
     const tab = ref(0);
 
     const tableFieldTypes = mealTableFieldTypes.map(value => ({
-      text: i18n.t(`feedback-schemes.meals.fields.types.${value}`),
+      title: i18n.t(`feedback-schemes.meals.fields.types.${value}`),
       value,
     }));
 
     const tableFieldStandardIds = mealTableFieldStandardIds.map(value => ({
-      text: i18n.t(`feedback-schemes.meals.fields.types.${value}`),
+      title: i18n.t(`feedback-schemes.meals.fields.types.${value}`),
       value,
     }));
 
     const fieldIdRules = computed(() => [
       (value: string | null): boolean | string => {
         if (!value)
-          return i18n.t('feedback-schemes.meals.fields.validation.required').toString();
+          return i18n.t('feedback-schemes.meals.fields.validation.required');
 
         const {
           index,
@@ -305,14 +285,14 @@ export default defineComponent({
           (item, idx) => item.type === type && item.fieldId === fieldId && index !== idx,
         );
 
-        return match ? i18n.t('feedback-schemes.meals.fields.validation.unique').toString() : true;
+        return match ? i18n.t('feedback-schemes.meals.fields.validation.unique') : true;
       },
     ]);
 
     const nutrientRules = computed(() => [
       (value: string[]): boolean | string => {
         if (!value.length)
-          return i18n.t('nutrient-types.validation.required').toString();
+          return i18n.t('nutrient-types.validation.required');
 
         const { index } = dialog.value;
         const match = items.value.find(
@@ -322,7 +302,7 @@ export default defineComponent({
             && index !== idx,
         );
 
-        return match ? i18n.t('nutrient-types.validation.unique').toString() : true;
+        return match ? i18n.t('nutrient-types.validation.unique') : true;
       },
     ]);
 

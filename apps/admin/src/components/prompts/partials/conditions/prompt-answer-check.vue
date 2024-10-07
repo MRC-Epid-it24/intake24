@@ -5,7 +5,7 @@
         v-model="currentValue.promptId"
         hide-details="auto"
         :label="$t('survey-schemes.conditions.promptAnswer.promptId')"
-        outlined
+        variant="outlined"
         @change="update(currentValue)"
       />
     </v-col>
@@ -14,22 +14,22 @@
         v-model="currentValue.op"
         hide-details="auto"
         item-value="op"
-        :items="operationSelectList"
+        :items="conditionOps"
         :label="$t('survey-schemes.conditions.ops._')"
-        outlined
-        @change="update(currentValue)"
+        variant="outlined"
+        @update:model-value="update(currentValue)"
       >
-        <template #item="{ item }">
-          <v-icon left>
-            {{ opToIconMap[item.op] }}
-          </v-icon>
-          {{ item.text }}
+        <template #item="{ item, props }">
+          <v-list-item v-bind="props">
+            <template #prepend>
+              <v-icon :icon="item.raw.icon" start />
+            </template>
+            <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+          </v-list-item>
         </template>
         <template #selection="{ item }">
-          <v-icon left>
-            {{ opToIconMap[item.op] }}
-          </v-icon>
-          {{ item.text }}
+          <v-icon :icon="item.raw.icon" start />
+          {{ item.raw.title }}
         </template>
       </v-select>
     </v-col>
@@ -46,24 +46,19 @@
       />
     </v-col>
     <v-col cols="12" md="6">
-      <v-checkbox v-model="currentValue.required" :label="$t('survey-schemes.conditions.promptAnswer.required')" @change="update(currentValue)" />
+      <v-checkbox v-model="currentValue.required" :label="$t('survey-schemes.conditions.promptAnswer.required')" @update:model-value="update(currentValue)" />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType, ref } from 'vue';
-import { VCombobox, VTextField } from 'vuetify/lib';
+import { VCombobox, VTextField } from 'vuetify/components';
 
-import {
-  type ConditionOpCode,
-  conditionOpCodes,
-  type PromptAnswerPropertyCheck,
-  type ValuePropertyCheck,
+import type {
+  PromptAnswerPropertyCheck,
 } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n';
-
-import opToIconMap from './op-icon-map';
+import { useSelects } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'PromptAnswerPropertyCheck',
@@ -71,29 +66,26 @@ export default defineComponent({
   components: { VTextField, VCombobox },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<PromptAnswerPropertyCheck>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
-    const { i18n } = useI18n();
+    const { conditionOps } = useSelects();
 
-    const currentValue = ref(props.value);
+    const currentValue = ref(props.modelValue);
 
-    const update = (value: ValuePropertyCheck) => {
-      emit('update:value', value);
+    const update = (value: PromptAnswerPropertyCheck) => {
+      emit('update:modelValue', value);
     };
-
-    const operationSelectList: { op: ConditionOpCode; text: string }[] = conditionOpCodes.map(op => ({
-      op,
-      text: i18n.t(`survey-schemes.conditions.ops.${op}`).toString(),
-    }));
 
     const comboOps = ['setEq', 'in', 'notIn'];
 
-    return { operationSelectList, update, currentValue, opToIconMap, comboOps };
+    return { conditionOps, update, currentValue, comboOps };
   },
 });
 </script>

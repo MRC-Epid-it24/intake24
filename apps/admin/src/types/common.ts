@@ -1,4 +1,4 @@
-import type { Route } from 'vue-router';
+import type { RouteLocationRaw } from 'vue-router';
 
 export interface Resource {
   group: string;
@@ -16,7 +16,7 @@ export interface Resource {
 
 export type RouteLeave = {
   dialog: boolean;
-  to: Route | null;
+  to: RouteLocationRaw | null;
   confirmed: boolean;
 };
 

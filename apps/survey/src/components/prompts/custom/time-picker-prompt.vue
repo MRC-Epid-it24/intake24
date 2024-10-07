@@ -10,7 +10,8 @@
           v-model="state"
           :format="prompt.format"
           full-width
-          :landscape="$vuetify.breakpoint.smAndUp"
+          :landscape="$vuetify.display.smAndUp"
+          title=""
         />
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
       </v-form>
@@ -39,24 +40,24 @@ export default defineComponent({
   mixins: [createBasePrompt<'time-picker-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: String as PropType<string | null>,
       default: null,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n } = useI18n();
+    const { i18n: { t } } = useI18n();
 
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
         clearErrors();
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
 
@@ -66,7 +67,7 @@ export default defineComponent({
       if (isValid.value)
         return true;
 
-      errors.value = [i18n.t(`prompts.${type}.validation.required`).toString()];
+      errors.value = [t(`prompts.${type}.validation.required`)];
       return false;
     };
 

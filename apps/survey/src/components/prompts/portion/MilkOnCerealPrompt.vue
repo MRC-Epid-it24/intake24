@@ -1,18 +1,18 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel>
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.container`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.container`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="bowlValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <image-map-selector
             v-if="bowlImageMap"
             v-bind="{
@@ -25,11 +25,11 @@
             @confirm="confirmBowl"
             @select="selectBowl"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.milk`" />
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.milk`" />
           <template #actions>
             <expansion-panel-actions :valid="milkLevelValid">
               <quantity-badge
@@ -39,8 +39,8 @@
               />
             </expansion-panel-actions>
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <image-map-selector
             v-if="milkLevelImageMap"
             v-bind="{
@@ -53,7 +53,7 @@
             @confirm="confirmMilk"
             @select="selectMilk"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
@@ -111,7 +111,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     const milkLevelImageMapPrefix = 'milkbowl';
@@ -125,7 +125,7 @@ export default defineComponent({
       bowlImageMap: null as ImageMapResponse | null,
       milkLevelImageMap: null as ImageMapResponse | null,
 
-      ...copy(this.value),
+      ...copy(this.modelValue),
     };
   },
 
@@ -288,7 +288,7 @@ export default defineComponent({
         milkLevelConfirmed: this.milkLevelConfirmed,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

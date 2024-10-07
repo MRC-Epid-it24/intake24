@@ -121,19 +121,6 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
               },
             },
           };
-        case 'userName':
-          return {
-            orPrevious: false,
-            object: 'survey',
-            property: {
-              id: 'userName',
-              type: 'value',
-              check: {
-                op: condition.op,
-                value: condition.value,
-              },
-            },
-          };
       }
       break; // TSC correctly detects this as unreachable but ESLint whines about case fallthrough
     case 'recallNumber':

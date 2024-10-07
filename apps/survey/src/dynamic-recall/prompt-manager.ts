@@ -15,7 +15,7 @@ import type {
 } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import { conditionOps, foodCompletionStateOptions } from '@intake24/common/prompts';
+import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import {
   asServedComplete,
@@ -323,7 +323,7 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
       if (
         foodState.type === 'encoded-food'
         && (foodState.portionSizeMethodIndex === null
-        || !foodState.flags.includes('portion-size-option-complete'))
+          || !foodState.flags.includes('portion-size-option-complete'))
       ) {
         recallLog().promptCheck(
           component,
@@ -804,11 +804,20 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
         value: condition.property.check.value,
       });
     }
-    case 'userName':
-      return conditionOps[condition.property.check.op]({
-        answer: surveyStore.user?.userId ?? null,
-        value: condition.property.check.value,
-      });
+    case 'userField': {
+      if (!surveyStore.user)
+        return false;
+
+      const { field, op, value } = condition.property.check;
+      if ((standardUserFields as unknown as string[]).includes(field)) {
+        return conditionOps[op]({
+          answer: surveyStore.user[field as 'name' | 'submissions' | 'userId'] ?? null,
+          value,
+        });
+      }
+
+      return conditionOps[op]({ answer: surveyStore.user.customFields[field] ?? null, value });
+    }
     case 'mealCompletion': {
       let completionState: FoodCompletionState | undefined;
       switch (condition.object) {

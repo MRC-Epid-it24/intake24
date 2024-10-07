@@ -1,15 +1,12 @@
 <template>
-  <div>
-    <component
-      :is="action"
-      v-for="action in currentActions"
-      :key="`${action}-${item.id}`"
-      :action="action"
-      :item="item"
-      :route="route"
-      @action="onAction"
-    />
-  </div>
+  <component
+    :is="action"
+    v-for="action in currentActions"
+    :key="`${action}-${item.id}`"
+    :action="action"
+    :item="item"
+    @action="onAction"
+  />
 </template>
 
 <script lang="ts">
@@ -47,9 +44,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    routePrefix: {
-      type: String,
-    },
   },
 
   emits: ['refresh'],
@@ -62,9 +56,6 @@ export default defineComponent({
 
         return this.can({ action, ownerId, securables });
       });
-    },
-    route(): string | null | undefined {
-      return this.routePrefix ?? this.$route.name;
     },
   },
 
@@ -83,7 +74,7 @@ export default defineComponent({
 
     async onSuccess(action: string): Promise<void> {
       const { id, name } = this.item;
-      useMessages().success(this.$t(`common.msg.${action}`, { name: name ?? id }).toString());
+      useMessages().success(this.$t(`common.msg.${action}`, { name: name ?? id }));
       this.$emit('refresh');
     },
   },

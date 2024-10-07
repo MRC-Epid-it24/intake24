@@ -1,5 +1,5 @@
 <template>
-  <v-container class="container-max" :class="{ 'pa-0': isMobile }" fluid>
+  <v-container class="container-max" :class="{ 'pa-0': $vuetify.display.mobile }" fluid>
     <component :is="layout" />
   </v-container>
 </template>
@@ -24,7 +24,7 @@ export default defineComponent({
 
   computed: {
     layout(): string {
-      return this.isMobile ? 'recall-mobile' : 'recall-desktop';
+      return this.$vuetify.display.mobile ? 'recall-mobile' : 'recall-desktop';
     },
   },
 });

@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-simple-table>
+    <v-table>
       <tbody>
         <tr>
           <th>{{ $t('survey-schemes.prompts.internal.id._') }}</th>
@@ -19,7 +19,7 @@
           <td>{{ entry.prompt.type }}</td>
         </tr>
       </tbody>
-    </v-simple-table>
+    </v-table>
     <v-container fluid>
       <json-editor v-bind="{ readOnly: true, value: entry.prompt }" />
     </v-container>

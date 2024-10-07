@@ -1,30 +1,27 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ attrs, on }">
-      <slot name="activator" v-bind="{ on, attrs }">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+    <template #activator="{ props }">
+      <slot name="activator" v-bind="{ props }">
         <v-text-field
-          v-bind="attrs"
           :class="activatorClass"
           :clearable="clearable"
           :disabled="disabled"
           :error-messages="errorMessages"
           hide-details="auto"
           :label="label"
+          :model-value="selectedItemName"
           :name="name"
-          outlined
           :prepend-inner-icon="itemIcon"
           readonly
-          :value="selectedItemName"
-          v-on="on"
+          variant="outlined"
+          v-bind="props"
           @click:clear="clearInput"
         />
       </slot>
     </template>
-    <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
+    <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           <slot name="title">
             {{ $t(`${resource}.title`) }}
@@ -39,58 +36,48 @@
           hide-details="auto"
           :label="$t('common.search._')"
           :loading="loading"
-          outlined
           prepend-inner-icon="$search"
+          variant="outlined"
           @click:clear="clear"
         />
         <template v-if="items.length">
-          <v-list dense min-height="350px">
-            <v-list-item-group v-model="selectedItemId">
-              <template v-for="(item, idx) in items">
-                <v-list-item :key="item[itemId]" :value="item[itemId]">
-                  <template #default="{ active }">
-                    <v-list-item-action class="mr-2">
-                      <v-checkbox :input-value="active" />
-                    </v-list-item-action>
-                    <v-list-item-avatar>
-                      <v-icon>{{ itemIcon }}</v-icon>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <slot name="item" v-bind="{ item }">
-                        <v-list-item-title>{{ item[itemName] }}</v-list-item-title>
-                      </slot>
-                    </v-list-item-content>
-                  </template>
-                </v-list-item>
-                <v-divider v-if="idx + 1 < items.length" :key="`div-${item[itemId]}`" />
-              </template>
-            </v-list-item-group>
+          <v-list v-model:selected="selectedItemId" density="compact" min-height="350px">
+            <template v-for="(item, idx) in items" :key="item[itemId]">
+              <v-list-item :value="item[itemId]">
+                <template #prepend="{ isActive }">
+                  <v-list-item-action class="mr-2">
+                    <v-checkbox-btn :model-value="isActive " />
+                  </v-list-item-action>
+                  <v-icon>{{ itemIcon }}</v-icon>
+                </template>
+                <slot name="item" v-bind="{ item }">
+                  <v-list-item-title>{{ item[itemName] }}</v-list-item-title>
+                </slot>
+              </v-list-item>
+              <v-divider v-if="idx + 1 < items.length" :key="`div-${item[itemId]}`" />
+            </template>
           </v-list>
           <div class="text-center">
-            <v-pagination v-model="page" circle :length="lastPage" />
+            <v-pagination v-model="page" :length="lastPage" rounded />
           </div>
         </template>
-        <v-alert v-else color="secondary" text type="info">
+        <v-alert v-else color="secondary" type="info">
           {{ $t('common.search.none') }}
         </v-alert>
       </v-card-text>
       <v-card-actions>
-        <v-btn class="font-weight-bold" color="error" text @click.stop="close">
-          <v-icon left>
-            $cancel
-          </v-icon>{{ $t('common.action.cancel') }}
+        <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="close">
+          <v-icon icon="$cancel" start /> {{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
           :disabled="!selectedItemId"
-          text
+          variant="text"
           @click.stop="confirm"
         >
-          <v-icon left>
-            $success
-          </v-icon>{{ $t('common.action.ok') }}
+          <v-icon icon="$success" start /> {{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -148,17 +135,17 @@ export default defineComponent({
       type: [Boolean, String],
       default: false,
     },
-    value: {
+    modelValue: {
       type: [Object, String] as PropType<Dictionary | string | null>,
     },
   },
 
-  emits: ['clear', 'input'],
+  emits: ['clear', 'update:modelValue'],
 
   setup(props) {
     const { resource } = toRefs(props);
-    const selectedItemId = ref<string | null>(
-      props.initialItem ? props.initialItem[props.itemId] : null,
+    const selectedItemId = ref<string[]>(
+      props.initialItem ? [props.initialItem[props.itemId]] : [],
     );
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
@@ -169,12 +156,12 @@ export default defineComponent({
       items.value.push(props.initialItem);
 
     watch(
-      () => props.value,
+      () => props.modelValue,
       (val) => {
         if (val === selectedItemId.value)
           return;
 
-        selectedItemId.value = null;
+        selectedItemId.value = [];
       },
     );
 
@@ -196,10 +183,10 @@ export default defineComponent({
     },
     selectedItem(): Dictionary | null {
       const { selectedItemId } = this;
-      if (!selectedItemId)
+      if (!selectedItemId.length)
         return null;
 
-      return this.items.find(item => item[this.itemId] === selectedItemId) ?? null;
+      return this.items.find(item => item[this.itemId] === selectedItemId[0]) ?? null;
     },
     selectedItemName() {
       if (this.selectedItem)
@@ -208,7 +195,7 @@ export default defineComponent({
       if (this.initialItem)
         return this.initialItem[this.itemName];
 
-      return this.value;
+      return this.modelValue;
     },
   },
 
@@ -219,22 +206,22 @@ export default defineComponent({
 
     input() {
       if (!this.selectedItem) {
-        this.$emit('input', null);
+        this.$emit('update:modelValue', null);
         return;
       }
 
-      let returnValue: Dictionary | string | null = this.selectedItemId;
+      let returnValue: Dictionary | string | null = this.selectedItemId[0];
       const { returnObject } = this;
 
       if (typeof returnObject === 'boolean')
-        returnValue = returnObject ? copy(this.selectedItem) : this.selectedItemId;
+        returnValue = returnObject ? copy(this.selectedItem) : this.selectedItemId[0];
       else returnValue = this.selectedItem[returnObject];
 
-      this.$emit('input', returnValue);
+      this.$emit('update:modelValue', returnValue);
     },
 
     clearInput() {
-      this.selectedItemId = null;
+      this.selectedItemId = [];
       this.input();
       this.$emit('clear');
     },

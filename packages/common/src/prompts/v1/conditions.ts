@@ -69,7 +69,7 @@ const promptAnswerCondition = baseCondition.extend({
 const propertyCondition = baseCondition.extend({
   type: z.literal('property'),
   props: z.object({
-    name: z.enum(['recallNumber', 'userName']),
+    name: z.enum(['recallNumber']),
   }),
 });
 

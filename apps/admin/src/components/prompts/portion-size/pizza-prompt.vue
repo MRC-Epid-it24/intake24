@@ -1,11 +1,11 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row class="mb-3">
       <v-col cols="12" md="6">
-        <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)" />
+        <image-map-settings :image-map="imageMap" @update:image-map="update('imageMap', $event)" />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

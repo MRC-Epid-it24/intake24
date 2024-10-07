@@ -6,7 +6,6 @@
           class="font-weight-medium"
           :color="color(item)"
           label
-          :text-color="item.time ? 'white' : 'primary'"
         >
           {{ stringTime(item.time) }}
         </v-chip>
@@ -36,7 +35,6 @@ export default defineComponent({
 
   setup() {
     const { translate } = useI18n();
-
     const stringTime = (time: MealTime | undefined): string => {
       if (time === undefined)
         return '?';

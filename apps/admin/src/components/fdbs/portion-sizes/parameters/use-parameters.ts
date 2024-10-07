@@ -4,11 +4,11 @@ import { useVModel } from '@vueuse/core';
 import type { PortionSizeMethodId, PortionSizeParameters } from '@intake24/common/surveys';
 
 export type UserParametersProps<T extends PortionSizeMethodId> = {
-  value: PortionSizeParameters[T];
+  modelValue: PortionSizeParameters[T];
 };
 
 export function useParameters<T extends PortionSizeMethodId>(props: UserParametersProps<T>, { emit }: SetupContext) {
-  const parameters = useVModel(props, 'value', emit, { eventName: 'input' });
+  const parameters = useVModel(props, 'modelValue', emit);
 
   return {
     parameters,

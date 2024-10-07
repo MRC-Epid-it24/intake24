@@ -9,47 +9,42 @@
   </data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'SurveyList',
+defineOptions({ name: 'SurveyList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
 
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('surveys.id'),
-          sortable: true,
-          value: 'slug',
-        },
-        {
-          text: this.$t('common.name'),
-          sortable: true,
-          value: 'name',
-        },
-        {
-          text: this.$t('locales._'),
-          sortable: true,
-          value: 'locale',
-        },
-        {
-          text: this.$t('survey-schemes._'),
-          sortable: true,
-          value: 'surveyScheme',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers = ref<DataTableHeader[]>([
+  {
+    title: t('surveys.id'),
+    sortable: true,
+    key: 'slug',
   },
-});
+  {
+    title: t('common.name'),
+    sortable: true,
+    key: 'name',
+  },
+  {
+    title: t('locales._'),
+    sortable: true,
+    key: 'locale',
+  },
+  {
+    title: t('survey-schemes._'),
+    sortable: true,
+    key: 'surveyScheme',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+]);
 </script>

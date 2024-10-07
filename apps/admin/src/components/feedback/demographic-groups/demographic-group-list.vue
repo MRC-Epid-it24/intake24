@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-4" flat tile>
+      <v-icon color="secondary" end>
         fas fa-people-arrows
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
@@ -10,60 +10,57 @@
       <v-spacer />
       <v-btn
         color="primary"
-        fab
-        small
+        icon="$add"
+        size="small"
         :title="$t('feedback-schemes.demographic-groups.create')"
         @click.stop="add"
-      >
-        <v-icon small>
-          $add
-        </v-icon>
-      </v-btn>
+      />
       <options-menu>
         <select-resource
           resource="feedback-schemes"
           return-object="demographicGroups"
-          @input="load"
+          @update:model-value="load"
         >
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="items" @input="update" />
+        <json-editor-dialog v-model="items" @update:model-value="update" />
       </options-menu>
     </v-toolbar>
-    <v-list two-line>
-      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(group, index) in items"
-            :key="group.id"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium">
-                {{ getListItemTitle(group) }}
-              </v-list-item-title>
-            </v-list-item-content>
+    <v-list lines="two">
+      <vue-draggable
+        v-model="items"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+        @end="update"
+      >
+        <v-list-item
+          v-for="(group, index) in items"
+          :key="group.id"
+          class="drag-and-drop__item"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title class="font-weight-medium">
+            {{ getListItemTitle(group) }}
+          </v-list-item-title>
+          <template #append>
             <v-list-item-action>
               <v-btn
                 icon
                 :title="$t('feedback-schemes.demographic-groups.edit')"
                 @click.stop="edit(index, group)"
               >
-                <v-icon color="secondary lighten-2">
+                <v-icon color="secondary-lighten-2">
                   $edit
                 </v-icon>
               </v-btn>
@@ -73,47 +70,41 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('feedback-schemes.demographic-groups.remove').toString()"
+                :label="$t('feedback-schemes.demographic-groups.remove')"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: getListItemTitle(group) }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <v-dialog
       v-model="dialog.show"
       fullscreen
-      hide-overlay
       persistent
+      :scrim="false"
       transition="dialog-bottom-transition"
     >
       <v-card tile>
         <v-toolbar color="secondary" dark>
-          <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-            <v-icon>$cancel</v-icon>
-          </v-btn>
+          <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
-            <v-icon dark left>
-              fas fa-people-arrows
-            </v-icon>
+            <v-icon icon="fas fa-people-arrows" start />
             {{
               $t(`feedback-schemes.demographic-groups.${dialog.index === -1 ? 'create' : 'edit'}`)
             }}
           </v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
-            <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
           <template #extension>
             <v-container>
-              <v-tabs v-model="tab" background-color="secondary" dark>
+              <v-tabs v-model="tab" bg-color="secondary">
                 <v-tab v-for="item in ['general', 'sectors', 'json']" :key="item" :tab-value="item">
                   {{ $t(`feedback-schemes.demographic-groups.tabs.${item}`) }}
                 </v-tab>
@@ -123,8 +114,8 @@
         </v-toolbar>
         <v-form ref="form" @submit.prevent="save">
           <v-container>
-            <v-tabs-items v-model="tab" class="pt-1">
-              <v-tab-item key="general" value="general">
+            <v-tabs-window v-model="tab" class="pt-1">
+              <v-tabs-window-item key="general" value="general">
                 <v-container>
                   <v-row>
                     <v-col cols="12" md="6">
@@ -134,20 +125,20 @@
                         :items="cardTypes"
                         :label="$t('feedback-schemes.cards.type')"
                         name="type"
-                        outlined
+                        variant="outlined"
                       />
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-autocomplete
                         v-model="dialog.item.nutrientTypeId"
                         hide-details="auto"
-                        item-text="description"
+                        item-title="description"
                         item-value="id"
                         :items="nutrientTypes"
                         :label="$t('nutrient-types._')"
                         name="nutrientTypeId"
-                        outlined
                         prepend-inner-icon="$nutrient-types"
+                        variant="outlined"
                       />
                     </v-col>
                     <v-col cols="12" md="6">
@@ -157,8 +148,8 @@
                         :items="nutrientRuleTypes"
                         :label="$t('feedback-schemes.nutrientRuleTypes._')"
                         name="nutrientRuleType"
-                        outlined
                         prepend-inner-icon="fas fa-divide"
+                        variant="outlined"
                       />
                     </v-col>
                     <v-col cols="12" md="6">
@@ -168,16 +159,20 @@
                         :items="sexes"
                         :label="$t('feedback-schemes.sexes._')"
                         name="sex"
-                        outlined
                         prepend-inner-icon="fas fa-genderless"
+                        variant="outlined"
                       >
-                        <template #item="{ item }">
-                          <span :class="`${item.icon} mr-3`" />
-                          {{ item.text }}
+                        <template #item="{ item, props }">
+                          <v-list-item v-bind="props">
+                            <template #prepend>
+                              <v-icon :icon="item.raw.icon" start />
+                            </template>
+                            <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
+                          </v-list-item>
                         </template>
                         <template #selection="{ item }">
-                          <span :class="`${item.icon} mr-3`" />
-                          {{ item.text }}
+                          <v-icon :icon="item.raw.icon" start />
+                          {{ item.raw.title }}
                         </template>
                       </v-select>
                     </v-col>
@@ -185,13 +180,13 @@
                       <v-select
                         v-model="dialog.item.physicalActivityLevelId"
                         hide-details="auto"
-                        item-text="name"
+                        item-title="name"
                         item-value="id"
                         :items="physicalActivityLevels"
                         :label="$t('feedback-schemes.physicalActivityLevels._')"
                         name="physicalActivityLevelId"
-                        outlined
                         prepend-inner-icon="fas fa-running"
+                        variant="outlined"
                       />
                     </v-col>
                     <v-col v-for="item in rangeType" :key="item" cols="12" md="6">
@@ -202,31 +197,27 @@
                     </v-col>
                   </v-row>
                 </v-container>
-              </v-tab-item>
-              <v-tab-item key="sectors" value="sectors">
+              </v-tabs-window-item>
+              <v-tabs-window-item key="sectors" value="sectors">
                 <v-container>
                   <demographic-group-sectors
                     v-model="dialog.item.scaleSectors"
                   />
                 </v-container>
-              </v-tab-item>
-              <v-tab-item key="json" value="json">
+              </v-tabs-window-item>
+              <v-tabs-window-item key="json" value="json">
                 <v-container>
                   <json-editor v-model="dialog.item" />
                 </v-container>
-              </v-tab-item>
-            </v-tabs-items>
+              </v-tabs-window-item>
+            </v-tabs-window>
             <v-card-actions>
-              <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>
-                  $cancel
-                </v-icon>{{ $t('common.action.cancel') }}
+              <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+                <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
               </v-btn>
               <v-spacer />
-              <v-btn class="font-weight-bold" color="info" text type="submit">
-                <v-icon left>
-                  $success
-                </v-icon>{{ $t('common.action.ok') }}
+              <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+                <v-icon icon="$success" start />{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>
@@ -239,7 +230,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
@@ -260,13 +251,13 @@ export default defineComponent({
 
   components: {
     ConfirmDialog,
-    Draggable: draggable,
     DemographicGroupRange,
     DemographicGroupSectors,
     JsonEditor,
     JsonEditorDialog,
     OptionsMenu,
     SelectResource,
+    VueDraggable,
   },
 
   props: {
@@ -274,7 +265,7 @@ export default defineComponent({
       type: Array as PropType<NutrientTypeResponse[]>,
       default: () => [],
     },
-    value: {
+    modelValue: {
       type: Array as PropType<DemographicGroup[]>,
       required: true,
     },
@@ -290,7 +281,7 @@ export default defineComponent({
 
     const cardTypes = computed(() =>
       cardTypesRef.map(value => ({
-        text: i18n.t(`feedback-schemes.cards.${value}.title`).toString(),
+        title: i18n.t(`feedback-schemes.cards.${value}.title`),
         value,
       })),
     );
@@ -320,13 +311,13 @@ export default defineComponent({
   data() {
     return {
       nutrientRuleTypes: nutrientRuleTypes.map(value => ({
-        text: this.$t(`feedback-schemes.nutrientRuleTypes.${value}`),
+        title: this.$t(`feedback-schemes.nutrientRuleTypes.${value}`),
         value,
       })),
       sexes: [
-        { text: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
+        { title: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
         ...sexes.map(value => ({
-          text: this.$t(`feedback-schemes.sexes.${value}`),
+          title: this.$t(`feedback-schemes.sexes.${value}`),
           value,
           icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
         })),

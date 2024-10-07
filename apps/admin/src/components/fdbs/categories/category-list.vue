@@ -1,6 +1,6 @@
 <template>
   <v-card v-bind="{ flat, outlined, tile }">
-    <v-toolbar color="grey lighten-4" flat>
+    <v-toolbar color="grey-lighten-4" flat>
       <v-toolbar-title class="font-weight-medium">
         <slot name="title">
           {{ $t('fdbs.categories.title') }}
@@ -15,28 +15,28 @@
       />
     </v-toolbar>
     <v-list class="py-0">
-      <template v-for="(item, idx) in items">
-        <v-list-item :key="item.code" link>
-          <v-list-item-avatar>
+      <template v-for="(item, idx) in items" :key="item.code">
+        <v-list-item link>
+          <template #prepend>
             <v-icon>$categories</v-icon>
-          </v-list-item-avatar>
+          </template>
           <slot name="item.content" v-bind="{ item }">
-            <v-list-item-content>
-              <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
           </slot>
-          <slot name="item.action" v-bind="{ item }" />
-          <v-list-item-action v-if="!disabled">
-            <confirm-dialog
-              color="error"
-              icon
-              icon-left="$delete"
-              :label="$t('fdbs.categories.remove').toString()"
-              @confirm="remove(item.code)"
-            >
-              {{ $t('common.action.confirm.remove', { name: item.name }) }}
-            </confirm-dialog>
-          </v-list-item-action>
+          <template #append>
+            <slot name="item.action" v-bind="{ item }" />
+            <v-list-item-action v-if="!disabled">
+              <confirm-dialog
+                color="error"
+                icon
+                icon-left="$delete"
+                :label="$t('fdbs.categories.remove')"
+                @confirm="remove(item.code)"
+              >
+                {{ $t('common.action.confirm.remove', { name: item.name }) }}
+              </confirm-dialog>
+            </v-list-item-action>
+          </template>
         </v-list-item>
         <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`" />
       </template>
@@ -87,17 +87,16 @@ export default defineComponent({
     tile: {
       type: Boolean,
     },
-    value: {
+    modelValue: {
       type: Array as PropType<CategoryListItem[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const items = useVModel(props, 'value', emit, {
-      eventName: 'input',
+    const items = useVModel(props, 'modelValue', emit, {
       passive: true,
       deep: true,
     });

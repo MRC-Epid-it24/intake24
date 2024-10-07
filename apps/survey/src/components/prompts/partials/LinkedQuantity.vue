@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel v-bind="$attrs">
-    <v-expansion-panel-header>
-      <i18n path="prompts.linkedAmount.label">
+    <v-expansion-panel-title>
+      <i18n-t keypath="prompts.linkedAmount.label" tag="span">
         <template #unit>
           {{ linkedQuantityUnit }}
         </template>
@@ -11,21 +11,21 @@
         <template #quantity>
           <span class="font-weight-medium">{{ parentQuantity }}</span>
         </template>
-      </i18n>
+      </i18n-t>
       <template #actions>
         <expansion-panel-actions :valid="confirmed" />
       </template>
-    </v-expansion-panel-header>
-    <v-expansion-panel-content>
+    </v-expansion-panel-title>
+    <v-expansion-panel-text>
       <quantity-card
         :confirmed="confirmed"
         :max="parentQuantity"
+        :model-value="modelValue"
         :show-all="!!linkedParent.categories.length"
-        :value="value"
-        @input="updateQuantity"
         @update:confirmed="updateConfirmed"
+        @update:model-value="updateQuantity"
       />
-    </v-expansion-panel-content>
+    </v-expansion-panel-text>
   </v-expansion-panel>
 </template>
 
@@ -70,23 +70,23 @@ export default defineComponent({
       type: Object as PropType<Prompt>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Number,
       required: true,
     },
   },
 
-  emits: ['input', 'update:confirmed'],
+  emits: ['update:modelValue', 'update:confirmed'],
 
   setup(props, { emit }) {
     const { foodName } = useFoodUtils(props);
-    const { i18n, translate } = useI18n();
+    const { i18n: { t }, translate } = useI18n();
     const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
 
     const linkedQuantityUnit = computed(() => {
       const unit = props.linkedParent.categories[0]?.unit;
       if (!unit || !standardUnitRefs.value[unit])
-        return i18n.t('prompts.linkedAmount.unit');
+        return t('prompts.linkedAmount.unit');
 
       return translate(standardUnitRefs.value[unit].howMany, {
         path: 'prompts.linkedAmount.unit',
@@ -100,7 +100,7 @@ export default defineComponent({
     );
 
     const updateQuantity = (value: number) => {
-      emit('input', value);
+      emit('update:modelValue', value);
     };
 
     const updateConfirmed = (value: boolean) => {

@@ -88,7 +88,10 @@
       "_": "Action variant",
       "title": "Action variants",
       "elevated": "Elevated",
+      "flat": "Flat",
       "outlined": "Outlined",
+      "plain": "Plain",
+      "tonal": "Tonal",
       "text": "Text"
     }
   },
@@ -117,7 +120,7 @@
       "promptAnswer": "Prompt answer",
       "property": "Property value",
       "recallNumber": "Recall number",
-      "userName": "Participant ID",
+      "userField": "User field",
       "mealCompletion": "Completion state",
       "foodCompletion": "Completion state"
     },
@@ -159,21 +162,15 @@
         "absent": "<em><strong>{object}</strong></em> is <strong>NOT</strong> tagged with <em><strong>{id}</strong></em>"
       },
       "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>",
+      "userField": "<em><strong>{property} ({field})</strong></em> for <em><strong>{object}</strong></em>",
       "notRequired": "<strong>OR</strong> not set"
     },
     "promptAnswer": {
       "promptId": "Prompt ID",
       "required": "Prompt answer is required (uncheck if this prompt should trigger if the answer is not known)"
     },
-    "exTypes": {
-      "drinks": "Drinks reported in {section}",
-      "energy": "Energy value of {section}",
-      "flag": "Flag {flagId} set in {section}",
-      "foodCategory": "Food category",
-      "meals": "Meals",
-      "promptAnswer": "Prompt answer {section}: {promptId}",
-      "property": "Property value {name}",
-      "recallNumber": "Recall number"
+    "userField": {
+      "field": "Field"
     },
     "ops": {
       "_": "Operation",

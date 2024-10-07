@@ -1,7 +1,7 @@
 import { isEmail } from 'validator';
 import { z } from 'zod';
 
-import { userAttributes, userCustomField, userRequest, userSurveyAliasAttributes } from './users';
+import { userAttributes, userCustomFieldAttributes, userRequest, userSurveyAliasAttributes } from './users';
 
 export const respondentEntry = userSurveyAliasAttributes.omit({
   createdAt: true,
@@ -11,7 +11,7 @@ export const respondentEntry = userSurveyAliasAttributes.omit({
   email: true,
   phone: true,
 })).extend({
-  customFields: userCustomField.array(),
+  customFields: userCustomFieldAttributes.array(),
   surveyAuthUrl: z.string(),
   feedbackAuthUrl: z.string(),
 });

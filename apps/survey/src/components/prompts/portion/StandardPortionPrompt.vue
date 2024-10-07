@@ -1,38 +1,39 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-if="standardUnitsLoaded" v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-if="standardUnitsLoaded" v-model="panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel v-show="parameters.units.length !== 1">
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.label`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.label`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="unitValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-radio-group v-model="portionSize.unit" @change="selectMethod">
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <v-radio-group v-model="portionSize.unit" @update:model-value="selectMethod">
             <v-radio v-for="unit in parameters.units" :key="unit.name" :value="unit">
               <template #label>
-                <i18n :path="`prompts.${type}.estimateIn`">
+                <i18n-t :keypath="`prompts.${type}.estimateIn`">
                   <template #unit>
                     {{ getStandardUnitEstimateIn(unit) }}
                   </template>
-                </i18n>
+                </i18n-t>
               </template>
             </v-radio>
           </v-radio-group>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!unitValid">
-        <v-expansion-panel-header>
-          <i18n
+        <v-expansion-panel-title>
+          <i18n-t
             v-if="portionSize.unit"
-            :path="`prompts.${type}.howMany.${
+            :keypath="`prompts.${type}.howMany.${
               portionSize.unit.omitFoodDescription ? '_' : 'withFood'
             }`"
+            tag="span"
           >
             <template #unit>
               {{ getStandardUnitHowMany(portionSize.unit) }}
@@ -40,7 +41,7 @@
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template v-else>
             {{ $t(`prompts.${type}.howMany.placeholder`) }}
           </template>
@@ -54,23 +55,23 @@
               />
             </expansion-panel-actions>
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <quantity-card
             v-model="portionSize.quantity"
-            :confirmed.sync="quantityConfirmed"
-            @input="selectQuantity"
+            v-model:confirmed="quantityConfirmed"
             @update:confirmed="confirmQuantity"
+            @update:model-value="selectQuantity"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <linked-quantity
         v-if="linkedParent && !linkedParent.auto"
         v-bind="{ disabled: !quantityValid, food, linkedParent, prompt }"
         v-model="portionSize.linkedQuantity"
-        :confirmed.sync="linkedQuantityConfirmed"
-        @input="selectLinkedQuantity"
+        v-model:confirmed="linkedQuantityConfirmed"
         @update:confirmed="confirmLinkedQuantity"
+        @update:model-value="selectLinkedQuantity"
       />
     </v-expansion-panels>
     <template #actions>
@@ -89,7 +90,6 @@ import { defineComponent } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
 
 import type { LinkedParent } from '../partials';
@@ -117,10 +117,9 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props) {
-    const { translate } = useI18n();
     const { foodName } = useFoodUtils(props);
     const {
       resolveStandardUnits,
@@ -133,7 +132,6 @@ export default defineComponent({
       resolveStandardUnits,
       getStandardUnitEstimateIn,
       getStandardUnitHowMany,
-      translate,
       foodName,
       standardUnitsLoaded,
     };
@@ -141,7 +139,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...copy(this.value),
+      ...copy(this.modelValue),
     };
   },
 
@@ -216,7 +214,7 @@ export default defineComponent({
         linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

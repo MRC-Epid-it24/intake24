@@ -4,25 +4,27 @@
       :class="{ 'selected': isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
       @click="action('selectMeal', meal.id)"
     >
-      <v-list-item-title class="font-weight-bold text-wrap">
+      <v-list-item-title class="text-body-2 font-weight-medium text-wrap">
         {{ mealName }}
       </v-list-item-title>
-      <v-list-item-action>
-        <v-list-item-action-text v-if="mealTime?.length">
-          {{ mealTime }}
-        </v-list-item-action-text>
-        <v-tooltip v-else bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon v-bind="attrs" small v-on="on">
-              $question
-            </v-icon>
-          </template>
-          <span>{{ $t('recall.menu.mealSuggested') }}</span>
-        </v-tooltip>
-      </v-list-item-action>
-      <v-list-item-action class="my-auto">
-        <context-menu v-bind="{ meal, menu }" @action="action" />
-      </v-list-item-action>
+      <template #append>
+        <v-list-item-action class="me-4 my-auto">
+          <span v-if="mealTime && !meal.flags.includes('meal-time:hidden')" class="text-body-2">
+            {{ mealTime }}
+          </span>
+          <v-tooltip v-else-if="!mealTime" location="bottom">
+            <template #activator="{ props }">
+              <v-icon size="small" v-bind="props">
+                $question
+              </v-icon>
+            </template>
+            <span>{{ $t('recall.menu.mealSuggested') }}</span>
+          </v-tooltip>
+        </v-list-item-action>
+        <v-list-item-action class="my-auto">
+          <context-menu v-bind="{ meal, menu }" @action="action" />
+        </v-list-item-action>
+      </template>
     </v-list-item>
     <v-divider />
     <template v-if="meal.foods.length">

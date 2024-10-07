@@ -1,15 +1,15 @@
 <template>
-  <v-container :class="{ 'pa-0': isMobile }">
+  <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
     <app-entry-screen
-      :subtitle="$t('common.login.captcha').toString()"
-      :title="$t('common._').toString()"
+      :subtitle="$t('common.login.captcha')"
+      :title="$t('common._')"
     >
-      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
+      <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
         <v-card-text class="d-flex flex-column justify-center align-center">
           <v-icon class="pt-8 pb-12" size="96">
             fas fa-robot
           </v-icon>
-          <v-btn block color="primary" rounded type="submit" x-large>
+          <v-btn block color="primary" rounded size="x-large" type="submit">
             {{ $t('common.login.start') }}
           </v-btn>
         </v-card-text>
@@ -19,80 +19,60 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router/composables';
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 
 import { useLogin } from './use-login';
 
-export default defineComponent({
-  name: 'SurveyChallenge',
+defineOptions({ name: 'SurveyChallenge' });
 
-  components: { AppEntryScreen, Captcha },
-
-  props: {
-    surveyId: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  surveyId: {
+    type: String,
+    required: true,
   },
+});
 
-  setup(props) {
-    const router = useRouter();
-    const route = useRoute();
+const router = useRouter();
+const route = useRoute();
 
-    const {
-      captchaEl,
-      captchaToken,
-      errors,
-      fetchSurveyPublicInfo,
-      login,
-      resetCaptcha,
-      status,
-      survey,
-      token,
-    } = useLogin(props);
+const {
+  captchaEl,
+  captchaToken,
+  errors,
+  login,
+  resetCaptcha,
+  token,
+} = useLogin(props);
 
-    const verified = async (token?: string) => {
-      captchaToken.value = token;
-      await login('token');
-    };
+async function verified(token?: string) {
+  captchaToken.value = token;
+  await login('token');
+}
 
-    const expired = () => {
-      resetCaptcha();
-    };
+function expired() {
+  resetCaptcha();
+}
 
-    const submit = async () => {
-      if (captchaEl.value) {
-        captchaEl.value.executeIfCan();
-        return;
-      }
+async function submit() {
+  if (captchaEl.value) {
+    captchaEl.value.executeIfCan();
+    return;
+  }
 
-      await login('token');
-    };
+  await login('token');
+}
 
-    onMounted(async () => {
-      const { auth } = route.query;
-      if (!auth || typeof auth !== 'string') {
-        await router.push({ name: 'survey-login', params: { surveyId: props.surveyId } });
-        return;
-      }
-      token.value = auth;
-    });
-
-    return {
-      captchaEl,
-      errors,
-      expired,
-      fetchSurveyPublicInfo,
-      status,
-      submit,
-      survey,
-      verified,
-    };
-  },
+onMounted(async () => {
+  const { auth } = route.query;
+  if (!auth || typeof auth !== 'string') {
+    await router.push({ name: 'survey-login', params: { surveyId: props.surveyId } });
+    return;
+  }
+  token.value = auth;
 });
 </script>
 

@@ -23,51 +23,52 @@
     />
     <template #actions>
       <v-btn
+        v-if="!meal.flags.includes('meal-time:disabled')"
         class="px-4"
         color="primary"
-        large
-        text
+        size="large"
         :title="$t('recall.actions.mealTime')"
+        variant="text"
         @click="action('mealTime', meal.id)"
       >
-        <v-icon left>
+        <v-icon start>
           fas fa-clock
         </v-icon>
         {{ $t('recall.actions.mealTime') }}
       </v-btn>
       <confirm-dialog
-        :label="$t('recall.menu.meal.delete').toString()"
+        :label="$t('recall.menu.meal.delete')"
         @confirm="action('deleteMeal', meal.id)"
       >
-        <template #activator="{ on, attrs }">
+        <template #activator="{ props }">
           <v-btn
             class="px-4"
             color="primary"
-            large
-            text
+            size="large"
             :title="$t('recall.actions.deleteMeal')"
-            v-bind="attrs"
-            v-on="on"
+            variant="text"
+            v-bind="props"
           >
-            <v-icon left>
+            <v-icon start>
               $delete
             </v-icon>
             {{ $t('recall.actions.nav.deleteMeal') }}
           </v-btn>
         </template>
-        <i18n path="recall.menu.meal.deleteConfirm">
+        <i18n-t keypath="recall.menu.meal.deleteConfirm" tag="span">
           <template #item>
             <span class="font-weight-medium">{{ mealName }}</span>
           </template>
-        </i18n>
+        </i18n-t>
       </confirm-dialog>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
     <template #nav-actions>
       <v-btn
+        v-if="!meal.flags.includes('meal-time:disabled')"
         color="primary"
-        text
         :title="$t('recall.actions.nav.mealTime')"
+        variant="text"
         @click.stop="action('mealTime', meal.id)"
       >
         <span class="text-overline font-weight-medium">
@@ -78,11 +79,11 @@
         </v-icon>
       </v-btn>
       <confirm-dialog
-        :label="$t('recall.menu.meal.delete').toString()"
+        :label="$t('recall.menu.meal.delete')"
         @confirm="action('deleteMeal', meal.id)"
       >
-        <template #activator="{ on, attrs }">
-          <v-btn color="primary" text v-bind="attrs" v-on="on">
+        <template #activator="{ props }">
+          <v-btn color="primary" variant="text" v-bind="props">
             <span class="text-overline font-weight-medium">
               {{ $t('recall.actions.nav.deleteMeal') }}
             </span>
@@ -91,11 +92,11 @@
             </v-icon>
           </v-btn>
         </template>
-        <i18n path="recall.menu.meal.deleteConfirm">
+        <i18n-t keypath="recall.menu.meal.deleteConfirm" tag="span">
           <template #item>
             <span class="font-weight-medium">{{ mealName }}</span>
           </template>
-        </i18n>
+        </i18n-t>
       </confirm-dialog>
       <next-mobile :disabled="!isValid" @click="action('next')" />
     </template>
@@ -108,7 +109,6 @@ import { computed, defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
 import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -127,25 +127,24 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Array as PropType<PromptStates['edit-meal-prompt']>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { translate } = useI18n();
     const { mealName } = useMealUtils(props);
     const { action } = usePromptUtils(props, ctx);
 
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
     const isValid = computed(() => !!state.value.length);
@@ -175,7 +174,7 @@ export default defineComponent({
       action('deleteFood', foodId);
     };
 
-    return { action, drinksOnly, foodsOnly, isValid, mealName, state, deleteFood, translate };
+    return { action, drinksOnly, foodsOnly, isValid, mealName, state, deleteFood };
   },
 });
 </script>

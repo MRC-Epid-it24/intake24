@@ -19,7 +19,7 @@ import {
   VToolbar,
   VToolbarItems,
   VToolbarTitle,
-} from 'vuetify/lib';
+} from 'vuetify/components';
 
 import type { LanguageTranslationAttributes } from '@intake24/db';
 import { copy } from '@intake24/common/util';
@@ -81,7 +81,7 @@ export default defineComponent({
   },
 
   methods: {
-    loadMoreMessages(entries: IntersectionObserverEntry[]) {
+    loadMoreMessages(isIntersecting: boolean, entries: IntersectionObserverEntry[]) {
       if (entries[0].isIntersecting && this.messagesAvailableToLoad) {
         const startIndex = this.loadedKeys.length;
         const endIndex
@@ -126,9 +126,9 @@ export default defineComponent({
 
       const check = has(this.$i18n.messages[this.$i18n.locale], `${key}.title`);
       if (check)
-        return this.$t(`${key}.title`).toString();
+        return this.$t(`${key}.title`);
 
-      return this.$t(`languages.translations.sections.${key}`).toString();
+      return this.$t(`languages.translations.sections.${key}`);
     },
 
     createInputs(
@@ -153,7 +153,7 @@ export default defineComponent({
         return h(VCol, { props: { cols: 12 } }, [
           h(VTextField, {
             props: {
-              messages: this.$t(fullPath).toString(),
+              messages: this.$t(fullPath),
               label: fullPath,
               outlined: true,
               value: translations[item],
@@ -221,7 +221,7 @@ export default defineComponent({
                 },
                 [
                   h(VIcon, { props: { left: true } }, '$success'),
-                  this.$t('common.action.ok').toString(),
+                  this.$t('common.action.ok'),
                 ],
               ),
             ]),
@@ -229,7 +229,7 @@ export default defineComponent({
           h(VContainer, [
             h(
               VCardTitle,
-              `${this.$t('languages.translations.title').toString()} - ${this.getSectionTitle()}`,
+              `${this.$t('languages.translations.title')} - ${this.getSectionTitle()}`,
             ),
             h(VRow, [
               this.createInputs(h, this.messages.loaded),

@@ -20,12 +20,23 @@
     "urlAuthToken": "Jeton d'identification URL",
     "none": "Pas d'alias de l'enquête défini"
   },
+  "identifiers": {
+    "_": "Identifier",
+    "title": "Identifiers"
+  },
+  "personalIdentifiers": {
+    "_": "Personal identifier",
+    "title": "Personal identifiers"
+  },
   "customFields": {
     "_": "Champ modifiable",
     "title": "Champs modifiables",
+    "add": "New field",
+    "remove": "Remove field",
     "name": "Champ du nom",
     "value": "Champ de la valeur",
-    "none": "Pas de champ modifiable défini"
+    "none": "Pas de champ modifiable défini",
+    "public": "Public"
   },
   "permissions": {
     "_": "Autorisation",

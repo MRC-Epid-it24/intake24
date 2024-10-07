@@ -1,4 +1,4 @@
-import type Router from 'vue-router';
+import type { Router } from 'vue-router';
 
 import { useAuth, useResource, useUser } from '../stores';
 import resources from './resources';
@@ -46,8 +46,10 @@ export default (router: Router): void => {
     next();
   });
 
-  router.afterEach(async (to) => {
-    const { meta: { module } = {} } = to;
+  router.beforeResolve(async (to) => {
+    const {
+      meta: { module },
+    } = to;
 
     // Update module/resource name
     const name = module.parent ?? module.current;
@@ -55,7 +57,7 @@ export default (router: Router): void => {
 
     const resourceStore = useResource();
 
-    if (!resourceStore.name !== name)
+    if (resourceStore.name !== name)
       resourceStore.update({ name, api: resource?.api ?? `admin/${name}`, refs: resource?.refs });
   });
 };

@@ -40,11 +40,11 @@ export default defineComponent({
     const getInitialState = computed<string | undefined>(() => undefined);
 
     const { state } = usePromptHandlerNoStore(ctx, getInitialState);
-    const { i18n } = useI18n();
+    const { i18n: { locale } } = useI18n();
     const survey = useSurvey();
 
-    const defaultMeals = computed(() => survey.defaultSchemeMeals?.map(({ name }) => name[i18n.locale] ?? name.en) ?? []);
-    const meals = computed(() => survey.meals.map(({ name }) => (name[i18n.locale] ?? name.en).toLowerCase().trim()));
+    const defaultMeals = computed(() => survey.defaultSchemeMeals?.map(({ name }) => name[locale.value] ?? name.en) ?? []);
+    const meals = computed(() => survey.meals.map(({ name }) => (name[locale.value] ?? name.en).toLowerCase().trim()));
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next')
@@ -65,7 +65,7 @@ export default defineComponent({
         return;
       }
 
-      survey.addMeal({ name: { en: state.value, [i18n.locale]: state.value } }, i18n.locale);
+      survey.addMeal({ name: { en: state.value, [locale.value]: state.value } }, locale.value);
     };
 
     return { state, action, defaultMeals, meals };

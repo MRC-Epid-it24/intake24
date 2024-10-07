@@ -1,6 +1,5 @@
 import type { TopFoods } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
 import { getNutrientUnit } from '@intake24/ui';
 
 import type { NutrientChartData } from './charts';
@@ -40,9 +39,8 @@ export function buildTopFoods(topFoods: TopFoods, foods: AggregateFoodStats[], n
     return { ...topFoods, chartData: [] };
 
   const chartData = topFoods.nutrientTypes.map((nutrient) => {
-    const { id } = nutrient;
+    const { id, name } = nutrient;
 
-    const name = useI18n().translate(nutrient.name);
     const unit = getNutrientUnit(id, nutrientTypes);
 
     const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);

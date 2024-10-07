@@ -1,6 +1,5 @@
 import type { StoreDefinition } from 'pinia';
 import { defineStore } from 'pinia';
-import Vue from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
 
@@ -56,7 +55,7 @@ export function getOrCreatePromptStateStore<T extends object>(
           else {
             ids.forEach((id) => {
               if (this.prompts[id]?.[promptId])
-                Vue.delete(this.prompts[id], promptId);
+                delete this.prompts[id][promptId];
             });
           }
 

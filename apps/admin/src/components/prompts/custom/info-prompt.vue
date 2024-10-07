@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options" value="options" />
+  <v-tabs-window-item key="options" value="options" />
 </template>
 
 <script lang="ts">

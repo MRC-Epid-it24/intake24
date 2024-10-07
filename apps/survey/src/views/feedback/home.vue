@@ -32,11 +32,11 @@
         </v-row>
         <v-row v-if="showSubmissions" class="d-print-none" justify="center">
           <v-col cols="12" lg="7" md="8" xl="6">
-            <v-expansion-panels focusable>
+            <v-expansion-panels>
               <v-expansion-panel>
-                <v-expansion-panel-header
+                <v-expansion-panel-title
                   class="text-subtitle-1 font-weight-medium"
-                  color="grey lighten-4"
+                  color="grey-lighten-4"
                 >
                   {{ $t('recall.submissions.title') }}
                   ({{
@@ -44,42 +44,39 @@
                       ? $t('recall.submissions.all')
                       : selectedSubmissions.length
                   }})
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-list flat>
-                    <v-list-item-group
-                      v-model="selectedSubmissions"
-                      multiple
-                      @change="buildFeedback"
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-list
+                    v-model="selectedSubmissions"
+                    multiple
+                    @change="buildFeedback"
+                  >
+                    <v-list-item
+                      v-for="(submission, idx) in submissions"
+                      :key="submission.id"
+                      density="compact"
+                      :value="submission.id"
                     >
-                      <v-list-item
-                        v-for="(submission, idx) in submissions"
-                        :key="submission.id"
-                        dense
-                        :value="submission.id"
-                      >
-                        <template #default="{ active }">
-                          <v-list-item-action class="my-0">
-                            <v-checkbox :input-value="active" />
-                          </v-list-item-action>
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              {{ `${$t('recall.submissions._')} ${idx + 1}` }} |
-                              {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
-                            </v-list-item-title>
-                          </v-list-item-content>
-                        </template>
-                      </v-list-item>
-                    </v-list-item-group>
+                      <template #default="{ isActive }">
+                        <v-list-item-action class="my-0">
+                          <v-checkbox :model-value="isActive" />
+                        </v-list-item-action>
+
+                        <v-list-item-title>
+                          {{ `${$t('recall.submissions._')} ${idx + 1}` }} |
+                          {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
+                        </v-list-item-title>
+                      </template>
+                    </v-list-item>
                   </v-list>
-                </v-expansion-panel-content>
+                </v-expansion-panel-text>
               </v-expansion-panel>
             </v-expansion-panels>
           </v-col>
         </v-row>
         <v-row v-if="hasMissingFoods" justify="center">
           <v-col cols="12" lg="7" md="8" xl="6">
-            <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation" text>
+            <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation">
               {{ $t('feedback.missingFoods') }}
             </v-alert>
           </v-col>
@@ -122,7 +119,7 @@
 import { computed, defineComponent, ref } from 'vue';
 
 import type { UserDemographic } from '@intake24/ui/feedback';
-import { SurveyRating } from '@intake24/survey/components';
+import { SurveyRating } from '@intake24/survey/components/elements';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 import {

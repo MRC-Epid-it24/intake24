@@ -137,8 +137,14 @@ const recallNumberProperty = valueProperty.extend({
   id: z.literal('recallNumber'),
 });
 
-const userNameProperty = valueProperty.extend({
-  id: z.literal('userName'),
+export const standardUserFields = ['name', 'submissions'] as const;
+
+const userFieldProperty = z.object({
+  id: z.literal('userField'),
+  type: z.literal('userField'),
+  check: valueCheck.extend({
+    field: z.enum(standardUserFields).or(z.string()),
+  }),
 });
 
 const mealCompletionProperty = z.object({
@@ -171,9 +177,9 @@ export const commonProperties = [
 export const surveyProperties = z.discriminatedUnion('id', [
   ...commonProperties,
   mealCompletionProperty,
-  recallNumberProperty,
-  userNameProperty,
   numberOfMealsProperty,
+  recallNumberProperty,
+  userFieldProperty,
 ]);
 
 export const mealProperties = z.discriminatedUnion('id', [
@@ -207,6 +213,8 @@ export type EnergyProperty = z.infer<typeof energyProperty>;
 export type FlagProperty = z.infer<typeof flagProperty>;
 export type TagProperty = z.infer<typeof tagProperty>;
 export type PromptAnswerProperty = z.infer<typeof promptAnswerProperty>;
+export type RecallNumberProperty = z.infer<typeof recallNumberProperty>;
+export type UserFieldProperty = z.infer<typeof userFieldProperty>;
 
 export type ValuePropertyCheck = z.infer<typeof valueCheck>;
 export type BooleanPropertyCheck = z.infer<typeof booleanProperty.shape.check>;
@@ -214,6 +222,7 @@ export type MealCompletionPropertyCheck = z.infer<typeof mealCompletionProperty.
 export type FlagPropertyCheck = z.infer<typeof flagProperty.shape.check>;
 export type TagPropertyCheck = z.infer<typeof tagProperty.shape.check>;
 export type PromptAnswerPropertyCheck = z.infer<typeof promptAnswerProperty.shape.check>;
+export type UserFieldPropertyCheck = z.infer<typeof userFieldProperty.shape.check>;
 
 export type Condition = z.infer<typeof condition>;
 export type ConditionObjectId = Condition['object'];
@@ -299,17 +308,22 @@ export const promptConditionDefaults: PromptConditionDefaults = {
         completionState: 'searchComplete',
       },
     },
+    numberOfMeals: {
+      id: 'numberOfMeals',
+      ...valuePropertyDefaults,
+    },
     recallNumber: {
       id: 'recallNumber',
       ...valuePropertyDefaults,
     },
-    userName: {
-      id: 'userName',
-      ...valuePropertyDefaults,
-    },
-    numberOfMeals: {
-      id: 'numberOfMeals',
-      ...valuePropertyDefaults,
+    userField: {
+      id: 'userField',
+      type: 'userField',
+      check: {
+        field: 'name',
+        op: 'eq',
+        value: null,
+      },
     },
   },
   meal: {

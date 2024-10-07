@@ -1,34 +1,29 @@
 <template>
   <v-dialog
     v-model="dialog"
-    :fullscreen="$vuetify.breakpoint.smAndDown"
+    :fullscreen="$vuetify.display.smAndDown"
     max-width="500px"
     transition="dialog-bottom-transition"
   >
-    <template #activator="{ on, attrs }">
-      <slot name="activator" v-bind="{ on, attrs }">
+    <template #activator="{ props }">
+      <slot name="activator" v-bind="props">
         <v-btn
-          v-bind="attrs"
           color="grey"
-          dark
           :disabled="disabled"
           :title="$t('common.help.title')"
-          v-on="on"
+          variant="flat"
+          v-bind="props"
         >
-          <v-icon left>
-            $info
-          </v-icon>{{ $t('common.help._') }}
+          <v-icon icon="$info" start />{{ $t('common.help._') }}
         </v-btn>
       </slot>
     </template>
-    <v-card :tile="isMobile">
+    <v-card :tile="$vuetify.display.mobile">
       <v-toolbar color="secondary" dark>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="cancel" />
         <v-toolbar-title>{{ $t('common.help.title') }}</v-toolbar-title>
       </v-toolbar>
-      <v-form @keydown.native="errors.clear()" @submit.prevent="requestHelp">
+      <v-form @keydown="errors.clear()" @submit.prevent="requestHelp">
         <v-card-text>
           <p class="mx-2">
             {{ $t('common.help.text') }}
@@ -42,8 +37,8 @@
                   hide-details="auto"
                   :label="$t('common.name')"
                   name="name"
-                  outlined
                   prepend-inner-icon="fas fa-user"
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="12">
@@ -53,8 +48,8 @@
                   hide-details="auto"
                   :label="$t('common.email')"
                   name="email"
-                  outlined
                   prepend-inner-icon="fas fa-envelope"
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="4">
@@ -63,16 +58,19 @@
                   hide-details="auto"
                   :items="regionCodes"
                   name="phoneCountry"
-                  outlined
                   single-line
+                  variant="outlined"
                 >
-                  <template #item="{ item }">
-                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`" />
-                    {{ item.text }}
+                  <template #item="{ props, item }">
+                    <v-list-item v-bind="props" :title="item.raw.text">
+                      <template #prepend>
+                        <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
+                      </template>
+                    </v-list-item>
                   </template>
                   <template #selection="{ item }">
-                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`" />
-                    {{ item.countryCode }}
+                    <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
+                    {{ item.raw.countryCode }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -83,8 +81,8 @@
                   hide-details="auto"
                   :label="$t('common.phone')"
                   name="phone"
-                  outlined
                   prepend-inner-icon="fas fa-phone"
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="12">
@@ -95,26 +93,24 @@
                   hide-details="auto"
                   :label="$t('common.message')"
                   name="message"
-                  outlined
                   prepend-inner-icon="fas fa-message"
+                  variant="outlined"
                 />
               </v-col>
             </v-row>
             <v-row justify="center">
-              <v-col :cols="isMobile ? '12' : 'auto'">
+              <v-col :cols="$vuetify.display.mobile ? '12' : 'auto'">
                 <v-btn
-                  :block="isMobile"
+                  :block="$vuetify.display.mobile"
                   color="primary"
                   :disabled="errors.any()"
-                  outlined
                   rounded
+                  size="x-large"
                   :title="$t('common.help.title')"
                   type="submit"
-                  x-large
+                  variant="outlined"
                 >
-                  <v-icon left>
-                    fas fa-circle-question
-                  </v-icon>
+                  <v-icon icon="fas fa-circle-question" start />
                   {{ $t('common.help.title') }}
                 </v-btn>
               </v-col>
@@ -135,8 +131,8 @@ import type { SurveyHelpRequest } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
-import { surveyService } from '../services';
-import { useMessages } from '../stores';
+import { surveyService } from '../../services';
+import { useMessages } from '../../stores';
 
 export default defineComponent({
   name: 'RequestHelp',
@@ -155,13 +151,13 @@ export default defineComponent({
   emits: ['cancel'],
 
   setup(props, { emit }) {
-    const { i18n } = useI18n();
+    const { i18n: { t } } = useI18n();
 
     const regionCodes = getSupportedRegionCodes().map((code) => {
       const countryCode = `+${getCountryCodeForRegionCode(code)}`;
 
       return {
-        text: `${i18n.t(`flags.${code.toLowerCase()}`)} (${countryCode})`,
+        text: `${t(`flags.${code.toLowerCase()}`)} (${countryCode})`,
         value: code,
         countryCode,
       };
@@ -198,7 +194,7 @@ export default defineComponent({
 
       try {
         await surveyService.requestHelp(surveyId, form.value);
-        useMessages().info(i18n.t('common.help.sent').toString());
+        useMessages().info(t('common.help.sent'));
         reset();
         close();
       }

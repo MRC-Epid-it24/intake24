@@ -10,9 +10,9 @@
             hide-details="auto"
             :label="$t('common.file.csv')"
             name="file"
-            outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
+            variant="outlined"
             @change="errors.clear('params.file')"
           />
         </v-col>
@@ -25,8 +25,8 @@
             :items="searchSortingAlgorithms"
             :label="$t('jobs.types.LocaleFoodRankingUpload.targetAlgorithm')"
             name="targetAlgorithm"
-            outlined
-            @change="errors.clear('params.targetAlgorithm')"
+            variant="outlined"
+            @update:model-value="errors.clear('params.targetAlgorithm')"
           />
         </v-col>
       </v-row>
@@ -36,6 +36,7 @@
             elevation="2"
             prominent
             type="warning"
+            variant="tonal"
           >
             <h4 class="mb-6">
               {{ $t('jobs.types.LocaleFoodRankingUpload.warningTitle') }}
@@ -71,7 +72,7 @@ export default defineComponent({
     return {
       searchSortingAlgorithms: searchSortingAlgorithms.map(value => ({
         value,
-        text: i18n.t(`surveys.search.algorithms.${value}`),
+        title: i18n.t(`surveys.search.algorithms.${value}`),
       })),
     };
   },

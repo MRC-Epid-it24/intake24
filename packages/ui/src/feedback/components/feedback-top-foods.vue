@@ -55,14 +55,15 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { i18n } = useI18n();
+    const { i18n: { t }, translate } = useI18n();
 
     const charts = computed(() => {
       const { colors } = props.topFoods;
 
       const chartOptions: EChartsOption[] = props.topFoods.chartData.map((nutrient) => {
-        const { name, unit, data } = nutrient;
+        const { unit, data } = nutrient;
         const id = nutrient.id.join(':');
+        const name = translate(nutrient.name);
 
         return {
           textStyle: {
@@ -70,7 +71,7 @@ export default defineComponent({
           },
           id,
           title: {
-            text: i18n.t('feedback.topFoods.chart', { nutrient: name }).toString(),
+            text: t('feedback.topFoods.chart', { nutrient: name }),
             left: 'center',
             textStyle: {
               fontWeight: 'bolder',

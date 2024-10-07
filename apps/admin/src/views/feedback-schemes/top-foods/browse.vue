@@ -2,14 +2,14 @@
   <layout
     v-if="entryLoaded && refsLoaded"
     v-bind="{ id, entry }"
-    :route-leave.sync="routeLeave"
+    v-model:route-leave="routeLeave"
     @save="submit"
   >
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
-    <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-4" flat tile>
+      <v-icon color="secondary" end>
         fas fa-sort-amount-down
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
@@ -17,13 +17,13 @@
       </v-toolbar-title>
       <v-spacer />
       <options-menu>
-        <select-resource resource="feedback-schemes" return-object="topFoods" @input="load">
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+        <select-resource resource="feedback-schemes" return-object="topFoods" @update:model-value="load">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -32,12 +32,12 @@
         <json-editor-dialog v-model="form.topFoods" />
       </options-menu>
     </v-toolbar>
-    <v-form @keydown.native="clearError" @submit.prevent="submit">
+    <v-form @keydown="clearError" @submit.prevent="submit">
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
-            <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="secondary" left>
+            <v-toolbar color="grey-lighten-2" flat tile>
+              <v-icon color="secondary" end>
                 fas fa-palette
               </v-icon>
               <v-toolbar-title class="font-weight-medium">
@@ -46,22 +46,22 @@
               <v-spacer />
               <v-text-field
                 v-model.number="form.topFoods.max"
-                background-color="grey lighten-5"
-                dense
+                bg-color="grey lighten-5"
+                density="compact"
                 :error-messages="form.errors.get('topFoods.max')"
                 hide-details
                 :label="$t('feedback-schemes.top-foods.max._')"
                 name="topFoods.max"
-                outlined
                 :rules="topFoodsMaxRules"
                 single-line
                 :style="{ maxWidth: '75px' }"
+                variant="outlined"
               />
             </v-toolbar>
             <error-list :errors="nonInputErrors" />
             <color-list
               v-model="form.topFoods.colors"
-              :last-label="$t('feedback-schemes.top-foods.other').toString()"
+              :last-label="$t('feedback-schemes.top-foods.other')"
             />
           </v-col>
           <v-divider vertical />
@@ -137,7 +137,7 @@ export default defineComponent({
 
     const topFoodsMaxRules = computed<RuleCallback[]>(() => [
       (value: string | null): boolean | string =>
-        Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required').toString(),
+        Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required'),
     ]);
 
     const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData() }));

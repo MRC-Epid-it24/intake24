@@ -1,14 +1,14 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row class="mb-3">
       <v-col cols="12" md="6">
         <food-browser-settings
           :categories-first="categoriesFirst"
-          @update:categoriesFirst="update('categoriesFirst', $event)"
+          @update:categories-first="update('categoriesFirst', $event)"
         />
       </v-col>
     </v-row>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

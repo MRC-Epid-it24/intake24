@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-subheader>{{ $t('user.mfa.title') }}</v-subheader>
+    <v-list>
+      <v-list-subheader>{{ $t('user.mfa.title') }}</v-list-subheader>
+    </v-list>
     <v-card-text class="d-flex flex-row align-center justify-space-between">
       <v-switch
         v-model="status"
@@ -9,9 +11,9 @@
         hide-details="auto"
         :label="$t(`user.mfa.${status ? 'disable' : 'enable'}`)"
         name="status"
-        @change="toggle"
+        @update:model-value="toggle"
       />
-      <v-alert v-if="!devices.length" class="my-auto ml-4" dense text type="info">
+      <v-alert v-if="!devices.length" class="my-auto ml-4" density="compact" type="info">
         {{ $t('user.mfa.disabled') }}
       </v-alert>
     </v-card-text>
@@ -20,42 +22,35 @@
         {{ $t('user.mfa.devices.title') }}
       </v-toolbar-title>
       <v-spacer />
-      <v-dialog v-model="dialog" :fullscreen="isMobile" max-width="600px">
-        <template #activator="{ attrs, on }">
+      <v-dialog v-model="dialog" :fullscreen="$vuetify.display.mobile" max-width="600px">
+        <template #activator="{ props }">
           <v-btn
-            v-bind="attrs"
-            color="secondary"
-            outlined
+
+            color="primary"
             rounded
             :title="$t('user.mfa.devices.add')"
-            v-on="on"
+            variant="flat"
+            v-bind="props"
           >
-            <v-icon left>
-              $add
-            </v-icon>
+            <v-icon icon="$add" start />
             {{ $t('user.mfa.devices.add') }}
           </v-btn>
         </template>
-        <v-card :tile="isMobile">
+        <v-card :tile="$vuetify.display.mobile">
           <v-toolbar color="secondary" dark flat>
-            <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-              <v-icon>$cancel</v-icon>
-            </v-btn>
+            <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
             <v-toolbar-title>
               {{ $t('user.mfa.devices.add') }}
             </v-toolbar-title>
           </v-toolbar>
-          <v-tabs v-model="tab" background-color="secondary" dark grow @change="clear">
-            <v-tabs-slider />
-            <v-tab v-for="provider in providers" :key="provider" :href="`#${provider}`">
-              <v-icon left>
-                {{ `$${provider}` }}
-              </v-icon>
+          <v-tabs v-model="tab" bg-color="secondary" grow @update:model-value="clear">
+            <v-tab v-for="provider in providers" :key="provider">
+              <v-icon :icon="`$${provider}`" start />
               {{ $t(`user.mfa.providers.${provider}._`) }}
             </v-tab>
           </v-tabs>
-          <v-tabs-items v-model="tab">
-            <v-tab-item v-for="provider in providers" :key="provider" :value="provider">
+          <v-tabs-window v-model="tab">
+            <v-tabs-window-item v-for="provider in providers" :key="provider" :value="provider">
               <v-card flat>
                 <v-card-title class="text-h5 font-weight-bold mb-2">
                   {{ $t(`user.mfa.providers.${provider}.title`) }}
@@ -65,60 +60,58 @@
                 </v-card-subtitle>
                 <component :is="provider" ref="providerRefs" @registered="add" />
               </v-card>
-            </v-tab-item>
-          </v-tabs-items>
+            </v-tabs-window-item>
+          </v-tabs-window>
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-list flat>
+    <v-list>
       <transition-group v-if="devices.length" name="drag-and-drop" type="transition">
-        <template v-for="(device, idx) in devices">
-          <v-list-item :key="device.id" link>
-            <v-list-item-avatar>
+        <template v-for="(device, idx) in devices" :key="device.id">
+          <v-list-item link>
+            <template #prepend>
               <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
                 {{ `$${device.provider}` }}
               </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ device.name }}</v-list-item-title>
-              <v-list-item-subtitle>
-                {{ $t(`user.mfa.providers.${device.provider}.title`) }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-chip v-if="device.preferred" color="secondary" outlined>
-                {{ $t('user.mfa.devices.preferred._') }}
-              </v-chip>
-              <confirm-dialog
-                v-else
-                color="secondary"
-                icon
-                icon-left="far fa-circle-up"
-                :label="$t('user.mfa.devices.preferred.promote').toString()"
-                @confirm="promote(device.id, idx)"
-              >
-                {{ $t('user.mfa.devices.preferred.promoteConfirm', { name: device.name }) }}
-              </confirm-dialog>
-            </v-list-item-action>
-            <v-list-item-action>
-              <confirm-dialog
-                color="error"
-                icon
-                icon-left="$delete"
-                :label="$t('user.mfa.devices.remove').toString()"
-                @confirm="remove(device.id)"
-              >
-                {{ $t('common.action.confirm.delete', { name: device.name }) }}
-              </confirm-dialog>
-            </v-list-item-action>
+            </template>
+            <v-list-item-title>{{ device.name }}</v-list-item-title>
+            <v-list-item-subtitle>
+              {{ $t(`user.mfa.providers.${device.provider}.title`) }}
+            </v-list-item-subtitle>
+            <template #append>
+              <v-list-item-action>
+                <v-chip v-if="device.preferred" color="secondary" variant="outlined">
+                  {{ $t('user.mfa.devices.preferred._') }}
+                </v-chip>
+                <confirm-dialog
+                  v-else
+                  color="secondary"
+                  icon
+                  icon-left="far fa-circle-up"
+                  :label="$t('user.mfa.devices.preferred.promote')"
+                  @confirm="promote(device.id, idx)"
+                >
+                  {{ $t('user.mfa.devices.preferred.promoteConfirm', { name: device.name }) }}
+                </confirm-dialog>
+              </v-list-item-action>
+              <v-list-item-action>
+                <confirm-dialog
+                  color="error"
+                  icon
+                  icon-left="$delete"
+                  :label="$t('user.mfa.devices.remove')"
+                  @confirm="remove(device.id)"
+                >
+                  {{ $t('common.action.confirm.delete', { name: device.name }) }}
+                </confirm-dialog>
+              </v-list-item-action>
+            </template>
           </v-list-item>
           <v-divider v-if="idx + 1 < devices.length" :key="`div-${device.id}`" />
         </template>
       </transition-group>
       <v-list-item v-else>
-        <v-list-item-content>
-          <v-list-item-title>{{ $t('user.mfa.devices.none') }}</v-list-item-title>
-        </v-list-item-content>
+        <v-list-item-title>{{ $t('user.mfa.devices.none') }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </div>
@@ -181,7 +174,7 @@ export default defineComponent({
 
     async toggle() {
       if (!this.devices.length) {
-        useMessages().info(this.$t('user.mfa.devices.none').toString());
+        useMessages().info(this.$t('user.mfa.devices.none'));
         return;
       }
 
@@ -190,7 +183,7 @@ export default defineComponent({
       }
       catch (err) {
         if (isAxiosError(err) && err.response?.status === HttpStatusCode.Forbidden) {
-          useMessages().info(this.$t('user.mfa.devices.none').toString());
+          useMessages().info(this.$t('user.mfa.devices.none'));
           return;
         }
 

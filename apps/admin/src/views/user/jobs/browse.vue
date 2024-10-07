@@ -1,75 +1,61 @@
 <template>
-  <div>
-    <h2 class="mb-4">
-      {{ $t('user.profile') }}
-    </h2>
-    <data-table :actions="['create', 'download', 'read']" api-url="admin/user/jobs" :headers="headers">
-      <template #[`item.successful`]="{ item }">
-        <v-icon v-if="item.successful" color="success">
-          $check
-        </v-icon>
-        <v-icon v-else color="error">
-          $times
-        </v-icon>
-      </template>
-      <template #[`item.startedAt`]="{ item }">
-        {{ formatDateTime(item.startedAt) }}
-      </template>
-    </data-table>
-  </div>
+  <h2 class="mb-4">
+    {{ $t('user.profile') }}
+  </h2>
+  <data-table :actions="['create', 'download', 'read']" api-url="admin/user/jobs" :headers="headers">
+    <template #[`item.successful`]="{ item }">
+      <v-icon v-if="item.successful" color="success">
+        $check
+      </v-icon>
+      <v-icon v-else color="error">
+        $times
+      </v-icon>
+    </template>
+    <template #[`item.startedAt`]="{ item }">
+      {{ formatDateTime(item.startedAt) }}
+    </template>
+  </data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
 import { useDateTime } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'UserJobList',
+defineOptions({ name: 'UserJobList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
+const { formatDateTime } = useDateTime();
 
-  setup() {
-    const { formatDateTime } = useDateTime();
-
-    return {
-      formatDateTime,
-    };
+const headers = ref<DataTableHeader[]>([
+  {
+    title: t('common.id'),
+    sortable: true,
+    key: 'id',
   },
-
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('common.id'),
-          sortable: true,
-          value: 'id',
-        },
-        {
-          text: this.$t('common.type'),
-          sortable: true,
-          value: 'type',
-        },
-        {
-          text: this.$t('common.startedAt'),
-          sortable: true,
-          value: 'startedAt',
-        },
-        {
-          text: this.$t('common.status'),
-          sortable: false,
-          value: 'successful',
-          align: 'center',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+  {
+    title: t('common.type'),
+    sortable: true,
+    key: 'type',
   },
-});
+  {
+    title: t('common.startedAt'),
+    sortable: true,
+    key: 'startedAt',
+  },
+  {
+    title: t('common.status'),
+    sortable: false,
+    key: 'successful',
+    align: 'center',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+]);
 </script>

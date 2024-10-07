@@ -2,71 +2,71 @@
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <div class="py-4">
       <div v-for="meal in meals" :key="meal.id">
-        <div class="subtitle-1 font-weight-medium px-4 py-2">
+        <div class="text-subtitle-1 font-weight-medium px-4 py-2">
           {{ translate(meal.name) }}
         </div>
         <v-divider />
-        <v-list dense>
+        <v-list density="compact">
           <v-list-item v-for="food in meal.foods" :key="food.id">
-            <v-list-item-content>
-              <v-list-item-title class="mb-4">
-                <!-- @vue-expect-error TODO: improve type (encoded foods filtered in handler) -->
-                {{ food.data.localName }}
-              </v-list-item-title>
-              <div v-for="(addon, idx) in foods[food.id]" :key="idx" class="d-flex flex-column flex-md-row align-stretch align-md-center ga-2">
-                <v-btn-toggle
-                  color="primary"
-                  :value="addon.confirmed"
-                  @change="updateConfirmed(food.id, idx, $event)"
-                >
-                  <v-btn class="px-4" height="40" :value="false">
-                    {{ promptI18n.didNotHave }}
-                  </v-btn>
-                </v-btn-toggle>
-                <v-select
-                  dense
-                  hide-details="auto"
-                  item-text="localName"
-                  item-value="code"
-                  :items="addonFoods"
-                  :label="promptI18n.food"
-                  outlined
-                  return-object
-                  :value="addon.data"
-                  @input="updateFood(food.id, idx, $event)"
-                />
-                <!-- @vue-expect-error vuetify2 not typed closure -->
-                <v-select
-                  v-model="addon.portionSize.unit"
-                  dense
-                  :disabled="!addon.data"
-                  hide-details="auto"
-                  :item-text="(item) => getStandardUnitEstimateIn(item)"
-                  item-value="name"
-                  :items="getAddonFoodsUnits(food.id, idx)"
-                  :label="promptI18n.portion"
-                  outlined
-                  return-object
-                  @change="updateUnit(food.id, idx)"
-                />
-                <v-select
-                  v-model="addon.portionSize.quantity"
-                  dense
-                  :disabled="!addon.data"
-                  hide-details="auto"
-                  :items="[0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-                  :label="promptI18n.quantity"
-                  outlined
-                  @change="updateQuantity(food.id, idx)"
-                />
-                <v-icon
-                  v-if="isAddonFoodValid(addon)"
-                  color="green"
-                >
-                  $check
-                </v-icon>
-              </div>
-            </v-list-item-content>
+            <v-list-item-title class="mb-4">
+              <!-- @vue-expect-error TODO: improve type (encoded foods filtered in handler) -->
+              {{ food.data.localName }}
+            </v-list-item-title>
+            <div v-for="(addon, idx) in foods[food.id]" :key="idx" class="d-flex flex-column flex-md-row align-stretch align-md-center ga-2">
+              <v-btn-toggle
+                base-color="grey-lighten-4"
+                class="align-self-stretch"
+                color="primary"
+                :model-value="addon.confirmed"
+                :style="{ 'height': 'unset', 'min-height': '40px' }"
+                @update:model-value="updateConfirmed(food.id, idx, $event)"
+              >
+                <v-btn class="px-4" :value="false">
+                  {{ promptI18n.didNotHave }}
+                </v-btn>
+              </v-btn-toggle>
+              <v-select
+                density="compact"
+                :disabled="addon.confirmed === false"
+                hide-details="auto"
+                item-title="localName"
+                item-value="code"
+                :items="addonFoods"
+                :label="promptI18n.food"
+                :model-value="addon.data"
+                return-object
+                variant="outlined"
+                @update:model-value="updateFood(food.id, idx, $event)"
+              />
+              <v-select
+                v-model="addon.portionSize.unit"
+                density="compact"
+                :disabled="addon.confirmed === false || !addon.data"
+                hide-details="auto"
+                :item-title="(item) => getStandardUnitEstimateIn(item)"
+                item-value="name"
+                :items="getAddonFoodsUnits(food.id, idx)"
+                :label="promptI18n.portion"
+                return-object
+                variant="outlined"
+                @update:model-value="updateUnit(food.id, idx)"
+              />
+              <v-select
+                v-model="addon.portionSize.quantity"
+                density="compact"
+                :disabled="addon.confirmed === false || !addon.data"
+                hide-details="auto"
+                :items="[0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+                :label="promptI18n.quantity"
+                variant="outlined"
+                @update:model-value="updateQuantity(food.id, idx)"
+              />
+              <v-icon
+                v-if="isAddonFoodValid(addon)"
+                color="green"
+                icon="$check"
+              />
+            </div>
           </v-list-item>
         </v-list>
       </div>
@@ -112,18 +112,18 @@ export default defineComponent({
       type: Array as PropType<MealState[]>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<PromptStates['addon-foods-prompt']>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
+    const { translate } = useI18n();
     const { action, translatePrompt } = usePromptUtils(props, ctx);
     const { resolveStandardUnits, getStandardUnitEstimateIn } = useStandardUnits();
-    const { translate } = useI18n();
 
     const promptI18n = computed(() =>
       translatePrompt([
@@ -134,7 +134,7 @@ export default defineComponent({
       ]),
     );
 
-    const foods = ref(copy(props.value.foods));
+    const foods = ref(copy(props.modelValue.foods));
     const addonFoods = ref<UserFoodData[]>([]);
     const addonFoodUnits = computed(() => addonFoods.value.reduce<Record<string, { conversionFactor: number; units: StandardUnit[] }>>((acc, food) => {
       let conversionFactor = 0;
@@ -180,7 +180,7 @@ export default defineComponent({
     }
 
     async function update() {
-      ctx.emit('input', { foods: foods.value });
+      ctx.emit('update:modelValue', { foods: foods.value });
     };
 
     async function updatePortionSize(foodId: string, idx: number) {

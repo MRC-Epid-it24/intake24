@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-card-text>
       <v-row>
         <v-col cols="12" lg="4" md="6">
@@ -8,28 +8,32 @@
           </v-card-title>
           <v-select
             :items="[1, 5, 10, 15, 20, 30]"
-            outlined
+            :model-value="allowedMinutes"
             prepend-inner-icon="fas fa-stopwatch"
-            :value="allowedMinutes"
-            @input="update('allowedMinutes', $event)"
+            variant="outlined"
+            @update:model-value="update('allowedMinutes', $event)"
           >
-            <template #item="{ item }">
-              <i18n path="survey-schemes.prompts.timePicker.allowedMinutes.item">
-                <template #item>
-                  <v-chip>
-                    <span>{{ item }}</span>
-                  </v-chip>
-                </template>
-              </i18n>
+            <template #item="{ item, props }">
+              <v-list-item v-bind="props">
+                <v-list-item-title>
+                  <i18n-t keypath="survey-schemes.prompts.timePicker.allowedMinutes.item">
+                    <template #item>
+                      <v-chip class="mx-1">
+                        <span>{{ item.raw }}</span>
+                      </v-chip>
+                    </template>
+                  </i18n-t>
+                </v-list-item-title>
+              </v-list-item>
             </template>
             <template #selection="{ item }">
-              <i18n path="survey-schemes.prompts.timePicker.allowedMinutes.item">
+              <i18n-t keypath="survey-schemes.prompts.timePicker.allowedMinutes.item">
                 <template #item>
-                  <v-chip>
-                    <span>{{ item }}</span>
+                  <v-chip class="mx-1">
+                    <span>{{ item.raw }}</span>
                   </v-chip>
                 </template>
-              </i18n>
+              </i18n-t>
             </template>
           </v-select>
         </v-col>
@@ -41,8 +45,8 @@
             class="d-flex"
             color="primary"
             mandatory
-            :value="format"
-            @change="update('format', $event)"
+            :model-value="format"
+            @update:model-value="update('format', $event)"
           >
             <v-btn
               class="px-10 flex-grow-1 flex-md-grow-0"
@@ -62,7 +66,7 @@
         </v-col>
       </v-row>
     </v-card-text>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

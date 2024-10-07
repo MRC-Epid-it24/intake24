@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="thresholds" value="thresholds">
+  <v-tabs-window-item key="thresholds" value="thresholds">
     <v-container>
       <v-row>
         <v-col v-for="(item, key) in { low, high }" :key="key" cols="12" md="6">
@@ -10,9 +10,9 @@
             <v-switch
               class="my-4"
               hide-details="auto"
-              :input-value="!!item"
               :label="$t('feedback-schemes.cards.thresholds.enabled')"
-              @change="toggleThreshold(key, $event)"
+              :model-value="!!item"
+              @update:model-value="toggleThreshold(key, $event)"
             />
             <template v-if="item">
               <v-slider
@@ -25,10 +25,11 @@
               />
               <language-selector
                 v-model="item.message"
-                :label="$t('feedback-schemes.cards.thresholds.message').toString()"
+                border
+                :label="$t('feedback-schemes.cards.thresholds.message')"
               >
-                <template v-for="lang in Object.keys(item.message)" #[`lang.${lang}`]>
-                  <html-editor :key="lang" v-model="item.message[lang]" />
+                <template v-for="lang in Object.keys(item.message)" :key="lang" #[`lang.${lang}`]>
+                  <html-editor v-model="item.message[lang]" />
                 </template>
               </language-selector>
             </template>
@@ -36,7 +37,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

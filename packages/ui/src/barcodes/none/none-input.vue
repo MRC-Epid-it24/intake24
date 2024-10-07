@@ -2,7 +2,6 @@
   <v-text-field
     v-bind="{ name, ...$attrs }"
     v-model="barcode"
-    v-on="$listeners"
   />
 </template>
 
@@ -28,7 +27,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:model-value']);
+const emit = defineEmits(['update:modelValue']);
 
 const barcode = useVModel(props, 'modelValue', emit);
 </script>

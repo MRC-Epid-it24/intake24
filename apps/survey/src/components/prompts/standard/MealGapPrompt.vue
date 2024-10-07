@@ -1,18 +1,18 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #prompt-description>
-      <div class="px-4 pt-4" :class="{ 'pb-4': isMobile }" v-html="promptI18n.description" />
+      <div class="px-4 pt-4" :class="{ 'pb-4': $vuetify.display.mobile }" v-html="promptI18n.description" />
     </template>
     <template #actions>
       <v-btn
         class="px-4"
         color="primary"
-        large
-        text
+        size="large"
         :title="promptI18n.yes"
+        variant="text"
         @click.stop="action('addMeal')"
       >
-        <v-icon left>
+        <v-icon start>
           $add
         </v-icon>
         {{ promptI18n.yes }}
@@ -20,19 +20,19 @@
       <v-btn
         class="px-4"
         color="primary"
-        large
-        text
+        size="large"
         :title="promptI18n.no"
+        variant="text"
         @click.stop="action('next')"
       >
-        <v-icon left>
+        <v-icon start>
           $next
         </v-icon>
         {{ promptI18n.no }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn color="primary" text :title="promptI18n.yes" @click.stop="action('addMeal')">
+      <v-btn color="primary" :title="promptI18n.yes" variant="text" @click.stop="action('addMeal')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.yes }}
         </span>
@@ -41,7 +41,7 @@
         </v-icon>
       </v-btn>
       <v-divider vertical />
-      <v-btn color="primary" text :title="promptI18n.no" @click.stop="action('next')">
+      <v-btn color="primary" :title="promptI18n.no" variant="text" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>
@@ -76,7 +76,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { i18n } = useI18n();
+    const { i18n: { t } } = useI18n();
     const { action, translatePrompt, type } = usePromptUtils(props, ctx);
     const { getMealName, getMealTime } = useMealUtils();
 
@@ -84,7 +84,7 @@ export default defineComponent({
       const [startMeal, endMeal] = props.meals;
 
       if (startMeal && endMeal) {
-        return i18n.t(`prompts.${type.value}.between`, {
+        return t(`prompts.${type.value}.between`, {
           startMeal: getMealName(startMeal),
           startMealTime: getMealTime(startMeal) ?? '',
           endMeal: getMealName(endMeal),
@@ -93,14 +93,14 @@ export default defineComponent({
       }
 
       if (startMeal) {
-        return i18n.t(`prompts.${type.value}.before`, {
+        return t(`prompts.${type.value}.before`, {
           meal: getMealName(startMeal),
           mealTime: getMealTime(startMeal) ?? '',
         });
       }
 
       if (endMeal) {
-        return i18n.t(`prompts.${type.value}.after`, {
+        return t(`prompts.${type.value}.after`, {
           meal: getMealName(endMeal),
           mealTime: getMealTime(endMeal) ?? '',
         });

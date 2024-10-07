@@ -12,7 +12,7 @@ import {
 } from '@intake24/common/surveys';
 
 import { z } from '../../util';
-import { customField } from '../common';
+import { userCustomField } from '../common';
 import { feedbackSchemeResponse } from './feedback';
 
 export const generateUserResponse = z.object({
@@ -27,7 +27,7 @@ export const createUserResponse = z.object({
   username: z.string(),
   authToken: z.string(),
   name: z.string().nullish(),
-  customFields: customField.array().optional(),
+  customFields: userCustomField.array().optional(),
   redirectUrl: z.string().optional(),
 });
 
@@ -73,6 +73,9 @@ export const surveyUserInfoResponse = z.object({
   userId: z.string().openapi({ title: 'Internal (numerical) Intake24 user ID' }),
   name: z.string().nullable().openapi({
     title: 'Optional user name for personalization',
+  }),
+  customFields: z.record(z.string()).openapi({
+    description: 'Public user custom fields',
   }),
   submissions: z.number().openapi({ description: 'Number of collected submissions' }),
   showFeedback: z.boolean().openapi({ description: 'Whether to show feedback' }),

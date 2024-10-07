@@ -1,24 +1,22 @@
 <template>
-  <v-card class="mb-4" v-bind="{ disabled, flat, outlined, tile }">
-    <v-toolbar color="grey lighten-4" v-bind="{ flat, tile }" flat>
-      <v-toolbar-title class="toolbar">
+  <v-card v-bind="{ border, disabled, flat, outlined, tile }">
+    <v-toolbar color="grey-lighten-4" v-bind="{ flat, tile }">
+      <v-toolbar-title class="">
         {{ label }}
       </v-toolbar-title>
       <v-spacer />
-      <v-menu bottom left>
-        <template #activator="{ attrs, on }">
+      <v-menu location="bottom left">
+        <template #activator="{ props }">
           <v-btn
+            class="me-2"
             color="primary"
             :disabled="!availableLanguages.length"
-            fab
-            small
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon>$add</v-icon>
-          </v-btn>
+            v-bind="props"
+            icon="$add"
+            size="small"
+          />
         </template>
-        <v-list class="grey lighten-3">
+        <v-list class="bg-grey-lighten-3">
           <v-list-item v-for="lang in availableLanguages" :key="lang.code" @click="add(lang.code)">
             <span :class="`fi fi-${lang.countryFlagCode} mr-3`" />
             <span class="font-weight-medium">{{ lang.englishName }}</span>
@@ -26,8 +24,7 @@
         </v-list>
       </v-menu>
       <template v-if="languages.length" #extension>
-        <v-tabs v-model="selected" background-color="grey lighten-4">
-          <v-tabs-slider />
+        <v-tabs v-model="selected" bg-color="grey-lighten-4">
           <v-tab v-for="lang in languages" :key="lang">
             <span :class="`fi fi-${getLanguageFlag(lang)} mr-3`" />
             <span class="font-weight-medium">{{ getLanguageName(lang) }}</span>
@@ -35,21 +32,19 @@
         </v-tabs>
       </template>
     </v-toolbar>
-    <v-tabs-items v-model="selected">
-      <v-tab-item v-for="lang in languages" :key="lang">
+    <v-tabs-window v-model="selected">
+      <v-tabs-window-item v-for="lang in languages" :key="lang">
         <v-card-text>
           <slot :lang="lang" :name="`lang.${lang}`" />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="error" :disabled="isRemoveDisabled" text @click.stop="remove">
-            <v-icon left>
-              $delete
-            </v-icon>{{ $t('common.action.delete') }}
+          <v-btn color="error" :disabled="isRemoveDisabled" variant="text" @click.stop="remove">
+            <v-icon icon="$delete" start />{{ $t('common.action.delete') }}
           </v-btn>
         </v-card-actions>
-      </v-tab-item>
-    </v-tabs-items>
+      </v-tabs-window-item>
+    </v-tabs-window>
   </v-card>
 </template>
 
@@ -71,15 +66,8 @@ export default defineComponent({
   name: 'LanguageSelector',
 
   props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: Object as PropType<
-        LocaleTranslation | RequiredLocaleTranslation | LocaleOptionList<ZodString | ZodNumber>
-      >,
-      required: true,
+    border: {
+      type: Boolean,
     },
     default: {
       type: [String, Array],
@@ -89,13 +77,22 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    modelValue: {
+      type: Object as PropType<
+        LocaleTranslation | RequiredLocaleTranslation | LocaleOptionList<ZodString | ZodNumber>
+      >,
+      required: true,
+    },
     flat: {
       type: Boolean,
       default: true,
     },
+    label: {
+      type: String,
+      required: true,
+    },
     outlined: {
       type: Boolean,
-      default: true,
     },
     required: {
       type: Boolean,
@@ -106,13 +103,13 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'lang-add', 'lang-remove'],
+  emits: ['update:modelValue', 'lang-add', 'lang-remove'],
 
   setup(props, { emit }) {
     const selected = ref<number | undefined>(undefined);
     const doNotRemove = computed(() => (props.required ? [english.code] : []));
 
-    const languages = computed(() => Object.keys(props.value));
+    const languages = computed(() => Object.keys(props.modelValue));
 
     watch(
       () => languages.value.length,
@@ -142,7 +139,7 @@ export default defineComponent({
       allLanguages.value.find(lang => lang.code === code)?.englishName ?? english.englishName;
 
     const add = async (code: string) => {
-      emit('input', { ...props.value, [code]: props.default });
+      emit('update:modelValue', { ...props.modelValue, [code]: props.default });
       emit('lang-add', code);
     };
 
@@ -151,8 +148,8 @@ export default defineComponent({
         return;
 
       const code = languages.value[selected.value];
-      const { [code]: remove, ...rest } = props.value;
-      emit('input', { ...rest });
+      const { [code]: remove, ...rest } = props.modelValue;
+      emit('update:modelValue', { ...rest });
       emit('lang-remove', code);
     };
 
@@ -173,7 +170,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.toolbar {
-  font-size: 110%;
-}
 </style>

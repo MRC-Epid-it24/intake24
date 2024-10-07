@@ -1,5 +1,5 @@
 <template>
-  <v-row class="pt-0" justify="center" :no-gutters="isMobile">
+  <v-row class="pt-0" justify="center" :no-gutters="$vuetify.display.mobile">
     <v-col class="pa-0" cols="12">
       <transition mode="out-in" name="component-fade">
         <component

@@ -1,14 +1,55 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import 'vuetify/styles';
+
+import { createVuetify } from 'vuetify';
+import * as directives from 'vuetify/directives';
+import { aliases, fa } from 'vuetify/iconsets/fa';
+import { VTimePicker } from 'vuetify/labs/VTimePicker';
 
 import { colors } from '@intake24/common/theme';
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+export default createVuetify({
+  components: {
+    VTimePicker,
+  },
+  directives,
+  defaults: {
+    VBtn: {
+      variant: 'flat',
+    },
+    VCardActions: {
+      VBtn: {
+        variant: 'flat',
+      },
+    },
+    VCombobox: {
+      variant: 'outlined',
+    },
+    VExpansionPanels: {
+      eager: true,
+    },
+    VFileInput: {
+      variant: 'outlined',
+    },
+    VSelect: {
+      variant: 'outlined',
+    },
+    VSwitch: {
+      color: 'primary',
+    },
+    VTextField: {
+      variant: 'outlined',
+    },
+    VTextarea: {
+      variant: 'outlined',
+    },
+  },
+  display: {
+    mobileBreakpoint: 'md',
+  },
   icons: {
-    iconfont: 'fa',
-    values: {
+    defaultSet: 'fa',
+    aliases: {
+      ...aliases,
       add: 'fas fa-circle-plus',
       back: 'fas fa-arrow-left',
       cancel: 'fas fa-xmark',
@@ -48,11 +89,14 @@ export default new Vuetify({
       survey: 'fas fa-poll-h',
       yes: 'far fa-circle-check',
     },
+    sets: {
+      fa,
+    },
   },
   theme: {
     themes: {
       light: {
-        ...colors,
+        colors,
       },
     },
   },

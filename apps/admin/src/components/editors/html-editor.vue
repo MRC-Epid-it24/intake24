@@ -1,6 +1,6 @@
 <template>
   <div>
-    <editor v-bind="{ init, value }" @input="$emit('input', $event)" />
+    <editor v-bind="{ init, modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
     <v-messages v-show="hasErrors" class="mt-3 mx-2" color="error" :value="errors" />
   </div>
 </template>
@@ -26,7 +26,8 @@ import 'tinymce/skins/ui/oxide/content.js';
 
 import type { PropType } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useLocale } from 'vuetify';
 
 export default defineComponent({
   name: 'HtmlEditor',
@@ -41,56 +42,54 @@ export default defineComponent({
       type: [String, Array],
       default: () => [],
     },
-    value: {
+    modelValue: {
       type: String as PropType<string | null>,
       default: '',
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
-  data() {
-    return {
-      tinymceDefaults: {
-        license_key: 'gpl',
-        skin_url: 'default',
-        content_css: 'default',
-        directionality: this.$vuetify.rtl ? 'rtl' : 'ltr',
-        default_link_target: '_blank',
-        height: 400,
-        menubar: false,
-        paste_as_text: true,
-        plugins: [
-          'advlist',
-          'autolink',
-          'code',
-          'fullscreen',
-          'image',
-          'link',
-          'lists',
-          'media',
-          'preview',
-          'table',
-        ],
-        toolbar:
+  setup(props) {
+    const vLocale = useLocale();
+
+    const tinymceDefaults = {
+      license_key: 'gpl',
+      skin_url: 'default',
+      content_css: 'default',
+      directionality: vLocale.isRtl.value ? 'rtl' : 'ltr',
+      default_link_target: '_blank',
+      height: 400,
+      menubar: false,
+      paste_as_text: true,
+      plugins: [
+        'advlist',
+        'autolink',
+        'code',
+        'fullscreen',
+        'image',
+        'link',
+        'lists',
+        'media',
+        'preview',
+        'table',
+      ],
+      toolbar:
           'undo redo | formatselect | bold italic strikethrough | forecolor backcolor | hr | link image media | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | preview fullscreen code',
-      },
     };
-  },
 
-  computed: {
-    errors() {
-      return typeof this.errorMessages === 'string' ? [this.errorMessages] : this.errorMessages;
-    },
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
-    init() {
-      return {
-        ...this.tinymceDefaults,
-        ...(this.initProps ?? {}),
-      };
-    },
+    const errors = computed(() => {
+      return typeof props.errorMessages === 'string' ? [props.errorMessages] : props.errorMessages;
+    });
+
+    const hasErrors = computed(() => !!errors.value.length);
+
+    const init = computed(() => ({
+      ...tinymceDefaults,
+      ...(props.initProps ?? {}),
+    }));
+
+    return { errors, hasErrors, init, tinymceDefaults };
   },
 });
 </script>

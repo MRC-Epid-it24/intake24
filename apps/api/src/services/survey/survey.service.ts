@@ -218,15 +218,20 @@ function surveyService({
       attributes: ['id', 'name'],
       include: [{
         association: 'customFields',
-        attributes: ['name', 'value'],
-        required: false,
-        where: { name: 'it24:feedback' },
+        attributes: ['name', 'value', 'public'],
       }],
     });
     if (!user)
       throw new NotFoundError();
-    const { name } = user;
-    const userFeedbackDisabled = ['0', 'false'].includes(user.customFields?.at(0)?.value ?? 'true');
+    const { name, customFields: userCustomFields = [] } = user;
+    const userFeedbackDisabled = ['0', 'false'].includes(userCustomFields.find(field => field.name === 'it24:feedback')?.value ?? 'true');
+
+    const customFields = userCustomFields.reduce((acc, item) => {
+      if (item.public)
+        acc[item.name] = item.value;
+
+      return acc;
+    }, {} as Record<string, string>);
 
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
@@ -250,6 +255,7 @@ function surveyService({
     return {
       userId,
       name,
+      customFields,
       submissions: totalSubmissions,
       showFeedback: !!(!userFeedbackDisabled && feedbackSchemeId && totalSubmissions >= numberOfSubmissionsForFeedback),
       maximumTotalSubmissionsReached:

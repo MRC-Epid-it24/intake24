@@ -13,23 +13,17 @@
     </v-card-subtitle>
     <v-card-actions>
       <v-btn @click="onAddRow">
-        <v-icon left>
-          fas fa-plus
-        </v-icon>
+        <v-icon icon="fas fa-plus" start />
       </v-btn>
       <v-btn @click="onRemoveLastRow">
-        <v-icon left>
-          fas fa-trash
-        </v-icon>{{ $t('drinkware-sets.volumeTable.removeRow') }}
+        <v-icon icon="fas fa-trash" start />{{ $t('drinkware-sets.volumeTable.removeRow') }}
       </v-btn>
       <v-btn :disabled="pasteDisabled" @click="onPasteData">
-        <v-icon left>
-          fas fa-clipboard
-        </v-icon>{{ $t('drinkware-sets.volumeTable.paste') }}
+        <v-icon icon="fas fa-clipboard" start />{{ $t('drinkware-sets.volumeTable.paste') }}
       </v-btn>
     </v-card-actions>
     <v-card-text>
-      <v-simple-table>
+      <v-table>
         <thead>
           <tr>
             <th class="text-left">
@@ -45,28 +39,28 @@
             <td>
               <v-text-field
                 v-model="volumeSampleRows[index][0]"
-                background-color="#0000"
-                dense
+                bg-color="#0000"
+                density="compact"
                 flat
                 hide-details
-                solo
+                variant="solo"
                 @change="onDataChanged"
               />
             </td>
             <td>
               <v-text-field
                 v-model="volumeSampleRows[index][1]"
-                background-color="#0000"
-                dense
+                bg-color="#0000"
+                density="compact"
                 flat
                 hide-details
-                solo
+                variant="solo"
                 @change="onDataChanged"
               />
             </td>
           </tr>
         </tbody>
-      </v-simple-table>
+      </v-table>
     </v-card-text>
   </v-card>
 </template>

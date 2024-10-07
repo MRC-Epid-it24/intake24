@@ -47,6 +47,7 @@ export default () => {
       'userId',
       'name',
       'submissions',
+      'customFields',
       'showFeedback',
       'maximumTotalSubmissionsReached',
       'maximumDailySubmissionsReached',

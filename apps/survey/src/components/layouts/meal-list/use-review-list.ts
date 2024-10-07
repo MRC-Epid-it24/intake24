@@ -7,11 +7,11 @@ export type UseReviewListProps = {
   review: ReviewOptions;
 };
 
-export function useReviewList(props: UseReviewListProps, ctx: SetupContext) {
+export function useReviewList(props: UseReviewListProps, ctx: SetupContext<('bottom-reached' | 'reviewed')[]>) {
   const bottomReached = ref(false);
   const reviewed = ref<string[]>([]);
 
-  const bottomIntersect = (entries: IntersectionObserverEntry[]) => {
+  const bottomIntersect = (isIntersecting: boolean, entries: IntersectionObserverEntry[]) => {
     if (!entries[0].isIntersecting)
       return;
 

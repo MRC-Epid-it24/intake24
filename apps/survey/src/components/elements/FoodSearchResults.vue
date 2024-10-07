@@ -1,16 +1,13 @@
 <template>
-  <v-list-item-group>
-    <v-list-item
-      v-for="food in results.foods"
-      :key="food.code"
-      class="list-item-border"
-      @click="foodSelected(food)"
-    >
-      <v-list-item-content>
-        <v-list-item-title>{{ food.name }}</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-  </v-list-item-group>
+  <v-list-item
+    v-for="food in results.foods"
+    :key="food.code"
+    class="list-item-border"
+    :value="food.code"
+    @click="foodSelected(food)"
+  >
+    <v-list-item-title>{{ food.name }}</v-list-item-title>
+  </v-list-item>
 </template>
 
 <script lang="ts">

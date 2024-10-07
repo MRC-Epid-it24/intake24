@@ -1,25 +1,31 @@
-@import 'vuetify/src/styles/styles.sass';
+@use 'settings';
+@import 'variables';
 
 // Libs
 @import 'fontawesome';
 @import 'flags';
 
+// Not padded sidebar
+.v-list-group__items .v-list-item {
+  padding-inline-start: 8px !important;
+}
+
 .list-bordered {
   > :not(:last-child) {
-    border-bottom: 1px solid map-get($grey, 'lighten-3');
+    border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
   }
 }
 
 .list-item-border {
   &:not(:last-child) {
-    border-bottom: 1px solid map-get($grey, 'lighten-3');
+    border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
   }
 }
 
 // Drag & drop lists
 .drag-and-drop__item {
   &:not(:last-child) {
-    border-bottom: 1px solid map-get($grey, 'lighten-3');
+    border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
   }
 
   .drag-and-drop__handle {

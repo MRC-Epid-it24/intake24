@@ -9,11 +9,11 @@
           <v-text-field
             v-model="filter.search"
             clearable
-            dense
+            density="compact"
             hide-details="auto"
             :label="$t('common.search._')"
-            outlined
             prepend-inner-icon="$search"
+            variant="outlined"
             @click:append="setFilter"
             @click:clear="resetFilter"
             @keyup.enter="setFilter"
@@ -21,22 +21,21 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-data-table
+    <v-data-table-server
       v-model="selected"
-      :footer-props="{ 'items-per-page-options': [25, 50, 100] }"
+      v-model:options="options"
       :headers="headers"
-      :item-key="trackBy"
+      :item-value="trackBy"
       :items="items"
+      :items-length="meta.total ?? 0"
       :items-per-page="50"
       :loading="isAppLoading"
-      :options.sync="options"
-      :server-items-length="meta.total"
       :show-select="showSelect"
     >
-      <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">
+      <template v-for="(_, scopedSlotName) in $slots" #[scopedSlotName]="slotData">
         <slot :name="scopedSlotName" v-bind="slotData" />
       </template>
-    </v-data-table>
+    </v-data-table-server>
   </div>
 </template>
 

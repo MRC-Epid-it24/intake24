@@ -1,117 +1,104 @@
 <template>
-  <v-list-item class="drag-and-drop__item" draggable link>
-    <v-list-item-avatar class="drag-and-drop__handle">
-      <v-icon>$handle</v-icon>
-    </v-list-item-avatar>
-    <v-list-item-content>
-      <v-list-item-title>{{ prompt.name }}</v-list-item-title>
-      <v-list-item-subtitle>
-        {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
-      </v-list-item-subtitle>
-    </v-list-item-content>
-    <v-list-item-content v-if="!isOverrideMode && hasTemplate">
-      <v-list-item-subtitle>
-        <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>
-          $sync
-        </v-icon>
-        <span color="success">
-          {{ $t(`survey-scheme-prompts.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
-        </span>
-      </v-list-item-subtitle>
-    </v-list-item-content>
-    <v-list-item-action>
-      <v-btn icon :title="$t('survey-schemes.prompts.edit')" @click.stop="edit">
-        <v-icon color="secondary lighten-1">
-          $edit
-        </v-icon>
-      </v-btn>
-    </v-list-item-action>
-    <v-list-item-action v-if="!isOverrideMode">
-      <v-menu
-        v-model="contextMenu"
-        close-on-click
-        close-on-content-click
-        max-width="600px"
-        offset-y
-      >
-        <template #activator="{ attrs, on }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon color="secondary lighten-1">
-              $options
-            </v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item link @click="copy">
-            <v-list-item-title>
-              <v-icon left>
-                fas fa-copy
+  <v-list-item class="drag-and-drop__item">
+    <template #prepend>
+      <v-avatar class="drag-and-drop__handle" icon="$handle" />
+    </template>
+    <v-list-item-title>{{ prompt.name }}</v-list-item-title>
+    <v-list-item-subtitle>
+      {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
+    </v-list-item-subtitle>
+    <v-list-item-subtitle v-if="!isOverrideMode && hasTemplate">
+      <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" start>
+        $sync
+      </v-icon>
+      <span color="success">
+        {{ $t(`survey-scheme-prompts.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
+      </span>
+    </v-list-item-subtitle>
+    <template #append>
+      <v-list-item-action>
+        <v-btn icon="$edit" :title="$t('survey-schemes.prompts.edit')" @click.stop="edit" />
+      </v-list-item-action>
+      <v-list-item-action v-if="!isOverrideMode">
+        <v-menu
+          v-model="contextMenu"
+          close-on-content-click
+          max-width="600px"
+          :persistent="false"
+        >
+          <template #activator="{ props }">
+            <v-btn icon v-bind="props">
+              <v-icon color="secondary-lighten-1">
+                $options
               </v-icon>
-              {{ $t('survey-schemes.prompts.copy') }}
-            </v-list-item-title>
-          </v-list-item>
-          <confirm-dialog
-            color="secondary lighten-1"
-            :label="$t('survey-schemes.prompts.move').toString()"
-            max-width="450px"
-            @close="clearMoveToSection"
-            @confirm="move"
-          >
-            <template #activator="{ attrs, on }">
-              <v-list-item link v-bind="attrs" v-on="on">
-                <v-list-item-title>
-                  <v-icon left>
-                    fas fa-exchange-alt
-                  </v-icon>
-                  {{ $t('survey-schemes.prompts.move') }}
-                </v-list-item-title>
-              </v-list-item>
-            </template>
-            <v-select
-              v-model="moveToSection"
-              hide-details="auto"
-              :items="moveSections"
-              :label="$t('survey-schemes.prompts.section')"
-              outlined
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item link @click="copy">
+              <v-list-item-title>
+                <v-icon icon="fas fa-copy" start />
+                {{ $t('survey-schemes.prompts.copy') }}
+              </v-list-item-title>
+            </v-list-item>
+            <confirm-dialog
+              color="secondary-lighten-1"
+              :label="$t('survey-schemes.prompts.move')"
+              max-width="450px"
+              @close="clearMoveToSection"
+              @confirm="move"
+            >
+              <template #activator="{ props }">
+                <v-list-item link v-bind="props">
+                  <v-list-item-title>
+                    <v-icon icon="fas fa-exchange-alt" start />
+                    {{ $t('survey-schemes.prompts.move') }}
+                  </v-list-item-title>
+                </v-list-item>
+              </template>
+              <v-select
+                v-model="moveToSection"
+                hide-details="auto"
+                :items="moveSections"
+                :label="$t('survey-schemes.prompts.section')"
+                variant="outlined"
+              />
+            </confirm-dialog>
+            <save-as-template-dialog
+              v-if="can('survey-scheme-prompts|create') && !hasTemplate"
+              :prompt="prompt"
             />
-          </confirm-dialog>
-          <save-as-template-dialog
-            v-if="can('survey-scheme-prompts|create') && !hasTemplate"
-            :prompt="prompt"
-          />
-          <confirm-dialog
-            v-if="hasTemplate && !isInSyncWithTemplate"
-            color="secondary lighten-1"
-            :label="$t('survey-scheme-prompts.sync.synchronize').toString()"
-            max-width="450px"
-            @confirm="sync"
-          >
-            <template #activator="{ attrs, on }">
-              <v-list-item v-bind="attrs" link v-on="on">
-                <v-list-item-title>
-                  <v-icon left>
-                    $sync
-                  </v-icon>
-                  {{ $t('survey-scheme-prompts.sync.synchronize') }}
-                </v-list-item-title>
-              </v-list-item>
-            </template>
-            {{ $t('survey-scheme-prompts.sync.confirm') }}
-          </confirm-dialog>
-        </v-list>
-      </v-menu>
-    </v-list-item-action>
-    <v-list-item-action>
-      <confirm-dialog
-        color="error"
-        icon
-        icon-left="$delete"
-        :label="$t('survey-schemes.prompts.remove').toString()"
-        @confirm="remove"
-      >
-        {{ $t('common.action.confirm.delete', { name: prompt.name }) }}
-      </confirm-dialog>
-    </v-list-item-action>
+            <confirm-dialog
+              v-if="hasTemplate && !isInSyncWithTemplate"
+              color="secondary-lighten-1"
+              :label="$t('survey-scheme-prompts.sync.synchronize')"
+              max-width="450px"
+              @confirm="sync"
+            >
+              <template #activator="{ props }">
+                <v-list-item v-bind="props" link>
+                  <v-list-item-title>
+                    <v-icon icon="$sync" start />
+                    {{ $t('survey-scheme-prompts.sync.synchronize') }}
+                  </v-list-item-title>
+                </v-list-item>
+              </template>
+              {{ $t('survey-scheme-prompts.sync.confirm') }}
+            </confirm-dialog>
+          </v-list>
+        </v-menu>
+      </v-list-item-action>
+      <v-list-item-action>
+        <confirm-dialog
+          color="error"
+          icon
+          icon-left="$delete"
+          :label="$t('survey-schemes.prompts.remove')"
+          @confirm="remove"
+        >
+          {{ $t('common.action.confirm.delete', { name: prompt.name }) }}
+        </confirm-dialog>
+      </v-list-item-action>
+    </template>
   </v-list-item>
 </template>
 

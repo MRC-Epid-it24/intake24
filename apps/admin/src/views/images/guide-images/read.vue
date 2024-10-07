@@ -2,7 +2,7 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12">
-        <v-simple-table>
+        <v-table>
           <tbody>
             <tr>
               <th>{{ $t('guide-images.id') }}</th>
@@ -17,7 +17,7 @@
               <td>{{ entry.imageMapId }}</td>
             </tr>
           </tbody>
-        </v-simple-table>
+        </v-table>
       </v-col>
     </v-row>
     <guide-drawer v-bind="{ entry, disabled: true, resource: 'guide-images' }" />

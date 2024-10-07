@@ -2,24 +2,20 @@
   <v-dialog
     v-model="dialog.show"
     fullscreen
-    hide-overlay
     persistent
+    :scrim="false"
     transition="dialog-bottom-transition"
   >
     <v-card tile>
       <v-toolbar color="secondary" dark>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`fdbs.portionSizes.${dialog.index === -1 ? 'add' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
-          <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-            <v-icon left>
-              $success
-            </v-icon>{{ $t('common.action.ok') }}
+          <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+            <v-icon icon="$success" start />{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -38,8 +34,8 @@
                     :items="estimationMethods"
                     :label="$t('fdbs.portionSizes.methods._')"
                     name="method"
-                    outlined
-                    @change="updateItemProps"
+                    variant="outlined"
+                    @update:model-value="updateItemProps"
                   />
                 </v-col>
                 <v-col cols="12">
@@ -49,7 +45,7 @@
                     :items="selections"
                     :label="$t('fdbs.portionSizes.description')"
                     name="description"
-                    outlined
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col cols="12">
@@ -88,16 +84,12 @@
             </v-col>
           </v-row>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>
-                $cancel
-              </v-icon>{{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer />
-            <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-container>

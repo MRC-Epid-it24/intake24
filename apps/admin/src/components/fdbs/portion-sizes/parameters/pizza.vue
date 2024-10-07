@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'PizzaParameters',
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<PortionSizeParameters['pizza']>,
       required: true,
     },

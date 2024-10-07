@@ -1,96 +1,101 @@
 <template>
-  <v-tab-item key="conditions" value="conditions">
-    <v-tabs v-model="selectedCondition" vertical>
-      <v-btn class="my-4" color="primary" @click="add">
-        <v-icon left>
-          $add
-        </v-icon>
-        {{ $t(`survey-schemes.conditions.add`) }}
-      </v-btn>
-      <draggable v-model="currentConditions" @end="update">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-tab v-for="condition in currentConditions" :key="condition.id">
-            <div v-if="condition.orPrevious" style="position: absolute; top: -0.6em;">
-              OR
-            </div>
-            {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
-          </v-tab>
-        </transition-group>
-      </draggable>
-      <v-tab-item v-for="(condition, idx) in currentConditions" :key="condition.id">
-        <v-card class="mx-4" outlined>
-          <v-card-title>
-            <v-icon left>
-              fas fa-location-arrow
-            </v-icon>
-            {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
-          </v-card-title>
-          <v-card-text class="px-0">
-            <condition-summary :condition="condition" />
-          </v-card-text>
-          <v-container>
-            <v-row v-if="idx !== 0">
-              <v-col cols="12" md="6">
-                <v-checkbox
-
-                  v-model="condition.orPrevious"
-                  class="mt-0"
-                  hide-details="auto"
-                  :label="$t(`survey-schemes.conditions.orPrevious`)"
-                  outlined
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="6">
-                <v-select
-                  hide-details="auto"
-                  item-value="object"
-                  :items="objectSelectList"
-                  :label="$t('survey-schemes.conditions.object._')"
-                  outlined
-                  :value="condition.object"
-                  @change="updatePromptConditionObject(idx, $event)"
-                />
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-select
-                  hide-details="auto"
-                  item-value="type"
-                  :items="propertySelectList[condition.object]"
-                  :label="$t('survey-schemes.conditions.property._')"
-                  outlined
-                  :value="condition.property.id"
-                  @change="updatePromptConditionProperty(idx, $event)"
-                />
-              </v-col>
-            </v-row>
-          </v-container>
-          <v-card-title>{{ $t(`survey-schemes.conditions._`) }}</v-card-title>
-          <v-card-text>
-            <component :is="condition.property.type" :value.sync="condition.property.check" />
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
-              <v-icon left>
-                $delete
+  <v-tabs-window-item key="conditions" value="conditions">
+    <div class="d-flex flex-row ga-2">
+      <div>
+        <v-btn class="my-4 ignore-item" color="primary" @click="add">
+          <v-icon icon="$add" start />
+          {{ $t(`survey-schemes.conditions.add`) }}
+        </v-btn>
+        <v-tabs v-model="selectedCondition" direction="vertical">
+          <vue-draggable
+            v-model="currentConditions"
+            :animation="300"
+            class="d-flex flex-column"
+            handle=".drag-and-drop__handle"
+            @end="update"
+          >
+            <v-tab v-for="condition in currentConditions" :key="condition.id" :class="{ 'mt-4': condition.orPrevious }" :value="condition.id">
+              <v-chip v-if="condition.orPrevious" class="font-weight-medium position-absolute" style="top: -1.5em;">
+                OR
+              </v-chip>
+              <v-icon class="drag-and-drop__handle" start>
+                $handle
               </v-icon>
-              {{ $t('survey-schemes.conditions.remove') }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-tab-item>
-    </v-tabs>
-  </v-tab-item>
+              {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
+            </v-tab>
+          </vue-draggable>
+        </v-tabs>
+      </div>
+      <v-tabs-window v-model="selectedCondition" class="flex-grow-1">
+        <v-tabs-window-item v-for="(condition, idx) in currentConditions" :key="condition.id" :value="condition.id">
+          <v-card border>
+            <v-card-title>
+              <v-icon icon="fas fa-location-arrow" start />
+              {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
+            </v-card-title>
+            <v-card-text class="px-0">
+              <condition-summary :condition="condition" />
+            </v-card-text>
+            <v-card-text>
+              <v-row v-if="idx !== 0">
+                <v-col cols="12" md="6">
+                  <v-checkbox-btn
+                    v-model="condition.orPrevious"
+                    hide-details="auto"
+                    :label="$t(`survey-schemes.conditions.orPrevious`)"
+                    outlined
+                  />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-select
+                    hide-details="auto"
+                    item-value="object"
+                    :items="objectSelectList"
+                    :label="$t('survey-schemes.conditions.object._')"
+                    :model-value="condition.object"
+                    variant="outlined"
+                    @update:model-value="updatePromptConditionObject(idx, $event)"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-select
+                    hide-details="auto"
+                    item-value="type"
+                    :items="propertySelectList[condition.object]"
+                    :label="$t('survey-schemes.conditions.property._')"
+                    :model-value="condition.property.id"
+                    variant="outlined"
+                    @update:model-value="updatePromptConditionProperty(idx, $event)"
+                  />
+                </v-col>
+              </v-row>
+            </v-card-text>
+            <v-card-title>{{ $t(`survey-schemes.conditions._`) }}</v-card-title>
+            <v-card-text>
+              <component :is="condition.property.type" v-model="condition.property.check" />
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn class="font-weight-bold" color="error" variant="text" @click="remove(idx)">
+                <v-icon icon="$delete" start />
+                {{ $t('survey-schemes.conditions.remove') }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-tabs-window-item>
+      </v-tabs-window>
+    </div>
+  </v-tabs-window-item>
 </template>
 
 <script lang='ts'>
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { mapValues } from 'lodash';
-import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { computed, defineComponent, ref, watch } from 'vue';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import { withIdList } from '@intake24/admin/util';
 import {
@@ -106,13 +111,18 @@ import {
 import { foodSections, mealSections, type PromptSection } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
 import { copy } from '@intake24/common/util/objects';
+import { useI18n } from '@intake24/i18n';
 
 import conditionPartials from './conditions';
 
 export default defineComponent({
   name: 'PromptConditions',
 
-  components: { Draggable: draggable, ...conditionPartials.check, ConditionSummary: conditionPartials.summary },
+  components: {
+    ...conditionPartials.check,
+    ConditionSummary: conditionPartials.summary,
+    VueDraggable,
+  },
 
   props: {
     conditions: {
@@ -127,50 +137,73 @@ export default defineComponent({
 
   emits: ['update:conditions'],
 
-  data() {
-    return {
-      currentConditions: withIdList(this.conditions),
-      selectedCondition: 0,
-    };
-  },
+  setup(props, { emit }) {
+    const { i18n: { t } } = useI18n();
 
-  computed: {
-    objectSelectList(): { object: ConditionObjectId; text: string }[] {
+    const currentConditions = ref(withIdList(props.conditions));
+    const selectedCondition = ref(currentConditions.value.length ? currentConditions.value[0].id : undefined);
+
+    const objectSelectList = computed(() => {
       const allowedObjects: ConditionObjectId[] = ['survey'];
 
-      if (this.promptSection !== undefined) {
-        if ((mealSections as readonly string[]).includes(this.promptSection))
+      if (props.promptSection !== undefined) {
+        if ((mealSections as readonly string[]).includes(props.promptSection))
           allowedObjects.push('meal');
 
-        if ((foodSections as readonly string[]).includes(this.promptSection))
+        if ((foodSections as readonly string[]).includes(props.promptSection))
           allowedObjects.push('food');
       }
 
-      return allowedObjects.map (object => ({ object, text: this.$t(`survey-schemes.conditions.object.${object}`).toString() }));
-    },
+      return allowedObjects.map (object => ({ object, title: t(`survey-schemes.conditions.object.${object}`) }));
+    });
 
-    propertySelectList(): Record<ConditionObjectId, { type: string; text: string }[]> {
-      return mapValues(promptConditionDefaults, properties => Object.keys(properties).map(id => ({ type: id, text: this.$t(`survey-schemes.conditions.property.${id}`).toString() })));
-    },
+    const propertySelectList = computed(() => {
+      return mapValues(promptConditionDefaults, properties => Object.keys(properties).map(id => ({ type: id, title: t(`survey-schemes.conditions.property.${id}`) })));
+    });
 
-    outputConditions(): Condition[] {
-      return this.currentConditions.map(({ id, ...rest }) => rest);
-    },
-  },
+    const outputConditions = computed(() => currentConditions.value.map(({ id, ...rest }) => copy(rest)));
 
-  watch: {
-    conditions(val) {
-      if (deepEqual(val, this.outputConditions))
+    const add = () => {
+      const defaultObject = conditionObjectIds[0];
+
+      const length = currentConditions.value.push(copy({
+        id: randomString(6),
+        ...getConditionDefaults(defaultObject, getDefaultConditionProperty(defaultObject)),
+      }));
+
+      selectedCondition.value = length - 1;
+    };
+
+    const remove = (index: number) => {
+      currentConditions.value.splice(index, 1);
+      if (currentConditions.value.length > 0)
+        currentConditions.value[0].orPrevious = false;
+    };
+
+    const update = () => {
+      emit('update:conditions', outputConditions.value);
+    };
+
+    watch(currentConditions, (val) => {
+      if (deepEqual(val, outputConditions.value))
         return;
 
-      this.currentConditions = withIdList(val);
-    },
-    outputConditions: {
-      handler() {
-        this.update();
-      },
-      deep: true,
-    },
+      emit('update:conditions', val);
+    });
+
+    watch(outputConditions, () => {
+      update();
+    }, { deep: true });
+
+    return {
+      add,
+      currentConditions,
+      selectedCondition,
+      objectSelectList,
+      propertySelectList,
+      remove,
+      update,
+    };
   },
 
   methods: {
@@ -210,27 +243,6 @@ export default defineComponent({
         1,
         copy({ ...getConditionDefaults(currentCondition.object, newPropertyId as ObjectPropertyId<ConditionObjectId>), id: currentCondition.id }),
       );
-    },
-
-    add() {
-      const defaultObject = conditionObjectIds[0];
-
-      const length = this.currentConditions.push(copy({
-        id: randomString(6),
-        ...getConditionDefaults(defaultObject, getDefaultConditionProperty(defaultObject)),
-      }));
-
-      this.selectedCondition = length - 1;
-    },
-
-    remove(index: number) {
-      this.currentConditions.splice(index, 1);
-      if (this.currentConditions.length > 0)
-        this.currentConditions[0].orPrevious = false;
-    },
-
-    update() {
-      this.$emit('update:conditions', this.outputConditions);
     },
   },
 });

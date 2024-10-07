@@ -7,42 +7,37 @@
   </data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'LanguageList',
+defineOptions({ name: 'LanguageList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
 
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('languages.code'),
-          sortable: true,
-          value: 'code',
-        },
-        {
-          text: this.$t('languages.englishName'),
-          sortable: true,
-          value: 'englishName',
-        },
-        {
-          text: this.$t('languages.localName'),
-          sortable: true,
-          value: 'localName',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers = ref<DataTableHeader[]>([
+  {
+    title: t('languages.code'),
+    sortable: true,
+    key: 'code',
   },
-});
+  {
+    title: t('languages.englishName'),
+    sortable: true,
+    key: 'englishName',
+  },
+  {
+    title: t('languages.localName'),
+    sortable: true,
+    key: 'localName',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+]);
 </script>

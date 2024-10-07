@@ -1,26 +1,26 @@
 <template>
-  <v-tab-item :key="type">
+  <v-tabs-window-item :key="type">
     <v-container>
-      <v-alert v-if="prompts.length === 0" color="secondary" text type="info">
+      <v-alert v-if="prompts.length === 0" color="secondary" type="info">
         {{ $t(`survey-schemes.prompts.${type}.noPrompts`) }}
       </v-alert>
       <v-row v-else>
         <v-col v-for="prompt in prompts" :key="prompt.id" cols="12" md="3">
-          <v-item v-slot="{ active, toggle }" :value="prompt.component">
+          <v-item v-slot="{ isSelected, toggle }" :value="prompt.component">
             <v-card
-              :color="active ? 'primary' : ''"
+              :color="isSelected ? 'primary' : 'secondary'"
               dark
               height="180"
-              @click.stop="tryToggle(active, toggle)"
+              @click.stop="tryToggle(isSelected, toggle)"
             >
-              <v-card-title class="justify-center">
+              <v-card-title class="text-center">
                 {{ $t(`survey-schemes.prompts.${prompt.id}.title`) }}
               </v-card-title>
               <v-card-subtitle class="text-center">
                 {{ $t(`survey-schemes.prompts.${prompt.id}.subtitle`) }}
               </v-card-subtitle>
-              <v-card-text v-show="active" class="text-center">
-                <v-icon x-large>
+              <v-card-text v-show="isSelected" class="text-center">
+                <v-icon size="48">
                   $check
                 </v-icon>
               </v-card-text>
@@ -29,7 +29,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">
@@ -53,11 +53,11 @@ export default defineComponent({
   },
 
   methods: {
-    tryToggle(active: boolean, toggle: () => void) {
+    tryToggle(active?: boolean, toggle?: () => void) {
       if (active)
         return;
 
-      toggle();
+      toggle?.();
     },
   },
 });

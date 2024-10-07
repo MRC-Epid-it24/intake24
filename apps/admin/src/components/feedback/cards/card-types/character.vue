@@ -1,22 +1,22 @@
 <template>
   <div>
-    <v-tab-item key="content" value="content">
+    <v-tabs-window-item key="content" value="content">
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
             <v-autocomplete
+              v-model:search-input="nutrientTypeIdSearchInput"
               hide-details="auto"
-              item-text="description"
+              item-title="description"
               item-value="id"
               :items="nutrientTypes"
               :label="$t('nutrient-types._')"
+              :model-value="modelValue.nutrientTypeIds"
               multiple
               name="nutrientTypeIds"
-              outlined
               prepend-inner-icon="$nutrient-types"
-              :search-input.sync="nutrientTypeIdSearchInput"
-              :value="value.nutrientTypeIds"
-              @change="updateNutrientTypeId($event)"
+              variant="outlined"
+              @update:model-value="updateNutrientTypeId($event)"
             />
           </v-col>
         </v-row>
@@ -24,14 +24,14 @@
       <v-card-title>{{ $t('feedback-schemes.sentiments.title') }}</v-card-title>
       <v-container>
         <character-sentiments
-          :value="value.sentiments"
-          @update:sentiments="update('sentiments', $event)"
+          :model-value="modelValue.sentiments"
+          @update:model-value="update('sentiments', $event)"
         />
       </v-container>
-    </v-tab-item>
-    <v-tab-item key="json" value="json">
-      <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
-    </v-tab-item>
+    </v-tabs-window-item>
+    <v-tabs-window-item key="json" value="json">
+      <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+    </v-tabs-window-item>
   </div>
 </template>
 
@@ -52,19 +52,21 @@ export default defineComponent({
   components: { CharacterSentiments, JsonEditor },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<Character>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
     const nutrientTypeIdSearchInput = ref<null | string>(null);
 
-    const nutrientTypes = computed<NutrientTypeAttributes>(() => useEntry().refs.nutrientTypes ?? []);
+    const nutrientTypes = computed<NutrientTypeAttributes[]>(() => useEntry().refs.nutrientTypes ?? []);
 
     const update = (field: string, value: any) => {
-      emit('input', { ...props.value, [field]: value });
+      emit('update:modelValue', { ...props.modelValue, [field]: value });
     };
 
     const updateNutrientTypeId = (value: string[]) => {

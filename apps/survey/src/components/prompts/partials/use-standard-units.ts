@@ -12,8 +12,8 @@ export type StandardUnitRefs = Record<
 >;
 
 export function useStandardUnits() {
-  const { translate } = useI18n();
   const http = useHttp();
+  const { translate } = useI18n();
 
   const standardUnitRefs = ref<StandardUnitRefs>({});
   const usingStandardTranslations = ref(true);

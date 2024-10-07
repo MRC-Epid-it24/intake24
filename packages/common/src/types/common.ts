@@ -16,6 +16,11 @@ export const customField = z.object({
 });
 export type CustomField = z.infer<typeof customField>;
 
+export const userCustomField = customField.extend({
+  public: z.boolean().optional(),
+});
+export type UserCustomField = z.infer<typeof userCustomField>;
+
 export const customFieldRecord = z.record(customField.shape.name, customField.shape.value);
 export type CustomFieldRecord = z.infer<typeof customFieldRecord>;
 
@@ -60,11 +65,11 @@ export const requiredLocaleTranslation = z.intersection(
 
 export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
 
-export function listOption<T extends z.ZodTypeAny = z.ZodString>(schema?: T) {
+export function listOption<T extends z.ZodTypeAny = z.ZodString>(valueSchema?: T) {
   return z.object({
     id: z.number().optional(),
-    label: z.string(),
-    value: schema ?? z.string(),
+    label: z.string().min(1).max(256),
+    value: valueSchema ?? z.string().min(1).max(256),
     exclusive: z.boolean().optional(),
   });
 }
@@ -73,12 +78,12 @@ export type ListOption<T extends z.ZodTypeAny = z.ZodString> = z.infer<
   ReturnType<typeof listOption<T>>
 >;
 
-export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>(schema?: T) {
+export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>(valueSchema?: T) {
   return z.intersection(
     z.object({
-      en: z.array(listOption(schema ?? z.string())),
+      en: z.array(listOption(valueSchema)),
     }),
-    z.record(z.array(listOption(schema ?? z.string()))),
+    z.record(z.array(listOption(valueSchema))),
   );
 }
 
@@ -86,12 +91,12 @@ export type LocaleOptionList<T extends z.ZodTypeAny = z.ZodString> = z.infer<
   ReturnType<typeof localeOptionList<T>>
 >;
 
-export function categoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber>(schema: T) {
+export function categoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber>(valueSchema: T) {
   return z.intersection(
     z.object({
-      _default: localeOptionList(schema),
+      _default: localeOptionList(valueSchema),
     }),
-    z.record(localeOptionList(schema)),
+    z.record(localeOptionList(valueSchema)),
   );
 }
 

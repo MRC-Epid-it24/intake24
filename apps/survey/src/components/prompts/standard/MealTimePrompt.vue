@@ -5,9 +5,12 @@
         <v-time-picker
           v-model="state"
           :allowed-minutes="allowedMinutes"
+          bg-color="grey-lighten-5"
+          color="primary"
           :format="prompt.format"
           full-width
-          :landscape="$vuetify.breakpoint.smAndUp"
+          :landscape="$vuetify.display.smAndUp"
+          title=""
         />
       </v-form>
     </v-card-text>
@@ -15,9 +18,9 @@
       <v-btn
         class="px-4"
         color="primary"
-        large
-        text
+        size="large"
         :title="promptI18n.no"
+        variant="text"
         @click.stop="action('cancel')"
       >
         {{ promptI18n.no }}
@@ -25,7 +28,7 @@
       <v-btn
         class="px-4"
         color="primary"
-        large
+        size="large"
         :title="promptI18n.yes"
         @click.stop="action('next')"
       >
@@ -33,7 +36,7 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn color="primary" text :title="promptI18n.no" @click.stop="action('cancel')">
+      <v-btn color="primary" :title="promptI18n.no" variant="text" @click.stop="action('cancel')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>
@@ -79,13 +82,13 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object as PropType<MealTime>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { action, translatePrompt } = usePromptUtils(props, ctx);
@@ -96,10 +99,10 @@ export default defineComponent({
     const promptI18n = computed(() => translatePrompt(['no', 'yes']));
     const state = computed({
       get() {
-        return fromMealTime(props.value, false);
+        return fromMealTime(props.modelValue, false);
       },
       set(value) {
-        ctx.emit('input', toMealTime(value));
+        ctx.emit('update:modelValue', toMealTime(value));
       },
     });
     const isValid = computed(() => !!state.value);
@@ -111,8 +114,8 @@ export default defineComponent({
 
 <style lang="scss">
 .meal-time-prompt {
-  .v-time-picker-title {
-    justify-content: center;
+  .v-time-picker__title {
+    text-align: center;
   }
 }
 </style>
