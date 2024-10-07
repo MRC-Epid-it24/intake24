@@ -238,8 +238,8 @@ importers:
         specifier: ^3.51.0
         version: 3.51.0(@ts-rest/core@3.51.0(@types/node@22.7.4)(zod@3.23.8))(express@4.21.0)(zod@3.23.8)
       awilix:
-        specifier: ^11.0.0
-        version: 11.0.0
+        specifier: ^12.0.1
+        version: 12.0.1
       axios:
         specifier: ^1.7.7
         version: 1.7.7(debug@4.3.7)
@@ -4153,8 +4153,8 @@ packages:
     resolution: {integrity: sha512-i/pC5xvaNVrduufGtnw8O+abLWq70wd6YutiPYR2NqrnwtjBMk7rG/vJTktnAivSok+ZqlkFZzuVICgObpQi4w==}
     engines: {node: '>=18'}
 
-  awilix@11.0.0:
-    resolution: {integrity: sha512-lnEm2TZu1OUWO1twi/3JrjSYu3RYjiOMiMQgfpwXj6uG4NSDtPSAWwTvqbpV7B8iWsXiC8GoMBKg1YsrUxPJhg==}
+  awilix@12.0.1:
+    resolution: {integrity: sha512-E5z/JhcokkANolIYbMcH93q5WAaz+vcPuRYkwaoESsjeHfKzAkSM8S2rZstbuOP8Thq4/+WgNbFlz8PI9wH1Jw==}
     engines: {node: '>=16.3.0'}
 
   aws-sign2@0.7.0:
@@ -13305,7 +13305,7 @@ snapshots:
 
   awesome-phonenumber@7.1.0: {}
 
-  awilix@11.0.0:
+  awilix@12.0.1:
     dependencies:
       camel-case: 4.1.2
       fast-glob: 3.3.2
