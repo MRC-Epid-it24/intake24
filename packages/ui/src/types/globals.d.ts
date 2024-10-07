@@ -8,7 +8,7 @@ declare module 'vue' {
     can: (permission: string | string[] | Permission) => boolean;
 
     // loadingMixin
-    isAppLoading: () => boolean;
+    isAppLoading: boolean;
 
     // moduleMixin
     module: string;

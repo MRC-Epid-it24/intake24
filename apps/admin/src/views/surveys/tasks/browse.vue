@@ -87,8 +87,8 @@ export default defineComponent({
       SurveyAuthUrlsExport: { surveyId: props.id },
       SurveyDataExport: {
         surveyId: props.id,
-        startDate: new Date(entry.value.startDate),
-        endDate: new Date(entry.value.endDate),
+        startDate: entry.value.startDate,
+        endDate: entry.value.endDate,
       },
       SurveyNutrientsRecalculation: { surveyId: props.id },
       SurveyRatingsExport: { surveyId: props.id },

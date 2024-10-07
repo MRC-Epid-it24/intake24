@@ -5,7 +5,7 @@ declare module 'vue' {
     $http: HttpClient;
 
     // loading mixin
-    isAppLoading: () => boolean;
+    isAppLoading: boolean;
   }
 }
 

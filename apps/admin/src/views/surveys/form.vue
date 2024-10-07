@@ -649,20 +649,10 @@ export default defineComponent({
     const infoComponentType = ref(undefined as string | undefined);
     const infoPopupOpen = ref(false);
 
-    const loadCallback = (data: SurveyEntry) => {
-      const { startDate, endDate, ...rest } = data;
-      return {
-        ...rest,
-        startDate: new Date(data.startDate),
-        endDate: new Date(data.endDate),
-      };
-    };
-
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
       data: surveyForm,
       editMethod: 'patch',
-      loadCallback,
     });
 
     const showInformationPopup = (type: string) => {

@@ -33,62 +33,59 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useDate } from 'vuetify';
 
 import { formatDate } from '@intake24/admin/util';
 
-export default defineComponent({
-  name: 'DatePicker',
+defineOptions({ name: 'DatePicker' });
 
-  props: {
-    clearable: {
-      type: Boolean,
-    },
-    errorMessages: {
-      type: [String, Array] as PropType<string | string[]>,
-    },
-    label: {
-      type: String,
-    },
-    modelValue: {
-      type: [Date, String] as PropType<string | Date | null>,
-    },
+const props = defineProps({
+  clearable: {
+    type: Boolean,
   },
-
-  emits: ['update:modelValue', 'change'],
-
-  setup(props, { emit }) {
-    const toDate = (val: string | Date | null | undefined): Date | null => {
-      if (val instanceof Date)
-        return val;
-
-      if (typeof val === 'string')
-        return new Date(val);
-
-      return null;
-    };
-    const dialog = ref(false);
-    const internalValue = ref(toDate(props.modelValue));
-
-    const formattedValue = computed(() => props.modelValue ? formatDate(props.modelValue, 'dd/MM/yyyy') : '');
-
-    watch(() => props.modelValue, (val) => {
-      if (toDate(val) === internalValue.value)
-        return;
-
-      internalValue.value = toDate(val);
-    });
-
-    function update() {
-      emit('update:modelValue', internalValue.value);
-      dialog.value = false;
-    }
-
-    return { dialog, formattedValue, internalValue, update };
+  errorMessages: {
+    type: [String, Array] as PropType<string | string[]>,
+  },
+  label: {
+    type: String,
+  },
+  modelValue: {
+    type: [Date, String] as PropType<string | Date | null>,
   },
 });
+
+const emit = defineEmits(['update:modelValue', 'change']);
+
+const adapter = useDate();
+
+function toDate(val: string | Date | null | undefined): Date | null {
+  if (val instanceof Date)
+    return adapter.parseISO(val.toISOString().substring(0, 10)) as Date;
+
+  if (typeof val === 'string')
+    return adapter.parseISO(new Date(val).toISOString().substring(0, 10)) as Date;
+
+  return null;
+}
+
+const dialog = ref(false);
+const internalValue = ref(toDate(props.modelValue));
+const formattedValue = computed(() => props.modelValue ? formatDate(props.modelValue, 'dd/MM/yyyy') : '');
+
+watch(() => props.modelValue, (val) => {
+  if (toDate(val) === internalValue.value)
+    return;
+
+  internalValue.value = toDate(val);
+});
+
+function update() {
+  emit('update:modelValue', internalValue.value ? adapter.toISO(internalValue.value).substring(0, 10) : null);
+  dialog.value = false;
+}
 </script>
 
 <style scoped></style>
