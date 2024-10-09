@@ -6,7 +6,7 @@
     transition="dialog-bottom-transition"
   >
     <template #activator="{ props }">
-      <slot name="activator" v-bind="props">
+      <slot name="activator" v-bind="{ props }">
         <v-btn
           color="grey"
           :disabled="disabled"

@@ -21,14 +21,14 @@
             @confirm="confirm"
             @select="select"
           >
-            <template #activator="{ on, attrs }">
+            <template #activator="{ props }">
               <v-btn
                 class="ma-1 font-weight-medium"
                 color="grey-darken-3"
                 icon
                 :title="$t(`prompts.guideImage.expand`)"
-                v-bind="attrs"
-                v-on="on"
+                variant="text"
+                v-bind="props"
               >
                 <v-icon aria-hidden="false" :aria-label="$t(`prompts.guideImage.expand`)">
                   $expandImage

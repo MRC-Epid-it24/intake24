@@ -1,11 +1,11 @@
 <template>
   <v-dialog v-model="dialog" :max-width="maxWidth" :persistent="persistent">
-    <template v-if="!external" #activator="{ props }">
-      <slot name="activator" v-bind="{ props }">
+    <template v-if="!external" #activator="{ props: dProps }">
+      <slot name="activator" v-bind="{ props: dProps }">
         <v-btn
           v-if="show"
           v-bind="{
-            ...props,
+            ...dProps,
             class: activatorClass,
             color: iconColor ? iconColor : color,
             disabled,
@@ -199,7 +199,14 @@ function confirm() {
   emit('confirm');
 }
 
+watch(() => props.modelValue, (val) => {
+  dialog.value = val;
+});
+
 watch(dialog, (val) => {
+  if (props.modelValue !== val)
+    emit('update:modelValue', val);
+
   if (!val)
     emit('close');
 });

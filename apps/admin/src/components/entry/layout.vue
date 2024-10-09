@@ -60,7 +60,7 @@ import has from 'lodash/has';
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { Resource, RouteLeave } from '@intake24/admin/types';
+import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
 import resources from '@intake24/admin/router/resources';
 import { useHttp } from '@intake24/admin/services';
@@ -102,13 +102,16 @@ const http = useHttp();
 const router = useRouter();
 
 const resourceDef = computed(
-  () => resources.find(item => item.name === resource.name) as Resource,
+  () => resources.find(item => item.name === resource.name),
 );
 
 const isCreate = computed(() => props.id === 'create');
 const tabs = computed(() => {
   if (isCreate.value)
     return ['create'];
+
+  if (!resourceDef.value)
+    return [];
 
   const { securables, ownerId } = props.entry;
   const { name, module, routes } = resourceDef.value;
@@ -134,7 +137,7 @@ function tabTitle(tab: string) {
   return t(check ? `${resource.name}.${tab}.tab` : `common.action.${tab}`);
 };
 
-async function remove(): Promise<void> {
+async function remove() {
   const { id, name } = props.entry;
 
   await http.delete(`${resource.api}/${props.id}`);
