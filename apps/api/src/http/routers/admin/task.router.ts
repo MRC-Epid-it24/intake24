@@ -41,7 +41,7 @@ export function task() {
         await uniqueMiddleware(body.name, { req });
 
         const task = await Task.create(body);
-        await req.scope.cradle.scheduler.tasks.addJob(task);
+        await req.scope.cradle.scheduler.tasks.updateTaskInQueue(task);
 
         return { status: 201, body: task };
       },
@@ -53,7 +53,7 @@ export function task() {
         if (!task)
           throw new NotFoundError();
 
-        const bullJob = await req.scope.cradle.scheduler.tasks.getRepeatableJobById(taskId);
+        const bullJob = await req.scope.cradle.scheduler.tasks.getScheduledJobById(taskId);
 
         return { status: 200, body: { ...task.get(), bullJob } };
       },
@@ -68,9 +68,8 @@ export function task() {
           throw new NotFoundError();
 
         await task.update(body);
-        await req.scope.cradle.scheduler.tasks.updateJob(task);
-
-        const bullJob = await req.scope.cradle.scheduler.tasks.getRepeatableJobById(taskId);
+        await req.scope.cradle.scheduler.tasks.updateTaskInQueue(task);
+        const bullJob = await req.scope.cradle.scheduler.tasks.getScheduledJobById(taskId);
 
         return { status: 200, body: { ...task.get(), bullJob } };
       },
@@ -82,8 +81,8 @@ export function task() {
         if (!task)
           throw new NotFoundError();
 
+        await req.scope.cradle.scheduler.tasks.removeTaskFromQueue(task);
         await task.destroy();
-        await req.scope.cradle.scheduler.tasks.removeJob(task);
 
         return { status: 204, body: undefined };
       },

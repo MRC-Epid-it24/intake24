@@ -198,7 +198,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
   private async queueJob(job: DbJob, options: JobsOptions = {}) {
     const { id, type, params } = job;
 
-    const bullJob = await this.queue.add(type, { params }, { ...options, jobId: `db-${id}` });
+    const bullJob = await this.queue.add(type, { type, params }, { ...options, jobId: `db-${id}` });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
 
