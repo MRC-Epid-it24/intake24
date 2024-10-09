@@ -59,11 +59,6 @@ import type { ImageMapResponse } from '@intake24/common/types/http';
 
 import { useImageMap } from './use-image-map';
 
-export type ImageMapObject = {
-  id: string;
-  polygon: string;
-};
-
 export default defineComponent({
   name: 'PinchZoomImageMapSelector',
 

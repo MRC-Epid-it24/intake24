@@ -72,11 +72,12 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/components';
 import { useElementSize } from '@vueuse/core';
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
 import type { ImageMap } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
@@ -85,95 +86,70 @@ import { ImagePlaceholder } from '@intake24/survey/components/elements';
 import PinchZoomImageMapSelector from './PinchZoomImageMapSelector.vue';
 import { useImageMap } from './use-image-map';
 
-export type ImageMapObject = {
-  id: string;
-  polygon: string;
+defineOptions({ name: 'ImageMapSelector' });
+
+const props = defineProps({
+  config: {
+    type: Object as PropType<ImageMap>,
+    required: true,
+  },
+  disabled: {
+    type: Boolean,
+    default: undefined,
+  },
+  id: {
+    type: String,
+  },
+  index: {
+    type: Number,
+  },
+  imageMapData: {
+    type: Object as PropType<ImageMapResponse>,
+    required: true,
+  },
+  labels: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
+});
+
+const emit = defineEmits(['confirm', 'select']);
+
+const img = ref<InstanceType<typeof VImg>>();
+const svg = ref<SVGElement>();
+
+const display = useDisplay();
+
+// @ts-expect-error should allow vue instance?
+const { width } = useElementSize(img);
+
+const screenHeight = ref(0);
+const screenWidth = ref(0);
+
+const { hoverIndex, label, objects } = useImageMap(props, width);
+
+const isDisabled = computed(() =>
+  typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled,
+);
+
+function getScreenDimensions() {
+  screenHeight.value = window.screen.height;
+  screenWidth.value = window.screen.width;
+}
+
+function confirm() {
+  emit('confirm');
+}
+
+function select(idx: number, id: string) {
+  emit('select', idx, id);
+
+  if (!display.mobile.value)
+    confirm();
 };
 
-export default defineComponent({
-  name: 'ImageMapSelector',
-
-  components: { PinchZoomImageMapSelector, ImagePlaceholder },
-
-  props: {
-    config: {
-      type: Object as PropType<ImageMap>,
-      required: true,
-    },
-    disabled: {
-      type: Boolean,
-      default: undefined,
-    },
-    id: {
-      type: String,
-    },
-    index: {
-      type: Number,
-    },
-    imageMapData: {
-      type: Object as PropType<ImageMapResponse>,
-      required: true,
-    },
-    labels: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
-  },
-
-  emits: ['confirm', 'select'],
-
-  setup(props, { emit }) {
-    const img = ref<InstanceType<typeof VImg>>();
-    const svg = ref<SVGElement>();
-
-    // @ts-expect-error should allow vue instance?
-    const { height, width } = useElementSize(img);
-
-    const screenHeight = ref(0);
-    const screenWidth = ref(0);
-
-    const { hoverIndex, label, objects } = useImageMap(props, width);
-
-    const isDisabled = computed(() =>
-      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled,
-    );
-
-    const getScreenDimensions = () => {
-      screenHeight.value = window.screen.height;
-      screenWidth.value = window.screen.width;
-    };
-
-    const confirm = () => {
-      emit('confirm');
-    };
-
-    onMounted(() => {
-      getScreenDimensions();
-    });
-
-    return {
-      height,
-      width,
-      confirm,
-      img,
-      isDisabled,
-      svg,
-      hoverIndex,
-      label,
-      objects,
-      screenHeight,
-      screenWidth,
-    };
-  },
-
-  methods: {
-    select(idx: number, id: string) {
-      this.$emit('select', idx, id);
-
-      if (!this.$vuetify.display.mobile)
-        this.confirm();
-    },
-  },
+onMounted(() => {
+  getScreenDimensions();
 });
 </script>
 

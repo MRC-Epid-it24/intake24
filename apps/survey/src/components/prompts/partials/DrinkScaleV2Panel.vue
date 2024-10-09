@@ -2,12 +2,10 @@
   <div ref="wrapper" class="drink-scale-wrapper__v2">
     <div class="drink-scale-drawer" :class="{ selected: cursorInScale }">
       <v-img
-        :key="imgKey"
         ref="imgDrink"
         :aspect-ratio="containerAspectRatio"
         class="drink-scale-image"
         :src="scale.baseImageUrl"
-        @load="onImageLoad"
         @mousedown="onMouseDown"
         @mousemove="onMouseMove"
         @touchmove="onTouchMove"
@@ -16,7 +14,6 @@
           <image-placeholder />
         </template>
       </v-img>
-
       <svg>
         <filter id="drink-scale-blur">
           <feGaussianBlur stdDeviation="5" />
@@ -106,8 +103,9 @@
 import type { PropType } from 'vue';
 import { useElementSize } from '@vueuse/core';
 import { chunk, maxBy } from 'lodash';
-import { computed, ref, toRefs, useTemplateRef, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useGoTo } from 'vuetify';
+import { VImg } from 'vuetify/components';
 
 import type { DrinkwareScaleV2Response } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
@@ -154,27 +152,18 @@ const emit = defineEmits(['confirm', 'update:modelValue']);
 const goTo = useGoTo();
 
 const wrapper = useTemplateRef('wrapper');
-const imgDrink = useTemplateRef('imgDrink');
+const imgDrink = useTemplateRef<VImg>('imgDrink');
 
 // @ts-expect-error should allow vue instance?
 const { height: imgContainerHeight, width: imgContainerWidth } = useElementSize(imgDrink);
 
-const originalImageHeight = ref(1);
-const originalImageWidth = ref(1);
+const originalImageHeight = computed(() => imgDrink.value?.naturalHeight ?? 1);
+const originalImageWidth = computed(() => imgDrink.value?.naturalWidth ?? 1);
 
 const containerAspectRatio = computed(() => {
   const imageAspect = originalImageWidth.value / originalImageHeight.value;
   return Math.max(imageAspect, props.minAspectRatio);
 });
-
-function onImageLoad() {
-  const vueImageElement = imgDrink.value?.$el;
-  if (vueImageElement) {
-    const imgEl = (vueImageElement as any).__vue__.image as HTMLImageElement; // stupid hack to get to the otherwise inaccessible naturalWidth/naturalHeight values
-    originalImageHeight.value = imgEl.naturalHeight;
-    originalImageWidth.value = imgEl.naturalWidth;
-  }
-}
 
 // Outline coordinates converted into a format compatible with the svg polygon's points attribute
 const outlinePoints = computed(() => {
@@ -197,11 +186,9 @@ const outlinePoints = computed(() => {
   return toSvgPolygonPoints(props.scale.outlineCoordinates, scaleWidth, scaleHeight, scaleHorizontalOffset, scaleVerticalOffset);
 });
 
-const propRefs = toRefs(props);
+const scaleBounds = computed(() => getScaleBounds(props.scale.outlineCoordinates));
 
-const scaleBounds = computed(() => getScaleBounds(propRefs.scale.value.outlineCoordinates));
-
-const symmetryShape = computed(() => getSymmetryShape(propRefs.scale.value.outlineCoordinates));
+const symmetryShape = computed(() => getSymmetryShape(props.scale.outlineCoordinates));
 
 // The bounding box of the sliding scale (full region not accounting for maxFillLevel)
 const scaleBoundsPx = computed(() => {
@@ -287,19 +274,19 @@ function onMouseDown(event: MouseEvent) {
 
 const fillLevel = computed(() => sliderValue.value * props.maxFillLevel);
 
-const maxVolume = computed(() => (maxBy(chunk(propRefs.scale.value.volumeSamplesNormalised, 2), sample => sample[1]) || [0, 0])[1]);
+const maxVolume = computed(() => (maxBy(chunk(props.scale.volumeSamplesNormalised, 2), sample => sample[1]) || [0, 0])[1]);
 
 // eslint-disable-next-line vue/return-in-computed-property
 const fillVolume = computed(() => {
-  switch (propRefs.scale.value.volumeMethod) {
+  switch (props.scale.volumeMethod) {
     case 'lookUpTable':
       return calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value);
     case 'cylindrical': {
       const { minY, maxY } = scaleBounds.value;
       const scaleHeight = maxY - minY;
       const fillLineY = maxY - scaleHeight * fillLevel.value;
-      const fullVolume = calculateFillVolume(symmetryShape.value, minY, propRefs.cylindricalVolumeStep.value);
-      const filledVolume = calculateFillVolume(symmetryShape.value, fillLineY, propRefs.cylindricalVolumeStep.value);
+      const fullVolume = calculateFillVolume(symmetryShape.value, minY, props.cylindricalVolumeStep);
+      const filledVolume = calculateFillVolume(symmetryShape.value, fillLineY, props.cylindricalVolumeStep);
       return (filledVolume * maxVolume.value) / fullVolume;
     }
   }
@@ -324,13 +311,6 @@ watch(
     sliderValue.value = props.modelValue / props.maxFillLevel; // Slider values are always in the range [0, 1]
   },
 );
-
-const imgKey = ref(0);
-
-watch(() => props.scale.baseImageUrl, () => {
-  // Element size fails to update on image change sometimes, this seems to fix it
-  ++imgKey.value;
-});
 
 function scrollTo() {
   setTimeout(async () => {
