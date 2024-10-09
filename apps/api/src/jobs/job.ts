@@ -26,7 +26,7 @@ export default abstract class Job<T extends JobType> {
     this.logger = logger;
   }
 
-  protected init(job: BullJob<JobData<JobParams[T]>>): void {
+  protected init(job: BullJob<JobData<T>>): void {
     const {
       id,
       data: { params },
@@ -48,11 +48,11 @@ export default abstract class Job<T extends JobType> {
    * To be implemented by each job
    *
    * @abstract
-   * @param {BullJob<JobData<JobParams[T]>>} job
+   * @param {BullJob<JobData<T>>} job
    * @returns {Promise<void>}
    * @memberof Job
    */
-  abstract run(job: BullJob<JobData<JobParams[T]>>): Promise<void>;
+  abstract run(job: BullJob<JobData<T>>): Promise<void>;
 
   /**
    * Get current progress
