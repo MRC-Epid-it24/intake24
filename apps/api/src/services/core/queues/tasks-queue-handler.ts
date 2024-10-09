@@ -5,7 +5,6 @@ import type { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import type { JobData } from '@intake24/common/types';
 import ioc from '@intake24/api/ioc';
-import { sleep } from '@intake24/api/util';
 import { Task } from '@intake24/db';
 
 import { QueueHandler } from './queue-handler';
@@ -63,172 +62,98 @@ export default class TasksQueueHandler extends QueueHandler<JobData> {
 
     this.workers.push(worker);
 
-    await this.clearRepeatableJobs();
-    await this.loadRepeatableJobs();
+    await this.clearScheduledJobs();
+    await this.loadScheduledJobs();
 
     this.logger.info(`${this.name} has been loaded.`);
   }
 
   async processor(job: BullJob<JobData>) {
-    const { id, name } = job;
+    const { id, data: { type } } = job;
 
     if (!id) {
       this.logger.error(`Queue ${this.name}: Job ID missing.`);
       return;
     }
 
-    const newJob = ioc.resolve<Job<any>>(name);
+    const newJob = ioc.resolve<Job<typeof type>>(type);
     await newJob.run(job);
   }
 
-  async getRepeatableJobById(id: string) {
-    const jobs = await this.queue.getRepeatableJobs();
+  private async clearScheduledJobs() {
+    const repeatableJobs = await this.queue.getJobSchedulers();
 
-    return jobs.find(job => job.id?.replace('db-', '') === id);
+    await Promise.all(repeatableJobs.map(job => this.queue.removeJobScheduler(job.key)));
   }
 
-  /**
-   * Remove repeatable job(s) from queue
-   *
-   * @private
-   * @param {string} [id]
-   * @memberof TasksQueueHandler
-   */
-  private async clearRepeatableJobs(id?: string) {
-    const repeatableJobs = await this.queue.getRepeatableJobs();
+  private createJobParams(task: Task) {
+    const { name, job, cron, params } = task;
 
-    for (const job of repeatableJobs) {
-      if (id && job.id?.replace('db-', '') !== id)
-        continue;
+    return {
+      name,
+      data: { type: job, params },
+      opts: { pattern: cron },
+    };
+  }
 
-      await this.queue.removeRepeatableByKey(job.key);
+  private async loadScheduledJobs() {
+    const tasks = await Task.findAll({ where: { active: true } });
+
+    for (const task of tasks) {
+      const { name, data, opts } = this.createJobParams(task);
+      await this.queue.upsertJobScheduler(`db-${task.id}`, opts, { name, data });
     }
   }
 
-  /**
-   * Load repeatable jobs from DB to the queue
-   *
-   * @private
-   * @memberof TasksQueueHandler
-   */
-  private async loadRepeatableJobs() {
-    const tasks = await Task.findAll({ where: { active: true } });
+  private async getScheduledJobByKey(key: string) {
+    const jobs = await this.queue.getJobSchedulers();
 
-    for (const task of tasks)
-      await this.addJob(task);
+    return jobs.find(job => job.key === key);
   }
 
-  /**
-   * Push job into the queue
-   *
-   * @private
-   * @param {Task} task
-   * @memberof TasksQueueHandler
-   */
-  private async queueJob(task: Task) {
-    const { id, job, cron, params } = task;
-
-    return await this.queue.add(job, { params }, { repeat: { pattern: cron }, jobId: `db-${id}` });
+  async getScheduledJobById(id: string) {
+    return await this.getScheduledJobByKey(`db-${id}`);
   }
 
-  /**
-   * Remove job from queue
-   *
-   * @private
-   * @param {Task} task
-   * @memberof TasksQueueHandler
-   */
-  private async dequeueJob(task: Task) {
-    this.clearRepeatableJobs(task.id);
+  private async removeScheduledJobById(id: string) {
+    const job = await this.getScheduledJobById(id);
+    if (!job) {
+      this.logger.debug(`Queue ${this.name}: Scheduled task (ID: ${id}) not in queue.`);
+      return undefined;
+    }
+
+    return await this.queue.removeJobScheduler(job.key);
   }
 
-  /**
-   * Add task's job to queue
-   *
-   * @param {Task} task
-   * @memberof TasksQueueHandler
-   */
-  public async addJob(task: Task) {
-    const { id, name, active } = task;
+  public async updateTaskInQueue(task: Task) {
+    const { id, active } = task;
 
     if (!active) {
-      this.logger.warn(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) not set as active.`);
+      await this.removeScheduledJobById(id);
       return;
     }
 
-    await this.queueJob(task);
+    const { name, data, opts } = this.createJobParams(task);
+    const job = await this.queue.upsertJobScheduler(`db-${id}`, opts, { name, data });
 
-    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) added.`);
+    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) updated.`);
+
+    return job;
   }
 
-  /**
-   * Update task's job to queue
-   *
-   * @param {Task} task
-   * @memberof TasksQueueHandler
-   */
-  public async updateJob(task: Task) {
-    const { id, name, active } = task;
+  public async removeTaskFromQueue(task: Task) {
+    const { id, name } = task;
 
-    await this.dequeueJob(task);
-
-    /*
-     * Bullmq bug
-     * When repeatable job removed right away and new job pushed in, job entry doesn't end up in redis store
-     * Though queue.add returns correct job entry
-     * Workaround: simple sleep/wait for few ms solves it for now
-     */
-    await sleep(20);
-
-    if (active)
-      await this.queueJob(task);
+    await this.removeScheduledJobById(id);
 
     this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) updated.`);
   }
 
-  /**
-   * Remove task's job from queue
-   *
-   * @param {Task} task
-   * @memberof TasksQueueHandler
-   */
-  public async removeJob(task: Task) {
-    const { id, name } = task;
-
-    await this.dequeueJob(task);
-
-    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) removed.`);
-  }
-
-  /**
-   * Add task's job to queue
-   *
-   * @param {Task} task
-   * @memberof TasksQueueHandler
-   */
-  public async runJob(task: Task) {
-    const { id, name, job, params } = task;
-
-    await this.queue.add(job, { params }, { delay: 500 });
-
-    this.logger.debug(`Queue ${this.name}: Task (ID: ${id}, Name: ${name}) queued.`);
-  }
-
-  /**
-   * Pause all scheduled tasks in queue
-   *
-   * @memberof TasksQueueHandler
-   */
   public async pauseAll() {
-    await this.clearRepeatableJobs();
+    await this.clearScheduledJobs();
   }
 
-  /**
-   * Resume all scheduled tasks in queue
-   *
-   * @memberof TasksQueueHandler
-   */
   public async resumeAll() {
-    await this.loadRepeatableJobs();
+    await this.loadScheduledJobs();
   }
 }
