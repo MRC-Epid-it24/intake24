@@ -73,7 +73,7 @@
       "add": "Add meal",
       "delete": "Delete meal",
       "deleteConfirm": "You are about to delete everything you had for {item}.",
-      "editFoods": "Change / Add foods",
+      "editFoods": "Update foods",
       "editTime": "Change time"
     }
   },
