@@ -19,7 +19,7 @@ export const repeatableBullJob = z.object({
 
 export type RepeatableBullJob = z.infer<typeof repeatableBullJob>;
 
-export type JobData<T = any> = { params: T };
+export type JobData<T extends JobType = JobType> = { type: T; params: JobParams[T] };
 
 export const redisStoreTypes = ['cache', 'rateLimiter', 'session'] as const;
 export type RedisStoreType = (typeof redisStoreTypes)[number];
