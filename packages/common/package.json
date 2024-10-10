@@ -49,7 +49,7 @@
     "@types/jest": "^29.5.13",
     "@types/lodash": "^4.17.10",
     "@types/ms": "^0.7.34",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.7.5",
     "@types/pluralize": "^0.0.33",
     "@types/validator": "^13.12.2",
     "fs-extra": "^11.2.0",
@@ -57,7 +57,7 @@
     "jest-extended": "^4.0.2",
     "svgo": "^3.3.2",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.6.2",
+    "typescript": "^5.6.3",
     "typescript-json-validator": "^2.4.2"
   }
 }
