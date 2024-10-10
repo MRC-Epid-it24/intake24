@@ -23,7 +23,7 @@ export function useClipboard() {
   }
 
   return {
-    clipboardAvailable,
     toClipboard,
+    clipboardAvailable,
   };
 }

@@ -1,5 +1,6 @@
 import type {
   CategoryContentsResponse,
+  CategoryGlobalListEntry,
   CategoryListEntry,
 } from '@intake24/common/types/http/admin';
 import type { CategoryLocal, FoodLocal } from '@intake24/db';
@@ -16,6 +17,14 @@ export function categoryResponse(category: CategoryLocal): CategoryListEntry {
   const { name: englishName, isHidden } = main;
 
   return { id, code, localeId, name, englishName, isHidden };
+}
+
+export function allCategoriesResponse(categories: CategoryGlobalListEntry[]): CategoryGlobalListEntry[] {
+  return categories.map((category) => {
+    const { code, name, isHidden } = category;
+
+    return { code, name, isHidden };
+  });
 }
 
 export function categoryContentsResponse({
