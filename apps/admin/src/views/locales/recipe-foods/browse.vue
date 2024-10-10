@@ -13,8 +13,8 @@
         @click.stop="add"
       />
     </v-toolbar>
-    <v-list>
-      <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
+    <v-list class="list-border">
+      <v-list-item v-for="(item, idx) in form.items" :key="idx">
         <template #prepend>
           <v-icon>fas fa-bowl-food</v-icon>
         </template>

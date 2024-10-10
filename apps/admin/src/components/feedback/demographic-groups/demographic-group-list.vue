@@ -35,7 +35,7 @@
         <json-editor-dialog v-model="items" @update:model-value="update" />
       </options-menu>
     </v-toolbar>
-    <v-list lines="two">
+    <v-list class="list-border" lines="two">
       <vue-draggable
         v-model="items"
         :animation="300"
@@ -45,7 +45,6 @@
         <v-list-item
           v-for="(group, index) in items"
           :key="group.id"
-          class="drag-and-drop__item"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />

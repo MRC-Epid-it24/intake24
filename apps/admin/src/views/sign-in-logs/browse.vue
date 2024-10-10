@@ -15,8 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-
 import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
 import { useDateTime } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
@@ -26,7 +24,7 @@ defineOptions({ name: 'SignInLogList' });
 const { i18n: { t } } = useI18n();
 const { formatDateTime } = useDateTime();
 
-const headers = ref<DataTableHeader[]>([
+const headers: DataTableHeader[] = [
   {
     title: t('common.id'),
     sortable: true,
@@ -63,5 +61,5 @@ const headers = ref<DataTableHeader[]>([
     key: 'action',
     align: 'end',
   },
-]);
+];
 </script>

@@ -95,7 +95,7 @@ export default defineComponent({
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
     const userDialog = ref<InstanceType<typeof UserDialog>>();
 
-    const headers = ref<DataTableHeader[]>([
+    const headers: DataTableHeader[] = [
       {
         title: t('users.name'),
         sortable: true,
@@ -120,7 +120,7 @@ export default defineComponent({
         key: 'action',
         align: 'end',
       },
-    ]);
+    ];
 
     return { headers, table, userDialog };
   },

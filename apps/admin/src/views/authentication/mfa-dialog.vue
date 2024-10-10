@@ -69,22 +69,21 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-list
-            v-model="deviceId" lines="two"
+            v-model="deviceId"
+            class="list-border"
+            lines="two"
             @change="selectDevice"
           >
             <v-list-subheader>{{ $t('common.mfa.devices') }}</v-list-subheader>
-            <template v-for="(device, idx) in authData.devices" :key="device.id">
-              <v-list-item link :value="device.id">
-                <template #prepend>
-                  <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
-                    {{ `$${device.provider}` }}
-                  </v-icon>
-                </template>
-                <v-list-item-title>{{ device.name }}</v-list-item-title>
-                <v-list-item-subtitle>{{ device.provider }}</v-list-item-subtitle>
-              </v-list-item>
-              <v-divider v-if="idx < authData.devices.length + 1" :key="`div-${device.id}`" />
-            </template>
+            <v-list-item v-for="device in authData.devices" :key="device.id" link :value="device.id">
+              <template #prepend>
+                <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
+                  {{ `$${device.provider}` }}
+                </v-icon>
+              </template>
+              <v-list-item-title>{{ device.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ device.provider }}</v-list-item-subtitle>
+            </v-list-item>
           </v-list>
         </v-col>
       </v-row>

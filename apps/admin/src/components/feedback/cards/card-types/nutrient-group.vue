@@ -11,12 +11,11 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('nutrient-types.current') }}</v-card-title>
-            <v-list>
+            <v-list class="list-border">
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="(nutrientType, idx) in currentNutrientTypes"
                   :key="nutrientType.id"
-                  class="list-item-border"
                   link
                 >
                   <template #prepend>
@@ -45,12 +44,11 @@
               prepend-inner-icon="$search"
               variant="outlined"
             />
-            <v-list>
+            <v-list class="list-border">
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="nutrientType in visibleNutrientTypes"
                   :key="nutrientType.id"
-                  class="list-item-border"
                   link
                 >
                   <template #prepend>

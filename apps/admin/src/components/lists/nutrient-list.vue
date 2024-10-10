@@ -27,7 +27,7 @@
         {{ $t('nutrient-types.reset.text') }}
       </confirm-dialog>
     </v-toolbar>
-    <v-list>
+    <v-list class="list-border">
       <vue-draggable
         v-model="items"
         :animation="300"
@@ -37,7 +37,6 @@
         <v-list-item
           v-for="(nutrientType, idx) in items"
           :key="nutrientType.id.join(':')"
-          class="drag-and-drop__item"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />

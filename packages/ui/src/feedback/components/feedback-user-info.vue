@@ -18,15 +18,12 @@
           <span>{{ $t('feedback.physicalData.change') }}</span>
         </v-tooltip>
       </v-toolbar>
-      <v-list v-if="physicalData.length" class="py-0">
-        <template v-for="(item, idx) in physicalData" :key="idx">
-          <v-list-item>
-            <v-list-item-subtitle>
-              {{ item }}
-            </v-list-item-subtitle>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < physicalData.length" :key="`div-${idx}`" />
-        </template>
+      <v-list v-if="physicalData.length" class="py-0 list-border">
+        <v-list-item v-for="(item, idx) in physicalData" :key="idx">
+          <v-list-item-subtitle>
+            {{ item }}
+          </v-list-item-subtitle>
+        </v-list-item>
       </v-list>
     </v-card>
     <!-- <v-btn

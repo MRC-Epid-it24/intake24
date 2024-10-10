@@ -13,8 +13,8 @@
         @click.stop="add"
       />
     </v-toolbar>
-    <v-list>
-      <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
+    <v-list class="list-border">
+      <v-list-item v-for="(item, idx) in form.items" :key="idx">
         <template #prepend>
           <v-icon>fas fa-arrows-split-up-and-left</v-icon>
         </template>
@@ -22,6 +22,8 @@
           <v-col cols="12" md="4">
             <v-text-field
               v-model.trim="item.firstWord"
+              class="my-1"
+              density="compact"
               hide-details="auto"
               :label="$t('locales.split-lists.firstWord')"
               name="firstWord"
@@ -31,6 +33,8 @@
           <v-col cols="12" md>
             <v-text-field
               v-model.trim="item.words"
+              class="my-1"
+              density="compact"
               hide-details="auto"
               :label="$t('locales.split-lists.words')"
               name="words"
@@ -57,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 
 import type {
   LocaleEntry,
@@ -66,6 +70,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -79,6 +84,8 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const http = useHttp();
+
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
@@ -89,33 +96,41 @@ export default defineComponent({
       config: { transform: ({ items }) => items },
     });
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit, toForm };
-  },
+    function add() {
+      form.items.push({ localeId: props.id, firstWord: '', words: '' });
+    };
 
-  async mounted() {
-    const { data: items } = await this.$http.get<SplitListAttributes[]>(
-      `admin/locales/${this.id}/split-lists`,
-    );
+    function remove(index: number) {
+      form.items.splice(index, 1);
+    };
 
-    this.toForm({ items });
-  },
+    async function save() {
+      form.items = form.items.filter(({ firstWord, words }) => firstWord && words);
 
-  methods: {
-    add() {
-      this.form.items.push({ localeId: this.id, firstWord: '', words: '' });
-    },
-
-    remove(index: number) {
-      this.form.items.splice(index, 1);
-    },
-
-    async save() {
-      this.form.items = this.form.items.filter(({ firstWord, words }) => firstWord && words);
-
-      const items = await this.form.post<SplitListAttributes[]>(`admin/locales/${this.id}/split-lists`);
+      const items = await form.post<SplitListAttributes[]>(`admin/locales/${props.id}/split-lists`);
 
       useStoreEntry().setEntry({ items });
-    },
+    };
+
+    onMounted(async () => {
+      const { data: items } = await http.get<SplitListAttributes[]>(
+        `admin/locales/${props.id}/split-lists`,
+      );
+
+      toForm({ items });
+    });
+
+    return {
+      add,
+      entry,
+      entryLoaded,
+      clearError,
+      form,
+      remove,
+      routeLeave,
+      save,
+      submit,
+    };
   },
 });
 </script>

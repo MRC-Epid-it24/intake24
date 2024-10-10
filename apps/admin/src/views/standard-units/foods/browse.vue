@@ -40,7 +40,7 @@ export default defineComponent({
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    const headers = ref<DataTableHeader[]>([
+    const headers: DataTableHeader[] = [
       {
         title: t('fdbs.foods.global.code'),
         sortable: true,
@@ -67,7 +67,7 @@ export default defineComponent({
         key: 'action',
         align: 'end',
       },
-    ]);
+    ];
 
     const updateTable = async () => {
       await table.value?.fetch();

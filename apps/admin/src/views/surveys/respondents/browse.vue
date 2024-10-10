@@ -264,7 +264,7 @@ export default defineComponent({
       );
     }
 
-    const headers = ref<DataTableHeader[]>([
+    const headers: DataTableHeader[] = [
       {
         title: i18n.t('users.aliases.username'),
         sortable: true,
@@ -295,7 +295,7 @@ export default defineComponent({
         key: 'action',
         align: 'end',
       },
-    ]);
+    ];
 
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);

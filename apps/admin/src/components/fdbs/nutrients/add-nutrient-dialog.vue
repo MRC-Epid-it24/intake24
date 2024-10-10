@@ -40,24 +40,21 @@
           </v-col>
         </v-row>
         <v-alert v-if="isAlreadyIncluded" type="error">
-          {{ $t('fdbs.nutrients.alreadyIncluded', { id: selectedRecord?.id }) }}
+          {{ $t('fdbs.nutrients.alreadyIncluded', { id: selected.at(0)?.id }) }}
         </v-alert>
         <template v-if="items.length">
-          <v-list v-model:selected="selectedRecordId" density="compact" min-height="350px">
-            <template v-for="(item, idx) in items" :key="item.id">
-              <v-list-item :value="item.id">
-                <template #prepend="{ isActive }">
-                  <v-list-item-action class="mr-2">
-                    <v-checkbox-btn :model-value="isActive " />
-                  </v-list-item-action>
-                  <v-icon>fas fa-list</v-icon>
-                </template>
-                <v-list-item-title>
-                  {{ item.nutrientTableRecordId }} | {{ item.name }}
-                </v-list-item-title>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`" />
-            </template>
+          <v-list v-model:selected="selected" class="list-border" density="compact" min-height="350px">
+            <v-list-item v-for="item in items" :key="item.id" :value="item">
+              <template #prepend="{ isActive }">
+                <v-list-item-action class="mr-2">
+                  <v-checkbox-btn :model-value="isActive " />
+                </v-list-item-action>
+                <v-icon>fas fa-list</v-icon>
+              </template>
+              <v-list-item-title>
+                {{ item.nutrientTableRecordId }} | {{ item.name }}
+              </v-list-item-title>
+            </v-list-item>
           </v-list>
           <div class="text-center">
             <v-pagination v-model="page" :length="lastPage" rounded />
@@ -69,102 +66,75 @@
       </v-card-text>
       <v-card-actions>
         <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="close">
-          <v-icon $cancel start />{{ $t('common.action.cancel') }}
+          <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer />
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="!selectedRecordId || isAlreadyIncluded"
+          :disabled="!isSelected || isAlreadyIncluded"
           variant="text"
           @click.stop="confirm"
         >
-          <v-icon $success start />{{ $t('common.action.ok') }}
+          <v-icon icon="$success" start />{{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import type {
   FoodDatabaseRefs,
-  NutrientTableRecordsResponse,
+  NutrientTableRecordAttributes,
+  NutrientTableRecordReference,
 } from '@intake24/common/types/http/admin';
-import type { NutrientTableRecordAttributes } from '@intake24/db';
 import { useFetchList } from '@intake24/admin/composables';
 import { copy } from '@intake24/common/util';
 
-export default defineComponent({
-  name: 'AddNutrientDialog',
+defineOptions({ name: 'AddNutrientDialog' });
 
-  props: {
-    currentItems: {
-      type: Array as PropType<NutrientTableRecordAttributes[]>,
-      required: true,
-    },
-    nutrientTables: {
-      type: Array as PropType<FoodDatabaseRefs['nutrientTables']>,
-      required: true,
-    },
+const props = defineProps({
+  currentItems: {
+    type: Array as PropType<NutrientTableRecordAttributes[]>,
+    required: true,
   },
-
-  emits: ['add'],
-
-  setup(props) {
-    const selectedRecordId = ref<string | null>(null);
-    const selectedTableId = ref(props.nutrientTables.length ? props.nutrientTables[0].id : ':id');
-
-    const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
-      NutrientTableRecordsResponse['data'][number]
-    >('admin/references/nutrient-tables/:id/records', selectedTableId);
-
-    return {
-      dialog,
-      loading,
-      items,
-      page,
-      lastPage,
-      search,
-      selectedRecordId,
-      selectedTableId,
-      fetch,
-      clear,
-    };
-  },
-
-  computed: {
-    selectedRecord(): NutrientTableRecordAttributes | null {
-      const { selectedRecordId } = this;
-      if (!selectedRecordId)
-        return null;
-
-      return this.items.find(item => item.id === selectedRecordId) ?? null;
-    },
-    isAlreadyIncluded(): boolean {
-      if (!this.currentItems.length || !this.selectedRecordId)
-        return false;
-
-      return !!this.currentItems.find(item => item.id === this.selectedRecordId);
-    },
-  },
-
-  methods: {
-    close() {
-      this.selectedRecordId = null;
-      this.dialog = false;
-    },
-
-    confirm() {
-      if (!this.selectedRecord)
-        return;
-
-      this.$emit('add', copy(this.selectedRecord));
-      this.close();
-    },
+  nutrientTables: {
+    type: Array as PropType<FoodDatabaseRefs['nutrientTables']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['add']);
+
+const selected = ref<NutrientTableRecordAttributes[]>([]);
+const selectedTableId = ref(props.nutrientTables.length ? props.nutrientTables[0].id : ':id');
+
+const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
+  NutrientTableRecordReference
+>('admin/references/nutrient-tables/:id/records', selectedTableId);
+
+const isSelected = computed(() => !!selected.value.length);
+const isAlreadyIncluded = computed(() => {
+  if (!props.currentItems.length || !selected.value.length)
+    return false;
+
+  return !!props.currentItems.find(item => item.id === selected.value.at(0)?.id);
+});
+
+function close() {
+  selected.value = [];
+  dialog.value = false;
+};
+
+function confirm() {
+  if (!selected.value.length)
+    return;
+
+  emit('add', copy(selected.value.at(0)));
+  close();
+};
 </script>

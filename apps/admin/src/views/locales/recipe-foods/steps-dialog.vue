@@ -1,12 +1,12 @@
 <template>
   <v-dialog
-    v-if="$props.dialog"
-    v-model="$props.dialog"
+    v-if="dialog"
     :fullscreen="$vuetify.display.smAndDown"
     max-width="700px"
+    :model-value="dialog"
   >
-    <v-card class="dialog-card" :tile="$vuetify.display.smAndDown">
-      <v-toolbar class="sticky-toolbar" color="secondary" dark flat>
+    <v-card :tile="$vuetify.display.smAndDown">
+      <v-toolbar color="secondary" dark flat>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="$emit('close')" />
         <v-toolbar-title>
           {{ $t('locales.recipe-foods.steps') }}
@@ -16,16 +16,16 @@
           {{ $t('common.action.save') }}
         </v-btn>
       </v-toolbar>
-      <v-list>
-        <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
+      <v-list class="list-border recipe-list">
+        <v-list-item v-for="(item, idx) in form.items" :key="idx" class="mt-2">
+          <v-list-item-title class="text-h4 font-weight-medium mb-4">
+            <v-avatar class="mr-3" color="primary" size="28">
+              <span class="text-white font-weight-medium text-h6">{{ item.order }}</span>
+            </v-avatar>
+            {{ translate(item.name) }}
+          </v-list-item-title>
           <v-container class="px-2 v-list-item-content">
-            <v-list-subheader class="text-h4 font-weight-medium mb-4 px-0">
-              <v-avatar class="mr-3" color="primary" size="28">
-                <span class="text-white font-weight-medium text-h6">{{ item.order }}</span>
-              </v-avatar>
-              {{ translate(item.name) }}
-            </v-list-subheader>
-            <v-row col="12">
+            <v-row>
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model.trim="item.code"
@@ -49,6 +49,7 @@
               <v-col cols="12">
                 <language-selector
                   v-model="item.name"
+                  border
                   :label="$t('locales.recipe-foods.name')"
                   required
                 >
@@ -67,6 +68,7 @@
               <v-col cols="12">
                 <language-selector
                   v-model="item.name"
+                  border
                   :label="$t('locales.recipe-foods.description')"
                   required
                 >
@@ -82,8 +84,6 @@
                   </template>
                 </language-selector>
               </v-col>
-            </v-row>
-            <v-row col="12">
               <v-col cols="12" md="6">
                 <v-switch
                   v-model="item.repeatable"
@@ -123,13 +123,12 @@
               <v-btn
                 block
                 class="full-width-btn"
-                elevation="0"
+                color="grey-lighten-3"
                 :title="$t('locales.recipe-foods.remove')"
+                variant="flat"
                 @click.stop="removeStep(idx)"
               >
-                <v-icon color="error">
-                  $delete
-                </v-icon>
+                <v-icon color="error" icon="$delete" />
               </v-btn>
             </v-list-item-action>
           </template>
@@ -252,36 +251,19 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
-.v-list-item-content {
-  flex: 9;
-  display: flex;
-  align-items: center;
-}
-
-.v-list-item-action {
-  flex: 1;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  > .full-width-btn {
-    width: 100%;
-    height: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5d4;
+<style lang="scss">
+.recipe-list {
+  .v-list-item__append {
+    align-self: stretch;
   }
-}
 
-.dialog-card {
-  .sticky-toolbar {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    z-index: 1;
+  .v-list-item-action {
+    align-self: stretch;
+
+    > .full-width-btn {
+      width: 100%;
+      height: 80%;
+    }
   }
 }
 </style>

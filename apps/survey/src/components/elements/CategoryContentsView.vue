@@ -52,11 +52,10 @@
     >
       {{ showAll ? i18n.showLess : i18n.showAll }}
     </v-btn>
-    <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
+    <v-list v-if="contents.foods.length" class="list-border list__no-wrap pa-0">
       <v-list-item
         v-for="food in contents.foods"
         :key="food.code"
-        class="list-item-border"
         @click="foodSelected(food)"
       >
         <template #prepend>

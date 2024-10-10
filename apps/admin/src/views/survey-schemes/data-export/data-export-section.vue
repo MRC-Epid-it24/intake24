@@ -23,7 +23,7 @@
         <v-row class="mt-3">
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('survey-schemes.data-export.current') }}</v-card-title>
-            <v-list lines="two">
+            <v-list class="list-border" lines="two">
               <vue-draggable
                 v-model="fields"
                 :animation="300"
@@ -32,7 +32,6 @@
                 <v-list-item
                   v-for="(field, index) in fields"
                   :key="field.id"
-                  class="drag-and-drop__item"
                 >
                   <template #prepend>
                     <v-avatar class="drag-and-drop__handle" icon="$handle" />
@@ -82,12 +81,11 @@
               prepend-inner-icon="$search"
               variant="outlined"
             />
-            <v-list lines="two">
+            <v-list class="list-border" lines="two">
               <transition-group name="drag-and-drop" type="transition">
                 <v-list-item
                   v-for="field in visibleFields"
                   :key="field.id"
-                  class="list-item-border"
                   link
                 >
                   <v-list-item-subtitle class="mb-1">

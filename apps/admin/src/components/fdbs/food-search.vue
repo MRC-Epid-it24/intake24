@@ -85,12 +85,12 @@ const categories = ref<CategoriesResponse['data']>([]);
 const foods = ref<FoodsResponse['data']>([]);
 const items = ref<FoodSearchItem[]>([]);
 
-const headers = ref<DataTableHeader[]>([
+const headers: DataTableHeader[] = [
   { title: '', key: 'resource', sortable: false },
   { title: i18n.t('fdbs.foods.global.code'), key: 'code' },
   { title: i18n.t('fdbs.foods.global.name'), key: 'englishName' },
   { title: i18n.t('fdbs.foods.local.name'), key: 'name' },
-]);
+];
 
 async function clear() {
   search.value = '';

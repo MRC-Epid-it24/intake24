@@ -85,6 +85,7 @@
                     <v-col cols="12">
                       <language-selector
                         v-model="object.label"
+                        border
                         :disabled="disabled"
                         :label="$t('guide-images.objects.label._')"
                       >

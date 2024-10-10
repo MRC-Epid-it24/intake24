@@ -28,7 +28,7 @@
           handle=".drag-and-drop__handle"
           tag="tbody"
         >
-          <tr v-for="(unit, idx) in parameters.units" :key="unit.name" class="drag-and-drop__item">
+          <tr v-for="(unit, idx) in parameters.units" :key="unit.name">
             <td>
               <v-icon class="drag-and-drop__handle">
                 $handle
@@ -66,6 +66,8 @@
                 icon
                 icon-left="$delete"
                 :label="$t('standard-units.remove')"
+                size="small"
+                variant="text"
                 @confirm="remove(idx)"
               >
                 {{ $t('common.action.confirm.delete', { name: unit.name }) }}

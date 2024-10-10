@@ -40,7 +40,13 @@ p {
   }
 }
 
-.list-item-border {
+.list-border {
+  .v-list-item:not(:last-child) {
+    border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
+  }
+}
+
+.list-item-border:not(:last-child) {
   border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
 }
 

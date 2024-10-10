@@ -11,7 +11,7 @@
         <v-btn color="primary" icon="$add" size="small" :title="$t('common.options.add')" @click.stop="add" />
       </v-toolbar>
       <v-divider />
-      <v-list density="compact">
+      <v-list class="list-border" density="compact">
         <vue-draggable
           v-model="currentOptions"
           :animation="300"
@@ -21,7 +21,6 @@
           <v-list-item
             v-for="(option, idx) in currentOptions"
             :key="option.id"
-            class="drag-and-drop__item"
             :ripple="false"
           >
             <template #prepend>

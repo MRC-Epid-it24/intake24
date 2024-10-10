@@ -54,6 +54,7 @@
                 icon
                 icon-left="$delete"
                 :label="$t('common.action.delete')"
+                variant="text"
                 @confirm="remove(item)"
               >
                 {{ $t('common.action.confirm.delete', { name: item.id }) }}

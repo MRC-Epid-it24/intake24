@@ -65,50 +65,47 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-list>
-      <transition-group v-if="devices.length" name="drag-and-drop" type="transition">
-        <template v-for="(device, idx) in devices" :key="device.id">
-          <v-list-item link>
-            <template #prepend>
-              <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
-                {{ `$${device.provider}` }}
-              </v-icon>
-            </template>
-            <v-list-item-title>{{ device.name }}</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ $t(`user.mfa.providers.${device.provider}.title`) }}
-            </v-list-item-subtitle>
-            <template #append>
-              <v-list-item-action>
-                <v-chip v-if="device.preferred" color="secondary" variant="outlined">
-                  {{ $t('user.mfa.devices.preferred._') }}
-                </v-chip>
-                <confirm-dialog
-                  v-else
-                  color="secondary"
-                  icon
-                  icon-left="far fa-circle-up"
-                  :label="$t('user.mfa.devices.preferred.promote')"
-                  @confirm="promote(device.id, idx)"
-                >
-                  {{ $t('user.mfa.devices.preferred.promoteConfirm', { name: device.name }) }}
-                </confirm-dialog>
-              </v-list-item-action>
-              <v-list-item-action>
-                <confirm-dialog
-                  color="error"
-                  icon
-                  icon-left="$delete"
-                  :label="$t('user.mfa.devices.remove')"
-                  @confirm="remove(device.id)"
-                >
-                  {{ $t('common.action.confirm.delete', { name: device.name }) }}
-                </confirm-dialog>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < devices.length" :key="`div-${device.id}`" />
-        </template>
+    <v-list class="list-border">
+      <transition-group v-if="devices.length" name="drag-and-drop">
+        <v-list-item v-for="(device, idx) in devices" :key="device.id" link>
+          <template #prepend>
+            <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
+              {{ `$${device.provider}` }}
+            </v-icon>
+          </template>
+          <v-list-item-title>{{ device.name }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ $t(`user.mfa.providers.${device.provider}.title`) }}
+          </v-list-item-subtitle>
+          <template #append>
+            <v-list-item-action>
+              <v-chip v-if="device.preferred" color="secondary" variant="outlined">
+                {{ $t('user.mfa.devices.preferred._') }}
+              </v-chip>
+              <confirm-dialog
+                v-else
+                color="secondary"
+                icon
+                icon-left="far fa-circle-up"
+                :label="$t('user.mfa.devices.preferred.promote')"
+                @confirm="promote(device.id, idx)"
+              >
+                {{ $t('user.mfa.devices.preferred.promoteConfirm', { name: device.name }) }}
+              </confirm-dialog>
+            </v-list-item-action>
+            <v-list-item-action>
+              <confirm-dialog
+                color="error"
+                icon
+                icon-left="$delete"
+                :label="$t('user.mfa.devices.remove')"
+                @confirm="remove(device.id)"
+              >
+                {{ $t('common.action.confirm.delete', { name: device.name }) }}
+              </confirm-dialog>
+            </v-list-item-action>
+          </template>
+        </v-list-item>
       </transition-group>
       <v-list-item v-else>
         <v-list-item-title>{{ $t('user.mfa.devices.none') }}</v-list-item-title>

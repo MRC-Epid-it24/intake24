@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-list>
+    <v-list class="list-border">
       <vue-draggable
         v-model="items"
         :animation="300"
@@ -10,7 +10,6 @@
         <v-list-item
           v-for="(item, idx) in items"
           :key="item._id"
-          class="drag-and-drop__item"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />

@@ -34,7 +34,7 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
-          <json-editor v-bind="{ readOnly: true, value: selected }" />
+          <json-editor v-bind="{ readOnly: true, modelValue: selected }" />
         </v-container>
       </v-card>
     </v-dialog>
@@ -67,7 +67,7 @@ export default defineComponent({
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
 
-    const headers = ref<DataTableHeader[]>([
+    const headers: DataTableHeader[] = [
       {
         title: t('surveys.submissions.id'),
         sortable: true,
@@ -104,7 +104,7 @@ export default defineComponent({
         key: 'action',
         align: 'end',
       },
-    ]);
+    ];
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 

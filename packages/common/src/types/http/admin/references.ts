@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { languageAttributes } from './languages';
 import { systemLocaleAttributes } from './locales';
+import { nutrientTableRecordAttributes } from './nutrient-tables';
 import { standardUnitAttributes } from './standard-units';
 import { surveyAttributes } from './surveys';
 
@@ -39,13 +40,7 @@ export const localeReference = systemLocaleAttributes.pick({
 });
 export type LocaleReference = z.infer<typeof localeReference>;
 
-export const nutrientTableRecordReference = z.object({
-  id: z.string(),
-  nutrientTableId: z.string(),
-  nutrientTableRecordId: z.string(),
-  name: z.string(),
-  localName: z.string(),
-});
+export const nutrientTableRecordReference = nutrientTableRecordAttributes;
 export type NutrientTableRecordReference = z.infer<typeof nutrientTableRecordReference>;
 
 export const standardUnitReference = standardUnitAttributes.pick({

@@ -16,7 +16,6 @@
 
 <script lang="ts" setup>
 import cronstrue from 'cronstrue';
-import { ref } from 'vue';
 
 import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
 import { useI18n } from '@intake24/i18n';
@@ -25,7 +24,7 @@ defineOptions({ name: 'TaskList' });
 
 const { i18n: { t } } = useI18n();
 
-const headers = ref<DataTableHeader[]>([
+const headers: DataTableHeader[] = [
   {
     title: t('common.name'),
     sortable: true,
@@ -57,7 +56,7 @@ const headers = ref<DataTableHeader[]>([
     key: 'action',
     align: 'end',
   },
-]);
+];
 
 function readableCron(cron: string) {
   return cronstrue.toString(cron, { use24HourTimeFormat: true });

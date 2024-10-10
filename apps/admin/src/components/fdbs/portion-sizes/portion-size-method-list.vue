@@ -14,17 +14,13 @@
         @click.stop="add"
       />
     </v-toolbar>
-    <v-list class="py-0" lines="two">
+    <v-list class="list-border py-0" lines="two">
       <vue-draggable
         v-model="items"
         :animation="300"
         handle=".drag-and-drop__handle"
       >
-        <v-list-item
-          v-for="(item, index) in items"
-          :key="item._id"
-          class="drag-and-drop__item"
-        >
+        <v-list-item v-for="(item, index) in items" :key="item._id">
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
           </template>

@@ -96,11 +96,10 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-list lines="two">
+    <v-list class="list-border" lines="two">
       <v-list-item
         v-for="(token, idx) in tokens"
         :key="token.id"
-        class="list-item-border"
         :disabled="token.revoked"
         link
       >

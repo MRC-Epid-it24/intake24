@@ -25,70 +25,70 @@
           <v-icon icon="fas fa-paper-plane" start /> {{ $t('notifications.add') }}
         </v-btn>
       </div>
-      <v-list class="py-0">
-        <template v-for="(item, idx) in items" :key="idx">
-          <v-list-item>
-            <template #prepend>
-              <v-icon>fas fa-paper-plane</v-icon>
-            </template>
-            <v-container>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <v-select
-                    v-model="item.type"
-                    hide-details="auto"
-                    :items="events"
-                    name="type"
-                    :title="$t('notifications.events._')"
-                    variant="outlined"
-                  />
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-select
-                    v-model="item.channel"
-                    hide-details="auto"
-                    :items="channels"
-                    name="channel"
-                    :title="$t('notifications.channels._')"
-                    variant="outlined"
-                    @update:model-value="updateProps(idx)"
-                  />
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-if="item.channel === 'webhook'"
-                    v-model="item.url"
-                    hide-details="auto"
-                    :label="$t('notifications.channels.url')"
-                    variant="outlined"
-                  />
-                  <v-text-field
-                    v-else-if="item.channel === 'email'"
-                    v-model="item.to"
-                    hide-details="auto"
-                    :label="$t('notifications.channels.to')"
-                    variant="outlined"
-                  />
-                  <v-text-field
-                    v-else-if="item.channel === 'slack'"
-                    v-model="item.channelId"
-                    hide-details="auto"
-                    :label="$t('notifications.channels.channelId')"
-                    variant="outlined"
-                  />
-                </v-col>
-              </v-row>
-            </v-container>
-            <template #append>
-              <v-list-item-action>
-                <v-btn icon="$delete" :title="$t('notifications.remove')" @click.stop="remove(idx)" />
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < items.length" :key="`div-${idx}`" />
-        </template>
+      <v-list class="list-border py-0">
+        <v-list-item v-for="(item, idx) in items" :key="idx">
+          <template #prepend>
+            <v-icon>fas fa-paper-plane</v-icon>
+          </template>
+          <v-container>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="item.type"
+                  hide-details="auto"
+                  :items="events"
+                  :name="`type-${idx}`"
+                  :title="$t('notifications.events._')"
+                  variant="outlined"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="item.channel"
+                  hide-details="auto"
+                  :items="channels"
+                  :name="`channel-${idx}`"
+                  :title="$t('notifications.channels._')"
+                  variant="outlined"
+                  @update:model-value="updateProps(idx)"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-if="item.channel === 'webhook'"
+                  v-model="item.url"
+                  hide-details="auto"
+                  :label="$t('notifications.channels.url')"
+                  :name="`url-${idx}`"
+                  variant="outlined"
+                />
+                <v-text-field
+                  v-else-if="item.channel === 'email'"
+                  v-model="item.to"
+                  hide-details="auto"
+                  :label="$t('notifications.channels.to')"
+                  :name="`to-${idx}`"
+                  variant="outlined"
+                />
+                <v-text-field
+                  v-else-if="item.channel === 'slack'"
+                  v-model="item.channelId"
+                  hide-details="auto"
+                  :label="$t('notifications.channels.channelId')"
+                  :name="`channelId-${idx}`"
+                  variant="outlined"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+          <template #append>
+            <v-list-item-action>
+              <v-btn color="error" icon="$delete" :title="$t('notifications.remove')" @click.stop="remove(idx)" />
+            </v-list-item-action>
+          </template>
+        </v-list-item>
       </v-list>
       <v-card-actions>
         <v-spacer />

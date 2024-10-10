@@ -21,7 +21,7 @@
       </tbody>
     </v-table>
     <v-container fluid>
-      <json-editor v-bind="{ readOnly: true, value: entry.prompt }" />
+      <json-editor v-bind="{ readOnly: true, modelValue: entry.prompt }" />
     </v-container>
   </layout>
 </template>

@@ -34,10 +34,10 @@
           step: index + 1,
           promptIds,
           templates,
-          items: isMealSection(section) ? form.prompts.meals[section] : form.prompts[section],
+          modelValue: isMealSection(section) ? form.prompts.meals[section] : form.prompts[section],
         }"
         @move="move"
-        @update:items="updateItems(section, $event)"
+        @update:model-value="updateItems(section, $event)"
       />
     </v-expansion-panels>
   </layout>

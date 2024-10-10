@@ -14,32 +14,29 @@
         @add="add"
       />
     </v-toolbar>
-    <v-list class="py-0">
-      <template v-for="(item, idx) in items" :key="item.code">
-        <v-list-item link>
-          <template #prepend>
-            <v-icon>$categories</v-icon>
-          </template>
-          <slot name="item.content" v-bind="{ item }">
-            <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
-          </slot>
-          <template #append>
-            <slot name="item.action" v-bind="{ item }" />
-            <v-list-item-action v-if="!disabled">
-              <confirm-dialog
-                color="error"
-                icon
-                icon-left="$delete"
-                :label="$t('fdbs.categories.remove')"
-                @confirm="remove(item.code)"
-              >
-                {{ $t('common.action.confirm.remove', { name: item.name }) }}
-              </confirm-dialog>
-            </v-list-item-action>
-          </template>
-        </v-list-item>
-        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`" />
-      </template>
+    <v-list class="list-border py-0">
+      <v-list-item v-for="item in items" :key="item.code" link>
+        <template #prepend>
+          <v-icon>$categories</v-icon>
+        </template>
+        <slot name="item.content" v-bind="{ item }">
+          <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
+        </slot>
+        <template #append>
+          <slot name="item.action" v-bind="{ item }" />
+          <v-list-item-action v-if="!disabled">
+            <confirm-dialog
+              color="error"
+              icon
+              icon-left="$delete"
+              :label="$t('fdbs.categories.remove')"
+              @confirm="remove(item.code)"
+            >
+              {{ $t('common.action.confirm.remove', { name: item.name }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </template>
+      </v-list-item>
     </v-list>
     <v-messages
       v-if="errors.has('main.parentCategories')"

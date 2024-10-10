@@ -30,11 +30,10 @@
       </template>
     </v-toolbar>
     <error-list :errors="nonInputErrors" tag="v-card-text" />
-    <v-list v-if="form.translations.length" lines="two">
+    <v-list v-if="form.translations.length" class="list-border" lines="two">
       <v-list-item
         v-for="translation in form.translations"
         :key="translation.id"
-        class="list-item-border"
         link
       >
         <template #prepend>

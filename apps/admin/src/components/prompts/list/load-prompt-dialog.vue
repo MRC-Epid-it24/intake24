@@ -36,27 +36,24 @@
         <v-alert v-if="promptAlreadyExists" type="error">
           {{
             $t('survey-schemes.prompts.templates.alreadyExists', {
-              promptId: selectedPrompt?.id,
+              promptId: selected.at(0)?.id,
             })
           }}
         </v-alert>
         <template v-if="prompts.length">
-          <v-list v-model:selected="selectedId" lines="two" min-height="350px">
-            <template v-for="(prompt, idx) in prompts" :key="prompt.id">
-              <v-list-item :value="prompt.id">
-                <template #prepend="{ isActive }">
-                  <v-list-item-action class="mr-2">
-                    <v-checkbox-btn :model-value="isActive " />
-                  </v-list-item-action>
-                  <v-icon>fas fa-question-circle</v-icon>
-                </template>
-                <v-list-item-title>{{ prompt.name }}</v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < prompts.length" :key="`div-${prompt.id}`" />
-            </template>
+          <v-list v-model:selected="selected" class="list-border" lines="two" min-height="350px">
+            <v-list-item v-for="prompt in prompts" :key="prompt.id" :value="prompt">
+              <template #prepend="{ isActive }">
+                <v-list-item-action class="mr-2">
+                  <v-checkbox-btn :model-value="isActive " />
+                </v-list-item-action>
+                <v-icon>fas fa-question-circle</v-icon>
+              </template>
+              <v-list-item-title>{{ prompt.name }}</v-list-item-title>
+              <v-list-item-subtitle>
+                {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
+              </v-list-item-subtitle>
+            </v-list-item>
           </v-list>
           <div class="text-center">
             <v-pagination v-model="page" :length="lastPage" rounded />
@@ -75,7 +72,7 @@
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="!selectedId || promptAlreadyExists"
+          :disabled="!isSelected || promptAlreadyExists"
           variant="text"
           @click.stop="confirm"
         >
@@ -125,19 +122,10 @@ const lastPage = ref<number | undefined>();
 const search = ref<string | null>(null);
 
 const prompts = ref<Prompt[]>([]);
-const selectedId = ref<string | undefined>();
+const selected = ref<Prompt[]>([]);
 
-const selectedPrompt = computed(() => {
-  if (!selectedId.value)
-    return undefined;
-
-  return prompts.value.find(prompt => prompt.id === selectedId.value);
-});
-
-const promptAlreadyExists = computed(() => {
-  const match = props.promptIds.find(id => id === selectedPrompt.value?.id);
-  return !!match;
-});
+const isSelected = computed(() => !!selected.value.length);
+const promptAlreadyExists = computed(() => !!props.promptIds.find(id => id === selected.value.at(0)?.id));
 
 async function fetchLocally(search: string | null, page: number, limit = 5) {
   const currentPage = page - 1;
@@ -183,7 +171,7 @@ async function fetch() {
 }
 
 function close() {
-  selectedId.value = undefined;
+  selected.value = [];
   dialog.value = false;
 };
 
@@ -192,10 +180,10 @@ function cancel() {
 };
 
 function confirm() {
-  if (!selectedPrompt.value)
+  if (!isSelected.value)
     return;
 
-  emit('load', copy(selectedPrompt.value));
+  emit('load', copy(selected.value.at(0)));
   close();
 };
 

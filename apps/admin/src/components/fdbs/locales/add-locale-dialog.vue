@@ -26,21 +26,18 @@
           {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItems[0].code }) }}
         </v-alert>
         <template v-if="items.length">
-          <v-list v-model:selected="selected" density="compact" min-height="350px" multiple>
-            <template v-for="(item, idx) in items" :key="item.id">
-              <v-list-item :value="item.id">
-                <template #prepend="{ isActive }">
-                  <v-list-item-action class="mr-2">
-                    <v-checkbox-btn :model-value="isActive " />
-                  </v-list-item-action>
-                  <v-icon>$locales</v-icon>
-                </template>
-                <v-list-item-title>
-                  {{ item.code }} | {{ item.englishName }}
-                </v-list-item-title>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`" />
-            </template>
+          <v-list v-model:selected="selected" class="list-border" density="compact" min-height="350px" multiple>
+            <v-list-item v-for="item in items" :key="item.id" :value="item.id">
+              <template #prepend="{ isActive }">
+                <v-list-item-action class="mr-2">
+                  <v-checkbox-btn :model-value="isActive " />
+                </v-list-item-action>
+                <v-icon>$locales</v-icon>
+              </template>
+              <v-list-item-title>
+                {{ item.code }} | {{ item.englishName }}
+              </v-list-item-title>
+            </v-list-item>
           </v-list>
           <div class="text-center">
             <v-pagination v-model="page" :length="lastPage" rounded />

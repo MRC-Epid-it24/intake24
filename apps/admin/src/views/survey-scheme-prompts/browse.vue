@@ -10,8 +10,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-
 import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
 import { useI18n } from '@intake24/i18n';
 
@@ -19,7 +17,7 @@ defineOptions({ name: 'SchemePromptList' });
 
 const { i18n: { t } } = useI18n();
 
-const headers = ref<DataTableHeader[]>([
+const headers: DataTableHeader[] = [
   {
     title: t('survey-schemes.prompts.internal.id._'),
     sortable: true,
@@ -46,5 +44,5 @@ const headers = ref<DataTableHeader[]>([
     key: 'action',
     align: 'end',
   },
-]);
+];
 </script>

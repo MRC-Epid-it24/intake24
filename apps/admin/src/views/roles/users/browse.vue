@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { RoleEntry } from '@intake24/common/types/http/admin';
 import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
@@ -38,11 +38,11 @@ export default defineComponent({
 
     const actions = ['read', 'edit'].filter(action => user.can(`users|${action}`));
 
-    const headers = ref<DataTableHeader[]>([
+    const headers: DataTableHeader[] = [
       { title: i18n.t('users.name'), sortable: true, key: 'name' },
       { title: i18n.t('common.email'), sortable: true, key: 'email' },
       { title: i18n.t('common.action._'), sortable: false, key: 'action', align: 'end' },
-    ]);
+    ];
 
     const { entry, entryLoaded } = useEntry<RoleEntry>(props);
     useEntryFetch(props);

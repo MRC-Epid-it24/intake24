@@ -39,7 +39,7 @@ export default defineComponent({
     const { entry, entryLoaded } = useEntry<StandardUnitAttributes>(props);
     useEntryFetch(props);
 
-    const headers = ref<DataTableHeader[]>([
+    const headers: DataTableHeader[] = [
       {
         title: t('fdbs.categories.global.code'),
         sortable: true,
@@ -66,7 +66,7 @@ export default defineComponent({
         key: 'action',
         align: 'end',
       },
-    ]);
+    ];
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 

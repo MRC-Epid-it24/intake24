@@ -33,7 +33,7 @@
         {{ $t('feedback-schemes.meals.fields.reset.text') }}
       </confirm-dialog>
     </v-toolbar>
-    <v-list lines="two">
+    <v-list class="list-border" lines="two">
       <vue-draggable
         v-model="items"
         :animation="300"
@@ -43,7 +43,6 @@
         <v-list-item
           v-for="(item, index) in items"
           :key="item.fieldId"
-          class="drag-and-drop__item"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />

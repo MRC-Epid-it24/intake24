@@ -41,21 +41,18 @@
           @click:clear="clear"
         />
         <template v-if="items.length">
-          <v-list v-model:selected="selectedItemId" density="compact" min-height="350px">
-            <template v-for="(item, idx) in items" :key="item[itemId]">
-              <v-list-item :value="item[itemId]">
-                <template #prepend="{ isActive }">
-                  <v-list-item-action class="mr-2">
-                    <v-checkbox-btn :model-value="isActive " />
-                  </v-list-item-action>
-                  <v-icon>{{ itemIcon }}</v-icon>
-                </template>
-                <slot name="item" v-bind="{ item }">
-                  <v-list-item-title>{{ item[itemName] }}</v-list-item-title>
-                </slot>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < items.length" :key="`div-${item[itemId]}`" />
-            </template>
+          <v-list v-model:selected="selectedItemId" class="list-border" density="compact" min-height="350px">
+            <v-list-item v-for="item in items" :key="item[itemId]" :value="item[itemId]">
+              <template #prepend="{ isActive }">
+                <v-list-item-action class="mr-2">
+                  <v-checkbox-btn :model-value="isActive " />
+                </v-list-item-action>
+                <v-icon>{{ itemIcon }}</v-icon>
+              </template>
+              <slot name="item" v-bind="{ item }">
+                <v-list-item-title>{{ item[itemName] }}</v-list-item-title>
+              </slot>
+            </v-list-item>
           </v-list>
           <div class="text-center">
             <v-pagination v-model="page" :length="lastPage" rounded />

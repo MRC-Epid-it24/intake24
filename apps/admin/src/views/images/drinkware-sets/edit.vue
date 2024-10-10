@@ -66,6 +66,7 @@
                 <v-card-text>
                   <language-selector
                     v-model="selectedScale.label"
+                    border
                     :label="$t('guide-images.objects.label._')"
                   >
                     <template v-for="lang in Object.keys(selectedScale.label)" :key="lang" #[`lang.${lang}`]>

@@ -43,7 +43,7 @@
         <json-editor-dialog v-model="items" @update:model-value="update" />
       </options-menu>
     </v-toolbar>
-    <v-list class="py-0">
+    <v-list class="list-border py-0">
       <vue-draggable
         v-model="items"
         :animation="300"
@@ -53,7 +53,6 @@
         <v-list-item
           v-for="(section, index) in sections"
           :key="section.id"
-          class="drag-and-drop__item"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />

@@ -48,7 +48,7 @@
       @close="close"
       @update="update"
     />
-    <v-list lines="two">
+    <v-list class="list-border" lines="two">
       <vue-draggable
         v-model="form.dataExport"
         :animation="300"
@@ -57,7 +57,6 @@
         <v-list-item
           v-for="(section, idx) in form.dataExport"
           :key="section.id"
-          class="drag-and-drop__item"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />

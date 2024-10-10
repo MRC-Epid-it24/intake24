@@ -12,35 +12,32 @@
         @add="add"
       />
     </v-toolbar>
-    <v-list class="py-0" lines="two">
-      <template v-for="(item, idx) in items" :key="item.id">
-        <v-list-item link>
-          <template #prepend>
-            <v-icon>$nutrient-types</v-icon>
-          </template>
-          <v-list-item-title>
-            {{ getNutrientTableName(item.nutrientTableId) }}
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ $t('common.id') }}: {{ item.nutrientTableRecordId }} | {{ $t('common.name') }}:
-            {{ item.name }}
-          </v-list-item-subtitle>
-          <template #append>
-            <v-list-item-action v-if="!disabled">
-              <confirm-dialog
-                color="error"
-                icon
-                icon-left="$delete"
-                :label="$t('fdbs.nutrients.remove')"
-                @confirm="remove(item.id)"
-              >
-                {{ $t('common.action.confirm.remove', { name: item.name }) }}
-              </confirm-dialog>
-            </v-list-item-action>
-          </template>
-        </v-list-item>
-        <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`" />
-      </template>
+    <v-list class="list-border py-0" lines="two">
+      <v-list-item v-for="item in items" :key="item.id" link>
+        <template #prepend>
+          <v-icon>$nutrient-types</v-icon>
+        </template>
+        <v-list-item-title>
+          {{ getNutrientTableName(item.nutrientTableId) }}
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          {{ $t('common.id') }}: {{ item.nutrientTableRecordId }} | {{ $t('common.name') }}:
+          {{ item.name }}
+        </v-list-item-subtitle>
+        <template #append>
+          <v-list-item-action v-if="!disabled">
+            <confirm-dialog
+              color="error"
+              icon
+              icon-left="$delete"
+              :label="$t('fdbs.nutrients.remove')"
+              @confirm="remove(item.id)"
+            >
+              {{ $t('common.action.confirm.remove', { name: item.name }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </template>
+      </v-list-item>
     </v-list>
     <v-messages
       v-if="errors.has('nutrientRecords')"
@@ -55,16 +52,15 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
-import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
+import type { FoodDatabaseRefs, NutrientTableRecordAttributes } from '@intake24/common/types/http/admin';
 import type { Errors } from '@intake24/common/util';
-import type { NutrientTableRecordAttributes } from '@intake24/db';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
 import AddNutrientDialog from './add-nutrient-dialog.vue';
 
 export default defineComponent({
-  name: 'FoodCompositionList',
+  name: 'NutrientList',
 
   components: { AddNutrientDialog, ConfirmDialog },
 

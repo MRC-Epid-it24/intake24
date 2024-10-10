@@ -75,7 +75,7 @@
         <v-expansion-panels v-model="panels" flat>
           <prompt-list
             v-bind="{ mode: 'override', promptIds, templates: prompts }"
-            v-model:items="form.surveySchemeOverrides.prompts"
+            v-model="form.surveySchemeOverrides.prompts"
           />
         </v-expansion-panels>
       </v-tabs-window-item>

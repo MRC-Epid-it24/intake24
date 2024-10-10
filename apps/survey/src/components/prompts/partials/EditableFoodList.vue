@@ -51,11 +51,11 @@
               </v-btn>
             </div>
           </v-form>
-          <v-list v-if="foods.length" density="compact">
+          <v-list v-if="foods.length" class="list-border" density="compact">
             <v-list-item
               v-for="(food, idx) in foods"
               :key="idx"
-              class="list-item-border ps-0"
+              class="ps-0"
               density="compact"
               :ripple="false"
               @click="editFood(idx)"
