@@ -1,69 +1,66 @@
 <template>
   <component :is="customPromptLayout" v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card dense flat>
-      <v-list dense>
-        <v-list-item v-for="meal in filteredMeals" :key="meal.id" :class="{ 'pa-0': isMobile }" :inactive="true" link :ripple="false">
-          <v-list-item-content>
-            <v-list-group :value="meal.time ? true : false">
-              <template #activator>
-                <v-list-item-title class="font-weight-bold meal-name text-wrap">
-                  {{ meal.name[$i18n.locale] }}
-                </v-list-item-title>
+      <v-list v-model:opened="opened" density="compact">
+        <v-list-group v-for="meal in filteredMeals" :key="meal.id" :value="meal.id">
+          <template #activator="{ props }">
+            <v-list-item class="text-primary">
+              <v-list-item-title class="font-weight-bold text-wrap" v-bind="props">
+                {{ meal.name[$i18n.locale] }}
+              </v-list-item-title>
+              <template #append>
                 <v-list-item-action>
-                  <v-list-item-action-text v-if="meal.time" class="meal-time">
+                  <span v-if="meal.time">
                     {{ stringTime(meal.time) }}
-                  </v-list-item-action-text>
-                  <v-icon v-else x-small>
+                  </span>
+                  <v-icon v-else size="x-small">
                     $question
                   </v-icon>
                 </v-list-item-action>
               </template>
+            </v-list-item>
+          </template>
+          <v-list-item :style="{ 'padding-inline-start': '0 !important' }">
+            <v-container :class="{ 'pa-2': $vuetify.display.mobile }">
+              <div v-if="localeOptions.length <= 3">
+                <v-row class="mb-4" style="flex-wrap: nowrap">
+                  <v-col cols="3" />
+                  <v-col v-for="(option, index) in localeOptions" :key="index" class="ps-0" cols="3">
+                    <label class="option-label">{{ option.label }}</label>
+                  </v-col>
+                </v-row>
+                <v-radio-group
+                  v-for="food in meal.foods" :key="food.id" v-model="promptAnswers[food.id]" class="mb-0 mt-0" density="compact" inline
+                  @update:model-value="updatePromptAnswers()"
+                >
+                  <v-col class="pa-0 pe-3 ma-0" cols="3">
+                    <span class="food-label">{{ foodDisplayName(food) }}</span>
+                  </v-col>
 
-              <v-list-item>
-                <v-list-item-content>
-                  <v-container :class="{ 'pa-0': isMobile }">
-                    <div v-if="localeOptions.length <= 3">
-                      <v-row class="mb-4" style="flex-wrap: nowrap">
-                        <v-col cols="3" />
-                        <v-col v-for="(option, index) in localeOptions" :key="index" class="pl-0" cols="3">
-                          <label class="option-label">{{ option.label }}</label>
-                        </v-col>
-                      </v-row>
-                      <v-radio-group
-                        v-for="food in meal.foods" :key="food.id" v-model="promptAnswers[food.id]" class="mb-0 mt-0" dense row
-                        @input="updatePromptAnswers()"
-                      >
-                        <v-col class="pa-0 pr-3 ma-0" cols="3">
-                          <span class="food-label">{{ foodDisplayName(food) }}</span>
-                        </v-col>
-
-                        <v-col v-for="(option, optIndex) in localeOptions" :key="optIndex" class="pa-0 ma-0" cols="3">
-                          <v-radio :value="option.value" />
-                        </v-col>
-                      </v-radio-group>
-                    </div>
-                    <div v-else>
-                      <v-row
-                        v-for="food in meal.foods" :key="food.id" v-model="promptAnswers[food.id]" align="baseline"
-                        class="mb-0 mt-0" dense row style="flex-wrap: nowrap"
-                      >
-                        <v-col class="pa-0 pr-4 ma-0 ml-2" cols="4">
-                          <span class="food-label">{{ foodDisplayName(food) }}</span>
-                        </v-col>
-                        <v-col class="pa-0 ma-0">
-                          <v-select
-                            v-model="promptAnswers[food.id]"
-                            class="option-label" cols="8" item-text="label" item-value="value" :items="localeOptions" md="6"
-                          />
-                        </v-col>
-                      </v-row>
-                    </div>
-                  </v-container>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-group>
-          </v-list-item-content>
-        </v-list-item>
+                  <v-col v-for="(option, optIndex) in localeOptions" :key="optIndex" class="pa-0 ma-0" cols="3">
+                    <v-radio :value="option.value" />
+                  </v-col>
+                </v-radio-group>
+              </div>
+              <div v-else>
+                <v-row
+                  v-for="food in meal.foods" :key="food.id" v-model="promptAnswers[food.id]" align="baseline"
+                  class="mb-0 mt-0" dense row style="flex-wrap: nowrap"
+                >
+                  <v-col class="pa-0 pe-4 ma-0 ms-2" cols="4">
+                    <span class="food-label">{{ foodDisplayName(food) }}</span>
+                  </v-col>
+                  <v-col class="pa-0 ma-0">
+                    <v-select
+                      v-model="promptAnswers[food.id]"
+                      class="option-label" cols="8" item-title="label" item-value="value" :items="localeOptions" md="6"
+                    />
+                  </v-col>
+                </v-row>
+              </div>
+            </v-container>
+          </v-list-item>
+        </v-list-group>
       </v-list>
     </v-card>
     <template #actions>
@@ -95,7 +92,7 @@ export default defineComponent({
   mixins: [createBasePrompt<'aggregate-choice-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<Record<string, CustomPromptAnswer>>,
       required: true,
     },
@@ -105,16 +102,18 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n } = useI18n();
+    const { i18n: { locale } } = useI18n();
 
     const localeOptions = computed(
-      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en,
+      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
     );
 
-    const promptAnswers = ref(props.value);
+    const opened = ref(props.filteredMeals.map(meal => meal.id));
+
+    const promptAnswers = ref(props.modelValue);
 
     const { action, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
       props,
@@ -135,11 +134,11 @@ export default defineComponent({
     };
 
     const isValid = computed(() => {
-      return props.filteredMeals.every(meal => meal.foods.every(food => props.value[food.id] !== undefined));
+      return props.filteredMeals.every(meal => meal.foods.every(food => props.modelValue[food.id] !== undefined));
     });
 
     const updatePromptAnswers = () => {
-      ctx.emit('input', promptAnswers.value);
+      ctx.emit('update:modelValue', promptAnswers.value);
     };
 
     return {
@@ -150,6 +149,7 @@ export default defineComponent({
       localeOptions,
       type,
       foodDisplayName,
+      opened,
       stringTime,
       isValid,
       promptAnswers,
@@ -169,13 +169,5 @@ export default defineComponent({
   .food-label {
     font-size: smaller;
   }
-}
-
-.meal-name {
-  font-size: medium !important;
-}
-
-.meal-time {
-  font-size: medium !important;
 }
 </style>

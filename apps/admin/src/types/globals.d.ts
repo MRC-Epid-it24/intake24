@@ -1,7 +1,7 @@
 import type { HttpClient, Permission } from '@intake24/ui/types';
 
-declare module 'vue/types/vue' {
-  interface Vue {
+declare module 'vue' {
+  interface ComponentCustomProperties {
     $http: HttpClient;
 
     // authMixin
@@ -9,9 +9,6 @@ declare module 'vue/types/vue' {
 
     // loadingMixin
     isAppLoading: () => boolean;
-
-    // isMobile mixin
-    isMobile: () => boolean;
 
     // moduleMixin
     module: string;

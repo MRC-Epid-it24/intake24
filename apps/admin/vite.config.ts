@@ -1,13 +1,14 @@
 import childProcess from 'node:child_process';
 import { fileURLToPath, URL } from 'node:url';
 
-import vue from '@vitejs/plugin-vue2';
-import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
-import Components from 'unplugin-vue-components/vite';
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+import vue from '@vitejs/plugin-vue';
 import { defineConfig, loadEnv } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
+import vueDevToolsPlugin from 'vite-plugin-vue-devtools';
+import vuetify from 'vite-plugin-vuetify';
 import webfontDownload from 'vite-plugin-webfont-dl';
 
 import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/common/src/security';
@@ -34,12 +35,14 @@ export default defineConfig(({ mode }) => {
     DEV_MKCERT_PATH,
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
+    VUE_DEV_TOOLS,
   } = loadEnv(mode, process.cwd(), '');
 
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
   const disablePwa = !!(DISABLE_PWA === 'true');
   const emptyOutDir = !!(EMPTY_OUT_DIR === 'true');
   const https = !!(DEV_HTTPS === 'true');
+  const vueDevTools = !!(VUE_DEV_TOOLS === 'true');
 
   if (captchaProvider && !isCaptchaProvider(captchaProvider))
     throw new Error('Invalid Captcha provider');
@@ -51,17 +54,6 @@ export default defineConfig(({ mode }) => {
         '@intake24/common': fileURLToPath(new URL('../../packages/common/src', import.meta.url)),
         '@intake24/i18n': fileURLToPath(new URL('../../packages/i18n/src', import.meta.url)),
         '@intake24/ui': fileURLToPath(new URL('../../packages/ui/src', import.meta.url)),
-      },
-    },
-    css: {
-      preprocessorOptions: {
-        sass: {
-          additionalData: [
-            '@import "./src/scss/vuetify"',
-            '@import "vuetify/src/styles/settings/_variables"',
-            '',
-          ].join('\n'),
-        },
       },
     },
     base,
@@ -105,14 +97,16 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
-      Components({
-        resolvers: [VuetifyResolver()],
-        directoryAsNamespace: true,
+      vuetify({
+        autoImport: true,
+        styles: { configFile: 'src/scss/settings.scss' },
       }),
-      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
+      VueI18nPlugin({ jitCompilation: true }),
       webfontDownload([
         'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
       ]),
+      vueDevTools ? vueDevToolsPlugin() : undefined,
+      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
       createHtmlPlugin({
         inject: {
           data: {

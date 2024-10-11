@@ -1,26 +1,21 @@
 <template>
-  <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-    <template #activator="{ attrs, on }">
-      <slot name="activator" v-bind="{ on, attrs }">
+  <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+    <template #activator="{ props }">
+      <slot name="activator" v-bind="props">
         <v-btn
-          v-bind="attrs"
           class="ml-3"
           color="secondary"
           :title="$t('feedback-schemes.preview.title')"
-          v-on="on"
+          v-bind="props"
         >
-          <v-icon left>
-            $search
-          </v-icon>
+          <v-icon icon="$search" start />
           {{ $t('feedback-schemes.preview._') }}
         </v-btn>
       </slot>
     </template>
     <v-card tile>
       <v-toolbar color="secondary" dark>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>{{ $t('feedback-schemes.preview.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-container class="pa-0" fluid>

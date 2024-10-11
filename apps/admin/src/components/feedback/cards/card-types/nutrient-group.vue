@@ -1,12 +1,12 @@
 <template>
   <div>
-    <card-unit v-bind="{ unit: value.unit }" @update:unit="update('unit', $event)" />
+    <card-unit v-bind="{ unit: modelValue.unit }" @update:unit="update('unit', $event)" />
     <card-thresholds
-      :thresholds="{ high: value.high, low: value.low }"
+      :thresholds="{ high: modelValue.high, low: modelValue.low }"
       @update:high="update('high', $event)"
       @update:low="update('low', $event)"
     />
-    <v-tab-item key="nutrients" value="nutrients">
+    <v-tabs-window-item key="nutrients" value="nutrients">
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
@@ -19,19 +19,17 @@
                   class="list-item-border"
                   link
                 >
-                  <v-list-item-avatar>
+                  <template #prepend>
                     <v-icon>$nutrient-types</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
+                  </template>
+                  <v-list-item-title>
                     {{ nutrientType.description }}
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn icon :title="$t('nutrient-types.remove')" @click.stop="remove(idx)">
-                      <v-icon color="error">
-                        $delete
-                      </v-icon>
-                    </v-btn>
-                  </v-list-item-action>
+                  </v-list-item-title>
+                  <template #append>
+                    <v-list-item-action>
+                      <v-btn color="error" icon="$delete" :title="$t('nutrient-types.remove')" @click.stop="remove(idx)" />
+                    </v-list-item-action>
+                  </template>
                 </v-list-item>
               </transition-group>
             </v-list>
@@ -44,8 +42,8 @@
               clearable
               hide-details="auto"
               :label="$t('nutrient-types._')"
-              outlined
               prepend-inner-icon="$search"
+              variant="outlined"
             />
             <v-list>
               <transition-group name="drag-and-drop" type="transition">
@@ -55,23 +53,25 @@
                   class="list-item-border"
                   link
                 >
-                  <v-list-item-avatar>
+                  <template #prepend>
                     <v-icon>$nutrient-types</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
+                  </template>
+                  <v-list-item-title>
                     {{ nutrientType.description }}
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn
-                      icon
-                      :title="$t('nutrient-types.add')"
-                      @click.stop="add(nutrientType.id)"
-                    >
-                      <v-icon color="info">
-                        $add
-                      </v-icon>
-                    </v-btn>
-                  </v-list-item-action>
+                  </v-list-item-title>
+                  <template #append>
+                    <v-list-item-action>
+                      <v-btn
+                        icon
+                        :title="$t('nutrient-types.add')"
+                        @click.stop="add(nutrientType.id)"
+                      >
+                        <v-icon color="info">
+                          $add
+                        </v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </template>
                 </v-list-item>
               </transition-group>
               <v-skeleton-loader
@@ -83,10 +83,10 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-tab-item>
-    <v-tab-item key="json" value="json">
-      <json-editor v-bind="{ value }" @input="$emit('input', $event)" />
-    </v-tab-item>
+    </v-tabs-window-item>
+    <v-tabs-window-item key="json" value="json">
+      <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+    </v-tabs-window-item>
   </div>
 </template>
 
@@ -108,14 +108,16 @@ export default defineComponent({
   components: { CardThresholds, CardUnit, JsonEditor },
 
   props: {
-    value: {
+    modelValue: {
       type: Object as PropType<NutrientGroupCard>,
       required: true,
     },
   },
 
+  emits: ['update:modelValue'],
+
   setup(props, { emit }) {
-    const currentNutrientTypeIds = ref([...props.value.nutrientTypes]);
+    const currentNutrientTypeIds = ref([...props.modelValue.nutrientTypes]);
     const search = ref<string | null>(null);
     const filteredNutrientTypes = ref<NutrientTypeResponse[]>([]);
     const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
@@ -167,13 +169,13 @@ export default defineComponent({
       () => visibleNutrientTypes.value.length < filteredNutrientTypes.value.length,
     );
 
-    const tryLoadMoreNutrientTypes = (entries: IntersectionObserverEntry[]) => {
+    const tryLoadMoreNutrientTypes = (isIntersecting: boolean, entries: IntersectionObserverEntry[]) => {
       if (entries[0].isIntersecting && nutrientTypesAvailableToLoad)
         loadMoreNutrientTypes();
     };
 
     const update = (field: string, value: any) => {
-      emit('input', { ...props.value, [field]: value });
+      emit('update:modelValue', { ...props.modelValue, [field]: value });
     };
 
     watch(

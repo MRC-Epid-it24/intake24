@@ -38,6 +38,15 @@
           "shouldRunCommands": true
         }
       ]
+    },
+    {
+      "splitTerminals":[
+        {
+          "name": "CLI",
+          "commands": ["cd apps/cli/", "clear"],
+          "shouldRunCommands": true
+        }
+      ]
     }
   ]
 }

@@ -1,26 +1,22 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-4" flat tile>
+      <v-icon color="secondary" end>
         fas fa-cloud-meatball
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.cards.title') }}
       </v-toolbar-title>
       <v-spacer />
-      <v-btn color="primary" fab small :title="$t('feedback-schemes.cards.add')" @click.stop="add">
-        <v-icon small>
-          $add
-        </v-icon>
-      </v-btn>
+      <v-btn color="primary" icon="$add" size="small" :title="$t('feedback-schemes.cards.add')" @click.stop="add" />
       <options-menu>
-        <select-resource resource="feedback-schemes" return-object="cards" @input="load">
-          <template #activator="{ attrs, on }">
-            <v-list-item v-bind="attrs" link v-on="on">
+        <select-resource resource="feedback-schemes" return-object="cards" @update:model-value="load">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" link>
+              <template #prepend>
+                <v-icon icon="$download" />
+              </template>
               <v-list-item-title>
-                <v-icon left>
-                  $download
-                </v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -29,32 +25,32 @@
         <json-editor-dialog v-model="cards" />
       </options-menu>
     </v-toolbar>
-    <v-list two-line>
-      <draggable v-model="cards" handle=".drag-and-drop__handle">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(card, index) in cards"
-            :key="card.id"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ getListItemTitle(card) }}</v-list-item-title>
-              <v-list-item-subtitle>
-                {{ `Type: ${card.type}` }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
+    <v-list lines="two">
+      <vue-draggable
+        v-model="cards"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+      >
+        <v-list-item
+          v-for="(card, index) in cards"
+          :key="card.id"
+          class="drag-and-drop__item"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title>{{ getListItemTitle(card) }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ `Type: ${card.type}` }}
+          </v-list-item-subtitle>
+          <template #append>
             <v-list-item-action>
               <v-btn
                 icon
                 :title="$t('feedback-schemes.cards.edit')"
                 @click.stop="edit({ card, index })"
               >
-                <v-icon color="secondary lighten-1">
+                <v-icon color="secondary-lighten-1">
                   $edit
                 </v-icon>
               </v-btn>
@@ -64,15 +60,15 @@
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('feedback-schemes.cards.remove').toString()"
+                :label="$t('feedback-schemes.cards.remove')"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: getListItemTitle(card) }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <card-selector ref="selector" :images="images" @save="save" />
   </v-card>
@@ -82,7 +78,7 @@
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { Card } from '@intake24/common/feedback';
 import type { FeedbackImage, NutrientTypeResponse } from '@intake24/common/types/http/admin';
@@ -101,12 +97,12 @@ export default defineComponent({
   name: 'CardList',
 
   components: {
-    Draggable: draggable,
     CardSelector,
     ConfirmDialog,
     JsonEditorDialog,
     OptionsMenu,
     SelectResource,
+    VueDraggable,
   },
 
   props: {
@@ -118,16 +114,16 @@ export default defineComponent({
       type: Array as PropType<NutrientTypeResponse[]>,
       default: () => [],
     },
-    value: {
+    modelValue: {
       type: Array as PropType<Card[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props) {
-    const cards = ref<Card[]>(props.value);
+    const cards = ref<Card[]>(props.modelValue);
     const selector = ref<InstanceType<typeof CardSelector>>();
 
     return { cards, selector };
@@ -182,7 +178,7 @@ export default defineComponent({
     },
 
     update() {
-      this.$emit('input', this.cards);
+      this.$emit('update:modelValue', this.cards);
     },
   },
 });

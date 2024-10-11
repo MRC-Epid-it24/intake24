@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-4" flat tile>
+      <v-icon color="secondary" end>
         fas fa-shield-halved
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
@@ -10,7 +10,7 @@
       <v-spacer />
       <div class="d-flex align-center font-weight-medium text-button">
         {{ $t('securables.owner._') }}:
-        <owner-dialog v-bind="{ api, owner, resource }" ref="ownerDialog" />
+        <owner-dialog v-bind="{ api, owner, resource }" />
       </div>
     </v-toolbar>
     <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
@@ -36,7 +36,7 @@
           :title="$t('common.action.edit')"
           @click.stop="editUser(item)"
         >
-          <v-icon dark>
+          <v-icon>
             $edit
           </v-icon>
         </v-btn>
@@ -44,7 +44,7 @@
           color="error"
           icon
           icon-left="$delete"
-          :label="$t('common.action.delete').toString()"
+          :label="$t('common.action.delete')"
           @confirm="removeUser(item.id)"
         >
           {{ $t('common.action.confirm.delete', { name: item.name ? item.name : item.id }) }}
@@ -62,10 +62,11 @@ import type { SecurableType } from '@intake24/common/security';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { securableDefs } from '@intake24/common/security';
 import { getResourceFromSecurable } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
 import type { Owner } from './owner-dialog.vue';
-import { EmbeddedDataTable } from '../data-tables';
+import { type DataTableHeader, EmbeddedDataTable } from '../data-tables';
 import OwnerDialog from './owner-dialog.vue';
 import UserDialog from './user-dialog.vue';
 
@@ -89,10 +90,39 @@ export default defineComponent({
   },
 
   setup() {
+    const { i18n: { t } } = useI18n();
+
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
     const userDialog = ref<InstanceType<typeof UserDialog>>();
 
-    return { table, userDialog };
+    const headers = ref<DataTableHeader[]>([
+      {
+        title: t('users.name'),
+        sortable: true,
+        key: 'name',
+        align: 'start',
+      },
+      {
+        title: t('common.email'),
+        sortable: true,
+        key: 'email',
+        align: 'start',
+      },
+      {
+        title: t('securables.actions._'),
+        sortable: false,
+        key: 'securables',
+        align: 'start',
+      },
+      {
+        title: t('common.action._'),
+        sortable: false,
+        key: 'action',
+        align: 'end',
+      },
+    ]);
+
+    return { headers, table, userDialog };
   },
 
   data() {
@@ -103,32 +133,6 @@ export default defineComponent({
     return {
       resource,
       actions,
-      headers: [
-        {
-          text: this.$t('users.name'),
-          sortable: true,
-          value: 'name',
-          align: 'start',
-        },
-        {
-          text: this.$t('common.email'),
-          sortable: true,
-          value: 'email',
-          align: 'start',
-        },
-        {
-          text: this.$t('securables.actions._'),
-          sortable: false,
-          value: 'securables',
-          align: 'start',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
     };
   },
 

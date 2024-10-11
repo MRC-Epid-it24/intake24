@@ -10,7 +10,7 @@
             hide-details="auto"
             :items="eventTypes"
             name="type"
-            outlined
+            variant="outlined"
           />
         </v-col>
         <v-col cols="12">
@@ -30,7 +30,7 @@
             hide-details="auto"
             :label="$t('surveys.submissions.id')"
             name="submissionId"
-            outlined
+            variant="outlined"
           />
           <v-text-field
             v-else
@@ -39,7 +39,7 @@
             hide-details="auto"
             :label="$t('surveys.sessions.id')"
             name="sessionId"
-            outlined
+            variant="outlined"
           />
         </v-col>
       </v-row>

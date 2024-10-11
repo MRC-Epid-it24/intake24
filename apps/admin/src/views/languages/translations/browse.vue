@@ -1,6 +1,6 @@
 <template>
-  <layout v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="save">
-    <v-toolbar bottom color="grey lighten-5" flat tile>
+  <layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
+    <v-toolbar color="grey-lighten-4" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>
@@ -11,7 +11,7 @@
           fab
           icon
           icon-left="fas fa-rotate"
-          :label="$t('common.action.sync').toString()"
+          :label="$t('common.action.sync')"
           @confirm="sync"
         >
           {{ $t('languages.translations.sync') }}
@@ -21,7 +21,7 @@
           fab
           icon
           icon-left="$delete"
-          :label="$t('common.action.delete').toString()"
+          :label="$t('common.action.delete')"
           @confirm="remove"
         >
           {{ $t('languages.translations.delete') }}
@@ -29,29 +29,25 @@
       </template>
     </v-toolbar>
     <error-list :errors="nonInputErrors" tag="v-card-text" />
-    <v-list v-if="form.translations.length" two-line>
+    <v-list v-if="form.translations.length" lines="two">
       <v-list-item
         v-for="translation in form.translations"
         :key="translation.id"
         class="list-item-border"
         link
       >
-        <v-list-item-avatar>
+        <template #prepend>
           <v-icon>fas fa-language</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ $t(`languages.translations.applications.${translation.application}`) }} |
-            {{ getSectionTitle(translation.section) }}
-          </v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn icon :title="$t('languages.translations.edit')" @click.stop="edit(translation)">
-            <v-icon color="secondary lighten-2">
-              $edit
-            </v-icon>
-          </v-btn>
-        </v-list-item-action>
+        </template>
+        <v-list-item-title>
+          {{ $t(`languages.translations.applications.${translation.application}`) }} |
+          {{ getSectionTitle(translation.section) }}
+        </v-list-item-title>
+        <template #append>
+          <v-list-item-action>
+            <v-btn icon="$edit" :title="$t('languages.translations.edit')" @click.stop="edit(translation)" />
+          </v-list-item-action>
+        </template>
       </v-list-item>
     </v-list>
     <v-card v-else flat link min-height="100px" @click="create">
@@ -59,9 +55,7 @@
         {{ $t('languages.translations.create') }}
       </v-card-title>
       <v-card-text class="d-flex justify-center align-center">
-        <v-btn color="secondary" fab x-large>
-          <v-icon>$add</v-icon>
-        </v-btn>
+        <v-btn color="secondary" icon="$add" size="x-large" />
       </v-card-text>
     </v-card>
     <translation-section
@@ -131,9 +125,9 @@ export default defineComponent({
     getSectionTitle(key: string): string {
       const check = has(this.$i18n.messages[this.$i18n.locale], `${key}.title`);
       if (check)
-        return this.$t(`${key}.title`).toString();
+        return this.$t(`${key}.title`);
 
-      return this.$t(`languages.translations.sections.${key}`).toString();
+      return this.$t(`languages.translations.sections.${key}`);
     },
 
     edit(translation: LanguageTranslationAttributes) {
@@ -153,7 +147,7 @@ export default defineComponent({
 
     notify(action: string) {
       this.messages.success(
-        this.$t(`languages.translations.${action}`, { name: this.entry.englishName }).toString(),
+        this.$t(`languages.translations.${action}`, { name: this.entry.englishName }),
       );
     },
 

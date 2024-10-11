@@ -1,66 +1,60 @@
 <template>
-  <v-stepper v-model="progress" flat vertical>
-    <v-stepper-step :complete="progress > 1" step="1">
-      {{ $t('user.mfa.devices.init.title') }}
-    </v-stepper-step>
-    <v-stepper-content step="1">
-      <v-row>
-        <v-col cols="12" sm="6">
-          <v-btn
-            block
-            class="my-4"
-            color="secondary"
-            :loading="!!regChallenge"
-            rounded
-            @click="challenge"
-          >
-            {{ $t('user.mfa.devices.init._') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-stepper-content>
-    <v-stepper-step :complete="progress > 2" step="2">
-      {{ $t('user.mfa.devices.qr.title') }}
-    </v-stepper-step>
-    <v-stepper-content step="2">
-      <v-row>
-        <v-col cols="12" order="last" order-sm="first" sm="6">
-          <v-form @submit.prevent="verify">
-            <v-text-field
-              v-model="form.name"
-              class="my-2"
-              :error-messages="form.errors.get('name')"
-              hide-details="auto"
-              :label="$t('user.mfa.devices.name._')"
-              name="name"
-              outlined
-              @input="form.errors.clear('name')"
-            />
-            <p class="my-2 text-subtitle-2">
-              {{ $t('user.mfa.devices.qr.text') }}
-            </p>
-            <v-otp-input
-              v-model="form.token"
-              :error-messages="form.errors.get('token')"
-              hide-details="auto"
-              length="6"
-              name="token"
-              @input="form.errors.clear('token')"
-            />
-            <v-btn block class="my-4" color="secondary" rounded type="submit">
-              {{ $t('user.mfa.devices.verify') }}
+  <v-stepper-vertical v-model="progress" flat hide-actions>
+    <template #default="{ step }">
+      <v-stepper-vertical-item :complete="step > 1" :title="$t('user.mfa.devices.init.title')" value="1">
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-btn
+              block
+              class="my-4"
+              color="secondary"
+              :loading="!!regChallenge"
+              rounded
+              @click="challenge"
+            >
+              {{ $t('user.mfa.devices.init._') }}
             </v-btn>
-          </v-form>
-        </v-col>
-        <v-col cols="12" order="first" order-sm="last" sm="6">
-          <v-img v-if="regChallenge" :aspect-ratio="1 / 1" :src="regChallenge?.qrCode" />
-        </v-col>
-      </v-row>
-    </v-stepper-content>
-    <v-stepper-step :complete="progress >= 3" step="3">
-      {{ $t('user.mfa.devices.registered') }}
-    </v-stepper-step>
-  </v-stepper>
+          </v-col>
+        </v-row>
+      </v-stepper-vertical-item>
+      <v-stepper-vertical-item :complete="step > 2" :title="$t('user.mfa.devices.qr.title')" value="2">
+        <v-row>
+          <v-col cols="12" order="last" order-sm="first" sm="6">
+            <v-form @submit.prevent="verify">
+              <v-text-field
+                v-model="form.name"
+                class="my-2"
+                :error-messages="form.errors.get('name')"
+                hide-details="auto"
+                :label="$t('user.mfa.devices.name._')"
+                name="name"
+                variant="outlined"
+                @update:model-value="form.errors.clear('name')"
+              />
+              <p class="my-2 text-subtitle-2">
+                {{ $t('user.mfa.devices.qr.text') }}
+              </p>
+              <v-otp-input
+                v-model="form.token"
+                :error-messages="form.errors.get('token')"
+                hide-details="auto"
+                length="6"
+                name="token"
+                @input="form.errors.clear('token')"
+              />
+              <v-btn block class="my-4" color="secondary" rounded type="submit">
+                {{ $t('user.mfa.devices.verify') }}
+              </v-btn>
+            </v-form>
+          </v-col>
+          <v-col cols="12" order="first" order-sm="last" sm="6">
+            <v-img v-if="regChallenge" :aspect-ratio="1 / 1" :src="regChallenge?.qrCode" />
+          </v-col>
+        </v-row>
+      </v-stepper-vertical-item>
+      <v-stepper-vertical-item :complete="step >= 3" :title="$t('user.mfa.devices.registered')" value="3" />
+    </template>
+  </v-stepper-vertical>
 </template>
 
 <script lang="ts">

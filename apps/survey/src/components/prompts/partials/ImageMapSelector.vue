@@ -9,7 +9,7 @@
         </v-img>
         <div class="pinch-zoom-activator">
           <pinch-zoom-image-map-selector
-            v-if="config.pinchZoom && isMobile"
+            v-if="config.pinchZoom && $vuetify.display.mobile"
             v-bind="{
               id,
               index,
@@ -24,10 +24,8 @@
             <template #activator="{ on, attrs }">
               <v-btn
                 class="ma-1 font-weight-medium"
-                color="grey darken-3"
-                dark
+                color="grey-darken-3"
                 icon
-                link
                 :title="$t(`prompts.guideImage.expand`)"
                 v-bind="attrs"
                 v-on="on"
@@ -43,7 +41,7 @@
           <slot name="label" />
           <v-chip
             v-if="label"
-            class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
+            class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold text-secondary border-secondary-1"
           >
             {{ label }}
           </v-chip>
@@ -66,8 +64,8 @@
         </svg>
       </div>
     </v-col>
-    <v-col v-if="isMobile" cols="12" sm="auto">
-      <v-btn :block="isMobile" color="primary" :disabled="isDisabled" @click="confirm">
+    <v-col v-if="$vuetify.display.mobile" cols="12" sm="auto">
+      <v-btn :block="$vuetify.display.mobile" color="primary" :disabled="isDisabled" @click="confirm">
         {{ $t('common.action.continue') }}
       </v-btn>
     </v-col>
@@ -76,7 +74,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { VImg } from 'vuetify/lib';
+import type { VImg } from 'vuetify/components';
 import { useElementSize } from '@vueuse/core';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 
@@ -172,7 +170,7 @@ export default defineComponent({
     select(idx: number, id: string) {
       this.$emit('select', idx, id);
 
-      if (!this.isMobile)
+      if (!this.$vuetify.display.mobile)
         this.confirm();
     },
   },

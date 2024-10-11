@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-toolbar bottom color="grey lighten-5" flat tile>
+    <v-toolbar color="grey-lighten-4" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.food-ranking.title') }}
       </v-toolbar-title>
@@ -9,10 +9,10 @@
       <v-card-title>{{ $t('locales.food-ranking.description') }} </v-card-title>
       <v-card-actions>
         <csv-upload
-          :dialog-title="$t('locales.food-ranking.upload').toString()"
+          :dialog-title="$t('locales.food-ranking.upload')"
           :endpoint="endpoint"
           job-type="LocaleFoodRankingUpload"
-          :label="$t('locales.food-ranking.upload').toString()"
+          :label="$t('locales.food-ranking.upload')"
           :survey-id="id"
         />
       </v-card-actions>

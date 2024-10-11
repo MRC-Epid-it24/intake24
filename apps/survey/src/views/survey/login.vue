@@ -1,18 +1,18 @@
 <template>
-  <v-container :class="{ 'pa-0': isMobile }">
+  <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
     <app-entry-screen
-      :subtitle="$t('common.login.subtitle').toString()"
-      :title="$t('common._').toString()"
+      :subtitle="$t('common.login.subtitle')"
+      :title="$t('common._')"
     >
       <template #subtitle>
         <div class="text-h6 text-center font-weight-medium pt-4 pb-2">
           {{ survey?.name }}
         </div>
         <v-card-subtitle class="text-center font-weight-medium py-0">
-          {{ $t('common.login.subtitle').toString() }}
+          {{ $t('common.login.subtitle') }}
         </v-card-subtitle>
       </template>
-      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
+      <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
         <v-card-text>
           <v-container>
             <v-row>
@@ -24,31 +24,35 @@
                   hide-details="auto"
                   :label="$t('common.username')"
                   name="username"
-                  outlined
                   prepend-inner-icon="fas fa-user"
                   required
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="password"
-                  :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
                   autocomplete="current-password"
                   :error-messages="errors.get('password')"
                   hide-details="auto"
                   :label="$t('common.password')"
                   name="password"
-                  outlined
                   prepend-inner-icon="fas fa-key"
                   required
                   :type="showPassword ? 'text' : 'password'"
-                  @click:append="showPassword = !showPassword"
-                />
+                  variant="outlined"
+                >
+                  <template #append-inner>
+                    <v-icon class="me-2" @click="showPassword = !showPassword">
+                      {{ showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+                    </v-icon>
+                  </template>
+                </v-text-field>
               </v-col>
             </v-row>
             <v-row justify="center">
               <v-col cols="12">
-                <v-btn block color="primary" rounded type="submit" x-large>
+                <v-btn block color="primary" rounded size="x-large" type="submit">
                   {{ $t('common.login._') }}
                 </v-btn>
               </v-col>
@@ -64,7 +68,7 @@
       </v-form>
       <template v-if="isOpenAccess">
         <v-divider />
-        <v-card-title class="text-h3 font-weight-medium justify-center">
+        <v-card-title class="text-h3 font-weight-medium text-center mt-4">
           {{ `No account?` }}
         </v-card-title>
         <v-card-subtitle class="d-flex justify-center font-weight-medium px-6 pt-4">
@@ -77,10 +81,10 @@
                 <v-btn
                   block
                   color="accent"
-                  outlined
                   rounded
+                  size="x-large"
                   :to="{ name: 'survey-generate-user', params: { surveyId } }"
-                  x-large
+                  variant="outlined"
                 >
                   {{ $t('survey.generateUser._') }}
                 </v-btn>
@@ -93,97 +97,77 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted } from 'vue';
-import { useRouter } from 'vue-router/composables';
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { useAuth } from '@intake24/survey/stores';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 
 import { useLogin } from './use-login';
 
-export default defineComponent({
+defineOptions({
   name: 'SurveyLogin',
+});
 
-  components: { AppEntryScreen, Captcha },
-
-  props: {
-    surveyId: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  surveyId: {
+    type: String,
+    required: true,
   },
+});
 
-  setup(props) {
-    const router = useRouter();
-    const {
-      captchaEl,
-      captchaToken,
-      errors,
-      fetchSurveyPublicInfo,
-      isOpenAccess,
-      login,
-      password,
-      resetCaptcha,
-      showPassword,
-      status,
-      survey,
-      username,
-    } = useLogin(props);
+const router = useRouter();
+const {
+  captchaEl,
+  captchaToken,
+  errors,
+  fetchSurveyPublicInfo,
+  isOpenAccess,
+  login,
+  password,
+  resetCaptcha,
+  showPassword,
+  survey,
+  username,
+} = useLogin(props);
 
-    const verified = async (token?: string) => {
-      captchaToken.value = token;
-      await login('alias');
-    };
+async function verified(token?: string) {
+  captchaToken.value = token;
+  await login('alias');
+}
 
-    const expired = () => {
-      resetCaptcha();
-    };
+function expired() {
+  resetCaptcha();
+}
 
-    const submit = async () => {
-      if (captchaEl.value) {
-        captchaEl.value.executeIfCan();
-        return;
-      }
+async function submit() {
+  if (captchaEl.value) {
+    captchaEl.value.executeIfCan();
+    return;
+  }
 
-      await login('alias');
-    };
+  await login('alias');
+}
 
-    onMounted(async () => {
-      await fetchSurveyPublicInfo();
-      if (!survey.value) {
-        await router.push({ name: 'home' });
-        return;
-      }
+onMounted(async () => {
+  await fetchSurveyPublicInfo();
+  if (!survey.value) {
+    await router.push({ name: 'home' });
+    return;
+  }
 
-      const auth = useAuth();
+  const auth = useAuth();
 
-      if (!auth.loggedIn) {
-        try {
-          await auth.refresh();
-          await router.push({ name: 'survey-home', params: { surveyId: props.surveyId } });
-        }
-        catch {
-          // continue
-        }
-      }
-    });
-
-    return {
-      captchaEl,
-      errors,
-      expired,
-      fetchSurveyPublicInfo,
-      isOpenAccess,
-      password,
-      showPassword,
-      status,
-      submit,
-      survey,
-      username,
-      verified,
-    };
-  },
+  if (!auth.loggedIn) {
+    try {
+      await auth.refresh();
+      await router.push({ name: 'survey-home', params: { surveyId: props.surveyId } });
+    }
+    catch {
+      // continue
+    }
+  }
 });
 </script>
 

@@ -1,18 +1,18 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel>
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.label`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.label`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="objectValid" />
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <image-map-selector
             v-if="guideImageData"
             v-bind="{
@@ -25,15 +25,15 @@
             @confirm="confirmObject"
             @select="selectObject"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
-        <v-expansion-panel-header>
-          <i18n :path="`prompts.${type}.quantity`">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.quantity`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ selectedFoodLabel }}</span>
             </template>
-          </i18n>
+          </i18n-t>
           <template #actions>
             <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
@@ -44,23 +44,23 @@
               />
             </expansion-panel-actions>
           </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
           <quantity-card
             v-model="portionSize.quantity"
-            :confirmed.sync="quantityConfirmed"
-            @input="selectQuantity"
+            v-model:confirmed="quantityConfirmed"
             @update:confirmed="confirmQuantity"
+            @update:model-value="selectQuantity"
           />
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
       <linked-quantity
         v-if="linkedParent && !linkedParent.auto"
         v-bind="{ disabled: !quantityValid, food, linkedParent, prompt }"
         v-model="portionSize.linkedQuantity"
-        :confirmed.sync="linkedQuantityConfirmed"
-        @input="selectLinkedQuantity"
+        v-model:confirmed="linkedQuantityConfirmed"
         @update:confirmed="confirmLinkedQuantity"
+        @update:model-value="selectLinkedQuantity"
       />
     </v-expansion-panels>
     <template #actions>
@@ -80,7 +80,6 @@ import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
 
 import type { LinkedParent } from '../partials';
@@ -108,20 +107,18 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   setup(props) {
-    const { translate } = useI18n();
     const { foodName } = useFoodUtils(props);
 
     return {
       foodName,
-      translate,
     };
   },
 
   data() {
-    const state = copy(this.value);
+    const state = copy(this.modelValue);
     state.portionSize.guideImageId = this.parameters.guideImageId;
 
     return {
@@ -245,7 +242,7 @@ export default defineComponent({
         linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
-      this.$emit('input', state);
+      this.$emit('update:modelValue', state);
     },
   },
 });

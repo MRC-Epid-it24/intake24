@@ -1,90 +1,76 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey lighten-2" flat tile>
-      <v-icon color="secondary" left>
+    <v-toolbar color="grey-lighten-2" flat tile>
+      <v-icon color="secondary" end>
         $nutrient-types
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('nutrient-types.title') }}
       </v-toolbar-title>
       <v-spacer />
-      <v-btn color="primary" fab small :title="$t('nutrient-types.create')" @click.stop="add">
-        <v-icon small>
-          $add
-        </v-icon>
-      </v-btn>
+      <v-btn color="primary" icon="$add" size="small" :title="$t('nutrient-types.create')" @click.stop="add" />
       <confirm-dialog
         color="error"
-        :label="$t('nutrient-types.reset._').toString()"
+        :label="$t('nutrient-types.reset._')"
         @confirm="resetList"
       >
-        <template #activator="{ attrs, on }">
+        <template #activator="{ props }">
           <v-btn
             class="ml-3"
             color="error"
-            fab
-            small
+            icon="$sync"
+            size="small"
             :title="$t('nutrient-types.reset._')"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon small>
-              $sync
-            </v-icon>
-          </v-btn>
+            v-bind="props"
+          />
         </template>
         {{ $t('nutrient-types.reset.text') }}
       </confirm-dialog>
     </v-toolbar>
     <v-list>
-      <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
-        <transition-group name="drag-and-drop" type="transition">
-          <v-list-item
-            v-for="(nutrientType, idx) in items"
-            :key="nutrientType.id.join(':')"
-            class="drag-and-drop__item"
-            draggable
-            link
-          >
-            <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>$handle</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ nutrientType.name.en }}</v-list-item-title>
-            </v-list-item-content>
+      <vue-draggable
+        v-model="items"
+        :animation="300"
+        handle=".drag-and-drop__handle"
+        @end="update"
+      >
+        <v-list-item
+          v-for="(nutrientType, idx) in items"
+          :key="nutrientType.id.join(':')"
+          class="drag-and-drop__item"
+        >
+          <template #prepend>
+            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          </template>
+          <v-list-item-title>{{ nutrientType.name.en }}</v-list-item-title>
+          <template #append>
             <v-list-item-action>
-              <v-btn icon :title="$t('nutrient-types.edit')" @click.stop="edit(idx, nutrientType)">
-                <v-icon color="secondary lighten-2">
-                  $edit
-                </v-icon>
-              </v-btn>
+              <v-btn icon="$edit" :title="$t('nutrient-types.edit')" @click.stop="edit(idx, nutrientType)" />
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t('nutrient-types.remove').toString()"
+                :label="$t('nutrient-types.remove')"
                 @confirm="remove(idx)"
               >
                 {{ $t('common.action.confirm.delete', { name: nutrientType.name.en }) }}
               </confirm-dialog>
             </v-list-item-action>
-          </v-list-item>
-        </transition-group>
-      </draggable>
+          </template>
+        </v-list-item>
+      </vue-draggable>
     </v-list>
     <v-dialog
       v-model="dialog.show"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
+      :fullscreen="$vuetify.display.smAndDown"
       max-width="600px"
       persistent
     >
-      <v-card :tile="$vuetify.breakpoint.smAndDown">
+      <v-card :tile="$vuetify.display.smAndDown">
         <v-toolbar color="secondary" dark flat>
-          <v-icon dark left>
-            $nutrient-types
-          </v-icon>
+          <v-icon icon="$nutrient-types" start />
           <v-toolbar-title>
             {{ $t(`nutrient-types.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
@@ -95,45 +81,41 @@
             <v-autocomplete
               v-model="dialog.item.id"
               hide-details="auto"
-              item-text="description"
+              item-title="description"
               item-value="id"
               :items="nutrientTypes"
               :label="$t('nutrient-types.title')"
               multiple
               name="nutrientTypeId"
-              outlined
               prepend-inner-icon="$nutrient-types"
               :rules="rules"
-              @change="updateNutrientLabel"
+              variant="outlined"
+              @update:model-value="updateNutrientLabel"
             />
           </v-card-text>
           <language-selector
             v-model="dialog.item.name"
-            :label="$t('nutrient-types.label').toString()"
+            :label="$t('nutrient-types.label')"
             :outlined="false"
             required
           >
-            <template v-for="lang in Object.keys(dialog.item.name)" #[`lang.${lang}`]>
+            <template v-for="lang in Object.keys(dialog.item.name)" :key="lang" #[`lang.${lang}`]>
               <v-text-field
-                :key="lang"
                 v-model="dialog.item.name[lang]"
                 hide-details="auto"
                 :label="$t('nutrient-types.label')"
-                outlined
+                variant="outlined"
               />
             </template>
           </language-selector>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>
-                $cancel
-              </v-icon>{{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer />
-            <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-icon icon="$success" start />
+              {{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -145,7 +127,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 
 import type { Nutrient } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
@@ -157,7 +139,7 @@ import { LanguageSelector } from '../forms';
 export default defineComponent({
   name: 'NutrientTypeList',
 
-  components: { ConfirmDialog, Draggable: draggable, LanguageSelector },
+  components: { ConfirmDialog, LanguageSelector, VueDraggable },
 
   props: {
     nutrientTypes: {
@@ -168,7 +150,7 @@ export default defineComponent({
       type: Array as PropType<Nutrient[]>,
       default: () => [],
     },
-    value: {
+    modelValue: {
       type: Array as PropType<Nutrient[]>,
       required: true,
     },
@@ -225,7 +207,7 @@ export default defineComponent({
       return [
         (value: string[]): boolean | string => {
           if (!value.length)
-            return this.$t('nutrient-types.validation.required').toString();
+            return this.$t('nutrient-types.validation.required');
 
           const { index } = this.dialog;
           const match = this.items.find(
@@ -233,7 +215,7 @@ export default defineComponent({
               [...value].sort().join(':') === [...nutrientType.id].sort().join(':') && index !== idx,
           );
 
-          return match ? this.$t('nutrient-types.validation.unique').toString() : true;
+          return match ? this.$t('nutrient-types.validation.unique') : true;
         },
       ];
     },

@@ -5,6 +5,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   CategoriesResponse,
   CategoryContentsResponse,
+  CategoryGlobalListEntry,
   CategoryInput,
   CategoryLocalEntry,
   MainCategoriesResponse,
@@ -12,7 +13,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { categoryContentsResponse } from '@intake24/api/http/responses/admin';
+import { allCategoriesResponse, categoryContentsResponse } from '@intake24/api/http/responses/admin/categories';
 import { CategoryLocal, SystemLocale } from '@intake24/db';
 
 function adminCategoryController({
@@ -103,7 +104,7 @@ function adminCategoryController({
     const canUpdateMain = !!(
       main?.code
       && ((await aclService.hasPermission('locales|food-list'))
-      || (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
+        || (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
     );
 
     const categoryLocal = await adminCategoryService.updateCategory(
@@ -154,6 +155,14 @@ function adminCategoryController({
     const categories = await adminCategoryService.getRootCategories(code);
 
     res.json(categories);
+  };
+
+  const all = async (
+    req: Request,
+    res: Response<CategoryGlobalListEntry[]>,
+  ): Promise<void> => {
+    const categories = await adminCategoryService.getAllCategories();
+    res.json(allCategoriesResponse(categories));
   };
 
   const contents = async (
@@ -237,6 +246,7 @@ function adminCategoryController({
     update,
     destroy,
     root,
+    all,
     contents,
     copy,
     categories,

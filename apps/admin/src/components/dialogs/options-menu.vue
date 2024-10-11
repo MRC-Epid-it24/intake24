@@ -1,18 +1,15 @@
 <template>
-  <v-menu v-model="menu" close-on-click left offset-y>
-    <template #activator="{ attrs, on }">
-      <slot name="activator" v-bind="{ attrs, on }">
+  <v-menu v-model="menu" location="left" :persistent="false">
+    <template #activator="{ props }">
+      <slot name="activator" v-bind="{ props }">
         <v-btn
-          v-bind="attrs"
-          class="ml-3"
+          class="ms-2"
           color="primary"
-          fab
-          small
+          icon="$options"
+          size="small"
           :title="$t('common.options._')"
-          v-on="on"
-        >
-          <v-icon>$options</v-icon>
-        </v-btn>
+          v-bind="props"
+        />
       </slot>
     </template>
     <v-list>

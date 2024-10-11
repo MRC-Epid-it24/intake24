@@ -1,7 +1,7 @@
 <template>
   <v-bottom-sheet v-model="navigation" content-class="meal-list-mobile__sheet" scrollable>
-    <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" class="navigation__btn-summary" value="summary" v-on="on">
+    <template #activator="{ props }">
+      <v-btn v-bind="props" class="navigation__btn-summary" value="summary">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.review') }}
         </span>
@@ -11,18 +11,18 @@
       </v-btn>
     </template>
     <v-card class="meal-list-mobile__card">
-      <div class="py-4 pl-4 pr-3 d-flex flex-row justify-space-between align-center">
+      <div class="py-4 ps-4 pe-3 d-flex flex-row justify-space-between align-center">
         <div class="text-h6 font-weight-medium">
           {{ $t('recall.menu.title') }}
         </div>
-        <v-btn color="primary" icon :title="$t('recall.menu.meal.add')" @click="action('addMeal')">
-          <v-icon x-large>
+        <v-btn color="white" icon :title="$t('recall.menu.meal.add')" @click="action('addMeal')">
+          <v-icon color="primary" size="x-large">
             $add
           </v-icon>
         </v-btn>
       </div>
       <v-card-text class="pa-0">
-        <v-list class="meal-list__list" dense subheader>
+        <v-list class="meal-list__list" density="compact">
           <meal-item
             v-for="meal in meals"
             :key="meal.id"
@@ -36,12 +36,12 @@
       <v-btn
         block
         color="info"
-        large
+        size="large"
         tile
         :title="$t('common.action.close')"
         @click="closeNavigation"
       >
-        <v-icon left>
+        <v-icon start>
           $close
         </v-icon>{{ $t('common.action.close') }}
       </v-btn>

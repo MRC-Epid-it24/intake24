@@ -1,12 +1,12 @@
 <template>
-  <v-container :class="{ 'pa-0': isMobile }">
-    <v-row justify="center" :no-gutters="isMobile">
+  <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
+    <v-row justify="center" :no-gutters="$vuetify.display.mobile">
       <v-col cols="12" md="8" sm="9">
-        <v-card :tile="isMobile">
+        <v-card :tile="$vuetify.display.mobile">
           <v-card-title>{{ $t('feedback.physicalData.title') }}</v-card-title>
           <v-card-subtitle>{{ $t('feedback.physicalData.subtitle') }}</v-card-subtitle>
           <v-card-text class="pa-4">
-            <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
+            <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
               <v-row>
                 <v-col v-if="collectPhysicalDataField('sex')" cols="12" lg="6">
                   <v-select
@@ -16,17 +16,20 @@
                     :items="sexes"
                     :label="$t('feedback.physicalData.sexes._')"
                     name="sex"
-                    outlined
-                    prepend-inner-icon="fa-genderless"
-                    @change="errors.clear('sex')"
+                    prepend-inner-icon="fas fa-genderless"
+                    variant="outlined"
+                    @update:model-value="errors.clear('sex')"
                   >
-                    <template #item="{ item }">
-                      <span :class="`${item.icon} mr-3`" />
-                      {{ item.text }}
+                    <template #item="{ props, item }">
+                      <v-list-item v-bind="props" :title="item.raw.text">
+                        <template #prepend>
+                          <span :class="`${item.raw.icon} me-3`" />
+                        </template>
+                      </v-list-item>
                     </template>
                     <template #selection="{ item }">
-                      <span :class="`${item.icon} mr-3`" />
-                      {{ item.text }}
+                      <span :class="`${item.raw.icon} me-3`" />
+                      {{ item.raw.text }}
                     </template>
                   </v-select>
                 </v-col>
@@ -37,8 +40,8 @@
                     hide-details="auto"
                     :label="$t('feedback.physicalData.birthdate')"
                     name="birthdate"
-                    outlined
-                    prepend-inner-icon="fa-birthday-cake"
+                    prepend-inner-icon="fas fa-birthday-cake"
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('heightCm')" cols="12" lg="6">
@@ -48,8 +51,8 @@
                     hide-details="auto"
                     :label="$t('feedback.physicalData.heightCm')"
                     name="heightCm"
-                    outlined
-                    prepend-inner-icon="fa-arrows-alt-v"
+                    prepend-inner-icon="fas fa-arrows-alt-v"
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('weightKg')" cols="12" lg="6">
@@ -59,8 +62,8 @@
                     hide-details="auto"
                     :label="$t('feedback.physicalData.weightKg')"
                     name="weightKg"
-                    outlined
-                    prepend-inner-icon="fa-weight"
+                    prepend-inner-icon="fas fa-weight"
+                    variant="outlined"
                   />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('physicalActivityLevelId')" cols="12" lg="6">
@@ -68,14 +71,14 @@
                     v-model="form.physicalActivityLevelId"
                     :error-messages="errors.get('physicalActivityLevelId')"
                     hide-details="auto"
-                    item-text="name"
+                    item-title="name"
                     item-value="id"
                     :items="physicalActivityLevels"
                     :label="$t('feedback.physicalData.physicalActivityLevelId')"
                     name="physicalActivityLevelId"
-                    outlined
-                    prepend-inner-icon="fa-running"
-                    @change="errors.clear('physicalActivityLevelId')"
+                    prepend-inner-icon="fas fa-running"
+                    variant="outlined"
+                    @update:model-value="errors.clear('physicalActivityLevelId')"
                   />
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('weightTarget')" cols="12" lg="6">
@@ -86,9 +89,9 @@
                     :items="weightTargets"
                     :label="$t('feedback.physicalData.weightTargets._')"
                     name="weightTarget"
-                    outlined
-                    prepend-inner-icon="fa-crosshairs"
-                    @change="errors.clear('weightTarget')"
+                    prepend-inner-icon="fas fa-crosshairs"
+                    variant="outlined"
+                    @update:model-value="errors.clear('weightTarget')"
                   />
                 </v-col>
               </v-row>
@@ -99,9 +102,9 @@
                     class="px-10"
                     color="primary"
                     :disabled="errors.any()"
+                    size="x-large"
                     :title="$t('common.action.continue')"
                     type="submit"
-                    x-large
                   >
                     {{ $t('common.action.continue') }}
                   </v-btn>
@@ -174,7 +177,7 @@ export default defineComponent({
         })),
       ],
       physicalActivityLevels: [
-        { id: null, name: this.$t('common.not.selected').toString(), coefficient: 0 },
+        { id: null, name: this.$t('common.not.selected'), coefficient: 0 },
       ] as NullablePhysicalActivityLevel[],
       weightTargets: [
         { text: this.$t('common.not.selected'), value: null },
@@ -209,7 +212,7 @@ export default defineComponent({
       this.form = { ...physicalData };
 
       this.physicalActivityLevels = [
-        { id: null, name: this.$t('common.not.selected').toString(), coefficient: 0 },
+        { id: null, name: this.$t('common.not.selected'), coefficient: 0 },
         ...feedbackData.physicalActivityLevels,
       ];
     }

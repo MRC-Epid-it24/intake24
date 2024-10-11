@@ -2,29 +2,25 @@
   <v-dialog
     v-model="dialog.show"
     fullscreen
-    hide-overlay
     persistent
+    :scrim="false"
     transition="dialog-bottom-transition"
   >
     <v-card tile>
       <v-toolbar color="secondary" dark>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`feedback-schemes.cards.${dialog.index === -1 ? 'add' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
-          <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-            <v-icon left>
-              $success
-            </v-icon>{{ $t('common.action.ok') }}
+          <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+            <v-icon icon="$success" start />{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
         <template #extension>
           <v-container>
-            <v-tabs v-model="tab" background-color="secondary" dark>
+            <v-tabs v-model="tab" bg-color="secondary">
               <v-tab
                 v-for="item in cardSettings[dialog.card.type].tabs" :key="item"
                 :tab-value="item"
@@ -37,43 +33,41 @@
       </v-toolbar>
       <v-form ref="form" @submit.prevent="save">
         <v-container>
-          <v-tabs-items v-model="tab" class="pt-1">
-            <v-tab-item key="general" value="general">
+          <v-tabs-window v-model="tab" class="pt-1">
+            <v-tabs-window-item key="general" value="general">
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-card outlined>
-                      <v-toolbar color="grey lighten-4" flat>
+                    <v-card border>
+                      <v-toolbar color="grey-lighten-4" flat>
                         <v-toolbar-title>
-                          <v-icon left>
-                            fas fa-cloud-meatball
-                          </v-icon>
+                          <v-icon icon="fas fa-cloud-meatball" start />
                           {{ $t(`feedback-schemes.cards.type`) }}
                         </v-toolbar-title>
                       </v-toolbar>
                       <v-item-group
                         v-model="dialog.card.type"
-                        active-class="primary"
-                        @change="updateCardProps"
+                        selected-class="primary"
+                        @update:model-value="updateCardProps"
                       >
                         <v-container>
                           <v-row>
                             <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
-                              <v-item v-slot="{ active, toggle }" :value="card.type">
+                              <v-item v-slot="{ isSelected, toggle }" :value="card.type">
                                 <v-card
-                                  :color="active ? 'primary' : ''"
+                                  :color="isSelected ? 'primary' : 'secondary'"
                                   dark
                                   height="180"
                                   @click.stop="toggle"
                                 >
-                                  <v-card-title class="justify-center">
+                                  <v-card-title class="text-center">
                                     {{ $t(`feedback-schemes.cards.${card.type}.title`) }}
                                   </v-card-title>
                                   <v-card-subtitle class="text-center">
                                     {{ $t(`feedback-schemes.cards.${card.type}.subtitle`) }}
                                   </v-card-subtitle>
-                                  <v-card-text v-show="active" class="text-center">
-                                    <v-icon x-large>
+                                  <v-card-text v-show="isSelected" class="text-center">
+                                    <v-icon size="48">
                                       $check
                                     </v-icon>
                                   </v-card-text>
@@ -86,12 +80,10 @@
                     </v-card>
                   </v-col>
                   <v-col cols="12">
-                    <v-card outlined>
-                      <v-toolbar color="grey lighten-4" flat>
+                    <v-card border>
+                      <v-toolbar color="grey-lighten-4" flat>
+                        <v-icon icon="fas fa-gears" start />
                         <v-toolbar-title>
-                          <v-icon left>
-                            fas fa-gears
-                          </v-icon>
                           {{ $t(`feedback-schemes.cards.options`) }}
                         </v-toolbar-title>
                       </v-toolbar>
@@ -102,33 +94,37 @@
                               <v-select
                                 v-model="dialog.card.image"
                                 hide-details="auto"
-                                item-text="id"
+                                item-title="id"
                                 item-value="id"
                                 :items="images"
                                 :label="$t('feedback-schemes.cards.image')"
                                 name="image"
-                                outlined
+                                variant="outlined"
                               >
-                                <template #item="{ item }">
-                                  <v-avatar class="mr-4 my-2" tile>
-                                    <v-img :alt="item.id" :src="item.url" />
-                                  </v-avatar>
-                                  {{ item.id }}
+                                <template #item="{ item, props }">
+                                  <v-list-item v-bind="props">
+                                    <template #prepend>
+                                      <v-avatar class="mr-4 my-2" tile>
+                                        <v-img :alt="item.raw.id" :src="item.raw.url" />
+                                      </v-avatar>
+                                    </template>
+                                    <v-list-item-title>{{ item.raw.id }}</v-list-item-title>
+                                  </v-list-item>
                                 </template>
                               </v-select>
                             </v-col>
                             <v-col cols="12" md="6">
                               <v-expansion-panels>
                                 <v-expansion-panel key="color">
-                                  <v-expansion-panel-header>
+                                  <v-expansion-panel-title>
                                     {{ $t(`feedback-schemes.cards.color`) }}
-                                  </v-expansion-panel-header>
-                                  <v-expansion-panel-content>
+                                  </v-expansion-panel-title>
+                                  <v-expansion-panel-text>
                                     <v-color-picker
                                       v-model="dialog.card.color"
                                       show-swatches
                                     />
-                                  </v-expansion-panel-content>
+                                  </v-expansion-panel-text>
                                 </v-expansion-panel>
                               </v-expansion-panels>
                             </v-col>
@@ -147,24 +143,20 @@
                   </v-col>
                 </v-row>
               </v-container>
-            </v-tab-item>
+            </v-tabs-window-item>
             <component
               :is="dialog.card.type"
               v-model="dialog.card"
               @validate="validate"
             />
-          </v-tabs-items>
+          </v-tabs-window>
           <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>
-                $cancel
-              </v-icon>{{ $t('common.action.cancel') }}
+            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer />
-            <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>
-                $success
-              </v-icon>{{ $t('common.action.ok') }}
+            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-container>

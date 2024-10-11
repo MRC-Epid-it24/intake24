@@ -1,33 +1,34 @@
 <template>
-  <v-dialog ref="menu" v-model="dialog" persistent :return-value.sync="internalValue" width="290px">
-    <template #activator="{ attrs, on }">
+  <v-dialog v-model="dialog" persistent width="290px">
+    <template #activator="{ props }">
       <v-text-field
         :clearable="clearable"
         :error-messages="errorMessages"
         hide-details="auto"
         :label="label"
-        outlined
-        v-bind="attrs"
+        :model-value="formattedValue"
         prepend-inner-icon="fas fa-calendar-days"
         readonly
-        :value="formattedInternalValue"
-        v-on="on"
+        variant="outlined"
+        v-bind="props"
         @click:clear="internalValue = null"
       />
     </template>
     <v-date-picker v-model="internalValue" scrollable>
-      <v-btn class="font-weight-medium" color="error" text @click="dialog = false">
-        {{ $t('common.action.cancel') }}
-      </v-btn>
-      <v-spacer />
-      <v-btn
-        class="font-weight-medium"
-        color="secondary"
-        text
-        @click="$refs.menu.save(internalValue)"
-      >
-        {{ $t('common.action.ok') }}
-      </v-btn>
+      <template #actions>
+        <v-btn class="font-weight-medium" color="error" variant="text" @click="dialog = false">
+          {{ $t('common.action.cancel') }}
+        </v-btn>
+        <v-spacer />
+        <v-btn
+          class="font-weight-medium"
+          color="secondary"
+          variant="text"
+          @click="update"
+        >
+          {{ $t('common.action.ok') }}
+        </v-btn>
+      </template>
     </v-date-picker>
   </v-dialog>
 </template>
@@ -51,45 +52,41 @@ export default defineComponent({
     label: {
       type: String,
     },
-    value: {
+    modelValue: {
       type: [Date, String] as PropType<string | Date | null>,
     },
   },
 
-  emits: ['input', 'change'],
+  emits: ['update:modelValue', 'change'],
 
   setup(props, { emit }) {
-    // const menu = ref<InstanceType<typeof VMenu>>();
-    const toDate = (val: string | Date | null | undefined): string | null => {
+    const toDate = (val: string | Date | null | undefined): Date | null => {
       if (val instanceof Date)
-        return val.toISOString().split('T')[0];
+        return val;
 
       if (typeof val === 'string')
-        return val.substring(0, 10);
+        return new Date(val);
 
       return null;
     };
     const dialog = ref(false);
-    const internalValue = ref(toDate(props.value));
+    const internalValue = ref(toDate(props.modelValue));
 
-    const formattedInternalValue = computed(() => internalValue.value ? formatDate(internalValue.value, 'dd/MM/yyyy') : '');
+    const formattedValue = computed(() => props.modelValue ? formatDate(props.modelValue, 'dd/MM/yyyy') : '');
 
-    watch(() => props.value, (val) => {
-      if (val === internalValue.value)
+    watch(() => props.modelValue, (val) => {
+      if (toDate(val) === internalValue.value)
         return;
 
       internalValue.value = toDate(val);
     });
 
-    watch(internalValue, (val) => {
-      if (val === props.value)
-        return;
+    function update() {
+      emit('update:modelValue', internalValue.value);
+      dialog.value = false;
+    }
 
-      emit('input', val);
-      emit('change');
-    });
-
-    return { dialog, formattedInternalValue, internalValue };
+    return { dialog, formattedValue, internalValue, update };
   },
 });
 </script>

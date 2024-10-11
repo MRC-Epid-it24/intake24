@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12">
@@ -11,8 +11,8 @@
                 hide-details="auto"
                 :label="$t('users.name')"
                 name="name"
-                outlined
                 prepend-inner-icon="fas fa-signature"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -23,8 +23,8 @@
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
-                outlined
                 prepend-inner-icon="fas fa-envelope"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -34,8 +34,8 @@
                 hide-details="auto"
                 :label="$t('common.phone')"
                 name="phone"
-                outlined
                 prepend-inner-icon="fas fa-phone"
+                variant="outlined"
               />
             </v-col>
             <template v-if="isCreate">
@@ -47,9 +47,9 @@
                   hide-details="auto"
                   :label="$t('common.password._')"
                   name="password"
-                  outlined
                   prepend-inner-icon="fas fa-key"
                   type="password"
+                  variant="outlined"
                 />
               </v-col>
               <v-col cols="12" md="6">
@@ -60,9 +60,9 @@
                   hide-details="auto"
                   :label="$t('common.password.confirm')"
                   name="passwordConfirm"
-                  outlined
                   prepend-inner-icon="fas fa-key"
                   type="password"
+                  variant="outlined"
                 />
               </v-col>
             </template>
@@ -71,19 +71,19 @@
                 v-model="form.roles"
                 :error-messages="form.errors.get('roles')"
                 hide-details="auto"
-                item-text="displayName"
+                item-title="displayName"
                 item-value="id"
                 :items="refs.roles"
                 :label="$t('users.roles._')"
                 multiple
                 name="roles"
-                outlined
                 prepend-inner-icon="$roles"
-                @change="form.errors.clear('roles')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('roles')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.roles.length === 1">{{ item.displayName }}</span>
+                    <span v-if="form.roles.length === 1">{{ item.raw.displayName }}</span>
                     <span v-if="form.roles.length > 1">{{ form.roles.length }} selected </span>
                   </template>
                 </template>
@@ -94,20 +94,20 @@
                 v-model="form.permissions"
                 :error-messages="form.errors.get('permissions')"
                 hide-details="auto"
-                item-text="displayName"
+                item-title="displayName"
                 item-value="id"
                 :items="refs.permissions"
                 :label="$t('users.permissions._')"
                 :messages="$t('users.permissions.hint')"
                 multiple
                 name="permissions"
-                outlined
                 prepend-inner-icon="$permissions"
-                @change="form.errors.clear('permissions')"
+                variant="outlined"
+                @update:model-value="form.errors.clear('permissions')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.permissions.length === 1">{{ item.displayName }}</span>
+                    <span v-if="form.permissions.length === 1">{{ item.raw.displayName }}</span>
                     <span v-if="form.permissions.length > 1">{{ form.permissions.length }} selected
                     </span>
                   </template>
@@ -121,7 +121,7 @@
                 hide-details="auto"
                 :label="$t('users.mfa._')"
                 name="multiFactorAuthentication"
-                @change="form.errors.clear('multiFactorAuthentication')"
+                @update:model-value="form.errors.clear('multiFactorAuthentication')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -131,7 +131,7 @@
                 hide-details="auto"
                 :label="$t('users.verified')"
                 name="verifiedAt"
-                @change="toggle('verifiedAt')"
+                @update:model-value="toggle('verifiedAt')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -141,7 +141,7 @@
                 hide-details="auto"
                 :label="$t('users.disabled')"
                 name="disabledAt"
-                @change="toggle('disabledAt')"
+                @update:model-value="toggle('disabledAt')"
               />
             </v-col>
           </v-row>
@@ -153,7 +153,7 @@
                 hide-details="auto"
                 :label="$t('users.notifications.email')"
                 name="emailNotifications"
-                @change="form.errors.clear('emailNotifications')"
+                @update:model-value="form.errors.clear('emailNotifications')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -163,7 +163,7 @@
                 hide-details="auto"
                 :label="$t('users.notifications.sms')"
                 name="smsNotifications"
-                @change="form.errors.clear('smsNotifications')"
+                @update:model-value="form.errors.clear('smsNotifications')"
               />
             </v-col>
           </v-row>

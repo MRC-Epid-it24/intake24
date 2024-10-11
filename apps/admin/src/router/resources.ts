@@ -59,7 +59,7 @@ export const resources: Resource[] = [
   {
     group: 'fdb',
     name: 'standard-units',
-    icon: 'fa-cubes-stacked',
+    icon: 'fas fa-cubes-stacked',
     api: 'admin/standard-units',
     generateRoutes: true,
     routes: [...routes, 'categories', 'foods'],

@@ -1,9 +1,9 @@
 <template>
   <app-entry-screen
-    :subtitle="$t('common.login.subtitle').toString()"
-    :title="$t('common._').toString()"
+    :subtitle="$t('common.login.subtitle')"
+    :title="$t('common._')"
   >
-    <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
+    <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="login">
       <v-card-text>
         <v-container>
           <v-row>
@@ -15,31 +15,35 @@
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
-                outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12">
               <v-text-field
                 v-model="password"
-                :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
                 autocomplete="current-password"
                 :error-messages="errors.get('password')"
                 hide-details="auto"
                 :label="$t('common.password._')"
                 name="password"
-                outlined
                 prepend-inner-icon="fas fa-key"
                 required
                 :type="showPassword ? 'text' : 'password'"
-                @click:append="showPassword = !showPassword"
-              />
+                variant="outlined"
+              >
+                <template #append-inner>
+                  <v-icon class="me-2" @click="showPassword = !showPassword">
+                    {{ showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+                  </v-icon>
+                </template>
+              </v-text-field>
               <v-btn
                 class="mt-2 font-weight-bold"
                 color="info"
-                text
                 :to="{ name: 'password-request' }"
+                variant="text"
               >
                 {{ $t('common.password.forgot') }}
               </v-btn>
@@ -47,7 +51,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn block color="primary" :disabled="isAppLoading" rounded type="submit" x-large>
+              <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
                 {{ $t('common.login._') }}
               </v-btn>
             </v-col>
@@ -57,14 +61,14 @@
     </v-form>
     <template v-if="signupEnabled">
       <v-divider class="mx-6" />
-      <v-card-title class="text-h3 font-weight-medium justify-center pt-6">
+      <v-card-title class="text-h3 font-weight-medium text-center pt-6">
         {{ $t('common.signup.noAccount') }}
       </v-card-title>
       <v-card-text>
         <v-container>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn block color="primary" outlined rounded :to="{ name: 'signup' }" x-large>
+              <v-btn block color="primary" rounded size="x-large" :to="{ name: 'signup' }" variant="outlined">
                 {{ $t('common.signup._') }}
               </v-btn>
             </v-col>
@@ -75,7 +79,7 @@
     <mfa-dialog
       v-if="auth.mfa"
       :auth-data="auth.mfa"
-      :value="!!auth.mfa"
+      :model-value="!!auth.mfa"
       @close="clearMFAChallenge"
     />
   </app-entry-screen>

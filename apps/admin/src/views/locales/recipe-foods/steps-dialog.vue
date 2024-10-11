@@ -2,14 +2,12 @@
   <v-dialog
     v-if="$props.dialog"
     v-model="$props.dialog"
-    :fullscreen="$vuetify.breakpoint.smAndDown"
+    :fullscreen="$vuetify.display.smAndDown"
     max-width="700px"
   >
-    <v-card class="dialog-card" :tile="$vuetify.breakpoint.smAndDown">
+    <v-card class="dialog-card" :tile="$vuetify.display.smAndDown">
       <v-toolbar class="sticky-toolbar" color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="$emit('close')">
-          <v-icon>$cancel</v-icon>
-        </v-btn>
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="$emit('close')" />
         <v-toolbar-title>
           {{ $t('locales.recipe-foods.steps') }}
         </v-toolbar-title>
@@ -20,135 +18,131 @@
       </v-toolbar>
       <v-list>
         <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
-          <v-list-item-content class="v-list-item-content">
-            <v-container class="px-2">
-              <v-subheader class="text-h4 font-weight-medium mb-4 px-0">
-                <v-avatar class="mr-3" color="primary" size="28">
-                  <span class="white--text font-weight-medium text-h6">{{ item.order }}</span>
-                </v-avatar>
-                {{ translate(item.name) }}
-              </v-subheader>
-              <v-row col="12">
-                <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model.trim="item.code"
-                    hide-details="auto"
-                    :label="$t('locales.recipe-foods.step_code')"
-                    name="special"
-                    outlined
-                    readonly
-                  />
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model.trim="item.order"
-                    hide-details="auto"
-                    :label="$t('locales.recipe-foods.order')"
-                    name="code"
-                    outlined
-                    readonly
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <language-selector
-                    v-model="item.name"
-                    :label="$t('locales.recipe-foods.name').toString()"
-                    required
-                  >
-                    <template v-for="lang in Object.keys(item.name)" #[`lang.${lang}`]>
-                      <v-text-field
-                        :key="lang"
-                        v-model="item.name[lang]"
-                        :error-messages="form.errors.get(`estimateIn.${lang}`)"
-                        hide-details="auto"
-                        :name="`estimateIn.${lang}`"
-                        outlined
-                        @input="form.errors.clear(`estimateIn.${lang}`)"
-                      />
-                    </template>
-                  </language-selector>
-                </v-col>
-                <v-col cols="12">
-                  <language-selector
-                    v-model="item.name"
-                    :label="$t('locales.recipe-foods.description').toString()"
-                    required
-                  >
-                    <template v-for="lang in Object.keys(item.name)" #[`lang.${lang}`]>
-                      <v-text-field
-                        :key="lang"
-                        v-model="item.description[lang]"
-                        :error-messages="form.errors.get(`recipe-foods.${lang}`)"
-                        hide-details="auto"
-                        :name="`recipe-foods.${lang}`"
-                        outlined
-                        @input="form.errors.clear(`recipe-foods.${lang}`)"
-                      />
-                    </template>
-                  </language-selector>
-                </v-col>
-              </v-row>
-              <v-row col="12">
-                <v-col cols="12" md="6">
-                  <v-switch
-                    v-model="item.repeatable"
-                    hide-details="auto"
-                    :label="$t('locales.recipe-foods.repeat')"
-                    name="repeatable"
-                  />
-                  <v-switch
-                    v-model="item.required"
-                    hide-details="auto"
-                    :label="$t('locales.recipe-foods.require')"
-                    name="required"
-                  />
-                </v-col>
-                <v-col cols="12" md="6">
-                  <select-resource
-                    v-model.trim="item.categoryCode"
-                    activator-class="mb-2"
-                    item-id="code"
-                    :label="$t('locales.recipe-foods.ingredientsCategory')"
-                    name="ingredientsCategoryCode"
-                    resource="categories"
-                  >
-                    <template #title>
-                      {{ $t(`fdbs.categories.title`) }}
-                    </template>
-                    <template #item="{ item: resItem }">
-                      <v-list-item-title>{{ resItem.code }}</v-list-item-title>
-                      <v-list-item-subtitle>{{ resItem.name }}</v-list-item-subtitle>
-                    </template>
-                  </select-resource>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-list-item-content>
-          <v-list-item-action class="v-list-item-action">
-            <v-btn
-              block
-              class="full-width-btn"
-              elevation="0"
-              :title="$t('locales.recipe-foods.remove')"
-              @click.stop="removeStep(idx)"
-            >
-              <v-icon color="error">
-                $delete
-              </v-icon>
-            </v-btn>
-          </v-list-item-action>
+          <v-container class="px-2 v-list-item-content">
+            <v-list-subheader class="text-h4 font-weight-medium mb-4 px-0">
+              <v-avatar class="mr-3" color="primary" size="28">
+                <span class="text-white font-weight-medium text-h6">{{ item.order }}</span>
+              </v-avatar>
+              {{ translate(item.name) }}
+            </v-list-subheader>
+            <v-row col="12">
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model.trim="item.code"
+                  hide-details="auto"
+                  :label="$t('locales.recipe-foods.step_code')"
+                  name="special"
+                  readonly
+                  variant="outlined"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model.trim="item.order"
+                  hide-details="auto"
+                  :label="$t('locales.recipe-foods.order')"
+                  name="code"
+                  readonly
+                  variant="outlined"
+                />
+              </v-col>
+              <v-col cols="12">
+                <language-selector
+                  v-model="item.name"
+                  :label="$t('locales.recipe-foods.name')"
+                  required
+                >
+                  <template v-for="lang in Object.keys(item.name)" :key="lang" #[`lang.${lang}`]>
+                    <v-text-field
+                      v-model="item.name[lang]"
+                      :error-messages="form.errors.get(`estimateIn.${lang}`)"
+                      hide-details="auto"
+                      :name="`estimateIn.${lang}`"
+                      variant="outlined"
+                      @update:model-value="form.errors.clear(`estimateIn.${lang}`)"
+                    />
+                  </template>
+                </language-selector>
+              </v-col>
+              <v-col cols="12">
+                <language-selector
+                  v-model="item.name"
+                  :label="$t('locales.recipe-foods.description')"
+                  required
+                >
+                  <template v-for="lang in Object.keys(item.name)" :key="lang" #[`lang.${lang}`]>
+                    <v-text-field
+                      v-model="item.description[lang]"
+                      :error-messages="form.errors.get(`recipe-foods.${lang}`)"
+                      hide-details="auto"
+                      :name="`recipe-foods.${lang}`"
+                      variant="outlined"
+                      @update:model-value="form.errors.clear(`recipe-foods.${lang}`)"
+                    />
+                  </template>
+                </language-selector>
+              </v-col>
+            </v-row>
+            <v-row col="12">
+              <v-col cols="12" md="6">
+                <v-switch
+                  v-model="item.repeatable"
+                  hide-details="auto"
+                  :label="$t('locales.recipe-foods.repeat')"
+                  name="repeatable"
+                />
+                <v-switch
+                  v-model="item.required"
+                  hide-details="auto"
+                  :label="$t('locales.recipe-foods.require')"
+                  name="required"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <select-resource
+                  v-model.trim="item.categoryCode"
+                  activator-class="mb-2"
+                  item-id="code"
+                  :label="$t('locales.recipe-foods.ingredientsCategory')"
+                  name="ingredientsCategoryCode"
+                  resource="categories"
+                >
+                  <template #title>
+                    {{ $t(`fdbs.categories.title`) }}
+                  </template>
+                  <template #item="{ item: resItem }">
+                    <v-list-item-title>{{ resItem.code }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ resItem.name }}</v-list-item-subtitle>
+                  </template>
+                </select-resource>
+              </v-col>
+            </v-row>
+          </v-container>
+          <template #append>
+            <v-list-item-action class="v-list-item-action">
+              <v-btn
+                block
+                class="full-width-btn"
+                elevation="0"
+                :title="$t('locales.recipe-foods.remove')"
+                @click.stop="removeStep(idx)"
+              >
+                <v-icon color="error">
+                  $delete
+                </v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </template>
         </v-list-item>
         <v-spacer class="pa-2" />
         <div class="justify-center d-flex">
           <v-btn
-            class="display-1"
+            class="text-h4"
             color="primary"
-            fab
+            icon="$add"
             :title="$t('locales.recipe-foods.add')"
             @click.stop="addStep"
-          >
-            <v-icon>$add</v-icon>
-          </v-btn>
+          />
         </div>
       </v-list>
     </v-card>
@@ -204,6 +198,9 @@ export default defineComponent({
       default: () => [],
     },
   },
+
+  emits: ['close', 'update-steps'],
+
   setup(props, { emit }) {
     const { translate } = useI18n();
 

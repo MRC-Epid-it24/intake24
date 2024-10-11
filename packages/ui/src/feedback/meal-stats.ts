@@ -26,12 +26,13 @@ export interface FeedbackMealsData extends Omit<FeedbackMeals, 'chart' | 'table'
 }
 
 export function buildMealStats(feedbackMeals: FeedbackMeals, meals: MealStats[], nutrientTypes: NutrientType[] = []): FeedbackMealsData {
+  // TODO: this should not be here
+  const { translate } = useI18n();
   const { chart, table } = feedbackMeals;
 
   const chartData = chart.nutrients.map((nutrient) => {
-    const { id } = nutrient;
+    const { id, name } = nutrient;
 
-    const name = useI18n().translate(nutrient.name);
     const unit = getNutrientUnit(id, nutrientTypes);
 
     const data = meals.map(meal => ({
@@ -45,7 +46,7 @@ export function buildMealStats(feedbackMeals: FeedbackMeals, meals: MealStats[],
   const tableData = meals.map((meal) => {
     return table.fields.reduce<MealTableFieldData>((acc, field) => {
       let resolvedValue: string | number | null = null;
-      const value = useI18n().translate(field.value);
+      const value = translate(field.value);
 
       switch (field.type) {
         case 'standard':

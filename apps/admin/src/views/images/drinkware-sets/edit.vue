@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -12,8 +12,8 @@
                 hide-details="auto"
                 :label="$t('drinkware-sets.id')"
                 name="id"
-                outlined
                 prepend-inner-icon="$drinkware-sets"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -24,8 +24,8 @@
                 hide-details="auto"
                 :label="$t('image-maps._')"
                 name="imageMapId"
-                outlined
                 prepend-inner-icon="$image-maps"
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -35,8 +35,8 @@
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
-                outlined
                 prepend-inner-icon="$description"
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -66,15 +66,14 @@
                 <v-card-text>
                   <language-selector
                     v-model="selectedScale.label"
-                    :label="$t('guide-images.objects.label._').toString()"
+                    :label="$t('guide-images.objects.label._')"
                   >
-                    <template v-for="lang in Object.keys(selectedScale.label)" #[`lang.${lang}`]>
+                    <template v-for="lang in Object.keys(selectedScale.label)" :key="lang" #[`lang.${lang}`]>
                       <v-text-field
-                        :key="lang"
                         v-model="selectedScale.label[lang]"
                         hide-details="auto"
                         :label="$t('guide-images.objects.label._')"
-                        outlined
+                        variant="outlined"
                       />
                     </template>
                   </language-selector>
@@ -122,16 +121,16 @@
                       hide-details="auto"
                       :label="$t('image-maps.baseImage')"
                       name="baseImage"
-                      outlined
                       prepend-icon=""
                       prepend-inner-icon="fas fa-paperclip"
+                      variant="outlined"
                     />
                   </v-card-text>
                   <v-card-actions>
                     <v-btn
                       color="primary"
                       :disabled="!baseImageFiles[selectedObjectId]"
-                      large
+                      size="large"
                       @click="createSlidingScale(selectedObjectId)"
                     >
                       <v-icon class="mr-2">
@@ -146,7 +145,7 @@
               <div v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1">
                 <sliding-scale-editor
                   :scale-index="selectedScaleIndex"
-                  @baseImageChanged="onBaseImageChanged"
+                  @base-image-changed="onBaseImageChanged"
                 />
 
                 <v-card flat>
@@ -161,7 +160,7 @@
                       item-value="method"
                       :items="volumeMethodSelectList"
                       :label="$t('drinkware-sets.volumeMethod.title')"
-                      outlined
+                      variant="outlined"
                     />
                   </v-card-text>
                 </v-card>
@@ -358,10 +357,10 @@ export default defineComponent({
     const volumeMethodSelectList
      = [{
        method: 'lookUpTable',
-       text: i18n.t('drinkware-sets.volumeMethod.lookUpTable'),
+       title: i18n.t('drinkware-sets.volumeMethod.lookUpTable'),
      }, {
        method: 'cylindrical',
-       text: i18n.t('drinkware-sets.volumeMethod.cylindrical'),
+       title: i18n.t('drinkware-sets.volumeMethod.cylindrical'),
      }];
 
     return {

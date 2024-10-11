@@ -1,30 +1,30 @@
 <template>
-  <div class="d-flex justify-center align-center">
-    <v-card
-      :class="{ 'mt-10': $vuetify.breakpoint.smAndUp }"
-      :max-width="$vuetify.breakpoint.xs ? $vuetify.breakpoint.thresholds.xs : maxWidth"
-      :tile="$vuetify.breakpoint.xs"
-    >
-      <div class="d-flex justify-center align-center pt-4">
-        <slot name="logo">
-          <v-avatar v-if="hasIcon" tile>
-            <img alt="logo" :src="iconFile">
-          </v-avatar>
+  <v-row justify="center" :no-gutters="$vuetify.display.mobile">
+    <v-col cols="12" sm="auto">
+      <v-card
+        :class="{ 'mt-10': $vuetify.display.smAndUp }"
+        :tile="$vuetify.display.xs"
+        :width="$vuetify.display.smAndUp ? width : undefined"
+      >
+        <div class="d-flex justify-center align-center pt-4">
+          <slot name="logo">
+            <v-avatar v-if="hasIcon" :image="iconFile" rounded="0" />
+          </slot>
+          <slot name="title">
+            <v-card-title class="text-h2 font-weight-medium justify-center">
+              {{ title }}
+            </v-card-title>
+          </slot>
+        </div>
+        <slot name="subtitle">
+          <v-card-subtitle v-if="subtitle" class="text-center font-weight-medium px-6 pt-4 pb-0">
+            {{ subtitle }}
+          </v-card-subtitle>
         </slot>
-        <slot name="title">
-          <v-card-title class="text-h2 font-weight-medium justify-center">
-            {{ title }}
-          </v-card-title>
-        </slot>
-      </div>
-      <slot name="subtitle">
-        <v-card-subtitle v-if="subtitle" class="text-center font-weight-medium px-6 pt-4 pb-0">
-          {{ subtitle }}
-        </v-card-subtitle>
-      </slot>
-      <slot />
-    </v-card>
-  </div>
+        <slot />
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -46,7 +46,7 @@ export default defineComponent({
     subtitle: {
       type: String,
     },
-    maxWidth: {
+    width: {
       type: String,
       default: '30rem',
     },

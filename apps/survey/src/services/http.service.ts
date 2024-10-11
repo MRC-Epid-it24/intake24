@@ -90,7 +90,7 @@ const httpClient: HttpClient = {
           isRefreshing = false;
 
           await auth.logout();
-          const { name, params: { surveyId } = {} } = router.currentRoute;
+          const { name, params: { surveyId } = {} } = router.currentRoute.value;
 
           if (surveyId && name !== 'survey-login')
             router.push({ name: 'survey-login', params: { surveyId } });

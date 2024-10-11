@@ -5,11 +5,11 @@
         <v-btn
           class="px-4"
           color="primary"
-          large
-          outlined
+          size="large"
           :to="{ name: 'survey-home', params: { surveyId } }"
+          variant="outlined"
         >
-          <v-icon left>
+          <v-icon start>
             $home
           </v-icon>
           {{ $t('common.home') }}
@@ -19,18 +19,18 @@
           class="px-4"
           color="primary"
           :disabled="!feedbackAvailable"
-          large
-          outlined
+          size="large"
           :to="{ name: 'feedback-home', params: { surveyId } }"
+          variant="outlined"
         >
-          <v-icon left>
+          <v-icon start>
             $feedback
           </v-icon>
           {{ $t('recall.actions.feedback') }}
         </v-btn>
       </template>
       <template #nav-actions>
-        <v-btn color="primary" text :to="{ name: 'survey-home', params: { surveyId } }">
+        <v-btn color="primary" :to="{ name: 'survey-home', params: { surveyId } }" variant="text">
           <span class="text-overline font-weight-medium">{{ $t('common.home') }}</span>
           <v-icon class="pb-1">
             $home
@@ -41,8 +41,8 @@
           v-if="feedbackEnabled"
           color="primary"
           :disabled="!feedbackAvailable"
-          text
           :to="{ name: 'feedback-home', params: { surveyId } }"
+          variant="text"
         >
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.feedback') }}
@@ -56,7 +56,7 @@
     <survey-rating
       v-if="prompt.rating"
       v-bind="{ submissionId, surveyId, type: 'recall' }"
-      class="grey lighten-4 pt-6"
+      class="bg-grey-lighten-4 pt-6"
     />
   </div>
 </template>
@@ -64,7 +64,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { SurveyRating } from '@intake24/survey/components';
+import { SurveyRating } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';

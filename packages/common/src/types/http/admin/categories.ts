@@ -39,6 +39,12 @@ export type CategoryListEntry = {
   isHidden: boolean;
 };
 
+export type CategoryGlobalListEntry = {
+  code: string;
+  name: string;
+  isHidden: boolean;
+};
+
 export type CategoriesResponse = Pagination<CategoryListEntry>;
 
 export type MainCategoriesResponse = Pagination<CategoryAttributes>;

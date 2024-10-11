@@ -1,7 +1,7 @@
 <template>
-  <layout v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-title>{{ $t('nutrient-tables._') }}</v-card-title>
         <v-card-text>
           <v-row>
@@ -13,7 +13,7 @@
                 hide-details="auto"
                 :label="$t('common.id')"
                 name="id"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -23,8 +23,8 @@
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
-                outlined
                 prepend-inner-icon="$description"
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -39,7 +39,7 @@
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.idColumnOffset')"
                 name="csvMapping.idColumnOffset"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -49,7 +49,7 @@
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.descriptionColumnOffset')"
                 name="csvMapping.descriptionColumnOffset"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -59,7 +59,7 @@
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.localDescriptionColumnOffset')"
                 name="csvMapping.localDescriptionColumnOffset"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -69,7 +69,7 @@
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.rowOffset')"
                 name="csvMapping.rowOffset"
-                outlined
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -81,21 +81,19 @@
           <v-spacer />
           <v-btn
             color="primary"
-            outlined
             rounded
             :title="$t('nutrient-tables.mapping.fields.create')"
+            variant="outlined"
             @click.stop="addField"
           >
-            <v-icon left>
-              $add
-            </v-icon>{{ $t('nutrient-tables.mapping.fields.create') }}
+            <v-icon icon="$add" start />{{ $t('nutrient-tables.mapping.fields.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>
-          <v-alert v-if="form.errors.has('csvMappingFields')" border="left" outlined type="error">
+          <v-alert v-if="form.errors.has('csvMappingFields')" border="start" type="error">
             {{ form.errors.get('csvMappingFields') }}
           </v-alert>
-          <v-simple-table>
+          <v-table>
             <thead>
               <tr>
                 <th>{{ $t('nutrient-tables.mapping.fields.fieldName') }}</th>
@@ -108,37 +106,35 @@
                 <td class="py-2">
                   <v-text-field
                     v-model="field.fieldName"
-                    dense
+                    density="compact"
                     hide-details="auto"
                     :label="$t('nutrient-tables.mapping.fields.fieldName')"
                     name="fieldName"
-                    outlined
+                    variant="outlined"
                   />
                 </td>
                 <td class="py-2">
                   <v-text-field
                     v-model="field.columnOffset"
-                    dense
+                    density="compact"
                     hide-details="auto"
                     :label="$t('nutrient-tables.mapping.fields.columnOffset')"
                     name="columnOffset"
-                    outlined
+                    variant="outlined"
                   />
                 </td>
                 <td class="py-2">
                   <v-btn
-                    icon
+                    color="error"
+                    icon="$delete"
                     :title="$t('nutrient-tables.mapping.fields.delete')"
+                    variant="text"
                     @click="removeField(idx)"
-                  >
-                    <v-icon color="error">
-                      $delete
-                    </v-icon>
-                  </v-btn>
+                  />
                 </td>
               </tr>
             </tbody>
-          </v-simple-table>
+          </v-table>
         </v-card-text>
         <v-toolbar flat tile>
           <v-toolbar-title>
@@ -147,26 +143,23 @@
           <v-spacer />
           <v-btn
             color="primary"
-            outlined
             rounded
             :title="$t('nutrient-tables.mapping.nutrients.create')"
+            variant="outlined"
             @click.stop="addNutrient"
           >
-            <v-icon left>
-              $add
-            </v-icon>{{ $t('nutrient-tables.mapping.nutrients.create') }}
+            <v-icon icon="$add" start />{{ $t('nutrient-tables.mapping.nutrients.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>
           <v-alert
             v-if="form.errors.has('csvMappingNutrients')"
-            border="left"
-            outlined
+            border="start"
             type="error"
           >
             {{ form.errors.get('csvMappingNutrients') }}
           </v-alert>
-          <v-simple-table>
+          <v-table>
             <thead>
               <tr>
                 <th>{{ $t('nutrient-tables.mapping.nutrients.nutrient') }}</th>
@@ -179,36 +172,34 @@
                 <td class="py-2">
                   <v-select
                     v-model="nutrient.nutrientTypeId"
-                    dense
+                    density="compact"
                     hide-details="auto"
-                    item-text="description"
+                    item-title="description"
                     item-value="id"
                     :items="refs.nutrientTypes"
                     :label="$t('nutrient-tables.mapping.nutrients.nutrient')"
                     name="nutrient"
-                    outlined
+                    variant="outlined"
                   />
                 </td>
                 <td class="py-2">
                   <v-text-field
                     v-model="nutrient.columnOffset"
-                    dense
+                    density="compact"
                     hide-details="auto"
                     :label="$t('nutrient-tables.mapping.nutrients.columnOffset')"
                     name="columnOffset"
-                    outlined
+                    variant="outlined"
                   />
                 </td>
                 <td class="py-2">
                   <v-btn
-                    icon
+                    color="error"
+                    icon="$delete"
                     :title="$t('nutrient-tables.mapping.nutrients.delete')"
+                    variant="text"
                     @click="removeNutrient(idx)"
-                  >
-                    <v-icon color="error">
-                      $delete
-                    </v-icon>
-                  </v-btn>
+                  />
                 </td>
               </tr>
               <v-skeleton-loader
@@ -217,7 +208,7 @@
                 type="table-row"
               />
             </tbody>
-          </v-simple-table>
+          </v-table>
         </v-card-text>
         <v-card-text>
           <submit-footer :disabled="form.errors.any()" />
@@ -378,7 +369,7 @@ export default defineComponent({
   },
 
   methods: {
-    loadMoreNutrients(entries: IntersectionObserverEntry[]) {
+    loadMoreNutrients(isIntersecting: boolean, entries: IntersectionObserverEntry[]) {
       if (entries[0].isIntersecting && this.nutrientsAvailableToLoad) {
         const startIndex = this.nutrients.items.length;
         const endIndex

@@ -1,10 +1,10 @@
 <template>
   <app-entry-screen
-    max-width="800px"
-    :subtitle="$t('common.signup.subtitle').toString()"
-    :title="$t('common.signup._').toString()"
+    :subtitle="$t('common.signup.subtitle')"
+    :title="$t('common.signup._')"
+    width="800px"
   >
-    <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
+    <v-form @keydown="form.errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>
         <v-container>
           <v-row>
@@ -16,9 +16,9 @@
                 hide-details="auto"
                 :label="$t('users.name')"
                 name="name"
-                outlined
                 prepend-inner-icon="fas fa-user"
                 required
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" sm="6">
@@ -29,9 +29,9 @@
                 hide-details="auto"
                 :label="$t('common.phone')"
                 name="phone"
-                outlined
                 prepend-inner-icon="fas fa-phone"
                 required
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" sm="6">
@@ -42,9 +42,9 @@
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
-                outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" sm="6">
@@ -55,54 +55,62 @@
                 hide-details="auto"
                 :label="$t('common.emailConfirm')"
                 name="emailConfirm"
-                outlined
                 prepend-inner-icon="fas fa-envelope"
                 required
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.password"
-                :append-icon="show.password ? 'fas fa-eye' : 'fas fa-eye-slash'"
+
                 autocomplete="new-password"
                 :error-messages="form.errors.get('password')"
                 hide-details="auto"
                 :label="$t('common.password._')"
                 name="password"
-                outlined
                 prepend-inner-icon="fas fa-key"
                 required
                 :type="show.password ? 'text' : 'password'"
-                @click:append="show.password = !show.password"
-              />
+                variant="outlined"
+              >
+                <template #append-inner>
+                  <v-icon class="me-2" @click="show.password = !show.password">
+                    {{ show.password ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+                  </v-icon>
+                </template>
+              </v-text-field>
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.passwordConfirm"
-                :append-icon="show.passwordConfirm ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 :error-messages="form.errors.get('passwordConfirm')"
                 hide-details="auto"
                 :label="$t('common.password.confirm')"
                 name="passwordConfirm"
-                outlined
                 prepend-inner-icon="fas fa-key"
                 required
                 :type="show.passwordConfirm ? 'text' : 'password'"
-                @click:append="show.passwordConfirm = !show.passwordConfirm"
-              />
+                variant="outlined"
+              >
+                <template #append-inner>
+                  <v-icon class="me-2" @click="show.passwordConfirm = !show.passwordConfirm">
+                    {{ show.passwordConfirm ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+                  </v-icon>
+                </template>
+              </v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-checkbox
+              <v-checkbox-btn
                 v-model="form.terms"
-                class="mt-0"
                 :error-messages="form.errors.get('terms')"
                 hide-details="auto"
                 name="terms"
-                @change="form.errors.clear('terms')"
+                @update:model-value="form.errors.clear('terms')"
               >
                 <template #label>
-                  <i18n path="common.terms.text" tag="div">
+                  <i18n-t keypath="common.terms.text" tag="div">
                     <template #privacy>
                       <a href="https://intake24.org/privacy" target="_blank" @click.stop>
                         {{ $t('common.terms.privacy') }}
@@ -113,14 +121,14 @@
                         {{ $t('common.terms.tos') }}
                       </a>
                     </template>
-                  </i18n>
+                  </i18n-t>
                 </template>
-              </v-checkbox>
+              </v-checkbox-btn>
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col cols="12" sm="6">
-              <v-btn block color="primary" :disabled="isAppLoading" rounded type="submit" x-large>
+              <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
                 {{ $t('common.signup._') }}
               </v-btn>
             </v-col>
@@ -130,10 +138,8 @@
       <captcha ref="captchaEl" @expired="expired" @verified="verified" />
     </v-form>
     <v-card-actions>
-      <v-btn color="info" exact text :to="{ name: 'login' }">
-        <v-icon left>
-          fas fa-angles-left
-        </v-icon>
+      <v-btn color="info" exact :to="{ name: 'login' }" variant="text">
+        <v-icon icon="fas fa-angles-left" start />
         {{ $t('common.login.back') }}
       </v-btn>
     </v-card-actions>
@@ -212,7 +218,7 @@ export default defineComponent({
       catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
-          useMessages().error(this.$t('common.password.request.captcha').toString());
+          useMessages().error(this.$t('common.password.request.captcha'));
         }
         else {
           throw err;

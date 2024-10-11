@@ -8,11 +8,10 @@
           class="rounded-xl"
           link
           tile
-          :title="item.name"
           @click="item.dialog ? openDialog(item.action) : action(item.action)"
         >
           <v-card-text class="d-flex flex-column justify-center align-center ga-2">
-            <v-icon large>
+            <v-icon size="large">
               {{ item.icon }}
             </v-icon>
             <span class="text-center font-weight-medium">{{ item.name }}</span>
@@ -22,14 +21,14 @@
       <confirm-dialog
         v-model="dialog"
         external
-        :label="$t(`recall.menu.${isMeal ? 'meal' : 'food'}.delete`).toString()"
+        :label="$t(`recall.menu.${isMeal ? 'meal' : 'food'}.delete`)"
         @confirm="action(isMeal ? 'deleteMeal' : 'deleteFood')"
       >
-        <i18n :path="`recall.menu.${isMeal ? 'meal' : 'food'}.deleteConfirm`">
+        <i18n-t :keypath="`recall.menu.${isMeal ? 'meal' : 'food'}.deleteConfirm`" tag="span">
           <template #item>
             <span class="font-weight-medium">{{ entityName }}</span>
           </template>
-        </i18n>
+        </i18n-t>
       </confirm-dialog>
     </v-sheet>
   </v-expand-transition>
@@ -66,6 +65,8 @@ export default defineComponent({
       required: true,
     },
   },
+
+  emits: ['action'],
 
   setup(props, ctx) {
     const { action, dialog, entity, entityName, isMeal, openDialog } = useContextMenu(props, ctx);

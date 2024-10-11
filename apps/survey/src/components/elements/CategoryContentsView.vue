@@ -1,15 +1,15 @@
 <template>
   <div class="d-flex flex-column">
     <div v-if="!contents.subcategories.length && !contents.foods.length" class="py-4">
-      <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
+      <v-alert color="grey-lighten-2" icon="fas fa-triangle-exclamation">
         {{ i18n.none }}
       </v-alert>
     </div>
     <div v-if="containsPizza" class="py-4">
       <v-alert
-        border="left"
+        border="start"
         class="smaller-padding"
-        color="primary lighten-4 mb-0"
+        color="primary-lighten-4"
         icon="fas fa-bell"
         rounded="lg"
       >
@@ -18,18 +18,18 @@
     </div>
     <div v-if="contents.foods.length >= 50 && type === 'foodSearch'" class="py-4">
       <v-alert
-        border="left"
+        border="start"
         class="smaller-padding"
-        color="primary lighten-4 mb-0"
+        color="primary-lighten-4"
         icon="fas fa-bell"
         rounded="lg"
       >
         {{ i18n.refine }}
       </v-alert>
     </div>
-    <v-subheader v-if="contents.subcategories.length">
+    <v-list-subheader v-if="contents.subcategories.length">
       {{ i18n.relatedCategories }}
-    </v-subheader>
+    </v-list-subheader>
     <v-chip-group v-if="contents.subcategories.length" column>
       <v-chip
         v-for="category in showAll ? contents.subcategories : firstCategories"
@@ -37,7 +37,7 @@
         class="my-1"
         clickable
         color="primary"
-        outlined
+        variant="outlined"
         @click="categorySelected(category)"
       >
         <span class="font-weight-medium">{{ category.name }}</span>
@@ -47,7 +47,7 @@
       v-if="contents.subcategories.length > threshold"
       class="my-1 mb-2 show-all-toggle-chip"
       color="info"
-      text
+      variant="text"
       @click="showAll = !showAll"
     >
       {{ showAll ? i18n.showLess : i18n.showAll }}
@@ -59,12 +59,10 @@
         class="list-item-border"
         @click="foodSelected(food)"
       >
-        <v-list-item-icon>
-          <v-icon>$food</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ food.name }}</v-list-item-title>
-        </v-list-item-content>
+        <template #prepend>
+          <v-icon icon="$food" />
+        </template>
+        <v-list-item-title>{{ food.name }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </div>

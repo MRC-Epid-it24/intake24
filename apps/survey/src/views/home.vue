@@ -1,8 +1,8 @@
 <template>
-  <v-container :class="{ 'pa-0': isMobile }">
+  <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
     <app-entry-screen
-      :subtitle="$t('common.welcome.subtitle').toString()"
-      :title="$t('common._').toString()"
+      :subtitle="$t('common.welcome.subtitle')"
+      :title="$t('common._')"
     >
       <v-divider class="mt-4" />
       <v-card-title class="font-weight-medium">
@@ -10,35 +10,30 @@
       </v-card-title>
       <image-placeholder v-if="isLoading" class="pa-8" />
       <v-list v-else-if="surveys.length">
-        <template v-for="(survey, idx) in surveys">
+        <template v-for="(survey, idx) in surveys" :key="survey.id">
           <v-list-item
-            :key="survey.id"
             :to="{ name: 'survey-login', params: { surveyId: survey.slug } }"
           >
-            <v-list-item-avatar>
+            <template #prepend>
               <v-icon>fas fa-square-poll-vertical</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ survey.name }}</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
+            </template>
+            <v-list-item-title>{{ survey.name }}</v-list-item-title>
+            <template #append>
               <v-icon>fas fa-arrow-up-right-from-square</v-icon>
-            </v-list-item-icon>
+            </template>
           </v-list-item>
           <v-divider v-if="idx + 1 < surveys.length" :key="`div-${survey.id}`" />
         </template>
       </v-list>
       <v-list v-else disabled>
         <v-list-item>
-          <v-list-item-icon>
+          <template #prepend>
             <v-icon>fas fa-ban</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $t('survey.openAccess.none._') }}</v-list-item-title>
-            <v-list-item-subtitle>
-              {{ $t('survey.openAccess.none.subtitle') }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
+          </template>
+          <v-list-item-title>{{ $t('survey.openAccess.none._') }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ $t('survey.openAccess.none.subtitle') }}
+          </v-list-item-subtitle>
         </v-list-item>
       </v-list>
     </app-entry-screen>
@@ -47,7 +42,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router/composables';
+import { useRouter } from 'vue-router';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';

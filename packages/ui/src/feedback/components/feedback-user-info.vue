@@ -1,34 +1,29 @@
 <template>
   <v-col cols>
     <v-card>
-      <v-toolbar color="grey lighten-4" flat tile>
+      <v-toolbar color="grey-lighten-4" flat tile>
         <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
           {{ $t('feedback.physicalData.title') }}
         </v-toolbar-title>
         <v-spacer />
-        <v-tooltip left>
-          <template #activator="{ attrs, on }">
+        <v-tooltip location="left">
+          <template #activator="{ props }">
             <v-btn
-              v-bind="attrs"
-              icon
+              icon="$edit"
               :title="$t('feedback.physicalData.change')"
               :to="{ name: 'feedback-physical-data', params: { surveyId } }"
-              v-on="on"
-            >
-              <v-icon>$edit</v-icon>
-            </v-btn>
+              v-bind="props"
+            />
           </template>
           <span>{{ $t('feedback.physicalData.change') }}</span>
         </v-tooltip>
       </v-toolbar>
       <v-list v-if="physicalData.length" class="py-0">
-        <template v-for="(item, idx) in physicalData">
-          <v-list-item :key="idx">
-            <v-list-item-content>
-              <v-list-item-subtitle>
-                {{ item }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
+        <template v-for="(item, idx) in physicalData" :key="idx">
+          <v-list-item>
+            <v-list-item-subtitle>
+              {{ item }}
+            </v-list-item-subtitle>
           </v-list-item>
           <v-divider v-if="idx + 1 < physicalData.length" :key="`div-${idx}`" />
         </template>
@@ -77,13 +72,13 @@ export default defineComponent({
         items.push(
           this.$t('feedback.physicalData.sex', {
             sex: this.$t(`feedback.physicalData.sexes.${sex}`),
-          }).toString(),
+          }),
         );
       }
 
       if (birthdate !== null) {
         items.push(
-          this.$t('feedback.physicalData.age', { age: this.userDemographic.getAge() }).toString(),
+          this.$t('feedback.physicalData.age', { age: this.userDemographic.getAge() }),
         );
       }
 
@@ -94,10 +89,10 @@ export default defineComponent({
       const { heightCm, weightKg } = this.userDemographic.physicalData;
 
       if (heightCm !== null)
-        items.push(this.$t('feedback.physicalData.height', { height: heightCm }).toString());
+        items.push(this.$t('feedback.physicalData.height', { height: heightCm }));
 
       if (weightKg !== null)
-        items.push(this.$t('feedback.physicalData.weight', { weight: weightKg }).toString());
+        items.push(this.$t('feedback.physicalData.weight', { weight: weightKg }));
 
       return items;
     },
@@ -120,7 +115,7 @@ export default defineComponent({
             target: this.$t(
               `feedback.physicalData.weightTargets.${userDemographic.physicalData.weightTarget}`,
             ),
-          }).toString(),
+          }),
         );
       }
 

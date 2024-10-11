@@ -7,40 +7,39 @@
     <template #actions>
       <template v-if="isFood">
         <confirm-dialog
-          :label="$t('recall.menu.food.delete').toString()"
+          :label="$t('recall.menu.food.delete')"
           @confirm="action('deleteFood', food?.id)"
         >
-          <template #activator="{ on, attrs }">
+          <template #activator="{ props }">
             <v-btn
               class="px-4"
               color="primary"
-              large
-              text
+              size="large"
               :title="$t('recall.actions.deleteFood')"
-              v-bind="attrs"
-              v-on="on"
+              variant="text"
+              v-bind="props"
             >
-              <v-icon left>
+              <v-icon start>
                 $delete
               </v-icon>
               {{ $t('recall.actions.deleteFood') }}
             </v-btn>
           </template>
-          <i18n path="recall.menu.food.deleteConfirm">
+          <i18n-t keypath="recall.menu.food.deleteConfirm">
             <template #item>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
         </confirm-dialog>
         <v-btn
           class="px-4"
           color="primary"
-          large
-          text
+          size="large"
           :title="$t('recall.actions.editFood')"
+          variant="text"
           @click.stop="action('editFood', food?.id)"
         >
-          <v-icon left>
+          <v-icon start>
             $edit
           </v-icon>
           {{ $t('recall.actions.editFood') }}
@@ -48,40 +47,39 @@
       </template>
       <template v-if="isMeal">
         <confirm-dialog
-          :label="$t('recall.menu.meal.delete').toString()"
+          :label="$t('recall.menu.meal.delete')"
           @confirm="action('deleteMeal', meal?.id)"
         >
-          <template #activator="{ on, attrs }">
+          <template #activator="{ props }">
             <v-btn
               class="px-4"
               color="primary"
-              large
-              text
+              size="large"
               :title="$t('recall.actions.deleteMeal')"
-              v-bind="attrs"
-              v-on="on"
+              variant="text"
+              v-bind="props"
             >
-              <v-icon left>
+              <v-icon start>
                 $delete
               </v-icon>
               {{ $t('recall.actions.deleteMeal') }}
             </v-btn>
           </template>
-          <i18n path="recall.menu.meal.deleteConfirm">
+          <i18n-t keypath="recall.menu.meal.deleteConfirm">
             <template #item>
               <span class="font-weight-medium">{{ mealName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
         </confirm-dialog>
         <v-btn
           class="px-4"
           color="primary"
-          large
-          text
+          size="large"
           :title="$t('recall.actions.editMeal')"
+          variant="text"
           @click.stop="action('editMeal', meal?.id)"
         >
-          <v-icon left>
+          <v-icon start>
             $add
           </v-icon>
           {{ $t('recall.actions.editMeal') }}
@@ -92,11 +90,11 @@
     <template #nav-actions>
       <template v-if="isFood">
         <confirm-dialog
-          :label="$t('recall.menu.food.delete').toString()"
+          :label="$t('recall.menu.food.delete')"
           @confirm="action('deleteFood', food?.id)"
         >
-          <template #activator="{ on, attrs }">
-            <v-btn color="primary" text v-bind="attrs" v-on="on">
+          <template #activator="{ props }">
+            <v-btn color="primary" variant="text" v-bind="props">
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteFood') }}
               </span>
@@ -105,14 +103,14 @@
               </v-icon>
             </v-btn>
           </template>
-          <i18n path="recall.menu.food.deleteConfirm">
+          <i18n-t keypath="recall.menu.food.deleteConfirm">
             <template #item>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
         </confirm-dialog>
         <v-divider vertical />
-        <v-btn color="primary" text @click.stop="action('editFood', food?.id)">
+        <v-btn color="primary" variant="text" @click.stop="action('editFood', food?.id)">
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.editFood') }}
           </span>
@@ -124,11 +122,11 @@
       </template>
       <template v-if="isMeal">
         <confirm-dialog
-          :label="$t('recall.menu.meal.delete').toString()"
+          :label="$t('recall.menu.meal.delete')"
           @confirm="action('deleteMeal', meal?.id)"
         >
-          <template #activator="{ on, attrs }">
-            <v-btn color="primary" text v-bind="attrs" v-on="on">
+          <template #activator="{ props }">
+            <v-btn color="primary" variant="text" v-bind="props">
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteMeal') }}
               </span>
@@ -137,14 +135,14 @@
               </v-icon>
             </v-btn>
           </template>
-          <i18n path="recall.menu.meal.deleteConfirm">
+          <i18n-t keypath="recall.menu.meal.deleteConfirm">
             <template #item>
               <span class="font-weight-medium">{{ mealName }}</span>
             </template>
-          </i18n>
+          </i18n-t>
         </confirm-dialog>
         <v-divider vertical />
-        <v-btn color="primary" text @click.stop="action('editMeal', meal?.id)">
+        <v-btn color="primary" variant="text" @click.stop="action('editMeal', meal?.id)">
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.editMeal') }}
           </span>
@@ -175,13 +173,13 @@ export default defineComponent({
   mixins: [createBasePrompt<'no-more-information-prompt'>()],
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: 'next',
     },
   },
 
-  emits: ['input'],
+  emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
     const { action, customPromptLayout, foodName, isFood, isMeal, mealName } = usePromptUtils(
@@ -192,10 +190,10 @@ export default defineComponent({
     const isValid = true;
     const state = computed({
       get() {
-        return props.value;
+        return props.modelValue;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('update:modelValue', value);
       },
     });
 

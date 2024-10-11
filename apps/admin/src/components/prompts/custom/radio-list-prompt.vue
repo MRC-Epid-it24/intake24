@@ -1,41 +1,40 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tabs-window-item key="options" value="options">
     <v-row class="mb-3">
       <v-col cols="12">
         <v-select
           hide-details="auto"
           :items="orientations"
           :label="$t('survey-schemes.prompts.orientation._')"
-          outlined
-          :value="orientation"
-          @change="update('orientation', $event)"
+          :model-value="orientation"
+          variant="outlined"
+          @update:model-value="update('orientation', $event)"
         />
       </v-col>
       <v-col cols="12">
         <v-switch
           hide-details="auto"
-          :input-value="other"
           :label="$t('survey-schemes.prompts.other')"
-          @change="update('other', $event)"
+          :model-value="other"
+          @update:model-value="update('other', $event)"
         />
       </v-col>
     </v-row>
     <language-selector
       :default="[]"
       :label="$t('common.options.title')"
+      :model-value="options"
       :required="true"
-      :value="options"
-      @input="update('options', $event)"
+      @update:model-value="update('options', $event)"
     >
-      <template v-for="lang in Object.keys(options)" #[`lang.${lang}`]>
+      <template v-for="lang in Object.keys(options)" :key="lang" #[`lang.${lang}`]>
         <options-list
-          :key="lang"
           :options="options[lang]"
           @update:options="updateLanguage('options', lang, $event)"
         />
       </template>
     </language-selector>
-  </v-tab-item>
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts">

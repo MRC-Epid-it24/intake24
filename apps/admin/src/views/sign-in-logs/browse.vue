@@ -14,66 +14,54 @@
   </data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
 import { useDateTime } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'SignInLogList',
+defineOptions({ name: 'SignInLogList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
+const { formatDateTime } = useDateTime();
 
-  setup() {
-    const { formatDateTime } = useDateTime();
-
-    return {
-      formatDateTime,
-    };
+const headers = ref<DataTableHeader[]>([
+  {
+    title: t('common.id'),
+    sortable: true,
+    key: 'id',
   },
-
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('common.id'),
-          sortable: true,
-          value: 'id',
-        },
-        {
-          text: this.$t('users.id'),
-          sortable: true,
-          value: 'userId',
-        },
-        {
-          text: this.$t('sign-in-logs.provider'),
-          sortable: true,
-          value: 'provider',
-        },
-        {
-          text: this.$t('sign-in-logs.providerKey'),
-          sortable: true,
-          value: 'providerKey',
-        },
-        {
-          text: this.$t('sign-in-logs.successful'),
-          sortable: false,
-          value: 'successful',
-        },
-        {
-          text: this.$t('sign-in-logs.date'),
-          sortable: true,
-          value: 'date',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+  {
+    title: t('users.id'),
+    sortable: true,
+    key: 'userId',
   },
-});
+  {
+    title: t('sign-in-logs.provider'),
+    sortable: true,
+    key: 'provider',
+  },
+  {
+    title: t('sign-in-logs.providerKey'),
+    sortable: true,
+    key: 'providerKey',
+  },
+  {
+    title: t('sign-in-logs.successful'),
+    sortable: false,
+    key: 'successful',
+  },
+  {
+    title: t('sign-in-logs.date'),
+    sortable: true,
+    key: 'date',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+]);
 </script>

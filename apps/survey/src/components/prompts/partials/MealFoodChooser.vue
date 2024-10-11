@@ -1,14 +1,10 @@
 <template>
-  <div>
-    <v-list-item v-for="food in filteredFoods" :key="food.id" @click="foodSelected(food)">
-      <v-list-item-icon>
-        <v-icon>$food</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>{{ getFoodDescription(food) }} </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-  </div>
+  <v-list-item v-for="food in filteredFoods" :key="food.id" @click="foodSelected(food)">
+    <template #prepend>
+      <v-icon>$food</v-icon>
+    </template>
+    <v-list-item-title>{{ getFoodDescription(food) }} </v-list-item-title>
+  </v-list-item>
 </template>
 
 <script lang="ts">

@@ -1,19 +1,19 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
       <confirm-dialog
         v-if="!isCreate && can({ action: 'edit' })"
         :activator-class="['ml-2']"
         color="primary"
         icon-left="fas fa-play"
-        :label="$t('tasks.run._').toString()"
+        :label="$t('tasks.run._')"
         @confirm="triggerJob"
       >
         {{ $t('tasks.run.confirm') }}
       </confirm-dialog>
     </template>
     <v-container fluid>
-      <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -23,7 +23,7 @@
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
-                outlined
+                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -34,9 +34,9 @@
                 :items="jobs"
                 :label="$t('tasks.job')"
                 name="job"
-                outlined
                 prepend-inner-icon="$jobs"
-                @change="jobChanged"
+                variant="outlined"
+                @update:model-value="jobChanged"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -46,8 +46,8 @@
                 hide-details="auto"
                 :label="$t('tasks.cron')"
                 name="cron"
-                outlined
                 prepend-inner-icon="far fa-clock"
+                variant="outlined"
               >
                 <template #append>
                   <pre>{{ readableCron }}</pre>
@@ -56,7 +56,7 @@
             </v-col>
             <v-col v-if="form.active" cols="12" md="6">
               <div class="d-flex align-center" style="height: 100%">
-                <span v-if="entry.bullJob" class="subtitle-1">
+                <span v-if="entry.bullJob" class="text-subtitle-1">
                   {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
                 </span>
               </div>
@@ -77,8 +77,8 @@
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
-                outlined
                 prepend-inner-icon="$description"
+                variant="outlined"
               />
             </v-col>
           </v-row>
@@ -88,7 +88,7 @@
             v-model="form.params"
             :errors="form.errors"
             name="params"
-            @input="form.errors.clear(paramErrors)"
+            @update:model-value="form.errors.clear(paramErrors)"
           />
           <submit-footer :disabled="form.errors.any()" />
         </v-card-text>
@@ -141,7 +141,7 @@ export default defineComponent({
     useEntryFetch(props);
 
     const jobs = computed(() =>
-      jobTypes.map(value => ({ value, text: i18n.t(`jobs.types.${value}._`).toString() })),
+      jobTypes.map(value => ({ value, title: i18n.t(`jobs.types.${value}._`) })),
     );
 
     const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskResponse>(props, {
@@ -184,7 +184,7 @@ export default defineComponent({
         return cronstrue.toString(this.form.cron, { use24HourTimeFormat: true });
       }
       catch {
-        return this.$t('tasks.invalidCron').toString();
+        return this.$t('tasks.invalidCron');
       }
     },
   },

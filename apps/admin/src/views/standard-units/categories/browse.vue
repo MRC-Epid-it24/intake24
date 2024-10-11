@@ -20,10 +20,11 @@
 import { defineComponent, ref } from 'vue';
 
 import type { StandardUnitAttributes } from '@intake24/common/types/http/admin';
-import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { Read } from '@intake24/admin/components/data-tables/action-bar';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
   name: 'StandardUnitCategories',
@@ -33,8 +34,39 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
+    const { i18n: { t } } = useI18n();
+
     const { entry, entryLoaded } = useEntry<StandardUnitAttributes>(props);
     useEntryFetch(props);
+
+    const headers = ref<DataTableHeader[]>([
+      {
+        title: t('fdbs.categories.global.code'),
+        sortable: true,
+        key: 'categoryCode',
+      },
+      {
+        title: t('locales.code'),
+        sortable: true,
+        key: 'localeCode',
+      },
+      {
+        title: t('fdbs.categories.local.id'),
+        sortable: true,
+        key: 'id',
+      },
+      {
+        title: t('fdbs.categories.local.name'),
+        sortable: true,
+        key: 'name',
+      },
+      {
+        title: t('common.action._'),
+        sortable: false,
+        key: 'action',
+        align: 'end',
+      },
+    ]);
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
@@ -42,41 +74,9 @@ export default defineComponent({
       await table.value?.fetch();
     };
 
-    return { entry, entryLoaded, table, updateTable };
+    return { headers, entry, entryLoaded, table, updateTable };
   },
 
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('fdbs.categories.global.code'),
-          sortable: true,
-          value: 'categoryCode',
-        },
-        {
-          text: this.$t('locales.code'),
-          sortable: true,
-          value: 'localeCode',
-        },
-        {
-          text: this.$t('fdbs.categories.local.id'),
-          sortable: true,
-          value: 'id',
-        },
-        {
-          text: this.$t('fdbs.categories.local.name'),
-          sortable: true,
-          value: 'name',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
-  },
 });
 </script>
 

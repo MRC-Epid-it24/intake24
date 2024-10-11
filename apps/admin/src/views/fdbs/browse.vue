@@ -5,49 +5,44 @@
       {{ item.code }}
     </template>
     <template #[`item.action`]="{ item }">
-      <v-btn color="secondary" icon :to="{ name: 'fdbs-food-list', params: { id: item.id } }">
+      <v-btn color="secondary" icon :to="{ name: 'fdbs-food-list', params: { id: item.id } }" variant="text">
         <v-icon>far fa-file</v-icon>
       </v-btn>
     </template>
   </data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-import { DataTable } from '@intake24/admin/components/data-tables';
+import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'FoodDbList',
+defineOptions({ name: 'FoodDbList' });
 
-  components: { DataTable },
+const { i18n: { t } } = useI18n();
 
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('locales.code'),
-          sortable: true,
-          value: 'code',
-        },
-        {
-          text: this.$t('locales.englishName'),
-          sortable: true,
-          value: 'englishName',
-        },
-        {
-          text: this.$t('locales.localName'),
-          sortable: true,
-          value: 'localName',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-    };
+const headers = ref<DataTableHeader[]>([
+  {
+    title: t('locales.code'),
+    sortable: true,
+    key: 'code',
   },
-});
+  {
+    title: t('locales.englishName'),
+    sortable: true,
+    key: 'englishName',
+  },
+  {
+    title: t('locales.localName'),
+    sortable: true,
+    key: 'localName',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+]);
 </script>

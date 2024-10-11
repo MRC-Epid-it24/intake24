@@ -14,19 +14,20 @@
       loading: isLoading,
       outlined,
       prependIcon,
-      value,
+      modelValue,
     }"
-    :search-input.sync="search"
-    @input="input($event)"
+    v-model:search="search"
+    @update:model-value="input($event)"
   />
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import debounce from 'lodash/debounce';
-import { defineComponent } from 'vue';
+import { watchDebounced } from '@vueuse/core';
+import { defineComponent, ref, watch } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
+import { useHttp } from '@intake24/admin/services';
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -41,7 +42,7 @@ export default defineComponent({
       default: false,
     },
     hideDetails: {
-      type: String,
+      type: String as PropType<'auto' | boolean | undefined>,
       default: 'auto',
     },
     hideNoData: {
@@ -76,7 +77,7 @@ export default defineComponent({
     prependIcon: {
       type: String,
     },
-    value: {
+    modelValue: {
       type: String as PropType<string | null>,
     },
     selected: {
@@ -87,74 +88,64 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'update:object'],
+  emits: ['update:modelValue', 'update:object'],
 
-  data() {
-    const items: Dictionary[] = [];
+  setup(props, { emit }) {
+    const http = useHttp();
 
-    if (this.selected)
-      items.push(this.selected);
+    const isLoading = ref(false);
+    const search = ref<string | undefined>(undefined);
+    const items = ref<Dictionary[]>([]);
 
-    return {
-      isLoading: false,
-      items,
-      search: null as string | null,
+    if (props.selected)
+      items.value.push(props.selected);
+
+    function input(value: any) {
+      const object = items.value.find(item => item[props.itemValue] === value);
+      emit('update:modelValue', value);
+      emit('update:object', object);
     };
-  },
 
-  watch: {
-    search(val) {
-      if (!val)
-        return;
-
-      // @ts-expect-error debounced
-      this.debouncedFetchItems();
-    },
-    selected(val) {
-      if (!val)
-        return;
-
-      this.items = [val];
-    },
-  },
-
-  created() {
-    this.debouncedFetchItems = debounce(() => {
-      this.fetchItems();
-    }, 500);
-  },
-
-  methods: {
-    async fetchItems() {
-      if (this.isLoading)
-        return;
-
-      this.isLoading = true;
-      const { search } = this;
-
-      try {
-        const { data } = await this.$http.get(this.api, { params: { search } });
-
-        this.items = this.resolveResponseObject(data);
-      }
-      finally {
-        this.isLoading = false;
-      }
-    },
-
-    input(value: any) {
-      const object = this.items.find(item => item[this.itemValue] === value);
-      this.$emit('input', value);
-      this.$emit('update:object', object);
-    },
-
-    resolveResponseObject(data: any) {
-      if (!this.responseObject)
+    function resolveResponseObject(data: any) {
+      if (!props.responseObject)
         return data;
 
-      const segments = this.responseObject.split('.');
+      const segments = props.responseObject.split('.');
       return segments.reduce((acc, segment) => acc[segment], data);
-    },
+    };
+
+    async function fetchItems() {
+      if (isLoading.value)
+        return;
+
+      isLoading.value = true;
+
+      try {
+        const { data } = await http.get(props.api, { params: { search: search.value } });
+
+        items.value = resolveResponseObject(data);
+      }
+      finally {
+        isLoading.value = false;
+      }
+    };
+
+    watchDebounced(
+      search,
+      () => {
+        fetchItems();
+      },
+      { debounce: 500, maxWait: 2000 },
+    );
+
+    watch(() => props.selected, (val) => {
+      if (!val)
+        return;
+
+      items.value = [val];
+    });
+
+    return { isLoading, input, items, search };
   },
 });
 </script>

@@ -11,70 +11,58 @@
   />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import { MultiPrompt } from '@intake24/survey/components/prompts';
-import { useSurvey } from '@intake24/survey/stores';
 
 import { useCustomPromptHandler } from '../mixins';
 
-const infoPrompts = ['info-prompt'];
-
-export default defineComponent({
+defineOptions({
   name: 'MultiCustomPromptHandler',
+});
 
-  components: { MultiPrompt },
-
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['multi-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
+const props = defineProps({
+  prompt: {
+    type: Object as PropType<Prompts['multi-prompt']>,
+    required: true,
   },
-
-  setup(props, { emit }) {
-    const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional }
-      = useCustomPromptHandler(props);
-    const survey = useSurvey();
-
-    const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
-    const state = ref<(CustomPromptAnswer | undefined)[]>(
-      props.prompt.prompts.map(prompt =>
-        isInfoPrompt(prompt) ? 'next' : getPromptAnswer(prompt.id),
-      ),
-    );
-
-    const commitAnswer = () => {
-      props.prompt.prompts.forEach((prompt, idx) => {
-        commitPromptAnswer(prompt, state.value[idx]);
-      });
-    };
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next')
-        commitAnswer();
-
-      emit('action', type, ...args);
-    };
-
-    return {
-      action,
-      foodOptional,
-      mealOptional,
-      state,
-      survey,
-    };
+  section: {
+    type: String as PropType<PromptSection>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action']);
+
+const infoPrompts = ['info-prompt'];
+
+const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional }
+      = useCustomPromptHandler(props);
+
+const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
+const state = ref<(CustomPromptAnswer | undefined)[]>(
+  props.prompt.prompts.map(prompt =>
+    isInfoPrompt(prompt) ? 'next' : getPromptAnswer(prompt.id),
+  ),
+);
+
+function commitAnswer() {
+  props.prompt.prompts.forEach((prompt, idx) => {
+    commitPromptAnswer(prompt, state.value[idx]);
+  });
+}
+
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'next')
+    commitAnswer();
+
+  emit('action', type, ...args);
+}
 </script>
 
 <style scoped></style>
