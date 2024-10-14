@@ -23,14 +23,14 @@
             <v-col cols="12" sm="8">
               <v-form @submit.prevent="verify">
                 <v-text-field
-                  v-model="form.name"
+                  v-model="data.name"
                   class="my-2"
-                  :error-messages="form.errors.get('name')"
+                  :error-messages="errors.get('name')"
                   hide-details="auto"
                   :label="$t('user.mfa.devices.name._')"
                   name="name"
                   variant="outlined"
-                  @update:model-value="form.errors.clear('name')"
+                  @update:model-value="errors.clear('name')"
                 />
                 <v-btn block class="my-4" color="secondary" rounded type="submit">
                   {{ $t('user.mfa.devices.verify') }}
@@ -45,74 +45,72 @@
   </v-stepper-vertical>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { startRegistration } from '@simplewebauthn/browser';
-import { defineComponent } from 'vue';
+import { ref } from 'vue';
 
 import type {
   FIDORegistrationChallenge,
   FIDORegistrationVerificationRequest,
   MFADeviceResponse,
 } from '@intake24/common/types/http/admin';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 
 export interface FIDOForm extends Omit<FIDORegistrationVerificationRequest, 'response'> {
   response: FIDORegistrationVerificationRequest['response'] | null;
 }
 
-export default defineComponent({
-  name: 'FidoDevice',
+defineOptions({ name: 'FidoDevice' });
 
-  emits: ['registered'],
+const emit = defineEmits(['registered']);
 
-  data() {
-    return {
-      url: 'admin/user/mfa/providers/fido',
-      progress: 1,
-      form: createForm<FIDOForm>({
-        challengeId: '',
-        name: 'My FIDO device',
-        response: null,
-      }),
-      regChallenge: null as FIDORegistrationChallenge | null,
-    };
-  },
+const http = useHttp();
 
-  methods: {
-    clear() {
-      this.form.reset();
-      this.regChallenge = null;
-      this.progress = 1;
-    },
+const url = 'admin/user/mfa/providers/fido';
+const progress = ref(1);
+const { data, errors, post, reset } = useForm<FIDOForm>({ data: {
+  challengeId: '',
+  name: 'My FIDO device',
+  response: null,
+} });
 
-    async challenge() {
-      const { data } = await this.$http.get<FIDORegistrationChallenge>(this.url);
+const regChallenge = ref<FIDORegistrationChallenge | null>(null);
 
-      this.regChallenge = data;
-      this.form.challengeId = data.challenge;
+function clear() {
+  reset();
+  regChallenge.value = null;
+  progress.value = 1;
+};
 
-      await this.startLocalRegistration();
-    },
+async function challenge() {
+  const res = await http.get<FIDORegistrationChallenge>(url);
 
-    async startLocalRegistration() {
-      if (!this.regChallenge)
-        return;
+  regChallenge.value = res.data;
+  data.value.challengeId = res.data.challenge;
 
-      try {
-        this.form.response = await startRegistration(this.regChallenge);
-        this.progress = 2;
-      }
-      catch {
-        this.regChallenge = null;
-      }
-    },
+  await startLocalRegistration();
+};
 
-    async verify() {
-      const device = await this.form.post<MFADeviceResponse>(this.url);
-      this.$emit('registered', device);
+async function startLocalRegistration() {
+  if (!regChallenge.value)
+    return;
 
-      this.progress = 3;
-    },
-  },
-});
+  try {
+    data.value.response = await startRegistration(regChallenge.value);
+    progress.value = 2;
+  }
+  catch {
+    regChallenge.value = null;
+  }
+};
+
+async function verify() {
+  const device = await post<MFADeviceResponse>(url);
+  emit('registered', device);
+
+  progress.value = 3;
+};
+
+defineExpose({ clear });
 </script>

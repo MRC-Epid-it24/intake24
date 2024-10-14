@@ -4,7 +4,7 @@
       <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
     <demographic-group-list
-      v-model="form.demographicGroups"
+      v-model="data.demographicGroups"
       :nutrient-types="refs?.nutrientTypes"
     />
   </layout>
@@ -32,7 +32,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
-    const { form, routeLeave, submit } = useEntryForm<
+    const { form: { data }, routeLeave, submit } = useEntryForm<
       FeedbackSchemeDemographicGroupsForm,
       FeedbackSchemeEntry
     >(props, {
@@ -40,9 +40,9 @@ export default defineComponent({
       editMethod: 'patch',
     });
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData() }));
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...data.value }));
 
-    return { currentFeedbackScheme, entry, entryLoaded, refs, form, routeLeave, submit };
+    return { currentFeedbackScheme, entry, entryLoaded, refs, data, routeLeave, submit };
   },
 });
 </script>

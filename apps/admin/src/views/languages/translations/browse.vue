@@ -5,7 +5,7 @@
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>
       <v-spacer />
-      <template v-if="form.translations.length">
+      <template v-if="data.translations.length">
         <confirm-dialog
           color="primary"
           icon
@@ -17,7 +17,7 @@
           {{ $t('languages.translations.sync') }}
         </confirm-dialog>
         <confirm-dialog
-          class="ms-2"
+          :activator-class="['ms-2']"
           color="error"
           icon
           icon-left="$delete"
@@ -30,9 +30,9 @@
       </template>
     </v-toolbar>
     <error-list :errors="nonInputErrors" tag="v-card-text" />
-    <v-list v-if="form.translations.length" class="list-border" lines="two">
+    <v-list v-if="data.translations.length" class="list-border" lines="two">
       <v-list-item
-        v-for="translation in form.translations"
+        v-for="translation in data.translations"
         :key="translation.id"
         link
       >
@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import has from 'lodash/has';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type {
   LanguageEntry,
@@ -77,6 +77,7 @@ import type {
 import type { LanguageTranslationAttributes } from '@intake24/db';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
@@ -94,18 +95,21 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const http = useHttp();
     const { i18n } = useI18n();
 
     const messages = useMessages();
     const { entry, entryLoaded } = useEntry<LanguageEntry>(props);
     useEntryFetch(props);
-    const { form, nonInputErrors, routeLeave, toForm } = useEntryForm<
+    const { form: { data, errors, put }, nonInputErrors, routeLeave, toForm } = useEntryForm<
       LanguageTranslationsForm,
       LanguageEntry
     >(props, {
       data: { translations: [] },
       nonInputErrorKeys: ['translations'],
     });
+
+    const selected = ref<LanguageTranslationAttributes | null>(null);
 
     function getSectionTitle(key: string) {
       const check = has(i18n.messages.value[i18n.locale.value], `${key}.title`);
@@ -115,21 +119,83 @@ export default defineComponent({
       return i18n.t(`languages.translations.sections.${key}`);
     };
 
+    function edit(translation: LanguageTranslationAttributes) {
+      selected.value = translation;
+    };
+
+    function update(translation: LanguageTranslationAttributes) {
+      const match = data.value.translations.find(item => item.id === translation.id);
+
+      if (match)
+        match.messages = copy(translation.messages);
+    };
+
+    function close() {
+      selected.value = null;
+    };
+
+    function notify(action: string) {
+      messages.success(
+        i18n.t(`languages.translations.${action}`, { name: entry.value.englishName }),
+      );
+    };
+
+    async function create() {
+      const { data: translations } = await http.post<LanguageTranslationsResponse>(
+        `admin/languages/${props.id}/translations`,
+        {},
+        { withLoading: true },
+      );
+
+      toForm({ translations });
+      notify('created');
+    };
+
+    async function save() {
+      const translations = await put<LanguageTranslationsResponse>(
+        `admin/languages/${props.id}/translations`,
+      );
+
+      toForm({ translations });
+      notify('updated');
+    };
+
+    async function remove() {
+      await http.delete(`admin/languages/${props.id}/translations`, { withLoading: true });
+      toForm({ translations: [] });
+
+      notify('deleted');
+    };
+
+    async function sync() {
+      const { data: translations } = await http.post<LanguageTranslationsResponse>(
+        `admin/languages/${props.id}/translations/sync`,
+        {},
+        { withLoading: true },
+      );
+
+      toForm({ translations });
+      notify('synced');
+    };
+
     return {
+      close,
+      create,
+      edit,
       entry,
       entryLoaded,
-      form,
-      nonInputErrors,
-      routeLeave,
-      toForm,
-      messages,
+      data,
+      errors,
       getSectionTitle,
-    };
-  },
-
-  data() {
-    return {
-      selected: null as LanguageTranslationAttributes | null,
+      messages,
+      nonInputErrors,
+      remove,
+      routeLeave,
+      save,
+      selected,
+      sync,
+      toForm,
+      update,
     };
   },
 
@@ -139,67 +205,6 @@ export default defineComponent({
     );
 
     this.toForm({ translations });
-  },
-
-  methods: {
-    edit(translation: LanguageTranslationAttributes) {
-      this.selected = translation;
-    },
-
-    update(translation: LanguageTranslationAttributes) {
-      const match = this.form.translations.find(item => item.id === translation.id);
-
-      if (match)
-        match.messages = copy(translation.messages);
-    },
-
-    close() {
-      this.selected = null;
-    },
-
-    notify(action: string) {
-      this.messages.success(
-        this.$t(`languages.translations.${action}`, { name: this.entry.englishName }),
-      );
-    },
-
-    async create() {
-      const { data: translations } = await this.$http.post<LanguageTranslationsResponse>(
-        `admin/languages/${this.id}/translations`,
-        {},
-        { withLoading: true },
-      );
-
-      this.toForm({ translations });
-      this.notify('created');
-    },
-
-    async save() {
-      const translations = await this.form.put<LanguageTranslationsResponse>(
-        `admin/languages/${this.id}/translations`,
-      );
-
-      this.toForm({ translations });
-      this.notify('updated');
-    },
-
-    async remove() {
-      await this.$http.delete(`admin/languages/${this.id}/translations`, { withLoading: true });
-      this.toForm({ translations: [] });
-
-      this.notify('deleted');
-    },
-
-    async sync() {
-      const { data: translations } = await this.$http.post<LanguageTranslationsResponse>(
-        `admin/languages/${this.id}/translations/sync`,
-        {},
-        { withLoading: true },
-      );
-
-      this.toForm({ translations });
-      this.notify('synced');
-    },
   },
 });
 </script>

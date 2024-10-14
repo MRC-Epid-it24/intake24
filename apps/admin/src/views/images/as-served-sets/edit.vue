@@ -6,9 +6,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="data.id"
                 disabled
-                :error-messages="form.errors.get('id')"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('as-served-sets.id')"
                 name="id"
@@ -18,8 +18,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -36,7 +36,7 @@
           @images="updateImages"
         />
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { AsServedImageInput, AsServedSetEntry } from '@intake24/common/types/http/admin';
+import type { AsServedImageEntry, AsServedSetEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
@@ -55,7 +55,7 @@ import AsServedImages from './images.vue';
 type EditAsServedSetForm = {
   id: string | null;
   description: string | null;
-  images: AsServedImageInput[];
+  images: AsServedImageEntry[];
 };
 
 export default defineComponent({
@@ -73,7 +73,7 @@ export default defineComponent({
 
     const { entry, entryLoaded } = useEntry<AsServedSetEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, nonInputErrors, routeLeave, submit } = useEntryForm<
       EditAsServedSetForm,
       AsServedSetEntry
     >(props, {
@@ -82,15 +82,23 @@ export default defineComponent({
       nonInputErrorKeys: ['images'],
     });
 
-    return { entry, entryLoaded, clearError, form, nonInputErrors, routeLeave, submit };
-  },
+    function updateImages(images: AsServedImageEntry[]) {
+      errors.clear('images');
 
-  methods: {
-    updateImages(images: AsServedImageInput[]) {
-      this.form.errors.clear('images');
+      data.value.images = [...images];
+    };
 
-      this.form.images = [...images];
-    },
+    return {
+      entry,
+      entryLoaded,
+      clearError,
+      data,
+      errors,
+      nonInputErrors,
+      routeLeave,
+      submit,
+      updateImages,
+    };
   },
 });
 </script>

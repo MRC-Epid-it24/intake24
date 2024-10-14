@@ -14,7 +14,7 @@
       />
     </v-toolbar>
     <v-list class="list-border">
-      <v-list-item v-for="(item, idx) in form.items" :key="idx">
+      <v-list-item v-for="(item, idx) in data.items" :key="idx">
         <template #prepend>
           <v-icon>fas fa-arrows-split-up-and-left</v-icon>
         </template>
@@ -88,7 +88,7 @@ export default defineComponent({
 
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
+    const { clearError, form: { data, errors, post }, routeLeave, submit, toForm } = useEntryForm<
       SplitListsForm,
       LocaleEntry
     >(props, {
@@ -97,17 +97,17 @@ export default defineComponent({
     });
 
     function add() {
-      form.items.push({ localeId: props.id, firstWord: '', words: '' });
+      data.value.items.push({ localeId: props.id, firstWord: '', words: '' });
     };
 
     function remove(index: number) {
-      form.items.splice(index, 1);
+      data.value.items.splice(index, 1);
     };
 
     async function save() {
-      form.items = form.items.filter(({ firstWord, words }) => firstWord && words);
+      data.value.items = data.value.items.filter(({ firstWord, words }) => firstWord && words);
 
-      const items = await form.post<SplitListAttributes[]>(`admin/locales/${props.id}/split-lists`);
+      const items = await post<SplitListAttributes[]>(`admin/locales/${props.id}/split-lists`);
 
       useStoreEntry().setEntry({ items });
     };
@@ -125,7 +125,8 @@ export default defineComponent({
       entry,
       entryLoaded,
       clearError,
-      form,
+      data,
+      errors,
       remove,
       routeLeave,
       save,

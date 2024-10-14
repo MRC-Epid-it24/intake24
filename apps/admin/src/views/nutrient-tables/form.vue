@@ -7,9 +7,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="data.id"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('id')"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('common.id')"
                 name="id"
@@ -18,8 +18,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -34,8 +34,8 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.csvMapping.idColumnOffset"
-                :error-messages="form.errors.get('csvMapping.idColumnOffset')"
+                v-model="data.csvMapping.idColumnOffset"
+                :error-messages="errors.get('csvMapping.idColumnOffset')"
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.idColumnOffset')"
                 name="csvMapping.idColumnOffset"
@@ -44,8 +44,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.csvMapping.descriptionColumnOffset"
-                :error-messages="form.errors.get('csvMapping.descriptionColumnOffset')"
+                v-model="data.csvMapping.descriptionColumnOffset"
+                :error-messages="errors.get('csvMapping.descriptionColumnOffset')"
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.descriptionColumnOffset')"
                 name="csvMapping.descriptionColumnOffset"
@@ -54,8 +54,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.csvMapping.localDescriptionColumnOffset"
-                :error-messages="form.errors.get('csvMapping.localDescriptionColumnOffset')"
+                v-model="data.csvMapping.localDescriptionColumnOffset"
+                :error-messages="errors.get('csvMapping.localDescriptionColumnOffset')"
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.localDescriptionColumnOffset')"
                 name="csvMapping.localDescriptionColumnOffset"
@@ -64,8 +64,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.csvMapping.rowOffset"
-                :error-messages="form.errors.get('csvMapping.rowOffset')"
+                v-model="data.csvMapping.rowOffset"
+                :error-messages="errors.get('csvMapping.rowOffset')"
                 hide-details="auto"
                 :label="$t('nutrient-tables.mapping.source.rowOffset')"
                 name="csvMapping.rowOffset"
@@ -89,8 +89,8 @@
           </v-btn>
         </v-toolbar>
         <v-card-text>
-          <v-alert v-if="form.errors.has('csvMappingFields')" border="start" type="error">
-            {{ form.errors.get('csvMappingFields') }}
+          <v-alert v-if="errors.has('csvMappingFields')" border="start" type="error">
+            {{ errors.get('csvMappingFields') }}
           </v-alert>
           <v-table>
             <thead>
@@ -101,7 +101,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(field, idx) in form.csvMappingFields" :key="`csv-mapping-fields-${idx}`">
+              <tr v-for="(field, idx) in data.csvMappingFields" :key="`csv-mapping-fields-${idx}`">
                 <td class="py-2">
                   <v-text-field
                     v-model="field.fieldName"
@@ -151,11 +151,11 @@
         </v-toolbar>
         <v-card-text>
           <v-alert
-            v-if="form.errors.has('csvMappingNutrients')"
+            v-if="errors.has('csvMappingNutrients')"
             border="start"
             type="error"
           >
-            {{ form.errors.get('csvMappingNutrients') }}
+            {{ errors.get('csvMappingNutrients') }}
           </v-alert>
           <v-table>
             <thead>
@@ -209,7 +209,7 @@
           </v-table>
         </v-card-text>
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -303,7 +303,7 @@ export default defineComponent({
       NutrientTableRefs
     >(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       NutrientTableForm,
       NutrientTableEntry
     >(props, {
@@ -326,7 +326,7 @@ export default defineComponent({
     const chunk = 10;
     const nutrients = ref<CsvMappingNutrient[]>([]);
 
-    const nutrientsAvailableToLoad = computed(() => nutrients.value.length < form.data.csvMappingNutrients.length);
+    const nutrientsAvailableToLoad = computed(() => nutrients.value.length < data.value.csvMappingNutrients.length);
 
     function loadMoreNutrients(isIntersecting: boolean) {
       if (!isIntersecting || !nutrientsAvailableToLoad.value)
@@ -334,39 +334,39 @@ export default defineComponent({
 
       const startIndex = nutrients.value.length;
       const endIndex
-          = startIndex + chunk > form.data.csvMappingNutrients.length
-            ? form.data.csvMappingNutrients.length
+          = startIndex + chunk > data.value.csvMappingNutrients.length
+            ? data.value.csvMappingNutrients.length
             : startIndex + chunk;
 
-      const items = form.csvMappingNutrients.slice(startIndex, endIndex);
+      const items = data.value.csvMappingNutrients.slice(startIndex, endIndex);
       nutrients.value.push(...items);
     };
 
     function addField() {
-      form.csvMappingFields.push({ fieldName: 'new_field', columnOffset: 'A' });
+      data.value.csvMappingFields.push({ fieldName: 'new_field', columnOffset: 'A' });
     };
 
     function removeField(index: number) {
-      form.csvMappingFields.splice(index, 1);
+      data.value.csvMappingFields.splice(index, 1);
     };
 
     function addNutrient() {
-      form.csvMappingNutrients.push({
+      data.value.csvMappingNutrients.push({
         nutrientTypeId: refs.value.nutrientTypes[0].id,
         columnOffset: 'A',
       });
     };
 
     function removeNutrient(index: number) {
-      form.csvMappingNutrients.splice(index, 1);
+      data.value.csvMappingNutrients.splice(index, 1);
     };
 
-    watch(() => form.csvMappingFields, () => {
-      form.errors.clear('csvMappingFields');
+    watch(() => data.value.csvMappingFields, () => {
+      errors.clear('csvMappingFields');
     });
 
-    watch(() => form.data.csvMappingNutrients, () => {
-      form.errors.clear('csvMappingNutrients');
+    watch(() => data.value.csvMappingNutrients, () => {
+      errors.clear('csvMappingNutrients');
     });
 
     return {
@@ -381,7 +381,8 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
+      errors,
       removeField,
       removeNutrient,
       routeLeave,

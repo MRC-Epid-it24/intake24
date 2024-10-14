@@ -1,7 +1,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Errors } from '@intake24/common/util';
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 
 export default <T>() =>
   defineComponent({
@@ -9,7 +9,7 @@ export default <T>() =>
 
     props: {
       errors: {
-        type: Object as PropType<Errors>,
+        type: Object as PropType<ReturnUseErrors>,
         required: true,
       },
       modelValue: {

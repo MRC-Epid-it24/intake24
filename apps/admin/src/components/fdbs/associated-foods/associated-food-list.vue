@@ -188,7 +188,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import type { Errors } from '@intake24/common/util';
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
@@ -211,7 +211,7 @@ export default defineComponent({
       default: false,
     },
     errors: {
-      type: Object as PropType<Errors>,
+      type: Object as PropType<ReturnUseErrors>,
       required: true,
     },
     foodCode: {

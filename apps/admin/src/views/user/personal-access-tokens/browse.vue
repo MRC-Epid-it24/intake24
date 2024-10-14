@@ -49,9 +49,9 @@
             </template>
             <v-form v-else @keydown="clearError" @submit.prevent="submit">
               <v-text-field
-                v-model="form.name"
+                v-model="data.name"
                 class="mb-4"
-                :error-messages="form.errors.get('name')"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
@@ -60,10 +60,10 @@
               <v-text-field
                 append-icon="fas fa-calendar-alt"
                 class="mb-4"
-                :error-messages="form.errors.get('expiresAt')"
+                :error-messages="errors.get('expiresAt')"
                 hide-details="auto"
                 :label="$t('common.expiresAt')"
-                :model-value="formatDate(form.expiresAt, 'dd/MM/yyyy')"
+                :model-value="formatDate(data.expiresAt, 'dd/MM/yyyy')"
                 name="expiresAt"
                 readonly
                 variant="outlined"
@@ -73,8 +73,8 @@
               <v-expand-transition>
                 <v-date-picker
                   v-show="datePicker"
-                  v-model="form.expiresAt"
-                  :error-messages="form.errors.get('expiresAt')"
+                  v-model="data.expiresAt"
+                  :error-messages="errors.get('expiresAt')"
                   hide-details="auto"
                   name="expiresAt"
                   scrollable
@@ -171,7 +171,7 @@ export default defineComponent({
     const dialog = ref(false);
     const datePicker = ref(false);
 
-    const { form, clearError } = useForm({
+    const { clearError, data, errors, post, reset } = useForm({
       data: { name: '', expiresAt: addYears(new Date(), 1) },
     });
 
@@ -180,7 +180,7 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      const data = await form.post<{ jwt: string; token: PersonalAccessTokenResponse }>(
+      const data = await post<{ jwt: string; token: PersonalAccessTokenResponse }>(
         'admin/user/personal-access-tokens',
       );
       jwt.value = data.jwt;
@@ -204,7 +204,7 @@ export default defineComponent({
     };
 
     watch(dialog, () => {
-      form.reset();
+      reset();
       jwt.value = '';
     });
 
@@ -217,7 +217,8 @@ export default defineComponent({
       close,
       datePicker,
       dialog,
-      form,
+      data,
+      errors,
       formatDate,
       jwt,
       revoke,

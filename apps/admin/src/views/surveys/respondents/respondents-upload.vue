@@ -21,15 +21,15 @@
             <v-row>
               <v-col cols="12" sm>
                 <v-file-input
-                  v-model="form.params.file"
-                  :error-messages="form.errors.get('file')"
+                  v-model="data.params.file"
+                  :error-messages="errors.get('file')"
                   hide-details="auto"
                   :label="$t('common.file.csv')"
                   name="file"
                   prepend-icon=""
                   prepend-inner-icon="fas fa-file-csv"
                   variant="outlined"
-                  @change="form.errors.clear('file')"
+                  @change="errors.clear('file')"
                 />
               </v-col>
               <v-col cols="12" sm="auto">
@@ -54,11 +54,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
 
 type RespondentsUploadForm = {
   type: 'SurveyRespondentsImport';
@@ -84,18 +84,20 @@ export default defineComponent({
     const jobType = 'SurveyRespondentsImport';
     const jobQuery = computed(() => ({ surveyId: props.surveyId }));
 
-    const form = reactive(createForm<RespondentsUploadForm>(
+    const { data, errors, post, reset } = useForm<RespondentsUploadForm>(
       {
-        type: jobType,
-        params: { file: null, surveyId: props.surveyId },
+        data: {
+          type: jobType,
+          params: { file: null, surveyId: props.surveyId },
+        },
+        config: { multipart: true },
       },
-      { multipart: true },
-    ));
+    );
 
     const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType, jobQuery);
 
     const close = () => {
-      form.reset();
+      reset();
       dialog.value = false;
     };
 
@@ -103,13 +105,22 @@ export default defineComponent({
       if (jobInProgress.value)
         return;
 
-      const job = await form.post<JobAttributes>(`admin/surveys/${props.surveyId}/tasks`);
+      const job = await post<JobAttributes>(`admin/surveys/${props.surveyId}/tasks`);
 
       jobs.value.unshift(job);
       await startPolling();
     };
 
-    return { close, form, dialog, jobs, jobInProgress, startPolling, submit };
+    return {
+      close,
+      data,
+      dialog,
+      errors,
+      jobs,
+      jobInProgress,
+      startPolling,
+      submit,
+    };
   },
 });
 </script>

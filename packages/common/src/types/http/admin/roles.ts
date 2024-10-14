@@ -30,6 +30,6 @@ export const roleEntry = roleAttributes.extend({
 export type RoleEntry = z.infer<typeof roleEntry>;
 
 export const roleRefs = z.object({
-  permissions: permissionAttributes.pick({ name: true, displayName: true, description: true }).array(),
+  permissions: permissionAttributes.pick({ id: true, name: true, displayName: true }).array(),
 });
 export type RoleRefs = z.infer<typeof roleRefs>;

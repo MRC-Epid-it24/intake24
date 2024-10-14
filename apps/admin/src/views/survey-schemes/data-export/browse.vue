@@ -39,7 +39,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.dataExport" />
+        <json-editor-dialog v-model="data.dataExport" />
       </options-menu>
     </v-toolbar>
     <data-export-section
@@ -50,12 +50,12 @@
     />
     <v-list class="list-border" lines="two">
       <vue-draggable
-        v-model="form.dataExport"
+        v-model="data.dataExport"
         :animation="300"
         handle=".drag-and-drop__handle"
       >
         <v-list-item
-          v-for="(section, idx) in form.dataExport"
+          v-for="(section, idx) in data.dataExport"
           :key="section.id"
         >
           <template #prepend>
@@ -139,7 +139,7 @@ export default defineComponent({
 
     const { entry, entryLoaded } = useEntry<SurveySchemeEntry>(props);
     const { fetch } = useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data }, routeLeave, submit } = useEntryForm<
       SurveySchemeDataExportForm,
       SurveySchemeEntry
     >(props, {
@@ -155,7 +155,7 @@ export default defineComponent({
     });
 
     const availableSections = computed(() => {
-      const used = form.dataExport.map(section => section.id);
+      const used = data.value.dataExport.map(section => section.id);
 
       return exportSectionIds
         .filter(id => !used.includes(id))
@@ -163,7 +163,7 @@ export default defineComponent({
     });
 
     const add = (section: ExportSectionId) => {
-      form.dataExport.push({ id: section, fields: [] });
+      data.value.dataExport.push({ id: section, fields: [] });
     };
 
     const edit = (section: ExportSection) => {
@@ -171,7 +171,7 @@ export default defineComponent({
     };
 
     const update = (section: ExportSection) => {
-      const match = form.dataExport.find(field => field.id === section.id);
+      const match = data.value.dataExport.find(field => field.id === section.id);
       if (!match)
         return;
 
@@ -183,11 +183,11 @@ export default defineComponent({
     };
 
     const load = (exportSections: ExportSection[]) => {
-      form.dataExport = [...exportSections];
+      data.value.dataExport = [...exportSections];
     };
 
     const remove = (idx: number) => {
-      form.dataExport.splice(idx, 1);
+      data.value.dataExport.splice(idx, 1);
     };
 
     const fetchExportRefs = async () => {
@@ -211,7 +211,7 @@ export default defineComponent({
       entry,
       entryLoaded,
       fetch,
-      form,
+      data,
       load,
       remove,
       routeLeave,

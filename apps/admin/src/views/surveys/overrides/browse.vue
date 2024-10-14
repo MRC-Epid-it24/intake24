@@ -17,33 +17,33 @@
             <v-row>
               <override-field v-model="switches.type" @change="toggle('type', $event)">
                 <v-select
-                  v-model="form.surveySchemeOverrides.settings.type"
+                  v-model="data.surveySchemeOverrides.settings.type"
                   :disabled="!switches.type"
-                  :error-messages="form.errors.get('settings.type')"
+                  :error-messages="errors.get('settings.type')"
                   hide-details="auto"
                   :items="schemeTypes"
                   :label="$t('survey-schemes.settings.types._')"
                   name="settings.type"
                   variant="outlined"
-                  @update:model-value="form.errors.clear('settings.type')"
+                  @update:model-value="errors.clear('settings.type')"
                 />
               </override-field>
               <override-field v-model="switches.flow" @change="toggle('flow', $event)">
                 <v-select
-                  v-model="form.surveySchemeOverrides.settings.flow"
+                  v-model="data.surveySchemeOverrides.settings.flow"
                   :disabled="!switches.flow"
-                  :error-messages="form.errors.get('settings.flow')"
+                  :error-messages="errors.get('settings.flow')"
                   hide-details="auto"
                   :items="recallFlows"
                   :label="$t('survey-schemes.settings.flows._')"
                   name="settings.flow"
                   variant="outlined"
-                  @update:model-value="form.errors.clear('settings.flow')"
+                  @update:model-value="errors.clear('settings.flow')"
                 />
               </override-field>
               <override-field v-model="switches.recallDate" @change="toggle('recallDate', $event)">
                 <v-text-field
-                  v-model="form.surveySchemeOverrides.settings.recallDate"
+                  v-model="data.surveySchemeOverrides.settings.recallDate"
                   :disabled="!switches.recallDate"
                   hide-details="auto"
                   :label="$t('survey-schemes.settings.recallDate')"
@@ -53,9 +53,9 @@
               </override-field>
               <override-field v-model="switches.languages" @change="toggle('languages', $event)">
                 <v-select
-                  v-model="form.surveySchemeOverrides.settings.languages"
+                  v-model="data.surveySchemeOverrides.settings.languages"
                   :disabled="!switches.languages"
-                  :error-messages="form.errors.get('settings.languages')"
+                  :error-messages="errors.get('settings.languages')"
                   hide-details="auto"
                   item-title="englishName"
                   item-value="code"
@@ -64,7 +64,7 @@
                   multiple
                   name="settings.languages"
                   variant="outlined"
-                  @update:model-value="form.errors.clear('settings.languages')"
+                  @update:model-value="errors.clear('settings.languages')"
                 />
               </override-field>
             </v-row>
@@ -75,13 +75,13 @@
         <v-expansion-panels v-model="panels" flat>
           <prompt-list
             v-bind="{ mode: 'override', promptIds, templates: prompts }"
-            v-model="form.surveySchemeOverrides.prompts"
+            v-model="data.surveySchemeOverrides.prompts"
           />
         </v-expansion-panels>
       </v-tabs-window-item>
       <v-tabs-window-item key="meals" value="meals">
         <meal-list
-          v-model="form.surveySchemeOverrides.meals"
+          v-model="data.surveySchemeOverrides.meals"
           mode="override"
           :scheme-id="entry.surveySchemeId"
         />
@@ -90,7 +90,7 @@
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -124,7 +124,7 @@ export default defineComponent({
     const { recallFlows, schemeTypes } = useSelects();
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<SurveyOverridesForm, SurveyEntry>(
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<SurveyOverridesForm, SurveyEntry>(
       props,
       { data: { surveySchemeOverrides: defaultOverrides }, editMethod: 'patch' },
     );
@@ -132,33 +132,34 @@ export default defineComponent({
     const languages = computed(() => useApp().langs);
 
     const switches = computed(() => ({
-      type: 'type' in form.surveySchemeOverrides.settings,
-      flow: 'flow' in form.surveySchemeOverrides.settings,
-      recallDate: 'recallDate' in form.surveySchemeOverrides.settings,
-      languages: 'languages' in form.surveySchemeOverrides.settings,
+      type: 'type' in data.value.surveySchemeOverrides.settings,
+      flow: 'flow' in data.value.surveySchemeOverrides.settings,
+      recallDate: 'recallDate' in data.value.surveySchemeOverrides.settings,
+      languages: 'languages' in data.value.surveySchemeOverrides.settings,
     }));
     const tab = ref('settings');
 
     const toggle = (key: keyof SchemeSettings, value: boolean) => {
       if (value) {
-        form.surveySchemeOverrides.settings = { ...form.surveySchemeOverrides.settings, [key]: defaultSchemeSettings[key] };
+        data.value.surveySchemeOverrides.settings = { ...data.value.surveySchemeOverrides.settings, [key]: defaultSchemeSettings[key] };
         return;
       }
 
-      const { [key]: _, ...rest } = form.surveySchemeOverrides.settings;
+      const { [key]: _, ...rest } = data.value.surveySchemeOverrides.settings;
 
-      form.surveySchemeOverrides.settings = rest;
+      data.value.surveySchemeOverrides.settings = rest;
     };
 
     const panels = ref(['override']);
-    const promptIds = computed(() => form.surveySchemeOverrides.prompts.map(({ id }) => id));
+    const promptIds = computed(() => data.value.surveySchemeOverrides.prompts.map(({ id }) => id));
     const prompts = computed(() => entryLoaded.value ? flattenScheme(entry.value.surveyScheme.prompts) : []);
 
     return {
       entry,
       entryLoaded,
       clearError,
-      form,
+      data,
+      errors,
       languages,
       panels,
       prompts,

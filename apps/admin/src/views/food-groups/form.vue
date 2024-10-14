@@ -6,8 +6,8 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
@@ -15,7 +15,7 @@
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -42,14 +42,14 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded } = useEntry<FoodGroupAttributes>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<FoodGroupForm, FoodGroupAttributes>(
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<FoodGroupForm, FoodGroupAttributes>(
       props,
       {
         data: { id: null, name: null },
       },
     );
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit };
+    return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };
   },
 });
 </script>
