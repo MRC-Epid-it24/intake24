@@ -40,7 +40,7 @@
                   <template v-if="isEdit && selected">
                     <v-text-field
                       disabled
-                      :error-messages="form.errors.get('userId')"
+                      :error-messages="errors.get('userId')"
                       hide-details="auto"
                       :label="$t('common.email')"
                       :model-value="`${selected.email} / ${selected.name}`"
@@ -51,10 +51,10 @@
                   </template>
                   <template v-else>
                     <auto-complete
-                      v-model="form.userId"
+                      v-model="data.userId"
                       :api="`${api}/users`"
                       clearable
-                      :error-messages="form.errors.get('userId')"
+                      :error-messages="errors.get('userId')"
                       hide-no-data
                       hide-selected
                       item-title="email"
@@ -62,7 +62,7 @@
                       :label="$t('common.email')"
                       name="userId"
                       prepend-inner-icon="fas fa-users"
-                      @update:model-value="form.errors.clear('userId')"
+                      @update:model-value="errors.clear('userId')"
                     />
                   </template>
                 </v-col>
@@ -75,8 +75,8 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="form.email"
-                      :error-messages="form.errors.get('email')"
+                      v-model="data.email"
+                      :error-messages="errors.get('email')"
                       hide-details="auto"
                       :label="$t('common.email')"
                       name="email"
@@ -86,8 +86,8 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="form.name"
-                      :error-messages="form.errors.get('name')"
+                      v-model="data.name"
+                      :error-messages="errors.get('name')"
                       hide-details="auto"
                       :label="$t('users.name')"
                       name="name"
@@ -97,8 +97,8 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="form.phone"
-                      :error-messages="form.errors.get('phone')"
+                      v-model="data.phone"
+                      :error-messages="errors.get('phone')"
                       hide-details="auto"
                       :label="$t('common.phone')"
                       name="phone"
@@ -116,14 +116,14 @@
           <v-row dense>
             <v-col v-for="action in actions" :key="action" cols="12" sm="6">
               <v-checkbox-btn
-                v-model="form.actions"
+                v-model="data.actions"
                 hide-details="auto"
                 :label="$t(`securables.actions.${action}`)"
                 :prepend-inner-icon="
-                  form.actions.includes(action) ? `fas fa-unlock` : `fas fa-lock`
+                  data.actions.includes(action) ? `fas fa-unlock` : `fas fa-lock`
                 "
                 :value="action"
-                @update:model-value="form.errors.clear('actions')"
+                @update:model-value="errors.clear('actions')"
               />
             </v-col>
           </v-row>
@@ -137,7 +137,7 @@
           <v-btn
             class="font-weight-bold"
             color="info"
-            :disabled="form.errors.any()"
+            :disabled="errors.any.value"
             type="submit"
             variant="text"
           >
@@ -152,12 +152,12 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import pick from 'lodash/pick';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
-import type { ValidationError } from '@intake24/common/util';
 import { AutoComplete, ErrorList } from '@intake24/admin/components/forms';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 
 export type UserDialogForm = {
   userId: string | null;
@@ -189,78 +189,81 @@ export default defineComponent({
 
   emits: ['update:table'],
 
-  data() {
-    return {
-      dialog: false,
-      tab: 0,
-      selected: null as UserSecurableListEntry | null,
-      form: createForm<UserDialogForm>({
-        userId: null,
-        email: null,
-        name: null,
-        phone: null,
-        actions: [],
-      }),
-      nonInputErrorKeys: ['actions'],
-      isLoading: false,
+  setup(props, { emit }) {
+    const http = useHttp();
+
+    const dialog = ref(false);
+    const tab = ref(0);
+    const selected = ref<UserSecurableListEntry | null>(null);
+
+    const form = useForm<UserDialogForm>({ data: {
+      userId: null,
+      email: null,
+      name: null,
+      phone: null,
+      actions: [],
+    } });
+    const { clearError, data, errors } = form;
+
+    const nonInputErrorKeys = ['actions'];
+    const isLoading = ref(false);
+
+    const isEdit = computed(() => !!selected.value);
+    const isNew = computed(() => tab.value === 1);
+    const nonInputErrors = computed(() => Object.values(pick(errors.all.value, nonInputErrorKeys)));
+
+    function add() {
+      form.reset();
+      selected.value = null;
+      dialog.value = true;
     };
-  },
 
-  computed: {
-    isEdit(): boolean {
-      return !!this.selected;
-    },
-    isNew(): boolean {
-      return this.tab === 1;
-    },
-    nonInputErrors(): ValidationError[] {
-      return Object.values(pick(this.form.errors.all(), this.nonInputErrorKeys));
-    },
-  },
-
-  methods: {
-    add() {
-      this.form.reset();
-      this.selected = null;
-      this.dialog = true;
-    },
-
-    edit(item: UserSecurableListEntry) {
+    function edit(item: UserSecurableListEntry) {
       const { id: userId, securables } = item;
-      this.form.load({ userId, actions: securables.map(({ action }) => action) });
-      this.selected = item;
-      this.dialog = true;
-    },
+      form.load({ userId, actions: securables.map(({ action }) => action) });
+      selected.value = item;
+      dialog.value = true;
+    };
 
-    reset() {
-      this.dialog = false;
-      this.form.reset();
-      this.selected = null;
-      this.tab = 0;
-    },
+    function reset() {
+      dialog.value = false;
+      form.reset();
+      selected.value = null;
+      tab.value = 0;
+    };
 
-    clearError(event: KeyboardEvent) {
-      const { name } = event.target as HTMLInputElement;
+    async function save() {
+      if (isNew.value)
+        await form.post(props.api);
+      else await form.patch(`${props.api}/${data.value.userId}`);
 
-      if (name)
-        this.form.errors.clear(name);
-    },
+      reset();
+      emit('update:table');
+    };
 
-    async save() {
-      if (this.isNew)
-        await this.form.post(this.api);
-      else await this.form.patch(`${this.api}/${this.form.userId}`);
+    async function remove(userId: string) {
+      await http.delete(`${props.api}/${userId}`);
 
-      this.reset();
-      this.$emit('update:table');
-    },
+      reset();
+      emit('update:table');
+    };
 
-    async remove(userId: string) {
-      await this.$http.delete(`${this.api}/${userId}`);
-
-      this.reset();
-      this.$emit('update:table');
-    },
+    return {
+      add,
+      edit,
+      clearError,
+      dialog,
+      data,
+      errors,
+      isEdit,
+      isLoading,
+      nonInputErrors,
+      remove,
+      reset,
+      save,
+      selected,
+      tab,
+    };
   },
 });
 </script>

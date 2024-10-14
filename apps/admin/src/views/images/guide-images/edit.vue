@@ -6,9 +6,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="data.id"
                 disabled
-                :error-messages="form.errors.get('id')"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('guide-images.id')"
                 name="id"
@@ -18,9 +18,9 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.imageMapId"
+                v-model="data.imageMapId"
                 disabled
-                :error-messages="form.errors.get('imageMapId')"
+                :error-messages="errors.get('imageMapId')"
                 hide-details="auto"
                 :label="$t('image-maps._')"
                 name="imageMapId"
@@ -30,8 +30,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -47,7 +47,7 @@
         />
         <error-list :errors="nonInputErrors" tag="v-card-text" />
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -80,7 +80,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded } = useEntry<GuideImageEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, nonInputErrors, routeLeave, submit } = useEntryForm<
       EditGuideImageForm,
       GuideImageEntry
     >(props, {
@@ -88,15 +88,13 @@ export default defineComponent({
       nonInputErrorKeys: ['objects'],
     });
 
-    return { entry, entryLoaded, clearError, form, nonInputErrors, routeLeave, submit };
-  },
+    async function updateObjects(objects: GuideImageEntryObject[]) {
+      errors.clear('objects');
 
-  methods: {
-    async updateObjects(objects: GuideImageEntryObject[]) {
-      this.form.errors.clear('objects');
+      data.value.objects = [...objects];
+    };
 
-      this.form.objects = [...objects];
-    },
+    return { entry, entryLoaded, clearError, data, errors, nonInputErrors, routeLeave, submit, updateObjects };
   },
 });
 </script>

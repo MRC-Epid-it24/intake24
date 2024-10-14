@@ -12,7 +12,7 @@
           {{ $t('common.password.change') }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-form @keydown="form.errors.clear($event.target.name)" @submit.prevent="submit">
+      <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
         <input
           autocomplete="username email"
           class="d-none"
@@ -24,9 +24,9 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="form.passwordCurrent"
+                v-model="data.passwordCurrent"
                 autocomplete="current-password"
-                :error-messages="form.errors.get('passwordCurrent')"
+                :error-messages="errors.get('passwordCurrent')"
                 hide-details="auto"
                 :label="$t('common.password.current')"
                 name="passwordCurrent"
@@ -44,9 +44,9 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="form.password"
+                v-model="data.password"
                 autocomplete="new-password"
-                :error-messages="form.errors.get('password')"
+                :error-messages="errors.get('password')"
                 hide-details="auto"
                 :label="$t('common.password.new')"
                 name="password"
@@ -64,9 +64,9 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="form.passwordConfirm"
+                v-model="data.passwordConfirm"
                 autocomplete="new-password"
-                :error-messages="form.errors.get('passwordConfirm')"
+                :error-messages="errors.get('passwordConfirm')"
                 hide-details="auto"
                 :label="$t('common.password.confirm')"
                 name="passwordConfirm"
@@ -95,9 +95,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -110,45 +111,54 @@ export default defineComponent({
     },
   },
 
-  data() {
+  setup() {
+    const { i18n: { t } } = useI18n();
+
+    const dialog = ref(false);
+    const loading = ref(false);
+    const { data, errors, post, reset } = useForm({ data: {
+      passwordCurrent: null,
+      password: null,
+      passwordConfirm: null,
+    } });
+    const showPassword = reactive({
+      current: false,
+      password: false,
+      confirm: false,
+    });
+
+    function close() {
+      dialog.value = false;
+      reset();
+    };
+
+    function cancel() {
+      close();
+    };
+
+    async function submit() {
+      loading.value = true;
+
+      try {
+        await post('user/password');
+        close();
+        useMessages().success(t('common.password.updated'));
+      }
+      finally {
+        loading.value = false;
+      }
+    };
+
     return {
-      dialog: false,
-      loading: false,
-      form: createForm({
-        passwordCurrent: null,
-        password: null,
-        passwordConfirm: null,
-      }),
-      showPassword: {
-        current: false,
-        password: false,
-        confirm: false,
-      },
+      cancel,
+      data,
+      dialog,
+      errors,
+      loading,
+      showPassword,
+      submit,
     };
   },
 
-  methods: {
-    close() {
-      this.dialog = false;
-      this.form.reset();
-    },
-
-    cancel() {
-      this.close();
-    },
-
-    async submit() {
-      this.loading = true;
-
-      try {
-        await this.form.post('user/password');
-        this.close();
-        useMessages().success(this.$t('common.password.updated'));
-      }
-      finally {
-        this.loading = false;
-      }
-    },
-  },
 });
 </script>

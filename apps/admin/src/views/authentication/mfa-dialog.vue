@@ -50,7 +50,7 @@
                     {{ $t('common.mfa.otp') }}
                   </p>
                   <v-otp-input
-                    v-model="otp.token"
+                    v-model="otp.data.value.token"
                     autocomplete="off"
                     class="mb-4"
                     :error-messages="otp.errors.get('token')"
@@ -95,11 +95,13 @@
 import type { PropType } from 'vue';
 import { startAuthentication } from '@simplewebauthn/browser';
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 import type { LoginResponse, MFAAuthResponse } from '@intake24/common/types/http';
+import { useForm } from '@intake24/admin/composables';
 import { useAuth, useMessages } from '@intake24/admin/stores';
-import { createForm } from '@intake24/admin/util';
+import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
   name: 'MFADialog',
@@ -117,141 +119,148 @@ export default defineComponent({
 
   emits: ['close', 'confirm'],
 
-  data() {
-    return {
-      auth: useAuth(),
-      otp: createForm({ challengeId: '', provider: 'otp', token: '' }),
-      duo: {
-        interval: undefined as undefined | number,
-        value: 100,
-      },
+  setup(props, { emit }) {
+    const auth = useAuth();
+    const router = useRouter();
+    const { i18n: { t } } = useI18n();
+
+    const otp = useForm({ data: { challengeId: '', provider: 'otp', token: '' } });
+    const duo = ref({
+      interval: undefined as undefined | number,
+      value: 100,
+    });
+
+    const provider = computed(() => props.authData.challenge?.provider);
+    const deviceId = computed(() => props.authData.challenge?.deviceId);
+
+    function close() {
+      emit('close');
     };
-  },
 
-  computed: {
-    provider() {
-      return this.authData.challenge?.provider;
-    },
-    deviceId() {
-      return this.authData.challenge?.deviceId;
-    },
-  },
+    function fail() {
+      useMessages().error(t('common.mfa.error'));
+      close();
+    };
 
-  watch: {
-    modelValue: {
-      immediate: true,
-      async handler(val, oldVal) {
-        if (!val || oldVal || !this.authData.challenge)
-          return;
+    function clearDuoInterval() {
+      clearInterval(duo.value.interval);
+    };
 
-        const { provider } = this.authData.challenge;
-
-        if (provider === 'duo') {
-          await this.duoTimeoutChallenge();
-          return;
-        }
-
-        if (provider === 'fido')
-          await this.fidoChallenge();
-      },
-    },
-  },
-
-  beforeUnmount() {
-    this.clearDuoInterval();
-  },
-
-  methods: {
-    close() {
-      this.$emit('close');
-    },
-
-    fail() {
-      useMessages().error(this.$t('common.mfa.error'));
-      this.close();
-    },
-
-    clearDuoInterval() {
-      clearInterval(this.duo.interval);
-    },
-
-    selectDevice(_deviceId: string) {
+    function selectDevice(_deviceId: string) {
       // TODO: implement device selection
       // console.log(deviceId);
-    },
+    };
 
-    async triggerChallenge() {
-      if (!this.authData.challenge)
-        return;
-
-      const { challenge } = this.authData;
-
-      await this[`${challenge.provider}Challenge`]();
-    },
-
-    async duoTimeoutChallenge() {
+    async function duoTimeoutChallenge() {
       // @ts-expect-error - node types
-      this.duo.interval = setInterval(() => {
-        this.duo.value -= 20;
+      duo.value.interval = setInterval(() => {
+        duo.value.value -= 20;
 
-        if (this.duo.value === 0) {
-          this.clearDuoInterval();
-          this.duoChallenge();
+        if (duo.value.value === 0) {
+          clearDuoInterval();
+          duoChallenge();
         }
       }, 1000);
-    },
+    };
 
-    async duoChallenge() {
-      if (this.authData.challenge?.provider !== 'duo')
+    async function duoChallenge() {
+      if (props.authData.challenge?.provider !== 'duo')
         throw new Error('Invalid MFA provider');
 
-      this.clearDuoInterval();
-      window.location.href = this.authData.challenge.challengeUrl;
-    },
+      clearDuoInterval();
+      window.location.href = props.authData.challenge.challengeUrl;
+    };
 
-    async fidoChallenge() {
-      if (this.authData.challenge?.provider !== 'fido')
+    async function fidoChallenge() {
+      if (props.authData.challenge?.provider !== 'fido')
         throw new Error('Invalid MFA provider');
 
       try {
-        const { challengeId, provider, options } = this.authData.challenge;
+        const { challengeId, provider, options } = props.authData.challenge;
         const response = await startAuthentication(options);
-        await this.auth.verify({ challengeId, provider, response });
-        await this.finalizeLogin();
+        await auth.verify({ challengeId, provider, response });
+        await finalizeLogin();
       }
       catch {
-        useMessages().error(this.$t('common.mfa.error'));
+        useMessages().error(t('common.mfa.error'));
       }
-    },
+    };
 
-    async otpChallenge() {
-      if (this.authData.challenge?.provider !== 'otp')
+    async function otpChallenge() {
+      if (props.authData.challenge?.provider !== 'otp')
         throw new Error('Invalid MFA provider');
 
-      const { challengeId, provider } = this.authData.challenge;
+      const { challengeId, provider } = props.authData.challenge;
 
-      this.otp.challengeId = challengeId;
-      this.otp.provider = provider;
+      otp.data.value.challengeId = challengeId;
+      otp.data.value.provider = provider;
 
       try {
-        const { accessToken } = await this.otp.post<LoginResponse>(`admin/auth/${provider}`, {
+        const { accessToken } = await otp.post<LoginResponse>(`admin/auth/${provider}`, {
           withLoading: true,
         });
-        await this.auth.successfulLogin(accessToken);
-        await this.finalizeLogin();
+        await auth.successfulLogin(accessToken);
+        await finalizeLogin();
       }
       catch (err) {
         if (isAxiosError(err) && err.response?.status !== HttpStatusCode.BadRequest)
-          this.fail();
+          fail();
       }
-    },
+    };
 
-    async finalizeLogin() {
-      if (!this.auth.loggedIn)
+    const challenges = {
+      duo: duoChallenge,
+      fido: fidoChallenge,
+      otp: otpChallenge,
+    };
+
+    async function triggerChallenge() {
+      if (!props.authData.challenge)
         return;
 
-      await this.$router.push({ name: 'dashboard' });
-    },
+      const { challenge } = props.authData;
+
+      await challenges[challenge.provider]();
+    };
+
+    async function finalizeLogin() {
+      if (!auth.loggedIn)
+        return;
+
+      await router.push({ name: 'dashboard' });
+    };
+
+    onBeforeUnmount(() => {
+      clearDuoInterval();
+    });
+
+    watch(() => props.modelValue, async (val, oldVal) => {
+      if (!val || oldVal || !props.authData.challenge)
+        return;
+
+      const { provider } = props.authData.challenge;
+
+      if (provider === 'duo') {
+        await duoTimeoutChallenge();
+        return;
+      }
+
+      if (provider === 'fido')
+        await fidoChallenge();
+    }, { immediate: true });
+
+    return {
+      close,
+      deviceId,
+      duo,
+      provider,
+      selectDevice,
+      otp,
+      duoChallenge,
+      fidoChallenge,
+      otpChallenge,
+      triggerChallenge,
+    };
   },
 });
 </script>

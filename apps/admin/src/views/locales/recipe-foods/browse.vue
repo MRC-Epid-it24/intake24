@@ -14,7 +14,7 @@
       />
     </v-toolbar>
     <v-list class="list-border">
-      <v-list-item v-for="(item, idx) in form.items" :key="idx">
+      <v-list-item v-for="(item, idx) in data.items" :key="idx">
         <template #prepend>
           <v-icon>fas fa-bowl-food</v-icon>
         </template>
@@ -55,13 +55,13 @@
             </v-col>
             <v-col cols="12" md="8">
               <v-select
-                v-if="form.synonymsSets"
+                v-if="data.synonymsSets"
                 v-model="item.synonymsId"
                 hide-details="auto"
                 :hint="`${item.synonymSet?.synonyms}, ${item.synonymSet?.id}`"
                 item-title="synonyms"
                 item-value="id"
-                :items="form.synonymsSets"
+                :items="data.synonymsSets"
                 :label="$t('locales.recipe-foods.synonymsId')"
                 single-line
                 variant="outlined"
@@ -73,7 +73,7 @@
               <v-btn
                 block
                 color="primary"
-                :disabled="form.errors.any() || isAppLoading || !item.id"
+                :disabled="errors.any.value || isAppLoading || !item.id"
                 :title="$t('locales.recipe-foods.steps')"
                 type="button"
                 @click.stop="() => openStepsDialog(item.id, item.code, item)"
@@ -114,7 +114,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type {
   LocaleEntry,
@@ -147,7 +147,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
+    const { clearError, form: { data, errors, post }, routeLeave, submit, toForm } = useEntryForm<
       RecipeFoodsForm,
       LocaleEntry
     >(props, {
@@ -155,23 +155,93 @@ export default defineComponent({
       config: { transform: ({ items }) => items },
     });
 
+    const dialog = ref(false);
+    const activeRecipeFoodId = ref('');
+    const activeRecipeFoodCode = ref('');
+    const activeRecipeFood = ref<RecipeFoodItem>({} as RecipeFoodItem);
+
+    function dollarSignAdd(value: string) {
+      if (value[0] === '$')
+        return value;
+      return `$${value}`;
+    };
+
+    function toggleDialog() {
+      dialog.value = !dialog.value;
+    };
+
+    function openStepsDialog(
+      recipeFoodId: string | undefined,
+      recipeFoodCode: string,
+      recipeFood: RecipeFoodRequest,
+    ) {
+      if (!recipeFoodId)
+        return;
+
+      activeRecipeFoodId.value = recipeFoodId;
+      activeRecipeFoodCode.value = recipeFoodCode;
+      activeRecipeFood.value = recipeFood;
+      toggleDialog();
+      console.log(recipeFoodId, recipeFoodCode, recipeFood);
+    };
+
+    function add() {
+      data.value.items.push({
+        localeId: props.id,
+        name: '',
+        code: '',
+        recipeWord: '',
+        synonymsId: null,
+      });
+    };
+
+    function remove(index: number) {
+      data.value.items.splice(index, 1);
+    };
+
+    async function updateItemSteps(idx: number, id: string, steps: RecipeFoodEntry['steps']) {
+      toggleDialog();
+      const item = data.value.items.find(item => item.id === id);
+      if (!item)
+        return;
+      item.steps = steps;
+      data.value.items.splice(idx, 1, item);
+      useStoreEntry().setEntry({ items: data.value.items });
+    };
+
+    async function save() {
+      data.value.items = data.value.items.filter(({ name }) => name).map((item) => {
+        item.code = dollarSignAdd(item.code);
+        return item;
+      });
+      const synonymsSets = data.value.synonymsSets;
+      const items = await post<RecipeFoodEntry[]>(
+        `admin/locales/${props.id}/recipe-foods`,
+      );
+
+      useStoreEntry().setEntry({ items, synonymsSets });
+    };
+
     return {
+      activeRecipeFoodId,
+      activeRecipeFoodCode,
+      activeRecipeFood,
+      add,
+      dialog,
       entry,
       entryLoaded,
       clearError,
-      form,
+      data,
+      errors,
+      openStepsDialog,
+      remove,
       routeLeave,
+      save,
       submit,
       toForm,
-    };
-  },
+      toggleDialog,
+      updateItemSteps,
 
-  data() {
-    return {
-      dialog: false,
-      activeRecipeFoodId: '',
-      activeRecipeFoodCode: '',
-      activeRecipeFood: {} as RecipeFoodItem,
     };
   },
 
@@ -182,69 +252,6 @@ export default defineComponent({
     ]);
 
     this.toForm({ items, synonymsSets });
-  },
-
-  methods: {
-    dollarSignAdd(value: string) {
-      if (value[0] === '$')
-        return value;
-      return `$${value}`;
-    },
-
-    toggleDialog() {
-      this.dialog = !this.dialog;
-    },
-
-    openStepsDialog(
-      recipeFoodId: string | undefined,
-      recipeFoodCode: string,
-      recipeFood: RecipeFoodRequest,
-    ) {
-      if (!recipeFoodId)
-        return;
-      this.activeRecipeFoodId = recipeFoodId;
-      this.activeRecipeFoodCode = recipeFoodCode;
-      this.activeRecipeFood = recipeFood;
-      this.toggleDialog();
-      console.log(recipeFoodId, recipeFoodCode, recipeFood);
-    },
-
-    add() {
-      this.form.items.push({
-        localeId: this.id,
-        name: '',
-        code: '',
-        recipeWord: '',
-        synonymsId: null,
-      });
-    },
-
-    remove(index: number) {
-      this.form.items.splice(index, 1);
-    },
-
-    async updateItemSteps(idx: number, id: string, steps: RecipeFoodEntry['steps']) {
-      this.toggleDialog();
-      const item = this.form.items.find(item => item.id === id);
-      if (!item)
-        return;
-      item.steps = steps;
-      this.form.items.splice(idx, 1, item);
-      useStoreEntry().setEntry({ items: this.form.items });
-    },
-
-    async save() {
-      this.form.items = this.form.items.filter(({ name }) => name).map((item) => {
-        item.code = this.dollarSignAdd(item.code);
-        return item;
-      });
-      const synonymsSets = this.form.synonymsSets;
-      const items = await this.form.post<RecipeFoodEntry[]>(
-        `admin/locales/${this.id}/recipe-foods`,
-      );
-
-      useStoreEntry().setEntry({ items, synonymsSets });
-    },
   },
 });
 </script>

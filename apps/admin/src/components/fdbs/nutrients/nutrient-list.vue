@@ -52,8 +52,8 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { FoodDatabaseRefs, NutrientTableRecordAttributes } from '@intake24/common/types/http/admin';
-import type { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -70,7 +70,7 @@ export default defineComponent({
       default: false,
     },
     errors: {
-      type: Object as PropType<Errors>,
+      type: Object as PropType<ReturnUseErrors>,
       required: true,
     },
     nutrientTables: {

@@ -29,7 +29,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.topFoods" />
+        <json-editor-dialog v-model="data.topFoods" />
       </options-menu>
     </v-toolbar>
     <v-form @keydown="clearError" @submit.prevent="submit">
@@ -45,10 +45,10 @@
               </v-toolbar-title>
               <v-spacer />
               <v-text-field
-                v-model.number="form.topFoods.max"
+                v-model.number="data.topFoods.max"
                 bg-color="grey lighten-5"
                 density="compact"
-                :error-messages="form.errors.get('topFoods.max')"
+                :error-messages="errors.get('topFoods.max')"
                 hide-details
                 :label="$t('feedback-schemes.top-foods.max._')"
                 name="topFoods.max"
@@ -60,14 +60,14 @@
             </v-toolbar>
             <error-list :errors="nonInputErrors" />
             <color-list
-              v-model="form.topFoods.colors"
+              v-model="data.topFoods.colors"
               :last-label="$t('feedback-schemes.top-foods.other')"
             />
           </v-col>
           <v-divider vertical />
           <v-col cols="12" md="6">
             <nutrient-list
-              v-model="form.topFoods.nutrientTypes"
+              v-model="data.topFoods.nutrientTypes"
               :defaults="defaultTopFoods.nutrientTypes"
               :nutrient-types="refs.nutrientTypes"
             />
@@ -75,7 +75,7 @@
         </v-row>
       </v-container>
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()" />
+        <submit-footer :disabled="errors.any.value" />
       </v-card-text>
     </v-form>
   </layout>
@@ -126,7 +126,7 @@ export default defineComponent({
       FeedbackSchemeRefs
     >(props);
     useEntryFetch(props);
-    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, nonInputErrors, routeLeave, submit } = useEntryForm<
       FeedbackSchemeTopFoodsForm,
       FeedbackSchemeEntry
     >(props, {
@@ -140,25 +140,25 @@ export default defineComponent({
         Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required'),
     ]);
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData() }));
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...data.value }));
 
     const updateColorList = () => {
-      const size = form.topFoods.max + 1;
+      const size = data.value.topFoods.max + 1;
 
-      if (size < form.topFoods.colors.length) {
-        form.topFoods.colors = [...form.topFoods.colors.slice(0, size)];
+      if (size < data.value.topFoods.colors.length) {
+        data.value.topFoods.colors = [...data.value.topFoods.colors.slice(0, size)];
       }
-      else if (size > form.topFoods.colors.length) {
+      else if (size > data.value.topFoods.colors.length) {
         const newColors = Array.from<string>({
-          length: size - form.topFoods.colors.length,
+          length: size - data.value.topFoods.colors.length,
         }).fill(colors.primary);
 
-        form.topFoods.colors = [...form.topFoods.colors, ...newColors];
+        data.value.topFoods.colors = [...data.value.topFoods.colors, ...newColors];
       }
     };
 
     const load = (topFoods: TopFoods) => {
-      form.topFoods = { ...topFoods };
+      data.value.topFoods = { ...topFoods };
     };
 
     const debouncedUpdateColorList = debounce(() => {
@@ -166,7 +166,7 @@ export default defineComponent({
     }, 300);
 
     watch(
-      () => form.topFoods.max,
+      () => data.value.topFoods.max,
       () => {
         debouncedUpdateColorList();
       },
@@ -179,7 +179,8 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
+      errors,
       menu,
       nonInputErrors,
       routeLeave,

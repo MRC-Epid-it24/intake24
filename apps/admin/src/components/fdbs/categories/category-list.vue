@@ -39,7 +39,7 @@
       </v-list-item>
     </v-list>
     <v-messages
-      v-if="errors.has('main.parentCategories')"
+      v-if="errors?.has('main.parentCategories')"
       class="px-4 pb-2"
       color="error"
       :value="errors.get('main.parentCategories')"
@@ -52,7 +52,7 @@ import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
 import { defineComponent } from 'vue';
 
-import { Errors } from '@intake24/common/util';
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { ConfirmDialog } from '@intake24/ui';
 
 import type { CategoryListItem } from './categories';
@@ -69,8 +69,7 @@ export default defineComponent({
       default: false,
     },
     errors: {
-      type: Object as PropType<Errors>,
-      default: () => new Errors(),
+      type: Object as PropType<ReturnUseErrors>,
     },
     flat: {
       type: Boolean,

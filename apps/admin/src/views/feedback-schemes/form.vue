@@ -14,8 +14,8 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
@@ -24,20 +24,20 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.type"
-                :error-messages="form.errors.get('type')"
+                v-model="data.type"
+                :error-messages="errors.get('type')"
                 hide-details="auto"
                 :items="types"
                 :label="$t('feedback-schemes.types._')"
                 name="type"
                 variant="outlined"
-                @update:model-value="form.errors.clear('type')"
+                @update:model-value="errors.clear('type')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.outputs"
-                :error-messages="form.errors.get('outputs')"
+                v-model="data.outputs"
+                :error-messages="errors.get('outputs')"
                 hide-details="auto"
                 :items="outputs"
                 :label="$t('feedback-schemes.outputs.title')"
@@ -45,13 +45,13 @@
                 name="outputs"
                 prepend-inner-icon="fas fa-right-from-bracket"
                 variant="outlined"
-                @update:model-value="form.errors.clear('outputs')"
+                @update:model-value="errors.clear('outputs')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.outputs.length === 1">{{ item.raw.title }}</span>
-                    <span v-if="form.outputs.length > 1">
-                      {{ $t('common.selected', { count: form.outputs.length }) }}
+                    <span v-if="data.outputs.length === 1">{{ item.raw.title }}</span>
+                    <span v-if="data.outputs.length > 1">
+                      {{ $t('common.selected', { count: data.outputs.length }) }}
                     </span>
                   </template>
                 </template>
@@ -59,14 +59,14 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.visibility"
-                :error-messages="form.errors.get('visibility')"
+                v-model="data.visibility"
+                :error-messages="errors.get('visibility')"
                 hide-details="auto"
                 :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
                 variant="outlined"
-                @update:model-value="form.errors.clear('visibility')"
+                @update:model-value="errors.clear('visibility')"
               >
                 <template #item="{ item, props }">
                   <v-list-item v-bind="props">
@@ -84,9 +84,9 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.physicalDataFields"
+                v-model="data.physicalDataFields"
                 class="mb-2"
-                :error-messages="form.errors.get('physicalDataFields')"
+                :error-messages="errors.get('physicalDataFields')"
                 hide-details="auto"
                 :items="physicalDataFields"
                 :label="$t('feedback-schemes.physicalDataFields.title')"
@@ -94,20 +94,20 @@
                 name="physicalDataFields"
                 prepend-inner-icon="fas fa-person-circle-question"
                 variant="outlined"
-                @update:model-value="form.errors.clear('physicalDataFields')"
+                @update:model-value="errors.clear('physicalDataFields')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.physicalDataFields.length === 1">{{ item.raw.title }}</span>
-                    <span v-if="form.physicalDataFields.length > 1">
-                      {{ $t('common.selected', { count: form.physicalDataFields.length }) }}
+                    <span v-if="data.physicalDataFields.length === 1">{{ item.raw.title }}</span>
+                    <span v-if="data.physicalDataFields.length > 1">
+                      {{ $t('common.selected', { count: data.physicalDataFields.length }) }}
                     </span>
                   </template>
                 </template>
               </v-select>
               <template v-for="(value, key) in requiredPhysicalDataFields" :key="key">
                 <v-alert
-                  v-if="!value && form.physicalDataFields.includes(key)"
+                  v-if="!value && data.physicalDataFields.includes(key)"
                   class="text-caption mb-1"
                   density="compact"
                   type="info"
@@ -121,7 +121,7 @@
                   </i18n-t>
                 </v-alert>
                 <v-alert
-                  v-if="value && !form.physicalDataFields.includes(key)"
+                  v-if="value && !data.physicalDataFields.includes(key)"
                   :key="key"
                   class="text-caption mb-1"
                   density="compact"
@@ -140,9 +140,9 @@
           </v-row>
         </v-card-text>
       </v-container>
-      <feedback-sections v-model="form.sections" />
+      <feedback-sections v-model="data.sections" />
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()" />
+        <submit-footer :disabled="errors.any.value" />
       </v-card-text>
     </v-form>
   </layout>
@@ -220,7 +220,7 @@ export default defineComponent({
 
     const { canHandleEntry, entry, entryLoaded, isCreate, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       PatchFeedbackSchemeForm,
       FeedbackSchemeEntry
     >(props, {
@@ -244,7 +244,7 @@ export default defineComponent({
       () =>
         ({
           ...entry.value,
-          ...form.getData(),
+          ...data.value,
         }) as FeedbackSchemeEntry,
     );
 
@@ -295,7 +295,8 @@ export default defineComponent({
       physicalDataFields,
       isCreate,
       clearError,
-      form,
+      data,
+      errors,
       refs,
       routeLeave,
       submit,

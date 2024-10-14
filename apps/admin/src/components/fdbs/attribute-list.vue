@@ -93,8 +93,8 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { Nullable } from '@intake24/common/types';
-import type { Errors } from '@intake24/common/util';
 import type { AttributeDefaultsAttributes } from '@intake24/db';
 import { useInRecipeTypes } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
@@ -122,7 +122,7 @@ export default defineComponent({
       default: false,
     },
     errors: {
-      type: Object as PropType<Errors>,
+      type: Object as PropType<ReturnUseErrors>,
       required: true,
     },
     modelValue: {
