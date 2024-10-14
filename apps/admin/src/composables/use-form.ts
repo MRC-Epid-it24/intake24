@@ -1,8 +1,22 @@
+import axios, { HttpStatusCode } from 'axios';
 import pick from 'lodash/pick';
-import { computed, reactive } from 'vue';
+import { computed, type Ref, ref } from 'vue';
 
-import type { FormConfig } from '@intake24/admin/util';
-import { createForm } from '@intake24/admin/util';
+import type { HttpRequestConfig } from '@intake24/ui/types';
+import { copy, getObjectNestedKeys, merge } from '@intake24/common/util';
+
+import { useHttp } from '../services';
+import { useErrors } from './use-errors';
+
+const expectedFailStatusCodes = [HttpStatusCode.BadRequest, HttpStatusCode.Conflict] as const;
+
+export type FormConfig<T = any> = {
+  status?: string;
+  multipart?: boolean;
+  resetOnSubmit?: boolean;
+  extractNestedKeys?: boolean;
+  transform?: (data: T) => any;
+};
 
 export type UseFormProps<F> = {
   data: F;
@@ -11,31 +25,124 @@ export type UseFormProps<F> = {
   nonInputErrorKeys?: string[];
 };
 
-export function useForm<F extends object>(formProps: UseFormProps<F>) {
-  const { data, config, loadCallback, nonInputErrorKeys = [] } = formProps;
+export function useForm<T extends object>(props: UseFormProps<T>) {
+  const http = useHttp();
+  const { loadCallback, nonInputErrorKeys = [] } = props;
 
-  const form = reactive(createForm<F>(data, config));
+  const formConfig = computed(() => ({
+    multipart: false,
+    resetOnSubmit: true,
+    ...props.config,
+  }));
 
-  const nonInputErrors = computed(() => Object.values(pick(form.errors.all(), nonInputErrorKeys)));
+  const keys = computed(() => Object.keys(props.data) as (keyof T)[]);
+  const allKeys = computed(() => props.config?.extractNestedKeys
+    ? getObjectNestedKeys(props.data)
+    : ([...keys.value] as string[]));
 
-  const toForm = (data: any) => {
+  const data = ref(copy(props.data)) as Ref<T>;
+  const errors = useErrors();
+
+  const nonInputErrors = computed(() => Object.values(pick(errors.errors.value, nonInputErrorKeys)));
+
+  function assign<S extends Partial<T>>(source: S) {
+    data.value = merge<T>(props.data, pick(source, allKeys.value));
+  };
+
+  function load<S extends Partial<T>>(source: S) {
+    reset();
+    assign(source);
+  };
+
+  function reset(): void {
+    errors.clear();
+    data.value = copy(props.data);
+  };
+
+  function getData(): T {
+    return data.value;
+  };
+
+  function toForm(data: any) {
     const input = loadCallback ? loadCallback(data) : data;
 
-    form.load(input);
+    load(input);
   };
 
   const clearError = (event: KeyboardEvent) => {
     const { name } = event.target as HTMLInputElement;
 
     if (name)
-      form.errors.clear(name);
+      errors.clear(name);
+  };
+
+  function onSuccess() {
+    if (formConfig.value.resetOnSubmit)
+      reset();
+  };
+
+  function onFail(err: unknown) {
+    if (!axios.isAxiosError(err))
+      return;
+
+    const { response: { status, data = {} } = {} } = err;
+    if (status !== undefined && expectedFailStatusCodes.includes(status) && 'errors' in data)
+      errors.record(data.errors);
+  };
+
+  async function submit<R>(config: HttpRequestConfig): Promise<R> {
+    const { transform, multipart } = formConfig.value;
+
+    try {
+      const { data } = await http.request<R>({
+        data: transform ? transform(getData() as T) : getData(),
+        withLoading: true,
+        headers: multipart ? { 'Content-Type': 'multipart/form-data' } : undefined,
+        ...config,
+      });
+
+      onSuccess();
+      return data;
+    }
+    catch (err) {
+      onFail(err);
+
+      throw err;
+    }
+  };
+
+  async function post<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+    return await submit<R>({ url, method: 'post', ...config });
+  };
+
+  async function get<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+    return await submit<R>({ url, method: 'get', ...config });
+  };
+
+  async function patch<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+    return await submit<R>({ url, method: 'patch', ...config });
+  };
+
+  async function put<R>(url: string, config?: HttpRequestConfig): Promise<R> {
+    return await submit<R>({ url, method: 'put', ...config });
   };
 
   return {
-    form,
+    allKeys,
+    errors,
+    getData,
+    data,
+    keys,
     nonInputErrorKeys,
     nonInputErrors,
     toForm,
     clearError,
+    load,
+    reset,
+    submit,
+    get,
+    post,
+    patch,
+    put,
   };
 }

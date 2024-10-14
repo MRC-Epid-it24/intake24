@@ -12,9 +12,9 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.main.code"
+                  v-model="data.main.code"
                   :disabled="!globalEdit"
-                  :error-messages="form.errors.get('main.code')"
+                  :error-messages="errors.get('main.code')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.global.code')"
                   name="main.code"
@@ -23,9 +23,9 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.main.name"
+                  v-model="data.main.name"
                   :disabled="!globalEdit"
-                  :error-messages="form.errors.get('main.name')"
+                  :error-messages="errors.get('main.name')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.global.name')"
                   name="main.name"
@@ -34,14 +34,14 @@
               </v-col>
               <v-col cols="12">
                 <select-resource
-                  v-model="form.main.foodGroupId"
+                  v-model="data.main.foodGroupId"
                   :disabled="!globalEdit"
-                  :error-messages="form.errors.get('main.foodGroupId')"
+                  :error-messages="errors.get('main.foodGroupId')"
                   :initial-item="entry?.main?.foodGroup"
                   :label="$t('fdbs.foods.global.foodGroup')"
                   name="main.foodGroup"
                   resource="food-groups"
-                  @update:model-value="form.errors.clear('main.foodGroupId')"
+                  @update:model-value="errors.clear('main.foodGroupId')"
                 />
               </v-col>
             </v-row>
@@ -57,8 +57,8 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.name"
-                  :error-messages="form.errors.get('name')"
+                  v-model="data.name"
+                  :error-messages="errors.get('name')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.local.name')"
                   name="name"
@@ -69,10 +69,10 @@
             <v-row>
               <v-col cols="12">
                 <v-combobox
-                  v-model="form.tags"
+                  v-model="data.tags"
                   chips
                   closable-chips
-                  :error-messages="form.errors.get('tags')"
+                  :error-messages="errors.get('tags')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.local.tags')"
                   multiple
@@ -84,42 +84,42 @@
           </v-card-text>
         </v-card>
         <locale-list
-          v-model="form.main.locales"
+          v-model="data.main.locales"
           class="mb-6"
           :disabled="!globalEdit"
-          :errors="form.errors"
+          :errors="errors"
         />
         <attribute-list
-          v-model="form.main.attributes"
+          v-model="data.main.attributes"
           class="mb-6"
           :disabled="!globalEdit"
-          :errors="form.errors"
+          :errors="errors"
         />
         <category-list
-          v-model="form.main.parentCategories"
+          v-model="data.main.parentCategories"
           class="mb-6"
           :disabled="!globalEdit"
-          :errors="form.errors"
+          :errors="errors"
           :locale-id="id"
           outlined
         />
         <nutrient-list
-          v-model="form.nutrientRecords"
+          v-model="data.nutrientRecords"
           class="mb-6"
-          :errors="form.errors"
+          :errors="errors"
           :nutrient-tables="refs?.nutrientTables ?? []"
         />
         <portion-size-method-list
-          v-model="form.portionSizeMethods"
+          v-model="data.portionSizeMethods"
           class="mb-6"
-          :errors="form.errors"
+          :errors="errors"
           :locale-id="id"
         />
         <associated-food-list
-          v-model="form.associatedFoods"
+          v-model="data.associatedFoods"
           class="mb-6"
-          :errors="form.errors"
-          :food-code="form.main.code"
+          :errors="errors"
+          :food-code="data.main.code"
           :locale-id="id"
         />
       </v-form>
@@ -219,7 +219,7 @@ export default defineComponent({
     const isEntryLoaded = computed(() => !!entry.value);
 
     const { refs } = useEntry<LocaleEntry, FoodDatabaseRefs>(props);
-    const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
+    const { clearError, form: { data, errors, put }, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
       FoodLocalInput,
       LocaleEntry
     >(props, {
@@ -267,7 +267,7 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      const data = await form.put<FoodLocalEntry>(
+      const data = await put<FoodLocalEntry>(
         `admin/fdbs/${props.id}/${type}/${props.entryId}`,
       );
       toForm(data);
@@ -310,7 +310,8 @@ export default defineComponent({
       entry,
       refs,
       clearError,
-      form,
+      data,
+      errors,
       nonInputErrors,
       originalEntry,
       routeLeave,

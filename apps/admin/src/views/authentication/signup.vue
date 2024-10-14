@@ -4,15 +4,15 @@
     :title="$t('common.signup._')"
     width="800px"
   >
-    <v-form @keydown="form.errors.clear($event.target.name)" @submit.prevent="submit">
+    <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="form.name"
+                v-model="data.name"
                 autocomplete="name"
-                :error-messages="form.errors.get('name')"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('users.name')"
                 name="name"
@@ -23,9 +23,9 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="form.phone"
+                v-model="data.phone"
                 autocomplete="tel"
-                :error-messages="form.errors.get('phone')"
+                :error-messages="errors.get('phone')"
                 hide-details="auto"
                 :label="$t('common.phone')"
                 name="phone"
@@ -36,9 +36,9 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="form.email"
+                v-model="data.email"
                 autocomplete="email"
-                :error-messages="form.errors.get('email')"
+                :error-messages="errors.get('email')"
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
@@ -49,9 +49,9 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="form.emailConfirm"
+                v-model="data.emailConfirm"
                 autocomplete="email"
-                :error-messages="form.errors.get('emailConfirm')"
+                :error-messages="errors.get('emailConfirm')"
                 hide-details="auto"
                 :label="$t('common.emailConfirm')"
                 name="emailConfirm"
@@ -62,10 +62,10 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="form.password"
+                v-model="data.password"
 
                 autocomplete="new-password"
-                :error-messages="form.errors.get('password')"
+                :error-messages="errors.get('password')"
                 hide-details="auto"
                 :label="$t('common.password._')"
                 name="password"
@@ -83,9 +83,9 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="form.passwordConfirm"
+                v-model="data.passwordConfirm"
                 autocomplete="new-password"
-                :error-messages="form.errors.get('passwordConfirm')"
+                :error-messages="errors.get('passwordConfirm')"
                 hide-details="auto"
                 :label="$t('common.password.confirm')"
                 name="passwordConfirm"
@@ -103,11 +103,11 @@
             </v-col>
             <v-col cols="12">
               <v-checkbox-btn
-                v-model="form.terms"
-                :error-messages="form.errors.get('terms')"
+                v-model="data.terms"
+                :error-messages="errors.get('terms')"
                 hide-details="auto"
                 name="terms"
-                @update:model-value="form.errors.clear('terms')"
+                @update:model-value="errors.clear('terms')"
               >
                 <template #label>
                   <i18n-t keypath="common.terms.text" tag="div">
@@ -148,10 +148,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import type { LoginResponse } from '@intake24/common/types/http';
+import { useForm } from '@intake24/admin/composables';
 import { useAuth, useMessages } from '@intake24/admin/stores';
-import { createForm } from '@intake24/admin/util';
+import { useI18n } from '@intake24/i18n';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 
 type SignUpForm = {
@@ -172,9 +174,16 @@ export default defineComponent({
 
   setup() {
     const captchaEl = ref<InstanceType<typeof Captcha>>();
+    const router = useRouter();
+    const { i18n: { t } } = useI18n();
 
-    return reactive({
-      form: createForm<SignUpForm>({
+    const show = reactive({
+      password: false,
+      passwordConfirm: false,
+    });
+
+    const { data, errors, post } = useForm<SignUpForm>({
+      data: {
         name: null,
         phone: null,
         email: null,
@@ -183,60 +192,62 @@ export default defineComponent({
         passwordConfirm: null,
         terms: false,
         captcha: undefined,
-      }),
-      show: {
-        password: false,
-        passwordConfirm: false,
       },
-      captchaEl,
     });
-  },
 
-  methods: {
-    resetCaptcha() {
-      this.form.captcha = undefined;
-      this.captchaEl?.reset();
-    },
+    function resetCaptcha() {
+      data.value.captcha = undefined;
+      captchaEl.value?.reset();
+    };
 
-    async verified(token?: string) {
-      this.form.captcha = token;
-      await this.sendRequest();
-    },
+    async function verified(token?: string) {
+      data.value.captcha = token;
+      await sendRequest();
+    };
 
-    expired() {
-      this.resetCaptcha();
-    },
+    function expired() {
+      resetCaptcha();
+    };
 
-    async sendRequest() {
+    async function sendRequest() {
       try {
-        const { accessToken } = await this.form.post<LoginResponse>('admin/sign-up', {
+        const { accessToken } = await post<LoginResponse>('admin/sign-up', {
           withLoading: true,
         });
         await useAuth().successfulLogin(accessToken);
-        await this.$router.push({ name: 'verify' });
+        await router.push({ name: 'verify' });
       }
       catch (err) {
-        if (this.form.errors.has('captcha')) {
-          this.form.errors.clear('captcha');
-          useMessages().error(this.$t('common.password.request.captcha'));
+        if (errors.has('captcha')) {
+          errors.clear('captcha');
+          useMessages().error(t('common.password.request.captcha'));
         }
         else {
           throw err;
         }
       }
       finally {
-        this.resetCaptcha();
+        resetCaptcha();
       }
-    },
+    };
 
-    async submit() {
-      if (this.captchaEl) {
-        this.captchaEl.executeIfCan();
+    async function submit() {
+      if (captchaEl.value) {
+        captchaEl.value.executeIfCan();
         return;
       }
 
-      await this.sendRequest();
-    },
+      await sendRequest();
+    };
+
+    return {
+      data,
+      errors,
+      expired,
+      show,
+      submit,
+      verified,
+    };
   },
 });
 </script>

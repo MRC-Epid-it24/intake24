@@ -14,7 +14,7 @@
       />
     </v-toolbar>
     <v-list class="list-border">
-      <v-list-item v-for="(item, idx) in form.items" :key="idx">
+      <v-list-item v-for="(item, idx) in data.items" :key="idx">
         <template #prepend>
           <v-icon>fas fa-arrows-split-up-and-left</v-icon>
         </template>
@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 
 import type {
   LocaleEntry,
@@ -55,6 +55,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -68,9 +69,11 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const http = useHttp();
+
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
+    const { clearError, form: { data, errors, post }, routeLeave, submit, toForm } = useEntryForm<
       SplitWordsForm,
       LocaleEntry
     >(props, {
@@ -78,33 +81,43 @@ export default defineComponent({
       config: { transform: ({ items }) => items },
     });
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit, toForm };
-  },
+    function add() {
+      data.value.items.push({ localeId: props.id, words: '' });
+    };
 
-  async mounted() {
-    const { data: items } = await this.$http.get<SplitWordAttributes[]>(
-      `admin/locales/${this.id}/split-words`,
-    );
+    function remove(index: number) {
+      data.value.items.splice(index, 1);
+    };
 
-    this.toForm({ items });
-  },
+    async function save() {
+      data.value.items = data.value.items.filter(({ words }) => words);
 
-  methods: {
-    add() {
-      this.form.items.push({ localeId: this.id, words: '' });
-    },
-
-    remove(index: number) {
-      this.form.items.splice(index, 1);
-    },
-
-    async save() {
-      this.form.items = this.form.items.filter(({ words }) => words);
-
-      const items = await this.form.post<SplitWordAttributes[]>(`admin/locales/${this.id}/split-words`);
+      const items = await post<SplitWordAttributes[]>(`admin/locales/${props.id}/split-words`);
 
       useStoreEntry().setEntry({ items });
-    },
+    };
+
+    onMounted(async () => {
+      const { data: items } = await http.get<SplitWordAttributes[]>(
+        `admin/locales/${props.id}/split-words`,
+      );
+
+      toForm({ items });
+    });
+
+    return {
+      add,
+      entry,
+      entryLoaded,
+      clearError,
+      data,
+      errors,
+      remove,
+      routeLeave,
+      save,
+      submit,
+      toForm,
+    };
   },
 });
 </script>

@@ -62,7 +62,7 @@ import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import type { Errors } from '@intake24/common/util';
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -84,7 +84,7 @@ export default defineComponent({
       default: false,
     },
     errors: {
-      type: Object as PropType<Errors>,
+      type: Object as PropType<ReturnUseErrors>,
       required: true,
     },
     localeId: {

@@ -6,9 +6,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.slug"
+                v-model="data.slug"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('slug')"
+                :error-messages="errors.get('slug')"
                 hide-details="auto"
                 :label="$t('surveys.id')"
                 name="slug"
@@ -17,8 +17,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('surveys.name')"
                 name="name"
@@ -27,48 +27,48 @@
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
-                v-model="form.localeId"
-                :error-messages="form.errors.get('localeId')"
+                v-model="data.localeId"
+                :error-messages="errors.get('localeId')"
                 :initial-item="entry.locale"
                 item-name="englishName"
                 :label="$t('locales._')"
                 name="localeId"
                 resource="locales"
-                @update:model-value="form.errors.clear('localeId')"
+                @update:model-value="errors.clear('localeId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
-                v-model="form.surveySchemeId"
-                :error-messages="form.errors.get('surveySchemeId')"
+                v-model="data.surveySchemeId"
+                :error-messages="errors.get('surveySchemeId')"
                 :initial-item="entry.surveyScheme"
                 :label="$t('survey-schemes._')"
                 name="surveySchemeId"
                 resource="survey-schemes"
-                @update:model-value="form.errors.clear('surveySchemeId')"
+                @update:model-value="errors.clear('surveySchemeId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <date-picker
-                v-model="form.startDate"
-                :error-messages="form.errors.get('startDate')"
+                v-model="data.startDate"
+                :error-messages="errors.get('startDate')"
                 :label="$t('surveys.startDate')"
-                @change="form.errors.clear('startDate')"
+                @change="errors.clear('startDate')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <date-picker
-                v-model="form.endDate"
-                :error-messages="form.errors.get('endDate')"
+                v-model="data.endDate"
+                :error-messages="errors.get('endDate')"
                 :label="$t('surveys.endDate')"
-                @change="form.errors.clear('endDate')"
+                @change="errors.clear('endDate')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.supportEmail"
+                v-model="data.supportEmail"
                 autocomplete="off"
-                :error-messages="form.errors.get('supportEmail')"
+                :error-messages="errors.get('supportEmail')"
                 hide-details="auto"
                 :label="$t('surveys.supportEmail')"
                 name="supportEmail"
@@ -78,21 +78,21 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.state"
-                :error-messages="form.errors.get('state')"
+                v-model="data.state"
+                :error-messages="errors.get('state')"
                 hide-details="auto"
                 :items="surveyStates"
                 :label="$t('surveys.states._')"
                 name="state"
                 prepend-inner-icon="fas fa-spinner"
                 variant="outlined"
-                @update:model-value="form.errors.clear('state')"
+                @update:model-value="errors.clear('state')"
               />
             </v-col>
-            <v-col v-show="form.state === 'suspended'" cols="12">
+            <v-col v-show="data.state === 'suspended'" cols="12">
               <v-text-field
-                v-model="form.suspensionReason"
-                :error-messages="form.errors.get('suspensionReason')"
+                v-model="data.suspensionReason"
+                :error-messages="errors.get('suspensionReason')"
                 hide-details="auto"
                 :label="$t('surveys.suspensionReason')"
                 name="suspensionReason"
@@ -107,18 +107,18 @@
                 {{ $t('surveys.search._') }}
               </div>
               <v-switch
-                v-model="form.searchSettings.collectData"
+                v-model="data.searchSettings.collectData"
                 class="my-6"
-                :error-messages="form.errors.get('searchSettings.collectData')"
+                :error-messages="errors.get('searchSettings.collectData')"
                 hide-details="auto"
                 :label="$t('surveys.search.collectData')"
                 name="searchCollectData"
-                @update:model-value="form.errors.clear('searchSettings.collectData')"
+                @update:model-value="errors.clear('searchSettings.collectData')"
               />
               <v-slider
-                v-model.number="form.searchSettings.maxResults"
+                v-model.number="data.searchSettings.maxResults"
                 class="mt-7"
-                :error-messages="form.errors.get('searchSettings.maxResults')"
+                :error-messages="errors.get('searchSettings.maxResults')"
                 hide-details="auto"
                 :label="$t('surveys.search.maxResults')"
                 max="100"
@@ -140,16 +140,16 @@
                 </v-label>
               </div>
               <v-select
-                v-model="form.searchSettings.sortingAlgorithm"
+                v-model="data.searchSettings.sortingAlgorithm"
                 class="mt-2"
                 density="compact"
-                :error-messages="form.errors.get('searchSettings.sortingAlgorithm')"
+                :error-messages="errors.get('searchSettings.sortingAlgorithm')"
                 hide-details="auto"
                 :items="searchSortingAlgorithms"
                 name="searchSortingAlgorithm"
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
                 variant="outlined"
-                @update:model-value="form.errors.clear('searchSettings.sortingAlgorithm')"
+                @update:model-value="errors.clear('searchSettings.sortingAlgorithm')"
               />
               <div class="mt-4">
                 <v-icon
@@ -162,8 +162,8 @@
                 </v-label>
               </div>
               <v-slider
-                v-model.number="form.searchSettings.matchScoreWeight"
-                :error-messages="form.errors.get('searchSettings.matchScoreWeight')"
+                v-model.number="data.searchSettings.matchScoreWeight"
+                :error-messages="errors.get('searchSettings.matchScoreWeight')"
                 hide-details="auto"
                 max="100"
                 min="0"
@@ -187,9 +187,9 @@
                 </v-icon>{{ $t('surveys.search.matchQualityCriteria') }}
               </div>
               <v-slider
-                v-model.number="form.searchSettings.firstWordCost"
+                v-model.number="data.searchSettings.firstWordCost"
                 class="mt-7"
-                :error-messages="form.errors.get('searchSettings.firstWordCost')"
+                :error-messages="errors.get('searchSettings.firstWordCost')"
                 hide-details="auto"
                 :label="$t('surveys.search.firstWordCost')"
                 max="20"
@@ -198,9 +198,9 @@
                 thumb-label="always"
               />
               <v-slider
-                v-model.number="form.searchSettings.wordOrderCost"
+                v-model.number="data.searchSettings.wordOrderCost"
                 class="mt-7"
-                :error-messages="form.errors.get('searchSettings.wordOrderCost')"
+                :error-messages="errors.get('searchSettings.wordOrderCost')"
                 hide-details="auto"
                 :label="$t('surveys.search.wordOrderCost')"
                 max="10"
@@ -209,9 +209,9 @@
                 thumb-label="always"
               />
               <v-slider
-                v-model.number="form.searchSettings.wordDistanceCost"
+                v-model.number="data.searchSettings.wordDistanceCost"
                 class="mt-7"
-                :error-messages="form.errors.get('searchSettings.wordDistanceCost')"
+                :error-messages="errors.get('searchSettings.wordDistanceCost')"
                 hide-details="auto"
                 :label="$t('surveys.search.wordDistanceCost')"
                 max="10"
@@ -220,9 +220,9 @@
                 thumb-label="always"
               />
               <v-slider
-                v-model.number="form.searchSettings.unmatchedWordCost"
+                v-model.number="data.searchSettings.unmatchedWordCost"
                 class="mt-7"
-                :error-messages="form.errors.get('searchSettings.unmatchedWordCost')"
+                :error-messages="errors.get('searchSettings.unmatchedWordCost')"
                 hide-details="auto"
                 :label="$t('surveys.search.unmatchedWordCost')"
                 max="10"
@@ -239,18 +239,18 @@
                 </v-icon>{{ $t('surveys.search.spellingCorrection') }}
               </div>
               <v-switch
-                v-model="form.searchSettings.enableEditDistance"
+                v-model="data.searchSettings.enableEditDistance"
                 class="mt-6"
-                :error-messages="form.errors.get('searchSettings.enableEditDistance')"
+                :error-messages="errors.get('searchSettings.enableEditDistance')"
                 hide-details="auto"
                 :label="$t('surveys.search.enableEditDistance')"
                 name="searchEnableEditDistance"
-                @update:model-value="form.errors.clear('searchSettings.enableEditDistance')"
+                @update:model-value="errors.clear('searchSettings.enableEditDistance')"
               />
               <v-slider
-                v-model.number="form.searchSettings.minWordLength1"
+                v-model.number="data.searchSettings.minWordLength1"
                 class="mt-6"
-                :error-messages="form.errors.get('searchSettings.minWordLength1')"
+                :error-messages="errors.get('searchSettings.minWordLength1')"
                 hide-details="auto"
                 :label="$t('surveys.search.minWordLength1')"
                 max="10"
@@ -259,9 +259,9 @@
                 thumb-label="always"
               />
               <v-slider
-                v-model.number="form.searchSettings.minWordLength2"
+                v-model.number="data.searchSettings.minWordLength2"
                 class="mt-6"
-                :error-messages="form.errors.get('searchSettings.minWordLength2')"
+                :error-messages="errors.get('searchSettings.minWordLength2')"
                 hide-details="auto"
                 :label="$t('surveys.search.minWordLength2')"
                 max="10"
@@ -270,18 +270,18 @@
                 thumb-label="always"
               />
               <v-switch
-                v-model="form.searchSettings.enablePhonetic"
+                v-model="data.searchSettings.enablePhonetic"
                 class="my-6"
-                :error-messages="form.errors.get('searchSettings.enablePhonetic')"
+                :error-messages="errors.get('searchSettings.enablePhonetic')"
                 hide-details="auto"
                 :label="$t('surveys.search.enablePhonetic')"
                 name="searchEnablePhonetic"
-                @update:model-value="form.errors.clear('searchSettings.enablePhonetic')"
+                @update:model-value="errors.clear('searchSettings.enablePhonetic')"
               />
               <v-slider
-                v-model.number="form.searchSettings.minWordLengthPhonetic"
+                v-model.number="data.searchSettings.minWordLengthPhonetic"
                 class="mt-0 mb-6"
-                :error-messages="form.errors.get('searchSettings.minWordLengthPhonetic')"
+                :error-messages="errors.get('searchSettings.minWordLengthPhonetic')"
                 hide-details="auto"
                 :label="$t('surveys.search.minWordLengthPhonetic')"
                 max="10"
@@ -293,16 +293,16 @@
                 {{ $t('surveys.search.spellingCorrectionPreference') }}
               </v-label>
               <v-select
-                v-model="form.searchSettings.spellingCorrectionPreference"
+                v-model="data.searchSettings.spellingCorrectionPreference"
                 class="mt-2"
                 density="compact"
-                :error-messages="form.errors.get('searchSettings.spellingCorrectionPreference')"
+                :error-messages="errors.get('searchSettings.spellingCorrectionPreference')"
                 hide-details="auto"
                 :items="spellingCorrectionOptions"
                 name="searchSpellingCorrectionPreference"
                 prepend-inner-icon="fas fa-arrow-up-wide-short"
                 variant="outlined"
-                @update:model-value="form.errors.clear('searchSettings.spellingCorrectionPreference')"
+                @update:model-value="errors.clear('searchSettings.spellingCorrectionPreference')"
               />
               <div class="text-h6 mb-4 mt-4 underline">
                 <v-icon
@@ -313,18 +313,18 @@
                 </v-icon>{{ $t('surveys.search.relevantCategories') }}
               </div>
               <v-switch
-                v-model="form.searchSettings.enableRelevantCategories"
+                v-model="data.searchSettings.enableRelevantCategories"
                 class="mt-6"
-                :error-messages="form.errors.get('searchSettings.enableRelevantCategories')"
+                :error-messages="errors.get('searchSettings.enableRelevantCategories')"
                 hide-details="auto"
                 :label="$t('surveys.search.enableRelevantCategories')"
                 name="searchEnableRelevantCategories"
-                @update:model-value="form.errors.clear('searchSettings.enableRelevantCategories')"
+                @update:model-value="errors.clear('searchSettings.enableRelevantCategories')"
               />
               <v-slider
-                v-model.number="form.searchSettings.relevantCategoryDepth"
+                v-model.number="data.searchSettings.relevantCategoryDepth"
                 class="mt-8"
-                :error-messages="form.errors.get('searchSettings.relevantCategoryDepth')"
+                :error-messages="errors.get('searchSettings.relevantCategoryDepth')"
                 hide-details="auto"
                 :label="$t('surveys.search.relevantCategoryDepth')"
                 max="5"
@@ -342,20 +342,20 @@
                 {{ $t('surveys.users._') }}
               </div>
               <v-switch
-                v-model="form.userPersonalIdentifiers"
-                :error-messages="form.errors.get('userPersonalIdentifiers')"
+                v-model="data.userPersonalIdentifiers"
+                :error-messages="errors.get('userPersonalIdentifiers')"
                 hide-details="auto"
                 :label="$t('surveys.users.personalIdentifiers')"
                 name="userPersonalIdentifiers"
-                @update:model-value="form.errors.clear('userPersonalIdentifiers')"
+                @update:model-value="errors.clear('userPersonalIdentifiers')"
               />
               <v-switch
-                v-model="form.userCustomFields"
-                :error-messages="form.errors.get('userCustomFields')"
+                v-model="data.userCustomFields"
+                :error-messages="errors.get('userCustomFields')"
                 hide-details="auto"
                 :label="$t('surveys.users.customFields')"
                 name="userCustomFields"
-                @update:model-value="form.errors.clear('userCustomFields')"
+                @update:model-value="errors.clear('userCustomFields')"
               />
             </v-col>
           </v-row>
@@ -366,18 +366,18 @@
                 {{ $t('surveys.auth._') }}
               </div>
               <v-switch
-                v-model="form.authCaptcha"
+                v-model="data.authCaptcha"
                 class="my-6"
-                :error-messages="form.errors.get('authCaptcha')"
+                :error-messages="errors.get('authCaptcha')"
                 hide-details="auto"
                 :label="$t('surveys.auth.captcha')"
                 name="authCaptcha"
-                @update:model-value="form.errors.clear('authCaptcha')"
+                @update:model-value="errors.clear('authCaptcha')"
               />
               <v-text-field
-                v-model="form.authUrlTokenCharset"
+                v-model="data.authUrlTokenCharset"
                 class="mb-4"
-                :error-messages="form.errors.get('authUrlTokenCharset')"
+                :error-messages="errors.get('authUrlTokenCharset')"
                 hide-details="auto"
                 :label="$t('surveys.auth.urlTokenCharset')"
                 name="authUrlTokenCharset"
@@ -385,9 +385,9 @@
                 variant="outlined"
               />
               <v-text-field
-                v-model.number="form.authUrlTokenLength"
+                v-model.number="data.authUrlTokenLength"
                 class="mb-4"
-                :error-messages="form.errors.get('authUrlTokenLength')"
+                :error-messages="errors.get('authUrlTokenLength')"
                 hide-details="auto"
                 :label="$t('surveys.auth.urlTokenLength')"
                 name="authUrlTokenLength"
@@ -395,8 +395,8 @@
                 variant="outlined"
               />
               <v-text-field
-                v-model="form.authUrlDomainOverride"
-                :error-messages="form.errors.get('authUrlDomainOverride')"
+                v-model="data.authUrlDomainOverride"
+                :error-messages="errors.get('authUrlDomainOverride')"
                 hide-details="auto"
                 :label="$t('surveys.auth.urlDomainOverride')"
                 name="authUrlDomainOverride"
@@ -412,26 +412,26 @@
                 {{ $t('surveys.submissionLimits._') }}
               </div>
               <v-text-field
-                v-model.number="form.maximumDailySubmissions"
+                v-model.number="data.maximumDailySubmissions"
                 class="mb-4"
-                :error-messages="form.errors.get('maximumDailySubmissions')"
+                :error-messages="errors.get('maximumDailySubmissions')"
                 hide-details="auto"
                 :label="$t('surveys.submissionLimits.maxDaily')"
                 name="maximumDailySubmissions"
                 variant="outlined"
               />
               <v-text-field
-                v-model.number="form.maximumTotalSubmissions"
+                v-model.number="data.maximumTotalSubmissions"
                 class="mb-4"
-                :error-messages="form.errors.get('maximumTotalSubmissions')"
+                :error-messages="errors.get('maximumTotalSubmissions')"
                 hide-details="auto"
                 :label="$t('surveys.submissionLimits.maxTotal')"
                 name="maximumTotalSubmissions"
                 variant="outlined"
               />
               <v-text-field
-                v-model.number="form.minimumSubmissionInterval"
-                :error-messages="form.errors.get('minimumSubmissionInterval')"
+                v-model.number="data.minimumSubmissionInterval"
+                :error-messages="errors.get('minimumSubmissionInterval')"
                 hide-details="auto"
                 :label="$t('surveys.submissionLimits.minInterval')"
                 name="minimumSubmissionInterval"
@@ -446,20 +446,20 @@
                 {{ $t('surveys.externalComm._') }}
               </div>
               <v-switch
-                v-model="form.allowGenUsers"
+                v-model="data.allowGenUsers"
                 class="my-6"
-                :error-messages="form.errors.get('allowGenUsers')"
+                :error-messages="errors.get('allowGenUsers')"
                 hide-details="auto"
                 :label="$t('surveys.externalComm.allowGenUsers')"
                 name="allowGenUsers"
-                @update:model-value="form.errors.clear('allowGenUsers')"
+                @update:model-value="errors.clear('allowGenUsers')"
               />
               <v-text-field
-                v-model="form.genUserKey"
+                v-model="data.genUserKey"
                 :append-icon="showGenUserKey ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 class="mb-4"
-                :error-messages="form.errors.get('genUserKey')"
+                :error-messages="errors.get('genUserKey')"
                 hide-details="auto"
                 :label="$t('surveys.externalComm.genUserKey')"
                 name="genUserKey"
@@ -468,10 +468,10 @@
                 @click:append="showGenUserKey = !showGenUserKey"
               />
               <event-notifications
-                v-model="form.notifications"
-                :error-messages="form.errors.get('notifications')"
+                v-model="data.notifications"
+                :error-messages="errors.get('notifications')"
                 name="notifications"
-                @update:model-value="form.errors.clear('notifications')"
+                @update:model-value="errors.clear('notifications')"
               />
             </v-col>
             <v-col :cols="$vuetify.display.mdAndUp ? `auto` : '12'">
@@ -482,18 +482,18 @@
                 {{ $t('surveys.session._') }}
               </div>
               <v-switch
-                v-model="form.session.store"
+                v-model="data.session.store"
                 class="my-6"
-                :error-messages="form.errors.get('session.store')"
+                :error-messages="errors.get('session.store')"
                 hide-details="auto"
                 :label="$t('surveys.session.store')"
                 name="session.store"
-                @update:model-value="form.errors.clear('session.store')"
+                @update:model-value="errors.clear('session.store')"
               />
               <v-text-field
-                v-model="form.session.age"
+                v-model="data.session.age"
                 class="mb-4"
-                :error-messages="form.errors.get('session.age')"
+                :error-messages="errors.get('session.age')"
                 hide-details="auto"
                 :hint="$t('surveys.session.age.hint')"
                 :label="$t('surveys.session.age._')"
@@ -502,8 +502,8 @@
                 variant="outlined"
               />
               <v-text-field
-                v-model="form.session.fixed"
-                :error-messages="form.errors.get('session.fixed')"
+                v-model="data.session.fixed"
+                :error-messages="errors.get('session.fixed')"
                 hide-details="auto"
                 :hint="$t('surveys.session.fixed.hint')"
                 :label="$t('surveys.session.fixed._')"
@@ -520,21 +520,21 @@
           <v-row>
             <v-col cols="12" md="6">
               <select-resource
-                v-model="form.feedbackSchemeId"
+                v-model="data.feedbackSchemeId"
                 clearable
-                :error-messages="form.errors.get('feedbackSchemeId')"
+                :error-messages="errors.get('feedbackSchemeId')"
                 :initial-item="entry.feedbackScheme"
                 :label="$t('feedback-schemes._')"
                 name="feedbackSchemeId"
                 resource="feedback-schemes"
-                @update:model-value="form.errors.clear('feedbackSchemeId')"
+                @update:model-value="errors.clear('feedbackSchemeId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model.number="form.numberOfSubmissionsForFeedback"
-                :disabled="!form.feedbackSchemeId"
-                :error-messages="form.errors.get('numberOfSubmissionsForFeedback')"
+                v-model.number="data.numberOfSubmissionsForFeedback"
+                :disabled="!data.feedbackSchemeId"
+                :error-messages="errors.get('numberOfSubmissionsForFeedback')"
                 hide-details="auto"
                 :label="$t('surveys.feedback.numberOfSubmissions')"
                 name="numberOfSubmissionsForFeedback"
@@ -542,7 +542,7 @@
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -650,7 +650,7 @@ export default defineComponent({
     const infoPopupOpen = ref(false);
 
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
       data: surveyForm,
       editMethod: 'patch',
     });
@@ -671,7 +671,8 @@ export default defineComponent({
       entryLoaded,
       isEdit,
       clearError,
-      form,
+      data,
+      errors,
       routeLeave,
       submit,
       showInformationPopup,

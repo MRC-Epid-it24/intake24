@@ -6,8 +6,8 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
-                :error-messages="form.errors.get('id')"
+                v-model="data.id"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('image-maps.id')"
                 name="id"
@@ -16,21 +16,21 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-file-input
-                v-model="form.baseImage"
-                :error-messages="form.errors.get('baseImage')"
+                v-model="data.baseImage"
+                :error-messages="errors.get('baseImage')"
                 hide-details="auto"
                 :label="$t('image-maps.baseImage')"
                 name="baseImage"
                 prepend-icon=""
                 prepend-inner-icon="fas fa-paperclip"
                 variant="outlined"
-                @change="form.errors.clear('baseImage')"
+                @change="errors.clear('baseImage')"
               />
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -39,7 +39,7 @@
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -68,7 +68,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded } = useEntry<ImageMapEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       CreateImageMapForm,
       ImageMapEntry
     >(props, {
@@ -81,7 +81,7 @@ export default defineComponent({
       config: { multipart: true },
     });
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit };
+    return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };
   },
 });
 </script>

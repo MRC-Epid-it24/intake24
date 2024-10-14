@@ -20,7 +20,7 @@
               <v-card-title>{{ $t('user.jobs.title') }}</v-card-title>
               <v-card-text>
                 <v-select
-                  v-model="form.type"
+                  v-model="data.type"
                   hide-details="auto"
                   :items="jobTypeList"
                   :label="$t('user.jobs._')"
@@ -33,13 +33,13 @@
             </v-col>
             <v-col cols="12" md="6">
               <component
-                :is="form.type"
-                v-if="Object.keys(form.params).length"
-                v-model="form.params"
-                :disabled="disabledJobParams[form.type]"
-                :errors="form.errors"
+                :is="data.type"
+                v-if="Object.keys(data.params).length"
+                v-model="data.params"
+                :disabled="disabledJobParams[data.type]"
+                :errors="errors"
                 name="params"
-                @update:model-value="form.errors.clear(paramErrors)"
+                @update:model-value="errors.clear(paramErrors)"
               />
             </v-col>
           </v-row>
@@ -48,7 +48,7 @@
               <v-btn
                 block
                 color="primary"
-                :disabled="form.errors.any() || jobInProgress || isAppLoading"
+                :disabled="errors.any.value || jobInProgress || isAppLoading"
                 size="x-large"
                 :title="$t('common.action.upload')"
                 type="submit"
@@ -102,28 +102,28 @@ export default defineComponent({
       ResourceExport: {},
     };
 
-    const { clearError, form } = useForm<UserJobForm>({
+    const { clearError, data, errors, post } = useForm<UserJobForm>({
       data: { type: userJobs[0], params: defaultJobsParams.value[userJobs[0]] },
       config: { resetOnSubmit: false },
     });
     const { jobs, jobInProgress, startPolling } = usePollsForJobs(userJobs);
 
-    const paramErrors = computed(() => Object.keys(form.params).map(key => `params.${key}`));
+    const paramErrors = computed(() => Object.keys(data.value.params).map(key => `params.${key}`));
 
     onMounted(async () => {
       await startPolling(true);
     });
 
     const updateJob = () => {
-      form.errors.clear();
-      form.params = defaultJobsParams.value[form.type];
+      errors.clear();
+      data.value.params = defaultJobsParams.value[data.value.type];
     };
 
     const submit = async () => {
       if (jobInProgress.value)
         return;
 
-      const job = await form.post<JobAttributes>(`admin/user/jobs`);
+      const job = await post<JobAttributes>(`admin/user/jobs`);
 
       jobs.value.unshift(job);
       await startPolling();
@@ -135,7 +135,8 @@ export default defineComponent({
       jobTypeList,
       clearError,
       paramErrors,
-      form,
+      data,
+      errors,
       jobs,
       jobInProgress,
       startPolling,

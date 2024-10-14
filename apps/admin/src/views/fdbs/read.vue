@@ -22,16 +22,24 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { detailMixin } from '@intake24/admin/components/entry';
+import { Layout } from '@intake24/admin/components/entry';
 import { FoodExplorer } from '@intake24/admin/components/fdbs';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'FoodDBDetail',
 
-  components: { FoodExplorer },
+  components: { FoodExplorer, Layout },
 
-  mixins: [detailMixin],
+  props: {
+    id: {
+      type: String,
+      default: 'create',
+    },
+    entryId: {
+      type: String,
+    },
+  },
 
   setup(props) {
     useEntryFetch(props);

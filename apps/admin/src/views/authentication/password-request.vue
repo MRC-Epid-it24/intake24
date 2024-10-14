@@ -11,14 +11,14 @@
         {{ $t('common.spam') }}
       </p>
     </v-card-text>
-    <v-form v-else @keydown="form.errors.clear($event.target.name)" @submit.prevent="submit">
+    <v-form v-else @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="form.email"
-                :error-messages="form.errors.get('email')"
+                v-model="data.email"
+                :error-messages="errors.get('email')"
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
@@ -49,9 +49,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/i18n';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -66,61 +67,70 @@ export default defineComponent({
   components: { AppEntryScreen, Captcha },
 
   setup() {
+    const { i18n: { t } } = useI18n();
     const captchaEl = ref<InstanceType<typeof Captcha>>();
+    const submitted = ref(false);
 
-    return reactive({
-      form: createForm<PasswordRequestForm>({
+    const { data, errors, post } = useForm<PasswordRequestForm>({
+      data: {
         email: null,
         captcha: undefined,
-      }),
-      captchaEl,
-      submitted: false,
+      },
     });
-  },
 
-  methods: {
-    resetCaptcha() {
-      this.form.captcha = undefined;
-      this.captchaEl?.reset();
-    },
+    function resetCaptcha() {
+      data.value.captcha = undefined;
+      captchaEl.value?.reset();
+    };
 
-    async verified(token: string) {
-      this.form.captcha = token;
-      await this.sendRequest();
-    },
+    async function verified(token: string) {
+      data.value.captcha = token;
+      await sendRequest();
+    };
 
-    expired() {
-      this.resetCaptcha();
-    },
+    function expired() {
+      resetCaptcha();
+    };
 
-    async sendRequest() {
+    async function sendRequest() {
       try {
-        await this.form.post('password');
-        this.submitted = true;
+        await post('password');
+        submitted.value = true;
       }
       catch (err) {
-        if (this.form.errors.has('captcha')) {
-          this.form.errors.clear('captcha');
-          useMessages().error(this.$t('common.password.request.captcha'));
+        if (errors.has('captcha')) {
+          errors.clear('captcha');
+          useMessages().error(t('common.password.request.captcha'));
         }
         else {
           throw err;
         }
       }
       finally {
-        this.resetCaptcha();
+        resetCaptcha();
       }
-    },
+    };
 
-    async submit() {
-      if (this.captchaEl) {
-        this.captchaEl.executeIfCan();
+    async function submit() {
+      if (captchaEl.value) {
+        captchaEl.value.executeIfCan();
         return;
       }
 
-      await this.sendRequest();
-    },
+      await sendRequest();
+    };
+
+    return {
+      captchaEl,
+      data,
+      errors,
+      expired,
+      submit,
+      submitted,
+      verified,
+    };
   },
+
 });
 </script>
 

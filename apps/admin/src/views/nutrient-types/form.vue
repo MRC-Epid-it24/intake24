@@ -6,9 +6,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="data.id"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('id')"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('nutrient-types.id')"
                 name="id"
@@ -18,8 +18,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -29,8 +29,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.unitId"
-                :error-messages="form.errors.get('unitId')"
+                v-model="data.unitId"
+                :error-messages="errors.get('unitId')"
                 hide-details="auto"
                 item-title="description"
                 item-value="id"
@@ -39,13 +39,13 @@
                 name="unitId"
                 prepend-inner-icon="$nutrient-units"
                 variant="outlined"
-                @update:model-value="form.errors.clear('unitId')"
+                @update:model-value="errors.clear('unitId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.kcalPerUnit"
-                :error-messages="form.errors.get('kcalPerUnit')"
+                v-model="data.kcalPerUnit"
+                :error-messages="errors.get('kcalPerUnit')"
                 hide-details="auto"
                 :label="$t('nutrient-types.kcalPerUnit')"
                 name="kcalPerUnit"
@@ -54,7 +54,7 @@
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -86,7 +86,7 @@ export default defineComponent({
       NutrientTypeRefs
     >(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       NutrientTypeForm,
       NutrientTypeResponse
     >(props, {
@@ -100,7 +100,8 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
+      errors,
       routeLeave,
       submit,
     };

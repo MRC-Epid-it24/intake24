@@ -17,7 +17,7 @@
         </v-btn>
       </v-toolbar>
       <v-list class="list-border recipe-list">
-        <v-list-item v-for="(item, idx) in form.items" :key="idx" class="mt-2">
+        <v-list-item v-for="(item, idx) in data.items" :key="idx" class="mt-2">
           <v-list-item-title class="text-h4 font-weight-medium mb-4">
             <v-avatar class="mr-3" color="primary" size="28">
               <span class="text-white font-weight-medium text-h6">{{ item.order }}</span>
@@ -56,11 +56,11 @@
                   <template v-for="lang in Object.keys(item.name)" :key="lang" #[`lang.${lang}`]>
                     <v-text-field
                       v-model="item.name[lang]"
-                      :error-messages="form.errors.get(`estimateIn.${lang}`)"
+                      :error-messages="errors.get(`estimateIn.${lang}`)"
                       hide-details="auto"
                       :name="`estimateIn.${lang}`"
                       variant="outlined"
-                      @update:model-value="form.errors.clear(`estimateIn.${lang}`)"
+                      @update:model-value="errors.clear(`estimateIn.${lang}`)"
                     />
                   </template>
                 </language-selector>
@@ -75,11 +75,11 @@
                   <template v-for="lang in Object.keys(item.name)" :key="lang" #[`lang.${lang}`]>
                     <v-text-field
                       v-model="item.description[lang]"
-                      :error-messages="form.errors.get(`recipe-foods.${lang}`)"
+                      :error-messages="errors.get(`recipe-foods.${lang}`)"
                       hide-details="auto"
                       :name="`recipe-foods.${lang}`"
                       variant="outlined"
-                      @update:model-value="form.errors.clear(`recipe-foods.${lang}`)"
+                      @update:model-value="errors.clear(`recipe-foods.${lang}`)"
                     />
                   </template>
                 </language-selector>
@@ -150,7 +150,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 
 import type {
   RecipeFoodStepAttributes,
@@ -158,7 +158,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
 
 export type LocaleRecipeFoodStepsForm = {
@@ -203,17 +203,17 @@ export default defineComponent({
   setup(props, { emit }) {
     const { translate } = useI18n();
 
-    const form = reactive(createForm<LocaleRecipeFoodStepsForm>({ items: props.items }));
+    const { data, errors, post } = useForm<LocaleRecipeFoodStepsForm>({ data: { items: props.items } });
 
     const saveSteps = async () => {
-      form.items = form.items
+      data.value.items = data.value.items
         .filter(({ name }) => name)
         .map((item, idx) => {
           item.order = idx + 1;
           return item;
         });
 
-      const items = await form.post<RecipeFoodStepAttributes[]>(
+      const items = await post<RecipeFoodStepAttributes[]>(
         `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`,
       );
 
@@ -221,13 +221,13 @@ export default defineComponent({
     };
 
     const addStep = () => {
-      form.items.push({
+      data.value.items.push({
         id: undefined,
-        code: `${props.activeRecipeFoodCode.substring(1)}_STP-${form.items.length + 1}`,
+        code: `${props.activeRecipeFoodCode.substring(1)}_STP-${data.value.items.length + 1}`,
         recipeFoodsId: props.activeRecipeFoodId,
         name: { en: 'Name' },
         description: { en: 'Description' },
-        order: form.items.length + 1,
+        order: data.value.items.length + 1,
         localeId: props.locale.code,
         categoryCode: '',
         repeatable: false,
@@ -237,11 +237,12 @@ export default defineComponent({
 
     const removeStep = (index: number) => {
       console.log(index);
-      form.items.splice(index, 1);
+      data.value.items.splice(index, 1);
     };
 
     return {
-      form,
+      data,
+      errors,
       addStep,
       removeStep,
       saveSteps,

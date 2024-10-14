@@ -3,7 +3,7 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
-    <henry-coefficient-list v-model="form.henryCoefficients" />
+    <henry-coefficient-list v-model="data.henryCoefficients" />
   </layout>
 </template>
 
@@ -29,7 +29,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
-    const { form, routeLeave, submit } = useEntryForm<
+    const { form: { data }, routeLeave, submit } = useEntryForm<
       FeedbackSchemeHenryCoefficientsForm,
       FeedbackSchemeEntry
     >(props, {
@@ -37,9 +37,9 @@ export default defineComponent({
       editMethod: 'patch',
     });
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData() }));
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...data.value }));
 
-    return { currentFeedbackScheme, entry, entryLoaded, form, refs, routeLeave, submit };
+    return { currentFeedbackScheme, entry, entryLoaded, data, refs, routeLeave, submit };
   },
 });
 </script>

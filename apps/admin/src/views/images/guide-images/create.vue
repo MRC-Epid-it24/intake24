@@ -6,8 +6,8 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
-                :error-messages="form.errors.get('id')"
+                v-model="data.id"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('guide-images.id')"
                 name="id"
@@ -17,20 +17,20 @@
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
-                v-model="form.imageMapId"
+                v-model="data.imageMapId"
                 clearable
-                :error-messages="form.errors.get('imageMapId')"
+                :error-messages="errors.get('imageMapId')"
                 item-name="description"
                 :label="$t('image-maps.id')"
                 name="imageMapId"
                 resource="image-maps"
-                @update:model-value="form.errors.clear('imageMapId')"
+                @update:model-value="errors.clear('imageMapId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -39,7 +39,7 @@
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -70,14 +70,14 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded } = useEntry<GuideImageEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       CreateGuideImageForm,
       GuideImageEntry
     >(props, {
       data: { id: null, description: null, imageMapId: null },
     });
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit };
+    return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };
   },
 });
 </script>

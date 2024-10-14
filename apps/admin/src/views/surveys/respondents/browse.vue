@@ -26,11 +26,11 @@
               </v-card-title>
               <v-card-text>
                 <v-text-field
-                  v-model="form.username"
+                  v-model="data.username"
                   autocomplete="username"
                   class="mb-4"
                   :disabled="!isCreate"
-                  :error-messages="form.errors.get('username')"
+                  :error-messages="errors.get('username')"
                   hide-details="auto"
                   :label="$t('users.username')"
                   name="username"
@@ -38,10 +38,10 @@
                   variant="outlined"
                 />
                 <v-text-field
-                  v-model="form.password"
+                  v-model="data.password"
                   autocomplete="new-password"
                   class="mb-4"
-                  :error-messages="form.errors.get('password')"
+                  :error-messages="errors.get('password')"
                   hide-details="auto"
                   :label="$t('common.password._')"
                   name="password"
@@ -50,9 +50,9 @@
                   variant="outlined"
                 />
                 <v-text-field
-                  v-model="form.passwordConfirm"
+                  v-model="data.passwordConfirm"
                   autocomplete="new-password"
-                  :error-messages="form.errors.get('passwordConfirm')"
+                  :error-messages="errors.get('passwordConfirm')"
                   hide-details="auto"
                   :label="$t('common.password.confirm')"
                   name="passwordConfirm"
@@ -67,9 +67,9 @@
                 </v-card-title>
                 <v-card-text>
                   <v-text-field
-                    v-model="form.name"
+                    v-model="data.name"
                     class="mb-4"
-                    :error-messages="form.errors.get('name')"
+                    :error-messages="errors.get('name')"
                     hide-details="auto"
                     :label="$t('users.name')"
                     name="name"
@@ -77,9 +77,9 @@
                     variant="outlined"
                   />
                   <v-text-field
-                    v-model="form.email"
+                    v-model="data.email"
                     class="mb-4"
-                    :error-messages="form.errors.get('email')"
+                    :error-messages="errors.get('email')"
                     hide-details="auto"
                     :label="$t('common.email')"
                     name="email"
@@ -87,8 +87,8 @@
                     variant="outlined"
                   />
                   <v-text-field
-                    v-model="form.phone"
-                    :error-messages="form.errors.get('phone')"
+                    v-model="data.phone"
+                    :error-messages="errors.get('phone')"
                     hide-details="auto"
                     :label="$t('common.phone')"
                     name="phone"
@@ -106,13 +106,13 @@
                   <v-btn color="primary" icon="$add" size="small" :title="$t('users.customFields.add')" @click.stop="addCustomField" />
                 </v-toolbar>
                 <v-card-text>
-                  <template v-for="(field, idx) in form.customFields" :key="`r-${idx}`">
+                  <template v-for="(field, idx) in data.customFields" :key="`r-${idx}`">
                     <v-row dense>
                       <v-col cols="12" md="4">
                         <v-text-field
                           v-model="field.name"
                           density="compact"
-                          :error-messages="form.errors.get(`customFields.${idx}.name`)"
+                          :error-messages="errors.get(`customFields.${idx}.name`)"
                           hide-details="auto"
                           :label="$t('users.customFields.name')"
                           variant="outlined"
@@ -122,7 +122,7 @@
                         <v-text-field
                           v-model="field.value"
                           density="compact"
-                          :error-messages="form.errors.get(`customFields.${idx}.value`)"
+                          :error-messages="errors.get(`customFields.${idx}.value`)"
                           hide-details="auto"
                           :label="$t('users.customFields.value')"
                           variant="outlined"
@@ -300,7 +300,7 @@ export default defineComponent({
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
 
-    const { form, clearError } = useForm<SurveyRespondentsForm>({
+    const { data, errors, clearError, load, post, patch, reset: resetForm } = useForm<SurveyRespondentsForm>({
       data: {
         userId: null,
         username: null,
@@ -314,15 +314,15 @@ export default defineComponent({
     });
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    const isCreate = computed(() => !form.userId);
+    const isCreate = computed(() => !data.value.userId);
 
     function addCustomField() {
-      const size = form.customFields.length + 1;
-      form.customFields.push({ name: `name-${size}`, value: `value-${size}` });
+      const size = data.value.customFields.length + 1;
+      data.value.customFields.push({ name: `name-${size}`, value: `value-${size}` });
     };
 
     function removeCustomField(index: number) {
-      form.customFields.splice(index, 1);
+      data.value.customFields.splice(index, 1);
     };
 
     async function fetchRespondent(username: string) {
@@ -334,7 +334,7 @@ export default defineComponent({
     };
 
     function addRespondent() {
-      form.reset();
+      reset();
       dialog.value = true;
     };
 
@@ -344,7 +344,7 @@ export default defineComponent({
 
       try {
         const user = await fetchRespondent(item.username);
-        form.load(user);
+        load(user);
       }
       finally {
         loading.value = false;
@@ -352,7 +352,7 @@ export default defineComponent({
     };
 
     function reset() {
-      form.reset();
+      resetForm();
       dialog.value = false;
     };
 
@@ -361,15 +361,15 @@ export default defineComponent({
     };
 
     async function saveRespondent() {
-      if (form.userId) {
-        const { username: name } = await form.patch<RespondentEntry>(
-          `admin/surveys/${props.id}/respondents/${form.username}`,
+      if (data.value.userId) {
+        const { username: name } = await patch<RespondentEntry>(
+          `admin/surveys/${props.id}/respondents/${data.value.username}`,
         );
 
         useMessages().success(i18n.t('common.msg.updated', { name }));
       }
       else {
-        const { username: name } = await form.post<RespondentEntry>(
+        const { username: name } = await post<RespondentEntry>(
           `admin/surveys/${props.id}/respondents`,
         );
 
@@ -398,7 +398,8 @@ export default defineComponent({
       entry,
       entryLoaded,
       table,
-      form,
+      data,
+      errors,
       clearError,
       removeCustomField,
       removeRespondent,

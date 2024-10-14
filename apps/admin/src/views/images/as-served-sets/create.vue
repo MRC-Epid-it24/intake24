@@ -6,8 +6,8 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
-                :error-messages="form.errors.get('id')"
+                v-model="data.id"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('as-served-sets.id')"
                 name="id"
@@ -17,21 +17,21 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-file-input
-                v-model="form.selectionImage"
-                :error-messages="form.errors.get('selectionImage')"
+                v-model="data.selectionImage"
+                :error-messages="errors.get('selectionImage')"
                 hide-details="auto"
                 :label="$t('as-served-sets.selectionImage')"
                 name="selectionImage"
                 prepend-icon=""
                 prepend-inner-icon="fas fa-paperclip"
                 variant="outlined"
-                @change="form.errors.clear('selectionImage')"
+                @change="errors.clear('selectionImage')"
               />
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -40,7 +40,7 @@
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -68,7 +68,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded } = useEntry<AsServedSetEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       CreateAsServedSetForm,
       AsServedSetEntry
     >(props, {
@@ -76,7 +76,7 @@ export default defineComponent({
       config: { multipart: true },
     });
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit };
+    return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };
   },
 });
 </script>

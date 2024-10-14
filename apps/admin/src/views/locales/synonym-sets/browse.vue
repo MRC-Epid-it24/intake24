@@ -14,7 +14,7 @@
       />
     </v-toolbar>
     <v-list class="list-border">
-      <v-list-item v-for="(item, idx) in form.items" :key="idx">
+      <v-list-item v-for="(item, idx) in data.items" :key="idx">
         <template #prepend>
           <v-icon>fas fa-arrows-split-up-and-left</v-icon>
         </template>
@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 
 import type {
   LocaleEntry,
@@ -55,6 +55,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -68,9 +69,11 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const http = useHttp();
+
     const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
+    const { clearError, form: { data, post }, routeLeave, submit, toForm } = useEntryForm<
       SynonymSetsForm,
       LocaleEntry
     >(props, {
@@ -78,35 +81,44 @@ export default defineComponent({
       config: { transform: ({ items }) => items },
     });
 
-    return { entry, entryLoaded, clearError, form, routeLeave, submit, toForm };
-  },
+    function add() {
+      data.value.items.push({ localeId: props.id, synonyms: '' });
+    };
 
-  async mounted() {
-    const { data: items } = await this.$http.get<SynonymSetAttributes[]>(
-      `admin/locales/${this.id}/synonym-sets`,
-    );
+    function remove(index: number) {
+      data.value.items.splice(index, 1);
+    };
 
-    this.toForm({ items });
-  },
+    async function save() {
+      data.value.items = data.value.items.filter(({ synonyms }) => synonyms);
 
-  methods: {
-    add() {
-      this.form.items.push({ localeId: this.id, synonyms: '' });
-    },
-
-    remove(index: number) {
-      this.form.items.splice(index, 1);
-    },
-
-    async save() {
-      this.form.items = this.form.items.filter(({ synonyms }) => synonyms);
-
-      const items = await this.form.post<SynonymSetAttributes[]>(
-        `admin/locales/${this.id}/synonym-sets`,
+      const items = await post<SynonymSetAttributes[]>(
+        `admin/locales/${props.id}/synonym-sets`,
       );
 
       useStoreEntry().setEntry({ items });
-    },
+    };
+
+    onMounted(async () => {
+      const { data: items } = await http.get<SynonymSetAttributes[]>(
+        `admin/locales/${props.id}/synonym-sets`,
+      );
+
+      toForm({ items });
+    });
+
+    return {
+      add,
+      entry,
+      entryLoaded,
+      clearError,
+      data,
+      remove,
+      routeLeave,
+      save,
+      submit,
+      toForm,
+    };
   },
 });
 </script>

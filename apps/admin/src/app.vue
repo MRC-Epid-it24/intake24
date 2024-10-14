@@ -135,7 +135,7 @@ import pluralize from 'pluralize';
 import { defineComponent } from 'vue';
 import { useDisplay, useLocale } from 'vuetify';
 
-import type { Dictionary } from '@intake24/common';
+import type { Dictionary } from '@intake24/common/types';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';

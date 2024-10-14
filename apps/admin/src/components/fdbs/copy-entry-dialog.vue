@@ -23,8 +23,8 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="form.code"
-                :error-messages="form.errors.get('code')"
+                v-model="data.code"
+                :error-messages="errors.get('code')"
                 hide-details="auto"
                 :label="$t(`fdbs.${type}.global.code`)"
                 name="code"
@@ -33,8 +33,8 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t(`fdbs.${type}.global.name`)"
                 name="name"
@@ -52,7 +52,7 @@
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="form.errors.any()"
+          :disabled="errors.any.value"
           variant="text"
           @click.stop="confirm"
         >
@@ -96,7 +96,7 @@ export default defineComponent({
     const { i18n } = useI18n();
     const router = useRouter();
 
-    const { clearError, form } = useForm<CopyEntityForm>({
+    const { clearError, data, errors, post } = useForm<CopyEntityForm>({
       data: { code: '', name: '' },
     });
 
@@ -108,8 +108,8 @@ export default defineComponent({
 
     const confirm = async () => {
       const { type, localeId, entryId } = props;
-      const { name } = form;
-      const { id } = await form.post<SurveySchemeEntry>(
+      const { name } = data.value;
+      const { id } = await post<SurveySchemeEntry>(
         `admin/fdbs/${localeId}/${type}/${entryId}/copy`,
       );
 
@@ -118,7 +118,7 @@ export default defineComponent({
       await router.push({ name: `fdbs-${type}`, params: { id: localeId, entryId: id } });
     };
 
-    return { clearError, close, confirm, form, dialog };
+    return { clearError, close, confirm, data, errors, dialog };
   },
 });
 </script>

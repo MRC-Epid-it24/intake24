@@ -21,8 +21,8 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
-              v-model="form.name"
-              :error-messages="form.errors.get('name')"
+              v-model="data.name"
+              :error-messages="errors.get('name')"
               hide-details="auto"
               :label="$t(`${resource}.copy.name`)"
               name="name"
@@ -42,7 +42,7 @@
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="form.errors.any()"
+          :disabled="errors.any.value"
           variant="text"
           @click.stop="confirm"
         >
@@ -58,7 +58,7 @@ import { defineComponent, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -85,7 +85,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
 
-    const form = createForm<CopySchemeForm>({ name: null });
+    const { data, errors, post } = useForm<CopySchemeForm>({ data: { name: null } });
     const dialog = ref(false);
     const redirect = ref(true);
 
@@ -96,7 +96,7 @@ export default defineComponent({
     const confirm = async () => {
       const { resource, schemeId } = props;
       const { name } = route;
-      const { id } = await form.post<SurveySchemeEntry>(`admin/${resource}/${schemeId}/copy`);
+      const { id } = await post<SurveySchemeEntry>(`admin/${resource}/${schemeId}/copy`);
 
       close();
       useMessages().success(i18n.t('common.msg.created', { name }));
@@ -108,8 +108,9 @@ export default defineComponent({
     return {
       close,
       confirm,
-      form,
+      data,
       dialog,
+      errors,
       redirect,
     };
   },

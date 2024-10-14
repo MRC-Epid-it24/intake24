@@ -21,15 +21,15 @@
             <v-row>
               <v-col cols="12" sm>
                 <v-file-input
-                  v-model="form.file"
-                  :error-messages="form.errors.get('file')"
+                  v-model="data.file"
+                  :error-messages="errors.get('file')"
                   hide-details="auto"
                   :label="$t('common.file.csv')"
                   name="file"
                   prepend-icon=""
                   prepend-inner-icon="fas fa-file-csv"
                   variant="outlined"
-                  @change="form.errors.clear('file')"
+                  @change="errors.clear('file')"
                 />
               </v-col>
               <v-col cols="12" sm="auto">
@@ -55,12 +55,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { JobType } from '@intake24/common/types';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
 
 type CsvUploadForm = {
   file: File | null;
@@ -91,10 +91,11 @@ export default defineComponent({
   },
 
   setup(props) {
-    const form = reactive(createForm<CsvUploadForm>({ file: null }, { multipart: true }));
+    const form = useForm<CsvUploadForm>({ data: { file: null }, config: { multipart: true } });
+    const { data, errors } = form;
     const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(props.jobType);
 
-    return { form, dialog, jobs, jobInProgress, startPolling };
+    return { data, errors, form, dialog, jobs, jobInProgress, startPolling };
   },
 
   methods: {

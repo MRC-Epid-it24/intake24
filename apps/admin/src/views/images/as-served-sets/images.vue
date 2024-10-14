@@ -72,7 +72,8 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -103,67 +104,72 @@ export default defineComponent({
 
   emits: ['images'],
 
-  setup() {
+  setup(props, { emit }) {
+    const http = useHttp();
+
     const fileInput = ref<InstanceType<typeof HTMLInputElement>>();
+    const images = ref(copy(props.items));
+    const loading = ref(false);
 
-    return { fileInput };
-  },
+    const { data, post } = useForm<AsServedImageForm>({
+      data: {
+        image: null as File | null,
+        weight: 0,
+      },
+      config: { multipart: true },
+    });
 
-  data() {
-    return {
-      images: copy(this.items),
-      form: createForm<AsServedImageForm>(
-        {
-          image: null as File | null,
-          weight: 0,
-        },
-        { multipart: true },
-      ),
-      loading: false,
+    function updateImages() {
+      const outputImages = images.value.map(({ id, weight }) => ({ id, weight }));
+      emit('images', outputImages);
     };
-  },
 
-  methods: {
-    updateImages() {
-      const images = this.images.map(({ id, weight }) => ({ id, weight }));
-      this.$emit('images', images);
-    },
-
-    addImage() {
-      this.loading = true;
+    function addImage() {
+      loading.value = true;
       window.addEventListener(
         'focus',
         () => {
-          this.loading = false;
+          loading.value = false;
         },
         { once: true },
       );
 
-      this.fileInput?.click();
-    },
+      fileInput.value?.click();
+    };
 
-    async onFileChanged(e: Event) {
+    async function onFileChanged(e: Event) {
       const target = e.target as HTMLInputElement;
-      this.form.image = target.files ? target.files[0] : null;
+      data.value.image = target.files ? target.files[0] : null;
 
       try {
-        const data = await this.form.post<AsServedImageEntry>(
-          `admin/images/as-served-sets/${this.setId}/images`,
+        const data = await post<AsServedImageEntry>(
+          `admin/images/as-served-sets/${props.setId}/images`,
         );
-        this.images.push(data);
+        images.value.push(data);
       }
       finally {
-        this.loading = false;
-        if (this.fileInput)
-          this.fileInput.value = '';
+        loading.value = false;
+        if (fileInput.value)
+          fileInput.value.value = '';
       }
-    },
+    };
 
-    async removeImage(imageId: string) {
-      await this.$http.delete(`admin/images/as-served-sets/${this.setId}/images/${imageId}`);
-      this.images = this.images.filter(image => image.id !== imageId);
-    },
+    async function removeImage(imageId: string) {
+      await http.delete(`admin/images/as-served-sets/${props.setId}/images/${imageId}`);
+      images.value = images.value.filter(image => image.id !== imageId);
+    };
+
+    return {
+      addImage,
+      fileInput,
+      images,
+      loading,
+      onFileChanged,
+      removeImage,
+      updateImages,
+    };
   },
+
 });
 </script>
 

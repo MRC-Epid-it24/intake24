@@ -6,8 +6,8 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('users.name')"
                 name="name"
@@ -17,9 +17,9 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.email"
+                v-model="data.email"
                 autocomplete="email"
-                :error-messages="form.errors.get('email')"
+                :error-messages="errors.get('email')"
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
@@ -29,8 +29,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.phone"
-                :error-messages="form.errors.get('phone')"
+                v-model="data.phone"
+                :error-messages="errors.get('phone')"
                 hide-details="auto"
                 :label="$t('common.phone')"
                 name="phone"
@@ -41,9 +41,9 @@
             <template v-if="isCreate">
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="form.password"
+                  v-model="data.password"
                   autocomplete="new-password"
-                  :error-messages="form.errors.get('password')"
+                  :error-messages="errors.get('password')"
                   hide-details="auto"
                   :label="$t('common.password._')"
                   name="password"
@@ -54,9 +54,9 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
-                  v-model="form.passwordConfirm"
+                  v-model="data.passwordConfirm"
                   autocomplete="new-password"
-                  :error-messages="form.errors.get('passwordConfirm')"
+                  :error-messages="errors.get('passwordConfirm')"
                   hide-details="auto"
                   :label="$t('common.password.confirm')"
                   name="passwordConfirm"
@@ -68,8 +68,8 @@
             </template>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.roles"
-                :error-messages="form.errors.get('roles')"
+                v-model="data.roles"
+                :error-messages="errors.get('roles')"
                 hide-details="auto"
                 item-title="displayName"
                 item-value="id"
@@ -79,20 +79,20 @@
                 name="roles"
                 prepend-inner-icon="$roles"
                 variant="outlined"
-                @update:model-value="form.errors.clear('roles')"
+                @update:model-value="errors.clear('roles')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.roles.length === 1">{{ item.raw.displayName }}</span>
-                    <span v-if="form.roles.length > 1">{{ form.roles.length }} selected </span>
+                    <span v-if="data.roles.length === 1">{{ item.raw.displayName }}</span>
+                    <span v-if="data.roles.length > 1">{{ data.roles.length }} selected </span>
                   </template>
                 </template>
               </v-select>
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.permissions"
-                :error-messages="form.errors.get('permissions')"
+                v-model="data.permissions"
+                :error-messages="errors.get('permissions')"
                 hide-details="auto"
                 item-title="displayName"
                 item-value="id"
@@ -103,12 +103,12 @@
                 name="permissions"
                 prepend-inner-icon="$permissions"
                 variant="outlined"
-                @update:model-value="form.errors.clear('permissions')"
+                @update:model-value="errors.clear('permissions')"
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="form.permissions.length === 1">{{ item.raw.displayName }}</span>
-                    <span v-if="form.permissions.length > 1">{{ form.permissions.length }} selected
+                    <span v-if="data.permissions.length === 1">{{ item.raw.displayName }}</span>
+                    <span v-if="data.permissions.length > 1">{{ data.permissions.length }} selected
                     </span>
                   </template>
                 </template>
@@ -116,18 +116,18 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
-                v-model="form.multiFactorAuthentication"
-                :error-messages="form.errors.get('multiFactorAuthentication')"
+                v-model="data.multiFactorAuthentication"
+                :error-messages="errors.get('multiFactorAuthentication')"
                 hide-details="auto"
                 :label="$t('users.mfa._')"
                 name="multiFactorAuthentication"
-                @update:model-value="form.errors.clear('multiFactorAuthentication')"
+                @update:model-value="errors.clear('multiFactorAuthentication')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
                 v-model="toggles.verifiedAt"
-                :error-messages="form.errors.get('verifiedAt')"
+                :error-messages="errors.get('verifiedAt')"
                 hide-details="auto"
                 :label="$t('users.verified')"
                 name="verifiedAt"
@@ -137,7 +137,7 @@
             <v-col cols="12" md="6">
               <v-switch
                 v-model="toggles.disabledAt"
-                :error-messages="form.errors.get('disabledAt')"
+                :error-messages="errors.get('disabledAt')"
                 hide-details="auto"
                 :label="$t('users.disabled')"
                 name="disabledAt"
@@ -148,26 +148,26 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-switch
-                v-model="form.emailNotifications"
-                :error-messages="form.errors.get('emailNotifications')"
+                v-model="data.emailNotifications"
+                :error-messages="errors.get('emailNotifications')"
                 hide-details="auto"
                 :label="$t('users.notifications.email')"
                 name="emailNotifications"
-                @update:model-value="form.errors.clear('emailNotifications')"
+                @update:model-value="errors.clear('emailNotifications')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
-                v-model="form.smsNotifications"
-                :error-messages="form.errors.get('smsNotifications')"
+                v-model="data.smsNotifications"
+                :error-messages="errors.get('smsNotifications')"
                 hide-details="auto"
                 :label="$t('users.notifications.sms')"
                 name="smsNotifications"
-                @update:model-value="form.errors.clear('smsNotifications')"
+                @update:model-value="errors.clear('smsNotifications')"
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -222,7 +222,7 @@ export default defineComponent({
 
     const { entry, entryLoaded, isCreate, refs, refsLoaded } = useEntry<UserEntry, UserRefs>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<UserForm, UserEntry>(props, {
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<UserForm, UserEntry>(props, {
       data: {
         id: null,
         name: null,
@@ -243,8 +243,8 @@ export default defineComponent({
     });
 
     const toggle = (field: 'verifiedAt' | 'disabledAt') => {
-      form[field] = toggles.value[field] ? new Date() : null;
-      form.errors.clear(field);
+      data.value[field] = toggles.value[field] ? new Date() : null;
+      errors.clear(field);
     };
 
     return {
@@ -256,13 +256,12 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
+      errors,
       routeLeave,
       submit,
     };
   },
-
-  methods: {},
 });
 </script>
 

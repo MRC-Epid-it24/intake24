@@ -77,7 +77,7 @@ import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
 import { copy as copyObject } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n/index';
+import { useI18n } from '@intake24/i18n';
 
 import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';

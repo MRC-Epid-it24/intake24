@@ -17,8 +17,8 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="form.code"
-                :error-messages="form.errors.get('code')"
+                v-model="data.code"
+                :error-messages="errors.get('code')"
                 hide-details="auto"
                 :label="$t('fdbs.foods.global.code')"
                 name="code"
@@ -27,8 +27,8 @@
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('fdbs.foods.global.name')"
                 name="name"
@@ -37,19 +37,19 @@
             </v-col>
             <v-col cols="12">
               <select-resource
-                v-model="form.foodGroupId"
-                :error-messages="form.errors.get('foodGroupId')"
+                v-model="data.foodGroupId"
+                :error-messages="errors.get('foodGroupId')"
                 :label="$t('fdbs.foods.global.foodGroup')"
                 name="foodGroupId"
                 resource="food-groups"
-                @update:model-value="form.errors.clear('foodGroupId')"
+                @update:model-value="errors.clear('foodGroupId')"
               />
             </v-col>
             <v-col cols="12">
               <category-list
-                v-model="form.parentCategories"
+                v-model="data.parentCategories"
                 class="mb-6"
-                :errors="form.errors"
+                :errors="errors"
                 :locale-id="localeId"
                 outlined
               />
@@ -65,7 +65,7 @@
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="form.errors.any()"
+          :disabled="errors.any.value"
           variant="text"
           @click.stop="confirm"
         >
@@ -109,7 +109,7 @@ export default defineComponent({
     const router = useRouter();
     const dialog = ref(false);
 
-    const { clearError, form } = useForm<CreateFoodForm>({
+    const { clearError, data, errors, post } = useForm<CreateFoodForm>({
       data: { code: '', name: '', foodGroupId: '0', parentCategories: [] },
     });
 
@@ -119,7 +119,7 @@ export default defineComponent({
 
     const confirm = async () => {
       const { localeId } = props;
-      const data = await form.post<FoodLocalEntry>(`admin/fdbs/${localeId}/foods`);
+      const data = await post<FoodLocalEntry>(`admin/fdbs/${localeId}/foods`);
 
       const { id, name, main: { name: englishName = 'record' } = {} } = data;
 
@@ -128,7 +128,7 @@ export default defineComponent({
       await router.push({ name: `fdbs-foods`, params: { id: localeId, entryId: id } });
     };
 
-    return { clearError, close, confirm, dialog, form };
+    return { clearError, close, confirm, dialog, data, errors };
   },
 });
 </script>

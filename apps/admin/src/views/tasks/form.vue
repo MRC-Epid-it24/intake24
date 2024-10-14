@@ -18,8 +18,8 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
@@ -28,8 +28,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.job"
-                :error-messages="form.errors.get('job')"
+                v-model="data.job"
+                :error-messages="errors.get('job')"
                 hide-details="auto"
                 :items="jobs"
                 :label="$t('tasks.job')"
@@ -41,8 +41,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.cron"
-                :error-messages="form.errors.get('cron')"
+                v-model="data.cron"
+                :error-messages="errors.get('cron')"
                 hide-details="auto"
                 :label="$t('tasks.cron')"
                 name="cron"
@@ -54,7 +54,7 @@
                 </template>
               </v-text-field>
             </v-col>
-            <v-col v-if="form.active" cols="12" md="6">
+            <v-col v-if="data.active" cols="12" md="6">
               <div class="d-flex align-center" style="height: 100%">
                 <span v-if="entry.bullJob" class="text-subtitle-1">
                   {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
@@ -63,8 +63,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
-                v-model="form.active"
-                :error-messages="form.errors.get('active')"
+                v-model="data.active"
+                :error-messages="errors.get('active')"
                 hide-details="auto"
                 :label="$t('common.action.active')"
                 name="active"
@@ -72,8 +72,8 @@
             </v-col>
             <v-col cols="12">
               <v-textarea
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -83,14 +83,14 @@
             </v-col>
           </v-row>
           <component
-            :is="form.job"
-            v-if="Object.keys(form.params).length"
-            v-model="form.params"
-            :errors="form.errors"
+            :is="data.job"
+            v-if="Object.keys(data.params).length"
+            v-model="data.params"
+            :errors="errors"
             name="params"
-            @update:model-value="form.errors.clear(paramErrors)"
+            @update:model-value="errors.clear(paramErrors)"
           />
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -144,7 +144,7 @@ export default defineComponent({
       jobTypes.map(value => ({ value, title: i18n.t(`jobs.types.${value}._`) })),
     );
 
-    const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskResponse>(props, {
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<TaskForm, TaskResponse>(props, {
       data: {
         id: null,
         name: null,
@@ -157,7 +157,7 @@ export default defineComponent({
       loadCallback,
     });
 
-    const paramErrors = computed(() => Object.keys(form.params).map(key => `params.${key}`));
+    const paramErrors = computed(() => Object.keys(data.value.params).map(key => `params.${key}`));
 
     return {
       defaultJobsParams,
@@ -169,7 +169,8 @@ export default defineComponent({
       jobs,
       paramErrors,
       clearError,
-      form,
+      data,
+      errors,
       routeLeave,
       submit,
     };
@@ -177,11 +178,11 @@ export default defineComponent({
 
   computed: {
     readableCron(): string {
-      if (!this.form.cron)
+      if (!this.data.cron)
         return '';
 
       try {
-        return cronstrue.toString(this.form.cron, { use24HourTimeFormat: true });
+        return cronstrue.toString(this.data.cron, { use24HourTimeFormat: true });
       }
       catch {
         return this.$t('tasks.invalidCron');
@@ -191,17 +192,17 @@ export default defineComponent({
 
   methods: {
     jobChanged() {
-      this.form.errors.clear('job');
+      this.errors.clear('job');
       this.updateParams();
     },
 
     updateParams() {
-      if (!this.form.job) {
-        this.form.params = {};
+      if (!this.data.job) {
+        this.data.params = {};
         return;
       }
 
-      this.form.params = { ...this.defaultJobsParams[this.form.job] };
+      this.data.params = { ...this.defaultJobsParams[this.data.job] };
     },
 
     async triggerJob() {

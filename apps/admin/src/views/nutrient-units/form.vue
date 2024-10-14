@@ -6,9 +6,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="data.id"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('id')"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('nutrient-units.id')"
                 name="id"
@@ -18,8 +18,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -29,8 +29,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.symbol"
-                :error-messages="form.errors.get('symbol')"
+                v-model="data.symbol"
+                :error-messages="errors.get('symbol')"
                 hide-details="auto"
                 :label="$t('nutrient-units.symbol')"
                 name="symbol"
@@ -39,7 +39,7 @@
               />
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -67,14 +67,23 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded, isEdit } = useEntry<NutrientUnitAttributes>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       NutrientUnitForm,
       NutrientUnitAttributes
     >(props, {
       data: { id: null, description: null, symbol: null },
     });
 
-    return { entry, entryLoaded, isEdit, clearError, form, routeLeave, submit };
+    return {
+      entry,
+      entryLoaded,
+      isEdit,
+      clearError,
+      data,
+      errors,
+      routeLeave,
+      submit,
+    };
   },
 });
 </script>
