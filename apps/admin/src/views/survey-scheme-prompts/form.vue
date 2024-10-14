@@ -6,7 +6,7 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.prompt.id"
+                v-model="data.prompt.id"
                 disabled
                 hide-details="auto"
                 :label="$t('survey-schemes.prompts.internal.id._')"
@@ -17,7 +17,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.prompt.name"
+                v-model="data.prompt.name"
                 disabled
                 hide-details="auto"
                 :label="$t('survey-schemes.prompts.internal.name._')"
@@ -35,7 +35,7 @@
         </v-card-text>
         <error-list :errors="nonInputErrors" tag="v-card-text" />
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
       <prompt-selector ref="selector" :prompt-ids="promptIds" @save="save" />
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type {
@@ -78,7 +78,7 @@ export default defineComponent({
       SurveySchemePromptRefs
     >(props);
     useEntryFetch(props);
-    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, nonInputErrors, routeLeave, submit } = useEntryForm<
       SchemePromptForm,
       SurveySchemePromptEntry
     >(props, {
@@ -93,36 +93,34 @@ export default defineComponent({
 
     const selector = ref<InstanceType<typeof PromptSelector>>();
 
+    const promptIds = computed(() => refs.value.promptIds);
+
+    function edit() {
+      selector.value?.edit(0, data.value.prompt);
+    };
+
+    function save({ prompt }: { prompt: Prompt; index: number }) {
+      errors.clear('prompt');
+
+      data.value.prompt = prompt;
+    };
+
     return {
+      edit,
       entry,
       entryLoaded,
       refs,
       refsLoaded,
+      promptIds,
       selector,
       clearError,
-      form,
+      data,
+      errors,
       nonInputErrors,
       routeLeave,
+      save,
       submit,
     };
-  },
-
-  computed: {
-    promptIds(): string[] {
-      return this.refs.promptIds;
-    },
-  },
-
-  methods: {
-    edit() {
-      this.selector?.edit(0, this.form.prompt);
-    },
-
-    save({ prompt }: { prompt: Prompt; index: number }) {
-      this.form.errors.clear('prompt');
-
-      this.form.prompt = prompt;
-    },
   },
 });
 </script>

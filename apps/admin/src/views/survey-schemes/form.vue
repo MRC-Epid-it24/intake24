@@ -13,8 +13,8 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.name"
-                :error-messages="form.errors.get('name')"
+                v-model="data.name"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
@@ -23,15 +23,15 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.visibility"
+                v-model="data.visibility"
                 class="mb-4"
-                :error-messages="form.errors.get('visibility')"
+                :error-messages="errors.get('visibility')"
                 hide-details="auto"
                 :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
                 variant="outlined"
-                @update:model-value="form.errors.clear('visibility')"
+                @update:model-value="errors.clear('visibility')"
               >
                 <template #item="{ item, props }">
                   <v-list-item v-bind="props">
@@ -54,31 +54,31 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.settings.type"
-                :error-messages="form.errors.get('settings.type')"
+                v-model="data.settings.type"
+                :error-messages="errors.get('settings.type')"
                 hide-details="auto"
                 :items="schemeTypes"
                 :label="$t('survey-schemes.settings.types._')"
                 name="settings.type"
                 variant="outlined"
-                @update:model-value="form.errors.clear('settings.type')"
+                @update:model-value="errors.clear('settings.type')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.settings.flow"
-                :error-messages="form.errors.get('settings.flow')"
+                v-model="data.settings.flow"
+                :error-messages="errors.get('settings.flow')"
                 hide-details="auto"
                 :items="recallFlows"
                 :label="$t('survey-schemes.settings.flows._')"
                 name="settings.flow"
                 variant="outlined"
-                @update:model-value="form.errors.clear('settings.flow')"
+                @update:model-value="errors.clear('settings.flow')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.settings.recallDate"
+                v-model="data.settings.recallDate"
                 hide-details="auto"
                 :label="$t('survey-schemes.settings.recallDate')"
                 name="settings.recallDate"
@@ -87,8 +87,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.settings.languages"
-                :error-messages="form.errors.get('settings.language')"
+                v-model="data.settings.languages"
+                :error-messages="errors.get('settings.language')"
                 hide-details="auto"
                 item-title="englishName"
                 item-value="code"
@@ -97,16 +97,16 @@
                 multiple
                 name="settings.languages"
                 variant="outlined"
-                @update:model-value="form.errors.clear('settings.languages')"
+                @update:model-value="errors.clear('settings.languages')"
               />
             </v-col>
           </v-row>
         </v-container>
       </v-card-text>
       <v-divider />
-      <meal-list v-model="form.meals" :scheme-id="id" />
+      <meal-list v-model="data.meals" :scheme-id="id" />
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()" />
+        <submit-footer :disabled="errors.any.value" />
       </v-card-text>
     </v-form>
   </layout>
@@ -156,7 +156,7 @@ export default defineComponent({
       SurveySchemeRefs
     >(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       PatchSurveySchemeForm,
       SurveySchemeEntry
     >(props, {
@@ -176,7 +176,8 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
+      errors,
       languages,
       recallFlows,
       routeLeave,

@@ -18,7 +18,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.prompts" />
+        <json-editor-dialog v-model="data.prompts" />
       </options-menu>
     </v-toolbar>
     <v-expansion-panels
@@ -34,7 +34,7 @@
           step: index + 1,
           promptIds,
           templates,
-          modelValue: isMealSection(section) ? form.prompts.meals[section] : form.prompts[section],
+          modelValue: isMealSection(section) ? data.prompts.meals[section] : data.prompts[section],
         }"
         @move="move"
         @update:model-value="updateItems(section, $event)"
@@ -79,7 +79,7 @@ export default defineComponent({
       props,
     );
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data }, routeLeave, submit } = useEntryForm<
       SurveySchemePromptsForm,
       SurveySchemeEntry
     >(props, {
@@ -97,7 +97,7 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
       panels,
       routeLeave,
       submit,
@@ -106,7 +106,7 @@ export default defineComponent({
 
   computed: {
     promptIds(): string[] {
-      return flattenScheme(this.form.prompts).map(({ id }) => id);
+      return flattenScheme(this.data.prompts).map(({ id }) => id);
     },
     templates(): SinglePrompt[] {
       if (!this.refsLoaded)
@@ -120,27 +120,27 @@ export default defineComponent({
     isMealSection,
 
     load(prompts: RecallPrompts) {
-      this.form.prompts = { ...prompts };
+      this.data.prompts = { ...prompts };
     },
 
     move(event: PromptMoveEvent) {
       const { section, prompt } = event;
 
       if (isMealSection(section)) {
-        this.form.prompts.meals[section].push(prompt);
+        this.data.prompts.meals[section].push(prompt);
         return;
       }
 
-      this.form.prompts[section].push(prompt);
+      this.data.prompts[section].push(prompt);
     },
 
     updateItems(section: PromptSection, prompts: SinglePrompt[]) {
       if (isMealSection(section)) {
-        this.form.prompts.meals[section] = prompts;
+        this.data.prompts.meals[section] = prompts;
         return;
       }
 
-      this.form.prompts[section] = prompts;
+      this.data.prompts[section] = prompts;
     },
   },
 });

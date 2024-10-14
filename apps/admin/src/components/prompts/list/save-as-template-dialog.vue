@@ -21,7 +21,7 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
-              v-model="form.prompt.id"
+              v-model="data.prompt.id"
               disabled
               hide-details="auto"
               :label="$t('survey-schemes.prompts.internal.id._')"
@@ -32,7 +32,7 @@
           </v-col>
           <v-col cols="12">
             <v-text-field
-              v-model="form.prompt.name"
+              v-model="data.prompt.name"
               disabled
               hide-details="auto"
               :label="$t('survey-schemes.prompts.internal.name._')"
@@ -62,16 +62,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import pick from 'lodash/pick';
-import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { SurveySchemePromptEntry } from '@intake24/common/types/http/admin';
-import type { ValidationError } from '@intake24/common/util';
 import { ErrorList } from '@intake24/admin/components/forms';
+import { useForm } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
-import { createForm } from '@intake24/admin/util';
 import { copy } from '@intake24/common/util';
 
 export type SchemePromptForm = {
@@ -94,50 +92,51 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      form: createForm<SchemePromptForm>({
-        prompt: this.prompt,
-      }),
+  setup(props) {
+    const entry = useEntry();
+    const router = useRouter();
+
+    const { data, errors, post, nonInputErrors } = useForm<SchemePromptForm>({
+      data: { prompt: props.prompt },
       nonInputErrorKeys: ['prompt'],
-      dialog: false,
-      redirect: false,
+      config: { multipart: true },
+    });
+
+    const dialog = ref(false);
+    const redirect = ref(false);
+
+    function close() {
+      dialog.value = false;
     };
-  },
 
-  computed: {
-    ...mapState(useEntry, ['refs']),
-    nonInputErrors(): ValidationError[] {
-      return Object.values(pick(this.form.errors.all(), this.nonInputErrorKeys));
-    },
-  },
+    function cancel() {
+      close();
+    };
 
-  methods: {
-    ...mapActions(useEntry, ['setRefs']),
+    async function confirm() {
+      const { id, prompt } = await post<SurveySchemePromptEntry>('admin/survey-scheme-prompts');
 
-    close() {
-      this.dialog = false;
-    },
-
-    cancel() {
-      this.close();
-    },
-
-    async confirm() {
-      const { id, prompt } = await this.form.post<SurveySchemePromptEntry>(
-        'admin/survey-scheme-prompts',
-      );
-
-      const templates = copy(this.refs.templates);
+      const templates = copy(entry.refs.templates);
       templates.push(prompt);
 
-      this.setRefs({ ...copy(this.refs), templates });
+      entry.setRefs({ ...copy(entry.refs), templates });
 
-      this.close();
+      close();
 
-      if (this.redirect)
-        await this.$router.push({ name: 'survey-scheme-prompts-read', params: { id } });
-    },
+      if (redirect.value)
+        await router.push({ name: 'survey-scheme-prompts-read', params: { id } });
+    };
+
+    return {
+      cancel,
+      close,
+      confirm,
+      data,
+      errors,
+      dialog,
+      nonInputErrors,
+      redirect,
+    };
   },
 });
 </script>

@@ -29,7 +29,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="form.meals" />
+        <json-editor-dialog v-model="data.meals" />
       </options-menu>
     </v-toolbar>
 
@@ -67,12 +67,12 @@
               />
             </v-toolbar>
             <error-list :errors="nonInputErrors" />
-            <color-list v-model="form.meals.chart.colors" />
+            <color-list v-model="data.meals.chart.colors" />
           </v-col>
           <v-divider vertical />
           <v-col cols="12" md="6">
             <nutrient-list
-              v-model="form.meals.chart.nutrients"
+              v-model="data.meals.chart.nutrients"
               :defaults="defaultMeals.chart.nutrients"
               :nutrient-types="refs.nutrientTypes"
             />
@@ -80,12 +80,12 @@
         </v-row>
       </v-container>
       <table-field-list
-        v-model="form.meals.table.fields"
+        v-model="data.meals.table.fields"
         :defaults="defaultMeals.table.fields"
         :nutrient-types="refs.nutrientTypes"
       />
       <v-card-text>
-        <submit-footer :disabled="form.errors.any()" />
+        <submit-footer :disabled="errors.any.value" />
       </v-card-text>
     </v-form>
   </layout>
@@ -138,7 +138,7 @@ export default defineComponent({
       FeedbackSchemeRefs
     >(props);
     useEntryFetch(props);
-    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, nonInputErrors, routeLeave, submit } = useEntryForm<
       FeedbackSchemeMealsForm,
       FeedbackSchemeEntry
     >(props, {
@@ -152,23 +152,23 @@ export default defineComponent({
         Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required'),
     ]);
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...form.getData() }));
+    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...data.value }));
 
     const updateColorList = () => {
-      if (colorMax.value < form.meals.chart.colors.length) {
-        form.meals.chart.colors = [...form.meals.chart.colors.slice(0, colorMax.value)];
+      if (colorMax.value < data.value.meals.chart.colors.length) {
+        data.value.meals.chart.colors = [...data.value.meals.chart.colors.slice(0, colorMax.value)];
       }
-      else if (colorMax.value > form.meals.chart.colors.length) {
+      else if (colorMax.value > data.value.meals.chart.colors.length) {
         const newColors = Array.from<string>({
-          length: colorMax.value - form.meals.chart.colors.length,
+          length: colorMax.value - data.value.meals.chart.colors.length,
         }).fill(colors.primary);
 
-        form.meals.chart.colors = [...form.meals.chart.colors, ...newColors];
+        data.value.meals.chart.colors = [...data.value.meals.chart.colors, ...newColors];
       }
     };
 
     const load = (meals: FeedbackMeals) => {
-      form.meals = { ...meals };
+      data.value.meals = { ...meals };
     };
 
     const debouncedUpdateColorList = debounce(() => {
@@ -187,7 +187,8 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
+      errors,
       menu,
       nonInputErrors,
       routeLeave,

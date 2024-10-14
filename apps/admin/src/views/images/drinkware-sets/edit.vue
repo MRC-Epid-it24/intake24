@@ -6,9 +6,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="data.id"
                 disabled
-                :error-messages="form.errors.get('id')"
+                :error-messages="errors.get('id')"
                 hide-details="auto"
                 :label="$t('drinkware-sets.id')"
                 name="id"
@@ -18,9 +18,9 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.imageMapId"
+                v-model="data.imageMapId"
                 disabled
-                :error-messages="form.errors.get('imageMapId')"
+                :error-messages="errors.get('imageMapId')"
                 hide-details="auto"
                 :label="$t('image-maps._')"
                 name="imageMapId"
@@ -30,8 +30,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.description"
-                :error-messages="form.errors.get('description')"
+                v-model="data.description"
+                :error-messages="errors.get('description')"
                 hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
@@ -175,7 +175,7 @@
           </v-row>
         </v-card-text>
         <v-card-text>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -233,8 +233,9 @@ export default defineComponent({
       config: { multipart: true },
       data: { id: null, imageMapId: null, description: null, scales: [], baseImage: {} },
     });
+    const { data, errors } = form;
 
-    const { i18n } = useI18n();
+    const { i18n: { t } } = useI18n();
 
     const imageMapEntryUrl = resources.find(r => r.name === 'image-maps')?.api;
 
@@ -344,9 +345,9 @@ export default defineComponent({
       });
 
       for (const [objectId, baseImageFile] of Object.entries(baseImageFiles.value))
-        form.data.baseImage[`choiceId-${objectId}`] = baseImageFile;
+        data.value.baseImage[`choiceId-${objectId}`] = baseImageFile;
 
-      form.data.scales = scaleFields;
+      data.value.scales = scaleFields;
 
       formSubmit();
     };
@@ -358,17 +359,18 @@ export default defineComponent({
     const volumeMethodSelectList
      = [{
        method: 'lookUpTable',
-       title: i18n.t('drinkware-sets.volumeMethod.lookUpTable'),
+       title: t('drinkware-sets.volumeMethod.lookUpTable'),
      }, {
        method: 'cylindrical',
-       title: i18n.t('drinkware-sets.volumeMethod.cylindrical'),
+       title: t('drinkware-sets.volumeMethod.cylindrical'),
      }];
 
     return {
       entry,
       entryLoaded,
       clearError,
-      form,
+      data,
+      errors,
       routeLeave,
       submit,
       imageMapLoading,

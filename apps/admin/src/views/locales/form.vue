@@ -6,9 +6,9 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.code"
+                v-model="data.code"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('code')"
+                :error-messages="errors.get('code')"
                 hide-details="auto"
                 :label="$t('locales.code')"
                 name="code"
@@ -18,22 +18,22 @@
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
-                v-model="form.prototypeLocaleId"
+                v-model="data.prototypeLocaleId"
                 clearable
-                :error-messages="form.errors.get('prototypeLocaleId')"
+                :error-messages="errors.get('prototypeLocaleId')"
                 :initial-item="entry.parent"
                 item-id="code"
                 item-name="englishName"
                 :label="$t('locales.prototypeLocaleId')"
                 name="prototypeLocaleId"
                 resource="locales"
-                @update:model-value="form.errors.clear('prototypeLocaleId')"
+                @update:model-value="errors.clear('prototypeLocaleId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.englishName"
-                :error-messages="form.errors.get('englishName')"
+                v-model="data.englishName"
+                :error-messages="errors.get('englishName')"
                 hide-details="auto"
                 :label="$t('locales.englishName')"
                 name="englishName"
@@ -42,8 +42,8 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.localName"
-                :error-messages="form.errors.get('localName')"
+                v-model="data.localName"
+                :error-messages="errors.get('localName')"
                 hide-details="auto"
                 :label="$t('locales.localName')"
                 name="localName"
@@ -52,40 +52,40 @@
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
-                v-model="form.respondentLanguageId"
-                :error-messages="form.errors.get('respondentLanguageId')"
+                v-model="data.respondentLanguageId"
+                :error-messages="errors.get('respondentLanguageId')"
                 :initial-item="entry.respondentLanguage"
                 item-id="code"
                 item-name="englishName"
                 :label="$t('locales.respondentLanguageId')"
                 name="respondentLanguageId"
                 resource="languages"
-                @update:model-value="form.errors.clear('respondentLanguageId')"
+                @update:model-value="errors.clear('respondentLanguageId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <select-resource
-                v-model="form.adminLanguageId"
-                :error-messages="form.errors.get('adminLanguageId')"
+                v-model="data.adminLanguageId"
+                :error-messages="errors.get('adminLanguageId')"
                 :initial-item="entry.adminLanguage"
                 item-id="code"
                 item-name="englishName"
                 :label="$t('locales.adminLanguageId')"
                 name="adminLanguageId"
                 resource="languages"
-                @update:model-value="form.errors.clear('adminLanguageId')"
+                @update:model-value="errors.clear('adminLanguageId')"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.countryFlagCode"
-                :error-messages="form.errors.get('countryFlagCode')"
+                v-model="data.countryFlagCode"
+                :error-messages="errors.get('countryFlagCode')"
                 hide-details="auto"
                 :items="flags"
                 :label="$t('locales.countryFlagCode')"
                 name="countryFlagCode"
                 variant="outlined"
-                @update:model-value="form.errors.clear('countryFlagCode')"
+                @update:model-value="errors.clear('countryFlagCode')"
               >
                 <template #item="{ item, props }">
                   <v-list-item v-bind="props">
@@ -103,14 +103,14 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.textDirection"
-                :error-messages="form.errors.get('textDirection')"
+                v-model="data.textDirection"
+                :error-messages="errors.get('textDirection')"
                 hide-details="auto"
                 :items="textDirections"
                 :label="$t('languages.textDirections._')"
                 name="textDirection"
                 variant="outlined"
-                @update:model-value="form.errors.clear('textDirection')"
+                @update:model-value="errors.clear('textDirection')"
               >
                 <template #item="{ item, props }">
                   <v-list-item v-bind="props">
@@ -128,14 +128,14 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
-                v-model="form.visibility"
-                :error-messages="form.errors.get('visibility')"
+                v-model="data.visibility"
+                :error-messages="errors.get('visibility')"
                 hide-details="auto"
                 :items="visibilities"
                 :label="$t('securables.visibility._')"
                 name="visibility"
                 variant="outlined"
-                @update:model-value="form.errors.clear('visibility')"
+                @update:model-value="errors.clear('visibility')"
               >
                 <template #item="{ item, props }">
                   <v-list-item v-bind="props">
@@ -156,21 +156,21 @@
                 {{ $t('locales.foodIndex._') }}
               </div>
               <v-switch
-                v-model="form.foodIndexEnabled"
+                v-model="data.foodIndexEnabled"
                 class="mb-4"
                 hide-details="auto"
                 :label="$t('locales.foodIndex.enabled')"
                 name="foodIndexEnabled"
               />
               <v-select
-                v-model="form.foodIndexLanguageBackendId"
-                :error-messages="form.errors.get('foodIndexLanguageBackendId')"
+                v-model="data.foodIndexLanguageBackendId"
+                :error-messages="errors.get('foodIndexLanguageBackendId')"
                 hide-details="auto"
                 :items="foodIndexLanguageBackends"
                 :label="$t('locales.foodIndex.languageBackend')"
                 name="foodIndexLanguageBackendId"
                 variant="outlined"
-                @update:model-value="form.errors.clear('foodIndexLanguageBackendId')"
+                @update:model-value="errors.clear('foodIndexLanguageBackendId')"
               >
                 <template #item="{ item, props }">
                   <v-list-item v-bind="props">
@@ -187,7 +187,7 @@
               </v-select>
             </v-col>
           </v-row>
-          <submit-footer :disabled="form.errors.any()" />
+          <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
     </v-container>
@@ -232,7 +232,7 @@ export default defineComponent({
       props,
     );
     useEntryFetch(props);
-    const { clearError, form, routeLeave, submit } = useEntryForm<LocaleForm, LocaleEntry>(props, {
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<LocaleForm, LocaleEntry>(props, {
       data: {
         id: null,
         code: null,
@@ -257,7 +257,8 @@ export default defineComponent({
       refs,
       refsLoaded,
       clearError,
-      form,
+      data,
+      errors,
       routeLeave,
       submit,
       textDirections,

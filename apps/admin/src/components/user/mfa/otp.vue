@@ -22,25 +22,25 @@
           <v-col cols="12" order="last" order-sm="first" sm="6">
             <v-form @submit.prevent="verify">
               <v-text-field
-                v-model="form.name"
+                v-model="data.name"
                 class="my-2"
-                :error-messages="form.errors.get('name')"
+                :error-messages="errors.get('name')"
                 hide-details="auto"
                 :label="$t('user.mfa.devices.name._')"
                 name="name"
                 variant="outlined"
-                @update:model-value="form.errors.clear('name')"
+                @update:model-value="errors.clear('name')"
               />
               <p class="my-2 text-subtitle-2">
                 {{ $t('user.mfa.devices.qr.text') }}
               </p>
               <v-otp-input
-                v-model="form.token"
-                :error-messages="form.errors.get('token')"
+                v-model="data.token"
+                :error-messages="errors.get('token')"
                 hide-details="auto"
                 length="6"
                 name="token"
-                @input="form.errors.clear('token')"
+                @input="errors.clear('token')"
               />
               <v-btn block class="my-4" color="secondary" rounded type="submit">
                 {{ $t('user.mfa.devices.verify') }}
@@ -57,51 +57,49 @@
   </v-stepper-vertical>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
 import type {
   MFADeviceResponse,
   OTPRegistrationChallenge,
 } from '@intake24/common/types/http/admin';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 
-export default defineComponent({
-  name: 'OtpDevice',
+defineOptions({ name: 'OtpDevice' });
 
-  emits: ['registered'],
+const emit = defineEmits(['registered']);
 
-  data() {
-    return {
-      url: 'admin/user/mfa/providers/otp',
-      progress: 1,
-      form: createForm({ challengeId: '', name: 'My OTP device', token: '' }),
-      regChallenge: null as OTPRegistrationChallenge | null,
-    };
-  },
+const http = useHttp();
 
-  methods: {
-    clear() {
-      this.form.reset();
-      this.regChallenge = null;
-      this.progress = 1;
-    },
+const url = 'admin/user/mfa/providers/otp';
+const progress = ref(1);
+const { data, errors, post, reset } = useForm({ data: { challengeId: '', name: 'My OTP device', token: '' } });
 
-    async challenge() {
-      const { data } = await this.$http.get<OTPRegistrationChallenge>(this.url);
+const regChallenge = ref<OTPRegistrationChallenge | null>(null);
 
-      this.regChallenge = data;
-      this.form.challengeId = data.challengeId;
+function clear() {
+  reset();
+  regChallenge.value = null;
+  progress.value = 1;
+};
 
-      this.progress = 2;
-    },
+async function challenge() {
+  const res = await http.get<OTPRegistrationChallenge>(url);
 
-    async verify() {
-      const device = await this.form.post<MFADeviceResponse>(this.url);
-      this.$emit('registered', device);
+  regChallenge.value = res.data;
+  data.value.challengeId = res.data.challengeId;
 
-      this.progress = 3;
-    },
-  },
-});
+  progress.value = 2;
+};
+
+async function verify() {
+  const device = await post<MFADeviceResponse>(url);
+  emit('registered', device);
+
+  progress.value = 3;
+};
+
+defineExpose({ clear });
 </script>

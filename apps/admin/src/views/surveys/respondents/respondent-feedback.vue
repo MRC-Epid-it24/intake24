@@ -54,25 +54,25 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.email"
-                  :error-messages="form.errors.get('email')"
+                  v-model="data.email"
+                  :error-messages="errors.get('email')"
                   hide-details="auto"
                   :label="$t('common.email')"
                   name="email"
                   prepend-inner-icon="fas fa-envelope"
                   variant="outlined"
-                  @update:model-value="form.errors.clear('email')"
+                  @update:model-value="errors.clear('email')"
                 />
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-radio-group
-                  v-model="form.copy"
-                  :error-messages="form.errors.get('copy')"
+                  v-model="data.copy"
+                  :error-messages="errors.get('copy')"
                   inline
                   :label="$t('surveys.respondents.feedback.email.copy._')"
                   mandatory
                   name="copy"
-                  @update:model-value="form.errors.clear('copy')"
+                  @update:model-value="errors.clear('copy')"
                 >
                   <v-radio :label="$t('surveys.respondents.feedback.email.copy.none')" value="none" />
                   <v-radio :label="$t('surveys.respondents.feedback.email.copy.cc')" value="cc" />
@@ -80,7 +80,7 @@
                 </v-radio-group>
               </v-col>
               <v-col class="ml-auto" cols="12" sm="auto">
-                <v-btn block color="primary" :disabled="form.errors.any()" size="x-large" type="submit">
+                <v-btn block color="primary" :disabled="errors.any.value" size="x-large" type="submit">
                   <v-icon icon="fas fa-envelope" start />
                   {{ $t('surveys.respondents.feedback.email.sent') }}
                 </v-btn>
@@ -101,10 +101,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { RespondentEntry } from '@intake24/common/types/http/admin';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import { useLoading } from '@intake24/ui/stores';
 import { downloadFile } from '@intake24/ui/util';
 
@@ -127,32 +128,30 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      apiUrl: `admin/surveys/${this.surveyId}/respondents/${this.user.username}/feedback`,
-      dialog: false,
-      form: createForm<RespondentFeedback>({ email: null, copy: 'none' }),
+  setup(props) {
+    const http = useHttp();
+
+    const apiUrl = computed(() => `admin/surveys/${props.surveyId}/respondents/${props.user.username}/feedback`);
+    const dialog = ref(false);
+    const { data, errors, post, reset } = useForm<RespondentFeedback>({ data: { email: null, copy: 'none' } });
+
+    function close() {
+      reset();
+      dialog.value = false;
     };
-  },
 
-  methods: {
-    close() {
-      this.form.reset();
-      this.dialog = false;
-    },
-
-    async download() {
+    async function download() {
       const loading = useLoading();
       loading.addItem('respondent-feedback-download');
 
       try {
-        const res = await this.$http.get(this.apiUrl, {
+        const res = await http.get(apiUrl.value, {
           responseType: 'arraybuffer',
           headers: { accept: 'application/pdf' },
         });
         downloadFile(
           res,
-          `Intake24-${this.surveyId}-${this.user.username}-${new Date()
+          `Intake24-${props.surveyId}-${props.user.username}-${new Date()
             .toISOString()
             .substring(0, 10)}.pdf`,
         );
@@ -160,11 +159,25 @@ export default defineComponent({
       finally {
         loading.removeItem('respondent-feedback-download');
       }
-    },
+    };
 
-    async email() {
-      await this.form.post(this.apiUrl);
-    },
+    async function email() {
+      await post(apiUrl.value);
+    };
+
+    return {
+      apiUrl,
+      close,
+      dialog,
+      download,
+      email,
+      data,
+      errors,
+    };
+  },
+
+  methods: {
+
   },
 });
 </script>

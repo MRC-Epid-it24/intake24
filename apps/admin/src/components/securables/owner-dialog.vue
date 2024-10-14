@@ -26,10 +26,10 @@
             <v-row>
               <v-col cols="12">
                 <auto-complete
-                  v-model="form.userId"
+                  v-model="data.userId"
                   :api="`${api}/users`"
                   clearable
-                  :error-messages="form.errors.get('userId')"
+                  :error-messages="errors.get('userId')"
                   hide-no-data
                   hide-selected
                   item-title="email"
@@ -38,7 +38,7 @@
                   name="userId"
                   prepend-inner-icon="fas fa-user-shield"
                   :selected="owner"
-                  @update:model-value="form.errors.clear('userId')"
+                  @update:model-value="errors.clear('userId')"
                   @update:object="internalOwner = $event"
                 />
               </v-col>
@@ -53,7 +53,7 @@
           <v-btn
             class="font-weight-bold"
             color="info"
-            :disabled="form.errors.any()"
+            :disabled="errors.any.value"
             type="submit"
             variant="text"
           >
@@ -67,12 +67,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { UserAttributes } from '@intake24/db';
 import { AutoComplete } from '@intake24/admin/components/forms';
+import { useForm } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
-import { createForm } from '@intake24/admin/util';
 
 type OwnerDialogForm = {
   userId: string | null;
@@ -99,12 +99,37 @@ export default defineComponent({
     },
   },
 
-  data() {
+  setup(props) {
+    const dialog = ref(false);
+    const internalOwner = ref(props.owner ? { ...props.owner } : undefined);
+    const isLoading = ref(false);
+
+    const { data, errors, post } = useForm<OwnerDialogForm>({ data: { userId: null } });
+
+    function reset() {
+      dialog.value = false;
+    };
+
+    async function save() {
+      await post(`${props.api}/owner`);
+
+      const partialEntry = internalOwner.value
+        ? { ownerId: internalOwner.value.id, owner: internalOwner.value }
+        : { ownerId: null, owner: null };
+
+      useEntry().updateEntry(partialEntry);
+
+      reset();
+    };
+
     return {
-      dialog: false,
-      form: createForm<OwnerDialogForm>({ userId: null }),
-      internalOwner: this.owner ? { ...this.owner } : undefined,
-      isLoading: false,
+      data,
+      errors,
+      dialog,
+      internalOwner,
+      isLoading,
+      reset,
+      save,
     };
   },
 
@@ -113,25 +138,7 @@ export default defineComponent({
       if (!val)
         return;
 
-      this.form.userId = this.owner?.id ?? null;
-    },
-  },
-
-  methods: {
-    reset() {
-      this.dialog = false;
-    },
-
-    async save() {
-      await this.form.post(`${this.api}/owner`);
-
-      const partialEntry = this.internalOwner
-        ? { ownerId: this.internalOwner.id, owner: this.internalOwner }
-        : { ownerId: null, owner: null };
-
-      useEntry().updateEntry(partialEntry);
-
-      this.reset();
+      this.data.userId = this.owner?.id ?? null;
     },
   },
 });

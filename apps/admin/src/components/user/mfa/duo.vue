@@ -16,13 +16,13 @@
             <v-col cols="12" sm="8">
               <v-form @submit.prevent="verify">
                 <v-text-field
-                  v-model="form.name"
-                  :error-messages="form.errors.get('name')"
+                  v-model="data.name"
+                  :error-messages="errors.get('name')"
                   hide-details="auto"
                   :label="$t('user.mfa.devices.name._')"
                   name="name"
                   variant="outlined"
-                  @update:model-value="form.errors.clear('name')"
+                  @update:model-value="errors.clear('name')"
                 />
                 <v-btn block class="my-4" color="secondary" rounded type="submit">
                   {{ $t('user.mfa.devices.verify') }}
@@ -37,64 +37,64 @@
   </v-stepper-vertical>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import type {
   DuoRegistrationChallenge,
   MFADeviceResponse,
 } from '@intake24/common/types/http/admin';
-import { createForm } from '@intake24/admin/util';
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 
-export default defineComponent({
-  name: 'DuoDevice',
+defineOptions({ name: 'DuoDevice' });
 
-  emits: ['registered'],
+const emit = defineEmits(['registered']);
 
-  data() {
-    return {
-      url: 'admin/user/mfa/providers/duo',
-      progress: 1,
-      form: createForm({ challengeId: '', name: 'My Duo Device', token: '' }),
-    };
-  },
+const route = useRoute();
+const router = useRouter();
+const http = useHttp();
 
-  mounted() {
-    this.loadDuoRegistration();
-  },
+const url = 'admin/user/mfa/providers/duo';
+const progress = ref(1);
+const { data, errors, post, reset } = useForm({ data: { challengeId: '', name: 'My Duo Device', token: '' } });
 
-  methods: {
-    async loadDuoRegistration() {
-      const { state: challengeId, code: token } = this.$route.query;
-      if (typeof challengeId !== 'string' || typeof token !== 'string')
-        return;
+async function loadDuoRegistration() {
+  const { state: challengeId, code: token } = route.query;
+  if (typeof challengeId !== 'string' || typeof token !== 'string')
+    return;
 
-      this.form.challengeId = challengeId;
-      this.form.token = token;
-      this.progress = 2;
-    },
+  data.value.challengeId = challengeId;
+  data.value.token = token;
+  progress.value = 2;
+};
 
-    clear() {
-      this.form.reset();
-      this.progress = 1;
-    },
+function clear() {
+  reset();
+  progress.value = 1;
+};
 
-    async challenge() {
-      const {
-        data: { challengeUrl },
-      } = await this.$http.get<DuoRegistrationChallenge>(this.url);
+async function challenge() {
+  const {
+    data: { challengeUrl },
+  } = await http.get<DuoRegistrationChallenge>(url);
 
-      window.location.href = challengeUrl;
-    },
+  window.location.href = challengeUrl;
+};
 
-    async verify() {
-      const device = await this.form.post<MFADeviceResponse>(this.url);
+async function verify() {
+  const device = await post<MFADeviceResponse>(url);
 
-      this.$emit('registered', device);
-      this.$router.replace({ query: {} });
+  emit('registered', device);
+  router.replace({ query: {} });
 
-      this.progress = 3;
-    },
-  },
+  progress.value = 3;
+};
+
+onMounted(async () => {
+  await loadDuoRegistration();
 });
+
+defineExpose({ clear });
 </script>
