@@ -15,7 +15,7 @@ import type { FindOptions, SubmissionScope } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
 import { strongPassword } from '@intake24/common/security';
-import { customField, type JobParams, type SurveyState } from '@intake24/common/types';
+import { type JobParams, type SurveyState, userCustomField } from '@intake24/common/types';
 import { isSessionAgeValid, isSessionFixedPeriodValid, randomString } from '@intake24/common/util';
 import {
   GenUserCounter,
@@ -118,7 +118,7 @@ function surveyService({
           password: strongPassword.optional(),
           redirectUrl: z.string().url().optional(),
           name: z.string().min(1).max(512).nullish(),
-          customFields: customField.array().optional(),
+          customFields: userCustomField.array().optional(),
         })
         .parse(decoded);
 

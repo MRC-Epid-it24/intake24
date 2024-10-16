@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken';
+import { omit, pick } from 'lodash';
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
+
+const keys = (payload: object, omitFields: string[] = []) => ['userId', 'authToken', ...Object.keys(omit(payload, ['password', ...omitFields]))];
 
 export default () => {
   let url: string;
@@ -117,7 +120,7 @@ export default () => {
         .send({ token });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);
+      expect(body).toContainAllKeys(keys(payload));
     });
 
     it('should return 200 and same respondent record, should be idempotent', async () => {
@@ -127,15 +130,16 @@ export default () => {
         .send({ token });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);
+      expect(body).toContainAllKeys(keys(payload));
     });
 
     it('should return 200 and respondent record (with password)', async () => {
-      const token = jwt.sign({
+      const payload = {
         username: 'userIdentifier002',
         password: 'aPassword132456',
         redirectUrl: 'https://redirect-me.here',
-      }, secret, { expiresIn: '15m' });
+      };
+      const token = jwt.sign(payload, secret, { expiresIn: '15m' });
 
       const { status, body } = await request(suite.app)
         .post(url)
@@ -143,16 +147,21 @@ export default () => {
         .send({ token });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);
+      expect(body).toContainAllKeys(keys(payload));
+      expect(pick(body, Object.keys(payload))).toEqual(omit(payload, 'password'));
     });
 
     it('should return 200 and respondent record without name & custom fields', async () => {
-      const token = jwt.sign({
-        username: 'userIdentifier002',
+      const payload = {
+        username: 'userIdentifier003',
         password: 'aPassword132456',
         name: 'myName',
-        customFields: [{ name: 'field01', value: 'value01' }],
-      }, secret, { expiresIn: '15m' });
+        customFields: [
+          { name: 'field01', value: 'value01' },
+          { name: 'field02', value: 'value02', public: true },
+        ],
+      };
+      const token = jwt.sign(payload, secret, { expiresIn: '15m' });
 
       const { status, body } = await request(suite.app)
         .post(url)
@@ -160,17 +169,19 @@ export default () => {
         .send({ token });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['userId', 'username', 'authToken']);
+      expect(body).toContainAllKeys(keys(payload, ['name', 'customFields']));
+      expect(pick(body, Object.keys(payload))).toEqual(omit(payload, ['password', 'name', 'customFields']));
     });
 
     it('should return 200 and respondent record with name', async () => {
       await suite.data.system.survey.update({ userCustomFields: false, userPersonalIdentifiers: true });
 
-      const token = jwt.sign({
-        username: 'userIdentifier002',
+      const payload = {
+        username: 'userIdentifier004',
         name: 'myName',
         customFields: [{ name: 'field01', value: 'value01' }],
-      }, secret, { expiresIn: '15m' });
+      };
+      const token = jwt.sign(payload, secret, { expiresIn: '15m' });
 
       const { status, body } = await request(suite.app)
         .post(url)
@@ -178,17 +189,19 @@ export default () => {
         .send({ token });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'name']);
+      expect(body).toContainAllKeys(keys(payload, ['customFields']));
+      expect(pick(body, Object.keys(payload))).toEqual(omit(payload, ['customFields']));
     });
 
     it('should return 200 and respondent record with custom fields', async () => {
       await suite.data.system.survey.update({ userCustomFields: true, userPersonalIdentifiers: false });
 
-      const token = jwt.sign({
-        username: 'userIdentifier002',
+      const payload = {
+        username: 'userIdentifier005',
         name: 'myName',
         customFields: [{ name: 'field01', value: 'value01' }],
-      }, secret, { expiresIn: '15m' });
+      };
+      const token = jwt.sign(payload, secret, { expiresIn: '15m' });
 
       const { status, body } = await request(suite.app)
         .post(url)
@@ -196,7 +209,8 @@ export default () => {
         .send({ token });
 
       expect(status).toBe(200);
-      expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'customFields']);
+      expect(body).toContainAllKeys(keys(payload, ['name']));
+      expect(pick(body, Object.keys(payload))).toEqual(omit(payload, ['name']));
     });
   });
 };
