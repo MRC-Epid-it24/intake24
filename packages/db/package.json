@@ -39,7 +39,7 @@
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
-    "@simplewebauthn/types": "^10.0.0",
+    "@simplewebauthn/types": "^11.0.0",
     "@types/lodash": "^4.17.9",
     "@types/node": "^22.7.4",
     "@types/pg": "^8.11.10",
