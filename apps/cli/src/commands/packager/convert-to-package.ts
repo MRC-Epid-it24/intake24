@@ -10,14 +10,16 @@ import { ApiClientV4 } from '@intake24/api-client-v4';
 import { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
 
 import type { PackageWriterOptions } from './package-writer';
+import type { CsvFoodRecordUnprocessed, CsvResultStructure, DefaultPSMCategory } from './types/csv-import';
 import type {
-  CsvFoodRecordUnprocessed,
-  CSVHeaders,
-  CsvResultStructure,
-  DefaultPSMCategory,
-} from './types/csv-import';
-import type { PkgAssociatedFood, PkgGlobalFood, PkgLocalFood, PkgPortionSizeMethod, PkgStandardUnit } from './types/foods';
+  PkgAssociatedFood,
+  PkgGlobalFood,
+  PkgLocalFood,
+  PkgPortionSizeMethod,
+  PkgStandardUnit,
+} from './types/foods';
 import { PkgConstants } from './constants';
+import { PkgLocalCategory } from './types/categories';
 import { CsvFoodRecords } from './types/csv-import';
 import { PkgLocale } from './types/locale';
 
@@ -42,7 +44,7 @@ const defaultJSONOptions: PackageWriterOptions = {
   outputEncoding: 'utf-8',
 };
 
-const DEFAULT_FOOD_COMPOSITION_TABLE = process.env.CSV_DEFAULT_FOOD_COMPOSION_TABLE || 'NDNS';
+const DEFAULT_FOOD_COMPOSITION_TABLE = process.env.CSV_DEFAULT_FOOD_COMPOSION_TABLE || 'AUSNUT';
 const DEFAULT_FOOD_COMPOSITION_TABLE_CODE = process.env.CSV_DEFAULT_FOOD_COMPOSITION_CODE || '01B10311';
 const DEFAULT_SKIP_MISSING_CATEGORIES = process.env.DEFAULT_SKIP_MISSING_CATEGORIES === 'true' || false;
 
@@ -57,7 +59,7 @@ export class ConvertorToPackage {
   private readonly logger: Logger;
   private readonly options: ConvertorOptions;
   private csvStructure: typeof CsvFoodRecords | undefined;
-  private exisingCategories: string[] | undefined;
+  private existingCategories: string[] | undefined;
 
   private locales: PkgLocale[] | undefined = [];
   private categoryPsm: DefaultPSMCategory[] | undefined;
@@ -65,6 +67,7 @@ export class ConvertorToPackage {
   private globalFoodList: PkgGlobalFood[] = [];
   private localFoodList: PkgLocalFood[] = [];
   private enabledLocalesFoodList: string[] = [];
+  private localCategories: PkgLocalCategory[] = [];
   private skipMissingCategories: boolean;
 
   private readonly apiClient: ApiClientV4;
@@ -85,22 +88,26 @@ export class ConvertorToPackage {
       ...defaultOptions,
       ...options,
     };
-    this.exisingCategories = undefined;
+    this.existingCategories = undefined;
     this.skipMissingCategories = DEFAULT_SKIP_MISSING_CATEGORIES;
   }
 
   private async writeJSON(object: any, outputPath: string): Promise<void> {
     const dirName = path.dirname(outputPath);
+    const { jsonSpaces, outputEncoding } = defaultJSONOptions;
+
     await fs.mkdir(dirName, { recursive: true });
-    await fs.writeFile(outputPath, JSON.stringify(object, null, defaultJSONOptions.jsonSpaces), {
-      encoding: defaultJSONOptions.outputEncoding,
+
+    this.logger.debug(`Writing JSON file: ${outputPath}`);
+    await fs.writeFile(outputPath, JSON.stringify(object, null, jsonSpaces), {
+      encoding: outputEncoding,
     });
   }
 
   private async readJSON<T>(relativePath: string): Promise<T | undefined> {
     const filePath = path.join(this.inputDirPath!, relativePath);
-    this.logger.debug(`Reading JSON file: ${filePath}`);
 
+    this.logger.debug(`Reading JSON file: ${filePath}`);
     try {
       await fs.access(filePath);
     }
@@ -109,69 +116,87 @@ export class ConvertorToPackage {
       return undefined;
     }
 
-    return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
+    return JSON.parse(await fs.readFile(filePath, 'utf-8'));
   }
 
   private async readLocaleId(): Promise<string | null> {
     this.logger.info('Loading locales');
     this.locales = await this.readJSON(PkgConstants.LOCALES_FILE_NAME);
-    if (this.locales !== undefined) {
+    if (this.locales?.length) {
       this.logger.debug(`Loaded ${this.locales[0].id} locale`);
       return this.locales[0].id;
     }
-    else {
-      this.logger.debug('No locales found');
-      return null;
-    }
+    this.logger.debug('No locales found');
+    return null;
   }
 
   private async readCategoryPsm(): Promise<DefaultPSMCategory[] | undefined> {
     this.logger.info('Loading category PSM');
     const categoryPsmJSON = await this.readJSON<DefaultPSMCategory[]>(PkgConstants.CATEGORY_PSM_FILE_NAME);
-    if (categoryPsmJSON !== undefined && categoryPsmJSON !== null) {
-      this.logger.debug('Loaded category PSM');
+
+    if (categoryPsmJSON?.length) {
+      this.logger.debug(`Loaded ${categoryPsmJSON.length} category PSMs`);
       return categoryPsmJSON;
     }
-    else {
-      this.logger.debug('No category PSMs found');
-      return undefined;
-    }
+
+    this.logger.debug('No category PSMs found');
+    return undefined;
   }
 
   // Validate CSV structure against JSON structure (TODO: move to the DB service)
   private validateCsvStructure = (headers: string[]): boolean => {
     this.logger.debug('Validating CSV structure');
-    // Check if all headers are of the correct type CSVHeaders
+    // Check if all headers are of the correct type
     const headersValidated = headers.every((header) => {
-      return Object.values(csvHeaders).includes(header.toLowerCase() as CSVHeaders);
+      if (!this.csvStructure || !header) {
+        this.logger.debug(`Header ${header} is not valid`);
+        return false;
+      }
+
+      const trimAndLowerCase = (header: string) => {
+        return header?.trim().toLowerCase();
+      };
+
+      return Object.keys(this.csvStructure).map(trimAndLowerCase).includes(trimAndLowerCase(header));
     });
 
     return headersValidated;
   };
 
   private validateRequiredFieldsExist = (headers: string[]): boolean => {
+    const trimAndLowerCase = (header: string) => {
+      return header.trim().toLowerCase();
+    };
+
     this.logger.debug('Validating required fields');
-    const requiredFields = Object.values(CsvFoodRecords)
-      .filter(record => record.required === true)
-      .map(record => record.header);
-    console.log('Required fields:', requiredFields);
-    const transformedHeaders = headers.map(header => header.toLowerCase());
+    if (!this.csvStructure) {
+      this.logger.debug('CSV structure not loaded');
+      return false;
+    }
+
+    const requiredFields = Object.entries(this.csvStructure)
+      .filter(([, record]) => record.required)
+      .map(([header, _]) => header);
+    const transformedHeaders = headers.map(trimAndLowerCase);
+
     this.logger.debug(`Transformed headers: ${transformedHeaders}`);
-    const requiredFieldsValidated = requiredFields.every((field) => {
+    const requiredFieldsValidated = requiredFields.map(trimAndLowerCase).every((field) => {
       this.logger.debug(`Checking for field: ${field} - ${transformedHeaders.includes(field)}`);
+
       return transformedHeaders.includes(field);
     });
-    this.logger.debug(`Required fields validated: ${requiredFieldsValidated}`);
     return requiredFieldsValidated;
   };
 
   private async readCSVStructure(): Promise<void> {
     this.logger.info('Loading CSV structure');
-    this.csvStructure = await CsvFoodRecords;
+    this.csvStructure = (await this.readJSON(PkgConstants.CSV_STRUCTURE_FILE_NAME)) || CsvFoodRecords;
   }
 
   private async readExistingCategories(): Promise<string[]> {
-    const existingCategories = await this.readJSON<existingCategories[]>(PkgConstants.CSV_EXISTING_CATEGORIES_FILE_NAME);
+    const existingCategories = await this.readJSON<existingCategories[]>(
+      PkgConstants.CSV_EXISTING_CATEGORIES_FILE_NAME,
+    );
     if (!existingCategories || existingCategories.length === 0) {
       this.logger.error('No existing categories found');
       return [];
@@ -190,82 +215,86 @@ export class ConvertorToPackage {
     }
   };
 
-  private determineNutrientTableCodes = (foodCompositionTable: string, foodCompositionTableCode: string): Record<string, string> => {
-    foodCompositionTable = foodCompositionTable.length > 0 ? foodCompositionTable : DEFAULT_FOOD_COMPOSITION_TABLE;
-    foodCompositionTableCode = foodCompositionTableCode.length > 0 ? foodCompositionTableCode : DEFAULT_FOOD_COMPOSITION_TABLE_CODE;
+  private determineNutrientTableCodes = (
+    foodCompositionTable: string,
+    foodCompositionTableCode: string,
+  ): Record<string, string> => {
+    foodCompositionTable = foodCompositionTable?.length > 0 ? foodCompositionTable : DEFAULT_FOOD_COMPOSITION_TABLE;
+    foodCompositionTableCode
+      = foodCompositionTableCode?.length > 0 ? foodCompositionTableCode : DEFAULT_FOOD_COMPOSITION_TABLE_CODE;
     return {
-      [foodCompositionTable.trim()]: foodCompositionTableCode,
+      [foodCompositionTable.trim()]: foodCompositionTableCode.trim(),
     };
   };
 
-  // validate the categories in the CSV file against the existing categories
-  private determineIfGlobalCategoriesExist = async (categories: string, exisingCategories: string[]): Promise<string[]> => {
+  // Validate the categories in the CSV file against the existing categories
+  private determineIfGlobalCategoriesExist = async (
+    categories: string,
+    existingCategories: string[],
+  ): Promise<string[]> => {
     this.logger.debug('Validating categories');
-    const missingCategories: string[] = [];
 
-    if (this.exisingCategories === undefined)
+    if (!this.existingCategories)
       return [];
-    const categoriesForCheck = categories
+
+    const categoriesSet = new Set(existingCategories);
+    return categories
       .split(',')
-      .map(category => category.trim());
-
-    categoriesForCheck.forEach((category) => {
-      if (!exisingCategories.includes(category))
-        missingCategories.push(category);
-    });
-
-    return missingCategories;
+      .map(category => category.trim())
+      .filter(category => !categoriesSet.has(category));
   };
 
   // Create a Map of the existing categories leaf - key, all parent categories - value
-  private determineCategoriesHierarchy = async (level: number, category: CategoryHeader, parentCategories: string[] = []): Promise<Map<string, string[]>> => {
-    const categoriesHierarchy: Map<string, string[]> = new Map();
-    categoriesHierarchy.set(`${category.code}:_${Math.round(Math.random() * 1000)}`, parentCategories);
+  private determineCategoriesHierarchy = async (
+    level: number,
+    category: CategoryHeader,
+    parentCategories: string[] = [],
+  ): Promise<Map<string, string[]>> => {
+    const categoriesHierarchy = new Map<string, string[]>();
+    const uniqueKey = `${category.code}:_${Math.floor(Math.random() * 1000)}`;
+    categoriesHierarchy.set(uniqueKey, parentCategories);
 
-    const contents = await this.apiClient.categories.getCategoryContents(
-      category.code,
-      this.localeId ?? '',
-    );
+    const contents = await this.apiClient.categories.getCategoryContents(category.code, this.localeId ?? '');
 
-    if (contents.subcategories.length === 0)
-      return categoriesHierarchy;
-    for (const subheader of contents.subcategories) {
-      const categoryPath = await this.determineCategoriesHierarchy(level + 1, subheader, [...parentCategories, category.code]);
-      categoryPath.forEach((value, key) => {
-        categoriesHierarchy.set(key, value);
+    if (contents.subcategories.length > 0) {
+      const subcategoryPromises = contents.subcategories.map(subheader =>
+        this.determineCategoriesHierarchy(level + 1, subheader, [...parentCategories, category.code]),
+      );
+
+      const subcategoryResults = await Promise.all(subcategoryPromises);
+
+      subcategoryResults.forEach((result) => {
+        result.forEach((value, key) => categoriesHierarchy.set(key, value));
       });
     }
+
     return categoriesHierarchy;
   };
 
   private mapCategoryHierarchy = async (categories: CategoryContents): Promise<Map<string, string[]>> => {
-    const categoriesHierarchy: Map<string, string[]> = new Map();
-    for (const category of categories.subcategories) {
-      const categoryPath = await this.determineCategoriesHierarchy(1, category, []);
-      categoryPath.forEach((value, key) => {
-        categoriesHierarchy.set(key, value);
-      });
-    }
+    const categoriesHierarchy = new Map<string, string[]>();
+
+    await Promise.all(
+      categories.subcategories.map(async (category) => {
+        this.logger.info(`Processing category ${category.code}`);
+        const categoryPath = await this.determineCategoriesHierarchy(1, category, []);
+        categoryPath.forEach((value, key) => categoriesHierarchy.set(key, value));
+      }),
+    );
+
     return categoriesHierarchy;
   };
 
   private linkAssociatedFoodCategories = (associatedFoodCategory: string): PkgAssociatedFood[] => {
     if (!associatedFoodCategory)
       return [];
-    const associatedFoods: PkgAssociatedFood[] = [];
-    associatedFoodCategory
-      .split(',')
-      .map(category => category.trim())
-      .forEach((category) => {
-        associatedFoods.push({
-          foodCode: category,
-          linkAsMain: false,
-          promptText: { en: '' },
-          genericName: { en: '' },
-        });
-      });
 
-    return associatedFoods;
+    return associatedFoodCategory.split(',').map(category => ({
+      foodCode: category.trim(),
+      linkAsMain: false,
+      promptText: { en: '' },
+      genericName: { en: '' },
+    }));
   };
 
   // Check if the parent categories have a default PSM
@@ -293,9 +322,7 @@ export class ConvertorToPackage {
     if (!psmToUse || psmToUse.length === 0)
       return [];
     const normalizedPsm: PkgPortionSizeMethod[] = [];
-    const lines = psm
-      .split('\n')
-      .map(method => method.trim());
+    const lines = psm.split('\n').map(method => method.trim());
     lines.forEach((line) => {
       const keyValuePairs = line.split(',').map(pair => pair.trim().split(': '));
       const method = keyValuePairs.find(pair => pair[0] === 'Method')?.[1];
@@ -329,40 +356,44 @@ export class ConvertorToPackage {
         case 'drink-scale':
           normalizedPsm.push({
             method: 'drink-scale',
-            description: 'use_a_drinware_image',
+            description: 'use_a_drinkware_image',
             conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
             drinkwareId: keyValuePairs.find(pair => pair[0] === 'drinkware-id')?.[1] ?? '',
-            initialFillLevel: Number.parseFloat(keyValuePairs.find(pair => pair[0] === 'initial-fill-level')?.[1] ?? '0.9'),
+            initialFillLevel: Number.parseFloat(
+              keyValuePairs.find(pair => pair[0] === 'initial-fill-level')?.[1] ?? '0.9',
+            ),
             skipFillLevel: keyValuePairs.find(pair => pair[0] === 'skip-fill-level')?.[1] === 'true',
             useForRecipes: useForRecipes === 'true',
           });
           break;
-        case 'standard-portion': {
-          const unitCount = Number.parseInt(keyValuePairs.find(pair => pair[0] === 'units-count')?.[1] ?? '0');
-          const units: PkgStandardUnit[] = [];
-          if (unitCount) {
-            for (let i = 0; i < unitCount; i++) {
-              const name = keyValuePairs.find(pair => pair[0] === `unit${i}-name`)?.[1];
-              const weight = keyValuePairs.find(pair => pair[0] === `unit${i}-weight`)?.[1];
-              const omitFoodDescription = keyValuePairs.find(pair => pair[0] === `unit${i}-omit-food-description`)?.[1] === 'true';
-              units.push({
-                name: name ?? '',
-                weight: Number.parseFloat(weight ?? '0'),
-                omitFoodDescription,
-                inlineEstimateIn: '',
-                inlineHowMany: '',
-              });
+        case 'standard-portion':
+          {
+            const unitCount = Number.parseInt(keyValuePairs.find(pair => pair[0] === 'units-count')?.[1] ?? '0');
+            const units: PkgStandardUnit[] = [];
+            if (unitCount) {
+              for (let i = 0; i < unitCount; i++) {
+                const name = keyValuePairs.find(pair => pair[0] === `unit${i}-name`)?.[1];
+                const weight = keyValuePairs.find(pair => pair[0] === `unit${i}-weight`)?.[1];
+                const omitFoodDescription
+                  = keyValuePairs.find(pair => pair[0] === `unit${i}-omit-food-description`)?.[1] === 'true';
+                units.push({
+                  name: name ?? '',
+                  weight: Number.parseFloat(weight ?? '0'),
+                  omitFoodDescription,
+                  inlineEstimateIn: '',
+                  inlineHowMany: '',
+                });
+              }
             }
-          }
 
-          normalizedPsm.push({
-            method: 'standard-portion',
-            description: 'use_a_standard_portion',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            units,
-            useForRecipes: useForRecipes === 'true',
-          });
-        }
+            normalizedPsm.push({
+              method: 'standard-portion',
+              description: 'use_a_standard_portion',
+              conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+              units,
+              useForRecipes: useForRecipes === 'true',
+            });
+          }
           break;
         case 'cereal':
           normalizedPsm.push({
@@ -404,35 +435,83 @@ export class ConvertorToPackage {
     return normalizedPsm;
   };
 
+  private async createLocalCategoryListAndWriteJSON(localeId: string) {
+    const categoryPsm = await this.readCategoryPsm();
+
+    if (!categoryPsm?.length) {
+      this.logger.warn(`Category PSM for locale ${this.localeId} does not exist`);
+      return;
+    }
+
+    const localCategories = await Promise.all(
+      categoryPsm.map(async (record) => {
+        const [category] = (
+          await this.apiClient.categories.list({
+            page: 1,
+            limit: 1,
+            search: record.code,
+          })
+        ).data;
+
+        return {
+          version: randomUUID(),
+          code: record.code,
+          localDescription: category.name,
+          portionSize: this.fromCSVPortionSizeMethodPackage(record.psm),
+        };
+      }),
+    );
+
+    await this.writeJSON(
+      { [localeId]: localCategories },
+      path.join(this.outputFilePath, PkgConstants.LOCAL_CATEGORIES_FILE_NAME),
+    );
+  }
+
   private async createGlobalFoodListAndWriteJSON(data: CsvFoodRecordUnprocessed[]) {
     const globalFoodList: PkgGlobalFood[] = [];
 
-    this.exisingCategories = await this.readExistingCategories();
-    // if existing categories file doesn't exisit or is empty, access V4 Api to get all categories
-    if (!this.exisingCategories) {
+    this.existingCategories = await this.readExistingCategories();
+
+    // If existing categories file doesn't exisit or is empty, access V4 Api to get all categories
+    if (!this.existingCategories) {
       this.logger.debug('No existing categories found, fetching from V4 API');
-      this.exisingCategories = (await this.apiClient.categories.getAllCategories()).map(category => category.code);
+      this.existingCategories = (await this.apiClient.categories.getAllCategories()).map(category => category.code);
     }
 
     // Get the root categories for the locale
     const localeRootCategories = await this.apiClient.categories.getRootCategories(this.localeId ?? '');
+
     // Create a Map of the existing categories leaf - key, all parent categories - value
     const localeCategoriesHierarchy: Map<string, string[]> = await this.mapCategoryHierarchy(localeRootCategories);
 
     this.logger.info('Creating global food list');
 
+    // Note: Please change this according to the legend provided for each locale
+    const ADD_NEW_GLOBAL_FOOD_ACTION = '5';
+
     for (const record of data) {
-      if (record.action !== '5')
+      if (record.action !== ADD_NEW_GLOBAL_FOOD_ACTION)
         continue;
-      let parentCategoriesUnique: string[] = [...new Set(record.categories
-        .split(',')
-        .map(category => category.trim()))];
-      const missingCategories = await this.determineIfGlobalCategoriesExist(record.categories, this.exisingCategories);
+
+      this.logger.info(`Processing global food ${record['intake24 code']}`);
+      let parentCategoriesUnique: string[] = [
+        ...new Set(record.categories.split(',').map(category => category.trim())),
+      ];
+      const missingCategories = await this.determineIfGlobalCategoriesExist(record.categories, this.existingCategories);
       if (!this.skipMissingCategories && missingCategories.length > 0) {
-        this.logger.error(`Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list. ERROR`);
+        this.logger.error(
+          `Categories ${missingCategories} for food ${
+            record['intake24 code']
+          } do not exist in the existing categories list. ERROR`,
+        );
       }
       else if (this.skipMissingCategories && missingCategories.length > 0) {
-        this.logger.warn(`Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list. SKIPPING`);
+        this.logger.warn(
+          `Categories ${missingCategories} for food ${
+            record['intake24 code']
+          } do not exist in the existing categories list. SKIPPING`,
+        );
         parentCategoriesUnique = parentCategoriesUnique.filter(category => !missingCategories.includes(category));
       }
 
@@ -445,13 +524,17 @@ export class ConvertorToPackage {
         const matchingKeys = Array.from(localeCategoriesHierarchy.keys()).filter(key => regex.test(key));
 
         // create a new set with all the parents categories from the matching keys
-        const matchedParentCategories = [...new Set(matchingKeys.map(key => localeCategoriesHierarchy.get(key)).flat())].filter(cat => cat !== undefined) as string[];
+        const matchedParentCategories = [
+          ...new Set(matchingKeys.map(key => localeCategoriesHierarchy.get(key)).flat()),
+        ].filter(cat => cat !== undefined) as string[];
 
         // add matched parent categories to the filtered array
         return matchedParentCategories.length > 0 ? [...filtered, ...matchedParentCategories] : filtered;
       }, [] as string[]);
 
-      const cleanedParentCategories = [...parentCategoriesUnique].filter(category => ![...parentCategoriesFiltered].includes(category));
+      const cleanedParentCategories = [...parentCategoriesUnique].filter(
+        category => ![...parentCategoriesFiltered].includes(category),
+      );
 
       const globalFood: PkgGlobalFood = {
         version: randomUUID(),
@@ -484,26 +567,44 @@ export class ConvertorToPackage {
     }
     this.globalFoodList = globalFoodList;
 
-    await this.writeJSON(
-      this.globalFoodList,
-      path.join(this.outputFilePath, PkgConstants.GLOBAL_FOODS_FILE_NAME),
-    );
+    await this.writeJSON(this.globalFoodList, path.join(this.outputFilePath, PkgConstants.GLOBAL_FOODS_FILE_NAME));
   }
 
   private async createLocalFoodListAndWriteJSON(data: CsvFoodRecordUnprocessed[], localeId: string) {
     const localFoodList: PkgLocalFood[] = [];
     const enabledLocalesFoodList: string[] = [];
+    const localCategories: PkgLocalCategory[] = [];
+
     for (const record of data) {
       this.logger.info(`Processing local food ${record['intake24 code']}`);
+
+      // if (!record["food composition table"]) {
+      //   this.logger.warn(`Food ${record["intake24 code"]} has no food composition table`);
+      //   continue;
+      // }
+
+      // if (!record["food composition record id"]) {
+      //   this.logger.warn(`Food ${record["intake24 code"]} has no food composition table record id`);
+      //   continue;
+      // }
+
       const localPsm = this.fromCSVPortionSizeMethodPackage(record['portion size estimation methods']);
       this.logger.info(`Local PSM for food ${record['intake24 code']}: ${localPsm.map(psm => psm.method).join(', ')}`);
+
+      const version = randomUUID();
+
+      console.log({ record });
       const localFood: PkgLocalFood = {
-        version: randomUUID(),
+        version,
         code: record['intake24 code'],
-        localDescription: record['local description'],
+        localDescription:
+          // @ts-expect-error('Provided CSV doesn't always match the type defined')
+          record['local description/tamil'].trim()
+          || record['local description'].trim()
+          || record['english description'].trim(),
         nutrientTableCodes: this.determineNutrientTableCodes(
           record['food composition table'],
-          record['food composition table record id'],
+          record['food composition record id'],
         ),
         associatedFoods: this.linkAssociatedFoodCategories(record['associated food or category']),
         portionSize: localPsm,
@@ -512,20 +613,28 @@ export class ConvertorToPackage {
       localFoodList.push(localFood);
       enabledLocalesFoodList.push(localFood.code);
     }
+
     this.localFoodList = localFoodList;
     this.enabledLocalesFoodList = enabledLocalesFoodList;
+    this.localCategories = localCategories;
 
     await this.writeJSON(
       { [localeId]: this.localFoodList },
       path.join(this.outputFilePath, PkgConstants.LOCAL_FOODS_FILE_NAME),
     );
 
-    if (this.enabledLocalesFoodList.length !== new Set(this.enabledLocalesFoodList).size)
+    if (this.enabledLocalesFoodList.length !== new Set(this.enabledLocalesFoodList).size) {
       this.logger.error('Duplicate food codes found in the enabled local foods list');
+    }
 
     await this.writeJSON(
       { [localeId]: this.enabledLocalesFoodList },
       path.join(this.outputFilePath, PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME),
+    );
+
+    await this.writeJSON(
+      { [localeId]: this.localCategories },
+      path.join(this.outputFilePath, PkgConstants.LOCAL_CATEGORIES_FILE_NAME),
     );
   }
 
@@ -536,18 +645,14 @@ export class ConvertorToPackage {
     const results: CsvFoodRecordUnprocessed[] = [];
 
     return new Promise<CsvFoodRecordUnprocessed[]>((resolve, reject) => {
-      createReadStream(csvFilePath)
+      createReadStream(csvFilePath, { encoding: 'utf-8' })
         .pipe(csv({}))
         .on('headers', (headers: string[]) => {
-          headers = headers.map(header => header.toLowerCase());
+          headers = headers.map(header => header.trim().toLowerCase());
           headersValidated = this.validateCsvStructure(headers);
           requiredHeadersValidated = this.validateRequiredFieldsExist(headers);
           if (!headersValidated || !requiredHeadersValidated) {
-            reject(
-              new Error(
-                'CSV file does not contain the required structure defined in the JSON file.',
-              ),
-            );
+            reject(new Error('CSV file does not contain the required structure defined in the JSON file.'));
           }
         })
         .on('data', (data: CsvFoodRecordUnprocessed) => {
@@ -556,7 +661,7 @@ export class ConvertorToPackage {
             return new Error('Headers not validated or not all required fields exist.');
           }
           const lowercaseData = Object.fromEntries(
-            Object.entries(data).map(([key, value]) => [key.toLowerCase(), value]),
+            Object.entries(data).map(([key, value]) => [key.trim().toLowerCase(), value]),
           ) as CsvFoodRecordUnprocessed;
           results.push(lowercaseData);
         })
@@ -586,19 +691,23 @@ export class ConvertorToPackage {
         this.logger.error('No locale found, exiting');
         throw new Error('No locale found');
       }
-      // this.categoryPsm = await this.readCategoryPsm();
+      this.categoryPsm = await this.readCategoryPsm();
       const uproccessedRecords = await this.processCsvFile(options.importedFile);
 
       // 1. Convert to the GlobalFood JSON structure
       await this.createGlobalFoodListAndWriteJSON(uproccessedRecords);
 
+      this.logger.info('Creating local food list');
       // 2. Convert to the LocalFood JSON structure
       await this.createLocalFoodListAndWriteJSON(uproccessedRecords, this.localeId);
 
       // 3. Convert to the EnabledLocalesFood JSON structure
       // this.createEnabledLocalesFoodList(data);
 
-      // 4. Convert to the PortionSizeMethod JSON structure
+      // 4. Convert to the LocalCategory JSON structure
+      await this.createLocalCategoryListAndWriteJSON(this.localeId);
+
+      // 5. Convert to the PortionSizeMethod JSON structure
       // TODO: Add the rest of the structures
     }
     catch (error) {
