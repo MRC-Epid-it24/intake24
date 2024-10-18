@@ -226,7 +226,7 @@ watch(
 </script>
 
 <style lang="scss">
-@import 'src/scss/variables';
+@use 'src/scss/variables';
 
 .drink-scale-wrapper {
   display: flex;
@@ -310,7 +310,7 @@ watch(
               left: -3.5px;
               width: 0;
               height: 0;
-              border-right: 7px solid $secondary;
+              border-right: 7px solid variables.$secondary;
               border-top: 7px solid transparent;
               border-bottom: 7px solid transparent;
             }

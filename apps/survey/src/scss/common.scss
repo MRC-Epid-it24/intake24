@@ -1,3 +1,7 @@
+@use 'sass:map';
+@use 'settings';
+@use 'variables';
+
 .v-application {
   ul,
   ol {
@@ -28,15 +32,15 @@
 }
 
 .border-secondary-1 {
-  border: 1px solid $secondary !important;
+  border: 1px solid variables.$secondary !important;
 }
 
 .border-primary-2 {
-  border: 2px solid $primary !important;
+  border: 2px solid variables.$primary !important;
 }
 
 .border-info-2 {
-  border: 2px solid $info !important;
+  border: 2px solid variables.$info !important;
 }
 
 .list__no-wrap {
@@ -47,12 +51,12 @@
 
 .list-border {
   .v-list-item:not(:last-child) {
-    border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
+    border-bottom: 1px solid map.get(settings.$grey, 'lighten-3');
   }
 }
 
 .list-item-border:not(:last-child) {
-  border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
+  border-bottom: 1px solid map.get(settings.$grey, 'lighten-3');
 }
 
 // ConfirmDialog wrapped actions buttons
@@ -62,7 +66,7 @@
   }
 }
 
-@media #{map-get(settings.$display-breakpoints, 'sm-and-down')} {
+@media #{map.get(settings.$display-breakpoints, 'sm-and-down')} {
   .iframe-container {
     position: relative;
     padding-bottom: 56.25%;

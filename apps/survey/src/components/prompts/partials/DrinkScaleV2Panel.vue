@@ -331,7 +331,7 @@ watch(
 </script>
 
 <style lang="scss">
-@import 'src/scss/variables';
+@use 'src/scss/variables';
 
 .drink-scale-wrapper__v2 {
   display: flex;
@@ -411,7 +411,7 @@ watch(
               left: -3.5px;
               width: 0;
               height: 0;
-              border-right: 7px solid $secondary;
+              border-right: 7px solid variables.$secondary;
               border-top: 7px solid transparent;
               border-bottom: 7px solid transparent;
             }
@@ -455,12 +455,12 @@ watch(
       cursor: pointer;
 
       stroke-width: 8;
-      stroke: $sliding_scale_color;
-      stroke-opacity: $sliding_scale_opacity;
+      stroke: variables.$sliding_scale_color;
+      stroke-opacity: variables.$sliding_scale_opacity;
       stroke-linecap: round;
       stroke-linejoin: round;
-      fill: $sliding_scale_color;
-      fill-opacity: $sliding_scale_opacity;
+      fill: variables.$sliding_scale_color;
+      fill-opacity: variables.$sliding_scale_opacity;
     }
   }
 }

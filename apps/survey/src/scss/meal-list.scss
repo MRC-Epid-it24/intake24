@@ -1,10 +1,12 @@
+@use 'variables';
+
 .meal-list__list {
   .selected {
-    background: $ternary;
+    background: variables.$ternary;
   }
 
   .selected-food {
-    background: $ternary;
+    background: variables.$ternary;
   }
 
   .v-list-group__header {
@@ -12,7 +14,7 @@
   }
 
   .v-list-item:hover {
-    background: $ternary;
+    background: variables.$ternary;
   }
 
   .v-list-group--active > .v-list-group__header > .v-list-group__header__prepend-icon {
