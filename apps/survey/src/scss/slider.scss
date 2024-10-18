@@ -1,13 +1,15 @@
+@use 'variables';
+
 .quantity-slider__slider {
   padding-top: 60px;
 
   .v-slider-thumb__label-container {
     .v-slider-thumb__label {
       height: unset;
-      background-color: $secondary;
+      background-color: variables.$secondary;
 
       &::before {
-        color: $secondary;
+        color: variables.$secondary;
       }
     }
   }

@@ -154,7 +154,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import 'src/scss/variables';
+@use 'src/scss/variables';
 
 .guide-drawer {
   position: relative;
@@ -187,7 +187,7 @@ onMounted(() => {
 
       &.active {
         stroke-width: 8;
-        stroke: $primary;
+        stroke: variables.$primary;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);
@@ -195,7 +195,7 @@ onMounted(() => {
 
       &:hover {
         stroke-width: 8;
-        stroke: $info;
+        stroke: variables.$info;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);

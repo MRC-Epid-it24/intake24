@@ -133,7 +133,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import 'src/scss/variables';
+@use 'src/scss/variables';
 
 .guide-drawer {
   position: relative;
@@ -166,7 +166,7 @@ export default defineComponent({
 
       &.active {
         stroke-width: 8;
-        stroke: $primary;
+        stroke: variables.$primary;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);
@@ -174,7 +174,7 @@ export default defineComponent({
 
       &:hover {
         stroke-width: 8;
-        stroke: $info;
+        stroke: variables.$info;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);

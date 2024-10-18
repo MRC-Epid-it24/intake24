@@ -1,14 +1,13 @@
-// Vars
-@use 'settings';
-@import 'variables';
-// Libs
-@import 'fontawesome';
-@import 'flags';
 // Partials
-@import 'common';
-@import 'print';
+@use 'common';
+@use 'print';
+
 // Components
-@import 'bottom-navigation';
-@import 'meal-list';
-@import 'slider';
-@import 'time-picker';
+@use 'bottom-navigation';
+@use 'meal-list';
+@use 'slider';
+@use 'time-picker';
+
+// Libs
+@use 'fontawesome';
+@use 'flags';
