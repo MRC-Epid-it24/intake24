@@ -227,8 +227,7 @@ function surveyService({
     const userFeedbackDisabled = ['0', 'false'].includes(userCustomFields.find(field => field.name === 'it24:feedback')?.value ?? 'true');
 
     const customFields = userCustomFields.reduce((acc, item) => {
-      if (item.public)
-        acc[item.name] = item.value;
+      acc[item.name] = item.public ? item.value : '[X]';
 
       return acc;
     }, {} as Record<string, string>);
