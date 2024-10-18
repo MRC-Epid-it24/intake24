@@ -441,7 +441,11 @@ function surveyService({
             identifierValue = aliases.at(0)?.[identifier];
             break;
           default:
+<<<<<<< HEAD
             identifierValue = customFields.find(field => field.name === identifier)?.value;
+=======
+            identifierValue = customFields.find(field => field.name === 'identifier')?.value;
+>>>>>>> 019755a98 (fix(api): correctly resolve multiple redirect prompt settings)
             break;
         }
 
