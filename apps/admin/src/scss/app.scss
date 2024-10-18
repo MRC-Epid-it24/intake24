@@ -1,9 +1,10 @@
+@use 'sass:map';
 @use 'settings';
-@import 'variables';
+@use 'variables';
 
 // Libs
-@import 'fontawesome';
-@import 'flags';
+@use 'fontawesome';
+@use 'flags';
 
 // Not padded sidebar
 .v-list-group__items .v-list-item {
@@ -12,12 +13,12 @@
 
 .list-border {
   .v-list-item:not(:last-child) {
-    border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
+    border-bottom: 1px solid map.get(settings.$grey, 'lighten-3');
   }
 }
 
 .list-item-border:not(:last-child) {
-  border-bottom: 1px solid map-get(settings.$grey, 'lighten-3');
+  border-bottom: 1px solid map.get(settings.$grey, 'lighten-3');
 }
 
 // Drag & drop lists

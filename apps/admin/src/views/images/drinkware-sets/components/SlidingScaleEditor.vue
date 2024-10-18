@@ -365,7 +365,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import 'src/scss/variables';
+@use 'src/scss/variables';
 
 .wrap-actions {
   flex-wrap: wrap;
@@ -387,7 +387,7 @@ export default defineComponent({
     .sliding-scale-polygon {
       stroke: black;
       stroke-width: 2px;
-      fill: $sliding_scale_color;
+      fill: variables.$sliding_scale_color;
       fill-opacity: 0.4;
     }
 
@@ -399,7 +399,7 @@ export default defineComponent({
       stroke-width: 2px;
 
       &.selected {
-        fill: $primary;
+        fill: variables.$primary;
       }
     }
   }
