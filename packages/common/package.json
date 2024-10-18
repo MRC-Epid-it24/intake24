@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@jest/types": "^29.6.3",
-    "@simplewebauthn/types": "^10.0.0",
+    "@simplewebauthn/types": "^11.0.0",
     "@types/dompurify": "^3.0.5",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.13",
