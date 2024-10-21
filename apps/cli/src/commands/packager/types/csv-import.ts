@@ -44,8 +44,8 @@ export const CsvFoodRecords = {
     type: 'string',
     required: true,
   },
-  foodCompostionTableRecordId: {
-    header: 'food composition table record id',
+  foodCompositionRecordId: {
+    header: 'food composition record id',
     type: 'string',
     required: true,
   },
