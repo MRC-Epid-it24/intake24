@@ -565,7 +565,7 @@ export class ConvertorToPackage {
         code: record['intake24 code'],
         localDescription:
           // @ts-expect-error('Provided CSV doesn't always match the type defined')
-          record['local description/tamil']?.trim()
+          record['local description/chinese']?.trim()
           || record['local description']?.trim()
           || record['english description'].trim(),
         nutrientTableCodes: this.determineNutrientTableCodes(
