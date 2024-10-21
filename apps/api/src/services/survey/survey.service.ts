@@ -431,17 +431,17 @@ function surveyService({
 
     const urls = redirectPrompts.reduce<string | null | Record<string, string>>(
       (acc, { id, identifier, url }) => {
-        let identifierValue: string | null;
+        let identifierValue: string | undefined;
         switch (identifier) {
           case 'userId':
             identifierValue = user.id;
             break;
           case 'username':
           case 'urlAuthToken':
-            identifierValue = aliases.length ? aliases[0][identifier] : null;
+            identifierValue = aliases.at(0)?.[identifier];
             break;
           default:
-            identifierValue = customFields.length ? customFields[0].value : null;
+            identifierValue = customFields.find(field => field.name === identifier)?.value;
             break;
         }
 
