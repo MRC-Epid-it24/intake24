@@ -150,9 +150,9 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { LoginResponse } from '@intake24/common/types/http';
 import { useForm } from '@intake24/admin/composables';
 import { useAuth, useMessages } from '@intake24/admin/stores';
+import type { LoginResponse } from '@intake24/common/types/http';
 import { useI18n } from '@intake24/i18n';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 

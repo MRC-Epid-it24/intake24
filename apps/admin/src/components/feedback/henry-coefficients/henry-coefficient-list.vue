@@ -196,10 +196,10 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/composables';
+import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
 import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
 

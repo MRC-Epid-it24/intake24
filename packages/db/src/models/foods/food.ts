@@ -16,7 +16,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import {
   AssociatedFood,
   Brand,
@@ -27,6 +26,7 @@ import {
   FoodLocal,
   FoodLocalList,
 } from '.';
+import BaseModel from '../model';
 import FoodsLocale from './locale';
 
 @Scopes(() => ({

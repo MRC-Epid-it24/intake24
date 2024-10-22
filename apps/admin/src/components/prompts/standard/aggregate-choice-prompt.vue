@@ -62,11 +62,11 @@
 import { mapValues } from 'lodash';
 import { defineComponent, type PropType, ref } from 'vue';
 
-import type { LocaleOptionList } from '@intake24/common/types';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { OptionsList } from '@intake24/admin/components/lists';
 import conditionPartials from '@intake24/admin/components/prompts/partials/conditions';
 import { type Condition, conditionObjectHasProperty, type ConditionObjectId, getConditionDefaults, getDefaultConditionProperty, type ObjectPropertyId, promptConditionDefaults } from '@intake24/common/prompts';
+import type { LocaleOptionList } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 

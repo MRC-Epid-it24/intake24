@@ -1,16 +1,16 @@
 import type { SetupContext } from 'vue';
-import { computed, ref } from 'vue';
+import type { UseFoodUtilsProps } from './use-food-utils';
 
+import type { UseMealUtilsProps } from './use-meal-utils';
+import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, PartialRecord, RecipeBuilder } from '@intake24/common/types';
 import type { LocaleContentOptions } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
+
 import { useSurvey } from '@intake24/survey/stores';
 import { promptType } from '@intake24/ui';
-
-import type { UseFoodUtilsProps } from './use-food-utils';
-import type { UseMealUtilsProps } from './use-meal-utils';
 import { useFoodUtils } from './use-food-utils';
 import { useMealUtils } from './use-meal-utils';
 

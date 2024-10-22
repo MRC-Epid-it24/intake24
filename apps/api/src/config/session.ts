@@ -1,7 +1,7 @@
-import ms from 'ms';
-
 import type { CookieSettings, SameSiteCookieOptions } from './common';
+
 import type { RedisOptions } from './redis';
+import ms from 'ms';
 
 export type SessionConfig = {
   redis: RedisOptions;

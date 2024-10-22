@@ -1,8 +1,8 @@
+import type { NutrientChartData } from './charts';
 import type { TopFoods } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { getNutrientUnit } from '@intake24/ui';
 
-import type { NutrientChartData } from './charts';
+import { getNutrientUnit } from '@intake24/ui';
 import { AggregateFoodStats } from './classes';
 
 export interface TopFoodData extends TopFoods {

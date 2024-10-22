@@ -185,19 +185,19 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import type { AssociatedFoodItem } from './associated-foods';
 import { defineComponent } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
 
-import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
+import { VueDraggable } from 'vue-draggable-plus';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { randomString } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
 
-import type { AssociatedFoodItem } from './associated-foods';
+import { ConfirmDialog } from '@intake24/ui';
 import { createDefaultAssociatedFood } from './associated-foods';
 
 export default defineComponent({

@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-
 import type { MessageType } from '../stores';
+
+import { defineComponent } from 'vue';
 import { useMessages } from '../stores';
 
 export default defineComponent({

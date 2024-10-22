@@ -50,13 +50,13 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 
+import { useHttp } from '@intake24/admin/services';
 import type {
   CategoryContentsResponse,
   CategoryListEntry,
   FoodListEntry,
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
-import { useHttp } from '@intake24/admin/services';
 import { randomString } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 

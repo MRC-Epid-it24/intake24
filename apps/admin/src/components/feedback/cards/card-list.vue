@@ -79,10 +79,10 @@ import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import type { Card } from '@intake24/common/feedback';
-import type { FeedbackImage, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
+import type { Card } from '@intake24/common/feedback';
+import type { FeedbackImage, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 
 import CardSelector from './card-selector.vue';

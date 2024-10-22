@@ -8,8 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { User } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   user: { include: [{ model: User }] },

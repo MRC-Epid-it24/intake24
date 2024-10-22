@@ -1,11 +1,11 @@
-import { uniq } from 'lodash';
+import type { InterpretedWord } from './interpreted-word';
 
+import { uniq } from 'lodash';
 import type {
   DictionaryType,
   PhoneticEncoder,
   SpellingCorrectionParameters,
 } from '@intake24/api/food-index/dictionary';
-import type { RecipeFoodsHeader } from '@intake24/common/types';
 import { RichDictionary } from '@intake24/api/food-index/dictionary';
 import InterpretedPhrase from '@intake24/api/food-index/interpreted-phrase';
 import {
@@ -13,7 +13,7 @@ import {
   countOrderViolations,
 } from '@intake24/api/food-index/match-quality-helpers';
 
-import type { InterpretedWord } from './interpreted-word';
+import type { RecipeFoodsHeader } from '@intake24/common/types';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;

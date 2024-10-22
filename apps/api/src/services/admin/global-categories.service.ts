@@ -1,7 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import type { Kysely } from 'kysely';
 
+import { randomUUID } from 'node:crypto';
+
+import { ApplicationError, ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { UseInRecipeType } from '@intake24/common/types';
 import type {
@@ -10,7 +11,6 @@ import type {
   UpdateGlobalCategoryRequest,
 } from '@intake24/common/types/http/admin';
 import type { FoodsDB } from '@intake24/db';
-import { ApplicationError, ConflictError, NotFoundError } from '@intake24/api/http/errors';
 
 function globalCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
   async function updateParentCategories(

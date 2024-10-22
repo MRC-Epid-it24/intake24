@@ -1,5 +1,5 @@
-import type { UserJobRequest } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import type { UserJobRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/user/jobs';

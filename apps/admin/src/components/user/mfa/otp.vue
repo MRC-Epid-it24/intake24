@@ -60,12 +60,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import type {
   MFADeviceResponse,
   OTPRegistrationChallenge,
 } from '@intake24/common/types/http/admin';
-import { useForm } from '@intake24/admin/composables';
-import { useHttp } from '@intake24/admin/services';
 
 defineOptions({ name: 'OtpDevice' });
 

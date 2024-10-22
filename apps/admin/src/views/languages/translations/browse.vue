@@ -70,15 +70,15 @@
 import has from 'lodash/has';
 import { defineComponent, ref } from 'vue';
 
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import type {
   LanguageEntry,
   LanguageTranslationsResponse,
 } from '@intake24/common/types/http/admin';
-import type { LanguageTranslationAttributes } from '@intake24/db';
-import { formMixin } from '@intake24/admin/components/entry';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { useHttp } from '@intake24/admin/services';
 import { copy } from '@intake24/common/util';
+import type { LanguageTranslationAttributes } from '@intake24/db';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';

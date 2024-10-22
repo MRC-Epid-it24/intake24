@@ -8,8 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { AsServedImage, ProcessedImage } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   selectionImage: { include: [{ model: ProcessedImage }] },

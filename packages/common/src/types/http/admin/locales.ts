@@ -1,10 +1,10 @@
 import { isLocale } from 'validator';
 import { z } from 'zod';
 
+import { recordVisibilities } from '@intake24/common/security';
 import type {
   Pagination,
 } from '@intake24/db';
-import { recordVisibilities } from '@intake24/common/security';
 
 import { localeTranslation, textDirections } from '../../common';
 import { languageAttributes } from './languages';

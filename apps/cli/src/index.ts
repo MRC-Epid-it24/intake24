@@ -1,13 +1,15 @@
+/* eslint-disable perfectionist/sort-imports */
 import './bootstrap';
 
 import { Argument, Command, Option } from 'commander';
 
 import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
+
 import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
-
 import pkg from '../package.json';
+
 import {
   extractCategories,
   findPortionImages,

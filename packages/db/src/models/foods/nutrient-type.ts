@@ -7,8 +7,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasOne, Scopes, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { FoodsNutrientUnit, NutrientTableRecordNutrient, NutrientTypeInKcal } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   unit: { include: [{ model: FoodsNutrientUnit }] },

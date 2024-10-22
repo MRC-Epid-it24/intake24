@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
-const { createPermissions } = require('../../utils.js');
 const foodDbConfig = require('../../foods/config.js');
+const { createPermissions } = require('../../utils.js');
 
 const permissions = [
   {

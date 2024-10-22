@@ -152,13 +152,13 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import { SelectResource } from '@intake24/admin/components/dialogs';
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { useForm } from '@intake24/admin/composables';
 import type {
   RecipeFoodStepAttributes,
   RecipeFoodStepRequest,
 } from '@intake24/common/types/http/admin';
-import { SelectResource } from '@intake24/admin/components/dialogs';
-import { LanguageSelector } from '@intake24/admin/components/forms';
-import { useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
 
 export type LocaleRecipeFoodStepsForm = {

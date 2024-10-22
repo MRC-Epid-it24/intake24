@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as roleId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { paginationMeta, paginationRequest, bigIntString as roleId } from '@intake24/common/types/http';
 import {
   roleAttributes,
   roleRefs,

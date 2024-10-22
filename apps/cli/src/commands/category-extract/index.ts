@@ -1,8 +1,8 @@
 import type { CsvWriter } from 'csv-writer/src/lib/csv-writer';
 import { createArrayCsvWriter } from 'csv-writer';
 
-import type { CategoryHeader } from '@intake24/common/types/http';
 import { ApiClientV4, getApiClientV4EnvOptions } from '@intake24/api-client-v4';
+import type { CategoryHeader } from '@intake24/common/types/http';
 import { logger as mainLogger } from '@intake24/common-backend';
 
 interface ExtractCategoriesOptions {

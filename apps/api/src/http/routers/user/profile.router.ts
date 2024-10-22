@@ -2,8 +2,8 @@ import type { FieldValidationError } from 'express-validator';
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash';
 
-import type { SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { contract } from '@intake24/common/contracts';
+import type { SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { Survey, UserPassword } from '@intake24/db';
 
 import { ForbiddenError, NotFoundError, ValidationError } from '../../errors';

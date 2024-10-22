@@ -1,6 +1,6 @@
-import path from 'node:path';
-
 import type { Express, Request, Response } from 'express';
+
+import path from 'node:path';
 import express from 'express';
 import helmet from 'helmet';
 

@@ -10,8 +10,8 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
 
-import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'ImageMapObject',

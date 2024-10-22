@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
 import { HttpStatusCode } from 'axios';
 
+import { ConflictError, ForbiddenError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { LocalCategoryEntry } from '@intake24/common/types/http/admin';
-import { ConflictError, ForbiddenError } from '@intake24/api/http/errors';
 
 function localCategoriesController({
   localCategoriesService,

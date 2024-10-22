@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 import { HttpStatusCode } from 'axios';
 
-import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 
 function localFoodsController({
   localFoodsService,

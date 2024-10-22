@@ -55,10 +55,10 @@
 import { defineComponent, type PropType, ref } from 'vue';
 import { VCombobox, VTextField } from 'vuetify/components';
 
+import { useSelects } from '@intake24/admin/composables';
 import type {
   PromptAnswerPropertyCheck,
 } from '@intake24/common/prompts';
-import { useSelects } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'PromptAnswerPropertyCheck',

@@ -1,6 +1,6 @@
-import { readFile } from 'node:fs/promises';
-
 import type { ElementNode, Node, RootNode } from 'svg-parser';
+
+import { readFile } from 'node:fs/promises';
 import { parse } from 'svg-parser';
 import * as svgpath from 'svgpath';
 

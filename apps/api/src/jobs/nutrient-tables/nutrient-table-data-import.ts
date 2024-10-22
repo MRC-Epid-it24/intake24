@@ -1,6 +1,6 @@
-import path from 'node:path';
-
 import type { Job } from 'bullmq';
+
+import path from 'node:path';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 

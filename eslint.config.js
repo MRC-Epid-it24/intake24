@@ -1,5 +1,4 @@
 import antfu from '@antfu/eslint-config';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default await antfu({
   stylistic: {
@@ -14,9 +13,6 @@ export default await antfu({
     'apps/api/src/food-index/language-backends/en/metaphone3.ts',
   ],
 }, {
-  plugins: {
-    'simple-import-sort': simpleImportSort,
-  },
   rules: {
     'import/order': 'off',
     'no-console': 'off',
@@ -28,20 +24,23 @@ export default await antfu({
       varsIgnorePattern: '^_',
     }],
     'jsdoc/require-returns-description': 'off',
-    'simple-import-sort/imports': [
-      'error',
-      {
-        groups: [
-          ['^\\u0000'],
-          ['^node:'],
-          ['^@?(?!intake24)\\w.*\\u0000$', '^@?(?!intake24)\\w'],
-          ['(?<=\\u0000)$', '^'],
-          ['^\\..*\\u0000$', '^\\.'],
-        ],
-      },
-    ],
-    'simple-import-sort/exports': 'error',
-    'sort-imports': 'off',
+    'perfectionist/sort-imports': ['error', {
+      groups: [
+        'type',
+        ['parent-type', 'sibling-type', 'index-type'],
+        'builtin',
+        'external',
+        ['internal', 'internal-type'],
+        ['parent', 'sibling', 'index'],
+        'side-effect',
+        'object',
+        'unknown',
+      ],
+      internalPattern: ['@intake24/**'],
+      newlinesBetween: 'ignore',
+      order: 'asc',
+      type: 'natural',
+    }],
     'style/quote-props': ['error', 'as-needed'],
     'style/member-delimiter-style': ['error', { multiline: { delimiter: 'semi' }, singleline: { delimiter: 'semi' } }],
     'ts/ban-types': 'off',

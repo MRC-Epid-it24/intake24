@@ -1,9 +1,9 @@
+import type { BaseClientV4 } from './base-client-v4';
 import type {
   GuideImageInputObject,
 } from '@intake24/common/types/http/admin';
-import { GuideImage } from '@intake24/db';
 
-import type { BaseClientV4 } from './base-client-v4';
+import { GuideImage } from '@intake24/db';
 
 export class GuideImageApiV4 {
   private static readonly apiPath = '/api/admin/images/guide-images';

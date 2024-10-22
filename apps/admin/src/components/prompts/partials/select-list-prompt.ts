@@ -1,9 +1,9 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { LocaleOptionList } from '@intake24/common/types';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { OptionsList } from '@intake24/admin/components/lists';
+import type { LocaleOptionList } from '@intake24/common/types';
 
 import basePrompt from './base-prompt';
 

@@ -15,8 +15,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { FoodLocal, NutrientTableRecord } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'FoodNutrient',

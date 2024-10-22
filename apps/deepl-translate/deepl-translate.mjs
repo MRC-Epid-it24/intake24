@@ -123,4 +123,4 @@ const args = process.argv.slice(2);
 if (args.length !== 4)
   throw new Error('Expected 4 arguments: sourceDir destDir sourceLang destLang');
 
-await translateFiles(args[0], args[1], args[2], args[3]);
+translateFiles(args[0], args[1], args[2], args[3]);

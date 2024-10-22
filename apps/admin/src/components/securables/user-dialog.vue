@@ -154,10 +154,10 @@ import type { PropType } from 'vue';
 import pick from 'lodash/pick';
 import { computed, defineComponent, ref } from 'vue';
 
-import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { AutoComplete, ErrorList } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
+import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 
 export type UserDialogForm = {
   userId: string | null;

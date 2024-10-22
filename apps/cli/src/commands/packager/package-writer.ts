@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import { merge } from 'lodash';
 
+import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type {
   PkgGlobalCategory,
@@ -15,7 +16,6 @@ import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-ma
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import type logger from '@intake24/common-backend/services/logger/logger';
-import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 
 export type Logger = typeof logger;
 

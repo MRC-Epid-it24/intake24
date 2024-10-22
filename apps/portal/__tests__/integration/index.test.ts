@@ -1,6 +1,8 @@
+/* eslint-disable perfectionist/sort-imports */
 import '../bootstrap';
 
 import { suite } from './helpers';
+
 import site from './site';
 
 describe('api', () => {

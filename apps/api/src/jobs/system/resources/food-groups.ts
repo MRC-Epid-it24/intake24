@@ -1,8 +1,8 @@
+import type { ResourceOps } from './resource';
+
 import { Readable } from 'node:stream';
 
 import { Transform } from '@json2csv/node';
-
-import type { ResourceOps } from './resource';
 
 export async function foodGroups({ kyselyDb }: ResourceOps) {
   const { total } = await kyselyDb.foods.selectFrom('foodGroups').select(({ fn }) => [

@@ -1,7 +1,7 @@
-import type { AlternativeFoodNames } from '@intake24/db';
-import { CategoryLocal, FoodLocalList, RecipeFood } from '@intake24/db';
-
 import type { RecipeFoodTuple } from '../phrase-index';
+import type { AlternativeFoodNames } from '@intake24/db';
+
+import { CategoryLocal, FoodLocalList, RecipeFood } from '@intake24/db';
 
 export type LocalFoodData = {
   code: string;

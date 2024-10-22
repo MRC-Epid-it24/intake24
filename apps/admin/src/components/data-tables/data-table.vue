@@ -47,14 +47,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import type { DataTableHeader } from './use-data-table';
 import { mapActions } from 'pinia';
-import { computed, defineComponent } from 'vue';
 
-import type { Dictionary } from '@intake24/common/types';
+import { computed, defineComponent } from 'vue';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { useResource } from '@intake24/admin/stores';
 
-import type { DataTableHeader } from './use-data-table';
+import type { Dictionary } from '@intake24/common/types';
 import { ActionBar } from './action-bar';
 import DataTableFilter from './data-table-filter.vue';
 import { useDataTable } from './use-data-table';

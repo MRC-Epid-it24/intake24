@@ -89,9 +89,9 @@ import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { computed, ref, watch } from 'vue';
 
+import { useHttp } from '@intake24/admin/services';
 import type { Prompt } from '@intake24/common/prompts';
 import type { SurveySchemeTemplates } from '@intake24/common/types/http/admin';
-import { useHttp } from '@intake24/admin/services';
 import { copy } from '@intake24/common/util';
 
 defineOptions({ name: 'LoadPromptDialog' });

@@ -168,12 +168,12 @@
 <script lang="ts">
 import { defineComponent, type PropType, ref } from 'vue';
 
-import type { RuleCallback } from '@intake24/admin/types';
-import type { Card } from '@intake24/common/feedback';
-import type { FeedbackImage } from '@intake24/common/types/http/admin';
 import { useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import type { RuleCallback } from '@intake24/admin/types';
+import type { Card } from '@intake24/common/feedback';
 import { cardDefaults } from '@intake24/common/feedback';
+import type { FeedbackImage } from '@intake24/common/types/http/admin';
 import { copy, merge, randomString } from '@intake24/common/util';
 
 import { cardSettings } from './card';

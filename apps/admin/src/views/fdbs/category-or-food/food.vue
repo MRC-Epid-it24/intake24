@@ -151,12 +151,6 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-import type {
-  FoodDatabaseRefs,
-  FoodLocalEntry,
-  FoodLocalInput,
-  LocaleEntry,
-} from '@intake24/common/types/http/admin';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
@@ -171,6 +165,12 @@ import {
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useUser } from '@intake24/admin/stores';
+import type {
+  FoodDatabaseRefs,
+  FoodLocalEntry,
+  FoodLocalInput,
+  LocaleEntry,
+} from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui/components';
 import { useMessages } from '@intake24/ui/stores';

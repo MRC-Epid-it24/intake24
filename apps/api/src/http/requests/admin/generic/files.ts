@@ -1,6 +1,6 @@
-import path from 'node:path';
-
 import type { ParamSchema } from 'express-validator';
+
+import path from 'node:path';
 
 import { customTypeErrorMessage } from '@intake24/api/http/requests/util';
 

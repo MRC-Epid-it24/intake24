@@ -2,7 +2,10 @@ import { randomUUID } from 'node:crypto';
 
 import { pick } from 'lodash';
 
+import { NotFoundError } from '@intake24/api/http/errors';
+import { categoryResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
+import { toSimpleName } from '@intake24/api/util';
 import type {
   CategoryInput,
   CategoryListEntry,
@@ -16,9 +19,6 @@ import type {
   PaginateQuery,
   Transaction,
 } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
-import { categoryResponse } from '@intake24/api/http/responses/admin';
-import { toSimpleName } from '@intake24/api/util';
 import {
   Category,
   CategoryAttribute,

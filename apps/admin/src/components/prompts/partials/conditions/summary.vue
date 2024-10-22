@@ -15,10 +15,10 @@
 <script lang="ts">
 import { computed, defineComponent, type PropType } from 'vue';
 
+import { opToIconMap } from '@intake24/admin/composables';
 import type {
   Condition,
 } from '@intake24/common/prompts';
-import { opToIconMap } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({

@@ -118,9 +118,9 @@
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { defineComponent, ref } from 'vue';
 
-import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
 import { useMessages } from '@intake24/admin/stores';
 import { mfaProviders } from '@intake24/common/security';
+import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 
 import Duo from './duo.vue';

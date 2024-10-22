@@ -1,6 +1,6 @@
-import ms from 'ms';
-
 import type { CookieSettings, SameSiteCookieOptions } from './common';
+
+import ms from 'ms';
 
 export type JwtTokenSettings = {
   secret: string;

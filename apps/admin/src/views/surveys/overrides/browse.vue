@@ -100,13 +100,13 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 
-import type { SchemeOverrides, SchemeSettings } from '@intake24/common/surveys';
-import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
+import type { SchemeOverrides, SchemeSettings } from '@intake24/common/surveys';
 import { defaultOverrides, defaultSchemeSettings, flattenScheme } from '@intake24/common/surveys';
+import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { useApp } from '@intake24/ui/stores';
 
 import OverrideField from './override-field.vue';

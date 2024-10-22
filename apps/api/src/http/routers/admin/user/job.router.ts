@@ -5,10 +5,10 @@ import fs from 'fs-extra';
 import { pick } from 'lodash';
 import { literal, where } from 'sequelize';
 
-import type { JobAttributes } from '@intake24/common/types/http/admin';
-import type { WhereOptions } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
+import type { WhereOptions } from '@intake24/db';
 import { Job, Op } from '@intake24/db';
 
 export function job() {

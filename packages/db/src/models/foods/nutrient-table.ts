@@ -6,16 +6,16 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
-
 import type { NutrientTableRecordCreationAttributes } from './nutrient-table-record';
-import BaseModel from '../model';
+
+import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
 import {
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
   NutrientTableRecord,
 } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   list: { order: [['id', 'ASC']] },

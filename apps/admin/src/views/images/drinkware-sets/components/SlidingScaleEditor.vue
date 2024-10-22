@@ -169,9 +169,9 @@ import { flatten, uniqueId } from 'lodash';
 import chunk from 'lodash/chunk';
 import { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue';
 
-import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 
 import { closestSegmentIndex, closestVertexIndex } from '../../math-helpers';
 

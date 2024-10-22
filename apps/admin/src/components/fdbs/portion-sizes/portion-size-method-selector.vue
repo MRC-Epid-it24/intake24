@@ -99,11 +99,11 @@
 </template>
 
 <script lang="ts">
+import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './portion-sizes';
+
 import { defineComponent, ref } from 'vue';
 
 import { copy, merge, randomString } from '@intake24/common/util';
-
-import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './portion-sizes';
 import portionSizeParams from './parameters';
 import { psmDefaults, usePortionSizeMethods } from './portion-sizes';
 

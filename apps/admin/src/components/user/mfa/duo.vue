@@ -41,12 +41,12 @@
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import type {
   DuoRegistrationChallenge,
   MFADeviceResponse,
 } from '@intake24/common/types/http/admin';
-import { useForm } from '@intake24/admin/composables';
-import { useHttp } from '@intake24/admin/services';
 
 defineOptions({ name: 'DuoDevice' });
 

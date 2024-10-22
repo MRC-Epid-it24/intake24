@@ -86,9 +86,9 @@ import type { PropType } from 'vue';
 import type { TranslateResult } from 'vue-i18n';
 import { defineComponent, ref, toRefs, watch } from 'vue';
 
-import type { Dictionary } from '@intake24/common/types';
 import { useFetchList } from '@intake24/admin/composables';
 import { getResource } from '@intake24/admin/router/resources';
+import type { Dictionary } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({

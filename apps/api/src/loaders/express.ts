@@ -1,6 +1,6 @@
-import path from 'node:path';
-
 import type { Express } from 'express';
+
+import path from 'node:path';
 import { json, urlencoded } from 'body-parser';
 import CleanCSS from 'clean-css';
 import RedisStore from 'connect-redis';

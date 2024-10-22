@@ -1,6 +1,6 @@
-import { copy } from '@intake24/common/util';
-
 import type { Prompts } from './prompts';
+
+import { copy } from '@intake24/common/util';
 import { basePrompt, promptValidation } from './base';
 
 export const checkboxListPrompt: Prompts['checkbox-list-prompt'] = copy({

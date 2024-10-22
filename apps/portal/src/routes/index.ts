@@ -1,8 +1,8 @@
 import type { Express } from 'express';
-import express from 'express';
-import helmet from 'helmet';
-
 import type { Ops } from '../app';
+import express from 'express';
+
+import helmet from 'helmet';
 import site from './site';
 
 export default (app: Express, { config }: Ops): void => {

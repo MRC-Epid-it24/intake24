@@ -1,5 +1,5 @@
-import type { PermissionRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import type { PermissionRequest } from '@intake24/common/types/http/admin';
 import { Permission } from '@intake24/db';
 
 export default () => {

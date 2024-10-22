@@ -27,8 +27,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
 import { useSelects } from '@intake24/admin/composables';
+import type { Prompts } from '@intake24/common/prompts';
 
 import { basePrompt } from '../partials';
 

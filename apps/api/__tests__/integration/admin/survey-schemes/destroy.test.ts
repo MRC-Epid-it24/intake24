@@ -1,5 +1,5 @@
-import type { SurveySchemeCreationAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import type { SurveySchemeCreationAttributes } from '@intake24/db';
 import { SurveyScheme } from '@intake24/db';
 
 export default () => {

@@ -55,8 +55,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { JobParams } from '@intake24/common/types';
 import { searchSortingAlgorithms } from '@intake24/common/surveys';
+import type { JobParams } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
 import jobParams from './job-params';

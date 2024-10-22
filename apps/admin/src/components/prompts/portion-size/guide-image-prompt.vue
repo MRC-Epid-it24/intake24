@@ -88,10 +88,10 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { CategoryListItem } from '@intake24/admin/components/fdbs';
-import type { Prompts } from '@intake24/common/prompts';
 import { SelectResource } from '@intake24/admin/components/dialogs';
+import type { CategoryListItem } from '@intake24/admin/components/fdbs';
 import { CategoryList } from '@intake24/admin/components/fdbs';
+import type { Prompts } from '@intake24/common/prompts';
 import { copy } from '@intake24/common/util';
 
 import { basePrompt, ImageMapSettings } from '../partials';

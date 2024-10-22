@@ -49,10 +49,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 
 type CreateDrinkwareSetForm = {
   id: string | null;

@@ -45,9 +45,9 @@ import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
-import type { CustomCard } from '@intake24/common/feedback';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import type { CustomCard } from '@intake24/common/feedback';
 
 export default defineComponent({
   name: 'CardThresholds',

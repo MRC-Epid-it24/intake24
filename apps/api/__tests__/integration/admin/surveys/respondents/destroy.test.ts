@@ -1,5 +1,5 @@
-import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
+import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 

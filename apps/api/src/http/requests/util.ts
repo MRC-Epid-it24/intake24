@@ -3,9 +3,9 @@ import type { TsRestRequest } from '@ts-rest/express';
 import type { RequestHandler } from 'express';
 import type { CustomValidator, Meta, ValidationChain } from 'express-validator';
 
-import type { I18nParams } from '@intake24/i18n';
 import { validation } from '@intake24/api/http/middleware';
 import { FoodsLocale } from '@intake24/db';
+import type { I18nParams } from '@intake24/i18n';
 
 export type ValidationMiddleware = RequestHandler | ValidationChain;
 

@@ -64,9 +64,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { NutrientTypeRefs, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import type { NutrientTypeRefs, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 
 type NutrientTypeForm = {
   id: string | null;

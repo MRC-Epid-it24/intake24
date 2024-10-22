@@ -1,10 +1,10 @@
-import 'winston-daily-rotate-file';
-
 import path from 'node:path';
 
 import { createLogger, format, transports } from 'winston';
 
 import config from './config';
+
+import 'winston-daily-rotate-file';
 
 export { Logger } from 'winston';
 

@@ -1,7 +1,7 @@
-import path from 'node:path';
-
 import type { AppRoute, AppRouter } from '@ts-rest/core';
+
 import type { TsRestRequest } from '@ts-rest/express';
+import path from 'node:path';
 import { initServer } from '@ts-rest/express';
 import multer from 'multer';
 import { col, fn } from 'sequelize';

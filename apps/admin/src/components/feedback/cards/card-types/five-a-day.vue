@@ -16,8 +16,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FiveADayCard } from '@intake24/common/feedback';
 import { JsonEditor } from '@intake24/admin/components/editors';
+import type { FiveADayCard } from '@intake24/common/feedback';
 
 import { CardThresholds, CardUnit } from '../partials';
 

@@ -1,13 +1,12 @@
 import { Redis } from 'ioredis';
 
-import type { User, UserSurveyAlias } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import {
   defaultMeals as defaultFeedbackMeals,
-  defaultTopFoods as defaultFeedbackTopFoods,
   feedbackOutputs as defaultFeedbackOutputs,
-  feedbackPhysicalDataFields,
   feedbackStandardSections as defaultFeedbackSections,
+  defaultTopFoods as defaultFeedbackTopFoods,
+  feedbackPhysicalDataFields,
 } from '@intake24/common/feedback';
 import {
   defaultExport,
@@ -17,6 +16,7 @@ import {
 } from '@intake24/common/surveys';
 import { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
 import { permissions } from '@intake24/common-backend';
+import type { User, UserSurveyAlias } from '@intake24/db';
 import {
   FeedbackScheme,
   FoodsLocale,

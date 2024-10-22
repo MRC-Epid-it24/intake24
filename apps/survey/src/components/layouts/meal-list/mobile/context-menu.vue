@@ -36,12 +36,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { FoodState, MealState } from '@intake24/common/types';
-import { ConfirmDialog } from '@intake24/ui';
-
 import type { MenuItem } from '../use-food-item';
+
+import { defineComponent } from 'vue';
+import type { FoodState, MealState } from '@intake24/common/types';
+
+import { ConfirmDialog } from '@intake24/ui';
 import { useContextMenu } from '../use-context-menu';
 
 export default defineComponent({

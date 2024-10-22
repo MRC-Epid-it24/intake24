@@ -1,6 +1,6 @@
-import path from 'node:path';
-
 import type { Request, Response } from 'express';
+
+import path from 'node:path';
 import { Router } from 'express';
 import fs from 'fs-extra';
 

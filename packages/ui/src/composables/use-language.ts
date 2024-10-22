@@ -1,10 +1,10 @@
 import type { useLocale } from 'vuetify';
-import { computed, onMounted, watch } from 'vue';
-
-import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
-import { defaultMessages, loadAppLanguage, useI18n } from '@intake24/i18n';
-
 import type { HttpClient } from '../types';
+
+import { computed, onMounted, watch } from 'vue';
+import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
+
+import { defaultMessages, loadAppLanguage, useI18n } from '@intake24/i18n';
 import { useApp } from '../stores';
 
 export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: ReturnType<typeof useLocale>) {

@@ -46,15 +46,15 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 
+import { formMixin } from '@intake24/admin/components/entry';
+import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import type { Prompt } from '@intake24/common/prompts';
+import { infoPrompt } from '@intake24/common/prompts';
 import type {
   SurveySchemePromptEntry,
   SurveySchemePromptRefs,
 } from '@intake24/common/types/http/admin';
-import { formMixin } from '@intake24/admin/components/entry';
-import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { infoPrompt } from '@intake24/common/prompts';
 
 export type SchemePromptForm = {
   id: string | null;

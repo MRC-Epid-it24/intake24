@@ -1,12 +1,12 @@
 import type { SetupContext } from 'vue';
-import { computed } from 'vue';
+import type { MenuItem } from './use-food-item';
 
+import { computed } from 'vue';
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
-import { useMealUtils } from '@intake24/survey/composables';
 
-import type { MenuItem } from './use-food-item';
+import { useMealUtils } from '@intake24/survey/composables';
 
 export type UseMealItemProps = {
   meal: MealState;

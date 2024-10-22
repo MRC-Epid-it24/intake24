@@ -60,8 +60,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime } from '@intake24/common/surveys';
+import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 

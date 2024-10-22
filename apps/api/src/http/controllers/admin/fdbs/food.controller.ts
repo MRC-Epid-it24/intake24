@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
+import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type {
   FoodInput,
@@ -9,7 +10,6 @@ import type {
   FoodsResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
 import { FoodLocal, SystemLocale } from '@intake24/db';
 
 function adminFoodController({

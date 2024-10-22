@@ -117,10 +117,10 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 
-import type { UserDemographic } from '@intake24/ui/feedback';
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
+import type { UserDemographic } from '@intake24/ui/feedback';
 import {
   buildCardParams,
   buildTopFoods,

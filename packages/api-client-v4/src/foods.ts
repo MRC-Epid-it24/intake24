@@ -1,3 +1,6 @@
+import type { BaseClientV4 } from './base-client-v4';
+
+import type { CreateResult } from './create-response';
 import type {
   CreateGlobalFoodRequest,
   CreateLocalFoodRequest,
@@ -5,9 +8,6 @@ import type {
   FoodEntry,
   UpdateGlobalFoodRequest,
 } from '@intake24/common/types/http/admin';
-
-import type { BaseClientV4 } from './base-client-v4';
-import type { CreateResult } from './create-response';
 import { parseCreateResponse } from './create-response';
 
 export class FoodsApiV4 {

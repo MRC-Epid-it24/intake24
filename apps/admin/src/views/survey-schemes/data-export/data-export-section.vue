@@ -161,8 +161,8 @@ import { watchDebounced } from '@vueuse/core';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import type { ExportField, ExportSection } from '@intake24/common/surveys';
 import { DataExportNutrients } from '@intake24/admin/components/schemes';
+import type { ExportField, ExportSection } from '@intake24/common/surveys';
 
 defineOptions({ name: 'DataExportSection' });
 

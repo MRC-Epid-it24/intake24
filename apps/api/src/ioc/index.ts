@@ -1,6 +1,7 @@
 import { asClass, asValue, createContainer } from 'awilix';
 
 import type { Config } from '@intake24/api/config';
+import config from '@intake24/api/config';
 import type { FoodIndex } from '@intake24/api/food-index';
 import type {
   // Admin
@@ -74,7 +75,6 @@ import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
 import type { Logger, Mailer } from '@intake24/common-backend';
 import type { DatabasesInterface } from '@intake24/db';
-import config from '@intake24/api/config';
 import { Database, KyselyDatabases, models } from '@intake24/db';
 
 import controllers from './controllers';

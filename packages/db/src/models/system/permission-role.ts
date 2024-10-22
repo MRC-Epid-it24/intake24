@@ -7,8 +7,8 @@ import type {
 } from 'sequelize';
 import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { Permission, Role } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'PermissionRole',

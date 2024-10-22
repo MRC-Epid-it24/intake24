@@ -143,13 +143,13 @@
 import { addYears } from 'date-fns';
 import { defineComponent, onMounted, ref, watch } from 'vue';
 
+import { useDateTime, useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
+import { useMessages } from '@intake24/admin/stores';
 import type {
   PersonalAccessTokenResponse,
   PersonalAccessTokensResponse,
 } from '@intake24/common/types/http/admin';
-import { useDateTime, useForm } from '@intake24/admin/composables';
-import { useHttp } from '@intake24/admin/services';
-import { useMessages } from '@intake24/admin/stores';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui/components';
 import { useClipboard } from '@intake24/ui/composables';

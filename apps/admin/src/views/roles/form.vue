@@ -97,10 +97,10 @@
 import orderBy from 'lodash/orderBy';
 import { defineComponent } from 'vue';
 
-import type { PermissionListEntry, RoleEntry, RoleRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import resources from '@intake24/admin/router/resources';
+import type { PermissionListEntry, RoleEntry, RoleRefs } from '@intake24/common/types/http/admin';
 
 type RoleForm = {
   id: string | null;

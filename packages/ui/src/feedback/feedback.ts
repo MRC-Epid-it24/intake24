@@ -3,8 +3,8 @@ import { computed, ref } from 'vue';
 
 import type { FeedbackCustomSection, FeedbackStandardSection } from '@intake24/common/feedback';
 import type { FeedbackSchemeResponse } from '@intake24/common/types/http';
-import type { FeedbackCardParameters, FeedbackDictionaries } from '@intake24/ui/feedback';
 import { copy } from '@intake24/common/util';
+import type { FeedbackCardParameters, FeedbackDictionaries } from '@intake24/ui/feedback';
 import { buildTopFoods } from '@intake24/ui/feedback';
 
 export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefined>) {

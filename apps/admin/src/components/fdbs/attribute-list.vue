@@ -95,8 +95,8 @@ import { computed, defineComponent } from 'vue';
 
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { Nullable } from '@intake24/common/types';
-import type { AttributeDefaultsAttributes } from '@intake24/db';
 import { useInRecipeTypes } from '@intake24/common/types';
+import type { AttributeDefaultsAttributes } from '@intake24/db';
 import { useI18n } from '@intake24/i18n';
 
 type Attributes = Pick<

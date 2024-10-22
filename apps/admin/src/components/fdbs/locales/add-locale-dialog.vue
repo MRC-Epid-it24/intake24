@@ -70,9 +70,9 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
+import { useFetchList } from '@intake24/admin/composables';
 import type { LocaleReference } from '@intake24/common/types/http/admin';
 import type { FoodsLocaleAttributes } from '@intake24/db';
-import { useFetchList } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'AddLocaleDialog',

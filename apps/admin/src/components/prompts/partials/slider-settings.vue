@@ -100,8 +100,8 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 
-import type { Slider } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import type { Slider } from '@intake24/common/prompts';
 
 export default defineComponent({
   name: 'SliderSettings',

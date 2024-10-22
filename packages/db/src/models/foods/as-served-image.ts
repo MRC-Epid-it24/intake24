@@ -9,8 +9,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { AsServedSet, ProcessedImage } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   asServedSet: { include: [{ model: AsServedSet }] },

@@ -1,12 +1,12 @@
-import type { Dialect, LogEvent, Logger as KyselyLogFunc } from 'kysely';
+import type { Dialect, Logger as KyselyLogFunc, LogEvent } from 'kysely';
+import type { DatabaseType } from './config';
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
+
 import cursor from 'pg-cursor';
-
 import type { Logger } from '@intake24/common-backend';
-import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
 
-import type { DatabaseType } from './config';
+import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
 
 function databaseLogQuery(sql: string, logger: Logger, limit: number) {
   if (limit > 0 && sql.length > limit)

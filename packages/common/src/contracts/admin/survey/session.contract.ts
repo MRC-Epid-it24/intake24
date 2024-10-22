@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as surveyId, paginationMeta, paginationRequest, uuid as sessionId } from '@intake24/common/types/http';
+import { paginationMeta, paginationRequest, uuid as sessionId, bigIntString as surveyId } from '@intake24/common/types/http';
 import { userSurveySessionAttributes } from '@intake24/common/types/http/admin';
 
 export const session = initContract().router({

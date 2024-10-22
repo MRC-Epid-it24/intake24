@@ -10,8 +10,8 @@ import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequel
 
 import type { SurveyState } from '@intake24/common/types';
 
-import BaseModel from '../model';
 import { Survey, User, UserSurveyAlias } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'UserSurveySession',

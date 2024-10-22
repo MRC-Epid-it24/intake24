@@ -93,10 +93,10 @@ import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { computed, ref, watch } from 'vue';
 
-import type { NutrientGroupCard } from '@intake24/common/feedback';
-import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { useEntry } from '@intake24/admin/stores';
+import type { NutrientGroupCard } from '@intake24/common/feedback';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 
 import { CardThresholds, CardUnit } from '../partials';
 

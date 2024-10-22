@@ -6,6 +6,8 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type { HasVisibility } from '..';
+
 import {
   BelongsTo,
   BelongsToMany,
@@ -17,14 +19,12 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
 import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
-import { defaultExport, defaultMeals, defaultPrompts, defaultSchemeSettings } from '@intake24/common/surveys';
 
-import type { HasVisibility } from '..';
-import { BaseModel } from '..';
+import { defaultExport, defaultMeals, defaultPrompts, defaultSchemeSettings } from '@intake24/common/surveys';
 import { Survey, User, UserSecurable } from '.';
+import { BaseModel } from '..';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name'], order: [['name', 'ASC']] },

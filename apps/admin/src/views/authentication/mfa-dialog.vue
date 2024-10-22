@@ -98,9 +98,9 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import { computed, defineComponent, onBeforeUnmount, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { LoginResponse, MFAAuthResponse } from '@intake24/common/types/http';
 import { useForm } from '@intake24/admin/composables';
 import { useAuth, useMessages } from '@intake24/admin/stores';
+import type { LoginResponse, MFAAuthResponse } from '@intake24/common/types/http';
 import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
@@ -177,7 +177,7 @@ export default defineComponent({
 
       try {
         const { challengeId, provider, options } = props.authData.challenge;
-        const response = await startAuthentication(options);
+        const response = await startAuthentication({ optionsJSON: options });
         await auth.verify({ challengeId, provider, response });
         await finalizeLogin();
       }

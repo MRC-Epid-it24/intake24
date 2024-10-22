@@ -1,8 +1,8 @@
+import type { ResourceOps } from './resource';
+
 import { Readable } from 'node:stream';
 
 import { Transform } from '@json2csv/node';
-
-import type { ResourceOps } from './resource';
 
 export async function languages({ kyselyDb }: ResourceOps) {
   const { total } = await kyselyDb.system.selectFrom('languages').select(({ fn }) => [fn.count<number>('id').as('total')]).executeTakeFirstOrThrow();

@@ -35,8 +35,8 @@ import { watchDebounced } from '@vueuse/core';
 import isEmpty from 'lodash/isEmpty';
 import { computed, defineComponent, ref, watch } from 'vue';
 
-import type { Dictionary } from '@intake24/common/types';
 import { useResource } from '@intake24/admin/stores';
+import type { Dictionary } from '@intake24/common/types';
 
 export default defineComponent({
   name: 'DataTableFilter',

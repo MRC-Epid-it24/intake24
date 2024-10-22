@@ -2,8 +2,8 @@ import type { Ref } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { ref, unref, watch } from 'vue';
 
-import type { Pagination } from '@intake24/db';
 import { useHttp } from '@intake24/admin/services';
+import type { Pagination } from '@intake24/db';
 
 export function useFetchList<T = any>(url: string, id?: string | Ref<string>) {
   const http = useHttp();

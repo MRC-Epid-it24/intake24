@@ -1,10 +1,13 @@
+import type { SurveyState, SurveyStore } from '../stores';
 import type {
   ComponentType,
   Condition,
   FoodCompletionState,
   Prompt,
 } from '@intake24/common/prompts';
+import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
 import type { FoodSection, MealSection, SurveyPromptSection } from '@intake24/common/surveys';
+import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import type {
   FoodFlag,
   FoodState,
@@ -14,9 +17,6 @@ import type {
   SurveyFlag,
 } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
-import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import {
   asServedComplete,
   cerealComplete,
@@ -32,6 +32,8 @@ import {
   recipeBuilderComplete,
   standardPortionComplete,
 } from '@intake24/common/util/portion-size-checks';
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+
 import {
   addonFoodPromptCheck,
   findMeal,
@@ -51,8 +53,6 @@ import {
   surveyPortionSizeComplete,
   surveySearchComplete,
 } from '@intake24/survey/util';
-
-import type { SurveyState, SurveyStore } from '../stores';
 import { filterMealsForAggregateChoicePrompt } from '../components/prompts/standard/aggregate-choice/aggregate-choice';
 import { recallLog } from '../stores';
 

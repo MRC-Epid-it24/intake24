@@ -60,11 +60,11 @@ import has from 'lodash/has';
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { RouteLeave } from '@intake24/admin/types';
-import type { Dictionary } from '@intake24/common/types';
 import resources from '@intake24/admin/router/resources';
 import { useHttp } from '@intake24/admin/services';
 import { useMessages, useResource, useUser } from '@intake24/admin/stores';
+import type { RouteLeave } from '@intake24/admin/types';
+import type { Dictionary } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 

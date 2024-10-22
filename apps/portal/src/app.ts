@@ -1,8 +1,8 @@
+import type { Config } from './config';
+
 import express from 'express';
 
 import type { Logger } from '@intake24/common-backend';
-
-import type { Config } from './config';
 import loaders from './loaders';
 
 export interface Ops {

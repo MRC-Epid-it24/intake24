@@ -58,8 +58,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { PromptValidationWithLimits } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import type { PromptValidationWithLimits } from '@intake24/common/prompts';
 
 export type LocaleTranslationKeys = 'message';
 

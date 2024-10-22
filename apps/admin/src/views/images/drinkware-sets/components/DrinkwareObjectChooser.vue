@@ -34,9 +34,9 @@ import type { VImg } from 'vuetify/components';
 import { useElementSize } from '@vueuse/core';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 
+import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import type { ImageMap } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
-import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 
 import { useImageMap } from '../use-image-map';
 

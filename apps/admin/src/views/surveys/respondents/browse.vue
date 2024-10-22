@@ -207,16 +207,16 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 
+import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 import type { UserCustomField } from '@intake24/common/types';
 import type {
   RespondentEntry,
   RespondentListEntry,
   SurveyEntry,
 } from '@intake24/common/types/http/admin';
-import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
-import { detailMixin } from '@intake24/admin/components/entry';
-import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { useHttp } from '@intake24/admin/services';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog, useClipboard } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';

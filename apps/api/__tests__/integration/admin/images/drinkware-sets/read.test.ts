@@ -1,7 +1,7 @@
 import request from 'supertest';
 
-import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 
 export default () => {
   const baseUrl = '/api/admin/images/drinkware-sets';

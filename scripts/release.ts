@@ -1,7 +1,7 @@
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-
 import type { Options } from 'execa';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+
+import { resolve } from 'node:path';
 import * as calver from 'calver';
 import execa from 'execa';
 import colors from 'picocolors';

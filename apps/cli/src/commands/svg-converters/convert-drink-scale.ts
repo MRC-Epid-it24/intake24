@@ -5,15 +5,15 @@ import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy } from 'lodash';
 
+import { PkgConstants } from '@intake24/cli/commands/packager/constants';
+import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import type { PkgDrinkScaleV2 } from '@intake24/cli/commands/packager/types/drinkware';
 import type {
   PkgImageMap,
   PkgImageMapObject,
 } from '@intake24/cli/commands/packager/types/image-map';
-import type { ImageMapData } from '@intake24/svg-utils';
-import { PkgConstants } from '@intake24/cli/commands/packager/constants';
-import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
+import type { ImageMapData } from '@intake24/svg-utils';
 import { getDrinkScaleOutline, getImageMapData } from '@intake24/svg-utils';
 
 type Logger = typeof mainLogger;

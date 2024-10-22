@@ -2,9 +2,9 @@ import type { Job as BullJob } from 'bullmq';
 import { Queue, Worker } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
+import ioc from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import type { JobData } from '@intake24/common/types';
-import ioc from '@intake24/api/ioc';
 import { Task } from '@intake24/db';
 
 import { QueueHandler } from './queue-handler';

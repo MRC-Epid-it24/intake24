@@ -186,8 +186,6 @@
 import { mapValues } from 'lodash';
 import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 
-import type { ImageMapResponse } from '@intake24/common/types/http';
-import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
@@ -196,6 +194,8 @@ import resources from '@intake24/admin/router/resources';
 import { httpService } from '@intake24/admin/services';
 import SlidingScaleEditor from '@intake24/admin/views/images/drinkware-sets/components/SlidingScaleEditor.vue';
 import VolumeSamplesTable from '@intake24/admin/views/images/drinkware-sets/components/VolumeSamplesTable.vue';
+import type { ImageMapResponse } from '@intake24/common/types/http';
+import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 
 import DrinkwareObjectChooser from './components/DrinkwareObjectChooser.vue';

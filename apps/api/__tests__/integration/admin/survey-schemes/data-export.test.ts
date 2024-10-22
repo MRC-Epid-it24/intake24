@@ -1,8 +1,8 @@
 import request from 'supertest';
 
-import type { SurveySchemeCreationAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { exportSectionIds } from '@intake24/common/surveys';
+import type { SurveySchemeCreationAttributes } from '@intake24/db';
 import { SurveyScheme } from '@intake24/db';
 
 export default () => {

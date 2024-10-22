@@ -29,10 +29,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { SurveySchemePromptEntry } from '@intake24/common/types/http/admin';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
+import type { SurveySchemePromptEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'SchemePromptDetail',

@@ -92,23 +92,23 @@
 </template>
 
 <script lang="ts">
+import type { FeedbackSchemeForm } from '../form.vue';
 import debounce from 'lodash/debounce';
-import { computed, defineComponent, ref, watch } from 'vue';
 
-import type { RuleCallback } from '@intake24/admin/types';
-import type { FeedbackMeals } from '@intake24/common/feedback';
-import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { Preview, TableFieldList } from '@intake24/admin/components/feedback';
 import { ColorList, NutrientList } from '@intake24/admin/components/lists';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import type { RuleCallback } from '@intake24/admin/types';
+import type { FeedbackMeals } from '@intake24/common/feedback';
 import { defaultMeals } from '@intake24/common/feedback';
 import { colors } from '@intake24/common/theme';
-import { useI18n } from '@intake24/i18n';
+import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 
-import type { FeedbackSchemeForm } from '../form.vue';
+import { useI18n } from '@intake24/i18n';
 
 export type FeedbackSchemeMealsForm = Pick<FeedbackSchemeForm, 'meals'>;
 

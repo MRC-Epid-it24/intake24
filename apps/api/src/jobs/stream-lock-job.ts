@@ -1,6 +1,6 @@
 import type { IoC } from '@intake24/api/ioc';
-import type { JobType } from '@intake24/common/types';
 import { sleep } from '@intake24/api/util';
+import type { JobType } from '@intake24/common/types';
 
 import BaseJob from './job';
 

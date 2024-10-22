@@ -1,7 +1,7 @@
+import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';
+
 /* eslint-disable ts/no-empty-object-type */
 import { Readable } from 'node:stream';
-
-import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';
 import { snakeCase } from 'lodash';
 import { col, DataTypes, fn, Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';

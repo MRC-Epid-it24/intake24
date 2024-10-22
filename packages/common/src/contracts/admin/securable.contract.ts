@@ -2,7 +2,7 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { securableDefs, type SecurableType } from '@intake24/common/security';
-import { bigIntString as userId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { paginationMeta, paginationRequest, bigIntString as userId } from '@intake24/common/types/http';
 import {
   createUserWithSecurables,
   updateSecurableOwnerRequest,

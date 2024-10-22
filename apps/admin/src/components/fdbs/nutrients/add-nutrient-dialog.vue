@@ -87,12 +87,12 @@
 import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
 
+import { useFetchList } from '@intake24/admin/composables';
 import type {
   FoodDatabaseRefs,
   NutrientTableRecordAttributes,
   NutrientTableRecordReference,
 } from '@intake24/common/types/http/admin';
-import { useFetchList } from '@intake24/admin/composables';
 import { copy } from '@intake24/common/util';
 
 defineOptions({ name: 'AddNutrientDialog' });

@@ -7,8 +7,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { DrinkwareSet, GuideImage, ImageMapObject, ProcessedImage } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   guideImages: { include: [{ model: GuideImage }] },

@@ -23,21 +23,20 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
+import { surveyPermissions } from '@intake24/common/security';
 import type {
   SchemeOverrides,
   SessionSettings,
   SurveySearchSettings,
   SurveyState,
 } from '@intake24/common/surveys';
-import type { Notification } from '@intake24/common/types';
-import { surveyPermissions } from '@intake24/common/security';
 import {
   defaultOverrides,
   defaultSearchSettings,
   defaultSessionSettings,
 } from '@intake24/common/surveys';
+import type { Notification } from '@intake24/common/types';
 
-import BaseModel from '../model';
 import {
   ClientErrorReport,
   FeedbackScheme,
@@ -51,6 +50,7 @@ import {
   UserSurveyAlias,
   UserSurveySession,
 } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   counter: { include: [{ model: GenUserCounter }] },

@@ -8,8 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { FoodsLocale } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'SplitWord',

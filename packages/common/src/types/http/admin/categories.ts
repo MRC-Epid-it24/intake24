@@ -1,3 +1,5 @@
+import type { FoodListEntry } from './foods';
+
 import type {
   CategoryAttributeAttributes,
   CategoryAttributes,
@@ -5,8 +7,6 @@ import type {
   CategoryPortionSizeMethodCreationAttributes,
   Pagination,
 } from '@intake24/db';
-
-import type { FoodListEntry } from './foods';
 
 export type CategoryInput = Pick<CategoryAttributes, 'code' | 'name'> & {
   parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];

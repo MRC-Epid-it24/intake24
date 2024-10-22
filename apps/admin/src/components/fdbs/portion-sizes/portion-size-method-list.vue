@@ -58,19 +58,19 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { deepEqual } from 'fast-equals';
-import { defineComponent, ref } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
-
-import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
-import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
-import { ConfirmDialog } from '@intake24/ui';
-
 import type {
   InternalPortionSizeMethodItem,
   PortionSizeMethodEvent,
   PortionSizeMethodItem,
 } from './portion-sizes';
+import { deepEqual } from 'fast-equals';
+import { defineComponent, ref } from 'vue';
+
+import { VueDraggable } from 'vue-draggable-plus';
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
+import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
+
+import { ConfirmDialog } from '@intake24/ui';
 import PortionSizeMethodSelector from './portion-size-method-selector.vue';
 
 export default defineComponent({

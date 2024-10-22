@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
-import type { SurveyState } from '@intake24/common/types';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import type { SurveyState } from '@intake24/common/types';
 
 export default () => {
   let url: string;

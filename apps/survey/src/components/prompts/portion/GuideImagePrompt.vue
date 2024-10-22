@@ -74,15 +74,15 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import type { LinkedParent } from '../partials';
 
+import { defineComponent } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
-import { useFoodUtils } from '@intake24/survey/composables';
 
-import type { LinkedParent } from '../partials';
+import { useFoodUtils } from '@intake24/survey/composables';
 import { ImageMapSelector, LinkedQuantity, QuantityBadge, QuantityCard } from '../partials';
 import createBasePortion from './createBasePortion';
 

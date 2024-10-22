@@ -13,6 +13,7 @@ import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type { UseInRecipeType } from '@intake24/common/types';
+import { useInRecipeTypes } from '@intake24/common/types';
 import type {
   CreateGlobalCategoryRequest,
   CreateGlobalFoodRequest,
@@ -25,7 +26,6 @@ import type {
   NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
-import { useInRecipeTypes } from '@intake24/common/types';
 
 function fromPackageImageMapObjects(
   objects: Record<string, PkgImageMapObject>,

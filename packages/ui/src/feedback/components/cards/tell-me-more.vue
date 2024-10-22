@@ -70,9 +70,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
-
 import type { FeedbackDetails } from './use-card';
+
+import { computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'TellMeMore',

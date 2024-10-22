@@ -44,11 +44,11 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import type { SurveyEntry, SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
+import type { SurveyEntry, SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';

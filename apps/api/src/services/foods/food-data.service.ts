@@ -1,9 +1,9 @@
+import { getParentLocale } from '@intake24/api/services/foods/common';
+import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
 import type {
   UserAssociatedFoodPrompt,
   UserFoodData,
 } from '@intake24/common/types/http/foods/user-food-data';
-import { getParentLocale } from '@intake24/api/services/foods/common';
-import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
 import {
   AssociatedFood,
   Brand,

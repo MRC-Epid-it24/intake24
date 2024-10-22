@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as signInLogId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { paginationMeta, paginationRequest, bigIntString as signInLogId } from '@intake24/common/types/http';
 import { signInLogAttributes } from '@intake24/common/types/http/admin';
 
 export const signInLog = initContract().router({

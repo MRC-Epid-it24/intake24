@@ -1,13 +1,23 @@
+import type csvParser from 'csv-parser';
 import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
-import path from 'node:path';
 
-import type csvParser from 'csv-parser';
+import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues, partition, sortBy, trim } from 'lodash';
 import removeBOM from 'remove-bom-stream';
 
+import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
+import {
+  AlbaneAlternativeDescriptionRow,
+} from '@intake24/cli/commands/fr-albane/types/alternative-descriptions';
+import { AlbaneFacetsRow } from '@intake24/cli/commands/fr-albane/types/facets';
+import { AlbaneFoodCategoryRow } from '@intake24/cli/commands/fr-albane/types/food-categories';
+import { AlbaneFoodListRow } from '@intake24/cli/commands/fr-albane/types/food-list';
+import { AlbaneStandardUnitRow } from '@intake24/cli/commands/fr-albane/types/standard-unit';
+import { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import type {
   PkgGlobalCategory,
   PkgLocalCategory,
@@ -22,16 +32,6 @@ import type {
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
-import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
-import {
-  AlbaneAlternativeDescriptionRow,
-} from '@intake24/cli/commands/fr-albane/types/alternative-descriptions';
-import { AlbaneFacetsRow } from '@intake24/cli/commands/fr-albane/types/facets';
-import { AlbaneFoodCategoryRow } from '@intake24/cli/commands/fr-albane/types/food-categories';
-import { AlbaneFoodListRow } from '@intake24/cli/commands/fr-albane/types/food-list';
-import { AlbaneStandardUnitRow } from '@intake24/cli/commands/fr-albane/types/standard-unit';
-import { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
-import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import { Dictionary } from '@intake24/common/types';
 import { capitalize } from '@intake24/common/util';
 import logger from '@intake24/common-backend/services/logger/logger';

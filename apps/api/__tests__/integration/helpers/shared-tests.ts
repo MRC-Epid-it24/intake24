@@ -1,7 +1,7 @@
-import { pick } from 'lodash';
-import request from 'supertest';
-
 import type Suite from './integration-suite';
+import { pick } from 'lodash';
+
+import request from 'supertest';
 
 type Method = 'get' | 'post' | 'patch' | 'put' | 'delete';
 

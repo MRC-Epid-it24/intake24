@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
+import { NotFoundError } from '@intake24/api/http/errors';
+import { categoryContentsResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
 import type {
   CategoriesResponse,
@@ -11,8 +13,6 @@ import type {
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
-import { categoryContentsResponse } from '@intake24/api/http/responses/admin';
 import { CategoryLocal, SystemLocale } from '@intake24/db';
 
 function adminCategoryController({

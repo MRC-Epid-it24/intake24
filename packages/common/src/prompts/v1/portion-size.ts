@@ -1,6 +1,6 @@
-import { copy } from '@intake24/common/util';
-
 import type { ImageMap, Prompts } from './prompts';
+
+import { copy } from '@intake24/common/util';
 import { basePortionPrompt } from './base';
 
 const imageMap: ImageMap = {

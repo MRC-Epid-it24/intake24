@@ -10,11 +10,11 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { ExternalSource } from '@intake24/common/prompts';
 
-import BaseModel from '../model';
 import {
   SurveySubmissionFood,
   SurveySubmissionMissingFood,
 } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'SurveySubmissionExternalSource',

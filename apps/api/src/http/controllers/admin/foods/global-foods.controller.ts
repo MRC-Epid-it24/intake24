@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
 import { HttpStatusCode } from 'axios';
 
+import { ForbiddenError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { FoodEntry, UpdateGlobalFoodRequest } from '@intake24/common/types/http/admin';
-import { ForbiddenError } from '@intake24/api/http/errors';
 
 function globalFoodsController({ globalFoodsService }: Pick<IoC, 'globalFoodsService'>) {
   const store = async (req: Request, res: Response): Promise<void> => {

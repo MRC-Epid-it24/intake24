@@ -135,14 +135,14 @@ import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { computed, defineComponent, ref } from 'vue';
 
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { closestSegmentIndex } from '@intake24/admin/views/images/math-helpers';
 import type {
   GuideImageEntry,
   GuideImageEntryObject,
   ImageMapEntry,
   ImageMapEntryObject,
 } from '@intake24/common/types/http/admin';
-import { LanguageSelector } from '@intake24/admin/components/forms';
-import { closestSegmentIndex } from '@intake24/admin/views/images/math-helpers';
 import { ConfirmDialog } from '@intake24/ui';
 
 interface Objects extends Omit<GuideImageEntryObject, 'id' | 'outlineCoordinates'> {

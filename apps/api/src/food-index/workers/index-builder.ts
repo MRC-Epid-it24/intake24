@@ -1,19 +1,21 @@
+/* eslint-disable perfectionist/sort-imports */
 import '@intake24/api/bootstrap';
+
+import type InterpretedPhrase from '../interpreted-phrase';
 
 import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
 
-import type { PhraseMatchResult, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
-import type { SearchQuery } from '@intake24/api/food-index/search-query';
-import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
+import type { PhraseMatchResult, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
+import type { SearchQuery } from '@intake24/api/food-index/search-query';
 import { ParentCategoryIndex } from '@intake24/api/food-index/workers/parent-category-index';
 import { NotFoundError } from '@intake24/api/http/errors';
+import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import { logger as servicesLogger } from '@intake24/common-backend';
 import { Database, FoodsLocale, RecipeFood, SynonymSet } from '@intake24/db';
 
-import type InterpretedPhrase from '../interpreted-phrase';
 import {
   fetchLocalCategories,
   fetchLocalFoods,

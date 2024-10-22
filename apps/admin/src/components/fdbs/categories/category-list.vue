@@ -49,13 +49,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { defineComponent } from 'vue';
-
-import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
-import { ConfirmDialog } from '@intake24/ui';
-
 import type { CategoryListItem } from './categories';
+import { useVModel } from '@vueuse/core';
+
+import { defineComponent } from 'vue';
+import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
+
+import { ConfirmDialog } from '@intake24/ui';
 import AddCategoryDialog from './add-category-dialog.vue';
 
 export default defineComponent({

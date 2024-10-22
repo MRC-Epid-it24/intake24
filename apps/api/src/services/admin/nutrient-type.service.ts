@@ -1,5 +1,5 @@
-import type { NutrientTypeRequest } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import type { NutrientTypeRequest } from '@intake24/common/types/http/admin';
 import { FoodsNutrientType, NutrientTypeInKcal, SystemNutrientType } from '@intake24/db';
 
 function nutrientTypeService() {

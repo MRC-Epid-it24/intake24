@@ -1,10 +1,10 @@
 import type { SiteUrls } from '@intake24/api/config';
+import { surveyUrlService } from '@intake24/api/services';
 import type {
   RespondentEntry,
   RespondentListEntry,
 } from '@intake24/common/types/http/admin';
 import type { UserSurveyAlias } from '@intake24/db';
-import { surveyUrlService } from '@intake24/api/services';
 
 export function respondentResponse(urls: SiteUrls, surveySlug: string, authUrlDomainOverride?: string | null) {
   const urlService = surveyUrlService(urls, surveySlug, authUrlDomainOverride);

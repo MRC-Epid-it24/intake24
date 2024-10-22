@@ -8,7 +8,6 @@ import type {
 } from 'sequelize';
 import { BelongsToMany, Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import {
   AssociatedFood,
   CategoryAttribute,
@@ -17,6 +16,7 @@ import {
   Food,
   FoodCategory,
 } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'Category',

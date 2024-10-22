@@ -2,7 +2,7 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { surveyTasks } from '@intake24/common/types';
-import { bigIntString as surveyId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { paginationMeta, paginationRequest, bigIntString as surveyId } from '@intake24/common/types/http';
 import {
   jobAttributes,
   surveyCreateRequest,

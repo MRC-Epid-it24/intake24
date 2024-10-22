@@ -11,8 +11,8 @@ import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { DrinkwareScaleVolumeMethod } from '@intake24/common/types/http/admin';
 
-import BaseModel from '../model';
 import { DrinkwareSet, ProcessedImage } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   drinkwareSet: { include: [{ model: DrinkwareSet }] },

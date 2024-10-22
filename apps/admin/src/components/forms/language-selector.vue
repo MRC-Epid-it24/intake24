@@ -53,12 +53,12 @@ import type { PropType } from 'vue';
 import type { ZodNumber, ZodString } from 'zod';
 import { computed, defineComponent, ref, watch } from 'vue';
 
+import { useApp } from '@intake24/admin/stores';
 import type {
   LocaleOptionList,
   LocaleTranslation,
   RequiredLocaleTranslation,
 } from '@intake24/common/types';
-import { useApp } from '@intake24/admin/stores';
 
 const english = { code: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' };
 

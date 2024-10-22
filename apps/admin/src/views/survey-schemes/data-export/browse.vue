@@ -95,13 +95,10 @@
 </template>
 
 <script lang="ts">
+import type { SurveySchemeForm } from '../form.vue';
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
 
-import type {
-  SurveySchemeEntry,
-  SurveySchemeExportRefs,
-} from '@intake24/common/types/http/admin';
+import { VueDraggable } from 'vue-draggable-plus';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
@@ -109,10 +106,13 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 import { useHttp } from '@intake24/admin/services';
 import { type ExportSection, type ExportSectionId, exportSectionIds } from '@intake24/common/surveys';
 import { defaultExport } from '@intake24/common/surveys';
+import type {
+  SurveySchemeEntry,
+  SurveySchemeExportRefs,
+} from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
 
-import type { SurveySchemeForm } from '../form.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import DataExportSection from './data-export-section.vue';
 
 export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;

@@ -125,10 +125,10 @@ import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
 
-import type { RuleCallback } from '@intake24/admin/types';
-import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import type { RuleCallback } from '@intake24/admin/types';
+import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
 import { demographicGroupScaleSectorDefaults, sentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
 

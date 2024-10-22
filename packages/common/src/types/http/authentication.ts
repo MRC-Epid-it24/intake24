@@ -2,11 +2,11 @@ import type {
   AuthenticationResponseJSON,
   PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/types';
+import type { MFADeviceResponse } from './admin/mfa-devices';
+
 import { z } from 'zod';
 
 import type { MFAAuthChallenge, MFAProvider } from '@intake24/common/security';
-
-import type { MFADeviceResponse } from './admin/mfa-devices';
 
 export type LoginRequest = {
   email: string;

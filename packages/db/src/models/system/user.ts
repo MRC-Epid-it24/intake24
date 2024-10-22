@@ -19,7 +19,6 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import {
   ClientErrorReport,
   FeedbackScheme,
@@ -44,6 +43,7 @@ import {
   UserSurveyAlias,
   UserSurveySession,
 } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   aliases: { include: [{ model: UserSurveyAlias, separate: true }] },

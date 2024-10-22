@@ -54,16 +54,16 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 
+import { formMixin } from '@intake24/admin/components/entry';
+import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
+import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
 import type { GetJobParams, JobParams, NutrientTableJob } from '@intake24/common/types';
+import { nutrientTableJobs } from '@intake24/common/types';
 import type {
   JobAttributes,
   NutrientTableEntry,
   NutrientTableRefs,
 } from '@intake24/common/types/http/admin';
-import { formMixin } from '@intake24/admin/components/entry';
-import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
-import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { nutrientTableJobs } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
 type NutrientTableTasksForm = {

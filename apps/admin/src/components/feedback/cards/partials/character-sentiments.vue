@@ -75,8 +75,8 @@ import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
 
-import type { Character, CharacterSentiment } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import type { Character, CharacterSentiment } from '@intake24/common/feedback';
 import { characterSentimentTypes, sentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
 

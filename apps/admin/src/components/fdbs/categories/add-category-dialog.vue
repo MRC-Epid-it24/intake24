@@ -66,13 +66,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref, toRefs } from 'vue';
-
-import type { CategoriesResponse, MainCategoriesResponse } from '@intake24/common/types/http/admin';
-import { useFetchList } from '@intake24/admin/composables';
-import { copy } from '@intake24/common/util';
-
 import type { CategoryListItem } from './categories';
+
+import { defineComponent, ref, toRefs } from 'vue';
+import { useFetchList } from '@intake24/admin/composables';
+import type { CategoriesResponse, MainCategoriesResponse } from '@intake24/common/types/http/admin';
+
+import { copy } from '@intake24/common/util';
 
 export default defineComponent({
   name: 'AddCategoryDialog',

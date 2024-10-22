@@ -1,8 +1,8 @@
-import path from 'node:path';
-
 import type { AppRoute, AppRouter } from '@ts-rest/core';
+
 import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
+import path from 'node:path';
 import { initServer } from '@ts-rest/express';
 import fs from 'fs-extra';
 import { pick } from 'lodash';

@@ -1,21 +1,13 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-
-const subscriptionSchema = z.object({
-  endpoint: z.string(),
-  expirationTime: z.union([z.number(), z.date(), z.null()]),
-  keys: z.object({
-    p256dh: z.string(),
-    auth: z.string(),
-  }),
-});
+import { webPushSubscription } from '../types/web-push';
 
 export const subscription = initContract().router({
   subscribe: {
     method: 'POST',
     path: '/subscriptions',
     body: z.object({
-      subscription: subscriptionSchema,
+      subscription: webPushSubscription,
     }),
     responses: {
       200: z.undefined(),

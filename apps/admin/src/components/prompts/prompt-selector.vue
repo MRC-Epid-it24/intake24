@@ -164,19 +164,19 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { Prompt, PromptType } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
 import {
   customPrompts,
   portionSizePrompts,
   promptSettings,
   standardPrompts,
 } from '@intake24/admin/components/prompts';
+import type { Prompt, PromptType } from '@intake24/common/prompts';
 import {
   customPrompts as customPromptDefaults,
   portionSizePrompts as portionSizeDefaults,
   standardPrompts as standardPromptDefaults,
 } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { copy, merge } from '@intake24/common/util';
 
 import { useTinymce } from '../editors';

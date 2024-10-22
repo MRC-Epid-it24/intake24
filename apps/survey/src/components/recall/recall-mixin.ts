@@ -10,14 +10,14 @@ import type {
 } from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { MealCreationState, MealState, Selection } from '@intake24/common/types';
-import type { SchemeEntryResponse } from '@intake24/common/types/http';
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { isSelectionEqual } from '@intake24/common/types';
+import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
   customHandlers,
   portionSizeHandlers,
   standardHandlers,
 } from '@intake24/survey/components/handlers';
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/util';

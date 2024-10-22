@@ -191,8 +191,8 @@ import type {
   PromptStates,
 } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
-import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { getFoodDescription } from '@intake24/common/types';
+import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFoodChooser.vue';

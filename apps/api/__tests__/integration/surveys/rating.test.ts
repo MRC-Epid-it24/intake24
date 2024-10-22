@@ -1,5 +1,5 @@
-import type { SurveyRatingRequest } from '@intake24/common/types/http';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import type { SurveyRatingRequest } from '@intake24/common/types/http';
 import { SurveySubmission } from '@intake24/db';
 
 export default () => {

@@ -69,10 +69,10 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { UserAttributes } from '@intake24/db';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
+import type { UserAttributes } from '@intake24/db';
 
 type OwnerDialogForm = {
   userId: string | null;

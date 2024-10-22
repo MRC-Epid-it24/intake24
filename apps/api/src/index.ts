@@ -1,14 +1,16 @@
+/* eslint-disable perfectionist/sort-imports */
 import '@intake24/api/bootstrap';
 
+import type { Express } from 'express';
+
+import type { Server } from 'node:https';
 import { createServer } from 'node:https';
 import { homedir } from 'node:os';
+
 import { join } from 'node:path';
-
-import type { Express } from 'express';
-import type { Server } from 'node:https';
 import { readFile } from 'fs-extra';
-
 import type { Ops } from '@intake24/api/app';
+
 import app from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';
 

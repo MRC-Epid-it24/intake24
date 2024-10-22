@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq';
 
-import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';

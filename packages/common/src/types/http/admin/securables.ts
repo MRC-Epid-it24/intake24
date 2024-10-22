@@ -1,8 +1,8 @@
+import type { UserListEntry } from '.';
+
 import { z } from 'zod';
 
 import type { Pagination } from '@intake24/db';
-
-import type { UserListEntry } from '.';
 import { bigIntString } from '../generic';
 import { userAttributes } from './users';
 

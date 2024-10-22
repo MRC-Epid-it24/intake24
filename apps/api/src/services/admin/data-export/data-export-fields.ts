@@ -4,9 +4,9 @@ import { orderBy } from 'lodash';
 import stringify from 'safe-stable-stringify';
 import uaParser from 'ua-parser-js';
 
-import type { SurveyScheme } from '@intake24/db';
 import { externalSources as externalSourceProviders, type Prompt } from '@intake24/common/prompts';
 import { type ExportField as BaseExportField, fromMealTime } from '@intake24/common/surveys';
+import type { SurveyScheme } from '@intake24/db';
 import {
   NutrientTableCsvMappingField,
   SurveySubmissionFood,

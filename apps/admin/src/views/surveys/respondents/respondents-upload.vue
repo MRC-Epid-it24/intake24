@@ -56,9 +56,9 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 
-import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useForm } from '@intake24/admin/composables';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 type RespondentsUploadForm = {
   type: 'SurveyRespondentsImport';

@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 
+import { authService } from '@intake24/admin/services';
 import type {
   LoginRequest,
   MFAAuthenticationVerificationRequest,
   MFAAuthResponse,
 } from '@intake24/common/types/http';
-import { authService } from '@intake24/admin/services';
 import { useLoading } from '@intake24/ui/stores';
 
 import { useUser } from './user';

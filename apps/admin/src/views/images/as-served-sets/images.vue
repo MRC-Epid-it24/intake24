@@ -71,9 +71,9 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
+import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 

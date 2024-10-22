@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import type { Pagination } from '@intake24/db';
 import { localeTranslation } from '@intake24/common/types';
+import type { Pagination } from '@intake24/db';
 
 import { safeIdentifier } from '../generic';
 

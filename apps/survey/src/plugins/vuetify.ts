@@ -1,11 +1,11 @@
-import 'vuetify/styles';
-
 import { createVuetify } from 'vuetify';
+
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
 import { VTimePicker } from 'vuetify/labs/VTimePicker';
-
 import { colors } from '@intake24/common/theme';
+
+import 'vuetify/styles';
 
 export default createVuetify({
   components: {

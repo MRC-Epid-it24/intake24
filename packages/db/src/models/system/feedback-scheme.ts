@@ -6,6 +6,8 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type { Securable } from '..';
+
 import {
   BelongsTo,
   BelongsToMany,
@@ -17,7 +19,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
 import type {
   Card,
   DemographicGroup,
@@ -29,12 +30,11 @@ import type {
   HenryCoefficient,
   TopFoods,
 } from '@intake24/common/feedback';
-import type { RecordVisibility } from '@intake24/common/security';
 import { defaultMeals, defaultTopFoods } from '@intake24/common/feedback';
 
-import type { Securable } from '..';
-import { BaseModel } from '..';
+import type { RecordVisibility } from '@intake24/common/security';
 import { Survey, User, UserSecurable } from '.';
+import { BaseModel } from '..';
 
 @Scopes(() => ({
   surveys: { include: [{ model: Survey }] },

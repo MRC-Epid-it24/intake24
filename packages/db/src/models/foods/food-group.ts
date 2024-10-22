@@ -8,8 +8,8 @@ import type {
 } from 'sequelize';
 import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { Food, FoodGroupLocal } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'FoodGroup',

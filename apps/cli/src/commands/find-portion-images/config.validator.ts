@@ -1,9 +1,9 @@
-import { inspect } from 'node:util';
-
 import type { ValidateFunction as AjvValidateFunction } from 'ajv';
-import Ajv from 'ajv';
 
 import type Config from './config';
+import { inspect } from 'node:util';
+
+import Ajv from 'ajv';
 
 export const ajv = new Ajv({
   allErrors: true,

@@ -1,9 +1,9 @@
 import { initServer } from '@ts-rest/express';
 
-import type { SignInLogAttributes } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { contract } from '@intake24/common/contracts';
+import type { SignInLogAttributes } from '@intake24/common/types/http/admin';
 import { SignInLog } from '@intake24/db';
 
 export function signInLog() {

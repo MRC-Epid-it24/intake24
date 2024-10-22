@@ -1,7 +1,7 @@
-import type { NutrientUnitRequest } from '@intake24/common/types/http/admin';
-import type { FoodsNutrientUnit } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import type { NutrientUnitRequest } from '@intake24/common/types/http/admin';
+import type { FoodsNutrientUnit } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-units';

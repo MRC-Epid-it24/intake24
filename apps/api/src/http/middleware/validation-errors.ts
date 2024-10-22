@@ -9,7 +9,7 @@ import type {
   ValidationError,
 } from 'express-validator';
 import type { ZodError, ZodIssueCode } from 'zod';
-import type { ValidationError as ZodValidationError, ZodIssue } from 'zod-validation-error';
+import type { ZodIssue, ValidationError as ZodValidationError } from 'zod-validation-error';
 import { fromZodError } from 'zod-validation-error';
 
 import type { I18nService } from '@intake24/api/services';

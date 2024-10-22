@@ -103,9 +103,9 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 
-import type { RespondentEntry } from '@intake24/common/types/http/admin';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
+import type { RespondentEntry } from '@intake24/common/types/http/admin';
 import { useLoading } from '@intake24/ui/stores';
 import { downloadFile } from '@intake24/ui/util';
 

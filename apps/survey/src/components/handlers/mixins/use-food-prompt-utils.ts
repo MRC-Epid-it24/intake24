@@ -1,5 +1,6 @@
-import { computed } from 'vue';
+import type { LinkedParent } from '../../prompts/partials';
 
+import { computed } from 'vue';
 import type {
   PortionSizeMethodId,
   PortionSizeParameters,
@@ -14,9 +15,8 @@ import type {
   RecipeBuilder,
 } from '@intake24/common/types';
 import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
-import { useSurvey } from '@intake24/survey/stores';
 
-import type { LinkedParent } from '../../prompts/partials';
+import { useSurvey } from '@intake24/survey/stores';
 
 export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   const survey = useSurvey();

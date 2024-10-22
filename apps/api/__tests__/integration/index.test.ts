@@ -1,3 +1,4 @@
+/* eslint-disable perfectionist/sort-imports */
 import '@intake24/api/bootstrap';
 
 import request from 'supertest';

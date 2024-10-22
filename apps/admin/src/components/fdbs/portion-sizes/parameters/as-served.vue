@@ -25,8 +25,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { PortionSizeParameters } from '@intake24/common/surveys';
 import { SelectResource } from '@intake24/admin/components/dialogs';
+import type { PortionSizeParameters } from '@intake24/common/surveys';
 
 import { useParameters } from './use-parameters';
 

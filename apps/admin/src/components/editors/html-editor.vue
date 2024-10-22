@@ -6,6 +6,10 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
+import Editor from '@tinymce/tinymce-vue';
+import { computed, defineComponent } from 'vue';
+import { useLocale } from 'vuetify';
 import 'tinymce/tinymce';
 import 'tinymce/icons/default/icons.min.js';
 import 'tinymce/themes/silver/theme.min.js';
@@ -19,15 +23,11 @@ import 'tinymce/plugins/image';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/media';
+
 import 'tinymce/plugins/preview';
 import 'tinymce/plugins/table';
 import 'tinymce/skins/content/default/content.js';
 import 'tinymce/skins/ui/oxide/content.js';
-
-import type { PropType } from 'vue';
-import Editor from '@tinymce/tinymce-vue';
-import { computed, defineComponent } from 'vue';
-import { useLocale } from 'vuetify';
 
 export default defineComponent({
   name: 'HtmlEditor',

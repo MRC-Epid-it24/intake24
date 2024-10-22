@@ -67,8 +67,8 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { FoodLocalCopyInput, SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { useForm } from '@intake24/admin/composables';
+import type { FoodLocalCopyInput, SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 

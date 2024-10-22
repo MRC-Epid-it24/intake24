@@ -1,14 +1,14 @@
+import type { NutrientChartData } from './charts';
+import type { MealStats } from './classes';
 import type {
   FeedbackMealChart,
   FeedbackMeals,
   FeedbackMealTable,
 } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
+
 import { useI18n } from '@intake24/i18n';
 import { getNutrientUnit } from '@intake24/ui';
-
-import type { NutrientChartData } from './charts';
-import type { MealStats } from './classes';
 
 export interface FeedbackMealChartData extends FeedbackMealChart {
   chartData: NutrientChartData[];

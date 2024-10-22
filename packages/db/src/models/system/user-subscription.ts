@@ -15,20 +15,10 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
+import { Subscription, SubscriptionType } from '@intake24/common/types';
 
-import BaseModel from '../model';
 import { User } from '.';
-
-export type SubscriptionType = 'web-push';
-
-export type PushSubscription = {
-  endpoint: string;
-  expirationTime?: number | Date | null; // TODO: Verify this
-  keys: {
-    p256dh: string;
-    auth: string;
-  };
-};
+import BaseModel from '../model';
 
 @Scopes(() => ({
   user: { include: [{ model: User }] },
@@ -66,12 +56,12 @@ export default class UserSubscription extends BaseModel<
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get subscription(): PushSubscription {
+  get subscription(): Subscription {
     const val = this.getDataValue('subscription') as unknown;
     return JSON.parse(val as string);
   }
 
-  set subscription(value: PushSubscription) {
+  set subscription(value: Subscription) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('subscription', JSON.stringify(value));
   }

@@ -1,6 +1,6 @@
-import { URL } from 'node:url';
-
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/types';
+
+import { URL } from 'node:url';
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
@@ -9,10 +9,10 @@ import {
 } from '@simplewebauthn/server';
 import { isoUint8Array } from '@simplewebauthn/server/helpers';
 
-import type { IoC } from '@intake24/api/ioc';
-import type { FIDOAuthChallenge } from '@intake24/common/security';
 import { ValidationError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { getFrontEndUrl } from '@intake24/api/util';
+import type { FIDOAuthChallenge } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
 import { MFAAuthenticator, MFADevice } from '@intake24/db';
 
@@ -83,18 +83,18 @@ function fidoProvider({
         { transaction },
       );
 
-      const { credentialPublicKey, counter, credentialDeviceType, credentialBackedUp }
+      const { credential: { id, publicKey, counter, transports = [] }, credentialDeviceType, credentialBackedUp }
         = registrationInfo;
 
       await MFAAuthenticator.create(
         {
-          id: registrationInfo.credentialID,
+          id,
           deviceId: device.id,
-          publicKey: credentialPublicKey,
+          publicKey,
           counter: counter.toString(),
           deviceType: credentialDeviceType,
           backedUp: credentialBackedUp,
-          transports: response.response.transports ?? [],
+          transports,
         },
         { transaction },
       );
@@ -139,9 +139,9 @@ function fidoProvider({
       expectedChallenge: challengeId,
       expectedOrigin: origin,
       expectedRPID: rpID,
-      authenticator: {
-        credentialID: authenticator.id,
-        credentialPublicKey: authenticator.publicKey,
+      credential: {
+        id: authenticator.id,
+        publicKey: authenticator.publicKey,
         counter: Number.parseInt(authenticator.counter, 10),
         transports: authenticator.transports,
       },

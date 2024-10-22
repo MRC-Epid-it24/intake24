@@ -17,8 +17,8 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { Permission, PermissionRole, RoleUser, User } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name', 'displayName'], order: [['name', 'ASC']] },

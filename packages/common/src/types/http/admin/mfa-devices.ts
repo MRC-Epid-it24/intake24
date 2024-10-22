@@ -136,7 +136,7 @@ export const registrationResponseJSON = z.object({
     appid: z.boolean().optional(),
     credProps: z.object({
       rk: z.boolean().optional(),
-    }),
+    }).optional(),
     hmacCreateSecret: z.boolean().optional(),
   }),
   type: z.literal('public-key'),

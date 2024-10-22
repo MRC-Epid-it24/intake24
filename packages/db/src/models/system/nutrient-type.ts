@@ -7,8 +7,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { SystemNutrientUnit } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   unit: { include: [{ model: SystemNutrientUnit }] },

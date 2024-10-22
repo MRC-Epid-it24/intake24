@@ -1,8 +1,8 @@
+import type { SurveyStore } from '../stores';
 import type { Selection } from '@intake24/common/types';
 import type PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
-import { getFoodIndexRequired, getMealIndexRequired } from '@intake24/survey/util';
 
-import type { SurveyStore } from '../stores';
+import { getFoodIndexRequired, getMealIndexRequired } from '@intake24/survey/util';
 
 function makeMealSelection(mealId: string): Selection {
   return {

@@ -1,12 +1,13 @@
-import 'lodash/debounce';
-
 import { addDays } from 'date-fns';
+
 import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
-
 import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
+
 import type { RecallFlow, SessionSettings } from '@intake24/common/surveys';
+import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import type {
+  SurveyState as CurrentSurveyState,
   CustomPromptAnswer,
   EncodedFood,
   FoodFlag,
@@ -20,10 +21,8 @@ import type {
   RecipeBuilder,
   Selection,
   SurveyFlag,
-  SurveyState as CurrentSurveyState,
 } from '@intake24/common/types';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
-import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import { isSessionAgeValid, isSessionFixedPeriodValid } from '@intake24/common/util';
 import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
@@ -39,10 +38,11 @@ import {
   getMealIndexRequired,
 } from '@intake24/survey/util';
 import { useApp, useLoading } from '@intake24/ui/stores';
-
 import { surveyService } from '../services';
+
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
+import 'lodash/debounce';
 
 export type MealUndo = {
   type: 'meal';

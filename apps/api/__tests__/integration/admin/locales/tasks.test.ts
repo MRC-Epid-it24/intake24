@@ -1,7 +1,7 @@
 import request from 'supertest';
 
-import type { QueueJob } from '@intake24/common/types';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import type { QueueJob } from '@intake24/common/types';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
 
 export default () => {

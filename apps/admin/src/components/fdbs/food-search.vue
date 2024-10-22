@@ -42,20 +42,20 @@
 </template>
 
 <script lang="ts" setup>
+import type { DataTableHeader } from '../data-tables';
 import { watchDebounced } from '@vueuse/core';
 import { nextTick, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { VTextField } from 'vuetify/components';
 
+import { VTextField } from 'vuetify/components';
+import { useHttp } from '@intake24/admin/services';
 import type {
   CategoriesResponse,
   CategoryListEntry,
   FoodsResponse,
 } from '@intake24/common/types/http/admin';
-import { useHttp } from '@intake24/admin/services';
-import { useI18n } from '@intake24/i18n';
 
-import type { DataTableHeader } from '../data-tables';
+import { useI18n } from '@intake24/i18n';
 
 export type Category = CategoryListEntry & { resource: 'categories' };
 export type Food = FoodsResponse['data'][number] & { resource: 'foods' };

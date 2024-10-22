@@ -42,9 +42,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import type { UserDemographic } from '../classes';
+
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'FeedbackUserInfo',

@@ -1,3 +1,4 @@
+import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type {
   CategoryContents,
@@ -6,13 +7,12 @@ import type {
   FoodHeader,
 } from '@intake24/common/types/http';
 import type { FindOptions, FoodLocalAttributes, PaginateQuery } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
 import {
   Category,
   FoodCategory,
   FoodLocal,
-  FoodsLocale as Locale,
   getAllChildCategories,
+  FoodsLocale as Locale,
   Op,
   QueryTypes,
 } from '@intake24/db';

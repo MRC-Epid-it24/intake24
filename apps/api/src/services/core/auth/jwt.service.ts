@@ -1,15 +1,15 @@
 import type { Secret, SignOptions } from 'jsonwebtoken';
 import jwt, { decode } from 'jsonwebtoken';
 
-import type { IoC } from '@intake24/api/ioc';
-import type { FrontEnd } from '@intake24/common/types';
 import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import {
   type AdminSignPayload,
   createAmrMethod,
   type SignPayload,
   type TokenPayload,
 } from '@intake24/common/security';
+import type { FrontEnd } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
 import { PersonalAccessToken } from '@intake24/db';
 

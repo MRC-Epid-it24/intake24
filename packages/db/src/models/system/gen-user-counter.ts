@@ -16,8 +16,8 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import BaseModel from '../model';
 import { Survey } from '.';
+import BaseModel from '../model';
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },

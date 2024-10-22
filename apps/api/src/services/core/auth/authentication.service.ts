@@ -1,8 +1,13 @@
 import type { AuthenticationResponseJSON } from '@simplewebauthn/types';
 import type { Request } from 'express';
 
+import type { Tokens } from '.';
+import { UnauthorizedError } from '@intake24/api/http/errors';
+import { captcha as captchaCheck } from '@intake24/api/http/rules';
 import type { IoC } from '@intake24/api/ioc';
+import { btoa } from '@intake24/api/util';
 import type { Subject } from '@intake24/common/security';
+import { createAmrMethod, surveyRespondent } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
 import type {
   AliasLoginRequest,
@@ -12,15 +17,10 @@ import type {
   MFAAuthResponse,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
-import type { SurveyAttributes, UserPassword } from '@intake24/db';
-import { UnauthorizedError } from '@intake24/api/http/errors';
-import { captcha as captchaCheck } from '@intake24/api/http/rules';
-import { btoa } from '@intake24/api/util';
-import { createAmrMethod, surveyRespondent } from '@intake24/common/security';
 import { supportedAlgorithms } from '@intake24/common-backend';
-import { MFADevice, Op, Survey, User } from '@intake24/db';
+import type { SurveyAttributes, UserPassword } from '@intake24/db';
 
-import type { Tokens } from '.';
+import { MFADevice, Op, Survey, User } from '@intake24/db';
 
 export type LoginCredentials<T extends FrontEnd = FrontEnd> = {
   user: User | null;

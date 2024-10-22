@@ -80,9 +80,9 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { FoodInput, FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { useForm } from '@intake24/admin/composables';
+import type { FoodInput, FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 

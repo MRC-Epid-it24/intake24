@@ -1,7 +1,7 @@
 import request from 'supertest';
 
-import type { LanguageCreationAttributes } from '@intake24/db';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import type { LanguageCreationAttributes } from '@intake24/db';
 import { Language, SystemLocale } from '@intake24/db';
 
 export default () => {

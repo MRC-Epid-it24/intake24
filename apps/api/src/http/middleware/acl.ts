@@ -2,10 +2,10 @@ import type { NextFunction, Request, Response, Router } from 'express';
 import { asValue } from 'awilix';
 import passport from 'passport';
 
-import type { TokenPayload } from '@intake24/common/security';
-import type { FrontEnd } from '@intake24/common/types';
 import { ForbiddenError } from '@intake24/api/http/errors';
+import type { TokenPayload } from '@intake24/common/security';
 import { surveyRespondent } from '@intake24/common/security';
+import type { FrontEnd } from '@intake24/common/types';
 
 /**
  * Verify authenticated user has verified the email address

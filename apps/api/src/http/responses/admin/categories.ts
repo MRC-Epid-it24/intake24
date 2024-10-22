@@ -1,9 +1,9 @@
+import { InternalServerError } from '@intake24/api/http/errors';
 import type {
   CategoryContentsResponse,
   CategoryListEntry,
 } from '@intake24/common/types/http/admin';
 import type { CategoryLocal, FoodLocal } from '@intake24/db';
-import { InternalServerError } from '@intake24/api/http/errors';
 
 import { foodsResponse } from './foods';
 

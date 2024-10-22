@@ -94,13 +94,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import type { WeightFactorProps } from './AsServedWeightFactor.vue';
 
+import { defineComponent, ref } from 'vue';
 import type { SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
-import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
-import type { WeightFactorProps } from './AsServedWeightFactor.vue';
+import { ImagePlaceholder } from '@intake24/survey/components/elements';
 import AsServedWeightFactor from './AsServedWeightFactor.vue';
 
 export default defineComponent({

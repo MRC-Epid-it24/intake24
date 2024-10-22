@@ -1,7 +1,7 @@
-import { isLocale } from 'validator';
-import { z } from 'zod';
-
 import type { Meal } from './meals';
+import { isLocale } from 'validator';
+
+import { z } from 'zod';
 import {
   basePrompt,
   type Condition,

@@ -1,7 +1,7 @@
 import request from 'supertest';
 
-import type { SplitListRequest } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import type { SplitListRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/locales';

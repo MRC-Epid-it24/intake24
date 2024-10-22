@@ -1,6 +1,6 @@
 import type { IoC } from '@intake24/api/ioc';
-import type { Permission, Role } from '@intake24/db';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
+import type { Permission, Role } from '@intake24/db';
 import { User } from '@intake24/db';
 
 function aclCache({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) {

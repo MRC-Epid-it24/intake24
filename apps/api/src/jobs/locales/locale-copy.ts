@@ -2,10 +2,10 @@ import type { Job } from 'bullmq';
 import type { Transaction } from 'kysely';
 import { sql } from 'kysely';
 
-import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
+import type { IoC } from '@intake24/api/ioc';
 import { LocaleCopyFoodsSubTasks, LocaleCopySystemSubTasks } from '@intake24/common/types';
-import { FoodsDB, Job as DbJob, SystemDB, SystemLocale } from '@intake24/db';
+import { Job as DbJob, FoodsDB, SystemDB, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 

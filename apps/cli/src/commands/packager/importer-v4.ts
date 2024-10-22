@@ -6,6 +6,7 @@ import decompress from 'decompress';
 import { omit } from 'lodash';
 
 import type { ApiClientV4, DrinkwareScaleUpdate } from '@intake24/api-client-v4';
+import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import type {
   PkgAsServedImage,
   PkgAsServedSet,
@@ -19,11 +20,10 @@ import type {
   PkgDrinkwareSet,
 } from '@intake24/cli/commands/packager/types/drinkware';
 import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
+import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
-import { PkgConstants } from '@intake24/cli/commands/packager/constants';
-import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import { Dictionary } from '@intake24/common/types';
 import logger from '@intake24/common-backend/services/logger/logger';
 

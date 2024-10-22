@@ -1,8 +1,8 @@
 import request from 'supertest';
 
+import { suite } from '@intake24/api-tests/integration/helpers';
 import type { QueueJob } from '@intake24/common/types';
 import type { Job } from '@intake24/db';
-import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/user/jobs';

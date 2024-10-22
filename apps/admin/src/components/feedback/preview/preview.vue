@@ -56,8 +56,8 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 
-import type { FeedbackImage, FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import { feedbackService } from '@intake24/admin/services';
+import type { FeedbackImage, FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import {
   buildCardParams,
   buildTopFoods,

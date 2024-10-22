@@ -1,7 +1,7 @@
 import type { Options } from 'express-rate-limit';
-import ms from 'ms';
-
 import type { RedisOptions } from './redis';
+
+import ms from 'ms';
 
 export type RateLimit = {
   windowMs: number;

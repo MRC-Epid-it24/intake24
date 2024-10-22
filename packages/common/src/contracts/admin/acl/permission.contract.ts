@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as permissionId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { paginationMeta, paginationRequest, bigIntString as permissionId } from '@intake24/common/types/http';
 import {
   permissionAttributes,
   permissionRequest,

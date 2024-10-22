@@ -3,9 +3,9 @@ import type { StrategyOptionsWithoutRequest } from 'passport-jwt';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Op } from 'sequelize';
 
+import security from '@intake24/api/config/security';
 import type { TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
-import security from '@intake24/api/config/security';
 import { User } from '@intake24/db';
 
 const { issuer, secret } = security.jwt;

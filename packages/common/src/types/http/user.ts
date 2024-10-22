@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { sexes, weightTargets } from '@intake24/common/feedback';
 import type {
   SurveySubmissionAttributes,
   SurveySubmissionCustomFieldAttributes,
@@ -12,7 +13,6 @@ import type {
   SurveySubmissionPortionSizeFieldAttributes,
   UserAttributes,
 } from '@intake24/db';
-import { sexes, weightTargets } from '@intake24/common/feedback';
 
 export interface SurveySubmissionFoodEntry extends SurveySubmissionFoodAttributes {
   meal: SurveySubmissionMealAttributes;

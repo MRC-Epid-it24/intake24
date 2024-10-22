@@ -1,10 +1,12 @@
+import type Config from './config';
+
 import { readFileSync } from 'node:fs';
 
 import { createArrayCsvWriter } from 'csv-writer';
-
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { Environment } from '@intake24/common/types';
 import { logger } from '@intake24/common-backend';
+
 import {
   AsServedImage,
   AsServedSet,
@@ -24,8 +26,6 @@ import {
   NutrientTableRecordNutrient,
   ProcessedImage,
 } from '@intake24/db';
-
-import type Config from './config';
 import validate from './config.validator';
 
 const energyKcalNutrientType = '1';

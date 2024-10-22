@@ -1,8 +1,10 @@
+/* eslint-disable perfectionist/sort-imports */
 import './bootstrap';
+
+import type { Ops } from './app';
 
 import { logger } from '@intake24/common-backend';
 
-import type { Ops } from './app';
 import app from './app';
 import config from './config';
 

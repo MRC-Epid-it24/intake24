@@ -100,10 +100,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDownloadJob } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui/components';
 
 export default defineComponent({

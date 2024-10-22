@@ -1,7 +1,7 @@
 import type { AddonFoodTrigger, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, MealState, Selection, SurveyState } from '@intake24/common/types';
-import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 import { randomString } from '@intake24/common/util';
+import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 
 // Helper to generate unique id for each meal/food with same length
 export const getEntityId = () => randomString(12);

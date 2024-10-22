@@ -9,8 +9,8 @@ import { BelongsTo, Column, DataType, HasOne, Table } from 'sequelize-typescript
 
 import { FoodLocal } from '@intake24/db';
 
-import BaseModel from '../model';
 import { FoodsLocale } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'FoodLocalList',

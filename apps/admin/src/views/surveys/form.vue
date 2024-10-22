@@ -552,8 +552,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import type { Notification } from '@intake24/common/types';
-import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { EventNotifications, SelectResource } from '@intake24/admin/components/dialogs';
 import InformationPopup from '@intake24/admin/components/dialogs/information-popup.vue';
 import { formMixin } from '@intake24/admin/components/entry';
@@ -569,6 +567,8 @@ import {
   type SurveyState,
 } from '@intake24/common/surveys';
 import { defaultOverrides, searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
+import type { Notification } from '@intake24/common/types';
+import type { SurveyEntry } from '@intake24/common/types/http/admin';
 
 export type SurveyForm = {
   id: string | null;

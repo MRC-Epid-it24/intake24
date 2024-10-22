@@ -1,6 +1,6 @@
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
-import type { LanguageCreationAttributes } from '@intake24/db';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import type { LanguageCreationAttributes } from '@intake24/db';
 import { Language } from '@intake24/db';
 
 export default () => {

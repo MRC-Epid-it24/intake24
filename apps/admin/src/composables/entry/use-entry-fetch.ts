@@ -1,9 +1,9 @@
-import { onBeforeRouteLeave } from 'vue-router';
-
-import resources from '@intake24/admin/router/resources';
-import { useEntry } from '@intake24/admin/stores';
-
 import type { UseStoreEntryProps } from './use-entry';
+
+import { onBeforeRouteLeave } from 'vue-router';
+import resources from '@intake24/admin/router/resources';
+
+import { useEntry } from '@intake24/admin/stores';
 
 export function useEntryFetch(props: UseStoreEntryProps) {
   const { requestEntry } = useEntry();

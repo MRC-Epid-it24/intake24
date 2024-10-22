@@ -10,8 +10,8 @@ import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescrip
 
 import type { TextDirection } from '@intake24/common/types';
 
-import BaseModel from '../model';
 import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
+import BaseModel from '../model';
 
 @Table({
   modelName: 'Locale',

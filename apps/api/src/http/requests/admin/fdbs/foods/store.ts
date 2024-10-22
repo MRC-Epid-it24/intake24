@@ -1,13 +1,13 @@
 import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
 
-import type { FindOptions } from '@intake24/db';
 import {
   customTypeErrorMessage,
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
+import type { FindOptions } from '@intake24/db';
 import { FoodGroup, FoodLocal, SystemLocale } from '@intake24/db';
 
 import { categories } from '../common';

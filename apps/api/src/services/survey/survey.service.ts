@@ -4,19 +4,19 @@ import { addDays, addMinutes, startOfDay } from 'date-fns';
 import { Op } from 'sequelize';
 import { z, ZodError } from 'zod';
 
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
+import { jwt } from '@intake24/api/util';
 import type { Prompts } from '@intake24/common/prompts';
+import { strongPassword } from '@intake24/common/security';
+import { type JobParams, type SurveyState, userCustomField } from '@intake24/common/types';
 import type {
   CreateUserResponse,
   SurveyRatingRequest,
   SurveyUserInfoResponse,
 } from '@intake24/common/types/http';
-import type { FindOptions, SubmissionScope } from '@intake24/db';
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { jwt } from '@intake24/api/util';
-import { strongPassword } from '@intake24/common/security';
-import { type JobParams, type SurveyState, userCustomField } from '@intake24/common/types';
 import { isSessionAgeValid, isSessionFixedPeriodValid, randomString } from '@intake24/common/util';
+import type { FindOptions, SubmissionScope } from '@intake24/db';
 import {
   GenUserCounter,
   submissionScope,
@@ -441,11 +441,7 @@ function surveyService({
             identifierValue = aliases.at(0)?.[identifier];
             break;
           default:
-<<<<<<< HEAD
             identifierValue = customFields.find(field => field.name === identifier)?.value;
-=======
-            identifierValue = customFields.find(field => field.name === 'identifier')?.value;
->>>>>>> 019755a98 (fix(api): correctly resolve multiple redirect prompt settings)
             break;
         }
 

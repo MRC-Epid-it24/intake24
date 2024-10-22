@@ -1,11 +1,11 @@
-import type { IoC } from '@intake24/api/ioc';
-
 import type {
   ExportField,
   ExportFieldInfo,
   ExportFieldTransform,
   ExportRow,
 } from './data-export-fields';
+
+import type { IoC } from '@intake24/api/ioc';
 
 export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField

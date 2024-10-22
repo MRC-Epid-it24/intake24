@@ -3,11 +3,11 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
-import type { Captcha } from '@intake24/ui';
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { surveyService } from '@intake24/survey/services';
 import { useAuth, useMessages } from '@intake24/survey/stores';
+import type { Captcha } from '@intake24/ui';
 
 export type UseLoginProps = {
   surveyId: string;

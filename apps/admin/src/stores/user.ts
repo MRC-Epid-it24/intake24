@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 
+import { httpService } from '@intake24/admin/services';
 import type { AdminTokenPayload, Subject } from '@intake24/common/security';
 import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
-import type { Permission } from '@intake24/ui/types';
-import { httpService } from '@intake24/admin/services';
 import { tokenService } from '@intake24/ui/services';
+import type { Permission } from '@intake24/ui/types';
 
 import { useResource } from './resource';
 

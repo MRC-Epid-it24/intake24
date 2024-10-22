@@ -71,11 +71,11 @@ import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import type { SinglePrompt } from '@intake24/common/prompts';
-import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
+import type { SinglePrompt } from '@intake24/common/prompts';
+import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import { copy as copyObject } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 

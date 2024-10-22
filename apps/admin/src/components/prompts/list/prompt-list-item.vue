@@ -104,14 +104,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+import type { MoveSection } from './prompt-list.vue';
 import { deepEqual } from 'fast-equals';
-import { computed, ref } from 'vue';
 
+import { computed, ref } from 'vue';
 import type { Prompt } from '@intake24/common/prompts';
 import { copy as copyObject } from '@intake24/common/util';
-import { ConfirmDialog } from '@intake24/ui';
 
-import type { MoveSection } from './prompt-list.vue';
+import { ConfirmDialog } from '@intake24/ui';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 
 defineOptions({ name: 'PromptListItem' });

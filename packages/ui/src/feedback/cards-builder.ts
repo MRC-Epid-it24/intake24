@@ -1,12 +1,4 @@
 import type {
-  CardType,
-  DemographicGroupScaleSector,
-  FiveADayCard,
-  NutrientGroupCard,
-} from '@intake24/common/feedback';
-import { round } from '@intake24/common/util';
-
-import type {
   AggregateFoodStats,
   CharacterParameters,
   CharacterRules,
@@ -14,6 +6,14 @@ import type {
   FruitAndVegPortions,
   UserDemographic,
 } from './classes';
+import type {
+  CardType,
+  DemographicGroupScaleSector,
+  FiveADayCard,
+  NutrientGroupCard,
+} from '@intake24/common/feedback';
+
+import { round } from '@intake24/common/util';
 import { DemographicRange } from './classes';
 
 export type FiveADayCardWithDemGroups = FiveADayCard & { demographicGroups: DemographicGroup[] };
