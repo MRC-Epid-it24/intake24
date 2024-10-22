@@ -34,7 +34,7 @@
     "@duosecurity/duo_universal": "^2.0.3",
     "@json2csv/node": "^7.0.6",
     "@json2csv/plainjs": "^7.0.6",
-    "@simplewebauthn/server": "^10.0.1",
+    "@simplewebauthn/server": "^11.0.0",
     "@ts-rest/core": "^3.51.0",
     "@ts-rest/express": "^3.51.0",
     "awilix": "^11.0.0",
