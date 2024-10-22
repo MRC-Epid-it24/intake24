@@ -160,8 +160,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(@vue/compiler-dom@3.5.12)(eslint@9.12.0(jiti@2.3.1))(rollup@2.79.2)(typescript@5.6.2)(vue-i18n@10.0.4(vue@3.5.12(typescript@5.6.2)))(vue@3.5.12(typescript@5.6.2))(webpack-sources@3.2.3)
       '@simplewebauthn/types':
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.0
+        version: 11.0.0
       '@tsconfig/node20':
         specifier: ^20.1.4
         version: 20.1.4
@@ -431,8 +431,8 @@ importers:
         specifier: ^29.6.3
         version: 29.6.3
       '@simplewebauthn/types':
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.0
+        version: 11.0.0
       '@types/body-parser':
         specifier: ^1.19.5
         version: 1.19.5
@@ -1073,8 +1073,8 @@ importers:
         specifier: ^29.6.3
         version: 29.6.3
       '@simplewebauthn/types':
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.0
+        version: 11.0.0
       '@types/dompurify':
         specifier: ^3.0.5
         version: 3.0.5
@@ -1216,8 +1216,8 @@ importers:
         version: 2.1.6(@types/node@22.7.4)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.4(mariadb@3.3.2)(pg-hstore@2.3.4)(pg@8.13.0)(tedious@18.6.1))
     devDependencies:
       '@simplewebauthn/types':
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.0
+        version: 11.0.0
       '@types/lodash':
         specifier: ^4.17.9
         version: 4.17.10
@@ -3464,6 +3464,9 @@ packages:
 
   '@simplewebauthn/types@10.0.0':
     resolution: {integrity: sha512-SFXke7xkgPRowY2E+8djKbdEznTVnD5R6GO7GPTthpHrokLvNKw8C3lFZypTxLI7KkCfGPfhtqB3d7OVGGa9jQ==}
+
+  '@simplewebauthn/types@11.0.0':
+    resolution: {integrity: sha512-b2o0wC5u2rWts31dTgBkAtSNKGX0cvL6h8QedNsKmj8O4QoLFQFR3DBVBUlpyVEhYKA+mXGUaXbcOc4JdQ3HzA==}
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -12846,6 +12849,8 @@ snapshots:
       - encoding
 
   '@simplewebauthn/types@10.0.0': {}
+
+  '@simplewebauthn/types@11.0.0': {}
 
   '@sinclair/typebox@0.27.8': {}
 

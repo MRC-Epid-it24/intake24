@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^5.2.0",
-    "@simplewebauthn/types": "^10.0.0",
+    "@simplewebauthn/types": "^11.0.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/jsdom": "^21.1.7",
     "@types/lodash": "^4.17.9",

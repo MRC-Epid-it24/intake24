@@ -97,7 +97,7 @@
   "devDependencies": {
     "@faker-js/faker": "^9.0.3",
     "@jest/types": "^29.6.3",
-    "@simplewebauthn/types": "^10.0.0",
+    "@simplewebauthn/types": "^11.0.0",
     "@types/body-parser": "^1.19.5",
     "@types/clean-css": "^4.2.11",
     "@types/cookie-parser": "^1.4.7",
