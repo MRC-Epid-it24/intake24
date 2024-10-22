@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
-    "@simplewebauthn/browser": "^10.0.0",
+    "@simplewebauthn/browser": "^11.0.0",
     "@tinymce/tinymce-vue": "^6.0.1",
     "@vueuse/core": "^11.1.0",
     "axios": "^1.7.7",
