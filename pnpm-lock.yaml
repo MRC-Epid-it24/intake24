@@ -352,8 +352,8 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1(socks@2.8.3)
       negotiator:
-        specifier: ^0.6.3
-        version: 0.6.3
+        specifier: ^1.0.0
+        version: 1.0.0
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -7673,6 +7673,10 @@ packages:
 
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
+    engines: {node: '>= 0.6'}
+
+  negotiator@1.0.0:
+    resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
 
   neo-async@2.6.2:
@@ -17721,6 +17725,8 @@ snapshots:
       is-buffer: 1.1.6
 
   negotiator@0.6.3: {}
+
+  negotiator@1.0.0: {}
 
   neo-async@2.6.2: {}
 
