@@ -21,18 +21,16 @@
           </v-icon>
         </v-btn>
       </div>
-      <v-card-text class="pa-0">
-        <v-list class="meal-list__list" density="compact">
-          <meal-item
-            v-for="meal in meals"
-            :key="meal.id"
-            v-bind="{ contextId, meal, selectedMealId, selectedFoodId }"
-            :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
-            @action="action"
-            @update:context-id="updateContextId"
-          />
-        </v-list>
-      </v-card-text>
+      <v-list class="meal-list__list pa-0" density="compact">
+        <meal-item
+          v-for="meal in meals"
+          :key="meal.id"
+          v-bind="{ contextId, meal, selectedMealId, selectedFoodId }"
+          :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
+          @action="action"
+          @update:context-id="updateContextId"
+        />
+      </v-list>
       <v-btn
         block
         color="info"

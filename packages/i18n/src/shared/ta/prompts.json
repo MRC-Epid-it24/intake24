@@ -257,7 +257,10 @@
   "reviewConfirm": {
     "name": "மதிப்பாய்வு செய்து உறுதிப்படுத்தவும்",
     "text": "",
-    "description": ""
+    "description": "",
+    "item": "Reviewed",
+    "meal": "I have reviewed all foods and drinks.",
+    "survey": "I have reviewed all meals and foods and drinks."
   },
   "sameAsBefore": {
     "name": "முன்பு போலவே",

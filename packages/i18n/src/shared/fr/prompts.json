@@ -257,7 +257,10 @@
   "reviewConfirm": {
     "name": "Relire et confirmer",
     "text": "",
-    "description": ""
+    "description": "",
+    "item": "Confirmé",
+    "meal": "J'ai examiné tous les aliments et boissons.",
+    "survey": "J'ai examiné tous les repas, aliments et boissons."
   },
   "sameAsBefore": {
     "name": "Comme précédemment",

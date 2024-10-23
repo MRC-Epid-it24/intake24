@@ -257,7 +257,10 @@
   "reviewConfirm": {
     "name": "Review and Confirm",
     "text": "",
-    "description": ""
+    "description": "",
+    "item": "Reviewed",
+    "meal": "I have reviewed all foods and drinks.",
+    "survey": "I have reviewed all meals and foods and drinks."
   },
   "sameAsBefore": {
     "name": "Same as before",

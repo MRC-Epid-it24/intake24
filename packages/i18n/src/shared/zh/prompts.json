@@ -257,7 +257,10 @@
   "reviewConfirm": {
     "name": "回顾和确认",
     "text": "",
-    "description": ""
+    "description": "",
+    "item": "Reviewed",
+    "meal": "I have reviewed all foods and drinks.",
+    "survey": "I have reviewed all meals and foods and drinks."
   },
   "sameAsBefore": {
     "name": "和以前一样",

@@ -11,8 +11,8 @@ export function useReviewList(props: UseReviewListProps, ctx: SetupContext<('bot
   const bottomReached = ref(false);
   const reviewed = ref<string[]>([]);
 
-  const bottomIntersect = (isIntersecting: boolean, entries: IntersectionObserverEntry[]) => {
-    if (!entries[0].isIntersecting)
+  const bottomIntersect = (isIntersecting: boolean) => {
+    if (bottomReached.value || !isIntersecting)
       return;
 
     bottomReached.value = true;

@@ -222,8 +222,8 @@ const fieldsAvailableToLoad = computed(
   () => visibleFields.value.length < filteredFields.value.length,
 );
 
-function tryLoadMoreFields(isIntersecting: boolean, entries: IntersectionObserverEntry[]) {
-  if (entries[0].isIntersecting && fieldsAvailableToLoad)
+function tryLoadMoreFields(isIntersecting: boolean) {
+  if (isIntersecting && fieldsAvailableToLoad)
     loadMoreFields();
 }
 
