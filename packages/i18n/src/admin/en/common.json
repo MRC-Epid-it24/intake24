@@ -40,7 +40,7 @@
     "changed": "Password has been changed.",
     "request": {
       "_": "Request new password",
-      "subtitle": "Enter your Intake24 account's email address and we'll send you instruction for password reset.",
+      "subtitle": "Enter your email address to receive password reset instructions.",
       "captcha": "Invalid captcha challenge",
       "send": "Send request",
       "sent": "Password reset instructions has been sent to provided email address."

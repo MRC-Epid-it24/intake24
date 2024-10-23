@@ -39,6 +39,8 @@ import type { CaptchaProvider } from '@intake24/common/security';
 
 defineOptions({
   name: 'Captcha',
+
+  components: { HCaptcha, ReCaptcha },
 });
 
 const emit = defineEmits(['expired', 'verified']);
