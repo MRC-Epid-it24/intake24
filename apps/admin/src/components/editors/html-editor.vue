@@ -6,6 +6,7 @@
 </template>
 
 <script lang="ts">
+import type { EditorOptions } from 'tinymce/tinymce';
 import type { PropType } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
 import { computed, defineComponent } from 'vue';
@@ -36,7 +37,7 @@ export default defineComponent({
 
   props: {
     initProps: {
-      type: Object,
+      type: Object as PropType<Partial<EditorOptions>>,
     },
     errorMessages: {
       type: [String, Array],
@@ -53,13 +54,18 @@ export default defineComponent({
   setup(props) {
     const vLocale = useLocale();
 
-    const tinymceDefaults = {
+    const errors = computed(() => {
+      return typeof props.errorMessages === 'string' ? [props.errorMessages] : props.errorMessages;
+    });
+
+    const hasErrors = computed(() => !!errors.value.length);
+
+    const init = computed<Partial<EditorOptions>>(() => ({
       license_key: 'gpl',
       skin_url: 'default',
-      content_css: 'default',
       directionality: vLocale.isRtl.value ? 'rtl' : 'ltr',
       default_link_target: '_blank',
-      height: 400,
+      min_height: 450,
       menubar: false,
       paste_as_text: true,
       plugins: [
@@ -76,20 +82,10 @@ export default defineComponent({
       ],
       toolbar:
           'undo redo | formatselect | bold italic strikethrough | forecolor backcolor | hr | link image media | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | preview fullscreen code',
-    };
-
-    const errors = computed(() => {
-      return typeof props.errorMessages === 'string' ? [props.errorMessages] : props.errorMessages;
-    });
-
-    const hasErrors = computed(() => !!errors.value.length);
-
-    const init = computed(() => ({
-      ...tinymceDefaults,
       ...(props.initProps ?? {}),
     }));
 
-    return { errors, hasErrors, init, tinymceDefaults };
+    return { errors, hasErrors, init };
   },
 });
 </script>

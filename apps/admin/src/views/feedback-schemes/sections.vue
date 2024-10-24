@@ -90,8 +90,10 @@
       v-model="dialog.show"
       fullscreen
       persistent
+      :retain-focus="false"
       :scrim="false"
       transition="dialog-bottom-transition"
+      :z-index="1050"
     >
       <v-card tile>
         <v-toolbar color="secondary" dark>
