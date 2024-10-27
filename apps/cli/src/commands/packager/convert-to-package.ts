@@ -9,7 +9,6 @@ import type logger from '@intake24/common-backend/services/logger/logger';
 import { ApiClientV4 } from '@intake24/api-client-v4';
 import { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
 
-import type { PackageWriterOptions } from './package-writer';
 import type {
   CsvFoodRecordUnprocessed,
   CsvResultStructure,
@@ -41,11 +40,6 @@ export interface existingCategories {
 
 const defaultOptions: ConvertorOptions = {
   type: 'csv',
-};
-
-const defaultJSONOptions: PackageWriterOptions = {
-  jsonSpaces: 2,
-  outputEncoding: 'utf-8',
 };
 
 const DEFAULT_FOOD_COMPOSITION_TABLE = process.env.CSV_DEFAULT_FOOD_COMPOSION_TABLE || 'AUSNUT';
@@ -98,22 +92,19 @@ export class ConvertorToPackage {
     this.skipMissingCategories = DEFAULT_SKIP_MISSING_CATEGORIES;
   }
 
-  private async writeJSON(object: any, outputPath: string): Promise<void> {
-    const dirName = path.dirname(outputPath);
-    const { jsonSpaces, outputEncoding } = defaultJSONOptions;
-
-    await fs.mkdir(dirName, { recursive: true });
-
-    this.logger.debug(`Writing JSON file: ${outputPath}`);
-    await fs.writeFile(outputPath, JSON.stringify(object, null, jsonSpaces), {
-      encoding: outputEncoding,
-    });
+  private async writeJSON<T>(data: T, outputPath: string): Promise<void> {
+    try {
+      await fs.mkdir(path.dirname(outputPath), { recursive: true });
+      await fs.writeFile(outputPath, JSON.stringify(data, null, 2), 'utf-8');
+    }
+    catch (error) {
+      this.logger.error(`Failed to write JSON to ${outputPath}:`, error);
+      throw error;
+    }
   }
 
   private async readJSON<T>(relativePath: string): Promise<T | undefined> {
     const filePath = path.join(this.inputDirPath!, relativePath);
-
-    this.logger.debug(`Reading JSON file: ${filePath}`);
     try {
       await fs.access(filePath);
     }
@@ -154,31 +145,34 @@ export class ConvertorToPackage {
   // Validate CSV structure against JSON structure (TODO: move to the DB service)
   private validateCsvStructure = (headers: string[]): boolean => {
     this.logger.debug('Validating CSV structure');
-    // Check if all headers are of the correct type
-    const headersValidated = headers.every((header) => {
-      if (!this.csvStructure || !header) {
-        this.logger.debug(`Header ${header} is not valid`);
+
+    if (!this.csvStructure || !headers.length) {
+      this.logger.debug('Invalid CSV structure or empty headers');
+      return false;
+    }
+
+    const validHeaders = new Set(Object.keys(this.csvStructure).map(h => h.trim().toLowerCase()));
+
+    return headers.every((header) => {
+      if (!header) {
+        this.logger.debug('Empty header found');
         return false;
       }
 
-      const trimAndLowerCase = (header: string) => {
-        return header?.trim().toLowerCase();
-      };
+      const normalizedHeader = header.trim().toLowerCase();
+      const isValid = validHeaders.has(normalizedHeader);
 
-      return Object.keys(this.csvStructure)
-        .map(trimAndLowerCase)
-        .includes(trimAndLowerCase(header));
+      if (!isValid) {
+        this.logger.debug(`Invalid header: ${header}`);
+      }
+
+      return isValid;
     });
-
-    return headersValidated;
   };
 
   private validateRequiredFieldsExist = (headers: string[]): boolean => {
-    const trimAndLowerCase = (header: string) => {
-      return header.trim().toLowerCase();
-    };
-
     this.logger.debug('Validating required fields');
+
     if (!this.csvStructure) {
       this.logger.debug('CSV structure not loaded');
       return false;
@@ -186,16 +180,25 @@ export class ConvertorToPackage {
 
     const requiredFields = Object.entries(this.csvStructure)
       .filter(([, record]) => record.required)
-      .map(([header, _]) => header);
-    const transformedHeaders = headers.map(trimAndLowerCase);
+      .map(([header, _]) => header.trim().toLowerCase());
 
-    this.logger.debug(`Transformed headers: ${transformedHeaders}`);
-    const requiredFieldsValidated = requiredFields.map(trimAndLowerCase).every((field) => {
-      this.logger.debug(`Checking for field: ${field} - ${transformedHeaders.includes(field)}`);
+    if (!requiredFields.length) {
+      this.logger.debug('No required fields defined');
+      return true;
+    }
 
-      return transformedHeaders.includes(field);
-    });
-    return requiredFieldsValidated;
+    const headerSet = new Set(headers.map(header => header.trim().toLowerCase()));
+
+    this.logger.debug(`Provided headers: ${[...headerSet]}`);
+
+    for (const field of requiredFields) {
+      if (!headerSet.has(field)) {
+        this.logger.debug(`Missing required field: ${field}`);
+        return false;
+      }
+    }
+
+    return true;
   };
 
   private async readCSVStructure(): Promise<void> {
@@ -248,14 +251,31 @@ export class ConvertorToPackage {
   ): Promise<string[]> => {
     this.logger.debug('Validating categories');
 
-    if (!this.existingCategories)
+    if (!categories?.trim() || !existingCategories?.length) {
+      this.logger.debug('No categories to validate or no existing categories');
       return [];
+    }
 
-    const categoriesSet = new Set(existingCategories);
-    return categories
-      .split(',')
-      .map(category => category.trim())
-      .filter(category => !categoriesSet.has(category));
+    try {
+      const categoriesSet = new Set(existingCategories);
+      const newCategories = categories
+        .split(',')
+        .map(category => category.trim())
+        .filter(Boolean) // Remove empty strings
+        .filter(category => !categoriesSet.has(category));
+
+      if (newCategories.length) {
+        this.logger.debug(`Found new categories: ${newCategories.join(', ')}`);
+      }
+
+      return newCategories;
+    }
+    catch (error) {
+      this.logger.error(
+        `Error processing categories: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+      return [];
+    }
   };
 
   // Create a Map of the existing categories leaf - key, all parent categories - value
