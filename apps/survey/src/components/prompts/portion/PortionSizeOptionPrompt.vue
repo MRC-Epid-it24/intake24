@@ -31,7 +31,7 @@
                   :class="{ 'bg-grey-lighten-4': !isSelected, 'bg-ternary': isSelected }"
                 >
                   <v-chip
-                    class="font-weight-medium px-4"
+                    class="font-weight-medium px-4 chip-truncate"
                     :color="option === availableMethod.index ? 'info' : 'primary'"
                     variant="flat"
                   >

@@ -3,6 +3,7 @@ import { createI18n, useI18n as useI18nLib } from 'vue-i18n';
 
 import type { Application } from '@intake24/common/types';
 
+import { copy } from '@intake24/common/util';
 import admin from './admin';
 import api from './api';
 import shared from './shared';
@@ -51,7 +52,7 @@ export const defaultMessages = {
   },
 
   setMessages(locale: string, newMessages: DefaultLocaleMessageSchema) {
-    this.messages[locale] = newMessages;
+    this.messages[locale] = copy(newMessages);
   },
 };
 

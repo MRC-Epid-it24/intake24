@@ -2,7 +2,7 @@
   <v-toolbar class="px-4" color="white" :dense="$vuetify.display.mobile" flat>
     <v-breadcrumbs class="ps-0 text-body-2" :items="items">
       <template #divider>
-        <v-icon>{{ forwardIcon }}</v-icon>
+        <v-icon>fas fa-caret-right</v-icon>
       </template>
     </v-breadcrumbs>
     <v-spacer />
@@ -24,11 +24,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { FoodState, MealState } from '@intake24/common/types';
-import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/i18n/index';
 
+import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
 import { RequestHelp } from '../../elements';
 
 export type BreadcrumbsElement = {
@@ -54,49 +55,35 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
+    const { i18n: { t } } = useI18n();
     const { getFoodName } = useFoodUtils();
     const { getMealName, getMealNameWithTime } = useMealUtils();
 
-    const forwardIcon = ref('fas fa-caret-right');
+    const getMealLabel = (meal: MealState, mealTime = true) => {
+      return mealTime && !meal.flags.includes('meal-time:hidden') ? getMealNameWithTime(meal) : getMealName(meal);
+    };
 
-    return { forwardIcon, getFoodName, getMealName, getMealNameWithTime };
-  },
-
-  computed: {
-    items() {
-      return this.getBreadCrumbs.filter(el => !el.disabled);
-    },
-
-    getFoodElement() {
-      return this.food ? { title: this.getFoodName(this.food), disabled: false } : undefined;
-    },
-
-    getMealElement() {
-      return this.meal ? { title: this.getMealLabel(this.meal), disabled: false } : undefined;
-    },
-
-    getBreadCrumbs(): BreadcrumbsElement[] {
+    const foodElement = computed(() => props.food ? { title: getFoodName(props.food), disabled: false } : undefined);
+    const mealElement = computed(() => props.meal ? { title: getMealLabel(props.meal), disabled: false } : undefined);
+    const breadCrumbs = computed(() => {
       const elements: BreadcrumbsElement[] = [];
 
-      const promptElement = { title: this.promptName, disabled: false };
+      const promptElement = { title: props.promptName, disabled: false };
 
       elements.push(
-        this.getMealElement ?? { title: this.$t('recall._'), disabled: false },
+        mealElement.value ?? { title: t('recall._'), disabled: false },
       );
-      if (this.getFoodElement)
-        elements.push(this.getFoodElement);
+      if (foodElement.value)
+        elements.push(foodElement.value);
 
       elements.push(promptElement);
 
       return elements;
-    },
-  },
+    });
+    const items = computed(() => breadCrumbs.value.filter(el => !el.disabled));
 
-  methods: {
-    getMealLabel(meal: MealState, mealTime = true) {
-      return mealTime ? this.getMealNameWithTime(meal) : this.getMealName(meal);
-    },
+    return { items };
   },
 });
 </script>

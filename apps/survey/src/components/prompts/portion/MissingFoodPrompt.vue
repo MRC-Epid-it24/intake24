@@ -41,7 +41,7 @@
               outlined
             />
           </template>
-          <v-btn :block="$vuetify.display.mobile" color="primary" :disabled="!homemadeValid" @click="confirm">
+          <v-btn v-if="homemadePrompt !== undefined" :block="$vuetify.display.mobile" color="primary" :disabled="!homemadeValid" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-text>

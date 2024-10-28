@@ -27,6 +27,15 @@
   }
 }
 
+.chip-truncate {
+  .v-chip__content {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .container-max {
   max-width: 1280px !important;
 }
