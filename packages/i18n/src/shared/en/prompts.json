@@ -454,9 +454,9 @@
     "description": "You said you were unable to find a good match for \"{food}\". Provide as much detail as you can to the following questions, to help us identify your food or drink.",
     "source": "Was it homemade?",
     "homemade": "Provide further details e.g. description of dish or ingredients.",
-    "purchased": "Tell us where was it purchased from? Does it have a brand name?",
-    "barcode": "Can you provide the barcode?",
-    "portionSize": "How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc."
+    "purchased": "Tell us where you purchased it from and the brand name if you know it.",
+    "barcode": "If you are completing this on a mobile phone, scan the barcode on the food package.",
+    "portionSize": "How much did you eat? e.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ate all of it."
   },
   "recipeBuilder": {
     "name": "{food} recipe builder",
