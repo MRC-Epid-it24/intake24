@@ -862,7 +862,10 @@
                             "minLength": 1,
                             "maxLength": 128
                           },
-                          "value": {}
+                          "value": {},
+                          "public": {
+                            "type": "boolean"
+                          }
                         },
                         "required": [
                           "name",
@@ -1668,7 +1671,9 @@
                                                   "type": "number"
                                                 },
                                                 "label": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "minLength": 1,
+                                                  "maxLength": 256
                                                 },
                                                 "value": {
                                                   "type": "number",
@@ -1700,7 +1705,9 @@
                                                 "type": "number"
                                               },
                                               "label": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "minLength": 1,
+                                                "maxLength": 256
                                               },
                                               "value": {
                                                 "type": "number",
@@ -1754,7 +1761,9 @@
                                                           "type": "number"
                                                         },
                                                         "label": {
-                                                          "type": "string"
+                                                          "type": "string",
+                                                          "minLength": 1,
+                                                          "maxLength": 256
                                                         },
                                                         "value": {
                                                           "type": "number",
@@ -1786,7 +1795,9 @@
                                                         "type": "number"
                                                       },
                                                       "label": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
                                                       },
                                                       "value": {
                                                         "type": "number",
@@ -1826,7 +1837,9 @@
                                                         "type": "number"
                                                       },
                                                       "label": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
                                                       },
                                                       "value": {
                                                         "type": "number",
@@ -1858,7 +1871,9 @@
                                                       "type": "number"
                                                     },
                                                     "label": {
-                                                      "type": "string"
+                                                      "type": "string",
+                                                      "minLength": 1,
+                                                      "maxLength": 256
                                                     },
                                                     "value": {
                                                       "type": "number",
@@ -2224,10 +2239,6 @@
                         "oneOf": [
                           {
                             "type": "number"
-                          },
-                          {
-                            "type": "string",
-                            "format": "date-time"
                           },
                           {
                             "type": "string",
@@ -5309,6 +5320,13 @@
                       "nullable": true,
                       "title": "Optional user name for personalization"
                     },
+                    "customFields": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Public user custom fields"
+                    },
                     "submissions": {
                       "type": "number",
                       "description": "Number of collected submissions"
@@ -5344,6 +5362,7 @@
                   "required": [
                     "userId",
                     "name",
+                    "customFields",
                     "submissions",
                     "showFeedback",
                     "maximumTotalSubmissionsReached",
@@ -5654,7 +5673,9 @@
                                       "no-meals-after",
                                       "no-meals-between",
                                       "no-meals-before",
-                                      "ready-meal-complete"
+                                      "ready-meal-complete",
+                                      "meal-time:hidden",
+                                      "meal-time:disabled"
                                     ]
                                   },
                                   {
@@ -6009,7 +6030,9 @@
                                       "no-meals-after",
                                       "no-meals-between",
                                       "no-meals-before",
-                                      "ready-meal-complete"
+                                      "ready-meal-complete",
+                                      "meal-time:hidden",
+                                      "meal-time:disabled"
                                     ]
                                   },
                                   {
@@ -6554,7 +6577,9 @@
                                       "no-meals-after",
                                       "no-meals-between",
                                       "no-meals-before",
-                                      "ready-meal-complete"
+                                      "ready-meal-complete",
+                                      "meal-time:hidden",
+                                      "meal-time:disabled"
                                     ]
                                   },
                                   {
@@ -6663,6 +6688,13 @@
                       "nullable": true,
                       "title": "Optional user name for personalization"
                     },
+                    "customFields": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Public user custom fields"
+                    },
                     "submissions": {
                       "type": "number",
                       "description": "Number of collected submissions"
@@ -6714,6 +6746,7 @@
                   "required": [
                     "userId",
                     "name",
+                    "customFields",
                     "submissions",
                     "showFeedback",
                     "maximumTotalSubmissionsReached",
@@ -7830,6 +7863,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "name": {
                             "type": "string",
                             "minLength": 1,
@@ -7840,13 +7876,10 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 128
-                          },
-                          "description": {
-                            "type": "string",
-                            "nullable": true
                           }
                         },
                         "required": [
+                          "id",
                           "name",
                           "displayName"
                         ]
@@ -8601,7 +8634,10 @@
                           "minLength": 1,
                           "maxLength": 128
                         },
-                        "value": {}
+                        "value": {},
+                        "public": {
+                          "type": "boolean"
+                        }
                       },
                       "required": [
                         "name",
@@ -8957,7 +8993,10 @@
                           "minLength": 1,
                           "maxLength": 128
                         },
-                        "value": {}
+                        "value": {},
+                        "public": {
+                          "type": "boolean"
+                        }
                       },
                       "required": [
                         "name",
@@ -38879,25 +38918,25 @@
                           "id": {
                             "type": "string"
                           },
-                          "nutrientTableId": {
-                            "type": "string"
-                          },
-                          "nutrientTableRecordId": {
-                            "type": "string"
-                          },
                           "name": {
                             "type": "string"
                           },
                           "localName": {
                             "type": "string"
+                          },
+                          "nutrientTableId": {
+                            "type": "string"
+                          },
+                          "nutrientTableRecordId": {
+                            "type": "string"
                           }
                         },
                         "required": [
                           "id",
-                          "nutrientTableId",
-                          "nutrientTableRecordId",
                           "name",
-                          "localName"
+                          "localName",
+                          "nutrientTableId",
+                          "nutrientTableRecordId"
                         ]
                       }
                     },
@@ -51274,7 +51313,10 @@
                           "minLength": 1,
                           "maxLength": 128
                         },
-                        "value": {}
+                        "value": {},
+                        "public": {
+                          "type": "boolean"
+                        }
                       },
                       "required": [
                         "name",
@@ -51358,13 +51400,17 @@
                           },
                           "userId": {
                             "type": "string"
+                          },
+                          "public": {
+                            "type": "boolean"
                           }
                         },
                         "required": [
                           "name",
                           "value",
                           "id",
-                          "userId"
+                          "userId",
+                          "public"
                         ]
                       }
                     },
@@ -51476,13 +51522,17 @@
                           },
                           "userId": {
                             "type": "string"
+                          },
+                          "public": {
+                            "type": "boolean"
                           }
                         },
                         "required": [
                           "name",
                           "value",
                           "id",
-                          "userId"
+                          "userId",
+                          "public"
                         ]
                       }
                     },
@@ -51570,7 +51620,10 @@
                           "minLength": 1,
                           "maxLength": 128
                         },
-                        "value": {}
+                        "value": {},
+                        "public": {
+                          "type": "boolean"
+                        }
                       },
                       "required": [
                         "name",
@@ -51646,13 +51699,17 @@
                           },
                           "userId": {
                             "type": "string"
+                          },
+                          "public": {
+                            "type": "boolean"
                           }
                         },
                         "required": [
                           "name",
                           "value",
                           "id",
-                          "userId"
+                          "userId",
+                          "public"
                         ]
                       }
                     },
@@ -51938,13 +51995,17 @@
                           },
                           "userId": {
                             "type": "string"
+                          },
+                          "public": {
+                            "type": "boolean"
                           }
                         },
                         "required": [
                           "name",
                           "value",
                           "id",
-                          "userId"
+                          "userId",
+                          "public"
                         ]
                       }
                     },
@@ -52031,7 +52092,10 @@
                     "minLength": 1,
                     "maxLength": 128
                   },
-                  "value": {}
+                  "value": {},
+                  "public": {
+                    "type": "boolean"
+                  }
                 },
                 "required": [
                   "name",
@@ -52060,13 +52124,17 @@
                     },
                     "userId": {
                       "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "name",
                     "value",
                     "id",
-                    "userId"
+                    "userId",
+                    "public"
                   ]
                 }
               }
@@ -52128,13 +52196,17 @@
                     },
                     "userId": {
                       "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "name",
                     "value",
                     "id",
-                    "userId"
+                    "userId",
+                    "public"
                   ]
                 }
               }
@@ -52182,7 +52254,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "value": {}
+                  "value": {},
+                  "public": {
+                    "type": "boolean"
+                  }
                 },
                 "required": [
                   "value"
@@ -52210,13 +52285,17 @@
                     },
                     "userId": {
                       "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "name",
                     "value",
                     "id",
-                    "userId"
+                    "userId",
+                    "public"
                   ]
                 }
               }
@@ -52264,7 +52343,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "value": {}
+                  "value": {},
+                  "public": {
+                    "type": "boolean"
+                  }
                 },
                 "required": [
                   "value"
@@ -52292,13 +52374,17 @@
                     },
                     "userId": {
                       "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "name",
                     "value",
                     "id",
-                    "userId"
+                    "userId",
+                    "public"
                   ]
                 }
               }
@@ -52322,13 +52408,17 @@
                     },
                     "userId": {
                       "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "name",
                     "value",
                     "id",
-                    "userId"
+                    "userId",
+                    "public"
                   ]
                 }
               }
@@ -64809,10 +64899,7 @@
                           "hmacCreateSecret": {
                             "type": "boolean"
                           }
-                        },
-                        "required": [
-                          "credProps"
-                        ]
+                        }
                       },
                       "type": {
                         "type": "string",
