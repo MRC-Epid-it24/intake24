@@ -118,6 +118,7 @@ export const authGuard: NavigationGuard = async (to, from, next) => {
 export const createUserGuard: NavigationGuard = async (to, from, next) => {
   const {
     params: { surveyId, token },
+    query: { redirect },
   } = to;
 
   try {
@@ -126,9 +127,8 @@ export const createUserGuard: NavigationGuard = async (to, from, next) => {
     await auth.logout(true);
     await auth.token({ token: authToken });
 
-    // TODO: set redirectUrl if supplied to survey state
-
-    next({ name: 'survey-home', params: { surveyId } });
+    const view = typeof redirect === 'string' && ['home', 'recall', 'feedback'].includes(redirect) ? redirect : 'home';
+    next({ path: `${surveyId}/${view}` });
   }
   catch {
     next({ name: 'home' });

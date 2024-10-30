@@ -27,11 +27,11 @@ Survey can be enabled with respondent account generation using shared secret. To
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
 :::
 
-Once enabled, two options listed below can be used to create respondent accounts. Regardless of the selected option, [JWT token](/open-api#tag/survey/post/surveys/{slug}/create-user){target="blank"} with payload must be created.
+Once enabled, two options listed below can be used to create respondent accounts. Regardless of the selected option, [JWT token](/open-api.html#tag/survey/POST/surveys/{slug}/create-user){target="blank"} with payload must be created.
 
 #### A) API endpoint
 
-- use [create user API endpoint](/open-api#tag/survey/post/surveys/{slug}/create-user){target="blank"}
+- use [create user API endpoint](/open-api.html#tag/survey/POST/surveys/{slug}/create-user){target="blank"}
 - create JWT token with desired payload according the specification
 
 #### Token specifications
@@ -78,13 +78,29 @@ Tokens without standard claims limit their identifiability and may pose increase
 }
 ```
 
-- form authentication URL with response details [authentication URL patterns](/admin/surveys/#authentication-urls)
+- form authentication URL with response details using one of the [authentication URL patterns](/admin/surveys/#authentication-urls)
 - redirect respondent to the URL
 
 #### B) Frontend app URL
 
-- route: `app.domain.com/{surveyId}/create-user/{token}`
-- under the hood same API endpoint is used as in `option A` and user is directly authenticated
+Under the hood same API endpoint is used as in `option A` calling the frontend app URL. User is automatically authenticated and redirected to the survey home page.
+
+```http
+app.domain.com/{surveyId}/create-user/{token}
+```
+
+**Optional redirect**
+
+User can be redirected within the app to a specific page after account creation using `redirect` query parameter:
+
+```http
+app.domain.com/{surveyId}/create-user/{token}?redirect=recall
+```
+
+- Possible values:
+  - `home` or `undefined` - user is redirected to the survey home
+  - `recall` - user is redirected to the survey recall
+  - `feedback` - user is redirected to the survey feedback
 
 ::: tip
 Pick suitable option based on integration use case, depending whether you need to process API response (`A`) or not (`B`).

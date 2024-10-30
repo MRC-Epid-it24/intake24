@@ -84,7 +84,7 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 **2. JWT secret is set**
 
-- API endpoint can be used to create new respondent accounts. See [API docs](/open-api#tag/survey/post/surveys/{slug}/create-user){target="blank"} for more details.
+- API endpoint can be used to create new respondent accounts. See [API docs](/open-api.html#tag/survey/POST/surveys/{slug}/create-user){target="blank"} for more details.
 
 ### Notifications
 
