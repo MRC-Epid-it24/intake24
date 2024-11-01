@@ -26,6 +26,17 @@ import { PkgLocalCategory } from './types/categories';
 import { CsvFoodRecords } from './types/csv-import';
 import { PkgLocale } from './types/locale';
 
+interface CategoryCache {
+  contents: Map<string, CategoryContents>;
+  lookup: Map<string, 'category' | 'food' | 'unknown'>;
+}
+
+interface CategoryHierarchyCache {
+  hierarchyMap: Map<string, string[]>;
+  parentChildMap: Map<string, Set<string>>;
+  processedCategories: Set<string>;
+}
+
 export type Logger = typeof logger;
 
 export const convertorTypeOptions = ['package', 'csv'] as const;
@@ -69,6 +80,18 @@ export class ConvertorToPackage {
   private enabledLocalesFoodList: string[] = [];
   private localCategories: PkgLocalCategory[] = [];
   private skipMissingCategories: boolean;
+  private categoryCache: CategoryCache = {
+    contents: new Map(),
+    lookup: new Map(),
+  };
+
+  private psmCache = new Map<string, PkgPortionSizeMethod[]>();
+  private keyValuePairCache = new Map<string, Map<string, string>>();
+  private categoryHierarchyCache: CategoryHierarchyCache = {
+    hierarchyMap: new Map(),
+    parentChildMap: new Map(),
+    processedCategories: new Set(),
+  };
 
   private readonly apiClient: ApiClientV4;
 
@@ -284,99 +307,186 @@ export class ConvertorToPackage {
     category: CategoryHeader,
     parentCategories: string[] = [],
   ): Promise<Map<string, string[]>> => {
-    const categoriesHierarchy = new Map<string, string[]>();
-    const uniqueKey = `${category.code}:_${Math.floor(Math.random() * 1000)}`;
-    categoriesHierarchy.set(uniqueKey, parentCategories);
-
-    const contents = await this.apiClient.categories.getCategoryContents(
-      category.code,
-      this.localeId ?? '',
-    );
-
-    if (contents.subcategories.length > 0) {
-      const subcategoryPromises = contents.subcategories.map(subheader =>
-        this.determineCategoriesHierarchy(level + 1, subheader, [
-          ...parentCategories,
-          category.code,
-        ]),
-      );
-
-      const subcategoryResults = await Promise.all(subcategoryPromises);
-
-      subcategoryResults.forEach((result) => {
-        result.forEach((value, key) => categoriesHierarchy.set(key, value));
-      });
+    if (!category?.code || !this.localeId) {
+      throw new Error('Invalid category or missing localeId');
     }
 
-    return categoriesHierarchy;
+    const result = new Map<string, string[]>();
+    const categoryPath = [...parentCategories, category.code];
+    const categoryKey = `${category.code}:_${randomUUID().slice(0, 8)}`;
+
+    try {
+      result.set(categoryKey, parentCategories);
+
+      const contents = await this.fetchCategoryContents(category.code);
+
+      if (!contents?.subcategories?.length) {
+        return result;
+      }
+
+      const batchSize = 10;
+      const batches: CategoryHeader[][] = [];
+
+      for (let i = 0; i < contents.subcategories.length; i += batchSize) {
+        batches.push(contents.subcategories.slice(i, i + batchSize));
+      }
+
+      const batchResults = await Promise.all(
+        batches.map(batch => this.processCategoryBatch(batch, level + 1, categoryPath)),
+      );
+
+      batchResults.forEach((batchMap) => {
+        batchMap.forEach((value, key) => result.set(key, value));
+      });
+
+      return result;
+    }
+    catch (error) {
+      this.logger.error(
+        `Error processing category ${category.code} at level ${level}: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`,
+      );
+      throw error;
+    }
   };
+
+  private async fetchCategoryContents(categoryCode: string) {
+    try {
+      if (this.categoryCache.contents.has(categoryCode)) {
+        return this.categoryCache.contents.get(categoryCode)!;
+      }
+
+      const contents = await this.apiClient.categories.getCategoryContents(
+        categoryCode,
+        this.localeId!,
+      );
+      this.categoryCache.contents.set(categoryCode, contents);
+
+      return contents;
+    }
+    catch (error) {
+      this.logger.error(
+        `Failed to fetch category contents for ${categoryCode}: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`,
+      );
+      throw error;
+    }
+  }
+
+  private async processCategoryBatch(
+    categories: CategoryHeader[],
+    level: number,
+    parentCategories: string[] = [],
+  ): Promise<Map<string, string[]>> {
+    const results = await Promise.all(
+      categories.map(category =>
+        this.determineCategoriesHierarchy(level, category, parentCategories),
+      ),
+    );
+
+    return results.reduce((mergedMap, currentMap) => {
+      currentMap.forEach((value, key) => mergedMap.set(key, value));
+      return mergedMap;
+    }, new Map<string, string[]>());
+  }
 
   private mapCategoryHierarchy = async (
     categories: CategoryContents,
   ): Promise<Map<string, string[]>> => {
-    const categoriesHierarchy = new Map<string, string[]>();
+    // Build the cache first if not already built
+    if (this.categoryHierarchyCache.processedCategories.size === 0) {
+      await this.buildCategoryHierarchyCache(categories);
+    }
 
-    await Promise.all(
-      categories.subcategories.map(async (category) => {
-        const categoryPath = await this.determineCategoriesHierarchy(1, category, []);
-        categoryPath.forEach((value, key) => categoriesHierarchy.set(key, value));
+    // Use the pre-built cache for faster processing
+    const batchSize = 10;
+    const batches: CategoryHeader[][] = [];
+
+    for (let i = 0; i < categories.subcategories.length; i += batchSize) {
+      batches.push(categories.subcategories.slice(i, i + batchSize));
+    }
+
+    // Process batches using the cache
+    const results = await Promise.all(
+      batches.map(async (batch) => {
+        const batchResults = new Map<string, string[]>();
+
+        for (const category of batch) {
+          const categoryKey = `${category.code}:_${randomUUID().slice(0, 8)}`;
+          const parents = this.categoryHierarchyCache.parentChildMap.get(category.code);
+
+          if (parents) {
+            batchResults.set(categoryKey, Array.from(parents));
+            // Also cache the result in hierarchyMap for future use
+            this.categoryHierarchyCache.hierarchyMap.set(categoryKey, Array.from(parents));
+          }
+        }
+
+        return batchResults;
       }),
     );
 
-    return categoriesHierarchy;
+    return results.reduce((mergedMap, currentMap) => {
+      currentMap.forEach((value, key) => mergedMap.set(key, value));
+      return mergedMap;
+    }, new Map<string, string[]>());
   };
 
-  private async isCategoryOrFoodCode(code: string): Promise<'category' | 'food' | 'unknown'> {
-    try {
-      const [
-        food,
-        {
-          data: [category],
-        },
-      ] = await Promise.all([
-        this.apiClient.foods.findGlobalFood(code),
-        this.apiClient.categories.list({ search: code }),
-      ]);
+  private async batchProcessCategories(
+    categories: string[],
+  ): Promise<Map<string, 'category' | 'food' | 'unknown'>> {
+    const uncachedCategories = categories.filter(cat => !this.categoryCache.lookup.has(cat));
 
-      console.log({ food, category });
+    if (uncachedCategories.length === 0) {
+      return this.categoryCache.lookup;
+    }
 
-      if (food)
-        return 'food';
-      if (category)
-        return 'category';
-      return 'unknown';
+    const batchSize = 50;
+    const batches = [];
+    for (let i = 0; i < uncachedCategories.length; i += batchSize) {
+      batches.push(uncachedCategories.slice(i, i + batchSize));
     }
-    catch (error) {
-      this.logger.error('Error checking code type:', error);
-      return 'unknown';
-    }
+
+    await Promise.all(
+      batches.map(async (batch) => {
+        const responses = await Promise.all(
+          batch.map(code =>
+            Promise.all([
+              this.apiClient.foods.findGlobalFood(code),
+              this.apiClient.categories.list({ search: code, limit: 1 }),
+            ]),
+          ),
+        );
+
+        responses.forEach(([food, { data }], index) => {
+          const code = batch[index];
+          const type = food ? 'food' : data.length ? 'category' : 'unknown';
+          this.categoryCache.lookup.set(code, type);
+        });
+      }),
+    );
+
+    return this.categoryCache.lookup;
   }
 
   private linkAssociatedFoodCategories = async (
     associatedFoodCategory: string,
   ): Promise<PkgAssociatedFood[]> => {
-    if (!associatedFoodCategory)
+    if (!associatedFoodCategory.trim())
       return [];
 
-    const promises = associatedFoodCategory.split(',').map(async (category) => {
-      this.isCategoryOrFoodCode(category.trim());
-      const associationType = await this.isCategoryOrFoodCode(category.trim());
+    const categories = associatedFoodCategory.split(',').map(c => c.trim());
+    const lookup = await this.batchProcessCategories(categories);
 
-      console.log(`Association type for category ${category}: ${associationType}`);
-      if (associationType === 'unknown') {
-        this.logger.warn(`Unknown association type for category ${category}`);
-      }
-
-      return {
-        foodCode: associationType === 'food' ? category.trim() : undefined,
-        categoryCode: associationType === 'category' ? category.trim() : undefined,
-        linkAsMain: false,
-        promptText: { en: '' },
-        genericName: { en: '' },
-      };
-    });
-
-    return await Promise.all(promises);
+    return categories.map(category => ({
+      foodCode: lookup.get(category) === 'food' ? category : undefined,
+      categoryCode: lookup.get(category) === 'category' ? category : undefined,
+      linkAsMain: false,
+      promptText: { en: '' },
+      genericName: { en: '' },
+    }));
   };
 
   // Check if the parent categories have a default PSM
@@ -395,133 +505,279 @@ export class ConvertorToPackage {
     return defaultPsm;
   };
 
-  private fromCSVPortionSizeMethodPackage = (psm: string): PkgPortionSizeMethod[] => {
-    this.logger.debug(`Processing PSM - ${psm}`);
-    const psmToUse = psm;
-    // TODO: Check if the parent categories have a default PSM
-    // const psmToUse = psm.length > 0 ? psm : this.checkForCategoryDefaultPsm(parentCategories);
+  private parseKeyValuePairs(line: string): Map<string, string> {
+    if (this.keyValuePairCache.has(line)) {
+      return this.keyValuePairCache.get(line)!;
+    }
 
-    if (!psmToUse || psmToUse.length === 0)
-      return [];
-    const normalizedPsm: PkgPortionSizeMethod[] = [];
-    const lines = psm.split('\n').map(method => method.trim());
-    lines.forEach((line) => {
-      const keyValuePairs = line.split(',').map(pair => pair.trim().split(': '));
-      const method = keyValuePairs.find(pair => pair[0] === 'Method')?.[1];
-      const useForRecipes = keyValuePairs.find(pair => pair[0] === 'use for recipes')?.[1];
-      const conversionFactor = keyValuePairs.find(pair => pair[0] === 'conversion')?.[1];
-      const servingImageSet = keyValuePairs.find(pair => pair[0] === 'serving-image-set')?.[1];
-      const leftoversImageSet = keyValuePairs.find(pair => pair[0] === 'leftovers-image-set')?.[1];
-      this.logger.info(
-        `Method: ${method}, useForRecipes: ${useForRecipes}, conversionFactor: ${conversionFactor}`,
-      );
-
-      allThePsmInTheImportCSV.add(method!);
-      switch (method) {
-        case 'as-served':
-          normalizedPsm.push({
-            method: 'as-served',
-            description: 'use_an_image',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            leftoversImageSet: leftoversImageSet ?? '',
-            useForRecipes: useForRecipes === 'true',
-            servingImageSet: servingImageSet ?? '',
-          });
-          break;
-        case 'guide-image':
-          normalizedPsm.push({
-            method: 'guide-image',
-            description: 'use_a_guided__image',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            guideImageId: keyValuePairs.find(pair => pair[0] === 'guide-image-id')?.[1] ?? '',
-            useForRecipes: useForRecipes === 'true',
-          });
-          break;
-        case 'drink-scale':
-          normalizedPsm.push({
-            method: 'drink-scale',
-            description: 'use_a_drinkware_image',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            drinkwareId: keyValuePairs.find(pair => pair[0] === 'drinkware-id')?.[1] ?? '',
-            initialFillLevel: Number.parseFloat(
-              keyValuePairs.find(pair => pair[0] === 'initial-fill-level')?.[1] ?? '0.9',
-            ),
-            skipFillLevel:
-              keyValuePairs.find(pair => pair[0] === 'skip-fill-level')?.[1] === 'true',
-            useForRecipes: useForRecipes === 'true',
-          });
-          break;
-        case 'standard-portion':
-          {
-            const unitCount = Number.parseInt(
-              keyValuePairs.find(pair => pair[0] === 'units-count')?.[1] ?? '0',
-            );
-            const units: PkgStandardUnit[] = [];
-            if (unitCount) {
-              for (let i = 0; i < unitCount; i++) {
-                const name = keyValuePairs.find(pair => pair[0] === `unit${i}-name`)?.[1];
-                const weight = keyValuePairs.find(pair => pair[0] === `unit${i}-weight`)?.[1];
-                const omitFoodDescription
-                  = keyValuePairs.find(pair => pair[0] === `unit${i}-omit-food-description`)?.[1]
-                  === 'true';
-                units.push({
-                  name: name ?? '',
-                  weight: Number.parseFloat(weight ?? '0'),
-                  omitFoodDescription,
-                  inlineEstimateIn: '',
-                  inlineHowMany: '',
-                });
-              }
-            }
-
-            normalizedPsm.push({
-              method: 'standard-portion',
-              description: 'use_a_standard_portion',
-              conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-              units,
-              useForRecipes: useForRecipes === 'true',
-            });
-          }
-          break;
-        case 'cereal':
-          normalizedPsm.push({
-            method: 'cereal',
-            description: 'use_a_cereal_portion',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            type: keyValuePairs.find(pair => pair[0] === 'cereal-type')?.[1] ?? '',
-            useForRecipes: useForRecipes === 'true',
-          });
-          break;
-        case 'pizza':
-          normalizedPsm.push({
-            method: 'pizza',
-            description: 'use_a_pizza_portion',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            useForRecipes: useForRecipes === 'true',
-          });
-          break;
-        case 'milk-on-cereal':
-          normalizedPsm.push({
-            method: 'milk-on-cereal',
-            description: 'use_a_milk_on_cereal_portion',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            useForRecipes: useForRecipes === 'true',
-          });
-          break;
-        case 'milk-in-a-hot-drink':
-          normalizedPsm.push({
-            method: 'milk-in-a-hot-drink',
-            description: 'use_a_milk_in_a_hot_drink_portion',
-            conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
-            useForRecipes: useForRecipes === 'true',
-          });
-          break;
-        default:
-          break;
-      }
+    const pairs = new Map<string, string>();
+    line.split(',').forEach((pair) => {
+      const [key, ...values] = pair.trim().split(': ');
+      pairs.set(key, values.join(': '));
     });
+
+    this.keyValuePairCache.set(line, pairs);
+    return pairs;
+  }
+
+  // private fromCSVPortionSizeMethodPackage = (psm: string): PkgPortionSizeMethod[] => {
+  //   this.logger.debug(`Processing PSM - ${psm}`);
+  //   const psmToUse = psm;
+  //   // TODO: Check if the parent categories have a default PSM
+  //   // const psmToUse = psm.length > 0 ? psm : this.checkForCategoryDefaultPsm(parentCategories);
+
+  //   if (!psmToUse || psmToUse.length === 0) return [];
+  //   const normalizedPsm: PkgPortionSizeMethod[] = [];
+  //   const lines = psm.split('\n').map(method => method.trim());
+  //   lines.forEach(line => {
+  //     const keyValuePairs = line.split(',').map(pair => pair.trim().split(': '));
+  //     const method = keyValuePairs.find(pair => pair[0] === 'Method')?.[1];
+  //     const useForRecipes = keyValuePairs.find(pair => pair[0] === 'use for recipes')?.[1];
+  //     const conversionFactor = keyValuePairs.find(pair => pair[0] === 'conversion')?.[1];
+  //     const servingImageSet = keyValuePairs.find(pair => pair[0] === 'serving-image-set')?.[1];
+  //     const leftoversImageSet = keyValuePairs.find(pair => pair[0] === 'leftovers-image-set')?.[1];
+  //     this.logger.info(
+  //       `Method: ${method}, useForRecipes: ${useForRecipes}, conversionFactor: ${conversionFactor}`,
+  //     );
+
+  //     allThePsmInTheImportCSV.add(method!);
+  //     switch (method) {
+  //       case 'as-served':
+  //         normalizedPsm.push({
+  //           method: 'as-served',
+  //           description: 'use_an_image',
+  //           conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //           leftoversImageSet: leftoversImageSet ?? '',
+  //           useForRecipes: useForRecipes === 'true',
+  //           servingImageSet: servingImageSet ?? '',
+  //         });
+  //         break;
+  //       case 'guide-image':
+  //         normalizedPsm.push({
+  //           method: 'guide-image',
+  //           description: 'use_a_guided__image',
+  //           conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //           guideImageId: keyValuePairs.find(pair => pair[0] === 'guide-image-id')?.[1] ?? '',
+  //           useForRecipes: useForRecipes === 'true',
+  //         });
+  //         break;
+  //       case 'drink-scale':
+  //         normalizedPsm.push({
+  //           method: 'drink-scale',
+  //           description: 'use_a_drinkware_image',
+  //           conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //           drinkwareId: keyValuePairs.find(pair => pair[0] === 'drinkware-id')?.[1] ?? '',
+  //           initialFillLevel: Number.parseFloat(
+  //             keyValuePairs.find(pair => pair[0] === 'initial-fill-level')?.[1] ?? '0.9',
+  //           ),
+  //           skipFillLevel:
+  //             keyValuePairs.find(pair => pair[0] === 'skip-fill-level')?.[1] === 'true',
+  //           useForRecipes: useForRecipes === 'true',
+  //         });
+  //         break;
+  //       case 'standard-portion':
+  //         {
+  //           const unitCount = Number.parseInt(
+  //             keyValuePairs.find(pair => pair[0] === 'units-count')?.[1] ?? '0',
+  //           );
+  //           const units: PkgStandardUnit[] = [];
+  //           if (unitCount) {
+  //             for (let i = 0; i < unitCount; i++) {
+  //               const name = keyValuePairs.find(pair => pair[0] === `unit${i}-name`)?.[1];
+  //               const weight = keyValuePairs.find(pair => pair[0] === `unit${i}-weight`)?.[1];
+  //               const omitFoodDescription =
+  //                 keyValuePairs.find(pair => pair[0] === `unit${i}-omit-food-description`)?.[1] ===
+  //                 'true';
+  //               units.push({
+  //                 name: name ?? '',
+  //                 weight: Number.parseFloat(weight ?? '0'),
+  //                 omitFoodDescription,
+  //                 inlineEstimateIn: '',
+  //                 inlineHowMany: '',
+  //               });
+  //             }
+  //           }
+
+  //           normalizedPsm.push({
+  //             method: 'standard-portion',
+  //             description: 'use_a_standard_portion',
+  //             conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //             units,
+  //             useForRecipes: useForRecipes === 'true',
+  //           });
+  //         }
+  //         break;
+  //       case 'cereal':
+  //         normalizedPsm.push({
+  //           method: 'cereal',
+  //           description: 'use_a_cereal_portion',
+  //           conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //           type: keyValuePairs.find(pair => pair[0] === 'cereal-type')?.[1] ?? '',
+  //           useForRecipes: useForRecipes === 'true',
+  //         });
+  //         break;
+  //       case 'pizza':
+  //         normalizedPsm.push({
+  //           method: 'pizza',
+  //           description: 'use_a_pizza_portion',
+  //           conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //           useForRecipes: useForRecipes === 'true',
+  //         });
+  //         break;
+  //       case 'milk-on-cereal':
+  //         normalizedPsm.push({
+  //           method: 'milk-on-cereal',
+  //           description: 'use_a_milk_on_cereal_portion',
+  //           conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //           useForRecipes: useForRecipes === 'true',
+  //         });
+  //         break;
+  //       case 'milk-in-a-hot-drink':
+  //         normalizedPsm.push({
+  //           method: 'milk-in-a-hot-drink',
+  //           description: 'use_a_milk_in_a_hot_drink_portion',
+  //           conversionFactor: conversionFactor ? Number.parseFloat(conversionFactor) : 1,
+  //           useForRecipes: useForRecipes === 'true',
+  //         });
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   });
+  //   return normalizedPsm;
+  // };
+
+  private fromCSVPortionSizeMethodPackage = (psm: string): PkgPortionSizeMethod[] => {
+    if (!psm?.trim())
+      return [];
+
+    if (this.psmCache.has(psm)) {
+      return this.psmCache.get(psm)!;
+    }
+
+    const normalizedPsm: PkgPortionSizeMethod[] = [];
+    const lines = psm.split('\n');
+
+    for (const line of lines) {
+      const pairs = this.parseKeyValuePairs(line);
+      const method = pairs.get('Method');
+      if (!method)
+        continue;
+
+      const useForRecipes = pairs.get('use for recipes') === 'true';
+      const conversionFactor = Number(pairs.get('conversion')) || 1;
+
+      allThePsmInTheImportCSV.add(method);
+
+      const psmMethod = this.createPSMMethod(method, pairs, useForRecipes, conversionFactor);
+      if (psmMethod)
+        normalizedPsm.push(psmMethod);
+    }
+
+    this.psmCache.set(psm, normalizedPsm);
     return normalizedPsm;
   };
+
+  private createPSMMethod(
+    method: string,
+    pairs: Map<string, string>,
+    useForRecipes: boolean,
+    conversionFactor: number,
+  ): PkgPortionSizeMethod | null {
+    switch (method) {
+      case 'as-served':
+        return {
+          method,
+          description: 'use_an_image',
+          conversionFactor,
+          useForRecipes,
+          servingImageSet: pairs.get('serving-image-set') ?? '',
+          leftoversImageSet: pairs.get('leftovers-image-set') ?? '',
+        };
+
+      case 'guide-image':
+        return {
+          method,
+          description: 'use_a_guided__image',
+          conversionFactor,
+          useForRecipes,
+          guideImageId: pairs.get('guide-image-id') ?? '',
+        };
+
+      case 'drink-scale':
+        return {
+          method,
+          description: 'use_a_drinkware_image',
+          conversionFactor,
+          useForRecipes,
+          drinkwareId: pairs.get('drinkware-id') ?? '',
+          initialFillLevel: Number(pairs.get('initial-fill-level')) || 0.9,
+          skipFillLevel: pairs.get('skip-fill-level') === 'true',
+        };
+
+      case 'standard-portion': {
+        const unitCount = Number(pairs.get('units-count')) || 0;
+        const units: PkgStandardUnit[] = [];
+
+        if (unitCount > 0) {
+          for (let i = 0; i < unitCount; i++) {
+            units.push({
+              name: pairs.get(`unit${i}-name`) ?? '',
+              weight: Number(pairs.get(`unit${i}-weight`)) || 0,
+              omitFoodDescription: pairs.get(`unit${i}-omit-food-description`) === 'true',
+              inlineEstimateIn: '',
+              inlineHowMany: '',
+            });
+          }
+        }
+
+        return {
+          method,
+          description: 'use_a_standard_portion',
+          conversionFactor,
+          useForRecipes,
+          units,
+        };
+      }
+
+      case 'cereal':
+        return {
+          method,
+          description: 'use_a_cereal_portion',
+          conversionFactor,
+          useForRecipes,
+          type: pairs.get('type') ?? '',
+        };
+
+      case 'pizza':
+        return {
+          method,
+          description: 'use_a_pizza_portion',
+          conversionFactor,
+          useForRecipes,
+        };
+
+      case 'milk-on-cereal':
+        return {
+          method,
+          description: 'use_a_milk_on_cereal_portion',
+          conversionFactor,
+          useForRecipes,
+        };
+
+      case 'milk-in-a-hot-drink':
+        return {
+          method,
+          description: 'use_a_milk_in_a_hot_drink_portion',
+          conversionFactor,
+          useForRecipes,
+        };
+
+      default:
+        this.logger.debug(`Unknown PSM method: ${method}`);
+        return null;
+    }
+  }
 
   private async createLocalCategoryListAndWriteJSON(localeId: string) {
     const categoryPsm = await this.readCategoryPsm();
@@ -531,8 +787,12 @@ export class ConvertorToPackage {
       return;
     }
 
-    const localCategories = await Promise.all(
-      categoryPsm.map(async (record) => {
+    const batchSize = 50;
+    const results: PkgLocalCategory[] = [];
+
+    for (let i = 0; i < categoryPsm.length; i += batchSize) {
+      const batch = categoryPsm.slice(i, i + batchSize);
+      const batchPromises = batch.map(async (record) => {
         const [category] = (
           await this.apiClient.categories.list({
             page: 1,
@@ -547,11 +807,14 @@ export class ConvertorToPackage {
           localDescription: category.name,
           portionSize: this.fromCSVPortionSizeMethodPackage(record.psm),
         };
-      }),
-    );
+      });
+
+      const batchResults = await Promise.all(batchPromises);
+      results.push(...batchResults);
+    }
 
     await this.writeJSON(
-      { [localeId]: localCategories },
+      { [localeId]: results },
       path.join(this.outputFilePath, PkgConstants.LOCAL_CATEGORIES_FILE_NAME),
     );
   }
@@ -566,45 +829,51 @@ export class ConvertorToPackage {
     const localeRootCategories = await this.apiClient.categories.getRootCategories(
       this.localeId ?? '',
     );
-    const localeCategoriesHierarchy = await this.mapCategoryHierarchy(localeRootCategories);
+
+    await this.buildCategoryHierarchyCache(localeRootCategories);
+    // const localeCategoriesHierarchy = await this.mapCategoryHierarchy(localeRootCategories);
 
     this.logger.info('Creating global food list');
 
     const ADD_NEW_GLOBAL_FOOD_ACTION = '5';
 
-    for (const record of data) {
-      if (record.action !== ADD_NEW_GLOBAL_FOOD_ACTION)
-        continue;
+    const batchSize = 100;
+    for (let i = 0; i < data.length; i += batchSize) {
+      const batch = data.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map(async (record) => {
+          if (record.action !== ADD_NEW_GLOBAL_FOOD_ACTION)
+            return;
 
-      this.logger.info(`Processing global food ${record['intake24 code']}`);
-      const parentCategoriesUnique = [
-        ...new Set(record.categories.split(',').map(category => category.trim())),
-      ];
-      const missingCategories = await this.determineIfGlobalCategoriesExist(
-        record.categories,
-        this.existingCategories,
+          this.logger.info(`Processing global food ${record['intake24 code']}`);
+          const parentCategoriesUnique = [
+            ...new Set(record.categories.split(',').map(category => category.trim())),
+          ];
+          const missingCategories = await this.determineIfGlobalCategoriesExist(
+            record.categories,
+            this.existingCategories!,
+          );
+
+          if (missingCategories.length > 0) {
+            const message = `Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list.`;
+            if (!this.skipMissingCategories) {
+              this.logger.error(`${message} ERROR`);
+              return;
+            }
+            this.logger.warn(`${message} SKIPPING`);
+            parentCategoriesUnique.filter(category => !missingCategories.includes(category));
+          }
+
+          const parentCategoriesFiltered = this.filterParentCategories(parentCategoriesUnique);
+          const cleanedParentCategories = parentCategoriesUnique.filter(
+            category => !parentCategoriesFiltered.includes(category),
+          );
+
+          globalFoodList.push(this.createGlobalFood(record, cleanedParentCategories));
+        }),
       );
-
-      if (missingCategories.length > 0) {
-        const message = `Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list.`;
-        if (!this.skipMissingCategories) {
-          this.logger.error(`${message} ERROR`);
-          continue;
-        }
-        this.logger.warn(`${message} SKIPPING`);
-        parentCategoriesUnique.filter(category => !missingCategories.includes(category));
-      }
-
-      const parentCategoriesFiltered = this.filterParentCategories(
-        parentCategoriesUnique,
-        localeCategoriesHierarchy,
-      );
-      const cleanedParentCategories = parentCategoriesUnique.filter(
-        category => !parentCategoriesFiltered.includes(category),
-      );
-
-      globalFoodList.push(this.createGlobalFood(record, cleanedParentCategories));
     }
+
     this.globalFoodList = globalFoodList;
 
     await this.writeJSON(
@@ -613,29 +882,55 @@ export class ConvertorToPackage {
     );
   }
 
-  private async getAllCategoriesFromDb(): Promise<string[]> {
-    const firstPage = await this.apiClient.categories.list({ page: 1 });
-    const { lastPage } = firstPage.meta;
-    const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
+  private filterParentCategories(categories: string[]): string[] {
+    const result = new Set<string>();
+    const processedCategories = new Set<string>();
 
-    const categories = await Promise.all(
-      pages.map(page => this.apiClient.categories.list({ page }).then(response => response.data)),
-    );
+    // Use the pre-built parent-child map for faster lookups
+    for (const category of categories) {
+      if (processedCategories.has(category))
+        continue;
+      processedCategories.add(category);
 
-    return categories.flat() as unknown as string[];
+      const parents = this.categoryHierarchyCache.parentChildMap.get(category);
+      if (parents) {
+        parents.forEach(parent => result.add(parent));
+      }
+    }
+
+    return Array.from(result);
   }
 
-  private filterParentCategories(categories: string[], hierarchy: Map<string, string[]>): string[] {
-    return categories.reverse().reduce((filtered, category) => {
-      const regex = new RegExp(`^${category}:_`);
-      const matchingKeys = Array.from(hierarchy.keys()).filter(key => regex.test(key));
-      const matchedParentCategories = [
-        ...new Set(matchingKeys.flatMap(key => hierarchy.get(key) || [])),
-      ];
-      return matchedParentCategories.length > 0
-        ? [...filtered, ...matchedParentCategories]
-        : filtered;
-    }, [] as string[]);
+  private async buildCategoryHierarchyCache(categories: CategoryContents) {
+    const queue = [...categories.subcategories];
+    const processed = new Set<string>();
+
+    while (queue.length > 0) {
+      const batchSize = 10;
+      const batch = queue.splice(0, batchSize);
+
+      await Promise.all(
+        batch.map(async (category) => {
+          if (processed.has(category.code))
+            return;
+
+          const contents = await this.fetchCategoryContents(category.code);
+          processed.add(category.code);
+
+          if (contents?.subcategories) {
+            queue.push(...contents.subcategories);
+
+            // Build parent-child relationships
+            contents.subcategories.forEach((child) => {
+              const childSet
+                = this.categoryHierarchyCache.parentChildMap.get(category.code) || new Set();
+              childSet.add(child.code);
+              this.categoryHierarchyCache.parentChildMap.set(category.code, childSet);
+            });
+          }
+        }),
+      );
+    }
   }
 
   private createGlobalFood(
@@ -748,43 +1043,62 @@ export class ConvertorToPackage {
 
   // Process the CSV file, while ensuring headers are validated before processing data
   private processCsvFile = async (csvFilePath: string): Promise<CsvFoodRecordUnprocessed[]> => {
-    let headersValidated = false; // Flag to ensure headers are validated
-    let requiredHeadersValidated = false; // Flag to ensure required headers are validated
     const results: CsvFoodRecordUnprocessed[] = [];
+    const chunkSize = 1000;
+    let currentChunk: CsvFoodRecordUnprocessed[] = [];
 
-    return new Promise<CsvFoodRecordUnprocessed[]>((resolve, reject) => {
-      createReadStream(csvFilePath, { encoding: 'utf-8' })
-        .pipe(csv({}))
-        .on('headers', (headers: string[]) => {
-          headers = headers.map(header => header.trim().toLowerCase());
-          headersValidated = this.validateCsvStructure(headers);
-          requiredHeadersValidated = this.validateRequiredFieldsExist(headers);
-          if (!headersValidated || !requiredHeadersValidated) {
-            reject(
-              new Error(
-                'CSV file does not contain the required structure defined in the JSON file.',
-              ),
-            );
-          }
-        })
-        .on('data', (data: CsvFoodRecordUnprocessed) => {
-          if (!headersValidated || !requiredHeadersValidated) {
-            this.logger.debug(`Headers didn't pass validation - ${headersValidated}`);
-            return new Error('Headers not validated or not all required fields exist.');
-          }
-          const lowercaseData = Object.fromEntries(
-            Object.entries(data).map(([key, value]) => [key.trim().toLowerCase(), value]),
+    const processChunk = async (chunk: CsvFoodRecordUnprocessed[]) => {
+      const processed = await Promise.all(
+        chunk.map(async (record) => {
+          const trimmedRecord = Object.fromEntries(
+            Object.entries(record).map(([key, value]) => [
+              key.trim().toLowerCase(),
+              typeof value === 'string' ? value.trim() : value,
+            ]),
           ) as CsvFoodRecordUnprocessed;
-          results.push(lowercaseData);
+
+          return trimmedRecord;
+        }),
+      );
+      results.push(...processed);
+    };
+
+    await new Promise<void>((resolve, reject) => {
+      createReadStream(csvFilePath, {
+        encoding: 'utf-8',
+        highWaterMark: 256 * 1024, // Increased buffer size
+      })
+        .pipe(
+          csv({
+            mapValues: ({ value }) => value,
+            mapHeaders: ({ header }) => header.trim().toLowerCase(),
+            strict: true,
+            skipLines: 0,
+          }),
+        )
+        .on('headers', (headers: string[]) => {
+          if (!this.validateCsvStructure(headers) || !this.validateRequiredFieldsExist(headers)) {
+            reject(new Error('Invalid CSV structure'));
+          }
         })
-        .on('end', () => {
-          if (headersValidated)
-            resolve(results);
+        .on('data', (record: CsvFoodRecordUnprocessed) => {
+          currentChunk.push(record);
+          if (currentChunk.length >= chunkSize) {
+            const chunkToProcess = [...currentChunk];
+            currentChunk = [];
+            processChunk(chunkToProcess);
+          }
         })
-        .on('error', (error) => {
-          reject(error);
-        });
+        .on('end', async () => {
+          if (currentChunk.length > 0) {
+            await processChunk(currentChunk);
+          }
+          resolve();
+        })
+        .on('error', reject);
     });
+
+    return results;
   };
 
   // Main function to initiate the CSV importer
@@ -850,6 +1164,5 @@ export class ConvertorToPackage {
 
     this.logger.info('Conversion complete');
     this.logger.info(`PSMs in the CSV file: ${[...allThePsmInTheImportCSV].join(', ')}`);
-    // await this.isCategoryOrFoodCode('DRNK');
   }
 }
