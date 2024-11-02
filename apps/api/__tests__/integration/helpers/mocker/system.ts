@@ -94,7 +94,7 @@ function customField(): UserCustomField {
 }
 
 function respondent(): CreateRespondentRequest {
-  const username = faker.internet.userName();
+  const username = faker.internet.username();
   const name = faker.person.firstName();
   const email = faker.internet.email();
   const password = 'sUpErStRoNgPaSwOrD-123467890';

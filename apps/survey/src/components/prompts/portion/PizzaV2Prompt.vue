@@ -256,8 +256,8 @@ export default defineComponent({
         state.value.portionSize.servingWeight
           = ((baseWeight * pizzaDefs[size!].multiplier * crustDefs[crust!])
             / (unit === 'slice' ? pizzaDefs[size!].slices : 1))
-            * quantity
-            * props.conversionFactor;
+          * quantity
+          * props.conversionFactor;
       }
 
       ctx.emit('update:modelValue', state.value);

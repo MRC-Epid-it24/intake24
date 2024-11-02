@@ -113,7 +113,7 @@ export async function generateCSV(filename: string): Promise<string> {
   const fields = ['username', 'password', 'email', 'name', 'phone'];
 
   const data = times(10, () => ({
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
     password: faker.internet.password(),
     email: faker.internet.email(),
     name: faker.person.firstName(),
