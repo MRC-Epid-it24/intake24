@@ -351,6 +351,21 @@ export class ConvertorToPackage {
     }
   };
 
+  private async getAllCategoriesFromPagination(): Promise<string[]> {
+    const firstPage = await this.apiClient.categories.list({
+      page: 1,
+      limit: 50,
+    });
+    const totalPages = Math.ceil(firstPage.meta.total / firstPage.meta.limit);
+
+    const remainingPages = Array.from({ length: totalPages - 1 }, (_, i) =>
+      this.apiClient.categories.list({ page: i + 2, limit: 50 }));
+
+    const allPages = await Promise.all([Promise.resolve(firstPage), ...remainingPages]);
+
+    return allPages.flatMap(page => page.data.map(category => category.code));
+  }
+
   private async fetchCategoryContents(categoryCode: string) {
     try {
       if (this.categoryCache.contents.has(categoryCode)) {
@@ -823,8 +838,7 @@ export class ConvertorToPackage {
     const globalFoodList: PkgGlobalFood[] = [];
 
     this.existingCategories
-      = (await this.readExistingCategories())
-      || (await this.apiClient.categories.getAllCategories()).map(category => category.code);
+      = (await this.readExistingCategories()) || (await this.getAllCategoriesFromPagination());
 
     const localeRootCategories = await this.apiClient.categories.getRootCategories(
       this.localeId ?? '',
@@ -855,7 +869,9 @@ export class ConvertorToPackage {
           );
 
           if (missingCategories.length > 0) {
-            const message = `Categories ${missingCategories} for food ${record['intake24 code']} do not exist in the existing categories list.`;
+            const message = `Categories ${missingCategories} for food ${
+              record['intake24 code']
+            } do not exist in the existing categories list.`;
             if (!this.skipMissingCategories) {
               this.logger.error(`${message} ERROR`);
               return;
