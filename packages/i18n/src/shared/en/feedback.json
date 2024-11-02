@@ -79,9 +79,9 @@
     "gotIt": "Got it!"
   },
   "unitDescription": {
-    "percentage_of_energy": "Dietary feedback is based on the contribution of this nutrient to your energy intake and how it compares with recommendations.",
+    "percentage_of_energy": "Feedback on this nutrient is based on the contribution to your energy intake from the foods and quantities you reported.",
     "energy_divided_by_bmr": "Dietary feedback is based on your energy intake divided by BMR and how this compares to recommendations.",
     "per_unit_of_weight": "Dietary feedback is based on your intake of this nutrient per kg of your body weight and how this compares with recommendations.",
-    "range": "Dietary feedback is based on your intake of this nutrient and how it compares with recommendations."
+    "range": "Feedback on this nutrient is based on the food and quantities that you reported."
   }
 }

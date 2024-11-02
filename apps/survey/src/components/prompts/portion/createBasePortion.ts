@@ -1,6 +1,5 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { useGoTo } from 'vuetify';
 
 import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -59,7 +58,6 @@ export default <
     emits: ['action', 'update:modelValue'],
 
     data() {
-      const goTo = useGoTo();
       const food = this.food as unknown as F;
       const parentFood = this.parentFood as unknown as PF;
 
@@ -68,7 +66,6 @@ export default <
 
       return {
         foodName,
-        goTo,
         errors: [] as string[],
         panel: 0,
         translate,
@@ -103,15 +100,6 @@ export default <
 
       closePanels() {
         this.panel = -1;
-      },
-
-      async goToActions() {
-        if (this.panel === -1)
-          return;
-
-        setTimeout(async () => {
-          await this.goTo('#actions', { duration: 1000 });
-        }, 100);
       },
 
       setPanel(panel: number) {

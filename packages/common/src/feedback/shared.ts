@@ -48,6 +48,7 @@ export const sentiments = [
   'too_low',
   'low',
   'bit_low',
+  'neutral',
   'good',
   'excellent',
   'high',

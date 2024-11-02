@@ -174,15 +174,17 @@ export default class DemographicGroup {
   }
 
   private getScaleSectorByBestSentiment(): DemographicScaleSector | undefined {
-    const excScaleSectors = this.scaleSectors.filter(ss => ss.sentiment === 'excellent');
-    if (excScaleSectors.length)
-      return excScaleSectors[0];
+    const sentimentOrder = new Map([
+      ['excellent', 1],
+      ['good', 2],
+      ['neutral', 3],
+    ]);
+    const sentimentOrderKeys = sentimentOrder.keys().toArray();
 
-    const goodScaleSectors = this.scaleSectors.filter(ss => ss.sentiment === 'good');
-    if (goodScaleSectors.length)
-      return goodScaleSectors[0];
+    const bestScaleSectors = this.scaleSectors.filter(ss => sentimentOrderKeys.includes(ss.sentiment))
+      .sort((a, b) => (sentimentOrder.get(a.sentiment) ?? 0) - (sentimentOrder.get(b.sentiment) ?? 0));
 
-    return undefined;
+    return bestScaleSectors.at(0);
   }
 
   private cloneWithCustomScaleSectors(scaleSectors: DemographicScaleSector[]): DemographicGroup {

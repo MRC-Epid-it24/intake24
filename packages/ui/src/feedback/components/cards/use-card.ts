@@ -30,16 +30,19 @@ export function useCard(props: UseCardProps) {
   const { i18n: { t }, translate } = useI18n();
 
   function getTextClass(sentiment: Sentiment | null): string | undefined {
-    if (!sentiment)
+    if (!sentiment || sentiment === 'neutral')
       return undefined;
 
-    if (['too_low', 'low', 'high', 'too_high'].includes(sentiment))
-      return 'text-danger';
+    if (['good', 'excellent'].includes(sentiment))
+      return 'text-success';
 
     if (['bit_low', 'bit_high'].includes(sentiment))
       return 'text-warning';
 
-    return 'text-success';
+    if (['too_low', 'low', 'high', 'too_high'].includes(sentiment))
+      return 'text-danger';
+
+    return undefined;
   }
 
   function getIconClass(sentiment: Sentiment | null): string {
@@ -49,6 +52,7 @@ export function useCard(props: UseCardProps) {
       too_low: 'fas fa-angle-double-down',
       low: 'fas fa-angle-double-down',
       bit_low: 'fas fa-angle-down',
+      neutral: defaultIcon,
       good: defaultIcon,
       excellent: defaultIcon,
       bit_high: 'fas fa-angle-up',
