@@ -20,6 +20,7 @@
       v-bind="{ prompt, section }"
       v-model="state"
       focus
+      @delete="deleteFood"
     />
     <template #actions>
       <v-btn

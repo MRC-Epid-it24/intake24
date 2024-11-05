@@ -20,7 +20,7 @@
                 :name="`${mode}-food`"
                 :placeholder="promptI18n.title"
                 @keydown.prevent.stop.enter="moveToList"
-                @update:model-value="updateFood(foods.length, $event)"
+                @update:model-value="updateFood"
               >
                 <template v-if="$vuetify.display.xs" #append>
                   <v-icon
@@ -57,20 +57,19 @@
               class="ps-0"
               density="compact"
               :ripple="false"
-              @click="editFood(idx)"
             >
               <template #prepend>
                 <v-icon icon="fas fa-caret-right" />
               </template>
               <v-text-field
-                v-if="food.type === 'free-text' && editIndex === idx"
+                v-if="food.type === 'free-text'"
+                v-model.trim="food.description"
                 class="v-input-basis-stretch"
                 density="compact"
                 hide-details
-                :model-value="food.description"
                 variant="underlined"
                 @focusout.stop="focusOut(idx)"
-                @update:model-value="updateFood(idx, $event)"
+                @update:model-value="updateFood"
               />
               <v-list-item-title v-else>
                 {{ getFoodName(food) }}
@@ -166,8 +165,6 @@ function createFood(): FreeTextFood {
 
 const newFood = ref(createFood());
 
-const editIndex = ref<number | null>(null);
-
 function updateFoods() {
   emit(
     'update:modelValue',
@@ -183,16 +180,7 @@ const debouncedUpdateFoods = useDebounceFn(
   { maxWait: 1000 },
 );
 
-function editFood(index: number) {
-  editIndex.value = index;
-}
-
-function updateFood(index: number, description: string) {
-  const food = index === foods.value.length ? newFood.value : foods.value[index];
-  if (food.type !== 'free-text')
-    return;
-
-  food.description = description;
+function updateFood() {
   debouncedUpdateFoods();
 }
 
@@ -201,15 +189,11 @@ function moveToList() {
     return;
 
   foods.value.push(newFood.value);
-  editFood(foods.value.length - 1);
   newFood.value = createFood();
   updateFoods();
 }
 
 function deleteFood(index: number) {
-  if (editIndex.value === index)
-    editIndex.value = null;
-
   const [food] = foods.value.splice(index, 1);
   updateFoods();
   emit('delete', food.id);

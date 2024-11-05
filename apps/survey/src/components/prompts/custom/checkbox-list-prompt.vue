@@ -14,7 +14,6 @@
           :key="option.value"
           v-model="selected"
           :disabled="disableOption(option.value)"
-          :error="hasErrors"
           hide-details="auto"
           :label="option.label"
           :value="option.value"
@@ -24,14 +23,11 @@
           <v-checkbox-btn v-model="otherEnabled" class="flex-grow-0" :disabled="disableOption(otherOutput)" hide-details />
           <v-text-field
             v-model.trim="otherValue"
-            :disabled="!otherEnabled || disableOption(otherOutput)"
-            :error="hasErrors && otherEnabled"
             hide-details="auto"
             :label="$t(`prompts.${type}.other`)"
-            @update:model-value="update()"
+            @change="update"
           />
         </div>
-        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
       </v-form>
     </v-card-text>
     <template #actions>
@@ -89,18 +85,13 @@ export default defineComponent({
     const disableOption = (value: string) => !props.modelValue.includes(value)
       && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.modelValue.length === props.prompt.validation.max));
 
-    const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
-      props,
-      ctx,
-    );
+    const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
 
     const update = (option?: ListOption) => {
       if (option?.exclusive && selected.value.includes(option.value)) {
         selected.value = [option.value];
         otherEnabled.value = false;
       }
-
-      clearErrors();
 
       ctx.emit('update:modelValue', [...state.value]);
     };
@@ -115,8 +106,6 @@ export default defineComponent({
     return {
       action,
       customPromptLayout,
-      errors,
-      hasErrors,
       isValid,
       localeOptions,
       disableOption,
