@@ -124,6 +124,7 @@
                 max="100"
                 min="10"
                 name="seachMaxResults"
+                step="1"
                 thumb-label="always"
               />
               <div class="text-h6 mb-6 mt-6 underline">
@@ -195,6 +196,7 @@
                 max="20"
                 min="0"
                 name="searchFirstWordCost"
+                step="1"
                 thumb-label="always"
               />
               <v-slider
@@ -206,6 +208,7 @@
                 max="10"
                 min="0"
                 name="searchWordOrderCost"
+                step="1"
                 thumb-label="always"
               />
               <v-slider
@@ -217,6 +220,7 @@
                 max="10"
                 min="0"
                 name="searchWordDistanceCost"
+                step="1"
                 thumb-label="always"
               />
               <v-slider
@@ -228,6 +232,7 @@
                 max="10"
                 min="0"
                 name="searchUnmatchedWordCost"
+                step="1"
                 thumb-label="always"
               />
               <div class="text-h6 mb-4 mt-4 underline">
@@ -256,6 +261,7 @@
                 max="10"
                 min="2"
                 name="searchMinWordLength1"
+                step="1"
                 thumb-label="always"
               />
               <v-slider
@@ -267,6 +273,7 @@
                 max="10"
                 min="3"
                 name="searchMinWordLength2"
+                step="1"
                 thumb-label="always"
               />
               <v-switch
@@ -287,6 +294,7 @@
                 max="10"
                 min="2"
                 name="searchMinWordLengthPhonetic"
+                step="1"
                 thumb-label="always"
               />
               <v-label>
@@ -330,6 +338,7 @@
                 max="5"
                 min="0"
                 name="searchRelevantCategoryDepth"
+                step="1"
                 thumb-label="always"
               />
               <information-popup v-if="infoComponentType" :component-type="`${infoComponentType}`" :open="infoPopupOpen" :title="$t(`surveys.search.information.${infoComponentType}.title`)" @close="hideInformationPopup" />

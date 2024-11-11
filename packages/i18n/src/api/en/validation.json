@@ -206,7 +206,7 @@
       "_": "\"{attribute}\" must be allowed value.",
       "options": "\"{attribute}\" must be one of the values: {options}."
     },
-    "int": {
+    "integer": {
       "_": "\"{attribute}\" must be an integer.",
       "min": "\"{attribute}\" must be an integer (min: {min}).",
       "max": "\"{attribute}\" must be an integer (max: {max}).",

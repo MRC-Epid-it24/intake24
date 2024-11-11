@@ -205,7 +205,7 @@
       "_": "\"{attribute}\" doit être une valeur autorisée.",
       "options": "\"{attribute}\" doit être une des valeurs suivantes : {options}."
     },
-    "int": {
+    "integer": {
       "_": "\"{attribute}\" doit être un nombre entier.",
       "min": "\"{attribute}\" doit être un nombre entier (min: {min}).",
       "max": "\"{attribute}\" doit être un nombre entier (max: {max}).",
