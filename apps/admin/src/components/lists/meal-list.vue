@@ -110,7 +110,7 @@
             </template>
           </language-selector>
           <v-card-text class="d-flex justify-center align-center pa-0">
-            <v-time-picker
+            <time-picker
               v-model="dialog.meal.time"
               full-width
               :landscape="$vuetify.display.smAndUp"
@@ -139,7 +139,7 @@ import { VueDraggable } from 'vue-draggable-plus';
 import type { Meal, Meals } from '@intake24/common/surveys';
 import { defaultMeals } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, TimePicker } from '@intake24/ui';
 
 import { OptionsMenu, SelectResource } from '../dialogs';
 import { JsonEditorDialog } from '../editors';
@@ -160,6 +160,7 @@ export default defineComponent({
     LanguageSelector,
     OptionsMenu,
     SelectResource,
+    TimePicker,
     VueDraggable,
   },
 

@@ -3,26 +3,20 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="6">
-          <v-card-title>
-            {{ $t('survey-schemes.prompts.meal-gap-prompt.startTime') }}
-          </v-card-title>
-          <v-time-picker
+          <time-picker
             full-width
-            :label="$t('survey-schemes.prompts.meal-gap-prompt.startTime')"
             :landscape="$vuetify.display.smAndUp"
             :model-value="startTime"
+            :title="$t('survey-schemes.prompts.meal-gap-prompt.startTime')"
             @update:model-value="update('startTime', $event)"
           />
         </v-col>
         <v-col cols="12" md="6">
-          <v-card-title>
-            {{ $t('survey-schemes.prompts.meal-gap-prompt.endTime') }}
-          </v-card-title>
-          <v-time-picker
+          <time-picker
             full-width
-            :label="$t('survey-schemes.prompts.meal-gap-prompt.endTime')"
             :landscape="$vuetify.display.smAndUp"
             :model-value="endTime"
+            :title="$t('survey-schemes.prompts.meal-gap-prompt.endTime')"
             @update:model-value="update('endTime', $event)"
           />
         </v-col>
@@ -49,11 +43,14 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompts } from '@intake24/common/prompts';
+import { TimePicker } from '@intake24/ui';
 
 import { basePrompt } from '../partials';
 
 export default defineComponent({
   name: 'MealGapPrompt',
+
+  components: { TimePicker },
 
   mixins: [basePrompt],
 

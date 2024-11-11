@@ -2,16 +2,14 @@
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 time-picker">
       <v-form @submit.prevent="action('next')">
-        <v-time-picker
+        <time-picker
+          v-model="state"
           :allowed-minutes="allowedMinutes"
           class="pa-0"
           color="primary"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.display.smAndUp"
-          :model-value="state"
-          @update:hour="updateHour"
-          @update:minute="updateMinute"
         />
       </v-form>
     </v-card-text>
@@ -70,11 +68,14 @@ import { computed, defineComponent } from 'vue';
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
 import type { MealState, MealTime } from '@intake24/common/types';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { TimePicker } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealTimePrompt',
+
+  components: { TimePicker },
 
   mixins: [createBasePrompt<'meal-time-prompt'>()],
 
@@ -100,7 +101,7 @@ export default defineComponent({
     const promptI18n = computed(() => translatePrompt(['no', 'yes']));
     const state = computed({
       get() {
-        return fromMealTime(props.modelValue, false);
+        return fromMealTime(props.modelValue);
       },
       set(value) {
         ctx.emit('update:modelValue', toMealTime(value));
@@ -108,30 +109,12 @@ export default defineComponent({
     });
     const isValid = computed(() => !!state.value);
 
-    /*
-    * Possible bug in v-time-picker
-    * - if time is predefined, modelValue does not emit only on hour-change
-    * - handle hours/minutes cases separately
-    */
-    function updateHour(hours: number) {
-      const { minutes } = props.modelValue;
-      console.log('updateHour', hours, minutes);
-      state.value = fromMealTime({ hours, minutes }, false);
-    };
-    function updateMinute(minutes: number) {
-      const { hours } = props.modelValue;
-      console.log('updateMinute', hours, minutes);
-      state.value = fromMealTime({ hours, minutes }, false);
-    };
-
     return {
       action,
       allowedMinutes,
       isValid,
       promptI18n,
       state,
-      updateHour,
-      updateMinute,
     };
   },
 });
