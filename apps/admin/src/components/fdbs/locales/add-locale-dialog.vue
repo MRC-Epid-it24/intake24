@@ -26,7 +26,7 @@
           {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItems[0].code }) }}
         </v-alert>
         <template v-if="items.length">
-          <v-list v-model:selected="selected" class="list-border" density="compact" min-height="350px" multiple>
+          <v-list v-model:selected="selected" class="list-border" density="compact" min-height="350px" select-strategy="leaf">
             <v-list-item v-for="item in items" :key="item.id" :value="item.id">
               <template #prepend="{ isActive }">
                 <v-list-item-action class="mr-2">

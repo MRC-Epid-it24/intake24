@@ -47,10 +47,10 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text class="pa-0">
                   <v-list
-                    v-model="selectedSubmissions"
+                    v-model:selected="selectedSubmissions"
                     density="compact"
-                    multiple
-                    @change="buildFeedback"
+                    select-strategy="leaf"
+                    @update:selected="buildFeedback"
                   >
                     <v-list-item
                       v-for="(submission, idx) in submissions"

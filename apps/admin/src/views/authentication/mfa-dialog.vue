@@ -69,10 +69,10 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-list
-            v-model="deviceId"
+            v-model:selected="deviceId"
             class="list-border"
             lines="two"
-            @change="selectDevice"
+            @update:selected="selectDevice"
           >
             <v-list-subheader>{{ $t('common.mfa.devices') }}</v-list-subheader>
             <v-list-item v-for="device in authData.devices" :key="device.id" link :value="device.id">
