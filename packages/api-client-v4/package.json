@@ -15,11 +15,11 @@
     "lodash": "^4.17.21",
     "mime-types": "^2.1.35",
     "p-queue": "^6.6.2",
-    "winston": "^3.16.0"
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
     "@types/mime-types": "^2.1.4",
-    "@types/node": "^22.8.6"
+    "@types/node": "^22.9.0"
   }
 }

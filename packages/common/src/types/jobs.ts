@@ -14,7 +14,7 @@ export const repeatableBullJob = z.object({
   tz: z.string().nullable(),
   pattern: z.string().nullable(),
   every: z.string().nullish(),
-  next: z.number(),
+  next: z.number().optional(),
 });
 
 export type RepeatableBullJob = z.infer<typeof repeatableBullJob>;
