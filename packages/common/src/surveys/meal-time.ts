@@ -30,7 +30,7 @@ export function sortMeals(a: MealState, b: MealState) {
 export const minutesWrapAround = (minutes: number) => (minutes < 0 ? 1440 + minutes : minutes);
 
 export function isMealAfter(time: MealTime, after: MealTime) {
-  return time.hours === after.hours ? time.minutes > after.minutes : time.hours > after.hours;
+  return time.hours === after.hours ? time.minutes >= after.minutes : time.hours >= after.hours;
 }
 
 export function minutesAfterMeal(time: MealTime, after: MealTime) {
@@ -46,7 +46,7 @@ export function mealWithStartGap(meal: MealState, startTime: string, gap: number
 }
 
 export function isMealBefore(time: MealTime, before: MealTime) {
-  return time.hours === before.hours ? time.minutes < before.minutes : time.hours < before.hours;
+  return time.hours === before.hours ? time.minutes <= before.minutes : time.hours <= before.hours;
 }
 
 export function minutesBeforeMeal(time: MealTime, before: MealTime) {
