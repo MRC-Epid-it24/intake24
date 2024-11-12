@@ -1,6 +1,6 @@
 <template>
   <split-food-prompt
-    v-bind="{ food: freeTextFood(), meal, prompt, section, suggestions }"
+    v-bind="{ food, meal, prompt, section, suggestions }"
     @action="action"
   />
 </template>
@@ -40,21 +40,34 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
-    // TODO: use server-side implementation for split words & lists
+    const food = freeTextFood();
+
+    /* Temporary solution to V3 split lists
+    *  TODO: server-side implementation for
+    * - split words & lists
+    * - force-split exception lists
+    */
     const suggestions = computed(() =>
-      freeTextFood()
+      food
         .description
-        .split(/(?:,| and | with )+/)
+        .split(/(?:,|&| and | with )+/i)
         .map(item => item.trim()),
     );
 
+    const forceSplits = ['burger:chips', 'chips:fish'];
+
+    const forceSplit = computed(() => {
+      const check = [...suggestions.value].sort((a, b) => a.localeCompare(b)).join(':').toLowerCase();
+      return forceSplits.includes(check);
+    });
+
     const single = () => {
-      survey.addFoodFlag(freeTextFood().id, 'split-food-complete');
+      survey.addFoodFlag(food.id, 'split-food-complete');
       emit('action', 'next');
     };
 
     const separate = () => {
-      const foodId = freeTextFood().id;
+      const foodId = food.id;
       const { foodIndex } = getFoodIndexRequired(meals.value, foodId);
 
       const [first, ...rest] = suggestions.value;
@@ -91,11 +104,16 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      if (forceSplit.value) {
+        separate();
+        return;
+      }
+
       if (suggestions.value.length === 1)
         single();
     });
 
-    return { action, freeTextFood, meal, separate, single, suggestions };
+    return { action, food, meal, separate, single, suggestions };
   },
 });
 </script>
