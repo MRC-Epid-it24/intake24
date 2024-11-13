@@ -102,11 +102,12 @@ module.exports = {
           const how_many = { en: data.how_many };
 
           for (const locale of addonLocales) {
+            const rfcLocale = locale.replace('_', '-');
             if (estimate_in.en !== localeFileMap[locale][id].estimate_in)
-              estimate_in[locale] = localeFileMap[locale][id].estimate_in;
+              estimate_in[rfcLocale] = localeFileMap[locale][id].estimate_in;
 
             if (how_many.en !== localeFileMap[locale][id].how_many)
-              how_many[locale] = localeFileMap[locale][id].how_many;
+              how_many[rfcLocale] = localeFileMap[locale][id].how_many;
           }
 
           return {
