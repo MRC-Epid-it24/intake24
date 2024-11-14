@@ -31,9 +31,9 @@ export async function executeWithPagination<DB, TB extends keyof DB, O>(query: S
     .clearSelect()
     .clearLimit()
     .clearOffset()
-    .select(eb => eb.fn.countAll<number>().as('total'));
+    .select(eb => eb.fn.countAll<string>().as('total'));
 
-  const { total } = (await countQuery.executeTakeFirstOrThrow()) as { total: number }; // Type system goes crazy
+  const total = Number.parseInt(((await countQuery.executeTakeFirstOrThrow()) as { total: string }).total, 10);
 
   const data = await modifiedQuery.execute();
 
