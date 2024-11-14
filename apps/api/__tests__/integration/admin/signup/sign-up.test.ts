@@ -93,5 +93,9 @@ export default () => {
         ),
       ).toBeTrue();
     });
+
+    it('should return 400 for duplicate email', async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['email'], { input });
+    });
   });
 };

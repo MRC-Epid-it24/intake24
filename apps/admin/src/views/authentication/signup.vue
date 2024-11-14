@@ -228,7 +228,6 @@ async function sendRequest() {
 };
 
 async function submit() {
-  console.log(captchaEl.value);
   if (captchaEl.value) {
     captchaEl.value.executeIfCan();
     return;
