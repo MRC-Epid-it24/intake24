@@ -24,7 +24,7 @@ async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { fo
 export function foodGroup() {
   return initServer().router(contract.admin.foodGroup, {
     browse: {
-      middleware: [permission('food-groups', 'food-groups|browse')],
+      middleware: [permission('food-groups', 'food-groups:browse')],
       handler: async ({ query }) => {
         const foodGroups = await FoodGroup.paginate({
           query,
@@ -36,7 +36,7 @@ export function foodGroup() {
       },
     },
     store: {
-      middleware: [permission('food-groups', 'food-groups|create')],
+      middleware: [permission('food-groups', 'food-groups:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 
@@ -46,7 +46,7 @@ export function foodGroup() {
       },
     },
     read: {
-      middleware: [permission('food-groups', 'food-groups|read')],
+      middleware: [permission('food-groups', 'food-groups:read')],
       handler: async ({ params: { foodGroupId } }) => {
         const foodGroup = await FoodGroup.findByPk(foodGroupId);
         if (!foodGroup)
@@ -56,7 +56,7 @@ export function foodGroup() {
       },
     },
     update: {
-      middleware: [permission('food-groups', 'food-groups|edit')],
+      middleware: [permission('food-groups', 'food-groups:edit')],
       handler: async ({ body, params: { foodGroupId }, req }) => {
         await uniqueMiddleware(body.name, { foodGroupId, req });
 
@@ -70,7 +70,7 @@ export function foodGroup() {
       },
     },
     destroy: {
-      middleware: [permission('food-groups', 'food-groups|delete')],
+      middleware: [permission('food-groups', 'food-groups:delete')],
       handler: async ({ params: { foodGroupId } }) => {
         const foodGroup = await FoodGroup.findByPk(foodGroupId, {
           attributes: ['id'],

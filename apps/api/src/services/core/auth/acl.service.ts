@@ -124,7 +124,7 @@ function aclService({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
   const hasResourceAccess = async (securableType: string, action: string): Promise<boolean> => {
     const resource = getResourceFromSecurable(securableType);
 
-    return hasPermission(`${resource}|${action}`);
+    return hasPermission(`${resource}:${action}`);
   };
 
   /**
@@ -221,9 +221,9 @@ function aclService({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
    */
   const getResourceAccessActions = async (resource: string): Promise<string[]> =>
     (await getPermissions())
-      .filter(permission => permission.startsWith(`${resource}|`))
+      .filter(permission => permission.startsWith(`${resource}:`))
       .map((permission) => {
-        const [, action] = permission.split('|');
+        const [, action] = permission.split(':');
         return action;
       });
 

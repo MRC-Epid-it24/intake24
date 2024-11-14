@@ -6,7 +6,7 @@
           <th>{{ $t('common.id') }}</th>
           <td>{{ entry.id }}</td>
           <th>{{ $t('users.id') }}</th>
-          <td v-if="can('users|read') && entry.userId">
+          <td v-if="can('users:read') && entry.userId">
             <router-link :to="{ name: 'users-read', params: { id: entry.userId } }">
               {{ entry.userId }}
             </router-link>

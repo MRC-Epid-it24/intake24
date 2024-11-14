@@ -37,7 +37,7 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
   const meta = { module: { current: resourceName, parent } };
 
   resourceRoutes.forEach((action) => {
-    let perm = parent ? `${parent}|${resourceName}` : `${resourceName}|${action}`;
+    let perm = parent ? `${parent}:${resourceName}` : `${resourceName}:${action}`;
     if (securable)
       perm = options.name;
 
@@ -57,7 +57,7 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
         path: [...pathSegments, action].join('/'),
         name: `${name}-${action}`,
         component: viewsPath[action],
-        meta: { ...meta, action, title: `${title}.${action}`, perm: `${name}|create` },
+        meta: { ...meta, action, title: `${title}.${action}`, perm: `${name}:create` },
         props: true,
       });
       return;

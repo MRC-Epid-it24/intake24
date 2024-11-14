@@ -167,8 +167,8 @@ export default defineComponent({
       const resourceNames = resources.map(({ name }) => name);
 
       return orderBy(permissions, 'name').reduce((acc, permission) => {
-        if (permission.name.includes('|') || resourceNames.includes(permission.name)) {
-          const key = permission.name.split('|')[0];
+        if (permission.name.includes(':') || resourceNames.includes(permission.name)) {
+          const key = permission.name.split(':')[0];
           if (!(key in acc.resources))
             acc.resources[key] = [];
 

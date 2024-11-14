@@ -5,7 +5,7 @@ import type { SynonymSetRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales|synonym-sets'];
+  const permissions = ['locales', 'locales:synonym-sets'];
 
   let url: string;
   let invalidUrl: string;

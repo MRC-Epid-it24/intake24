@@ -7,7 +7,7 @@ import type { UserInput, UserRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/users';
-  const permissions = ['acl', 'users', 'users|create'];
+  const permissions = ['acl', 'users', 'users:create'];
 
   let input: UserRequest;
   let output: Omit<UserInput, 'permissions' | 'roles'>;

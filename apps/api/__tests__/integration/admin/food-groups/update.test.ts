@@ -4,7 +4,7 @@ import { FoodGroup } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/food-groups';
-  const permissions = ['food-groups', 'food-groups|edit'];
+  const permissions = ['food-groups', 'food-groups:edit'];
 
   let url: string;
   let invalidUrl: string;

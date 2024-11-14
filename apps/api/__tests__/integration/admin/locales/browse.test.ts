@@ -3,7 +3,7 @@ import { SystemLocale } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/locales';
-  const permissions = ['locales', 'locales|browse'];
+  const permissions = ['locales', 'locales:browse'];
 
   let systemLocale: SystemLocale;
 

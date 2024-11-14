@@ -38,10 +38,10 @@
         v-if="
           can([
             'locales',
-            'food-groups|browse',
-            'nutrient-tables|browse',
-            'nutrient-types|browse',
-            'nutrient-units|browse',
+            'food-groups:browse',
+            'nutrient-tables:browse',
+            'nutrient-types:browse',
+            'nutrient-units:browse',
           ])
         "
         icon="fas fa-fw fa-hamburger"
@@ -55,14 +55,14 @@
         :resources="resources.local"
       />
       <menu-tree
-        v-if="can(['as-served|browse', 'guide-images|browse', 'image-maps|browse'])"
+        v-if="can(['as-served:browse', 'guide-images:browse', 'image-maps:browse'])"
         icon="fas fa-fw fa-images"
         name="images"
         :resources="resources.images"
       />
       <menu-tree
         v-if="
-          can(['feedback-schemes', 'survey-schemes', 'survey-scheme-prompts|browse', 'surveys'])
+          can(['feedback-schemes', 'survey-schemes', 'survey-scheme-prompts:browse', 'surveys'])
         "
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"
@@ -75,7 +75,7 @@
         :resources="resources.acl"
       />
       <menu-tree
-        v-if="can(['jobs|browse', 'sign-in-logs|browse', 'tasks|browse'])"
+        v-if="can(['jobs:browse', 'sign-in-logs:browse', 'tasks:browse'])"
         icon="fas fa-fw fa-tools"
         name="system"
         :resources="resources.system"

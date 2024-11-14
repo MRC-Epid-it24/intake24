@@ -4,7 +4,7 @@ import { StandardUnit } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/standard-units';
-  const permissions = ['standard-units', 'standard-units|foods'];
+  const permissions = ['standard-units', 'standard-units:foods'];
 
   let url: string;
   let invalidUrl: string;

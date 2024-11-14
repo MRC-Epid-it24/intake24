@@ -16,7 +16,7 @@ export function asServedImage() {
 
   return initServer().router(contract.admin.images.asServedImage, {
     browse: {
-      middleware: [permission('as-served-sets', 'as-served-sets|browse')],
+      middleware: [permission('as-served-sets', 'as-served-sets:browse')],
       handler: async ({ params: { asServedSetId }, query }) => {
         const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
         if (!asServedSet)
@@ -36,7 +36,7 @@ export function asServedImage() {
     },
     store: {
       middleware: [
-        permission('as-served-sets', 'as-served-sets|create'),
+        permission('as-served-sets', 'as-served-sets:create'),
         upload.single('image'),
       ],
       handler: async ({ body: { weight }, file, params: { asServedSetId }, req }) => {
@@ -66,7 +66,7 @@ export function asServedImage() {
       },
     },
     destroyAll: {
-      middleware: [permission('as-served-sets', 'as-served-sets|delete')],
+      middleware: [permission('as-served-sets', 'as-served-sets:delete')],
       handler: async ({ params: { asServedSetId }, req }) => {
         await req.scope.cradle.asServedService.destroyImage(asServedSetId);
 
@@ -74,7 +74,7 @@ export function asServedImage() {
       },
     },
     read: {
-      middleware: [permission('as-served-sets', 'as-served-sets|read')],
+      middleware: [permission('as-served-sets', 'as-served-sets:read')],
       handler: async ({ params: { asServedSetId, asServedImageId }, req }) => {
         const asServedImage = await req.scope.cradle.portionSizeService.getAsServedImage(asServedSetId, asServedImageId);
         if (!asServedImage)
@@ -84,7 +84,7 @@ export function asServedImage() {
       },
     },
     destroy: {
-      middleware: [permission('as-served-sets', 'as-served-sets|delete')],
+      middleware: [permission('as-served-sets', 'as-served-sets:delete')],
       handler: async ({ params: { asServedSetId, asServedImageId }, req }) => {
         const result = await req.scope.cradle.asServedService.destroyImage(asServedSetId, asServedImageId);
         if (!result)

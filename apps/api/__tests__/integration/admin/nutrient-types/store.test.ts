@@ -3,7 +3,7 @@ import type { NutrientTypeRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/nutrient-types';
-  const permissions = ['nutrient-types', 'nutrient-types|create'];
+  const permissions = ['nutrient-types', 'nutrient-types:create'];
 
   let input: NutrientTypeRequest;
   let output: NutrientTypeRequest;

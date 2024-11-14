@@ -39,7 +39,7 @@ async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { re
 export function standardUnit() {
   return initServer().router(contract.admin.standardUnit, {
     browse: {
-      middleware: [permission('standard-units', 'standard-units|browse')],
+      middleware: [permission('standard-units', 'standard-units:browse')],
       handler: async ({ query }) => {
         const standardUnits = await StandardUnit.paginate({
           query,
@@ -51,7 +51,7 @@ export function standardUnit() {
       },
     },
     store: {
-      middleware: [permission('standard-units', 'standard-units|create')],
+      middleware: [permission('standard-units', 'standard-units:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id, { req });
 
@@ -61,7 +61,7 @@ export function standardUnit() {
       },
     },
     read: {
-      middleware: [permission('standard-units', 'standard-units|read')],
+      middleware: [permission('standard-units', 'standard-units:read')],
       handler: async ({ params: { standardUnitId } }) => {
         const standardUnit = await StandardUnit.findByPk(standardUnitId);
         if (!standardUnit)
@@ -71,7 +71,7 @@ export function standardUnit() {
       },
     },
     update: {
-      middleware: [permission('standard-units', 'standard-units|edit')],
+      middleware: [permission('standard-units', 'standard-units:edit')],
       handler: async ({ body, params: { standardUnitId } }) => {
         const standardUnit = await StandardUnit.findByPk(standardUnitId);
         if (!standardUnit)
@@ -83,7 +83,7 @@ export function standardUnit() {
       },
     },
     destroy: {
-      middleware: [permission('standard-units', 'standard-units|delete')],
+      middleware: [permission('standard-units', 'standard-units:delete')],
       handler: async ({ params: { standardUnitId } }) => {
         const standardUnit = await StandardUnit.findByPk(standardUnitId);
         if (!standardUnit)
@@ -120,7 +120,7 @@ export function standardUnit() {
       },
     },
     categories: {
-      middleware: [permission('standard-units', 'standard-units|categories')],
+      middleware: [permission('standard-units', 'standard-units:categories')],
       handler: async ({ params, query }) => {
         const { standardUnitId } = params;
 
@@ -161,7 +161,7 @@ export function standardUnit() {
       },
     },
     foods: {
-      middleware: [permission('standard-units', 'standard-units|foods')],
+      middleware: [permission('standard-units', 'standard-units:foods')],
       handler: async ({ params, query }) => {
         const { standardUnitId } = params;
 

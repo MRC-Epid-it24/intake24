@@ -7,7 +7,7 @@ import { Survey } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys|tasks'];
+  const permissions = ['surveys', 'surveys:tasks'];
 
   let input: Omit<QueueJob, 'userId' | 'params'> & {
     params: { surveyId: string; startDate: string; endDate: string };

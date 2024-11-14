@@ -5,7 +5,7 @@ import { Language } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/languages';
-  const permissions = ['languages', 'languages|read'];
+  const permissions = ['languages', 'languages:read'];
 
   let url: string;
   let invalidUrl: string;

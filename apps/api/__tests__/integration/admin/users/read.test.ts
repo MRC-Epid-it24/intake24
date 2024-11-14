@@ -9,7 +9,7 @@ import type { User } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/users';
-  const permissions = ['acl', 'users', 'users|read'];
+  const permissions = ['acl', 'users', 'users:read'];
 
   let url: string;
   let invalidUrl: string;

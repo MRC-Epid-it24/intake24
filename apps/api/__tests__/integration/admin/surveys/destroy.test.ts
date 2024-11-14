@@ -12,7 +12,7 @@ async function refreshSurveyRecord(input?: SurveyCreateRequest, overrides: Parti
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys|delete'];
+  const permissions = ['surveys', 'surveys:delete'];
 
   let url: string;
   let invalidUrl: string;

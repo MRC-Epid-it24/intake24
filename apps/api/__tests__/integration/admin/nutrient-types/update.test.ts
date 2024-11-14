@@ -5,7 +5,7 @@ import type { FoodsNutrientType } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-types';
-  const permissions = ['nutrient-types', 'nutrient-types|edit'];
+  const permissions = ['nutrient-types', 'nutrient-types:edit'];
 
   let url: string;
   let invalidUrl: string;

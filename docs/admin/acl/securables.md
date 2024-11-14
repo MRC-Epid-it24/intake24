@@ -70,5 +70,5 @@ Public visibility means that record is visible for the use to all users.
 
 Restricted visibility means that record is visible for the use to users
 
-1. with `resource|use` permission granted
-2. with `resource|securables` securable granted
+1. with `resource:use` permission granted
+2. with `resource:securables` securable granted

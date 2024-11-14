@@ -38,7 +38,7 @@ async function assertRespondentResponse(url: string, input: RespondentRequest) {
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys|respondents'];
+  const permissions = ['surveys', 'surveys:respondents'];
 
   let url: string;
   let invalidSurveyUrl: string;

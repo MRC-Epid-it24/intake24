@@ -3,7 +3,7 @@ import type { StandardUnitCreationAttributes } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/standard-units';
-  const permissions = ['standard-units', 'standard-units|create'];
+  const permissions = ['standard-units', 'standard-units:create'];
 
   let input: StandardUnitCreationAttributes;
   let output: StandardUnitCreationAttributes;

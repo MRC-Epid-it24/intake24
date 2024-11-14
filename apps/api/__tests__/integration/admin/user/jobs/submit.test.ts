@@ -3,7 +3,7 @@ import type { UserJobRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/user/jobs';
-  const permissions = ['as-served-sets|browse'];
+  const permissions = ['as-served-sets:browse'];
 
   const input: UserJobRequest = {
     type: 'ResourceExport',
@@ -40,7 +40,6 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      // await suite.util.setPermission('as-served-sets|browse');
       await suite.util.setPermission(permissions);
       await suite.sharedTests.assertAcknowledged('post', url, { input, result: true });
     });

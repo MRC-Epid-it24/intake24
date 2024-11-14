@@ -76,7 +76,7 @@ export function locale() {
           order: [[fn('lower', col('Locale.code')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('locales|browse')) {
+        if (await aclService.hasPermission('locales:browse')) {
           const locales = await SystemLocale.paginate(paginateOptions);
           return { status: 200, body: locales };
         }
@@ -92,7 +92,7 @@ export function locale() {
       },
     },
     store: {
-      middleware: [permission('locales', 'locales|create')],
+      middleware: [permission('locales', 'locales:create')],
       handler: async ({ body, req }) => {
         await Promise.all([
           uniqueMiddleware(body.code, { field: 'code', req }),

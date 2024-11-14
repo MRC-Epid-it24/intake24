@@ -3,7 +3,7 @@ import type { FoodGroupCreationAttributes } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/food-groups';
-  const permissions = ['food-groups', 'food-groups|create'];
+  const permissions = ['food-groups', 'food-groups:create'];
 
   let input: FoodGroupCreationAttributes;
   let output: FoodGroupCreationAttributes;

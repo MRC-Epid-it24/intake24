@@ -5,7 +5,7 @@ import type { GuideImageEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/guide-images';
-  const permissions = ['guide-images', 'guide-images|edit'];
+  const permissions = ['guide-images', 'guide-images:edit'];
 
   const input = {
     id: 'guideImage_004',

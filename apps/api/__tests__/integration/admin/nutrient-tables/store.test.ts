@@ -6,7 +6,7 @@ import type { NutrientTableRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/nutrient-tables';
-  const permissions = ['nutrient-tables', 'nutrient-tables|create'];
+  const permissions = ['nutrient-tables', 'nutrient-tables:create'];
 
   let input: NutrientTableRequest;
   let output: NutrientTableRequest;

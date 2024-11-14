@@ -5,7 +5,7 @@ import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';
-  const permissions = ['jobs', 'jobs|delete'];
+  const permissions = ['jobs', 'jobs:delete'];
 
   let url: string;
   let invalidUrl: string;

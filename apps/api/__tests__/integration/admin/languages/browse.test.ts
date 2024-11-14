@@ -3,7 +3,7 @@ import { Language } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/languages';
-  const permissions = ['languages', 'languages|browse'];
+  const permissions = ['languages', 'languages:browse'];
 
   let language: Language;
 

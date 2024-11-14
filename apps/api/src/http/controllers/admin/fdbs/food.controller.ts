@@ -90,7 +90,7 @@ function adminFoodController({
 
     const canUpdateMain = !!(
       main?.code
-      && ((await aclService.hasPermission('locales|food-list'))
+      && ((await aclService.hasPermission('locales:food-list'))
         || (await FoodLocal.count({ where: { foodCode: main.code } })) === 1)
     );
 

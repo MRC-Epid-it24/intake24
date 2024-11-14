@@ -3,7 +3,7 @@ import { Survey } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys|browse'];
+  const permissions = ['surveys', 'surveys:browse'];
 
   let survey: Survey;
 

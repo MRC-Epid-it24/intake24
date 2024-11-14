@@ -53,7 +53,7 @@ export function feedbackScheme() {
           order: [[fn('lower', col('FeedbackScheme.name')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('feedback-schemes|browse')) {
+        if (await aclService.hasPermission('feedback-schemes:browse')) {
           const feedbackSchemes = await FeedbackScheme.paginate(paginateOptions);
           return { status: 200, body: feedbackSchemes };
         }
@@ -69,7 +69,7 @@ export function feedbackScheme() {
       },
     },
     store: {
-      middleware: [permission('feedback-schemes', 'feedback-schemes|create')],
+      middleware: [permission('feedback-schemes', 'feedback-schemes:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 

@@ -35,7 +35,7 @@ export default () => {
       .send(input);
 
     // Test user job
-    await suite.util.setPermission(['surveys', 'surveys|tasks']);
+    await suite.util.setPermission(['surveys', 'surveys:tasks']);
     await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.survey.id}/tasks`)
       .set('Accept', 'application/json')

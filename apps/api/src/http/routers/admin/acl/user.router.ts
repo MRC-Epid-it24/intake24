@@ -45,7 +45,7 @@ async function dataCheck<T extends AppRoute | AppRouter>({ permissions, roles, r
 export function user() {
   return initServer().router(contract.admin.acl.user, {
     browse: {
-      middleware: [permission('acl', 'users', 'users|browse')],
+      middleware: [permission('acl', 'users', 'users:browse')],
       handler: async ({ query }) => {
         const users = await User.paginate({
           query,
@@ -58,7 +58,7 @@ export function user() {
       },
     },
     store: {
-      middleware: [permission('acl', 'users', 'users|create')],
+      middleware: [permission('acl', 'users', 'users:create')],
       handler: async ({ body, req }) => {
         const { email, permissions, roles } = body;
         await uniqueMiddleware(email, { req });
@@ -87,7 +87,7 @@ export function user() {
       },
     },
     read: {
-      middleware: [permission('acl', 'users', 'users|read')],
+      middleware: [permission('acl', 'users', 'users:read')],
       handler: async ({ params: { userId } }) => {
         const user = await User.scope(['aliases', 'customFields', 'permissions', 'roles']).findByPk(
           userId,
@@ -99,7 +99,7 @@ export function user() {
       },
     },
     update: {
-      middleware: [permission('acl', 'users', 'users|edit')],
+      middleware: [permission('acl', 'users', 'users:edit')],
       handler: async ({ body, params: { userId }, req }) => {
         const { email, permissions, roles } = body;
         await uniqueMiddleware(email, { userId, req });
@@ -117,7 +117,7 @@ export function user() {
       },
     },
     destroy: {
-      middleware: [permission('acl', 'users', 'users|delete')],
+      middleware: [permission('acl', 'users', 'users:delete')],
       handler: async ({ params: { userId }, req }) => {
         await req.scope.cradle.adminUserService.destroy(userId);
 
@@ -125,7 +125,7 @@ export function user() {
       },
     },
     permissions: {
-      middleware: [permission('acl', 'users', 'users|permissions')],
+      middleware: [permission('acl', 'users', 'users:permissions')],
       handler: async ({ params: { userId }, query }) => {
         const user = await User.findByPk(userId, { attributes: ['id'] });
         if (!user)
@@ -142,7 +142,7 @@ export function user() {
       },
     },
     roles: {
-      middleware: [permission('acl', 'users', 'users|roles')],
+      middleware: [permission('acl', 'users', 'users:roles')],
       handler: async ({ params: { userId }, query }) => {
         const user = await User.findByPk(userId, { attributes: ['id'] });
         if (!user)

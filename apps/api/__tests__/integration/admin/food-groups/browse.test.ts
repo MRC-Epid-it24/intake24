@@ -3,7 +3,7 @@ import { FoodGroup } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/food-groups';
-  const permissions = ['food-groups', 'food-groups|browse'];
+  const permissions = ['food-groups', 'food-groups:browse'];
 
   beforeAll(async () => {
     await FoodGroup.create(mocker.foods.foodGroup());

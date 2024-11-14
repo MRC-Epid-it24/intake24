@@ -7,7 +7,7 @@ import { guardedSurveyFields, Survey } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys|edit'];
+  const permissions = ['surveys', 'surveys:edit'];
 
   let url: string;
   let invalidUrl: string;

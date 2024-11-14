@@ -13,7 +13,7 @@ function localCategoriesController({
 
     const { localeId } = req.params;
 
-    if (!(await aclService.hasPermission('fdbs|edit')))
+    if (!(await aclService.hasPermission('fdbs:edit')))
       throw new ForbiddenError();
 
     try {
@@ -38,7 +38,7 @@ function localCategoriesController({
     const { localeId, categoryId } = req.params;
     const { version } = req.query;
 
-    if (!(await aclService.hasPermission('fdbs|edit')))
+    if (!(await aclService.hasPermission('fdbs:edit')))
       throw new ForbiddenError();
 
     await localCategoriesService.update(
@@ -55,7 +55,7 @@ function localCategoriesController({
   const read = async (req: Request, res: Response<LocalCategoryEntry>): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|read')))
+    if (!(await aclService.hasPermission('fdbs:read')))
       throw new ForbiddenError();
 
     const { localeId, categoryId } = req.params;

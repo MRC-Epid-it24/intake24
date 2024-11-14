@@ -24,7 +24,7 @@ async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { pe
 export function permission() {
   return initServer().router(contract.admin.acl.permission, {
     browse: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|browse')],
+      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:browse')],
       handler: async ({ query }) => {
         const permissions = await Permission.paginate({
           query,
@@ -36,7 +36,7 @@ export function permission() {
       },
     },
     store: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|create')],
+      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 
@@ -49,7 +49,7 @@ export function permission() {
       },
     },
     read: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|read')],
+      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:read')],
       handler: async ({ params: { permissionId } }) => {
         const permission = await Permission.findByPk(permissionId);
         if (!permission)
@@ -59,7 +59,7 @@ export function permission() {
       },
     },
     update: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|edit')],
+      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:edit')],
       handler: async ({ body, params: { permissionId } }) => {
         const permission = await Permission.findByPk(permissionId);
         if (!permission)
@@ -71,7 +71,7 @@ export function permission() {
       },
     },
     destroy: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|delete')],
+      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:delete')],
       handler: async ({ params: { permissionId } }) => {
         const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
         if (!permission)
@@ -83,7 +83,7 @@ export function permission() {
       },
     },
     roles: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|roles')],
+      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:roles')],
       handler: async ({ params: { permissionId }, query }) => {
         const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
         if (!permission)
@@ -102,7 +102,7 @@ export function permission() {
       },
     },
     users: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions|users')],
+      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:users')],
       handler: async ({ params: { permissionId }, query }) => {
         const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
         if (!permission)

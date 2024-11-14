@@ -6,7 +6,7 @@ import type { SplitWordRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales|split-words'];
+  const permissions = ['locales', 'locales:split-words'];
 
   let url: string;
   let invalidUrl: string;

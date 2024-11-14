@@ -5,7 +5,7 @@ import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 
 export default () => {
   const baseUrl = '/api/admin/images/drinkware-sets';
-  const permissions = ['drinkware-sets', 'drinkware-sets|read'];
+  const permissions = ['drinkware-sets', 'drinkware-sets:read'];
 
   const input = {
     id: 'drinkwareSet_002',

@@ -6,7 +6,7 @@ import type { SurveyCreateRequest, SurveyEntry } from '@intake24/common/types/ht
 
 export default () => {
   const url = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys|create'];
+  const permissions = ['surveys', 'surveys:create'];
 
   let input: SurveyCreateRequest;
   let output: Partial<SurveyEntry>;

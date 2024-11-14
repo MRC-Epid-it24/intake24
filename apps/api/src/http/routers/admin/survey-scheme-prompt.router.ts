@@ -32,7 +32,7 @@ async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { su
 export function surveySchemePrompt() {
   return initServer().router(contract.admin.surveySchemePrompt, {
     browse: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|browse')],
+      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:browse')],
       handler: async ({ query }) => {
         const schemePrompts = await SurveySchemePrompt.paginate({
           query,
@@ -44,7 +44,7 @@ export function surveySchemePrompt() {
       },
     },
     store: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|create')],
+      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:create')],
       handler: async ({ body, req }) => {
         const { prompt } = body;
 
@@ -70,7 +70,7 @@ export function surveySchemePrompt() {
       },
     },
     read: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|read')],
+      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:read')],
       handler: async ({ params: { surveySchemePromptId } }) => {
         const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
         if (!schemePrompt)
@@ -80,7 +80,7 @@ export function surveySchemePrompt() {
       },
     },
     update: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|edit')],
+      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:edit')],
       handler: async ({ body, params: { surveySchemePromptId }, req }) => {
         const { prompt } = body;
 
@@ -97,7 +97,7 @@ export function surveySchemePrompt() {
       },
     },
     destroy: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|delete')],
+      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:delete')],
       handler: async ({ params: { surveySchemePromptId } }) => {
         const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId, {
           attributes: ['id'],
@@ -111,7 +111,7 @@ export function surveySchemePrompt() {
       },
     },
     sync: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts|sync')],
+      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:sync')],
       handler: async ({ body, params: { surveySchemePromptId } }) => {
         const { prompt, section, surveySchemeId } = body;
 

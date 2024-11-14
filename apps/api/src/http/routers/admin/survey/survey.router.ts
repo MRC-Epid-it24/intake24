@@ -85,7 +85,7 @@ export function survey() {
           transform: surveyListResponse,
         };
 
-        if (await aclService.hasPermission('surveys|browse')) {
+        if (await aclService.hasPermission('surveys:browse')) {
           const surveys = await Survey.paginate(paginateOptions);
           return { status: 200, body: surveys };
         }
@@ -105,7 +105,7 @@ export function survey() {
       },
     },
     store: {
-      middleware: [permission('surveys', 'surveys|create')],
+      middleware: [permission('surveys', 'surveys:create')],
       handler: async ({ body, req }) => {
         await Promise.all([
           uniqueMiddleware(body.name, { req }),
@@ -198,7 +198,7 @@ export function survey() {
       },
     },
     put: {
-      middleware: [permission('surveys', 'surveys|edit')],
+      middleware: [permission('surveys', 'surveys:edit')],
       handler: async ({ body, params: { surveyId }, req }) => {
         await uniqueMiddleware(body.name, { surveyId, req });
 

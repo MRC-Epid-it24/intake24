@@ -25,7 +25,7 @@ async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { ro
 export function role() {
   return initServer().router(contract.admin.acl.role, {
     browse: {
-      middleware: [permission('acl', 'roles', 'roles|browse')],
+      middleware: [permission('acl', 'roles', 'roles:browse')],
       handler: async ({ query }) => {
         const roles = await Role.paginate({
           query,
@@ -37,7 +37,7 @@ export function role() {
       },
     },
     store: {
-      middleware: [permission('acl', 'roles', 'roles|create')],
+      middleware: [permission('acl', 'roles', 'roles:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 
@@ -62,7 +62,7 @@ export function role() {
       },
     },
     read: {
-      middleware: [permission('acl', 'roles', 'roles|read')],
+      middleware: [permission('acl', 'roles', 'roles:read')],
       handler: async ({ params: { roleId } }) => {
         const role = await Role.scope('permissions').findByPk(roleId);
         if (!role)
@@ -72,7 +72,7 @@ export function role() {
       },
     },
     update: {
-      middleware: [permission('acl', 'roles', 'roles|edit')],
+      middleware: [permission('acl', 'roles', 'roles:edit')],
       handler: async ({ body, params: { roleId }, req }) => {
         const role = await Role.scope('permissions').findByPk(roleId);
         if (!role)
@@ -97,7 +97,7 @@ export function role() {
       },
     },
     destroy: {
-      middleware: [permission('acl', 'roles', 'roles|delete')],
+      middleware: [permission('acl', 'roles', 'roles:delete')],
       handler: async ({ params: { roleId } }) => {
         const role = await Role.findByPk(roleId, { attributes: ['id'] });
         if (!role)
@@ -109,7 +109,7 @@ export function role() {
       },
     },
     permissions: {
-      middleware: [permission('acl', 'roles', 'roles|permissions')],
+      middleware: [permission('acl', 'roles', 'roles:permissions')],
       handler: async ({ params: { roleId }, query }) => {
         const role = await Role.findByPk(roleId, { attributes: ['id'] });
         if (!role)
@@ -126,7 +126,7 @@ export function role() {
       },
     },
     users: {
-      middleware: [permission('acl', 'roles', 'roles|users')],
+      middleware: [permission('acl', 'roles', 'roles:users')],
       handler: async ({ params: { roleId }, query }) => {
         const role = await Role.findByPk(roleId, { attributes: ['id'] });
         if (!role)

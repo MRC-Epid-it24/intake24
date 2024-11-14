@@ -6,7 +6,7 @@ import type { FeedbackSchemeCreationAttributes } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/feedback-schemes';
-  const permissions = ['feedback-schemes', 'feedback-schemes|create'];
+  const permissions = ['feedback-schemes', 'feedback-schemes:create'];
 
   let input: FeedbackSchemeCreationAttributes;
   let output: FeedbackSchemeCreationAttributes;

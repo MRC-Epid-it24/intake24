@@ -6,7 +6,7 @@ import type { ImageMapEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/image-maps';
-  const permissions = ['image-maps', 'image-maps|edit'];
+  const permissions = ['image-maps', 'image-maps:edit'];
 
   const fileName = 'imageMap_004.jpg';
   const id = 'imageMap_004';

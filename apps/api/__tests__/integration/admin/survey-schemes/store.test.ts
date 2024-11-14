@@ -6,7 +6,7 @@ import type { SurveySchemeCreationAttributes } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/survey-schemes';
-  const permissions = ['survey-schemes', 'survey-schemes|create'];
+  const permissions = ['survey-schemes', 'survey-schemes:create'];
 
   let input: SurveySchemeCreationAttributes;
   let output: SurveySchemeCreationAttributes;

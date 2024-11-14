@@ -4,7 +4,7 @@ import type { RecipeFoodRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales|recipe-foods'];
+  const permissions = ['locales', 'locales:recipe-foods'];
 
   let url: string;
   // let invalidUrl: string;

@@ -3,7 +3,7 @@ import { FeedbackScheme } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/feedback-schemes';
-  const permissions = ['feedback-schemes', 'feedback-schemes|browse'];
+  const permissions = ['feedback-schemes', 'feedback-schemes:browse'];
 
   let scheme: FeedbackScheme;
 

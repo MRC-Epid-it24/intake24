@@ -9,7 +9,7 @@ import { SignInLog } from '@intake24/db';
 export function signInLog() {
   return initServer().router(contract.admin.signInLog, {
     browse: {
-      middleware: [permission('sign-in-logs', 'sign-in-logs|browse')],
+      middleware: [permission('sign-in-logs', 'sign-in-logs:browse')],
       handler: async ({ query }) => {
         const signInLogs = await SignInLog.paginate<() => SignInLogAttributes>({
           query,
@@ -21,7 +21,7 @@ export function signInLog() {
       },
     },
     read: {
-      middleware: [permission('sign-in-logs', 'sign-in-logs|read')],
+      middleware: [permission('sign-in-logs', 'sign-in-logs:read')],
       handler: async ({ params: { signInLogId } }) => {
         const signInLog = await SignInLog.findByPk(signInLogId);
         if (!signInLog)
@@ -31,7 +31,7 @@ export function signInLog() {
       },
     },
     destroy: {
-      middleware: [permission('sign-in-logs', 'sign-in-logs|delete')],
+      middleware: [permission('sign-in-logs', 'sign-in-logs:delete')],
       handler: async ({ params: { signInLogId } }) => {
         const signInLog = await SignInLog.findByPk(signInLogId, { attributes: ['id'] });
         if (!signInLog)

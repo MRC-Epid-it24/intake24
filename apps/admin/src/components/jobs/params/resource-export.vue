@@ -38,7 +38,7 @@ export default defineComponent({
     const { i18n } = useI18n();
     const { can } = useUser();
 
-    const items = resources.filter(item => can(`${item.split('.')[0]}|browse`)).map(value => ({
+    const items = resources.filter(item => can(`${item.split('.')[0]}:browse`)).map(value => ({
       title: i18n.t(`${value}.title`),
       value,
     }));

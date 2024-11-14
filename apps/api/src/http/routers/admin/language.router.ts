@@ -38,7 +38,7 @@ export function language() {
           order: [[fn('lower', col('Language.code')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('languages|browse')) {
+        if (await aclService.hasPermission('languages:browse')) {
           const languages = await Language.paginate(paginateOptions);
           return { status: 200, body: languages };
         }
@@ -54,7 +54,7 @@ export function language() {
       },
     },
     store: {
-      middleware: [permission('languages', 'languages|create')],
+      middleware: [permission('languages', 'languages:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.code, { req });
 

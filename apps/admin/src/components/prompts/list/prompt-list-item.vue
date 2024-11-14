@@ -64,7 +64,7 @@
               />
             </confirm-dialog>
             <save-as-template-dialog
-              v-if="can('survey-scheme-prompts|create') && !hasTemplate"
+              v-if="can('survey-scheme-prompts:create') && !hasTemplate"
               :prompt="prompt"
             />
             <confirm-dialog

@@ -214,7 +214,7 @@ export default defineComponent({
     const type = 'foods' as const;
     const entry = ref<FoodLocalEntry | null>(null);
     const globalEdit = computed(
-      () => user.can('locales|food-list') || entry.value?.main?.locales?.length === 1,
+      () => user.can('locales:food-list') || entry.value?.main?.locales?.length === 1,
     );
     const isEntryLoaded = computed(() => !!entry.value);
 

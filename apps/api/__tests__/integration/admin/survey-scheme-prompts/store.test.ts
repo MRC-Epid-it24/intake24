@@ -3,7 +3,7 @@ import type { SurveySchemePromptCreationAttributes } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/survey-scheme-prompts';
-  const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts|create'];
+  const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts:create'];
 
   let input: SurveySchemePromptCreationAttributes;
   let output: SurveySchemePromptCreationAttributes;

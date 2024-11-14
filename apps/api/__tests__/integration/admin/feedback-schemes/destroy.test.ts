@@ -4,7 +4,7 @@ import { FeedbackScheme } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/feedback-schemes';
-  const permissions = ['feedback-schemes', 'feedback-schemes|delete'];
+  const permissions = ['feedback-schemes', 'feedback-schemes:delete'];
 
   let url: string;
   let invalidUrl: string;

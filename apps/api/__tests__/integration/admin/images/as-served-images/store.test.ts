@@ -8,7 +8,7 @@ import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 export default () => {
   const url = '/api/admin/images/as-served-sets/asServedSetForImages/images';
   const invalidUrl = '/api/admin/images/as-served-sets/invalidAsServedSetForImages/images';
-  const permissions = ['as-served-sets', 'as-served-sets|create'];
+  const permissions = ['as-served-sets', 'as-served-sets:create'];
 
   const fileName = 'asServedImage_001.jpg';
   const weight = 10;

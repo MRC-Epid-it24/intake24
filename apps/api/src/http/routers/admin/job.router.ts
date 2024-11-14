@@ -12,7 +12,7 @@ import { Job, Op } from '@intake24/db';
 export function job() {
   return initServer().router(contract.admin.job, {
     browse: {
-      middleware: [permission('jobs', 'jobs|browse')],
+      middleware: [permission('jobs', 'jobs:browse')],
       handler: async ({ query }) => {
         const jobs = await Job.paginate<() => JobAttributes>({
           query,
@@ -26,7 +26,7 @@ export function job() {
       },
     },
     read: {
-      middleware: [permission('jobs', 'jobs|read')],
+      middleware: [permission('jobs', 'jobs:read')],
       handler: async ({ params: { jobId } }) => {
         const job = await Job.findByPk(jobId, {
           include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
@@ -38,7 +38,7 @@ export function job() {
       },
     },
     destroy: {
-      middleware: [permission('jobs', 'jobs|delete')],
+      middleware: [permission('jobs', 'jobs:delete')],
       handler: async ({ params: { jobId } }) => {
         const job = await Job.findByPk(jobId, { attributes: ['id'] });
         if (!job)
@@ -50,7 +50,7 @@ export function job() {
       },
     },
     download: {
-      middleware: [permission('jobs', 'jobs|read')],
+      middleware: [permission('jobs', 'jobs:read')],
       handler: async ({ params: { jobId: id }, req, res }) => {
         const job = await Job.findOne({
           attributes: ['id', 'downloadUrl'],
@@ -82,7 +82,7 @@ export function job() {
       },
     },
     repeat: {
-      middleware: [permission('jobs', 'jobs|edit')],
+      middleware: [permission('jobs', 'jobs:edit')],
       handler: async ({ params: { jobId }, req }) => {
         const job = await Job.findByPk(jobId, { attributes: ['id', 'type', 'userId', 'params'] });
         if (!job)

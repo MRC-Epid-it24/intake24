@@ -5,7 +5,7 @@ import { Survey } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys|read'];
+  const permissions = ['surveys', 'surveys:read'];
 
   let url: string;
   let invalidUrl: string;

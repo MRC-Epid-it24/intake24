@@ -5,7 +5,7 @@ import type { FoodsNutrientUnit } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-units';
-  const permissions = ['nutrient-units', 'nutrient-units|read'];
+  const permissions = ['nutrient-units', 'nutrient-units:read'];
 
   let url: string;
   let invalidUrl: string;

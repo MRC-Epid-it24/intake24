@@ -25,15 +25,15 @@ Permissions need to be implemented on system-level and are usually distributed a
 
 Permissions formed from resource name and action (with `pipe` character separator). Base actions are `browse`, `read`, `create`, `edit`, `delete`. Other resource-specific actions follows similar convention.
 
-| Permission           | Description                     |
-| -------------------- | ------------------------------- |
-| resource\|browse     | Browse / list resource records  |
-| resource\|read       | Read resource record details    |
-| resource\|create     | Create new resource record      |
-| resource\|edit       | Edit resource record            |
-| resource\|delete     | Delete resource record          |
-| resource\|securables | Control `securable` permissions |
-| resource\|[action]   | Specific resource record action |
+| Permission          | Description                     |
+| ------------------- | ------------------------------- |
+| resource:browse     | Browse / list resource records  |
+| resource:read       | Read resource record details    |
+| resource:create     | Create new resource record      |
+| resource:edit       | Edit resource record            |
+| resource:delete     | Delete resource record          |
+| resource:securables | Control `securable` permissions |
+| resource:[action]   | Specific resource record action |
 
 ## Special purpose permissions
 

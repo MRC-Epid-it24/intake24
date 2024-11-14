@@ -85,7 +85,7 @@ export function reference() {
           order: [[fn('lower', col('FeedbackScheme.name')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('feedback-schemes|use')) {
+        if (await aclService.hasPermission('feedback-schemes:use')) {
           const feedbackSchemes = await FeedbackScheme.paginate(paginateOptions);
           return { status: 200, body: feedbackSchemes };
         }
@@ -168,7 +168,7 @@ export function reference() {
           order: [[fn('lower', col('Language.code')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('languages|use')) {
+        if (await aclService.hasPermission('languages:use')) {
           const languages = await Language.paginate(paginateOptions);
           return { status: 200, body: languages };
         }
@@ -197,7 +197,7 @@ export function reference() {
           order: [[fn('lower', col('Locale.code')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('locales|use')) {
+        if (await aclService.hasPermission('locales:use')) {
           const locales = await SystemLocale.paginate(paginateOptions);
           return { status: 200, body: locales };
         }
@@ -312,7 +312,7 @@ export function reference() {
           order: [[fn('lower', col('SurveyScheme.name')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('survey-schemes|use')) {
+        if (await aclService.hasPermission('survey-schemes:use')) {
           const surveySchemes = await SurveyScheme.paginate(paginateOptions);
           return { status: 200, body: surveySchemes };
         }

@@ -40,7 +40,7 @@ export function job() {
       const { userId } = req.scope.cradle.user;
 
       const resource = params.resource.split('.')[0];
-      if (!(await req.scope.cradle.aclService.hasPermission(`${resource}|browse`)))
+      if (!(await req.scope.cradle.aclService.hasPermission(`${resource}:browse`)))
         throw new ForbiddenError();
 
       const jobEntry = await req.scope.cradle.scheduler.jobs.addJob(

@@ -24,7 +24,7 @@ async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { ta
 export function task() {
   return initServer().router(contract.admin.task, {
     browse: {
-      middleware: [permission('tasks', 'tasks|browse')],
+      middleware: [permission('tasks', 'tasks:browse')],
       handler: async ({ query }) => {
         const tasks = await Task.paginate({
           query,
@@ -36,7 +36,7 @@ export function task() {
       },
     },
     store: {
-      middleware: [permission('tasks', 'tasks|create')],
+      middleware: [permission('tasks', 'tasks:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 
@@ -47,7 +47,7 @@ export function task() {
       },
     },
     read: {
-      middleware: [permission('tasks', 'tasks|read')],
+      middleware: [permission('tasks', 'tasks:read')],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId);
         if (!task)
@@ -59,7 +59,7 @@ export function task() {
       },
     },
     update: {
-      middleware: [permission('tasks', 'tasks|edit')],
+      middleware: [permission('tasks', 'tasks:edit')],
       handler: async ({ body, params: { taskId }, req }) => {
         await uniqueMiddleware(body.name, { taskId, req });
 
@@ -75,7 +75,7 @@ export function task() {
       },
     },
     destroy: {
-      middleware: [permission('tasks', 'tasks|delete')],
+      middleware: [permission('tasks', 'tasks:delete')],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId, { attributes: ['id'] });
         if (!task)
@@ -88,7 +88,7 @@ export function task() {
       },
     },
     run: {
-      middleware: [permission('tasks', 'tasks|edit')],
+      middleware: [permission('tasks', 'tasks:edit')],
       handler: async ({ params: { taskId }, req }) => {
         const { userId } = req.scope.cradle.user;
 

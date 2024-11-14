@@ -22,7 +22,7 @@ export function foodDb() {
           order: [[fn('lower', col('code')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('locales|food-list')) {
+        if (await aclService.hasPermission('locales:food-list')) {
           const locales = await SystemLocale.paginate(paginateOptions);
           return { status: 200, body: locales };
         }

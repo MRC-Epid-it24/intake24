@@ -6,7 +6,7 @@ import type { SplitListRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales|split-lists'];
+  const permissions = ['locales', 'locales:split-lists'];
 
   let url: string;
   let invalidUrl: string;

@@ -49,7 +49,7 @@ async function unitIdMiddleware<T extends AppRoute | AppRouter>(unitId: string, 
 export function nutrientType() {
   return initServer().router(contract.admin.nutrientType, {
     browse: {
-      middleware: [permission('nutrient-types', 'nutrient-types|browse')],
+      middleware: [permission('nutrient-types', 'nutrient-types:browse')],
       handler: async ({ query }) => {
         const nutrientTypes = await FoodsNutrientType.paginate({
           query,
@@ -62,7 +62,7 @@ export function nutrientType() {
       },
     },
     store: {
-      middleware: [permission('nutrient-types', 'nutrient-types|create')],
+      middleware: [permission('nutrient-types', 'nutrient-types:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id, req);
         await unitIdMiddleware(body.unitId, req);
@@ -81,7 +81,7 @@ export function nutrientType() {
       },
     },
     read: {
-      middleware: [permission('nutrient-types', 'nutrient-types|read')],
+      middleware: [permission('nutrient-types', 'nutrient-types:read')],
       handler: async ({ params: { nutrientTypeId }, req }) => {
         const nutrientType
           = await req.scope.cradle.nutrientTypeService.getNutrientType(nutrientTypeId);
@@ -90,7 +90,7 @@ export function nutrientType() {
       },
     },
     update: {
-      middleware: [permission('nutrient-types', 'nutrient-types|edit')],
+      middleware: [permission('nutrient-types', 'nutrient-types:edit')],
       handler: async ({ body, params: { nutrientTypeId }, req }) => {
         await unitIdMiddleware(body.unitId, req);
 
@@ -103,7 +103,7 @@ export function nutrientType() {
       },
     },
     destroy: {
-      middleware: [permission('nutrient-types', 'nutrient-types|delete')],
+      middleware: [permission('nutrient-types', 'nutrient-types:delete')],
       handler: async ({ params: { nutrientTypeId }, req }) => {
         await req.scope.cradle.nutrientTypeService.deleteNutrientType(nutrientTypeId);
 

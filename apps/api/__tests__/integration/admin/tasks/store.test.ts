@@ -3,7 +3,7 @@ import type { TaskRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/tasks';
-  const permissions = ['tasks', 'tasks|create'];
+  const permissions = ['tasks', 'tasks:create'];
 
   let input: TaskRequest;
   let output: TaskRequest;

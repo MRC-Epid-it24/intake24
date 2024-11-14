@@ -31,7 +31,7 @@ export default () => {
   });
 
   it('should return 403 when missing survey-specific permission', async () => {
-    await suite.util.setPermission('surveys|edit');
+    await suite.util.setPermission('surveys:edit');
 
     await suite.sharedTests.assertMissingAuthorization('put', url);
   });
@@ -43,14 +43,14 @@ export default () => {
   });
 
   it(`should return 403 when missing surveyadmin`, async () => {
-    // await suite.util.setPermission(['surveys|edit', surveyStaff(survey.id)]);
+    // await suite.util.setPermission(['surveys:edit', surveyStaff(survey.id)]);
 
     await suite.sharedTests.assertMissingAuthorization('put', url);
   });
 
   describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['surveys|edit', 'surveyadmin']);
+      await suite.util.setPermission(['surveys:edit', 'surveyadmin']);
     });
 
     it('should return 400 for missing input data', async () => {

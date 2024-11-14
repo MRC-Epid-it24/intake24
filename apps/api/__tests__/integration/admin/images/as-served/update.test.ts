@@ -6,7 +6,7 @@ import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/as-served-sets';
-  const permissions = ['as-served-sets', 'as-served-sets|edit'];
+  const permissions = ['as-served-sets', 'as-served-sets:edit'];
 
   const fileName = 'asServedSet_004.jpg';
   const id = 'asServedSet_004';

@@ -51,7 +51,7 @@ export function surveyScheme() {
           order: [[fn('lower', col('SurveyScheme.name')), 'ASC']],
         };
 
-        if (await aclService.hasPermission('survey-schemes|browse')) {
+        if (await aclService.hasPermission('survey-schemes:browse')) {
           const surveySchemes = await SurveyScheme.paginate(paginateOptions);
           return { status: 200, body: surveySchemes };
         }
@@ -67,7 +67,7 @@ export function surveyScheme() {
       },
     },
     store: {
-      middleware: [permission('survey-schemes', 'survey-schemes|create')],
+      middleware: [permission('survey-schemes', 'survey-schemes:create')],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name, { req });
 

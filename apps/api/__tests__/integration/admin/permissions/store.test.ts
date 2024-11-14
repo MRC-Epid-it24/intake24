@@ -3,7 +3,7 @@ import type { PermissionRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/permissions';
-  const permissions = ['acl', 'permissions', 'permissions|create'];
+  const permissions = ['acl', 'permissions', 'permissions:create'];
 
   let input: PermissionRequest;
 

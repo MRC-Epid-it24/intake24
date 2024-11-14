@@ -19,7 +19,7 @@ function globalCategoriesController({
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit')))
+    if (!(await aclService.hasPermission('fdbs:edit')))
       throw new ForbiddenError();
 
     // Doing this operation properly is difficult, see
@@ -49,7 +49,7 @@ function globalCategoriesController({
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit')))
+    if (!(await aclService.hasPermission('fdbs:edit')))
       throw new ForbiddenError();
 
     const { categoryId } = req.params;
@@ -66,7 +66,7 @@ function globalCategoriesController({
     const { aclService } = req.scope.cradle;
 
     // FIXME: use correct permission
-    if (!(await aclService.hasPermission('fdbs|read')))
+    if (!(await aclService.hasPermission('fdbs:read')))
       throw new ForbiddenError();
 
     const { categoryId } = req.params;

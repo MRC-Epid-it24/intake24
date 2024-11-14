@@ -3,7 +3,7 @@ import type { LanguageCreationAttributes } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/languages';
-  const permissions = ['languages', 'languages|create'];
+  const permissions = ['languages', 'languages:create'];
 
   let input: LanguageCreationAttributes;
   let output: LanguageCreationAttributes;

@@ -9,7 +9,7 @@ function globalFoodsController({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
   const store = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit')))
+    if (!(await aclService.hasPermission('fdbs:edit')))
       throw new ForbiddenError();
 
     const entry = await globalFoodsService.create(req.body);
@@ -22,7 +22,7 @@ function globalFoodsController({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|edit')))
+    if (!(await aclService.hasPermission('fdbs:edit')))
       throw new ForbiddenError();
 
     const { foodId } = req.params;
@@ -47,7 +47,7 @@ function globalFoodsController({ globalFoodsService }: Pick<IoC, 'globalFoodsSer
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs|read')))
+    if (!(await aclService.hasPermission('fdbs:read')))
       throw new ForbiddenError();
 
     const { foodId } = req.params;
