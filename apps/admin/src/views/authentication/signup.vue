@@ -146,8 +146,8 @@
   </app-entry-screen>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+<script lang="ts" setup>
+import { reactive, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useForm } from '@intake24/admin/composables';
@@ -167,89 +167,75 @@ type SignUpForm = {
   captcha: string | undefined;
 };
 
-export default defineComponent({
-  name: 'SignUp',
+defineOptions({ name: 'SignUp' });
 
-  components: { AppEntryScreen, Captcha },
+const captchaEl = useTemplateRef('captchaEl');
+const router = useRouter();
+const { i18n: { t } } = useI18n();
 
-  setup() {
-    const captchaEl = ref<InstanceType<typeof Captcha>>();
-    const router = useRouter();
-    const { i18n: { t } } = useI18n();
+const show = reactive({
+  password: false,
+  passwordConfirm: false,
+});
 
-    const show = reactive({
-      password: false,
-      passwordConfirm: false,
-    });
-
-    const { data, errors, post } = useForm<SignUpForm>({
-      data: {
-        name: null,
-        phone: null,
-        email: null,
-        emailConfirm: null,
-        password: null,
-        passwordConfirm: null,
-        terms: false,
-        captcha: undefined,
-      },
-    });
-
-    function resetCaptcha() {
-      data.value.captcha = undefined;
-      captchaEl.value?.reset();
-    };
-
-    async function verified(token?: string) {
-      data.value.captcha = token;
-      await sendRequest();
-    };
-
-    function expired() {
-      resetCaptcha();
-    };
-
-    async function sendRequest() {
-      try {
-        const { accessToken } = await post<LoginResponse>('admin/sign-up', {
-          withLoading: true,
-        });
-        await useAuth().successfulLogin(accessToken);
-        await router.push({ name: 'verify' });
-      }
-      catch (err) {
-        if (errors.has('captcha')) {
-          errors.clear('captcha');
-          useMessages().error(t('common.password.request.captcha'));
-        }
-        else {
-          throw err;
-        }
-      }
-      finally {
-        resetCaptcha();
-      }
-    };
-
-    async function submit() {
-      if (captchaEl.value) {
-        captchaEl.value.executeIfCan();
-        return;
-      }
-
-      await sendRequest();
-    };
-
-    return {
-      data,
-      errors,
-      expired,
-      show,
-      submit,
-      verified,
-    };
+const { data, errors, post } = useForm<SignUpForm>({
+  data: {
+    name: null,
+    phone: null,
+    email: null,
+    emailConfirm: null,
+    password: null,
+    passwordConfirm: null,
+    terms: false,
+    captcha: undefined,
   },
 });
+
+function resetCaptcha() {
+  data.value.captcha = undefined;
+  captchaEl.value?.reset();
+};
+
+async function verified(token?: string) {
+  data.value.captcha = token;
+  await sendRequest();
+};
+
+function expired() {
+  resetCaptcha();
+};
+
+async function sendRequest() {
+  try {
+    const { accessToken } = await post<LoginResponse>('admin/sign-up', {
+      withLoading: true,
+    });
+    await useAuth().successfulLogin(accessToken);
+    await router.push({ name: 'verify' });
+  }
+  catch (err) {
+    if (errors.has('captcha')) {
+      errors.clear('captcha');
+      useMessages().error(t('common.password.request.captcha'));
+    }
+    else {
+      throw err;
+    }
+  }
+  finally {
+    resetCaptcha();
+  }
+};
+
+async function submit() {
+  console.log(captchaEl.value);
+  if (captchaEl.value) {
+    captchaEl.value.executeIfCan();
+    return;
+  }
+
+  await sendRequest();
+};
 </script>
 
 <style lang="scss"></style>

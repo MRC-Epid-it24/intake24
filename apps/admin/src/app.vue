@@ -14,13 +14,13 @@
       </v-list>
       <v-divider />
       <v-list density="compact" nav>
-        <v-list-group color="grey-lighten-1" prepend-icon="fas fa-fw fa-user" :value="true">
+        <v-list-group color="grey-lighten-1" prepend-icon="fas fa-user" :value="true">
           <template #activator="{ props }">
             <v-list-item v-bind="props">
               <v-list-item-title>{{ $t('user._') }}</v-list-item-title>
             </v-list-item>
           </template>
-          <v-list-item link prepend-icon="fas fa-fw fa-tachometer-alt" :to="{ name: 'dashboard' }">
+          <v-list-item link prepend-icon="fas fa-tachometer-alt" :to="{ name: 'dashboard' }">
             <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
           </v-list-item>
           <v-list-item link prepend-icon="fas fa-circle-user" :to="{ name: 'user' }">

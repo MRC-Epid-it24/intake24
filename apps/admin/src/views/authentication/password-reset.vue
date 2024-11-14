@@ -69,8 +69,7 @@
   </app-entry-screen>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
 
 import { ErrorList } from '@intake24/admin/components/forms';
@@ -86,40 +85,27 @@ type PasswordResetForm = {
   passwordConfirm: string | null;
 };
 
-export default defineComponent({
-  name: 'PasswordReset',
+defineOptions({ name: 'PasswordReset' });
 
-  components: { AppEntryScreen, ErrorList },
+const route = useRoute();
+const router = useRouter();
+const { i18n: { t } } = useI18n();
 
-  setup() {
-    const route = useRoute();
-    const router = useRouter();
-    const { i18n: { t } } = useI18n();
-
-    const { data, errors, nonInputErrors, post } = useForm<PasswordResetForm>({
-      data: {
-        token: route.params.token,
-        email: null,
-        password: null,
-        passwordConfirm: null,
-      },
-      nonInputErrorKeys: ['token'],
-    });
-
-    async function submit() {
-      await post('password/reset');
-      useMessages().success(t('common.password.changed'));
-      await router.push({ name: 'login' });
-    };
-
-    return {
-      data,
-      errors,
-      nonInputErrors,
-      submit,
-    };
+const { data, errors, nonInputErrors, post } = useForm<PasswordResetForm>({
+  data: {
+    token: route.params.token.toString(),
+    email: null,
+    password: null,
+    passwordConfirm: null,
   },
+  nonInputErrorKeys: ['token'],
 });
+
+async function submit() {
+  await post('password/reset');
+  useMessages().success(t('common.password.changed'));
+  await router.push({ name: 'login' });
+};
 </script>
 
 <style lang="scss"></style>

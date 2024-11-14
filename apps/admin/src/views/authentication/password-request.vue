@@ -48,8 +48,8 @@
   </app-entry-screen>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref, useTemplateRef } from 'vue';
 
 import { useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
@@ -61,77 +61,60 @@ type PasswordRequestForm = {
   captcha: string | undefined;
 };
 
-export default defineComponent({
-  name: 'PasswordRequest',
+defineOptions({ name: 'PasswordRequest' });
 
-  components: { AppEntryScreen, Captcha },
+const { i18n: { t } } = useI18n();
+const captchaEl = useTemplateRef('captchaEl');
+const submitted = ref(false);
 
-  setup() {
-    const { i18n: { t } } = useI18n();
-    const captchaEl = ref<InstanceType<typeof Captcha>>();
-    const submitted = ref(false);
-
-    const { data, errors, post } = useForm<PasswordRequestForm>({
-      data: {
-        email: null,
-        captcha: undefined,
-      },
-    });
-
-    function resetCaptcha() {
-      data.value.captcha = undefined;
-      captchaEl.value?.reset();
-    };
-
-    async function verified(token: string) {
-      data.value.captcha = token;
-      await sendRequest();
-    };
-
-    function expired() {
-      resetCaptcha();
-    };
-
-    async function sendRequest() {
-      try {
-        await post('password');
-        submitted.value = true;
-      }
-      catch (err) {
-        if (errors.has('captcha')) {
-          errors.clear('captcha');
-          useMessages().error(t('common.password.request.captcha'));
-        }
-        else {
-          throw err;
-        }
-      }
-      finally {
-        resetCaptcha();
-      }
-    };
-
-    async function submit() {
-      if (captchaEl.value) {
-        captchaEl.value.executeIfCan();
-        return;
-      }
-
-      await sendRequest();
-    };
-
-    return {
-      captchaEl,
-      data,
-      errors,
-      expired,
-      submit,
-      submitted,
-      verified,
-    };
+const { data, errors, post } = useForm<PasswordRequestForm>({
+  data: {
+    email: null,
+    captcha: undefined,
   },
-
 });
+
+function resetCaptcha() {
+  data.value.captcha = undefined;
+  captchaEl.value?.reset();
+};
+
+async function verified(token: string) {
+  data.value.captcha = token;
+  await sendRequest();
+};
+
+function expired() {
+  resetCaptcha();
+};
+
+async function sendRequest() {
+  try {
+    await post('password');
+    submitted.value = true;
+  }
+  catch (err) {
+    if (errors.has('captcha')) {
+      errors.clear('captcha');
+      useMessages().error(t('common.password.request.captcha'));
+    }
+    else {
+      throw err;
+    }
+  }
+  finally {
+    resetCaptcha();
+  }
+};
+
+async function submit() {
+  if (captchaEl.value) {
+    captchaEl.value.executeIfCan();
+    return;
+  }
+
+  await sendRequest();
+};
 </script>
 
 <style lang="scss"></style>
