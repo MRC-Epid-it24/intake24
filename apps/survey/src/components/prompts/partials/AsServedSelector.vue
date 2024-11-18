@@ -8,7 +8,8 @@
         <v-row>
           <v-col class="d-flex justify-end me-auto">
             <v-chip
-              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold text-secondary border-secondary-1"
+              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
+              color="info"
             >
               {{ thumbnailWeight }}
             </v-chip>

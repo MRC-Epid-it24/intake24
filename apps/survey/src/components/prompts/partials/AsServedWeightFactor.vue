@@ -5,6 +5,7 @@
     contained
     :model-value="show"
     :opacity="0.2"
+    persistent
     scroll-strategy="none"
   >
     <v-card class="card-overlay" flat :tile="$vuetify.display.mobile">
@@ -24,10 +25,11 @@
             $increment
           </v-icon>
         </v-btn>
-        <v-chip color="grey-lighten-1">
+        <v-chip>
           <i18n-t
             class="font-weight-medium text-h6"
             :keypath="`prompts.asServed.weightFactor.${type}.${subType}`"
+            tag="span"
           >
             <template #whole>
               <span class="font-weight-bold">{{ whole }}</span>
