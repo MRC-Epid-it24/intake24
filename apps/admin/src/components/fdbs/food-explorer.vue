@@ -27,7 +27,7 @@
       v-model:opened="opened"
       activatable
       color="primary"
-      dense
+      density="compact"
       item-title="name"
       item-value="key"
       :items="items"

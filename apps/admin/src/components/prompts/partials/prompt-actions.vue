@@ -90,14 +90,13 @@
                         variant="outlined"
                       >
                         <template #item="{ item, props }">
-                          <v-list-item v-bind="props">
+                          <v-list-item v-bind="props" :title="item.raw.title">
                             <template #prepend>
                               <span
                                 class="mr-2 pa-4 rounded-circle"
                                 :style="{ backgroundColor: item.raw.color }"
                               />
                             </template>
-                            <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
                           </v-list-item>
                         </template>
                         <template #selection="{ item }">

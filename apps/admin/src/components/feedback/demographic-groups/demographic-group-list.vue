@@ -164,11 +164,10 @@
                         variant="outlined"
                       >
                         <template #item="{ item, props }">
-                          <v-list-item v-bind="props">
+                          <v-list-item v-bind="props" :title="item.raw.title">
                             <template #prepend>
                               <v-icon :icon="item.raw.icon" start />
                             </template>
-                            <v-list-item-title>{{ item.raw.title }}</v-list-item-title>
                           </v-list-item>
                         </template>
                         <template #selection="{ item }">

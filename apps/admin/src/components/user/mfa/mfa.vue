@@ -17,7 +17,7 @@
         {{ $t('user.mfa.disabled') }}
       </v-alert>
     </v-card-text>
-    <v-toolbar dense flat>
+    <v-toolbar flat>
       <v-toolbar-title>
         {{ $t('user.mfa.devices.title') }}
       </v-toolbar-title>

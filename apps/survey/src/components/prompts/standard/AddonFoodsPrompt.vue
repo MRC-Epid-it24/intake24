@@ -1,6 +1,6 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-card dense flat>
+    <v-card flat>
       <v-list v-model:opened="opened" class="list-border" density="compact">
         <v-list-group v-for="meal in meals" :key="meal.id" class="mb-2" :value="meal.id">
           <template #activator="{ props }">

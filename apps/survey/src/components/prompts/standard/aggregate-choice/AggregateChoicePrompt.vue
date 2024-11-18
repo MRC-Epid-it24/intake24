@@ -1,6 +1,6 @@
 <template>
   <component :is="customPromptLayout" v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-card dense flat>
+    <v-card flat>
       <v-list v-model:opened="opened" density="compact">
         <v-list-group v-for="meal in filteredMeals" :key="meal.id" :value="meal.id">
           <template #activator="{ props }">

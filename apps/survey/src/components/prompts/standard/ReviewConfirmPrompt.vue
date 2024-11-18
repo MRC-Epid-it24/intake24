@@ -5,7 +5,7 @@
       <v-divider />
     </v-col>
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
-      <v-card dense flat>
+      <v-card flat>
         <v-list class="flex-grow-1 flex-shrink-0" density="compact">
           <v-list-item v-for="meal in meals" :key="meal.id" :inactive="true" link :ripple="false">
             <template #prepend>

@@ -98,7 +98,7 @@
                 </v-card-text>
               </template>
               <template v-if="entry.userCustomFields">
-                <v-toolbar dense flat tile>
+                <v-toolbar flat tile>
                   <div class="font-weight-medium">
                     {{ $t('users.customFields.title') }}
                   </div>
