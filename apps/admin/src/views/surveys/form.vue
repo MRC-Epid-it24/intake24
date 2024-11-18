@@ -465,7 +465,6 @@
               />
               <v-text-field
                 v-model="data.genUserKey"
-                :append-icon="showGenUserKey ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 class="mb-4"
                 :error-messages="errors.get('genUserKey')"
@@ -474,8 +473,13 @@
                 name="genUserKey"
                 :type="showGenUserKey ? 'text' : 'password'"
                 variant="outlined"
-                @click:append="showGenUserKey = !showGenUserKey"
-              />
+              >
+                <template #append-inner>
+                  <v-icon class="me-2" @click="showGenUserKey = !showGenUserKey">
+                    {{ showGenUserKey ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+                  </v-icon>
+                </template>
+              </v-text-field>
               <event-notifications
                 v-model="data.notifications"
                 :error-messages="errors.get('notifications')"

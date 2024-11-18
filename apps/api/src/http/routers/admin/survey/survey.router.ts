@@ -193,6 +193,13 @@ export function survey() {
           throw new ValidationError('Missing body');
 
         await survey.update(updateInput);
+        await survey.reload({
+          include: [
+            { association: 'locale' },
+            { association: 'feedbackScheme' },
+            { association: 'surveyScheme' },
+          ],
+        });
 
         return { status: 200, body: surveyResponse(survey) };
       },
@@ -215,6 +222,14 @@ export function survey() {
         await survey.update(
           pick(body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields]),
         );
+
+        await survey.reload({
+          include: [
+            { association: 'locale' },
+            { association: 'feedbackScheme' },
+            { association: 'surveyScheme' },
+          ],
+        });
 
         return { status: 200, body: surveyResponse(survey) };
       },

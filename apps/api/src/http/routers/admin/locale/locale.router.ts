@@ -183,7 +183,13 @@ export function locale() {
 
         await Promise.all([systemLocale.update(body), foodsLocale.update(body)]);
 
-        await systemLocale.reload();
+        await systemLocale.reload({
+          include: [
+            { association: 'parent' },
+            { association: 'adminLanguage' },
+            { association: 'respondentLanguage' },
+          ],
+        });
 
         return { status: 200, body: localeResponse(systemLocale) };
       },

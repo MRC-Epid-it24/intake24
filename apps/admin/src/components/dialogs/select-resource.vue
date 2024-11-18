@@ -81,152 +81,121 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { TranslateResult } from 'vue-i18n';
-import { defineComponent, ref, toRefs, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { useFetchList } from '@intake24/admin/composables';
 import { getResource } from '@intake24/admin/router/resources';
 import type { Dictionary } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
-export default defineComponent({
-  name: 'SelectResourceDialog',
+defineOptions({ name: 'SelectResourceDialog' });
 
-  props: {
-    activatorClass: {
-      type: String,
-    },
-    clearable: {
-      type: Boolean,
-    },
-    disabled: {
-      type: Boolean,
-    },
-    errorMessages: {
-      type: Array as PropType<string[]>,
-    },
-    initialItem: {
-      type: [Object] as PropType<Dictionary | null>,
-    },
-    itemId: {
-      type: String,
-      default: 'id',
-    },
-    itemName: {
-      type: String,
-      default: 'name',
-    },
-    label: {
-      type: String as PropType<string | TranslateResult>,
-    },
-    name: {
-      type: String,
-    },
-    resource: {
-      type: String,
-      required: true,
-    },
-    returnObject: {
-      type: [Boolean, String],
-      default: false,
-    },
-    modelValue: {
-      type: [Object, String] as PropType<Dictionary | string | null>,
-    },
+const props = defineProps({
+  activatorClass: {
+    type: String,
   },
-
-  emits: ['clear', 'update:modelValue'],
-
-  setup(props) {
-    const { resource } = toRefs(props);
-    const selectedItemId = ref<string[]>(
-      props.initialItem ? [props.initialItem[props.itemId]] : [],
-    );
-
-    const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
-      `/admin/references/${resource.value}`,
-    );
-
-    if (props.initialItem)
-      items.value.push(props.initialItem);
-
-    watch(
-      () => props.modelValue,
-      (val) => {
-        if (val === selectedItemId.value)
-          return;
-
-        selectedItemId.value = [];
-      },
-    );
-
-    return {
-      dialog,
-      loading,
-      items,
-      page,
-      lastPage,
-      search,
-      selectedItemId,
-      clear,
-    };
+  clearable: {
+    type: Boolean,
   },
-
-  computed: {
-    itemIcon() {
-      return getResource(this.resource)?.icon ?? 'fas fa-list';
-    },
-    selectedItem(): Dictionary | null {
-      const { selectedItemId } = this;
-      if (!selectedItemId.length)
-        return null;
-
-      return this.items.find(item => item[this.itemId] === selectedItemId[0]) ?? null;
-    },
-    selectedItemName() {
-      if (this.selectedItem)
-        return this.selectedItem[this.itemName];
-
-      if (this.initialItem)
-        return this.initialItem[this.itemName];
-
-      return this.modelValue;
-    },
+  disabled: {
+    type: Boolean,
   },
-
-  methods: {
-    close() {
-      this.dialog = false;
-    },
-
-    input() {
-      if (!this.selectedItem) {
-        this.$emit('update:modelValue', null);
-        return;
-      }
-
-      let returnValue: Dictionary | string | null = this.selectedItemId[0];
-      const { returnObject } = this;
-
-      if (typeof returnObject === 'boolean')
-        returnValue = returnObject ? copy(this.selectedItem) : this.selectedItemId[0];
-      else returnValue = this.selectedItem[returnObject];
-
-      this.$emit('update:modelValue', returnValue);
-    },
-
-    clearInput() {
-      this.selectedItemId = [];
-      this.input();
-      this.$emit('clear');
-    },
-
-    confirm() {
-      this.input();
-      this.close();
-    },
+  errorMessages: {
+    type: Array as PropType<string[]>,
+  },
+  initialItem: {
+    type: [Object] as PropType<Dictionary | null>,
+  },
+  itemId: {
+    type: String,
+    default: 'id',
+  },
+  itemName: {
+    type: String,
+    default: 'name',
+  },
+  label: {
+    type: String as PropType<string | TranslateResult>,
+  },
+  name: {
+    type: String,
+  },
+  resource: {
+    type: String,
+    required: true,
+  },
+  returnObject: {
+    type: [Boolean, String],
+    default: false,
+  },
+  modelValue: {
+    type: [Object, String] as PropType<Dictionary | string | null>,
   },
 });
+
+const emit = defineEmits(['clear', 'update:modelValue']);
+
+const selectedItemId = ref<string[]>(props.initialItem ? [props.initialItem[props.itemId]] : []);
+
+const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
+  `/admin/references/${props.resource}`,
+);
+
+if (props.initialItem)
+  items.value.push(props.initialItem);
+
+const itemIcon = computed(() => getResource(props.resource)?.icon ?? 'fas fa-list');
+const selectedItem = computed(() => selectedItemId.value.length ? items.value.find(item => item[props.itemId] === selectedItemId.value[0]) : undefined);
+const selectedItemName = computed(() => {
+  if (selectedItem.value)
+    return selectedItem.value[props.itemName];
+
+  if (props.initialItem)
+    return props.initialItem[props.itemName];
+
+  return props.modelValue;
+});
+
+function close() {
+  dialog.value = false;
+};
+
+function update() {
+  if (!selectedItem.value) {
+    emit('update:modelValue', null);
+    return;
+  }
+
+  let returnValue: Dictionary | string | null = selectedItemId.value[0];
+
+  if (typeof props.returnObject === 'boolean')
+    returnValue = props.returnObject ? copy(selectedItem.value) : selectedItemId.value[0];
+  else returnValue = selectedItem.value[props.returnObject];
+
+  emit('update:modelValue', returnValue);
+};
+
+function clearInput() {
+  selectedItemId.value = [];
+  update();
+  emit('clear');
+};
+
+function confirm() {
+  update();
+  close();
+};
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (val === selectedItemId.value.at(0))
+      return;
+
+    selectedItemId.value = [];
+  },
+);
 </script>
