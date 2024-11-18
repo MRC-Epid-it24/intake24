@@ -23,8 +23,8 @@
     </div>
     <v-divider class="my-3" />
     <v-treeview
+      v-model:activated="activated"
       v-model:opened="opened"
-      v-model:selected="selected"
       activatable
       color="primary"
       dense
@@ -86,12 +86,12 @@ export default defineComponent({
     const http = useHttp();
     const { i18n } = useI18n();
 
-    const selected = ref<string[]>([]);
+    const activated = ref<string[]>([]);
     const opened = ref<string[]>([]);
     const items = ref<TreeItem[]>([]);
     const showGlobalName = ref<boolean>(false);
-    const selectedEntryId = ref<string | null>(null);
-    const selectedEntryCategories = ref<string[]>([]);
+    const activatedEntryId = ref<string | null>(null);
+    const activatedEntryCategories = ref<string[]>([]);
 
     const itemText = computed(() => (showGlobalName.value ? 'englishName' : 'name'));
 
@@ -149,11 +149,11 @@ export default defineComponent({
     };
 
     const openItem = async (item: TreeItem) => {
-      if (selectedEntryId.value === item.id)
+      if (activatedEntryId.value === item.id)
         return;
 
-      selectedEntryId.value = item.id;
-      selectedEntryCategories.value = [];
+      activatedEntryId.value = item.id;
+      activatedEntryCategories.value = [];
 
       await router.push({
         name: `fdbs-${item.type}`,
@@ -166,12 +166,12 @@ export default defineComponent({
         return;
 
       for (const child of children) {
-        if (selectedEntryId.value === child.id) {
-          selected.value = [child.key];
+        if (activatedEntryId.value === child.id) {
+          activated.value = [child.key];
           return true;
         }
 
-        if (selectedEntryCategories.value.includes(child.code)) {
+        if (activatedEntryCategories.value.includes(child.code)) {
           await fetchCategoryContent(child);
           opened.value.push(child.key);
 
@@ -193,22 +193,22 @@ export default defineComponent({
         `admin/fdbs/${props.localeId}/${type}/${entryId}/categories`,
       );
 
-      selectedEntryId.value = entryId;
-      selectedEntryCategories.value = data.categories.reverse();
+      activatedEntryId.value = entryId;
+      activatedEntryCategories.value = data.categories.reverse();
 
       await findActiveInChildren(items.value);
     };
 
     onBeforeRouteUpdate((to, from, next) => {
-      if (to.params.entryId !== selectedEntryId.value)
-        findActiveInTree(to.params.entryId, to.meta?.module.current);
+      if (to.params.entryId !== activatedEntryId.value)
+        findActiveInTree(to.params.entryId?.toString(), to.meta.module.current);
 
       next();
     });
 
     onMounted(async () => {
       await fetchRootCategories();
-      await findActiveInTree(route.params.entryId, route.meta?.module.current);
+      await findActiveInTree(route.params.entryId?.toString(), route.meta.module.current);
     });
 
     return {
@@ -217,10 +217,8 @@ export default defineComponent({
       itemText,
       opened,
       openItem,
-      selected,
+      activated,
       showGlobalName,
-      selectedEntryId,
-      selectedEntryCategories,
     };
   },
 });

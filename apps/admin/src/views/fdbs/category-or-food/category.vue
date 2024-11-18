@@ -114,7 +114,7 @@
     </div>
     <v-skeleton-loader
       v-else
-      type="card-heading, list-item-three-line@3, actions"
+      type="heading, list-item-three-line@3, actions"
     />
     <confirm-leave-dialog v-model="routeLeave" />
   </div>

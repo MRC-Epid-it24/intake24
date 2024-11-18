@@ -152,32 +152,33 @@ export default defineComponent({
       })),
     );
 
-    return {
-      attributes,
-      defaultAttributes,
-      useInRecipeTypeItems,
+    function isInherited(attribute: AttributeType) {
+      return attributes.value[attribute] === null;
     };
-  },
 
-  methods: {
-    isInherited(attribute: AttributeType) {
-      return this.attributes[attribute] === null;
-    },
+    function title(attribute: AttributeType): string {
+      const key = attributes.value[attribute] === null ? 'override' : 'inherit';
+      return i18n.t(`fdbs.attributes.${key}`);
+    };
 
-    title(attribute: AttributeType): string {
-      const key = this.attributes[attribute] === null ? 'override' : 'inherit';
-      return this.$t(`fdbs.attributes.${key}`);
-    },
-
-    toggleInherit(attribute: AttributeType) {
-      if (this.attributes[attribute] !== null) {
-        this.attributes[attribute] = null;
+    function toggleInherit(attribute: AttributeType) {
+      if (attributes.value[attribute] !== null) {
+        attributes.value[attribute] = null;
         return;
       }
 
       // @ts-expect-error it doesn't narrow the type correctly
       this.attributes[attribute] = this.defaultAttributes[attribute];
-    },
+    };
+
+    return {
+      attributes,
+      defaultAttributes,
+      isInherited,
+      title,
+      toggleInherit,
+      useInRecipeTypeItems,
+    };
   },
 });
 </script>

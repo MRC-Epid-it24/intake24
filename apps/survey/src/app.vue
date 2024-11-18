@@ -189,14 +189,14 @@
 </template>
 
 <script lang="ts">
-import type { TranslateResult } from 'vue-i18n';
 import { mapState } from 'pinia';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
 import { useLocale } from 'vuetify';
-
 import { Navigation } from '@intake24/survey/components/layouts';
-import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 
+import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 import { useHttp } from './services';
 import { useApp, useAuth, useSurvey } from './stores';
 
@@ -207,6 +207,7 @@ export default defineComponent({
 
   setup() {
     const http = useHttp();
+    const route = useRoute();
     const vI18n = useLocale();
     useLanguage('survey', http, vI18n);
 
@@ -219,6 +220,17 @@ export default defineComponent({
       privacy: import.meta.env.VITE_LEGAL_PRIVACY,
       terms: import.meta.env.VITE_LEGAL_TERMS,
     }));
+
+    const title = computed(() => {
+      if (route.meta?.title)
+        return vI18n.t(route.meta.title);
+
+      return vI18n.t('common._');
+    });
+
+    watch(route, () => {
+      document.title = title.value;
+    });
 
     const windowInnerHeight = computed(() => window.innerHeight);
 
@@ -244,24 +256,8 @@ export default defineComponent({
       return this.$route.params.surveyId;
     },
 
-    title(): TranslateResult {
-      if (this.$route.meta?.title)
-        return this.$t(this.$route.meta.title);
-
-      return this.$t('common._');
-    },
-
     showNav(): boolean {
       return this.loggedIn && !!this.surveyId && this.$route.name !== 'survey-recall';
-    },
-  },
-
-  watch: {
-    title: {
-      handler(val) {
-        document.title = val;
-      },
-      immediate: true,
     },
   },
 
