@@ -194,8 +194,9 @@ import { computed, defineComponent, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { useLocale } from 'vuetify';
-import { Navigation } from '@intake24/survey/components/layouts';
 
+import { useI18n } from '@intake24/i18n';
+import { Navigation } from '@intake24/survey/components/layouts';
 import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 import { useHttp } from './services';
 import { useApp, useAuth, useSurvey } from './stores';
@@ -209,30 +210,24 @@ export default defineComponent({
     const http = useHttp();
     const route = useRoute();
     const vI18n = useLocale();
+    const { i18n: { t } } = useI18n();
     useLanguage('survey', http, vI18n);
 
-    const appInfo = computed(() => useApp().app);
     const sidebar = ref(false);
 
+    const appInfo = computed(() => useApp().app);
     const legal = computed(() => ({
       home: import.meta.env.VITE_LEGAL_HOME,
       copyright: import.meta.env.VITE_LEGAL_COPYRIGHT,
       privacy: import.meta.env.VITE_LEGAL_PRIVACY,
       terms: import.meta.env.VITE_LEGAL_TERMS,
     }));
-
-    const title = computed(() => {
-      if (route.meta?.title)
-        return vI18n.t(route.meta.title);
-
-      return vI18n.t('common._');
-    });
+    const title = computed(() => t(route.meta?.title ?? 'common._'));
+    const windowInnerHeight = computed(() => window.innerHeight);
 
     watch(route, () => {
       document.title = title.value;
     });
-
-    const windowInnerHeight = computed(() => window.innerHeight);
 
     return {
       appInfo,
