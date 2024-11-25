@@ -27,12 +27,10 @@ export const customComponentTypes = [
   'yes-no-prompt',
   'aggregate-choice-prompt',
 ] as const;
-
 export type CustomComponentType = (typeof customComponentTypes)[number];
 
 export const standardComponentTypes = [
   'addon-foods-prompt',
-  'aggregate-choice-prompt',
   'associated-foods-prompt',
   'general-associated-foods-prompt',
   'edit-meal-prompt',
@@ -51,7 +49,6 @@ export const standardComponentTypes = [
   'split-food-prompt',
   'submit-prompt',
 ] as const;
-
 export type StandardComponentType = (typeof standardComponentTypes)[number];
 
 export type PortionSizeComponentType =
@@ -198,15 +195,13 @@ export const timePicker = z.object({
 });
 export type TimePicker = z.infer<typeof timePicker>;
 
-const aggregateChoicePrompt = baseStandardPrompt.extend({
+// Custom
+const aggregateChoicePrompt = baseCustomPrompt.extend({
   component: z.literal('aggregate-choice-prompt'),
   options: localeOptionList(),
   foodFilter: condition.optional(),
 });
 
-export type AggregateChoicePrompt = z.infer<typeof aggregateChoicePrompt>;
-
-// Custom
 const checkboxListPrompt = baseCustomPrompt
   .extend({
     component: z.literal('checkbox-list-prompt'),
@@ -436,6 +431,7 @@ const submitPrompt = baseStandardPrompt.extend({
 
 export const singlePrompt = z.discriminatedUnion('component', [
   // Custom
+  aggregateChoicePrompt,
   checkboxListPrompt,
   datePickerPrompt,
   infoPrompt,
@@ -480,7 +476,6 @@ export const singlePrompt = z.discriminatedUnion('component', [
   sameAsBeforePrompt,
   splitFoodPrompt,
   submitPrompt,
-  aggregateChoicePrompt,
 ]);
 export type SinglePrompt = z.infer<typeof singlePrompt>;
 

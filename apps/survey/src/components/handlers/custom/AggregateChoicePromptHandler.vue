@@ -13,10 +13,9 @@ import { computed, defineComponent } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { FoodState } from '@intake24/common/types';
-import { AggregateChoicePrompt } from '@intake24/survey/components/prompts/standard';
-import { useSurvey } from '@intake24/survey/stores';
+import { AggregateChoicePrompt, filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 
-import { filterMealsForAggregateChoicePrompt } from '../../prompts/standard/aggregate-choice/aggregate-choice';
+import { useSurvey } from '@intake24/survey/stores';
 import { usePromptHandlerNoStore } from '../mixins';
 
 export default defineComponent({

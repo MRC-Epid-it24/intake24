@@ -1,7 +1,9 @@
+import AggregateChoicePromptHandler from './AggregateChoicePromptHandler.vue';
 import CustomPromptHandler from './CustomPromptHandler.vue';
-import MultiCustomPromptHandler from './MultiCustomPromptHandler.vue';
+import MultiPromptHandler from './MultiPromptHandler.vue';
 
 export default {
+  AggregateChoicePromptHandler,
   CustomPromptHandler,
-  MultiCustomPromptHandler,
+  MultiPromptHandler,
 };

@@ -32,8 +32,9 @@ import {
   recipeBuilderComplete,
   standardPortionComplete,
 } from '@intake24/common/util/portion-size-checks';
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import {
   addonFoodPromptCheck,
   findMeal,
@@ -53,7 +54,6 @@ import {
   surveyPortionSizeComplete,
   surveySearchComplete,
 } from '@intake24/survey/util';
-import { filterMealsForAggregateChoicePrompt } from '../components/prompts/standard/aggregate-choice/aggregate-choice';
 import { recallLog } from '../stores';
 
 function foodEnergy(energy: number, food: FoodState): number {

@@ -645,7 +645,7 @@
       "subtitle": "Ask to choose yes or no"
     },
     "aggregate-choice-prompt": {
-      "title": "Aggregate food question",
+      "title": "Aggregate choice question",
       "subtitle": "Ask to choose an option for every reported food in a single screen"
     },
     "as-served-prompt": {

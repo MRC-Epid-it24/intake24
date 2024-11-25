@@ -46,10 +46,10 @@ function dataExportFields() {
   /**
    * Helper to filter custom Prompt to ExportField
    *
-   * @param {Prompt} { type }
-   * @returns {boolean}
+   * @param {string} [component]
    */
-  const customPromptFilter = ({ type }: Prompt): boolean => type === 'custom';
+  const customPromptFilter = (component?: string) =>
+    (prompt: Prompt): boolean => prompt.type === 'custom' && (!component || prompt.component === component);
 
   /**
    * User fields
@@ -224,7 +224,7 @@ function dataExportFields() {
   const submissionCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
     const { preMeals, postMeals, submission } = surveyScheme.prompts;
     return [...preMeals, ...postMeals, ...submission]
-      .filter(customPromptFilter)
+      .filter(customPromptFilter())
       .map(customPromptMapper);
   };
 
@@ -258,7 +258,7 @@ function dataExportFields() {
       meals: { preFoods, postFoods },
     } = surveyScheme.prompts;
 
-    return [...preFoods, ...postFoods].filter(customPromptFilter).map(customPromptMapper);
+    return [...preFoods, ...postFoods].filter(customPromptFilter()).map(customPromptMapper);
   };
 
   /**
@@ -343,8 +343,13 @@ function dataExportFields() {
    *
    * @returns {Promise<ExportField[]>}
    */
-  const foodCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> =>
-    surveyScheme.prompts.meals.foods.filter(customPromptFilter).map(customPromptMapper);
+  const foodCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
+    const { preMeals, postMeals, meals: { foods } } = surveyScheme.prompts;
+    return [
+      ...foods.filter(customPromptFilter()),
+      ...[...preMeals, ...postMeals].filter(customPromptFilter('aggregate-choice-prompt')),
+    ].map(customPromptMapper);
+  };
 
   /**
    * Food composition fields

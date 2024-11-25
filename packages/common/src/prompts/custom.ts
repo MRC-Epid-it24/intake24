@@ -3,6 +3,16 @@ import type { Prompts } from './prompts';
 import { copy } from '@intake24/common/util';
 import { basePrompt, promptValidation } from './base';
 
+export const aggregateChoicePrompt: Prompts['aggregate-choice-prompt'] = copy({
+  ...basePrompt,
+  component: 'aggregate-choice-prompt',
+  type: 'custom',
+  id: 'aggregate-choice-prompt',
+  name: 'Aggregate choice question prompt',
+  options: { en: [] },
+  foodFilter: undefined,
+});
+
 export const checkboxListPrompt: Prompts['checkbox-list-prompt'] = copy({
   ...basePrompt,
   ...promptValidation,
@@ -110,6 +120,7 @@ export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({
 });
 
 export const customPrompts = [
+  aggregateChoicePrompt,
   checkboxListPrompt,
   datePickerPrompt,
   infoPrompt,

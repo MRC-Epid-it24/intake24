@@ -9,6 +9,8 @@ import TextareaPrompt from './textarea-prompt.vue';
 import TimePickerPrompt from './time-picker-prompt.vue';
 import YesNoPrompt from './yes-no-prompt.vue';
 
+export * from './aggregate-choice';
+
 export default {
   CheckboxListPrompt,
   DatePickerPrompt,

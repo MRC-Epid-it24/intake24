@@ -194,16 +194,6 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
   },
 });
 
-export const aggregateChoicePrompt: Prompts['aggregate-choice-prompt'] = copy({
-  ...basePrompt,
-  component: 'aggregate-choice-prompt',
-  type: 'standard',
-  id: 'aggregate-choice-prompt',
-  name: 'Aggregate food question prompt',
-  options: { en: [] },
-  foodFilter: undefined,
-});
-
 export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-prompt'] = copy({
   ...basePrompt,
   component: 'general-associated-foods-prompt',
@@ -237,5 +227,4 @@ export const standardPrompts = [
   sameAsBeforePrompt,
   splitFoodPrompt,
   submitPrompt,
-  aggregateChoicePrompt,
 ];

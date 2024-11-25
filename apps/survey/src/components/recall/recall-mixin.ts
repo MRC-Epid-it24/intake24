@@ -68,8 +68,8 @@ export default defineComponent({
 
       switch (prompt.type) {
         case 'custom':
-          return prompt.component === 'multi-prompt'
-            ? 'multi-custom-prompt-handler'
+          return ['multi-prompt', 'aggregate-choice-prompt'].includes(prompt.component)
+            ? `${prompt.component}-handler`
             : 'custom-prompt-handler';
         case 'standard':
         case 'portion-size':

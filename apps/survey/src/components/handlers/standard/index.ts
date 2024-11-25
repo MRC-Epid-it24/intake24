@@ -1,5 +1,4 @@
 import AddonFoodsPromptHandler from './AddonFoodsPromptHandler.vue';
-import AggregateChoicePromptHandler from './AggregateChoicePromptHandler.vue';
 import AssociatedFoodsPromptHandler from './AssociatedFoodsPromptHandler.vue';
 import EditMealPromptHandler from './EditMealPromptHandler.vue';
 import ExternalSourcePromptHandler from './ExternalSourcePromptHandler.vue';
@@ -20,7 +19,6 @@ import SubmitPromptHandler from './SubmitPromptHandler.vue';
 
 export default {
   AddonFoodsPromptHandler,
-  AggregateChoicePromptHandler,
   AssociatedFoodsPromptHandler,
   GeneralAssociatedFoodsPromptHandler,
   EditMealPromptHandler,

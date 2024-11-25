@@ -107,16 +107,17 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
     const promptMap = this.getPromptMap();
 
     const mergeCallback = (prompt: SinglePrompt) => {
-      const baseMerge = merge<SinglePrompt>(promptMap[prompt.component], prompt);
+      const { component, type, ...rest } = prompt;
+      const { actions, conditions, ...baseMerge } = merge<SinglePrompt>(promptMap[prompt.component], rest);
       return {
         ...baseMerge,
-        actions: baseMerge.actions
+        actions: actions
           ? {
-              ...baseMerge.actions,
-              items: baseMerge.actions.items.map(action => merge(defaultAction, action)),
+              ...actions,
+              items: actions.items.map(action => merge(defaultAction, action)),
             }
           : undefined,
-        conditions: baseMerge.conditions.map(condition => merge<Condition>(getConditionDefaults(condition.object, condition.property.id), condition)),
+        conditions: conditions.map(condition => merge<Condition>(getConditionDefaults(condition.object, condition.property.id), condition)),
       };
     };
 

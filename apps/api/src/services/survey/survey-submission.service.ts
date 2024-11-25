@@ -477,7 +477,10 @@ function surveySubmissionService({
       .filter(({ type }) => type === 'custom')
       .map(({ id }) => id);
 
-    const foodCustomPrompts = foods.filter(({ type }) => type === 'custom').map(({ id }) => id);
+    const foodCustomPrompts = [
+      ...foods.filter(({ type }) => type === 'custom').map(({ id }) => id),
+      ...[...preMeals, ...postMeals].filter(({ component, type }) => type === 'custom' && component === 'aggregate-choice-prompt').map(({ id }) => id),
+    ];
 
     await db.system.transaction(async (transaction) => {
       const { recallDate, startTime, endTime, userAgent } = state;

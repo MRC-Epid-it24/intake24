@@ -23,7 +23,7 @@ import { MultiPrompt } from '@intake24/survey/components/prompts';
 import { useCustomPromptHandler } from '../mixins';
 
 defineOptions({
-  name: 'MultiCustomPromptHandler',
+  name: 'MultiPromptHandler',
 });
 
 const props = defineProps({

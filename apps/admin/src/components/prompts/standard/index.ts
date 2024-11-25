@@ -1,5 +1,4 @@
 import AddonFoodsPrompt from './addon-foods-prompt.vue';
-import AggregateChoicePrompt from './aggregate-choice-prompt.vue';
 import AssociatedFoodsPrompt from './associated-foods-prompt.vue';
 import EditMealPrompt from './edit-meal-prompt.vue';
 import ExternalSourcePrompt from './external-source-prompt.vue';
@@ -20,7 +19,6 @@ import SubmitPrompt from './submit-prompt.vue';
 
 export default {
   AddonFoodsPrompt,
-  AggregateChoicePrompt,
   AssociatedFoodsPrompt,
   GeneralAssociatedFoodsPrompt,
   EditMealPrompt,

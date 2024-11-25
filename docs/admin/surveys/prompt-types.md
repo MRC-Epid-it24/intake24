@@ -385,6 +385,19 @@ Recipe builder prompt for foods with multiple ingredients, such as sandwiches, s
 
 Prompts with customizable generic behavior. Custom prompts can be used multiple times per scheme as long as they are identified with scheme-unique [`Prompt ID`](/admin/surveys/prompt-editor#general).
 
+### Aggregate choice prompt
+
+Prompt to collect single option from a list of foods.
+
+#### Options
+
+- `options` - locale-specific list of options with properties:
+
+  - `label` - user-facing displayed label
+  - `value` - value stored in database
+
+- `as only for specified foods` - conditions to limit the foods to which the prompt is applicable
+
 ### Checkbox list prompt
 
 Multi-select list of options.
@@ -393,8 +406,8 @@ Multi-select list of options.
 
 - `options` - locale-specific list of options with properties:
 
-  - `label` - (user-facing displayed value)
-  - `value` - (value stored in database) can be specified
+  - `label` - user-facing displayed label
+  - `value` - value stored in database
   - `exclusive` - exclusive flag - if selected, other options are deselected
 
 - `other` - `true` or `false` whether to show 'other' option, free-form text input
@@ -427,8 +440,8 @@ Prompt to collect single or multiple option(s) from a list of options using sele
 
 - `options` - locale-specific list of options with properties:
 
-  - `label` (user-facing displayed value)
-  - `value` (value stored in database) can be specified
+  - `label` - user-facing displayed label
+  - `value` - value stored in database
 
 ### Slider prompt
 
@@ -454,8 +467,8 @@ Single-select list of options.
 
 - `options` - locale-specific list of options with properties:
 
-  - `label` (user-facing displayed value)
-  - `value` (value stored in database) can be specified
+  - `label` - user-facing displayed label
+  - `value` - value stored in database
 
 - `other` - `true` or `false` whether to show 'other' option, free-form text input
 
