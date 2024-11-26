@@ -1,6 +1,7 @@
 import { Redis } from 'ioredis';
 
 import ioc from '@intake24/api/ioc';
+import { permissions } from '@intake24/common-backend';
 import {
   defaultMeals as defaultFeedbackMeals,
   feedbackOutputs as defaultFeedbackOutputs,
@@ -15,7 +16,6 @@ import {
   defaultSchemeSettings,
 } from '@intake24/common/surveys';
 import { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
-import { permissions } from '@intake24/common-backend';
 import type { User, UserSurveyAlias } from '@intake24/db';
 import {
   FeedbackScheme,

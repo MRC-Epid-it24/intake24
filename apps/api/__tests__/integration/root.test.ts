@@ -3,8 +3,8 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import request from 'supertest';
 
-import fsConfig from '@intake24/api/config/filesystem';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import fsConfig from '@intake24/api/config/filesystem';
 
 export default () => {
   it('get / should render when SPA app if deployed', async () => {

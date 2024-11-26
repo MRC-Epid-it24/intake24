@@ -33,8 +33,8 @@ import type {
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
-import { capitalize } from '@intake24/common/util';
 import logger from '@intake24/common-backend/services/logger/logger';
+import { capitalize } from '@intake24/common/util';
 
 export type Logger = typeof logger;
 

@@ -1,6 +1,6 @@
 export { default as HtmlEditor } from './html-editor.vue';
-export { default as JsonEditor } from './json-editor.vue';
 export { default as JsonEditorDialog } from './json-editor-dialog.vue';
+export { default as JsonEditor } from './json-editor.vue';
 export * from './use-tinymce';
 
 // export const JsonEditor = await import('./json-editor.vue');

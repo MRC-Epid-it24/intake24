@@ -3,8 +3,8 @@ import { Worker } from 'node:worker_threads';
 import config from '@intake24/api/config';
 import { SearchQueryParameters } from '@intake24/api/food-index/search-query';
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { FoodSearchResponse } from '@intake24/common/types/http';
 import { logger } from '@intake24/common-backend/services';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import { FoodsLocale, RecipeFood } from '@intake24/db';
 
 let indexReady = false;

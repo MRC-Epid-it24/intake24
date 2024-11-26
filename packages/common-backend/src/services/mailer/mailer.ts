@@ -3,10 +3,10 @@ import type { MailConfig } from './config';
 import { convert } from 'html-to-text';
 
 import nodemailer from 'nodemailer';
-import type { Environment } from '@intake24/common/types';
 import type { Logger } from '@intake24/common-backend';
-
 import { replaceCssAsInlineStyle } from '@intake24/common-backend';
+
+import type { Environment } from '@intake24/common/types';
 
 export type MailerOps = {
   environment: Environment;

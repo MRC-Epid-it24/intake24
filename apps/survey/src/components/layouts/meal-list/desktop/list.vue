@@ -36,8 +36,8 @@ import { defineComponent } from 'vue';
 import type { MealState } from '@intake24/common/types';
 
 import { useMealList } from '../use-meal-list';
-import MealItem from './meal-item.vue';
 import MealItemExpandable from './meal-item-expandable.vue';
+import MealItem from './meal-item.vue';
 
 export default defineComponent({
   name: 'MealList',

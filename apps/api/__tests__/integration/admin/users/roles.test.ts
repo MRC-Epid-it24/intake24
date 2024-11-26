@@ -1,5 +1,5 @@
-import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import ioc from '@intake24/api/ioc';
 import type { UserRequest } from '@intake24/common/types/http/admin';
 import type { User } from '@intake24/db';
 

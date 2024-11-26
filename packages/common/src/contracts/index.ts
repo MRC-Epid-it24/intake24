@@ -10,8 +10,8 @@ import { i18n } from './i18n.contract';
 import { password } from './password.contract';
 import { portionSize } from './portion-size.contract';
 import { subscription } from './subscription.contract';
-import { survey } from './survey.contract';
 import { surveyRespondent } from './survey-respondent.contract';
+import { survey } from './survey.contract';
 import user from './user';
 
 const c = initContract();

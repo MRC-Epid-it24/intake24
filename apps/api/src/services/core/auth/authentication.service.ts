@@ -6,6 +6,7 @@ import { UnauthorizedError } from '@intake24/api/http/errors';
 import { captcha as captchaCheck } from '@intake24/api/http/rules';
 import type { IoC } from '@intake24/api/ioc';
 import { btoa } from '@intake24/api/util';
+import { supportedAlgorithms } from '@intake24/common-backend';
 import type { Subject } from '@intake24/common/security';
 import { createAmrMethod, surveyRespondent } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
@@ -17,7 +18,6 @@ import type {
   MFAAuthResponse,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
-import { supportedAlgorithms } from '@intake24/common-backend';
 import type { SurveyAttributes, UserPassword } from '@intake24/db';
 
 import { MFADevice, Op, Survey, User } from '@intake24/db';

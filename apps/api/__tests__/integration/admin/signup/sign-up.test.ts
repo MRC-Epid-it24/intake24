@@ -1,8 +1,8 @@
 import request from 'supertest';
 
+import { suite } from '@intake24/api-tests/integration/helpers';
 import securityConfig from '@intake24/api/config/security';
 import ioc from '@intake24/api/ioc';
-import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/sign-up';

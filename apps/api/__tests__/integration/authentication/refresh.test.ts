@@ -1,7 +1,7 @@
 import request from 'supertest';
 
-import securityConfig from '@intake24/api/config/security';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import securityConfig from '@intake24/api/config/security';
 
 export default () => {
   const url = '/api/auth/refresh';

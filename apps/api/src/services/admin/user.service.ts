@@ -3,11 +3,11 @@ import { uniqBy } from 'lodash';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
+import { defaultAlgorithm } from '@intake24/common-backend';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
 import type { UserCustomField as UserCustomFieldInput } from '@intake24/common/types';
 import type { UserInput } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
-import { defaultAlgorithm } from '@intake24/common-backend';
 import type { Transaction, UserPasswordAttributes } from '@intake24/db';
 import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 

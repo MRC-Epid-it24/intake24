@@ -1,7 +1,7 @@
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
 import slugify from 'slugify';
-import uaParser from 'ua-parser-js';
+import { UAParser } from 'ua-parser-js';
 import validator from 'validator';
 
 export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');
@@ -76,7 +76,7 @@ export function getAgentInfo(agent: { name?: string; version?: string }): string
 }
 
 export function getUAInfo(userAgent?: string): string | undefined {
-  const { browser, os } = uaParser(userAgent);
+  const { browser, os } = UAParser(userAgent);
   return [browser, os].map(getAgentInfo).filter(Boolean).join(', ');
 }
 

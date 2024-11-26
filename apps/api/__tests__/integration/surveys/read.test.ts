@@ -1,5 +1,5 @@
-import { publicSurveyEntryResponse } from '@intake24/api/http/responses';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import { publicSurveyEntryResponse } from '@intake24/api/http/responses';
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 
 export default () => {

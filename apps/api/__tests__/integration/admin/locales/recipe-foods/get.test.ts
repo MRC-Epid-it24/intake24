@@ -1,5 +1,5 @@
-import ioc from '@intake24/api/ioc';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import ioc from '@intake24/api/ioc';
 import type { RecipeFoodRequest } from '@intake24/common/types/http/admin';
 
 export default () => {

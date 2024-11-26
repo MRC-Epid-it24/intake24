@@ -3,8 +3,8 @@ import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 
-import asServed from './as-served/index.test';
 import asServedImages from './as-served-images/index.test';
+import asServed from './as-served/index.test';
 import drinkwareSets from './drinkware-sets/index.test';
 import guideImages from './guide-images/index.test';
 import imageMaps from './image-maps/index.test';

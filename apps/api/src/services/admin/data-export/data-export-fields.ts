@@ -2,7 +2,7 @@ import type { FieldInfo } from '@json2csv/plainjs';
 import { differenceInMinutes } from 'date-fns';
 import { orderBy } from 'lodash';
 import stringify from 'safe-stable-stringify';
-import uaParser from 'ua-parser-js';
+import { UAParser } from 'ua-parser-js';
 
 import { externalSources as externalSourceProviders, type Prompt } from '@intake24/common/prompts';
 import { type ExportField as BaseExportField, fromMealTime } from '@intake24/common/surveys';
@@ -172,13 +172,13 @@ function dataExportFields() {
     {
       id: 'userAgent',
       label: 'User Agent',
-      value: ({ food }: ExportRow) => uaParser(food.meal?.submission?.userAgent ?? undefined).ua,
+      value: ({ food }: ExportRow) => UAParser(food.meal?.submission?.userAgent ?? undefined).ua,
     },
     {
       id: 'browser',
       label: 'Browser',
       value: ({ food }: ExportRow) => {
-        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        const uaInfo = UAParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.browser.name, uaInfo.browser.version].filter(Boolean).join(' | ');
       },
     },
@@ -186,7 +186,7 @@ function dataExportFields() {
       id: 'engine',
       label: 'Engine',
       value: ({ food }: ExportRow) => {
-        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        const uaInfo = UAParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.engine.name, uaInfo.engine.version].filter(Boolean).join(' | ');
       },
     },
@@ -194,7 +194,7 @@ function dataExportFields() {
       id: 'device',
       label: 'Device',
       value: ({ food }: ExportRow) => {
-        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        const uaInfo = UAParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.device.model, uaInfo.device.type, uaInfo.device.vendor]
           .filter(Boolean)
           .join(' | ');
@@ -204,7 +204,7 @@ function dataExportFields() {
       id: 'os',
       label: 'OS',
       value: ({ food }: ExportRow) => {
-        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        const uaInfo = UAParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.os.name, uaInfo.os.version].filter(Boolean).join(' | ');
       },
     },
@@ -212,7 +212,7 @@ function dataExportFields() {
       id: 'cpu',
       label: 'CPU',
       value: ({ food }: ExportRow) =>
-        uaParser(food.meal?.submission?.userAgent ?? undefined).cpu.architecture,
+        UAParser(food.meal?.submission?.userAgent ?? undefined).cpu.architecture,
     },
   ];
 

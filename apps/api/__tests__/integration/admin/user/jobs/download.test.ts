@@ -1,7 +1,7 @@
 import request from 'supertest';
 
-import { sleep } from '@intake24/api/util';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import { sleep } from '@intake24/api/util';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 export default () => {

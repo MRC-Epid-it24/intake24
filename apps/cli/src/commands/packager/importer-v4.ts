@@ -24,8 +24,8 @@ import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
-import { Dictionary } from '@intake24/common/types';
 import logger from '@intake24/common-backend/services/logger/logger';
+import { Dictionary } from '@intake24/common/types';
 
 import typeConverters from './types/v4-type-conversions';
 

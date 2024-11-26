@@ -1,9 +1,9 @@
 import ms from 'ms';
 import request from 'supertest';
 
+import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 import { sleep } from '@intake24/api/util';
-import { suite } from '@intake24/api-tests/integration/helpers';
 import { UserPasswordReset } from '@intake24/db';
 
 let dateNowSpy: jest.SpyInstance;

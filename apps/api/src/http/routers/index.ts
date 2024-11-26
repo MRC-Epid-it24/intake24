@@ -21,8 +21,8 @@ import { i18n } from './i18n.router';
 import { password } from './password.router';
 import { portionSize } from './portion-size.router';
 import { subscription } from './subscription.router';
-import { survey } from './survey.router';
 import { surveyRespondent } from './survey-respondent.router';
+import { survey } from './survey.router';
 import user from './user';
 
 const server = initServer();
