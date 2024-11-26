@@ -1,7 +1,6 @@
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
-import { Op } from 'sequelize';
-import { isUUID } from 'validator';
+import { cast, col, Op, where } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
@@ -20,23 +19,24 @@ export function submission() {
         });
 
         const { search } = query;
-
-        const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
-        if (typeof search === 'string' && search) {
-          if (isUUID(search)) {
-            where.id = search;
-          }
-          else {
-            where['$user.aliases.username$'] = {
-              [SurveySubmission.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.substring]:
-            `%${search}%`,
-            };
-          }
-        }
+        const isPostgres = SurveySubmission.sequelize?.getDialect() === 'postgres';
+        const op = isPostgres ? Op.iLike : Op.substring;
+        const value = isPostgres ? `%${search}%` : search;
+        const whereClause: WhereOptions<SurveySubmissionAttributes> = typeof search === 'string' && search
+          ? {
+              [Op.and]: {
+                surveyId,
+                [Op.or]: [
+                  where(cast(col('SurveySubmission.id'), 'text'), op, value),
+                  { '$user.aliases.username$': { [op]: value } },
+                ],
+              },
+            }
+          : { surveyId };
 
         const submissions = await SurveySubmission.paginate({
           query,
-          where,
+          where: whereClause,
           include: [
             {
               association: 'user',

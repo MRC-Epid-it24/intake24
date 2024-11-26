@@ -1,7 +1,6 @@
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
-import { Op } from 'sequelize';
-import { isUUID } from 'validator';
+import { cast, col, Op, where } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
@@ -20,23 +19,24 @@ export function session() {
         });
 
         const { search } = query;
-
-        const where: WhereOptions<UserSurveySessionAttributes> = { surveyId };
-        if (typeof search === 'string' && search) {
-          if (isUUID(search)) {
-            where.id = search;
-          }
-          else {
-            where['$user.aliases.username$'] = {
-              [UserSurveySession.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.substring]:
-                `%${search}%`,
-            };
-          }
-        }
+        const isPostgres = UserSurveySession.sequelize?.getDialect() === 'postgres';
+        const op = isPostgres ? Op.iLike : Op.substring;
+        const value = isPostgres ? `%${search}%` : search;
+        const whereClause: WhereOptions<UserSurveySessionAttributes> = typeof search === 'string' && search
+          ? {
+              [Op.and]: {
+                surveyId,
+                [Op.or]: [
+                  where(cast(col('UserSurveySession.id'), 'text'), op, value),
+                  { '$alias.username$': { [op]: value } },
+                ],
+              },
+            }
+          : { surveyId };
 
         const sessions = await UserSurveySession.paginate({
           query,
-          where,
+          where: whereClause,
           include: [{ association: 'alias', attributes: ['username'], where: { surveyId } }],
           order: [['createdAt', 'ASC']],
           subQuery: false,
