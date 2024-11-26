@@ -237,8 +237,7 @@ import { JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/compon
 import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
 import { cardTypes as cardTypesRef, type DemographicGroup, nutrientRuleTypes, rangeType, sexes } from '@intake24/common/feedback';
-import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
-import type { PhysicalActivityLevelAttributes } from '@intake24/db';
+import type { NutrientTypeResponse, PhysicalActivityLevelAttributes } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 

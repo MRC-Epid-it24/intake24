@@ -21,8 +21,8 @@ import { defineComponent, onMounted, ref } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
 import type { ExportField } from '@intake24/common/surveys';
+import type { Pagination } from '@intake24/common/types/http';
 import type { FoodDatabaseRefs, NutrientTableAttributes } from '@intake24/common/types/http/admin';
-import type { Pagination } from '@intake24/db';
 
 export default defineComponent({
   name: 'DataExportNutrients',

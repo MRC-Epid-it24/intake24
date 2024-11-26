@@ -1,3 +1,4 @@
+import type { Pagination } from '../generic';
 import type { FoodListEntry } from './foods';
 
 import type {
@@ -5,7 +6,6 @@ import type {
   CategoryAttributes,
   CategoryLocalAttributes,
   CategoryPortionSizeMethodCreationAttributes,
-  Pagination,
 } from '@intake24/db';
 
 export type CategoryInput = Pick<CategoryAttributes, 'code' | 'name'> & {

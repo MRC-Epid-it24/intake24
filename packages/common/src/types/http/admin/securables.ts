@@ -2,8 +2,7 @@ import type { UserListEntry } from '.';
 
 import { z } from 'zod';
 
-import type { Pagination } from '@intake24/db';
-import { bigIntString } from '../generic';
+import { bigIntString, type Pagination } from '../generic';
 import { userAttributes } from './users';
 
 export const createUserWithSecurables = z.object({

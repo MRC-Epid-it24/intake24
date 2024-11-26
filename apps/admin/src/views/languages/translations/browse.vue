@@ -75,10 +75,10 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 import { useHttp } from '@intake24/admin/services';
 import type {
   LanguageEntry,
+  LanguageTranslationAttributes,
   LanguageTranslationsResponse,
 } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
-import type { LanguageTranslationAttributes } from '@intake24/db';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';

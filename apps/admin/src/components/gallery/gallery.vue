@@ -80,7 +80,7 @@ import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { resource } from '@intake24/admin/mixins';
 import { useMessages, useResource } from '@intake24/admin/stores';
 import type { Dictionary } from '@intake24/common/types';
-import type { Pagination, PaginationMeta } from '@intake24/db';
+import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({

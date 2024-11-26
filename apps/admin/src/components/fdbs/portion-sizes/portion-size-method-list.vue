@@ -107,7 +107,7 @@ export default defineComponent({
   },
 
   computed: {
-    outputItems(): PortionSizeMethodItem[] {
+    outputItems() {
       return this.items.map(withoutIdAndOrder);
     },
   },

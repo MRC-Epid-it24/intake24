@@ -1,9 +1,10 @@
-import type { AssociatedFood } from './associated-food';
+import type { Pagination } from '../generic';
 
+import type { AssociatedFood } from './associated-food';
 import { z } from 'zod';
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
-import type { UseInRecipeType } from '@intake24/common/types';
 
+import type { UseInRecipeType } from '@intake24/common/types';
 import type {
   AssociatedFoodCreationAttributes,
   CategoryAttributes,
@@ -13,7 +14,6 @@ import type {
   FoodPortionSizeMethodCreationAttributes,
   FoodsLocaleAttributes,
   NutrientTableRecordAttributes,
-  Pagination,
 } from '@intake24/db';
 
 export type InheritableAttributes = {

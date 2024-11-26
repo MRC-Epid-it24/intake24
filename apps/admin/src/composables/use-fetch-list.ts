@@ -3,7 +3,7 @@ import { watchDebounced } from '@vueuse/core';
 import { ref, unref, watch } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
-import type { Pagination } from '@intake24/db';
+import type { Pagination } from '@intake24/common/types/http';
 
 export function useFetchList<T = any>(url: string, id?: string | Ref<string>) {
   const http = useHttp();

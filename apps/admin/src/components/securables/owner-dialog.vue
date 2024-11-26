@@ -72,7 +72,7 @@ import { defineComponent, ref } from 'vue';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
-import type { UserAttributes } from '@intake24/db';
+import type { UserAttributes } from '@intake24/common/types/http/admin';
 
 type OwnerDialogForm = {
   userId: string | null;

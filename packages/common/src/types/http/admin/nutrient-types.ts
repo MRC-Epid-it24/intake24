@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import type { Pagination } from '../generic';
 
-import type { Pagination } from '@intake24/db';
+import { z } from 'zod';
 
 import { nutrientUnitAttributes } from './nutrient-units';
 

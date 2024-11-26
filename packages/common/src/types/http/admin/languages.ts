@@ -1,11 +1,9 @@
+import type { Pagination } from '../generic';
 import { isLocale } from 'validator';
-import { z } from 'zod';
 
+import { z } from 'zod';
 import { recordVisibilities } from '@intake24/common/security';
 import { applications, textDirections } from '@intake24/common/types';
-import type {
-  Pagination,
-} from '@intake24/db';
 import { compareMessageKeys, defaultI18nMessages, validateTranslations } from '@intake24/i18n';
 
 import { userSecurableAttributes } from './securables';

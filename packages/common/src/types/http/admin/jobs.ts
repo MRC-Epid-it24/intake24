@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import type { Pagination } from '../generic';
 
-import type { Pagination } from '@intake24/db';
+import { z } from 'zod';
 
 import { jobTypeParams, jobTypes, userJobs, userJobTypeParams } from '../../jobs';
 import { userAttributes } from './users';

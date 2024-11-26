@@ -15,7 +15,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Subscription, SubscriptionType } from '@intake24/common/types';
+import type { Subscription, SubscriptionType } from '@intake24/common/types';
 
 import { User } from '.';
 import BaseModel from '../model';

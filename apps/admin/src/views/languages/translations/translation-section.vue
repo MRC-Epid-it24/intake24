@@ -19,10 +19,10 @@ import {
   VToolbarTitle,
 } from 'vuetify/components';
 
+import type { LanguageTranslationAttributes } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
-import type { LanguageTranslationAttributes } from '@intake24/db';
-import { type LocaleMessageDictionary, useI18n } from '@intake24/i18n';
 
+import { type LocaleMessageDictionary, useI18n } from '@intake24/i18n';
 import IntersectableSkeleton from './intersectable-skeleton.vue';
 
 export default defineComponent({

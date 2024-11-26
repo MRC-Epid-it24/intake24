@@ -119,6 +119,7 @@ export interface PortionSizeMethodBase {
   description: string;
   useForRecipes: boolean;
   conversionFactor: number;
+  orderBy: string;
 }
 
 export interface AsServedPsm extends PortionSizeMethodBase {

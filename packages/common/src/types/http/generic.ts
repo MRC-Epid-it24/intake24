@@ -1,3 +1,4 @@
+import type { Dictionary } from '../common';
 import { z } from '../../util';
 
 export const bigIntString = z.bigint().or(z.number().or(z.string()).pipe(z.coerce.number().int())).pipe(z.coerce.string());
@@ -40,6 +41,12 @@ export const paginationMeta = z.object({
   to: z.number(),
   total: z.number(),
 });
+export type PaginationMeta = z.infer<typeof paginationMeta>;
+
+export interface Pagination<R = Dictionary> {
+  data: R[];
+  meta: PaginationMeta;
+}
 
 export const multerFile = z.object({
   fieldname: z.string(),

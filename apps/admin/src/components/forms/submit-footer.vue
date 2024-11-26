@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 
 export default defineComponent({
   name: 'SubmitFooter',
@@ -32,7 +32,7 @@ export default defineComponent({
       default: '$save',
     },
     justify: {
-      type: String,
+      type: String as PropType<'center' | 'end' | 'start' | 'space-around' | 'space-between' | 'space-evenly' | 'stretch'>,
       default: 'center',
     },
     label: {

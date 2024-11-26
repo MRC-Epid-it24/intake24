@@ -1,11 +1,11 @@
-import type { FoodPortionSizeMethodCreationAttributes } from '@intake24/db';
+import type { PortionSizeMethod } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 
-export type PortionSizeMethodItem = FoodPortionSizeMethodCreationAttributes;
+export type PortionSizeMethodItem = PortionSizeMethod;
 
-export interface InternalPortionSizeMethodItem extends FoodPortionSizeMethodCreationAttributes {
+export type InternalPortionSizeMethodItem = PortionSizeMethod & {
   _id: string;
-}
+};
 
 export type PortionSizeMethodEvent = {
   index: number;

@@ -111,7 +111,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
 
       const portionSizeRows = await t
         .selectFrom('categoryPortionSizeMethods')
-        .select(['method', 'description', 'useForRecipes', 'conversionFactor', 'parameters'])
+        .select(['method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy', 'parameters'])
         .where('categoryLocalId', '=', categoryLocalsRow.id)
         .execute();
 
@@ -120,6 +120,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
         conversionFactor: row.conversionFactor,
         description: row.description,
         useForRecipes: row.useForRecipes,
+        orderBy: row.orderBy,
         parameters: JSON.parse(row.parameters) /* unsafe! */,
       }));
 

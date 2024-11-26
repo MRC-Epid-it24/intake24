@@ -6,22 +6,7 @@ import { snakeCase } from 'lodash';
 import { col, DataTypes, fn, Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 
-import type { Dictionary } from '@intake24/common/types';
-
-export interface PaginationMeta {
-  from: number;
-  lastPage: number;
-  page: number;
-  path: string;
-  limit: number;
-  to: number;
-  total: number;
-}
-
-export interface Pagination<R = Dictionary> {
-  data: R[];
-  meta: PaginationMeta;
-}
+import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 
 export type PaginateQuery = {
   page?: number;
