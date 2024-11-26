@@ -115,11 +115,12 @@ function fromPackageAssociatedFood(associatedFood: PkgAssociatedFood): Associate
 
 // V4 types are very similar to pkg types at the moment but better to explicitly map
 // them to preserve type safety in case they diverge
-function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod): PortionSizeMethod {
+function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string): PortionSizeMethod {
   const baseFields = {
     description: psm.description,
     conversionFactor: psm.conversionFactor,
     useForRecipes: psm.useForRecipes,
+    orderBy,
   };
 
   switch (psm.method) {
@@ -209,7 +210,7 @@ function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
     altNames: localFood.alternativeNames,
     tags: localFood.tags,
     associatedFoods: localFood.associatedFoods.map(af => fromPackageAssociatedFood(af)),
-    portionSizeMethods: localFood.portionSize.map(psm => fromPackagePortionSizeMethod(psm)),
+    portionSizeMethods: localFood.portionSize.map((psm, idx) => fromPackagePortionSizeMethod(psm, idx.toString())),
     nutrientTableCodes: localFood.nutrientTableCodes,
   };
 }
@@ -219,7 +220,7 @@ function fromPackageLocalCategory(localCategory: PkgLocalCategory): CreateLocalC
     code: localCategory.code,
     version: localCategory.version,
     name: localCategory.localDescription ?? 'Missing description!',
-    portionSizeMethods: localCategory.portionSize.map(psm => fromPackagePortionSizeMethod(psm)),
+    portionSizeMethods: localCategory.portionSize.map((psm, idx) => fromPackagePortionSizeMethod(psm, idx.toString())),
   };
 }
 
