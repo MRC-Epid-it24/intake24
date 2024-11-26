@@ -24,7 +24,7 @@ export const captcha = z
 export const paginationRequest = z.object({
   page: z.coerce.number().int().min(1).optional(),
   limit: z.coerce.number().int().min(1).max(1000).optional(),
-  sort: z.union([z.literal('asc'), z.literal('desc')]).optional(),
+  sort: z.string().regex(/^.+\|(asc|desc)$/).optional(),
   search: z
     .string()
     .max(128)
