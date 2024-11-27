@@ -1,9 +1,9 @@
+/* eslint-disable perfectionist/sort-imports */
 import { createApp } from 'vue';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 import VueGtag from 'vue-gtag';
 
 import pinia from '@intake24/ui/stores/bootstrap';
-
 import App from './app.vue';
 import i18n from './i18n';
 import { auth, loading, module } from './mixins';
@@ -12,6 +12,7 @@ import router from './router';
 import guards from './router/guards';
 import { errorHandler, httpService } from './services';
 import { useAuth } from './stores';
+import { cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui/cookie-consent';
 
 guards(router);
 
@@ -41,6 +42,7 @@ app.use(VueGtag, {
     id: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
   },
 }, router);
+app.use(cookieConsentPlugin, cookieConsentConfig());
 app.use(VueDOMPurifyHTML, {
   i18n: {
     ALLOWED_TAGS: ['b', 'i', 'strong', 'em', 'p', 'u'],

@@ -7,13 +7,6 @@
     "_": "Selamat datang ke Intake24",
     "subtitle": "Intake24 ialah sistem berkomputer sumber terbuka ingatan semula diet, yang dilengkapi oleh pengguna berdasarkan rekod ingatan semula multiple-pass 24 jam.."
   },
-  "legal": {
-    "_": "Hak sah",
-    "copyright": "{name} oleh {team} © {year}",
-    "privacy": "Dasar privasi",
-    "terms": "Syarat penggunaan",
-    "cookies": "Pilihan Cookie"
-  },
   "login": {
     "_": "Daftar masuk",
     "start": "Jom mula",

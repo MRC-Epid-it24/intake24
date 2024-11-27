@@ -1,15 +1,40 @@
+import type { Translation } from 'vanilla-cookieconsent';
 import type { useLocale } from 'vuetify';
+
 import type { HttpClient } from '../types';
+import get from 'lodash/get';
 
-import { computed, onMounted, watch } from 'vue';
+import { computed, onMounted, toRaw, watch } from 'vue';
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
-
 import { defaultMessages, loadAppLanguage, useI18n } from '@intake24/i18n';
+import { cookieConsentConfig, useCookieConsent } from '../cookie-consent';
 import { useApp } from '../stores';
 
 export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: ReturnType<typeof useLocale>) {
   const appStore = useApp();
   const { i18n } = useI18n();
+  const cc = useCookieConsent();
+
+  async function loadCookieConsentLang(lang: string) {
+    const languages = i18n.availableLocales;
+    const { translations } = cc.getConfig('language');
+    const ccLangs = Object.keys(translations);
+
+    for (const item of languages) {
+      if (ccLangs.includes(item))
+        continue;
+
+      const ccTranslation = toRaw(get(i18n.getLocaleMessage(item), 'legal.cookies.consent')) as unknown as (Translation | undefined);
+      if (!ccTranslation)
+        continue;
+
+      translations[item] = ccTranslation;
+    }
+
+    cc.reset();
+    await cc.run(cookieConsentConfig(translations));
+    await cc.setLanguage(lang);
+  }
 
   const fallbackLanguages = computed(() => {
     if (!i18n.fallbackLocale.value)
@@ -70,6 +95,7 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
       if (hasLanguage(lang)) {
         updateAppWithLanguage(lang, isRrl);
         appStore.setLanguage(lang);
+        await loadCookieConsentLang(lang);
         break;
       }
     }
@@ -84,5 +110,8 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
     appStore.setLanguages(data);
 
     await setLanguage(appStore.lang || navigator.language || navigator.userLanguage);
+
+    if (!Object.keys(cc.getConfig('language').translations).length)
+      await loadCookieConsentLang(i18n.locale.value);
   });
 }

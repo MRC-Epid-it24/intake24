@@ -72,12 +72,12 @@
           <v-list-group>
             <template #activator="{ props }">
               <v-list-item v-bind="props">
-                {{ $t('common.legal._') }}
+                {{ $t('legal._') }}
               </v-list-item>
             </template>
             <v-list-item :href="legal.privacy" link target="_blank">
               <v-list-item-title>
-                {{ $t('common.legal.privacy') }}
+                {{ $t('legal.privacy') }}
               </v-list-item-title>
               <template #append>
                 <v-list-item-action>
@@ -87,13 +87,18 @@
             </v-list-item>
             <v-list-item :href="legal.terms" link target="_blank">
               <v-list-item-title>
-                {{ $t('common.legal.terms') }}
+                {{ $t('legal.terms') }}
               </v-list-item-title>
               <template #append>
                 <v-list-item-action>
                   <v-icon icon="$redirect" size="x-small" />
                 </v-list-item-action>
               </template>
+            </v-list-item>
+            <v-list-item href="#" link @click.stop="showCookieConsent">
+              <v-list-item-title>
+                {{ $t('legal.cookies._') }}
+              </v-list-item-title>
             </v-list-item>
           </v-list-group>
         </v-list>
@@ -162,7 +167,7 @@
     <message-box />
     <v-footer v-if="!$vuetify.display.mobile" class="justify-center pa-4 flex-grow-0">
       <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-2">
-        <i18n-t keypath="common.legal.copyright" tag="span">
+        <i18n-t keypath="legal.copyright" tag="span">
           <template #name>
             <a class="text-decoration-none text-primary" :href="legal.home" target="_blank">
               {{ $t('common._') }}
@@ -177,11 +182,15 @@
         </i18n-t>
         <span class="d-none d-md-flex mx-2">|</span>
         <a class="text-decoration-none text-primary" :href="legal.privacy" target="_blank">
-          {{ $t('common.legal.privacy') }}
+          {{ $t('legal.privacy') }}
         </a>
         <span class="d-none d-md-flex mx-2">|</span>
         <a class="text-decoration-none text-primary" :href="legal.terms" target="_blank">
-          {{ $t('common.legal.terms') }}
+          {{ $t('legal.terms') }}
+        </a>
+        <span class="d-none d-md-flex mx-2">|</span>
+        <a class="text-decoration-none text-primary" href="#" @click="showCookieConsent">
+          {{ $t('legal.cookies._') }}
         </a>
       </div>
     </v-footer>
@@ -197,7 +206,7 @@ import { useLocale } from 'vuetify';
 
 import { useI18n } from '@intake24/i18n';
 import { Navigation } from '@intake24/survey/components/layouts';
-import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
+import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useCookieConsent, useLanguage } from '@intake24/ui';
 import { useHttp } from './services';
 import { useApp, useAuth, useSurvey } from './stores';
 
@@ -212,6 +221,7 @@ export default defineComponent({
     const vI18n = useLocale();
     const { i18n: { t } } = useI18n();
     useLanguage('survey', http, vI18n);
+    const cc = useCookieConsent();
 
     const sidebar = ref(false);
 
@@ -225,6 +235,10 @@ export default defineComponent({
     const title = computed(() => t(route.meta?.title ?? 'common._'));
     const windowInnerHeight = computed(() => window.innerHeight);
 
+    const showCookieConsent = () => {
+      cc.showPreferences();
+    };
+
     watch(route, () => {
       document.title = title.value;
     });
@@ -232,6 +246,7 @@ export default defineComponent({
     return {
       appInfo,
       legal,
+      showCookieConsent,
       sidebar,
       windowInnerHeight,
     };

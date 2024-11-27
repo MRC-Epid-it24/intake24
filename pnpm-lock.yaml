@@ -1325,6 +1325,9 @@ importers:
       svg-gauge:
         specifier: ^1.0.7
         version: 1.0.7
+      vanilla-cookieconsent:
+        specifier: ^3.0.1
+        version: 3.0.1
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.2)
@@ -9876,6 +9879,9 @@ packages:
   validator@13.12.0:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
+
+  vanilla-cookieconsent@3.0.1:
+    resolution: {integrity: sha512-gqc4x7O9t1I4xWr7x6/jtQWPr4PZK26SmeA0iyTv1WyoECfAGnu5JEOExmMEP+5Fz66AT9OiCBO3GII4wDQHLw==}
 
   vanilla-jsoneditor@2.1.0:
     resolution: {integrity: sha512-2KXye9BssRr0qo9WiiuIKOtkt2NZKAEWYlBpo7+mcJzEVdGoZOWIWvQ2krgGpFatBP7Nc+0kJG3h+94IEzGvcg==}
@@ -20396,6 +20402,8 @@ snapshots:
       spdx-expression-parse: 3.0.1
 
   validator@13.12.0: {}
+
+  vanilla-cookieconsent@3.0.1: {}
 
   vanilla-jsoneditor@2.1.0(@lezer/common@1.2.3):
     dependencies:

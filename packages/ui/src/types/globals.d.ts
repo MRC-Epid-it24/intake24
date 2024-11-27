@@ -1,3 +1,5 @@
+import type CookieConsent from 'vanilla-cookieconsent';
+
 import type { HttpClient, Permission } from '.';
 
 declare module 'vue' {
@@ -12,6 +14,8 @@ declare module 'vue' {
 
     // moduleMixin
     module: string;
+
+    $cc: CookieConsent;
   }
 }
 

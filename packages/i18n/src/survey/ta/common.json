@@ -7,13 +7,6 @@
     "_": "Intake24க்கு வரவேற்கிறோம்",
     "subtitle": "Intake2 என்பது மல்டிபிள் பாஸ் 24 மணி நேர நினைவுட்டு  அடிப்படையிலான ஒரு திறந்த மூல சுய-நிறைவு செய்யப்பட்ட கணினிமயமாக்கப்பட்ட உணவுமுறை திரும்ப மென்பொருள் அமைப்பாகும்."
   },
-  "legal": {
-    "_": "Legal",
-    "copyright": "{name} by {team} © {year}",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Use",
-    "cookies": "Cookie Preferences"
-  },
   "login": {
     "_": "உள்நுழைக",
     "start": "Let's get started",

@@ -7,13 +7,6 @@
     "_": "Bienvenue sur Intake24",
     "subtitle": "Intake24 est un outil utilisé dans le cadre d'études pour collecter des informations sur ce que les gens mangent et boivent."
   },
-  "legal": {
-    "_": "Crédits",
-    "copyright": "{name} par {team} © {year}",
-    "privacy": "Politique de Confidentialité",
-    "terms": "Conditions d'Utilisation",
-    "cookies": "Préférences pour les cookies"
-  },
   "login": {
     "_": "Se connecter",
     "start": "Commençons",

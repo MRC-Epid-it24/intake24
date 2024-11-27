@@ -19,7 +19,7 @@
         "../common/src/*"
       ],
       "@intake24/ui/*": [
-        "src/*"
+        "./src/*"
       ],
       "@intake24/*": [
         "../*/src"

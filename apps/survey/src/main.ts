@@ -1,14 +1,16 @@
+/* eslint-disable perfectionist/sort-imports */
 import { createApp } from 'vue';
 import VueGtag from 'vue-gtag';
 
 import pinia from '@intake24/ui/stores/bootstrap';
-
 import App from './app.vue';
 import i18n from './i18n';
 import { loading } from './mixins';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import { errorHandler, httpService } from './services';
+import { cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui';
+
 import { useAuth } from './stores';
 
 const app = createApp(App);
@@ -33,6 +35,7 @@ app.use(VueGtag, {
     id: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
   },
 }, router);
+app.use(cookieConsentPlugin, cookieConsentConfig());
 
 app.mount('#app');
 
