@@ -46,6 +46,10 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
     promptStore.clearState(getFoodOrMealId(), props.prompt.id);
   };
 
+  const clearStoredStateById = (foodOrMealId: string) => {
+    promptStore.clearState(foodOrMealId, props.prompt.id);
+  };
+
   const action = (type: string, ...args: [id?: string, params?: object]) => {
     if (type === 'next' && commitAnswer)
       commitAnswer();
@@ -90,6 +94,7 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
     getFoodOrMealId,
     update,
     clearStoredState,
+    clearStoredStateById,
     action,
     actionPortionSize,
     commitPortionSize,

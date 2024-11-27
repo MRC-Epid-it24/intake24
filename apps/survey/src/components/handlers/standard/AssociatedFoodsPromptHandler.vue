@@ -83,7 +83,7 @@ export default defineComponent({
 
     const associatedFoodPrompts = computed(() => food().data.associatedFoodPrompts);
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
+    const { state, update, clearStoredStateById } = usePromptHandlerStore(props, ctx, getInitialState);
 
     async function fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
       // TODO: Show loading
@@ -275,7 +275,7 @@ export default defineComponent({
 
       processLinkAsMain(foodId);
 
-      clearStoredState();
+      clearStoredStateById(foodId);
 
       ctx.emit('action', 'next');
     }

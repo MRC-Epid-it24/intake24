@@ -50,6 +50,9 @@ export default class DynamicRecall {
   // to the first food/meal for the next pass.
   private resetSelectionOnFreeEntryComplete() {
     this.store.$onAction((context) => {
+      if (context.name === 'setSelection')
+        return;
+
       const store = context.store;
       const survey = store.$state.data;
       const completeBefore = surveyFreeEntryComplete(survey);
@@ -67,6 +70,9 @@ export default class DynamicRecall {
   // to the first food for next pass such as the associated foods prompts.
   private resetSelectionOnPortionSizeComplete() {
     this.store.$onAction((context) => {
+      if (context.name === 'setSelection')
+        return;
+
       const store = context.store;
       const survey = store.$state.data;
 
@@ -109,6 +115,9 @@ export default class DynamicRecall {
   // deferredPromptsEnabled becomes true.
   private registerDeferredPromptsCheck() {
     this.store.$onAction((context) => {
+      if (context.name === 'setSelection')
+        return;
+
       const store = context.store;
       const enabledBefore = this.promptManager.deferredPromptsEnabled;
 
