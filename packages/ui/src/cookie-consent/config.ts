@@ -1,4 +1,25 @@
 import type { CookieConsentConfig } from 'vanilla-cookieconsent';
+import { bootstrap, optIn, optOut, type PluginOptions, setOptions } from 'vue-gtag';
+
+export function gTagConfig(): PluginOptions {
+  return {
+    appName: import.meta.env.VITE_APP_NAME,
+    config: {
+      id: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
+    },
+  };
+}
+
+async function toggleGA(enabled: boolean) {
+  if (!enabled) {
+    optOut();
+    return;
+  }
+
+  optIn();
+  setOptions(gTagConfig());
+  await bootstrap();
+}
 
 export function cookieConsentConfig(translations: CookieConsentConfig['language']['translations'] = {}): CookieConsentConfig {
   return ({
@@ -19,6 +40,12 @@ export function cookieConsentConfig(translations: CookieConsentConfig['language'
     language: {
       default: 'en',
       translations,
+    },
+    onChange: ({ cookie }) => {
+      toggleGA(cookie.categories.includes('analytics'));
+    },
+    onFirstConsent: ({ cookie }) => {
+      toggleGA(cookie.categories.includes('analytics'));
     },
   });
 }

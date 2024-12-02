@@ -17,6 +17,11 @@ interface ImportMetaEnv {
   readonly VITE_STRICH_KEY: string;
   readonly VITE_WEBPUSH_PUBLIC_KEY: string;
 
+  readonly VITE_LEGAL_HOME: string;
+  readonly VITE_LEGAL_COPYRIGHT: string;
+  readonly VITE_LEGAL_PRIVACY: string;
+  readonly VITE_LEGAL_TERMS: string;
+
 }
 
 interface ImportMeta {

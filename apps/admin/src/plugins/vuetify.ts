@@ -107,6 +107,7 @@ export default createVuetify({
       mobile: 'fas fa-mobile-screen',
       options: 'fas fa-ellipsis-vertical',
       read: 'far fa-file',
+      redirect: 'fas fa-up-right-from-square',
       search: 'fas fa-magnifying-glass',
       save: 'fas fa-save',
       sync: 'fas fa-sync',

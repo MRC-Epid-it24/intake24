@@ -27,14 +27,7 @@ app.use(router);
 app.use(pinia);
 app.use(i18n);
 app.use(vuetify);
-app.use(VueGtag, {
-  enabled: !!import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
-  bootstrap: !!import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
-  appName: import.meta.env.VITE_APP_NAME,
-  config: {
-    id: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
-  },
-}, router);
+app.use(VueGtag, { bootstrap: false }, router);
 app.use(cookieConsentPlugin, cookieConsentConfig());
 
 app.mount('#app');

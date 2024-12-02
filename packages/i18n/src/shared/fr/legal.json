@@ -1,6 +1,6 @@
 {
   "_": "Crédits",
-  "copyright": "{name} par {team} © {year}",
+  "copyright": "{name} © {team} {year}",
   "privacy": "Politique de Confidentialité",
   "terms": "Conditions d'Utilisation",
   "cookies": {
@@ -24,7 +24,7 @@
             "description": "Intake24 uses <strong>necessary cookies</strong> for the proper functioning of the website. <strong>Analytics & statistical</strong> cookies help us to understand how visitors use the websites to improve the services offered."
           },
           {
-            "title": "Necessary cookies",
+            "title": "Necessary cookies <span class=\"pm__badge\">Always Enabled</span>",
             "description": "Cookies that are strictly necessary for the proper functioning of the website.",
             "linkedCategory": "necessary",
             "cookieTable": {

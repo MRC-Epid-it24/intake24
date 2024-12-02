@@ -80,6 +80,9 @@
         name="system"
         :resources="resources.system"
       />
+      <template #append>
+        <app-nav-footer />
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar v-if="loggedIn" color="primary">
@@ -110,7 +113,6 @@
         {{ $t('common.logout.text') }}
       </confirm-dialog>
     </v-app-bar>
-
     <v-main>
       <v-container :class="{ 'pa-0': $vuetify.display.mobile }" fluid>
         <v-breadcrumbs v-if="breadcrumbs.length" class="px-1 py-2" :items="breadcrumbs">
@@ -123,7 +125,7 @@
     </v-main>
     <service-worker />
     <message-box />
-    <!-- <v-footer app> </v-footer> -->
+    <app-footer />
   </v-app>
 </template>
 
@@ -141,7 +143,7 @@ import resources from '@intake24/admin/router/resources';
 import { useApp, useAuth, useEntry, useUser } from '@intake24/admin/stores';
 import { iconWhite } from '@intake24/common/theme/assets';
 import type { Dictionary } from '@intake24/common/types';
-import { ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
+import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 
 import { useHttp } from './services';
 
@@ -157,7 +159,7 @@ type Breadcrumbs = {
 export default defineComponent({
   name: 'App',
 
-  components: { ConfirmDialog, Loader, MenuTree, MessageBox, ServiceWorker },
+  components: { AppFooter, AppNavFooter, ConfirmDialog, Loader, MenuTree, MessageBox, ServiceWorker },
 
   mixins: [webPush],
 
@@ -213,10 +215,6 @@ export default defineComponent({
       },
       immediate: true,
     },
-  },
-
-  async created() {
-    this.$http.init(this.$router, useAuth);
   },
 
   async mounted() {
