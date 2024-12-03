@@ -12,12 +12,16 @@
     "suspended": "数据收集已暂停。",
     "completed": "数据收集已完成。"
   },
-  "openAccess": {
-    "_": "开放获取研究",
-    "none": {
-      "_": "没有开放获取研究",
-      "subtitle": "目前没有可用的开放获取研究。"
-    }
+  "participant": {
+    "_": "Are you a participant?",
+    "subtitle": "You have landed on the main page for Intake24.",
+    "link": "To access Intake24 you will need your <strong>own survey link</strong>.",
+    "info": "<p>If you have been invited to take part in an Intake24 survey you should have been provided with a link.</p><p>Please check your invitation to take part. If you are unsure, please contact your research study team.</p>"
+  },
+  "visitor": {
+    "_": "Are you a visitor?",
+    "subtitle": "You can try our demo survey!",
+    "try": "Try demo now!"
   },
   "generateUser": {
     "400": "提供的验证码无效。",
@@ -26,6 +30,7 @@
     "429": "刚刚生成新用户，请稍后重试。",
     "_": "生成访问权限",
     "subtitle": "这是开放获取研究，您可以免费访问。",
+    "noAccount": "No account?",
     "link": "link",
     "info1": "Select 'Generate access' to generate new credentials. Note down these credentials if you would like to resume later.",
     "info2": "This survey will take approximately 15 minutes.",

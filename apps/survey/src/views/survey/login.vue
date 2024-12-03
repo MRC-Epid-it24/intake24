@@ -67,7 +67,7 @@
       <template v-if="isOpenAccess">
         <v-divider />
         <v-card-title class="text-h3 font-weight-medium text-center mt-4">
-          {{ `No account?` }}
+          {{ $t('survey.generateUser.noAccount') }}
         </v-card-title>
         <v-card-subtitle class="d-flex justify-center font-weight-medium px-6 pt-4">
           {{ $t('survey.generateUser.subtitle') }}

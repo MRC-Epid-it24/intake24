@@ -8,7 +8,9 @@
       >
         <div class="d-flex justify-center align-center pt-4">
           <slot name="logo">
-            <v-avatar v-if="hasIcon" :image="iconFile" rounded="0" />
+            <v-avatar v-if="hasIcon" rounded="0">
+              <v-img :cover="false" :src="iconFile" />
+            </v-avatar>
           </slot>
           <slot name="title">
             <v-card-title class="text-h2 font-weight-medium justify-center">
@@ -17,9 +19,9 @@
           </slot>
         </div>
         <slot name="subtitle">
-          <v-card-subtitle v-if="subtitle" class="text-center font-weight-medium px-6 pt-4 pb-0">
+          <div v-if="subtitle" class="text-subtitle-2 text-center font-weight-medium pa-3 pb-0 opacity-70">
             {{ subtitle }}
-          </v-card-subtitle>
+          </div>
         </slot>
         <slot />
       </v-card>

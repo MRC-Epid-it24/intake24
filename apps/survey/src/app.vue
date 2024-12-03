@@ -67,7 +67,7 @@
             {{ $t('common.logout.text') }}
           </confirm-dialog>
         </div>
-        <app-nav-footer />
+        <app-nav-footer :contact="showContact" />
       </template>
     </v-navigation-drawer>
     <v-app-bar color="primary" flat scroll-behavior="hide">
@@ -127,14 +127,14 @@
     />
     <service-worker />
     <message-box />
-    <app-footer />
+    <app-footer :contact="showContact" />
   </v-app>
 </template>
 
 <script lang="ts">
 import { mapState } from 'pinia';
 import { computed, defineComponent, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { useLocale } from 'vuetify';
 
@@ -152,6 +152,7 @@ export default defineComponent({
   setup() {
     const http = useHttp();
     const route = useRoute();
+    const router = useRouter();
     const vI18n = useLocale();
     const { i18n: { t } } = useI18n();
     useLanguage('survey', http, vI18n);
@@ -161,12 +162,30 @@ export default defineComponent({
     const title = computed(() => t(route.meta?.title ?? 'common._'));
     const windowInnerHeight = computed(() => window.innerHeight);
 
+    const surveyId = computed(() => route.params.surveyId.toString());
+    const showContact = computed(() => route.name === 'home');
+
+    function toggleSidebar() {
+      sidebar.value = !sidebar.value;
+    };
+
+    async function logout() {
+      await useAuth().logout(true);
+      await router.push(
+        surveyId.value ? { name: 'survey-login', params: { surveyId: surveyId.value } } : { name: 'home' },
+      );
+    };
+
     watch(title, () => {
       document.title = title.value;
     });
 
     return {
+      logout,
+      showContact,
       sidebar,
+      surveyId,
+      toggleSidebar,
       windowInnerHeight,
     };
   },
@@ -181,26 +200,8 @@ export default defineComponent({
       userName: state => state.user?.name,
     }),
 
-    surveyId(): string {
-      return this.$route.params.surveyId;
-    },
-
     showNav(): boolean {
       return this.loggedIn && !!this.surveyId && this.$route.name !== 'survey-recall';
-    },
-  },
-
-  methods: {
-    toggleSidebar() {
-      this.sidebar = !this.sidebar;
-    },
-
-    async logout() {
-      await useAuth().logout(true);
-      const { surveyId } = this;
-      await this.$router.push(
-        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' },
-      );
     },
   },
 });

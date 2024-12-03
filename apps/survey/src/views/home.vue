@@ -4,44 +4,45 @@
       :subtitle="$t('common.welcome.subtitle')"
       :title="$t('common._')"
     >
-      <v-divider class="mt-4" />
-      <v-card-title class="font-weight-medium">
-        {{ $t('survey.openAccess._') }}
-      </v-card-title>
-      <image-placeholder v-if="isLoading" class="pa-8" />
-      <v-list v-else-if="surveys.length">
-        <template v-for="(survey, idx) in surveys" :key="survey.id">
-          <v-list-item
-            :to="{ name: 'survey-login', params: { surveyId: survey.slug } }"
+      <v-card-text class="d-flex flex-column ga-4 px-6 pt-0 pb-6">
+        <v-divider class="mt-4" />
+        <div class="text-h3 font-weight-medium text-center">
+          {{ $t('survey.participant._') }}
+        </div>
+        <div class="text-subtitle-2 text-center font-weight-medium opacity-70">
+          {{ $t('survey.participant.subtitle') }}
+        </div>
+        <v-alert type="info">
+          <div v-html="$t('survey.participant.link')" />
+        </v-alert>
+        <div v-html="$t('survey.participant.info')" />
+        <image-placeholder v-if="isLoading" />
+        <template v-if="hasDemo">
+          <v-divider />
+          <div class="text-h3 font-weight-medium text-center">
+            {{ $t('survey.visitor._') }}
+          </div>
+          <div class="text-subtitle-2 text-center font-weight-medium opacity-70">
+            {{ $t('survey.visitor.subtitle') }}
+          </div>
+          <v-btn
+            block
+            color="accent"
+            rounded
+            size="x-large"
+            :to="{ name: 'survey-generate-user', params: { surveyId: 'demo' } }"
+            variant="outlined"
           >
-            <template #prepend>
-              <v-icon>fas fa-square-poll-vertical</v-icon>
-            </template>
-            <v-list-item-title>{{ survey.name }}</v-list-item-title>
-            <template #append>
-              <v-icon>fas fa-arrow-up-right-from-square</v-icon>
-            </template>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < surveys.length" :key="`div-${survey.id}`" />
+            {{ $t('survey.visitor.try') }}
+          </v-btn>
         </template>
-      </v-list>
-      <v-list v-else disabled>
-        <v-list-item>
-          <template #prepend>
-            <v-icon>fas fa-ban</v-icon>
-          </template>
-          <v-list-item-title>{{ $t('survey.openAccess.none._') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ $t('survey.openAccess.none.subtitle') }}
-          </v-list-item-subtitle>
-        </v-list-item>
-      </v-list>
+      </v-card-text>
     </app-entry-screen>
   </v-container>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
@@ -51,47 +52,43 @@ import { AppEntryScreen } from '@intake24/ui/components';
 import { surveyService } from '../services';
 import { useAuth, useUser } from '../stores';
 
-export default defineComponent({
+defineOptions({
   name: 'AppHome',
+});
 
-  components: { AppEntryScreen, ImagePlaceholder },
+const auth = useAuth();
+const router = useRouter();
 
-  setup() {
-    const isLoading = ref(false);
-    const surveys = ref<PublicSurveyEntry[]>([]);
-    const auth = useAuth();
-    const router = useRouter();
+const isLoading = ref(false);
+const surveys = ref<PublicSurveyEntry[]>([]);
+const hasDemo = computed(() => surveys.value.find(({ slug }) => slug === 'demo'));
 
-    const fetchSurveyPublicInfo = async () => {
-      isLoading.value = true;
+async function fetchSurveyPublicInfo() {
+  isLoading.value = true;
 
-      try {
-        surveys.value = await surveyService.surveyPublicList();
-      }
-      finally {
-        isLoading.value = false;
-      }
-    };
+  try {
+    surveys.value = await surveyService.surveyPublicList();
+  }
+  finally {
+    isLoading.value = false;
+  }
+}
 
-    const tryLoggingIn = async () => {
-      if (!auth.loggedIn)
-        await auth.refresh(false);
-      if (!auth.loggedIn)
-        return;
+async function tryLoggingIn() {
+  if (!auth.loggedIn)
+    await auth.refresh(false);
+  if (!auth.loggedIn)
+    return;
 
-      const surveyId = useUser().profile?.surveyId;
-      if (!surveyId)
-        return;
+  const surveyId = useUser().profile?.surveyId;
+  if (!surveyId)
+    return;
 
-      await router.push({ name: 'survey-home', params: { surveyId } });
-    };
+  await router.push({ name: 'survey-home', params: { surveyId } });
+}
 
-    onMounted(async () => {
-      await tryLoggingIn();
-      await fetchSurveyPublicInfo();
-    });
-
-    return { isLoading, surveys };
-  },
+onMounted(async () => {
+  await tryLoggingIn();
+  await fetchSurveyPublicInfo();
 });
 </script>

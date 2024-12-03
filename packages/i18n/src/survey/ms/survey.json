@@ -12,12 +12,16 @@
     "suspended": "Pengumpulan data telah dihentikan.",
     "completed": "Pengumpulan data telah lengkap."
   },
-  "openAccess": {
-    "_": "Kajian open access",
-    "none": {
-      "_": "Tiada kajian open access",
-      "subtitle": "Tiada sebarang kajian open access buat masa ini."
-    }
+  "participant": {
+    "_": "Are you a participant?",
+    "subtitle": "You have landed on the main page for Intake24.",
+    "link": "To access Intake24 you will need your <strong>own survey link</strong>.",
+    "info": "<p>If you have been invited to take part in an Intake24 survey you should have been provided with a link.</p><p>Please check your invitation to take part. If you are unsure, please contact your research study team.</p>"
+  },
+  "visitor": {
+    "_": "Are you a visitor?",
+    "subtitle": "You can try our demo survey!",
+    "try": "Try demo now!"
   },
   "generateUser": {
     "400": "Imej keselamatan captcha yang diberikan tidak sah.",
@@ -26,6 +30,7 @@
     "429": "Pengguna Baharu baru sahaja dijana, sila cuba semula sebentar lagi.",
     "_": "Jana akses",
     "subtitle": "Ini adalah kajian open access, anda boleh mengakses secara percuma.",
+    "noAccount": "No account?",
     "link": "link",
     "info1": "Select 'Generate access' to generate new credentials. Note down these credentials if you would like to resume later.",
     "info2": "This survey will take approximately 15 minutes.",

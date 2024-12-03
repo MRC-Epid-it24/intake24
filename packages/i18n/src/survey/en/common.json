@@ -5,7 +5,7 @@
   "navigation": "Navigation",
   "welcome": {
     "_": "Welcome to Intake24",
-    "subtitle": "Intake24 is an open-source self-completed computerised dietary recall system based on multiple-pass 24-hour recall."
+    "subtitle": "Intake24 is an open-source computerised dietary assessment system based on the multiple pass 24-hour recall."
   },
   "login": {
     "_": "Sign in",
