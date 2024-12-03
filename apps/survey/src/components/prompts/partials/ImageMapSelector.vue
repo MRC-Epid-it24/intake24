@@ -155,7 +155,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@use 'src/scss/variables';
+@use '@intake24/survey/scss/variables';
 
 .guide-drawer {
   position: relative;

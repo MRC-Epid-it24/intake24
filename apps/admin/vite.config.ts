@@ -161,7 +161,7 @@ export default defineConfig(({ mode }) => {
           cleanupOutdatedCaches: true,
           globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
           importScripts: ['js/web-push.js'],
-          maximumFileSizeToCacheInBytes: 3000000,
+          maximumFileSizeToCacheInBytes: 3500000,
         },
       }),
     ].filter(Boolean),

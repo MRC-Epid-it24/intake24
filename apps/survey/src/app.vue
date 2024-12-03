@@ -207,7 +207,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use './scss/app.scss';
+@use '@intake24/survey/scss/app.scss';
 
 .app-bar-survey-info {
   background-color: #ffffff;

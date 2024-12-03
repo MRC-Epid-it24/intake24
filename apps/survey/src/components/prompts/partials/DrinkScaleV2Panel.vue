@@ -332,7 +332,7 @@ watch(
 </script>
 
 <style lang="scss">
-@use 'src/scss/variables';
+@use '@intake24/survey/scss/variables';
 
 .drink-scale-wrapper__v2 {
   display: flex;

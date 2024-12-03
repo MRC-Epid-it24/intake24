@@ -307,5 +307,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use './scss/app.scss';
+@use '@intake24/admin/scss/app.scss';
 </style>

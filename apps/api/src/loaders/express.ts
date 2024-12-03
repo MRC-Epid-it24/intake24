@@ -3,7 +3,7 @@ import type { Express } from 'express';
 import path from 'node:path';
 import { json, urlencoded } from 'body-parser';
 import CleanCSS from 'clean-css';
-import RedisStore from 'connect-redis';
+import { RedisStore } from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import { pick } from 'lodash';

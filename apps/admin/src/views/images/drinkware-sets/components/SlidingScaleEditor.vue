@@ -365,7 +365,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use 'src/scss/variables';
+@use '@intake24/admin/scss/variables';
 
 .wrap-actions {
   flex-wrap: wrap;
