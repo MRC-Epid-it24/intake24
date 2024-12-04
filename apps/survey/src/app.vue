@@ -162,7 +162,7 @@ export default defineComponent({
     const title = computed(() => t(route.meta?.title ?? 'common._'));
     const windowInnerHeight = computed(() => window.innerHeight);
 
-    const surveyId = computed(() => route.params.surveyId.toString());
+    const surveyId = computed<string | undefined>(() => route.params.surveyId?.toString());
     const showContact = computed(() => route.name === 'home');
 
     function toggleSidebar() {
