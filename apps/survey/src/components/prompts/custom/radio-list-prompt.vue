@@ -16,10 +16,11 @@
           <v-radio
             v-for="option in localeOptions"
             :key="option.value"
+            class="my-1 selection-control__start"
             :label="option.label"
             :value="option.value"
           />
-          <div v-if="prompt.other" class="d-flex flex-row align-center">
+          <div v-if="prompt.other" class="d-flex flex-row align-center my-1">
             <v-radio class="flex-grow-0" hide-details value="other" />
             <v-text-field
               v-model.trim="otherValue"
@@ -100,4 +101,10 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.selection-control__start {
+  .v-selection-control__wrapper {
+    align-self: flex-start;
+  }
+}
+</style>
