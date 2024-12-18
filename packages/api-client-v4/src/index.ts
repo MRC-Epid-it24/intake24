@@ -6,6 +6,7 @@ import { AsServedApiV4 } from './as-served';
 import { BaseClientV4 } from './base-client-v4';
 import { CategoriesApiV4 } from './categories';
 import { DrinkwareApiV4, DrinkwareScaleUpdate } from './drinkware';
+import { FoodDatabasesApiV4 } from './fdbs';
 import { FoodsApiV4 } from './foods';
 import { GuideImageApiV4 } from './guide-images';
 import { ImageMapApiV4 } from './image-maps';
@@ -21,6 +22,7 @@ export class ApiClientV4 {
   public readonly baseClient: BaseClientV4;
   public readonly locales: LocalesApiV4;
   public readonly foods: FoodsApiV4;
+  public readonly fdbs: FoodDatabasesApiV4;
   public readonly categories: CategoriesApiV4;
   public readonly nutrientTables: NutrientTablesApiV4;
   public readonly portionSize: {
@@ -34,6 +36,7 @@ export class ApiClientV4 {
     this.baseClient = new BaseClientV4(logger, options);
     this.locales = new LocalesApiV4(this.baseClient);
     this.foods = new FoodsApiV4(this.baseClient);
+    this.fdbs = new FoodDatabasesApiV4(this.baseClient);
     this.categories = new CategoriesApiV4(this.baseClient);
     this.nutrientTables = new NutrientTablesApiV4(this.baseClient);
     this.portionSize = {
