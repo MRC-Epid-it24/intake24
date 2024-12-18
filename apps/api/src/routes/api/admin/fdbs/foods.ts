@@ -13,6 +13,12 @@ export default () => {
     .post(validation.store, wrapAsync(adminFoodController.store))
     .get(validation.browse, wrapAsync(adminFoodController.browse));
 
+  // This is not very elegant because /by-code potentially clashes with /:foodId, but
+  // since food ids are numbers this is fine
+  router
+    .route('/by-code/:foodCode')
+    .get(wrapAsync(adminFoodController.readByCode));
+
   router
     .route('/:foodId')
     .get(wrapAsync(adminFoodController.read))
