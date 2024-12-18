@@ -51,6 +51,16 @@ function localFoodsController({
     res.json(instance);
   };
 
+  const readEnabledFoods = async (req: Request, res: Response): Promise<void> => {
+    const { aclService } = req.scope.cradle;
+
+    if (!(await aclService.hasPermission('fdbs:read')))
+      throw new ForbiddenError();
+    const enabledFoods = await localFoodsService.readEnabledFoods(req.params.localeId);
+    res.status(HttpStatusCode.Ok);
+    res.json({ enabledFoods });
+  };
+
   const updateEnabledFoods = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
@@ -65,6 +75,7 @@ function localFoodsController({
   return {
     read,
     store,
+    readEnabledFoods,
     updateEnabledFoods,
   };
 }

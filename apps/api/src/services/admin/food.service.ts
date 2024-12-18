@@ -44,11 +44,11 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     return FoodLocal.paginate({ query, transform: foodsResponse, ...options });
   };
 
-  const getFood = async (foodLocalId: string, localeCode?: string) => {
+  const getFoodImpl = async (foodId: { id: string } | { foodCode: string }, localeCode?: string) => {
     const where = localeCode ? { localeId: localeCode } : {};
 
     return FoodLocal.findOne({
-      where: { ...where, id: foodLocalId },
+      where: { ...where, ...foodId },
       include: [
         {
           association: 'main',
@@ -82,6 +82,10 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       ],
     });
   };
+
+  const getFoodByCode = async (foodCode: string, localeCode?: string) => getFoodImpl({ foodCode }, localeCode);
+
+  const getFood = async (foodLocalId: string, localeCode?: string) => getFoodImpl({ id: foodLocalId }, localeCode);
 
   const updatePortionSizeMethods = async (
     foodLocalId: string,
@@ -374,6 +378,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
   return {
     browseFoods,
     getFood,
+    getFoodByCode,
     createFood,
     updateFood,
     copyFood,
