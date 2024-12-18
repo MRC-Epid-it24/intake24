@@ -4,8 +4,8 @@ import './bootstrap';
 import { Argument, Command, Option } from 'commander';
 
 import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
-
 import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+import buildUaeLocaleCommand from './commands/uae/build-uae-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
 import pkg from '../package.json';
@@ -18,6 +18,7 @@ import {
   generateVapidKeys,
   hashPassword,
   packageExportV3,
+  packageExportV4,
   packageImportV4,
   searchTest,
 } from './commands';
@@ -98,7 +99,7 @@ async function run() {
         case 'v3':
           return await packageExportV3(version, options);
         case 'v4':
-          throw new Error('Not implemented');
+          return await packageExportV4(version, options);
         default:
           throw new Error(`Unexpected version option: ${version}`);
       }
@@ -161,6 +162,24 @@ async function run() {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (options) => {
       await buildFrAlbaneLocaleCommand(options);
+    });
+
+  program
+    .command('build-uae')
+    .description('Build UAE (NYUAD) locale')
+    .requiredOption('-sc, --source-locale-code [source locale code]', 'Source locale code')
+    .requiredOption('-s, --source-path [source path]', 'Source package directory')
+    .requiredOption('-pc, --prototype-locale-code [prototype locale code]', 'Prototype locale code')
+    .requiredOption('-p, --prototype-path [prototype path]', 'Prototype package directory')
+    .requiredOption('-fc, --fallback-locale-code [fallback locale code]', 'Fallback locale code')
+    .requiredOption('-f, --fallback-path [prototype path]', 'Fallback package directory')
+    .requiredOption('-f2c, --fallback2-locale-code [fallback locale code]', 'Fallback 2 locale code')
+    .requiredOption('-f2, --fallback2-path [prototype path]', 'Fallback 2 package directory')
+    .requiredOption('-f3c, --fallback3-locale-code [fallback locale code]', 'Fallback 3 locale code')
+    .requiredOption('-f3, --fallback3-path [prototype path]', 'Fallback 3 package directory')
+    .requiredOption('-o, --output-path [output path]', 'Output package directory')
+    .action(async (options) => {
+      await buildUaeLocaleCommand(options);
     });
 
   const volumeMethodOption = new Option('-m, --volume-method [volume-method]', 'Volume estimation method')

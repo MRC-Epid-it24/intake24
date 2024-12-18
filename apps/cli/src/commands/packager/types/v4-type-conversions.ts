@@ -3,15 +3,24 @@ import type {
   PkgLocalCategory,
 } from '@intake24/cli/commands/packager/types/categories';
 import type {
+  PkgAsServedPsm,
   PkgAssociatedFood,
+  PkgCerealPsm,
+  PkgDrinkScalePsm,
   PkgGlobalFood,
+  PkgGuideImagePsm,
+  PkgInheritableAttributes,
   PkgLocalFood,
+  PkgMilkInHotDrinkPsm,
+  PkgMilkOnCerealPsm,
+  PkgPizzaPsm,
   PkgPortionSizeMethod,
+  PkgStandardPortionPsm,
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgImageMapObject } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
-import type { PortionSizeMethod } from '@intake24/common/surveys';
+import type { AsServedPsm, CerealPsm, DrinkScalePsm, GuideImagePsm, MilkInHotDrinkPsm, MilkOnCerealPsm, PizzaPsm, PortionSizeMethod, StandardPortionPsm } from '@intake24/common/surveys';
 import type { UseInRecipeType } from '@intake24/common/types';
 import { useInRecipeTypes } from '@intake24/common/types';
 import type {
@@ -19,13 +28,17 @@ import type {
   CreateGlobalFoodRequest,
   CreateLocalCategoryRequest,
   CreateLocalFoodRequest,
+  FoodEntry,
+  FoodLocalEntry,
   GuideImageInputObject,
   ImageMapEntryObject,
+  LocaleEntry,
   LocaleRequest,
   NutrientTableRecordRequest,
   NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
+import { AssociatedFoodAttributes, FoodPortionSizeMethodAttributes } from '@intake24/db';
 
 function fromPackageImageMapObjects(
   objects: Record<string, PkgImageMapObject>,
@@ -243,6 +256,190 @@ function fromPackageNutrientTableRecords(nutrientTable: PkgNutrientTable): Nutri
   return nutrientTable.records;
 }
 
+function packageAssociatedFoodPrompt(language: string, assocFood: AssociatedFoodAttributes): PkgAssociatedFood {
+  const genericNameFiltered: Record<string, string> = {};
+
+  for (const [k, v] of Object.entries(assocFood.genericName)) {
+    if (v !== null)
+      genericNameFiltered[k] = v;
+  }
+
+  const promptTextFiltered: Record<string, string> = {};
+
+  for (const [k, v] of Object.entries(assocFood.text)) {
+    if (v !== null)
+      promptTextFiltered[k] = v;
+  }
+
+  return {
+    foodCode: assocFood.associatedFoodCode ?? undefined,
+    categoryCode: assocFood.associatedCategoryCode ?? undefined,
+    genericName: genericNameFiltered,
+    promptText: promptTextFiltered,
+    linkAsMain: assocFood.linkAsMain,
+  };
+}
+
+function packageLocalFood(code: string, language: string, localFood: FoodLocalEntry): PkgLocalFood {
+  const nutrientTableCodes: Record<string, string> = {};
+
+  if (localFood.nutrientRecords !== undefined) {
+    for (const record of localFood.nutrientRecords) {
+      nutrientTableCodes[record.nutrientTableId] = record.nutrientTableRecordId;
+    }
+  }
+
+  return {
+    code,
+    version: undefined,
+    localDescription:
+        localFood.name,
+    alternativeNames: localFood.altNames,
+    associatedFoods: localFood.associatedFoods?.map(af => packageAssociatedFoodPrompt(language, af)) || [],
+    brandNames: [],
+    nutrientTableCodes,
+    portionSize: localFood.portionSizeMethods?.map(packagePortionSize) || [],
+  };
+}
+
+// function packageLocale(locale: )
+
+function packageAsServed(portionSize: AsServedPsm): PkgAsServedPsm {
+  return {
+    method: 'as-served',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+    servingImageSet: portionSize.parameters.servingImageSet,
+    leftoversImageSet: portionSize.parameters.leftoversImageSet ?? undefined,
+  };
+}
+
+function packageGuideImage(portionSize: GuideImagePsm): PkgGuideImagePsm {
+  return {
+    method: 'guide-image',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+    guideImageId: portionSize.parameters.guideImageId,
+  };
+}
+
+function packageDrinkScale(portionSize: DrinkScalePsm): PkgDrinkScalePsm {
+  return {
+    method: 'drink-scale',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+    drinkwareId: portionSize.parameters.drinkwareId,
+    initialFillLevel: portionSize.parameters.initialFillLevel,
+    skipFillLevel: portionSize.parameters.skipFillLevel,
+  };
+}
+
+function packageStandardPortion(portionSize: StandardPortionPsm): PkgStandardPortionPsm {
+  return {
+    method: 'standard-portion',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+    units: portionSize.parameters.units,
+  };
+}
+
+function packageCereal(portionSize: CerealPsm): PkgCerealPsm {
+  return {
+    method: 'cereal',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+    type: portionSize.parameters.type,
+  };
+}
+
+function packageMilkOnCereal(portionSize: MilkOnCerealPsm): PkgMilkOnCerealPsm {
+  return {
+    method: 'milk-on-cereal',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+  };
+}
+
+function packagePizza(portionSize: PizzaPsm): PkgPizzaPsm {
+  return {
+    method: 'pizza',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+  };
+}
+
+function packageMilkInHotDrink(portionSize: MilkInHotDrinkPsm): PkgMilkInHotDrinkPsm {
+  return {
+    method: 'milk-in-a-hot-drink',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+  };
+}
+
+function packagePortionSize(portionSize: FoodPortionSizeMethodAttributes): PkgPortionSizeMethod {
+  switch (portionSize.method) {
+    case 'as-served':
+      return packageAsServed(portionSize as AsServedPsm);
+    case 'guide-image':
+      return packageGuideImage(portionSize as GuideImagePsm);
+    case 'drink-scale':
+      return packageDrinkScale(portionSize as DrinkScalePsm);
+    case 'standard-portion':
+      return packageStandardPortion(portionSize as StandardPortionPsm);
+    case 'cereal':
+      return packageCereal(portionSize as CerealPsm);
+    case 'milk-on-cereal':
+      return packageMilkOnCereal(portionSize as MilkOnCerealPsm);
+    case 'pizza':
+      return packagePizza(portionSize as PizzaPsm);
+    case 'milk-in-a-hot-drink':
+      return packageMilkInHotDrink(portionSize as MilkInHotDrinkPsm);
+    default:
+      throw new Error(`Unexpected portion size estimation method: ${portionSize.method}`);
+  }
+}
+
+function packageGlobalFood(food: FoodEntry): PkgGlobalFood {
+  const parentCategories = food.parentCategories ? food.parentCategories.map(category => category.code) : [];
+
+  const attributes: PkgInheritableAttributes = {
+    readyMealOption: food.attributes?.readyMealOption ?? undefined,
+    sameAsBeforeOption: food.attributes?.sameAsBeforeOption ?? undefined,
+    reasonableAmount: food.attributes?.reasonableAmount ?? undefined,
+    useInRecipes: food.attributes?.useInRecipes ?? undefined,
+  };
+
+  return {
+    version: food.version,
+    code: food.code,
+    englishDescription: food.name,
+    groupCode: Number.parseInt(food.foodGroupId),
+    attributes,
+    parentCategories,
+  };
+}
+
+function packageLocale(locale: LocaleEntry): PkgLocale {
+  return {
+    id: locale.id,
+    englishName: locale.englishName,
+    localName: locale.localName,
+    prototypeLocale: locale.prototypeLocaleId,
+    adminLanguage: locale.adminLanguage?.code || locale.adminLanguageId,
+    respondentLanguage: locale.respondentLanguage?.code || locale.respondentLanguageId,
+    textDirection: locale.textDirection,
+    flagCode: locale.countryFlagCode,
+  };
+}
+
 export default {
   fromPackageImageMapObjects,
   fromPackageGuideImageObjects,
@@ -253,4 +450,7 @@ export default {
   fromPackageLocalCategory,
   fromPackageNutrientTable,
   fromPackageNutrientTableRecords,
+  packageLocale,
+  packageLocalFood,
+  packageGlobalFood,
 };
