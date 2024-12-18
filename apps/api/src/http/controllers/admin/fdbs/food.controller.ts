@@ -74,6 +74,25 @@ function adminFoodController({
     res.json(foodLocal);
   };
 
+  const readByCode = async (
+    req: Request<{ foodCode: string; localeId: string }>,
+    res: Response<FoodLocalEntry>,
+  ): Promise<void> => {
+    const { foodCode, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
+
+    const foodLocal = await adminFoodService.getFoodByCode(foodCode, code);
+    if (!foodLocal)
+      throw new NotFoundError();
+
+    res.json(foodLocal);
+  };
+
   const update = async (
     req: Request<{ foodId: string; localeId: string }, any, FoodLocalInput>,
     res: Response<FoodLocalEntry>,
@@ -167,6 +186,7 @@ function adminFoodController({
     browse,
     store,
     read,
+    readByCode,
     update,
     destroy,
     copy,
