@@ -2,7 +2,7 @@ import type { CreationAttributes, Transaction } from 'sequelize';
 
 import { randomUUID } from 'node:crypto';
 
-import { ConflictError } from '@intake24/api/http/errors';
+import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
 import type { PortionSizeMethod } from '@intake24/common/surveys';
@@ -225,8 +225,61 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     }
   };
 
-  const read = async (_localeId: string, _foodCode: string, _transaction?: Transaction) => {
-    //
+  const readImpl = async (
+    localeId: string,
+    foodCode: string,
+    transaction: Transaction,
+  ) => {
+    const foodLocal = await FoodLocal.findOne({
+      where: { localeId, foodCode },
+      transaction,
+    });
+
+    if (foodLocal === null)
+      throw new NotFoundError();
+
+    const portionSizeRows = await FoodPortionSizeMethod.findAll(
+      {
+        where: { foodLocalId: foodLocal.id },
+        attributes: ['method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy', 'parameters'],
+        transaction,
+      },
+    );
+
+    const portionSizeMethods: PortionSizeMethod[] = portionSizeRows.map(row => (
+      {
+        method: row.method,
+        conversionFactor: row.conversionFactor,
+        description: row.description,
+        useForRecipes: row.useForRecipes,
+        orderBy: row.orderBy,
+        parameters: row.parameters,
+      } as PortionSizeMethod));
+
+    return {
+      foodCode,
+      localeId,
+      id: foodLocal.id,
+      version: foodLocal.version,
+      name: foodLocal.name,
+      portionSizeMethods,
+    };
+  };
+
+  const read = async (localeId: string, foodCode: string, transaction?: Transaction) => {
+    if (transaction !== undefined) {
+      return await readImpl(localeId, foodCode, transaction);
+    }
+    else {
+      return await db.foods.transaction(async (transaction) => {
+        return await readImpl(localeId, foodCode, transaction);
+      });
+    }
+  };
+
+  const readEnabledFoods = async (localeId: string): Promise<string[]> => {
+    const rows = await FoodLocalList.findAll({ where: { localeId }, attributes: ['foodCode'] });
+    return rows.map(row => row.foodCode);
   };
 
   const updateEnabledFoods = async (localeId: string, enabledFoods: string[]) => {
@@ -240,6 +293,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
   return {
     create,
     read,
+    readEnabledFoods,
     updatePortionSizeMethods,
     updateEnabledFoods,
   };
