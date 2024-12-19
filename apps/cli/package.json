@@ -47,7 +47,7 @@
     "@types/decompress": "^4.2.7",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.13",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "@types/validator": "^13.12.2",
     "@types/web-push": "^3.6.4",
     "@types/webpack-env": "^1.18.5",
@@ -58,7 +58,7 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "webpack": "^5.97.0",
+    "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^3.0.0",
     "webpackbar": "^7.0.0"
