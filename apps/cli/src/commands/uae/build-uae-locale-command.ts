@@ -23,13 +23,13 @@ export interface UAELocaleOptions {
 
 const locale: PkgLocale = {
   id: 'ar_AE_NYUAD',
-  localName: 'UAE (NYUAD)',
-  englishName: 'UAE (NYUAD)',
+  localName: 'الإمارات العربية المتحدة (جامعة نيويورك أبوظبي)',
+  englishName: 'UAE (NYU Abu Dhabi)',
   textDirection: 'rtl',
   prototypeLocale: null,
-  respondentLanguage: 'ar',
+  respondentLanguage: 'ar-AE',
   flagCode: 'ae',
-  adminLanguage: 'ar',
+  adminLanguage: 'en',
   foodIndexLanguageBackendId: 'en',
 };
 
