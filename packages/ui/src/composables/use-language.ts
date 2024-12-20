@@ -54,12 +54,9 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
 
   const hasLanguage = (languageId: string) => i18n.availableLocales.includes(languageId);
 
-  const updateAppWithLanguage = (languageId: string, isRtl?: boolean) => {
+  const updateAppWithLanguage = (languageId: string, _isRtl?: boolean) => {
     i18n.locale.value = languageId;
     vI18n.current.value = languageId;
-
-    if (typeof isRtl !== 'undefined')
-      vI18n.isRtl.value = isRtl;
 
     document.querySelector('html')?.setAttribute('lang', languageId);
     http.axios.defaults.headers.common['Accept-Language'] = languageId;

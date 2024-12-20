@@ -121,4 +121,9 @@ export default createVuetify({
       },
     },
   },
+  locale: {
+    rtl: {
+      'ar-AE': true,
+    },
+  },
 });
