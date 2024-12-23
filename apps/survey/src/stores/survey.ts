@@ -113,13 +113,10 @@ export function surveyInitialState(): CurrentSurveyState {
 }
 
 function canUseUserSession(state: CurrentSurveyState, settings?: SessionSettings) {
-  const { startTime, submissionTime } = state;
+  const { startTime } = state;
 
   if (!startTime)
     return false;
-
-  if (submissionTime)
-    return true;
 
   const { age = null, fixed = null } = settings ?? {};
   const startDt = new Date(startTime);
@@ -140,8 +137,8 @@ export const useSurvey = defineStore('survey', {
   }),
   debounce: {
     storeUserSession: [
-      3000,
-      { maxWait: 20000 },
+      2000,
+      { maxWait: 15000 },
     ],
   },
   persist: {
@@ -149,8 +146,7 @@ export const useSurvey = defineStore('survey', {
     afterHydrate(context) {
       context.store.reCreateStoreAfterDeserialization();
 
-      if (!canUseUserSession(context.store.$state.data))
-        context.store.clearState();
+      context.store.validateState(context.store.$state.data);
     },
   },
   getters: {
@@ -281,7 +277,7 @@ export const useSurvey = defineStore('survey', {
         this.setParameters(surveyInfo);
         this.setUserInfo(userInfo);
 
-        const userSession = surveyInfo.session.store ? await surveyService.getUserSession(surveyId) : undefined;
+        const userSession = !this.isSubmitted && surveyInfo.session.store ? await surveyService.getUserSession(surveyId) : undefined;
         this.loadUserSession(userSession?.sessionData);
       }
       finally {
@@ -373,6 +369,13 @@ export const useSurvey = defineStore('survey', {
       this.reCreateStoreAfterDeserialization();
     },
 
+    validateState(state: CurrentSurveyState, settings?: SessionSettings) {
+      if (canUseUserSession(state, settings))
+        return;
+
+      this.clearState();
+    },
+
     loadUserSession(serverState?: CurrentSurveyState) {
       if (!this.parameters) {
         console.error(`Survey parameters not loaded. Cannot load user session.`);
@@ -385,8 +388,7 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (!canUseUserSession(this.data, session))
-        this.clearState();
+      this.validateState(this.data, session);
     },
 
     async startUserSession() {
@@ -404,7 +406,7 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (this.isSubmitting || !this.parameters.session.store || !canUseUserSession(this.data, this.parameters.session))
+      if (this.isSubmitting || this.isSubmitted || !this.parameters.session.store || !canUseUserSession(this.data, this.parameters.session))
         return;
 
       await surveyService.saveUserSession(this.parameters.slug, this.data);

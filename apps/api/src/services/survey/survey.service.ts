@@ -333,12 +333,15 @@ function surveyService({
   /**
    * Save respondent's survey session
    *
-   * @param {string} slug
+   * @param {(string | Survey)} slug
    * @param {string} userId
    * @param {SurveyState} sessionData
    */
-  const saveSession = async (slug: string, userId: string, sessionData: SurveyState) => {
-    const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications', 'session'] });
+  const saveSession = async (slug: string | Survey, userId: string, sessionData: SurveyState) => {
+    const survey
+      = typeof slug === 'string'
+        ? await Survey.findBySlug(slug, { attributes: ['id', 'notifications', 'session'] })
+        : slug;
     if (!survey)
       throw new NotFoundError();
 

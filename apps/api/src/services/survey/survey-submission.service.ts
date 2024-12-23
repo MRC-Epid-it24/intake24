@@ -386,7 +386,7 @@ function surveySubmissionService({
   const submit = async (
     slug: string,
     userId: string,
-    state: SurveyState,
+    surveyState: SurveyState,
     tzOffset: number,
   ): Promise<SurveySubmissionResponse> => {
     const survey = await Survey.findBySlug(slug, {
@@ -395,7 +395,9 @@ function surveySubmissionService({
         'feedbackSchemeId',
         'maximumTotalSubmissions',
         'maximumDailySubmissions',
+        'notifications',
         'numberOfSubmissionsForFeedback',
+        'session',
       ],
       include: [{ association: 'surveyScheme', attributes: ['prompts'], required: true }],
     });
@@ -404,17 +406,14 @@ function surveySubmissionService({
 
     const { id: surveyId } = survey;
     const submission = { id: randomUUID(), submissionTime: new Date() };
+    const state = { ...surveyState, ...submission };
 
     const [userInfo, followUpUrl] = await Promise.all([
       surveyService.userInfo(survey, userId, tzOffset, 1),
       surveyService.getFollowUpUrl(survey, userId),
+      surveyService.saveSession(survey, userId, state),
+      scheduler.jobs.addJob({ type: 'SurveySubmission', userId, params: { surveyId, userId, state } }),
     ]);
-
-    await scheduler.jobs.addJob({
-      type: 'SurveySubmission',
-      userId,
-      params: { surveyId, userId, state: { ...state, ...submission } },
-    });
 
     return { ...userInfo, followUpUrl, submission };
   };

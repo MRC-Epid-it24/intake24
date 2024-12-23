@@ -324,8 +324,9 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 
+import { useRouter } from 'vue-router';
 import type { SurveySubmissionEntry } from '@intake24/common/types/http';
 import { userService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
@@ -343,17 +344,33 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const submissions = ref<SurveySubmissionEntry[]>([]);
+  setup(props) {
     const survey = useSurvey();
+    const router = useRouter();
+
+    const submissions = ref<SurveySubmissionEntry[]>([]);
     const startTime = computed(() => survey.data.startTime);
     const endTime = computed(() => survey.data.endTime);
 
+    async function startRecall() {
+      await survey.startRecall(true);
+      await router.push({ name: 'survey-recall', params: { surveyId: props.surveyId } });
+    };
+
+    async function cancelRecall() {
+      await survey.cancelRecall();
+    };
+
+    onMounted(async () => {
+      submissions.value = await userService.submissions(props.surveyId);
+    });
+
     return {
-      survey,
       submissions,
       startTime,
       endTime,
+      cancelRecall,
+      startRecall,
     };
   },
 
@@ -369,21 +386,6 @@ export default defineComponent({
       'limitReached',
       'parameters',
     ]),
-  },
-
-  async mounted() {
-    this.submissions = await userService.submissions(this.surveyId);
-  },
-
-  methods: {
-    async startRecall() {
-      await this.survey.startRecall(true);
-      await this.$router.push({ name: 'survey-recall', params: { surveyId: this.surveyId } });
-    },
-
-    async cancelRecall() {
-      await this.survey.cancelRecall();
-    },
   },
 });
 </script>
