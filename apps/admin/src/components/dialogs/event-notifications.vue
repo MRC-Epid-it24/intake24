@@ -100,14 +100,27 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 
 import type { Notification, Notifications } from '@intake24/common/types';
 import { eventTypes, notificationChannels } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
+
+defineOptions({
+  name: 'EventNotifications',
+});
+
+const props = defineProps({
+  modelValue: {
+    type: Array as PropType<Notification[]>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
 
 const defaultNotifications: Notifications = {
   webhook: {
@@ -127,63 +140,39 @@ const defaultNotifications: Notifications = {
   },
 };
 
-export default defineComponent({
-  name: 'EventNotifications',
-
-  props: {
-    modelValue: {
-      type: Array as PropType<Notification[]>,
-      required: true,
-    },
-  },
-
-  setup(props, { emit }) {
-    const { i18n } = useI18n();
-    const items = useVModel(props, 'modelValue', emit, {
-      passive: true,
-      deep: true,
-    });
-
-    const channels = notificationChannels.map(value => ({
-      value,
-      title: i18n.t(`notifications.channels.${value}`),
-    }));
-    const events = eventTypes.map(value => ({
-      value,
-      title: i18n.t(`notifications.events.${value}`),
-    }));
-
-    const dialog = ref(false);
-
-    const add = () => {
-      items.value.push({ ...defaultNotifications.webhook });
-    };
-
-    const remove = (idx: number) => {
-      items.value.splice(idx, 1);
-    };
-
-    const close = () => {
-      dialog.value = false;
-    };
-
-    const updateProps = (idx: number) => {
-      const defaults = defaultNotifications[items.value[idx].channel];
-      items.value.splice(idx, 1, { ...defaults, type: items.value[idx].type });
-    };
-
-    return {
-      add,
-      close,
-      dialog,
-      items,
-      remove,
-      channels,
-      events,
-      updateProps,
-    };
-  },
+const { i18n } = useI18n();
+const items = useVModel(props, 'modelValue', emit, {
+  passive: true,
+  deep: true,
 });
+
+const channels = notificationChannels.map(value => ({
+  value,
+  title: i18n.t(`notifications.channels.${value}`),
+}));
+const events = eventTypes.map(value => ({
+  value,
+  title: i18n.t(`notifications.events.${value}`),
+}));
+
+const dialog = ref(false);
+
+function add() {
+  items.value.push({ ...defaultNotifications.webhook });
+}
+
+function remove(idx: number) {
+  items.value.splice(idx, 1);
+}
+
+function close() {
+  dialog.value = false;
+}
+
+function updateProps(idx: number) {
+  const defaults = defaultNotifications[items.value[idx].channel];
+  items.value.splice(idx, 1, { ...defaults, type: items.value[idx].type });
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -130,21 +130,22 @@
 </template>
 
 <script lang="ts">
-import type { RouteLocationRaw } from 'vue-router';
 import groupBy from 'lodash/groupBy';
 import { mapState } from 'pinia';
 import pluralize from 'pluralize';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
+import { type RouteLocationRaw, useRoute, useRouter } from 'vue-router';
 import { useDisplay, useLocale } from 'vuetify';
 
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';
-import { useApp, useAuth, useEntry, useUser } from '@intake24/admin/stores';
+import { useApp, useAuth, useEntry, useResource, useUser } from '@intake24/admin/stores';
 import { iconWhite } from '@intake24/common/theme/assets';
 import type { Dictionary } from '@intake24/common/types';
-import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
+import { useI18n } from '@intake24/i18n';
 
+import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 import { useHttp } from './services';
 
 type Breadcrumbs = {
@@ -167,54 +168,121 @@ export default defineComponent({
     const http = useHttp();
     const vI18n = useLocale();
     const display = useDisplay();
+    const entry = useEntry();
+    const resource = useResource();
+    const route = useRoute();
+    const router = useRouter();
+    const { i18n: { t } } = useI18n();
 
     useLanguage('admin', http, vI18n);
 
+    const sidebar = ref(display.lgAndUp);
+
+    const title = computed(() => {
+      const { meta: { title } = {} } = route;
+      if (title)
+        return t(title);
+
+      if (!resource.name)
+        return t('common._');
+
+      const { id, name, englishName, description } = entry.data;
+
+      // TODO: we should resole breadcrumb name in better way based on entry field
+      return name ?? englishName ?? description ?? id ?? t(`${resource.name}.title`);
+    });
+
+    function buildBreadCrumb(module: string, action: string, currentParams: Dictionary, parent?: string) {
+      const defaults = { disabled: false, exact: true, link: true };
+      const items: Breadcrumbs[] = [];
+
+      if (parent) {
+        items.push(
+          ...buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams),
+        );
+      }
+
+      const name = parent ? `${parent}-${module}` : module;
+      const title = parent && module !== 'securables' ? `${parent}.${module}` : module;
+      const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
+      const { [identifier]: currentId, id } = currentParams;
+
+      const params: Dictionary<string> = { [identifier]: currentId };
+      if (parent)
+        params.id = id;
+
+      items.push({ ...defaults, title: t(`${title}.title`), to: { name } });
+
+      if (!currentId)
+        return items;
+
+      if (currentId === 'create') {
+        items.push({
+          ...defaults,
+          title: t(`${title}.${action}`),
+          to: { name: `${name}-${action}`, params },
+        });
+        return items;
+      }
+
+      // TODO: we should resole breadcrumb name in better way based on entry field
+      const { id: entryId, name: entryName, englishName, description } = entry.data;
+      const text = entryName ?? englishName ?? description ?? entryId ?? t(`${title}.read`);
+
+      items.push({
+        ...defaults,
+        title: parent ? t(`${title}.${action}`) : text,
+        to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
+      });
+
+      if (['edit'].includes(action)) {
+        items.push({
+          ...defaults,
+          title: t(`${title}.${action}`),
+          to: { name: `${name}-${action}`, params },
+        });
+      }
+
+      return items;
+    };
+
+    const breadcrumbs = computed(() => {
+      const { meta: { module, action } = {}, params } = route;
+      if (!module || !action)
+        return [];
+
+      const { current, parent } = module;
+      return buildBreadCrumb(current, action, params, parent);
+    });
+
+    function toggleSidebar() {
+      sidebar.value = !sidebar.value;
+    };
+
+    async function logout() {
+      await useAuth().logout(true);
+      await router.push({ name: 'login' });
+    };
+
+    watch(title, (val) => {
+      document.title = val;
+    });
+
     return {
-      resources: groupBy(resources, 'group'),
-      sidebar: display.lgAndUp,
+      breadcrumbs,
       logo: iconWhite,
+      logout,
+      resources: groupBy(resources, 'group'),
+      sidebar,
+      title,
+      toggleSidebar,
     };
   },
 
   computed: {
     ...mapState(useApp, ['app']),
     ...mapState(useAuth, ['loggedIn']),
-    ...mapState(useEntry, { entry: 'data' }),
     ...mapState(useUser, ['isVerified']),
-
-    breadcrumbs(): Breadcrumbs[] {
-      const { meta: { module, action } = {}, params } = this.$route;
-      if (!module || !action)
-        return [];
-
-      const { current, parent } = module;
-      return this.buildBreadCrumb(current, action, params, parent);
-    },
-
-    title(): string {
-      const { meta: { title } = {} } = this.$route;
-      if (title)
-        return this.$t(title);
-
-      const { module } = this;
-      if (!module)
-        return this.$t('common._');
-
-      const { id, name, englishName, description } = this.entry;
-
-      // TODO: we should resole breadcrumb name in better way based on entry field
-      return name ?? englishName ?? description ?? id ?? this.$t(`${module}.title`);
-    },
-  },
-
-  watch: {
-    title: {
-      handler(val) {
-        document.title = val;
-      },
-      immediate: true,
-    },
   },
 
   async mounted() {
@@ -237,71 +305,6 @@ export default defineComponent({
       if (this.isPermissionGranted)
         await this.subscribe();
     }, 5 * 1000);
-  },
-
-  methods: {
-    toggleSidebar() {
-      this.sidebar = !this.sidebar;
-    },
-
-    async logout() {
-      await useAuth().logout(true);
-      await this.$router.push({ name: 'login' });
-    },
-
-    buildBreadCrumb(module: string, action: string, currentParams: Dictionary, parent?: string) {
-      const defaults = { disabled: false, exact: true, link: true };
-      const items: Breadcrumbs[] = [];
-
-      if (parent) {
-        items.push(
-          ...this.buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams),
-        );
-      }
-
-      const name = parent ? `${parent}-${module}` : module;
-      const title = parent && module !== 'securables' ? `${parent}.${module}` : module;
-      const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
-      const { [identifier]: currentId, id } = currentParams;
-
-      const params: Dictionary<string> = { [identifier]: currentId };
-      if (parent)
-        params.id = id;
-
-      items.push({ ...defaults, title: this.$t(`${title}.title`), to: { name } });
-
-      if (!currentId)
-        return items;
-
-      if (currentId === 'create') {
-        items.push({
-          ...defaults,
-          title: this.$t(`${title}.${action}`),
-          to: { name: `${name}-${action}`, params },
-        });
-        return items;
-      }
-
-      // TODO: we should resole breadcrumb name in better way based on entry field
-      const { id: entryId, name: entryName, englishName, description } = this.entry;
-      const text = entryName ?? englishName ?? description ?? entryId ?? this.$t(`${title}.read`);
-
-      items.push({
-        ...defaults,
-        title: parent ? this.$t(`${title}.${action}`) : text,
-        to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
-      });
-
-      if (['edit'].includes(action)) {
-        items.push({
-          ...defaults,
-          title: this.$t(`${title}.${action}`),
-          to: { name: `${name}-${action}`, params },
-        });
-      }
-
-      return items;
-    },
   },
 });
 </script>

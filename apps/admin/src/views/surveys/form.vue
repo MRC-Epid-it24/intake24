@@ -573,15 +573,20 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 import {
   defaultSearchSettings,
   defaultSessionSettings,
+  spellingCorrectionPreferences as defaultSpellingCorrectionPreferences,
   type SchemeOverrides,
   type SessionSettings,
-  spellingCorrectionPreferences,
   type SurveySearchSettings,
   type SurveyState,
 } from '@intake24/common/surveys';
-import { defaultOverrides, searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
+import {
+  defaultOverrides,
+  searchSortingAlgorithms as defaultSearchSortingAlgorithms,
+  surveyStates as defaultSurveyStates,
+} from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
+import { useI18n } from '@intake24/i18n';
 
 export type SurveyForm = {
   id: string | null;
@@ -657,10 +662,25 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const { i18n: { t } } = useI18n();
     const { entry, entryLoaded, isEdit } = useEntry<SurveyEntry>(props);
 
     const infoComponentType = ref(undefined as string | undefined);
     const infoPopupOpen = ref(false);
+    const showGenUserKey = ref(false);
+
+    const surveyStates = defaultSurveyStates.map(value => ({
+      value,
+      title: t(`surveys.states.${value}`),
+    }));
+    const searchSortingAlgorithms = defaultSearchSortingAlgorithms.map(value => ({
+      value,
+      title: t(`surveys.search.algorithms.${value}`),
+    }));
+    const spellingCorrectionOptions = defaultSpellingCorrectionPreferences.map(value => ({
+      value,
+      title: t(`surveys.search.spellingCorrectionOptions.${value}`),
+    }));
 
     useEntryFetch(props);
     const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
@@ -677,8 +697,6 @@ export default defineComponent({
       infoPopupOpen.value = false;
     };
 
-    const matchScoreWeightTickLabels = ['Sorting data', 'Match score'];
-
     return {
       entry,
       entryLoaded,
@@ -687,30 +705,15 @@ export default defineComponent({
       data,
       errors,
       routeLeave,
-      submit,
-      showInformationPopup,
       hideInformationPopup,
       infoComponentType,
       infoPopupOpen,
-      matchScoreWeightTickLabels,
-    };
-  },
-
-  data() {
-    return {
-      showGenUserKey: false,
-      surveyStates: surveyStates.map(value => ({
-        value,
-        title: this.$t(`surveys.states.${value}`),
-      })),
-      searchSortingAlgorithms: searchSortingAlgorithms.map(value => ({
-        value,
-        title: this.$t(`surveys.search.algorithms.${value}`),
-      })),
-      spellingCorrectionOptions: spellingCorrectionPreferences.map(value => ({
-        value,
-        title: this.$t(`surveys.search.spellingCorrectionOptions.${value}`),
-      })),
+      searchSortingAlgorithms,
+      showGenUserKey,
+      showInformationPopup,
+      spellingCorrectionOptions,
+      submit,
+      surveyStates,
     };
   },
 

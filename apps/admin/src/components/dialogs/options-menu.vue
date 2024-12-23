@@ -18,22 +18,8 @@
   </v-menu>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
+<script lang="ts" setup>
+defineOptions({
   name: 'OptionsMenu',
-
-  data() {
-    return {
-      menu: false,
-    };
-  },
-
-  methods: {
-    close() {
-      this.menu = false;
-    },
-  },
 });
 </script>

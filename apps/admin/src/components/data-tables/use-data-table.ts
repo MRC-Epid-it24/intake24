@@ -55,7 +55,7 @@ export function useDataTable(props: DataTableProps, filter: ComputedRef<Dictiona
       withLoading: true,
     });
 
-    items.value = data.data;
+    items.value = [...data.data];
     meta.value = { ...data.meta };
   };
 
