@@ -19,7 +19,6 @@ export const useResource = defineStore('resource', {
     filter: {},
   }),
   persist: {
-    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}resource`,
     pick: ['filter'],
   },
   getters: {

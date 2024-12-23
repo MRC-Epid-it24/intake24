@@ -22,9 +22,7 @@ export interface SameAsBeforeState {
 
 export const useSameAsBefore = defineStore('same-as-before', {
   state: (): SameAsBeforeState => ({ items: {} }),
-  persist: {
-    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}same-as-before`,
-  },
+  persist: true,
   actions: {
     getItem(localeId: string, foodCode: string) {
       const { userId } = useUser();

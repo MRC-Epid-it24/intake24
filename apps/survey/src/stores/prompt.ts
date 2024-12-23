@@ -12,7 +12,7 @@ interface FoodOrMealPromptsState<T> {
 export const promptStores = new Map<ComponentType, StoreDefinition>();
 
 function storageKey(promptType: ComponentType): string {
-  return `${import.meta.env.VITE_APP_PREFIX ?? ''}${promptType}-state`;
+  return `${promptType}-state`;
 }
 
 export function clearPromptStores(): void {
@@ -29,7 +29,7 @@ export function getOrCreatePromptStateStore<T extends object>(
   let storeDef = promptStores.get(promptType);
 
   if (storeDef === undefined) {
-    const storageKey = `${import.meta.env.VITE_APP_PREFIX ?? ''}${promptType}-state`;
+    const storageKey = `${promptType}-state`;
 
     storeDef = defineStore(`${promptType}-state`, {
       state: (): FoodOrMealPromptsState<T> => ({

@@ -145,7 +145,6 @@ export const useSurvey = defineStore('survey', {
     ],
   },
   persist: {
-    key: `${import.meta.env.VITE_APP_PREFIX ?? ''}survey`,
     pick: ['data', 'user'],
     afterHydrate(context) {
       context.store.reCreateStoreAfterDeserialization();
