@@ -210,8 +210,8 @@ function loadMoreFields() {
 function loadFilteredFields() {
   filteredFields.value = search.value
     ? availableFields.value.filter(
-      field => !!field.label.match(new RegExp(search.value, 'i')),
-    )
+        field => !!field.label.match(new RegExp(search.value, 'i')),
+      )
     : [...availableFields.value];
 
   visibleFields.value = [];

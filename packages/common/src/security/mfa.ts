@@ -1,4 +1,4 @@
-import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/types';
+import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/server';
 
 export const mfaProviders = ['duo', 'fido', 'otp'] as const;
 

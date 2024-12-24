@@ -1,4 +1,4 @@
-import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/types';
+import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server';
 
 import { URL } from 'node:url';
 import {

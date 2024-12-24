@@ -206,13 +206,13 @@ export default defineComponent({
                       ...[
                         messagesAvailableToLoad.value
                           ? h(VCol, { cols: 12 }, {
-                            default: () => [
-                              h(IntersectableSkeleton, {
-                                type: 'list-item',
-                                onIntersected: loadMoreMessages,
-                              }),
-                            ],
-                          })
+                              default: () => [
+                                h(IntersectableSkeleton, {
+                                  type: 'list-item',
+                                  onIntersected: loadMoreMessages,
+                                }),
+                              ],
+                            })
                           : undefined,
                       ].filter(Boolean),
                     ],

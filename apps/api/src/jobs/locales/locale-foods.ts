@@ -160,9 +160,9 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
             this.cachedParentCategoriesService.getFoodAllCategories(food.foodCode),
             food.portionSizeMethods?.length
               ? this.portionSizeMethodsService.resolvePortionSizeMethods(
-                food.localeId,
-                food.foodCode,
-              )
+                  food.localeId,
+                  food.foodCode,
+                )
               : ([] as (CategoryPortionSizeMethod | FoodPortionSizeMethod)[]),
           ]);
 

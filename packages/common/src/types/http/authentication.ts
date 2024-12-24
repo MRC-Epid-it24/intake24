@@ -1,7 +1,7 @@
 import type {
   AuthenticationResponseJSON,
   PublicKeyCredentialRequestOptionsJSON,
-} from '@simplewebauthn/types';
+} from '@simplewebauthn/server';
 import type { MFADeviceResponse } from './admin/mfa-devices';
 
 import { z } from 'zod';

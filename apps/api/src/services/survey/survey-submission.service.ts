@@ -547,10 +547,10 @@ function surveySubmissionService({
           SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
           searchCollectData
             ? scheduler.jobs.addJob({
-              type: 'PopularitySearchUpdateCounters',
-              userId,
-              params: { localeCode, foodCodes },
-            })
+                type: 'PopularitySearchUpdateCounters',
+                userId,
+                params: { localeCode, foodCodes },
+              })
             : null,
         ].filter(Boolean),
       );
@@ -678,16 +678,16 @@ function surveySubmissionService({
           cache.forget(`user-submissions:${userId}`),
           hasNotifications
             ? scheduler.jobs.addJob({
-              type: 'SurveyEventNotification',
-              userId,
-              params: {
-                type: 'survey.session.submitted',
-                sessionId,
-                surveyId,
-                submissionId: surveySubmissionId,
+                type: 'SurveyEventNotification',
                 userId,
-              },
-            })
+                params: {
+                  type: 'survey.session.submitted',
+                  sessionId,
+                  surveyId,
+                  submissionId: surveySubmissionId,
+                  userId,
+                },
+              })
             : null,
         ].filter(Boolean),
       );

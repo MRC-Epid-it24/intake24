@@ -49,9 +49,9 @@ function globalFoodsService({ db }: Pick<IoC, 'db'>) {
         = input.parentCategories === undefined
           ? []
           : input.parentCategories.map(categoryId => ({
-            foodCode: globalFoodId,
-            categoryCode: categoryId,
-          }));
+              foodCode: globalFoodId,
+              categoryCode: categoryId,
+            }));
 
       await FoodCategory.bulkCreate(categoryEntries, { transaction: t });
 

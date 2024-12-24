@@ -123,9 +123,9 @@ function adminSurveyService({
           adminUserService.createPassword({ userId, password: password ?? randomString(12) }, transaction),
           userCustomFields && customFields?.length
             ? UserCustomField.bulkCreate(
-              customFields.map(field => ({ ...field, userId })),
-              { transaction },
-            )
+                customFields.map(field => ({ ...field, userId })),
+                { transaction },
+              )
             : null,
         ].filter(Boolean),
       );
@@ -251,11 +251,11 @@ function adminSurveyService({
           password ? adminUserService.updatePassword(userId, password, transaction) : null,
           userCustomFields && customFields && user.customFields
             ? adminUserService.updateUserCustomFields(
-              userId,
-              user.customFields,
-              customFields,
-              transaction,
-            )
+                userId,
+                user.customFields,
+                customFields,
+                transaction,
+              )
             : null,
           adminUserService.flushACLCacheByUserId(userId),
         ].filter(Boolean),

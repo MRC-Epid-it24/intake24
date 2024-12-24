@@ -1,4 +1,4 @@
-import type { AuthenticationResponseJSON } from '@simplewebauthn/types';
+import type { AuthenticationResponseJSON } from '@simplewebauthn/server';
 import type { Request } from 'express';
 
 import type { Tokens } from '.';

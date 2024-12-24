@@ -1,4 +1,4 @@
-import type { AuthenticatorTransportFuture, CredentialDeviceType } from '@simplewebauthn/types';
+import type { AuthenticatorTransportFuture, CredentialDeviceType } from '@simplewebauthn/server';
 import type {
   Attributes,
   CreationAttributes,

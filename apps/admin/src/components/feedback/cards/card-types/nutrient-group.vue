@@ -151,8 +151,8 @@ function loadMoreNutrientTypes() {
 function loadFilteredNutrientTypes() {
   filteredNutrientTypes.value = search.value
     ? availableNutrientTypes.value.filter(
-      nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
-    )
+        nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
+      )
     : [...availableNutrientTypes.value];
 
   visibleNutrientTypes.value = [];
