@@ -7,24 +7,22 @@ Releases follow two standards:
 
 ## Prepare and release
 
-Have a clean git working directory and run following command to prepare and push release.
+Run following command with clean git working directory to prepare and push release. See [`scripts/release.ts`](https://github.com/MRC-Epid-it24/intake24/blob/master/scripts/release.ts) for implementation details.
 
 ```sh
 pnpm release
 ```
 
-Please see [`scripts/release.ts`](https://github.com/MRC-Epid-it24/intake24/blob/master/scripts/release.ts) for details implementation.
-
 Release command run following actions:
 
 - asks for target release type confirmation
-- updates `package.json` files with
+- updates all `package.json` files with target version
 - generates changelog from git commits to CLI
-- asks for confirmation
+- asks for confirmation (Y/n) to commit/push changes to github
 - commits changes to `package.json` files
 - creates a `tag` with target version
-- pushes both `master` and `tag` to github
+- pushes both `main` and `tag` to github
 
 ## Github release
 
-Once release has been pushed to github, github release needs to be created. Copy & paste generated changelog to github release description.
+Once release has been pushed to github, [github release](https://github.com/MRC-Epid-it24/intake24/releases) needs to be created. Copy & paste generated changelog to github release description.

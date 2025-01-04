@@ -10,7 +10,7 @@ git clone https://github.com/MRC-Epid-it24/intake24
 
 ## Repository structure
 
-Repository is set as `mono-repository` with [workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
+Repository is set as `mono-repository` with [workspaces](https://pnpm.io/workspaces) using [pnpm](https://pnpm.io).
 
 Deployable applications are in `apps` folder. Shared components are in `packages` folder.
 
@@ -48,7 +48,7 @@ corepack enable
 corepack install
 ```
 
-Install all dependencies from root-level
+Install project dependencies from repository root.
 
 ```sh
 pnpm install
@@ -64,13 +64,11 @@ Please see [`scripts/verify-commit.ts`](https://github.com/MRC-Epid-it24/intake2
 
 ## Code style
 
-Project is set up with [eslint](https://eslint.org/) and [prettier](https://prettier.io/) to help to keep clean and maintainable code.
+Project is set up with [eslint](https://eslint.org/) configured with [antfu](https://github.com/antfu/eslint-config) preset to help to keep clean and maintainable code.
 
-Both integrate very well with most of the IDEs. Install respective plugins / extensions and configure it to run on `save` to have immediate effect.
+ESLint integrates very well with most of the IDEs. Install respective plugins / extensions and configure it to run on `save` to have immediate effect.
 
-You can also run lint process manually from root-level or in each `app` / `package`.
-
-Run linting and try to fix as much as possible automatically
+You can also run lint process manually from repository root.
 
 ```sh
 pnpm lint

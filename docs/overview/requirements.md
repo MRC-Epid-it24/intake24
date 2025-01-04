@@ -4,11 +4,12 @@
 
 - [PNPM](https://pnpm.io) package manager.
 
-Intake24 system has three main components:
+Intake24 system has couple of main components:
 
 1. API server
 2. Admin application
 3. Survey application
+4. CLI (Command Line Interface)
 
 Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment/) section describes in detail how to use ansible scripts.
 
@@ -24,7 +25,7 @@ API Server requires [Node.js](https://nodejs.org) runtime and couple of backend 
 
 ### Redis
 
-[Redis](https://redis.io) is used for `cache` / `queue` / `rate-limit` / `session` services.
+[Redis](https://redis.io) is used for `cache` / `queue` (jobs management) / `rate-limit` / `session` services.
 
 ### PDF generation
 

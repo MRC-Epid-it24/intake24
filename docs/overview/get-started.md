@@ -1,6 +1,6 @@
 # Get started
 
-This section briefly describes how to configure, build and start the Intake24 components.
+Section briefly describes how to configure, build and start the Intake24 components for development and production deployment.
 
 ## Repository
 
@@ -10,7 +10,7 @@ Clone the repository
 git clone https://github.com/MRC-Epid-it24/intake24
 ```
 
-Repository is set as mono-repository with [workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
+Repository is set as mono-repository with [workspaces](https://pnpm.io/workspaces) using [pnpm](https://pnpm.io).
 
 Shared components are in `packages` folder. Applications are in `apps` folder.
 
@@ -22,7 +22,7 @@ corepack enable
 corepack install
 ```
 
-Install project dependencies
+Install project dependencies from repository root.
 
 ```sh
 pnpm install
@@ -66,6 +66,16 @@ Copy template of configuration file and edit it as required. Please see [Configu
 ```sh
 cp .env-template .env
 ```
+
+### Development
+
+Serve the application locally in development mode with hot-reload
+
+```sh
+pnpm dev
+```
+
+### Production
 
 Build the application
 
@@ -115,12 +125,14 @@ pnpm db:migrate:foods
 pnpm db:migrate:system
 ```
 
-## Admin client
+## Admin / Survey apps
 
-Navigate to `apps/admin` directory.
+Both applications are built as SPAs using [vite](https://vitejs.dev) and [vue](https://vuejs.org) - build toolchain pipeline is same for both.
+
+Navigate to `apps/admin` or `apps/survey` directory depending on which application you want to build.
 
 ```sh
-cd apps/admin
+cd apps/{admin|survey}
 ```
 
 Copy template of configuration file and edit it as required. Please see [Configuration](/config/) section for detailed description of configuration options.
@@ -128,6 +140,16 @@ Copy template of configuration file and edit it as required. Please see [Configu
 ```sh
 cp .env-template .env
 ```
+
+### Development
+
+Serve the application locally in development mode with hot-reload
+
+```sh
+pnpm dev
+```
+
+### Production
 
 Build the application
 
@@ -144,48 +166,6 @@ pnpm start
 :::tip
 This should only be used if you host the client on separate domain. It will start separate http server to serve the application.
 :::
-
-Serve the application locally in development mode with hot-reload
-
-```sh
-pnpm dev
-```
-
-## Survey client
-
-Navigate to `apps/survey` directory.
-
-```sh
-cd apps/survey
-```
-
-Copy template of configuration file and edit it as required. Please see [Configuration](/config/) section for detailed description of configuration options.
-
-```sh
-cp .env-template .env
-```
-
-Build the application
-
-```sh
-pnpm build
-```
-
-Start the application
-
-```sh
-pnpm start
-```
-
-:::tip
-This should only be used if you host the client on separate domain. It will start separate http server to serve the application.
-:::
-
-Serve the application locally in development mode with hot-reload
-
-```sh
-pnpm dev
-```
 
 ## Documentation
 
