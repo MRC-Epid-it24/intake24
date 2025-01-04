@@ -3,12 +3,12 @@ import{_ as a,c as s,a2 as n,o as t}from"./chunks/framework.B2i-IWTO.js";const g
 <span class="line"><span>├─ apps -&gt; Applications</span></span>
 <span class="line"><span>│  ├─ api -&gt; API Server</span></span>
 <span class="line"><span>│  ├─ admin -&gt; Admin tool</span></span>
+<span class="line"><span>│  ├─ docs -&gt; Documentation</span></span>
 <span class="line"><span>│  ├─ cli -&gt; Command line interface</span></span>
 <span class="line"><span>│  ├─ portal -&gt; Portal website</span></span>
 <span class="line"><span>│  └─ survey -&gt; Survey application</span></span>
 <span class="line"><span>├─ deployment - Ansible playbooks / scripts for deployment</span></span>
 <span class="line"><span>├─ docker - Docker files for development</span></span>
-<span class="line"><span>├─ docs -&gt; Documentation</span></span>
 <span class="line"><span>└─ packages</span></span>
 <span class="line"><span>   ├─ api-client-v3 -&gt; API Client (Intake24 V3)</span></span>
 <span class="line"><span>   ├─ api-client-v4 -&gt; API Client (Intake24 V4 - current)</span></span>
