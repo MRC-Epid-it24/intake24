@@ -1242,10 +1242,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -2535,8 +2532,8 @@
                     },
                     "birthdate": {
                       "type": "number",
-                      "minimum": 1874,
-                      "maximum": 2024,
+                      "minimum": 1875,
+                      "maximum": 2025,
                       "nullable": true
                     },
                     "physicalActivityLevelId": {
@@ -2614,8 +2611,8 @@
                   },
                   "birthdate": {
                     "type": "number",
-                    "minimum": 1874,
-                    "maximum": 2024,
+                    "minimum": 1875,
+                    "maximum": 2025,
                     "nullable": true
                   },
                   "physicalActivityLevelId": {
@@ -2674,8 +2671,8 @@
                     },
                     "birthdate": {
                       "type": "number",
-                      "minimum": 1874,
-                      "maximum": 2024,
+                      "minimum": 1875,
+                      "maximum": 2025,
                       "nullable": true
                     },
                     "physicalActivityLevelId": {
@@ -6915,10 +6912,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -7339,10 +7333,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -7490,10 +7481,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -7635,10 +7623,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -8130,10 +8115,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -8281,10 +8263,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -8426,10 +8405,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -9164,10 +9140,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -9342,10 +9315,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -9945,10 +9915,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -20612,10 +20579,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -20871,10 +20835,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -21199,10 +21160,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -22158,10 +22116,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -22473,10 +22428,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -22804,10 +22756,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -23264,10 +23213,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -24077,10 +24023,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -24601,10 +24544,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -25235,10 +25175,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -27588,10 +27525,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -28359,10 +28293,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -28773,10 +28704,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -29027,10 +28955,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -29351,10 +29276,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -33215,10 +33137,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -33475,10 +33394,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -33804,10 +33720,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -35570,10 +35483,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -36034,10 +35944,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -36369,10 +36276,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -36499,10 +36403,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -36620,10 +36521,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -36750,10 +36648,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38025,10 +37920,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38146,10 +38038,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38267,10 +38156,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38397,10 +38283,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38527,10 +38410,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38662,10 +38542,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38797,10 +38674,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -38930,10 +38804,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -39063,10 +38934,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -39196,10 +39064,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -39363,10 +39228,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -39493,10 +39355,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -39599,10 +39458,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -39997,10 +39853,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -40639,10 +40492,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -40797,10 +40647,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -40948,10 +40795,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -51211,10 +51055,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -52015,10 +51856,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -52570,10 +52408,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -52824,10 +52659,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -53137,10 +52969,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -53395,10 +53224,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -53722,10 +53548,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -55892,10 +55715,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -56047,10 +55867,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -56511,10 +56328,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -56767,10 +56581,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -57092,10 +56903,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -61780,10 +61588,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -65208,10 +65013,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
+              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -65585,7 +65387,7 @@
       "name": "Apache-2.0",
       "url": "https://opensource.org/license/apache-2-0"
     },
-    "version": "2024.7"
+    "version": "2024.8"
   },
   "servers": [
     {
