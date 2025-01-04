@@ -1,0 +1,25 @@
+{
+  "name": "@intake24/docs",
+  "type": "module",
+  "version": "2024.8",
+  "private": true,
+  "description": "Intake24 documentation",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "directory": "apps/docs"
+  },
+  "scripts": {
+    "dev": "pnpm open-api && vitepress dev",
+    "build": "pnpm open-api && vitepress build",
+    "serve": "pnpm open-api && vitepress serve",
+    "open-api": "pnpm tsx scripts/open-api.ts"
+  },
+  "devDependencies": {
+    "@ts-rest/open-api": "^3.51.0",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2",
+    "vitepress": "^1.5.0"
+  }
+}

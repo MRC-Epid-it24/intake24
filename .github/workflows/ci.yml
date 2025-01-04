@@ -5,13 +5,13 @@ on:
     paths-ignore:
       - 'deployment/**'
       - 'docker/**'
-      - 'docs/**'
+      - 'apps/docs/**'
   pull_request:
     branches: [main]
     paths-ignore:
       - 'deployment/**'
       - 'docker/**'
-      - 'docs/**'
+      - 'apps/docs/**'
 
 permissions:
   contents: read

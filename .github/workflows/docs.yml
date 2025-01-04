@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/**'
+      - 'apps/docs/**'
+      - 'packages/common/src/contracts/**'
 
 permissions:
   contents: write
@@ -32,14 +33,15 @@ jobs:
         run: pnpm install
 
       - name: Docs - build
-        run: pnpm docs:build
+        working-directory: apps/docs
+        run: pnpm build
 
       - name: Set CNAME
-        run: echo "docs.intake24.org" > docs/.vitepress/dist/CNAME
+        run: echo "docs.intake24.org" > apps/docs/.vitepress/dist/CNAME
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: ghp-docs
-          folder: docs/.vitepress/dist
+          folder: apps/docs/.vitepress/dist
           clean: true

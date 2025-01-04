@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress';
 
-import { description } from '../../package.json';
+import { description } from '../package.json';
 import { nav } from './nav';
 import { sidebar } from './sidebar';
 

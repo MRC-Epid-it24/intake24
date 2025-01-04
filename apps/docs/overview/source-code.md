@@ -20,12 +20,12 @@ Deployable applications are in `apps` folder. Shared components are in `packages
 ├─ apps -> Applications
 │  ├─ api -> API Server
 │  ├─ admin -> Admin tool
+│  ├─ docs -> Documentation
 │  ├─ cli -> Command line interface
 │  ├─ portal -> Portal website
 │  └─ survey -> Survey application
 ├─ deployment - Ansible playbooks / scripts for deployment
 ├─ docker - Docker files for development
-├─ docs -> Documentation
 └─ packages
    ├─ api-client-v3 -> API Client (Intake24 V3)
    ├─ api-client-v4 -> API Client (Intake24 V4 - current)
