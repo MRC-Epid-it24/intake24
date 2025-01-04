@@ -20,7 +20,7 @@
     "Dietary recall system"
   ],
   "engines": {
-    "node": ">=18.17.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "prepare": "pnpm simple-git-hooks",
