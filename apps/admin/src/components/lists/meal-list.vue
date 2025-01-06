@@ -131,157 +131,124 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
+import { computed, ref, watch } from 'vue';
 
+import { VueDraggable } from 'vue-draggable-plus';
 import type { Meal, Meals } from '@intake24/common/surveys';
 import { defaultMeals } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
-import { ConfirmDialog, TimePicker } from '@intake24/ui';
 
+import { useI18n } from '@intake24/i18n';
+import { ConfirmDialog, TimePicker } from '@intake24/ui';
 import { OptionsMenu, SelectResource } from '../dialogs';
 import { JsonEditorDialog } from '../editors';
 import { LanguageSelector } from '../forms';
 
-export type MealDialog = {
+type MealDialog = {
   show: boolean;
   index: number;
   meal: Meal;
 };
 
-export default defineComponent({
-  name: 'MealList',
+defineOptions({ name: 'MealList' });
 
-  components: {
-    ConfirmDialog,
-    JsonEditorDialog,
-    LanguageSelector,
-    OptionsMenu,
-    SelectResource,
-    TimePicker,
-    VueDraggable,
+const props = defineProps({
+  schemeId: {
+    type: String,
+    required: true,
   },
-
-  props: {
-    schemeId: {
-      type: String,
-      required: true,
-    },
-    mode: {
-      type: String as PropType<'full' | 'override'>,
-      default: 'full',
-    },
-    modelValue: {
-      type: Array as PropType<Meal[]>,
-      required: true,
-    },
+  mode: {
+    type: String as PropType<'full' | 'override'>,
+    default: 'full',
   },
-
-  emits: ['update:modelValue'],
-
-  setup() {
-    const form = ref<InstanceType<typeof HTMLFormElement>>();
-
-    return { form };
-  },
-
-  data() {
-    const dialog = (show = false): MealDialog => ({
-      show,
-      index: -1,
-      meal: { name: { en: '' }, time: '8:00' },
-    });
-
-    return {
-      dialog: dialog(),
-      newDialog: dialog,
-      meals: [...this.modelValue],
-      defaultMeals,
-    };
-  },
-
-  computed: {
-    isOverrideMode(): boolean {
-      return this.mode === 'override';
-    },
-    title(): string {
-      return this.$t(
-        this.isOverrideMode ? 'survey-schemes.overrides.meals.title' : 'survey-schemes.meals.title',
-      );
-    },
-    subtitle() {
-      if (!this.isOverrideMode)
-        return undefined;
-
-      return this.$t('survey-schemes.overrides.meals.subtitle');
-    },
-  },
-
-  watch: {
-    meals(val) {
-      this.$emit('update:modelValue', val);
-    },
-  },
-
-  methods: {
-    rules(langId: string) {
-      return [
-        (value: string | null): boolean | string => {
-          if (!value)
-            return this.$t('survey-schemes.meals.validation.required');
-
-          const { index } = this.dialog;
-          const match = this.meals.find(
-            (meal, idx) => value === meal.name[langId] && index !== idx,
-          );
-
-          return match ? this.$t('survey-schemes.meals.validation.unique') : true;
-        },
-      ];
-    },
-
-    add() {
-      this.dialog = this.newDialog(true);
-    },
-
-    edit(index: number, meal: Meal) {
-      this.dialog = { show: true, index, meal: copy(meal) };
-    },
-
-    save() {
-      const isValid = this.form?.validate();
-      if (!isValid)
-        return;
-
-      const { index, meal } = this.dialog;
-
-      if (index === -1)
-        this.meals.push(meal);
-      else this.meals.splice(index, 1, meal);
-
-      this.reset();
-    },
-
-    remove(index: number) {
-      this.meals.splice(index, 1);
-    },
-
-    reset() {
-      this.dialog = this.newDialog();
-      this.form?.resetValidation();
-    },
-
-    load(meals: Meals) {
-      this.meals = [...meals];
-    },
-
-    resetList() {
-      this.meals = [...this.defaultMeals];
-    },
+  modelValue: {
+    type: Array as PropType<Meal[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const { i18n: { t } } = useI18n();
+
+function newDialog(show = false): MealDialog {
+  return {
+    show,
+    index: -1,
+    meal: { name: { en: '' }, time: '8:00' },
+  };
+}
+
+const dialog = ref(newDialog());
+const form = ref<InstanceType<typeof HTMLFormElement>>();
+const meals = ref(copy(props.modelValue));
+
+const isOverrideMode = computed(() => props.mode === 'override');
+const title = computed(() => t(
+  isOverrideMode.value ? 'survey-schemes.overrides.meals.title' : 'survey-schemes.meals.title',
+));
+const subtitle = computed(() => isOverrideMode.value ? t('survey-schemes.overrides.meals.subtitle') : undefined);
+
+function rules(langId: string) {
+  return [
+    (value: string | null): boolean | string => {
+      if (!value)
+        return t('survey-schemes.meals.validation.required');
+
+      const { index } = dialog.value;
+      const match = meals.value.find(
+        (meal, idx) => value === meal.name[langId] && index !== idx,
+      );
+
+      return match ? t('survey-schemes.meals.validation.unique') : true;
+    },
+  ];
+};
+
+function add() {
+  dialog.value = newDialog(true);
+};
+
+function edit(index: number, meal: Meal) {
+  dialog.value = { show: true, index, meal: copy(meal) };
+};
+
+function save() {
+  const isValid = form.value?.validate();
+  if (!isValid)
+    return;
+
+  const { index, meal } = dialog.value;
+
+  if (index === -1)
+    meals.value.push(meal);
+  else meals.value.splice(index, 1, meal);
+
+  reset();
+};
+
+function remove(index: number) {
+  meals.value.splice(index, 1);
+};
+
+function reset() {
+  dialog.value = newDialog();
+  form.value?.resetValidation();
+};
+
+function load(items: Meals) {
+  meals.value = [...items];
+};
+
+function resetList() {
+  meals.value = copy(defaultMeals);
+};
+
+watch(meals, (val) => {
+  emit('update:modelValue', val);
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped></style>
