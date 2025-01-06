@@ -72,8 +72,7 @@ export default defineComponent({
         return;
 
       this.$emit('update:modelValue', { dialog, to, confirmed: true });
-      // TODO: vue-router RawLocation and Route types are incompatible (RawLocation:name cannot be null)
-      await this.$router.push({ ...to, name: to.name ?? undefined });
+      await this.$router.push(to);
     },
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <v-menu v-model="menu" location="left" :persistent="false">
+  <v-menu location="left" :persistent="false">
     <template #activator="{ props }">
       <slot name="activator" v-bind="{ props }">
         <v-btn
