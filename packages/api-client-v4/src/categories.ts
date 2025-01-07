@@ -75,7 +75,7 @@ export class CategoriesApiV4 {
       request,
     );
 
-    return parseCreateResponse(response, this.baseClient.logger);
+    return parseCreateResponse(response, this.baseClient.logger, request);
   }
 
   public async updateCategoryLocal(

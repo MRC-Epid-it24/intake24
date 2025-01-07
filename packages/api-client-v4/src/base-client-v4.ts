@@ -141,7 +141,12 @@ export class BaseClientV4 {
         return this.login();
       }
       else {
-        throw new Error(`Unexpected status code: ${response.status} (${response.config.url})`);
+        let errorMessage = `Unexpected status code: ${response.status} (${response.config.url})`;
+
+        const reqBody = response.request?.body;
+        if (reqBody !== undefined)
+          errorMessage += `\n\n${reqBody}`;
+        throw new Error(errorMessage);
       }
     }
   }
@@ -234,7 +239,10 @@ export class BaseClientV4 {
     this.logger.error(message);
 
     if (response.data !== undefined)
-      this.logger.error(`Response body: ${JSON.stringify(response.data)}`);
+      this.logger.debug(`Response body: ${JSON.stringify(response.data)}`);
+
+    if (response.request?.data !== undefined)
+      this.logger.debug(`Request body: ${JSON.stringify(response.request?.data)}`);
 
     return new Error(message);
   }
