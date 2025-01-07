@@ -227,3 +227,4 @@ List of external source fields. Data can be collected from multiple sources, so 
 - `{source}:searchTerm` - unique external source identifier, UUIDv4
 - `{source}:type` - selection type (`'selected' | 'missing'`)
 - `{source}:data` - json serialized external source data
+- `{source}:data.path.to.field` - `dot-notation` json path to extract field value

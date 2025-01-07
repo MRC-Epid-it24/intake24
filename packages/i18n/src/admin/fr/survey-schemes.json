@@ -217,7 +217,8 @@
     "fields": {
       "_": "Modifier le libellé du champ",
       "id": "Identifiant du champ",
-      "label": "Libellé du champ"
+      "label": "Libellé du champ",
+      "custom": "Add custom"
     },
     "sections": {
       "_": "Sections d'export de données",

@@ -222,7 +222,8 @@
     "fields": {
       "_": "Edit field label",
       "id": "Field ID",
-      "label": "Field label"
+      "label": "Field label",
+      "custom": "Add custom"
     },
     "sections": {
       "_": "Data export sections",

@@ -51,7 +51,7 @@
                       <v-btn
                         icon
                         :title="$t('common.action.edit')"
-                        @click.stop="editOpen(index, field)"
+                        @click.stop="edit(index, field)"
                       >
                         <v-icon color="secondary-lighten-2">
                           $edit
@@ -59,7 +59,7 @@
                       </v-btn>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-btn color="error" icon="$delete" :title="$t('common.action.remove')" @click.stop="remove(index)" />
+                      <v-btn color="error" icon="$delete" :title="$t('common.action.remove')" @click.stop="exclude(index)" />
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -68,7 +68,14 @@
           </v-col>
           <v-divider vertical />
           <v-col cols="12" md="6">
-            <v-card-title>{{ $t('survey-schemes.data-export.available') }}</v-card-title>
+            <div class="d-flex align-center justify-space-between mb-2">
+              <v-card-title>
+                {{ $t('survey-schemes.data-export.available') }}
+              </v-card-title>
+              <v-btn v-if="section?.id === 'externalSources'" color="primary" rounded="pill" @click="addCustom">
+                {{ $t('survey-schemes.data-export.fields.custom') }}
+              </v-btn>
+            </div>
             <data-export-nutrients
               v-if="section?.id === 'foodNutrients'"
               v-model="fetchedRefFields"
@@ -100,7 +107,7 @@
                   </v-list-item-subtitle>
                   <template #append>
                     <v-list-item-action>
-                      <v-btn color="info" icon="$add" :title="$t('common.action.add')" @click.stop="add(field)" />
+                      <v-btn color="info" icon="$add" :title="$t('common.action.add')" @click.stop="include(field)" />
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -122,7 +129,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="editDialog.field.id"
-                  disabled
+                  :disabled="!isCustomField(editDialog.field.id)"
                   hide-details="auto"
                   :label="$t('survey-schemes.data-export.fields.id')"
                   name="id"
@@ -179,7 +186,14 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'update']);
 
-const newEditDialog = () => ({ show: false, index: -1, field: { id: '', label: '' } });
+function newEditDialog(show = false, custom = false) {
+  return {
+    show,
+    custom,
+    index: -1,
+    field: { id: '', label: '' },
+  };
+}
 const editDialog = ref(newEditDialog());
 
 const dialog = ref(false);
@@ -189,12 +203,16 @@ const filteredFields = ref<ExportField[]>([]);
 const visibleFields = ref<ExportField[]>([]);
 const fetchedRefFields = ref<ExportField[]>([]);
 
+const currentFields = computed(() => props.section?.id === 'foodNutrients' ? fetchedRefFields.value : props.refFields);
+
 const availableFields = computed(() => {
   const fieldIds = fields.value.map(field => field.id);
-  return (
-    props.section?.id === 'foodNutrients' ? fetchedRefFields.value : props.refFields
-  ).filter(field => !fieldIds.includes(field.id));
+  return currentFields.value.filter(field => !fieldIds.includes(field.id));
 });
+
+function isCustomField(id: string) {
+  return !currentFields.value.find(f => f.id === id);
+}
 
 function loadMoreFields() {
   const startIndex = visibleFields.value.length;
@@ -227,12 +245,16 @@ function tryLoadMoreFields(isIntersecting: boolean) {
     loadMoreFields();
 }
 
-function add(field: ExportField) {
+function include(field: ExportField) {
   fields.value.push(field);
 };
 
-function editOpen(index: number, field: ExportField) {
-  editDialog.value = { show: true, index, field: { ...field } };
+function addCustom() {
+  editDialog.value = newEditDialog(true, true);
+};
+
+function edit(index: number, field: ExportField) {
+  editDialog.value = { ...newEditDialog(true), index, field: { ...field } };
 };
 
 function editConfirm() {
@@ -240,6 +262,8 @@ function editConfirm() {
 
   if (index !== -1)
     fields.value.splice(index, 1, field);
+  else
+    fields.value.push(field);
 
   editReset();
 };
@@ -248,7 +272,7 @@ function editReset() {
   editDialog.value = newEditDialog();
 };
 
-function remove(index: number) {
+function exclude(index: number) {
   fields.value.splice(index, 1);
 };
 

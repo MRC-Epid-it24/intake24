@@ -4,6 +4,7 @@ import type {
   ExportFieldTransform,
   ExportRow,
 } from './data-export-fields';
+import { get } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 
@@ -56,8 +57,14 @@ export function externalSourceField(field: ExportField): ExportFieldTransform {
   return ({ food }) => {
     const [sourceId, fieldId] = field.id.split(':');
     const record = food.externalSources?.find(item => sourceId === item.source);
+    if (!record)
+      return undefined;
+
+    if (fieldId.startsWith('data.'))
+      return get(record.data, fieldId.replace('data.', ''));
+
     // @ts-expect-error - TODO: fix this
-    return record && fieldId in record ? record[fieldId] : undefined;
+    return record[fieldId];
   };
 }
 
