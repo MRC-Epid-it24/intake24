@@ -11,6 +11,7 @@ export default await antfu({
     'deployment',
     '**/public',
     'apps/api/src/food-index/language-backends/en/metaphone3.ts',
+    'apps/api/src/food-index/language-backends/arabic-stemmer/index.js',
   ],
 }, {
   rules: {

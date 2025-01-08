@@ -231,6 +231,9 @@ importers:
       '@json2csv/plainjs':
         specifier: ^7.0.6
         version: 7.0.6
+      '@orama/stemmers':
+        specifier: ^3.0.4
+        version: 3.0.4
       '@simplewebauthn/server':
         specifier: ^13.1.1
         version: 13.1.1
@@ -3339,6 +3342,10 @@ packages:
 
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
+
+  '@orama/stemmers@3.0.4':
+    resolution: {integrity: sha512-T6/hmzA+ziFtPXpSc6/jS/BiyO7gOLX6fc9wZ8Xnp+yXdjKGoedNRVex69iSHuA5AKRR1tZ3+G3O7xbZ7E5UaA==}
+    engines: {node: '>= 16.0.0'}
 
   '@parcel/watcher-android-arm64@2.5.1':
     resolution: {integrity: sha512-KF8+j9nNbUN8vzOFDpRMsaKBHZ/mcjEjMToVMJOhTozkDonQFFrRcfdLWn6yWKCmJKmdVxSgHiYvTCef4/qcBA==}
@@ -13151,6 +13158,8 @@ snapshots:
       '@octokit/openapi-types': 23.0.1
 
   '@one-ini/wasm@0.1.1': {}
+
+  '@orama/stemmers@3.0.4': {}
 
   '@parcel/watcher-android-arm64@2.5.1':
     optional: true
