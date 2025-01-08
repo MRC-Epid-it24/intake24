@@ -411,8 +411,8 @@ function surveySubmissionService({
     const [userInfo, followUpUrl] = await Promise.all([
       surveyService.userInfo(survey, userId, tzOffset, 1),
       surveyService.getFollowUpUrl(survey, userId),
-      surveyService.saveSession(survey, userId, state),
       scheduler.jobs.addJob({ type: 'SurveySubmission', userId, params: { surveyId, userId, state } }),
+      survey.session.store ? surveyService.saveSession(survey, userId, state) : () => Promise.resolve(),
     ]);
 
     return { ...userInfo, followUpUrl, submission };
