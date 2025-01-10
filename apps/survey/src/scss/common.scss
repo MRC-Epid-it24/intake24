@@ -36,6 +36,12 @@
   }
 }
 
+.chip__no-wrap {
+  white-space: initial !important;
+  height: unset !important;
+  min-height: calc(var(--v-chip-height)) !important;
+}
+
 .container-max {
   max-width: 1280px !important;
 }

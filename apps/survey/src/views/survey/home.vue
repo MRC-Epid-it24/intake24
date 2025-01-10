@@ -7,11 +7,11 @@
           <v-card-title class="text-h5 font-weight-medium mb-2 pt-4">
             {{ $t('survey.welcome._') }}
           </v-card-title>
-          <v-card-subtitle class="pb-4">
+          <div class="text-body-2 px-4 pt-0 pb-4 opacity-60">
             {{ $t('survey.welcome.subtitle') }}
-          </v-card-subtitle>
+          </div>
           <v-divider />
-          <v-list class="list-no-wrap" lines="two">
+          <v-list class="list__no-wrap" lines="two">
             <v-list-subheader>{{ $t('survey.info') }}</v-list-subheader>
             <v-list-item>
               <v-list-item-title>{{ $t('survey._') }}</v-list-item-title>
@@ -221,7 +221,7 @@
           </template>
           <!-- Feedback info -->
           <template v-if="feedbackAllowed">
-            <v-list class="list-no-wrap">
+            <v-list class="list__no-wrap">
               <v-list-subheader>{{ $t('feedback.info') }}</v-list-subheader>
               <template v-if="feedbackAvailable">
                 <v-list-item link>
@@ -280,7 +280,7 @@
             <v-divider />
           </template>
           <!-- Past recalls -->
-          <v-card-subtitle class="mt-4">
+          <v-card-subtitle class="my-4">
             {{ $t('recall.submissions.past') }}
           </v-card-subtitle>
           <v-card-text class="py-0">
@@ -303,7 +303,7 @@
                 </v-timeline-item>
               </v-timeline>
             </template>
-            <v-list v-else class="list-no-wrap">
+            <v-list v-else class="list__no-wrap">
               <v-list-item>
                 <template #prepend>
                   <v-icon size="large">

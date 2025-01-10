@@ -1,16 +1,13 @@
 <template>
   <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
-    <app-entry-screen
-      :subtitle="$t('common.login.subtitle')"
-      :title="$t('common._')"
-    >
+    <app-entry-screen :title="$t('common._')">
       <template #subtitle>
         <div class="text-h6 text-center font-weight-medium pt-4 pb-2">
           {{ survey?.name }}
         </div>
-        <v-card-subtitle class="text-center font-weight-medium py-0">
+        <div class="text-subtitle-2 text-center font-weight-medium opacity-60">
           {{ $t('common.login.subtitle') }}
-        </v-card-subtitle>
+        </div>
       </template>
       <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
         <v-card-text>
@@ -66,29 +63,23 @@
       </v-form>
       <template v-if="isOpenAccess">
         <v-divider />
-        <v-card-title class="text-h3 font-weight-medium text-center mt-4">
-          {{ $t('survey.generateUser.noAccount') }}
-        </v-card-title>
-        <v-card-subtitle class="d-flex justify-center font-weight-medium px-6 pt-4">
-          {{ $t('survey.generateUser.subtitle') }}
-        </v-card-subtitle>
-        <v-card-text>
-          <v-container>
-            <v-row justify="center">
-              <v-col cols="12">
-                <v-btn
-                  block
-                  color="accent"
-                  rounded
-                  size="x-large"
-                  :to="{ name: 'survey-generate-user', params: { surveyId } }"
-                  variant="outlined"
-                >
-                  {{ $t('survey.generateUser._') }}
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
+        <v-card-text class="d-flex flex-column ga-4 pa-6">
+          <div class="text-h3 font-weight-medium text-center">
+            {{ $t('survey.generateUser.noAccount') }}
+          </div>
+          <div class="text-body-2 text-center font-weight-medium px-6 opacity-60">
+            {{ $t('survey.generateUser.subtitle') }}
+          </div>
+          <v-btn
+            block
+            color="accent"
+            rounded
+            size="x-large"
+            :to="{ name: 'survey-generate-user', params: { surveyId } }"
+            variant="outlined"
+          >
+            {{ $t('survey.generateUser._') }}
+          </v-btn>
         </v-card-text>
       </template>
     </app-entry-screen>

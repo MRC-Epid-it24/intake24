@@ -42,7 +42,7 @@
       <v-chip
         v-for="category in showAll ? contents.subcategories : firstCategories"
         :key="category.code"
-        class="my-1"
+        class="chip__no-wrap py-1"
         clickable
         @click="categorySelected(category)"
       >
@@ -142,5 +142,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

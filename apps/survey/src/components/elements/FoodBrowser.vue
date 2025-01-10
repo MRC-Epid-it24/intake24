@@ -44,6 +44,7 @@
         </v-alert>
         <v-btn
           v-if="navigationHistory.length"
+          class="btn-truncate"
           size="large"
           variant="text"
           @click="navigateBack"
@@ -229,21 +230,16 @@ const showInDialog = computed(
 
 const dialog = ref(false);
 
+const backCategoryLabel = computed(() => {
+  if (!navigationHistory.value.length)
+    return '??';
+
+  const last = navigationHistory.value[navigationHistory.value.length - 1];
+
+  return last === 'search' ? t(`prompts.${type.value}.results`).toLowerCase() : last.name;
+});
+
 const promptI18n = computed(() => {
-  function backCategoryLabel(): string {
-    if (navigationHistory.value.length === 0)
-      return '??';
-
-    const last = navigationHistory.value[navigationHistory.value.length - 1];
-
-    if (last === 'search')
-      return t(`prompts.${type.value}.searchResults`);
-
-    return last.name;
-  }
-
-  // add conditional browse
-
   return {
     ...translatePrompt(
       [
@@ -264,7 +260,7 @@ const promptI18n = computed(() => {
         type.value === 'recipeBuilder' ? 'missing.irrelevantIngredient' : undefined,
       ].filter(Boolean) as string[],
       {
-        back: { category: backCategoryLabel() },
+        back: { category: backCategoryLabel.value },
         browse: { category: props.stepName },
       },
     ),

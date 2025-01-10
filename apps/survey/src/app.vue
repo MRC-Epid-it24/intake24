@@ -90,7 +90,7 @@
         </div>
         <v-spacer v-if="$vuetify.display.smAndUp" />
         <v-btn
-          v-if="surveyId"
+          v-if="surveyId && !$vuetify.display.mobile"
           :icon="$vuetify.display.mobile"
           :size="$vuetify.display.mobile ? 'large' : undefined"
           :title="$t('profile._')"
@@ -224,7 +224,10 @@ export default defineComponent({
   align-items: center;
 
   margin-left: 8px;
+  margin-right: 12px;
   padding: 8px 16px 8px 16px;
+
+  overflow: hidden;
 
   span {
     font-size: 0.9rem;
@@ -239,14 +242,10 @@ export default defineComponent({
   @media screen and (max-width: 600px) {
     flex-direction: column;
     flex-grow: 1;
-    align-items: start;
+    align-items: stretch;
     justify-content: space-around;
 
     padding: 0px 16px 0px 16px;
-
-    height: 46px;
-    max-height: 46px;
-    min-height: 46px;
   }
 }
 
