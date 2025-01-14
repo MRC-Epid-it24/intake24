@@ -18,6 +18,7 @@
         "title": "Cookies preferences",
         "acceptAllBtn": "Accept all",
         "savePreferencesBtn": "Save preferences",
+        "closeIconLabel": "Close",
         "sections": [
           {
             "title": "How we use cookies 📢",

@@ -13,23 +13,26 @@ import { getObjectNestedKeys } from '@intake24/common/util';
  * Merges two translations files together
  * - merge default built-in translation with database message object
  *
- * @param {*} target
+ * @param {*} defaults
  * @param {*} source
  * @returns
  */
-export function mergeTranslations(target: any, source: any) {
-  if (typeof target === 'undefined')
+export function mergeTranslations(defaults: any, source: any) {
+  if (typeof defaults === 'undefined')
     return undefined;
 
   if (typeof source === 'undefined')
-    return target;
+    return defaults;
 
-  if (typeof target === 'string')
-    return typeof source === 'string' ? source : target;
+  if (typeof defaults === 'string')
+    return typeof source === 'string' ? source : defaults;
 
-  if (Object.prototype.toString.call(target) === '[object Object]') {
-    return Object.keys(target).reduce<Record<string, any>>((acc, key) => {
-      acc[key] = mergeTranslations(target[key], source[key]);
+  if (Array.isArray(defaults))
+    return Array.isArray(source) ? source : defaults;
+
+  if (Object.prototype.toString.call(defaults) === '[object Object]') {
+    return Object.keys(defaults).reduce<Record<string, any>>((acc, key) => {
+      acc[key] = mergeTranslations(defaults[key], source[key]);
       return acc;
     }, {});
   }

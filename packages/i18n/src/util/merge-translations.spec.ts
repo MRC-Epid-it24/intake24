@@ -27,4 +27,13 @@ describe('merge translation files', () => {
 
     expect(merged).toEqual({ a: 'a11', b: 'b11', c: { ca: 'ca1' } });
   });
+
+  it('should keep the arrays as-is', () => {
+    const target = { a: 'a1', b: 'b1', c: [{ ca: 'ca1' }] };
+    const source = { a: 'a11', b: 'b11', c: [{ ca: 'ca11' }, { cb: 'cb2' }] };
+
+    const merged = mergeTranslations(target, source);
+
+    expect(merged).toEqual({ a: 'a11', b: 'b11', c: [{ ca: 'ca11' }, { cb: 'cb2' }] });
+  });
 });

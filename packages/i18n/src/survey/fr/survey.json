@@ -30,6 +30,7 @@
     "429": "De nouveaux identifiants viennent d'être générés, rééssayez plus tard.",
     "_": "Accéder à l'étude",
     "subtitle": "Ceci est une étude en libre accès, vous pouvez y accéder gratuitement.",
+    "noAccount": "No account?",
     "link": "lien",
     "info1": "Sélectionnez 'Accéder à l'étude' pour générer de nouveaux identifiants. Il vous faudra retenir ces identifiants si vous souhaitez reprendre votre session plus tard.",
     "info2": "Cette enquête va durer approximativement trente minutes.",
