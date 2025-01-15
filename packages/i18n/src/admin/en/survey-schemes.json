@@ -524,7 +524,8 @@
     "edit-meal-prompt": {
       "title": "Food list",
       "subtitle": "List or edit foods in this meal as free text descriptions",
-      "separateDrinks": "Separate drinks list"
+      "separateDrinks": "Separate drinks list",
+      "inputAutoFocus": "Automatically set focus to the food entry text field"
     },
     "external-source-prompt": {
       "title": "External source",

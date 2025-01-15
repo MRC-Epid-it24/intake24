@@ -367,6 +367,7 @@ const generalAssociatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).exten
 const editMealPrompt = baseStandardPrompt.extend({
   component: z.literal('edit-meal-prompt'),
   separateDrinks: z.boolean(),
+  inputAutoFocus: z.boolean(),
 });
 
 const externalSourcePrompt = baseStandardPrompt.extend({

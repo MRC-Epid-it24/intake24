@@ -37,6 +37,7 @@ export const editMealPrompt: Prompts['edit-meal-prompt'] = copy({
   id: 'edit-meal-prompt',
   name: 'Meal Edit prompt',
   separateDrinks: false,
+  inputAutoFocus: true,
 });
 
 export const externalSourcePrompt: Prompts['external-source-prompt'] = copy({

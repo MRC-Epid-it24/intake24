@@ -218,6 +218,15 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
             },
       };
     }
+    case 'edit-meal-prompt':
+      return {
+        ...prompt,
+        version: 2,
+        useGraph: false,
+        conditions,
+        separateDrinks: true,
+        inputAutoFocus: true,
+      };
     default:
       return {
         ...prompt,

@@ -4,7 +4,7 @@
       <editable-food-list
         v-model="foodsOnly"
         v-bind="{ prompt, section }"
-        focus
+        :focus="prompt.inputAutoFocus"
         mode="foodsOnly"
         @delete="deleteFood"
       />
@@ -19,7 +19,7 @@
       v-else
       v-bind="{ prompt, section }"
       v-model="state"
-      focus
+      :focus="prompt.inputAutoFocus"
       @delete="deleteFood"
     />
     <template #actions>

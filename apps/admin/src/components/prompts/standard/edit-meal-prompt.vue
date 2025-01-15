@@ -8,6 +8,12 @@
           :model-value="separateDrinks"
           @update:model-value="update('separateDrinks', $event)"
         />
+        <v-switch
+          hide-details="auto"
+          :label="$t('survey-schemes.prompts.edit-meal-prompt.inputAutoFocus')"
+          :model-value="inputAutoFocus"
+          @update:model-value="update('inputAutoFocus', $event)"
+        />
       </v-col>
     </v-row>
   </v-tabs-window-item>
@@ -29,6 +35,10 @@ export default defineComponent({
   props: {
     separateDrinks: {
       type: Boolean as PropType<Prompts['edit-meal-prompt']['separateDrinks']>,
+      required: true,
+    },
+    inputAutoFocus: {
+      type: Boolean as PropType<Prompts['edit-meal-prompt']['inputAutoFocus']>,
       required: true,
     },
   },
