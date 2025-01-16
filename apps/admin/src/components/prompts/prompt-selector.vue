@@ -308,7 +308,7 @@ export default defineComponent({
 
       const newPrompt
         = this.availablePrompts.find(item => item.component === component)
-        ?? this.availablePrompts[0];
+          ?? this.availablePrompts[0];
       if (!newPrompt)
         return;
 

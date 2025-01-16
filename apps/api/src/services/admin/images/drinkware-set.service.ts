@@ -188,9 +188,9 @@ function drinkwareSetService({
             // image processing pipeline
             const baseImage
               = input.baseImageFiles[choiceId]
-              ?? (v1
-                ? await convertV1BaseImage(drinkwareSetId, imageUploaderId, v1.baseImageUrl)
-                : undefined);
+                ?? (v1
+                  ? await convertV1BaseImage(drinkwareSetId, imageUploaderId, v1.baseImageUrl)
+                  : undefined);
 
             if (baseImage === undefined) {
               throw new ApplicationError(

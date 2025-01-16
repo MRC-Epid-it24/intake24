@@ -229,9 +229,9 @@ export default defineComponent({
         this.portionSize.objectWeight = this.guideImageData.objects[id].weight ?? 0;
         this.portionSize.servingWeight
           = this.guideImageData.objects[id].weight
-          * this.portionSize.quantity
-          * this.conversionFactor
-          * this.portionSize.linkedQuantity;
+            * this.portionSize.quantity
+            * this.conversionFactor
+            * this.portionSize.linkedQuantity;
       }
 
       const state: PromptStates['guide-image-prompt'] = {

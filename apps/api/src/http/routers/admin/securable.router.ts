@@ -150,7 +150,7 @@ export function securable(securable: ModelStatic<Securable>) {
           const currentActions = user.securables?.map(sec => sec.action).sort() ?? [];
           const actionsMatch
             = actions.length === currentActions.length
-            && actions.sort().every((action, idx) => action === currentActions[idx]);
+              && actions.sort().every((action, idx) => action === currentActions[idx]);
 
           if (!actionsMatch) {
             const records = actions.map(action => ({ ...securableInput, action }));

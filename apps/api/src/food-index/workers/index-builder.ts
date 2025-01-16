@@ -284,7 +284,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     const acceptHidden = query.parameters.includeHidden || !localeIndex.parentCategoryIndex.isFoodHidden(matchResult.key);
     const acceptCategory
       = query.parameters.limitToCategory === undefined
-      || localeIndex.parentCategoryIndex.isFoodInCategory(matchResult.key, query.parameters.limitToCategory);
+        || localeIndex.parentCategoryIndex.isFoodInCategory(matchResult.key, query.parameters.limitToCategory);
 
     return acceptHidden && acceptCategory;
   });

@@ -203,9 +203,9 @@ export default defineComponent({
 
       this.portionSize.servingWeight
         = (portionSize.unit?.weight ?? 0)
-        * portionSize.quantity
-        * this.conversionFactor
-        * this.portionSize.linkedQuantity;
+          * portionSize.quantity
+          * this.conversionFactor
+          * this.portionSize.linkedQuantity;
 
       const state: PromptStates['standard-portion-prompt'] = {
         portionSize: this.portionSize,

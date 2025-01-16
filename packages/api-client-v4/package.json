@@ -18,8 +18,8 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.13",
+    "@types/lodash": "^4.17.14",
     "@types/mime-types": "^2.1.4",
-    "@types/node": "^22.10.2"
+    "@types/node": "^22.10.7"
   }
 }

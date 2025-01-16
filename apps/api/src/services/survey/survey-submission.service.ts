@@ -670,7 +670,7 @@ function surveySubmissionService({
 
       const hasNotifications
         = notifications.length
-        && notifications.some(({ type }) => type === 'survey.session.submitted');
+          && notifications.some(({ type }) => type === 'survey.session.submitted');
 
       // Clean user submissions cache and dispatch submission notification if any
       await Promise.all(

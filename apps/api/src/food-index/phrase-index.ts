@@ -214,7 +214,7 @@ export class PhraseIndex<K> {
 
       const indexMatches
         = this.wordIndex.get(phrase.words[wi].interpretations[interpretationIndex].dictionaryWord)
-        || [];
+          || [];
 
       const matchedWords: Array<WordMatch> = indexMatches.map(m => ({
         word: {
