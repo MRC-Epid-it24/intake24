@@ -6,7 +6,7 @@
       </template>
     </v-breadcrumbs>
     <v-spacer />
-    <request-help :survey-id="$route.params.surveyId">
+    <request-help :survey-id="$route.params.surveyId.toString()">
       <template v-if="$vuetify.display.mobile" #activator="{ props }">
         <v-btn
           v-bind="props"

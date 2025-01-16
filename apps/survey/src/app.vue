@@ -122,7 +122,7 @@
       <router-view />
     </v-main>
     <navigation
-      v-if="showNav"
+      v-if="showNav && surveyId"
       v-bind="{ surveyId, recall: recallAllowed, feedback: feedbackAllowed }"
     />
     <service-worker />

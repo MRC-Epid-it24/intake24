@@ -15,7 +15,7 @@ export const feedbackParametersGuard: NavigationGuard = async (to, from, next) =
 
   try {
     if (!survey.parametersLoaded)
-      await survey.loadParameters(surveyId);
+      await survey.loadParameters(surveyId.toString());
   }
   catch (error) {
     if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
@@ -50,7 +50,7 @@ export const surveyParametersGuard: NavigationGuard = async (to, from, next) => 
 
   try {
     if (!survey.parametersLoaded)
-      await survey.loadParameters(surveyId);
+      await survey.loadParameters(surveyId.toString());
   }
   catch (error) {
     if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
@@ -91,7 +91,7 @@ export const authGuard: NavigationGuard = async (to, from, next) => {
   try {
     const auth = useAuth();
     await auth.logout(true);
-    await auth.token({ token });
+    await auth.token({ token: token.toString() });
 
     if (auth.loggedIn) {
       const surveyId = useUser().profile?.surveyId;
@@ -122,7 +122,7 @@ export const createUserGuard: NavigationGuard = async (to, from, next) => {
   } = to;
 
   try {
-    const { authToken } = await surveyService.createUser(surveyId, token);
+    const { authToken } = await surveyService.createUser(surveyId.toString(), token.toString());
     const auth = useAuth();
     await auth.logout(true);
     await auth.token({ token: authToken });

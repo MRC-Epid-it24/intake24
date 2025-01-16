@@ -15,7 +15,7 @@ import vueDevToolsPlugin from 'vite-plugin-vue-devtools';
 import vuetify from 'vite-plugin-vuetify';
 import webfontDownload from 'vite-plugin-webfont-dl';
 
-import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/common/src/security';
+import { resolveCaptchaScript } from '../../packages/common/src/security';
 import { colors } from '../../packages/common/src/theme';
 import pkg from './package.json';
 
@@ -49,9 +49,6 @@ export default defineConfig(({ mode }) => {
   const legacy = !!(LEGACY === 'true');
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
   const vueDevTools = !!(VUE_DEV_TOOLS === 'true');
-
-  if (captchaProvider && !isCaptchaProvider(captchaProvider))
-    throw new Error('Invalid Captcha provider');
 
   return {
     resolve: {

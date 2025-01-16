@@ -208,8 +208,8 @@ export default defineComponent({
       update();
     };
 
-    async function updateConfirmed(foodId: string, idx: number, confirmed: boolean) {
-      foods.value[foodId][idx].confirmed = typeof confirmed === 'boolean' ? confirmed : null;
+    async function updateConfirmed(foodId: string, idx: number, confirmed: boolean | null) {
+      foods.value[foodId][idx].confirmed = !!confirmed;
 
       if (confirmed === false) {
         foods.value[foodId][idx].data = null;

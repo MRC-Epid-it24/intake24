@@ -4,11 +4,11 @@
     :value="true"
     @click="action('selectMeal', meal.id)"
   >
-    <template #prepend>
+    <!--     <template #prepend>
       <v-icon :class="{ rotate: isSelected || selectedFoodInMeal }">
         $expand
       </v-icon>
-    </template>
+    </template> -->
     <template #activator>
       <v-list-item-title class="text-body-2 font-weight-medium text-wrap">
         {{ mealName }}

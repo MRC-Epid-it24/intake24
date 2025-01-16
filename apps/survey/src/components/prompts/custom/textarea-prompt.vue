@@ -62,7 +62,7 @@ export default defineComponent({
 
     const confirm = () => {
       const isValid = form.value?.validate();
-      return isValid;
+      return !!isValid;
     };
 
     const { action, customPromptLayout, type } = usePromptUtils(props, ctx, confirm);

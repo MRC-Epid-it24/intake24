@@ -68,7 +68,6 @@
 
           <food-browser
             v-if="showFoodBrowser(step)"
-            class="mt-2"
             v-bind="{
               localeId,
               surveySlug,
@@ -285,7 +284,11 @@ export default defineComponent({
       this.activeStep = getNextStep(this.recipeSteps);
     },
 
-    updateActiveStep(index: number) {
+    updateActiveStep(index: unknown) {
+      // TODO: remove this once we have a proper type from vuetify component
+      if (typeof index !== 'number')
+        return;
+
       const { recipeSteps } = this;
       this.$emit('update:modelValue', { activeStep: index, recipeSteps });
       this.activeStep = index;

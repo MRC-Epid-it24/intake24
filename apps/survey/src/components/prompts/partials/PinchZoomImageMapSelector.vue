@@ -99,6 +99,7 @@ export default defineComponent({
     const { hoverIndex, label, objects } = useImageMap(props, toRef(props, 'width'));
 
     const resetScale = () => {
+      // @ts-expect-error - not exposed in types
       zoomer.value?.setData({ scale: 1, originX: 0, originY: 0, translateX: 0, translateY: 0 });
     };
 
