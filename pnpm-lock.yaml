@@ -801,6 +801,9 @@ importers:
       '@fortawesome/fontawesome-free':
         specifier: ^6.7.2
         version: 6.7.2
+      '@vue-youtube/core':
+        specifier: ^0.0.6
+        version: 0.0.6(vue@3.5.13(typescript@5.7.3))
       '@vueuse/core':
         specifier: ^12.4.0
         version: 12.4.0(typescript@5.7.3)
@@ -4174,6 +4177,24 @@ packages:
 
   '@volar/typescript@2.4.11':
     resolution: {integrity: sha512-2DT+Tdh88Spp5PyPbqhyoYavYCPDsqbHLFwcUI9K1NlY1YgUJvujGdrqUp0zWxnW7KWNTr3xSpMuv2WnaTKDAw==}
+
+  '@vue-youtube/core@0.0.6':
+    resolution: {integrity: sha512-3bqs41WCP1901vv7EXxYD0/mKhhjq6YA3r9Lhr0wyFV+UHPLyxcZZ50yUtkXn1cIr9Pz0DRzEGwi65Quj94Pmg==}
+    peerDependencies:
+      '@vue/composition-api': ^1.7.2
+      vue: ^2.7.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
+  '@vue-youtube/shared@0.0.6':
+    resolution: {integrity: sha512-5GxwPkiHOhNpjBbRuL5UmE4EpX8hmTpA+UOiTNEZzeYyrGY6iSYwL8w3Ot+QJ8Koc3K0o9GHD8XywHrKDXbs3g==}
+    peerDependencies:
+      '@vue/composition-api': ^1.7.2
+      vue: ^2.7.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
 
   '@vue/babel-helper-vue-transform-on@1.2.5':
     resolution: {integrity: sha512-lOz4t39ZdmU4DJAa2hwPYmKc8EsuGa2U0L9KaZaOJUt0UwQNjNA3AZTq6uEivhOKhhG1Wvy96SvYBoFmCg3uuw==}
@@ -14017,6 +14038,17 @@ snapshots:
       '@volar/language-core': 2.4.11
       path-browserify: 1.0.1
       vscode-uri: 3.0.8
+
+  '@vue-youtube/core@0.0.6(vue@3.5.13(typescript@5.7.3))':
+    dependencies:
+      '@vue-youtube/shared': 0.0.6(vue@3.5.13(typescript@5.7.3))
+      vue: 3.5.13(typescript@5.7.3)
+      vue-demi: 0.14.10(vue@3.5.13(typescript@5.7.3))
+
+  '@vue-youtube/shared@0.0.6(vue@3.5.13(typescript@5.7.3))':
+    dependencies:
+      vue: 3.5.13(typescript@5.7.3)
+      vue-demi: 0.14.10(vue@3.5.13(typescript@5.7.3))
 
   '@vue/babel-helper-vue-transform-on@1.2.5': {}
 

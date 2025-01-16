@@ -442,6 +442,18 @@
         "max": "Maximum number of answers"
       }
     },
+    "video": {
+      "_": "Video",
+      "youtube": {
+        "_": "Youtube video",
+        "videoId": "Youtube video ID",
+        "height": "Video height",
+        "width": "Video width",
+        "autoContinue": "Continue on video end",
+        "autoplay": "Autoplay video",
+        "required": "Video is required to be played"
+      }
+    },
     "templates": {
       "_": "Prompt Template",
       "title": "Prompt Templates",
@@ -600,7 +612,6 @@
         "onecheckbox": "Tick one survey check to pass review"
       }
     },
-
     "info-prompt": {
       "title": "Information",
       "subtitle": "Show a message or instructions and ask for confirmation"

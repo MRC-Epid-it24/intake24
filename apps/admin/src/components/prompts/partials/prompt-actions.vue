@@ -1,181 +1,179 @@
 <template>
   <v-tabs-window-item key="actions" value="actions">
-    <v-container>
-      <v-row>
-        <v-col cols="6">
-          <v-switch
-            v-model="toggle"
-            hide-details="auto"
-            :label="$t('survey-schemes.actions.enable')"
-            @update:model-value="changeToggle"
-          />
-        </v-col>
-        <v-col v-if="currentActions" cols="6">
-          <v-switch
-            v-model="currentActions.both"
-            hide-details="auto"
-            :label="$t('survey-schemes.actions.both')"
-          />
-        </v-col>
-      </v-row>
-      <div v-if="currentActions" class="mt-4">
-        <div class="text-h5 mb-4">
-          {{ $t(`survey-schemes.actions.title`) }}
-        </div>
-        <div class="d-flex flex-row ga-2">
-          <div>
-            <v-btn class="mb-4" color="primary" @click="add">
-              <v-icon icon="$add" start />
-              {{ $t(`survey-schemes.actions.add`) }}
-            </v-btn>
-            <v-tabs v-model="selectedAction" direction="vertical">
-              <vue-draggable
-                v-model="currentActions.items"
-                :animation="300"
-                handle=".drag-and-drop__handle"
-                @end="update"
-              >
-                <v-tab v-for="(action, idx) in currentActions.items" :key="action.id" class="d-flex ga-3" :value="action.id">
-                  <v-icon class="drag-and-drop__handle">
-                    $handle
-                  </v-icon>
-                  {{ $t(`survey-schemes.actions.types.${action.type}`) }}({{ idx + 1 }})
-                </v-tab>
-              </vue-draggable>
-            </v-tabs>
-          </div>
-          <v-tabs-window v-model="selectedAction" class="flex-grow-1">
-            <v-tabs-window-item v-for="(action, idx) in currentActions.items" :key="action.id" :value="action.id">
-              <v-card border flat>
-                <v-card-title>
-                  <v-icon icon="fas fa-location-arrow" start />
-                  {{ $t(`survey-schemes.actions.types._`) }} #{{ idx + 1 }}
-                </v-card-title>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" md="6">
-                      <v-select
-                        v-model="action.type"
-                        hide-details="auto"
-                        :items="availableActions"
-                        :label="$t('survey-schemes.actions.types._')"
-                        variant="outlined"
-                      />
-                    </v-col>
-                    <v-col class="my-auto" cols="12" md="6">
-                      <v-select
-                        v-model="action.layout"
-                        hide-details="auto"
-                        :items="layouts"
-                        :label="$t('survey-schemes.actions.layouts._')"
-                        multiple
-                        variant="outlined"
-                      />
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <v-select
-                        v-model="action.variant"
-                        hide-details="auto"
-                        :items="actionVariants"
-                        :label="$t('survey-schemes.actions.variants._')"
-                        variant="outlined"
-                      />
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <v-select
-                        v-model="action.color"
-                        hide-details="auto"
-                        :items="colors"
-                        :label="$t('survey-schemes.actions.color')"
-                        variant="outlined"
-                      >
-                        <template #item="{ item, props }">
-                          <v-list-item v-bind="props" :title="item.raw.title">
-                            <template #prepend>
-                              <span
-                                class="mr-2 pa-4 rounded-circle"
-                                :style="{ backgroundColor: item.raw.color }"
-                              />
-                            </template>
-                          </v-list-item>
-                        </template>
-                        <template #selection="{ item }">
-                          <span
-                            class="mr-2 pa-2 rounded-circle"
-                            :style="{ backgroundColor: item.raw.color }"
-                          />
-                          {{ item.raw.title }}
-                        </template>
-                      </v-select>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="action.icon"
-                        hide-details="auto"
-                        :label="$t('survey-schemes.actions.icon')"
-                        variant="outlined"
-                      />
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <json-editor-dialog v-model="action.params">
-                        <template #activator="{ props }">
-                          <v-btn v-bind="props" block class="h-100" size="large" variant="tonal">
-                            <v-icon icon="fas fa-code" start />
-                            {{ $t('survey-schemes.actions.parameters') }}
-                          </v-btn>
-                        </template>
-                      </json-editor-dialog>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <language-selector
-                        v-model="action.text"
-                        border
-                        :label="$t('survey-schemes.actions.text')"
-                        :required="true"
-                      >
-                        <template v-for="lang in Object.keys(action.text)" :key="lang" #[`lang.${lang}`]>
-                          <v-text-field
-                            v-model="action.text[lang]"
-                            hide-details="auto"
-                            :label="$t('survey-schemes.actions.text')"
-                            :rules="[]"
-                            variant="outlined"
-                          />
-                        </template>
-                      </language-selector>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <language-selector
-                        v-model="action.label"
-                        border
-                        :label="$t('survey-schemes.actions.label')"
-                      >
-                        <template v-for="lang in Object.keys(action.label)" :key="lang" #[`lang.${lang}`]>
-                          <v-text-field
-                            v-model="action.label[lang]"
-                            hide-details="auto"
-                            :label="$t('survey-schemes.actions.label')"
-                            :rules="[]"
-                            variant="outlined"
-                          />
-                        </template>
-                      </language-selector>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <v-card-actions>
-                  <v-spacer />
-                  <v-btn class="font-weight-bold" color="error" variant="text" @click="remove(idx)">
-                    <v-icon icon="$delete" start />
-                    {{ $t('survey-schemes.actions.remove') }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-tabs-window-item>
-          </v-tabs-window>
-        </div>
+    <v-row>
+      <v-col cols="6">
+        <v-switch
+          v-model="toggle"
+          hide-details="auto"
+          :label="$t('survey-schemes.actions.enable')"
+          @update:model-value="changeToggle"
+        />
+      </v-col>
+      <v-col v-if="currentActions" cols="6">
+        <v-switch
+          v-model="currentActions.both"
+          hide-details="auto"
+          :label="$t('survey-schemes.actions.both')"
+        />
+      </v-col>
+    </v-row>
+    <div v-if="currentActions" class="mt-4">
+      <div class="text-h5 mb-4">
+        {{ $t(`survey-schemes.actions.title`) }}
       </div>
-    </v-container>
+      <div class="d-flex flex-row ga-2">
+        <div>
+          <v-btn class="mb-4" color="primary" @click="add">
+            <v-icon icon="$add" start />
+            {{ $t(`survey-schemes.actions.add`) }}
+          </v-btn>
+          <v-tabs v-model="selectedAction" direction="vertical">
+            <vue-draggable
+              v-model="currentActions.items"
+              :animation="300"
+              handle=".drag-and-drop__handle"
+              @end="update"
+            >
+              <v-tab v-for="(action, idx) in currentActions.items" :key="action.id" class="d-flex ga-3" :value="action.id">
+                <v-icon class="drag-and-drop__handle">
+                  $handle
+                </v-icon>
+                {{ $t(`survey-schemes.actions.types.${action.type}`) }}({{ idx + 1 }})
+              </v-tab>
+            </vue-draggable>
+          </v-tabs>
+        </div>
+        <v-tabs-window v-model="selectedAction" class="flex-grow-1">
+          <v-tabs-window-item v-for="(action, idx) in currentActions.items" :key="action.id" :value="action.id">
+            <v-card border flat>
+              <v-card-title>
+                <v-icon icon="fas fa-location-arrow" start />
+                {{ $t(`survey-schemes.actions.types._`) }} #{{ idx + 1 }}
+              </v-card-title>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <v-select
+                      v-model="action.type"
+                      hide-details="auto"
+                      :items="availableActions"
+                      :label="$t('survey-schemes.actions.types._')"
+                      variant="outlined"
+                    />
+                  </v-col>
+                  <v-col class="my-auto" cols="12" md="6">
+                    <v-select
+                      v-model="action.layout"
+                      hide-details="auto"
+                      :items="layouts"
+                      :label="$t('survey-schemes.actions.layouts._')"
+                      multiple
+                      variant="outlined"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-select
+                      v-model="action.variant"
+                      hide-details="auto"
+                      :items="actionVariants"
+                      :label="$t('survey-schemes.actions.variants._')"
+                      variant="outlined"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-select
+                      v-model="action.color"
+                      hide-details="auto"
+                      :items="colors"
+                      :label="$t('survey-schemes.actions.color')"
+                      variant="outlined"
+                    >
+                      <template #item="{ item, props }">
+                        <v-list-item v-bind="props" :title="item.raw.title">
+                          <template #prepend>
+                            <span
+                              class="mr-2 pa-4 rounded-circle"
+                              :style="{ backgroundColor: item.raw.color }"
+                            />
+                          </template>
+                        </v-list-item>
+                      </template>
+                      <template #selection="{ item }">
+                        <span
+                          class="mr-2 pa-2 rounded-circle"
+                          :style="{ backgroundColor: item.raw.color }"
+                        />
+                        {{ item.raw.title }}
+                      </template>
+                    </v-select>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      v-model="action.icon"
+                      hide-details="auto"
+                      :label="$t('survey-schemes.actions.icon')"
+                      variant="outlined"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <json-editor-dialog v-model="action.params">
+                      <template #activator="{ props }">
+                        <v-btn v-bind="props" block class="h-100" size="large" variant="tonal">
+                          <v-icon icon="fas fa-code" start />
+                          {{ $t('survey-schemes.actions.parameters') }}
+                        </v-btn>
+                      </template>
+                    </json-editor-dialog>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <language-selector
+                      v-model="action.text"
+                      border
+                      :label="$t('survey-schemes.actions.text')"
+                      :required="true"
+                    >
+                      <template v-for="lang in Object.keys(action.text)" :key="lang" #[`lang.${lang}`]>
+                        <v-text-field
+                          v-model="action.text[lang]"
+                          hide-details="auto"
+                          :label="$t('survey-schemes.actions.text')"
+                          :rules="[]"
+                          variant="outlined"
+                        />
+                      </template>
+                    </language-selector>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <language-selector
+                      v-model="action.label"
+                      border
+                      :label="$t('survey-schemes.actions.label')"
+                    >
+                      <template v-for="lang in Object.keys(action.label)" :key="lang" #[`lang.${lang}`]>
+                        <v-text-field
+                          v-model="action.label[lang]"
+                          hide-details="auto"
+                          :label="$t('survey-schemes.actions.label')"
+                          :rules="[]"
+                          variant="outlined"
+                        />
+                      </template>
+                    </language-selector>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn class="font-weight-bold" color="error" variant="text" @click="remove(idx)">
+                  <v-icon icon="$delete" start />
+                  {{ $t('survey-schemes.actions.remove') }}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-tabs-window-item>
+        </v-tabs-window>
+      </div>
+    </div>
   </v-tabs-window-item>
 </template>
 

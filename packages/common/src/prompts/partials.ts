@@ -1,4 +1,4 @@
-import type { Counter, Slider } from './prompts';
+import type { Counter, Slider, YoutubeVideo } from './prompts';
 
 export const counterDefaults: Counter = {
   type: 'counter',
@@ -17,4 +17,14 @@ export const sliderDefaults: Slider = {
   current: { value: 1, label: false, size: 50 },
   step: 1,
   confirm: false,
+};
+
+export const ytVideoDefaults: YoutubeVideo = {
+  type: 'youtube',
+  videoId: 't0ac25uWrxY',
+  height: 720,
+  width: 1280,
+  autoContinue: false,
+  autoplay: false,
+  required: false,
 };

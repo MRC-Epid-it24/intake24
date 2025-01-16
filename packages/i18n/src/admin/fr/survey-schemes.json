@@ -437,6 +437,18 @@
         "max": "Maximum number of answers"
       }
     },
+    "video": {
+      "_": "Video",
+      "youtube": {
+        "_": "Youtube video",
+        "videoId": "Youtube video ID",
+        "height": "Video height",
+        "width": "Video width",
+        "autoContinue": "Continue on video end",
+        "autoplay": "Autoplay video",
+        "required": "Video is required to be played"
+      }
+    },
     "templates": {
       "_": "Modèle d'invite",
       "title": "Modèles d'invite",

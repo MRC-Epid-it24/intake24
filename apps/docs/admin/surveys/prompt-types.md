@@ -426,6 +426,17 @@ Prompt to collect date information.
 
 Informational prompt for acknowledging displayed information.
 
+#### Video options
+
+Allows to embed youtube video with optional settings.
+
+- `videoId` - Youtube video ID
+- `height` - video height (default: `1280`)
+- `width` - video width (default: `720`)
+- `autoContinue` - continue on video end
+- `autoplay` - autoplay video
+- `required` - video is required to be played in full to continue
+
 ### No more information prompt
 
 Terminal prompt for `food` or `meal` when no more information is required. It should be placed in `foods` and `postFoods` sections respectively.

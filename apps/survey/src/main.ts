@@ -10,6 +10,7 @@ import vuetify from './plugins/vuetify';
 import router from './router';
 import { errorHandler, httpService } from './services';
 import { cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui';
+import { createManager } from '@vue-youtube/core';
 
 import { useAuth } from './stores';
 
@@ -29,6 +30,7 @@ app.use(i18n);
 app.use(vuetify);
 app.use(VueGtag, { bootstrap: false }, router);
 app.use(cookieConsentPlugin, cookieConsentConfig());
+app.use(createManager({ deferLoading: { enabled: true, autoLoad: true } }));
 
 app.mount('#app');
 

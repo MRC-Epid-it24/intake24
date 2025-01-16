@@ -11,7 +11,7 @@
         <v-col cols="12" md="6">
           <v-card-text>
             <v-text-field
-              v-model.number="counter.current"
+              v-model.number="modelValue.current"
               hide-details="auto"
               :label="$t('survey-schemes.prompts.counter.current')"
               name="current"
@@ -19,7 +19,7 @@
               variant="outlined"
             />
             <v-text-field
-              v-model.number="counter.min"
+              v-model.number="modelValue.min"
               class="mt-4"
               hide-details="auto"
               :label="$t('survey-schemes.prompts.counter.min')"
@@ -28,7 +28,7 @@
               variant="outlined"
             />
             <v-text-field
-              v-model.number="counter.max"
+              v-model.number="modelValue.max"
               class="mt-4"
               hide-details="auto"
               :label="$t('survey-schemes.prompts.counter.max')"
@@ -40,17 +40,17 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-switch
-            v-model="counter.confirm"
+            v-model="modelValue.confirm"
             hide-details="auto"
             :label="$t('survey-schemes.prompts.counter.confirm')"
           />
           <v-switch
-            v-model="counter.whole"
+            v-model="modelValue.whole"
             hide-details="auto"
             :label="$t('survey-schemes.prompts.counter.whole')"
           />
           <v-switch
-            v-model="counter.fraction"
+            v-model="modelValue.fraction"
             hide-details="auto"
             :label="$t('survey-schemes.prompts.counter.fraction')"
           />
@@ -60,42 +60,30 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { useVModel } from '@vueuse/core';
 
+import { computed } from 'vue';
 import type { Counter } from '@intake24/common/prompts';
 
-export default defineComponent({
-  name: 'CounterSettings',
+defineOptions({ name: 'CounterSettings' });
 
-  props: {
-    modelValue: {
-      type: Object as PropType<Counter>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const isNumber = computed(() => [
-      (value: string | null): boolean | string =>
-        !Number.isNaN(value) || 'Value needs to be a number.',
-    ]);
-
-    const counter = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        emit('update:modelValue', value);
-      },
-    });
-
-    return { counter, isNumber };
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<Counter>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const modelValue = useVModel(props, 'modelValue', emit, { deep: true, passive: true });
+
+const isNumber = computed(() => [
+  (value: string | null): boolean | string =>
+    !Number.isNaN(value) || 'Value needs to be a number.',
+]);
 </script>
 
 <style lang="scss" scoped></style>

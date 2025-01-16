@@ -14,6 +14,7 @@ export const promptTypes = ['custom', 'standard', 'portion-size'] as const;
 export type PromptType = (typeof promptTypes)[number];
 
 export const customComponentTypes = [
+  'aggregate-choice-prompt',
   'info-prompt',
   'date-picker-prompt',
   'time-picker-prompt',
@@ -25,7 +26,6 @@ export const customComponentTypes = [
   'slider-prompt',
   'textarea-prompt',
   'yes-no-prompt',
-  'aggregate-choice-prompt',
 ] as const;
 export type CustomComponentType = (typeof customComponentTypes)[number];
 
@@ -195,6 +195,19 @@ export const timePicker = z.object({
 });
 export type TimePicker = z.infer<typeof timePicker>;
 
+export const youtubeVideo = z.object({
+  type: z.literal('youtube'),
+  videoId: z.string(),
+  height: z.number(),
+  width: z.number(),
+  autoContinue: z.boolean(),
+  autoplay: z.boolean(),
+  required: z.boolean(),
+});
+export type YoutubeVideo = z.infer<typeof youtubeVideo>;
+export const hasVideo = z.object({ video: z.discriminatedUnion('type', [youtubeVideo]).optional() });
+export type HasVideo = z.infer<typeof hasVideo>;
+
 // Custom
 const aggregateChoicePrompt = baseCustomPrompt.extend({
   component: z.literal('aggregate-choice-prompt'),
@@ -214,7 +227,7 @@ const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(datePicke
   component: z.literal('date-picker-prompt'),
 });
 
-const infoPrompt = baseCustomPrompt.extend({
+const infoPrompt = baseCustomPrompt.merge(hasVideo).extend({
   component: z.literal('info-prompt'),
 });
 
@@ -489,6 +502,7 @@ export type Prompt = z.infer<typeof prompt>;
 
 export const prompts = z.object({
   // Custom
+  'aggregate-choice-prompt': aggregateChoicePrompt,
   'checkbox-list-prompt': checkboxListPrompt,
   'date-picker-prompt': datePickerPrompt,
   'info-prompt': infoPrompt,
@@ -534,7 +548,6 @@ export const prompts = z.object({
   'same-as-before-prompt': sameAsBeforePrompt,
   'split-food-prompt': splitFoodPrompt,
   'submit-prompt': submitPrompt,
-  'aggregate-choice-prompt': aggregateChoicePrompt,
 });
 
 export type Prompts = z.infer<typeof prompts>;

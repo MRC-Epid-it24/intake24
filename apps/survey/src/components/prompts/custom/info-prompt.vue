@@ -10,6 +10,11 @@
     <template #nav-actions>
       <next-mobile :disabled="!isValid" @click="updateAndAction('next')" />
     </template>
+    <div v-if="prompt.video" class="pa-4">
+      <div class="iframe-container">
+        <div ref="video" />
+      </div>
+    </div>
   </component>
 </template>
 
@@ -19,6 +24,7 @@ import { computed, defineComponent } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
+import { useYoutubeVideo } from '../partials';
 
 export default defineComponent({
   name: 'InfoPrompt',
@@ -37,7 +43,15 @@ export default defineComponent({
   setup(props, ctx) {
     const { action, customPromptLayout } = usePromptUtils(props, ctx);
 
-    const isValid = true;
+    const updateAndAction = (type: string, ...args: [id?: string, params?: object]) => {
+      state.value = type;
+      action(type, ...args);
+    };
+
+    const { video, watched } = useYoutubeVideo(props.prompt, updateAndAction);
+
+    const isValid = computed(() => !props.prompt.video?.required || watched.value);
+
     const state = computed({
       get() {
         return props.modelValue;
@@ -47,16 +61,12 @@ export default defineComponent({
       },
     });
 
-    const updateAndAction = (type: string, ...args: [id?: string, params?: object]) => {
-      state.value = type;
-      action(type, ...args);
-    };
-
     return {
       customPromptLayout,
       isValid,
       state,
       updateAndAction,
+      video,
     };
   },
 });
