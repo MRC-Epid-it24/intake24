@@ -17,7 +17,7 @@ export type UseLayoutProps = {
   isValid?: boolean;
 };
 
-export function useLayout(props: UseLayoutProps, ctx: SetupContext<'action'[]>) {
+export function useLayout(props: UseLayoutProps, ctx: Pick<SetupContext<'action'[]>, 'emit' | 'slots'>) {
   const { i18n: globalI18n, translate } = useI18n();
   const { action, isInMultiPrompt, params, type } = usePromptUtils(props, ctx);
   const { foodName } = useFoodUtils(props);

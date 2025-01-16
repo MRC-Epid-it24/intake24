@@ -10,7 +10,7 @@ export type UseMealListProps = {
   meals: MealState[];
 };
 
-export function useMealList(props: UseMealListProps, { emit }: SetupContext<'action'[]>) {
+export function useMealList(props: UseMealListProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
   const survey = useSurvey();
 
   const selectedMealId = computed(() => {

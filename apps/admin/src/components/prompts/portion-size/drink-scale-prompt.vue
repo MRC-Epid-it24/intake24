@@ -90,8 +90,8 @@ export default defineComponent({
       title: value ? i18n.t(`survey-schemes.prompts.${value}._`) : i18n.t('common.disabled'),
     }));
 
-    const updateMultiple = (value: typeof multipleTypes[number]) => {
-      update('multiple', value ? multiDefaults[value] : value);
+    const updateMultiple = (value: typeof multipleTypes[number] | boolean) => {
+      update('multiple', typeof value === 'string' ? multiDefaults[value] : false);
     };
 
     return { drinkScalePrompt, multipleItems, update, updateMultiple };

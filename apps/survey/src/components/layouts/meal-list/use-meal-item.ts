@@ -15,7 +15,7 @@ export type UseMealItemProps = {
   selectedMealId?: string;
 };
 
-export function useMealItem(props: UseMealItemProps, { emit }: SetupContext<'action'[]>) {
+export function useMealItem(props: UseMealItemProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
   const { i18n: { t } } = useI18n();
   const { mealName, mealTime } = useMealUtils(props);
 

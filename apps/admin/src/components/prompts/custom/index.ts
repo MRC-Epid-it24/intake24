@@ -15,11 +15,11 @@ export default {
   CheckboxListPrompt,
   DatePickerPrompt,
   InfoPrompt,
+  NoMoreInformationPrompt,
   RadioListPrompt,
   SelectPrompt,
   SliderPrompt,
   TimePickerPrompt,
   TextareaPrompt,
   YesNoPrompt,
-  NoMoreInformationPrompt,
 };

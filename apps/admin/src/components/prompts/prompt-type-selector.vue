@@ -1,6 +1,6 @@
 <template>
   <v-tabs-window-item :key="type">
-    <v-container>
+    <v-container fluid>
       <v-alert v-if="prompts.length === 0" color="secondary" type="info">
         {{ $t(`survey-schemes.prompts.${type}.noPrompts`) }}
       </v-alert>
@@ -16,7 +16,7 @@
               <v-card-title class="text-center">
                 {{ $t(`survey-schemes.prompts.${prompt.id}.title`) }}
               </v-card-title>
-              <v-card-subtitle class="text-center">
+              <v-card-subtitle class="text-center text__no-wrap">
                 {{ $t(`survey-schemes.prompts.${prompt.id}.subtitle`) }}
               </v-card-subtitle>
               <v-card-text v-show="isSelected" class="text-center">

@@ -1,6 +1,6 @@
 import type { SetupContext } from 'vue';
 
-export function useBasePrompt(props: any, context: SetupContext<'update:options'[]>) {
+export function useBasePrompt(props: any, context: Pick<SetupContext<'update:options'[]>, 'emit'>) {
   const update = (field: string, value: any) => {
     context.emit('update:options', { [field]: value });
   };

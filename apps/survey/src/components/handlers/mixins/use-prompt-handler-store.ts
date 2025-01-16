@@ -9,7 +9,7 @@ import { findMeal, mealPortionSizeComplete } from '@intake24/survey/util';
 export type UsePromptHandlerStoreProps<P extends keyof PromptStates> = {
   prompt: Prompts[P];
 };
-export function usePromptHandlerStore<P extends keyof PromptStates, S extends PromptStates[P]>(props: UsePromptHandlerStoreProps<P>, { emit }: SetupContext<'action'[]>, getInitialState: () => S, commitAnswer?: () => void) {
+export function usePromptHandlerStore<P extends keyof PromptStates, S extends PromptStates[P]>(props: UsePromptHandlerStoreProps<P>, { emit }: Pick<SetupContext<'action'[]>, 'emit'>, getInitialState: () => S, commitAnswer?: () => void) {
   const promptStore = getOrCreatePromptStateStore<S>(props.prompt.component)();
   const survey = useSurvey();
 

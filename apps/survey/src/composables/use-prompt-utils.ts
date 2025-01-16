@@ -29,7 +29,7 @@ export function usePromptUtils<
   P extends keyof Prompts,
   F extends FoodState | undefined,
   FP extends EncodedFood | RecipeBuilder | undefined,
->(props: UsePromptProps<P, F, FP>, { emit }: SetupContext<'action'[]>, confirmCallback?: () => boolean) {
+>(props: UsePromptProps<P, F, FP>, { emit }: Pick<SetupContext<'action'[]>, 'emit'>, confirmCallback?: () => boolean) {
   const { i18n: { d, t } } = useI18n();
   const survey = useSurvey();
   const surveySlug = computed(() => survey.parameters?.slug);

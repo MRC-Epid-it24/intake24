@@ -20,7 +20,7 @@ export type UseFoodItemProps = {
   meal: MealState;
 };
 
-export function useFoodItem(props: UseFoodItemProps, { emit }: SetupContext<'action'[]>) {
+export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
   const { i18n: { t } } = useI18n();
   const { foodName } = useFoodUtils(props);
 
