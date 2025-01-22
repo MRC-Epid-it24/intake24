@@ -4089,11 +4089,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -41241,11 +41248,18 @@
                             },
                             "time": {
                               "type": "string"
+                            },
+                            "flags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "name",
-                            "time"
+                            "time",
+                            "flags"
                           ]
                         }
                       },
@@ -41670,11 +41684,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -43142,11 +43163,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -43618,11 +43646,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -45090,11 +45125,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -45556,11 +45598,18 @@
                             },
                             "time": {
                               "type": "string"
+                            },
+                            "flags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "name",
-                            "time"
+                            "time",
+                            "flags"
                           ]
                         }
                       },
@@ -45974,11 +46023,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -47446,11 +47502,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -47912,11 +47975,18 @@
                             },
                             "time": {
                               "type": "string"
+                            },
+                            "flags": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           },
                           "required": [
                             "name",
-                            "time"
+                            "time",
+                            "flags"
                           ]
                         }
                       },
@@ -48360,11 +48430,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -49832,11 +49909,18 @@
                               },
                               "time": {
                                 "type": "string"
+                              },
+                              "flags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
                               "name",
-                              "time"
+                              "time",
+                              "flags"
                             ]
                           }
                         },
@@ -53736,11 +53820,18 @@
                         },
                         "time": {
                           "type": "string"
+                        },
+                        "flags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "name",
-                        "time"
+                        "time",
+                        "flags"
                       ]
                     }
                   },
@@ -53920,11 +54011,18 @@
                           },
                           "time": {
                             "type": "string"
+                          },
+                          "flags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "required": [
                           "name",
-                          "time"
+                          "time",
+                          "flags"
                         ]
                       }
                     },
@@ -54242,11 +54340,18 @@
                           },
                           "time": {
                             "type": "string"
+                          },
+                          "flags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "required": [
                           "name",
-                          "time"
+                          "time",
+                          "flags"
                         ]
                       }
                     },
@@ -54526,11 +54631,18 @@
                         },
                         "time": {
                           "type": "string"
+                        },
+                        "flags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "name",
-                        "time"
+                        "time",
+                        "flags"
                       ]
                     }
                   },
@@ -54707,11 +54819,18 @@
                           },
                           "time": {
                             "type": "string"
+                          },
+                          "flags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "required": [
                           "name",
-                          "time"
+                          "time",
+                          "flags"
                         ]
                       }
                     },
@@ -54991,11 +55110,18 @@
                         },
                         "time": {
                           "type": "string"
+                        },
+                        "flags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "name",
-                        "time"
+                        "time",
+                        "flags"
                       ]
                     }
                   },
@@ -55180,11 +55306,18 @@
                           },
                           "time": {
                             "type": "string"
+                          },
+                          "flags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "required": [
                           "name",
-                          "time"
+                          "time",
+                          "flags"
                         ]
                       }
                     },
@@ -55517,11 +55650,18 @@
                           },
                           "time": {
                             "type": "string"
+                          },
+                          "flags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "required": [
                           "name",
-                          "time"
+                          "time",
+                          "flags"
                         ]
                       }
                     },
