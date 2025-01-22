@@ -12,8 +12,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood } from '@intake24/common/types';
+import type { EncodedFood, PromptSection } from '@intake24/common/surveys';
 import { ReadyMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 

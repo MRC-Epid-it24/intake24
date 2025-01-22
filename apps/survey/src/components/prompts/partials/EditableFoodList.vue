@@ -104,8 +104,7 @@ import { useDebounceFn } from '@vueuse/core';
 import { computed, nextTick, onMounted, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { FoodState, FreeTextFood } from '@intake24/common/types';
+import type { FoodState, FreeTextFood, PromptSection } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';

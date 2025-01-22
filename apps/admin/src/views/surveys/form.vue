@@ -577,12 +577,12 @@ import {
   type SchemeOverrides,
   type SessionSettings,
   type SurveySearchSettings,
-  type SurveyState,
+  type SurveyStatus,
 } from '@intake24/common/surveys';
 import {
   defaultOverrides,
   searchSortingAlgorithms as defaultSearchSortingAlgorithms,
-  surveyStates as defaultSurveyStates,
+  surveyStatuses,
 } from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
@@ -592,7 +592,7 @@ export type SurveyForm = {
   id: string | null;
   slug: string | null;
   name: string | null;
-  state: SurveyState;
+  state: SurveyStatus;
   localeId: string | null;
   surveySchemeId: string | null;
   feedbackSchemeId: string | null;
@@ -669,7 +669,7 @@ export default defineComponent({
     const infoPopupOpen = ref(false);
     const showGenUserKey = ref(false);
 
-    const surveyStates = defaultSurveyStates.map(value => ({
+    const surveyStates = surveyStatuses.map(value => ({
       value,
       title: t(`surveys.states.${value}`),
     }));

@@ -66,7 +66,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
-import type { MealState, MealTime } from '@intake24/common/types';
+import type { MealState, MealTime } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { TimePicker } from '@intake24/ui';
 

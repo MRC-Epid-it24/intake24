@@ -8,7 +8,7 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
-import type { SurveyState } from '@intake24/common/types';
+import type { SurveyState } from '@intake24/common/surveys';
 
 import { Survey, User, UserSurveyAlias } from '.';
 import BaseModel from '../model';

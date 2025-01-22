@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
-import { surveyState } from '../types';
+import { surveyState } from '../surveys';
 import {
   foodSearchResponse,
   surveyEntryResponse,

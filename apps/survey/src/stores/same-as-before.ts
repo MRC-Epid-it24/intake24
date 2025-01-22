@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import type { EncodedFood } from '@intake24/common/types';
+import type { EncodedFood } from '@intake24/common/surveys';
 
 import { useUser } from './user';
 

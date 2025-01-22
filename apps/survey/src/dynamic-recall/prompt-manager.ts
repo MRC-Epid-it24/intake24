@@ -6,16 +6,8 @@ import type {
   Prompt,
 } from '@intake24/common/prompts';
 import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
-import type { FoodSection, MealSection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { FoodFlag, FoodSection, FoodState, MealFlag, MealSection, MealState, Selection, SurveyFlag, SurveyPromptSection } from '@intake24/common/surveys';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
-import type {
-  FoodFlag,
-  FoodState,
-  MealFlag,
-  MealState,
-  Selection,
-  SurveyFlag,
-} from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
   asServedComplete,

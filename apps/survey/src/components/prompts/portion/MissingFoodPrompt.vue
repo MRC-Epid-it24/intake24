@@ -78,7 +78,7 @@
 import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { MissingFood } from '@intake24/common/types';
+import type { MissingFood } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { barcodes } from '@intake24/ui';

@@ -28,7 +28,7 @@ import type {
   SchemeOverrides,
   SessionSettings,
   SurveySearchSettings,
-  SurveyState,
+  SurveyStatus,
 } from '@intake24/common/surveys';
 import {
   defaultOverrides,
@@ -96,7 +96,7 @@ export default class Survey extends BaseModel<
     allowNull: false,
     type: DataType.STRING(64),
   })
-  declare state: SurveyState;
+  declare state: SurveyStatus;
 
   @Column({
     allowNull: false,

@@ -342,7 +342,7 @@ This needs to be run if survey schemes structure changes, e.g. new non-optional 
 {
   "surveyId": string,
   "userId": string,
-  "state": SurveyState
+  "state": SurveyStatus
 }
 ```
 

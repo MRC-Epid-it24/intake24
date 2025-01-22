@@ -81,7 +81,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
-import type { FreeTextFood } from '@intake24/common/types';
+import type { FreeTextFood } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';

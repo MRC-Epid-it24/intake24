@@ -1,5 +1,5 @@
-import type { Prompts } from '@intake24/common/prompts';
-import type { MealState, MealTime } from '@intake24/common/types';
+import type { Prompts } from '../prompts';
+import type { MealState, MealTime } from './recall';
 
 export function fromMealTime(time: MealTime, doubleDigit = true): string {
   const { hours, minutes } = time;

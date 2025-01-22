@@ -40,7 +40,7 @@ import type { PropType } from 'vue';
 import type { MenuItem } from '../use-food-item';
 
 import { defineComponent } from 'vue';
-import type { FoodState, MealState } from '@intake24/common/types';
+import type { FoodState, MealState } from '@intake24/common/surveys';
 
 import { ConfirmDialog } from '@intake24/ui';
 import { useContextMenu } from '../use-context-menu';

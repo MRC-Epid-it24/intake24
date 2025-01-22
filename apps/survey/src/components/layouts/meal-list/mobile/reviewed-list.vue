@@ -78,7 +78,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { ReviewOptions } from '@intake24/common/prompts';
-import type { MealState } from '@intake24/common/types';
+import type { MealState } from '@intake24/common/surveys';
 import { useMealUtils } from '@intake24/survey/composables';
 
 import { useMealList } from '../use-meal-list';

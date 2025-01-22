@@ -12,7 +12,7 @@ import { computed, defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import { getSearchTerm } from '@intake24/common/types';
+import { getSearchTerm } from '@intake24/common/surveys';
 import { ExternalSourcePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 

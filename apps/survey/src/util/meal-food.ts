@@ -1,5 +1,5 @@
 import type { AddonFoodTrigger, Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState, MealState, Selection, SurveyState } from '@intake24/common/types';
+import type { EncodedFood, FoodState, MealState, Selection, SurveyState } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 

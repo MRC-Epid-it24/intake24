@@ -8,7 +8,7 @@ import { contract } from '@intake24/common/contracts';
 import type { SinglePrompt } from '@intake24/common/prompts';
 import type { TokenPayload } from '@intake24/common/security';
 import type {
-  SurveyState as SurveyStatus,
+  SurveyStatus,
 } from '@intake24/common/surveys';
 import {
   flattenSchemeWithSection,

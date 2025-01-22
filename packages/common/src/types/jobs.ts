@@ -1,10 +1,10 @@
-import type { SurveyState } from './recall';
+import type { SurveyState } from '../surveys';
 import { endOfDay, startOfDay } from 'date-fns';
 import pick from 'lodash/pick';
 
 import { z } from 'zod';
 
-import { searchSortingAlgorithms } from '@intake24/common/surveys';
+import { searchSortingAlgorithms } from '../surveys';
 
 export const repeatableBullJob = z.object({
   key: z.string(),

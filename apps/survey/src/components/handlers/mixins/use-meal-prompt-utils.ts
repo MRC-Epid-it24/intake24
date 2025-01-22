@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 
-import type { MealState } from '@intake24/common/types';
+import type { MealState } from '@intake24/common/surveys';
 import { useSurvey } from '@intake24/survey/stores';
 
 export function requireMeal(meal: MealState | undefined): MealState {

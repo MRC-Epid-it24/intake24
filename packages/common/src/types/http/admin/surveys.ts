@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 import { z } from 'zod';
 
-import { schemeOverrides, sessionSettings, surveySearchSettings, surveyStates } from '@intake24/common/surveys';
+import { schemeOverrides, sessionSettings, surveySearchSettings, surveyStatuses } from '@intake24/common/surveys';
 
 import { notification } from '../../notifications';
 import { safeIdentifier } from '../generic';
@@ -15,7 +15,7 @@ export const surveyAttributes = z.object({
   id: z.string(),
   slug: safeIdentifier.max(128).transform(value => slugify(value, { strict: true })),
   name: z.string().min(1).max(512),
-  state: z.enum(surveyStates),
+  state: z.enum(surveyStatuses),
   startDate: z.union([z.string(), z.date()]).pipe(z.coerce.date()),
   endDate: z.union([z.string(), z.date()]).pipe(z.coerce.date()),
   surveySchemeId: z.string(),

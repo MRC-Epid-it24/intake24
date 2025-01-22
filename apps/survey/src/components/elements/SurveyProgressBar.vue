@@ -20,7 +20,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import { fromMealTime } from '@intake24/common/surveys';
-import type { MealState, MealTime } from '@intake24/common/types';
+import type { MealState, MealTime } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({

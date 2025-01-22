@@ -5,13 +5,15 @@ import type { IoC } from '@intake24/api/ioc';
 import { ExternalSource } from '@intake24/common/prompts';
 import type {
   CustomPromptAnswer,
-  Dictionary,
   EncodedFood,
   ExternalSourceRecord,
   FoodState,
   MissingFood,
   RecipeBuilder,
   SurveyState,
+} from '@intake24/common/surveys';
+import type {
+  Dictionary,
   WithKey,
 } from '@intake24/common/types';
 import type { SurveySubmissionResponse } from '@intake24/common/types/http';

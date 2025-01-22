@@ -40,7 +40,7 @@
             {{ $t(`common.${entry.active}`) }}
           </td>
         </tr>
-        <tr v-if="entry.bullJob">
+        <tr v-if="entry.bullJob?.next">
           <th>{{ $t('tasks.run.next') }}</th>
           <td>{{ formatDateTime(new Date(entry.bullJob.next)) }}</td>
         </tr>

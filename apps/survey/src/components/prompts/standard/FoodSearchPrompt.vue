@@ -16,8 +16,8 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
-import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { FoodState, RecipeFood } from '@intake24/common/types';
+import type { FoodState, SearchSortingAlgorithm } from '@intake24/common/surveys';
+import type { RecipeFood } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { FoodBrowser } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';

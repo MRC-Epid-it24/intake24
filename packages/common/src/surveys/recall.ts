@@ -1,12 +1,12 @@
+import type { CerealType, StandardUnit } from '.';
+
 import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
 
-import type { CerealType, StandardUnit } from '../surveys';
-
-import type { RecipeFood } from './foods';
-import type { UserFoodData } from './http';
+import type { RecipeFood } from '../types/foods';
+import type { UserFoodData } from '../types/http';
 import { z } from 'zod';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
-import { type Dictionary, type Optional, requiredLocaleTranslation } from './common';
+import { type Dictionary, type Optional, requiredLocaleTranslation } from '../types/common';
 
 /*
 Not currently used:
@@ -25,7 +25,7 @@ export type DynamicSurveyFlag = z.infer<typeof dynamicSurveyFlag>;
 export const surveyFlag = z.union([dynamicSurveyFlag, z.string()]);
 export type SurveyFlag = z.infer<typeof surveyFlag>;
 
-export const staticMealFlag = [
+export const staticMealFlags = [
   'free-entry-complete',
   'no-meals-after',
   'no-meals-between',
@@ -34,15 +34,15 @@ export const staticMealFlag = [
   'meal-time:hidden',
   'meal-time:disabled',
 ] as const;
-export type StaticMealFlag = (typeof staticMealFlag)[number];
+export type StaticMealFlag = (typeof staticMealFlags)[number];
 export const dynamicMealFlag = z.custom<`food-search:${string}` | `${string}-acknowledged` | `${string}-complete`>((val) => {
   return typeof val === 'string' && (val.startsWith('food-search:') || /-(?:acknowledged|complete)$/.test(val));
 });
 export type DynamicMealFlag = z.infer<typeof dynamicMealFlag>;
-export const mealFlag = z.union([z.enum(staticMealFlag), dynamicMealFlag, z.string()]);
+export const mealFlag = z.union([z.enum(staticMealFlags), dynamicMealFlag, z.string()]);
 export type MealFlag = z.infer<typeof mealFlag>;
 
-export const staticFoodFlag = [
+export const staticFoodFlags = [
   'is-drink',
   'link-as-main',
   'ready-meal',
@@ -55,13 +55,13 @@ export const staticFoodFlag = [
   'associated-foods-complete',
   'disable-general-associated-foods',
 ] as const;
-export type StaticFoodFlag = (typeof staticFoodFlag)[number];
+export type StaticFoodFlag = (typeof staticFoodFlags)[number];
 export const dynamicFoodFlag = z.custom<`${string}-acknowledged` | `${string}-complete`>((val) => {
   return typeof val === 'string' && /-(?:acknowledged|complete)$/.test(val);
 });
 export type DynamicFoodFlag = z.infer<typeof dynamicFoodFlag>;
-export const foodFlag = z.union([z.enum(staticFoodFlag), dynamicFoodFlag, z.string()]);
-export type FoodFlag = z.infer<typeof foodFlag>;
+export const foodFlags = z.union([z.enum(staticFoodFlags), dynamicFoodFlag, z.string()]);
+export type FoodFlag = z.infer<typeof foodFlags>;
 
 export const customPromptAnswer = z.union([z.string(), z.array(z.string()), z.number(), z.array(z.number()), z.boolean(), z.array(z.boolean()), z.null()]);
 export type CustomPromptAnswer = z.infer<typeof customPromptAnswer>;

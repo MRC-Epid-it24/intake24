@@ -8,7 +8,7 @@ import {
   searchSortingAlgorithms,
   sessionSettings,
   surveyRatings,
-  surveyStates,
+  surveyStatuses,
 } from '@intake24/common/surveys';
 
 import { z } from '../../util';
@@ -50,7 +50,7 @@ export const surveyEntryResponse = z.object({
   id: z.string(),
   slug: z.string(),
   name: z.string(),
-  state: z.enum(surveyStates),
+  state: z.enum(surveyStatuses),
   locale: z.object({ id: z.string(), code: z.string() }),
   surveyScheme: z.object({
     id: z.string(),

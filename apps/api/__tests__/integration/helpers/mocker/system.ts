@@ -305,7 +305,7 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
   };
 
   const surveySchemeOverrides = {
-    meals: [{ name: { en: faker.word.words(3) }, time: '8:00' }],
+    meals: [{ name: { en: faker.word.words(3) }, time: '8:00', flags: [] }],
     prompts: [],
     settings: {},
   };

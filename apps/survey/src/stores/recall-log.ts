@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 import type { ComponentType } from '@intake24/common/prompts';
-import type { Selection } from '@intake24/common/types';
+import type { Selection } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useSurvey } from '@intake24/survey/stores/survey';
 

@@ -130,7 +130,7 @@ import axios, { isAxiosError } from 'axios';
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/surveys';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { barcodes } from '@intake24/ui';

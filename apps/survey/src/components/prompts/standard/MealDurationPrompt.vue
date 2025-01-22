@@ -52,7 +52,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { MealState } from '@intake24/common/types';
+import type { MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 

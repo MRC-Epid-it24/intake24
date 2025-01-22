@@ -1,6 +1,5 @@
 import type { Prompt, Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { CustomPromptAnswer } from '@intake24/common/types';
+import type { CustomPromptAnswer, PromptSection } from '@intake24/common/surveys';
 import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodPromptUtils } from './use-food-prompt-utils';

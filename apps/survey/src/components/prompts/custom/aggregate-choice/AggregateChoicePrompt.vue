@@ -91,7 +91,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 
-import type { CustomPromptAnswer, MealState } from '@intake24/common/types';
+import type { CustomPromptAnswer, MealState } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';

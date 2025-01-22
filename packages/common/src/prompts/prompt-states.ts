@@ -2,6 +2,8 @@ import type {
   FoodState,
   MissingFood,
   PortionSizeStates,
+} from '../surveys';
+import type {
   RecipeFood,
   RequiredLocaleTranslation,
 } from '../types';

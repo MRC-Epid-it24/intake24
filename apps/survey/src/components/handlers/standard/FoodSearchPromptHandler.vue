@@ -15,14 +15,8 @@ import { mapActions } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type {
-  EncodedFood,
-  FoodState,
-  MissingFood,
-  RecipeBuilder,
-  RecipeFood,
-} from '@intake24/common/types';
+import type { EncodedFood, FoodState, MissingFood, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+import type { RecipeFood } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';

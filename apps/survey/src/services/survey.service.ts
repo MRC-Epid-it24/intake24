@@ -1,4 +1,4 @@
-import type { SurveyState } from '@intake24/common/types';
+import type { SurveyState } from '@intake24/common/surveys';
 import type {
   CreateUserResponse,
   GenerateUserResponse,

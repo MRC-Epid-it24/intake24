@@ -3,8 +3,7 @@ import set from 'lodash/set';
 import { computed, onBeforeMount, type SetupContext } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { FoodState, MealState } from '@intake24/common/types';
+import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';
 import { defaultMessages, useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';

@@ -25,13 +25,8 @@ import type {
   PromptStates,
   RecipeBuilderStepState,
 } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type {
-  EncodedFood,
-  FoodFlag,
-  MissingFood,
-  RecipeFoodStepsType,
-} from '@intake24/common/types';
+import type { EncodedFood, FoodFlag, MissingFood, PromptSection } from '@intake24/common/surveys';
+import type { RecipeFoodStepsType } from '@intake24/common/types';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 

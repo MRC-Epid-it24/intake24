@@ -81,50 +81,101 @@
     </v-list>
     <v-dialog
       v-model="dialog.show"
-      :fullscreen="$vuetify.display.smAndDown"
-      max-width="600px"
+      fullscreen
+      no-click-animation
       persistent
+      transition="dialog-bottom-transition"
     >
-      <v-card :tile="$vuetify.display.smAndDown">
-        <v-toolbar color="secondary" dark flat>
-          <v-icon icon="fas fa-hamburger" start />
+      <v-card tile>
+        <v-toolbar color="secondary" dark>
+          <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
-        </v-toolbar>
-        <v-divider />
-        <v-form ref="form" @submit.prevent="save">
-          <language-selector
-            v-model="dialog.meal.name"
-            :label="$t('survey-schemes.meals.name')"
-            :outlined="false"
-          >
-            <template v-for="lang in Object.keys(dialog.meal.name)" :key="lang" #[`lang.${lang}`]>
-              <v-text-field
-                v-model="dialog.meal.name[lang]"
-                hide-details="auto"
-                :label="$t('survey-schemes.meals.name')"
-                :rules="rules(lang)"
-                variant="outlined"
-              />
-            </template>
-          </language-selector>
-          <v-card-text class="d-flex justify-center align-center pa-0">
-            <time-picker
-              v-model="dialog.meal.time"
-              full-width
-              :landscape="$vuetify.display.smAndUp"
-            />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
-              <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
-            </v-btn>
-            <v-spacer />
-            <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+          <v-spacer />
+          <v-toolbar-items>
+            <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
               <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
-          </v-card-actions>
+          </v-toolbar-items>
+          <template #extension>
+            <v-container fluid>
+              <v-tabs v-model="tab" bg-color="secondary">
+                <v-tab v-for="item in ['general', 'json']" :key="item" :tab-value="item">
+                  {{ item }}
+                </v-tab>
+              </v-tabs>
+            </v-container>
+          </template>
+        </v-toolbar>
+        <v-form ref="form" @submit.prevent="save">
+          <v-container class="dialog-container" fluid>
+            <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
+              <v-tabs-window-item key="general" value="general">
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <language-selector
+                      v-model="dialog.meal.name"
+                      border
+                      :label="$t('survey-schemes.meals.name')"
+                    >
+                      <template v-for="lang in Object.keys(dialog.meal.name)" :key="lang" #[`lang.${lang}`]>
+                        <v-text-field
+                          v-model="dialog.meal.name[lang]"
+                          hide-details="auto"
+                          :label="$t('survey-schemes.meals.name')"
+                          :rules="rules(lang)"
+                          variant="outlined"
+                        />
+                      </template>
+                    </language-selector>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <custom-list
+                      v-model="dialog.meal.flags"
+                      i18n-prefix="survey-schemes.meals.flags"
+                      :standard-items="staticMealFlags"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-card border class="w-100" flat>
+                      <v-toolbar color="grey-lighten-4" flat tile>
+                        <v-icon class="mx-2" color="secondary">
+                          fas fa-clock
+                        </v-icon>
+                        <div class="d-flex flex-column">
+                          <v-toolbar-title class="font-weight-medium">
+                            {{ $t('survey-schemes.meals.defaultTime') }}
+                          </v-toolbar-title>
+                        </div>
+                      </v-toolbar>
+                      <v-card-text class="pt-0 d-flex justify-center">
+                        <time-picker
+                          v-model="dialog.meal.time"
+                          class="pa-0"
+                          color="primary"
+                          full-width
+                          :landscape="$vuetify.display.smAndUp"
+                        />
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-tabs-window-item>
+              <v-tabs-window-item key="json" value="json">
+                <json-editor v-model="dialog.meal" />
+              </v-tabs-window-item>
+            </v-tabs-window>
+            <v-card-actions>
+              <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
+                <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
+              </v-btn>
+              <v-spacer />
+              <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+                <v-icon icon="$success" start />{{ $t('common.action.ok') }}
+              </v-btn>
+            </v-card-actions>
+          </v-container>
         </v-form>
       </v-card>
     </v-dialog>
@@ -133,18 +184,19 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 
 import { VueDraggable } from 'vue-draggable-plus';
-import type { Meal, Meals } from '@intake24/common/surveys';
-import { defaultMeals } from '@intake24/common/surveys';
-import { copy } from '@intake24/common/util';
+import type { Meal } from '@intake24/common/surveys';
+import { defaultMeals, staticMealFlags } from '@intake24/common/surveys';
 
+import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog, TimePicker } from '@intake24/ui';
 import { OptionsMenu, SelectResource } from '../dialogs';
-import { JsonEditorDialog } from '../editors';
+import { JsonEditor, JsonEditorDialog } from '../editors';
 import { LanguageSelector } from '../forms';
+import CustomList from './custom-list.vue';
 
 type MealDialog = {
   show: boolean;
@@ -177,13 +229,14 @@ function newDialog(show = false): MealDialog {
   return {
     show,
     index: -1,
-    meal: { name: { en: '' }, time: '8:00' },
+    meal: { name: { en: '' }, time: '8:00', flags: [] },
   };
 }
 
 const dialog = ref(newDialog());
-const form = ref<InstanceType<typeof HTMLFormElement>>();
+const form = useTemplateRef('form');
 const meals = ref(copy(props.modelValue));
+const tab = ref('general');
 
 const isOverrideMode = computed(() => props.mode === 'override');
 const title = computed(() => t(
@@ -215,9 +268,9 @@ function edit(index: number, meal: Meal) {
   dialog.value = { show: true, index, meal: copy(meal) };
 };
 
-function save() {
-  const isValid = form.value?.validate();
-  if (!isValid)
+async function save() {
+  const { valid } = await form.value?.validate() ?? {};
+  if (!valid)
     return;
 
   const { index, meal } = dialog.value;
@@ -238,7 +291,7 @@ function reset() {
   form.value?.resetValidation();
 };
 
-function load(items: Meals) {
+function load(items: Meal[]) {
   meals.value = [...items];
 };
 
@@ -251,4 +304,10 @@ watch(meals, (val) => {
 }, { deep: true });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+}
+</style>

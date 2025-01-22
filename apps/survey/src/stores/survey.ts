@@ -4,8 +4,6 @@ import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
 
-import type { RecallFlow, SessionSettings } from '@intake24/common/surveys';
-import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import type {
   SurveyState as CurrentSurveyState,
   CustomPromptAnswer,
@@ -18,10 +16,13 @@ import type {
   MealState,
   MealTime,
   MissingFood,
+  RecallFlow,
   RecipeBuilder,
   Selection,
+  SessionSettings,
   SurveyFlag,
-} from '@intake24/common/types';
+} from '@intake24/common/surveys';
+import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { isSessionAgeValid, isSessionFixedPeriodValid } from '@intake24/common/util';
 import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
@@ -301,8 +302,8 @@ export const useSurvey = defineStore('survey', {
         ...surveyInitialState(),
         schemeId: this.parameters.surveyScheme.id,
         startTime: new Date(),
-        meals: this.parameters.surveyScheme.meals.map(({ name, time }) =>
-          createMeal({ name, defaultTime: toMealTime(time) }, this.parameters?.surveyScheme.settings.flow)),
+        meals: this.parameters.surveyScheme.meals.map(({ name, time, flags }) =>
+          createMeal({ name, defaultTime: toMealTime(time), flags }, this.parameters?.surveyScheme.settings.flow)),
       });
 
       await this.startUserSession();

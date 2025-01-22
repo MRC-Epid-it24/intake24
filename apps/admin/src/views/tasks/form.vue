@@ -56,7 +56,7 @@
             </v-col>
             <v-col v-if="data.active" cols="12" md="6">
               <div class="d-flex align-center" style="height: 100%">
-                <span v-if="entry.bullJob" class="text-subtitle-1">
+                <span v-if="entry.bullJob?.next" class="text-subtitle-1">
                   {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
                 </span>
               </div>

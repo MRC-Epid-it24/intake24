@@ -26,7 +26,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
-import type { FoodState, MealState } from '@intake24/common/types';
+import type { FoodState, MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 
 import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';

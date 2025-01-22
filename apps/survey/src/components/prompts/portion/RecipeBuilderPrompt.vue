@@ -110,7 +110,7 @@ import type {
   RecipeBuilderStepState,
   SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
-import type { RecipeBuilder } from '@intake24/common/types';
+import type { RecipeBuilder } from '@intake24/common/surveys';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';

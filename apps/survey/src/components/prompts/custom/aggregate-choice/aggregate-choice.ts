@@ -1,5 +1,5 @@
 import type { Prompts } from '@intake24/common/prompts';
-import type { MealState } from '@intake24/common/types';
+import type { MealState } from '@intake24/common/surveys';
 import { evaluateCondition } from '@intake24/survey/dynamic-recall/prompt-manager';
 import type { SurveyStore } from '@intake24/survey/stores';
 import { flattenFoods } from '@intake24/survey/util/meal-food';

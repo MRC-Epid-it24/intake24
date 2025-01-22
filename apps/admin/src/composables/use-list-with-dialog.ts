@@ -1,6 +1,7 @@
 import type { Ref, SetupContext, UnwrapRef } from 'vue';
 import { deepEqual } from 'fast-equals';
-import { computed, ref, toRefs, watch } from 'vue';
+import { computed, ref, toRefs, useTemplateRef, watch } from 'vue';
+import { VForm } from 'vuetify/components';
 
 import { copy } from '@intake24/common/util';
 
@@ -20,7 +21,7 @@ export type ListOps<I, O = I> = {
 export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupContext, ops: ListOps<I, O>) {
   const { modelValue } = toRefs(props);
   const { newItem, transformIn, transformOut } = ops;
-  const form = ref<InstanceType<typeof HTMLFormElement>>();
+  const form = useTemplateRef<InstanceType<typeof VForm>>('form');
 
   const items = ref(copy(transformIn ? modelValue.value.map(transformIn) : modelValue.value)) as Ref<
     UnwrapRef<I>[]
@@ -82,9 +83,9 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupC
     update();
   };
 
-  const save = () => {
-    const isValid = form.value?.validate();
-    if (!isValid)
+  const save = async () => {
+    const { valid } = await form.value?.validate() ?? {};
+    if (!valid)
       return;
 
     const { index, item } = dialog.value;

@@ -102,8 +102,7 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import type {
   PromptStates,
 } from '@intake24/common/prompts';
-import type { PortionSizeParameters, StandardUnit } from '@intake24/common/surveys';
-import type { MealState } from '@intake24/common/types';
+import type { MealState, PortionSizeParameters, StandardUnit } from '@intake24/common/surveys';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';

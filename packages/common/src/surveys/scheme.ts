@@ -163,13 +163,15 @@ export function groupSchemeMultiPrompts(scheme: RecallPrompts): GroupedRecallPro
   };
 }
 
+export const defaultMeal: Meal = { name: { en: 'Meal name' }, time: '8:00', flags: [] };
+
 export const defaultMeals: Meal[] = [
-  { name: { en: 'Breakfast' }, time: '8:00' },
-  { name: { en: 'Morning snack' }, time: '10:00' },
-  { name: { en: 'Lunch' }, time: '13:00' },
-  { name: { en: 'Afternoon snack' }, time: '16:00' },
-  { name: { en: 'Dinner' }, time: '18:00' },
-  { name: { en: 'Evening snack' }, time: '20:00' },
+  { name: { en: 'Breakfast' }, time: '8:00', flags: [] },
+  { name: { en: 'Morning snack' }, time: '10:00', flags: [] },
+  { name: { en: 'Lunch' }, time: '13:00', flags: [] },
+  { name: { en: 'Afternoon snack' }, time: '16:00', flags: [] },
+  { name: { en: 'Dinner' }, time: '18:00', flags: [] },
+  { name: { en: 'Evening snack' }, time: '20:00', flags: [] },
 ];
 
 export const exportSectionIds = [

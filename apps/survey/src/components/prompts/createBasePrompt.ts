@@ -2,8 +2,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
+import type { EncodedFood, FoodState, MealState, PromptSection } from '@intake24/common/surveys';
 
 import { Next, NextMobile } from './actions';
 import { BaseLayout, CardLayout, PanelLayout } from './layouts';

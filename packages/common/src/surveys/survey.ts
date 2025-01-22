@@ -7,8 +7,8 @@ import { schemeSettings } from './scheme';
 export const surveyRatings = ['recall', 'feedback'] as const;
 export type SurveyRating = (typeof surveyRatings)[number];
 
-export const surveyStates = ['notStarted', 'active', 'suspended', 'completed'] as const;
-export type SurveyState = (typeof surveyStates)[number];
+export const surveyStatuses = ['notStarted', 'active', 'suspended', 'completed'] as const;
+export type SurveyStatus = (typeof surveyStatuses)[number];
 
 export const searchSortingAlgorithms = [
   // 'paRules', Pairwise association not implemented

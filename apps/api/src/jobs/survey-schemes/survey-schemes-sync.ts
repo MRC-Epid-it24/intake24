@@ -2,7 +2,7 @@ import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 import { Condition, customPrompts, defaultAction, getConditionDefaults, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
-import { defaultSchemeSettings, type PromptSection, type RecallPrompts } from '@intake24/common/surveys';
+import { defaultMeal, defaultSchemeSettings, Meal, type PromptSection, type RecallPrompts } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
 import { Survey, SurveyScheme } from '@intake24/db';
 
@@ -106,7 +106,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
     const promptMap = this.getPromptMap();
 
-    const mergeCallback = (prompt: SinglePrompt) => {
+    const promptMergeCallback = (prompt: SinglePrompt) => {
       const { component, type, ...rest } = prompt;
       const { actions, conditions, ...baseMerge } = merge<SinglePrompt>(promptMap[prompt.component], rest);
       return {
@@ -121,28 +121,32 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
       };
     };
 
+    const mealMergeCallback = (meal: Meal) => merge(defaultMeal, meal);
+
     const schemes = await this.models.system.SurveyScheme.findAll({
-      attributes: ['id', 'settings', 'prompts'],
+      attributes: ['id', 'meals', 'prompts', 'settings'],
       order: [['id', 'ASC']],
     });
 
     for (const scheme of schemes) {
       await this.migrateSchemePrompts(scheme);
 
+      const meals = scheme.meals.map(mealMergeCallback);
+
       const prompts: RecallPrompts = {
-        preMeals: scheme.prompts.preMeals.map(mergeCallback),
+        preMeals: scheme.prompts.preMeals.map(promptMergeCallback),
         meals: {
-          preFoods: scheme.prompts.meals.preFoods.map(mergeCallback),
-          foods: scheme.prompts.meals.foods.map(mergeCallback),
-          postFoods: scheme.prompts.meals.postFoods.map(mergeCallback),
-          foodsDeferred: scheme.prompts.meals.foodsDeferred ? scheme.prompts.meals.foodsDeferred.map(mergeCallback) : [],
+          preFoods: scheme.prompts.meals.preFoods.map(promptMergeCallback),
+          foods: scheme.prompts.meals.foods.map(promptMergeCallback),
+          postFoods: scheme.prompts.meals.postFoods.map(promptMergeCallback),
+          foodsDeferred: scheme.prompts.meals.foodsDeferred ? scheme.prompts.meals.foodsDeferred.map(promptMergeCallback) : [],
         },
-        postMeals: scheme.prompts.postMeals.map(mergeCallback),
-        submission: scheme.prompts.submission.map(mergeCallback),
+        postMeals: scheme.prompts.postMeals.map(promptMergeCallback),
+        submission: scheme.prompts.submission.map(promptMergeCallback),
       };
       const settings = merge(defaultSchemeSettings, scheme.settings);
 
-      await scheme.update({ prompts, settings });
+      await scheme.update({ meals, prompts, settings });
     }
 
     const surveys = await this.models.system.Survey.findAll({
@@ -155,8 +159,8 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
       await survey.update({
         surveySchemeOverrides: {
-          ...survey.surveySchemeOverrides,
-          prompts: survey.surveySchemeOverrides.prompts.map(mergeCallback),
+          meals: survey.surveySchemeOverrides.meals.map(mealMergeCallback),
+          prompts: survey.surveySchemeOverrides.prompts.map(promptMergeCallback),
           settings: survey.surveySchemeOverrides.settings ?? {},
         },
       });

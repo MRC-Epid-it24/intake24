@@ -9,7 +9,8 @@ import type { IoC } from '@intake24/api/ioc';
 import { jwt } from '@intake24/api/util';
 import type { Prompts } from '@intake24/common/prompts';
 import { strongPassword } from '@intake24/common/security';
-import { type JobParams, type SurveyState, userCustomField } from '@intake24/common/types';
+import type { SurveyState } from '@intake24/common/surveys';
+import { type JobParams, userCustomField } from '@intake24/common/types';
 import type {
   CreateUserResponse,
   SurveyRatingRequest,

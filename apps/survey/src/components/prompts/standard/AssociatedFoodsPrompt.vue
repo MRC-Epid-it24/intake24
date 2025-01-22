@@ -190,8 +190,8 @@ import type {
   AssociatedFoodPromptItem,
   PromptStates,
 } from '@intake24/common/prompts';
-import type { EncodedFood } from '@intake24/common/types';
-import { getFoodDescription } from '@intake24/common/types';
+import type { EncodedFood } from '@intake24/common/surveys';
+import { getFoodDescription } from '@intake24/common/surveys';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';

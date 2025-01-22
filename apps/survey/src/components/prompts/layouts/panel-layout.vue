@@ -47,8 +47,7 @@
 import { type PropType, useSlots } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { FoodState, MealState } from '@intake24/common/types';
+import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';
 
 import { useLayout } from './use-layout';
 

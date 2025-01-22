@@ -1,5 +1,5 @@
 import type { SurveyStore } from '../stores';
-import type { Selection } from '@intake24/common/types';
+import type { Selection } from '@intake24/common/surveys';
 import type PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 
 import { getFoodIndexRequired, getMealIndexRequired } from '@intake24/survey/util';

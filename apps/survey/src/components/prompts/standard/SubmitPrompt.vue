@@ -41,7 +41,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { PromptLayout } from '@intake24/common/prompts';
-import type { MealState } from '@intake24/common/types';
+import type { MealState } from '@intake24/common/surveys';
 import { ReviewMealList, ReviewMealListMobile } from '@intake24/survey/components/layouts';
 import { usePromptUtils } from '@intake24/survey/composables';
 

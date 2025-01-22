@@ -8,9 +8,8 @@ import type {
   GenericActionType,
   MealActionType,
 } from '@intake24/common/prompts';
-import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
-import type { MealCreationState, MealState, Selection } from '@intake24/common/types';
-import { isSelectionEqual } from '@intake24/common/types';
+import type { MealCreationState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import { isSelectionEqual } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
   customHandlers,

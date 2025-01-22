@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
-import type { SurveyState } from '@intake24/common/types';
+import type { SurveyState } from '@intake24/common/surveys';
 import { UserSurveySession, type UserSurveySessionCreationAttributes } from '@intake24/db';
 
 export default () => {

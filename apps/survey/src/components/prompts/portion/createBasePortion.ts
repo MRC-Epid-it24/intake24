@@ -2,8 +2,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, MealState, MissingFood, RecipeBuilder } from '@intake24/common/types';
+import type { EncodedFood, MealState, MissingFood, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';

@@ -11,8 +11,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, PromptSection } from '@intake24/common/surveys';
 import { AggregateChoicePrompt, filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 
 import { useSurvey } from '@intake24/survey/stores';

@@ -34,7 +34,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, MissingFood } from '@intake24/common/types';
+import type { EncodedFood, MissingFood } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';

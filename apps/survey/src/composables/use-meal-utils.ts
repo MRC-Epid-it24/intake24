@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 
 import { fromMealTime } from '@intake24/common/surveys';
-import type { MealState } from '@intake24/common/types';
+import type { MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 
 export type UseMealUtilsProps = {

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import type { PortionSizeStates } from '@intake24/common/types';
+import type { PortionSizeStates } from '@intake24/common/surveys';
 import type { SurveySubmissionPortionSizeFieldCreationAttributes } from '@intake24/db';
 
 function parseUrlPathname(url?: string | null) {

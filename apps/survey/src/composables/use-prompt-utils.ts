@@ -4,8 +4,8 @@ import type { UseFoodUtilsProps } from './use-food-utils';
 import type { UseMealUtilsProps } from './use-meal-utils';
 import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, FoodState, PartialRecord, RecipeBuilder } from '@intake24/common/types';
+import type { EncodedFood, FoodState, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+import type { PartialRecord } from '@intake24/common/types';
 import type { LocaleContentOptions } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
 

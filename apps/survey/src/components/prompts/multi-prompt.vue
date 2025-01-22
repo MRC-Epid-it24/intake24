@@ -32,7 +32,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { CustomPromptAnswer, FoodState } from '@intake24/common/types';
+import type { CustomPromptAnswer, FoodState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from './createBasePrompt';

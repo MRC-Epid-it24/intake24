@@ -18,8 +18,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters, PromptSection } from '@intake24/common/surveys';
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, PortionSizeParameters, PromptSection } from '@intake24/common/surveys';
 import { AddonFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { addonFoodPromptCheck, getEntityId } from '@intake24/survey/util';
