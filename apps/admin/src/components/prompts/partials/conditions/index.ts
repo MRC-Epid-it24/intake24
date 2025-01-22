@@ -1,4 +1,5 @@
 import BooleanPropertyCheck from './boolean-check.vue';
+import EntityValuePropertyCheck from './entitiy-value-check.vue';
 import FlagPropertyCheck from './flag-check.vue';
 import FoodCompletionPropertyCheck from './food-completion-check.vue';
 import MealCompletionPropertyCheck from './meal-completion-check.vue';
@@ -12,6 +13,7 @@ export default {
   check: {
     value: ValuePropertyCheck,
     boolean: BooleanPropertyCheck,
+    entityValue: EntityValuePropertyCheck,
     mealCompletion: MealCompletionPropertyCheck,
     foodCompletion: FoodCompletionPropertyCheck,
     flag: FlagPropertyCheck,

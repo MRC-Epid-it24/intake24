@@ -8,7 +8,6 @@
         :items="standardUserFields"
         :label="$t('survey-schemes.conditions.userField.field')"
         variant="outlined"
-        @update:model-value="update(currentValue)"
       />
     </v-col>
     <v-col cols="12" md="6">
@@ -19,7 +18,6 @@
         :items="conditionOps"
         :label="$t('survey-schemes.conditions.ops._')"
         variant="outlined"
-        @update:model-value="update(currentValue)"
       >
         <template #item="{ item, props }">
           <v-list-item v-bind="props" :title="item.raw.title">
@@ -50,14 +48,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
-import { VCombobox, VTextField } from 'vuetify/components';
+import { defineComponent, type PropType } from 'vue';
 
-import { useSelects } from '@intake24/admin/composables';
-import {
-  standardUserFields,
-  type UserFieldPropertyCheck,
-} from '@intake24/common/prompts';
+import { VCombobox, VTextField } from 'vuetify/components';
+import { standardUserFields, type UserFieldPropertyCheck } from '@intake24/common/prompts';
+import { useCheck } from './use-check';
 
 export default defineComponent({
   name: 'UserFieldPropertyCheck',
@@ -74,17 +69,9 @@ export default defineComponent({
   emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const { conditionOps } = useSelects();
+    const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
 
-    const currentValue = ref(props.modelValue);
-
-    const update = (value: UserFieldPropertyCheck) => {
-      emit('update:modelValue', value);
-    };
-
-    const comboOps = ['setEq', 'in', 'notIn'];
-
-    return { conditionOps, update, currentValue, comboOps, standardUserFields };
+    return { conditionOps, currentValue, comboOps, standardUserFields };
   },
 });
 </script>

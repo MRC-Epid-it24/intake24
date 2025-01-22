@@ -84,10 +84,11 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
         object: 'survey',
         property: {
           id: 'numberOfMeals',
-          type: 'value',
+          type: 'entityValue',
           check: {
             op: condition.op,
             value: condition.value,
+            entity: 'meal',
           },
         },
       };

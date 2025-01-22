@@ -8,7 +8,6 @@
         :items="conditionOps"
         :label="$t('survey-schemes.conditions.ops._')"
         variant="outlined"
-        @update:model-value="update(currentValue)"
       >
         <template #item="{ item, props }">
           <v-list-item v-bind="props" :title="item.raw.title">
@@ -27,6 +26,8 @@
       <component
         :is="comboOps.includes(currentValue.op) ? 'v-combobox' : 'v-text-field'"
         v-model="currentValue.value"
+        chips
+        deletable-chips
         hide-details="auto"
         :label="$t('survey-schemes.conditions.value')"
         multiple
@@ -37,11 +38,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import { VCombobox, VTextField } from 'vuetify/components';
 
-import { useSelects } from '@intake24/admin/composables';
 import type { ValuePropertyCheck } from '@intake24/common/prompts';
+import { useCheck } from './use-check';
 
 export default defineComponent({
   name: 'ValuePropertyCheck',
@@ -58,17 +59,9 @@ export default defineComponent({
   emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const { conditionOps } = useSelects();
+    const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
 
-    const currentValue = ref(props.modelValue);
-
-    const update = (value: ValuePropertyCheck) => {
-      emit('update:modelValue', value);
-    };
-
-    const comboOps = ['setEq', 'in', 'notIn'];
-
-    return { conditionOps, update, currentValue, comboOps };
+    return { conditionOps, currentValue, comboOps };
   },
 });
 </script>

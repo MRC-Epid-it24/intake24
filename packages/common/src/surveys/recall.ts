@@ -1,8 +1,8 @@
-import type { CerealType, StandardUnit } from '.';
-
 import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
 
-import type { RecipeFood } from '../types/foods';
+import type { CerealType, StandardUnit } from '../surveys';
+
+import type { FoodType, RecipeFood } from '../types';
 import type { UserFoodData } from '../types/http';
 import { z } from 'zod';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
@@ -215,7 +215,7 @@ export interface AbstractFoodState {
   flags: FoodFlag[];
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  type: 'free-text' | 'encoded-food' | 'missing-food' | 'recipe-builder';
+  type: FoodType;
   external?: ExternalSourceRecord;
 }
 

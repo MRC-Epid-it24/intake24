@@ -6,7 +6,6 @@
         hide-details="auto"
         :label="$t('survey-schemes.conditions.promptAnswer.promptId')"
         variant="outlined"
-        @change="update(currentValue)"
       />
     </v-col>
     <v-col cols="12" md="6">
@@ -17,7 +16,6 @@
         :items="conditionOps"
         :label="$t('survey-schemes.conditions.ops._')"
         variant="outlined"
-        @update:model-value="update(currentValue)"
       >
         <template #item="{ item, props }">
           <v-list-item v-bind="props" :title="item.raw.title">
@@ -45,19 +43,20 @@
       />
     </v-col>
     <v-col cols="12" md="6">
-      <v-checkbox v-model="currentValue.required" :label="$t('survey-schemes.conditions.promptAnswer.required')" @update:model-value="update(currentValue)" />
+      <v-checkbox
+        v-model="currentValue.required"
+        :label="$t('survey-schemes.conditions.promptAnswer.required')"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
-import { VCombobox, VTextField } from 'vuetify/components';
+import { defineComponent, type PropType } from 'vue';
 
-import { useSelects } from '@intake24/admin/composables';
-import type {
-  PromptAnswerPropertyCheck,
-} from '@intake24/common/prompts';
+import { VCombobox, VTextField } from 'vuetify/components';
+import type { PromptAnswerPropertyCheck } from '@intake24/common/prompts';
+import { useCheck } from './use-check';
 
 export default defineComponent({
   name: 'PromptAnswerPropertyCheck',
@@ -74,17 +73,9 @@ export default defineComponent({
   emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const { conditionOps } = useSelects();
+    const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
 
-    const currentValue = ref(props.modelValue);
-
-    const update = (value: PromptAnswerPropertyCheck) => {
-      emit('update:modelValue', value);
-    };
-
-    const comboOps = ['setEq', 'in', 'notIn'];
-
-    return { conditionOps, update, currentValue, comboOps };
+    return { conditionOps, currentValue, comboOps };
   },
 });
 </script>

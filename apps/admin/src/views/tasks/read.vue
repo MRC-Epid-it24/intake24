@@ -42,7 +42,7 @@
         </tr>
         <tr v-if="entry.bullJob?.next">
           <th>{{ $t('tasks.run.next') }}</th>
-          <td>{{ formatDateTime(new Date(entry.bullJob.next)) }}</td>
+          <td>{{ formatDateTime(new Date(entry.bullJob!.next)) }}</td>
         </tr>
         <tr>
           <th>{{ $t('common.description') }}</th>

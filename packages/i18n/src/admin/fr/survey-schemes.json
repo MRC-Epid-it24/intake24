@@ -120,6 +120,7 @@
       "flag": "Flag",
       "tag": "Tag",
       "foodCategory": "Food category",
+      "numberOfFoods": "Number of foods",
       "numberOfMeals": "Number of meals",
       "promptAnswer": "Prompt answer",
       "property": "Property value",
@@ -134,16 +135,27 @@
       "portionSizeComplete": "Portion size estimation complete",
       "complete": "Associated food prompts complete"
     },
+    "category": {
+      "_": "Category",
+      "id": "Category ID",
+      "includeIfSet": "Include if set",
+      "showIfSet": "Show if set"
+    },
     "flag": {
+      "_": "Flag",
       "id": "Flag ID",
+      "includeIfSet": "Include if set",
       "showIfSet": "Show if set"
     },
     "tag": {
+      "_": "Tag",
       "id": "Tag ID",
+      "includeIfSet": "Include if tagged",
       "showIfSet": "Show if tagged"
     },
     "summary": {
       "value": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
+      "entityValue": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
       "boolean": "<em><strong>{property}</strong></em> in <em><strong>{object}</strong></em>: {value}",
       "mealCompletion": {
         "freeEntryComplete": "<em><strong>free text entry</em></strong> of foods for the <em><strong>{object}</strong></em> is complete",

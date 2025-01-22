@@ -6,19 +6,21 @@
         hide-details="auto"
         :label="$t('survey-schemes.conditions.flag.id')"
         variant="outlined"
-        @change="update(currentValue)"
       />
     </v-col>
     <v-col cols="12" md="6">
-      <v-checkbox-btn v-model="currentValue.value" :label="$t('survey-schemes.conditions.flag.showIfSet')" @update:model-value="update(currentValue)" />
+      <v-checkbox-btn
+        v-model="currentValue.value"
+        :label="$t('survey-schemes.conditions.flag.showIfSet')"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
-
+import { defineComponent, type PropType } from 'vue';
 import type { FlagPropertyCheck } from '@intake24/common/prompts';
+import { useCheck } from './use-check';
 
 export default defineComponent({
   name: 'FlagPropertyCheck',
@@ -33,12 +35,9 @@ export default defineComponent({
   emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const currentValue = ref(props.modelValue);
+    const { currentValue } = useCheck(props, { emit });
 
-    const update = (value: FlagPropertyCheck) => {
-      emit('update:modelValue', value);
-    };
-    return { update, currentValue };
+    return { currentValue };
   },
 });
 </script>

@@ -1,15 +1,18 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-checkbox-btn v-model="currentValue.value" :label="$t('survey-schemes.conditions.showIfTrue')" @update:model-value="update(currentValue)" />
+      <v-checkbox-btn
+        v-model="currentValue.value"
+        :label="$t('survey-schemes.conditions.showIfTrue')"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
-
+import { defineComponent, type PropType } from 'vue';
 import type { BooleanPropertyCheck } from '@intake24/common/prompts';
+import { useCheck } from './use-check';
 
 export default defineComponent({
   name: 'BooleanPropertyCheck',
@@ -24,12 +27,9 @@ export default defineComponent({
   emits: ['update:modelValue'],
 
   setup(props, { emit }) {
-    const currentValue = ref(props.modelValue);
+    const { currentValue } = useCheck(props, { emit });
 
-    const update = (value: BooleanPropertyCheck) => {
-      emit('update:modelValue', value);
-    };
-    return { update, currentValue };
+    return { currentValue };
   },
 });
 </script>

@@ -54,6 +54,8 @@ export default defineComponent({
         }
         case 'value':
           return i18n.t(`survey-schemes.conditions.summary.value`, { object, property });
+        case 'entityValue':
+          return i18n.t(`survey-schemes.conditions.summary.entityValue`, { object, property });
         case 'promptAnswer':
           return i18n.t(`survey-schemes.conditions.summary.promptAnswer`, { object, property, promptId: condition.property.check.promptId || '?' });
         case 'userField':

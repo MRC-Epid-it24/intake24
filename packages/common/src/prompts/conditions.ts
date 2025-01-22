@@ -1,5 +1,6 @@
 import isEqual from 'lodash/isEqual';
 import { z } from 'zod';
+import { foodTypes } from '../types/foods';
 
 export const conditionOpCodes = ['eq', 'ne', 'setEq', 'in', 'notIn', 'gte', 'gt', 'lte', 'lt'] as const;
 export type ConditionOpCode = typeof conditionOpCodes[number];
@@ -163,21 +164,51 @@ const foodCompletionProperty = z.object({
   }),
 });
 
-const numberOfMealsProperty = valueProperty.extend({
+const numberOfMealsProperty = z.object({
   id: z.literal('numberOfMeals'),
+  type: z.literal('entityValue'),
+  check: valueCheck.extend({
+    entity: z.literal('meal'),
+    flag: z.object({
+      id: z.string(),
+      value: z.boolean(),
+    }).optional(),
+  }),
+});
+
+const numberOfFoodsProperty = z.object({
+  id: z.literal('numberOfFoods'),
+  type: z.literal('entityValue'),
+  check: valueCheck.extend({
+    entity: z.literal('food'),
+    type: z.enum(foodTypes).nullable(),
+    flag: z.object({
+      id: z.string(),
+      value: z.boolean(),
+    }).optional(),
+    tag: z.object({
+      id: z.string(),
+      value: z.boolean(),
+    }).optional(),
+    category: z.object({
+      id: z.string(),
+      value: z.boolean(),
+    }).optional(),
+  }),
 });
 
 export const commonProperties = [
   energyProperty,
   drinksProperty,
   flagProperty,
+  numberOfFoodsProperty,
+  numberOfMealsProperty,
   promptAnswerProperty,
 ] as const;
 
 export const surveyProperties = z.discriminatedUnion('id', [
   ...commonProperties,
   mealCompletionProperty,
-  numberOfMealsProperty,
   recallNumberProperty,
   userFieldProperty,
 ]);
@@ -211,6 +242,8 @@ export type BooleanProperty = z.infer<typeof booleanProperty>;
 export type DrinksProperty = z.infer<typeof drinksProperty>;
 export type EnergyProperty = z.infer<typeof energyProperty>;
 export type FlagProperty = z.infer<typeof flagProperty>;
+export type NumberOfFoodsProperty = z.infer<typeof numberOfFoodsProperty>;
+export type NumberOfMealsProperty = z.infer<typeof numberOfMealsProperty>;
 export type TagProperty = z.infer<typeof tagProperty>;
 export type PromptAnswerProperty = z.infer<typeof promptAnswerProperty>;
 export type RecallNumberProperty = z.infer<typeof recallNumberProperty>;
@@ -218,6 +251,7 @@ export type UserFieldProperty = z.infer<typeof userFieldProperty>;
 
 export type ValuePropertyCheck = z.infer<typeof valueCheck>;
 export type BooleanPropertyCheck = z.infer<typeof booleanProperty.shape.check>;
+export type EntityValuePropertyCheck = z.infer<typeof numberOfFoodsProperty.shape.check> | z.infer<typeof numberOfMealsProperty.shape.check>;
 export type MealCompletionPropertyCheck = z.infer<typeof mealCompletionProperty.shape.check>;
 export type FlagPropertyCheck = z.infer<typeof flagProperty.shape.check>;
 export type TagPropertyCheck = z.infer<typeof tagProperty.shape.check>;
@@ -260,6 +294,8 @@ type CommonPropertyDefaults = {
   drinks: DrinksProperty;
   energy: EnergyProperty;
   flag: FlagProperty;
+  numberOfFoods: NumberOfFoodsProperty;
+  numberOfMeals: NumberOfMealsProperty;
   promptAnswer: PromptAnswerProperty;
 };
 
@@ -278,6 +314,25 @@ const commonPropertyDefaults: CommonPropertyDefaults = {
     check: {
       flagId: '',
       value: true,
+    },
+  },
+  numberOfFoods: {
+    id: 'numberOfFoods',
+    type: 'entityValue',
+    check: {
+      op: 'eq',
+      value: null,
+      entity: 'food',
+      type: null,
+    },
+  },
+  numberOfMeals: {
+    id: 'numberOfMeals',
+    type: 'entityValue',
+    check: {
+      op: 'eq',
+      value: null,
+      entity: 'meal',
     },
   },
   promptAnswer: {
@@ -307,10 +362,6 @@ export const promptConditionDefaults: PromptConditionDefaults = {
       check: {
         completionState: 'searchComplete',
       },
-    },
-    numberOfMeals: {
-      id: 'numberOfMeals',
-      ...valuePropertyDefaults,
     },
     recallNumber: {
       id: 'recallNumber',

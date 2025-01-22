@@ -50,12 +50,12 @@ All fields can be localized to [languages](/admin/localization/languages) set up
 
 Following variables can be used in the fields:
 
-- `{meal}` - Meal name & time
-- `{mealName}` - Meal name
-- `{mealTime}` - Meal time
-- `{food}` - Food name
+- `{meal}` - Meal name & time (e.g. `Breakfast (12:00)`)
+- `{mealName}` - Meal name (e.g. `Breakfast`)
+- `{mealTime}` - Meal time (e.g. `12:00`)
+- `{food}` - Food name (e.g. `Bread`)
 - `{item}` - Food name or Meal name depending on current selection of prompt level type
-- `{recallDate}` - Recall date
+- `{recallDate}` - Recall date (e.g. `2023-01-01`)
 - `{recallNumber}` - Current recall number
 - `{userName}` - User's name (if available)
 
@@ -85,16 +85,19 @@ Conditions tab defines list of conditions that needs to be met to display the pr
 
 ### Type
 
-| Type            | Description                                            |
-| --------------- | ------------------------------------------------------ |
-| `Drinks`        | Number of drinks (in `meal` or `survey`)               |
-| `Energy`        | Total energy (`food` / `meal` / `survey`)              |
-| `Flag`          | Whether `food` / `meal` / `survey` has a specific flag |
-| `Food category` | Whether `food` has the category assigned               |
-| `Meals`         | Number of meals in recall                              |
-| `Prompt answer` | `Food` / `meal` / `survey` prompt answer               |
-| `Property`      | Property value (e.g. `Recall number` / `User's name`)  |
-| `Recall`        | @deprecated use property, Current recall number        |
+| Type              | Status                                           | Description                                                                |
+| ----------------- | ------------------------------------------------ | -------------------------------------------------------------------------- |
+| `Drinks`          | deprecated (use `Number of foods` with category) | Number of drinks (in `meal` or `survey`)                                   |
+| `Energy`          | active                                           | Total energy (`food` / `meal` / `survey`)                                  |
+| `Flag`            | active                                           | Whether `food` / `meal` / `survey` has a specific flag                     |
+| `Food category`   | active                                           | Whether `food` has the category assigned                                   |
+| `Food completion` | active                                           | Whether `food` is completed                                                |
+| `Meal completion` | active                                           | Whether `meal` is completed                                                |
+| `Number of foods` | active                                           | Number of foods in recall / meal / food with optional properties to filter |
+| `Number of meals` | active                                           | Number of meal in recall / meal with optional properties to filter         |
+| `Prompt answer`   | active                                           | `Food` / `meal` / `survey` prompt answer                                   |
+| `Recall`          | deprecated (use `User field` with `submissions`) | Current recall number                                                      |
+| `User field`      | active                                           | `name`, `submissions` custom field                                         |
 
 ### Operation
 

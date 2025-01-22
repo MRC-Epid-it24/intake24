@@ -10,6 +10,9 @@ export const useInRecipeTypes = {
 
 export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipeTypes];
 
+export const foodTypes = ['free-text', 'encoded-food', 'missing-food', 'recipe-builder'] as const;
+export type FoodType = (typeof foodTypes)[number];
+
 // Special Foods | Foods Builder section
 
 export const recipeFoodStepsType = z.object({

@@ -83,7 +83,6 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { TranslateResult } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
 
 import { useFetchList } from '@intake24/admin/composables';
@@ -118,7 +117,7 @@ const props = defineProps({
     default: 'name',
   },
   label: {
-    type: String as PropType<string | TranslateResult>,
+    type: String,
   },
   name: {
     type: String,

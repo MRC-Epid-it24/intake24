@@ -3,6 +3,8 @@ import type {
   ComponentType,
   Condition,
   FoodCompletionState,
+  NumberOfFoodsProperty,
+  NumberOfMealsProperty,
   Prompt,
 } from '@intake24/common/prompts';
 import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
@@ -25,8 +27,8 @@ import {
   standardPortionComplete,
 } from '@intake24/common/util/portion-size-checks';
 import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
-
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+
 import {
   addonFoodPromptCheck,
   findMeal,
@@ -74,6 +76,43 @@ function mealEnergy(energy: number, meal: MealState): number {
 function surveyEnergy(energy: number, meals: MealState[]): number {
   return meals.reduce(mealEnergy, energy);
 }
+
+function mealCount(property: NumberOfMealsProperty) {
+  return (count: number, meal: MealState): number =>
+    !property.check.flag || property.check.flag.value === meal.flags.includes(property.check.flag.id)
+      ? count + 1
+      : count;
+};
+
+function surveyMealCount(property: NumberOfMealsProperty) {
+  return (count: number, meals: MealState[]): number => meals.reduce(mealCount(property), count);
+};
+
+function foodCount(property: NumberOfFoodsProperty) {
+  return (count: number, food: FoodState): number => {
+    if (food.linkedFoods.length)
+      count += food.linkedFoods.reduce(foodDrinks, count);
+
+    const { flag, type, tag, category } = property.check;
+
+    return (
+      (!flag || flag.value === food.flags.includes(flag.id))
+      && (!type || food.type === type)
+      && (!tag || (food.type === 'encoded-food' && tag.value === food.data.tags.includes(tag.id)))
+      && (!category || (food.type === 'encoded-food' && category.value === food.data.categories.includes(category.id)))
+    )
+      ? count + 1
+      : count;
+  };
+}
+
+function mealFoodCount(property: NumberOfFoodsProperty) {
+  return (count: number, meal: MealState): number => meal.foods.reduce(foodCount(property), count);
+};
+
+function surveyFoodCount(property: NumberOfFoodsProperty) {
+  return (count: number, meals: MealState[]): number => meals.reduce(mealFoodCount(property), count);
+};
 
 function foodDrinks(count: number, food: FoodState): number {
   if (food.linkedFoods.length)
@@ -760,6 +799,43 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
           break;
       }
       return flag === condition.property.check.value;
+    }
+    case 'numberOfFoods': {
+      let count = 0;
+      switch (condition.object) {
+        case 'survey':
+          count = surveyFoodCount(condition.property)(0, surveyStore.meals);
+          break;
+        case 'meal':
+          count = mealFoodCount(condition.property)(0, requireMeal(condition.property.id));
+          break;
+        case 'food':
+          count = foodCount(condition.property)(0, requireFood(condition.property.id));
+          break;
+      }
+      return conditionOps[condition.property.check.op]({
+        answer: count,
+        value: condition.property.check.value,
+      });
+    }
+    case 'numberOfMeals': {
+      let count = 0;
+      switch (condition.object) {
+        case 'survey':
+          count = surveyMealCount(condition.property)(0, surveyStore.meals);
+          break;
+        case 'meal':
+          count = mealCount(condition.property)(0, requireMeal(condition.property.id));
+          break;
+        case 'food':
+          count = mealCount(condition.property)(0, requireMeal(condition.property.id));
+          break;
+      }
+
+      return conditionOps[condition.property.check.op]({
+        answer: count,
+        value: condition.property.check.value,
+      });
     }
     case 'tag': {
       const food = requireFood(condition.property.id);

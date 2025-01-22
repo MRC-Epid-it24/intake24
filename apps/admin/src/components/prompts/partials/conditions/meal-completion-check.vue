@@ -8,17 +8,16 @@
         :items="completionStateSelectList"
         :label="$t('survey-schemes.conditions.property.mealCompletion')"
         variant="outlined"
-        @update:model-value="update(currentValue)"
       />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
-
+import { defineComponent, type PropType } from 'vue';
 import { foodCompletionStateOptions, type MealCompletionPropertyCheck } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
+import { useCheck } from './use-check';
 
 export default defineComponent({
   name: 'MealCompletionPropertyCheck',
@@ -34,15 +33,11 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { i18n } = useI18n();
-
-    const currentValue = ref(props.modelValue);
+    const { currentValue } = useCheck(props, { emit });
 
     const completionStateSelectList = foodCompletionStateOptions.map(state => ({ state, title: i18n.t(`survey-schemes.conditions.foodCompletion.${state}`) }));
 
-    const update = (value: MealCompletionPropertyCheck) => {
-      emit('update:modelValue', value);
-    };
-    return { completionStateSelectList, update, currentValue };
+    return { completionStateSelectList, currentValue };
   },
 });
 </script>
