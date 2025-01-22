@@ -284,15 +284,10 @@
   "splitFood": {
     "name": "Pemisah makanan",
     "text": "",
-    "description": "Nampaknya anda telah memasukkan lebih daripada satu item makanan pada baris ini.",
-    "searchTerm": "Cari istilah: {food}",
+    "description": "Cari istilah: <strong>{food}</strong>",
     "split": "Adakah ini makanan yang berasingan?",
-    "singleSuggestion": "Klik pada \"simpan sebagai makanan tunggal\" jika anda maksudkan satu makanan tunggal seperti sup ayam dan sayur-sayuran.",
-    "singleSuggestionEx": "Klik pada \"simpan sebagai makanan tunggal\" jika anda maksudkan satu makanan seperti {food}.",
-    "separateSuggestion": "Klik pada \"makanan berasingan\" untuk barangan seperti ikan dan kentang goreng.",
-    "separateSuggestionEx": "Klik pada \"makanan lain\" untuk item seperti {food}.",
-    "separate": "Makanan lain",
-    "single": "Simpan sebagai hidangan tunggal"
+    "separate": "Yes",
+    "single": "No"
   },
   "submit": {
     "name": "Hantar rekod",

@@ -284,15 +284,10 @@
   "splitFood": {
     "name": "Séparer les aliments",
     "text": "",
-    "description": "Il semblerait que vous avez renseigné plus d'un aliment sur la même ligne.",
-    "searchTerm": "Rechercher: {food}",
+    "description": "Vous avez recherché: <strong>{food}</strong>.",
     "split": "S'agit-il de deux aliments distincts?",
-    "singleSuggestion": "Sélectionner 'conserver comme aliment unique' s'il s'agit d'un aliment unique de type soupe au poulet et aux légumes.",
-    "singleSuggestionEx": "Sélectionner 'conserver comme aliment unique' s'il s'agit d'un aliment unique de type {food}.",
-    "separateSuggestion": "Sélectionner 'aliments distincts' pour des aliments tels qu'un steak frites.",
-    "separateSuggestionEx": "Sélectionner 'aliments distincts' pour des aliments tels que {food}.",
-    "separate": "Aliments distincts",
-    "single": "Conserver comme aliment unique"
+    "separate": "Oui",
+    "single": "Non"
   },
   "submit": {
     "name": "Soumettre la page",

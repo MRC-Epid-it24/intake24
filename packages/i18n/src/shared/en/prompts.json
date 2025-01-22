@@ -284,15 +284,10 @@
   "splitFood": {
     "name": "Split food",
     "text": "",
-    "description": "It looks like you entered more than one food item on the line.",
-    "searchTerm": "Search term: {food}",
+    "description": "You have searched for <strong>{food}</strong>.",
     "split": "Are these separate foods?",
-    "singleSuggestion": "Select 'keep as single food' if you meant a single food such as chicken and vegetable soup.",
-    "singleSuggestionEx": "Select 'keep as single food' if you meant a single food such as {food}.",
-    "separateSuggestion": "Select 'separate foods' for items such as fish and chips.",
-    "separateSuggestionEx": "Select 'separate foods' for items such as {food}.",
-    "separate": "Separate foods",
-    "single": "Keep as single food"
+    "separate": "Yes",
+    "single": "No"
   },
   "submit": {
     "name": "Submit page",

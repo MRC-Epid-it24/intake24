@@ -284,15 +284,10 @@
   "splitFood": {
     "name": "拆分食物",
     "text": "",
-    "description": "看起来您在同一行中输入了多个食物项目。",
-    "searchTerm": "搜索词：{food}",
+    "description": "搜索词：<strong>{food}</strong>",
     "split": "这些是单独的食物吗？?",
-    "singleSuggestion": "如果您是指像鸡肉蔬菜汤这样的单一食物，请单击“保留为单一食物”。",
-    "singleSuggestionEx": "如果您是指像{food}这样的单一食物，请单击“保留为单一食物”。",
-    "separateSuggestion": "如果是鱼和薯条等项目，请单击“分开食物”。",
-    "separateSuggestionEx": "如果是{food}等项目，请单击“分开食物”。",
-    "separate": "分开食物",
-    "single": "保留为单一食物"
+    "separate": "Yes",
+    "single": "No"
   },
   "submit": {
     "name": "提交页面",
