@@ -8,7 +8,7 @@ import type {
   Prompt,
 } from '@intake24/common/prompts';
 import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
-import type { FoodFlag, FoodSection, FoodState, MealFlag, MealSection, MealState, Selection, SurveyFlag, SurveyPromptSection } from '@intake24/common/surveys';
+import type { FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
@@ -789,13 +789,13 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       let flag = false;
       switch (condition.object) {
         case 'survey':
-          flag = surveyStore.hasFlag(condition.property.check.flagId as SurveyFlag);
+          flag = surveyStore.hasFlag(condition.property.check.flagId);
           break;
         case 'meal':
-          flag = requireMeal(condition.property.id).flags.includes(condition.property.check.flagId as MealFlag);
+          flag = requireMeal(condition.property.id).flags.includes(condition.property.check.flagId);
           break;
         case 'food':
-          flag = requireFood(condition.property.id).flags.includes(condition.property.check.flagId as FoodFlag);
+          flag = requireFood(condition.property.id).flags.includes(condition.property.check.flagId);
           break;
       }
       return flag === condition.property.check.value;
@@ -843,7 +843,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       if (food.type !== 'encoded-food')
         return false;
 
-      return food.data.tags.includes(condition.property.check.tagId);
+      return condition.property.check.value === food.data.tags.includes(condition.property.check.tagId);
     }
     case 'promptAnswer': {
       let answer;
