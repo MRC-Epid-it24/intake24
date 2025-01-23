@@ -7,9 +7,9 @@
           <v-card-title class="text-h5 font-weight-medium mb-2 pt-4">
             {{ $t('survey.welcome._') }}
           </v-card-title>
-          <div class="text-body-2 px-4 pt-0 pb-4 opacity-60">
+          <v-card-subtitle class="pb-4">
             {{ $t('survey.welcome.subtitle') }}
-          </div>
+          </v-card-subtitle>
           <v-divider />
           <v-list class="list__no-wrap" lines="two">
             <v-list-subheader>{{ $t('survey.info') }}</v-list-subheader>

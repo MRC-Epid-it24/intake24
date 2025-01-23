@@ -3,7 +3,8 @@
     <v-col cols="12" sm="auto">
       <v-card
         :class="{ 'mt-10': $vuetify.display.smAndUp }"
-        :tile="$vuetify.display.xs"
+        :flat="$vuetify.display.mobile"
+        :tile="$vuetify.display.mobile"
         :width="$vuetify.display.smAndUp ? width : undefined"
       >
         <div class="d-flex justify-center align-center pt-4">
@@ -19,9 +20,9 @@
           </slot>
         </div>
         <slot name="subtitle">
-          <div v-if="subtitle" class="text-subtitle-2 text-center font-weight-medium pa-3 pb-0 opacity-70">
+          <v-card-subtitle v-if="subtitle" class="text-center font-weight-medium px-6 pt-4 pb-0">
             {{ subtitle }}
-          </div>
+          </v-card-subtitle>
         </slot>
         <slot />
       </v-card>

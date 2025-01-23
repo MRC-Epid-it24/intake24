@@ -4,9 +4,9 @@
       <v-col cols="12" md="8" sm="9">
         <v-card :tile="$vuetify.display.mobile">
           <v-card-title>{{ $t('feedback.physicalData.title') }}</v-card-title>
-          <div class="text-body-2 px-4 pt-0 pb-4 opacity-60">
+          <v-card-subtitle>
             {{ $t('feedback.physicalData.subtitle') }}
-          </div>
+          </v-card-subtitle>
           <v-card-text class="pa-4">
             <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
               <v-row>

@@ -5,9 +5,9 @@
         <div class="text-h6 text-center font-weight-medium pt-4 pb-2">
           {{ survey?.name }}
         </div>
-        <div class="text-subtitle-2 text-center font-weight-medium opacity-60">
+        <v-card-subtitle class="text-center font-weight-medium">
           {{ $t('common.login.subtitle') }}
-        </div>
+        </v-card-subtitle>
       </template>
       <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
         <v-card-text>
@@ -67,9 +67,9 @@
           <div class="text-h3 font-weight-medium text-center">
             {{ $t('survey.generateUser.noAccount') }}
           </div>
-          <div class="text-body-2 text-center font-weight-medium px-6 opacity-60">
+          <v-card-subtitle class="text-center font-weight-medium">
             {{ $t('survey.generateUser.subtitle') }}
-          </div>
+          </v-card-subtitle>
           <v-btn
             block
             color="accent"

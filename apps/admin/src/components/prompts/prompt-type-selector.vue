@@ -16,7 +16,7 @@
               <v-card-title class="text-center">
                 {{ $t(`survey-schemes.prompts.${prompt.id}.title`) }}
               </v-card-title>
-              <v-card-subtitle class="text-center text__no-wrap">
+              <v-card-subtitle class="text-center">
                 {{ $t(`survey-schemes.prompts.${prompt.id}.subtitle`) }}
               </v-card-subtitle>
               <v-card-text v-show="isSelected" class="text-center">

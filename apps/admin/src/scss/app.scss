@@ -21,10 +21,6 @@
   border-bottom: 1px solid map.get(settings.$grey, 'lighten-3');
 }
 
-.text__no-wrap {
-  white-space: initial !important;
-}
-
 // Drag & drop lists
 .drag-and-drop__handle {
   cursor: move;
