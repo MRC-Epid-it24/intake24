@@ -1,5 +1,5 @@
 import axios, { HttpStatusCode } from 'axios';
-import { computed, ref } from 'vue';
+import { computed, ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
@@ -27,7 +27,7 @@ export function useLogin(props: UseLoginProps) {
   const survey = ref<PublicSurveyEntry | null>(null);
   const errors = ref(new Errors());
 
-  const captchaEl = ref<InstanceType<typeof Captcha>>();
+  const captchaEl = useTemplateRef<InstanceType<typeof Captcha>>('captchaEl');
   const captchaToken = ref<string | undefined>(undefined);
 
   const isOpenAccess = computed(() => !!survey.value?.openAccess);

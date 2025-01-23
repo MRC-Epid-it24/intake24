@@ -7,7 +7,7 @@
             <image-placeholder />
           </template>
         </v-img>
-        <svg ref="svg">
+        <svg>
           <filter id="polygon-blur">
             <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
           </filter>
@@ -28,16 +28,16 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { VImg } from 'vuetify/components';
 import { useElementSize } from '@vueuse/core';
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { onMounted, ref, useTemplateRef } from 'vue';
 
+import { useDisplay } from 'vuetify';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import type { ImageMap } from '@intake24/common/prompts';
-import type { ImageMapResponse } from '@intake24/common/types/http';
 
+import type { ImageMapResponse } from '@intake24/common/types/http';
 import { useImageMap } from '../use-image-map';
 
 export type ImageMapObject = {
@@ -45,90 +45,69 @@ export type ImageMapObject = {
   polygon: string;
 };
 
-export default defineComponent({
-  name: 'DrinkwareObjectChooser',
+defineOptions({ name: 'DrinkwareObjectChooser' });
 
-  components: { ImagePlaceholder },
-
-  props: {
-    config: {
-      type: Object as PropType<ImageMap>,
-      required: true,
-    },
-    disabled: {
-      type: Boolean,
-      default: undefined,
-    },
-    id: {
-      type: String,
-    },
-    index: {
-      type: Number,
-    },
-    imageMapData: {
-      type: Object as PropType<ImageMapResponse>,
-      required: true,
-    },
-    labels: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
+const props = defineProps({
+  config: {
+    type: Object as PropType<ImageMap>,
+    required: true,
   },
-
-  emits: ['confirm', 'select'],
-
-  setup(props, { emit }) {
-    const img = ref<InstanceType<typeof VImg>>();
-    const svg = ref<SVGElement>();
-
-    // @ts-expect-error should allow vue instance?
-    const { height, width } = useElementSize(img);
-
-    const screenHeight = ref(0);
-    const screenWidth = ref(0);
-
-    const { hoverIndex, label, objects } = useImageMap(props, width);
-
-    const isDisabled = computed(() =>
-      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled,
-    );
-
-    const getScreenDimensions = () => {
-      screenHeight.value = window.screen.height;
-      screenWidth.value = window.screen.width;
-    };
-
-    const confirm = () => {
-      emit('confirm');
-    };
-
-    onMounted(() => {
-      getScreenDimensions();
-    });
-
-    return {
-      height,
-      width,
-      confirm,
-      img,
-      isDisabled,
-      svg,
-      hoverIndex,
-      label,
-      objects,
-      screenHeight,
-      screenWidth,
-    };
+  disabled: {
+    type: Boolean,
+    default: undefined,
   },
-
-  methods: {
-    select(idx: number, id: string) {
-      this.$emit('select', idx, id);
-
-      if (!this.$vuetify.display.mobile)
-        this.confirm();
-    },
+  id: {
+    type: String,
   },
+  index: {
+    type: Number,
+  },
+  imageMapData: {
+    type: Object as PropType<ImageMapResponse>,
+    required: true,
+  },
+  labels: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
+});
+
+const emit = defineEmits(['confirm', 'select']);
+
+const img = useTemplateRef('img');
+
+const { mobile } = useDisplay();
+
+// @ts-expect-error should allow vue instance?
+const { width } = useElementSize(img);
+
+const screenHeight = ref(0);
+const screenWidth = ref(0);
+
+const { hoverIndex, objects } = useImageMap(props, width);
+
+/* const isDisabled = computed(() =>
+  typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled,
+); */
+
+function getScreenDimensions() {
+  screenHeight.value = window.screen.height;
+  screenWidth.value = window.screen.width;
+}
+
+function confirm() {
+  emit('confirm');
+}
+
+function select(idx: number, id: string) {
+  emit('select', idx, id);
+
+  if (!mobile.value)
+    confirm();
+}
+
+onMounted(() => {
+  getScreenDimensions();
 });
 </script>
 

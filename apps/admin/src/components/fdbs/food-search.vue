@@ -44,10 +44,9 @@
 <script lang="ts" setup>
 import type { DataTableHeader } from '../data-tables';
 import { watchDebounced } from '@vueuse/core';
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { VTextField } from 'vuetify/components';
 import { useHttp } from '@intake24/admin/services';
 import type {
   CategoriesResponse,
@@ -79,7 +78,7 @@ const router = useRouter();
 const dialog = ref(false);
 const loading = ref(false);
 const search = ref('');
-const searchRef = ref<InstanceType<typeof VTextField>>();
+const searchRef = useTemplateRef('searchRef');
 
 const categories = ref<CategoriesResponse['data']>([]);
 const foods = ref<FoodsResponse['data']>([]);

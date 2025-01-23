@@ -163,8 +163,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import type { VForm } from 'vuetify/components';
 
+import { defineComponent, useTemplateRef } from 'vue';
 import {
   customPrompts,
   portionSizePrompts,
@@ -178,8 +179,8 @@ import {
   standardPrompts as standardPromptDefaults,
 } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import { copy, merge } from '@intake24/common/util';
 
+import { copy, merge } from '@intake24/common/util';
 import { useTinymce } from '../editors';
 import {
   PromptActions,
@@ -233,7 +234,7 @@ export default defineComponent({
 
   setup() {
     useTinymce();
-    const form = ref<InstanceType<typeof HTMLFormElement>>();
+    const form = useTemplateRef<InstanceType<typeof VForm>>('form');
 
     return { form };
   },
@@ -353,9 +354,9 @@ export default defineComponent({
       };
     },
 
-    save() {
-      const isValid = this.form?.validate();
-      if (!isValid)
+    async save() {
+      const { valid } = await this.form?.validate() || {};
+      if (!valid)
         return;
 
       const {

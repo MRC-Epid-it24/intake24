@@ -98,93 +98,86 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './portion-sizes';
 
-import { defineComponent, ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 
 import { copy, merge, randomString } from '@intake24/common/util';
 import portionSizeParams from './parameters';
 import { psmDefaults, usePortionSizeMethods } from './portion-sizes';
 
-export default defineComponent({
+defineOptions({
   name: 'PortionSizeMethodSelector',
-
   components: { ...portionSizeParams },
+});
 
-  emits: ['save'],
+const emit = defineEmits(['save']);
 
-  setup() {
-    const { estimationMethods, selections } = usePortionSizeMethods();
+const { estimationMethods, selections } = usePortionSizeMethods();
 
-    const newDialog = (show = false): PortionSizeMethodDialog => ({
-      show,
-      index: -1,
-      item: copy({ ...psmDefaults[0], _id: randomString(6) }),
-    });
+function newDialog(show = false): PortionSizeMethodDialog {
+  return {
+    show,
+    index: -1,
+    item: copy({ ...psmDefaults[0], _id: randomString(6) }),
+  };
+}
 
-    const dialog = ref(newDialog());
-    const form = ref<InstanceType<typeof HTMLFormElement>>();
+const dialog = ref(newDialog());
+const form = useTemplateRef('form');
 
-    return {
-      dialog,
-      newDialog,
-      form,
-      selections,
-      estimationMethods,
-      psmDefaults,
-    };
-  },
+function updateItemProps() {
+  const {
+    show,
+    index,
+    item: { method },
+  } = dialog.value;
 
-  methods: {
-    updateItemProps() {
-      const {
-        show,
-        index,
-        item: { method },
-      } = this.dialog;
+  const item = psmDefaults.find(item => item.method === method);
+  if (!item)
+    return;
 
-      const item = this.psmDefaults.find(item => item.method === method);
-      if (!item)
-        return;
+  dialog.value = { show, index, item: copy({ ...item, _id: randomString(6) }) };
+};
 
-      this.dialog = { show, index, item: copy({ ...item, _id: randomString(6) }) };
-    },
+function add() {
+  dialog.value = newDialog(true);
+};
 
-    add() {
-      this.dialog = this.newDialog(true);
-    },
+function edit(index: number, item: InternalPortionSizeMethodItem) {
+  const defaults = psmDefaults.find(d => d.method === item.method);
+  if (!defaults) {
+    console.warn(`Portion size method defaults for method '${item.method}' not found.`);
+    return;
+  }
 
-    edit(index: number, item: InternalPortionSizeMethodItem) {
-      const defaults = this.psmDefaults.find(d => d.method === item.method);
-      if (!defaults) {
-        console.warn(`Portion size method defaults for method '${item.method}' not found.`);
-        return;
-      }
+  dialog.value = { show: true, index, item: copy(merge<InternalPortionSizeMethodItem>(defaults, item)) };
+};
 
-      this.dialog = { show: true, index, item: copy(merge(defaults, item)) };
-    },
+async function save() {
+  const { valid } = await form.value?.validate() ?? {};
+  if (!valid)
+    return;
 
-    save() {
-      const isValid = this.form?.validate();
-      if (!isValid)
-        return;
+  const { index, item } = dialog.value;
 
-      const { index, item } = this.dialog;
+  emit('save', { item, index });
 
-      this.$emit('save', { item, index });
+  reset();
+};
 
-      this.reset();
-    },
+function reset() {
+  dialog.value = newDialog();
+  form.value?.resetValidation();
+};
 
-    reset() {
-      this.dialog = this.newDialog();
-      this.form?.resetValidation();
-    },
+async function validate() {
+  await form.value?.validate();
+};
 
-    validate() {
-      this.form?.validate();
-    },
-  },
+defineExpose({
+  add,
+  edit,
 });
 </script>

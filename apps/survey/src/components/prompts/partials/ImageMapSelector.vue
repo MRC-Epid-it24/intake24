@@ -75,9 +75,8 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { VImg } from 'vuetify/components';
 import { useElementSize } from '@vueuse/core';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, useTemplateRef } from 'vue';
 import { useDisplay } from 'vuetify';
 
 import type { ImageMap } from '@intake24/common/prompts';
@@ -116,8 +115,8 @@ const props = defineProps({
 
 const emit = defineEmits(['confirm', 'select']);
 
-const img = ref<InstanceType<typeof VImg>>();
-const svg = ref<SVGElement>();
+const img = useTemplateRef('img');
+const svg = useTemplateRef('svg');
 
 const display = useDisplay();
 

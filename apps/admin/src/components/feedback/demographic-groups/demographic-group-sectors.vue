@@ -179,7 +179,7 @@ export default defineComponent({
   },
 
   watch: {
-    value(val) {
+    modelValue(val) {
       if (deepEqual(val, this.sectors))
         return;
 

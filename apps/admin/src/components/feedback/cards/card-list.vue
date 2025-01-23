@@ -73,112 +73,80 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { deepEqual } from 'fast-equals';
-import { defineComponent, ref } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
+import { useVModel } from '@vueuse/core';
+import { useTemplateRef } from 'vue';
 
+import { VueDraggable } from 'vue-draggable-plus';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import type { Card } from '@intake24/common/feedback';
 import type { FeedbackImage, NutrientTypeResponse } from '@intake24/common/types/http/admin';
-import { ConfirmDialog } from '@intake24/ui';
 
+import { copy } from '@intake24/common/util';
+import { ConfirmDialog } from '@intake24/ui';
 import CardSelector from './card-selector.vue';
 
-export type CardEvent = {
+type CardEvent = {
   index: number;
   card: Card;
 };
 
-export default defineComponent({
-  name: 'CardList',
+defineOptions({ name: 'CardList' });
 
-  components: {
-    CardSelector,
-    ConfirmDialog,
-    JsonEditorDialog,
-    OptionsMenu,
-    SelectResource,
-    VueDraggable,
+const props = defineProps({
+  images: {
+    type: Array as PropType<FeedbackImage[]>,
+    default: () => [],
   },
-
-  props: {
-    images: {
-      type: Array as PropType<FeedbackImage[]>,
-      default: () => [],
-    },
-    nutrientTypes: {
-      type: Array as PropType<NutrientTypeResponse[]>,
-      default: () => [],
-    },
-    modelValue: {
-      type: Array as PropType<Card[]>,
-      required: true,
-    },
+  nutrientTypes: {
+    type: Array as PropType<NutrientTypeResponse[]>,
+    default: () => [],
   },
-
-  emits: ['update:modelValue'],
-
-  setup(props) {
-    const cards = ref<Card[]>(props.modelValue);
-    const selector = ref<InstanceType<typeof CardSelector>>();
-
-    return { cards, selector };
-  },
-
-  watch: {
-    value(val) {
-      if (deepEqual(val, this.cards))
-        return;
-
-      this.cards = [...val];
-    },
-    cards() {
-      this.update();
-    },
-  },
-
-  methods: {
-    getListItemTitle(card: Card): string {
-      const { image } = card;
-
-      if (!('nutrientTypeIds' in card))
-        return image;
-
-      const nutrients = this.nutrientTypes
-        .filter(({ id }) => card.nutrientTypeIds.includes(id))
-        .map(item => item.description);
-
-      return `${image} | ${nutrients.join(' | ')}`;
-    },
-
-    add() {
-      this.selector?.add();
-    },
-
-    load(cards: Card[]) {
-      this.cards = [...cards];
-    },
-
-    edit({ card, index }: CardEvent) {
-      this.selector?.edit(index, card);
-    },
-
-    save({ card, index }: CardEvent) {
-      if (index === -1)
-        this.cards.push(card);
-      else this.cards.splice(index, 1, card);
-    },
-
-    remove(index: number) {
-      this.cards.splice(index, 1);
-    },
-
-    update() {
-      this.$emit('update:modelValue', this.cards);
-    },
+  modelValue: {
+    type: Array as PropType<Card[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const cards = useVModel(props, 'modelValue', emit, { deep: true, passive: true, clone: copy });
+const selector = useTemplateRef('selector');
+
+function getListItemTitle(card: Card): string {
+  const { image } = card;
+
+  if (!('nutrientTypeIds' in card))
+    return image;
+
+  const nutrients = props.nutrientTypes
+    .filter(({ id }) => card.nutrientTypeIds.includes(id))
+    .map(item => item.description);
+
+  return `${image} | ${nutrients.join(' | ')}`;
+};
+
+function add() {
+  selector.value?.add();
+};
+
+function load(items: Card[]) {
+  cards.value = [...items];
+};
+
+function edit({ card, index }: CardEvent) {
+  selector.value?.edit(index, card);
+};
+
+function save({ card, index }: CardEvent) {
+  if (index === -1)
+    cards.value.push(card);
+  else cards.value.splice(index, 1, card);
+};
+
+function remove(index: number) {
+  cards.value.splice(index, 1);
+};
 </script>

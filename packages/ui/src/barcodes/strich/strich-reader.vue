@@ -30,8 +30,7 @@
 import type { PropType } from 'vue';
 import { BarcodeReader, StrichSDK } from '@pixelverse/strichjs-sdk';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
-import { defineComponent, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue';
-import { VCard } from 'vuetify/components';
+import { defineComponent, onBeforeMount, onBeforeUnmount, useTemplateRef, watch } from 'vue';
 
 import { defaultBarcodeScannerOptions, type StrichScanner } from '@intake24/common/barcodes';
 
@@ -57,8 +56,8 @@ const { hasTorch, initTorch, toggleTorch } = useTorch();
 
 const dialog = useVModel(props, 'dialog', emit);
 
-const card = ref<InstanceType<typeof VCard>>();
-const reader = ref<InstanceType<typeof HTMLFormElement>>();
+const card = useTemplateRef('card');
+const reader = useTemplateRef('reader');
 
 const { height, width } = useElementSize(card);
 

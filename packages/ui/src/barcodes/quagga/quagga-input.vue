@@ -16,7 +16,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, useTemplateRef } from 'vue';
 
 import type { QuaggaScanner } from '@intake24/common/barcodes';
 
@@ -50,7 +50,7 @@ const emit = defineEmits<{
 const barcode = useVModel(props, 'modelValue', emit);
 
 const dialog = ref(false);
-const inputRef = ref<InstanceType<typeof HTMLFormElement>>();
+const inputRef = useTemplateRef('inputRef');
 
 function open(event: Event) {
   event.preventDefault();

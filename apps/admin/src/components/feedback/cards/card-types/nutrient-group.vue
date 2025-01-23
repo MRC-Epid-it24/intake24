@@ -1,91 +1,89 @@
 <template>
-  <div>
-    <card-unit v-bind="{ unit: modelValue.unit }" @update:unit="update('unit', $event)" />
-    <card-thresholds
-      :thresholds="{ high: modelValue.high, low: modelValue.low }"
-      @update:high="update('high', $event)"
-      @update:low="update('low', $event)"
-    />
-    <v-tabs-window-item key="nutrients" value="nutrients">
-      <v-container>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-card-title>{{ $t('nutrient-types.current') }}</v-card-title>
-            <v-list class="list-border">
-              <transition-group name="drag-and-drop" type="transition">
-                <v-list-item
-                  v-for="(nutrientType, idx) in currentNutrientTypes"
-                  :key="nutrientType.id"
-                  link
-                >
-                  <template #prepend>
-                    <v-icon>$nutrient-types</v-icon>
-                  </template>
-                  <v-list-item-title>
-                    {{ nutrientType.description }}
-                  </v-list-item-title>
-                  <template #append>
-                    <v-list-item-action>
-                      <v-btn color="error" icon="$delete" :title="$t('nutrient-types.remove')" @click.stop="remove(idx)" />
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
-              </transition-group>
-            </v-list>
-          </v-col>
-          <v-divider vertical />
-          <v-col cols="12" md="6">
-            <v-card-title>{{ $t('nutrient-types.available') }}</v-card-title>
-            <v-text-field
-              v-model="search"
-              clearable
-              hide-details="auto"
-              :label="$t('nutrient-types._')"
-              prepend-inner-icon="$search"
-              variant="outlined"
+  <card-unit v-bind="{ unit: modelValue.unit }" @update:unit="update('unit', $event)" />
+  <card-thresholds
+    :thresholds="{ high: modelValue.high, low: modelValue.low }"
+    @update:high="update('high', $event)"
+    @update:low="update('low', $event)"
+  />
+  <v-tabs-window-item key="nutrients" value="nutrients">
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-card-title>{{ $t('nutrient-types.current') }}</v-card-title>
+          <v-list class="list-border">
+            <transition-group name="drag-and-drop" type="transition">
+              <v-list-item
+                v-for="(nutrientType, idx) in currentNutrientTypes"
+                :key="nutrientType.id"
+                link
+              >
+                <template #prepend>
+                  <v-icon>$nutrient-types</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ nutrientType.description }}
+                </v-list-item-title>
+                <template #append>
+                  <v-list-item-action>
+                    <v-btn color="error" icon="$delete" :title="$t('nutrient-types.remove')" @click.stop="remove(idx)" />
+                  </v-list-item-action>
+                </template>
+              </v-list-item>
+            </transition-group>
+          </v-list>
+        </v-col>
+        <v-divider vertical />
+        <v-col cols="12" md="6">
+          <v-card-title>{{ $t('nutrient-types.available') }}</v-card-title>
+          <v-text-field
+            v-model="search"
+            clearable
+            hide-details="auto"
+            :label="$t('nutrient-types._')"
+            prepend-inner-icon="$search"
+            variant="outlined"
+          />
+          <v-list class="list-border">
+            <transition-group name="drag-and-drop" type="transition">
+              <v-list-item
+                v-for="nutrientType in visibleNutrientTypes"
+                :key="nutrientType.id"
+                link
+              >
+                <template #prepend>
+                  <v-icon>$nutrient-types</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ nutrientType.description }}
+                </v-list-item-title>
+                <template #append>
+                  <v-list-item-action>
+                    <v-btn
+                      icon
+                      :title="$t('nutrient-types.add')"
+                      @click.stop="add(nutrientType.id)"
+                    >
+                      <v-icon color="info">
+                        $add
+                      </v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </template>
+              </v-list-item>
+            </transition-group>
+            <v-skeleton-loader
+              v-if="nutrientTypesAvailableToLoad"
+              v-intersect="tryLoadMoreNutrientTypes"
+              type="list-item"
             />
-            <v-list class="list-border">
-              <transition-group name="drag-and-drop" type="transition">
-                <v-list-item
-                  v-for="nutrientType in visibleNutrientTypes"
-                  :key="nutrientType.id"
-                  link
-                >
-                  <template #prepend>
-                    <v-icon>$nutrient-types</v-icon>
-                  </template>
-                  <v-list-item-title>
-                    {{ nutrientType.description }}
-                  </v-list-item-title>
-                  <template #append>
-                    <v-list-item-action>
-                      <v-btn
-                        icon
-                        :title="$t('nutrient-types.add')"
-                        @click.stop="add(nutrientType.id)"
-                      >
-                        <v-icon color="info">
-                          $add
-                        </v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
-              </transition-group>
-              <v-skeleton-loader
-                v-if="nutrientTypesAvailableToLoad"
-                v-intersect="tryLoadMoreNutrientTypes"
-                type="list-item"
-              />
-            </v-list>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-tabs-window-item>
-    <v-tabs-window-item key="json" value="json">
-      <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
-    </v-tabs-window-item>
-  </div>
+          </v-list>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-tabs-window-item>
+  <v-tabs-window-item key="json" value="json">
+    <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+  </v-tabs-window-item>
 </template>
 
 <script lang="ts" setup>

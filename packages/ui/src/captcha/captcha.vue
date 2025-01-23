@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
 import HCaptcha from '@hcaptcha/vue3-hcaptcha';
-import { ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import { VueRecaptcha as ReCaptcha } from 'vue-recaptcha';
 
 import type { CaptchaProvider } from '@intake24/common/security';
@@ -45,7 +45,7 @@ defineOptions({
 
 const emit = defineEmits(['expired', 'verified']);
 
-const captcha = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
+const captcha = useTemplateRef<InstanceType<typeof HCaptcha | typeof ReCaptcha>>('captcha');
 const provider = ref<CaptchaProvider | null>(import.meta.env.VITE_CAPTCHA_PROVIDER || null);
 const sitekey = ref<string>(import.meta.env.VITE_CAPTCHA_SITEKEY || '');
 

@@ -64,7 +64,7 @@ import type {
   PortionSizeMethodItem,
 } from './portion-sizes';
 import { deepEqual } from 'fast-equals';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, useTemplateRef } from 'vue';
 
 import { VueDraggable } from 'vue-draggable-plus';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
@@ -101,7 +101,7 @@ export default defineComponent({
 
   setup(props) {
     const items = ref(props.modelValue.map(withIdAndOrder));
-    const selector = ref<InstanceType<typeof PortionSizeMethodSelector>>();
+    const selector = useTemplateRef<InstanceType<typeof PortionSizeMethodSelector>>('selector');
 
     return { items, selector };
   },
@@ -113,7 +113,7 @@ export default defineComponent({
   },
 
   watch: {
-    value(val: PortionSizeMethodItem[]) {
+    modelValue(val: PortionSizeMethodItem[]) {
       if (deepEqual(val, this.outputItems))
         return;
 

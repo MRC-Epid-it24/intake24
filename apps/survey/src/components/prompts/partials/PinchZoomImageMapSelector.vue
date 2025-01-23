@@ -54,7 +54,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import PinchScrollZoom from '@coddicat/vue-pinch-scroll-zoom';
-import { defineComponent, ref, toRef } from 'vue';
+import { defineComponent, ref, toRef, useTemplateRef } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
 
@@ -94,7 +94,7 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const dialog = ref(false);
-    const zoomer = ref<InstanceType<typeof PinchScrollZoom>>();
+    const zoomer = useTemplateRef<InstanceType<typeof PinchScrollZoom>>('zoomer');
 
     const { hoverIndex, label, objects } = useImageMap(props, toRef(props, 'width'));
 

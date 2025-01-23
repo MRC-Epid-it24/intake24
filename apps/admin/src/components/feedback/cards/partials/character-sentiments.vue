@@ -70,88 +70,54 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { deepEqual } from 'fast-equals';
-import { defineComponent, ref } from 'vue';
+import { useVModel } from '@vueuse/core';
 
+import { ref } from 'vue';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import type { Character, CharacterSentiment } from '@intake24/common/feedback';
-import { characterSentimentTypes, sentiments } from '@intake24/common/feedback';
+import type { CharacterSentiment } from '@intake24/common/feedback';
+import { characterSentimentTypes, sentiments as defaultSentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 
-export const characterSentimentDefaults: CharacterSentiment = {
+defineOptions({ name: 'CharacterSentiments' });
+
+const props = defineProps({
+  modelValue: {
+    type: Array as PropType<CharacterSentiment[]>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const { i18n: { t } } = useI18n();
+
+const characterSentimentDefaults: CharacterSentiment = {
   sentiment: [],
   sentimentType: 'happy',
   name: {},
 };
+const availableSentiments = defaultSentiments.map(value => ({
+  title: t(`feedback-schemes.sentiments.${value}`),
+  value,
+}));
+const availableCharacterSentimentTypes = characterSentimentTypes.map(value => ({
+  title: t(`feedback-schemes.characterSentimentTypes.${value}`),
+  value,
+}));
 
-export default defineComponent({
-  name: 'CharacterSentiments',
+const selectedSentiment = ref(0);
+const sentiments = useVModel(props, 'modelValue', emit, { deep: true, passive: true, clone: copy });
 
-  components: { LanguageSelector },
+function add() {
+  sentiments.value.push(copy(characterSentimentDefaults));
+};
 
-  props: {
-    modelValue: {
-      type: Array as PropType<Character['sentiments']>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup() {
-    const selectedSentiment = ref(0);
-
-    return {
-      selectedSentiment,
-    };
-  },
-
-  data() {
-    return {
-      characterSentimentDefaults,
-      sentiments: [...this.modelValue],
-      availableSentiments: sentiments.map(value => ({
-        title: this.$t(`feedback-schemes.sentiments.${value}`),
-        value,
-      })),
-      availableCharacterSentimentTypes: characterSentimentTypes.map(value => ({
-        title: this.$t(`feedback-schemes.characterSentimentTypes.${value}`),
-        value,
-      })),
-    };
-  },
-
-  watch: {
-    value(val) {
-      if (deepEqual(val, this.sentiments))
-        return;
-
-      this.sentiments = [...val];
-    },
-    sentiments: {
-      handler() {
-        this.update();
-      },
-      deep: true,
-    },
-  },
-
-  methods: {
-    add() {
-      this.sentiments.push(copy(characterSentimentDefaults));
-    },
-
-    remove(index: number) {
-      this.sentiments.splice(index, 1);
-    },
-
-    update() {
-      this.$emit('update:modelValue', this.sentiments);
-    },
-  },
-});
+function remove(index: number) {
+  sentiments.value.splice(index, 1);
+};
 </script>
 
 <style lang="scss" scoped></style>

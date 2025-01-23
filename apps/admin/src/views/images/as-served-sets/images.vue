@@ -67,9 +67,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
@@ -82,95 +82,77 @@ type AsServedImageForm = {
   weight: number;
 };
 
-export default defineComponent({
-  name: 'AsServedImages',
+defineOptions({ name: 'AsServedImages' });
 
-  components: { ConfirmDialog },
-
-  props: {
-    setId: {
-      type: String,
-      required: true,
-    },
-    items: {
-      type: Array as PropType<AsServedImageEntry[]>,
-      required: true,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  setId: {
+    type: String,
+    required: true,
   },
-
-  emits: ['images'],
-
-  setup(props, { emit }) {
-    const http = useHttp();
-
-    const fileInput = ref<InstanceType<typeof HTMLInputElement>>();
-    const images = ref(copy(props.items));
-    const loading = ref(false);
-
-    const { data, post } = useForm<AsServedImageForm>({
-      data: {
-        image: null as File | null,
-        weight: 0,
-      },
-      config: { multipart: true },
-    });
-
-    function updateImages() {
-      const outputImages = images.value.map(({ id, weight }) => ({ id, weight }));
-      emit('images', outputImages);
-    };
-
-    function addImage() {
-      loading.value = true;
-      window.addEventListener(
-        'focus',
-        () => {
-          loading.value = false;
-        },
-        { once: true },
-      );
-
-      fileInput.value?.click();
-    };
-
-    async function onFileChanged(e: Event) {
-      const target = e.target as HTMLInputElement;
-      data.value.image = target.files ? target.files[0] : null;
-
-      try {
-        const data = await post<AsServedImageEntry>(
-          `admin/images/as-served-sets/${props.setId}/images`,
-        );
-        images.value.push(data);
-      }
-      finally {
-        loading.value = false;
-        if (fileInput.value)
-          fileInput.value.value = '';
-      }
-    };
-
-    async function removeImage(imageId: string) {
-      await http.delete(`admin/images/as-served-sets/${props.setId}/images/${imageId}`);
-      images.value = images.value.filter(image => image.id !== imageId);
-    };
-
-    return {
-      addImage,
-      fileInput,
-      images,
-      loading,
-      onFileChanged,
-      removeImage,
-      updateImages,
-    };
+  items: {
+    type: Array as PropType<AsServedImageEntry[]>,
+    required: true,
   },
-
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const emit = defineEmits(['images']);
+const http = useHttp();
+
+const fileInput = useTemplateRef('fileInput');
+const images = ref(copy(props.items));
+const loading = ref(false);
+
+const { data, post } = useForm<AsServedImageForm>({
+  data: {
+    image: null as File | null,
+    weight: 0,
+  },
+  config: { multipart: true },
+});
+
+function updateImages() {
+  const outputImages = images.value.map(({ id, weight }) => ({ id, weight }));
+  emit('images', outputImages);
+};
+
+function addImage() {
+  loading.value = true;
+  window.addEventListener(
+    'focus',
+    () => {
+      loading.value = false;
+    },
+    { once: true },
+  );
+
+  fileInput.value?.click();
+};
+
+async function onFileChanged(e: Event) {
+  const target = e.target as HTMLInputElement;
+  data.value.image = target.files ? target.files[0] : null;
+
+  try {
+    const data = await post<AsServedImageEntry>(
+      `admin/images/as-served-sets/${props.setId}/images`,
+    );
+    images.value.push(data);
+  }
+  finally {
+    loading.value = false;
+    if (fileInput.value)
+      fileInput.value.value = '';
+  }
+};
+
+async function removeImage(imageId: string) {
+  await http.delete(`admin/images/as-served-sets/${props.setId}/images/${imageId}`);
+  images.value = images.value.filter(image => image.id !== imageId);
+};
 </script>
 
 <style lang="scss" scoped>

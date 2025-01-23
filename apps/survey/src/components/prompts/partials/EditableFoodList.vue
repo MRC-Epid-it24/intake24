@@ -101,7 +101,7 @@
 import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/components';
 import { useDebounceFn } from '@vueuse/core';
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, FreeTextFood, PromptSection } from '@intake24/common/surveys';
@@ -147,7 +147,7 @@ const promptI18n = computed(() => ({
   add: t(`prompts.${type.value}.add`),
 }));
 
-const search = ref<InstanceType<typeof VTextField>>();
+const search = useTemplateRef('search');
 
 const foods = ref(copy(props.modelValue));
 

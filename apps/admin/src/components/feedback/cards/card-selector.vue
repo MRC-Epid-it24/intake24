@@ -145,11 +145,7 @@
                 </v-row>
               </v-container>
             </v-tabs-window-item>
-            <component
-              :is="dialog.card.type"
-              v-model="dialog.card"
-              @validate="validate"
-            />
+            <component :is="dialog.card.type" v-model="dialog.card" />
           </v-tabs-window>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="reset">
@@ -167,20 +163,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
+import type { VForm } from 'vuetify/components';
 
+import { defineComponent, type PropType, useTemplateRef } from 'vue';
 import { useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
 import { cardDefaults } from '@intake24/common/feedback';
 import type { FeedbackImage } from '@intake24/common/types/http/admin';
-import { copy, merge, randomString } from '@intake24/common/util';
 
+import { copy, merge, randomString } from '@intake24/common/util';
 import { cardSettings } from './card';
 import cardTypes from './card-types';
 
-export type CardDialog = {
+type CardDialog = {
   show: boolean;
   index: number;
   card: Card;
@@ -206,7 +203,7 @@ export default defineComponent({
 
   setup() {
     useTinymce();
-    const form = ref<InstanceType<typeof HTMLFormElement>>();
+    const form = useTemplateRef<InstanceType<typeof VForm>>('form');
 
     return { form };
   },
@@ -268,8 +265,8 @@ export default defineComponent({
       };
     },
 
-    save() {
-      const isValid = this.form?.validate();
+    async save() {
+      const isValid = await this.form?.validate() ?? {};
       if (!isValid)
         return;
 

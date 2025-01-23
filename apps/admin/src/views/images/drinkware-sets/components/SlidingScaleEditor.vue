@@ -111,7 +111,6 @@
           </v-img>
 
           <svg
-            ref="svg"
             @dblclick.stop="createVertex"
             @mouseleave="endVertexDrag"
             @mousemove="onScaleMouseMove"
@@ -162,12 +161,11 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import type { VImg } from 'vuetify/components';
+<script lang="ts" setup>
 import { useElementSize } from '@vueuse/core';
 import { flatten, uniqueId } from 'lodash';
 import chunk from 'lodash/chunk';
-import { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue';
+import { computed, onMounted, ref, toRef, useTemplateRef, watch } from 'vue';
 
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
@@ -175,192 +173,155 @@ import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 
 import { closestSegmentIndex, closestVertexIndex } from '../../math-helpers';
 
-export default defineComponent({
-  name: 'SlidingScaleEditor',
+defineOptions({ name: 'SlidingScaleEditor' });
 
-  components: { ImagePlaceholder },
-
-  props: {
-    scaleIndex: {
-      type: Number,
-      required: true,
-    },
+const props = defineProps({
+  scaleIndex: {
+    type: Number,
+    required: true,
   },
+});
 
-  emits: ['baseImageChanged'],
+const emit = defineEmits(['baseImageChanged']);
 
-  setup(props, { emit }) {
-    const img = ref<InstanceType<typeof VImg>>();
-    const svg = ref<SVGElement>();
+const img = useTemplateRef('img');
 
-    // @ts-expect-error should allow vue instance?
-    const { height, width } = useElementSize(img);
+// @ts-expect-error should allow vue instance?
+const { height, width } = useElementSize(img);
 
-    const screenHeight = ref(0);
-    const screenWidth = ref(0);
+const screenHeight = ref(0);
+const screenWidth = ref(0);
 
-    const getScreenDimensions = () => {
-      screenHeight.value = window.screen.height;
-      screenWidth.value = window.screen.width;
-    };
+function getScreenDimensions() {
+  screenHeight.value = window.screen.height;
+  screenWidth.value = window.screen.width;
+}
 
-    const entryStore = useStoreEntry();
+const entryStore = useStoreEntry();
 
-    const clearScaleDialog = ref(false);
+const clearScaleDialog = ref(false);
 
-    const entry = entryStore.getEntry as DrinkwareSetEntry;
+const entry = entryStore.getEntry as DrinkwareSetEntry;
 
-    const scaleIndex = toRef(props, 'scaleIndex');
+const scaleIndex = toRef(props, 'scaleIndex');
 
-    const selectedVertexIndex = ref(-1);
+const selectedVertexIndex = ref(-1);
 
-    const overlayImageUrl = ref<string | undefined>(undefined);
+const overlayImageUrl = ref<string | undefined>(undefined);
 
-    const newBaseImageFile = ref<File | undefined>(undefined);
+const newBaseImageFile = ref<File | undefined>(undefined);
 
-    const newBaseImagePreviewUrl = ref<string | undefined>(undefined);
+const showOverlayImage = ref(true);
 
-    const showOverlayImage = ref(true);
+const scale = computed(() => {
+  return entry.scales[scaleIndex.value];
+});
 
-    const scale = computed(() => {
-      return entry.scales[scaleIndex.value];
-    });
+const outlineCoordinates = ref<[number, number][]>(
+  scale.value.version === 2
+    ? (chunk(scale.value.outlineCoordinates, 2) as [number, number][])
+    : [],
+);
 
-    const outlineCoordinates = ref<[number, number][]>(
-      scale.value.version === 2
-        ? (chunk(scale.value.outlineCoordinates, 2) as [number, number][])
-        : [],
+const svgPolygonPoints = computed(() => {
+  return outlineCoordinates.value
+    .map(([x, y]) => `${x * width.value}, ${y * height.value}`)
+    .join(' ');
+});
+
+function onConvertScaleVersion() {
+  const v1 = entry.scales[scaleIndex.value];
+
+  if (v1.version !== 1) {
+    console.warn(
+      `Attempted to convert a scale of version ${v1.version}: can only convert version 1`,
     );
+    return;
+  }
 
-    const svgPolygonPoints = computed(() => {
-      return outlineCoordinates.value
-        .map(([x, y]) => `${x * width.value}, ${y * height.value}`)
-        .join(' ');
-    });
+  overlayImageUrl.value = v1.overlayImageUrl;
 
-    const onConvertScaleVersion = () => {
-      const v1 = entry.scales[scaleIndex.value];
+  entry.scales.splice(scaleIndex.value, 1, {
+    version: 2,
+    choiceId: v1.choiceId,
+    label: v1.label,
+    volumeSamples: v1.volumeSamples,
+    volumeSamplesNormalised: v1.volumeSamples,
+    baseImageUrl: v1.baseImageUrl,
+    outlineCoordinates: [],
+  });
 
-      if (v1.version !== 1) {
-        console.warn(
-          `Attempted to convert a scale of version ${v1.version}: can only convert version 1`,
-        );
-        return;
-      }
+  outlineCoordinates.value = [];
+}
 
-      overlayImageUrl.value = v1.overlayImageUrl;
+function createVertex(e: MouseEvent) {
+  const p = [e.offsetX / width.value, e.offsetY / height.value] as [number, number];
+  const coords = outlineCoordinates.value;
+  const closestIndex = closestSegmentIndex(coords, p);
+  const insertAt = (closestIndex + 1) % coords.length;
+  coords.splice(insertAt, 0, p);
+  selectedVertexIndex.value = insertAt;
+}
 
-      entry.scales.splice(scaleIndex.value, 1, {
-        version: 2,
-        choiceId: v1.choiceId,
-        label: v1.label,
-        volumeSamples: v1.volumeSamples,
-        volumeSamplesNormalised: v1.volumeSamples,
-        baseImageUrl: v1.baseImageUrl,
-        outlineCoordinates: [],
-      });
+function deleteSelected() {
+  const coords = outlineCoordinates.value;
+  const deletedPos = coords[selectedVertexIndex.value];
+  coords.splice(selectedVertexIndex.value, 1);
+  selectedVertexIndex.value = closestVertexIndex(coords, deletedPos);
+}
 
-      outlineCoordinates.value = [];
-    };
+function clearScale() {
+  outlineCoordinates.value = [];
+  clearScaleDialog.value = false;
+  selectedVertexIndex.value = -1;
+}
 
-    const createVertex = (e: MouseEvent) => {
-      const p = [e.offsetX / width.value, e.offsetY / height.value] as [number, number];
-      const coords = outlineCoordinates.value;
-      const closestIndex = closestSegmentIndex(coords, p);
-      const insertAt = (closestIndex + 1) % coords.length;
-      coords.splice(insertAt, 0, p);
-      selectedVertexIndex.value = insertAt;
-    };
+onMounted(() => {
+  getScreenDimensions();
+});
 
-    const deleteSelected = () => {
-      const coords = outlineCoordinates.value;
-      const deletedPos = coords[selectedVertexIndex.value];
-      coords.splice(selectedVertexIndex.value, 1);
-      selectedVertexIndex.value = closestVertexIndex(coords, deletedPos);
-    };
+let dragging = false;
 
-    const clearScale = () => {
-      outlineCoordinates.value = [];
-      clearScaleDialog.value = false;
-      selectedVertexIndex.value = -1;
-    };
+function onVertexMouseDown(index: number) {
+  selectedVertexIndex.value = index;
+  dragging = true;
+}
 
-    onMounted(() => {
-      getScreenDimensions();
-    });
+function endVertexDrag() {
+  dragging = false;
+}
 
-    let dragging = false;
+function onScaleMouseMove(e: MouseEvent) {
+  if (dragging) {
+    outlineCoordinates.value.splice(selectedVertexIndex.value, 1, [
+      e.offsetX / width.value,
+      e.offsetY / height.value,
+    ]);
+  }
+}
 
-    const onVertexMouseDown = (index: number) => {
-      selectedVertexIndex.value = index;
-      dragging = true;
-    };
+function replaceBaseImage() {
+  if (newBaseImageFile.value) {
+    // revokeObjectURL seems to fail silently if the string is not a valid object URL
+    // so there is no need to track allocated URLs separately
+    URL.revokeObjectURL(scale.value.baseImageUrl);
+    scale.value.baseImageUrl = URL.createObjectURL(newBaseImageFile.value);
+    emit('baseImageChanged', scale.value.choiceId, newBaseImageFile.value);
+  }
+}
 
-    const endVertexDrag = () => {
-      dragging = false;
-    };
+watch(
+  outlineCoordinates,
+  (newValue) => {
+    if (scale.value.version === 2)
+      scale.value.outlineCoordinates = flatten(newValue);
+  },
+  { deep: true },
+);
 
-    const onScaleMouseMove = (e: MouseEvent) => {
-      if (dragging) {
-        outlineCoordinates.value.splice(selectedVertexIndex.value, 1, [
-          e.offsetX / width.value,
-          e.offsetY / height.value,
-        ]);
-      }
-    };
-
-    const replaceBaseImage = () => {
-      if (newBaseImageFile.value) {
-        // revokeObjectURL seems to fail silently if the string is not a valid object URL
-        // so there is no need to track allocated URLs separately
-        URL.revokeObjectURL(scale.value.baseImageUrl);
-        scale.value.baseImageUrl = URL.createObjectURL(newBaseImageFile.value);
-        emit('baseImageChanged', scale.value.choiceId, newBaseImageFile.value);
-      }
-    };
-
-    watch(
-      outlineCoordinates,
-      (newValue) => {
-        if (scale.value.version === 2)
-          scale.value.outlineCoordinates = flatten(newValue);
-      },
-      { deep: true },
-    );
-
-    watch(scale, (newValue) => {
-      outlineCoordinates.value
+watch(scale, (newValue) => {
+  outlineCoordinates.value
         = newValue.version === 2 ? (chunk(newValue.outlineCoordinates, 2) as [number, number][]) : [];
-    });
-
-    return {
-      height,
-      width,
-      confirm,
-      img,
-      svg,
-      screenHeight,
-      screenWidth,
-      scale,
-      onConvertScaleVersion,
-      createVertex,
-      outlineCoordinates,
-      svgPolygonPoints,
-      onVertexMouseDown,
-      endVertexDrag,
-      onScaleMouseMove,
-      selectedVertexIndex,
-      deleteSelected,
-      clearScale,
-      clearScaleDialog,
-      showOverlayImage,
-      overlayImageUrl,
-      newBaseImageFile,
-      newBaseImagePreviewUrl,
-      replaceBaseImage,
-    };
-  },
-  methods: { uniqueId },
 });
 </script>
 

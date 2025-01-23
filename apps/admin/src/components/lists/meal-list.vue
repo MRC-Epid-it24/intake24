@@ -184,12 +184,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref, useTemplateRef, watch } from 'vue';
+import { useVModel } from '@vueuse/core';
 
+import { computed, ref, useTemplateRef } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 import type { Meal } from '@intake24/common/surveys';
-import { defaultMeals, staticMealFlags } from '@intake24/common/surveys';
 
+import { defaultMeals, staticMealFlags } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog, TimePicker } from '@intake24/ui';
@@ -235,7 +236,7 @@ function newDialog(show = false): MealDialog {
 
 const dialog = ref(newDialog());
 const form = useTemplateRef('form');
-const meals = ref(copy(props.modelValue));
+const meals = useVModel(props, 'modelValue', emit, { passive: true, deep: true, clone: copy });
 const tab = ref('general');
 
 const isOverrideMode = computed(() => props.mode === 'override');
@@ -298,10 +299,6 @@ function load(items: Meal[]) {
 function resetList() {
   meals.value = copy(defaultMeals);
 };
-
-watch(meals, (val) => {
-  emit('update:modelValue', val);
-}, { deep: true });
 </script>
 
 <style lang="scss" scoped>

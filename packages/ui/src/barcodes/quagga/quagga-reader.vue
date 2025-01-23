@@ -39,8 +39,7 @@ import type { QuaggaJSResultObject } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
 import Quagga from '@ericblade/quagga2';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
-import { defineComponent, onBeforeUnmount, ref, watch } from 'vue';
-import { VCard } from 'vuetify/components';
+import { defineComponent, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 
 import { defaultBarcodeScannerOptions, type QuaggaScanner } from '@intake24/common/barcodes';
 
@@ -75,8 +74,8 @@ const { hasTorch, initTorch, toggleTorch } = useTorch();
 
 const dialog = useVModel(props, 'dialog', emit);
 
-const card = ref<InstanceType<typeof VCard>>();
-const reader = ref<InstanceType<typeof HTMLFormElement>>();
+const card = useTemplateRef('card');
+const reader = useTemplateRef('reader');
 
 const { height, width } = useElementSize(card);
 
