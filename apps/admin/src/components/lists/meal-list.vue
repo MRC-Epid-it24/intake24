@@ -158,9 +158,7 @@
                       <v-card-text class="pt-0 d-flex justify-center">
                         <v-time-picker
                           v-model="dialog.meal.time"
-                          class="pa-0"
-                          color="primary"
-                          full-width
+                          class="time-picker pa-0"
                           :landscape="$vuetify.display.smAndUp"
                         />
                       </v-card-text>

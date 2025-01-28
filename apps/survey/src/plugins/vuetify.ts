@@ -63,6 +63,12 @@ export default createVuetify({
       color: 'primary',
       variant: 'outlined',
     },
+    VTimePicker: {
+      ampmInTitle: true,
+      color: 'primary',
+      format: '24hr',
+      fullWidth: true,
+    },
   },
   display: {
     mobileBreakpoint: 'md',

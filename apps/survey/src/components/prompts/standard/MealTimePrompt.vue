@@ -6,9 +6,7 @@
           v-model="state"
           :allowed-minutes="allowedMinutes"
           class="pa-0"
-          color="primary"
           :format="prompt.format"
-          full-width
           :landscape="$vuetify.display.smAndUp"
         />
       </v-form>
