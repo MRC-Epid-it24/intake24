@@ -9,6 +9,7 @@
         <v-time-picker
           v-model="state"
           class="pa-0"
+          color="primary"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.display.smAndUp"
