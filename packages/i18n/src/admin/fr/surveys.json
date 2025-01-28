@@ -28,7 +28,13 @@
   "externalComm": {
     "_": "Communication externe",
     "allowGenUsers": "Permettre la génération d'utilisateurs",
-    "genUserKey": "Code secret JWT pour la communication M2M"
+    "secret": {
+      "_": "Code secret JWT pour la communication M2M",
+      "generate": {
+        "_": "Generate",
+        "text": "Generate JWT secret"
+      }
+    }
   },
   "users": {
     "_": "Paramètres des utilisateurs",

@@ -519,7 +519,8 @@
     "edit-meal-prompt": {
       "title": "Liste d'aliments",
       "subtitle": "Listez ou modifiez des aliments dans ce repas en tant que champ texte libre",
-      "separateDrinks": "Séparez la liste des boissons"
+      "separateDrinks": "Séparez la liste des boissons",
+      "inputAutoFocus": "Automatically set focus to the food entry text field"
     },
     "external-source-prompt": {
       "title": "External source",

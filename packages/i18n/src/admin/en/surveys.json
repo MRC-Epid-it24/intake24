@@ -29,7 +29,13 @@
   "externalComm": {
     "_": "External communication",
     "allowGenUsers": "Allow user generation",
-    "genUserKey": "JWT secret for M2M communication"
+    "secret": {
+      "_": "JWT secret for M2M communication",
+      "generate": {
+        "_": "Generate",
+        "text": "Generate JWT secret"
+      }
+    }
   },
   "users": {
     "_": "Users settings",

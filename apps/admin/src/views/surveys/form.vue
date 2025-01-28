@@ -469,15 +469,29 @@
                 class="mb-4"
                 :error-messages="errors.get('genUserKey')"
                 hide-details="auto"
-                :label="$t('surveys.externalComm.genUserKey')"
+                :label="$t('surveys.externalComm.secret._')"
                 name="genUserKey"
-                :type="showGenUserKey ? 'text' : 'password'"
+                :type="showSecret ? 'text' : 'password'"
                 variant="outlined"
               >
                 <template #append-inner>
-                  <v-icon class="me-2" @click="showGenUserKey = !showGenUserKey">
-                    {{ showGenUserKey ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+                  <v-icon class="me-2" @click="showSecret = !showSecret">
+                    {{ showSecret ? 'fas fa-eye' : 'fas fa-eye-slash' }}
                   </v-icon>
+                </template>
+                <template #append>
+                  <confirm-dialog :label="$t('surveys.externalComm.secret.generate._')" @confirm="generateSecret">
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        color="primary"
+                        icon="fas fa-rotate"
+                        :label="$t('surveys.externalComm.secret.generate._')"
+                        variant="flat"
+                      />
+                    </template>
+                    {{ $t('surveys.externalComm.secret.generate.text') }}
+                  </confirm-dialog>
                 </template>
               </v-text-field>
               <event-notifications
@@ -582,7 +596,9 @@ import {
 import type { SchemeOverrides, SessionSettings, SurveySearchSettings, SurveyStatus } from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
+import { randomString } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
+import { ConfirmDialog } from '@intake24/ui';
 
 export type SurveyForm = {
   id: string | null;
@@ -653,7 +669,7 @@ export const surveyForm: SurveyForm = {
 export default defineComponent({
   name: 'SurveyForm',
 
-  components: { InformationPopup, DatePicker, EventNotifications, SelectResource },
+  components: { ConfirmDialog, InformationPopup, DatePicker, EventNotifications, SelectResource },
 
   mixins: [formMixin],
 
@@ -663,7 +679,7 @@ export default defineComponent({
 
     const infoComponentType = ref(undefined as string | undefined);
     const infoPopupOpen = ref(false);
-    const showGenUserKey = ref(false);
+    const showSecret = ref(false);
 
     const surveyStates = surveyStatuses.map(value => ({
       value,
@@ -693,6 +709,10 @@ export default defineComponent({
       infoPopupOpen.value = false;
     };
 
+    const generateSecret = () => {
+      data.value.genUserKey = randomString(64);
+    };
+
     return {
       entry,
       entryLoaded,
@@ -700,12 +720,13 @@ export default defineComponent({
       clearError,
       data,
       errors,
+      generateSecret,
       routeLeave,
       hideInformationPopup,
       infoComponentType,
       infoPopupOpen,
       searchSortingAlgorithms,
-      showGenUserKey,
+      showSecret,
       showInformationPopup,
       spellingCorrectionOptions,
       submit,
@@ -717,7 +738,7 @@ export default defineComponent({
     'form.allowGenUsers': {
       handler(val) {
         if (!val)
-          this.showGenUserKey = false;
+          this.showSecret = false;
       },
     },
   },

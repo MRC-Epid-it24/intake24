@@ -29,8 +29,24 @@
         <tr>
           <th>{{ $t('surveys.externalComm.allowGenUsers') }}</th>
           <td>{{ $t(`common.${entry.allowGenUsers}`) }}</td>
-          <th>{{ $t('surveys.externalComm.genUserKey') }}</th>
-          <td>{{ entry.genUserKey }}</td>
+          <th>{{ $t('surveys.externalComm.secret._') }}</th>
+          <td>
+            <v-text-field
+              autocomplete="new-password"
+              hide-details="auto"
+              :model-value="entry.genUserKey"
+              name="genUserKey"
+              readonly
+              :type="showSecret ? 'text' : 'password'"
+              variant="plain"
+            >
+              <template #append-inner>
+                <v-icon class="me-2" @click="showSecret = !showSecret">
+                  {{ showSecret ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+                </v-icon>
+              </template>
+            </v-text-field>
+          </td>
         </tr>
         <tr>
           <th>{{ $t('surveys.users.personalIdentifiers') }}</th>
@@ -92,7 +108,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
@@ -108,7 +124,14 @@ export default defineComponent({
     const { formatDate } = useDateTime();
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
 
-    return { entry, entryLoaded, formatDate };
+    const showSecret = ref(false);
+
+    return {
+      entry,
+      entryLoaded,
+      formatDate,
+      showSecret,
+    };
   },
 });
 </script>
