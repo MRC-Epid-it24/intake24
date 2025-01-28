@@ -39,11 +39,10 @@
         </template>
       </v-list-item>
     </v-list>
-    <v-messages
-      v-if="errors.has('nutrientRecords')"
+    <error-list
+      v-if="errors?.has('nutrientRecords')"
       class="px-4 pb-2"
-      color="error"
-      :value="errors.get('nutrientRecords')"
+      :errors="errors.get('nutrientRecords')"
     />
   </v-card>
 </template>
@@ -57,12 +56,13 @@ import type { FoodDatabaseRefs, NutrientTableRecordAttributes } from '@intake24/
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
+import { ErrorList } from '../../forms';
 import AddNutrientDialog from './add-nutrient-dialog.vue';
 
 export default defineComponent({
   name: 'NutrientList',
 
-  components: { AddNutrientDialog, ConfirmDialog },
+  components: { AddNutrientDialog, ConfirmDialog, ErrorList },
 
   props: {
     disabled: {

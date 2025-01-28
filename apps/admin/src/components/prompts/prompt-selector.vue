@@ -37,6 +37,7 @@
       </v-toolbar>
       <v-form ref="form" @submit.prevent="save">
         <v-container class="prompt-container" :fluid="$vuetify.display.mdAndDown">
+          <error-list v-bind="{ errors }" />
           <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
             <v-tabs-window-item key="general" value="general">
               <v-row>
@@ -165,7 +166,8 @@
 import type { PropType } from 'vue';
 import type { VForm } from 'vuetify/components';
 
-import { defineComponent, useTemplateRef } from 'vue';
+import { defineComponent, ref, useTemplateRef } from 'vue';
+import { ErrorList } from '@intake24/admin/components/forms';
 import {
   customPrompts,
   portionSizePrompts,
@@ -178,8 +180,8 @@ import {
   portionSizePrompts as portionSizeDefaults,
   standardPrompts as standardPromptDefaults,
 } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
 
+import type { PromptSection } from '@intake24/common/surveys';
 import { copy, merge } from '@intake24/common/util';
 import { useTinymce } from '../editors';
 import {
@@ -205,6 +207,7 @@ export default defineComponent({
   name: 'PromptSelector',
 
   components: {
+    ErrorList,
     PromptActions,
     PromptConditions,
     PromptContent,
@@ -234,9 +237,11 @@ export default defineComponent({
 
   setup() {
     useTinymce();
+
+    const errors = ref<string[]>([]);
     const form = useTemplateRef<InstanceType<typeof VForm>>('form');
 
-    return { form };
+    return { errors, form };
   },
 
   data() {
@@ -338,7 +343,7 @@ export default defineComponent({
       this.updatePromptTypeTab(this.dialog.prompt.type);
     },
 
-    edit(index: number, prompt: Prompt) {
+    edit(index: number, prompt: Prompt, errors: string[]) {
       const promptDefaults = this.prompts.find(p => p.component === prompt.component);
       if (!promptDefaults) {
         console.warn(`Prompt defaults for prompt type '${prompt.component}' not found.`);
@@ -352,6 +357,7 @@ export default defineComponent({
         index,
         prompt: { origId: prompt.id, ...merge<Prompt>(promptDefaults, prompt) },
       };
+      this.errors = [...errors];
     },
 
     async save() {

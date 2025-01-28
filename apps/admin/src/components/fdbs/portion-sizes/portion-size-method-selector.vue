@@ -21,6 +21,7 @@
       </v-toolbar>
       <v-form ref="form" @submit.prevent="save">
         <v-container>
+          <error-list v-bind="{ errors }" />
           <v-row class="mt-2">
             <v-col cols="12" md="4">
               <v-card-title class="px-0">
@@ -104,6 +105,7 @@ import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './p
 import { ref, useTemplateRef } from 'vue';
 
 import { copy, merge, randomString } from '@intake24/common/util';
+import { ErrorList } from '../../forms';
 import portionSizeParams from './parameters';
 import { psmDefaults, usePortionSizeMethods } from './portion-sizes';
 
@@ -126,6 +128,7 @@ function newDialog(show = false): PortionSizeMethodDialog {
 
 const dialog = ref(newDialog());
 const form = useTemplateRef('form');
+const errors = ref<string[]>([]);
 
 function updateItemProps() {
   const {
@@ -145,7 +148,7 @@ function add() {
   dialog.value = newDialog(true);
 };
 
-function edit(index: number, item: InternalPortionSizeMethodItem) {
+function edit(index: number, item: InternalPortionSizeMethodItem, errorItems: string[]) {
   const defaults = psmDefaults.find(d => d.method === item.method);
   if (!defaults) {
     console.warn(`Portion size method defaults for method '${item.method}' not found.`);
@@ -153,6 +156,7 @@ function edit(index: number, item: InternalPortionSizeMethodItem) {
   }
 
   dialog.value = { show: true, index, item: copy(merge<InternalPortionSizeMethodItem>(defaults, item)) };
+  errors.value = [...errorItems];
 };
 
 async function save() {

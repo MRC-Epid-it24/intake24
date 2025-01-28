@@ -24,18 +24,20 @@
         <v-list-item
           v-for="(item, index) in items"
           :key="item._id"
+          :class="errors.has(`associatedFoods[${index}]*`) ? 'text-error' : undefined"
+          :variant="errors.has(`associatedFoods[${index}]*`) ? 'tonal' : undefined"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
           </template>
           <v-list-item-title>{{ translate(item.genericName) }}</v-list-item-title>
-          <v-list-item-subtitle>{{ translate(item.text) }} </v-list-item-subtitle>
-          <v-messages
-            v-if="errors.has('associatedFoods', index)"
-            color="error"
-            :value="errors.get('associatedFoods', index)"
-          />
+          <v-list-item-subtitle>
+            {{ translate(item.text) }}
+          </v-list-item-subtitle>
           <template #append>
+            <v-chip v-if="errors.has(`associatedFoods[${index}]*`)" color="error" variant="flat">
+              {{ errors.get(`associatedFoods[${index}]*`).length }} errors
+            </v-chip>
             <v-list-item-action v-if="!disabled">
               <v-btn icon="$edit" :title="$t('fdbs.associatedFoods.edit')" @click.stop="edit(index, item)" />
             </v-list-item-action>
@@ -76,6 +78,7 @@
         </v-toolbar>
         <v-form ref="form" @submit.prevent="save">
           <v-container>
+            <error-list v-if="dialog.index !== -1" :errors="errors.get(`associatedFoods[${dialog.index}]*`)" />
             <v-row class="mt-2">
               <v-col cols="12" md="6">
                 <v-card-title>{{ $t('common.options._') }}</v-card-title>
@@ -135,6 +138,7 @@
               <v-col cols="12">
                 <language-selector
                   v-model="dialog.item.genericName"
+                  border
                   :label="$t('fdbs.associatedFoods.genericName')"
                   required
                 >
@@ -152,6 +156,7 @@
               <v-col cols="12">
                 <language-selector
                   v-model="dialog.item.text"
+                  border
                   :label="$t('fdbs.associatedFoods.text')"
                   required
                 >
@@ -190,7 +195,7 @@ import { defineComponent } from 'vue';
 
 import { VueDraggable } from 'vue-draggable-plus';
 import { SelectResource } from '@intake24/admin/components/dialogs';
-import { LanguageSelector } from '@intake24/admin/components/forms';
+import { ErrorList, LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
@@ -203,7 +208,7 @@ import { createDefaultAssociatedFood } from './associated-foods';
 export default defineComponent({
   name: 'AssociatedFoodList',
 
-  components: { ConfirmDialog, LanguageSelector, SelectResource, VueDraggable },
+  components: { ConfirmDialog, ErrorList, LanguageSelector, SelectResource, VueDraggable },
 
   props: {
     disabled: {

@@ -46,7 +46,7 @@ export function useForm<T extends object>(props: UseFormProps<T>) {
   const nonInputErrors = computed(() => Object.values(pick(errors.errors.value, nonInputErrorKeys)));
 
   function assign<S extends Partial<T>>(source: S) {
-    data.value = merge<T>(props.data, pick(source, allKeys.value));
+    data.value = merge<T, S>(props.data, pick(source, allKeys.value));
   };
 
   function load<S extends Partial<T>>(source: S) {

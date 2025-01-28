@@ -20,7 +20,12 @@
         :animation="300"
         handle=".drag-and-drop__handle"
       >
-        <v-list-item v-for="(item, index) in items" :key="item._id">
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="item._id"
+          :class="errors.has(`portionSizeMethods[${index}]*`) ? 'text-error' : undefined"
+          :variant="errors.has(`portionSizeMethods[${index}]*`) ? 'tonal' : undefined"
+        >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
           </template>
@@ -28,12 +33,10 @@
             {{ $t(`prompts.portionSizeOption.selections.${item.description}`) }}
           </v-list-item-title>
           <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
-          <v-messages
-            v-if="errors.has('portionSizeMethods', index)"
-            color="error"
-            :value="errors.get('portionSizeMethods', index)"
-          />
           <template #append>
+            <v-chip v-if="errors.has(`portionSizeMethods[${index}]*`)" color="error" variant="flat">
+              {{ errors.get(`portionSizeMethods[${index}]*`).length }} errors
+            </v-chip>
             <v-list-item-action v-if="!disabled">
               <v-btn icon="$edit" :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })" />
             </v-list-item-action>
@@ -137,7 +140,8 @@ export default defineComponent({
     },
 
     edit({ item, index }: PortionSizeMethodEvent) {
-      this.selector?.edit(index, item);
+      const errors = this.errors.get(`portionSizeMethods[${index}]*`);
+      this.selector?.edit(index, item, errors);
     },
 
     save({ item, index }: PortionSizeMethodEvent) {

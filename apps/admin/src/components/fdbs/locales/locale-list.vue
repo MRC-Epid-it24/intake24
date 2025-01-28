@@ -40,11 +40,10 @@
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
-    <v-messages
+    <error-list
       v-if="errors?.has('main.locales')"
       class="px-4 pb-2"
-      color="error"
-      :value="errors.get('main.locales')"
+      :errors="errors.get('main.locales')"
     />
   </v-card>
 </template>
@@ -57,12 +56,13 @@ import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { FoodsLocaleAttributes } from '@intake24/db';
 import { ConfirmDialog } from '@intake24/ui';
 
+import { ErrorList } from '../../forms';
 import AddLocaleDialog from './add-locale-dialog.vue';
 
 export default defineComponent({
   name: 'LocaleList',
 
-  components: { AddLocaleDialog, ConfirmDialog },
+  components: { AddLocaleDialog, ConfirmDialog, ErrorList },
 
   props: {
     disabled: {

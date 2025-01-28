@@ -24,32 +24,41 @@ export function useErrors(props: UseErrorProps = {}) {
   const all = computed(() => errors.value);
   const any = computed(() => !!Object.keys(errors.value).length);
 
-  function get(field: string, index?: number) {
-    if (typeof index === 'undefined')
+  function get(field: string) {
+    if (!any.value)
+      return [];
+
+    if (!field.endsWith('*'))
       return [errors.value[field]?.msg].filter(Boolean);
 
+    const match = field.slice(0, -1);
+
     return Object.entries(errors.value).reduce<string[]>((acc, [key, value]) => {
-      if (key.startsWith(`${field}[${index}]`))
+      if (key.startsWith(match))
         acc.push(value.msg);
 
       return acc;
     }, []);
   };
 
-  function has(field: string, index?: number) {
-    if (typeof index === 'undefined')
-      return Object.prototype.hasOwnProperty.call(errors.value, field);
-
-    return Object.keys(errors.value).some(
-      key => key === field || key.startsWith(`${field}[${index}]`),
-    );
-  };
-
   function getErrors(field?: string[]) {
+    if (!any.value)
+      return [];
+
     if (!field)
       return Object.values(errors.value);
 
     return Object.values(pick(errors.value, field));
+  };
+
+  function has(field: string) {
+    if (!field.endsWith('*'))
+      return Object.prototype.hasOwnProperty.call(errors.value, field);
+
+    const match = field.slice(0, -1);
+
+    return Object.keys(errors.value).some(key => key === field || key.startsWith(match),
+    );
   };
 
   function record(items?: ValidationErrors) {

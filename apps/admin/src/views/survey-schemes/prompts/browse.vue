@@ -30,6 +30,7 @@
         v-for="(section, index) in promptSections"
         :key="section"
         v-bind="{
+          errors,
           section,
           step: index + 1,
           promptIds,
@@ -79,7 +80,7 @@ export default defineComponent({
       props,
     );
     useEntryFetch(props);
-    const { clearError, form: { data }, routeLeave, submit } = useEntryForm<
+    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<
       SurveySchemePromptsForm,
       SurveySchemeEntry
     >(props, {
@@ -94,6 +95,7 @@ export default defineComponent({
       promptSections,
       entry,
       entryLoaded,
+      errors,
       refs,
       refsLoaded,
       clearError,

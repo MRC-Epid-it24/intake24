@@ -124,9 +124,17 @@ export default defineComponent({
     const { recallFlows, schemeTypes } = useSelects();
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
-    const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<SurveyOverridesForm, SurveyEntry>(
+    const {
+      clearError,
+      form: { data, errors },
+      routeLeave,
+      submit,
+    } = useEntryForm<SurveyOverridesForm, SurveyEntry>(
       props,
-      { data: { surveySchemeOverrides: defaultOverrides }, editMethod: 'patch' },
+      {
+        data: { surveySchemeOverrides: defaultOverrides },
+        editMethod: 'patch',
+      },
     );
 
     const languages = computed(() => useApp().langs);

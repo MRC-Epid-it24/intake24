@@ -49,7 +49,13 @@
           <prompt-list-item
             v-for="(prompt, index) in prompts"
             :key="`${prompt.id}:${prompt.name}`"
-            v-bind="{ mode, prompt, index, templates }"
+            v-bind="{
+              errors: errors.get(`prompts.${fullSection}.${index}*`),
+              mode,
+              prompt,
+              index,
+              templates,
+            }"
             :move-sections="moveSections(prompt)"
             @prompt:copy="copy"
             @prompt:edit="edit"
@@ -59,7 +65,7 @@
           />
         </vue-draggable>
       </v-list>
-      <prompt-selector ref="selector" v-bind="{ mode, section, promptIds }" @save="save" />
+      <prompt-selector ref="selector" v-bind="{ errors, mode, section, promptIds }" @save="save" />
     </v-expansion-panel-text>
   </v-expansion-panel>
   <v-divider />
@@ -74,11 +80,12 @@ import { VueDraggable } from 'vue-draggable-plus';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
+import type { ReturnUseErrors } from '@intake24/admin/composables';
 import type { SinglePrompt } from '@intake24/common/prompts';
-import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
+import { isMealSection, type MealSection, type PromptSection, type SurveyPromptSection } from '@intake24/common/surveys';
 import { copy as copyObject } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 
+import { useI18n } from '@intake24/i18n';
 import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';
@@ -97,6 +104,10 @@ export interface PromptMoveEvent extends PromptEvent {
 defineOptions({ name: 'PromptList' });
 
 const props = defineProps({
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+    required: true,
+  },
   mode: {
     type: String as PropType<'full' | 'override'>,
     default: 'full',
@@ -140,6 +151,7 @@ const subtitle = computed(() => i18n.t(
     ? `survey-schemes.overrides.prompts.subtitle`
     : `survey-schemes.prompts.${props.section}.subtitle`,
 ));
+const fullSection = computed(() => isMealSection(props.section) ? `meals.${props.section}` : props.section);
 
 function create() {
   if (isOverrideMode.value)
@@ -157,7 +169,8 @@ function copy({ prompt, index }: PromptEvent) {
 };
 
 function edit({ prompt, index }: PromptEvent) {
-  selector.value?.edit(index, prompt);
+  const errors = props.errors.get(`prompts.${fullSection.value}.${index}*`);
+  selector.value?.edit(index, prompt, errors);
 };
 
 function save({ prompt, index }: PromptEvent) {

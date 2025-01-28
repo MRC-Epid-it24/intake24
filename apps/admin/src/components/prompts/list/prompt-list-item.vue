@@ -1,5 +1,8 @@
 <template>
-  <v-list-item>
+  <v-list-item
+    :class="errors.length ? 'text-error' : undefined"
+    :variant="errors.length ? 'tonal' : undefined"
+  >
     <template #prepend>
       <v-avatar class="drag-and-drop__handle" icon="$handle" />
     </template>
@@ -16,6 +19,9 @@
       </span>
     </v-list-item-subtitle>
     <template #append>
+      <v-chip v-if="errors.length" color="error" variant="flat">
+        {{ errors.length }} errors
+      </v-chip>
       <v-list-item-action>
         <v-btn icon="$edit" :title="$t('survey-schemes.prompts.edit')" @click.stop="edit" />
       </v-list-item-action>
@@ -117,6 +123,10 @@ import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 defineOptions({ name: 'PromptListItem' });
 
 const props = defineProps({
+  errors: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
   mode: {
     type: String as PropType<'full' | 'override'>,
     default: 'full',

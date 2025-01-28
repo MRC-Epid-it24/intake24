@@ -108,7 +108,7 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
   return {
     form,
     data: form.data,
-    errors: form.data,
+    errors: form.errors,
     nonInputErrorKeys,
     nonInputErrors,
     toForm,

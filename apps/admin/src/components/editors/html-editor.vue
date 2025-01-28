@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <editor v-bind="{ init, modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
-    <v-messages v-show="hasErrors" class="mt-3 mx-2" color="error" :value="errors" />
-  </div>
+  <editor v-bind="{ init, modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
 </template>
 
 <script lang="ts">
@@ -39,10 +36,6 @@ export default defineComponent({
     initProps: {
       type: Object as PropType<Partial<EditorOptions>>,
     },
-    errorMessages: {
-      type: [String, Array],
-      default: () => [],
-    },
     modelValue: {
       type: String as PropType<string | null>,
       default: '',
@@ -53,12 +46,6 @@ export default defineComponent({
 
   setup(props) {
     const vLocale = useLocale();
-
-    const errors = computed(() => {
-      return typeof props.errorMessages === 'string' ? [props.errorMessages] : props.errorMessages;
-    });
-
-    const hasErrors = computed(() => !!errors.value.length);
 
     const init = computed<Partial<EditorOptions>>(() => ({
       license_key: 'gpl',
@@ -85,7 +72,7 @@ export default defineComponent({
       ...(props.initProps ?? {}),
     }));
 
-    return { errors, hasErrors, init };
+    return { init };
   },
 });
 </script>
