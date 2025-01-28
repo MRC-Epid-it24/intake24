@@ -55,7 +55,8 @@
 import { defineComponent } from 'vue';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
-import { type JobParams, localeCopySubTasks } from '@intake24/common/types';
+import { localeCopySubTasks } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
 import jobParams from './job-params';

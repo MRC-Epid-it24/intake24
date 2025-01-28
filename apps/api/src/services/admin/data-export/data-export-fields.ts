@@ -4,8 +4,10 @@ import { orderBy } from 'lodash';
 import stringify from 'safe-stable-stringify';
 import { UAParser } from 'ua-parser-js';
 
-import { externalSources as externalSourceProviders, type Prompt } from '@intake24/common/prompts';
-import { type ExportField as BaseExportField, fromMealTime } from '@intake24/common/surveys';
+import { externalSources as externalSourceProviders } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
+import { fromMealTime } from '@intake24/common/surveys';
+import type { ExportField as BaseExportField } from '@intake24/common/surveys';
 import type { SurveyScheme } from '@intake24/db';
 import {
   NutrientTableCsvMappingField,

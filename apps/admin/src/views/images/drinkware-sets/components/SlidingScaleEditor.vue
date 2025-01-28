@@ -245,6 +245,7 @@ function onConvertScaleVersion() {
     version: 2,
     choiceId: v1.choiceId,
     label: v1.label,
+    volumeMethod: 'lookUpTable',
     volumeSamples: v1.volumeSamples,
     volumeSamplesNormalised: v1.volumeSamples,
     baseImageUrl: v1.baseImageUrl,

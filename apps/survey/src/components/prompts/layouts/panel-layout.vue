@@ -44,7 +44,8 @@
 </template>
 
 <script lang="ts" setup>
-import { type PropType, useSlots } from 'vue';
+import type { PropType } from 'vue';
+import { useSlots } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';

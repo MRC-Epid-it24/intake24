@@ -104,8 +104,8 @@ import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import { type ExportSection, type ExportSectionId, exportSectionIds } from '@intake24/common/surveys';
-import { defaultExport } from '@intake24/common/surveys';
+import { defaultExport, exportSectionIds } from '@intake24/common/surveys';
+import type { ExportSection, ExportSectionId } from '@intake24/common/surveys';
 import type {
   SurveySchemeEntry,
   SurveySchemeExportRefs,

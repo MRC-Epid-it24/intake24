@@ -130,11 +130,12 @@
 </template>
 
 <script lang="ts">
+import type { RouteLocationRaw } from 'vue-router';
 import groupBy from 'lodash/groupBy';
 import { mapState } from 'pinia';
 import pluralize from 'pluralize';
 import { computed, defineComponent, ref, watch } from 'vue';
-import { type RouteLocationRaw, useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useDisplay, useLocale } from 'vuetify';
 
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';

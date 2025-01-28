@@ -172,7 +172,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, type PropType, ref } from 'vue';
+import type { PropType } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 import { useRoute, useRouter } from 'vue-router';
 

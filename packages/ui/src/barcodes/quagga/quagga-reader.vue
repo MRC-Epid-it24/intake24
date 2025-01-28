@@ -41,7 +41,8 @@ import Quagga from '@ericblade/quagga2';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 
-import { defaultBarcodeScannerOptions, type QuaggaScanner } from '@intake24/common/barcodes';
+import { defaultBarcodeScannerOptions } from '@intake24/common/barcodes';
+import type { QuaggaScanner } from '@intake24/common/barcodes';
 
 import { useMessages } from '../../stores';
 import { useTorch } from '../util';

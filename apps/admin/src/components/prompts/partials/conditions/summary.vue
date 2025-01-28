@@ -13,7 +13,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, type PropType } from 'vue';
+import type { PropType } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import { opToIconMap } from '@intake24/admin/composables';
 import type {

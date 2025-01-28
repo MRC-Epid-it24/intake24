@@ -6,7 +6,7 @@
   >
     <v-card-text class="pt-2 time-picker">
       <v-form @submit.prevent="action('next')">
-        <time-picker
+        <v-time-picker
           v-model="state"
           class="pa-0"
           :format="prompt.format"
@@ -31,14 +31,11 @@ import { computed, defineComponent } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { TimePicker } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'TimePickerPrompt',
-
-  components: { TimePicker },
 
   mixins: [createBasePrompt<'time-picker-prompt'>()],
 

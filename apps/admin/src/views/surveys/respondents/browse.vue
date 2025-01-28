@@ -207,7 +207,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 
-import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';

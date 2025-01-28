@@ -1,8 +1,9 @@
+import type { Pagination } from '../generic';
+
 import { z } from 'zod';
 
 import { localeTranslation } from '@intake24/common/types';
-
-import { type Pagination, safeIdentifier } from '../generic';
+import { safeIdentifier } from '../generic';
 
 export const drinkwareScaleVolumeMethod = ['lookUpTable', 'cylindrical'] as const;
 export type DrinkwareScaleVolumeMethod = typeof drinkwareScaleVolumeMethod[number];

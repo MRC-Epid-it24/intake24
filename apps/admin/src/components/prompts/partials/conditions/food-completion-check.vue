@@ -14,9 +14,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 
-import { foodCompletionStateOptions, type MealCompletionPropertyCheck } from '@intake24/common/prompts';
+import { foodCompletionStateOptions } from '@intake24/common/prompts';
+import type { MealCompletionPropertyCheck } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
 import { useCheck } from './use-check';
 

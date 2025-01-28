@@ -96,7 +96,7 @@ export default defineComponent({
     const promptIds = computed(() => refs.value.promptIds);
 
     function edit() {
-      selector.value?.edit(0, data.value.prompt);
+      selector.value?.edit(0, data.value.prompt, errors.get('prompt*'));
     };
 
     function save({ prompt }: { prompt: Prompt; index: number }) {

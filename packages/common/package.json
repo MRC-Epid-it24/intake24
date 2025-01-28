@@ -21,7 +21,7 @@
     "test:unit:watch": "pnpm test:unit --watch"
   },
   "dependencies": {
-    "@anatine/zod-openapi": "^2.2.6",
+    "@anatine/zod-openapi": "^2.2.7",
     "@ts-rest/core": "^3.51.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
@@ -43,12 +43,12 @@
   },
   "devDependencies": {
     "@jest/types": "^29.6.3",
-    "@simplewebauthn/server": "^13.1.0",
+    "@simplewebauthn/server": "^13.1.1",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
-    "@types/lodash": "^4.17.14",
+    "@types/lodash": "^4.17.15",
     "@types/ms": "^0.7.34",
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.12.0",
     "@types/pluralize": "^0.0.33",
     "@types/validator": "^13.12.2",
     "fs-extra": "^11.3.0",

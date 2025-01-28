@@ -2,7 +2,8 @@ import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 import { Condition, customPrompts, defaultAction, getConditionDefaults, portionSizePrompts, SinglePrompt, standardPrompts } from '@intake24/common/prompts';
-import { defaultMeal, defaultSchemeSettings, Meal, type PromptSection, type RecallPrompts } from '@intake24/common/surveys';
+import { defaultMeal, defaultSchemeSettings, Meal } from '@intake24/common/surveys';
+import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
 import { Survey, SurveyScheme } from '@intake24/db';
 

@@ -10,7 +10,8 @@ import { jwt } from '@intake24/api/util';
 import type { Prompts } from '@intake24/common/prompts';
 import { strongPassword } from '@intake24/common/security';
 import type { SurveyState } from '@intake24/common/surveys';
-import { type JobParams, userCustomField } from '@intake24/common/types';
+import { userCustomField } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 import type {
   CreateUserResponse,
   SurveyRatingRequest,

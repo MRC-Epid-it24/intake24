@@ -17,7 +17,8 @@
 <script lang="ts" setup>
 import cronstrue from 'cronstrue';
 
-import { DataTable, type DataTableHeader } from '@intake24/admin/components/data-tables';
+import { DataTable } from '@intake24/admin/components/data-tables';
+import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { useI18n } from '@intake24/i18n';
 
 defineOptions({ name: 'TaskList' });

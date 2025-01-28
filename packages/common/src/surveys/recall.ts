@@ -3,10 +3,11 @@ import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
 import type { CerealType, StandardUnit } from '../surveys';
 
 import type { FoodType, RecipeFood } from '../types';
+import type { Dictionary, Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
 import { z } from 'zod';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
-import { type Dictionary, type Optional, requiredLocaleTranslation } from '../types/common';
+import { requiredLocaleTranslation } from '../types/common';
 
 /*
 Not currently used:

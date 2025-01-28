@@ -1,8 +1,9 @@
 import type { UserListEntry } from '.';
 
-import { z } from 'zod';
+import type { Pagination } from '../generic';
 
-import { bigIntString, type Pagination } from '../generic';
+import { z } from 'zod';
+import { bigIntString } from '../generic';
 import { userAttributes } from './users';
 
 export const createUserWithSecurables = z.object({

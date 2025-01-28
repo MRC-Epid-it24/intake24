@@ -19,7 +19,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { Read } from '@intake24/admin/components/data-tables/action-bar';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';

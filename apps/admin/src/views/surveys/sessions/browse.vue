@@ -44,7 +44,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import { type DataTableHeader, EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';

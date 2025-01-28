@@ -1,14 +1,15 @@
+import type { Condition, Prompt, SinglePrompt } from '../prompts';
 import type { Meal } from './meals';
-import { isLocale } from 'validator';
 
+import { isLocale } from 'validator';
 import { z } from 'zod';
 import {
   basePrompt,
-  type Condition,
+
   CurrentPromptVersion,
-  type Prompt,
+
   prompt,
-  type SinglePrompt,
+
   singlePrompt,
 } from '../prompts';
 

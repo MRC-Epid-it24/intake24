@@ -22,7 +22,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { type JobParams, redisStoreTypes } from '@intake24/common/types';
+import { redisStoreTypes } from '@intake24/common/types';
+import type { JobParams } from '@intake24/common/types';
 
 import jobParams from './job-params';
 

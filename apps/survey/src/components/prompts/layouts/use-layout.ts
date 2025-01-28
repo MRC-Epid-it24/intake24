@@ -1,6 +1,7 @@
+import type { SetupContext } from 'vue';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { computed, onBeforeMount, type SetupContext } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';

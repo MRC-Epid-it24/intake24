@@ -100,7 +100,8 @@ import type { Prompt } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { type SameAsBeforeItem, useSurvey } from '@intake24/survey/stores';
+import { useSurvey } from '@intake24/survey/stores';
+import type { SameAsBeforeItem } from '@intake24/survey/stores';
 
 import createBasePrompt from '../createBasePrompt';
 import { useStandardUnits } from '../partials';

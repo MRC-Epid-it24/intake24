@@ -39,10 +39,10 @@
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
-    "@simplewebauthn/server": "^13.1.0",
-    "@types/lodash": "^4.17.14",
-    "@types/node": "^22.10.7",
-    "@types/pg": "^8.11.10",
+    "@simplewebauthn/server": "^13.1.1",
+    "@types/lodash": "^4.17.15",
+    "@types/node": "^22.12.0",
+    "@types/pg": "^8.11.11",
     "@types/pg-cursor": "^2.7.2",
     "@types/validator": "^13.12.2",
     "kysely-codegen": "^0.17.0",

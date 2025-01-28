@@ -10,7 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { BooleanPropertyCheck } from '@intake24/common/prompts';
 import { useCheck } from './use-check';
 

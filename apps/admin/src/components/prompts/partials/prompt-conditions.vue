@@ -99,16 +99,18 @@ import { VueDraggable } from 'vue-draggable-plus';
 
 import { withIdList } from '@intake24/admin/util';
 import {
-  type Condition,
+
   conditionObjectHasProperty,
-  type ConditionObjectId,
+
   conditionObjectIds,
   getConditionDefaults,
   getDefaultConditionProperty,
-  type ObjectPropertyId,
+
   promptConditionDefaults,
 } from '@intake24/common/prompts';
-import { foodSections, mealSections, type PromptSection } from '@intake24/common/surveys';
+import type { Condition, ConditionObjectId, ObjectPropertyId } from '@intake24/common/prompts';
+import { foodSections, mealSections } from '@intake24/common/surveys';
+import type { PromptSection } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
 import { copy } from '@intake24/common/util/objects';
 import { useI18n } from '@intake24/i18n';

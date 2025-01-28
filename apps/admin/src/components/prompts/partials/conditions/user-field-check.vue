@@ -48,10 +48,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 
 import { VCombobox, VTextField } from 'vuetify/components';
-import { standardUserFields, type UserFieldPropertyCheck } from '@intake24/common/prompts';
+import { standardUserFields } from '@intake24/common/prompts';
+import type { UserFieldPropertyCheck } from '@intake24/common/prompts';
 import { useCheck } from './use-check';
 
 export default defineComponent({

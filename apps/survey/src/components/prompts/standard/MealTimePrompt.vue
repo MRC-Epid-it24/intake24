@@ -2,7 +2,7 @@
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 time-picker">
       <v-form @submit.prevent="action('next')">
-        <time-picker
+        <v-time-picker
           v-model="state"
           :allowed-minutes="allowedMinutes"
           class="pa-0"
@@ -68,14 +68,11 @@ import { computed, defineComponent } from 'vue';
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
 import type { MealState, MealTime } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { TimePicker } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealTimePrompt',
-
-  components: { TimePicker },
 
   mixins: [createBasePrompt<'meal-time-prompt'>()],
 

@@ -1,6 +1,7 @@
 import orderBy from 'lodash/orderBy';
 
-import { actionTypes as actionTypeRefs, actionVariants as actionVariantRefs, type ConditionOpCode, conditionOpCodes, promptLayouts } from '@intake24/common/prompts';
+import { actionTypes as actionTypeRefs, actionVariants as actionVariantRefs, conditionOpCodes, promptLayouts } from '@intake24/common/prompts';
+import type { ConditionOpCode } from '@intake24/common/prompts';
 import { recordVisibilities } from '@intake24/common/security';
 import { recallFlows as recallFlowRefs, schemeTypes as schemeTypeRefs } from '@intake24/common/surveys';
 import { colors as themeColors } from '@intake24/common/theme';

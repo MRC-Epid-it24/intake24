@@ -150,7 +150,7 @@
                         </div>
                       </v-toolbar>
                       <v-card-text class="pt-0 d-flex justify-center">
-                        <time-picker
+                        <v-time-picker
                           v-model="dialog.meal.time"
                           class="pa-0"
                           color="primary"
@@ -193,7 +193,7 @@ import type { Meal } from '@intake24/common/surveys';
 import { defaultMeals, staticMealFlags } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog, TimePicker } from '@intake24/ui';
+import { ConfirmDialog } from '@intake24/ui';
 import { OptionsMenu, SelectResource } from '../dialogs';
 import { JsonEditor, JsonEditorDialog } from '../editors';
 import { LanguageSelector } from '../forms';

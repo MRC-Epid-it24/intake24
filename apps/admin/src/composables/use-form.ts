@@ -1,6 +1,7 @@
+import type { Ref } from 'vue';
 import axios, { HttpStatusCode } from 'axios';
 import pick from 'lodash/pick';
-import { computed, type Ref, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { copy, getObjectNestedKeys, merge } from '@intake24/common/util';
 import type { HttpRequestConfig } from '@intake24/ui/types';

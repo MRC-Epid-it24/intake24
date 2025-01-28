@@ -1,5 +1,6 @@
+import type { SetupContext } from 'vue';
 import { addDays } from 'date-fns';
-import { computed, type SetupContext } from 'vue';
+import { computed } from 'vue';
 import { useDate } from 'vuetify';
 
 import type { Prompts } from '@intake24/common/prompts';

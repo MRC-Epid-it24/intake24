@@ -104,7 +104,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 
 import { VCombobox, VTextField } from 'vuetify/components';
 import { SelectResource } from '@intake24/admin/components/dialogs';

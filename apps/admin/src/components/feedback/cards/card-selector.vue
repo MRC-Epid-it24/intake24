@@ -163,9 +163,10 @@
 </template>
 
 <script lang="ts">
-import type { VForm } from 'vuetify/components';
+import type { PropType } from 'vue';
 
-import { defineComponent, type PropType, useTemplateRef } from 'vue';
+import type { VForm } from 'vuetify/components';
+import { defineComponent, useTemplateRef } from 'vue';
 import { useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { RuleCallback } from '@intake24/admin/types';

@@ -1,5 +1,6 @@
 import type { CookieConsentConfig } from 'vanilla-cookieconsent';
-import { bootstrap, optIn, optOut, type PluginOptions, setOptions } from 'vue-gtag';
+import type { PluginOptions } from 'vue-gtag';
+import { bootstrap, optIn, optOut, setOptions } from 'vue-gtag';
 
 export function gTagConfig(): PluginOptions {
   return {

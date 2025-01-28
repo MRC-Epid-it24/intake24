@@ -32,7 +32,8 @@ import { BarcodeReader, StrichSDK } from '@pixelverse/strichjs-sdk';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeMount, onBeforeUnmount, useTemplateRef, watch } from 'vue';
 
-import { defaultBarcodeScannerOptions, type StrichScanner } from '@intake24/common/barcodes';
+import { defaultBarcodeScannerOptions } from '@intake24/common/barcodes';
+import type { StrichScanner } from '@intake24/common/barcodes';
 
 import { useTorch } from '../util';
 

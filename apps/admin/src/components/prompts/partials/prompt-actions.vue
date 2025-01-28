@@ -187,7 +187,8 @@ import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useSelects } from '@intake24/admin/composables';
 import { withIdList } from '@intake24/admin/util';
-import { type Actions, defaultAction } from '@intake24/common/prompts';
+import { defaultAction } from '@intake24/common/prompts';
+import type { Actions } from '@intake24/common/prompts';
 import { copy, randomString } from '@intake24/common/util';
 
 defineOptions({ name: 'PromptActions' });
