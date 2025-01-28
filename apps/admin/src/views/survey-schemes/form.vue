@@ -78,6 +78,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="data.settings.recallDate"
+                :error-messages="errors.get('settings.recallDate')"
                 hide-details="auto"
                 :label="$t('survey-schemes.settings.recallDate')"
                 name="settings.recallDate"
@@ -103,7 +104,7 @@
         </v-container>
       </v-card-text>
       <v-divider />
-      <meal-list v-model="data.meals" :scheme-id="id" />
+      <meal-list v-model="data.meals" :errors="errors" :scheme-id="id" />
       <v-card-text>
         <submit-footer :disabled="errors.any.value" />
       </v-card-text>

@@ -82,6 +82,7 @@
       <v-tabs-window-item key="meals" value="meals">
         <meal-list
           v-model="data.surveySchemeOverrides.meals"
+          :errors="errors"
           mode="override"
           :scheme-id="entry.surveySchemeId"
         />

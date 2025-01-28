@@ -29,7 +29,7 @@
               <load-prompt-dialog
                 :items="isOverrideMode ? templates : undefined"
                 :prompt-ids="promptIds"
-                :scheme-id="$route.params.id"
+                :scheme-id="$route.params.id.toString()"
                 @load="load"
               />
               <json-editor-dialog v-model="prompts" />
@@ -50,7 +50,7 @@
             v-for="(prompt, index) in prompts"
             :key="`${prompt.id}:${prompt.name}`"
             v-bind="{
-              errors: errors.get(`prompts.${fullSection}.${index}*`),
+              errors: errors.get(`prompts.${fullSection}.${index}.*`),
               mode,
               prompt,
               index,
@@ -65,7 +65,7 @@
           />
         </vue-draggable>
       </v-list>
-      <prompt-selector ref="selector" v-bind="{ errors, mode, section, promptIds }" @save="save" />
+      <prompt-selector ref="selector" v-bind="{ mode, section, promptIds }" @save="save" />
     </v-expansion-panel-text>
   </v-expansion-panel>
   <v-divider />
@@ -154,6 +154,10 @@ const subtitle = computed(() => i18n.t(
 ));
 const fullSection = computed(() => isMealSection(props.section) ? `meals.${props.section}` : props.section);
 
+function clearErrors(index?: number) {
+  props.errors.clear(typeof index === 'undefined' ? `prompts.${fullSection.value}.*` : `prompts.${fullSection.value}.${index}.*`);
+}
+
 function create() {
   if (isOverrideMode.value)
     return;
@@ -162,6 +166,7 @@ function create() {
 };
 
 function load(prompt: SinglePrompt) {
+  clearErrors();
   prompts.value.push(prompt);
 };
 
@@ -170,7 +175,7 @@ function copy({ prompt, index }: PromptEvent) {
 };
 
 function edit({ prompt, index }: PromptEvent) {
-  const errors = props.errors.get(`prompts.${fullSection.value}.${index}*`);
+  const errors = props.errors.get(`prompts.${fullSection.value}.${index}.*`);
   selector.value?.edit(index, prompt, errors);
 };
 
@@ -178,6 +183,8 @@ function save({ prompt, index }: PromptEvent) {
   if (index === -1)
     prompts.value.push(prompt);
   else prompts.value.splice(index, 1, prompt);
+
+  clearErrors(index);
 };
 
 function moveSections(prompt: SinglePrompt): MoveSection[] {
@@ -198,6 +205,7 @@ function move(event: PromptMoveEvent) {
 };
 
 function remove(index: number) {
+  clearErrors(index);
   prompts.value.splice(index, 1);
 };
 

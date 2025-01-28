@@ -54,6 +54,8 @@
         <v-list-item
           v-for="(meal, index) in meals"
           :key="meal.name.en"
+          :class="errors.has(`meals.${index}.*`) ? 'text-error' : undefined"
+          :variant="errors.has(`meals.${index}.*`) ? 'tonal' : undefined"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
@@ -61,6 +63,9 @@
           <v-list-item-title>{{ meal.name.en }}</v-list-item-title>
           <v-list-item-subtitle>{{ meal.time }}</v-list-item-subtitle>
           <template #append>
+            <v-chip v-if="errors.has(`meals.${index}.*`)" color="error" variant="flat">
+              {{ errors.get(`meals.${index}.*`).length }} errors
+            </v-chip>
             <v-list-item-action>
               <v-btn icon="$edit" :title="$t('survey-schemes.meals.edit')" @click.stop="edit(index, meal)" />
             </v-list-item-action>
@@ -110,6 +115,7 @@
         </v-toolbar>
         <v-form ref="form" @submit.prevent="save">
           <v-container class="dialog-container" fluid>
+            <error-list :errors="errors.get(`meals.${dialog.index}.*`)" />
             <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
               <v-tabs-window-item key="general" value="general">
                 <v-row>
@@ -184,19 +190,20 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import { useVModel } from '@vueuse/core';
-
 import { computed, ref, useTemplateRef } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
-import type { Meal } from '@intake24/common/surveys';
 
+import { VueDraggable } from 'vue-draggable-plus';
+import type { ReturnUseErrors } from '@intake24/admin/composables';
+import type { Meal } from '@intake24/common/surveys';
 import { defaultMeals, staticMealFlags } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { OptionsMenu, SelectResource } from '../dialogs';
 import { JsonEditor, JsonEditorDialog } from '../editors';
-import { LanguageSelector } from '../forms';
+import { ErrorList, LanguageSelector } from '../forms';
 import CustomList from './custom-list.vue';
 
 type MealDialog = {
@@ -208,6 +215,10 @@ type MealDialog = {
 defineOptions({ name: 'MealList' });
 
 const props = defineProps({
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+    required: true,
+  },
   schemeId: {
     type: String,
     required: true,
@@ -261,6 +272,10 @@ function rules(langId: string) {
   ];
 };
 
+function clearErrors(index?: number) {
+  props.errors.clear(typeof index === 'undefined' ? 'meals.*' : `meals.${index}.*`);
+}
+
 function add() {
   dialog.value = newDialog(true);
 };
@@ -280,10 +295,12 @@ async function save() {
     meals.value.push(meal);
   else meals.value.splice(index, 1, meal);
 
+  clearErrors(index);
   reset();
 };
 
 function remove(index: number) {
+  clearErrors(index);
   meals.value.splice(index, 1);
 };
 
@@ -293,10 +310,12 @@ function reset() {
 };
 
 function load(items: Meal[]) {
+  clearErrors();
   meals.value = [...items];
 };
 
 function resetList() {
+  clearErrors();
   meals.value = copy(defaultMeals);
 };
 </script>

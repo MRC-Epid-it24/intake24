@@ -72,13 +72,22 @@ export function useErrors(props: UseErrorProps = {}) {
       return;
     }
 
-    if (field) {
-      const { [field]: discard, ...rest } = errors.value;
-      errors.value = { ...rest };
+    if (!field) {
+      errors.value = {};
       return;
     };
 
-    errors.value = {};
+    if (field.endsWith('*')) {
+      const match = field.slice(0, -1);
+      Object.keys(errors.value).forEach((key) => {
+        if (key.startsWith(match))
+          delete errors.value[key];
+      });
+      return;
+    }
+
+    const { [field]: discard, ...rest } = errors.value;
+    errors.value = { ...rest };
   };
 
   return {
