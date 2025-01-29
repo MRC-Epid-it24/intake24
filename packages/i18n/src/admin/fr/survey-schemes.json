@@ -440,10 +440,13 @@
       "step": "Incrémentation"
     },
     "timePicker": {
+      "_": "Time picker",
+      "title": "Time picker options",
       "allowedMinutes": {
         "_": "Minutes autorisées",
         "item": "Toutes les {item} minutes"
       },
+      "amPmToggle": "AM/PM toggle",
       "format": {
         "_": "Format de l'heure",
         "ampm": "AM/PM",

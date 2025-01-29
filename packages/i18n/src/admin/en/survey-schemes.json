@@ -445,10 +445,13 @@
       "step": "Step increment"
     },
     "timePicker": {
+      "_": "Time picker",
+      "title": "Time picker options",
       "allowedMinutes": {
         "_": "Allowed minutes",
         "item": "Every {item} minutes"
       },
+      "amPmToggle": "AM/PM toggle",
       "format": {
         "_": "Time format",
         "ampm": "AM/PM",

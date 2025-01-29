@@ -124,6 +124,7 @@ export const mealTimePrompt: Prompts['meal-time-prompt'] = copy({
   id: 'meal-time-prompt',
   name: 'Meal Time prompt',
   allowedMinutes: 5,
+  amPmToggle: false,
   format: '24hr',
 });
 

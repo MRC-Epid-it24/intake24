@@ -191,6 +191,7 @@ export type DatePicker = z.infer<typeof datePicker>;
 
 export const timePicker = z.object({
   format: z.enum(['ampm', '24hr']),
+  amPmToggle: z.boolean(),
   allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
 });
 export type TimePicker = z.infer<typeof timePicker>;

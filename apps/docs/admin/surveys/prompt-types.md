@@ -140,6 +140,8 @@ Prompt to collect meal time information using standard time picker.
 
 - `format` - time format (`am/pm` or `24h`)
 
+- `AM/PM toggle` - `true` or `false` whether to show AM/PM toggle buttons
+
 ### Ready meal prompt
 
 Prompt to collect ready meal information. Multi-select list of options, for each food within the meal that has `ready-meal` attribute set to `true`.
@@ -496,6 +498,8 @@ Prompt to collect time information.
 - `allowedMinutes` - allowed minutes for selection (`1`, `5`, `10`, `15`, `20`, `30`)
 
 - `format` - time format (`am/pm` or `24h`)
+
+- `AM/PM toggle` - `true` or `false` whether to show AM/PM toggle buttons
 
 ### Yes/no prompt
 

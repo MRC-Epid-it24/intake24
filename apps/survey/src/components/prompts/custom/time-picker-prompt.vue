@@ -8,6 +8,8 @@
       <v-form @submit.prevent="action('next')">
         <v-time-picker
           v-model="state"
+          :allowed-minutes="allowedMinutes"
+          :am-pm-in-title="prompt.amPmToggle"
           class="pa-0"
           :format="prompt.format"
           :landscape="$vuetify.display.smAndUp"
@@ -50,6 +52,10 @@ export default defineComponent({
   setup(props, ctx) {
     const { i18n: { t } } = useI18n();
 
+    const allowedMinutes = computed(
+      () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
+    );
+
     const state = computed({
       get() {
         return props.modelValue;
@@ -78,6 +84,7 @@ export default defineComponent({
 
     return {
       action,
+      allowedMinutes,
       customPromptLayout,
       errors,
       hasErrors,

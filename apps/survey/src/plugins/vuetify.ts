@@ -64,7 +64,7 @@ export default createVuetify({
       variant: 'outlined',
     },
     VTimePicker: {
-      ampmInTitle: true,
+      ampmInTitle: false,
       color: 'primary',
       format: '24hr',
       fullWidth: true,
