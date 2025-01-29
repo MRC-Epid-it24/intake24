@@ -5,7 +5,7 @@
         <v-time-picker
           v-model="state"
           :allowed-minutes="allowedMinutes"
-          :am-pm-in-title="prompt.amPmToggle"
+          :ampm-in-title="prompt.amPmToggle"
           class="pa-0"
           :format="prompt.format"
           :landscape="$vuetify.display.smAndUp"
