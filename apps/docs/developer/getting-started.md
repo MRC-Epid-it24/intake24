@@ -5,19 +5,19 @@
 Steps to getting a local instance running
 
 - Setup the database
-  - Method 1 (prefered): Excute Docker compose file `docker/docker-compose.yml` to prepare PostgresQL and Redis instances, and map out port 5432 and 6379 respectively by default.
+  - Method 1 (prefered): Execute Docker compose file `docker/docker-compose.yml` to prepare PostgresQL and Redis instances, and map out port 5432 and 6379 respectively by default.
   - Method 2: Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
-- Alternatively, obtain database snapshots from the intake24 team and import them into a database (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/).
+- Obtain up-to-date database snapshots from the intake24 team and import them into a database by scripts or DB tools (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/).
 - Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
 - To start `api` / `admin` / `survey`: `pnpm dev` for live reloads
 
 ## Useful tools
 
-- IDE for developing Node, Typescript, npm and associated tooling (e.g. VS Code)
+- IDE for developing Node, Typescript, npm (Intake24 use `pnpm` as drop-in replacement of npm) and associated tooling (e.g. VS Code)
+- Docker, a clean and resource-efficient way to run PostgreSQL and Redis servers locally.
 - Virtual Box (v6.x minimum) for running database VM
 - Database browser (e.g. DBeaver) for exploring/manipulating PostgreSQL DB.
 - Redis
-- Docker, a clean and resource-efficient way to run PostgreSQL and Redis servers locally.
 
 ::: tip
 Intake24 requires node.js version 16 or newer, please make sure to check your node.js version before continuing.
@@ -39,7 +39,7 @@ docker compose up -d
 ```
 
 :::tip
-The script may run DB script within `docker/init` folder, hence you may need to grant execution right for the scripts inside this folder.
+The script also run DB script within `docker/init` folder, hence if you may need to grant execution right for the scripts inside this folder.
 :::
 
 ## API server
@@ -69,5 +69,6 @@ Add `DB_DEV_SYSTEM_DEBUG_QUERY_LIMIT=500` and `DB_DEV_FOODS_DEBUG_QUERY_LIMIT=50
 ## API access
 
 If you had your account already created in the databse snapshot you are using, please add your email in DBeaver `users` tables, then go to `apps/cli`, and run `pnpm cli:dev hash-password yourNewPassword`.
+
 Grab the hash and put it manually into the `password_hash` column of the `user_passwords` table for your user record (find you user_id in users).
 There will be a cli command available to create a whole new account without this manual hassle.
