@@ -1,7 +1,7 @@
 {
   "name": "@intake24/docs",
   "type": "module",
-  "version": "2024.8",
+  "version": "2025.1",
   "private": true,
   "description": "Intake24 documentation",
   "license": "Apache-2.0",
