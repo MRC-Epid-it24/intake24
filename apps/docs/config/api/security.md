@@ -41,12 +41,11 @@ Issuer claim for signing JWT tokens
 
 Secret to sign JWT access token.
 
-(You need to replace the default value, e.g. verybigaccesssecret)
+You need to set a secret manually or use the [CLI](../../cli/generate-key) to generate a secret.
 
 - object-path: `jwt.access.secret`
 - dotenv var: `JWT_ACCESS_SECRET`
 - type: `string`
-- default: `''`
 
 ### Admin application settings
 
@@ -73,12 +72,11 @@ Lifetime of JWT access token. Defined as `ms-formatted` string, see [ms](https:/
 
 Secret to sign JWT refresh token
 
-(You need to replace the default value, e.g. verybigrefreshsecret)
+You need to set a secret manually or use the [CLI](../../cli/generate-key) to generate a secret.
 
 - object-path: `jwt.admin.refresh.secret`
 - dotenv var: `JWT_ADMIN_REFRESH_SECRET`
 - type: `string`
-- default: `''`
 
 #### Refresh token audience
 
@@ -167,12 +165,11 @@ Lifetime of JWT access token. Defined as `ms-formatted` string, see [ms](https:/
 
 Secret to sign JWT refresh token
 
-(You need to replace the default value, e.g. verybigrefreshsecret)
+You need to set a secret manually or use the [CLI](../../cli/generate-key) to generate a secret.
 
 - object-path: `jwt.survey.refresh.secret`
 - dotenv var: `JWT_SURVEY_REFRESH_SECRET`
 - type: `string`
-- default: `''`
 
 #### Refresh token audience
 

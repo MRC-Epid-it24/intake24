@@ -4,8 +4,14 @@ All parts of the system are using environment variables. Environment specific co
 
 Each `application` / `package` loads `.env` file in respective directory. There is an example file (`.env-template`) in each relevant directory, which can be used as template.
 
-Copy the `.env-template` file and modify the `.env` file as needed.
+## Clone `.env-template`
+
+Copy the `.env-template` file in respective folder and modify the `.env` file as needed.
 
 ```sh
 cp .env-template .env
 ```
+
+## Generate .env file by CLI
+
+Instead of copy and rename `.env-template` file, you can also use the [CLI](../../cli/generate-env) to generate a `.env` file.
