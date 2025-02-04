@@ -61,6 +61,10 @@ export class FoodsApiV4 {
     return parseCreateResponse(response, this.baseClient.logger);
   }
 
+  public async getEnabledFoods(localeId: string): Promise<{ enabledFoods: string[] } | null> {
+    return this.baseClient.getOptional<{ enabledFoods: string[] }>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`);
+  }
+
   public async updateEnabledFoods(localeId: string, enabledFoods: string[]) {
     await this.baseClient.post<FoodEntry>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`, {
       enabledFoods,

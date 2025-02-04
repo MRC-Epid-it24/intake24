@@ -9,6 +9,7 @@ export default () => {
 
   router
     .route('/:localeId/enabled-foods')
+    .get(wrapAsync(adminLocalFoodsController.readEnabledFoods))
     .post(wrapAsync(adminLocalFoodsController.updateEnabledFoods));
 
   router.route('/:localeId').post(wrapAsync(adminLocalFoodsController.store));

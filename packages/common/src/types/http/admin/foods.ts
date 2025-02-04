@@ -6,11 +6,13 @@ import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
 
 import type { UseInRecipeType } from '@intake24/common/types';
 import type {
+  AssociatedFoodAttributes,
   AssociatedFoodCreationAttributes,
   CategoryAttributes,
   FoodAttributeAttributes,
   FoodAttributes,
   FoodLocalAttributes,
+  FoodPortionSizeMethodAttributes,
   FoodPortionSizeMethodCreationAttributes,
   FoodsLocaleAttributes,
   NutrientTableRecordAttributes,
@@ -145,6 +147,9 @@ export type FoodEntry = FoodAttributes & {
 
 export interface FoodLocalEntry extends FoodLocalAttributes {
   main?: FoodEntry;
+  associatedFoods?: AssociatedFoodAttributes[];
+  portionSizeMethods?: FoodPortionSizeMethodAttributes[];
+  nutrientRecords?: NutrientTableRecordAttributes[];
 }
 
 export type FoodGroupsResponse = Pagination<FoodGroupAttributes>;

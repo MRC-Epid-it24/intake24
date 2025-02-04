@@ -6,6 +6,7 @@ import type {
   CreateGlobalCategoryRequest,
   CreateLocalCategoryRequest,
   GlobalCategoryEntry,
+  LocalCategoryEntry,
   MainCategoriesResponse,
   UpdateGlobalCategoryRequest,
   UpdateLocalCategoryRequest,
@@ -68,13 +69,13 @@ export class CategoriesApiV4 {
   public async createCategoryLocal(
     localeId: string,
     request: CreateLocalCategoryRequest,
-  ): Promise<CreateResult<any, GlobalCategoryEntry>> {
+  ): Promise<CreateResult<any, LocalCategoryEntry>> {
     const response = await this.baseClient.postResponse(
       `${CategoriesApiV4.adminApiPath}/local/${localeId}`,
       request,
     );
 
-    return parseCreateResponse(response, this.baseClient.logger);
+    return parseCreateResponse(response, this.baseClient.logger, request);
   }
 
   public async updateCategoryLocal(

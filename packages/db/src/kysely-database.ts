@@ -8,11 +8,11 @@ import type { Logger } from '@intake24/common-backend';
 
 import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
 
-function databaseLogQuery(sql: string, logger: Logger, limit: number) {
+function databaseLogQuery(sql: string, logger: Logger, logLevel: string, limit: number) {
   if (limit > 0 && sql.length > limit)
-    logger.debug(`${sql.substring(0, limit)}...`);
+    logger.log(logLevel, `${sql.substring(0, limit)}...`);
   else
-    logger.debug(sql);
+    logger.log(logLevel, sql);
 }
 
 export class KyselyDatabases {
@@ -62,16 +62,34 @@ export class KyselyDatabases {
             databaseLogQuery(
               `Query [${event.queryDurationMillis.toFixed(1)} ms]: ${event.query.sql}`,
               this.dbLogger,
+              'debug',
               this.config[this.env][database].debugQueryLimit,
             );
-            databaseLogQuery(
-              `└ Parameters: ${event.query.parameters.join(', ')}`,
-              this.dbLogger,
-              this.config[this.env][database].debugQueryLimit,
-            );
+            if (event.query.parameters.length > 0) {
+              databaseLogQuery(
+                `└ parameters: ${event.query.parameters.join(', ')}`,
+                this.dbLogger,
+                'debug',
+                this.config[this.env][database].debugQueryLimit,
+              );
+            }
             break;
           case 'error':
-            this.dbLogger.error(event.error);
+            databaseLogQuery(
+              `Query [${event.queryDurationMillis.toFixed(1)} ms]: ${event.query.sql}`,
+              this.dbLogger,
+              'error',
+              this.config[this.env][database].debugQueryLimit,
+            );
+            if (event.query.parameters.length > 0) {
+              databaseLogQuery(
+                `├ parameters: ${event.query.parameters.join(', ')}`,
+                this.dbLogger,
+                'error',
+                this.config[this.env][database].debugQueryLimit,
+              );
+            }
+            this.dbLogger.error(`└ ${event.error}`);
             break;
         }
       };

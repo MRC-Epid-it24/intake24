@@ -27,14 +27,14 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
     if (portionSizeMethods.length > 0) {
       await transaction
         .insertInto('categoryPortionSizeMethods')
-        .values(eb =>
-          portionSizeMethods.map(m => ({
+        .values(
+          portionSizeMethods.map((m, index) => ({
             categoryLocalId,
             method: m.method,
             description: m.description,
             useForRecipes: m.useForRecipes,
             conversionFactor: m.conversionFactor,
-            orderBy: eb.ref('id'),
+            orderBy: index,
             parameters: JSON.stringify(m.parameters),
           })),
         )
