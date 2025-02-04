@@ -24,5 +24,5 @@ For a more streamlined approach, you can use our CLI tool to generate .env files
 pnpm cli generate-env
 ```
 
-For detailed instructions on using the CLI, please refer to our `.env` generation [guideline](../../cli/generate-env).
+For detailed instructions on using the CLI, please refer to our `.env` generation [guideline](/cli/generate-env).
 Choose the method that best suits your workflow and project needs.
