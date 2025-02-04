@@ -42,6 +42,8 @@ docker compose up -d
 The script also run DB script within `docker/init` folder, hence if you may need to grant execution right for the scripts inside this folder.
 :::
 
+Please also check the [guideline](/developer/docker) to configure or import database snapshot to PostgreSQL server created using docker.
+
 ## API server
 
 Go to `api` and follow instructions in the readme file.
