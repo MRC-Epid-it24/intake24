@@ -86,13 +86,13 @@ pnpm run cli hash-password [your password]
 
 Replace `[your password]` to the password you want.
 
-1. Replace `[hash]` and `[salt]` with the password hash and salt generated, and insert to user by id.
+9. Replace `[hash]` and `[salt]` with the password hash and salt generated, and insert to user by id.
 
 ```
 insert into user_passwords (user_id, password_hash, password_salt, password_hasher) values (11969, '[hash]', '[salt]', 'bcrypt');
 ```
 
-1. Give this user id superuser permissions:
+10. Give this user id superuser permissions:
 
 ```
 insert into role_user (role_id, user_id, created_at, updated_at) values (1, 11969, now(), now());
