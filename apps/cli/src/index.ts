@@ -78,7 +78,7 @@ async function run() {
     });
 
   const skipFoodsOption = new Option(
-    '-sf, --skip-foods [food-ids...]',
+    '--sf, --skip-foods [food-ids...]',
     'Skip foods having these codes (typically for debug purposes)',
   );
 
@@ -89,11 +89,11 @@ async function run() {
     .description('Export food data into a portable format')
     .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
     .option(
-      '-as, --as-served [set-ids...]',
+      '--as, --as-served [set-ids...]',
       'Export as served portion size images for given set identifiers',
     )
     .addOption(skipFoodsOption)
-    .requiredOption('-l, --locale <locale-ids...>', 'Export all data for the given locale ids')
+    .requiredOption('--locale <locale-ids...>', 'Export all data for the given locale ids')
     .action(async (version, options) => {
       switch (version) {
         case 'v3':
@@ -106,12 +106,12 @@ async function run() {
     });
 
   const conflictResolutionOption = new Option(
-    '-c, --on-conflict [on-conflict-option]',
+    '--on-conflict [on-conflict-option]',
     'Conflict resolution strategy',
   ).choices(conflictResolutionOptions);
 
   const specificModulesExecutionOption = new Option(
-    '-m, --modules-for-execution [modules-for-execution-option...]',
+    '--modules-for-execution [modules-for-execution-option...]',
     'Specific modules to execute',
   ).choices(importerSpecificModulesExecutionOptions);
 
@@ -167,16 +167,16 @@ async function run() {
   program
     .command('build-uae')
     .description('Build UAE (NYUAD) locale')
-    .requiredOption('-sc, --source-locale-code [source locale code]', 'Source locale code')
-    .requiredOption('-s, --source-path [source path]', 'Source package directory')
-    .requiredOption('-pc, --prototype-locale-code [prototype locale code]', 'Prototype locale code')
-    .requiredOption('-p, --prototype-path [prototype path]', 'Prototype package directory')
-    .requiredOption('-fc, --fallback-locale-code [fallback locale code]', 'Fallback locale code')
-    .requiredOption('-f, --fallback-path [prototype path]', 'Fallback package directory')
-    .requiredOption('-f2c, --fallback2-locale-code [fallback locale code]', 'Fallback 2 locale code')
-    .requiredOption('-f2, --fallback2-path [prototype path]', 'Fallback 2 package directory')
-    .requiredOption('-f3c, --fallback3-locale-code [fallback locale code]', 'Fallback 3 locale code')
-    .requiredOption('-f3, --fallback3-path [prototype path]', 'Fallback 3 package directory')
+    .requiredOption('--sc, --source-locale-code [source locale code]', 'Source locale code')
+    .requiredOption('--sp, --source-path [source path]', 'Source package directory')
+    .requiredOption('--pc, --prototype-locale-code [prototype locale code]', 'Prototype locale code')
+    .requiredOption('--pp, --prototype-path [prototype path]', 'Prototype package directory')
+    .requiredOption('--fc, --fallback-locale-code [fallback locale code]', 'Fallback locale code')
+    .requiredOption('--fp, --fallback-path [prototype path]', 'Fallback package directory')
+    .requiredOption('--f2c, --fallback2-locale-code [fallback locale code]', 'Fallback 2 locale code')
+    .requiredOption('--f2p, --fallback2-path [prototype path]', 'Fallback 2 package directory')
+    .requiredOption('--f3c, --fallback3-locale-code [fallback locale code]', 'Fallback 3 locale code')
+    .requiredOption('--f3p, --fallback3-path [prototype path]', 'Fallback 3 package directory')
     .requiredOption('-o, --output-path [output path]', 'Output package directory')
     .action(async (options) => {
       await buildUaeLocaleCommand(options);
@@ -190,19 +190,19 @@ async function run() {
   program
     .command('convert-drink-scale')
     .description('Convert legacy SVG drink scale data to Intake24 package format')
-    .requiredOption('-id, --set-id [set-id]', 'Drinkware set ID')
-    .requiredOption('-d, --description [description]', 'Drinkware set description')
-    .requiredOption('-svg, --selection-svg [selection-svg]', 'Selection image map SVG')
+    .requiredOption('--id, --set-id [set-id]', 'Drinkware set ID')
+    .requiredOption('--description [description]', 'Drinkware set description')
+    .requiredOption('--svg, --selection-svg [selection-svg]', 'Selection image map SVG')
     .requiredOption(
-      '-img, --selection-base-image [selection-base-image]',
+      '--img, --selection-base-image [selection-base-image]',
       'Selection image map base image',
     )
-    .requiredOption('-s, --scales-csv [scales-csv]', 'Drink scales description CSV')
+    .requiredOption('--scales-csv [scales-csv]', 'Drink scales description CSV')
     .requiredOption('-o, --output-dir [output-dir]', 'Output package directory')
     .addOption(volumeMethodOption)
-    .requiredOption('-l, --language [language]', 'Language code for labels and descriptions')
+    .requiredOption('--language [language]', 'Language code for labels and descriptions')
     .option(
-      '-ow, --overwrite',
+      '--ow, --overwrite',
       'Overwrite existing records in destination package directory',
       false,
     )
@@ -213,13 +213,13 @@ async function run() {
   program
     .command('convert-image-map')
     .description('Convert legacy SVG image map data to Intake24 package format')
-    .requiredOption('-id, --id [image map ID]>', 'Image map ID')
-    .requiredOption('-d, --description [description]', 'Image map description')
-    .requiredOption('-svg, --svg-path [SVG path]', 'Image map SVG')
-    .requiredOption('-img, --base-image-path [base image path]', 'Image map base image')
+    .requiredOption('--id [image map ID]>', 'Image map ID')
+    .requiredOption('--description [description]', 'Image map description')
+    .requiredOption('--svg, --svg-path [SVG path]', 'Image map SVG')
+    .requiredOption('--img, --base-image-path [base image path]', 'Image map base image')
     .requiredOption('-o, --output-dir [output directory]', 'Output package directory')
     .option(
-      '-ow, --overwrite',
+      '--ow, --overwrite',
       'Overwrite existing records in destination package directory',
       false,
     )
@@ -230,8 +230,8 @@ async function run() {
   program
     .command('search-test')
     .description('Test search quality of the system')
-    .requiredOption('-t, --term <term>', 'Search term')
-    .requiredOption('-p, --path <path>', 'Jsonl file path')
+    .requiredOption('--term <term>', 'Search term')
+    .requiredOption('--path <path>', 'Jsonl file path')
     .action(async (cmd) => {
       await searchTest(cmd);
     });
