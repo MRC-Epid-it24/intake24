@@ -22,6 +22,12 @@ System consists of two databases:
 
 ## URL
 
+Examples
+
+`DB_DEV_SYSTEM_URL=postgres://user:password@localhost:5432/intake24_system_dev`
+
+`DB_DEV_FOODS_URL=postgres://user:password@localhost:5432/intake24_foods_dev`
+
 - object-path: `[environment][database].url`
 - dotenv vars:
   - `development`: `DB_DEV_FOODS_URL` and `DB_DEV_SYSTEM_URL`
@@ -91,6 +97,8 @@ System consists of two databases:
 - default: `'postgres'`
 
 ## Security
+
+In developement environment, `DB_CONNECTION_SSL` can set to `false` to skip using SSL protocol.
 
 - object-path: `[environment].security`
 - dotenv vars:

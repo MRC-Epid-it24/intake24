@@ -1,6 +1,6 @@
 # Access control list (ACL)
 
-Path: `apps/api/src/config/acl.ts`
+Path: `packages/common-backend/src/acl/config.ts`
 
 ## Cache
 

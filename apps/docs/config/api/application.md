@@ -60,6 +60,8 @@ Internal port application listens on.
 
 Secret key to use for in-app signing/encryption (cookie/session)
 
+(You need to replace the default value, e.g. verybigappsecret)
+
 - object-path: `secret`
 - dotenv var: `APP_SECRET`
 - type: `string`

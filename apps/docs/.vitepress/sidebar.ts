@@ -452,6 +452,14 @@ export const sidebar = {
           link: '/developer/vm',
         },
         {
+          text: 'Development using Docker',
+          link: '/developer/docker',
+        },
+        {
+          text: 'Import database snapshots',
+          link: '/developer/import-db-snapshots',
+        },
+        {
           text: 'Adding a New Prompt',
           link: '/developer/new-prompts',
         },

@@ -39,7 +39,9 @@ Issuer claim for signing JWT tokens
 
 ### Access token secret
 
-Secret to sign JWT access token
+Secret to sign JWT access token.
+
+You need to set a secret manually or use the [CLI](../../cli/generate-key) to generate a secret.
 
 - object-path: `jwt.access.secret`
 - dotenv var: `JWT_ACCESS_SECRET`
@@ -69,6 +71,8 @@ Lifetime of JWT access token. Defined as `ms-formatted` string, see [ms](https:/
 #### Refresh token secret
 
 Secret to sign JWT refresh token
+
+You need to set a secret manually or use the [CLI](../../cli/generate-key) to generate a secret.
 
 - object-path: `jwt.admin.refresh.secret`
 - dotenv var: `JWT_ADMIN_REFRESH_SECRET`
@@ -160,6 +164,8 @@ Lifetime of JWT access token. Defined as `ms-formatted` string, see [ms](https:/
 #### Refresh token secret
 
 Secret to sign JWT refresh token
+
+You need to set a secret manually or use the [CLI](../../cli/generate-key) to generate a secret.
 
 - object-path: `jwt.survey.refresh.secret`
 - dotenv var: `JWT_SURVEY_REFRESH_SECRET`

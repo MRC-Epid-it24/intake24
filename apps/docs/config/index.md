@@ -4,8 +4,25 @@ All parts of the system are using environment variables. Environment specific co
 
 Each `application` / `package` loads `.env` file in respective directory. There is an example file (`.env-template`) in each relevant directory, which can be used as template.
 
-Copy the `.env-template` file and modify the `.env` file as needed.
+## Setting Up Your Environment
+
+You have two options for creating your `.env` file:
+
+### Option 1: Manual Clone
+
+Copy the `.env-template` file in respective folder and modify the `.env` file as needed.
 
 ```sh
 cp .env-template .env
 ```
+
+### Option 2: CLI Generation
+
+For a more streamlined approach, you can use our CLI tool to generate .env files (each in `api`, `admin` and `survey` folder)
+
+```sh
+pnpm cli generate-env
+```
+
+For detailed instructions on using the CLI, please refer to our `.env` generation [guideline](../../cli/generate-env).
+Choose the method that best suits your workflow and project needs.
