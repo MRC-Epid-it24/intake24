@@ -29,7 +29,7 @@
       "_": "Paramètre des catégories globales",
       "code": "Code de la catégorie",
       "name": "Nom anglais",
-      "isHidden": "Est caché"
+      "hidden": "Est caché"
     },
     "local": {
       "_": "Paramètres des catégories régionales",

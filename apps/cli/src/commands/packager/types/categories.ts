@@ -7,7 +7,7 @@ export interface PkgGlobalCategory {
   version: string;
   code: string;
   englishDescription: string;
-  isHidden: boolean;
+  hidden: boolean;
   attributes: PkgInheritableAttributes;
   parentCategories: string[];
 }

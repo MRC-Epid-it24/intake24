@@ -8,8 +8,8 @@ import { camelCase } from 'lodash';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import { FixedFoodRanking, FoodLocalList, PAOccurrence, SystemLocale } from '@intake24/db';
+import { SearchSortingAlgorithm } from '@intake24/common/surveys';
+import { FixedFoodRanking, Food, PAOccurrence, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 
@@ -153,10 +153,10 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
     const { localeId } = this.params;
 
     const validFoodCodes = (
-      await FoodLocalList.findAll({
-        where: { localeId: this.localeCode, foodCode: foodCodes },
+      await Food.findAll({
+        where: { localeId: this.localeCode, code: foodCodes },
       })
-    ).map(row => row.foodCode);
+    ).map(row => row.code);
 
     const invalidFoodCodes = foodCodes.filter(code => !validFoodCodes.includes(code));
 

@@ -17,7 +17,6 @@ export const systemLocaleAttributes = z.object({
   respondentLanguageId: languageAttributes.shape.code,
   adminLanguageId: languageAttributes.shape.code,
   countryFlagCode: z.string().min(1).max(16).refine(val => isLocale(val)),
-  prototypeLocaleId: z.string().min(1).max(16).nullable(),
   textDirection: z.enum(textDirections),
   foodIndexEnabled: z.boolean(),
   foodIndexLanguageBackendId: z.string().min(1).max(16),
@@ -35,7 +34,6 @@ export const localeRequest = systemLocaleAttributes.omit({
   createdAt: true,
   updatedAt: true,
 }).partial({
-  prototypeLocaleId: true,
   textDirection: true,
   foodIndexEnabled: true,
   foodIndexLanguageBackendId: true,

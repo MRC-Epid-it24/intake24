@@ -159,7 +159,6 @@ function packageLocale(locale: LocaleV3): PkgLocale {
     id: locale.id,
     englishName: locale.englishName,
     localName: locale.localName,
-    prototypeLocale: parseOption(locale.prototypeLocale),
     adminLanguage: locale.adminLanguage,
     respondentLanguage: locale.respondentLanguage,
     textDirection: parseTextDirection(locale.textDirection),
@@ -327,7 +326,7 @@ function packageGlobalCategory(mainCategory: MainCategoryRecordV3): PkgGlobalCat
     code: mainCategory.code,
     englishDescription: mainCategory.englishDescription,
     version: mainCategory.version,
-    isHidden: mainCategory.isHidden,
+    hidden: mainCategory.hidden,
     parentCategories: mainCategory.parentCategories.map(header => header.code),
     attributes: {
       readyMealOption: parseOption(mainCategory.attributes.readyMealOption) ?? undefined,

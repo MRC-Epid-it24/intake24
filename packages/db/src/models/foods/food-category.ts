@@ -28,21 +28,21 @@ export default class FoodCategory extends BaseModel<
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare foodCode: string;
+  declare foodId: string;
 
   @ForeignKey(() => Category)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare categoryCode: string;
+  declare categoryId: string;
 
-  @BelongsTo(() => Food, 'foodCode')
+  @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;
 
-  @BelongsTo(() => Category, 'categoryCode')
+  @BelongsTo(() => Category, 'categoryId')
   declare category?: NonAttribute<Category>;
 }
 

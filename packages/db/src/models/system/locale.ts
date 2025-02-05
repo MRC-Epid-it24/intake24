@@ -32,7 +32,6 @@ import BaseModel from '../model';
   },
   adminLanguage: { include: [{ association: 'adminLanguage' }] },
   respondentLanguage: { include: [{ association: 'respondentLanguage' }] },
-  parent: { include: [{ association: 'parent' }] },
   surveys: { include: [{ model: Survey }] },
 }))
 @Table({
@@ -89,12 +88,6 @@ export default class SystemLocale
   declare countryFlagCode: string;
 
   @Column({
-    allowNull: true,
-    type: DataType.STRING(16),
-  })
-  declare prototypeLocaleId: CreationOptional<string | null>;
-
-  @Column({
     allowNull: false,
     defaultValue: 'ltr',
     type: DataType.STRING(8),
@@ -145,18 +138,6 @@ export default class SystemLocale
     targetKey: 'code',
   })
   declare respondentLanguage?: NonAttribute<Language>;
-
-  @BelongsTo(() => SystemLocale, {
-    foreignKey: 'prototypeLocaleId',
-    targetKey: 'code',
-  })
-  declare parent?: NonAttribute<SystemLocale>;
-
-  @HasMany(() => SystemLocale, {
-    foreignKey: 'prototypeLocaleId',
-    sourceKey: 'code',
-  })
-  declare children?: NonAttribute<SystemLocale[]>;
 
   @HasMany(() => Survey, 'localeId')
   declare surveys?: Survey[];

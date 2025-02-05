@@ -24,12 +24,10 @@ import type { AsServedPsm, CerealPsm, DrinkScalePsm, GuideImagePsm, MilkInHotDri
 import type { UseInRecipeType } from '@intake24/common/types';
 import { useInRecipeTypes } from '@intake24/common/types';
 import type {
+  CreateCategoryRequest,
+  CreateFoodRequest,
   CreateGlobalCategoryRequest,
   CreateGlobalFoodRequest,
-  CreateLocalCategoryRequest,
-  CreateLocalFoodRequest,
-  FoodEntry,
-  FoodLocalEntry,
   GuideImageInputObject,
   ImageMapEntryObject,
   LocaleEntry,
@@ -68,7 +66,6 @@ function fromPackageLocale(locale: PkgLocale): LocaleRequest {
     localName: locale.localName,
     englishName: locale.englishName,
     adminLanguageId: locale.adminLanguage,
-    prototypeLocaleId: locale.prototypeLocale,
     countryFlagCode: locale.flagCode,
     foodIndexLanguageBackendId: locale.foodIndexLanguageBackendId ?? 'en',
     respondentLanguageId: locale.respondentLanguage,
@@ -105,7 +102,7 @@ function fromPackageGlobalCategory(globalCategory: PkgGlobalCategory): CreateGlo
     code: globalCategory.code,
     name: globalCategory.englishDescription,
     parentCategories: globalCategory.parentCategories,
-    isHidden: globalCategory.isHidden,
+    hidden: globalCategory.hidden,
     attributes: {
       readyMealOption: globalCategory.attributes.readyMealOption,
       reasonableAmount: globalCategory.attributes.reasonableAmount,
@@ -223,7 +220,7 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string
   }
 }
 
-function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
+function fromPackageLocalFood(localFood: PkgLocalFood): CreateFoodRequest {
   return {
     code: localFood.code,
     name: localFood.localDescription ?? 'Missing local description!',
@@ -235,7 +232,7 @@ function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
   };
 }
 
-function fromPackageLocalCategory(localCategory: PkgLocalCategory): CreateLocalCategoryRequest {
+function fromPackageLocalCategory(localCategory: PkgLocalCategory): CreateCategoryRequest {
   return {
     code: localCategory.code,
     version: localCategory.version,

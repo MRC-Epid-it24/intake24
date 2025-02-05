@@ -35,7 +35,7 @@ export default class FixedFoodRanking extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(36),
   })
   declare foodCode: string;
 

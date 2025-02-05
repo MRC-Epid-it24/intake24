@@ -17,11 +17,11 @@
             v-model="attributes.sameAsBeforeOption"
             class="mt-0"
             :disabled="disabled || isInherited('sameAsBeforeOption')"
-            :error-messages="errors.get('main.attributes.sameAsBeforeOption')"
+            :error-messages="errors.get('attributes.sameAsBeforeOption')"
             hide-details="auto"
             :label="$t('fdbs.attributes.sameAsBeforeOption')"
             name="attributes.sameAsBeforeOption"
-            @update:model-value="errors.clear('main.attributes.sameAsBeforeOption')"
+            @update:model-value="errors.clear('attributes.sameAsBeforeOption')"
           />
         </v-col>
       </v-row>
@@ -36,11 +36,11 @@
             v-model="attributes.readyMealOption"
             class="mt-0"
             :disabled="disabled || isInherited('readyMealOption')"
-            :error-messages="errors.get('main.attributes.readyMealOption')"
+            :error-messages="errors.get('attributes.readyMealOption')"
             hide-details="auto"
             :label="$t('fdbs.attributes.readyMealOption')"
             name="attributes.readyMealOption"
-            @update:model-value="errors.clear('main.attributes.readyMealOption')"
+            @update:model-value="errors.clear('attributes.readyMealOption')"
           />
         </v-col>
       </v-row>
@@ -55,12 +55,12 @@
             v-model.number="attributes.reasonableAmount"
             density="compact"
             :disabled="disabled || isInherited('reasonableAmount')"
-            :error-messages="errors.get('main.attributes.reasonableAmount')"
+            :error-messages="errors.get('attributes.reasonableAmount')"
             hide-details="auto"
             :label="$t('fdbs.attributes.reasonableAmount')"
             name="attributes.reasonableAmount"
             variant="outlined"
-            @update:model-value="errors.clear('main.attributes.reasonableAmount')"
+            @update:model-value="errors.clear('attributes.reasonableAmount')"
           />
         </v-col>
       </v-row>
@@ -75,13 +75,13 @@
             v-model="attributes.useInRecipes"
             density="compact"
             :disabled="disabled || isInherited('useInRecipes')"
-            :error-messages="errors.get('main.attributes.useInRecipes')"
+            :error-messages="errors.get('attributes.useInRecipes')"
             hide-details="auto"
             :items="useInRecipeTypeItems"
             :label="$t('fdbs.attributes.useInRecipes._')"
             name="attributes.useInRecipes"
             variant="outlined"
-            @update:model-value="errors.clear('main.attributes.useInRecipes')"
+            @update:model-value="errors.clear('attributes.useInRecipes')"
           />
         </v-col>
       </v-row>

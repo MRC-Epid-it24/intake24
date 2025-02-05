@@ -70,7 +70,7 @@
       },
       "code": "Global code",
       "foodGroupId": "Food group ID",
-      "isHidden": "Is hidden",
+      "hidden": "Is hidden",
       "name": "Global name",
       "parentCategories": "Parent categories"
     },
@@ -103,7 +103,6 @@
     "physicalDataFields": "Physical data fields",
     "prompt": "Prompt",
     "prompts": "Prompts",
-    "prototypeLocaleId": "Prototype locale ID",
     "respondentLanguageId": "Respondent language ID",
     "roles": "Roles",
     "sessionData": "Session data",

@@ -24,21 +24,21 @@ export default class CategoryCategory extends BaseModel<
 > {
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare subcategoryCode: string;
+  declare categoryId: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare categoryCode: string;
+  declare subCategoryId: string;
 
-  @BelongsTo(() => Category, 'subcategoryCode')
-  declare subcategory?: NonAttribute<Category>;
-
-  @BelongsTo(() => Category, 'categoryCode')
+  @BelongsTo(() => Category, 'categoryId')
   declare category?: NonAttribute<Category>;
+
+  @BelongsTo(() => Category, 'subCategoryId')
+  declare subCategory?: NonAttribute<Category>;
 }
 
 export type CategoryCategoryAttributes = Attributes<CategoryCategory>;

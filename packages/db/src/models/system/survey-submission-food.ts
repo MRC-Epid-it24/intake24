@@ -64,7 +64,7 @@ export default class SurveySubmissionFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(32),
+    type: DataType.STRING(36),
   })
   declare code: string;
 
