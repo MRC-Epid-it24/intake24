@@ -2,7 +2,8 @@ import type { PortionSizeMethodId } from '../../surveys';
 
 import { z } from 'zod';
 import { localeOptionList, localeTranslation } from '../../types';
-import { actions, promptLayouts } from '../actions';
+import { actions } from '../actions';
+import { layoutTypes } from '../partials';
 import { condition } from './conditions';
 
 export const radioOrientations = ['column', 'row'] as const;
@@ -354,7 +355,7 @@ const splitFoodPrompt = baseStandardPrompt.extend({
 
 const submitPrompt = baseStandardPrompt.extend({
   component: z.literal('submit-prompt'),
-  review: z.record(z.enum(promptLayouts), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
+  review: z.record(z.enum(layoutTypes), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
 });
 
 export const singlePrompt = z.discriminatedUnion('component', [

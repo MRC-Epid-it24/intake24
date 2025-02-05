@@ -1,10 +1,10 @@
 import orderBy from 'lodash/orderBy';
 
-import { actionTypes as actionTypeRefs, actionVariants as actionVariantRefs, conditionOpCodes, promptLayouts } from '@intake24/common/prompts';
+import { actionTypes as actionTypeRefs, conditionOpCodes, layoutTypes } from '@intake24/common/prompts';
 import type { ConditionOpCode } from '@intake24/common/prompts';
 import { recordVisibilities } from '@intake24/common/security';
 import { recallFlows as recallFlowRefs, schemeTypes as schemeTypeRefs } from '@intake24/common/surveys';
-import { colors as themeColors } from '@intake24/common/theme';
+import { colors as themeColors, variants as themeVariants } from '@intake24/common/theme';
 import { textDirections as textDirectionRefs } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
@@ -18,9 +18,9 @@ export function useSelects() {
     title: t(`survey-schemes.actions.types.${value}`),
   }));
 
-  const actionVariants = actionVariantRefs.map(value => ({
+  const variants = themeVariants.map(value => ({
     value,
-    title: t(`survey-schemes.actions.variants.${value}`),
+    title: t(`survey-schemes.theme.variants.${value}`),
   }));
 
   const colors = Object.entries(themeColors).map(([key, color]) => ({
@@ -43,9 +43,9 @@ export function useSelects() {
     'title',
   );
 
-  const layouts = promptLayouts.map(value => ({
+  const layouts = layoutTypes.map(value => ({
     value,
-    title: t(`survey-schemes.actions.layouts.${value}`),
+    title: t(`survey-schemes.theme.layouts.${value}`),
   }));
 
   const orientations = ['column', 'row'].map(value => ({
@@ -77,15 +77,15 @@ export function useSelects() {
 
   return {
     actions,
-    actionVariants,
     colors,
     conditionOps,
     flags,
     layouts,
     orientations,
-    textDirections,
-    visibilities,
     recallFlows,
     schemeTypes,
+    textDirections,
+    variants,
+    visibilities,
   };
 }

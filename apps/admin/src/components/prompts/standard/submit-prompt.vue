@@ -11,7 +11,7 @@
             v-for="key in keys"
             :key="key"
             :items="options"
-            :label="$t(`survey-schemes.actions.layouts.${key}`)"
+            :label="$t(`survey-schemes.theme.layouts.${key}`)"
             :model-value="review[key]"
             :prepend-inner-icon="`$${key}`"
             variant="outlined"

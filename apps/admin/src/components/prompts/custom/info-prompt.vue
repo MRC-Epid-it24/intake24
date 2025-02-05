@@ -19,6 +19,12 @@
           @update:model-value="update('video', $event)"
         />
       </v-col>
+      <v-col :cols="12">
+        <carousel
+          :model-value="carousel"
+          @update:model-value="update('carousel', $event)"
+        />
+      </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>
@@ -29,7 +35,7 @@ import type { PropType } from 'vue';
 import { ytVideoDefaults } from '@intake24/common/prompts';
 import type { Prompts } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
-import { useBasePrompt, YoutubeVideo } from '../partials';
+import { Carousel, useBasePrompt, YoutubeVideo } from '../partials';
 
 defineOptions({
   name: 'InfoPrompt',
@@ -38,6 +44,9 @@ defineOptions({
 });
 
 const props = defineProps({
+  carousel: {
+    type: Object as PropType<Prompts['info-prompt']['carousel']>,
+  },
   video: {
     type: [Boolean, Object] as PropType<Prompts['info-prompt']['video']>,
   },

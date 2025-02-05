@@ -65,16 +65,9 @@
     "remove": "Remove action",
     "enable": "Enable custom prompt actions",
     "both": "Display both layout actions in mobile UI",
-    "color": "Color",
     "icon": "Icon",
     "label": "Label",
     "text": "Text",
-    "layouts": {
-      "_": "Layout",
-      "title": "Layouts",
-      "desktop": "Desktop",
-      "mobile": "Mobile"
-    },
     "parameters": "Parameters",
     "types": {
       "_": "Action type",
@@ -92,19 +85,8 @@
       "mealTime": "Meal time",
       "selectFood": "Select food",
       "selectMeal": "Select meal"
-    },
-    "variants": {
-      "_": "Action variant",
-      "title": "Action variants",
-      "elevated": "Elevated",
-      "flat": "Flat",
-      "outlined": "Outlined",
-      "plain": "Plain",
-      "tonal": "Tonal",
-      "text": "Text"
     }
   },
-
   "conditions": {
     "_": "Condition",
     "title": "Conditions",
@@ -414,6 +396,20 @@
       "_": "Orientation",
       "column": "Column",
       "row": "Row"
+    },
+    "carousel": {
+      "_": "Carousel",
+      "title": "Carousel settings",
+      "required": "Carousel is required to be finished",
+      "slides": {
+        "_": "Slide",
+        "title": "Carousel slides",
+        "add": "Add slide",
+        "edit": "Edit slide",
+        "remove": "Remove slide",
+        "text": "Text",
+        "image": "Image"
+      }
     },
     "counter": {
       "_": "Counter",
@@ -742,6 +738,28 @@
     "standard-portion-prompt": {
       "title": "Standard portion",
       "subtitle": "Use the \"standard portion\" method to estimate the portion size"
+    }
+  },
+  "theme": {
+    "colors": {
+      "_": "Color",
+      "title": "Colors"
+    },
+    "layouts": {
+      "_": "Layout",
+      "title": "Layouts",
+      "desktop": "Desktop",
+      "mobile": "Mobile"
+    },
+    "variants": {
+      "_": "Variant",
+      "title": "Variants",
+      "elevated": "Elevated",
+      "flat": "Flat",
+      "outlined": "Outlined",
+      "plain": "Plain",
+      "tonal": "Tonal",
+      "text": "Text"
     }
   }
 }

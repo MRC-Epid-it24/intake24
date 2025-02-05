@@ -18,9 +18,7 @@
               <v-chip v-if="condition.orPrevious" class="font-weight-medium position-absolute" style="top: -1.5em;">
                 OR
               </v-chip>
-              <v-icon class="drag-and-drop__handle" start>
-                $handle
-              </v-icon>
+              <v-icon class="drag-and-drop__handle " icon="$handle" start />
               {{ $t(`survey-schemes.conditions.property.${condition.property.id}`) }}
             </v-tab>
           </vue-draggable>
@@ -181,6 +179,8 @@ export default defineComponent({
       currentConditions.value.splice(index, 1);
       if (currentConditions.value.length > 0)
         currentConditions.value[0].orPrevious = false;
+
+      selectedCondition.value = currentConditions.value?.at(-1)?.id ?? undefined;
     };
 
     const update = () => {

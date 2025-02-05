@@ -1,5 +1,11 @@
 @use 'variables';
 
+.navigation {
+  &:not(:has(.v-btn)) {
+    display: none !important;
+  }
+}
+
 .bottom-navigation {
   position: fixed;
   bottom: 0;
@@ -10,6 +16,10 @@
   display: flex;
   gap: 0.375rem;
   width: 100%;
+
+  &:not(:has(.bottom-navigation__actions .v-btn, .bottom-navigation__summary)) {
+    display: none !important;
+  }
 
   .bottom-navigation__summary {
     height: inherit;

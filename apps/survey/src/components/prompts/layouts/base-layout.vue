@@ -18,7 +18,7 @@
     <v-card-actions
       v-if="!$vuetify.display.mobile || prompt.actions?.both"
       id="actions"
-      class="pa-5 px-md-0 d-flex flex-column-reverse flex-md-row align-stretch flex-wrap ga-3"
+      class="navigation pa-5 px-md-0 d-flex flex-column-reverse flex-md-row align-stretch flex-wrap ga-3"
     >
       <template v-if="desktopActions.length">
         <v-btn

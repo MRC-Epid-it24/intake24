@@ -3,9 +3,10 @@ import type { PortionSizeMethodId } from '../surveys';
 import { z } from 'zod';
 import { barcodeScannerOptions } from '../barcodes';
 import { localeOptionList, localeTranslation } from '../types';
-import { actions, promptLayouts } from './actions';
+import { actions } from './actions';
 import { condition } from './conditions';
 import { externalSourceOptions } from './external-sources';
+import { carousel, counter, datePicker, hasVideo, layoutTypes, slider, timePicker } from './partials';
 
 export const radioOrientations = ['column', 'row'] as const;
 export type RadioOrientation = (typeof radioOrientations)[number];
@@ -154,61 +155,6 @@ export type LinkedQuantity = z.infer<typeof linkedQuantity>;
 export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as const;
 export type ReviewOptions = (typeof reviewOptions)[number];
 
-export const sliderValue = z.object({
-  value: z.number().nullable(),
-  label: z.union([z.literal(false), localeTranslation]),
-});
-export type SliderValue = z.infer<typeof sliderValue>;
-
-export const slider = z.object({
-  type: z.literal('slider'),
-  current: sliderValue.extend({ size: z.number() }),
-  min: sliderValue,
-  max: sliderValue,
-  step: z.number(),
-  confirm: z.boolean(),
-});
-export type Slider = z.infer<typeof slider>;
-
-const counterValue = z.number().positive().multipleOf(0.25).nullish().transform(val => val ?? undefined);
-export const counter = z.object({
-  type: z.literal('counter'),
-  current: counterValue,
-  min: counterValue,
-  max: counterValue,
-  confirm: z.boolean(),
-  whole: z.boolean(),
-  fraction: z.boolean(),
-});
-export type Counter = z.infer<typeof counter>;
-
-export const datePicker = z.object({
-  current: z.coerce.number().int().nullable(),
-  min: z.coerce.number().int().nullable(),
-  max: z.coerce.number().int().nullable(),
-});
-export type DatePicker = z.infer<typeof datePicker>;
-
-export const timePicker = z.object({
-  format: z.enum(['ampm', '24hr']),
-  amPmToggle: z.boolean(),
-  allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
-});
-export type TimePicker = z.infer<typeof timePicker>;
-
-export const youtubeVideo = z.object({
-  type: z.literal('youtube'),
-  videoId: z.string(),
-  height: z.number(),
-  width: z.number(),
-  autoContinue: z.boolean(),
-  autoplay: z.boolean(),
-  required: z.boolean(),
-});
-export type YoutubeVideo = z.infer<typeof youtubeVideo>;
-export const hasVideo = z.object({ video: z.discriminatedUnion('type', [youtubeVideo]).optional() });
-export type HasVideo = z.infer<typeof hasVideo>;
-
 // Custom
 const aggregateChoicePrompt = baseCustomPrompt.extend({
   component: z.literal('aggregate-choice-prompt'),
@@ -230,6 +176,7 @@ const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(datePicke
 
 const infoPrompt = baseCustomPrompt.merge(hasVideo).extend({
   component: z.literal('info-prompt'),
+  carousel: carousel.optional(),
 });
 
 const noMoreInformationPrompt = baseCustomPrompt.extend({
@@ -441,7 +388,7 @@ const splitFoodPrompt = baseStandardPrompt.extend({
 
 const submitPrompt = baseStandardPrompt.extend({
   component: z.literal('submit-prompt'),
-  review: z.record(z.enum(promptLayouts), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
+  review: z.record(z.enum(layoutTypes), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
 });
 
 export const singlePrompt = z.discriminatedUnion('component', [
