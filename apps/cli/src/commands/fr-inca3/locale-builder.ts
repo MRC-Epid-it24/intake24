@@ -43,7 +43,6 @@ const locale: PkgLocale = {
   localName: 'France (ANSES)',
   englishName: 'France (ANSES)',
   textDirection: 'ltr',
-  prototypeLocale: null,
   respondentLanguage: 'fr',
   flagCode: 'fr',
   adminLanguage: 'fr',
@@ -635,7 +634,7 @@ export class FrenchAnsesLocaleBuilder {
         englishDescription: 'Baby food and savoury snacks',
         parentCategories: ['19TODSFD'],
         version: '0fd3f027-6f2a-47f3-9838-7bb0037a4fd4',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRDEIN',
@@ -643,7 +642,7 @@ export class FrenchAnsesLocaleBuilder {
         englishDescription: 'Baby desserts',
         parentCategories: ['19TODSFD'],
         version: '64f6bd7b-0f0b-41b6-ab20-afac96078a28',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRCEBI',
@@ -651,7 +650,7 @@ export class FrenchAnsesLocaleBuilder {
         englishDescription: 'Baby cereals and biscuits',
         parentCategories: ['19TODSFD'],
         version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRLABO',
@@ -659,7 +658,7 @@ export class FrenchAnsesLocaleBuilder {
         englishDescription: 'Baby milk and drinks',
         parentCategories: ['19TODSFD'],
         version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRLAMA',
@@ -667,7 +666,7 @@ export class FrenchAnsesLocaleBuilder {
         englishDescription: 'Breast milk',
         parentCategories: ['FRLABO'],
         version: 'e309274c-12be-49d0-88e2-26744ce7f3c1',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRCIT',
@@ -675,7 +674,7 @@ export class FrenchAnsesLocaleBuilder {
         englishDescription: 'Lemon juice for cooking',
         parentCategories: ['COND'],
         version: '0555155a-8073-4a00-b30c-26691082b7d1',
-        isHidden: false,
+        hidden: false,
       },
     ];
   }

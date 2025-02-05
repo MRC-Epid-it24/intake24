@@ -1,46 +1,36 @@
 import type { IoC } from '@intake24/api/ioc';
 import { Category, Food } from '@intake24/db';
+import {
+  getCategoryParentCategories as localGetCategoryParentCategories,
+  getFoodParentCategories as localGetFoodParentCategories,
+} from './common';
 
 function cachedParentCategoriesService({
   cache,
   cacheConfig,
 }: Pick<IoC, 'cache' | 'cacheConfig'>) {
-  async function getFoodParentCategories(foodCode: string): Promise<string[]> {
+  async function getFoodParentCategories(foodId: string): Promise<string[]> {
     return cache.remember<string[]>(
-      `food-parent-categories:${foodCode}`,
+      `food-parent-categories:${foodId}`,
       cacheConfig.ttl,
-      async () => {
-        const row = await Food.findOne({
-          where: { code: foodCode },
-          include: [{ association: 'parentCategories', attributes: ['code'] }],
-        });
-
-        return row?.parentCategories?.map(cat => cat.code) ?? [];
-      },
+      async () => localGetFoodParentCategories(foodId),
     );
   }
 
-  async function getCategoryParentCategories(categoryCode: string): Promise<string[]> {
+  async function getCategoryParentCategories(categoryId: string): Promise<string[]> {
     return cache.remember<string[]>(
-      `category-parent-categories:${categoryCode}`,
+      `category-parent-categories:${categoryId}`,
       cacheConfig.ttl,
-      async () => {
-        const row = await Category.findOne({
-          where: { code: categoryCode },
-          include: [{ association: 'parentCategories', attributes: ['code'] }],
-        });
-
-        return row?.parentCategories?.map(cat => cat.code) ?? [];
-      },
+      async () => localGetCategoryParentCategories([categoryId]),
     );
   }
 
-  async function getFoodAllCategories(foodCode: string): Promise<string[]> {
+  async function getFoodAllCategories(foodId: string): Promise<string[]> {
     return cache.remember<string[]>(
-      `food-all-categories:${foodCode}`,
+      `food-all-categories:${foodId}`,
       cacheConfig.ttl,
       async () => {
-        let nextLevel = await getFoodParentCategories(foodCode);
+        let nextLevel = await getFoodParentCategories(foodId);
         const allCategories = new Set<string>();
 
         while (nextLevel.length > 0) {
@@ -55,12 +45,29 @@ function cachedParentCategoriesService({
     );
   }
 
-  async function getCategoryAllCategories(categoryCode: string): Promise<string[]> {
+  async function getFoodAllCategoryCodes(localeCode: string, code: string): Promise<string[]> {
     return cache.remember<string[]>(
-      `category-all-categories:${categoryCode}`,
+      `food-all-category-codes:${localeCode}:${code}`,
       cacheConfig.ttl,
       async () => {
-        let nextLevel = await getCategoryParentCategories(categoryCode);
+        const food = await Food.findOne({ where: { code, localeId: localeCode }, attributes: ['id'] });
+        if (!food)
+          return [];
+
+        const id = await getFoodAllCategories(food.id);
+        const categories = await Category.findAll({ where: { id }, attributes: ['code'] });
+
+        return categories.map(category => category.code);
+      },
+    );
+  }
+
+  async function getCategoryAllCategories(categoryId: string): Promise<string[]> {
+    return cache.remember<string[]>(
+      `category-all-categories:${categoryId}`,
+      cacheConfig.ttl,
+      async () => {
+        let nextLevel = await getCategoryParentCategories(categoryId);
         const allCategories = new Set<string>();
 
         while (nextLevel.length > 0) {
@@ -79,6 +86,7 @@ function cachedParentCategoriesService({
     getFoodParentCategories,
     getCategoryParentCategories,
     getFoodAllCategories,
+    getFoodAllCategoryCodes,
     getCategoryAllCategories,
   };
 }
