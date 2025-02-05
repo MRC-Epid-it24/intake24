@@ -36,6 +36,7 @@ import type {
   Filesystem,
   FoodDataService,
   FoodSearchService,
+  FoodThumbnailImageService,
   GlobalCategoriesService,
   GlobalFoodsService,
   GuideImageService,
@@ -189,6 +190,7 @@ export interface IoC extends Jobs {
   drinkwareSetService: DrinkwareSetService;
   guideImageService: GuideImageService;
   imageMapService: ImageMapService;
+  foodThumbnailImageService: FoodThumbnailImageService;
 
   // Survey / user
   adminSignupService: AdminSignupService;
