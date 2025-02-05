@@ -3,19 +3,16 @@ import {
   applyDefaultSearchQueryParameters,
   OptionalSearchQueryParameters,
 } from '@intake24/api/food-index/search-query';
-import type { IoC } from '@intake24/api/ioc';
-import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 
 // const ATTR_USE_ANYWHERE = 0;
 const ATTR_AS_REGULAR_FOOD_ONLY = 1;
 const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
 
-function foodSearchService({
-  inheritableAttributesService,
-  cache,
+function foodSearchService(/* {
+   cache,
   cacheConfig,
-}: Pick<IoC, 'inheritableAttributesService' | 'cache' | 'cacheConfig'>) {
+}: Pick<IoC, | 'cache' | 'cacheConfig'> */) {
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -29,7 +26,7 @@ function foodSearchService({
     }
   }
 
-  const resolveInheritableAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes>> => {
+  /* const resolveInheritableAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes>> => {
     const data = await Promise.all(
       foodCodes.map(code => inheritableAttributesService.resolveInheritableAttributes(code)),
     );
@@ -39,16 +36,16 @@ function foodSearchService({
 
   const getInheritableAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes | null>> => {
     return cache.rememberMany(foodCodes, 'food-attributes', cacheConfig.ttl, resolveInheritableAttributes);
-  };
+  }; */
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
     const results = await foodIndex.search(queryParameters);
-    const attrs = await getInheritableAttributes(results.foods.map(r => r.code));
+    // const attrs = await getInheritableAttributes(results.foods.map(r => r.code));
 
     const withFilteredIngredients = {
-      foods: results.foods.filter(header =>
-        acceptForQuery(isRecipe, attrs[header.code]?.useInRecipes),
+      foods: results.foods.filter(_header =>
+        acceptForQuery(isRecipe/* , attrs[header.code]?.useInRecipes */),
       ),
       categories: results.categories,
     };
@@ -57,13 +54,10 @@ function foodSearchService({
   };
 
   return {
-    getInheritableAttributes,
     search,
   };
 }
 
 export default foodSearchService;
 
-export type FoodSearchService = ReturnType<
-  typeof foodSearchService
->;
+export type FoodSearchService = ReturnType<typeof foodSearchService>;

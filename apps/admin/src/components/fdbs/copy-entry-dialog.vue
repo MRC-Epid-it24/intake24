@@ -68,11 +68,11 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useForm } from '@intake24/admin/composables';
-import type { FoodLocalCopyInput, SurveySchemeEntry } from '@intake24/common/types/http/admin';
+import type { FoodCopyInput, SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
-export type CopyEntityForm = FoodLocalCopyInput;
+export type CopyEntityForm = FoodCopyInput;
 
 export default defineComponent({
   name: 'CopyEntryDialog',
