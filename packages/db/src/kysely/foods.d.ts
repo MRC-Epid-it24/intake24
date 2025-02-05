@@ -208,6 +208,14 @@ export interface FoodsRestrictions {
   localeId: string;
 }
 
+export interface FoodThumbnailImages {
+  createdAt: Generated<Timestamp>;
+  foodLocalId: Int8;
+  id: Generated<Int8>;
+  imageId: Int8;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface GuideImageObjects {
   guideImageId: string;
   id: Generated<Int8>;
@@ -442,6 +450,7 @@ export interface DB {
   foodsLocalLists: FoodsLocalLists;
   foodsNutrients: FoodsNutrients;
   foodsRestrictions: FoodsRestrictions;
+  foodThumbnailImages: FoodThumbnailImages;
   guideImageObjects: GuideImageObjects;
   guideImages: GuideImages;
   imageMapObjects: ImageMapObjects;

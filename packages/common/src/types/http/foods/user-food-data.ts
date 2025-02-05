@@ -40,6 +40,7 @@ export const userFoodData = z.object({
   brandNames: z.array(z.string()),
   categories: z.array(z.string()),
   tags: z.array(z.string()),
+  thumbnailImageUrl: z.string().optional(),
 });
 
 export type UserFoodData = z.infer<typeof userFoodData>;

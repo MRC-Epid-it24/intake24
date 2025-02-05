@@ -13,6 +13,10 @@ export type SelectionScreenImageConfig = {
   height: number;
 };
 
+export type FoodThumbnailImageConfig = {
+  width: number;
+};
+
 export type ImageMapsConfig = {
   width: number;
 };
@@ -27,6 +31,7 @@ export type ImageProcessorConfig = {
   imageMaps: ImageMapsConfig;
   drinkScale: SlidingScaleConfig;
   optionSelection: SelectionScreenImageConfig;
+  foodThumbnailImage: FoodThumbnailImageConfig;
 };
 
 const imageProcessorConfig: ImageProcessorConfig = {
@@ -47,6 +52,9 @@ const imageProcessorConfig: ImageProcessorConfig = {
   optionSelection: {
     width: Number.parseInt(process.env.IMAGE_OPTION_SELECTION_WIDTH || '300', 10),
     height: Number.parseInt(process.env.IMAGE_OPTION_SELECTION_HEIGHT || '200', 10),
+  },
+  foodThumbnailImage: {
+    width: Number.parseInt(process.env.IMAGE_FOOD_THUMB_WIDTH || '1000', 10),
   },
 };
 
