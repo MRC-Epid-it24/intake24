@@ -8,7 +8,7 @@ import {
 } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import type { FindOptions } from '@intake24/db';
-import { CategoryLocal, SystemLocale } from '@intake24/db';
+import { Category, SystemLocale } from '@intake24/db';
 
 export default validate(
   checkSchema({
@@ -33,15 +33,12 @@ export default validate(
           if (!locale)
             throw new Error(customTypeErrorMessage('unique._', meta));
 
-          const options: FindOptions<CategoryLocal> = {
-            where: { localeId: locale.code },
-            include: [{ association: 'main', attributes: [], required: true }],
-          };
+          const options: FindOptions<Category> = { where: { localeId: locale.code } };
 
           if (
             !(await unique({
-              model: CategoryLocal,
-              condition: { field: 'categoryCode', value },
+              model: Category,
+              condition: { field: 'code', value },
               options,
             }))
           ) {
