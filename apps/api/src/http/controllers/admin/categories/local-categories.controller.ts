@@ -3,7 +3,7 @@ import { HttpStatusCode } from 'axios';
 
 import { ConflictError, ForbiddenError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { LocalCategoryEntry } from '@intake24/common/types/http/admin';
+import type { SimpleCategoryEntry } from '@intake24/common/types/http/admin';
 
 function localCategoriesController({
   localCategoriesService,
@@ -52,7 +52,7 @@ function localCategoriesController({
     res.end();
   };
 
-  const read = async (req: Request, res: Response<LocalCategoryEntry>): Promise<void> => {
+  const read = async (req: Request, res: Response<SimpleCategoryEntry>): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
     if (!(await aclService.hasPermission('fdbs:read')))
