@@ -18,6 +18,7 @@ export enum ProcessedImagePurposes {
   ImageMapBaseImage = 4,
   ImageMapOverlay = 5,
   DrinkScaleBaseImage = 6,
+  FoodThumbnailImage = 7,
 }
 
 export type ProcessedImagePurpose = ProcessedImagePurposes;
