@@ -113,6 +113,7 @@ export default createVuetify({
       start: 'fas fa-play',
       survey: 'fas fa-poll-h',
       yes: 'far fa-circle-check',
+      image: 'fas fa-image',
     },
     sets: {
       fa,

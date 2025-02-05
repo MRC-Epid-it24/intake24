@@ -21,6 +21,7 @@ import FoodLocal from './food-local';
 import FoodLocalList from './food-local-list';
 import FoodNutrient from './food-nutrient';
 import FoodPortionSizeMethod from './food-portion-size-method';
+import FoodThumbnailImage from './food-thumbnail-image';
 import GuideImage from './guide-image';
 import GuideImageObject from './guide-image-object';
 import ImageMap from './image-map';
@@ -93,6 +94,8 @@ export { default as FoodNutrient } from './food-nutrient';
 export * from './food-nutrient';
 export { default as FoodPortionSizeMethod } from './food-portion-size-method';
 export * from './food-portion-size-method';
+export { default as FoodThumbnailImage } from './food-thumbnail-image';
+export * from './food-thumbnail-image';
 export { default as GuideImage } from './guide-image';
 export * from './guide-image';
 export { default as GuideImageObject } from './guide-image-object';
@@ -168,6 +171,7 @@ export const foods = {
   FoodLocalList,
   FoodNutrient,
   FoodPortionSizeMethod,
+  FoodThumbnailImage,
   GuideImage,
   GuideImageObject,
   ImageMap,

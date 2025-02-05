@@ -172,6 +172,31 @@ function processedImageService({
     });
   };
 
+  const createFoodThumbnailImage = async (
+    foodLocalId: string,
+    sourceImage: SourceImage | string,
+  ): Promise<ProcessedImage> => {
+    const image
+      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+
+    const fileName = `${randomUUID()}${path.extname(image.path)}`;
+    const fileDir = path.posix.join('food_thumbnails', foodLocalId);
+    const fullPath = path.posix.join(fileDir, fileName);
+
+    await fs.ensureDir(path.join(imagesPath, fileDir));
+
+    await sharp(path.join(imagesPath, image.path))
+      .resize(imageProcessorConfig.foodThumbnailImage.width)
+      .jpeg({ mozjpeg: true })
+      .toFile(path.join(imagesPath, fullPath));
+
+    return ProcessedImage.create({
+      path: fullPath,
+      sourceId: image.id,
+      purpose: ProcessedImagePurposes.FoodThumbnailImage,
+    });
+  };
+
   const destroy = async (imageId: string, options: DestroyOptions = {}): Promise<void> => {
     const processedImage = await ProcessedImage.findByPk(imageId, {
       attributes: ['id', 'path', 'sourceId'],
@@ -206,6 +231,7 @@ function processedImageService({
     createImageMapBaseImage,
     createSelectionImage,
     createDrinkScaleBaseImage,
+    createFoodThumbnailImage,
     destroy,
   };
 }

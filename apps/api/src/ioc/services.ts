@@ -25,6 +25,7 @@ import {
   Filesystem,
   foodDataService,
   foodSearchService,
+  foodThumbnailImageService,
   globalCategoriesService,
   globalFoodsService,
   guideImageService,
@@ -81,6 +82,7 @@ export default (container: AwilixContainer): void => {
     imageMapService: asFunction(imageMapService).singleton(),
     processedImageService: asFunction(processedImageService).singleton(),
     sourceImageService: asFunction(sourceImageService).singleton(),
+    foodThumbnailImageService: asFunction(foodThumbnailImageService).singleton(),
 
     feedbackService: asFunction(feedbackService).singleton(),
     foodDataService: asFunction(foodDataService).singleton(),

@@ -1,5 +1,6 @@
 import acl from './acl';
 import { authentication } from './authentication.contract';
+import { foodThumbnailImages } from './fdbs/food-thumbnail-images.contract';
 import { feedbackScheme } from './feedback-scheme.contract';
 import { foodDb } from './food-db.contract';
 import { foodGroup } from './food-group.contract';
@@ -29,6 +30,7 @@ export default {
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   foodDb,
   foodGroup,
+  foodThumbnailImages,
   images,
   job,
   language,
