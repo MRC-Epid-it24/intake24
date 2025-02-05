@@ -33,7 +33,7 @@
       "_": "Global category settings",
       "code": "Category code",
       "name": "English name",
-      "isHidden": "Is hidden"
+      "hidden": "Is hidden"
     },
     "local": {
       "_": "Local category settings",
