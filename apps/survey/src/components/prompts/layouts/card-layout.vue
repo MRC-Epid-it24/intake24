@@ -22,7 +22,7 @@
       <v-card-actions
         v-if="!$vuetify.display.mobile || prompt.actions?.both"
         id="actions"
-        class="px-4 pt-0 pb-4 d-flex flex-column-reverse flex-md-row flex-wrap align-stretch ga-3"
+        class="navigation px-4 pt-0 pb-4 d-flex flex-column-reverse flex-md-row flex-wrap align-stretch ga-3"
       >
         <template v-if="desktopActions.length">
           <v-btn
@@ -30,7 +30,6 @@
             :key="item.type"
             class="px-4"
             :color="item.color ?? undefined"
-            :disabled="item.type === 'next' && !isValid"
             size="large"
             :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
             :variant="item.variant"
@@ -55,7 +54,6 @@
             <template v-for="(item, idx) in mobileActions" :key="item.type">
               <v-btn
                 :color="item.color ?? undefined"
-                :disabled="item.type === 'next' && !isValid"
                 :title="
                   Object.keys(item.label).length ? translate(item.label) : translate(item.text)
                 "

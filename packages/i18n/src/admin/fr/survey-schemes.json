@@ -61,16 +61,9 @@
     "remove": "Supprimer l'action",
     "enable": "Permettre les actions d'invite personnalisée",
     "both": "Permettre les deux actions de mise en page dans l'interface utilisateur mobile",
-    "color": "Couleur",
     "icon": "Icone",
     "label": "Libellé",
     "text": "Texte",
-    "layouts": {
-      "_": "Mise en page",
-      "title": "Mises en pages",
-      "desktop": "Bureau",
-      "mobile": "Mobile"
-    },
     "parameters": "Paramètres",
     "types": {
       "_": "Type d'action",
@@ -88,16 +81,6 @@
       "mealTime": "Heure du repas",
       "selectFood": "Sélectionner un aliment",
       "selectMeal": "Sélectionner un repas"
-    },
-    "variants": {
-      "_": "Autre action",
-      "title": "Autres actions",
-      "elevated": "Elevé",
-      "flat": "Flat",
-      "outlined": "Esquissé",
-      "plain": "Plain",
-      "tonal": "Tonal",
-      "text": "Texte"
     }
   },
   "conditions": {
@@ -409,6 +392,20 @@
       "_": "Orientation",
       "column": "Colonne",
       "row": "Ligne"
+    },
+    "carousel": {
+      "_": "Carousel",
+      "title": "Carousel settings",
+      "required": "Carousel is required to be finished",
+      "slides": {
+        "_": "Slide",
+        "title": "Carousel slides",
+        "add": "Add slide",
+        "edit": "Edit slide",
+        "remove": "Remove slide",
+        "text": "Text",
+        "image": "Image"
+      }
     },
     "counter": {
       "_": "Counter",
@@ -737,6 +734,28 @@
     "standard-portion-prompt": {
       "title": "Portion standard",
       "subtitle": "Choisir la méthode \"standard portion\" pour estimer la taille de la portion"
+    }
+  },
+  "theme": {
+    "colors": {
+      "_": "Couleur",
+      "title": "Couleurs"
+    },
+    "layouts": {
+      "_": "Mise en page",
+      "title": "Mises en pages",
+      "desktop": "Bureau",
+      "mobile": "Mobile"
+    },
+    "variants": {
+      "_": "Autre",
+      "title": "Autres",
+      "elevated": "Elevé",
+      "flat": "Flat",
+      "outlined": "Esquissé",
+      "plain": "Plain",
+      "tonal": "Tonal",
+      "text": "Texte"
     }
   }
 }

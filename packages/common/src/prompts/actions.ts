@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
+import { variants } from '../theme';
 import { localeTranslation } from '../types';
-
-export const promptLayouts = ['desktop', 'mobile'] as const;
-export type PromptLayout = (typeof promptLayouts)[number];
+import { layoutTypes } from './partials';
 
 export const genericActionTypes = ['addMeal', 'next', 'review'] as const;
 export const mealActionTypes = [
@@ -26,19 +25,15 @@ export type MealActionType = (typeof mealActionTypes)[number];
 export type FoodActionType = (typeof foodActionTypes)[number];
 export type ActionType = (typeof actionTypes)[number];
 
-export const actionVariants = ['flat', 'text', 'elevated', 'tonal', 'outlined', 'plain'] as const;
-
-export type ActionVariant = (typeof actionVariants)[number];
-
 export const actionItem = z.object({
   type: z.enum(actionTypes),
   params: z.any(),
   text: localeTranslation,
   label: localeTranslation,
   color: z.string().nullable(),
-  variant: z.enum(actionVariants),
+  variant: z.enum(variants),
   icon: z.string().nullable(),
-  layout: z.enum(promptLayouts).array(),
+  layout: z.enum(layoutTypes).array(),
 });
 
 export type ActionItem = z.infer<typeof actionItem>; ;

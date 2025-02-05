@@ -3,7 +3,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { computed, onBeforeMount } from 'vue';
 
-import type { Prompt } from '@intake24/common/prompts';
+import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';
 import { defaultMessages, useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
@@ -55,12 +55,18 @@ export function useLayout(props: UseLayoutProps, ctx: Pick<SetupContext<'action'
     globalI18n.setLocaleMessage(globalI18n.locale.value, messages);
   };
 
+  const isItemValid = (item: ActionItem) => item.type !== 'next' || props.isValid;
+
   const foodOrMealId = computed(() => props.food?.id ?? props.meal?.id);
-  const desktopActions = computed(() => props.prompt.actions?.items.filter(action => action.layout.includes('desktop')) ?? []);
+  const desktopActions = computed(() => props.prompt.actions?.items.filter(
+    action => action.layout.includes('desktop') && isItemValid(action),
+  ) ?? []);
   const hasDefaultSlot = computed(() => !!ctx.slots.default);
   const hasActionsSlot = computed(() => !!ctx.slots.actions);
   const hasNavActionsSlot = computed(() => !!ctx.slots['nav-actions']);
-  const mobileActions = computed(() => props.prompt.actions?.items.filter(action => action.layout.includes('mobile')) ?? []);
+  const mobileActions = computed(() => props.prompt.actions?.items.filter(action =>
+    action.layout.includes('mobile') && isItemValid(action)) ?? [],
+  );
 
   const i18n = computed(() => (
 

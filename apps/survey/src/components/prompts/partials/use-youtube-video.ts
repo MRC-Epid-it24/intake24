@@ -1,5 +1,5 @@
 import { usePlayer } from '@vue-youtube/core';
-import { ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import type { HasVideo, Prompt } from '@intake24/common/prompts';
 
 export type UseYoutubeVideoProps = Prompt & HasVideo;
@@ -14,7 +14,7 @@ const ytPlayerStates = {
 } as const;
 
 export function useYoutubeVideo(props: UseYoutubeVideoProps, callback?: (type: string, ...args: [id?: string, params?: object]) => void) {
-  const video = ref();
+  const video = useTemplateRef<InstanceType<typeof HTMLElement>>('video');
   const watched = ref(false);
 
   if (!props.video)

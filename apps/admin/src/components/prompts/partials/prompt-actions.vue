@@ -35,9 +35,7 @@
               @end="update"
             >
               <v-tab v-for="(action, idx) in currentActions.items" :key="action.id" class="d-flex ga-3" :value="action.id">
-                <v-icon class="drag-and-drop__handle">
-                  $handle
-                </v-icon>
+                <v-icon class="drag-and-drop__handle" icon="$handle" start />
                 {{ $t(`survey-schemes.actions.types.${action.type}`) }}({{ idx + 1 }})
               </v-tab>
             </vue-draggable>
@@ -66,7 +64,7 @@
                       v-model="action.layout"
                       hide-details="auto"
                       :items="layouts"
-                      :label="$t('survey-schemes.actions.layouts._')"
+                      :label="$t('survey-schemes.theme.layouts._')"
                       multiple
                       variant="outlined"
                     />
@@ -75,8 +73,8 @@
                     <v-select
                       v-model="action.variant"
                       hide-details="auto"
-                      :items="actionVariants"
-                      :label="$t('survey-schemes.actions.variants._')"
+                      :items="variants"
+                      :label="$t('survey-schemes.theme.variants._')"
                       variant="outlined"
                     />
                   </v-col>
@@ -85,7 +83,7 @@
                       v-model="action.color"
                       hide-details="auto"
                       :items="colors"
-                      :label="$t('survey-schemes.actions.color')"
+                      :label="$t('survey-schemes.theme.colors._')"
                       variant="outlined"
                     >
                       <template #item="{ item, props }">
@@ -201,7 +199,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:actions']);
 
-const { actions: availableActions, actionVariants, colors, layouts } = useSelects();
+const { actions: availableActions, colors, layouts, variants } = useSelects();
 
 const currentActions = ref(props.actions ? { ...props.actions, items: withIdList(props.actions.items) } : undefined);
 const selectedAction = ref(currentActions.value?.items.length ? currentActions.value.items[0].id : undefined);
@@ -217,13 +215,8 @@ const outputActions = computed(() => {
   };
 });
 
-function changeToggle(enable: boolean) {
-  if (!enable) {
-    currentActions.value = undefined;
-    return;
-  }
-
-  currentActions.value = { both: false, items: [] };
+function changeToggle(enable: boolean | null) {
+  currentActions.value = enable ? { both: false, items: [] } : undefined;
 };
 
 function add() {
@@ -235,6 +228,7 @@ function add() {
 
 function remove(index: number) {
   currentActions.value?.items.splice(index, 1);
+  selectedAction.value = currentActions.value?.items.at(-1)?.id ?? undefined;
 };
 
 function update() {
