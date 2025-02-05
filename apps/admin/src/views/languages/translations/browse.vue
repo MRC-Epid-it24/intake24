@@ -1,6 +1,6 @@
 <template>
   <layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
-    <v-toolbar color="grey-lighten-4" flat tile>
+    <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>

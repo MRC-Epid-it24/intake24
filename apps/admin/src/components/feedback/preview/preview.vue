@@ -14,7 +14,7 @@
       </slot>
     </template>
     <v-card tile>
-      <v-toolbar color="secondary" dark>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>{{ $t('feedback-schemes.preview.title') }}</v-toolbar-title>
       </v-toolbar>

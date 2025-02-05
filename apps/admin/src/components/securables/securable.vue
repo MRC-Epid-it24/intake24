@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="grey-lighten-4" flat tile>
+    <v-toolbar color="grey-lighten-4">
       <v-icon color="secondary" end>
         fas fa-shield-halved
       </v-icon>

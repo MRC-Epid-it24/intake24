@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-bind="{ modelValue }" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
     <v-card :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary" dark flat>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>{{ $t('common.mfa.title') }}</v-toolbar-title>
       </v-toolbar>

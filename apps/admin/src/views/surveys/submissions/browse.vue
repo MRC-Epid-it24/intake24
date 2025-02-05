@@ -27,7 +27,7 @@
     </embedded-data-table>
     <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
       <v-card tile>
-        <v-toolbar color="secondary" dark>
+        <v-toolbar color="secondary">
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
           <v-toolbar-title>
             {{ selected.id }}

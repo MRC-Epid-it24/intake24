@@ -1,7 +1,7 @@
 <template>
   <v-card border flat>
     <v-toolbar color="grey-lighten-4">
-      <v-icon icon="fas fa-calculator" start />
+      <v-icon end icon="fas fa-calculator" />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.counter.title') }}
       </v-toolbar-title>

@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
-    <v-toolbar color="grey-lighten-4" flat tile>
+    <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.split-words.title') }}
       </v-toolbar-title>

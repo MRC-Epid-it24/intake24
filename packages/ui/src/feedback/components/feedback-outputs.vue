@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" sm="auto">
     <v-card height="100%">
-      <v-toolbar color="grey-lighten-4" flat tile>
+      <v-toolbar color="grey-lighten-4">
         <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
           {{ $t('feedback.outputs.title') }}
         </v-toolbar-title>
@@ -39,7 +39,7 @@
             </v-btn>
           </template>
           <v-card :tile="$vuetify.display.smAndDown">
-            <v-toolbar color="secondary" dark>
+            <v-toolbar color="secondary">
               <v-btn
                 icon="$close"
                 :title="$t('common.action.close')"
@@ -118,7 +118,7 @@
             </v-btn>
           </template>
           <v-card :tile="$vuetify.display.smAndDown">
-            <v-toolbar color="secondary" dark>
+            <v-toolbar color="secondary">
               <v-btn
                 icon="$close"
                 :title="$t('common.action.close')"

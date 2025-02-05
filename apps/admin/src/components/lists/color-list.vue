@@ -36,8 +36,8 @@
       persistent
     >
       <v-card :tile="$vuetify.display.smAndDown">
-        <v-toolbar color="secondary" dark flat>
-          <v-icon icon="fas fa-palette" start />
+        <v-toolbar color="secondary">
+          <v-icon end icon="fas fa-palette" />
           <v-toolbar-title>
             {{ $t('feedback-schemes.colors.edit') }}
           </v-toolbar-title>

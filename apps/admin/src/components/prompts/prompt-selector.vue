@@ -10,7 +10,7 @@
     :z-index="1050"
   >
     <v-card tile>
-      <v-toolbar color="secondary" dark>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`survey-schemes.prompts.${dialog.index === -1 ? 'create' : 'edit'}`) }}
@@ -44,9 +44,7 @@
                 <v-col cols="12">
                   <v-card border flat>
                     <v-toolbar color="grey-lighten-4">
-                      <v-icon end>
-                        fas fa-fingerprint
-                      </v-icon>
+                      <v-icon end icon="fas fa-fingerprint" />
                       <v-toolbar-title>
                         {{ $t('survey-schemes.prompts.internal._') }}
                       </v-toolbar-title>
@@ -90,9 +88,7 @@
                 <v-col v-if="!isOverrideMode" cols="12">
                   <v-card border flat>
                     <v-toolbar color="grey-lighten-4">
-                      <v-icon end>
-                        fas fa-circle-question
-                      </v-icon>
+                      <v-icon end icon="fas fa-circle-question" />
                       <v-toolbar-title>
                         {{ $t(`survey-schemes.prompts.type`) }}
                       </v-toolbar-title>

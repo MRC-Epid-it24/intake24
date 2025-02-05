@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
-    <v-toolbar color="grey-lighten-4" flat tile>
+    <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.prompts.title`) }}
       </v-toolbar-title>

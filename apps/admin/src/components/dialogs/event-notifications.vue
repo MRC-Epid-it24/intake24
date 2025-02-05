@@ -14,7 +14,7 @@
       </v-btn>
     </template>
     <v-card tile>
-      <v-toolbar color="secondary" dark>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('notifications.title') }}

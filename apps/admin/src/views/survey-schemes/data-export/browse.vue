@@ -6,7 +6,7 @@
       <p>Export sections can be re-ordered using drag & drop.</p>
       <p>Each section can be modified to define specific fields and order for export.</p>
     </v-card-text>
-    <v-toolbar color="grey-lighten-2" flat tile>
+    <v-toolbar color="grey-lighten-2">
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>

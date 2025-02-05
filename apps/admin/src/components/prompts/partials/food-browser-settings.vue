@@ -1,7 +1,7 @@
 <template>
   <v-card border flat>
     <v-toolbar color="grey-lighten-4">
-      <v-icon icon="$search" start />
+      <v-icon end icon="$search" />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.foodBrowser._') }}
       </v-toolbar-title>

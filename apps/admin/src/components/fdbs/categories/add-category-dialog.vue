@@ -4,7 +4,7 @@
       <v-btn color="primary" icon="$add" size="small" :title="$t('fdbs.categories.add')" v-bind="props" />
     </template>
     <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary" dark flat>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('fdbs.categories.title') }}

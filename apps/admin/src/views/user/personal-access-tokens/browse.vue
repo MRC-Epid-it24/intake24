@@ -24,7 +24,7 @@
           </v-btn>
         </template>
         <v-card :loading="false" :tile="$vuetify.display.smAndDown">
-          <v-toolbar color="secondary" dark flat>
+          <v-toolbar color="secondary">
             <v-btn icon="$cancel" :title="$t('common.action.close')" variant="plain" @click.stop="close" />
             <v-toolbar-title>{{ $t('user.personalAccessTokens.issue') }}</v-toolbar-title>
           </v-toolbar>

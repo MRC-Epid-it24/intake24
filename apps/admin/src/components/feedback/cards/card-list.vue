@@ -1,9 +1,7 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey-lighten-4" flat tile>
-      <v-icon color="secondary" end>
-        fas fa-cloud-meatball
-      </v-icon>
+    <v-toolbar color="grey-lighten-4">
+      <v-icon color="secondary" end icon="fas fa-cloud-meatball" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.cards.title') }}
       </v-toolbar-title>

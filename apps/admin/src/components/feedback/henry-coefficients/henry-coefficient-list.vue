@@ -1,9 +1,7 @@
 <template>
   <div>
-    <v-toolbar color="grey-lighten-4" flat tile>
-      <v-icon color="secondary" end>
-        fas fa-square-root-alt
-      </v-icon>
+    <v-toolbar color="grey-lighten-4">
+      <v-icon color="secondary" end icon="fas fa-square-root-alt" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.henry-coefficients.title') }}
       </v-toolbar-title>
@@ -87,8 +85,8 @@
       persistent
     >
       <v-card :tile="$vuetify.display.smAndDown">
-        <v-toolbar color="secondary" dark flat>
-          <v-icon icon="fas fa-square-root-alt" start />
+        <v-toolbar color="secondary">
+          <v-icon end icon="fas fa-square-root-alt" />
           <v-toolbar-title>
             {{
               $t(`feedback-schemes.henry-coefficients.${dialog.index === -1 ? 'create' : 'edit'}`)

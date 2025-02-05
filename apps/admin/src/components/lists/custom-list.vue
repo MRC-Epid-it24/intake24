@@ -1,9 +1,7 @@
 <template>
   <v-card border class="w-100" flat>
-    <v-toolbar color="grey-lighten-4" flat tile>
-      <v-icon class="mx-2" color="secondary">
-        fas fa-list
-      </v-icon>
+    <v-toolbar color="grey-lighten-4">
+      <v-icon color="secondary" end icon="fas fa-list" />
       <div class="d-flex flex-column">
         <v-toolbar-title class="font-weight-medium">
           {{ $t(`${i18nPrefix}.title`) }}

@@ -19,7 +19,7 @@
       </slot>
     </template>
     <v-card :tile="$vuetify.display.mobile">
-      <v-toolbar color="secondary" dark>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="cancel" />
         <v-toolbar-title>{{ $t('common.help.title') }}</v-toolbar-title>
       </v-toolbar>

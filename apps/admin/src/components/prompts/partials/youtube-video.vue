@@ -1,7 +1,7 @@
 <template>
   <v-card border flat>
     <v-toolbar color="grey-lighten-4">
-      <v-icon icon="fas fa-sliders" start />
+      <v-icon end icon="fas fa-sliders" />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.video.youtube._') }}
       </v-toolbar-title>

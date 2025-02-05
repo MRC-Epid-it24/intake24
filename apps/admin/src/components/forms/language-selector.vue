@@ -1,6 +1,6 @@
 <template>
   <v-card v-bind="{ border, disabled, flat, outlined, tile }">
-    <v-toolbar color="grey-lighten-4" v-bind="{ flat, tile }">
+    <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         {{ label }}
       </v-toolbar-title>

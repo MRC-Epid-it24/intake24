@@ -1,9 +1,7 @@
 <template>
   <div>
-    <v-toolbar color="grey-lighten-4" flat tile>
-      <v-icon color="secondary" end>
-        fas fa-table-list
-      </v-icon>
+    <v-toolbar color="grey-lighten-4">
+      <v-icon color="secondary" end icon="fas fa-table-list" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.meals.table') }}
       </v-toolbar-title>
@@ -85,7 +83,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="secondary" dark>
+        <v-toolbar color="secondary">
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             <v-icon icon="fas fa-table-list" start />

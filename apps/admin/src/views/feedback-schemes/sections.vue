@@ -1,6 +1,6 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey-lighten-3" flat tile>
+    <v-toolbar color="grey-lighten-4">
       <v-icon color="secondary" end>
         fas fa-bars-staggered
       </v-icon>

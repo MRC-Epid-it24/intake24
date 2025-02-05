@@ -6,7 +6,7 @@
     :model-value="dialog"
   >
     <v-card :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary" dark flat>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="$emit('close')" />
         <v-toolbar-title>
           {{ $t('locales.recipe-foods.steps') }}

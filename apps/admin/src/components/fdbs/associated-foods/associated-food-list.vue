@@ -64,7 +64,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="secondary" dark>
+        <v-toolbar color="secondary">
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             {{ $t(`fdbs.associatedFoods.${dialog.index === -1 ? 'add' : 'edit'}`) }}

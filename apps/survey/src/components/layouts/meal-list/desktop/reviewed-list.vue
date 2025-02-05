@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-toolbar color="white" flat>
+    <v-toolbar color="white">
       <v-toolbar-title>
         {{ $t('recall.menu.title') }}
       </v-toolbar-title>

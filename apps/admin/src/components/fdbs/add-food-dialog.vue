@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary" dark flat>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('fdbs.foods.add') }}

@@ -1,7 +1,7 @@
 <template>
   <v-card border flat>
     <v-toolbar color="grey-lighten-4">
-      <v-icon icon="fas fa-globe" start />
+      <v-icon end icon="fas fa-globe" />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.externalSources.title') }}
       </v-toolbar-title>

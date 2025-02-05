@@ -9,8 +9,8 @@
       </v-list-item>
     </template>
     <v-card :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary" dark flat>
-        <v-icon icon="$upload" start />
+      <v-toolbar color="secondary">
+        <v-icon end icon="$upload" />
         <v-toolbar-title>
           {{ $t(`surveys.respondents.upload.title`) }}
         </v-toolbar-title>

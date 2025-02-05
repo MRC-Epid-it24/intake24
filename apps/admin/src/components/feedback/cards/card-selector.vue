@@ -9,7 +9,7 @@
     :z-index="1050"
   >
     <v-card tile>
-      <v-toolbar color="secondary" dark>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`feedback-schemes.cards.${dialog.index === -1 ? 'add' : 'edit'}`) }}
@@ -42,8 +42,8 @@
                   <v-col cols="12">
                     <v-card border flat>
                       <v-toolbar color="grey-lighten-4">
+                        <v-icon end icon="fas fa-cloud-meatball" />
                         <v-toolbar-title>
-                          <v-icon icon="fas fa-cloud-meatball" start />
                           {{ $t(`feedback-schemes.cards.type`) }}
                         </v-toolbar-title>
                       </v-toolbar>
@@ -84,7 +84,7 @@
                   <v-col cols="12">
                     <v-card border flat>
                       <v-toolbar color="grey-lighten-4">
-                        <v-icon icon="fas fa-gears" start />
+                        <v-icon end icon="fas fa-gears" />
                         <v-toolbar-title>
                           {{ $t(`feedback-schemes.cards.options`) }}
                         </v-toolbar-title>

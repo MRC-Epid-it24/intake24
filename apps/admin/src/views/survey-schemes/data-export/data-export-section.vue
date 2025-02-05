@@ -7,7 +7,7 @@
     transition="dialog-bottom-transition"
   >
     <v-card v-if="dialog" tile>
-      <v-toolbar color="secondary" dark>
+      <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="cancel" />
         <v-toolbar-title>
           {{ $t(`survey-schemes.data-export.sections.${section?.id}`) }}

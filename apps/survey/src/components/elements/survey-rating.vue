@@ -28,7 +28,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card :tile="$vuetify.display.mobile">
-        <v-toolbar color="secondary" dark>
+        <v-toolbar color="secondary">
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="close" />
           <v-toolbar-title>{{ $t(`${type}.rating._`) }}</v-toolbar-title>
         </v-toolbar>

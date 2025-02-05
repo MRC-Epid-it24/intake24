@@ -1,9 +1,7 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey-lighten-2" flat tile>
-      <v-icon color="secondary" end start>
-        fas fa-hamburger
-      </v-icon>
+    <v-toolbar color="grey-lighten-2">
+      <v-icon color="secondary" end icon="fas fa-hamburger" />
       <div class="d-flex flex-column">
         <v-toolbar-title class="font-weight-medium">
           {{ title }}
@@ -92,7 +90,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="secondary" dark>
+        <v-toolbar color="secondary">
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
@@ -145,15 +143,11 @@
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-card border class="w-100" flat>
-                      <v-toolbar color="grey-lighten-4" flat tile>
-                        <v-icon class="mx-2" color="secondary">
-                          fas fa-clock
-                        </v-icon>
-                        <div class="d-flex flex-column">
-                          <v-toolbar-title class="font-weight-medium">
-                            {{ $t('survey-schemes.meals.defaultTime') }}
-                          </v-toolbar-title>
-                        </div>
+                      <v-toolbar color="grey-lighten-4">
+                        <v-icon color="secondary" end icon="fas fa-clock" />
+                        <v-toolbar-title class="font-weight-medium">
+                          {{ $t('survey-schemes.meals.defaultTime') }}
+                        </v-toolbar-title>
                       </v-toolbar>
                       <v-card-text class="pt-0 d-flex justify-center">
                         <v-time-picker
