@@ -20,7 +20,7 @@ import type {
 } from '@intake24/common/types/http';
 import type { SurveyAttributes, UserPassword } from '@intake24/db';
 
-import { MFADevice, Op, Survey, User } from '@intake24/db';
+import { MFADevice, Survey, User } from '@intake24/db';
 
 export type LoginCredentials<T extends FrontEnd = FrontEnd> = {
   user: User | null;
@@ -271,9 +271,8 @@ function authenticationService({
   ): Promise<Tokens | MFAAuthResponse> => {
     const { email, password } = credentials;
 
-    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
     const user = await User.findOne({
-      where: { email: { [op]: email } },
+      where: { email: { [User.op('ciEq')]: email } },
       include: [{ association: 'password', required: true }],
     });
 
@@ -295,10 +294,9 @@ function authenticationService({
   ): Promise<ChallengeResponse | Tokens> => {
     const { email, password, survey: slug, captcha } = credentials;
 
-    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
     const [user, survey] = await Promise.all([
       User.findOne({
-        where: { email: { [op]: email } },
+        where: { email: { [User.op('ciEq')]: email } },
         include: [
           { association: 'password', required: true },
           {
@@ -340,7 +338,11 @@ function authenticationService({
           association: 'aliases',
           where: { username },
           include: [
-            { association: 'survey', attributes: ['authCaptcha', 'slug'], where: { slug } },
+            {
+              association: 'survey',
+              attributes: ['authCaptcha', 'slug'],
+              where: { slug: { [User.op('ciEq')]: slug } },
+            },
           ],
         },
         { association: 'password' },

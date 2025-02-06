@@ -7,7 +7,6 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { Op } from 'sequelize';
 import {
   AfterCreate,
   AfterDestroy,
@@ -373,9 +372,8 @@ export default class Survey extends BaseModel<
     options: FindOptions<SurveyAttributes> = {},
   ): Promise<Survey | null> {
     const { where, ...rest } = options;
-    const op = Survey.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
-    return Survey.findOne({ where: { ...where, slug: { [op]: slug } }, ...rest });
+    return Survey.findOne({ where: { ...where, slug: { [this.op('ciEq')]: slug } }, ...rest });
   }
 
   // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system
