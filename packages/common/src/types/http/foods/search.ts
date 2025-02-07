@@ -16,6 +16,7 @@ export const foodHeader = z.object({
   code: z.string(),
   name: z.string(),
   searchTerm: z.string().nullish(),
+  thumbnailImageUrl: z.string().optional(),
 });
 
 export type FoodHeader = z.infer<typeof foodHeader>;
