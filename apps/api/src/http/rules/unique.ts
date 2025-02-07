@@ -20,7 +20,7 @@ export default async ({ model, condition, options = { attributes: ['id'] } }: Un
   const cModel = model as BaseModelCtor<BaseModel>;
 
   const { field, value, ci } = mergedCondition;
-  const op = ci && cModel.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
+  const op = ci ? cModel.op('ciEq') : Op.eq;
 
   const findOptions: FindOptions = merge(options, { where: { [field]: { [op]: value } } });
 

@@ -1,7 +1,6 @@
 import type { Job } from 'bullmq';
 import ms from 'ms';
 import nunjucks from 'nunjucks';
-import { Op } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import { getFrontEndUrl, getUAInfo } from '@intake24/api/util';
@@ -58,9 +57,8 @@ export default class UserEmailVerificationNotification extends BaseJob<'UserEmai
 
   private async getUser(): Promise<User | null> {
     const { email } = this.params;
-    const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
-    return User.findOne({ attributes: ['id', 'name'], where: { email: { [op]: email } } });
+    return User.findOne({ attributes: ['id', 'name'], where: { email: { [User.op('ciEq')]: email } } });
   }
 
   private async sendEmail(user: User) {

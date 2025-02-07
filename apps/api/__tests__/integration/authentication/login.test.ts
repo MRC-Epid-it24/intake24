@@ -44,4 +44,23 @@ export default () => {
       ),
     ).toBeTrue();
   });
+
+  it('valid credentials should return 200, access token & refresh cookie (case-insensitive)', async () => {
+    const res = await request(suite.app).post(url).set('Accept', 'application/json').send({
+      email: 'testUser@example.com',
+      password: 'testUserPassword',
+      survey: 'tEst-sUrvey',
+      captcha: 'test-captcha',
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toContainAllKeys(['accessToken']);
+
+    expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
+    expect(
+      (res.get('Set-Cookie') ?? []).some(
+        cookie => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name,
+      ),
+    ).toBeTrue();
+  });
 };

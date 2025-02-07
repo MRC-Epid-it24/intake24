@@ -5,7 +5,7 @@ import ms from 'ms';
 import { ValidationError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
-import { Op, User, UserPasswordReset } from '@intake24/db';
+import { Op, UserPasswordReset } from '@intake24/db';
 
 import { captchaCheck } from '../rules';
 
@@ -39,12 +39,11 @@ export function password() {
       const expiredAt = new Date(
         Date.now() - ms(req.scope.cradle.securityConfig.passwords.expiresIn),
       );
-      const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
       const passwordReset = await UserPasswordReset.findOne({
         attributes: ['id', 'userId'],
         where: { token, createdAt: { [Op.gt]: expiredAt } },
-        include: [{ association: 'user', where: { email: { [op]: email } } }],
+        include: [{ association: 'user', where: { email: { [UserPasswordReset.op('ciEq')]: email } } }],
       });
 
       if (!passwordReset) {
