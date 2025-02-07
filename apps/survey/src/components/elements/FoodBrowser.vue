@@ -73,6 +73,7 @@
           :categories-first="prompt.categoriesFirst.search"
           :contents="searchContents"
           :i18n="promptI18n"
+          layout="auto"
           :search-term="searchTerm ?? undefined"
           :type="type"
           @category-selected="categorySelected"
