@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useGtm } from '@gtm-support/vue-gtm';
 import { onMounted } from 'vue';
 import { bootstrap, setOptions } from 'vue-gtag';
 import { gTagConfig } from './config';
@@ -19,6 +20,8 @@ async function enableAnalytics() {
   if (!on)
     return;
 
+  const gtm = useGtm();
+  gtm?.enable(true);
   setOptions(gTagConfig());
   await bootstrap();
 };
