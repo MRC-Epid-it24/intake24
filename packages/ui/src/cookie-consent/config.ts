@@ -1,5 +1,6 @@
 import type { CookieConsentConfig } from 'vanilla-cookieconsent';
 import type { PluginOptions } from 'vue-gtag';
+import { useGtm } from '@gtm-support/vue-gtm';
 import { bootstrap, optIn, optOut, setOptions } from 'vue-gtag';
 
 export function gTagConfig(): PluginOptions {
@@ -20,6 +21,16 @@ async function toggleGA(enabled: boolean) {
   optIn();
   setOptions(gTagConfig());
   await bootstrap();
+}
+async function toggleGTM(enabled: boolean) {
+  const gtm = useGtm();
+
+  if (!enabled) {
+    gtm?.enable(false);
+    return;
+  }
+
+  gtm?.enable(true);
 }
 
 export function cookieConsentConfig(translations: CookieConsentConfig['language']['translations'] = {}): CookieConsentConfig {
@@ -44,9 +55,11 @@ export function cookieConsentConfig(translations: CookieConsentConfig['language'
     },
     onChange: ({ cookie }) => {
       toggleGA(cookie.categories.includes('analytics'));
+      toggleGTM(cookie.categories.includes('analytics'));
     },
     onFirstConsent: ({ cookie }) => {
       toggleGA(cookie.categories.includes('analytics'));
+      toggleGTM(cookie.categories.includes('analytics'));
     },
   });
 }

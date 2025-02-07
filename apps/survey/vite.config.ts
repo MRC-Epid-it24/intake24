@@ -41,8 +41,6 @@ export default defineConfig(({ mode }) => {
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
     VUE_DEV_TOOLS,
-    GTM_CONTAINER_ID,
-    MS_CLARITY_PROJECT_ID,
   } = loadEnv(mode, process.cwd(), '');
 
   const disablePwa = !!(DISABLE_PWA === 'true');
@@ -120,8 +118,6 @@ export default defineConfig(({ mode }) => {
             title: appName,
             themeColor: colors.primary,
             captcha: resolveCaptchaScript(captchaProvider),
-            msClarityProjectId: MS_CLARITY_PROJECT_ID,
-            gtmContainerId: GTM_CONTAINER_ID,
           },
         },
       }),

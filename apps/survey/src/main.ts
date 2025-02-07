@@ -1,7 +1,6 @@
 /* eslint-disable perfectionist/sort-imports */
 import { createApp } from 'vue';
 import VueGtag from 'vue-gtag';
-
 import pinia from '@intake24/ui/stores/bootstrap';
 import App from './app.vue';
 import i18n from './i18n';
@@ -11,6 +10,7 @@ import router from './router';
 import { errorHandler, httpService } from './services';
 import { cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui';
 import { createManager } from '@vue-youtube/core';
+import { createGtm } from '@gtm-support/vue-gtm';
 
 import { useAuth } from './stores';
 
@@ -31,6 +31,7 @@ app.use(vuetify);
 app.use(VueGtag, { bootstrap: false }, router);
 app.use(cookieConsentPlugin, cookieConsentConfig());
 app.use(createManager({ deferLoading: { enabled: true, autoLoad: true } }));
+app.use(createGtm({ id: import.meta.env.VITE_GTM_CONTAINER_ID, enabled: false, debug: true, vueRouter: router }));
 
 app.mount('#app');
 
