@@ -246,8 +246,8 @@ export function surveyRespondent() {
       req,
     }) => {
       const { searchSettings, localeCode } = await cache.remember(`survey-search-settings:${slug}`, surveySettingsCacheTTL, () => surveyService.getSearchSettings(slug));
-
       const { description, hidden, category: limitToCategory, previous, recipe } = query;
+      const { imagesBaseUrl } = req.scope.cradle;
 
       const searchOptions: OptionalSearchQueryParameters = {
         previous,
@@ -258,6 +258,8 @@ export function surveyRespondent() {
       };
 
       const searchResults = await req.scope.cradle.foodSearchService.search(localeCode, description, recipe === 'true', searchOptions);
+
+      searchResults.foods = searchResults.foods.map(header => ({ ...header, thumbnailImageUrl: header.thumbnailImageUrl && `${imagesBaseUrl}/${header.thumbnailImageUrl}` }));
 
       return { status: 200, body: searchResults };
     },
