@@ -11,9 +11,10 @@ const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
 
 function foodSearchService({
   inheritableAttributesService,
+  foodThumbnailImageService,
   cache,
   cacheConfig,
-}: Pick<IoC, 'inheritableAttributesService' | 'cache' | 'cacheConfig'>) {
+}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig'>) {
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -43,11 +44,15 @@ function foodSearchService({
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
     const results = await foodIndex.search(queryParameters);
     const attrs = await getInheritableAttributes(results.foods.map(r => r.code));
+    const thumbnailImages = await foodThumbnailImageService.resolveImages(localeId, results.foods.map(foodHeader => foodHeader.code));
 
     const withFilteredIngredients = {
       foods: results.foods.filter(header =>
         acceptForQuery(isRecipe, attrs[header.code]?.useInRecipes),
-      ),
+      ).map(header => ({
+        ...header,
+        thumbnailImageUrl: thumbnailImages[header.code],
+      })),
       categories: results.categories,
     };
 
