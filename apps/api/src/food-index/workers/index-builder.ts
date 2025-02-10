@@ -121,20 +121,39 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 
   const parentCategoryIndex = new ParentCategoryIndex(localFoods, allLocalCategories, logger);
 
-  const localCategories = allLocalCategories.filter(category => parentCategoryIndex.nonEmptyCategories.has(category.code));
+  const localCategories = allLocalCategories.filter(category =>
+    parentCategoryIndex.nonEmptyCategories.has(category.code),
+  );
 
   const foodDescriptions = new Array<PhraseWithKey<string>>();
+
+  // Determine if the backend provides enriched processing.
+  // If so, use its processDescriptionForIndexing function; otherwise, use identity.
+  const processDescription
+    = languageBackend.processDescriptionForIndexing ?? ((desc: string) => [desc]);
 
   for (const food of localFoods) {
     if (!food.name)
       continue;
 
-    foodDescriptions.push({ phrase: food.name, key: food.code });
+    const processedNameTokens = processDescription(food.name);
+    foodDescriptions.push({
+      phrase: processedNameTokens.join(' '),
+      key: food.code,
+      original: food.name,
+    });
 
     const altNames = food.altNames[languageBackend.languageCode];
 
     if (altNames !== undefined) {
-      for (const name of altNames) foodDescriptions.push({ phrase: name, key: food.code });
+      for (const name of altNames) {
+        const processedAltTokens = processDescription(name);
+        foodDescriptions.push({
+          phrase: processedAltTokens.join(''),
+          key: food.code,
+          original: name,
+        });
+      }
     }
   }
 
@@ -144,22 +163,23 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     if (!category.name || category.isHidden)
       continue;
 
-    categoryDescriptions.push({ phrase: category.name, key: category.code });
+    const processedCategoryTokens = processDescription(category.name);
+    categoryDescriptions.push({
+      phrase: processedCategoryTokens.join(' '),
+      key: category.code,
+      original: category.name,
+    });
   }
 
   const foodIndex = new PhraseIndex<string>(
     foodDescriptions,
-    LanguageBackends[languageBackendId],
+    languageBackend,
     synonymSets,
     recipeFoodsSynomSet,
     recipeFoodslist,
   );
 
-  const categoryIndex = new PhraseIndex<string>(
-    categoryDescriptions,
-    LanguageBackends[languageBackendId],
-    synonymSets,
-  );
+  const categoryIndex = new PhraseIndex<string>(categoryDescriptions, languageBackend, synonymSets);
 
   return {
     foodIndex,
@@ -204,18 +224,25 @@ async function matchRecipeFoods(
     const temp = acc.find(item => item.code === current.code);
     if (!temp)
       return acc.concat([current]);
-    else
-      return acc;
+    else return acc;
   }, [] as FoodHeader[]);
   return recipeFoodHeadersFiltered;
 }
 
-function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchResult<string>[], categoryResults: PhraseMatchResult<string>[], transitiveLimit: number): PhraseMatchResult<string>[] {
+function getRelevantCategories(
+  index: LocalFoodIndex,
+  foodResults: PhraseMatchResult<string>[],
+  categoryResults: PhraseMatchResult<string>[],
+  transitiveLimit: number,
+): PhraseMatchResult<string>[] {
   const foodCodes = foodResults.map(matchResult => matchResult.key);
   const relevantCategories: Map<string, LocalCategoryData> = new Map<string, LocalCategoryData>();
 
   for (const foodCode of foodCodes) {
-    const transitiveParentCategories = index.parentCategoryIndex.getFoodTransitiveParentCategories(foodCode, transitiveLimit);
+    const transitiveParentCategories = index.parentCategoryIndex.getFoodTransitiveParentCategories(
+      foodCode,
+      transitiveLimit,
+    );
     for (const [categoryCode, data] of transitiveParentCategories) {
       // Skip categories that have been matched by the search algorithm to prevent duplicates (for example, "Tap water"/"Water")
       if (!categoryResults.some(result => result.key === categoryCode)) {
@@ -267,7 +294,11 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   if (foodInterpretedRecipeFoods.words.length > 0)
     recipeFoodsHeaders = await matchRecipeFoods(foodInterpretedRecipeFoods, query);
 
-  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
+  const foodResults = localeIndex.foodIndex.findMatches(
+    foodInterpretation,
+    MAX_PHRASE_COMBINATIONS,
+    matchQualityParameters,
+  );
 
   const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
     query.parameters.description,
@@ -275,16 +306,33 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     'categories',
   );
 
-  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
+  const categoryResults = localeIndex.categoryIndex.findMatches(
+    categoryInterpretation,
+    MAX_PHRASE_COMBINATIONS,
+    matchQualityParameters,
+  );
 
-  if (query.parameters.enableRelevantCategories)
-    categoryResults.push(...getRelevantCategories(localeIndex, foodResults, categoryResults, query.parameters.relevantCategoryDepth));
+  if (query.parameters.enableRelevantCategories) {
+    categoryResults.push(
+      ...getRelevantCategories(
+        localeIndex,
+        foodResults,
+        categoryResults,
+        query.parameters.relevantCategoryDepth,
+      ),
+    );
+  }
 
   const filteredFoods = foodResults.filter((matchResult) => {
-    const acceptHidden = query.parameters.includeHidden || !localeIndex.parentCategoryIndex.isFoodHidden(matchResult.key);
+    const acceptHidden
+      = query.parameters.includeHidden
+        || !localeIndex.parentCategoryIndex.isFoodHidden(matchResult.key);
     const acceptCategory
       = query.parameters.limitToCategory === undefined
-        || localeIndex.parentCategoryIndex.isFoodInCategory(matchResult.key, query.parameters.limitToCategory);
+        || localeIndex.parentCategoryIndex.isFoodInCategory(
+          matchResult.key,
+          query.parameters.limitToCategory,
+        );
 
     return acceptHidden && acceptCategory;
   });
@@ -300,7 +348,11 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
 
   const filteredCategories = categoryResults.filter(
     matchResult =>
-      (query.parameters.limitToCategory === undefined || localeIndex.parentCategoryIndex.isSubCategory(matchResult.key, query.parameters.limitToCategory)),
+      query.parameters.limitToCategory === undefined
+      || localeIndex.parentCategoryIndex.isSubCategory(
+        matchResult.key,
+        query.parameters.limitToCategory,
+      ),
   );
 
   const categories = rankCategoryResults(filteredCategories);

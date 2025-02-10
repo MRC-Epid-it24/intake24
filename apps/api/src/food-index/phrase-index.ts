@@ -21,6 +21,7 @@ const MAX_WORD_INTERPRETATIONS = 4;
 export interface PhraseWithKey<K> {
   phrase: string;
   key: K;
+  original?: string;
 }
 
 export type RecipeFoodTuple = [key: string, entry: RecipeFoodsHeader];
@@ -34,12 +35,14 @@ export interface LanguageBackend {
   sanitiseDescription: (description: string) => string;
   stem: (word: string) => string;
   splitCompound: (word: string) => Array<string>;
+  processDescriptionForIndexing?: (description: string) => string[];
 }
 
 export interface DictionaryPhrase<K> {
   asTyped: string;
   words: Array<string>;
   key: K;
+  original?: string;
 }
 
 export interface WordMatch {
@@ -112,13 +115,23 @@ export class PhraseIndex<K> {
       case 'foods':
       case 'categories':
         interpretedWords = words
-          .map(w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters))
+          .map(w =>
+            this.dictionary.interpretWord(
+              w,
+              MAX_WORD_INTERPRETATIONS,
+              spellingCorrectionParameters,
+            ),
+          )
           .filter(w => w.interpretations.length > 0);
         break;
       case 'recipes':
         interpretedWords = words
           .map(w =>
-            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters),
+            this.recipeFoodsDictionary.interpretWord(
+              w,
+              MAX_WORD_INTERPRETATIONS,
+              spellingCorrectionParameters,
+            ),
           )
           .filter(w => w.interpretations.length > 0);
         break;
@@ -179,10 +192,16 @@ export class PhraseIndex<K> {
     return result;
   }
 
-  private evaluateMatchQuality(input: InterpretedPhrase, matchedWords: Array<WordMatch>, parameters: MatchQualityParameters): number {
+  private evaluateMatchQuality(
+    input: InterpretedPhrase,
+    matchedWords: Array<WordMatch>,
+    parameters: MatchQualityParameters,
+  ): number {
     const matchedIndices = matchedWords.map(w => w.matched.wordIndex);
 
-    const firstWordPenalty = matchedWords.some(match => match.word.index === 0) ? 0 : parameters.firstWordCost;
+    const firstWordPenalty = matchedWords.some(match => match.word.index === 0)
+      ? 0
+      : parameters.firstWordCost;
     const orderViolations = countOrderViolations(matchedIndices);
     const distanceViolations = countDistanceViolations(matchedIndices);
 
@@ -311,11 +330,14 @@ export class PhraseIndex<K> {
       }
     }
 
-    return uniqueMatches.map(m => ({
-      phrase: this.phraseIndex[m.phraseIndex].asTyped,
-      key: this.phraseIndex[m.phraseIndex].key,
-      quality: m.quality,
-    }));
+    return uniqueMatches.map((m) => {
+      const matchedPhrase = this.phraseIndex[m.phraseIndex];
+      return {
+        phrase: matchedPhrase.original ?? matchedPhrase.asTyped,
+        key: matchedPhrase.key,
+        quality: m.quality,
+      };
+    });
   }
 
   constructor(
@@ -334,7 +356,12 @@ export class PhraseIndex<K> {
 
     for (let pi = 0; pi < phrases.length; pi += 1) {
       const words = this.getWordList(phrases[pi].phrase);
-      this.phraseIndex[pi] = { asTyped: phrases[pi].phrase, words, key: phrases[pi].key };
+      this.phraseIndex[pi] = {
+        asTyped: phrases[pi].phrase,
+        words,
+        key: phrases[pi].key,
+        original: phrases[pi].original ?? phrases[pi].phrase,
+      };
 
       for (let wi = 0; wi < words.length; wi += 1) {
         const occurrences = this.wordIndex.get(words[wi]) || new Array<[number, number]>();
@@ -362,8 +389,7 @@ export class PhraseIndex<K> {
     // Falten Array of recipe Foods int othe Set of string
     const recipeDictionaryWords = new Set<string>();
     for (const recipeFoodSet of stemmedRecipeSynonyms) {
-      for (const recipeFood of recipeFoodSet)
-        recipeDictionaryWords.add(recipeFood);
+      for (const recipeFood of recipeFoodSet) recipeDictionaryWords.add(recipeFood);
     }
 
     // Create a dictionary for Recipe Foods Indexing with all the synonym sets and recipe foods
