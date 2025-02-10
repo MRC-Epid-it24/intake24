@@ -59597,32 +59597,42 @@
                           "type": "string",
                           "nullable": true
                         },
+                        "iterationCount": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
                         "endDate": {
-                          "type": "number",
-                          "nullable": true
+                          "type": "number"
                         },
                         "tz": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         },
                         "pattern": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         },
                         "every": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         },
                         "next": {
                           "type": "number"
+                        },
+                        "template": {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "nullable": true
+                            },
+                            "opts": {
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
                         "key",
-                        "name",
-                        "endDate",
-                        "tz",
-                        "pattern"
+                        "name"
                       ]
                     }
                   },
@@ -60882,32 +60892,42 @@
                           "type": "string",
                           "nullable": true
                         },
+                        "iterationCount": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
                         "endDate": {
-                          "type": "number",
-                          "nullable": true
+                          "type": "number"
                         },
                         "tz": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         },
                         "pattern": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         },
                         "every": {
-                          "type": "string",
-                          "nullable": true
+                          "type": "string"
                         },
                         "next": {
                           "type": "number"
+                        },
+                        "template": {
+                          "type": "object",
+                          "properties": {
+                            "data": {
+                              "nullable": true
+                            },
+                            "opts": {
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
                         "key",
-                        "name",
-                        "endDate",
-                        "tz",
-                        "pattern"
+                        "name"
                       ]
                     }
                   },
