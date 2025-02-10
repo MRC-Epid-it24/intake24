@@ -10,11 +10,17 @@ export const repeatableBullJob = z.object({
   key: z.string(),
   name: z.string(),
   id: z.string().nullish(),
-  endDate: z.number().nullable(),
-  tz: z.string().nullable(),
-  pattern: z.string().nullable(),
-  every: z.string().nullish(),
+  iterationCount: z.number().optional(),
+  limit: z.number().optional(),
+  endDate: z.number().optional(),
+  tz: z.string().optional(),
+  pattern: z.string().optional(),
+  every: z.string().optional(),
   next: z.number().optional(),
+  template: z.object({
+    data: z.any(),
+    opts: z.any(),
+  }).optional(),
 });
 
 export type RepeatableBullJob = z.infer<typeof repeatableBullJob>;

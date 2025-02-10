@@ -17,8 +17,8 @@
     "open-api": "pnpm tsx scripts/open-api.ts"
   },
   "devDependencies": {
-    "@ts-rest/open-api": "^3.51.0",
-    "@types/node": "^22.12.0",
+    "@ts-rest/open-api": "^3.51.1",
+    "@types/node": "^22.13.1",
     "typescript": "^5.7.3",
     "vitepress": "^1.6.3"
   }
