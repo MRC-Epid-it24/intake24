@@ -32,11 +32,11 @@
     "vanilla-cookieconsent": "^3.1.0",
     "vue": "^3.5.13",
     "vue-echarts": "^7.0.3",
-    "vue-gtag": "^2.0.1",
+    "vue-gtag": "^2.1.0",
     "vue-i18n": "^11.1.1",
     "vue-recaptcha": "^2.0.3",
     "vue-router": "^4.5.0",
-    "vuetify": "^3.7.11"
+    "vuetify": "^3.7.12"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.15",

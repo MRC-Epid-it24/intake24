@@ -35,7 +35,7 @@
     "jsdom": "^26.0.0",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.8",
-    "pg": "^8.13.1",
+    "pg": "^8.13.2",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
     "remove-bom-stream": "^2.0.0",

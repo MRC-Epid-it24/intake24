@@ -44,10 +44,10 @@
     "vue": "^3.5.13",
     "vue-dompurify-html": "^5.2.0",
     "vue-draggable-plus": "^0.6.0",
-    "vue-gtag": "^2.0.1",
+    "vue-gtag": "^2.1.0",
     "vue-i18n": "^11.1.1",
     "vue-router": "^4.5.0",
-    "vuetify": "^3.7.11"
+    "vuetify": "^3.7.12"
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^6.0.3",
@@ -68,12 +68,12 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-mkcert": "^1.17.6",
     "vite-plugin-pwa": "^0.21.1",
-    "vite-plugin-vue-devtools": "^7.7.1",
+    "vite-plugin-vue-devtools": "^7.7.2",
     "vite-plugin-vuetify": "^2.1.0",
     "vite-plugin-webfont-dl": "^3.10.4",
     "vitest": "^3.0.5",
     "vue-tsc": "^2.2.0",
     "workbox-window": "^7.3.0",
-    "zod": "^3.24.1"
+    "zod": "^3.24.2"
   }
 }
