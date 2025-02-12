@@ -5,6 +5,7 @@ import { Argument, Command, Option } from 'commander';
 
 import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
 import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+import buildGoustoLocaleCommand from './commands/gousto/build-gousto-locale-command';
 import buildUaeLocaleCommand from './commands/uae/build-uae-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
@@ -234,6 +235,15 @@ async function run() {
     .requiredOption('--path <path>', 'Jsonl file path')
     .action(async (cmd) => {
       await searchTest(cmd);
+    });
+
+  program
+    .command('build-gousto')
+    .description('Build Gousto locale')
+    .requiredOption('-s, --source-path [source file path]', 'Source file path (recipe drop CSV)')
+    .requiredOption('-o, --output-path [output path]', 'Output package directory')
+    .action(async (options) => {
+      await buildGoustoLocaleCommand(options);
     });
 
   await program.parseAsync(process.argv);
