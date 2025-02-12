@@ -44,7 +44,7 @@
           flat
         >
           <v-card
-            class="pa-4"
+            class="px-6 py-4"
             :color="prompt.carousel.color"
             flat
             tile
