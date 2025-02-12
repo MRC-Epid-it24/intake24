@@ -1,16 +1,14 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 time-picker">
-      <v-form @submit.prevent="action('next')">
-        <v-time-picker
-          v-model="state"
-          :allowed-minutes="allowedMinutes"
-          :ampm-in-title="prompt.amPmToggle"
-          class="pa-0"
-          :format="prompt.format"
-          :landscape="$vuetify.display.smAndUp"
-        />
-      </v-form>
+      <v-time-picker
+        v-model="state"
+        :allowed-minutes="allowedMinutes"
+        :ampm-in-title="prompt.amPmToggle"
+        class="pa-0 mx-auto"
+        :format="prompt.format"
+        :landscape="$vuetify.display.smAndUp"
+      />
     </v-card-text>
     <template #actions>
       <v-btn

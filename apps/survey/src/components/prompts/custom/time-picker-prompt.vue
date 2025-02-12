@@ -5,17 +5,14 @@
     @action="action"
   >
     <v-card-text class="pt-2 time-picker">
-      <v-form @submit.prevent="action('next')">
-        <v-time-picker
-          v-model="state"
-          :allowed-minutes="allowedMinutes"
-          :ampm-in-title="prompt.amPmToggle"
-          class="pa-0"
-          :format="prompt.format"
-          :landscape="$vuetify.display.smAndUp"
-        />
-        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
-      </v-form>
+      <v-time-picker
+        v-model="state"
+        :allowed-minutes="allowedMinutes"
+        :ampm-in-title="prompt.amPmToggle"
+        class="pa-0 mx-auto"
+        :format="prompt.format"
+        :landscape="$vuetify.display.smAndUp"
+      />
     </v-card-text>
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
@@ -29,10 +26,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
-
-import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
@@ -50,8 +44,6 @@ export default defineComponent({
   emits: ['action', 'update:modelValue'],
 
   setup(props, ctx) {
-    const { i18n: { t } } = useI18n();
-
     const allowedMinutes = computed(
       () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
     );
@@ -61,33 +53,18 @@ export default defineComponent({
         return props.modelValue;
       },
       set(value) {
-        clearErrors();
         ctx.emit('update:modelValue', value);
       },
     });
 
     const isValid = computed(() => !props.prompt.validation.required || !!state.value);
 
-    const confirm = () => {
-      if (isValid.value)
-        return true;
-
-      errors.value = [t(`prompts.${type}.validation.required`)];
-      return false;
-    };
-
-    const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
-      props,
-      ctx,
-      confirm,
-    );
+    const { action, customPromptLayout } = usePromptUtils(props, ctx);
 
     return {
       action,
       allowedMinutes,
       customPromptLayout,
-      errors,
-      hasErrors,
       isValid,
       state,
     };
