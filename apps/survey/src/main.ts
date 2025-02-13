@@ -11,6 +11,7 @@ import router from './router';
 import { errorHandler, httpService } from './services';
 import { cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui';
 import { createManager } from '@vue-youtube/core';
+import { createGtm } from '@gtm-support/vue-gtm';
 
 import { useAuth } from './stores';
 
@@ -31,6 +32,7 @@ app.use(vuetify);
 app.use(VueGtag, { bootstrap: false }, router);
 app.use(cookieConsentPlugin, cookieConsentConfig());
 app.use(createManager({ deferLoading: { enabled: true, autoLoad: true } }));
+app.use(createGtm({ id: import.meta.env.VITE_GTM_CONTAINER_ID, enabled: false, debug: import.meta.env.DEV, vueRouter: router }));
 
 app.mount('#app');
 
