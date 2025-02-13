@@ -7,61 +7,9 @@ import {
   portionSizeMethods as portionSizeMethodIds,
   portionSizeParameter,
 } from '@intake24/common/surveys';
-import {
-  useInRecipeTypes,
-} from '@intake24/common/types';
-import { Category, Food, FoodsLocale, NutrientTableRecord } from '@intake24/db';
-
-export const attributes: Schema = {
-  'main.attributes.readyMealOption': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('boolean._'),
-    isBoolean: { options: { strict: true } },
-    optional: { options: { nullable: true } },
-  },
-  'main.attributes.reasonableAmount': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('int._'),
-    isInt: true,
-    optional: { options: { nullable: true } },
-  },
-  'main.attributes.sameAsBeforeOption': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('boolean._'),
-    isBoolean: { options: { strict: true } },
-    optional: { options: { nullable: true } },
-  },
-  'main.attributes.useInRecipes': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('in.options', { options: Object.values(useInRecipeTypes) }),
-    isIn: { options: [Object.values(useInRecipeTypes)] },
-    optional: { options: { nullable: true } },
-  },
-};
+import { Category, Food, NutrientTableRecord } from '@intake24/db';
 
 export const categories: ParamSchema = {
-  in: ['body'],
-  errorMessage: typeErrorMessage('array._'),
-  isArray: { bail: true },
-  optional: true,
-  custom: {
-    options: async (value: any[], meta): Promise<void> => {
-      if (value.some(({ code }) => !code || typeof code !== 'string'))
-        throw new Error(customTypeErrorMessage('array.string', meta));
-
-      if (!value.length)
-        return;
-
-      const code = value.map(({ code }) => code);
-
-      const availableCategories = await Category.count({ where: { code } });
-      if (availableCategories !== value.length)
-        throw new Error(customTypeErrorMessage('exists._', meta));
-    },
-  },
-};
-
-export const locales: ParamSchema = {
   in: ['body'],
   errorMessage: typeErrorMessage('array._'),
   isArray: { bail: true },
@@ -76,8 +24,8 @@ export const locales: ParamSchema = {
 
       const id = value.map(({ id }) => id);
 
-      const availableLocales = await FoodsLocale.count({ where: { id } });
-      if (availableLocales !== value.length)
+      const availableCategories = await Category.count({ where: { id } });
+      if (availableCategories !== value.length)
         throw new Error(customTypeErrorMessage('exists._', meta));
     },
   },
@@ -186,7 +134,7 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedCategoryCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
+    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'code' }),
     isLength: { bail: true, options: { max: 8 } },
     custom: {
       options: async (value, meta): Promise<void> => {
@@ -203,7 +151,7 @@ export const associatedFoods: Schema = {
           const category = await Category.findByPk(value, { attributes: ['code'] });
           if (!category) {
             throw new Error(
-              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' }),
+              customTypeErrorMessage('exists._', meta, { attributePath: 'code' }),
             );
           }
         }
@@ -216,7 +164,7 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedFoodCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
+    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'code' }),
     isLength: { bail: true, options: { max: 8 } },
     custom: {
       options: async (value, meta): Promise<void> => {
@@ -233,7 +181,7 @@ export const associatedFoods: Schema = {
           const food = await Food.findByPk(value, { attributes: ['code'] });
           if (!food) {
             throw new Error(
-              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' }),
+              customTypeErrorMessage('exists._', meta, { attributePath: 'code' }),
             );
           }
         }
