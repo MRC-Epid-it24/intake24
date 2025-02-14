@@ -136,6 +136,10 @@ Google Analytics ID. Disabled if not set.
 
 Google Tag Manger Container ID. Disabled if not set.
 
+### VITE_CLARITY_PROJECT_ID
+
+Microsoft Clarity project ID. Disabled if not set.
+
 ### VITE_WEBPUSH_PUBLIC_KEY
 
 Webpush public key for we-push notifications.
