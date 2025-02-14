@@ -17,10 +17,10 @@ function showPreferences() {
 
 async function enableAnalytics() {
   const on = cc.getUserPreferences().acceptedCategories.includes('analytics');
+  useGtm()?.enable(on);
   if (!on)
     return;
 
-  useGtm()?.enable(true);
   setOptions(gTagConfig());
   await bootstrap();
 };

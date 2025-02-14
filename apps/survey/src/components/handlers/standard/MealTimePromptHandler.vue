@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { useGtm } from '@gtm-support/vue-gtm';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
@@ -52,6 +53,17 @@ export default defineComponent({
       if (type === 'cancel') {
         survey.deleteMeal(meal.value.id);
         ctx.emit('action', 'next');
+
+        useGtm()?.trackEvent({
+          event: 'meal_cancelled',
+          category: 'Survey',
+          action: 'Cancel Meal',
+          label: meal.value.name.en,
+          value: 1,
+          noninteraction: false,
+        });
+        console.log('Meal cancelled event tracked');
+
         return;
       }
 
