@@ -1,6 +1,7 @@
 import type { CookieConsentConfig } from 'vanilla-cookieconsent';
 import type { PluginOptions } from 'vue-gtag';
 import { useGtm } from '@gtm-support/vue-gtm';
+import Clarity from '@microsoft/clarity';
 import { bootstrap, optIn, optOut, setOptions } from 'vue-gtag';
 
 export function gTagConfig(): PluginOptions {
@@ -25,6 +26,10 @@ async function toggleGA(enabled: boolean) {
 async function toggleGTM(enabled: boolean) {
   useGtm()?.enable(enabled);
 }
+async function toggleClarity(enabled: boolean) {
+  console.log('Clarity toggled to ', enabled);
+  Clarity.consent(enabled);
+}
 export function cookieConsentConfig(translations: CookieConsentConfig['language']['translations'] = {}): CookieConsentConfig {
   return ({
     cookie: {
@@ -48,10 +53,12 @@ export function cookieConsentConfig(translations: CookieConsentConfig['language'
     onChange: ({ cookie }) => {
       toggleGA(cookie.categories.includes('analytics'));
       toggleGTM(cookie.categories.includes('analytics'));
+      toggleClarity(cookie.categories.includes('analytics'));
     },
     onFirstConsent: ({ cookie }) => {
       toggleGA(cookie.categories.includes('analytics'));
       toggleGTM(cookie.categories.includes('analytics'));
+      toggleClarity(cookie.categories.includes('analytics'));
     },
   });
 }
