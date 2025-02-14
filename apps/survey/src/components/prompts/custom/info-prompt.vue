@@ -57,7 +57,7 @@
             class="mx-auto rounded-lg"
             eager
             :min-width="$vuetify.display.mobile ? '100%' : '350px'"
-            :src="item.image[$vuetify.display.mobile ? 'mobile' : 'desktop'] ?? ''"
+            :src="resolveSlideUrl(item.image)"
             width="auto"
           />
         </v-card>
@@ -102,7 +102,7 @@ export default defineComponent({
     };
 
     const { video, watched: videoWatched } = useYoutubeVideo(props.prompt, updateAndAction);
-    const { carousel, watched: carouselWatched } = useCarousel(props.prompt);
+    const { carousel, resolveSlideUrl, watched: carouselWatched } = useCarousel(props.prompt);
 
     const isVideoValid = computed(() => !props.prompt.video?.required || videoWatched.value);
     const isCarouselValid = computed(() => !props.prompt.carousel?.required || carouselWatched.value);
@@ -121,6 +121,7 @@ export default defineComponent({
     return {
       customPromptLayout,
       isValid,
+      resolveSlideUrl,
       state,
       updateAndAction,
       video,

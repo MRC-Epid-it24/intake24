@@ -85,7 +85,7 @@ export default defineConfig(({ mode }) => {
       port: 8100,
       host: '0.0.0.0',
       proxy: {
-        '/api': {
+        '^/(api|images)': {
           target: API_HOST,
           changeOrigin: true,
           secure: false,
