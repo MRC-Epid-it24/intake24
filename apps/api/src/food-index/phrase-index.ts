@@ -31,6 +31,7 @@ export interface LanguageBackend {
   languageCode: string;
   indexIgnore: string[];
   phoneticEncoder: PhoneticEncoder | undefined;
+  transformer?: { getSemanticSimilarity: (query: string, phrase: string) => Promise<number> };
 
   sanitiseDescription: (description: string) => string;
   stem: (word: string) => string;

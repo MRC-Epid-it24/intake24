@@ -5,6 +5,8 @@ import { getLocalPopularityRanking } from '@intake24/api/food-index/ranking/loca
 import type { Logger } from '@intake24/common-backend';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+import languagesBackend from '../language-backends';
+import { getLanguageBackendId } from '../workers/index-builder';
 
 export type RankingAlgorithm = '';
 
@@ -76,32 +78,42 @@ function normaliseMatchCost(results: PhraseMatchResult<string>[]): PhraseMatchRe
   }
 }
 
-function applyRankingData(
+async function applyRankingData(
+  localeId: string,
   rankingData: RankingData,
   results: PhraseMatchResult<string>[],
   matchScoreWeight: number,
+  transformerModelWeight: number,
+  query: string,
   logger: Logger,
-): FoodHeader[] {
+): Promise<FoodHeader[]> {
   const normalisedRankingData = normaliseRankingData(rankingData);
   const normalisedSearchResults = normaliseMatchCost(results);
 
-  const combinedScoreResults = normalisedSearchResults
-    .map((result) => {
+  const combinedScoreResults = await Promise.all(
+    normalisedSearchResults.map(async (result) => {
       let rankingScore = normalisedRankingData[result.key];
-
       if (rankingScore === undefined) {
         logger.warn(`No ranking data for food code "${result.key}"`);
         rankingScore = 0;
       }
 
+      const transformer = languagesBackend[await getLanguageBackendId(localeId)]?.transformer;
+
+      const semanticScore = (await transformer?.getSemanticSimilarity(query, result.phrase)) ?? 0;
+
+      // Combined score
       const combinedScore
-        = rankingScore * (1 - matchScoreWeight) + result.quality * matchScoreWeight;
+        = rankingScore * (1 - matchScoreWeight - transformerModelWeight)
+          + result.quality * matchScoreWeight
+          + semanticScore * transformerModelWeight;
 
       return {
         header: { code: result.key, name: result.phrase },
         rankingScore: combinedScore,
       };
-    });
+    }),
+  );
 
   const sortedResults = combinedScoreResults.sort((h1, h2) => h2.rankingScore - h1.rankingScore);
 
@@ -135,13 +147,23 @@ export async function rankFoodResults(
   matchScoreWeight: number,
   logger: Logger,
   recipeFoodsHeaders: FoodHeader[],
+  query: string,
+  semanticWeight: number,
 ): Promise<FoodHeader[]> {
   const foodCodes = results.map(result => result.key);
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
   if (rankingData !== null) {
     return recipeFoodsHeaders.concat(
-      applyRankingData(rankingData, results, matchScoreWeight, logger),
+      await applyRankingData(
+        localeId,
+        rankingData,
+        results,
+        matchScoreWeight,
+        semanticWeight,
+        query,
+        logger,
+      ),
     );
   }
   else {

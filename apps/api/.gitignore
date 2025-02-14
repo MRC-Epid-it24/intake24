@@ -4,4 +4,4 @@
 .vscode/*
 !.vscode/launch.json
 
-cache/*
+.cache/*

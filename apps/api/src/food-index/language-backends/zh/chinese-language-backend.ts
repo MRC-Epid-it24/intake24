@@ -2,6 +2,7 @@ import nodejieba from 'nodejieba';
 import pinyin from 'pinyin';
 
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
+import { getSemanticSimilarity } from './transformer';
 
 const sanitiseRegexp = /[.`,/\\\-+)(…，。、？！“”]/g;
 
@@ -117,6 +118,9 @@ export default {
       pinyinCache.set(input, result);
       return result;
     },
+  },
+  transformer: {
+    getSemanticSimilarity,
   },
 
   // Tokenize sentences into words (tokens) using nodejieba

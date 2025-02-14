@@ -81,7 +81,7 @@ async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]>
   );
 }
 
-async function getLanguageBackendId(localeId: string): Promise<string> {
+export async function getLanguageBackendId(localeId: string): Promise<string> {
   const row = await FoodsLocale.findOne({
     attributes: ['foodIndexLanguageBackendId'],
     where: { id: localeId },
@@ -344,6 +344,8 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     query.parameters.matchScoreWeight / 100.0,
     logger,
     recipeFoodsHeaders,
+    query.parameters.description,
+    0.5,
   );
 
   const filteredCategories = categoryResults.filter(
