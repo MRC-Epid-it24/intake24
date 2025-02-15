@@ -74,6 +74,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { useGtm } from '@gtm-support/vue-gtm';
 import { defineComponent } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
@@ -129,6 +130,14 @@ export default defineComponent({
   methods: {
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
+      useGtm()?.trackEvent({
+        event: 'search_food',
+        category: 'Survey',
+        action: 'click food category chip',
+        label: category.name,
+        value: 1,
+        noninteraction: false,
+      });
     },
 
     foodSelected(food: FoodHeader): void {
