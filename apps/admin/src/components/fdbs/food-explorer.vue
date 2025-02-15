@@ -35,7 +35,7 @@
       transition
     >
       <template #prepend="{ item }">
-        <v-icon v-if="item.type === 'foods'" start>
+        <v-icon v-if="item._type === 'foods'" start>
           $foods
         </v-icon>
       </template>
@@ -65,7 +65,7 @@ import FoodSearch from './food-search.vue';
 
 export type TreeItem = ((CategoryListEntry & { children: TreeItem[] }) | FoodListEntry) & {
   key: string;
-  type: string;
+  _type: string;
 };
 
 export default defineComponent({
@@ -102,7 +102,7 @@ export default defineComponent({
 
       const noCategory: TreeItem = {
         key: randomString(8),
-        type: 'categories',
+        _type: 'categories',
         id: 'no-category',
         code: 'no-category',
         localeId: props.localeId,
@@ -117,7 +117,7 @@ export default defineComponent({
         ...data.map(category => ({
           ...category,
           key: randomString(8),
-          type: 'categories',
+          _type: 'categories',
           children: [],
         })),
       ];
@@ -137,13 +137,13 @@ export default defineComponent({
         ...categories.map(item => ({
           ...item,
           key: randomString(8),
-          type: 'categories',
+          _type: 'categories',
           children: [],
         })),
         ...foods.map(item => ({
           ...item,
           key: randomString(8),
-          type: 'foods',
+          _type: 'foods',
         })),
       );
     };
@@ -156,7 +156,7 @@ export default defineComponent({
       activatedEntryCategories.value = [];
 
       await router.push({
-        name: `fdbs-${item.type}`,
+        name: `fdbs-${item._type}`,
         params: { id: props.localeId, entryId: item.id },
       });
     };
