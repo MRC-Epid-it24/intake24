@@ -1,3 +1,4 @@
+import { useGtm } from '@gtm-support/vue-gtm';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 import { useGoTo } from 'vuetify';
@@ -286,6 +287,11 @@ export default defineComponent({
     },
 
     async mealAction(type: MealActionType, mealId: string) {
+      const meal = this.meals.find(meal => meal.id === mealId);
+      if (!meal) {
+        console.warn(`Meal with id ${mealId} not found.`);
+        return;
+      }
       switch (type) {
         case 'editMeal':
           this.showMealPrompt(mealId, 'preFoods', 'edit-meal-prompt');
@@ -295,6 +301,15 @@ export default defineComponent({
           break;
         case 'deleteMeal':
           this.survey.deleteMeal(mealId);
+
+          useGtm()?.trackEvent({
+            event: 'meal_cancelled',
+            category: 'Survey',
+            action: 'click DELETE MEAL',
+            label: meal.name.en,
+            value: 1,
+            noninteraction: false,
+          });
           await this.nextPrompt();
           break;
         case 'selectMeal':
