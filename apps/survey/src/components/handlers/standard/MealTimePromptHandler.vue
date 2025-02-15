@@ -57,13 +57,11 @@ export default defineComponent({
         useGtm()?.trackEvent({
           event: 'meal_cancelled',
           category: 'Survey',
-          action: 'Cancel Meal',
+          action: 'click DID NOT HAVE',
           label: meal.value.name.en,
           value: 1,
           noninteraction: false,
         });
-        console.log('Meal cancelled event tracked');
-
         return;
       }
 
