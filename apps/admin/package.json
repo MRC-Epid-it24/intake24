@@ -37,7 +37,7 @@
     "json-editor-vue": "^0.17.3",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.8",
-    "pinia": "^2.3.1",
+    "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",
     "pluralize": "^8.0.0",
     "tinymce": "^7.6.1",

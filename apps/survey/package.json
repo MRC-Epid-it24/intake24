@@ -35,7 +35,7 @@
     "flag-icons": "^7.3.2",
     "helmet": "^8.0.0",
     "lodash": "^4.17.21",
-    "pinia": "^2.3.1",
+    "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",
     "uuid": "^11.0.5",
     "vue": "^3.5.13",
