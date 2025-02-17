@@ -131,10 +131,11 @@ export default defineComponent({
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
       useGtm()?.trackEvent({
-        event: 'search_food',
+        event: 'food_category_selected',
         category: 'Survey',
         action: 'click food category chip',
         label: category.name,
+        search_term: this.searchTerm,
         value: 1,
         noninteraction: false,
       });
@@ -142,6 +143,15 @@ export default defineComponent({
 
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
+      useGtm()?.trackEvent({
+        event: 'food_selected',
+        category: 'Survey',
+        action: 'select food',
+        label: food.name,
+        search_term: this.searchTerm,
+        value: 1,
+        noninteraction: false,
+      });
     },
 
     toggleExpand() {
