@@ -20,7 +20,7 @@
     "test:unit:watch": "pnpm test:unit --watch"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.2",
     "html-to-text": "^9.0.5",
     "jsdom": "^26.0.0",
     "nodemailer": "^6.10.0",
