@@ -1,5 +1,5 @@
 <template>
-  <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" class="py-2" :flat="!dialog">
+  <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" v-scroll="onScroll" class="py-2" :flat="!dialog">
     <v-text-field
       ref="searchRef"
       v-model="searchTerm"
@@ -73,6 +73,8 @@
           :categories-first="prompt.categoriesFirst.search"
           :contents="searchContents"
           :i18n="promptI18n"
+          :percent-scrolled="percentScrolled"
+          :search-count="searchCount"
           :search-term="searchTerm ?? undefined"
           :type="type"
           @category-selected="categorySelected"
@@ -223,6 +225,25 @@ const recipeBuilderFoods = ref<FoodHeader[]>([]);
 const recipeFoods = ref<RecipeFood[]>([]);
 const recipeBuilderToggle = ref(false);
 const tab = ref(0);
+const searchCount = ref(1);
+const percentScrolled = ref(0);
+
+function onScroll(event: Event) {
+  if (event.target instanceof Document) {
+    const scrollTop = event.target.documentElement.scrollTop;
+    const totalHeight = event.target.documentElement.scrollHeight;
+    const clientHeight = event.target.documentElement.clientHeight;
+
+    const percentages = [25, 50, 75, 90];
+    percentages.forEach((percentage) => {
+      const threshold = (percentage / 100) * (totalHeight - clientHeight);
+      if ((percentScrolled.value < percentage) && (scrollTop >= threshold)) {
+        percentScrolled.value = percentage;
+        console.debug(`Scrolled to ${percentScrolled.value}%`);
+      }
+    });
+  }
+}
 
 const showInDialog = computed(
   () => props.inDialog && searchRef.value?.$vuetify.display.mobile,
@@ -463,6 +484,8 @@ watchDebounced(
       currentCategoryContents.value = undefined;
       navigationHistory.value = [];
       tab.value = 1;
+      searchCount.value++;
+      percentScrolled.value = 0;
       return;
     }
 

@@ -103,6 +103,14 @@ export default defineComponent({
       type: String as PropType<string>,
       default: '',
     },
+    searchCount: {
+      type: Number as PropType<number>,
+      default: 0,
+    },
+    percentScrolled: {
+      type: Number as PropType<number>,
+      default: 0,
+    },
   },
 
   emits: ['food-selected', 'category-selected'],
@@ -136,7 +144,8 @@ export default defineComponent({
         action: 'click food category chip',
         label: category.name,
         search_term: this.searchTerm,
-        value: 1,
+        search_count: this.searchCount,
+        percent_scrolled: this.percentScrolled,
         noninteraction: false,
       });
     },
@@ -146,10 +155,12 @@ export default defineComponent({
       useGtm()?.trackEvent({
         event: 'food_selected',
         category: 'Survey',
+        food_category: this.contents.header.name,
         action: 'select food',
         label: food.name,
         search_term: this.searchTerm,
-        value: 1,
+        search_count: this.searchCount,
+        percent_scrolled: this.percentScrolled,
         noninteraction: false,
       });
     },
