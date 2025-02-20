@@ -246,13 +246,14 @@ function selectObject(idx: number) {
 function addObject() {
   const nextId = objects.value.reduce((acc, { id }) => (acc < id ? id : acc), -1);
   coords.value.push([]);
-  objects.value.push({
+  const objectsLength = objects.value.push({
     id: nextId + 1,
     description: '',
     label: {},
     navigationIndex: nextId + 1,
     weight: 0,
   });
+  selectObject(objectsLength - 1);
 };
 
 function removeObject(index: number) {
