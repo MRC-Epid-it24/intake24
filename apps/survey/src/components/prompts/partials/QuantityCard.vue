@@ -48,7 +48,7 @@
                 icon
                 size="x-large"
                 :title="$t('prompts.quantity.more')"
-                @click="update(0.25)"
+                @click="incrementFraction"
               >
                 <v-icon aria-hidden="false">
                   $increment
@@ -61,7 +61,7 @@
                 icon
                 size="x-large"
                 :title="$t('prompts.quantity.less')"
-                @click="update(-0.25)"
+                @click="decrementFraction"
               >
                 <v-icon aria-hidden="false">
                   $decrement
@@ -88,116 +88,116 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { computed, watch } from 'vue';
 
-export default defineComponent({
-  name: 'QuantityCard',
+defineOptions({ name: 'QuantityCard' });
 
-  props: {
-    confirm: {
-      type: Boolean,
-      default: true,
-    },
-    min: {
-      type: Number,
-      default: 0.25,
-    },
-    max: {
-      type: Number,
-      default: 30,
-    },
-    showAll: {
-      type: Boolean,
-      default: false,
-    },
-    modelValue: {
-      type: Number,
-      default: 1,
-    },
-    confirmed: {
-      type: Boolean,
-      default: true,
-    },
-    fraction: {
-      type: Boolean,
-      default: true,
-    },
-    whole: {
-      type: Boolean,
-      default: true,
-    },
+const props = defineProps({
+  confirm: {
+    type: Boolean,
+    default: true,
   },
-
-  emits: ['update:modelValue', 'update:confirmed'],
-
-  data() {
-    return {
-      currentValue: Math.min(this.max, Math.max(this.min, this.modelValue)),
-    };
+  min: {
+    type: Number,
+    default: 0.25,
   },
-
-  computed: {
-    maxDisabled(): boolean {
-      return this.currentValue === this.max;
-    },
-
-    minDisabled(): boolean {
-      return this.currentValue === this.min;
-    },
-
-    fractionLabel(): string {
-      const fraction = this.currentValue - Math.floor(this.currentValue);
-
-      switch (fraction) {
-        case 0.25:
-          return '¼';
-        case 0.5:
-          return '½';
-        case 0.75:
-          return '¾';
-        default:
-          return fraction.toString();
-      }
-    },
-
-    wholeLabel(): string {
-      return Math.floor(this.currentValue).toString();
-    },
+  max: {
+    type: Number,
+    default: 30,
   },
-
-  watch: {
-    value(val: number) {
-      if (val === this.currentValue)
-        return;
-
-      this.currentValue = Math.min(this.max, Math.max(this.min, val));
-    },
+  showAll: {
+    type: Boolean,
+    default: false,
   },
-
-  methods: {
-    setAll() {
-      this.update(this.max);
-      this.updateConfirmed(true);
-    },
-
-    update(value: number) {
-      this.currentValue = Math.min(this.max, Math.max(this.min, this.currentValue + value));
-
-      this.updateValue();
-
-      if (this.confirmed)
-        this.updateConfirmed(false);
-    },
-
-    updateConfirmed(value: boolean) {
-      this.$emit('update:confirmed', value);
-    },
-
-    updateValue() {
-      this.$emit('update:modelValue', this.currentValue);
-    },
+  modelValue: {
+    type: Number,
+    default: 1,
   },
+  confirmed: {
+    type: Boolean,
+    default: true,
+  },
+  fraction: {
+    type: Boolean,
+    default: true,
+  },
+  whole: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const emit = defineEmits(['update:modelValue', 'update:confirmed']);
+
+const fractions = [1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4];
+const reversedFractions = computed(() => fractions.toReversed());
+
+const currentValue = defineModel('modelValue', { type: Number, default: 1 });
+
+const currentWhole = computed(() => Math.floor(currentValue.value));
+const currentFraction = computed(() => currentValue.value - currentWhole.value);
+
+const maxDisabled = computed(() => currentValue.value === props.max);
+const minDisabled = computed(() => currentValue.value === props.min);
+
+const wholeLabel = computed(() => currentWhole.value.toString());
+const fractionLabel = computed(() => {
+  if (!currentFraction.value)
+    return currentFraction.value;
+
+  const fraction = currentFraction.value.toFixed(2);
+
+  switch (fraction) {
+    case '0.25':
+      return '¼';
+    case '0.33':
+      return '⅓';
+    case '0.50':
+      return '½';
+    case '0.67':
+      return '⅔';
+    case '0.75':
+      return '¾';
+    default:
+      return fraction.toString();
+  }
+});
+
+function setAll() {
+  update(props.max);
+  updateConfirmed(true);
+};
+
+function clamp(value: number) {
+  return Math.min(props.max, Math.max(props.min, value));
+};
+
+function update(value: number) {
+  currentValue.value = clamp(currentValue.value + value);
+};
+
+function incrementFraction() {
+  const nextFraction = fractions.find(fraction => fraction.toFixed(2) > currentFraction.value.toFixed(2)) ?? 1;
+  currentValue.value = clamp(currentWhole.value + nextFraction);
+};
+function decrementFraction() {
+  if (!currentFraction.value) {
+    currentValue.value = clamp(currentWhole.value - 1 + (fractions.at(-1) ?? 0));
+    return;
+  }
+
+  const prevFraction = reversedFractions.value.find(fraction => fraction.toFixed(2) < currentFraction.value.toFixed(2)) ?? 0;
+  currentValue.value = clamp(currentWhole.value + prevFraction);
+};
+
+function updateConfirmed(value: boolean) {
+  emit('update:confirmed', value);
+};
+
+watch(currentValue, () => {
+  if (props.confirmed)
+    updateConfirmed(false);
 });
 </script>
 
