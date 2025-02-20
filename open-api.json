@@ -5320,13 +5320,15 @@
                   "type": "object",
                   "properties": {
                     "userId": {
-                      "type": "string",
-                      "title": "Internal (numerical) Intake24 user ID"
+                      "$ref": "#/components/schemas/Internal (numerical) Intake24 user ID"
                     },
                     "name": {
-                      "type": "string",
                       "nullable": true,
-                      "title": "Optional user name for personalization"
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Optional user name for personalization"
+                        }
+                      ]
                     },
                     "customFields": {
                       "type": "object",
@@ -6688,13 +6690,15 @@
                   "type": "object",
                   "properties": {
                     "userId": {
-                      "type": "string",
-                      "title": "Internal (numerical) Intake24 user ID"
+                      "$ref": "#/components/schemas/Internal (numerical) Intake24 user ID"
                     },
                     "name": {
-                      "type": "string",
                       "nullable": true,
-                      "title": "Optional user name for personalization"
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Optional user name for personalization"
+                        }
+                      ]
                     },
                     "customFields": {
                       "type": "object",
@@ -65556,6 +65560,16 @@
     }
   ],
   "components": {
+    "schemas": {
+      "Internal (numerical) Intake24 user ID": {
+        "type": "string",
+        "title": "Internal (numerical) Intake24 user ID"
+      },
+      "Optional user name for personalization": {
+        "type": "string",
+        "title": "Optional user name for personalization"
+      }
+    },
     "securitySchemes": {
       "bearerHttpAuthentication": {
         "description": "Bearer token using a JWT",
