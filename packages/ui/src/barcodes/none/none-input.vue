@@ -1,8 +1,5 @@
 <template>
-  <v-text-field
-    v-bind="{ name, ...$attrs }"
-    v-model="barcode"
-  />
+  <v-text-field v-bind="{ name }" v-model="barcode" />
 </template>
 
 <script lang="ts" setup>

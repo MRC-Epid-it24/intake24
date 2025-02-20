@@ -1,5 +1,5 @@
 <template>
-  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ name, ...$attrs }">
+  <v-text-field ref="inputRef" v-model="barcode" v-bind="{ name }">
     <template #append-inner>
       <v-icon @click.stop.prevent="open">
         fas fa-barcode
