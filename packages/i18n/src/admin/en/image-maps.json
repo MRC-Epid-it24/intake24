@@ -11,6 +11,12 @@
   "objects": {
     "_": "Image map object",
     "title": "Image map objects",
-    "delete": "Delete object"
+    "id": "Object ID",
+    "add": "Add object",
+    "delete": "Delete object",
+    "label": {
+      "_": "Label",
+      "hint": "Use '{'{weight}'}' variable to include object weight."
+    }
   }
 }

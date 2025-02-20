@@ -12,23 +12,28 @@
     "suspended": "توقفت عملية جمع البيانات.",
     "completed": "تم جمع البيانات"
   },
-  "openAccess": {
-    "_": "دراسات متاحة",
-    "none": {
-      "_": "دراسات غير متاحة",
-      "subtitle": "لاتوجد دراسات متاحة الآن"
-    }
+  "participant": {
+    "_": "Are you a participant?",
+    "subtitle": "You have landed on the main page for Intake24.",
+    "link": "To access Intake24 you will need your <strong>own survey link</strong>.",
+    "info": "<p>If you have been invited to take part in an Intake24 survey you should have been provided with a link.</p><p>Please check your invitation to take part. If you are unsure, please contact your research study team.</p>"
+  },
+  "visitor": {
+    "_": "Are you a visitor?",
+    "subtitle": "You can try our demo survey!",
+    "try": "Try demo now!"
   },
   "generateUser": {
-    "_": "إعطاء صلاحية بالدخول",
-    "subtitle": "هذه دراسة متاحة، يمكنك الدخول مجاناً",
-    "link": "الرابط",
-    "info1": "انقر 'إعطاء الصلاحية بالدخول' لإنشاء بياناتك الخاصة بالدخول. يرجى حفظ بيانات الدخول في مكان ما إن كنت تود الاستمرار و الإكمال لاحقاً",
-    "info2": "سيستغرق هذا الاستبيان قرابة ١٥ دقيقة",
-    "info3": "إذا قمت بإغلاق المتصفح، يمكنك الإكمال لاحقاً عبر النقر على هذا {action}.",
     "400": "كلمة التحقق غير صحيحة.",
     "403": "الاستبيان {surveyId} لايسمح.",
     "404": "الاستبيان {surveyId} غير معروف.",
-    "429": "تم إنشاء مستخدم جديد، يرجى المحاولة لاحقاً"
+    "429": "تم إنشاء مستخدم جديد، يرجى المحاولة لاحقاً",
+    "_": "إعطاء صلاحية بالدخول",
+    "subtitle": "هذه دراسة متاحة، يمكنك الدخول مجاناً",
+    "noAccount": "No account?",
+    "link": "الرابط",
+    "info1": "انقر 'إعطاء الصلاحية بالدخول' لإنشاء بياناتك الخاصة بالدخول. يرجى حفظ بيانات الدخول في مكان ما إن كنت تود الاستمرار و الإكمال لاحقاً",
+    "info2": "سيستغرق هذا الاستبيان قرابة ١٥ دقيقة",
+    "info3": "إذا قمت بإغلاق المتصفح، يمكنك الإكمال لاحقاً عبر النقر على هذا {action}."
   }
 }

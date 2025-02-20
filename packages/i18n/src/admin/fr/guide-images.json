@@ -10,11 +10,9 @@
     "_": "Objet de la photo étalon",
     "title": "Guide image objects",
     "id": "Identifiant de l'objet",
-    "add": "Ajouter une photo étalon",
-    "delete": "Supprimer l'objet",
     "label": {
       "_": "Légende",
-      "hint": "Utiliser la variable '{weight}' pour inclure le poids de l'objet."
+      "hint": "Utiliser la variable '{'{weight}'}' pour inclure le poids de l'objet."
     },
     "weight": "Poids"
   }

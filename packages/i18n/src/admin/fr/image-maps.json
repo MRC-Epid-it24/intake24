@@ -10,6 +10,12 @@
   "objects": {
     "_": "Objet de la photo à curseur",
     "title": "Image map objects",
-    "delete": "Supprimer l'objet"
+    "id": "Identifiant de l'objet",
+    "add": "Ajouter une photo étalon",
+    "delete": "Supprimer l'objet",
+    "label": {
+      "_": "Légende",
+      "hint": "Utiliser la variable '{'{weight}'}' pour inclure le poids de l'objet."
+    }
   }
 }

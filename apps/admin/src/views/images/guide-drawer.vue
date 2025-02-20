@@ -42,7 +42,7 @@
                   :style="{ cursor: 'pointer' }"
                   @click="selectObject(idx)"
                 >
-                  <v-icon icon="fas fa-draw-polygon" start />{{ $t('guide-images.objects.id') }}:
+                  <v-icon icon="fas fa-draw-polygon" start />{{ $t(`${resource}.objects.id`) }}:
                   {{ object.id }}
                   <v-spacer />
                   <confirm-dialog
@@ -51,7 +51,7 @@
                     icon
                     :icon-color="isSelected ? `white` : `error`"
                     icon-left="$delete"
-                    :label="$t('guide-images.objects.delete')"
+                    :label="$t(`${resource}.objects.delete`)"
                     variant="text"
                     @confirm="removeObject(idx)"
                   >
@@ -76,7 +76,7 @@
                         v-model.number="object.weight"
                         :disabled="isImageMap || disabled"
                         hide-details="auto"
-                        :label="$t('guide-images.objects.weight')"
+                        :label="$t(`${resource}.objects.weight`)"
                         :name="`weight-${object.id}`"
                         prepend-inner-icon="fas fa-scale-balanced"
                         variant="outlined"
@@ -87,14 +87,14 @@
                         v-model="object.label"
                         border
                         :disabled="disabled"
-                        :label="$t('guide-images.objects.label._')"
+                        :label="$t(`${resource}.objects.label._`)"
                       >
                         <template v-for="lang in Object.keys(object.label)" :key="lang" #[`lang.${lang}`]>
                           <v-text-field
                             v-model="object.label[lang]"
                             hide-details="auto"
-                            :hint="isGuideImage ? $t('guide-images.objects.label.hint') : undefined"
-                            :label="$t('guide-images.objects.label._')"
+                            :hint="isGuideImage ? $t(`${resource}.objects.label.hint`) : undefined"
+                            :label="$t(`${resource}.objects.label._`)"
                             :persistent-hint="isGuideImage"
                             variant="outlined"
                             @update:model-value="updateObjects"
@@ -115,7 +115,7 @@
               height="100%"
               link
               min-height="200px"
-              :title="$t('guide-images.objects.add')"
+              :title="$t(`${resource}.objects.add`)"
               @click.stop="addObject"
             >
               <v-btn color="primary" icon="$add" size="x-large" />
