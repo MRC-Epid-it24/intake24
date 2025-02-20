@@ -1,60 +1,64 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <v-tabs direction="vertical">
-        <select-resource item-id="code" resource="categories" @update:model-value="addCategory">
-          <template #activator="{ props }">
-            <v-btn class="mb-4" color="primary" v-bind="props">
-              <v-icon icon="$add" start />
-              {{ $t(`fdbs.categories.add`) }}
-            </v-btn>
-          </template>
-          <template #title>
-            {{ $t(`fdbs.categories.title`) }}
-          </template>
-          <template #item="{ item }">
-            <v-list-item-title>{{ item.code }}</v-list-item-title>
-            <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
-          </template>
-        </select-resource>
-        <v-tab v-for="(option, cat) in parameters.options" :key="cat">
+  <div class="d-flex flex-row ga-2">
+    <div>
+      <select-resource item-id="code" resource="categories" @update:model-value="addCategory">
+        <template #activator="{ props }">
+          <v-btn class="mb-4" color="primary" v-bind="props">
+            <v-icon icon="$add" start />
+            {{ $t(`fdbs.categories.add`) }}
+          </v-btn>
+        </template>
+        <template #title>
+          {{ $t(`fdbs.categories.title`) }}
+        </template>
+        <template #item="{ item }">
+          <v-list-item-title>{{ item.code }}</v-list-item-title>
+          <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+        </template>
+      </select-resource>
+      <v-tabs v-model="selected" direction="vertical">
+        <v-tab v-for="(option, cat) in parameters.options" :key="cat" :value="cat">
           <v-icon icon="$categories" start />{{ cat }}
         </v-tab>
-        <v-tabs-window-item v-for="(option, cat) in parameters.options" :key="cat" class="pl-3">
-          <div class="d-flex flex-column">
-            <language-selector
-              v-model="parameters.options[cat]"
-              :default="[]"
-              :label="$t('fdbs.portionSizes.methods.parent-food-portion.options')"
-              :required="true"
-            >
-              <template v-for="lang in Object.keys(parameters.options[cat])" :key="lang" #[`lang.${lang}`]>
-                <options-list
-                  :options="parameters.options[cat][lang]"
-                  :rules="rules"
-                  @update:options="updateOption(cat, lang, $event)"
-                />
-              </template>
-            </language-selector>
-            <v-btn
-              class="align-self-end"
-              color="error"
-              :disabled="cat === '_default'"
-              variant="text"
-              @click="removeCategory(cat)"
-            >
-              <v-icon icon="$delete" start />{{ $t(`fdbs.categories.remove`) }}
-            </v-btn>
-          </div>
-        </v-tabs-window-item>
       </v-tabs>
-    </v-col>
-  </v-row>
+    </div>
+    <v-tabs-window v-model="selected" class="flex-grow-1">
+      <v-tabs-window-item v-for="(option, cat) in parameters.options" :key="cat" class="pl-3" :value="cat">
+        <div class="d-flex flex-column">
+          <language-selector
+            v-model="parameters.options[cat]"
+            border
+            :default="[]"
+            :label="$t('fdbs.portionSizes.methods.parent-food-portion.options')"
+            :required="true"
+          >
+            <template v-for="lang in Object.keys(parameters.options[cat])" :key="lang" #[`lang.${lang}`]>
+              <options-list
+                numeric
+                :options="parameters.options[cat][lang]"
+                :rules="rules"
+                @update:options="updateOption(cat, lang, $event)"
+              />
+            </template>
+          </language-selector>
+          <v-btn
+            class="align-self-end"
+            color="error"
+            :disabled="cat === '_default'"
+            variant="text"
+            @click="removeCategory(cat)"
+          >
+            <v-icon icon="$delete" start />{{ $t(`fdbs.categories.remove`) }}
+          </v-btn>
+        </div>
+      </v-tabs-window-item>
+    </v-tabs-window>
+  </div>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
@@ -78,6 +82,8 @@ export default defineComponent({
 
   setup(props, context) {
     const { parameters } = useParameters<'parent-food-portion'>(props, context);
+
+    const selected = ref(Object.keys(parameters.value.options).at(0));
 
     const rules = [
       (value: any): boolean | string => {
@@ -116,6 +122,7 @@ export default defineComponent({
       removeCategory,
       parameters,
       rules,
+      selected,
       updateOption,
     };
   },

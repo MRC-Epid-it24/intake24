@@ -52,3 +52,9 @@ ul.v-breadcrumbs {
 .v-breadcrumbs--large {
   font-weight: 600;
 }
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+}

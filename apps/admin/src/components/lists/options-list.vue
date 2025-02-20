@@ -74,6 +74,9 @@ const props = defineProps({
   exclusive: {
     type: Boolean,
   },
+  numeric: {
+    type: Boolean,
+  },
   options: {
     type: Array as PropType<ListOption<ZodString | ZodNumber>[]>,
     required: true,
@@ -100,7 +103,7 @@ const optionValueRules = computed<RuleCallback[]>(() => [...defaultValueRules, .
 
 function add() {
   const size = currentOptions.value.length + 1;
-  currentOptions.value.push({ id: size, label: `label-${size}`, value: `value-${size}` });
+  currentOptions.value.push({ id: size, label: `label-${size}`, value: props.numeric ? size : `value-${size}` });
 };
 
 function remove(index: number) {

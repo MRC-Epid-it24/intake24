@@ -20,7 +20,7 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-form ref="form" @submit.prevent="save">
-        <v-container>
+        <v-container class="dialog-container" :fluid="$vuetify.display.mdAndDown">
           <error-list v-bind="{ errors }" />
           <v-row class="mt-2">
             <v-col cols="12" md="4">

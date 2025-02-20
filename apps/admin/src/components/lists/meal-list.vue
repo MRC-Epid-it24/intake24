@@ -312,10 +312,6 @@ function resetList() {
 };
 </script>
 
-<style lang="scss" scoped>
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 64px);
-}
+<style lang="scss">
+
 </style>
