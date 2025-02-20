@@ -341,6 +341,8 @@ watchDebounced(
 <style lang="scss" scoped>
 .guides-drawer {
   position: relative;
+  outline: 0;
+  user-select: none;
 
   svg {
     position: absolute;
