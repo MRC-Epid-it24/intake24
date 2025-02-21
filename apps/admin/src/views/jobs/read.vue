@@ -1,16 +1,7 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <template #actions>
-      <confirm-dialog
-        v-if="can({ action: 'edit' })"
-        :activator-class="['ml-2']"
-        color="primary"
-        icon-left="fas fa-play"
-        :label="$t('jobs.repeat._')"
-        @confirm="repeat"
-      >
-        {{ $t('jobs.repeat.confirm') }}
-      </confirm-dialog>
+      <job-repeat v-if="entry && can({ action: 'edit' })" :model-value="entry" />
     </template>
     <v-table>
       <tbody>
@@ -86,30 +77,31 @@
           <th>{{ $t('common.updatedAt') }}</th>
           <td>{{ formatDateTime(entry.updatedAt) }}</td>
         </tr>
-        <tr>
-          <th>{{ $t('jobs.params') }}</th>
-          <td colspan="3">
-            <pre class="my-3">{{ JSON.stringify(entry.params, null, '\t') }}</pre>
-          </td>
-        </tr>
       </tbody>
     </v-table>
+    <div class="d-flex flex-column gr-2 pa-4">
+      <div class="font-weight-medium text-body-2">
+        {{ $t('jobs.params') }}
+      </div>
+      <json-editor :model-value="entry.params" read-only />
+    </div>
   </layout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { JobRepeat } from '@intake24/admin/components/dialogs';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDownloadJob } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
-import { ConfirmDialog } from '@intake24/ui/components';
 
 export default defineComponent({
   name: 'JobDetail',
 
-  components: { ConfirmDialog },
+  components: { JobRepeat, JsonEditor },
 
   mixins: [detailMixin],
 
@@ -120,12 +112,6 @@ export default defineComponent({
     const { download, downloadUrlAvailable } = useDownloadJob();
 
     return { download, downloadUrlAvailable, entry, entryLoaded, formatDateTime };
-  },
-
-  methods: {
-    async repeat() {
-      await this.$http.post(`admin/jobs/${this.id}/repeat`);
-    },
   },
 });
 </script>

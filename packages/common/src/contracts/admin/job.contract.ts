@@ -4,7 +4,7 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { bigIntString as jobId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
-import { jobAttributes } from '@intake24/common/types/http/admin';
+import { jobAttributes, repeatJobRequest } from '@intake24/common/types/http/admin';
 
 export const job = initContract().router({
   browse: {
@@ -55,7 +55,7 @@ export const job = initContract().router({
     method: 'POST',
     path: '/admin/jobs/:jobId/repeat',
     pathParams: z.object({ jobId }),
-    body: null,
+    body: repeatJobRequest.optional(),
     responses: {
       200: jobAttributes,
     },

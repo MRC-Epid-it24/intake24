@@ -4,13 +4,12 @@
     :flat="$vuetify.display.mobile"
     :rounded="$vuetify.display.mobile ? 0 : undefined"
   >
-    <v-toolbar color="white">
+    <v-toolbar class="toolbar-items" color="white">
       <template v-for="action in ['create', 'read', 'edit']" :key="action">
         <component
           :is="action"
           v-if="currentActions.includes(action)"
           :action="action"
-          class="mr-2"
           :disabled="selected.length !== 1"
           @action="onAction"
         />

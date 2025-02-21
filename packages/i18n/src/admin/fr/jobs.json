@@ -12,7 +12,9 @@
   "stackTrace": "Message d'erreur",
   "repeat": {
     "_": "Répéter la tâche",
-    "confirm": "Placer la tâche dans la file d'attente"
+    "confirm": "Placer la tâche dans la file d'attente",
+    "confirmed": "Job has been pushed to the queue",
+    "override": "Override job parameters"
   },
   "types": {
     "_": "Types de tâches",

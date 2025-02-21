@@ -12,7 +12,9 @@
   "stackTrace": "Error message",
   "repeat": {
     "_": "Repeat job",
-    "confirm": "Push the job to the queue"
+    "confirm": "Push the job to the queue",
+    "confirmed": "Job has been pushed to the queue",
+    "override": "Override job parameters"
   },
   "types": {
     "_": "Job types",

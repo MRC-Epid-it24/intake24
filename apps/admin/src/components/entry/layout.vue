@@ -4,13 +4,12 @@
     :flat="$vuetify.display.mobile"
     :rounded="$vuetify.display.mobile ? 0 : undefined"
   >
-    <v-toolbar color="white">
+    <v-toolbar class="toolbar-items" color="white">
       <v-btn color="grey-darken-1" :title="$t(`common.action.back`)" :to="{ name: resource.name }" variant="flat">
         <v-icon icon="$back" start />{{ $t(`common.action.back`) }}
       </v-btn>
       <v-btn
         v-if="editsResource"
-        class="ml-3"
         color="secondary"
         :title="$t(`common.action.save`)"
         variant="flat"
@@ -144,3 +143,6 @@ async function remove() {
   await router.push({ name: resource.name });
 };
 </script>
+
+<style lang="scss">
+</style>

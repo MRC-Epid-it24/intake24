@@ -3,7 +3,6 @@
     <template #activator="{ props }">
       <slot name="activator" v-bind="props">
         <v-btn
-          class="ml-3"
           color="secondary"
           :title="$t('feedback-schemes.preview.title')"
           v-bind="props"

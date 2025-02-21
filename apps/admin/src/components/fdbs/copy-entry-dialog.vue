@@ -2,7 +2,6 @@
   <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
     <template #activator="{ props }">
       <v-btn
-        class="ml-3"
         color="secondary"
         :title="$t(`fdbs.${type}.copy`)"
         variant="outlined"

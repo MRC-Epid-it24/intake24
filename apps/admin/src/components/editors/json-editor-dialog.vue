@@ -32,7 +32,7 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-container fluid>
-        <json-editor-vue v-model="content" :stringified="false" />
+        <json-editor-vue v-model="content" class="json-editor" :stringified="false" />
       </v-container>
     </v-card>
   </v-dialog>

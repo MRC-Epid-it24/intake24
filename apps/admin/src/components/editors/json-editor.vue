@@ -1,5 +1,12 @@
 <template>
-  <json-editor-vue v-bind="{ readOnly, stringified: false, modelValue }" @update:model-value="input" />
+  <json-editor-vue
+    v-bind="{
+      readOnly,
+      stringified: false,
+      modelValue,
+      class: 'json-editor',
+    }" @update:model-value="input"
+  />
 </template>
 
 <script lang="ts">

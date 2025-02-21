@@ -83,14 +83,14 @@ export function job() {
     },
     repeat: {
       middleware: [permission('jobs', 'jobs:edit')],
-      handler: async ({ params: { jobId }, req }) => {
+      handler: async ({ params: { jobId }, body, req }) => {
         const job = await Job.findByPk(jobId, { attributes: ['id', 'type', 'userId', 'params'] });
-        if (!job)
+        if (!job || (body?.type && body.type !== job.type))
           throw new NotFoundError();
 
         const { type, userId, params } = job;
 
-        const jobEntry = await req.scope.cradle.scheduler.jobs.addJob({ type, userId, params });
+        const jobEntry = await req.scope.cradle.scheduler.jobs.addJob({ type, userId, params: body?.params ?? params });
 
         return { status: 200, body: jobEntry };
       },

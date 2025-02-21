@@ -2,17 +2,8 @@ import type { Pagination } from '../generic';
 
 import { z } from 'zod';
 
-import { jobTypeParams, jobTypes, userJobs, userJobTypeParams } from '../../jobs';
+import { jobParams, JobTypeParams, jobTypeParams, jobTypes, userTasks } from '../../jobs';
 import { userAttributes } from './users';
-
-export const userJobRequest = z.object({
-  type: z.enum(userJobs),
-  params: userJobTypeParams,
-});
-
-export type UserJobRequest = z.infer<typeof userJobRequest>;
-
-export type JobsResponse = Pagination<JobAttributes>;
 
 export const jobAttributes = z.object({
   id: z.string(),
@@ -31,5 +22,40 @@ export const jobAttributes = z.object({
   updatedAt: z.date(),
   user: userAttributes.optional(),
 });
-
 export type JobAttributes = z.infer<typeof jobAttributes>;
+
+export const repeatJobRequest = jobAttributes.pick({
+  type: true,
+}).extend({
+  params: z.custom<JobTypeParams>(() => {
+    return true;
+  }),
+}).partial().superRefine(
+  (val, ctx) => {
+    if (!val.type && !val.params)
+      return;
+
+    if (!val.type) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Job type is required',
+        path: ['type'],
+      });
+      return;
+    }
+
+    const { success, error } = jobParams.shape[val.type].safeParse(val.params);
+    if (!success) {
+      error.issues.forEach((issue) => {
+        issue.path.unshift('params');
+        ctx.addIssue(issue);
+      });
+    }
+  },
+);
+export type RepeatJobRequest = z.infer<typeof repeatJobRequest>;
+
+export type JobsResponse = Pagination<JobAttributes>;
+
+export const userJobRequest = userTasks;
+export type UserJobRequest = z.infer<typeof userJobRequest>;

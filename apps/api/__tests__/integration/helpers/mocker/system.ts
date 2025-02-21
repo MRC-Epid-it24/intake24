@@ -1,9 +1,8 @@
 import { randomUUID } from 'node:crypto';
-
 import { faker } from '@faker-js/faker';
+
 import { times } from 'lodash';
 import slugify from 'slugify';
-
 import {
   defaultMeals as defaultFeedbackMeals,
   feedbackOutputs as defaultFeedbackOutputs,
@@ -11,6 +10,7 @@ import {
   defaultTopFoods as defaultFeedbackTopFoods,
   feedbackPhysicalDataFields,
 } from '@intake24/common/feedback';
+
 import { customPrompts } from '@intake24/common/prompts';
 import { createAmrMethod, recordVisibilities } from '@intake24/common/security';
 import {
@@ -21,7 +21,7 @@ import {
   searchSortingAlgorithms,
   spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
-import { jobTypes, UserCustomField } from '@intake24/common/types';
+import { defaultJobsParams, UserCustomField } from '@intake24/common/types';
 import type {
   CreateRespondentRequest,
   LanguageRequest,
@@ -35,6 +35,7 @@ import type {
 import { randomString } from '@intake24/common/util';
 import type {
   FeedbackSchemeCreationAttributes,
+  JobCreationAttributes,
   SurveySchemeCreationAttributes,
   SurveySchemePromptCreationAttributes,
 } from '@intake24/db';
@@ -353,13 +354,33 @@ function submission(surveyId: string, userId: string) {
   };
 }
 
+function job(): JobCreationAttributes {
+  const type = 'CleanRedisStore';
+  const progress = faker.number.float({ min: 0, max: 1 });
+  const successful = faker.datatype.boolean();
+  const message = faker.word.words(10);
+  const params = defaultJobsParams.CleanRedisStore;
+  const startedAt = faker.date.recent({ days: 1 });
+  const completedAt = faker.date.recent({ days: 1 });
+
+  return {
+    type,
+    progress,
+    successful,
+    message,
+    params,
+    startedAt,
+    completedAt,
+  };
+}
+
 function task(): TaskRequest {
   const name = faker.word.words(3);
-  const job = jobTypes[0];
+  const job = 'CleanRedisStore';
   const cron = '0 * * * *';
   const active = true;
   const description = faker.word.words(10);
-  const params = {};
+  const params = defaultJobsParams.CleanRedisStore;
 
   return {
     name,
@@ -374,6 +395,7 @@ function task(): TaskRequest {
 export default {
   customField,
   feedbackScheme,
+  job,
   language,
   locale,
   personalAccessToken,

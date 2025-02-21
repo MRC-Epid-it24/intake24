@@ -58,3 +58,13 @@ ul.v-breadcrumbs {
   flex-direction: column;
   min-height: calc(100vh - 64px);
 }
+
+.toolbar-items {
+  .v-toolbar__content {
+    column-gap: 8px;
+  }
+}
+
+.json-editor {
+  --jse-theme-color: rgb(var(--v-theme-info));
+}

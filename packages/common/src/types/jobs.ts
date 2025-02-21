@@ -208,10 +208,7 @@ export const jobParams = z.object({
   UserEmailVerificationNotification,
   UserPasswordResetNotification,
 });
-
 export type JobParams = z.infer<typeof jobParams>;
-
-export const userJobTypeParams = ResourceExport;
 
 export const jobTypeParams = z.union([
   CleanRedisStore,
@@ -242,6 +239,7 @@ export const jobTypeParams = z.union([
   UserEmailVerificationNotification,
   UserPasswordResetNotification,
 ]);
+export type JobTypeParams = z.infer<typeof jobTypeParams>;
 
 export const localeTasks = z.discriminatedUnion('type', [
   z.object({
@@ -261,7 +259,6 @@ export const localeTasks = z.discriminatedUnion('type', [
     params: LocaleFoodRankingUpload.omit({ file: true }),
   }),
 ]);
-
 export type LocaleTask = z.infer<typeof localeTasks>;
 
 export const localeJobs = [
@@ -270,7 +267,6 @@ export const localeJobs = [
   'LocaleFoodNutrientMapping',
   'LocaleFoodRankingUpload',
 ] as const;
-
 export type LocaleJob = (typeof localeJobs)[number];
 
 export const nutrientTableTasks = z.discriminatedUnion('type', [
@@ -283,11 +279,9 @@ export const nutrientTableTasks = z.discriminatedUnion('type', [
     params: NutrientTableMappingImport.omit({ file: true }),
   }),
 ]);
-
 export type NutrientTableTask = z.infer<typeof nutrientTableTasks>;
 
 export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableDataImport'] as const;
-
 export type NutrientTableJob = (typeof nutrientTableJobs)[number];
 
 export const surveyJobs = [
@@ -298,6 +292,7 @@ export const surveyJobs = [
   'SurveyRespondentsImport',
   'SurveySessionsExport',
 ] as const;
+export type SurveyJob = (typeof surveyJobs)[number];
 
 export const surveyTasks = z.discriminatedUnion('type', [
   z.object({
@@ -325,15 +320,23 @@ export const surveyTasks = z.discriminatedUnion('type', [
     params: SurveySessionsExport,
   }),
 ]);
-
 export type SurveyTask = z.infer<typeof surveyTasks>;
 
-export type SurveyJob = (typeof surveyJobs)[number];
+/* export const userTasks = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('ResourceExport'),
+    params: ResourceExport,
+  }),
+]); */
+export const userTasks = z.object({
+  type: z.literal('ResourceExport'),
+  params: ResourceExport,
+});
+export type UserTasks = z.infer<typeof userTasks>;
 
 export const userJobs = [
   'ResourceExport',
 ] as const;
-
 export type UserJob = (typeof userJobs)[number];
 
 export const jobTypes = [
@@ -359,8 +362,6 @@ export const jobTypes = [
 ] as const;
 
 export type JobType = keyof JobParams & (typeof jobTypes)[number];
-
-export type JobTypeParams = z.infer<typeof jobTypeParams>;
 
 export type GetJobParams<P extends keyof JobParams> = JobParams[P];
 
