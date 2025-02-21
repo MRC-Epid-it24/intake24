@@ -2,9 +2,9 @@ import type { BaseClientV4 } from './base-client-v4';
 
 import type { CreateResult } from './create-response';
 import type {
+  CreateFoodRequest,
+  CreateFoodRequestOptions,
   CreateGlobalFoodRequest,
-  CreateLocalFoodRequest,
-  CreateLocalFoodRequestOptions,
   FoodEntry,
   UpdateGlobalFoodRequest,
 } from '@intake24/common/types/http/admin';
@@ -49,8 +49,8 @@ export class FoodsApiV4 {
 
   public async createLocalFood(
     localeId: string,
-    createRequest: CreateLocalFoodRequest,
-    options: CreateLocalFoodRequestOptions,
+    createRequest: CreateFoodRequest,
+    options: CreateFoodRequestOptions,
   ): Promise<CreateResult<FoodEntry>> {
     const response = await this.baseClient.postResponse<FoodEntry>(
       `${FoodsApiV4.localApiPath}/${localeId}`,
@@ -59,15 +59,5 @@ export class FoodsApiV4 {
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
-  }
-
-  public async getEnabledFoods(localeId: string): Promise<{ enabledFoods: string[] } | null> {
-    return this.baseClient.getOptional<{ enabledFoods: string[] }>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`);
-  }
-
-  public async updateEnabledFoods(localeId: string, enabledFoods: string[]) {
-    await this.baseClient.post<FoodEntry>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`, {
-      enabledFoods,
-    });
   }
 }
