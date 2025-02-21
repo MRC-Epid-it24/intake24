@@ -253,8 +253,8 @@ importers:
         specifier: ^1.20.3
         version: 1.20.3
       bullmq:
-        specifier: ^5.41.3
-        version: 5.41.3
+        specifier: ^5.41.4
+        version: 5.41.4
       clean-css:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1118,7 +1118,7 @@ importers:
   packages/common-backend:
     dependencies:
       bcryptjs:
-        specifier: ^3.0.1
+        specifier: ^3.0.2
         version: 3.0.2
       html-to-text:
         specifier: ^9.0.5
@@ -4855,8 +4855,8 @@ packages:
     resolution: {integrity: sha512-p1n8zyCkt1BVrKNFymOHjcDSAl7oq/gUvfgULv2EblgpPVQlQr9yHnWjg9IJ2MhfwPqiYqMMrr01OY7yQoK2yA==}
     engines: {node: '>=18.20'}
 
-  bullmq@5.41.3:
-    resolution: {integrity: sha512-tWTeuO/BHDg6gKVnQJMjO42zkhsGss6s4bMdgJU24JVBT53yUvDjaO9H0L/BHKAtsMi4xlxkrDuMNSYWeHlekA==}
+  bullmq@5.41.4:
+    resolution: {integrity: sha512-fwgvtGaO8nzJOlLNVKOIDyuWQvlHzFgYzI/b1QCJGSrUb1NrIYq75qiG08nufL2coxNLm0M7A0KYr9HNtP160Q==}
 
   bundle-name@4.1.0:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
@@ -14724,7 +14724,7 @@ snapshots:
 
   builtin-modules@4.0.0: {}
 
-  bullmq@5.41.3:
+  bullmq@5.41.4:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.5.0
