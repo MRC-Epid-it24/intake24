@@ -26782,6 +26782,54 @@
             "schema": {}
           }
         ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "CleanRedisStore",
+                      "CleanStorageFiles",
+                      "FeedbackSchemesSync",
+                      "LanguageTranslationsSync",
+                      "LocaleIndexBuild",
+                      "PopularitySearchUpdateCounters",
+                      "PurgeExpiredTokens",
+                      "ResourceExport",
+                      "SurveyEventNotification",
+                      "SurveyFeedbackNotification",
+                      "SurveyHelpRequestNotification",
+                      "SurveySchemesSync",
+                      "SurveySubmission",
+                      "UserEmailVerificationNotification",
+                      "UserPasswordResetNotification",
+                      "LocaleCopy",
+                      "LocaleFoods",
+                      "LocaleFoodNutrientMapping",
+                      "LocaleFoodRankingUpload",
+                      "NutrientTableMappingImport",
+                      "NutrientTableDataImport",
+                      "SurveyAuthUrlsExport",
+                      "SurveyDataExport",
+                      "SurveyNutrientsRecalculation",
+                      "SurveyRatingsExport",
+                      "SurveyRespondentsImport",
+                      "SurveySessionsExport",
+                      "ResourceExport"
+                    ]
+                  },
+                  "params": {
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200",
