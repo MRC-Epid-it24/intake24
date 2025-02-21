@@ -179,7 +179,7 @@ export default class DemographicGroup {
       ['good', 2],
       ['neutral', 3],
     ]);
-    const sentimentOrderKeys = sentimentOrder.keys().toArray();
+    const sentimentOrderKeys = [...sentimentOrder.keys()];
 
     const bestScaleSectors = this.scaleSectors.filter(ss => sentimentOrderKeys.includes(ss.sentiment))
       .sort((a, b) => (sentimentOrder.get(a.sentiment) ?? 0) - (sentimentOrder.get(b.sentiment) ?? 0));
