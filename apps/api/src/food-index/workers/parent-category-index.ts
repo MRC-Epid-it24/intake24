@@ -1,4 +1,4 @@
-import { LocalCategoryData, LocalFoodData } from '@intake24/api/food-index/workers/food-data';
+import type { LocalCategoryData, LocalFoodData } from '@intake24/api/food-index/workers/food-data';
 import type Logger from '@intake24/common-backend/services/logger/logger';
 
 interface TransitiveParentCategory {

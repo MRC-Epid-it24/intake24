@@ -3,14 +3,15 @@ import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
 import { col, fn, Op } from 'sequelize';
-
 import { ValidationError } from '@intake24/api/http/errors';
+
 import { permission } from '@intake24/api/http/middleware';
 import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { languageResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
-import { Language, PaginateOptions, securableScope } from '@intake24/db';
+import type { PaginateOptions } from '@intake24/db';
+import { Language, securableScope } from '@intake24/db';
 
 async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { languageId, req }: { languageId?: string; req: TsRestRequest<T> }) {
   const where: WhereOptions = languageId ? { id: { [Op.ne]: languageId } } : {};

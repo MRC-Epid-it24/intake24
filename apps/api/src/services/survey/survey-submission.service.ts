@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { ExternalSource } from '@intake24/common/prompts';
+import type { ExternalSource } from '@intake24/common/prompts';
 import type {
   CustomPromptAnswer,
   EncodedFood,

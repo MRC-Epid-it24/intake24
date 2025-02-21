@@ -1,9 +1,7 @@
 import { initServer } from '@ts-rest/express';
 
 import foodIndex from '@intake24/api/food-index';
-import {
-  OptionalSearchQueryParameters,
-} from '@intake24/api/food-index/search-query';
+import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import { InvalidIdError } from '@intake24/api/services';
 import { contract } from '@intake24/common/contracts';
 

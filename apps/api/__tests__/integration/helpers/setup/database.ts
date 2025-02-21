@@ -15,7 +15,7 @@ import {
   defaultPrompts,
   defaultSchemeSettings,
 } from '@intake24/common/surveys';
-import { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
+import type { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
 import type { User, UserSurveyAlias } from '@intake24/db';
 import {
   FeedbackScheme,

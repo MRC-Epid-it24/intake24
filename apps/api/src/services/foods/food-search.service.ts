@@ -1,8 +1,6 @@
 import foodIndex from '@intake24/api/food-index';
-import {
-  applyDefaultSearchQueryParameters,
-  OptionalSearchQueryParameters,
-} from '@intake24/api/food-index/search-query';
+import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/search-query';
+import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import type { IoC } from '@intake24/api/ioc';
 import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import type { FoodSearchResponse } from '@intake24/common/types/http';

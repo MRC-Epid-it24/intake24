@@ -1,4 +1,4 @@
-import { PromptSection } from '@intake24/common/surveys';
+import type { PromptSection } from '@intake24/common/surveys';
 
 import migrateToV2 from './2_refactor_conditions';
 import migrateToV3 from './3_prompt_answer_optional';

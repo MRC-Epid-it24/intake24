@@ -12,7 +12,7 @@ import { surveySchemeResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import type { ExportField, ExportSectionId } from '@intake24/common/surveys';
-import { SurveySchemeExportRefs } from '@intake24/common/types/http/admin';
+import type { SurveySchemeExportRefs } from '@intake24/common/types/http/admin';
 import { kebabCase } from '@intake24/common/util';
 import type { PaginateOptions } from '@intake24/db';
 import {

@@ -1,8 +1,5 @@
-import {
-  defaultSearchSettings,
-  SearchSortingAlgorithm,
-  SpellingCorrectionPreference,
-} from '@intake24/common/surveys';
+import type { SearchSortingAlgorithm, SpellingCorrectionPreference } from '@intake24/common/surveys';
+import { defaultSearchSettings } from '@intake24/common/surveys';
 
 export interface OptionalSearchQueryParameters {
   previous?: string[];

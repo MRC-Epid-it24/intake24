@@ -1,5 +1,5 @@
-import { Prompt, SinglePrompt } from '@intake24/common/prompts';
-import { Condition } from '@intake24/common/prompts/conditions';
+import type { Prompt, SinglePrompt } from '@intake24/common/prompts';
+import type { Condition } from '@intake24/common/prompts/conditions';
 
 function migrateCondition(condition: Condition): Condition {
   switch (condition.property.type) {

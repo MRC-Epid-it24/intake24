@@ -20,8 +20,8 @@ import {
   fetchLocalCategories,
   fetchLocalFoods,
   fetchRecipeFoodsList,
-  LocalCategoryData,
 } from './food-data';
+import type { LocalCategoryData } from './food-data';
 
 if (parentPortNullable === null)
   throw new Error('This file can only be run as a worker thread');

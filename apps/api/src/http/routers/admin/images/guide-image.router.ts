@@ -1,7 +1,8 @@
 import type { AppRoute, AppRouter } from '@ts-rest/core';
 import type { TsRestRequest } from '@ts-rest/express';
+import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
-import { col, fn, Op, WhereOptions } from 'sequelize';
+import { col, fn, Op } from 'sequelize';
 
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';

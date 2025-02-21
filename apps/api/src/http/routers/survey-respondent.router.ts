@@ -1,7 +1,7 @@
 import { initServer } from '@ts-rest/express';
 import ms from 'ms';
 
-import { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
+import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import { NotFoundError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';

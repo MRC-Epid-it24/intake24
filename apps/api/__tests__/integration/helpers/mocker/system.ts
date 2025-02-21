@@ -21,7 +21,8 @@ import {
   searchSortingAlgorithms,
   spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
-import { defaultJobsParams, UserCustomField } from '@intake24/common/types';
+import { defaultJobsParams } from '@intake24/common/types';
+import type { UserCustomField } from '@intake24/common/types';
 import type {
   CreateRespondentRequest,
   LanguageRequest,

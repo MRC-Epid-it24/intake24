@@ -4,7 +4,8 @@ import { col, fn, Op } from 'sequelize';
 import { permission } from '@intake24/api/http/middleware';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { contract } from '@intake24/common/contracts';
-import { NutrientTable, PaginateOptions, securableScope, SystemLocale } from '@intake24/db';
+import { NutrientTable, securableScope, SystemLocale } from '@intake24/db';
+import type { PaginateOptions } from '@intake24/db';
 
 export function foodDb() {
   return initServer().router(contract.admin.foodDb, {

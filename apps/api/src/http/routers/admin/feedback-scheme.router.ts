@@ -18,7 +18,6 @@ import { kebabCase } from '@intake24/common/util';
 import {
   createFeedbackSchemeFields,
   FeedbackScheme,
-  PaginateOptions,
   perCardFeedbackSchemeFields,
   PhysicalActivityLevel,
   securableScope,
@@ -26,6 +25,7 @@ import {
   updateFeedbackSchemeFields,
   UserSecurable,
 } from '@intake24/db';
+import type { PaginateOptions } from '@intake24/db';
 
 async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { feedbackSchemeId, req }: { feedbackSchemeId?: string; req: TsRestRequest<T> }) {
   const where: WhereOptions = feedbackSchemeId ? { id: { [Op.ne]: feedbackSchemeId } } : {};

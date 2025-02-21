@@ -8,7 +8,7 @@ import { camelCase } from 'lodash';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { SearchSortingAlgorithm } from '@intake24/common/surveys';
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import { FixedFoodRanking, FoodLocalList, PAOccurrence, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';

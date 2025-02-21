@@ -1,6 +1,6 @@
-import { HttpStatusCode } from 'axios';
+import type { ExtendedFieldValidationError } from '../middleware';
 
-import { ExtendedFieldValidationError } from '../middleware';
+import { HttpStatusCode } from 'axios';
 
 export default class ValidationError extends Error {
   public errors: { [name: string]: ExtendedFieldValidationError } = {};

@@ -4,8 +4,9 @@ import { sql } from 'kysely';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import { LocaleCopyFoodsSubTasks, LocaleCopySystemSubTasks } from '@intake24/common/types';
-import { Job as DbJob, FoodsDB, SystemDB, SystemLocale } from '@intake24/db';
+import type { LocaleCopyFoodsSubTasks, LocaleCopySystemSubTasks } from '@intake24/common/types';
+import { Job as DbJob, SystemLocale } from '@intake24/db';
+import type { FoodsDB, SystemDB } from '@intake24/db';
 
 import BaseJob from '../job';
 
