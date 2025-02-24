@@ -63,19 +63,19 @@ export default class SurveySubmissionMissingFood extends BaseModel<
 
   @Column({
     allowNull: true,
-    type: DataType.STRING(512),
+    type: DataType.STRING(1024),
   })
   declare description: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING(512),
+    type: DataType.STRING(1024),
   })
   declare portionSize: string | null;
 
   @Column({
     allowNull: true,
-    type: DataType.STRING(512),
+    type: DataType.STRING(1024),
   })
   declare leftovers: string | null;
 
