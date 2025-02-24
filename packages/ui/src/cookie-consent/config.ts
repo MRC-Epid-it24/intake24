@@ -14,12 +14,14 @@ export function gTagConfig(): PluginOptions {
 }
 
 async function toggleGA(enabled: boolean) {
+  console.debug('GA toggled to ', enabled);
   if (!enabled) {
+    console.debug('GA opt-out');
     optOut();
     return;
   }
 
-  console.debug('GA toggled to ', enabled);
+  console.debug('GA opt-in', enabled);
   optIn();
   setOptions(gTagConfig());
   await bootstrap();
@@ -53,11 +55,13 @@ export function cookieConsentConfig(translations: CookieConsentConfig['language'
       translations,
     },
     onChange: ({ cookie }) => {
+      console.debug('Consent changed');
       toggleGA(cookie.categories.includes('analytics'));
       toggleGTM(cookie.categories.includes('analytics'));
       toggleClarity(cookie.categories.includes('analytics'));
     },
     onFirstConsent: ({ cookie }) => {
+      console.debug('First consent');
       toggleGA(cookie.categories.includes('analytics'));
       toggleGTM(cookie.categories.includes('analytics'));
       toggleClarity(cookie.categories.includes('analytics'));
