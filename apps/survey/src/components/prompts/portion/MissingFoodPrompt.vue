@@ -25,6 +25,7 @@
                 <v-textarea
                   v-model="info.description"
                   hide-details="auto"
+                  name="description"
                   :rules="textFieldRules"
                   @update:model-value="update"
                 />
@@ -39,6 +40,7 @@
                   v-model="info.brand"
                   class="mb-4"
                   hide-details="auto"
+                  name="brand"
                   :rules="textFieldRules"
                   @update:model-value="update"
                 />
@@ -51,6 +53,7 @@
                   :is="`${prompt.barcode.type}-input`"
                   v-model:model-value="info.barcode"
                   hide-details="auto"
+                  name="barcode"
                   :options="prompt.barcode"
                   outlined
                   :rules="barcodeRules"
@@ -84,13 +87,14 @@
               v-model="info.portionSize"
               class="mb-4"
               hide-details="auto"
+              name="portionSize"
               :rules="textFieldRules"
               @update:model-value="update"
             />
             <v-btn
               :block="$vuetify.display.mobile"
               color="primary"
-              :disabled="!info.portionSize"
+              :disabled="!portionSizeValid"
               @click="confirm"
             >
               {{ $t('common.action.continue') }}
@@ -235,10 +239,16 @@ export default defineComponent({
   setup() {
     const { form, inputTooLog } = useForm();
 
+    const formErrors = computed(() => form.value?.errors ?? []);
     const barcodeRules = computed(() => [inputTooLog(128)]);
-    const textFieldRules = computed(() => [inputTooLog(1024)]);
+    const textFieldRules = computed(() => [inputTooLog(102)]);
 
-    return { form, barcodeRules, textFieldRules };
+    return {
+      form,
+      formErrors,
+      barcodeRules,
+      textFieldRules,
+    };
   },
 
   data() {
@@ -273,7 +283,7 @@ export default defineComponent({
         && this.formErrors.every(error => typeof error !== 'string' && !['portionSize'].includes(error.id.toString()));
     },
     validConditions(): boolean[] {
-      return [!!this.form?.isValid, this.homemadeValid, !!this.info.portionSize];
+      return [!!this.form?.isValid, this.homemadeValid, this.portionSizeValid];
     },
   },
 
