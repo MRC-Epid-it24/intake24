@@ -7,7 +7,7 @@ import type { Dictionary, Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
 import { z } from 'zod';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
-import { requiredLocaleTranslation } from '../types/common';
+import { requiredLocaleTranslationWithLimit } from '../types/common';
 
 /*
 Not currently used:
@@ -259,12 +259,11 @@ export const mealTime = z.object({
   hours: z.number(),
   minutes: z.number(),
 });
-
 export type MealTime = z.infer<typeof mealTime>;
 
 export const mealState = z.object({
   id: z.string(),
-  name: requiredLocaleTranslation,
+  name: requiredLocaleTranslationWithLimit({ max: 64 }),
   defaultTime: mealTime,
   time: mealTime.optional(),
   duration: z.number().nullable(),

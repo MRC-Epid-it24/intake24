@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts">
-import type { VForm } from 'vuetify/components';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
+import { useForm } from '../partials';
 
 export default defineComponent({
   name: 'TextareaPrompt',
@@ -48,9 +48,9 @@ export default defineComponent({
 
   setup(props, ctx) {
     const { i18n: { t }, translate } = useI18n();
+    const { form, inputTooLog } = useForm();
 
-    const form = ref<InstanceType<typeof VForm>>();
-    const isValid = computed(() => !props.prompt.validation.required || !!props.modelValue);
+    const isValid = computed(() => !!form.value?.isValid && (!props.prompt.validation.required || !!props.modelValue));
     const state = computed({
       get() {
         return props.modelValue;
@@ -60,25 +60,30 @@ export default defineComponent({
       },
     });
 
-    const confirm = () => {
-      const isValid = form.value?.validate();
-      return !!isValid;
+    const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
+
+    const rules = computed(() => {
+      const items = [inputTooLog(512)];
+
+      if (props.prompt.validation.required) {
+        items.push((v: string | null) =>
+          !!v
+          || (translate(props.prompt.validation.message)
+            ?? t(`prompts.${type.value}.validation.required`)));
+      }
+
+      return items;
+    });
+
+    return {
+      action,
+      customPromptLayout,
+      form,
+      isValid,
+      rules,
+      state,
+      translate,
     };
-
-    const { action, customPromptLayout, type } = usePromptUtils(props, ctx, confirm);
-
-    const rules = computed(() =>
-      props.prompt.validation.required
-        ? [
-            (v: string | null) =>
-              !!v
-              || (translate(props.prompt.validation.message)
-                ?? t(`prompts.${type.value}.validation.required`)),
-          ]
-        : [],
-    );
-
-    return { action, customPromptLayout, form, isValid, rules, state, translate };
   },
 });
 </script>

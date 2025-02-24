@@ -6,19 +6,21 @@
     <v-card-text class="pt-2">
       <v-row>
         <v-col cols="12" md="8">
-          <component
-            :is="prompt.custom ? 'v-combobox' : 'v-select'"
-            v-model="state"
-            v-model:search-input="state"
-            autofocus
-            class="meal-add-prompt__combobox"
-            clearable
-            hide-details="auto"
-            :items="availableMeals"
-            :label="promptI18n.label"
-            outlined
-            :rules="rules"
-          />
+          <v-form ref="form" @submit.prevent="action('next')">
+            <component
+              :is="prompt.custom ? 'v-combobox' : 'v-select'"
+              v-model="state"
+              v-model:search-input="state"
+              autofocus
+              class="meal-add-prompt__combobox"
+              clearable
+              hide-details="auto"
+              :items="availableMeals"
+              :label="promptI18n.label"
+              outlined
+              :rules="rules"
+            />
+          </v-form>
         </v-col>
       </v-row>
     </v-card-text>
@@ -87,6 +89,7 @@ import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
+import { useForm } from '../partials';
 
 export default defineComponent({
   name: 'MealAddPrompt',
@@ -115,6 +118,8 @@ export default defineComponent({
     const { i18n: { t }, translatePath } = useI18n();
     const { action, params, type } = usePromptUtils(props, ctx);
 
+    const { form, inputTooLog } = useForm();
+
     const state = computed({
       get() {
         return props.modelValue;
@@ -127,8 +132,7 @@ export default defineComponent({
     const isValidMeal = (value: any) => !props.prompt.unique || !props.meals.includes(value?.toLowerCase().trim());
     const availableMeals = computed(() => props.defaultMeals.filter(meal => isValidMeal(meal)));
     const hasMeals = computed(() => !!props.meals.length);
-
-    const isValid = computed(() => !!state.value && isValidMeal(state.value));
+    const isValid = computed(() => !!form.value?.isValid && !!state.value && isValidMeal(state.value));
 
     const i18nPrefix = computed(
       () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`,
@@ -142,10 +146,20 @@ export default defineComponent({
     }));
 
     const rules = [
+      inputTooLog(64),
       (value: any): boolean | string => isValidMeal(value) || promptI18n.value.exists.toString(),
     ];
 
-    return { action, availableMeals, hasMeals, isValid, promptI18n, rules, state };
+    return {
+      action,
+      availableMeals,
+      form,
+      hasMeals,
+      isValid,
+      promptI18n,
+      rules,
+      state,
+    };
   },
 });
 </script>

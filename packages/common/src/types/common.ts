@@ -62,8 +62,15 @@ export const requiredLocaleTranslation = z.intersection(
   z.object({ en: z.string() }),
   z.record(z.string().nullable()),
 );
-
 export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
+
+export function requiredLocaleTranslationWithLimit(options: { min?: number; max: number }) {
+  const { min = 1, max } = options;
+  return z.intersection(
+    z.object({ en: z.string().min(min).max(max) }),
+    z.record(z.string().min(min).max(max).nullable()),
+  );
+}
 
 export function listOption<T extends z.ZodTypeAny = z.ZodString>(valueSchema?: T) {
   return z.object({

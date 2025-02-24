@@ -76,5 +76,8 @@
   "errors": {
     "500": "Il y a eu un problème :(",
     "retry": "Réessayer"
+  },
+  "validation": {
+    "tooLong": "Entered text is too long ({max} characters max)."
   }
 }

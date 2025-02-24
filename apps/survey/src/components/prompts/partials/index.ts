@@ -13,6 +13,7 @@ export { default as QuantityCard } from './QuantityCard.vue';
 export { default as QuantitySlider } from './QuantitySlider.vue';
 export * from './use-carousel';
 export * from './use-date-picker';
+export * from './use-form';
 export * from './use-panels';
 export * from './use-standard-units';
 export * from './use-youtube-video';
