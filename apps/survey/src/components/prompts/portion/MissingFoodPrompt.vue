@@ -138,7 +138,7 @@ export default defineComponent({
 
     const formErrors = computed(() => form.value?.errors ?? []);
     const barcodeRules = computed(() => [inputTooLog(128)]);
-    const textFieldRules = computed(() => [inputTooLog(102)]);
+    const textFieldRules = computed(() => [inputTooLog(1024)]);
 
     return {
       form,
