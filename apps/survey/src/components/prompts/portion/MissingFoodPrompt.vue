@@ -25,7 +25,6 @@
                 <v-textarea
                   v-model="info.description"
                   hide-details="auto"
-                  name="description"
                   :rules="textFieldRules"
                   @update:model-value="update"
                 />
@@ -40,7 +39,6 @@
                   v-model="info.brand"
                   class="mb-4"
                   hide-details="auto"
-                  name="brand"
                   :rules="textFieldRules"
                   @update:model-value="update"
                 />
@@ -53,7 +51,6 @@
                   :is="`${prompt.barcode.type}-input`"
                   v-model:model-value="info.barcode"
                   hide-details="auto"
-                  name="barcode"
                   :options="prompt.barcode"
                   outlined
                   :rules="barcodeRules"
@@ -87,14 +84,13 @@
               v-model="info.portionSize"
               class="mb-4"
               hide-details="auto"
-              name="portionSize"
               :rules="textFieldRules"
               @update:model-value="update"
             />
             <v-btn
               :block="$vuetify.display.mobile"
               color="primary"
-              :disabled="!portionSizeValid"
+              :disabled="!info.portionSize"
               @click="confirm"
             >
               {{ $t('common.action.continue') }}
@@ -128,7 +124,6 @@
                 <v-textarea
                   v-model="info.description"
                   hide-details="auto"
-                  name="description"
                   :rules="textFieldRules"
                   @update:model-value="update"
                 />
@@ -143,7 +138,6 @@
                   v-model="info.brand"
                   class="mb-4"
                   hide-details="auto"
-                  name="brand"
                   :rules="textFieldRules"
                   @update:model-value="update"
                 />
@@ -156,7 +150,6 @@
                   :is="`${prompt.barcode.type}-input`"
                   v-model:model-value="info.barcode"
                   hide-details="auto"
-                  name="barcode"
                   :options="prompt.barcode"
                   outlined
                   :rules="barcodeRules"
@@ -190,14 +183,13 @@
               v-model="info.portionSize"
               class="mb-4"
               hide-details="auto"
-              name="portionSize"
               :rules="textFieldRules"
               @update:model-value="update"
             />
             <v-btn
               :block="$vuetify.display.mobile"
               color="primary"
-              :disabled="!portionSizeValid"
+              :disabled="!info.portionSize"
               @click="confirm"
             >
               {{ $t('common.action.continue') }}
@@ -218,6 +210,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 import { computed, defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { MissingFood } from '@intake24/common/surveys';
@@ -225,6 +218,7 @@ import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { barcodes } from '@intake24/ui';
 
+import { useForm } from '../partials';
 import { useForm } from '../partials';
 import { useForm } from '../partials';
 import createBasePortion from './createBasePortion';
@@ -241,16 +235,10 @@ export default defineComponent({
   setup() {
     const { form, inputTooLog } = useForm();
 
-    const formErrors = computed(() => form.value?.errors ?? []);
     const barcodeRules = computed(() => [inputTooLog(128)]);
     const textFieldRules = computed(() => [inputTooLog(1024)]);
 
-    return {
-      form,
-      formErrors,
-      barcodeRules,
-      textFieldRules,
-    };
+    return { form, barcodeRules, textFieldRules };
   },
 
   data() {
@@ -285,8 +273,7 @@ export default defineComponent({
         && this.formErrors.every(error => typeof error !== 'string' && !['portionSize'].includes(error.id.toString()));
     },
     validConditions(): boolean[] {
-      return [!!this.form?.isValid, this.homemadeValid, this.portionSizeValid];
-      return [!!this.form?.isValid, this.homemadeValid, this.portionSizeValid];
+      return [!!this.form?.isValid, this.homemadeValid, !!this.info.portionSize];
     },
   },
 

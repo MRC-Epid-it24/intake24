@@ -24,45 +24,68 @@
   </component>
 </template>
 
-<script lang="ts" setup>
-import { computed } from 'vue';
+<script lang="ts">
+import { computed, defineComponent } from 'vue';
+
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
-import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+
+import createBasePrompt from '../createBasePrompt';
 import { useForm } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({
+export default defineComponent({
   name: 'TextareaPrompt',
-  components: { BaseLayout, CardLayout, PanelLayout },
+
+  mixins: [createBasePrompt<'textarea-prompt'>()],
+
+  props: {
+    modelValue: {
+      type: String,
+    },
+  },
+
+  emits: ['action', 'update:modelValue'],
+
+  setup(props, ctx) {
+    const { i18n: { t }, translate } = useI18n();
+    const { form, inputTooLog } = useForm();
+
+    const isValid = computed(() => !!form.value?.isValid && (!props.prompt.validation.required || !!props.modelValue));
+    const state = computed({
+      get() {
+        return props.modelValue;
+      },
+      set(value) {
+        ctx.emit('update:modelValue', value);
+      },
+    });
+
+    const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
+
+    const rules = computed(() => {
+      const items = [inputTooLog(512)];
+
+      if (props.prompt.validation.required) {
+        items.push((v: string | null) =>
+          !!v
+          || (translate(props.prompt.validation.message)
+            ?? t(`prompts.${type.value}.validation.required`)));
+      }
+
+      return items;
+    });
+
+    return {
+      action,
+      customPromptLayout,
+      form,
+      isValid,
+      rules,
+      state,
+      translate,
+    };
+  },
 });
-
-const props = defineProps(createBasePromptProps<'textarea-prompt'>());
-
-const emit = defineEmits(['action', 'update:modelValue']);
-
-const { i18n: { t }, translate } = useI18n();
-const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
-const { form, inputTooLog } = useForm();
-
-const state = defineModel('modelValue', { type: String });
-const isValid = computed(() => !!form.value?.isValid && (!props.prompt.validation.required || !!state.value));
-
-const rules = computed(() => {
-  const items = [inputTooLog(512)];
-
-  if (props.prompt.validation.required) {
-    items.push((v: string | null) =>
-      !!v
-      || (translate(props.prompt.validation.message)
-        ?? t(`prompts.${type.value}.validation.required`)));
-  }
-
-  return items;
-});
-
-defineExpose({ isValid });
 </script>
 
 <style lang="scss" scoped></style>
