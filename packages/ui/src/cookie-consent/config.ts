@@ -19,15 +19,17 @@ async function toggleGA(enabled: boolean) {
     return;
   }
 
+  console.debug('GA toggled to ', enabled);
   optIn();
   setOptions(gTagConfig());
   await bootstrap();
 }
 async function toggleGTM(enabled: boolean) {
+  console.debug('GTM toggled to ', enabled);
   useGtm()?.enable(enabled);
 }
 async function toggleClarity(enabled: boolean) {
-  console.log('Clarity toggled to ', enabled);
+  console.debug('Clarity toggled to ', enabled);
   Clarity.consent(enabled);
 }
 export function cookieConsentConfig(translations: CookieConsentConfig['language']['translations'] = {}): CookieConsentConfig {
