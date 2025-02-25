@@ -1,6 +1,7 @@
 import AggregateChoicePrompt from './aggregate-choice-prompt.vue';
 import CheckboxListPrompt from './checkbox-list-prompt.vue';
 import DatePickerPrompt from './date-picker-prompt.vue';
+import FoodSelectionPrompt from './food-selection-prompt.vue';
 import InfoPrompt from './info-prompt.vue';
 import NoMoreInformationPrompt from './no-more-information-prompt.vue';
 import RadioListPrompt from './radio-list-prompt.vue';
@@ -14,6 +15,7 @@ export default {
   AggregateChoicePrompt,
   CheckboxListPrompt,
   DatePickerPrompt,
+  FoodSelectionPrompt,
   InfoPrompt,
   NoMoreInformationPrompt,
   RadioListPrompt,
