@@ -201,6 +201,11 @@
       "message": "You have already answered some questions about \"{discardedFoodName}\"! If you change it to \"{selectedFoodName}\" now, you might have to answer some of those questions again. Are you sure you would like to replace this food?"
     }
   },
+  "foodSelection": {
+    "name": "Select foods",
+    "text": "",
+    "description": "<p>Select foods from the list below.</p>"
+  },
   "mealAdd": {
     "name": "Add Meal",
     "text": "",

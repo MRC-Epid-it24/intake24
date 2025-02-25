@@ -1,5 +1,6 @@
 import CheckboxListPrompt from './checkbox-list-prompt.vue';
 import DatePickerPrompt from './date-picker-prompt.vue';
+import FoodSelectionPrompt from './food-selection/food-selection-prompt.vue';
 import InfoPrompt from './info-prompt.vue';
 import NoMoreInformationPrompt from './no-more-information-prompt.vue';
 import RadioListPrompt from './radio-list-prompt.vue';
@@ -15,6 +16,7 @@ export const customPrompts = {
   CheckboxListPrompt,
   DatePickerPrompt,
   InfoPrompt,
+  FoodSelectionPrompt,
   NoMoreInformationPrompt,
   SelectPrompt,
   SliderPrompt,

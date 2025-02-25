@@ -151,32 +151,32 @@
       "showIfSet": "Show if tagged"
     },
     "summary": {
-      "value": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
-      "entityValue": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
-      "boolean": "<em><strong>{property}</strong></em> in <em><strong>{object}</strong></em>: {value}",
+      "value": "<em><strong>{property}</strong></em> &nbsp;of&nbsp; <em><strong>{object}</strong></em>",
+      "entityValue": "<em><strong>{property}</strong></em> &nbsp;of&nbsp; <em><strong>{object}</strong></em>",
+      "boolean": "<em><strong>{property}</strong></em> &nbsp;in&nbsp; <em><strong>{object}</strong></em>: {value}",
       "mealCompletion": {
-        "freeEntryComplete": "<em><strong>free text entry</em></strong> of foods for the <em><strong>{object}</strong></em> is complete",
-        "searchComplete": "<em><strong>identification</em></strong> of foods in the <em><strong>{object}</strong></em> is complete",
-        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> of foods in the <em><strong>{object}</strong></em> is complete",
-        "complete": "<em><strong>associated food prompts</em></strong> in the <em><strong>{object}</strong></em> are complete"
+        "freeEntryComplete": "<em><strong>free text entry</em></strong> &nbsp;of&nbsp; foods for the <em><strong>{object}</strong></em> is complete",
+        "searchComplete": "<em><strong>identification</em></strong> &nbsp;of&nbsp; foods in the <em><strong>{object}</strong></em> is complete",
+        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> &nbsp;of foods in the <em><strong>{object}</strong></em> is complete",
+        "complete": "<em><strong>associated food prompts</em></strong> &nbsp;in the&nbsp; <em><strong>{object}</strong></em> are complete"
       },
       "foodCompletion": {
-        "freeEntryComplete": "<em><strong>free text entry</em></strong> for the <em><strong>{object}</strong></em> is complete",
-        "searchComplete": "<em><strong>identification</em></strong> of the <em><strong>{object}</strong></em> is complete",
-        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> for the <em><strong>{object}</strong></em> is complete",
-        "complete": "<em><strong>associated food prompts</em></strong> for the <em><strong>{object}</strong></em> are complete"
+        "freeEntryComplete": "<em><strong>free text entry</em></strong> &nbsp;for the&nbsp; <em><strong>{object}</strong></em> is complete",
+        "searchComplete": "<em><strong>identification</em></strong> &nbsp;of the&nbsp; <em><strong>{object}</strong></em> is complete",
+        "portionSizeComplete": "<em><strong>portion size estimation</em></strong> &nbsp;for the&nbsp; <em><strong>{object}</strong></em> is complete",
+        "complete": "<em><strong>associated food prompts</em></strong> &nbsp;for the&nbsp; <em><strong>{object}</strong></em> are complete"
       },
       "flag": {
-        "set": "flag <em><strong>{id}</strong></em> set in <em><strong>{object}</strong></em>",
-        "notSet": "flag <em><strong>{id}</strong></em> not set in <em><strong>{object}</strong></em>"
+        "set": "flag <em><strong>{id}</strong></em> &nbsp;set in&nbsp; <em><strong>{object}</strong></em>",
+        "notSet": "flag <em><strong>{id}</strong></em> &nbsp;not set in&nbsp; <em><strong>{object}</strong></em>"
       },
       "tag": {
-        "present": "<em><strong>{object}</strong></em> is tagged with <em><strong>{id}</strong></em>",
-        "absent": "<em><strong>{object}</strong></em> is <strong>NOT</strong> tagged with <em><strong>{id}</strong></em>"
+        "present": "<em><strong>{object}</strong></em> &nbsp;is tagged with&nbsp; <em><strong>{id}</strong></em>",
+        "absent": "<em><strong>{object}</strong></em> &nbsp;is&nbsp; <strong>NOT</strong> &nbsp;tagged with&nbsp; <em><strong>{id}</strong></em>"
       },
-      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> for <em><strong>{object}</strong></em>",
-      "userField": "<em><strong>{property} ({field})</strong></em> for <em><strong>{object}</strong></em>",
-      "notRequired": "<strong>OR</strong> not set"
+      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> &nbsp;for&nbsp; <em><strong>{object}</strong></em>",
+      "userField": "<em><strong>{property} ({field})</strong></em> &nbsp;for&nbsp; <em><strong>{object}</strong></em>",
+      "notRequired": "<strong>OR</strong> &nbsp;not set"
     },
     "promptAnswer": {
       "promptId": "Prompt ID",
@@ -552,6 +552,13 @@
         "_": "Enable survey rating collection",
         "title": "Survey rating"
       }
+    },
+    "food-selection-prompt": {
+      "title": "Food selection",
+      "subtitle": "Select foods from a meal using a checkbox list",
+      "filter": "Only ask for certain foods",
+      "useFlag": "Set a flag on selected foods instead of a custom prompt answer",
+      "flag": "Flag"
     },
     "food-search-prompt": {
       "title": "Food database search",
