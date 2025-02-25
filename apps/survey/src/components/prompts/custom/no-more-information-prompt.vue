@@ -19,9 +19,7 @@
               variant="text"
               v-bind="props"
             >
-              <v-icon start>
-                $delete
-              </v-icon>
+              <v-icon icon="$delete" start />
               {{ $t('recall.actions.deleteFood') }}
             </v-btn>
           </template>
@@ -39,9 +37,7 @@
           variant="text"
           @click.stop="action('editFood', food?.id)"
         >
-          <v-icon start>
-            $edit
-          </v-icon>
+          <v-icon icon="$edit" start />
           {{ $t('recall.actions.editFood') }}
         </v-btn>
       </template>
@@ -59,9 +55,7 @@
               variant="text"
               v-bind="props"
             >
-              <v-icon start>
-                $delete
-              </v-icon>
+              <v-icon icon="$delete" start />
               {{ $t('recall.actions.deleteMeal') }}
             </v-btn>
           </template>
@@ -79,9 +73,7 @@
           variant="text"
           @click.stop="action('editMeal', meal?.id)"
         >
-          <v-icon start>
-            $add
-          </v-icon>
+          <v-icon icon="$add" start />
           {{ $t('recall.actions.editMeal') }}
         </v-btn>
       </template>
@@ -98,9 +90,7 @@
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteFood') }}
               </span>
-              <v-icon class="pb-1">
-                $delete
-              </v-icon>
+              <v-icon class="pb-1" icon="$delete" />
             </v-btn>
           </template>
           <i18n-t keypath="recall.menu.food.deleteConfirm">
@@ -114,9 +104,7 @@
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.editFood') }}
           </span>
-          <v-icon class="pb-1">
-            $edit
-          </v-icon>
+          <v-icon class="pb-1" icon="$edit" />
         </v-btn>
         <v-divider vertical />
       </template>
@@ -130,9 +118,7 @@
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteMeal') }}
               </span>
-              <v-icon class="pb-1">
-                $delete
-              </v-icon>
+              <v-icon class="pb-1" icon="$delete" />
             </v-btn>
           </template>
           <i18n-t keypath="recall.menu.meal.deleteConfirm">
@@ -146,9 +132,7 @@
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.editMeal') }}
           </span>
-          <v-icon class="pb-1">
-            $add
-          </v-icon>
+          <v-icon class="pb-1" icon="$add" />
         </v-btn>
         <v-divider vertical />
       </template>
@@ -157,58 +141,33 @@
   </component>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
-
-export default defineComponent({
+defineOptions({
   name: 'NoMoreInformationPrompt',
-
-  components: { ConfirmDialog },
-
-  mixins: [createBasePrompt<'no-more-information-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: String,
-      default: 'next',
-    },
-  },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { action, customPromptLayout, foodName, isFood, isMeal, mealName } = usePromptUtils(
-      props,
-      ctx,
-    );
-
-    const isValid = true;
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
-
-    return {
-      action,
-      customPromptLayout,
-      foodName,
-      isFood,
-      isMeal,
-      isValid,
-      mealName,
-      state,
-    };
-  },
+  components: { BaseLayout, CardLayout, PanelLayout },
 });
+
+const props = defineProps(createBasePromptProps<'no-more-information-prompt'>());
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const {
+  action,
+  customPromptLayout,
+  foodName,
+  isFood,
+  isMeal,
+  mealName,
+} = usePromptUtils(props, { emit });
+
+const isValid = true;
+defineModel('modelValue', { type: String, default: 'next' });
 </script>
 
 <style lang="scss" scoped></style>

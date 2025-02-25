@@ -26,9 +26,7 @@
           :to="{ name: 'survey-home', params: { surveyId } }"
           variant="outlined"
         >
-          <v-icon start>
-            $home
-          </v-icon>
+          <v-icon icon="$home" start />
           {{ $t('common.home') }}
         </v-btn>
         <v-btn
@@ -40,9 +38,7 @@
           :to="{ name: 'feedback-home', params: { surveyId } }"
           variant="outlined"
         >
-          <v-icon start>
-            $feedback
-          </v-icon>
+          <v-icon icon="$feedback" start />
           {{ $t('recall.actions.feedback') }}
         </v-btn>
         <template v-if="followUpUrl">
@@ -56,9 +52,7 @@
             :title="promptI18n.goTo"
             variant="outlined"
           >
-            <v-icon start>
-              $redirect
-            </v-icon>
+            <v-icon icon="$redirect" start />
             {{ promptI18n.goTo }}
           </v-btn>
         </template>
@@ -68,9 +62,7 @@
           <span class="text-overline font-weight-medium">
             {{ $t('common.home') }}
           </span>
-          <v-icon class="pb-1">
-            $home
-          </v-icon>
+          <v-icon class="pb-1" icon="$home" />
         </v-btn>
         <v-divider vertical />
         <v-btn
@@ -83,18 +75,14 @@
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.feedback') }}
           </span>
-          <v-icon class="pb-1">
-            $feedback
-          </v-icon>
+          <v-icon class="pb-1" icon="$feedback" />
         </v-btn>
         <v-divider vertical />
         <v-btn v-if="followUpUrl" color="primary" :href="followUpUrl" :target="prompt.target" variant="text">
           <span class="text-overline font-weight-medium">
             {{ promptI18n.goTo }}
           </span>
-          <v-icon class="pb-1">
-            $redirect
-          </v-icon>
+          <v-icon class="pb-1" icon="$redirect" />
         </v-btn>
       </template>
     </card-layout>
@@ -106,111 +94,92 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
-
+<script lang="ts" setup>
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'RedirectPrompt' });
 
-export default defineComponent({
-  name: 'RedirectPrompt',
-
-  components: { SurveyRating },
-
-  mixins: [createBasePrompt<'redirect-prompt'>()],
-
-  props: {
-    feedbackAvailable: {
-      type: Boolean,
-    },
-    feedbackEnabled: {
-      type: Boolean,
-    },
-    followUpUrl: {
-      type: String,
-    },
-    submissionId: {
-      type: String,
-    },
-    surveyId: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'redirect-prompt'>(),
+  feedbackAvailable: {
+    type: Boolean,
   },
+  feedbackEnabled: {
+    type: Boolean,
+  },
+  followUpUrl: {
+    type: String,
+  },
+  submissionId: {
+    type: String,
+  },
+  surveyId: {
+    type: String,
+    required: true,
+  },
+});
 
-  emits: ['action'],
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  setup(props, ctx) {
-    const { action, translatePrompt } = usePromptUtils(props, ctx);
+const { action, translatePrompt } = usePromptUtils(props, { emit });
 
-    const isValid = true;
-    const timerInterval = ref<undefined | number>(undefined);
-    const timerValue = ref(props.prompt.timer ? 100 : 0);
-    const timerTick = computed(() =>
-      props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0,
-    );
-    const timerSecs = computed(() => {
-      if (!props.prompt.timer)
-        return 0;
+const isValid = true;
+const timerInterval = ref<undefined | number>(undefined);
+const timerValue = ref(props.prompt.timer ? 100 : 0);
+const timerTick = computed(() =>
+  props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0,
+);
+const timerSecs = computed(() => {
+  if (!props.prompt.timer)
+    return 0;
 
-      const timer = Math.round((timerValue.value / 100) * props.prompt.timer);
-      return timer > 0 ? timer : 0;
-    });
+  const timer = Math.round((timerValue.value / 100) * props.prompt.timer);
+  return timer > 0 ? timer : 0;
+});
 
-    const promptI18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
+const promptI18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
 
-    const redirect = () => {
-      if (!props.followUpUrl)
-        return;
+function redirect() {
+  if (!props.followUpUrl)
+    return;
 
-      window.open(props.followUpUrl, props.prompt.target);
-    };
+  window.open(props.followUpUrl, props.prompt.target);
+}
 
-    const clearTimer = () => {
-      clearInterval(timerInterval.value);
-    };
+function clearTimer() {
+  clearInterval(timerInterval.value);
+}
 
-    const startTimer = () => {
-      if (props.prompt.timer === 0 || !props.followUpUrl)
-        return;
+function startTimer() {
+  if (props.prompt.timer === 0 || !props.followUpUrl)
+    return;
 
-      if (props.prompt.timer < 0) {
-        redirect();
-        return;
-      }
+  if (props.prompt.timer < 0) {
+    redirect();
+    return;
+  }
 
-      // @ts-expect-error - node types
-      timerInterval.value = setInterval(() => {
-        timerValue.value -= timerTick.value;
+  // @ts-expect-error - node types
+  timerInterval.value = setInterval(() => {
+    timerValue.value -= timerTick.value;
 
-        if (timerValue.value <= 0) {
-          clearTimer();
-          redirect();
-        }
-      }, 1000);
-    };
-
-    onMounted(() => {
-      startTimer();
-    });
-
-    onBeforeUnmount(() => {
+    if (timerValue.value <= 0) {
       clearTimer();
-    });
+      redirect();
+    }
+  }, 1000);
+}
 
-    return {
-      action,
-      isValid,
-      promptI18n,
-      timerTick,
-      timerSecs,
-      timerValue,
-      clearTimer,
-      redirect,
-    };
-  },
+onMounted(() => {
+  startTimer();
+});
+
+onBeforeUnmount(() => {
+  clearTimer();
 });
 </script>
 

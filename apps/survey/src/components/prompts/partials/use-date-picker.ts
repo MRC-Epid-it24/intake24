@@ -10,7 +10,7 @@ export type DatePickerProps = {
   modelValue: string | null;
 };
 
-export function useDatePicker(props: DatePickerProps, ctx: SetupContext<'update:modelValue'[]>) {
+export function useDatePicker(props: DatePickerProps, { emit }: Pick<SetupContext<'update:modelValue'[]>, 'emit'>) {
   const adapter = useDate();
 
   const datePickerProps = computed(() => {
@@ -29,7 +29,7 @@ export function useDatePicker(props: DatePickerProps, ctx: SetupContext<'update:
       return props.modelValue ? adapter.parseISO(new Date(props.modelValue).toISOString().substring(0, 10)) : null;
     },
     set(value) {
-      ctx.emit('update:modelValue', value ? adapter.toISO(value).substring(0, 10) : null);
+      emit('update:modelValue', value ? adapter.toISO(value).substring(0, 10) : null);
     },
   });
 

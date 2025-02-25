@@ -9,9 +9,7 @@
           :to="{ name: 'survey-home', params: { surveyId } }"
           variant="outlined"
         >
-          <v-icon start>
-            $home
-          </v-icon>
+          <v-icon icon="$home" start />
           {{ $t('common.home') }}
         </v-btn>
         <v-btn
@@ -23,18 +21,14 @@
           :to="{ name: 'feedback-home', params: { surveyId } }"
           variant="outlined"
         >
-          <v-icon start>
-            $feedback
-          </v-icon>
+          <v-icon icon="$feedback" start />
           {{ $t('recall.actions.feedback') }}
         </v-btn>
       </template>
       <template #nav-actions>
         <v-btn color="primary" :to="{ name: 'survey-home', params: { surveyId } }" variant="text">
           <span class="text-overline font-weight-medium">{{ $t('common.home') }}</span>
-          <v-icon class="pb-1">
-            $home
-          </v-icon>
+          <v-icon class="pb-1" icon="$home" />
         </v-btn>
         <v-divider vertical />
         <v-btn
@@ -47,9 +41,7 @@
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.feedback') }}
           </span>
-          <v-icon class="pb-1">
-            $feedback
-          </v-icon>
+          <v-icon class="pb-1" icon="$feedback" />
         </v-btn>
       </template>
     </card-layout>
@@ -61,45 +53,36 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'FinalPrompt' });
 
-export default defineComponent({
-  name: 'FinalPrompt',
-
-  components: { SurveyRating },
-
-  mixins: [createBasePrompt<'final-prompt'>()],
-
-  props: {
-    feedbackAvailable: {
-      type: Boolean,
-    },
-    feedbackEnabled: {
-      type: Boolean,
-    },
-    submissionId: {
-      type: String,
-    },
-    surveyId: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'final-prompt'>(),
+  feedbackAvailable: {
+    type: Boolean,
   },
-
-  setup(props, ctx) {
-    const { action } = usePromptUtils(props, ctx);
-
-    const isValid = true;
-
-    return { action, isValid };
+  feedbackEnabled: {
+    type: Boolean,
+  },
+  submissionId: {
+    type: String,
+  },
+  surveyId: {
+    type: String,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action } = usePromptUtils(props, { emit });
+
+const isValid = true;
 </script>
 
 <style lang="scss" scoped></style>

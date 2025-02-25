@@ -48,56 +48,39 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, onMounted } from 'vue';
-
+import { computed, onMounted } from 'vue';
 import type { MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../actions';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'MealDurationPrompt' });
 
-export default defineComponent({
-  name: 'MealDurationPrompt',
-
-  mixins: [createBasePrompt<'meal-duration-prompt'>()],
-
-  props: {
-    meal: {
-      type: Object as PropType<MealState>,
-      required: true,
-    },
-    modelValue: {
-      type: Number,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'meal-duration-prompt'>(),
+  meal: {
+    type: Object as PropType<MealState>,
+    required: true,
   },
+});
 
-  emits: ['action', 'update:modelValue'],
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  setup(props, ctx) {
-    const { translate } = useI18n();
-    const { action, translatePrompt } = usePromptUtils(props, ctx);
+const { translate } = useI18n();
+const { action, translatePrompt } = usePromptUtils(props, { emit });
 
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
+const state = defineModel('modelValue', { type: Number });
 
-    const isValid = computed(() => state.value !== null);
-    const promptI18n = computed(() => translatePrompt(['minutes', 'confirm']));
+const isValid = computed(() => state.value !== null);
+const promptI18n = computed(() => translatePrompt(['minutes', 'confirm']));
 
-    onMounted(() => {
-      if (typeof props.modelValue === 'undefined')
-        state.value = props.prompt.slider.current.value ?? props.prompt.slider.min.value ?? 0;
-    });
-
-    return { action, isValid, promptI18n, state, translate };
-  },
+onMounted(() => {
+  if (typeof state.value === 'undefined')
+    state.value = props.prompt.slider.current.value ?? props.prompt.slider.min.value ?? 0;
 });
 </script>
 

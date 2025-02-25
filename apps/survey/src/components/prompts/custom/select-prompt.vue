@@ -32,61 +32,57 @@
   </component>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
-
-export default defineComponent({
+defineOptions({
   name: 'SelectPrompt',
+  components: { BaseLayout, CardLayout, PanelLayout },
+});
 
-  mixins: [createBasePrompt<'select-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: [String, Number, Array] as PropType<string | number | string[] | number[]>,
-    },
-  },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { i18n: { locale, t } } = useI18n();
-    const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
-
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
-
-    const promptI18n = computed(() => ({
-      label: t(`prompts.${type.value}.label`),
-    }));
-
-    const isValid = computed(() => {
-      if (!props.prompt.validation.required)
-        return true;
-
-      if (props.prompt.multiple && Array.isArray(state.value))
-        return !!state.value.length;
-
-      return typeof state.value !== 'undefined' && state.value !== null;
-    });
-    const localeOptions = computed(
-      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
-    );
-
-    return { action, customPromptLayout, isValid, localeOptions, promptI18n, state };
+const props = defineProps({
+  ...createBasePromptProps<'select-prompt'>(),
+  modelValue: {
+    type: [String, Number, Array] as PropType<string | number | string[] | number[]>,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { i18n: { locale, t } } = useI18n();
+const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
+
+const state = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  },
+});
+
+const promptI18n = computed(() => ({
+  label: t(`prompts.${type.value}.label`),
+}));
+
+const isValid = computed(() => {
+  if (!props.prompt.validation.required)
+    return true;
+
+  if (props.prompt.multiple && Array.isArray(state.value))
+    return !!state.value.length;
+
+  return typeof state.value !== 'undefined' && state.value !== null;
+});
+const localeOptions = computed(
+  () => props.prompt.options[locale.value] ?? props.prompt.options.en,
+);
 </script>
 
 <style lang="scss"></style>

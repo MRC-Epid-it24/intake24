@@ -23,53 +23,32 @@
   </component>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { computed } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
-import createBasePrompt from '../createBasePrompt';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-export default defineComponent({
+defineOptions({
   name: 'TimePickerPrompt',
-
-  mixins: [createBasePrompt<'time-picker-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: String as PropType<string | null>,
-      default: null,
-    },
-  },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const allowedMinutes = computed(
-      () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
-    );
-
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
-
-    const isValid = computed(() => !props.prompt.validation.required || !!state.value);
-
-    const { action, customPromptLayout } = usePromptUtils(props, ctx);
-
-    return {
-      action,
-      allowedMinutes,
-      customPromptLayout,
-      isValid,
-      state,
-    };
-  },
+  components: { BaseLayout, CardLayout, PanelLayout },
 });
+
+const props = defineProps({
+  ...createBasePromptProps<'time-picker-prompt'>(),
+});
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action, customPromptLayout } = usePromptUtils(props, { emit });
+const state = defineModel('modelValue', { type: String as PropType<string | null>, default: null });
+
+const allowedMinutes = computed(
+  () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
+);
+const isValid = computed(() => !props.prompt.validation.required || !!state.value);
 </script>
 
 <style lang="scss">

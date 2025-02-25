@@ -42,63 +42,50 @@
   </component>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
-
+<script lang="ts" setup>
+import type { PropType } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
-
-export default defineComponent({
+defineOptions({
   name: 'RadioListPrompt',
+  components: { BaseLayout, CardLayout, PanelLayout },
+});
 
-  mixins: [createBasePrompt<'radio-list-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: String,
-    },
-  },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { i18n: { locale } } = useI18n();
-
-    const otherValue = ref('');
-    const selected = ref(props.modelValue);
-
-    const state = computed(() =>
-      selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value,
-    );
-    const isValid = computed(
-      () =>
-        !props.prompt.validation.required
-        || (!!state.value && (selected.value !== 'other' || !!otherValue.value)),
-    );
-    const localeOptions = computed(
-      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
-    );
-
-    const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
-
-    const update = () => {
-      ctx.emit('update:modelValue', state.value);
-    };
-
-    return {
-      action,
-      customPromptLayout,
-      isValid,
-      localeOptions,
-      otherValue,
-      selected,
-      type,
-      update,
-    };
+const props = defineProps({
+  ...createBasePromptProps<'radio-list-prompt'>(),
+  modelValue: {
+    type: String as PropType<string>,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { i18n: { locale } } = useI18n();
+const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
+
+const otherValue = ref('');
+const selected = ref(props.modelValue);
+
+const state = computed(() =>
+  selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value,
+);
+const isValid = computed(
+  () =>
+    !props.prompt.validation.required
+    || (!!state.value && (selected.value !== 'other' || !!otherValue.value)),
+);
+const localeOptions = computed(
+  () => props.prompt.options[locale.value] ?? props.prompt.options.en,
+);
+
+function update() {
+  emit('update:modelValue', state.value);
+}
 </script>
 
 <style lang="scss">

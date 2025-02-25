@@ -12,69 +12,53 @@
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
-        <v-icon class="pb-1">
-          $no
-        </v-icon>
+        <v-icon class="pb-1" icon="$no" />
       </v-btn>
       <v-divider vertical />
       <v-btn color="primary" :title="$t('common.action.yes')" variant="text" @click.stop="state = true">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>
-        <v-icon class="pb-1">
-          $yes
-        </v-icon>
+        <v-icon class="pb-1" icon="$yes" />
       </v-btn>
     </template>
   </component>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
-
-export default defineComponent({
+defineOptions({
   name: 'YesNoPrompt',
+  components: { BaseLayout, CardLayout, PanelLayout },
+});
 
-  components: { YesNoToggle },
-
-  mixins: [createBasePrompt<'yes-no-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: undefined,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'yes-no-prompt'>(),
+  modelValue: {
+    type: Boolean,
+    default: undefined,
   },
+});
 
-  emits: ['action', 'update:modelValue'],
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  setup(props, ctx) {
-    const { action, customPromptLayout } = usePromptUtils(props, ctx);
+const { action, customPromptLayout } = usePromptUtils(props, { emit });
 
-    const isValid = computed(() => props.modelValue !== undefined);
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
+const isValid = computed(() => props.modelValue !== undefined);
+const state = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
 
-        if (typeof value === 'boolean')
-          action('next');
-      },
-    });
-
-    return {
-      action,
-      customPromptLayout,
-      isValid,
-      state,
-    };
+    if (typeof value === 'boolean')
+      action('next');
   },
 });
 </script>

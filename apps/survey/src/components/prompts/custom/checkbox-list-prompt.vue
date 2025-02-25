@@ -39,84 +39,70 @@
   </component>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import type { ListOption } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
-
-export default defineComponent({
+defineOptions({
   name: 'CheckboxListPrompt',
+  components: { BaseLayout, CardLayout, PanelLayout },
+});
 
-  mixins: [createBasePrompt<'checkbox-list-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: Array as PropType<string[]>,
-      default: () => [] as string[],
-    },
+const props = defineProps({
+  ...createBasePromptProps<'checkbox-list-prompt'>(),
+  modelValue: {
+    type: Array as PropType<string[]>,
+    default: () => [] as string[],
   },
+});
 
-  emits: ['action', 'update:modelValue'],
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  setup(props, ctx) {
-    const { i18n: { locale } } = useI18n();
+const { i18n: { locale } } = useI18n();
+const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
 
-    const otherEnabled = ref(false);
-    const otherValue = ref('');
-    const otherOutput = computed(() => otherValue.value.length ? `Other: ${otherValue.value}` : '');
+const otherEnabled = ref(false);
+const otherValue = ref('');
+const otherOutput = computed(() => otherValue.value.length ? `Other: ${otherValue.value}` : '');
 
-    const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
-    const state = computed(() => [...selected.value, otherOutput.value].filter(Boolean));
+const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
+const state = computed(() => [...selected.value, otherOutput.value].filter(Boolean));
 
-    const localeOptions = computed(
-      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
-    );
-    const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.modelValue.includes(option.value)));
-    const isMinSatisfied = computed(() => !props.prompt.validation.min || props.modelValue.length >= props.prompt.validation.min);
-    const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.modelValue.length <= props.prompt.validation.max);
-    const isRequiredSatisfied = computed(() => !props.prompt.validation.required || !!props.modelValue.length);
-    const isValid = computed(() => isRequiredSatisfied.value && (isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value)));
+const localeOptions = computed(
+  () => props.prompt.options[locale.value] ?? props.prompt.options.en,
+);
+const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.modelValue.includes(option.value)));
+const isMinSatisfied = computed(() => !props.prompt.validation.min || props.modelValue.length >= props.prompt.validation.min);
+const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.modelValue.length <= props.prompt.validation.max);
+const isRequiredSatisfied = computed(() => !props.prompt.validation.required || !!props.modelValue.length);
+const isValid = computed(() => isRequiredSatisfied.value && (isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value)));
 
-    const disableOption = (value: string) => !props.modelValue.includes(value)
-      && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.modelValue.length === props.prompt.validation.max));
+function disableOption(value: string) {
+  return !props.modelValue.includes(value)
+    && (isExclusiveSelected.value || (!!props.prompt.validation.max && props.modelValue.length === props.prompt.validation.max));
+}
 
-    const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
+function update(option?: ListOption) {
+  if (option?.exclusive && selected.value.includes(option.value)) {
+    selected.value = [option.value];
+    otherEnabled.value = false;
+  }
 
-    const update = (option?: ListOption) => {
-      if (option?.exclusive && selected.value.includes(option.value)) {
-        selected.value = [option.value];
-        otherEnabled.value = false;
-      }
+  emit('update:modelValue', [...state.value]);
+}
 
-      ctx.emit('update:modelValue', [...state.value]);
-    };
+watch(otherEnabled, (val) => {
+  if (!val)
+    otherValue.value = '';
 
-    watch(otherEnabled, (val) => {
-      if (!val)
-        otherValue.value = '';
-
-      update();
-    });
-
-    return {
-      action,
-      customPromptLayout,
-      isValid,
-      localeOptions,
-      disableOption,
-      otherEnabled,
-      otherOutput,
-      otherValue,
-      selected,
-      type,
-      update,
-    };
-  },
+  update();
 });
 </script>
 
