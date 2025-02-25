@@ -74,6 +74,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { useGtm } from '@gtm-support/vue-gtm';
 import { defineComponent } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
@@ -102,6 +103,14 @@ export default defineComponent({
       type: String as PropType<string>,
       default: '',
     },
+    searchCount: {
+      type: Number as PropType<number>,
+      default: 0,
+    },
+    percentScrolled: {
+      type: Number as PropType<number>,
+      default: 0,
+    },
   },
 
   emits: ['food-selected', 'category-selected'],
@@ -129,10 +138,31 @@ export default defineComponent({
   methods: {
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
+      useGtm()?.trackEvent({
+        event: 'food_category_selected',
+        category: 'Survey',
+        action: 'click food category chip',
+        label: category.name,
+        search_term: this.searchTerm,
+        search_count: this.searchCount,
+        percent_scrolled: this.percentScrolled,
+        noninteraction: false,
+      });
     },
 
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
+      useGtm()?.trackEvent({
+        event: 'food_selected',
+        category: 'Survey',
+        food_category: this.contents.header.name,
+        action: 'select food',
+        label: food.name,
+        search_term: this.searchTerm,
+        search_count: this.searchCount,
+        percent_scrolled: this.percentScrolled,
+        noninteraction: false,
+      });
     },
 
     toggleExpand() {

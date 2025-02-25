@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { requiredLocaleTranslation } from '../types';
+import { requiredLocaleTranslationWithLimit } from '../types';
 
 export const meal = z.object({
-  name: requiredLocaleTranslation,
-  time: z.string(),
+  name: requiredLocaleTranslationWithLimit({ max: 64 }),
+  time: z.string().regex(/^\d{1,2}:\d{2}$/),
   flags: z.array(z.string()),
 });
 
