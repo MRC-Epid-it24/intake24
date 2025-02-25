@@ -58,14 +58,17 @@ export default defineComponent({
 
     const isValid = true;
     const rootCategory = computed(() => {
-      const foodSearch = props.meal?.flags?.find(flag => flag.startsWith('food-search:'))?.split(':')[1];
+      const mealFlagCategory = props.meal?.flags?.find(flag => flag.startsWith('food-search:'))?.split(':')[1];
+      const foodFlagCategory = props.food?.flags?.find(flag => flag.startsWith('search-category:'))?.split(':')[1];
 
-      if (!foodSearch)
+      const category = foodFlagCategory ?? mealFlagCategory;
+
+      if (!category)
         return undefined;
 
-      const [foodsCategory, drinksCategory] = foodSearch.split('|');
+      const [foodsCategory, drinksCategory] = category.split('|');
 
-      return props.food?.flags.includes('is-drink') ? drinksCategory : foodsCategory;
+      return props.food?.flags.includes('is-drink') ? drinksCategory ?? foodsCategory : foodsCategory;
     });
 
     const foodSelected = async (food: FoodHeader) => {
