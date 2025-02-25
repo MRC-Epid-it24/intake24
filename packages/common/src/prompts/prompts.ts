@@ -18,6 +18,7 @@ export const customComponentTypes = [
   'aggregate-choice-prompt',
   'info-prompt',
   'date-picker-prompt',
+  'food-selection-prompt',
   'time-picker-prompt',
   'checkbox-list-prompt',
   'multi-prompt',
@@ -172,6 +173,13 @@ const checkboxListPrompt = baseCustomPrompt
 
 const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(datePicker).extend({
   component: z.literal('date-picker-prompt'),
+});
+
+const foodSelectionPrompt = baseCustomPrompt.extend({
+  component: z.literal('food-selection-prompt'),
+  foodFilter: condition.optional(),
+  useFlag: z.boolean(),
+  flag: z.string().optional(),
 });
 
 const infoPrompt = baseCustomPrompt.merge(hasVideo).extend({
@@ -404,6 +412,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   checkboxListPrompt,
   datePickerPrompt,
   infoPrompt,
+  foodSelectionPrompt,
   noMoreInformationPrompt,
   radioListPrompt,
   selectPrompt,
@@ -462,6 +471,7 @@ export const prompts = z.object({
   'checkbox-list-prompt': checkboxListPrompt,
   'date-picker-prompt': datePickerPrompt,
   'info-prompt': infoPrompt,
+  'food-selection-prompt': foodSelectionPrompt,
   'multi-prompt': multiPrompt,
   'no-more-information-prompt': noMoreInformationPrompt,
   'radio-list-prompt': radioListPrompt,

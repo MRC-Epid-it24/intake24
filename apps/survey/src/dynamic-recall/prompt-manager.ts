@@ -48,6 +48,7 @@ import {
   surveyPortionSizeComplete,
   surveySearchComplete,
 } from '@intake24/survey/util';
+import { filterFoodsForFoodSelectionPrompt } from '../components/prompts/custom/food-selection/food-selection';
 import { recallLog } from '../stores';
 
 function foodEnergy(energy: number, food: FoodState): number {
@@ -181,7 +182,8 @@ function checkSurveyStandardConditions(surveyStore: SurveyStore, prompt: Prompt)
   }
 }
 
-function checkMealStandardConditions(surveyState: SurveyState, mealState: MealState, withSelection: Selection | null, prompt: Prompt): boolean {
+function checkMealStandardConditions(surveyStore: SurveyStore, mealState: MealState, withSelection: Selection | null, prompt: Prompt): boolean {
+  const surveyState = surveyStore.$state;
   const selection = withSelection || surveyState.data.selection;
 
   switch (prompt.component) {
@@ -207,7 +209,7 @@ function checkMealStandardConditions(surveyState: SurveyState, mealState: MealSt
       return false;
     case 'multi-prompt':
       return prompt.prompts.some(item =>
-        checkMealStandardConditions(surveyState, mealState, withSelection, item),
+        checkMealStandardConditions(surveyStore, mealState, withSelection, item),
       );
     case 'addon-foods-prompt':
       return !mealState.flags.includes(`${prompt.id}-complete`) && mealState.foods.some(addonFoodPromptCheck(prompt));
@@ -229,6 +231,11 @@ function checkMealStandardConditions(surveyState: SurveyState, mealState: MealSt
       return false;
     case 'ready-meal-prompt':
       return !mealState.flags.includes('ready-meal-complete');
+    case 'food-selection-prompt': {
+      if (mealState.flags.includes(`${prompt.id}-complete`))
+        return false;
+      return filterFoodsForFoodSelectionPrompt(surveyStore, mealState, prompt).length > 0;
+    }
     default:
       return mealState.customPromptAnswers[prompt.id] === undefined;
   }
@@ -1025,7 +1032,7 @@ export default class PromptManager {
 
     return this.scheme.prompts.meals[section].find(
       prompt =>
-        checkMealStandardConditions(state, meal, withSelection, prompt)
+        checkMealStandardConditions(this.store, meal, withSelection, prompt)
         && checkPromptCustomConditions(this.store, meal, undefined, prompt),
     );
   }
