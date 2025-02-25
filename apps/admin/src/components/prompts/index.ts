@@ -55,6 +55,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: [...promptSectionsExceptSubmission],
   },
+  'food-selection-prompt': {
+    tabs: [...tabs],
+    sections: ['preFoods', 'postFoods'],
+  },
   'multi-prompt': {
     tabs: [],
     sections: [],
