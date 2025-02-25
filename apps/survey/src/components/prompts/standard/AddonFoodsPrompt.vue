@@ -13,9 +13,7 @@
                   <span v-if="meal.time">
                     {{ getMealTime(meal) }}
                   </span>
-                  <v-icon v-else size="x-small">
-                    $question
-                  </v-icon>
+                  <v-icon v-else icon="$question" size="x-small" />
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -95,182 +93,157 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, onMounted, ref } from 'vue';
-
-import type {
-  PromptStates,
-} from '@intake24/common/prompts';
+import { computed, onMounted, ref } from 'vue';
+import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState, PortionSizeParameters, StandardUnit } from '@intake24/common/surveys';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
-
-import createBasePrompt from '../createBasePrompt';
+import { Next, NextMobile } from '../actions';
+import { CardLayout } from '../layouts';
 import { useStandardUnits } from '../partials';
+import { createBasePromptProps } from '../prompt-props';
 
-export default defineComponent({
-  name: 'AddonFoodsPrompt',
+defineOptions({ name: 'AddonFoodsPrompt' });
 
-  mixins: [createBasePrompt<'addon-foods-prompt'>()],
-
-  props: {
-    localeId: {
-      type: String,
-      required: true,
-    },
-    meals: {
-      type: Array as PropType<MealState[]>,
-      required: true,
-    },
-    modelValue: {
-      type: Object as PropType<PromptStates['addon-foods-prompt']>,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'addon-foods-prompt'>(),
+  localeId: {
+    type: String,
+    required: true,
   },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { translate } = useI18n();
-    const { action, getMealTime, translatePrompt } = usePromptUtils(props, ctx);
-    const { resolveStandardUnits, getStandardUnitEstimateIn } = useStandardUnits();
-
-    const promptI18n = computed(() =>
-      translatePrompt([
-        'food',
-        'portion',
-        'quantity',
-        'didNotHave',
-      ]),
-    );
-
-    const opened = ref(props.meals.map(meal => meal.id));
-    const foods = ref(copy(props.modelValue.foods));
-    const addonFoods = ref<UserFoodData[]>([]);
-    const addonFoodUnits = computed(() => addonFoods.value.reduce<Record<string, { conversionFactor: number; units: StandardUnit[] }>>((acc, food) => {
-      let conversionFactor = 0;
-      const units = food.portionSizeMethods.reduce<StandardUnit[]>((su, psm, idx, array) => {
-        if (psm.method !== 'standard-portion' || psm.conversionFactor !== array[0].conversionFactor)
-          return su;
-
-        conversionFactor = psm.conversionFactor;
-        su.push(...((psm.parameters as PortionSizeParameters['standard-portion']).units));
-        return su;
-      }, []);
-
-      acc[food.code] = { conversionFactor, units };
-
-      return acc;
-    }, {}));
-
-    function isAddonFoodValid(food: PromptStates['addon-foods-prompt']['foods'][string][number]) {
-      return !!(food.confirmed === false
-        || (food.data && food.portionSize.unit && food.portionSize.quantity > 0));
-    };
-
-    const isValid = computed(() => Object.values(foods.value).every(foods => foods.every(isAddonFoodValid)));
-
-    function getAddonFoodsUnits(foodId: string, idx: number) {
-      const code = foods.value[foodId][idx].data?.code;
-      return code ? addonFoodUnits.value[code].units : [];
-    }
-
-    async function getAddonFoods() {
-      const foodCodes: string[] = [];
-      if (props.prompt.lookup.type === 'food') {
-        foodCodes.push(props.prompt.lookup.value);
-      }
-      else {
-        const contents = await categoriesService.contents(props.localeId, props.prompt.lookup.value);
-        foodCodes.push(...contents.foods.map(({ code }) => code));
-      }
-
-      return await Promise.all(
-        foodCodes.map(code => foodsService.getData(props.localeId, code)),
-      );
-    }
-
-    async function update() {
-      ctx.emit('update:modelValue', { foods: foods.value });
-    };
-
-    async function updatePortionSize(foodId: string, idx: number) {
-      const { portionSize: { unit, quantity, linkedQuantity }, data } = foods.value[foodId][idx];
-
-      const conversionFactor = data?.code ? addonFoodUnits.value[data.code].conversionFactor : 1;
-      foods.value[foodId][idx].portionSize.servingWeight = (unit?.weight ?? 0) * quantity * conversionFactor * linkedQuantity;
-
-      update();
-    };
-
-    async function updateConfirmed(foodId: string, idx: number, confirmed: boolean | null) {
-      foods.value[foodId][idx].confirmed = !!confirmed;
-
-      if (confirmed === false) {
-        foods.value[foodId][idx].data = null;
-        foods.value[foodId][idx].portionSize.unit = null;
-        foods.value[foodId][idx].portionSize.quantity = 0;
-      }
-
-      updatePortionSize(foodId, idx);
-    }
-
-    async function updateFood(foodId: string, idx: number, data: UserFoodData | null) {
-      foods.value[foodId][idx].data = data;
-      foods.value[foodId][idx].portionSize.unit = null;
-
-      if (!data)
-        foods.value[foodId][idx].confirmed = null;
-
-      updatePortionSize(foodId, idx);
-    };
-
-    async function updateUnit(foodId: string, idx: number) {
-      updatePortionSize(foodId, idx);
-    };
-
-    async function updateQuantity(foodId: string, idx: number) {
-      updatePortionSize(foodId, idx);
-    };
-
-    onMounted(async () => {
-      addonFoods.value = await getAddonFoods();
-
-      const names = [
-        ...new Set(
-          Object.values(addonFoodUnits.value)
-            .map(({ units }) => units)
-            .flat()
-            .filter(({ inlineEstimateIn }) => !inlineEstimateIn)
-            .map(({ name }) => name),
-        ),
-      ];
-
-      await resolveStandardUnits(names);
-    });
-
-    return {
-      action,
-      addonFoods,
-      getAddonFoodsUnits,
-      getMealTime,
-      getStandardUnitEstimateIn,
-      foods,
-      isAddonFoodValid,
-      isValid,
-      opened,
-      promptI18n,
-      updateConfirmed,
-      updateFood,
-      updateUnit,
-      updateQuantity,
-      translate,
-    };
+  meals: {
+    type: Array as PropType<MealState[]>,
+    required: true,
   },
+  modelValue: {
+    type: Object as PropType<PromptStates['addon-foods-prompt']>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { translate } = useI18n();
+const { action, getMealTime, translatePrompt } = usePromptUtils(props, { emit });
+const { resolveStandardUnits, getStandardUnitEstimateIn } = useStandardUnits();
+
+const promptI18n = computed(() =>
+  translatePrompt([
+    'food',
+    'portion',
+    'quantity',
+    'didNotHave',
+  ]),
+);
+
+const opened = ref(props.meals.map(meal => meal.id));
+const foods = ref(copy(props.modelValue.foods));
+const addonFoods = ref<UserFoodData[]>([]);
+const addonFoodUnits = computed(() => addonFoods.value.reduce<Record<string, { conversionFactor: number; units: StandardUnit[] }>>((acc, food) => {
+  let conversionFactor = 0;
+  const units = food.portionSizeMethods.reduce<StandardUnit[]>((su, psm, idx, array) => {
+    if (psm.method !== 'standard-portion' || psm.conversionFactor !== array[0].conversionFactor)
+      return su;
+
+    conversionFactor = psm.conversionFactor;
+    su.push(...((psm.parameters as PortionSizeParameters['standard-portion']).units));
+    return su;
+  }, []);
+
+  acc[food.code] = { conversionFactor, units };
+
+  return acc;
+}, {}));
+
+function isAddonFoodValid(food: PromptStates['addon-foods-prompt']['foods'][string][number]) {
+  return !!(food.confirmed === false
+    || (food.data && food.portionSize.unit && food.portionSize.quantity > 0));
+};
+
+const isValid = computed(() => Object.values(foods.value).every(foods => foods.every(isAddonFoodValid)));
+
+function getAddonFoodsUnits(foodId: string, idx: number) {
+  const code = foods.value[foodId][idx].data?.code;
+  return code ? addonFoodUnits.value[code].units : [];
+}
+
+async function getAddonFoods() {
+  const foodCodes: string[] = [];
+  if (props.prompt.lookup.type === 'food') {
+    foodCodes.push(props.prompt.lookup.value);
+  }
+  else {
+    const contents = await categoriesService.contents(props.localeId, props.prompt.lookup.value);
+    foodCodes.push(...contents.foods.map(({ code }) => code));
+  }
+
+  return await Promise.all(
+    foodCodes.map(code => foodsService.getData(props.localeId, code)),
+  );
+}
+
+async function update() {
+  emit('update:modelValue', { foods: foods.value });
+};
+
+async function updatePortionSize(foodId: string, idx: number) {
+  const { portionSize: { unit, quantity, linkedQuantity }, data } = foods.value[foodId][idx];
+
+  const conversionFactor = data?.code ? addonFoodUnits.value[data.code].conversionFactor : 1;
+  foods.value[foodId][idx].portionSize.servingWeight = (unit?.weight ?? 0) * quantity * conversionFactor * linkedQuantity;
+
+  update();
+};
+
+async function updateConfirmed(foodId: string, idx: number, confirmed: boolean | null) {
+  foods.value[foodId][idx].confirmed = !!confirmed;
+
+  if (confirmed === false) {
+    foods.value[foodId][idx].data = null;
+    foods.value[foodId][idx].portionSize.unit = null;
+    foods.value[foodId][idx].portionSize.quantity = 0;
+  }
+
+  updatePortionSize(foodId, idx);
+}
+
+async function updateFood(foodId: string, idx: number, data: UserFoodData | null) {
+  foods.value[foodId][idx].data = data;
+  foods.value[foodId][idx].portionSize.unit = null;
+
+  if (!data)
+    foods.value[foodId][idx].confirmed = null;
+
+  updatePortionSize(foodId, idx);
+};
+
+async function updateUnit(foodId: string, idx: number) {
+  updatePortionSize(foodId, idx);
+};
+
+async function updateQuantity(foodId: string, idx: number) {
+  updatePortionSize(foodId, idx);
+};
+
+onMounted(async () => {
+  addonFoods.value = await getAddonFoods();
+
+  const names = [
+    ...new Set(
+      Object.values(addonFoodUnits.value)
+        .map(({ units }) => units)
+        .flat()
+        .filter(({ inlineEstimateIn }) => !inlineEstimateIn)
+        .map(({ name }) => name),
+    ),
+  ];
+
+  await resolveStandardUnits(names);
 });
 </script>
 

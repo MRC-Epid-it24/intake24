@@ -9,7 +9,7 @@
         <v-list class="flex-grow-1 flex-shrink-0" density="compact">
           <v-list-item v-for="meal in meals" :key="meal.id" :inactive="true" link :ripple="false">
             <template #prepend>
-              <v-icon>$meal</v-icon>
+              <v-icon icon="$meal" />
             </template>
             <v-list-group :value="meal.time ? true : false">
               <template #activator>
@@ -23,9 +23,7 @@
                   <span v-if="meal.time">
                     {{ stringTime(meal.time) }}
                   </span>
-                  <v-icon v-else size="x-small">
-                    $question
-                  </v-icon>
+                  <v-icon v-else icon="$question" size="x-small" />
                 </v-list-item-action>
               </template>
               <v-list v-if="meal.foods.length && meal.time ? true : false">
@@ -56,62 +54,51 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { fromMealTime } from '@intake24/common/surveys';
 import type { FoodState, MealState, MealTime } from '@intake24/common/surveys';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'ReviewConfirmPrompt' });
 
-export default defineComponent({
-  name: 'ReviewConfirmPrompt',
-
-  components: { SurveyProgressBar },
-
-  mixins: [createBasePrompt<'review-confirm-prompt'>()],
-
-  props: {
-    meals: {
-      type: Array as PropType<MealState[]>,
-      required: true,
-    },
-  },
-
-  emits: ['action', 'meal-selected', 'food-selected'],
-
-  setup(props, ctx) {
-    const { action } = usePromptUtils(props, ctx);
-    const isValid = true;
-
-    return { action, isValid };
-  },
-
-  methods: {
-    chooseMeal(mealId: string, name: string, foods: FoodState[], entity: string) {
-      this.$emit('meal-selected', { mealId, name, foods, entity });
-    },
-    chooseFood(foodId: string, name: string, entity: string) {
-      this.$emit('food-selected', { foodId, name, entity });
-    },
-    foodDisplayName(food: FoodState) {
-      let dispalyName = '???';
-      if (food.type === 'free-text')
-        dispalyName = food.description;
-      if (food.type === 'encoded-food')
-        dispalyName = food.data.localName;
-      if (dispalyName.length > 16)
-        dispalyName = dispalyName.slice(0, 16).concat('...');
-      return dispalyName;
-    },
-    stringTime(time: MealTime): string {
-      return fromMealTime(time);
-    },
+const props = defineProps({
+  ...createBasePromptProps<'review-confirm-prompt'>(),
+  meals: {
+    type: Array as PropType<MealState[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue', 'action', 'meal-selected', 'food-selected']);
+
+const { action } = usePromptUtils(props, { emit });
+const isValid = true;
+
+function chooseMeal(mealId: string, name: string, foods: FoodState[], entity: string) {
+  emit('meal-selected', { mealId, name, foods, entity });
+};
+
+function chooseFood(foodId: string, name: string, entity: string) {
+  emit('food-selected', { foodId, name, entity });
+};
+
+function foodDisplayName(food: FoodState) {
+  let dispalyName = '???';
+  if (food.type === 'free-text')
+    dispalyName = food.description;
+  if (food.type === 'encoded-food')
+    dispalyName = food.data.localName;
+  if (dispalyName.length > 16)
+    dispalyName = dispalyName.slice(0, 16).concat('...');
+  return dispalyName;
+};
+function stringTime(time: MealTime): string {
+  return fromMealTime(time);
+};
 </script>
 
 <style lang="scss" scoped></style>

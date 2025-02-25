@@ -17,42 +17,28 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { usePromptUtils } from '@intake24/survey/composables';
-
-import createBasePrompt from '../createBasePrompt';
+import { Next, NextMobile } from '../actions';
+import { CardLayout } from '../layouts';
 import { useDatePicker } from '../partials';
+import { createBasePromptProps } from '../prompt-props';
 
-export default defineComponent({
-  name: 'RecallDaterPrompt',
+defineOptions({ name: 'RecallDatePrompt' });
 
-  mixins: [createBasePrompt<'recall-date-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: String as PropType<string | null>,
-      default: null,
-    },
-  },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { action, customPromptLayout } = usePromptUtils(props, ctx);
-    const { datePickerProps, isValid, state } = useDatePicker(props, ctx);
-
-    return {
-      action,
-      customPromptLayout,
-      datePickerProps,
-      isValid,
-      state,
-    };
+const props = defineProps({
+  ...createBasePromptProps<'recall-date-prompt'>(),
+  modelValue: {
+    type: String as PropType<string | null>,
+    default: null,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action } = usePromptUtils(props, { emit });
+const { datePickerProps, isValid, state } = useDatePicker(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

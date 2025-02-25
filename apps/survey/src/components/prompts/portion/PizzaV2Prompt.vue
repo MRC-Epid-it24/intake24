@@ -150,24 +150,53 @@
   </base-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 // @ts-expect-error - virtual types
 import PizzaSlice from 'virtual:icons/fluent/food-pizza-24-filled';
 // @ts-expect-error - virtual types
 import PizzaWhole from 'virtual:icons/game-icons/full-pizza';
-import { computed, defineComponent, ref } from 'vue';
-
+import { computed, ref } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood, PortionSizeParameters, RecipeBuilder } from '@intake24/common/surveys';
 import { pizzaCrusts, pizzaSizes, pizzaUnits } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
+import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
-
-import createBasePrompt from '../createBasePrompt';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout } from '../layouts';
 import { QuantityCard, usePanel } from '../partials';
+import { createBasePromptProps } from '../prompt-props';
+
+defineOptions({
+  name: 'PizzaV2Prompt',
+  components: { PizzaSlice, PizzaWhole },
+});
+
+const props = defineProps({
+  ...createBasePromptProps<'pizza-v2-prompt'>(),
+  conversionFactor: {
+    type: Number,
+    required: true,
+  },
+  parentFood: {
+    type: Object as PropType<EncodedFood | RecipeBuilder>,
+  },
+  parameters: {
+    type: Object as PropType<PortionSizeParameters['pizza-v2']>,
+    required: true,
+  },
+  modelValue: {
+    type: Object as PropType<PromptStates['pizza-v2-prompt']>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { i18n: { t } } = useI18n();
+const { action, type } = usePromptUtils(props, { emit });
 
 const baseWeight = 198;
 
@@ -181,111 +210,61 @@ const pizzaDefs = {
 
 const crustDefs = { classic: 1, 'italian-thin': 0.8, stuffed: 1.2 };
 
-export default defineComponent({
-  name: 'PizzaV2Prompt',
+const state = ref(copy(props.modelValue));
 
-  components: { PizzaSlice, PizzaWhole, QuantityCard, ExpansionPanelActions, ValidInvalidIcon },
+const sizeValid = computed(() => state.value.confirmed.size);
+const crustValid = computed(() => state.value.confirmed.crust);
+const unitValid = computed(() => state.value.confirmed.unit);
+const quantityValid = computed(() => state.value.confirmed.quantity);
+const validConditions = computed(() => [
+  sizeValid.value,
+  crustValid.value,
+  unitValid.value,
+  quantityValid.value,
+]);
+const isValid = computed(() => validConditions.value.every(condition => condition));
 
-  mixins: [createBasePrompt<'pizza-v2-prompt'>()],
+const { updatePanel } = usePanel(state, validConditions);
 
-  props: {
-    conversionFactor: {
-      type: Number,
-      required: true,
-    },
-    parentFood: {
-      type: Object as PropType<EncodedFood | RecipeBuilder>,
-    },
-    parameters: {
-      type: Object as PropType<PortionSizeParameters['pizza-v2']>,
-      required: true,
-    },
-    modelValue: {
-      type: Object as PropType<PromptStates['pizza-v2-prompt']>,
-      required: true,
-    },
-  },
+const sizeOptions = computed(() =>
+  pizzaSizes.map(value => ({
+    label: t(`prompts.${type.value}.sizes.${value}`),
+    value,
+  })),
+);
 
-  emits: ['action', 'update:modelValue'],
+const crustOptions = computed(() =>
+  pizzaCrusts.map(value => ({
+    label: t(`prompts.${type.value}.crusts.${value}`),
+    value,
+  })),
+);
 
-  setup(props, ctx) {
-    const { i18n: { t } } = useI18n();
-    const { action, type } = usePromptUtils(props, ctx);
+const unitOptions = computed(() =>
+  pizzaUnits.map(value => ({
+    label: t(`prompts.${type.value}.units.${value}`),
+    value,
+  })),
+);
 
-    const state = ref(copy(props.modelValue));
-
-    const sizeValid = computed(() => state.value.confirmed.size);
-    const crustValid = computed(() => state.value.confirmed.crust);
-    const unitValid = computed(() => state.value.confirmed.unit);
-    const quantityValid = computed(() => state.value.confirmed.quantity);
-    const validConditions = computed(() => [
-      sizeValid.value,
-      crustValid.value,
-      unitValid.value,
-      quantityValid.value,
-    ]);
-    const isValid = computed(() => validConditions.value.every(condition => condition));
-
-    const { updatePanel } = usePanel(state, validConditions);
-
-    const sizeOptions = computed(() =>
-      pizzaSizes.map(value => ({
-        label: t(`prompts.${type.value}.sizes.${value}`),
-        value,
-      })),
-    );
-
-    const crustOptions = computed(() =>
-      pizzaCrusts.map(value => ({
-        label: t(`prompts.${type.value}.crusts.${value}`),
-        value,
-      })),
-    );
-
-    const unitOptions = computed(() =>
-      pizzaUnits.map(value => ({
-        label: t(`prompts.${type.value}.units.${value}`),
-        value,
-      })),
-    );
-
-    const update = () => {
-      const { size, crust, unit, quantity } = state.value.portionSize;
-      if ([size, crust, unit, quantity].every(item => item)) {
-        state.value.portionSize.servingWeight
+function update() {
+  const { size, crust, unit, quantity } = state.value.portionSize;
+  if ([size, crust, unit, quantity].every(item => item)) {
+    state.value.portionSize.servingWeight
           = ((baseWeight * pizzaDefs[size!].multiplier * crustDefs[crust!])
             / (unit === 'slice' ? pizzaDefs[size!].slices : 1))
           * quantity
           * props.conversionFactor;
-      }
+  }
 
-      ctx.emit('update:modelValue', state.value);
-    };
+  emit('update:modelValue', state.value);
+}
 
-    const confirmType = (type: 'size' | 'crust' | 'unit' | 'quantity', value: boolean) => {
-      state.value.confirmed[type] = value;
-      updatePanel();
-      update();
-    };
-
-    return {
-      action,
-      confirmType,
-      crustOptions,
-      crustValid,
-      isValid,
-      quantityValid,
-      sizeOptions,
-      sizeValid,
-      state,
-      type,
-      unitOptions,
-      unitValid,
-      update,
-      updatePanel,
-    };
-  },
-});
+function confirmType(type: 'size' | 'crust' | 'unit' | 'quantity', value: boolean) {
+  state.value.confirmed[type] = value;
+  updatePanel();
+  update();
+}
 </script>
 
 <style lang="scss" scoped>

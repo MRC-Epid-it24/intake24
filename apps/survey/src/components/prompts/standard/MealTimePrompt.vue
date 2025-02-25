@@ -36,9 +36,7 @@
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>
-        <v-icon class="pb-1">
-          $cancel
-        </v-icon>
+        <v-icon class="pb-1" icon="$cancel" />
       </v-btn>
       <v-divider vertical />
       <v-btn
@@ -50,68 +48,52 @@
         <span class="text-overline font-weight-medium">
           {{ promptI18n.yes }}
         </span>
-        <v-icon class="pb-1">
-          $next
-        </v-icon>
+        <v-icon class="pb-1" icon="$next" />
       </v-btn>
     </template>
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
 import type { MealState, MealTime } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'MealTimePrompt' });
 
-export default defineComponent({
-  name: 'MealTimePrompt',
-
-  mixins: [createBasePrompt<'meal-time-prompt'>()],
-
-  props: {
-    meal: {
-      type: Object as PropType<MealState>,
-      required: true,
-    },
-    modelValue: {
-      type: Object as PropType<MealTime>,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'meal-time-prompt'>(),
+  meal: {
+    type: Object as PropType<MealState>,
+    required: true,
   },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { action, translatePrompt } = usePromptUtils(props, ctx);
-
-    const allowedMinutes = computed(
-      () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
-    );
-    const promptI18n = computed(() => translatePrompt(['no', 'yes']));
-    const state = computed({
-      get() {
-        return fromMealTime(props.modelValue);
-      },
-      set(value) {
-        ctx.emit('update:modelValue', toMealTime(value));
-      },
-    });
-    const isValid = computed(() => !!state.value);
-
-    return {
-      action,
-      allowedMinutes,
-      isValid,
-      promptI18n,
-      state,
-    };
+  modelValue: {
+    type: Object as PropType<MealTime>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action, translatePrompt } = usePromptUtils(props, { emit });
+
+const allowedMinutes = computed(
+  () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
+);
+const promptI18n = computed(() => translatePrompt(['no', 'yes']));
+const state = computed({
+  get() {
+    return fromMealTime(props.modelValue);
+  },
+  set(value) {
+    emit('update:modelValue', toMealTime(value));
+  },
+});
+const isValid = computed(() => !!state.value);
 </script>
 
 <style lang="scss">

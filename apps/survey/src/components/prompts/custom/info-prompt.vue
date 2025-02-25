@@ -71,64 +71,38 @@
   </component>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
-
-import createBasePrompt from '../createBasePrompt';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { useCarousel, useYoutubeVideo } from '../partials';
+import { createBasePromptProps } from '../prompt-props';
 
-export default defineComponent({
+defineOptions({
   name: 'InfoPrompt',
-
-  mixins: [createBasePrompt<'info-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: String,
-      default: 'next',
-    },
-  },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { action, customPromptLayout } = usePromptUtils(props, ctx);
-
-    const updateAndAction = (type: string, ...args: [id?: string, params?: object]) => {
-      state.value = type;
-      action(type, ...args);
-    };
-
-    const { video, watched: videoWatched } = useYoutubeVideo(props.prompt, updateAndAction);
-    const { carousel, resolveSlideUrl, watched: carouselWatched } = useCarousel(props.prompt);
-
-    const isVideoValid = computed(() => !props.prompt.video?.required || videoWatched.value);
-    const isCarouselValid = computed(() => !props.prompt.carousel?.required || carouselWatched.value);
-
-    const isValid = computed(() => isVideoValid.value && isCarouselValid.value);
-
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
-
-    return {
-      customPromptLayout,
-      isValid,
-      resolveSlideUrl,
-      state,
-      updateAndAction,
-      video,
-      carousel,
-    };
-  },
+  components: { BaseLayout, CardLayout, PanelLayout },
 });
+
+const props = defineProps(createBasePromptProps<'info-prompt'>());
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action, customPromptLayout } = usePromptUtils(props, { emit });
+const { video, watched: videoWatched } = useYoutubeVideo(props.prompt, updateAndAction);
+const { carousel, resolveSlideUrl, watched: carouselWatched } = useCarousel(props.prompt);
+
+const state = defineModel('modelValue', { type: String, default: 'next' });
+
+function updateAndAction(type: string, ...args: [id?: string, params?: object]) {
+  state.value = type;
+  action(type, ...args);
+}
+
+const isVideoValid = computed(() => !props.prompt.video?.required || videoWatched.value);
+const isCarouselValid = computed(() => !props.prompt.carousel?.required || carouselWatched.value);
+
+const isValid = computed(() => isVideoValid.value && isCarouselValid.value);
 </script>
 
 <style lang="scss">

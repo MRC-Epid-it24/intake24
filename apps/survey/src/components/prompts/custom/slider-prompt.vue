@@ -27,9 +27,7 @@
                 {{ translate(prompt.slider.current.label) }}
               </span>
             </div>
-            <v-icon v-else class="fa-beat pa-4" color="white">
-              fas fa-circle
-            </v-icon>
+            <v-icon v-else class="fa-beat pa-4" color="white" icon="fas fa-circle" />
           </template>
           <template #prepend>
             <div v-if="prompt.slider.min.label" class="d-flex flex-column align-center">
@@ -59,73 +57,62 @@
   </component>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
-
-export default defineComponent({
+defineOptions({
   name: 'SliderPrompt',
+  components: { BaseLayout, CardLayout, PanelLayout },
+});
 
-  mixins: [createBasePrompt<'slider-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: Number as PropType<number>,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'slider-prompt'>(),
+  modelValue: {
+    type: Number as PropType<number>,
   },
+});
 
-  emits: ['action', 'update:modelValue'],
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  setup(props, ctx) {
-    const { translate } = useI18n();
-    const { action, customPromptLayout } = usePromptUtils(props, ctx);
+const { translate } = useI18n();
+const { action, customPromptLayout } = usePromptUtils(props, { emit });
 
-    /*
-     * State is updated on @change event of the slider
-     * - expansion-header click trigger events on other components, including v-slider causing to emit @input with 0 value
-     */
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', typeof value === 'undefined' || value === null ? undefined : value);
-      },
-    });
-
-    const isInitialized = computed(
-      () => typeof state.value !== 'undefined' && state.value !== null,
-    );
-
-    const initialize = (value: number) => {
-      if (isInitialized.value)
-        return;
-
-      state.value = value;
-    };
-
-    const isValid = computed(() => typeof props.modelValue !== 'undefined');
-
-    onMounted(() => {
-      if (typeof props.modelValue === 'undefined')
-        state.value = props.prompt.slider.current.value ?? undefined;
-    });
-
-    return {
-      action,
-      customPromptLayout,
-      initialize,
-      isInitialized,
-      isValid,
-      state,
-      translate,
-    };
+/*
+* State is updated on @change event of the slider
+* - expansion-header click trigger events on other components, including v-slider causing to emit @input with 0 value
+*/
+const state = computed({
+  get() {
+    return props.modelValue;
   },
+  set(value) {
+    emit('update:modelValue', typeof value === 'undefined' || value === null ? undefined : value);
+  },
+});
+
+const isInitialized = computed(
+  () => typeof state.value !== 'undefined' && state.value !== null,
+);
+
+function initialize(value: number) {
+  if (isInitialized.value)
+    return;
+
+  state.value = value;
+}
+
+const isValid = computed(() => typeof props.modelValue !== 'undefined');
+
+onMounted(() => {
+  if (typeof props.modelValue === 'undefined')
+    state.value = props.prompt.slider.current.value ?? undefined;
 });
 </script>
 

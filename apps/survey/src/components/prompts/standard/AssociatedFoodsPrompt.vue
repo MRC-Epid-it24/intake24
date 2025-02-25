@@ -48,9 +48,7 @@
                 <v-card-text class="pa-2">
                   <v-row align="center" justify="space-between" no-gutters>
                     <v-col class="text-h6" cols="12" sm="auto">
-                      <v-icon start>
-                        $food
-                      </v-icon>
+                      <v-icon icon="$food" start />
                       {{ associatedFoodDescription(foodItem) }}
                     </v-col>
                     <v-col class="pt-2 pt-sm-0 d-flex flex-column ga-1" cols="12" sm="auto">
@@ -60,9 +58,7 @@
                         variant="flat"
                         @click="replaceFood(index, foodIndex)"
                       >
-                        <v-icon start>
-                          $edit
-                        </v-icon>
+                        <v-icon icon="$edit" start />
                         {{ promptI18n['select.different'] }}
                       </v-btn>
                       <confirm-dialog
@@ -77,9 +73,7 @@
                             :title="promptI18n['select.remove']"
                             variant="flat"
                           >
-                            <v-icon start>
-                              $delete
-                            </v-icon>
+                            <v-icon icon="$delete" start />
                             {{ promptI18n['select.remove'] }}
                           </v-btn>
                         </template>
@@ -181,10 +175,9 @@
   </base-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref, watch } from 'vue';
-
+import { computed, ref, watch } from 'vue';
 import type {
   AssociatedFoodPrompt,
   AssociatedFoodPromptItem,
@@ -198,8 +191,36 @@ import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/
 import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFoodChooser.vue';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'AssociatedFoodsPrompt' });
+
+const props = defineProps({
+  ...createBasePromptProps<'associated-foods-prompt'>(),
+  food: {
+    type: Object as PropType<EncodedFood>,
+    required: true,
+  },
+  prompts: {
+    type: Array as PropType<Array<UserAssociatedFoodPrompt>>,
+    required: true,
+  },
+  localeId: {
+    type: String,
+    required: true,
+  },
+  surveySlug: {
+    type: String,
+  },
+  modelValue: {
+    type: Object as PropType<PromptStates['associated-foods-prompt']>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['action', 'update:modelValue']);
 
 function isPromptValid(prompt: AssociatedFoodPrompt): boolean {
   return prompt.mainFoodConfirmed === false
@@ -212,293 +233,227 @@ function getNextPrompt(prompts: AssociatedFoodPrompt[]) {
   return prompts.findIndex(prompt => !isPromptValid(prompt));
 }
 
-export default defineComponent({
-  name: 'AssociatedFoodsPrompt',
+const { translate, i18n: { t } } = useI18n();
+const { action, translatePrompt, type } = usePromptUtils(props, { emit });
 
-  components: { ConfirmDialog, ExpansionPanelActions, FoodBrowser, MealFoodChooser },
+const promptI18n = computed(() =>
+  translatePrompt([
+    'existingFoodHint',
+    'yes',
+    'yesAnother',
+    'no',
+    'moreFoodsQuestion',
+    'databaseLookupTitle',
+    'databaseLookupWithExisting',
+    'existingFoodsTitle',
+    'select.different',
+    'select.remove',
+  ]),
+);
 
-  mixins: [createBasePrompt<'associated-foods-prompt'>()],
+const activePrompt = ref(props.modelValue.activePrompt);
+const promptStates = ref(props.modelValue.promptStates);
+const replaceFoodIndex = ref(props.prompts.map(() => undefined as number | undefined));
+const allowMultiple = computed(() => props.prompt.multiple);
 
-  props: {
-    food: {
-      type: Object as PropType<EncodedFood>,
-      required: true,
-    },
-    prompts: {
-      type: Array as PropType<Array<UserAssociatedFoodPrompt>>,
-      required: true,
-    },
-    localeId: {
-      type: String,
-      required: true,
-    },
-    surveySlug: {
-      type: String,
-    },
-    modelValue: {
-      type: Object as PropType<PromptStates['associated-foods-prompt']>,
-      required: true,
-    },
-  },
+const associatedFoodPrompts = computed(() => props.prompts);
+const isValid = computed(() => promptStates.value.every(isPromptValid));
+const usedExistingFoodIds = computed(() => promptStates.value.flatMap(prompt =>
+  prompt.foods
+    .filter(food => food.type === 'existing' && food.existingFoodId !== undefined)
+    .map(food => food.existingFoodId!),
+));
 
-  emits: ['action', 'update:modelValue'],
+const availableFoods = computed(() => {
+  const foodsInThisMeal = props.meal?.foods ?? [];
 
-  setup(props, ctx) {
-    const { translate } = useI18n();
-    const { action, translatePrompt, type } = usePromptUtils(props, ctx);
+  return associatedFoodPrompts.value.map((prompt) => {
+    const availableFoods: string[] = [];
 
-    const promptI18n = computed(() =>
-      translatePrompt([
-        'existingFoodHint',
-        'yes',
-        'yesAnother',
-        'no',
-        'moreFoodsQuestion',
-        'databaseLookupTitle',
-        'databaseLookupWithExisting',
-        'existingFoodsTitle',
-        'select.different',
-        'select.remove',
-      ]),
-    );
+    for (const food of foodsInThisMeal) {
+      // Don't link food to itself
+      if (food.id === props.food.id)
+        continue;
 
-    const activePrompt = ref(props.modelValue.activePrompt);
-    const promptStates = ref(props.modelValue.promptStates);
-    const allowMultiple = computed(() => props.prompt.multiple);
+      // Don't allow linking foods that have linked foods of their own
+      if (food.linkedFoods.length)
+        continue;
 
-    const replaceFoodIndex = ref(
-      props.prompts.map(() => undefined as number | undefined),
-    );
+      // Don't allow two or more prompts to refer to the same existing food id.
+      if (usedExistingFoodIds.value.includes(food.id))
+        continue;
 
-    // React to changes to the meal's foods list and filter out references to foods (created
-    // by the "use existing food" option) that have been removed from the meal.
-    //
-    // Case 1: an existing food id becomes invalid if the food is removed from the meal
-    //         before the associated food prompt is completed (e.g., deleted via the side panel)
-
-    // Case 2: a prompt state restored from local storage refers to an invalid food id
-    //         (covered by the 'immediate' option)
-    watch(
-      () => props.meal?.foods,
-      (newFoods) => {
-        for (let i = 0; i < promptStates.value.length; ++i) {
-          const prompt = promptStates.value[i];
-
-          const update = {
-            ...prompt,
-            foods: prompt.foods.filter(food =>
-              food.type === 'existing' ? newFoods?.some(f => f.id === food.existingFoodId) : true,
-            ),
-          };
-
-          promptStates.value.splice(i, 1, update);
-        }
-      },
-      { deep: true, immediate: true },
-    );
-
-    return {
-      action,
-      activePrompt,
-      promptI18n,
-      promptStates,
-      replaceFoodIndex,
-      allowMultiple,
-      translate,
-      type,
-    };
-  },
-
-  computed: {
-    associatedFoodPrompts(): UserAssociatedFoodPrompt[] {
-      return this.prompts;
-    },
-
-    isValid(): boolean {
-      return this.promptStates.every(isPromptValid);
-    },
-
-    usedExistingFoodIds(): string[] {
-      const result = this.promptStates.flatMap(prompt =>
-        prompt.foods
-          .filter(food => food.type === 'existing' && food.existingFoodId !== undefined)
-          .map(food => food.existingFoodId!),
-      );
-
-      return result;
-    },
-
-    availableFoods(): string[][] {
-      const foodsInThisMeal = this.meal?.foods ?? [];
-
-      return this.associatedFoodPrompts.map((prompt) => {
-        const availableFoods: string[] = [];
-
-        for (const food of foodsInThisMeal) {
-          // Don't link food to itself
-          if (food.id === this.food.id)
-            continue;
-
-          // Don't allow linking foods that have linked foods of their own
-          if (food.linkedFoods.length)
-            continue;
-
-          // Don't allow two or more prompts to refer to the same existing food id.
-          if (this.usedExistingFoodIds.includes(food.id))
-            continue;
-
-          const matchesFood
+      const matchesFood
             = prompt.foodCode !== undefined
               && food.type === 'encoded-food'
               && food.data.code === prompt.foodCode;
 
-          const matchesCategory
+      const matchesCategory
             = prompt.categoryCode !== undefined
               && food.type === 'encoded-food'
               && food.data.categories.includes(prompt.categoryCode);
 
-          if (matchesFood || matchesCategory)
-            availableFoods.push(food.id);
-        }
+      if (matchesFood || matchesCategory)
+        availableFoods.push(food.id);
+    }
 
-        return availableFoods;
-      });
-    },
-  },
-
-  methods: {
-    isPromptValid,
-
-    promptHeader(index: number): string {
-      const promptText = this.translate(this.associatedFoodPrompts[index].promptText);
-      if (this.availableFoods[index].length > 0)
-        return `${promptText} ${this.promptI18n.existingFoodHint}`;
-      else
-        return promptText;
-    },
-
-    showFoodChooser(promptIndex: number): boolean {
-      const prompt = this.promptStates[promptIndex];
-
-      return !!(
-        this.replaceFoodIndex[promptIndex] !== undefined
-        || (prompt.mainFoodConfirmed && !prompt.foods.length)
-        || prompt.additionalFoodConfirmed
-      );
-    },
-
-    showMoreFoodsQuestion(promptIndex: number): boolean {
-      const associatedPrompt = this.associatedFoodPrompts[promptIndex];
-      const state = this.promptStates[promptIndex];
-
-      return !!(
-        !associatedPrompt.foodCode
-        && this.allowMultiple
-        && this.associatedFoodPrompts[promptIndex].multiple
-        && state.mainFoodConfirmed
-        && state.foods.length > 0
-        && this.replaceFoodIndex[promptIndex] === undefined
-      );
-    },
-
-    associatedFoodDescription(food: AssociatedFoodPromptItem): string {
-      if (food.type === 'selected' && food.selectedFood !== undefined)
-        return food.selectedFood.name;
-      if (food.type === 'existing' && food.existingFoodId !== undefined)
-        return this.existingFoodDescription(food.existingFoodId);
-      if (food.type === 'missing')
-        return this.$t(`prompts.${this.type}.missing.placeholder`);
-      return 'No food selected';
-    },
-
-    existingFoodDescription(foodId: string): string {
-      const food = this.meal?.foods.find(food => food.id === foodId);
-      return food ? getFoodDescription(food) : '';
-    },
-
-    replaceFood(promptIndex: number, foodIndex: number) {
-      this.replaceFoodIndex.splice(promptIndex, 1, foodIndex);
-    },
-
-    removeFood(promptIndex: number, foodIndex: number) {
-      const state = this.promptStates[promptIndex];
-
-      const update = {
-        ...state,
-        foods: state.foods.slice(0, foodIndex).concat(state.foods.slice(foodIndex + 1)),
-      };
-
-      this.promptStates.splice(promptIndex, 1, update);
-
-      this.updatePrompts();
-    },
-
-    foodSelected(food: FoodHeader, promptIndex: number): void {
-      this.onFoodSelected({ type: 'selected', selectedFood: food }, promptIndex);
-    },
-
-    existingFoodSelected(foodId: string, promptIndex: number) {
-      this.onFoodSelected({ type: 'existing', existingFoodId: foodId }, promptIndex);
-    },
-
-    foodMissing(promptIndex: number) {
-      this.onFoodSelected({ type: 'missing' }, promptIndex);
-    },
-
-    onFoodSelected(selectedFood: AssociatedFoodPromptItem, promptIndex: number): void {
-      const state = this.promptStates[promptIndex];
-      const replaceIndex = this.replaceFoodIndex[promptIndex];
-
-      const foods = state.foods.slice();
-
-      if (replaceIndex !== undefined) {
-        foods[replaceIndex] = selectedFood;
-        this.replaceFoodIndex.splice(promptIndex, 1);
-      }
-      else {
-        foods.push(selectedFood);
-      }
-
-      const update = {
-        ...state,
-        additionalFoodConfirmed:
-          state.additionalFoodConfirmed === true ? undefined : state.additionalFoodConfirmed,
-        foods,
-      };
-
-      this.promptStates.splice(promptIndex, 1, update);
-
-      this.goToNextIfCan(promptIndex);
-      this.updatePrompts();
-    },
-
-    onConfirmStateChanged(index: number) {
-      const prompt = this.associatedFoodPrompts[index];
-      const state = this.promptStates[index];
-      if (state.mainFoodConfirmed && prompt.foodCode && !state.foods.length) {
-        this.foodSelected(
-          { code: prompt.foodCode, name: this.translate(prompt.genericName) },
-          index,
-        );
-      }
-
-      this.goToNextIfCan(index);
-    },
-
-    goToNextIfCan(index: number) {
-      if (!isPromptValid(this.promptStates[index]))
-        return;
-
-      this.activePrompt = getNextPrompt(this.promptStates);
-    },
-
-    updatePrompts() {
-      const { activePrompt, promptStates } = this;
-
-      this.$emit('update:modelValue', { activePrompt, promptStates });
-    },
-  },
+    return availableFoods;
+  });
 });
+
+// React to changes to the meal's foods list and filter out references to foods (created
+// by the "use existing food" option) that have been removed from the meal.
+//
+// Case 1: an existing food id becomes invalid if the food is removed from the meal
+//         before the associated food prompt is completed (e.g., deleted via the side panel)
+
+// Case 2: a prompt state restored from local storage refers to an invalid food id
+//         (covered by the 'immediate' option)
+watch(
+  () => props.meal?.foods,
+  (newFoods) => {
+    for (let i = 0; i < promptStates.value.length; ++i) {
+      const prompt = promptStates.value[i];
+
+      const update = {
+        ...prompt,
+        foods: prompt.foods.filter(food =>
+          food.type === 'existing' ? newFoods?.some(f => f.id === food.existingFoodId) : true,
+        ),
+      };
+
+      promptStates.value.splice(i, 1, update);
+    }
+  },
+  { deep: true, immediate: true },
+);
+
+function promptHeader(index: number): string {
+  const promptText = translate(associatedFoodPrompts.value[index].promptText);
+  if (availableFoods.value[index].length > 0)
+    return `${promptText} ${promptI18n.value.existingFoodHint}`;
+  else
+    return promptText;
+};
+
+function showFoodChooser(promptIndex: number): boolean {
+  const prompt = promptStates.value[promptIndex];
+
+  return !!(
+    replaceFoodIndex.value[promptIndex] !== undefined
+    || (prompt.mainFoodConfirmed && !prompt.foods.length)
+    || prompt.additionalFoodConfirmed
+  );
+};
+
+function showMoreFoodsQuestion(promptIndex: number): boolean {
+  const associatedPrompt = associatedFoodPrompts.value[promptIndex];
+  const state = promptStates.value[promptIndex];
+
+  return !!(
+    !associatedPrompt.foodCode
+    && allowMultiple.value
+    && associatedFoodPrompts.value[promptIndex].multiple
+    && state.mainFoodConfirmed
+    && state.foods.length > 0
+    && replaceFoodIndex.value[promptIndex] === undefined
+  );
+};
+
+function associatedFoodDescription(food: AssociatedFoodPromptItem): string {
+  if (food.type === 'selected' && food.selectedFood !== undefined)
+    return food.selectedFood.name;
+  if (food.type === 'existing' && food.existingFoodId !== undefined)
+    return existingFoodDescription(food.existingFoodId);
+  if (food.type === 'missing')
+    return t(`prompts.${type.value}.missing.placeholder`);
+  return 'No food selected';
+};
+
+function existingFoodDescription(foodId: string): string {
+  const food = props.meal?.foods.find(food => food.id === foodId);
+  return food ? getFoodDescription(food) : '';
+};
+
+function replaceFood(promptIndex: number, foodIndex: number) {
+  replaceFoodIndex.value.splice(promptIndex, 1, foodIndex);
+};
+
+function removeFood(promptIndex: number, foodIndex: number) {
+  const state = promptStates.value[promptIndex];
+
+  const update = {
+    ...state,
+    foods: state.foods.slice(0, foodIndex).concat(state.foods.slice(foodIndex + 1)),
+  };
+
+  promptStates.value.splice(promptIndex, 1, update);
+
+  updatePrompts();
+};
+
+function foodSelected(food: FoodHeader, promptIndex: number): void {
+  onFoodSelected({ type: 'selected', selectedFood: food }, promptIndex);
+};
+
+function existingFoodSelected(foodId: string, promptIndex: number) {
+  onFoodSelected({ type: 'existing', existingFoodId: foodId }, promptIndex);
+};
+
+function foodMissing(promptIndex: number) {
+  onFoodSelected({ type: 'missing' }, promptIndex);
+};
+
+function onFoodSelected(selectedFood: AssociatedFoodPromptItem, promptIndex: number): void {
+  const state = promptStates.value[promptIndex];
+  const replaceIndex = replaceFoodIndex.value[promptIndex];
+
+  const foods = state.foods.slice();
+
+  if (replaceIndex !== undefined) {
+    foods[replaceIndex] = selectedFood;
+    replaceFoodIndex.value.splice(promptIndex, 1);
+  }
+  else {
+    foods.push(selectedFood);
+  }
+
+  const update = {
+    ...state,
+    additionalFoodConfirmed:
+          state.additionalFoodConfirmed === true ? undefined : state.additionalFoodConfirmed,
+    foods,
+  };
+
+  promptStates.value.splice(promptIndex, 1, update);
+
+  goToNextIfCan(promptIndex);
+  updatePrompts();
+};
+
+function onConfirmStateChanged(index: number) {
+  const prompt = associatedFoodPrompts.value[index];
+  const state = promptStates.value[index];
+  if (state.mainFoodConfirmed && prompt.foodCode && !state.foods.length) {
+    foodSelected(
+      { code: prompt.foodCode, name: translate(prompt.genericName) },
+      index,
+    );
+  }
+
+  goToNextIfCan(index);
+};
+
+function goToNextIfCan(index: number) {
+  if (!isPromptValid(promptStates.value[index]))
+    return;
+
+  activePrompt.value = getNextPrompt(promptStates.value);
+};
+
+function updatePrompts() {
+  emit('update:modelValue', { activePrompt: activePrompt.value, promptStates: promptStates.value });
+};
 </script>
 
 <style lang="scss" scoped>

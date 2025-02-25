@@ -32,9 +32,7 @@
         variant="text"
         @click="action('mealTime', meal.id)"
       >
-        <v-icon start>
-          fas fa-clock
-        </v-icon>
+        <v-icon icon="fas fa-clock" start />
         {{ $t('recall.actions.mealTime') }}
       </v-btn>
       <confirm-dialog
@@ -50,9 +48,7 @@
             variant="text"
             v-bind="props"
           >
-            <v-icon start>
-              $delete
-            </v-icon>
+            <v-icon icon="$delete" start />
             {{ $t('recall.actions.nav.deleteMeal') }}
           </v-btn>
         </template>
@@ -75,9 +71,7 @@
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.mealTime') }}
         </span>
-        <v-icon class="pb-1">
-          fas fa-clock
-        </v-icon>
+        <v-icon class="pb-1" icon="fas fa-clock" />
       </v-btn>
       <confirm-dialog
         :label="$t('recall.menu.meal.delete')"
@@ -88,9 +82,7 @@
             <span class="text-overline font-weight-medium">
               {{ $t('recall.actions.nav.deleteMeal') }}
             </span>
-            <v-icon class="pb-1">
-              $delete
-            </v-icon>
+            <v-icon class="pb-1" icon="$delete" />
           </v-btn>
         </template>
         <i18n-t keypath="recall.menu.meal.deleteConfirm" tag="span">
@@ -104,78 +96,69 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
 import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
-
-import createBasePrompt from '../createBasePrompt';
+import { Next, NextMobile } from '../actions';
+import { CardLayout } from '../layouts';
 import { EditableFoodList } from '../partials';
+import { createBasePromptProps } from '../prompt-props';
 
-export default defineComponent({
-  name: 'EditMealPrompt',
+defineOptions({ name: 'EditMealPrompt' });
 
-  components: { EditableFoodList, ConfirmDialog },
-
-  mixins: [createBasePrompt<'edit-meal-prompt'>()],
-
-  props: {
-    meal: {
-      type: Object as PropType<MealState>,
-      required: true,
-    },
-    modelValue: {
-      type: Array as PropType<PromptStates['edit-meal-prompt']>,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'edit-meal-prompt'>(),
+  meal: {
+    type: Object as PropType<MealState>,
+    required: true,
   },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { mealName } = useMealUtils(props);
-    const { action } = usePromptUtils(props, ctx);
-
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
-    const isValid = computed(() => !!state.value.length);
-    const drinksOnly = computed({
-      get() {
-        return state.value.filter(food => food.flags.includes('is-drink'));
-      },
-      set(val) {
-        // eslint-disable-next-line ts/no-use-before-define
-        state.value = [...foodsOnly.value, ...val];
-      },
-    });
-    const foodsOnly = computed({
-      get() {
-        return state.value.filter(food => !food.flags.includes('is-drink'));
-      },
-      set(val) {
-        state.value = [...drinksOnly.value, ...val];
-      },
-    });
-
-    const deleteFood = (foodId: string) => {
-      const food = props.meal.foods.find(food => food.id === foodId);
-      if (!food)
-        return;
-
-      action('deleteFood', foodId);
-    };
-
-    return { action, drinksOnly, foodsOnly, isValid, mealName, state, deleteFood };
+  modelValue: {
+    type: Array as PropType<PromptStates['edit-meal-prompt']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { mealName } = useMealUtils(props);
+const { action } = usePromptUtils(props, { emit });
+
+const state = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  },
+});
+const isValid = computed(() => !!state.value.length);
+const drinksOnly = computed({
+  get() {
+    return state.value.filter(food => food.flags.includes('is-drink'));
+  },
+  set(val) {
+    // eslint-disable-next-line ts/no-use-before-define
+    state.value = [...foodsOnly.value, ...val];
+  },
+});
+const foodsOnly = computed({
+  get() {
+    return state.value.filter(food => !food.flags.includes('is-drink'));
+  },
+  set(val) {
+    state.value = [...drinksOnly.value, ...val];
+  },
+});
+
+function deleteFood(foodId: string) {
+  const food = props.meal.foods.find(food => food.id === foodId);
+  if (!food)
+    return;
+
+  action('deleteFood', foodId);
+}
 </script>

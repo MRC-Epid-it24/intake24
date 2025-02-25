@@ -7,9 +7,7 @@
         </v-card-title>
         <v-card-text class="d-flex flex-column align-start gr-2">
           <v-chip v-for="(suggestion) in suggestions" :key="suggestion" class="px-4" color="info" variant="flat">
-            <v-icon class="mr-2">
-              $food
-            </v-icon>
+            <v-icon class="mr-2" icon="$food" />
             {{ suggestion }}
           </v-chip>
         </v-card-text>
@@ -53,51 +51,40 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import type { FreeTextFood } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'SplitFoodPrompt' });
 
-export default defineComponent({
-  name: 'SplitFoodPrompt',
-
-  mixins: [createBasePrompt<'split-food-prompt', FreeTextFood>()],
-
-  props: {
-    food: {
-      type: Object as PropType<FreeTextFood>,
-      required: true,
-    },
-    suggestions: {
-      type: Array as PropType<string[]>,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'split-food-prompt', FreeTextFood>(),
+  food: {
+    type: Object as PropType<FreeTextFood>,
+    required: true,
   },
-
-  setup(props, ctx) {
-    const { action, translatePrompt, type } = usePromptUtils(props, ctx);
-
-    const isValid = true;
-    const promptI18n = computed(() =>
-      translatePrompt([
-        'split',
-        'separate',
-        'single',
-      ]),
-    );
-
-    return {
-      action,
-      isValid,
-      promptI18n,
-      type,
-    };
+  suggestions: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action, translatePrompt } = usePromptUtils(props, { emit });
+
+const isValid = true;
+const promptI18n = computed(() =>
+  translatePrompt([
+    'split',
+    'separate',
+    'single',
+  ]),
+);
 </script>
 
 <style lang="scss" scoped></style>

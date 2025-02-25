@@ -22,57 +22,44 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../actions';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'ReadyMealPrompt' });
 
-export default defineComponent({
-  name: 'ReadyMealPrompt',
-
-  components: { YesNoToggle },
-
-  mixins: [createBasePrompt<'ready-meal-prompt'>()],
-
-  props: {
-    meal: {
-      type: Object as PropType<MealState>,
-      required: true,
-    },
-    modelValue: {
-      type: Array as PropType<PromptStates['ready-meal-prompt']>,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'ready-meal-prompt'>(),
+  meal: {
+    type: Object as PropType<MealState>,
+    required: true,
   },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { action } = usePromptUtils(props, ctx);
-
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
-    const isValid = computed(() => state.value.every(food => food.value !== undefined));
-
-    return {
-      action,
-      isValid,
-      state,
-    };
+  modelValue: {
+    type: Array as PropType<PromptStates['ready-meal-prompt']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action } = usePromptUtils(props, { emit });
+
+const state = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  },
+});
+const isValid = computed(() => state.value.every(food => food.value !== undefined));
 </script>
 
 <style lang="scss" scoped></style>

@@ -24,9 +24,7 @@
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.addMeal') }}
         </span>
-        <v-icon class="pb-1">
-          $add
-        </v-icon>
+        <v-icon class="pb-1" icon="$add" />
       </v-btn>
       <v-divider vertical />
       <next-mobile :disabled="!isValidMobile" @click="action('next')">
@@ -36,83 +34,67 @@
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import type { PromptLayout } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
 import { ReviewMealList, ReviewMealListMobile } from '@intake24/survey/components/layouts';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../actions';
+import { CardLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'SubmitPrompt' });
 
-export default defineComponent({
-  name: 'SubmitPrompt',
-
-  components: {
-    ReviewMealList,
-    ReviewMealListMobile,
+const props = defineProps({
+  ...createBasePromptProps<'submit-prompt'>(),
+  meals: {
+    type: Array as PropType<MealState[]>,
+    required: true,
   },
+});
 
-  mixins: [createBasePrompt<'submit-prompt'>()],
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  props: {
-    meals: {
-      type: Array as PropType<MealState[]>,
-      required: true,
-    },
-  },
+const { action } = usePromptUtils(props, { emit });
 
-  setup(props, ctx) {
-    const { action } = usePromptUtils(props, ctx);
+const bottomReached = ref<Record<PromptLayout, boolean>>({ desktop: false, mobile: false });
+const reviewed = ref<Record<PromptLayout, string[]>>({ desktop: [], mobile: [] });
 
-    const bottomReached = ref<Record<PromptLayout, boolean>>({ desktop: false, mobile: false });
-    const reviewed = ref<Record<PromptLayout, string[]>>({ desktop: [], mobile: [] });
+function updateBottomReached(layout: PromptLayout, value: boolean) {
+  bottomReached.value[layout] = value;
+}
 
-    const updateBottomReached = (layout: PromptLayout, value: boolean) => {
-      bottomReached.value[layout] = value;
-    };
+function updateReviewed(layout: PromptLayout, value: string[]) {
+  reviewed.value[layout] = value;
+}
 
-    const updateReviewed = (layout: PromptLayout, value: string[]) => {
-      reviewed.value[layout] = value;
-    };
+const isValid = computed(() => {
+  if (props.prompt.review.desktop === 'scroll')
+    return bottomReached.value.desktop;
 
-    const isValid = computed(() => {
-      if (props.prompt.review.desktop === 'scroll')
-        return bottomReached.value.desktop;
+  if (props.prompt.review.desktop === 'checkbox')
+    return props.meals.length === reviewed.value.desktop.length;
 
-      if (props.prompt.review.desktop === 'checkbox')
-        return props.meals.length === reviewed.value.desktop.length;
+  if (props.prompt.review.desktop === 'onecheckbox')
+    return reviewed.value.desktop.length === 1;
 
-      if (props.prompt.review.desktop === 'onecheckbox')
-        return reviewed.value.desktop.length === 1;
+  return true;
+});
 
-      return true;
-    });
+const isValidMobile = computed(() => {
+  if (props.prompt.review.mobile === 'scroll')
+    return bottomReached.value.mobile;
 
-    const isValidMobile = computed(() => {
-      if (props.prompt.review.mobile === 'scroll')
-        return bottomReached.value.mobile;
+  if (props.prompt.review.mobile === 'checkbox')
+    return props.meals.length === reviewed.value.mobile.length;
 
-      if (props.prompt.review.mobile === 'checkbox')
-        return props.meals.length === reviewed.value.mobile.length;
+  if (props.prompt.review.desktop === 'onecheckbox')
+    return reviewed.value.mobile.length === 1;
 
-      if (props.prompt.review.desktop === 'onecheckbox')
-        return reviewed.value.mobile.length === 1;
-
-      return true;
-    });
-
-    return {
-      action,
-      isValid,
-      isValidMobile,
-      updateBottomReached,
-      updateReviewed,
-      bottomReached,
-    };
-  },
+  return true;
 });
 </script>
 

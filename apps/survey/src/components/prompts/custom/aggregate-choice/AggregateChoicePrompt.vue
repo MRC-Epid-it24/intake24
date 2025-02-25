@@ -13,9 +13,7 @@
                   <span v-if="meal.time">
                     {{ getMealTime(meal) }}
                   </span>
-                  <v-icon v-else size="x-small">
-                    $question
-                  </v-icon>
+                  <v-icon v-else icon="$question" size="x-small" />
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -87,70 +85,50 @@
   </component>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
-
+import { computed, ref } from 'vue';
 import type { CustomPromptAnswer, MealState } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { Next, NextMobile } from '../../actions';
+import { BaseLayout, CardLayout, PanelLayout } from '../../layouts';
+import { createBasePromptProps } from '../../prompt-props';
 
-import createBasePrompt from '../../createBasePrompt';
-
-export default defineComponent({
+defineOptions({
   name: 'AggregateChoicePrompt',
+  components: { BaseLayout, CardLayout, PanelLayout },
+});
 
-  mixins: [createBasePrompt<'aggregate-choice-prompt'>()],
-
-  props: {
-    modelValue: {
-      type: Object as PropType<Record<string, CustomPromptAnswer>>,
-      required: true,
-    },
-    filteredMeals: {
-      type: Array as PropType<MealState[]>,
-      required: true,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'aggregate-choice-prompt'>(),
+  modelValue: {
+    type: Object as PropType<Record<string, CustomPromptAnswer>>,
+    required: true,
   },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { i18n: { locale }, translate } = useI18n();
-
-    const opened = ref(props.filteredMeals.map(meal => meal.id));
-    const promptAnswers = ref(copy(props.modelValue));
-
-    const { action, getFoodName, getMealTime, customPromptLayout, type } = usePromptUtils(
-      props,
-      ctx,
-    );
-
-    const localeOptions = computed(
-      () => props.prompt.options[locale.value] ?? props.prompt.options.en,
-    );
-    const isValid = computed(() => props.filteredMeals.every(meal => meal.foods.every(food => props.modelValue[food.id] !== undefined)));
-
-    const updatePromptAnswers = () => {
-      ctx.emit('update:modelValue', promptAnswers.value);
-    };
-
-    return {
-      action,
-      customPromptLayout,
-      localeOptions,
-      type,
-      getFoodName,
-      getMealTime,
-      opened,
-      isValid,
-      promptAnswers,
-      translate,
-      updatePromptAnswers,
-    };
+  filteredMeals: {
+    type: Array as PropType<MealState[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { i18n: { locale }, translate } = useI18n();
+const { action, getFoodName, getMealTime, customPromptLayout } = usePromptUtils(props, { emit });
+
+const opened = ref(props.filteredMeals.map(meal => meal.id));
+const promptAnswers = ref(copy(props.modelValue));
+
+const localeOptions = computed(
+  () => props.prompt.options[locale.value] ?? props.prompt.options.en,
+);
+const isValid = computed(() => props.filteredMeals.every(meal => meal.foods.every(food => props.modelValue[food.id] !== undefined)));
+
+function updatePromptAnswers() {
+  emit('update:modelValue', promptAnswers.value);
+}
 </script>
 
 <style lang="scss" scoped>

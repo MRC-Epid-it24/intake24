@@ -1,7 +1,7 @@
 <template>
-  <base-layout v-bind="{ food, meal, prompt, section, isValid }">
-    <v-expansion-panels v-model="activeStep" :tile="$vuetify.display.mobile" @update:model-value="updateActiveStep">
-      <v-expansion-panel v-for="(step, index) in recipeSteps" :key="index">
+  <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+    <v-expansion-panels v-model="state.activeStep" :tile="$vuetify.display.mobile" @update:model-value="updateActiveStep">
+      <v-expansion-panel v-for="(step, index) in state.recipeSteps" :key="index">
         <v-expansion-panel-title>
           <div>
             <v-avatar class="me-2" color="primary" size="28">
@@ -17,7 +17,6 @@
           <v-sheet class="mb-4">
             {{ translate(step.description) }}
           </v-sheet>
-
           <v-expand-transition>
             <v-radio-group
               v-if="!step.required"
@@ -100,10 +99,9 @@
   </base-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
+import { computed, ref } from 'vue';
 import type {
   MissingFoodRecipeBuilderItemState,
   PromptStates,
@@ -120,10 +118,36 @@ import {
   MissingAllRecipeIngredients,
   SelectedFoodList,
 } from '@intake24/survey/components/elements';
+import { usePromptUtils } from '@intake24/survey/composables';
 import { foodsService } from '@intake24/survey/services';
 import { getEntityId } from '@intake24/survey/util';
+import { Next, NextMobile } from '../actions';
+import { BaseLayout } from '../layouts';
+import { createBasePromptProps } from '../prompt-props';
 
-import createBasePrompt from '../createBasePrompt';
+defineOptions({ name: 'RecipeBuilderPrompt' });
+
+const props = defineProps({
+  ...createBasePromptProps<'recipe-builder-prompt', RecipeBuilder>(),
+  localeId: {
+    type: String,
+    required: true,
+  },
+  surveySlug: {
+    type: String,
+  },
+  modelValue: {
+    type: Object as PropType<PromptStates['recipe-builder-prompt']>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['action', 'update:modelValue', 'add-food']);
+
+const { translate } = useI18n();
+const { action } = usePromptUtils(props, { emit });
+
+const state = ref(copy(props.modelValue));
 
 function isStepValid(step: RecipeBuilderStepState): boolean {
   const foodSelected = step.foods.length > 0;
@@ -134,205 +158,143 @@ function isStepValid(step: RecipeBuilderStepState): boolean {
     return step.confirmed === 'no';
 }
 
+const allConfirmed = computed(() => state.value.recipeSteps.every(step => isStepValid(step)));
+const atLeastOneFoodSelected = computed(() => state.value.recipeSteps.some(step => step.foods.length > 0));
+const isValid = computed(() => allConfirmed.value && atLeastOneFoodSelected.value);
+
 function getNextStep(steps: RecipeBuilderStepState[]) {
   return steps.findIndex(step => !isStepValid(step));
 }
 
-export default defineComponent({
-  name: 'RecipeBuilderPrompt',
+function removeFood({ foodIndex, index }: { foodIndex: number; index: number }) {
+  const foodToRemove = state.value.recipeSteps[index].foods.splice(foodIndex, 1);
+  if (!state.value.recipeSteps[index].foods.length)
+    state.value.recipeSteps[index].confirmed = undefined;
 
-  components: { ExpansionPanelActions, FoodBrowser, SelectedFoodList, MissingAllRecipeIngredients },
+  if (foodToRemove === undefined)
+    return;
+  update();
+};
 
-  mixins: [createBasePrompt<'recipe-builder-prompt', RecipeBuilder>()],
+function update() {
+  emit('update:modelValue', {
+    recipeSteps: state.value.recipeSteps,
+    activeStep: state.value.activeStep,
+    recipe: state.value.recipe,
+  });
+};
 
-  props: {
-    localeId: {
-      type: String,
-      required: true,
-    },
-    surveySlug: {
-      type: String,
-    },
-    modelValue: {
-      type: Object as PropType<PromptStates['recipe-builder-prompt']>,
-      required: true,
-    },
-  },
+function foodSelected(index: number, selectedFood: SelectedFoodRecipeBuilderItemState): void {
+  onFoodSelected({ type: 'selected', selectedFood }, index);
+};
 
-  emits: ['action', 'update:modelValue', 'add-food'],
+function foodMissing(index: number, searchTerm?: string | null) {
+  onFoodSelected({ type: 'missing', searchTerm }, index);
+};
 
-  setup() {
-    const { translate } = useI18n();
+function foodSkipped(index: number): void {
+  state.value.activeStep = index + 1;
+  state.value.recipeSteps[index].confirmed = 'yes';
+  state.value.recipeSteps[index].anotherFoodConfirmed = undefined;
+  update();
+};
 
-    return {
-      isStepValid,
-      translate,
+async function onFoodSelected(
+  item:
+    | { type: 'selected'; selectedFood: FoodHeader }
+    | { type: 'missing'; searchTerm?: string | null },
+  idx: number,
+): Promise<void> {
+  const step = state.value.recipeSteps[idx];
+  const id = getEntityId();
+
+  let food: MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
+  if (item.type === 'missing') {
+    food = {
+      ...item,
+      id,
+      idx,
+      name: `${step.categoryCode}: ${item.searchTerm ? item.searchTerm : step.name.en}`,
     };
-  },
-
-  data() {
-    return {
-      ...copy(this.modelValue),
+  }
+  else {
+    const { selectedFood, type } = item;
+    const ingredient = await foodsService.getData(props.localeId, selectedFood.code);
+    food = {
+      type,
+      ...selectedFood,
+      name: ingredient.localName,
+      id,
+      idx,
+      ingredient,
     };
-  },
+  }
 
-  computed: {
-    allConfirmed(): boolean {
-      return this.recipeSteps.every(step => this.isStepValid(step));
-    },
+  const foods = step.foods.slice();
+  foods.push(food);
 
-    atLeastOneFoodSelected(): boolean {
-      return this.recipeSteps.some(step => step.foods.length > 0);
-    },
+  const update: RecipeBuilderStepState = {
+    ...step,
+    foods,
+    anotherFoodConfirmed: undefined,
+  };
 
-    isValid(): boolean {
-      return this.allConfirmed && this.atLeastOneFoodSelected;
-    },
-  },
+  state.value.recipeSteps.splice(idx, 1, update);
 
-  methods: {
-    confirm() {
-      console.log('Update Panel');
-      // this.updatePanel();
-    },
+  updateActiveStep(idx);
+  goToNextIfCan(idx);
+};
 
-    removeFood({ foodIndex, index }: { foodIndex: number; index: number }) {
-      const foodToRemove = this.recipeSteps[index].foods.splice(foodIndex, 1);
-      if (!this.recipeSteps[index].foods.length)
-        this.recipeSteps[index].confirmed = undefined;
+function goToNextIfCan(index: number) {
+  if (!isStepValid(state.value.recipeSteps[index]))
+    return;
 
-      if (foodToRemove === undefined)
-        return;
-      this.update();
-    },
+  state.value.activeStep = getNextStep(state.value.recipeSteps);
+};
 
-    update() {
-      const state: PromptStates['recipe-builder-prompt'] = {
-        recipeSteps: this.recipeSteps,
-        activeStep: this.activeStep,
-        recipe: this.recipe,
-      };
+function updateActiveStep(index: unknown) {
+  // TODO: remove this once we have a proper type from vuetify component
+  if (typeof index !== 'number')
+    return;
 
-      this.$emit('update:modelValue', state);
-    },
+  const { recipeSteps } = state.value;
+  emit('update:modelValue', { activeStep: index, recipeSteps });
+  state.value.activeStep = index;
+};
 
-    foodSelected(index: number, selectedFood: SelectedFoodRecipeBuilderItemState): void {
-      this.onFoodSelected({ type: 'selected', selectedFood }, index);
-    },
+function onToggleStepAddMore(stepIndex: number) {
+  goToNextIfCan(stepIndex);
+};
 
-    foodMissing(index: number, searchTerm?: string | null) {
-      this.onFoodSelected({ type: 'missing', searchTerm }, index);
-    },
+function onConfirmToggleIngredients(index: number) {
+  goToNextIfCan(index);
+};
 
-    foodSkipped(index: number): void {
-      this.activeStep = index + 1;
-      this.recipeSteps[index].confirmed = 'yes';
-      this.recipeSteps[index].anotherFoodConfirmed = undefined;
-      this.update();
-    },
+function updateStepsIngredients() {
+  console.log('Updating Steps Ingredients');
+  const chosenIngredients = state.value.recipeSteps
+  // Ignore optional steps that have been rejected even if they had
+  // initially been accepted and some foods were added
+    .filter(step => step.confirmed !== 'no')
+    .map(({ foods }) => foods);
+  emit('add-food', chosenIngredients);
+};
 
-    async onFoodSelected(
-      item:
-        | { type: 'selected'; selectedFood: FoodHeader }
-        | { type: 'missing'; searchTerm?: string | null },
-      idx: number,
-    ): Promise<void> {
-      const step = this.recipeSteps[idx];
-      const id = getEntityId();
-
-      let food: MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
-      if (item.type === 'missing') {
-        food = {
-          ...item,
-          id,
-          idx,
-          name: `${step.categoryCode}: ${item.searchTerm ? item.searchTerm : step.name.en}`,
-        };
-      }
-      else {
-        const { selectedFood, type } = item;
-        const ingredient = await foodsService.getData(this.localeId, selectedFood.code);
-        food = {
-          type,
-          ...selectedFood,
-          name: ingredient.localName,
-          id,
-          idx,
-          ingredient,
-        };
-      }
-
-      const foods = step.foods.slice();
-      foods.push(food);
-
-      const update: RecipeBuilderStepState = {
-        ...step,
-        foods,
-        anotherFoodConfirmed: undefined,
-      };
-
-      this.recipeSteps.splice(idx, 1, update);
-
-      this.updateActiveStep(idx);
-      this.goToNextIfCan(idx);
-    },
-
-    goToNextIfCan(index: number) {
-      if (!isStepValid(this.recipeSteps[index]))
-        return;
-
-      this.activeStep = getNextStep(this.recipeSteps);
-    },
-
-    updateActiveStep(index: unknown) {
-      // TODO: remove this once we have a proper type from vuetify component
-      if (typeof index !== 'number')
-        return;
-
-      const { recipeSteps } = this;
-      this.$emit('update:modelValue', { activeStep: index, recipeSteps });
-      this.activeStep = index;
-    },
-
-    onToggleStepAddMore(stepIndex: number) {
-      this.goToNextIfCan(stepIndex);
-    },
-
-    onConfirmToggleIngredients(index: number) {
-      this.goToNextIfCan(index);
-    },
-
-    updateStepsIngredients() {
-      console.log('Updating Steps Ingredients');
-      const chosenIngredients = this.recipeSteps
-        // Ignore optional steps that have been rejected even if they had
-        // initially been accepted and some foods were added
-        .filter(step => step.confirmed !== 'no')
-        .map(({ foods }) => foods);
-      this.$emit('add-food', chosenIngredients);
-    },
-
-    showFoodBrowser(step: RecipeBuilderStepState): boolean {
-      if (step.required || step.confirmed === 'yes') {
-        // Current step needs at least one food to be selected, and it hasn't
-        if (step.foods.length === 0)
-          return true;
-        else
-          // Some foods have already been added, but another food has been confirmed by the user
-          return step.anotherFoodConfirmed === true;
-      }
-      else {
-        // Step has not been confirmed or has been rejected (i.e. step.required is false and
-        // step.confirmed is either 'no' or undefined)
-        return false;
-      }
-    },
-
-    action(type: string, id?: string, stepId?: number) {
-      this.$emit('action', type, id, stepId);
-    },
-  },
-});
+function showFoodBrowser(step: RecipeBuilderStepState): boolean {
+  if (step.required || step.confirmed === 'yes') {
+    // Current step needs at least one food to be selected, and it hasn't
+    if (step.foods.length === 0)
+      return true;
+    else
+    // Some foods have already been added, but another food has been confirmed by the user
+      return step.anotherFoodConfirmed === true;
+  }
+  else {
+    // Step has not been confirmed or has been rejected (i.e. step.required is false and
+    // step.confirmed is either 'no' or undefined)
+    return false;
+  }
+};
 </script>
 
 <style lang="scss" scoped></style>

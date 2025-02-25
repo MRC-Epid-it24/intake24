@@ -34,9 +34,7 @@
         variant="text"
         @click.stop="action('cancel')"
       >
-        <v-icon start>
-          $cancel
-        </v-icon>
+        <v-icon icon="$cancel" start />
         {{ promptI18n.no }}
       </v-btn>
       <v-btn
@@ -47,9 +45,7 @@
         :title="promptI18n.yes"
         @click="action('next')"
       >
-        <v-icon start>
-          $add
-        </v-icon>
+        <v-icon icon="$add" start />
         {{ promptI18n.yes }}
       </v-btn>
     </template>
@@ -64,104 +60,73 @@
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>
-        <v-icon class="pb-1">
-          $cancel
-        </v-icon>
+        <v-icon class="pb-1" icon="$cancel" />
       </v-btn>
       <v-btn color="primary" :disabled="!isValid" :title="promptI18n.yes" @click="action('next')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.yes }}
         </span>
-        <v-icon class="pb-1">
-          $next
-        </v-icon>
+        <v-icon class="pb-1" icon="$next" />
       </v-btn>
     </template>
   </card-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { computed } from 'vue';
 import { VCombobox, VSelect } from 'vuetify/components';
-
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-
-import createBasePrompt from '../createBasePrompt';
+import { CardLayout } from '../layouts';
 import { useForm } from '../partials';
+import { createBasePromptProps } from '../prompt-props';
 
-export default defineComponent({
+defineOptions({
   name: 'MealAddPrompt',
-
   components: { VCombobox, VSelect },
+});
 
-  mixins: [createBasePrompt<'meal-add-prompt'>()],
-
-  props: {
-    defaultMeals: {
-      type: Array as PropType<string[]>,
-      required: true,
-    },
-    meals: {
-      type: Array as PropType<string[]>,
-      required: true,
-    },
-    modelValue: {
-      type: String,
-    },
+const props = defineProps({
+  ...createBasePromptProps<'meal-add-prompt'>(),
+  defaultMeals: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
-
-  emits: ['action', 'update:modelValue'],
-
-  setup(props, ctx) {
-    const { i18n: { t }, translatePath } = useI18n();
-    const { action, params, type } = usePromptUtils(props, ctx);
-
-    const { form, inputTooLog } = useForm();
-
-    const state = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        ctx.emit('update:modelValue', value);
-      },
-    });
-
-    const isValidMeal = (value: any) => !props.prompt.unique || !props.meals.includes(value?.toLowerCase().trim());
-    const availableMeals = computed(() => props.defaultMeals.filter(meal => isValidMeal(meal)));
-    const hasMeals = computed(() => !!props.meals.length);
-    const isValid = computed(() => !!form.value?.isValid && !!state.value && isValidMeal(state.value));
-
-    const i18nPrefix = computed(
-      () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`,
-    );
-    const promptI18n = computed(() => ({
-      exists: t(`prompts.${type.value}.exists`),
-      no: t(`prompts.${type.value}.no`),
-      yes: t(`prompts.${type.value}.yes`),
-      description: translatePath(`${i18nPrefix.value}.description`, params.value, true),
-      label: t(`${i18nPrefix.value}.label`),
-    }));
-
-    const rules = [
-      inputTooLog(64),
-      (value: any): boolean | string => isValidMeal(value) || promptI18n.value.exists.toString(),
-    ];
-
-    return {
-      action,
-      availableMeals,
-      form,
-      hasMeals,
-      isValid,
-      promptI18n,
-      rules,
-      state,
-    };
+  meals: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { i18n: { t }, translatePath } = useI18n();
+const { action, params, type } = usePromptUtils(props, { emit });
+const { form, inputTooLog } = useForm();
+
+const state = defineModel('modelValue', { type: String });
+
+const isValidMeal = (value: any) => !props.prompt.unique || !props.meals.includes(value?.toLowerCase().trim());
+const availableMeals = computed(() => props.defaultMeals.filter(meal => isValidMeal(meal)));
+const hasMeals = computed(() => !!props.meals.length);
+const isValid = computed(() => !!form.value?.isValid && !!state.value && isValidMeal(state.value));
+
+const i18nPrefix = computed(
+  () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`,
+);
+const promptI18n = computed(() => ({
+  exists: t(`prompts.${type.value}.exists`),
+  no: t(`prompts.${type.value}.no`),
+  yes: t(`prompts.${type.value}.yes`),
+  description: translatePath(`${i18nPrefix.value}.description`, params.value, true),
+  label: t(`${i18nPrefix.value}.label`),
+}));
+
+const rules = [
+  inputTooLog(64),
+  (value: any): boolean | string => isValidMeal(value) || promptI18n.value.exists.toString(),
+];
 </script>
 
 <style lang="scss">
