@@ -49,6 +49,8 @@ const allowedMinutes = computed(
   () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
 );
 const isValid = computed(() => !props.prompt.validation.required || !!state.value);
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss">

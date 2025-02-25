@@ -61,6 +61,8 @@ const rules = computed(() => {
 
   return items;
 });
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss" scoped></style>

@@ -47,6 +47,8 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { action, customPromptLayout } = usePromptUtils(props, { emit });
 const { datePickerProps, isValid, state } = useDatePicker(props, { emit });
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss" scoped></style>

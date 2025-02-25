@@ -168,6 +168,8 @@ const {
 
 const isValid = true;
 defineModel('modelValue', { type: String, default: 'next' });
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss" scoped></style>

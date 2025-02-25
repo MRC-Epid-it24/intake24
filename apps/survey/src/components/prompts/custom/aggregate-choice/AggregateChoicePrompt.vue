@@ -129,6 +129,8 @@ const isValid = computed(() => props.filteredMeals.every(meal => meal.foods.ever
 function updatePromptAnswers() {
   emit('update:modelValue', promptAnswers.value);
 }
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss" scoped>

@@ -100,6 +100,7 @@ const state = computed({
 const isInitialized = computed(
   () => typeof state.value !== 'undefined' && state.value !== null,
 );
+const isValid = computed(() => typeof props.modelValue !== 'undefined');
 
 function initialize(value: number) {
   if (isInitialized.value)
@@ -108,12 +109,12 @@ function initialize(value: number) {
   state.value = value;
 }
 
-const isValid = computed(() => typeof props.modelValue !== 'undefined');
-
 onMounted(() => {
   if (typeof props.modelValue === 'undefined')
     state.value = props.prompt.slider.current.value ?? undefined;
 });
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss"></style>

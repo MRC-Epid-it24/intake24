@@ -86,6 +86,8 @@ const localeOptions = computed(
 function update() {
   emit('update:modelValue', state.value);
 }
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss">

@@ -11,7 +11,7 @@ import YesNoPrompt from './yes-no-prompt.vue';
 
 export * from './aggregate-choice';
 
-export default {
+export const customPrompts = {
   CheckboxListPrompt,
   DatePickerPrompt,
   InfoPrompt,
@@ -23,3 +23,4 @@ export default {
   TimePickerPrompt,
   YesNoPrompt,
 };
+export type CustomPrompts = typeof customPrompts[keyof typeof customPrompts];
