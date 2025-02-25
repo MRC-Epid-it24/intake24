@@ -61,6 +61,8 @@ const state = computed({
       action('next');
   },
 });
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss" scoped></style>

@@ -103,6 +103,8 @@ const isVideoValid = computed(() => !props.prompt.video?.required || videoWatche
 const isCarouselValid = computed(() => !props.prompt.carousel?.required || carouselWatched.value);
 
 const isValid = computed(() => isVideoValid.value && isCarouselValid.value);
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss">

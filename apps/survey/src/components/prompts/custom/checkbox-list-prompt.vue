@@ -104,6 +104,8 @@ watch(otherEnabled, (val) => {
 
   update();
 });
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss" scoped></style>

@@ -83,6 +83,8 @@ const isValid = computed(() => {
 const localeOptions = computed(
   () => props.prompt.options[locale.value] ?? props.prompt.options.en,
 );
+
+defineExpose({ isValid });
 </script>
 
 <style lang="scss"></style>
