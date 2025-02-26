@@ -6,6 +6,7 @@ export { default as ImagePlaceholder } from './ImagePlaceholder.vue';
 export { default as InfoAlert } from './InfoAlert.vue';
 export { default as MissingAllRecipeIngredients } from './MissingAllRecipeIngredients.vue';
 export { default as MissingFoodPanel } from './MissingFoodPanel.vue';
+export { default as NoImagePlaceholder } from './NoImagePlaceholder.vue';
 export { default as RequestHelp } from './request-help.vue';
 export { default as SelectedFoodList } from './SelectedFoodList.vue';
 export { default as SurveyRating } from './survey-rating.vue';

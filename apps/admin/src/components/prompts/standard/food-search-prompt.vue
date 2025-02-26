@@ -1,6 +1,6 @@
 <template>
   <v-tabs-window-item key="options" value="options">
-    <v-row>
+    <v-row class="ml-2">
       <v-col cols="12" md="6">
         <v-switch
           hide-details="auto"
@@ -17,8 +17,8 @@
       </v-col>
       <v-col cols="12" md="6">
         <food-browser-settings
-          :categories-first="categoriesFirst"
-          @update:categories-first="update('categoriesFirst', $event)"
+          v-bind="{ categoriesFirst, allowThumbnails, enableGrid, gridThreshold }"
+          @update="update($event.field, $event.value)"
         />
       </v-col>
     </v-row>
@@ -31,20 +31,16 @@ import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { basePrompt, FoodBrowserSettings } from '../partials';
+import { basePrompt, foodBrowserProps, FoodBrowserSettings } from '../partials';
 
 export default defineComponent({
   name: 'FoodSearchPrompt',
 
   components: { FoodBrowserSettings },
 
-  mixins: [basePrompt],
+  mixins: [basePrompt, foodBrowserProps],
 
   props: {
-    categoriesFirst: {
-      type: Object as PropType<Prompts['food-search-prompt']['categoriesFirst']>,
-      required: true,
-    },
     allowBrowsing: {
       type: Boolean as PropType<Prompts['food-search-prompt']['allowBrowsing']>,
       required: true,

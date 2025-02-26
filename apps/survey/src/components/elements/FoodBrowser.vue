@@ -58,8 +58,11 @@
         <image-placeholder v-if="requestInProgress" class="my-6" />
         <category-contents-view
           v-if="currentCategoryContents && !requestInProgress"
+          :allow-thumbnails="prompt.allowThumbnails"
           :categories-first="prompt.categoriesFirst.browse"
           :contents="currentCategoryContents"
+          :enable-grid="prompt.enableGrid"
+          :grid-threshold="prompt.gridThreshold"
           :i18n="promptI18n"
           :type="type"
           @category-selected="categorySelected"
@@ -70,14 +73,18 @@
         <image-placeholder v-if="requestInProgress" class="my-6" />
         <category-contents-view
           v-if="!requestInProgress"
+          :allow-thumbnails="prompt.allowThumbnails"
           :categories-first="prompt.categoriesFirst.search"
           :contents="searchContents"
+          :enable-grid="prompt.enableGrid"
+          :grid-threshold="prompt.gridThreshold"
           :i18n="promptI18n"
-          layout="auto"
+          layout="grid"
           :percent-scrolled="percentScrolled"
           :search-count="searchCount"
           :search-term="searchTerm ?? undefined"
           :type="type"
+          :use-grid-layout="true"
           @category-selected="categorySelected"
           @food-selected="foodSelected"
         />
@@ -181,7 +188,7 @@ const props = defineProps({
   },
   prompt: {
     type: Object as PropType<
-      Prompts['associated-foods-prompt' | 'food-search-prompt' | 'recipe-builder-prompt']
+      Prompts['associated-foods-prompt' | 'general-associated-foods-prompt' | 'food-search-prompt' | 'recipe-builder-prompt']
     >,
     required: true,
   },
