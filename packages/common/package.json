@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@anatine/zod-openapi": "^2.2.7",
+    "@gtm-support/vue-gtm": "^3.1.0",
     "@ts-rest/core": "^3.52.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",

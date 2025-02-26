@@ -8,14 +8,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { useGtm } from '@gtm-support/vue-gtm';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
+import { GtmEvent, GtmSchemePrompts, sendGtmEvent } from '@intake24/common/types';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
-import { useSurvey } from '@intake24/survey/stores';
 
+import { useSurvey } from '@intake24/survey/stores';
 import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
 
 export default defineComponent({
@@ -52,14 +52,14 @@ export default defineComponent({
       }
       if (type === 'cancel') {
         survey.deleteMeal(meal.value.id);
-        ctx.emit('action', 'next');
+        ctx.emit('action', 'next', ...args);
 
-        useGtm()?.trackEvent({
-          event: 'meal_cancelled',
-          category: 'Survey',
-          action: 'click DID NOT HAVE',
-          label: meal.value.name.en,
-          value: 1,
+        sendGtmEvent({
+          event: GtmEvent.DeleteMeal,
+          scheme_prompts: GtmSchemePrompts.PreMeals,
+          action: type,
+          prompt_id: props.prompt.id,
+          meal: meal.value.name.en,
           noninteraction: false,
         });
         return;

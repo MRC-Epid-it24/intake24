@@ -1,4 +1,3 @@
-import { useGtm } from '@gtm-support/vue-gtm';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 import { useGoTo } from 'vuetify';
@@ -11,6 +10,8 @@ import type {
 } from '@intake24/common/prompts';
 import type { MealCreationState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import { isSelectionEqual } from '@intake24/common/surveys';
+import { GtmSchemePrompts, sendGtmEvent } from '@intake24/common/types';
+import type { GtmEventParams } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
   customHandlers,
@@ -20,8 +21,8 @@ import {
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
 
+import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
 import { InfoAlert } from '../elements';
 
 export default defineComponent({
@@ -251,6 +252,19 @@ export default defineComponent({
     },
 
     async action(type: string, id?: string, params?: object) {
+      console.debug(`track event: ${type}`);
+      const gtmEventParams: GtmEventParams = {
+        event: type,
+        scheme_prompts: GtmSchemePrompts.PreMeals,
+        action: type,
+        prompt_id: this.currentPrompt?.prompt.id,
+        noninteraction: false,
+      };
+      const meal = this.meals.find(meal => meal.id === id);
+      if (meal) {
+        gtmEventParams.meal = meal.name.en;
+      }
+      sendGtmEvent(gtmEventParams);
       switch (type) {
         case 'next':
         case 'restart':
@@ -302,14 +316,6 @@ export default defineComponent({
         case 'deleteMeal':
           this.survey.deleteMeal(mealId);
 
-          useGtm()?.trackEvent({
-            event: 'meal_cancelled',
-            category: 'Survey',
-            action: 'click DELETE MEAL',
-            label: meal.name.en,
-            value: 1,
-            noninteraction: false,
-          });
           await this.nextPrompt();
           break;
         case 'selectMeal':

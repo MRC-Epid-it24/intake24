@@ -74,9 +74,8 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { useGtm } from '@gtm-support/vue-gtm';
 import { defineComponent } from 'vue';
-
+import { GtmEvent, GtmSchemePrompts, sendGtmEvent } from '@intake24/common/types';
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 
 export default defineComponent({
@@ -138,11 +137,10 @@ export default defineComponent({
   methods: {
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
-      useGtm()?.trackEvent({
-        event: 'food_category_selected',
-        category: 'Survey',
-        action: 'click food category chip',
-        label: category.name,
+      sendGtmEvent({
+        event: GtmEvent.SelectFoodCategory,
+        scheme_prompts: GtmSchemePrompts.Foods,
+        food_category_name: category.name,
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
@@ -152,12 +150,10 @@ export default defineComponent({
 
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
-      useGtm()?.trackEvent({
-        event: 'food_selected',
-        category: 'Survey',
-        food_category: this.contents.header.name,
-        action: 'select food',
-        label: food.name,
+      sendGtmEvent({
+        event: GtmEvent.SelectFood,
+        scheme_prompts: GtmSchemePrompts.Foods,
+        food_name: food.name,
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
