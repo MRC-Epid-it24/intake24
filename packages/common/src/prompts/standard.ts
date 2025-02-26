@@ -1,7 +1,14 @@
-import type { Prompts } from './prompts';
+import type { FoodBrowser, Prompts } from './prompts';
 
 import { copy } from '@intake24/common/util';
 import { basePrompt } from './base';
+
+export const foodBrowserDefaults: FoodBrowser = {
+  categoriesFirst: { browse: false, search: false },
+  allowThumbnails: false,
+  enableGrid: false,
+  gridThreshold: 70,
+};
 
 export const addonFoodsPrompt: Prompts['addon-foods-prompt'] = copy({
   ...basePrompt,
@@ -26,8 +33,8 @@ export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   type: 'standard',
   id: 'associated-foods-prompt',
   name: 'Associated foods prompt',
-  categoriesFirst: { browse: false, search: false },
   multiple: false,
+  ...foodBrowserDefaults,
 });
 
 export const editMealPrompt: Prompts['edit-meal-prompt'] = copy({
@@ -66,8 +73,8 @@ export const foodSearchPrompt: Prompts['food-search-prompt'] = copy({
   id: 'food-search-prompt',
   name: 'Food search prompt',
   allowBrowsing: true,
-  categoriesFirst: { browse: false, search: false },
   dualLanguage: false,
+  ...foodBrowserDefaults,
 });
 
 export const mealAddPrompt: Prompts['meal-add-prompt'] = copy({
@@ -205,9 +212,9 @@ export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-pro
   categoryCode: '',
   promptText: {},
   genericName: {},
-  categoriesFirst: { browse: false, search: false },
   multiple: false,
   skipPortionSize: false,
+  ...foodBrowserDefaults,
 });
 
 export const standardPrompts = [

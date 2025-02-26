@@ -564,7 +564,10 @@
       "title": "Food database search",
       "subtitle": "Choose a food from the database that best matches the description",
       "allowBrowsing": "Allow respondents to search for foods by freely browsing food categories",
-      "dualLanguage": "Display alternative food names in another language"
+      "dualLanguage": "Display alternative food names in another language",
+      "allowThumbnails": "Show food thumbnail images if available",
+      "enableGrid": "Allow grid layout",
+      "gridThreshold": "Use grid layout if at least {percent}% of foods have thumbnails"
     },
     "meal-add-prompt": {
       "title": "Add meal",
