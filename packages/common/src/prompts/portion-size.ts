@@ -2,6 +2,7 @@ import type { ImageMap, Prompts } from './prompts';
 
 import { copy } from '@intake24/common/util';
 import { basePortionPrompt } from './base';
+import { foodBrowserDefaults } from './standard';
 
 const imageMap: ImageMap = {
   labels: false,
@@ -128,7 +129,7 @@ export const recipeBuilderPrompt: Prompts['recipe-builder-prompt'] = copy({
   type: 'portion-size',
   id: 'recipe-builder-prompt',
   name: 'Recipe Builder',
-  categoriesFirst: { browse: false, search: false },
+  ...foodBrowserDefaults,
 });
 
 export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({

@@ -2,6 +2,7 @@ export { default as BarcodeSettings } from './barcode-settings.vue';
 export { default as basePrompt } from './base-prompt';
 export { default as CounterSettings } from './counter-settings.vue';
 export { default as ExternalSourceSettings } from './external-source-settings.vue';
+export { default as foodBrowserProps } from './food-browser-props-mixin';
 export { default as FoodBrowserSettings } from './food-browser-settings.vue';
 export { default as ImageMapSettings } from './image-map-settings.vue';
 export { default as PromptActions } from './prompt-actions.vue';
