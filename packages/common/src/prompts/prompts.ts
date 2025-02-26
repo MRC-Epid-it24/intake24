@@ -131,6 +131,9 @@ export type AddonFoodTrigger = (typeof addonFoodTriggers)[number];
 
 export const foodBrowser = z.object({
   categoriesFirst: z.record(z.enum(['browse', 'search']), z.boolean()),
+  allowThumbnails: z.boolean(),
+  enableGrid: z.boolean(),
+  gridThreshold: z.number(),
 });
 export type FoodBrowser = z.infer<typeof foodBrowser>;
 
