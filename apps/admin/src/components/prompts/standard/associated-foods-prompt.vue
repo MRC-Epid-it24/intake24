@@ -11,8 +11,8 @@
       </v-col>
       <v-col cols="12" md="6">
         <food-browser-settings
-          :categories-first="categoriesFirst"
-          @update:categories-first="update('categoriesFirst', $event)"
+          v-bind="{ categoriesFirst, allowThumbnails, enableGrid, gridThreshold }"
+          @update="update($event.field, $event.value)"
         />
       </v-col>
     </v-row>
@@ -25,20 +25,16 @@ import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { basePrompt, FoodBrowserSettings } from '../partials';
+import { basePrompt, foodBrowserProps, FoodBrowserSettings } from '../partials';
 
 export default defineComponent({
   name: 'AssociatedFoodsPrompt',
 
   components: { FoodBrowserSettings },
 
-  mixins: [basePrompt],
+  mixins: [basePrompt, foodBrowserProps],
 
   props: {
-    categoriesFirst: {
-      type: Object as PropType<Prompts['associated-foods-prompt']['categoriesFirst']>,
-      required: true,
-    },
     multiple: {
       type: Boolean as PropType<Prompts['associated-foods-prompt']['multiple']>,
       required: true,
