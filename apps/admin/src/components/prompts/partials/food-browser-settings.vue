@@ -12,14 +12,41 @@
         hide-details="auto"
         :label="$t('survey-schemes.prompts.foodBrowser.categoriesFirst.browse')"
         :model-value="categoriesFirst.browse"
-        @update:model-value="update('browse', $event)"
+        @update:model-value="updateCategoriesFirst('browse', $event)"
       />
       <v-switch
         hide-details="auto"
         :label="$t('survey-schemes.prompts.foodBrowser.categoriesFirst.search')"
         :model-value="categoriesFirst.search"
-        @update:model-value="update('search', $event)"
+        @update:model-value="updateCategoriesFirst('search', $event)"
       />
+      <v-switch
+        hide-details="auto"
+        :label="$t('survey-schemes.prompts.food-search-prompt.allowThumbnails')"
+        :model-value="allowThumbnails"
+        @update:model-value="update('allowThumbnails', $event)"
+      />
+      <v-switch
+        hide-details="auto"
+        :label="$t('survey-schemes.prompts.food-search-prompt.enableGrid')"
+        :model-value="enableGrid"
+        @update:model-value="update('enableGrid', $event)"
+      />
+      <v-slide-x-transition>
+        <div v-show="enableGrid" class="ml-4">
+          <v-label>
+            {{ $t('survey-schemes.prompts.food-search-prompt.gridThreshold', { percent: Math.round(gridThreshold) }) }}
+          </v-label>
+          <v-slider
+            class="ml-0"
+            :max-width="600"
+            :min="10"
+            :model-value="gridThreshold"
+            :step="5"
+            @update:model-value="update('gridThreshold', $event)"
+          />
+        </div>
+      </v-slide-x-transition>
     </v-card-text>
   </v-card>
 </template>
@@ -38,13 +65,28 @@ export default defineComponent({
       type: Object as PropType<FoodBrowser['categoriesFirst']>,
       required: true,
     },
+    allowThumbnails: {
+      type: Boolean as PropType<FoodBrowser['allowThumbnails']>,
+      required: true,
+    },
+    enableGrid: {
+      type: Boolean as PropType<FoodBrowser['enableGrid']>,
+      required: true,
+    },
+    gridThreshold: {
+      type: Number as PropType<FoodBrowser['gridThreshold']>,
+      required: true,
+    },
   },
 
-  emits: ['update:categoriesFirst'],
+  emits: ['update'],
 
   methods: {
-    update(field: keyof FoodBrowser['categoriesFirst'], value: boolean) {
-      this.$emit(`update:categoriesFirst`, { ...this.categoriesFirst, [field]: value });
+    update(field: keyof FoodBrowser, value: any) {
+      this.$emit(`update`, { field, value });
+    },
+    updateCategoriesFirst(field: keyof FoodBrowser['categoriesFirst'], value: boolean | null) {
+      this.$emit(`update`, { field: 'categoriesFirst', value: { ...this.categoriesFirst, [field]: Boolean(value) } });
     },
   },
 });

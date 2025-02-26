@@ -70,9 +70,11 @@
         <v-card border class="h-100">
           <v-card-text>
             <v-img
+              v-if="allowThumbnails && food.thumbnailImageUrl"
               aspect-ratio="1"
-              :src="food.thumbnailImageUrl ?? 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'"
+              :src="food.thumbnailImageUrl"
             />
+            <no-image-placeholder v-else />
           </v-card-text>
           <v-card-title class="text-wrap font-weight-medium">
             {{ food.name }}
@@ -98,7 +100,7 @@
 
           <template #append>
             <v-btn
-              v-if="food.thumbnailImageUrl"
+              v-if="allowThumbnails && food.thumbnailImageUrl"
               icon
               @click.stop="toggleFoodThumbnail(food.code)"
             >
@@ -108,7 +110,7 @@
         </v-list-item>
         <v-expand-transition>
           <v-card
-            v-show="food.thumbnailImageUrl && thumbnailExpanded[food.code]"
+            v-show="allowThumbnails && food.thumbnailImageUrl && thumbnailExpanded[food.code]"
             border class="ma-4 mt-2 cursor-pointer" max-width="80%" @click="foodSelected(food)"
           >
             <v-card-text class="pa-1">
@@ -131,9 +133,12 @@ import { defineComponent, reactive } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 import { sendGtmEvent } from '@intake24/ui/tracking';
+import NoImagePlaceholder from './NoImagePlaceholder.vue';
 
 export default defineComponent({
   name: 'CategoryContentsView',
+
+  components: { NoImagePlaceholder },
 
   props: {
     contents: {
@@ -156,13 +161,17 @@ export default defineComponent({
       type: String as PropType<string>,
       default: '',
     },
-    layout: {
-      type: String as PropType<'list' | 'grid' | 'auto'>,
-      default: 'list',
+    allowThumbnails: {
+      type: Boolean,
+      required: true,
     },
-    gridLayoutThreshold: {
+    enableGrid: {
+      type: Boolean,
+      required: true,
+    },
+    gridThreshold: {
       type: Number,
-      default: 0.7,
+      required: true,
     },
     searchCount: {
       type: Number as PropType<number>,
@@ -196,22 +205,16 @@ export default defineComponent({
       return this.searchTerm.toLowerCase().includes('pizza');
     },
     useGridLayout(): boolean {
-      switch (this.layout) {
-        case 'grid': return true;
-        case 'list': return false;
-        case 'auto': {
-          const totalFoodCount = this.contents.foods.length;
-          const foodsWithThumbnailsCount = this.contents.foods.filter(f => f.thumbnailImageUrl).length;
+      if (!(this.enableGrid && this.allowThumbnails))
+        return false;
 
-          if (totalFoodCount === 0)
-            return false;
-          else
-            return foodsWithThumbnailsCount / totalFoodCount > this.gridLayoutThreshold;
-        }
-        default:
-          console.warn(`Unexpected layout property value: ${this.layout}`);
-          return false;
-      }
+      const totalFoodCount = this.contents.foods.length;
+      const foodsWithThumbnailsCount = this.contents.foods.filter(f => f.thumbnailImageUrl).length;
+
+      if (totalFoodCount === 0)
+        return false;
+      else
+        return Math.round(foodsWithThumbnailsCount * 100.0 / totalFoodCount) >= this.gridThreshold;
     },
   },
 
