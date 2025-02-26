@@ -132,6 +132,14 @@ Captcha provider sitekey. Please refer to your provider, how to obtain the key.
 
 Google Analytics ID. Disabled if not set.
 
+### VITE_GTM_CONTAINER_ID
+
+Google Tag Manger Container ID. Disabled if not set.
+
+### VITE_CLARITY_PROJECT_ID
+
+Microsoft Clarity project ID. Disabled if not set.
+
 ### VITE_WEBPUSH_PUBLIC_KEY
 
 Webpush public key for we-push notifications.

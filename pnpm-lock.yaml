@@ -501,13 +501,13 @@ importers:
         version: 7.0.3
       fork-ts-checker-webpack-plugin:
         specifier: ^9.0.2
-        version: 9.0.2(typescript@5.7.3)(webpack@5.98.0)
+        version: 9.0.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1))
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9
       nodemon-webpack-plugin:
         specifier: ^4.8.2
-        version: 4.8.2(webpack@5.98.0)
+        version: 4.8.2(webpack@5.98.0(webpack-cli@6.0.1))
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
@@ -519,7 +519,7 @@ importers:
         version: 29.2.5(@babel/core@7.26.9)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.9))(jest@29.7.0(@types/node@22.13.4)(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))(typescript@5.7.3)
       ts-loader:
         specifier: ^9.5.2
-        version: 9.5.2(typescript@5.7.3)(webpack@5.98.0)
+        version: 9.5.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1))
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
@@ -540,7 +540,7 @@ importers:
         version: 3.0.0
       webpackbar:
         specifier: ^7.0.0
-        version: 7.0.0(webpack@5.98.0)
+        version: 7.0.0(webpack@5.98.0(webpack-cli@6.0.1))
 
   apps/cli:
     dependencies:
@@ -622,10 +622,10 @@ importers:
         version: 1.18.8
       fork-ts-checker-webpack-plugin:
         specifier: ^9.0.2
-        version: 9.0.2(typescript@5.7.3)(webpack@5.98.0)
+        version: 9.0.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1))
       ts-loader:
         specifier: ^9.5.2
-        version: 9.5.2(typescript@5.7.3)(webpack@5.98.0)
+        version: 9.5.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1))
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@22.13.4)(typescript@5.7.3)
@@ -652,7 +652,7 @@ importers:
         version: 3.0.0
       webpackbar:
         specifier: ^7.0.0
-        version: 7.0.0(webpack@5.98.0)
+        version: 7.0.0(webpack@5.98.0(webpack-cli@6.0.1))
 
   apps/docs:
     devDependencies:
@@ -734,7 +734,7 @@ importers:
         version: 1.18.8
       fork-ts-checker-webpack-plugin:
         specifier: ^9.0.2
-        version: 9.0.2(typescript@5.7.3)(webpack@5.98.0)
+        version: 9.0.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1))
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.13.4)(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3))
@@ -749,7 +749,7 @@ importers:
         version: 3.1.9
       nodemon-webpack-plugin:
         specifier: ^4.8.2
-        version: 4.8.2(webpack@5.98.0)
+        version: 4.8.2(webpack@5.98.0(webpack-cli@6.0.1))
       npm-run-all2:
         specifier: ^7.0.2
         version: 7.0.2
@@ -770,7 +770,7 @@ importers:
         version: 29.2.5(@babel/core@7.26.9)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.9))(jest@29.7.0(@types/node@22.13.4)(ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.3)))(typescript@5.7.3)
       ts-loader:
         specifier: ^9.5.2
-        version: 9.5.2(typescript@5.7.3)(webpack@5.98.0)
+        version: 9.5.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1))
       tsconfig-paths-webpack-plugin:
         specifier: ^4.2.0
         version: 4.2.0
@@ -791,7 +791,7 @@ importers:
         version: 3.0.0
       webpackbar:
         specifier: ^7.0.0
-        version: 7.0.0(webpack@5.98.0)
+        version: 7.0.0(webpack@5.98.0(webpack-cli@6.0.1))
 
   apps/survey:
     dependencies:
@@ -804,6 +804,12 @@ importers:
       '@fortawesome/fontawesome-free':
         specifier: ^6.7.2
         version: 6.7.2
+      '@gtm-support/vue-gtm':
+        specifier: ^3.1.0
+        version: 3.1.0(vue@3.5.13(typescript@5.7.3))
+      '@microsoft/clarity':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@vue-youtube/core':
         specifier: ^0.0.6
         version: 0.0.6(vue@3.5.13(typescript@5.7.3))
@@ -849,6 +855,9 @@ importers:
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
+      vanilla-cookieconsent:
+        specifier: ^3.1.0
+        version: 3.1.0
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
@@ -1292,9 +1301,15 @@ importers:
       '@ericblade/quagga2':
         specifier: ^1.8.4
         version: 1.8.4
+      '@gtm-support/vue-gtm':
+        specifier: ^3.1.0
+        version: 3.1.0(vue@3.5.13(typescript@5.7.3))
       '@hcaptcha/vue3-hcaptcha':
         specifier: ^1.3.0
         version: 1.3.0(vue@3.5.13(typescript@5.7.3))
+      '@microsoft/clarity':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@pinia/plugin-debounce':
         specifier: ^1.0.1
         version: 1.0.1
@@ -2866,6 +2881,14 @@ packages:
     resolution: {integrity: sha512-GsBrnOzU8uj0LECDfD5zomZJIjrPhIlWU82AHwa2s40FKH+kcxQaBvBo3Z4TxyZHIyX8XTDxsyA33/Vx9eFuQA==}
     engines: {node: '>=6'}
 
+  '@gtm-support/core@3.0.1':
+    resolution: {integrity: sha512-SctcoqvvAbGAgZzOb7DZ4wjbZF3ZS7Las3qIEByv6g7mzPf4E9LpRXcQzjmywYLcUx2jys7PWJAa3s5slvj/0w==}
+
+  '@gtm-support/vue-gtm@3.1.0':
+    resolution: {integrity: sha512-kGUnCI+Z5lBeCKd7rzgU7UoFU8Q0EkJfh17SgeyAyx8cLdISqeq54BNJKZrME3WXersoigLZVJ1GLs0buYD3lA==}
+    peerDependencies:
+      vue: '>= 3.2.26 < 4.0.0'
+
   '@hcaptcha/vue3-hcaptcha@1.3.0':
     resolution: {integrity: sha512-IEonS6JiYdU7uy6aeib8cYtMO4nj8utwStbA9bWHyYbOvOvhpkV+AW8vfSKh6SntYxqle/TRwhv+kU9p92CfsA==}
     peerDependencies:
@@ -3234,6 +3257,9 @@ packages:
 
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
+
+  '@microsoft/clarity@1.0.0':
+    resolution: {integrity: sha512-2QY6SmXnqRj6dWhNY8NYCN3e53j4zCFebH4wGnNhdGV1mqAsQwql2fT0w8TISxCvwwfVp8idsWLIdrRHOms1PQ==}
 
   '@mongodb-js/saslprep@1.2.0':
     resolution: {integrity: sha512-+ywrb0AqkfaYuhHs6LxKWgqbh3I72EpEgESCw37o+9qPx9WTCkgDm2B+eMrwehGtHBWHFU4GXvnSCNiFhhausg==}
@@ -11215,7 +11241,7 @@ snapshots:
       '@babel/traverse': 7.26.9
       '@babel/types': 7.26.9
       convert-source-map: 2.0.0
-      debug: 4.4.0(supports-color@5.5.0)
+      debug: 4.4.0
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -11935,7 +11961,7 @@ snapshots:
       '@babel/parser': 7.26.9
       '@babel/template': 7.26.9
       '@babel/types': 7.26.9
-      debug: 4.4.0(supports-color@5.5.0)
+      debug: 4.4.0
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -12455,6 +12481,15 @@ snapshots:
     dependencies:
       '@fortawesome/fontawesome-common-types': 6.7.2
 
+  '@gtm-support/core@3.0.1': {}
+
+  '@gtm-support/vue-gtm@3.1.0(vue@3.5.13(typescript@5.7.3))':
+    dependencies:
+      '@gtm-support/core': 3.0.1
+      vue: 3.5.13(typescript@5.7.3)
+    optionalDependencies:
+      vue-router: 4.5.0(vue@3.5.13(typescript@5.7.3))
+
   '@hcaptcha/vue3-hcaptcha@1.3.0(vue@3.5.13(typescript@5.7.3))':
     dependencies:
       vue: 3.5.13(typescript@5.7.3)
@@ -12930,6 +12965,8 @@ snapshots:
       '@lezer/common': 1.2.3
 
   '@marijn/find-cluster-break@1.0.2': {}
+
+  '@microsoft/clarity@1.0.0': {}
 
   '@mongodb-js/saslprep@1.2.0':
     dependencies:
@@ -14124,7 +14161,7 @@ snapshots:
       typescript: 5.7.3
       vue: 3.5.13(typescript@5.7.3)
 
-  '@vuetify/loader-shared@2.1.0(vue@3.5.13(typescript@5.7.3))(vuetify@3.7.13)':
+  '@vuetify/loader-shared@2.1.0(vue@3.5.13(typescript@5.7.3))(vuetify@3.7.13(typescript@5.7.3)(vite-plugin-vuetify@2.1.0)(vue@3.5.13(typescript@5.7.3)))':
     dependencies:
       upath: 2.0.1
       vue: 3.5.13(typescript@5.7.3)
@@ -14237,17 +14274,17 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@webpack-cli/configtest@3.0.1(webpack-cli@6.0.1)(webpack@5.98.0)':
+  '@webpack-cli/configtest@3.0.1(webpack-cli@6.0.1(webpack@5.98.0))(webpack@5.98.0(webpack-cli@6.0.1))':
     dependencies:
       webpack: 5.98.0(webpack-cli@6.0.1)
       webpack-cli: 6.0.1(webpack@5.98.0)
 
-  '@webpack-cli/info@3.0.1(webpack-cli@6.0.1)(webpack@5.98.0)':
+  '@webpack-cli/info@3.0.1(webpack-cli@6.0.1(webpack@5.98.0))(webpack@5.98.0(webpack-cli@6.0.1))':
     dependencies:
       webpack: 5.98.0(webpack-cli@6.0.1)
       webpack-cli: 6.0.1(webpack@5.98.0)
 
-  '@webpack-cli/serve@3.0.1(webpack-cli@6.0.1)(webpack@5.98.0)':
+  '@webpack-cli/serve@3.0.1(webpack-cli@6.0.1(webpack@5.98.0))(webpack@5.98.0(webpack-cli@6.0.1))':
     dependencies:
       webpack: 5.98.0(webpack-cli@6.0.1)
       webpack-cli: 6.0.1(webpack@5.98.0)
@@ -15334,6 +15371,10 @@ snapshots:
       ms: 2.1.3
     optionalDependencies:
       supports-color: 5.5.0
+
+  debug@4.4.0:
+    dependencies:
+      ms: 2.1.3
 
   debug@4.4.0(supports-color@5.5.0):
     dependencies:
@@ -16455,7 +16496,7 @@ snapshots:
 
   forever-agent@0.6.1: {}
 
-  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.7.3)(webpack@5.98.0):
+  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1)):
     dependencies:
       '@babel/code-frame': 7.26.2
       chalk: 4.1.2
@@ -16877,7 +16918,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0(supports-color@5.5.0)
+      debug: 4.4.0
     transitivePeerDependencies:
       - supports-color
 
@@ -16919,7 +16960,7 @@ snapshots:
   https-proxy-agent@7.0.6:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0(supports-color@5.5.0)
+      debug: 4.4.0
     transitivePeerDependencies:
       - supports-color
 
@@ -17238,7 +17279,7 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.4.0(supports-color@5.5.0)
+      debug: 4.4.0
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -18653,7 +18694,7 @@ snapshots:
 
   nodemailer@6.10.0: {}
 
-  nodemon-webpack-plugin@4.8.2(webpack@5.98.0):
+  nodemon-webpack-plugin@4.8.2(webpack@5.98.0(webpack-cli@6.0.1)):
     dependencies:
       '@types/nodemon': 1.19.6
       nodemon: 3.0.1
@@ -20397,7 +20438,7 @@ snapshots:
       type-fest: 0.16.0
       unique-string: 2.0.0
 
-  terser-webpack-plugin@5.3.11(webpack@5.98.0):
+  terser-webpack-plugin@5.3.11(webpack@5.98.0(webpack-cli@6.0.1)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
@@ -20525,7 +20566,7 @@ snapshots:
       '@jest/types': 29.6.3
       babel-jest: 29.7.0(@babel/core@7.26.9)
 
-  ts-loader@9.5.2(typescript@5.7.3)(webpack@5.98.0):
+  ts-loader@9.5.2(typescript@5.7.3)(webpack@5.98.0(webpack-cli@6.0.1)):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.18.1
@@ -21110,7 +21151,7 @@ snapshots:
 
   vite-plugin-vuetify@2.1.0(vite@6.1.1(@types/node@22.13.4)(jiti@2.4.2)(sass@1.85.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.7.3))(vuetify@3.7.13):
     dependencies:
-      '@vuetify/loader-shared': 2.1.0(vue@3.5.13(typescript@5.7.3))(vuetify@3.7.13)
+      '@vuetify/loader-shared': 2.1.0(vue@3.5.13(typescript@5.7.3))(vuetify@3.7.13(typescript@5.7.3)(vite-plugin-vuetify@2.1.0)(vue@3.5.13(typescript@5.7.3)))
       debug: 4.4.0(supports-color@5.5.0)
       upath: 2.0.1
       vite: 6.1.1(@types/node@22.13.4)(jiti@2.4.2)(sass@1.85.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
@@ -21371,9 +21412,9 @@ snapshots:
   webpack-cli@6.0.1(webpack@5.98.0):
     dependencies:
       '@discoveryjs/json-ext': 0.6.3
-      '@webpack-cli/configtest': 3.0.1(webpack-cli@6.0.1)(webpack@5.98.0)
-      '@webpack-cli/info': 3.0.1(webpack-cli@6.0.1)(webpack@5.98.0)
-      '@webpack-cli/serve': 3.0.1(webpack-cli@6.0.1)(webpack@5.98.0)
+      '@webpack-cli/configtest': 3.0.1(webpack-cli@6.0.1(webpack@5.98.0))(webpack@5.98.0(webpack-cli@6.0.1))
+      '@webpack-cli/info': 3.0.1(webpack-cli@6.0.1(webpack@5.98.0))(webpack@5.98.0(webpack-cli@6.0.1))
+      '@webpack-cli/serve': 3.0.1(webpack-cli@6.0.1(webpack@5.98.0))(webpack@5.98.0(webpack-cli@6.0.1))
       colorette: 2.0.20
       commander: 12.1.0
       cross-spawn: 7.0.6
@@ -21419,7 +21460,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.11(webpack@5.98.0)
+      terser-webpack-plugin: 5.3.11(webpack@5.98.0(webpack-cli@6.0.1))
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     optionalDependencies:
@@ -21429,7 +21470,7 @@ snapshots:
       - esbuild
       - uglify-js
 
-  webpackbar@7.0.0(webpack@5.98.0):
+  webpackbar@7.0.0(webpack@5.98.0(webpack-cli@6.0.1)):
     dependencies:
       ansis: 3.15.0
       consola: 3.4.0
