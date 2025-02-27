@@ -68,6 +68,26 @@
                   "name": "^_gid",
                   "exp": "1 day",
                   "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                },
+                {
+                  "name": "^_CLID",
+                  "exp": "1 year",
+                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                },
+                {
+                  "name": "^_MUID",
+                  "exp": "390 days",
+                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                },
+                {
+                  "name": "^_clck",
+                  "exp": "30 days",
+                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                },
+                {
+                  "name": "^_clsk",
+                  "exp": "1 day",
+                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
                 }
               ]
             }

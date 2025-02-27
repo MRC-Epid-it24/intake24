@@ -14,7 +14,6 @@ import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
-
 import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
 
 export default defineComponent({

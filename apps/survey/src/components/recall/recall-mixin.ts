@@ -20,7 +20,6 @@ import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-rec
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
-
 import { InfoAlert } from '../elements';
 
 export default defineComponent({
@@ -286,6 +285,11 @@ export default defineComponent({
     },
 
     async mealAction(type: MealActionType, mealId: string) {
+      const meal = this.meals.find(meal => meal.id === mealId);
+      if (!meal) {
+        console.warn(`Meal with id ${mealId} not found.`);
+        return;
+      }
       switch (type) {
         case 'editMeal':
           this.showMealPrompt(mealId, 'preFoods', 'edit-meal-prompt');
