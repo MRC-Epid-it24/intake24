@@ -110,74 +110,28 @@ export function usePromptUtils<
     if (type !== 'next') {
       console.debug(`track event in use-prompt-utils: ${type}`);
       const gtmEventParams: GtmEventParams = {
+        action: type,
         prompt_id: props.prompt.id,
         meal: mealName.value,
         food: foodName.value,
         noninteraction: false,
       };
-      switch (type) {
-        case 'cancel':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.DeleteMeal;
-          break;
-        case 'deleteMeal':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.DeleteMeal;
-          break;
-        case 'noMoreInformation':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.NoMoreInformation;
-          break;
-        case 'review':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.Review;
-          break;
-        case 'addFood':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.AddFood;
-          break;
-        case 'addMeal':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.AddMeal;
-          break;
-        case 'changeFood':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.ChangeFood;
-          break;
-        case 'deleteFood':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.DeleteFood;
-          break;
-        case 'editFood':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.EditFood;
-          break;
-        case 'editMeal':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.EditMeal;
-          break;
-        case 'mealTime':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.MealTime;
-          break;
-        case 'selectFood':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.SelectFood;
-          break;
-        case 'selectMeal':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.SelectMeal;
-          break;
-        case 'selectFoodCategory':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.SelectFoodCategory;
-          break;
-        case 'restart':
-          gtmEventParams.action = type;
-          gtmEventParams.event = GtmEvents.Restart;
-          break;
+      for (const key in GtmEvents) {
+        if (type === GtmEvents[key]) {
+          gtmEventParams.event = GtmEvents[key];
+        }
+        if (type === 'cancel') { // Cancel button
+          for (const key in GtmEvents) {
+            if (GtmEvents[key] === 'deleteMeal') {
+              gtmEventParams.event = GtmEvents[key];
+            }
+          }
+        }
       }
-      if (gtmEventParams.event) {
+      if (!gtmEventParams.event) {
+        console.warn(`No defined GTM event found for action: ${type}, GTM event skipped.`);
+      }
+      else {
         sendGtmEvent(gtmEventParams);
       }
       emit('action', type, ...args);

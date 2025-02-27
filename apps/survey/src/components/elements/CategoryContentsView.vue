@@ -77,6 +77,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 import { GtmEvents, GtmSchemePrompts, sendGtmEvent } from '@intake24/ui/tracking';
+import type { GtmEventParams } from '@intake24/ui/tracking';
 
 export default defineComponent({
   name: 'CategoryContentsView',
@@ -137,28 +138,46 @@ export default defineComponent({
   methods: {
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
-      sendGtmEvent({
-        event: GtmEvents.SelectFoodCategory,
-        scheme_prompts: GtmSchemePrompts.Foods,
+      const params: GtmEventParams = {
         food_category: category.name,
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
-      });
+      };
+      for (const key in GtmEvents) {
+        if (GtmEvents[key] === 'selectFoodCategory') {
+          params.event = GtmEvents[key];
+        }
+      }
+      for (const key in GtmSchemePrompts) {
+        if (GtmSchemePrompts[key] === 'foods') {
+          params.scheme_prompts = GtmSchemePrompts[key];
+        }
+      }
+      sendGtmEvent(params);
     },
 
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
-      sendGtmEvent({
-        event: GtmEvents.SelectFood,
-        scheme_prompts: GtmSchemePrompts.Foods,
+      const params: GtmEventParams = {
         food: food.name,
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
-      });
+      };
+      for (const key in GtmEvents) {
+        if (GtmEvents[key] === 'selectFood') {
+          params.event = GtmEvents[key];
+        }
+      }
+      for (const key in GtmSchemePrompts) {
+        if (GtmSchemePrompts[key] === 'foods') {
+          params.scheme_prompts = GtmSchemePrompts[key];
+        }
+      }
+      sendGtmEvent(params);
     },
 
     toggleExpand() {

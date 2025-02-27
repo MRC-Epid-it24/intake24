@@ -1,35 +1,35 @@
 import { useGtm } from '@gtm-support/vue-gtm';
 
-export const GtmEvents = {
-  NoMoreInformation: 'noMoreInformation',
-  Review: 'review',
-  AddFood: 'addFood',
-  AddMeal: 'addMeal',
-  ChangeFood: 'changeFood',
-  DeleteFood: 'deleteFood',
-  DeleteMeal: 'deleteMeal',
-  EditFood: 'editFood',
-  EditMeal: 'editMeal',
-  MealTime: 'mealTime',
-  SelectFood: 'selectFood',
-  SelectMeal: 'selectMeal',
-  SelectFoodCategory: 'selectFoodCategory', // it is a action not found in action type
-  Next: 'next',
-  Restart: 'restart',
-} as const;
-export type GtmEvent = typeof GtmEvents[keyof typeof GtmEvents];
+export const GtmEvents = [
+  'noMoreInformation',
+  'review',
+  'addFood',
+  'addMeal',
+  'changeFood',
+  'deleteFood',
+  'deleteMeal',
+  'editFood',
+  'editMeal',
+  'mealTime',
+  'selectFood',
+  'selectMeal',
+  'selectFoodCategory', // it is a action not found in action type
+  'next',
+  'restart',
+] as const;
+type GtmEvent = (typeof GtmEvents)[number];
 
 // Event category for Google Analytics, deduced from Scheme prompts structure
-export const GtmSchemePrompts = {
-  PreMeals: 'preMeals',
-  PostMeals: 'postMeals',
-  Submission: 'submission',
-  PreFoods: 'preFoods',
-  Foods: 'foods',
-  PostFoods: 'postFoods',
-  FoodsDeferred: 'foodsDeferred',
-} as const;
-export type GtmSchemePrompt = typeof GtmSchemePrompts[keyof typeof GtmSchemePrompts];
+export const GtmSchemePrompts = [
+  'preMeals',
+  'postMeals',
+  'submission',
+  'preFoods',
+  'foods',
+  'postFoods',
+  'foodsDeferred',
+] as const;
+export type GtmSchemePrompt = typeof GtmSchemePrompts[number];
 
 export type GtmEventParams = {
   event?: GtmEvent; // event type, e.g. GtmEvents.DeleteMeal, which is 'deleteMeal'. Open to new event types
