@@ -20,9 +20,6 @@ import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-rec
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
-import { GtmSchemePrompts, sendGtmEvent } from '@intake24/ui/tracking';
-
-import type { GtmEventParams } from '@intake24/ui/tracking';
 import { InfoAlert } from '../elements';
 
 export default defineComponent({
@@ -252,19 +249,6 @@ export default defineComponent({
     },
 
     async action(type: string, id?: string, params?: object) {
-      console.debug(`track event: ${type}`);
-      const gtmEventParams: GtmEventParams = {
-        event: type,
-        scheme_prompts: GtmSchemePrompts.PreMeals,
-        action: type,
-        prompt_id: this.currentPrompt?.prompt.id,
-        noninteraction: false,
-      };
-      const meal = this.meals.find(meal => meal.id === id);
-      if (meal) {
-        gtmEventParams.meal = meal.name.en;
-      }
-      sendGtmEvent(gtmEventParams);
       switch (type) {
         case 'next':
         case 'restart':
@@ -315,7 +299,6 @@ export default defineComponent({
           break;
         case 'deleteMeal':
           this.survey.deleteMeal(mealId);
-
           await this.nextPrompt();
           break;
         case 'selectMeal':

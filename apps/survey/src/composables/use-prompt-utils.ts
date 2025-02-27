@@ -11,6 +11,8 @@ import { useI18n } from '@intake24/i18n';
 
 import { useSurvey } from '@intake24/survey/stores';
 import { promptType } from '@intake24/ui';
+import { GtmEvents, sendGtmEvent } from '@intake24/ui/tracking';
+import type { GtmEventParams } from '@intake24/ui/tracking';
 import { useFoodUtils } from './use-food-utils';
 import { useMealUtils } from './use-meal-utils';
 
@@ -106,6 +108,78 @@ export function usePromptUtils<
 
   const action = (type: string, ...args: [id?: string, params?: object]) => {
     if (type !== 'next') {
+      console.debug(`track event in use-prompt-utils: ${type}`);
+      const gtmEventParams: GtmEventParams = {
+        prompt_id: props.prompt.id,
+        meal: mealName.value,
+        food: foodName.value,
+        noninteraction: false,
+      };
+      switch (type) {
+        case 'cancel':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.DeleteMeal;
+          break;
+        case 'deleteMeal':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.DeleteMeal;
+          break;
+        case 'noMoreInformation':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.NoMoreInformation;
+          break;
+        case 'review':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.Review;
+          break;
+        case 'addFood':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.AddFood;
+          break;
+        case 'addMeal':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.AddMeal;
+          break;
+        case 'changeFood':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.ChangeFood;
+          break;
+        case 'deleteFood':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.DeleteFood;
+          break;
+        case 'editFood':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.EditFood;
+          break;
+        case 'editMeal':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.EditMeal;
+          break;
+        case 'mealTime':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.MealTime;
+          break;
+        case 'selectFood':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.SelectFood;
+          break;
+        case 'selectMeal':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.SelectMeal;
+          break;
+        case 'selectFoodCategory':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.SelectFoodCategory;
+          break;
+        case 'restart':
+          gtmEventParams.action = type;
+          gtmEventParams.event = GtmEvents.Restart;
+          break;
+      }
+      if (gtmEventParams.event) {
+        sendGtmEvent(gtmEventParams);
+      }
       emit('action', type, ...args);
       return;
     }

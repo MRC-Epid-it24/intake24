@@ -76,7 +76,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
-import { GtmEvent, GtmSchemePrompts, sendGtmEvent } from '@intake24/ui/tracking';
+import { GtmEvents, GtmSchemePrompts, sendGtmEvent } from '@intake24/ui/tracking';
 
 export default defineComponent({
   name: 'CategoryContentsView',
@@ -138,7 +138,7 @@ export default defineComponent({
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
       sendGtmEvent({
-        event: GtmEvent.SelectFoodCategory,
+        event: GtmEvents.SelectFoodCategory,
         scheme_prompts: GtmSchemePrompts.Foods,
         food_category: category.name,
         search_term: this.searchTerm,
@@ -151,7 +151,7 @@ export default defineComponent({
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
       sendGtmEvent({
-        event: GtmEvent.SelectFood,
+        event: GtmEvents.SelectFood,
         scheme_prompts: GtmSchemePrompts.Foods,
         food: food.name,
         search_term: this.searchTerm,
