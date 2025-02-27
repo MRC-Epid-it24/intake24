@@ -4071,7 +4071,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -4082,13 +4084,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -5622,7 +5627,9 @@
                                   "type": "object",
                                   "properties": {
                                     "en": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64
                                     }
                                   },
                                   "required": [
@@ -5633,6 +5640,8 @@
                                   "type": "object",
                                   "additionalProperties": {
                                     "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64,
                                     "nullable": true
                                   }
                                 }
@@ -5979,7 +5988,9 @@
                                   "type": "object",
                                   "properties": {
                                     "en": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64
                                     }
                                   },
                                   "required": [
@@ -5990,6 +6001,8 @@
                                   "type": "object",
                                   "additionalProperties": {
                                     "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64,
                                     "nullable": true
                                   }
                                 }
@@ -6526,7 +6539,9 @@
                                   "type": "object",
                                   "properties": {
                                     "en": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64
                                     }
                                   },
                                   "required": [
@@ -6537,6 +6552,8 @@
                                   "type": "object",
                                   "additionalProperties": {
                                     "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64,
                                     "nullable": true
                                   }
                                 }
@@ -41282,7 +41299,9 @@
                                   "type": "object",
                                   "properties": {
                                     "en": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64
                                     }
                                   },
                                   "required": [
@@ -41293,13 +41312,16 @@
                                   "type": "object",
                                   "additionalProperties": {
                                     "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64,
                                     "nullable": true
                                   }
                                 }
                               ]
                             },
                             "time": {
-                              "type": "string"
+                              "type": "string",
+                              "pattern": "^\\d{1,2}:\\d{2}$"
                             },
                             "flags": {
                               "type": "array",
@@ -41718,7 +41740,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -41729,13 +41753,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -43197,7 +43224,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -43208,13 +43237,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -43680,7 +43712,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -43691,13 +43725,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -45159,7 +45196,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -45170,13 +45209,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -45632,7 +45674,9 @@
                                   "type": "object",
                                   "properties": {
                                     "en": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64
                                     }
                                   },
                                   "required": [
@@ -45643,13 +45687,16 @@
                                   "type": "object",
                                   "additionalProperties": {
                                     "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64,
                                     "nullable": true
                                   }
                                 }
                               ]
                             },
                             "time": {
-                              "type": "string"
+                              "type": "string",
+                              "pattern": "^\\d{1,2}:\\d{2}$"
                             },
                             "flags": {
                               "type": "array",
@@ -46057,7 +46104,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -46068,13 +46117,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -47536,7 +47588,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -47547,13 +47601,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -48009,7 +48066,9 @@
                                   "type": "object",
                                   "properties": {
                                     "en": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64
                                     }
                                   },
                                   "required": [
@@ -48020,13 +48079,16 @@
                                   "type": "object",
                                   "additionalProperties": {
                                     "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64,
                                     "nullable": true
                                   }
                                 }
                               ]
                             },
                             "time": {
-                              "type": "string"
+                              "type": "string",
+                              "pattern": "^\\d{1,2}:\\d{2}$"
                             },
                             "flags": {
                               "type": "array",
@@ -48464,7 +48526,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -48475,13 +48539,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -49943,7 +50010,9 @@
                                     "type": "object",
                                     "properties": {
                                       "en": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 64
                                       }
                                     },
                                     "required": [
@@ -49954,13 +50023,16 @@
                                     "type": "object",
                                     "additionalProperties": {
                                       "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
                                       "nullable": true
                                     }
                                   }
                                 ]
                               },
                               "time": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^\\d{1,2}:\\d{2}$"
                               },
                               "flags": {
                                 "type": "array",
@@ -53854,7 +53926,9 @@
                               "type": "object",
                               "properties": {
                                 "en": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64
                                 }
                               },
                               "required": [
@@ -53865,13 +53939,16 @@
                               "type": "object",
                               "additionalProperties": {
                                 "type": "string",
+                                "minLength": 1,
+                                "maxLength": 64,
                                 "nullable": true
                               }
                             }
                           ]
                         },
                         "time": {
-                          "type": "string"
+                          "type": "string",
+                          "pattern": "^\\d{1,2}:\\d{2}$"
                         },
                         "flags": {
                           "type": "array",
@@ -54045,7 +54122,9 @@
                                 "type": "object",
                                 "properties": {
                                   "en": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64
                                   }
                                 },
                                 "required": [
@@ -54056,13 +54135,16 @@
                                 "type": "object",
                                 "additionalProperties": {
                                   "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64,
                                   "nullable": true
                                 }
                               }
                             ]
                           },
                           "time": {
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "^\\d{1,2}:\\d{2}$"
                           },
                           "flags": {
                             "type": "array",
@@ -54374,7 +54456,9 @@
                                 "type": "object",
                                 "properties": {
                                   "en": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64
                                   }
                                 },
                                 "required": [
@@ -54385,13 +54469,16 @@
                                 "type": "object",
                                 "additionalProperties": {
                                   "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64,
                                   "nullable": true
                                 }
                               }
                             ]
                           },
                           "time": {
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "^\\d{1,2}:\\d{2}$"
                           },
                           "flags": {
                             "type": "array",
@@ -54665,7 +54752,9 @@
                               "type": "object",
                               "properties": {
                                 "en": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64
                                 }
                               },
                               "required": [
@@ -54676,13 +54765,16 @@
                               "type": "object",
                               "additionalProperties": {
                                 "type": "string",
+                                "minLength": 1,
+                                "maxLength": 64,
                                 "nullable": true
                               }
                             }
                           ]
                         },
                         "time": {
-                          "type": "string"
+                          "type": "string",
+                          "pattern": "^\\d{1,2}:\\d{2}$"
                         },
                         "flags": {
                           "type": "array",
@@ -54853,7 +54945,9 @@
                                 "type": "object",
                                 "properties": {
                                   "en": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64
                                   }
                                 },
                                 "required": [
@@ -54864,13 +54958,16 @@
                                 "type": "object",
                                 "additionalProperties": {
                                   "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64,
                                   "nullable": true
                                 }
                               }
                             ]
                           },
                           "time": {
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "^\\d{1,2}:\\d{2}$"
                           },
                           "flags": {
                             "type": "array",
@@ -55144,7 +55241,9 @@
                               "type": "object",
                               "properties": {
                                 "en": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64
                                 }
                               },
                               "required": [
@@ -55155,13 +55254,16 @@
                               "type": "object",
                               "additionalProperties": {
                                 "type": "string",
+                                "minLength": 1,
+                                "maxLength": 64,
                                 "nullable": true
                               }
                             }
                           ]
                         },
                         "time": {
-                          "type": "string"
+                          "type": "string",
+                          "pattern": "^\\d{1,2}:\\d{2}$"
                         },
                         "flags": {
                           "type": "array",
@@ -55340,7 +55442,9 @@
                                 "type": "object",
                                 "properties": {
                                   "en": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64
                                   }
                                 },
                                 "required": [
@@ -55351,13 +55455,16 @@
                                 "type": "object",
                                 "additionalProperties": {
                                   "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64,
                                   "nullable": true
                                 }
                               }
                             ]
                           },
                           "time": {
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "^\\d{1,2}:\\d{2}$"
                           },
                           "flags": {
                             "type": "array",
@@ -55684,7 +55791,9 @@
                                 "type": "object",
                                 "properties": {
                                   "en": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 64
                                   }
                                 },
                                 "required": [
@@ -55695,13 +55804,16 @@
                                 "type": "object",
                                 "additionalProperties": {
                                   "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 64,
                                   "nullable": true
                                 }
                               }
                             ]
                           },
                           "time": {
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "^\\d{1,2}:\\d{2}$"
                           },
                           "flags": {
                             "type": "array",
