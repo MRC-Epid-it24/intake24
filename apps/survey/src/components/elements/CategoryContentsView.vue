@@ -139,44 +139,28 @@ export default defineComponent({
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
       const params: GtmEventParams = {
+        event: GtmEvents.includes('selectFoodCategory') ? 'selectFoodCategory' : '',
+        scheme_prompts: GtmSchemePrompts.includes('foods') ? 'foods' : '',
         food_category: category.name,
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
       };
-      for (const key in GtmEvents) {
-        if (GtmEvents[key] === 'selectFoodCategory') {
-          params.event = GtmEvents[key];
-        }
-      }
-      for (const key in GtmSchemePrompts) {
-        if (GtmSchemePrompts[key] === 'foods') {
-          params.scheme_prompts = GtmSchemePrompts[key];
-        }
-      }
       sendGtmEvent(params);
     },
 
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
       const params: GtmEventParams = {
+        event: GtmEvents.includes('selectFood') ? 'selectFood' : '',
+        scheme_prompts: GtmSchemePrompts.includes('foods') ? 'foods' : '',
         food: food.name,
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
       };
-      for (const key in GtmEvents) {
-        if (GtmEvents[key] === 'selectFood') {
-          params.event = GtmEvents[key];
-        }
-      }
-      for (const key in GtmSchemePrompts) {
-        if (GtmSchemePrompts[key] === 'foods') {
-          params.scheme_prompts = GtmSchemePrompts[key];
-        }
-      }
       sendGtmEvent(params);
     },
 

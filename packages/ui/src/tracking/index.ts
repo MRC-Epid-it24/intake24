@@ -33,7 +33,7 @@ export type GtmSchemePrompt = typeof GtmSchemePrompts[number];
 
 export type GtmEventParams = {
   event?: GtmEvent | string; // event type, e.g. GtmEvents.DeleteMeal, which is 'deleteMeal'. Open to new event types
-  scheme_prompts?: GtmSchemePrompt; // e.g. GtmSchemePrompt.Submission, which is 'preMeals'
+  scheme_prompts?: GtmSchemePrompt | string; // e.g. GtmSchemePrompt.Submission, which is 'preMeals'
   meal?: string;
   food?: string; // food name, e.g. "Fresh fruit salad"
   food_category?: string; // food category, e.g. "Ham / gammon"
