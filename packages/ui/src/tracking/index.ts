@@ -1,26 +1,16 @@
 import { useGtm } from '@gtm-support/vue-gtm';
+import { actionTypes } from '@intake24/common/prompts';
 
-export const GtmEvents = [
+export const gtmEvents = [
+  ...actionTypes,
   'noMoreInformation',
-  'review',
-  'addFood',
-  'addMeal',
-  'changeFood',
-  'deleteFood',
-  'deleteMeal',
-  'editFood',
-  'editMeal',
-  'mealTime',
-  'selectFood',
-  'selectMeal',
-  'selectFoodCategory', // it is a action not found in action type
-  'next',
+  'selectFoodCategory',
   'restart',
 ] as const;
-type GtmEvent = (typeof GtmEvents)[number];
+type GtmEvent = (typeof gtmEvents)[number];
 
 // Event category for Google Analytics, deduced from Scheme prompts structure
-export const GtmSchemePrompts = [
+export const gtmSchemePrompts = [
   'preMeals',
   'postMeals',
   'submission',
@@ -29,7 +19,7 @@ export const GtmSchemePrompts = [
   'postFoods',
   'foodsDeferred',
 ] as const;
-export type GtmSchemePrompt = typeof GtmSchemePrompts[number];
+export type GtmSchemePrompt = typeof gtmSchemePrompts[number];
 
 export type GtmEventParams = {
   event?: GtmEvent | string; // event type, e.g. GtmEvents.DeleteMeal, which is 'deleteMeal'. Open to new event types
