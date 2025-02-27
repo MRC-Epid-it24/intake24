@@ -11,7 +11,7 @@ import { useI18n } from '@intake24/i18n';
 
 import { useSurvey } from '@intake24/survey/stores';
 import { promptType } from '@intake24/ui';
-import { GtmEvents, sendGtmEvent } from '@intake24/ui/tracking';
+import { sendGtmEvent } from '@intake24/ui/tracking';
 import type { GtmEventParams } from '@intake24/ui/tracking';
 import { useFoodUtils } from './use-food-utils';
 import { useMealUtils } from './use-meal-utils';
@@ -110,30 +110,17 @@ export function usePromptUtils<
     if (type !== 'next') {
       console.debug(`track event in use-prompt-utils: ${type}`);
       const gtmEventParams: GtmEventParams = {
+        event: type,
         action: type,
         prompt_id: props.prompt.id,
         meal: mealName.value,
         food: foodName.value,
         noninteraction: false,
       };
-      for (const key in GtmEvents) {
-        if (type === GtmEvents[key]) {
-          gtmEventParams.event = GtmEvents[key];
-        }
-        if (type === 'cancel') { // Cancel button
-          for (const key in GtmEvents) {
-            if (GtmEvents[key] === 'deleteMeal') {
-              gtmEventParams.event = GtmEvents[key];
-            }
-          }
-        }
+      if (type === 'cancel') {
+        gtmEventParams.event = 'deleteMeal';
       }
-      if (!gtmEventParams.event) {
-        console.warn(`No defined GTM event found for action: ${type}, GTM event skipped.`);
-      }
-      else {
-        sendGtmEvent(gtmEventParams);
-      }
+      sendGtmEvent(gtmEventParams);
       emit('action', type, ...args);
       return;
     }
