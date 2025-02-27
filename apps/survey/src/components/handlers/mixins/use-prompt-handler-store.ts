@@ -79,7 +79,28 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
       survey.setSelection({ mode: 'auto', element: { type: 'food', foodId: meal.foods[0].id } });
   };
 
+  const changeMethod = (idx: number) => {
+    const foodId = getFoodId();
+
+    survey.updateFood({ foodId, update: { portionSizeMethodIndex: idx, portionSize: null } });
+    survey.addFoodFlag(foodId, 'portion-size-option-complete');
+    survey.removeFoodFlag(foodId, 'portion-size-method-complete');
+    clearStoredState();
+  };
+
   const actionPortionSize = (type: string, ...args: [id?: string, params?: object]) => {
+    if (type === 'changeMethod') {
+      const index = args.at(0);
+      if (typeof index !== 'number') {
+        console.warn('Invalid portion size method index', index);
+        return;
+      }
+
+      changeMethod(index);
+      emit('action', 'next');
+      return;
+    }
+
     if (type === 'next')
       commitPortionSize();
 

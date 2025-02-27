@@ -1,132 +1,46 @@
 <template>
   <card-layout v-bind="{ food, prompt, section, isValid }" @action="action">
-    <v-item-group
-      v-if="availableMethods.length"
-      v-model="option"
-      :mandatory="optionValid"
-      @update:model-value="change"
-    >
-      <v-container>
-        <v-row>
-          <v-col
-            v-for="(availableMethod) in availableMethods"
-            :key="availableMethod.index"
-            cols="12"
-            md="4"
-            sm="6"
-          >
-            <v-item v-slot="{ isSelected, toggle }" :value="availableMethod.index">
-              <v-card
-                border
-                border-color="secondary"
-                class="d-flex flex-column justify-space-between"
-                :elevation="isSelected ? '4' : undefined"
-                height="100%"
-                hover
-                @click="click(toggle)"
-              >
-                <component :is="availableMethod.method" :method="availableMethod" />
-                <v-card-actions
-                  class="d-flex justify-end"
-                  :class="{ 'bg-grey-lighten-4': !isSelected, 'bg-ternary': isSelected }"
-                >
-                  <v-chip
-                    class="font-weight-medium px-4 chip-truncate"
-                    :color="option === availableMethod.index ? 'info' : 'primary'"
-                    variant="flat"
-                  >
-                    {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
-                  </v-chip>
-                </v-card-actions>
-              </v-card>
-            </v-item>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-item-group>
-    <v-card-text v-else>
-      <v-alert border="start" type="warning" variant="outlined">
-        {{ $t(`prompts.${type}.unknown`, { food: foodName }) }}
-      </v-alert>
-    </v-card-text>
+    <portion-size-methods
+      v-bind="{
+        foodName,
+        modelValue: modelValue.option,
+        portionSizeMethods,
+      }"
+      @update:model-value="update"
+    />
   </card-layout>
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { computed, onMounted } from 'vue';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { CardLayout } from '../layouts';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
 
-import type { PromptStates } from '@intake24/common/prompts';
-import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+defineOptions({ name: 'PortionSizeOptionPrompt' });
 
-import createBasePortion from './createBasePortion';
-import options from './options';
+const props = defineProps(createPortionPromptProps<'portion-size-option-prompt'>());
 
-export default defineComponent({
-  name: 'PortionSizeOptionPrompt',
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  components: { ...options },
+const { action } = usePromptUtils(props, { emit });
+const { foodName } = useFoodUtils(props);
+const isValid = computed(() => props.modelValue !== null);
 
-  mixins: [createBasePortion<'portion-size-option-prompt'>()],
+function update(event?: number) {
+  emit('update:modelValue', { option: event ?? null });
 
-  props: {
-    availableMethods: {
-      type: Array as PropType<(UserPortionSizeMethod & { index: number })[]>,
-      required: true,
-    },
-  },
+  if (!isValid.value)
+    return;
 
-  emits: ['update:modelValue'],
+  action('next');
+};
 
-  data() {
-    return {
-      option: this.modelValue.option ?? undefined,
-    };
-  },
-
-  computed: {
-    optionValid() {
-      return this.option !== undefined;
-    },
-
-    validConditions(): boolean[] {
-      return [this.optionValid];
-    },
-  },
-
-  mounted() {
-    if (!this.optionValid && this.availableMethods.length === 1) {
-      this.option = 0;
-      this.change();
-      this.action('next');
-    }
-  },
-
-  methods: {
-    click(toggle?: () => void) {
-      toggle?.();
-
-      if (!this.optionValid)
-        return;
-
-      this.action('next');
-    },
-
-    change() {
-      this.clearErrors();
-
-      if (!this.optionValid)
-        return;
-
-      this.update();
-    },
-
-    update() {
-      const state: PromptStates['portion-size-option-prompt'] = { option: this.option ?? null };
-
-      this.$emit('update:modelValue', state);
-    },
-  },
+onMounted(() => {
+  if (!isValid.value && props.portionSizeMethods.length === 1) {
+    update(0);
+  }
 });
 </script>
 

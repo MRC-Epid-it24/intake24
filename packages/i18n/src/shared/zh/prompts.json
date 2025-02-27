@@ -366,6 +366,7 @@
     "name": "上菜集",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "serving": {
       "header": "第1步。请选择您的食物份量。",
       "less": "我吃了更少的量",
@@ -396,17 +397,21 @@
     "name": "麦片",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "container": "请选择一个看起来最像您在吃{food}时使用的餐碗的图片。"
   },
   "directWeight": {
     "name": "重量",
     "text": "",
-    "description": "输入你吃了多少。"
+    "description": "",
+    "method": "您想如何估计您的份量?",
+    "quantity": "输入你吃了多少。"
   },
   "drinkScale": {
     "name": "饮料秤",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "container": "选择外观与您用来盛放{food}的杯子或玻璃杯最相似的一个。",
     "serving": {
       "header": "第1步。请选择您的饮料份量。",
@@ -427,6 +432,7 @@
     "name": "指南图片",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "label": "选择最接近你所吃{food}大小的图片。",
     "quantity": "请选择您吃/喝{food} 了多少。",
     "confirm": "我吃了那么多",
@@ -436,6 +442,7 @@
     "name": "热饮中的牛奶",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "label": "您在茶或咖啡中加了多少{{food}?",
     "confirm": "我加了那么多"
   },
@@ -443,6 +450,7 @@
     "name": "麦片中的牛奶",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "container": "选择最接近你用来盛放{food}的碗。",
     "milk": "请选择您加的牛奶量（不含麦片）。"
   },
@@ -492,6 +500,7 @@
     "name": "父食物部分",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "label": "您在您的{food} 中吃了多少 {parentFood}?",
     "confirm": "我吃了这么多"
   },
@@ -499,6 +508,7 @@
     "name": "披萨",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "typeLabel": "选择最接近你所吃披萨大小的种类。",
     "thicknessLabel": "你的披萨有多厚？",
     "sizeLabel": "你吃的是什么大小的披萨片？",
@@ -515,6 +525,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "sizes": {
       "label": "What size pizza did you have?",
       "personal": "Personal 7\"",
@@ -543,6 +554,7 @@
     "name": "标准份量",
     "text": "",
     "description": "",
+    "method": "您想如何估计您的份量?",
     "label": "你想如何估计你吃的{food}份量？",
     "estimateIn": "{unit}里",
     "howMany": {

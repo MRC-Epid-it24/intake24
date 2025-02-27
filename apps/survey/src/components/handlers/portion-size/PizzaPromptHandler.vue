@@ -6,6 +6,7 @@
       meal,
       parameters,
       parentFood,
+      portionSizeMethods,
       prompt,
       section,
     }"
@@ -48,7 +49,7 @@ export default defineComponent({
       encodedFoodPortionSizeData,
       parameters,
       parentFoodOptional: parentFood,
-      portionSize,
+      portionSizeMethods,
     } = useFoodPromptUtils<'pizza'>();
     const { meal } = useMealPromptUtils();
 
@@ -61,7 +62,7 @@ export default defineComponent({
         servingWeight: 0,
         leftoversWeight: 0,
       },
-      panel: 0,
+      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
       confirmed: { type: false, thickness: false, slice: false, quantity: false },
     });
 
@@ -76,7 +77,7 @@ export default defineComponent({
       meal,
       parameters,
       parentFood,
-      portionSize,
+      portionSizeMethods,
       state,
       action,
       update,

@@ -1,15 +1,15 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-
 import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, MealState, MissingFood, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+import type { EncodedFood, FoodState, MealState, MissingFood, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
 import { promptType } from '@intake24/ui';
-
 import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout } from '../layouts';
+import { PortionSizeMethods } from './methods';
 
 export default <
   P extends keyof Prompts & keyof PromptStates,
@@ -25,6 +25,7 @@ export default <
       NextMobile,
       BaseLayout,
       CardLayout,
+      PortionSizeMethods,
       ValidInvalidIcon,
     },
 
@@ -38,6 +39,10 @@ export default <
       },
       meal: {
         type: Object as PropType<MealState>,
+        required: true,
+      },
+      portionSizeMethods: {
+        type: Array as PropType<(UserPortionSizeMethod & { index: number })[]>,
         required: true,
       },
       prompt: {
@@ -75,18 +80,18 @@ export default <
       hasErrors(): boolean {
         return !!this.errors.length;
       },
-
       validConditions(): boolean[] {
         return [false];
       },
       nextStepConditions(): boolean[] {
         return this.validConditions;
       },
-
+      psmValid(): boolean {
+        return (this.food as FoodState).type === 'encoded-food' && (this.food as EncodedFood).portionSizeMethodIndex !== null;
+      },
       isValid(): boolean {
         return this.validConditions.every(conditions => conditions);
       },
-
       type() {
         return promptType((this.prompt as Prompt).component);
       },
@@ -116,8 +121,8 @@ export default <
         this.closePanels();
       },
 
-      action(type: string, id?: string) {
-        this.$emit('action', type, id);
+      action(type: string, ...args: [id?: string, params?: object]) {
+        this.$emit('action', type, ...args);
       },
     },
   });

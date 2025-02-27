@@ -6,6 +6,7 @@
       meal,
       parameters,
       parentFood,
+      portionSizeMethods,
       prompt,
       section,
     }"
@@ -48,7 +49,7 @@ export default defineComponent({
       encodedFoodPortionSizeData,
       parameters,
       parentFoodOptional: parentFood,
-      portionSize,
+      portionSizeMethods,
     } = useFoodPromptUtils<'milk-on-cereal'>();
     const { meal } = useMealPromptUtils();
 
@@ -65,7 +66,7 @@ export default defineComponent({
         servingWeight: 0,
         leftoversWeight: 0,
       },
-      panel: 0,
+      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
       bowlConfirmed: false,
       milkLevelConfirmed: false,
     });
@@ -81,7 +82,7 @@ export default defineComponent({
       meal,
       parameters,
       parentFood,
-      portionSize,
+      portionSizeMethods,
       state,
       action,
       update,

@@ -26,7 +26,6 @@
 import type { PropType } from 'vue';
 import type { ZodNumber } from 'zod';
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
-
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { LocaleOptionList } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';

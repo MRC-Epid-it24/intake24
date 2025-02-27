@@ -1,6 +1,24 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
+      <v-expansion-panel :readonly="portionSizeMethods.length === 1">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.method`" tag="span">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n-t>
+          <template #actions>
+            <expansion-panel-actions :valid="psmValid" />
+          </template>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <portion-size-methods
+            v-bind="{ foodName, modelValue: food.portionSizeMethodIndex, portionSizeMethods }"
+            @update:model-value="action('changeMethod', $event)"
+          />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-title>
           {{ $t(`prompts.${type}.sizes.label`) }}
@@ -157,17 +175,17 @@ import PizzaSlice from 'virtual:icons/fluent/food-pizza-24-filled';
 // @ts-expect-error - virtual types
 import PizzaWhole from 'virtual:icons/game-icons/full-pizza';
 import { computed, ref } from 'vue';
-import type { PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, PortionSizeParameters, RecipeBuilder } from '@intake24/common/surveys';
+import type { PortionSizeParameters } from '@intake24/common/surveys';
 import { pizzaCrusts, pizzaSizes, pizzaUnits } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
-import { usePromptUtils } from '@intake24/survey/composables';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { Next, NextMobile } from '../actions';
 import { BaseLayout } from '../layouts';
 import { QuantityCard, usePanel } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
 
 defineOptions({
   name: 'PizzaV2Prompt',
@@ -175,20 +193,13 @@ defineOptions({
 });
 
 const props = defineProps({
-  ...createBasePromptProps<'pizza-v2-prompt'>(),
+  ...createPortionPromptProps<'pizza-v2-prompt'>(),
   conversionFactor: {
     type: Number,
     required: true,
   },
-  parentFood: {
-    type: Object as PropType<EncodedFood | RecipeBuilder>,
-  },
   parameters: {
     type: Object as PropType<PortionSizeParameters['pizza-v2']>,
-    required: true,
-  },
-  modelValue: {
-    type: Object as PropType<PromptStates['pizza-v2-prompt']>,
     required: true,
   },
 });
@@ -197,6 +208,7 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { t } } = useI18n();
 const { action, type } = usePromptUtils(props, { emit });
+const { foodName } = useFoodUtils(props);
 
 const baseWeight = 198;
 
@@ -212,11 +224,13 @@ const crustDefs = { classic: 1, 'italian-thin': 0.8, stuffed: 1.2 };
 
 const state = ref(copy(props.modelValue));
 
+const psmValid = computed(() => props.food.portionSizeMethodIndex !== null);
 const sizeValid = computed(() => state.value.confirmed.size);
 const crustValid = computed(() => state.value.confirmed.crust);
 const unitValid = computed(() => state.value.confirmed.unit);
 const quantityValid = computed(() => state.value.confirmed.quantity);
 const validConditions = computed(() => [
+  psmValid.value,
   sizeValid.value,
   crustValid.value,
   unitValid.value,

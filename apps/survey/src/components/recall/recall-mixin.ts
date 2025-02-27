@@ -317,6 +317,7 @@ export default defineComponent({
           break;
         case 'editFood':
           this.survey.editFood(foodId);
+          this.setSelection({ element: { type: 'food', foodId }, mode: 'auto' });
           await this.nextPrompt();
           break;
         case 'deleteFood':

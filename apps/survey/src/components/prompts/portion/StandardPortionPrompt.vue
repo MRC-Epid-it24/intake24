@@ -1,6 +1,24 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-if="standardUnitsLoaded" v-model="panel" :tile="$vuetify.display.mobile">
+      <v-expansion-panel :readonly="portionSizeMethods.length === 1">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.method`" tag="span">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n-t>
+          <template #actions>
+            <expansion-panel-actions :valid="psmValid" />
+          </template>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <portion-size-methods
+            v-bind="{ foodName, modelValue: food.portionSizeMethodIndex, portionSizeMethods }"
+            @update:model-value="action('changeMethod', $event)"
+          />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
       <v-expansion-panel v-show="parameters.units.length !== 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.label`" tag="span">
@@ -153,7 +171,7 @@ export default defineComponent({
     },
 
     validConditions(): boolean[] {
-      const conditions = [this.unitValid, this.quantityValid];
+      const conditions = [this.psmValid, this.unitValid, this.quantityValid];
 
       if (this.linkedParent && !this.linkedParent.auto && this.linkedParent.categories.length)
         conditions.push(this.linkedQuantityConfirmed);

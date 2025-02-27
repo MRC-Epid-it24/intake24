@@ -8,6 +8,7 @@
       meal,
       parameters,
       parentFood,
+      portionSizeMethods,
       prompt,
       section,
     }"
@@ -19,11 +20,9 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import { GuideImagePrompt } from '@intake24/survey/components/prompts';
-
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
@@ -53,6 +52,7 @@ export default defineComponent({
       linkedParentQuantity,
       parameters,
       parentFoodOptional: parentFood,
+      portionSizeMethods,
     } = useFoodPromptUtils<'guide-image'>();
     const { meal } = useMealPromptUtils();
 
@@ -69,7 +69,7 @@ export default defineComponent({
         servingWeight: 0,
         leftoversWeight: 0,
       },
-      panel: 0,
+      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
       objectConfirmed: false,
       quantityConfirmed: false,
       linkedQuantityConfirmed: false,
@@ -88,6 +88,7 @@ export default defineComponent({
       meal,
       parameters,
       parentFood,
+      portionSizeMethods,
       state,
       action,
       update,

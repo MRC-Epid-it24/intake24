@@ -306,7 +306,7 @@
   "portionSizeOption": {
     "name": "Méthode de quantification",
     "text": "",
-    "description": "Comment souhaitez-vous estimer votre portion ?",
+    "description": "Comment souhaitez-vous estimer votre portion?",
     "selections": {
       "grated": "Râpé",
       "in_a_bag": "Dans un sac",
@@ -366,6 +366,7 @@
     "name": "Tel que servi",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "serving": {
       "header": "A l'aide de ces photos, choisissez combien de {food} vous avez consommé.",
       "less": "J'en ai pris moins",
@@ -396,17 +397,21 @@
     "name": "Céréales",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "container": "Sélectionnez le bol qui ressemble le plus à celui que vous avez utilisé pour {food}."
   },
   "directWeight": {
     "name": "Poids",
     "text": "",
-    "description": "Entrez la quantité consommée."
+    "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
+    "quantity": "Entrez la quantité consommée."
   },
   "drinkScale": {
     "name": "Quantification du verre",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "container": "Sélectionnez le verre ou la tasse qui ressemble le plus à celui que vous avez utilisé pour {food}.",
     "serving": {
       "header": "Utilisez le curseur ou cliquez sur le verre ou la tasse pour indiquer combien vous avez consommé.",
@@ -427,6 +432,7 @@
     "name": "Guide photo",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "label": "Choisissez la photo qui correspond le mieux à la taille de portion de {food} que vous avez eue.",
     "quantity": "Choisissez combien de {food} vous avez eu.",
     "confirm": "J'en ai eu autant",
@@ -436,6 +442,7 @@
     "name": "Lait dans une boisson chaude",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "label": "Combien de {food} y avait-il dans votre thé ou votre café ?",
     "confirm": "Il y en avait autant"
   },
@@ -443,6 +450,7 @@
     "name": "Lait sur des céréales",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "container": "Sélectionnez le bol qui ressemble le plus à celui que vous avez utilisé pour {food}.",
     "milk": "Choisissez la hauteur à laquelle votre lait montait (sans les céréales)."
   },
@@ -492,6 +500,7 @@
     "name": "Portion alimentaire parent",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "label": "Combien de l'aliment {food} avez-vous consommé dans l'aliment {parentFood}?",
     "confirm": "J'en ai mangé autant"
   },
@@ -499,6 +508,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "typeLabel": "Sélectionnez la pizza qui ressemble le plus à la part que vous avez mangée.",
     "thicknessLabel": "Quelle était l'épaisseur de votre pizza ?",
     "sizeLabel": "De quelle taille étai(en)t la(les) tranche(s) que vous avez consommée(s)?",
@@ -515,6 +525,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "sizes": {
       "label": "Quelle taille de pizza avez-vous consommé ?",
       "personal": "Individuelle 7\"",
@@ -543,6 +554,7 @@
     "name": "Portion standard",
     "text": "",
     "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?",
     "label": "Comment souhaiteriez-vous estimer la taille de votre portion de {food}?",
     "estimateIn": "En {unit}",
     "howMany": {

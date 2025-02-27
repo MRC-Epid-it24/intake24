@@ -2,6 +2,7 @@ import type { PropType } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, MealState, MissingFood, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 
 export function createBasePromptProps<P extends keyof Prompts, F extends FoodState = EncodedFood>() {
   return {
@@ -45,6 +46,10 @@ export function createPortionPromptProps<P extends keyof Prompts & keyof PromptS
     },
     modelValue: {
       type: Object as PropType<PromptStates[P]>,
+      required: true,
+    },
+    portionSizeMethods: {
+      type: Array as PropType<(UserPortionSizeMethod & { index: number })[]>,
       required: true,
     },
   } as const;

@@ -366,6 +366,7 @@
     "name": "As served",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "serving": {
       "header": "Using these pictures, choose how much {food} you had.",
       "less": "I had less",
@@ -396,17 +397,21 @@
     "name": "Cereal",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "container": "Select the bowl that looks most like the one you used for your {food}."
   },
   "directWeight": {
     "name": "Weight",
     "text": "",
-    "description": "Enter how much you had in grams or mls."
+    "description": "",
+    "method": "How do you want to estimate your portion?",
+    "quantity": "Enter how much you had in grams or mls."
   },
   "drinkScale": {
     "name": "Drink scale",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "container": "Select the cup or glass that looks most like the one you used for your {food}.",
     "serving": {
       "header": "Use the slider or tap on the cup or glass to indicate how much you had.",
@@ -427,6 +432,7 @@
     "name": "Guide image",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "Select the image that is the closest match to the size of {food} you had.",
     "quantity": "Choose how many of {food} you had.",
     "confirm": "I had that many",
@@ -436,6 +442,7 @@
     "name": "Milk in a hot drink",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "How much {food} did you have in your tea or coffee?",
     "confirm": "I had that much"
   },
@@ -443,6 +450,7 @@
     "name": "Milk on cereal",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "container": "Select the bowl that looks most like the one you used for your {food}.",
     "milk": "Choose the level your milk came up to (without cereal)."
   },
@@ -492,6 +500,7 @@
     "name": "Parent food portion",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "How much {food} did you have in your {parentFood}?",
     "confirm": "I had that much"
   },
@@ -499,6 +508,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "typeLabel": "Select the pizza that is closest to the size you had.",
     "thicknessLabel": "How thick was your pizza?",
     "sizeLabel": "What size slice(s) did you have?",
@@ -515,6 +525,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "sizes": {
       "label": "What size pizza did you have?",
       "personal": "Personal 7\"",
@@ -543,6 +554,7 @@
     "name": "Standard portion",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "How would you like to estimate the portion size of your {food}?",
     "estimateIn": "In {unit}",
     "howMany": {

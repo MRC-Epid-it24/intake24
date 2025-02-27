@@ -1,5 +1,4 @@
 import type { LinkedParent } from '../../prompts/partials';
-
 import { computed } from 'vue';
 import type {
   EncodedFood,
@@ -11,12 +10,15 @@ import type {
   PortionSizeStates,
   RecipeBuilder,
 } from '@intake24/common/surveys';
-import type {
-  LocaleTranslation,
-} from '@intake24/common/types';
+import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 
 import { useSurvey } from '@intake24/survey/stores';
+
+const parentFoodRequiredPSMs: PortionSizeMethodId[] = [
+  'milk-in-a-hot-drink',
+  'parent-food-portion',
+];
 
 export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   const survey = useSurvey();
@@ -114,6 +116,14 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
 
   const foodName = (): LocaleTranslation => ({ en: encodedFood().data.localName });
 
+  const portionSizeMethods = computed(() =>
+    encodedFood().data.portionSizeMethods.map((item, index) => ({ ...item, index })).filter(
+      item =>
+        survey.registeredPortionSizeMethods.includes(item.method)
+        && (!parentFoodRequiredPSMs.includes(item.method) || !!parentFood.value),
+    ),
+  );
+
   const portionSize = (): UserPortionSizeMethod => {
     const selectedFood = encodedFood();
 
@@ -200,6 +210,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     initializeRecipeComponents,
     missingFood,
     portionSize,
+    portionSizeMethods,
     recipeBuilder,
     conversionFactor,
     parameters,

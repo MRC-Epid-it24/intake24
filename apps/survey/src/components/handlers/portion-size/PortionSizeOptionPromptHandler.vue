@@ -2,7 +2,7 @@
   <portion-size-option-prompt
     v-model="state"
     v-bind="{
-      availableMethods,
+      portionSizeMethods,
       food,
       meal,
       parentFood,
@@ -10,25 +10,17 @@
       section,
     }"
     @action="action"
-    @update:model-value="update"
   />
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, PortionSizeMethodId, PromptSection } from '@intake24/common/surveys';
+import type { Prompts } from '@intake24/common/prompts';
+import type { EncodedFood, PromptSection } from '@intake24/common/surveys';
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
-
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
-
-const parentFoodRequiredPSMs: PortionSizeMethodId[] = [
-  'milk-in-a-hot-drink',
-  'parent-food-portion',
-];
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
 
 export default defineComponent({
   name: 'PortionSizeOptionPromptHandler',
@@ -49,61 +41,35 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props, ctx) {
-    const { encodedFood, parentFoodOptional: parentFood } = useFoodPromptUtils();
+    const survey = useSurvey();
+    const { encodedFood, parentFoodOptional: parentFood, portionSizeMethods } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
     const food = encodedFood();
 
-    const getInitialState = (): PromptStates['portion-size-option-prompt'] => ({
-      option: food.portionSizeMethodIndex,
-    });
+    const getInitialState = computed(() => ({ option: food.portionSizeMethodIndex }));
 
     const commitAnswer = () => {
-      const update: Partial<Omit<EncodedFood, 'type'>> = {
-        portionSizeMethodIndex: state.value.option,
-      };
+      const update: Partial<Omit<EncodedFood, 'type'>> = { portionSizeMethodIndex: state.value.option };
 
-      if (
-        food.portionSizeMethodIndex !== null
-        && food.portionSizeMethodIndex !== state.value.option
+      if (food.portionSizeMethodIndex !== null && food.portionSizeMethodIndex !== state.value.option
       ) {
         update.portionSize = null;
       }
 
       survey.updateFood({ foodId: food.id, update });
       survey.addFoodFlag(food.id, 'portion-size-option-complete');
-
-      clearStoredState();
     };
 
-    const { state, action, update, clearStoredState } = usePromptHandlerStore(
-      props,
-      ctx,
-      getInitialState,
-      commitAnswer,
-    );
-
-    const survey = useSurvey();
-
-    const availableMethods = computed(() =>
-      food.data.portionSizeMethods.map((item, index) => ({
-        ...item,
-        index,
-      })).filter(
-        item =>
-          survey.registeredPortionSizeMethods.includes(item.method)
-          && (!parentFoodRequiredPSMs.includes(item.method) || !!parentFood.value),
-      ),
-    );
+    const { state, action } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
     return {
       food,
       meal,
       parentFood,
+      portionSizeMethods,
       state,
-      update,
       action,
-      availableMethods,
     };
   },
 });

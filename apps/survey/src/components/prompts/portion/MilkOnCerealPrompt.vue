@@ -1,6 +1,24 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
+      <v-expansion-panel :readonly="portionSizeMethods.length === 1">
+        <v-expansion-panel-title>
+          <i18n-t :keypath="`prompts.${type}.method`" tag="span">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n-t>
+          <template #actions>
+            <expansion-panel-actions :valid="psmValid" />
+          </template>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <portion-size-methods
+            v-bind="{ foodName, modelValue: food.portionSizeMethodIndex, portionSizeMethods }"
+            @update:model-value="action('changeMethod', $event)"
+          />
+        </v-expansion-panel-text>
+      </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.container`" tag="span">
@@ -187,7 +205,7 @@ export default defineComponent({
     },
 
     validConditions(): boolean[] {
-      return [this.bowlValid, this.milkLevelValid];
+      return [this.psmValid, this.bowlValid, this.milkLevelValid];
     },
   },
 

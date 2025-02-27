@@ -6,6 +6,7 @@
       meal,
       parameters,
       parentFood,
+      portionSizeMethods,
       prompt,
       section,
     }"
@@ -48,6 +49,7 @@ export default defineComponent({
       encodedFoodPortionSizeData,
       parameters,
       parentFoodOptional: parentFood,
+      portionSizeMethods,
     } = useFoodPromptUtils<'drink-scale'>();
 
     const currentValue = computed(() => {
@@ -73,7 +75,7 @@ export default defineComponent({
         leftovers: false,
         count: currentValue.value,
       },
-      panel: 0,
+      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
       objectConfirmed: false,
       quantityConfirmed: false,
       leftoversConfirmed: false,
@@ -93,6 +95,7 @@ export default defineComponent({
       meal,
       parameters,
       parentFood,
+      portionSizeMethods,
       state,
       action,
       update,

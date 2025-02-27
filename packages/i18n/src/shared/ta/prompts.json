@@ -366,6 +366,7 @@
     "name": "என பரிமாறப்பட்டது",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "serving": {
       "header": "Using these pictures, choose how much {food} you had.",
       "less": "நான் குறைவாக எடுத்துக்கொண்டேன்  ",
@@ -396,17 +397,21 @@
     "name": "தானியம்",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "container": "உங்கள் {food} நீங்கள் பயன்படுத்திய கிண்ணத்தைப் போலவே இருக்கும் கிண்ணத்தைத் தேர்ந்தெடுக்கவும்."
   },
   "directWeight": {
     "name": "எடை",
     "text": "",
-    "description": "உங்களிடம் எவ்வளவு இருந்தது என்பதை உள்ளிடவும்."
+    "description": "",
+    "method": "How do you want to estimate your portion?",
+    "quantity": "உங்களிடம் எவ்வளவு இருந்தது என்பதை உள்ளிடவும்."
   },
   "drinkScale": {
     "name": "பானம் அளவு",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "container": "உங்கள் {food} நீங்கள் பயன்படுத்திய கோப்பை அல்லது கண்ணாடியைத் தேர்ந்தெடுக்கவும்.",
     "serving": {
       "header": "வலதுபுறத்தில் உள்ள ஸ்லைடரைப் பயன்படுத்தவும் அல்லது உங்கள் கோப்பை அல்லது கண்ணாடி எவ்வளவு நிரம்பியது என்பதைக் குறிக்க கோப்பை அல்லது கண்ணாடி மீது கிளிக் செய்யவும்.",
@@ -427,6 +432,7 @@
     "name": "வழிகாட்டி படம்",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "நீங்கள் வைத்திருந்த {food} அளவுக்கு மிக நெருக்கமான படத்தைத் தேர்ந்தெடுக்கவும்.",
     "quantity": "Choose how many of {food} you had.",
     "confirm": "என்னிடம் இவ்வளவு இருந்தது",
@@ -436,6 +442,7 @@
     "name": "சூடான பானத்தில் பால்",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "உங்களிடம் உள்ள அளவைத் தேர்ந்தெடுக்கவும்.",
     "confirm": "நான் அவ்வளவு எடுத்துக்கொண்டேன்"
   },
@@ -443,6 +450,7 @@
     "name": "தானியத்தின் மீது பால்",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "container": "உங்கள் {food} நீங்கள் பயன்படுத்திய கிண்ணத்தைப் போலவே இருக்கும் கிண்ணத்தைத் தேர்ந்தெடுக்கவும்.",
     "milk": "உங்கள் பால் வந்த அளவைத் தேர்ந்தெடுங்கள் (தானியம் இல்லாமல்)."
   },
@@ -492,6 +500,7 @@
     "name": "Parent food portion",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "How much {food} did you have in your {parentFood}?",
     "confirm": "I had that much"
   },
@@ -499,6 +508,7 @@
     "name": "பீட்சா",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "typeLabel": "நீங்கள் வைத்திருந்த அளவுக்கு மிக நெருக்கமான பீட்சாவைத் தேர்ந்தெடுக்கவும்.",
     "thicknessLabel": "உங்கள் பீட்சா தடிமனாக இருந்ததா?",
     "sizeLabel": "உங்களிடம் என்ன அளவு துண்டுகள் இருந்தன?",
@@ -515,6 +525,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "sizes": {
       "label": "What size pizza did you have?",
       "personal": "Personal 7\"",
@@ -543,6 +554,7 @@
     "name": "நிலையான பகுதி",
     "text": "",
     "description": "",
+    "method": "How do you want to estimate your portion?",
     "label": "உங்கள் {food} பகுதியின் அளவை எவ்வாறு மதிப்பிட விரும்புகிறீர்கள்?",
     "estimateIn": "இல் {unit}",
     "howMany": {

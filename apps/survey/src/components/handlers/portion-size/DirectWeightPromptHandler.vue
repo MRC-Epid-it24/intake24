@@ -6,6 +6,7 @@
       food: food(),
       meal,
       parameters,
+      portionSizeMethods,
       prompt,
       section,
     }"
@@ -48,6 +49,7 @@ export default defineComponent({
       encodedFood: food,
       encodedFoodPortionSizeData,
       parameters,
+      portionSizeMethods,
     } = useFoodPromptUtils<'direct-weight'>();
     const { meal } = useMealPromptUtils();
 
@@ -58,6 +60,7 @@ export default defineComponent({
         servingWeight: 0,
         leftoversWeight: 0,
       },
+      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
     });
 
     const {
@@ -71,6 +74,7 @@ export default defineComponent({
       food,
       meal,
       parameters,
+      portionSizeMethods,
       state,
       action,
       update,

@@ -9,7 +9,6 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 

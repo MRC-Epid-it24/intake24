@@ -751,9 +751,6 @@ export const useSurvey = defineStore('survey', {
 
         flags.push('portion-size-method-complete');
 
-        if (food.data.portionSizeMethods.length > 1)
-          flags.push('portion-size-option-complete');
-
         if (food.portionSize) {
           const component: PortionSizeComponentType = `${food.portionSize.method}-prompt`;
           const store = getOrCreatePromptStateStore(component)();

@@ -4,6 +4,7 @@
     v-bind="{
       food: food(),
       meal,
+      portionSizeMethods: [],
       prompt,
       section,
     }"

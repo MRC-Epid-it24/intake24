@@ -72,6 +72,7 @@ export type PromptStates = {
   };
   'direct-weight-prompt': {
     portionSize: PortionSizeStates['direct-weight'];
+    panel: number;
   };
   'drink-scale-prompt': {
     portionSize: PortionSizeStates['drink-scale'];

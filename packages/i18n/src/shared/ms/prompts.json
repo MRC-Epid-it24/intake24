@@ -366,6 +366,7 @@
     "name": "Seperti yang dihidangkan",
     "text": "Menggunakan prompt di bawah, pilih berapa banyak {food} yang anda ambil, dan sama ada anda mempunyai lebihan makanan",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "serving": {
       "header": "Langkah 1. Pilih saiz porsi anda.",
       "less": "Saya telah mengambil lebih kurang",
@@ -396,17 +397,21 @@
     "name": "Bijirin",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "container": "Pilih mangkuk yang paling sama seperti mangkuk yang anda gunakan untuk {food} anda."
   },
   "directWeight": {
     "name": "Berat",
     "text": "",
-    "description": "Masukkan jumlah yang telah anda ambil."
+    "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
+    "quantity": "Masukkan jumlah yang telah anda ambil."
   },
   "drinkScale": {
     "name": "Skala minuman",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "container": "Pilih cawan atau gelas yang paling sama seperti yang anda gunakan untuk {food} anda.",
     "serving": {
       "header": "Gunakan slider di sebelah kanan atau klik pada cawan atau gelas untuk menunjukkan tahap kepenuhan cawan atau gelas anda.",
@@ -427,6 +432,7 @@
     "name": "Gambar panduan",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "label": "Pilih imej yang paling hampir sama dengan saiz {food} yang anda ambil.",
     "quantity": "Pilih berapa banyak yang telah anda ambil.",
     "confirm": "Saya telah mengambil sebanyak itu",
@@ -436,6 +442,7 @@
     "name": "Susu di dalam minuman panas",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "label": "Berapa banyak {food} yang anda ambil di dalam teh atau kopi anda?",
     "confirm": "Saya telah mengambil sebanyak itu"
   },
@@ -443,6 +450,7 @@
     "name": "Susu pada bijirin",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "container": "Pilih mangkuk yang paling sama seperti mangkuk yang anda gunakan untuk {food} anda.",
     "milk": "Pilih tahap susu anda (tanpa bijirin)."
   },
@@ -492,6 +500,7 @@
     "name": "Porsi makanan asal",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "label": "Berapa banyak {food} yang anda telah ambil dalam {parentFood}?",
     "confirm": "Saya telah mengambil sebanyak itu"
   },
@@ -499,6 +508,7 @@
     "name": "Piza",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "typeLabel": "Pilih piza yang paling hampir dengan saiz yang telah anda ambil.",
     "thicknessLabel": "Berapa tebalkah piza anda?",
     "sizeLabel": "Apakah saiz kepingan piza yang anda ambil?",
@@ -515,6 +525,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "sizes": {
       "label": "What size pizza did you have?",
       "personal": "Personal 7\"",
@@ -543,6 +554,7 @@
     "name": "Porsi piawai",
     "text": "",
     "description": "",
+    "method": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "label": "Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?",
     "estimateIn": "Dalam {unit}",
     "howMany": {
