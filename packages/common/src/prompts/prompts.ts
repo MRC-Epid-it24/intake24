@@ -165,7 +165,7 @@ const aggregateChoicePrompt = baseCustomPrompt.extend({
 const checkboxListPrompt = baseCustomPrompt
   .extend({
     component: z.literal('checkbox-list-prompt'),
-    options: localeOptionList(),
+    options: localeOptionList({ limit: 2048 }),
     other: z.boolean(),
     validation: promptValidationWithLimits,
   });
@@ -192,7 +192,7 @@ const radioListPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
 
 const selectPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
   component: z.literal('select-prompt'),
-  options: localeOptionList(),
+  options: localeOptionList({ limit: 2048 }),
   multiple: z.boolean(),
 });
 

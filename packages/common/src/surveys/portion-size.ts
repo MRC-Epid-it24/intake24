@@ -55,7 +55,7 @@ export const guideImagePortionSizeParameters = z.object({
 });
 
 export const milkInHotDrinkPortionSizeParameters = z.object({
-  options: localeOptionList(z.coerce.number()),
+  options: localeOptionList({ valueSchema: z.coerce.number() }),
 });
 
 export const milkOnCerealPortionSizeParameters = z.object({

@@ -64,7 +64,15 @@ export type DynamicFoodFlag = z.infer<typeof dynamicFoodFlag>;
 export const foodFlags = z.union([z.enum(staticFoodFlags), dynamicFoodFlag, z.string()]);
 export type FoodFlag = z.infer<typeof foodFlags>;
 
-export const customPromptAnswer = z.union([z.string(), z.array(z.string()), z.number(), z.array(z.number()), z.boolean(), z.array(z.boolean()), z.null()]);
+export const customPromptAnswer = z.union([
+  z.string().max(2048),
+  z.array(z.string().max(2048)),
+  z.number(),
+  z.array(z.number()),
+  z.boolean(),
+  z.array(z.boolean()),
+  z.null(),
+]);
 export type CustomPromptAnswer = z.infer<typeof customPromptAnswer>;
 
 export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;

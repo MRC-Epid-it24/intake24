@@ -85,13 +85,27 @@ export type ListOption<T extends z.ZodTypeAny = z.ZodString> = z.infer<
   ReturnType<typeof listOption<T>>
 >;
 
-export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>(valueSchema?: T) {
-  return z.intersection(
+export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>({ valueSchema, limit }: { valueSchema?: T; limit?: number } = {}) {
+  const scheme = z.intersection(
     z.object({
       en: z.array(listOption(valueSchema)),
     }),
     z.record(z.array(listOption(valueSchema))),
   );
+
+  if (!limit)
+    return scheme;
+
+  return scheme.superRefine((data, ctx) => {
+    const length = Object.values(data).flat().map(item => item.value).join('').length;
+    if (length <= limit)
+      return;
+
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `Combined options values are too long, limit is ${limit} characters`,
+    });
+  });
 }
 
 export type LocaleOptionList<T extends z.ZodTypeAny = z.ZodString> = z.infer<
@@ -101,9 +115,9 @@ export type LocaleOptionList<T extends z.ZodTypeAny = z.ZodString> = z.infer<
 export function categoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber>(valueSchema: T) {
   return z.intersection(
     z.object({
-      _default: localeOptionList(valueSchema),
+      _default: localeOptionList({ valueSchema }),
     }),
-    z.record(localeOptionList(valueSchema)),
+    z.record(localeOptionList({ valueSchema })),
   );
 }
 
