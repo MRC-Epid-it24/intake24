@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form @submit.prevent="action('next')">
+      <v-form ref="form" @submit.prevent="submit">
         <v-label v-if="$t(`prompts.${type}.label`)">
           {{ $t(`prompts.${type}.label`) }}
         </v-label>
@@ -25,6 +25,8 @@
             v-model.trim="otherValue"
             hide-details="auto"
             :label="$t(`prompts.${type}.other`)"
+            name="other"
+            :rules="otherRules"
             @change="update"
           />
         </div>
@@ -48,6 +50,7 @@ import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({
@@ -67,10 +70,12 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { locale } } = useI18n();
 const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
+const { form, inputTooLog, submit } = useForm({ action });
 
 const otherEnabled = ref(false);
 const otherValue = ref('');
 const otherOutput = computed(() => otherValue.value.length ? `Other: ${otherValue.value}` : '');
+const otherRules = computed(() => [inputTooLog(256)]);
 
 const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
 const state = computed(() => [...selected.value, otherOutput.value].filter(Boolean));
@@ -82,7 +87,10 @@ const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => 
 const isMinSatisfied = computed(() => !props.prompt.validation.min || props.modelValue.length >= props.prompt.validation.min);
 const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.modelValue.length <= props.prompt.validation.max);
 const isRequiredSatisfied = computed(() => !props.prompt.validation.required || !!props.modelValue.length);
-const isValid = computed(() => isRequiredSatisfied.value && (isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value)));
+const isValid = computed(() =>
+  !!form.value?.isValid && isRequiredSatisfied.value
+  && (isExclusiveSelected.value || (isMinSatisfied.value && isMaxSatisfied.value)),
+);
 
 function disableOption(value: string) {
   return !props.modelValue.includes(value)

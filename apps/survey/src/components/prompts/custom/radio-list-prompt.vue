@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form @submit.prevent="action('next')">
+      <v-form ref="form" @submit.prevent="submit">
         <v-radio-group
           v-model="selected"
           hide-details="auto"
@@ -26,6 +26,8 @@
               v-model.trim="otherValue"
               hide-details="auto"
               :label="$t(`prompts.${type}.other`)"
+              name="other"
+              :rules="otherRules"
               @change="update"
               @focus="selected = 'other'"
             />
@@ -49,6 +51,7 @@ import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({
@@ -67,17 +70,18 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { locale } } = useI18n();
 const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
+const { form, inputTooLog, submit } = useForm({ action });
 
 const otherValue = ref('');
+const otherRules = computed(() => [inputTooLog(256)]);
 const selected = ref(props.modelValue);
 
 const state = computed(() =>
   selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value,
 );
 const isValid = computed(
-  () =>
-    !props.prompt.validation.required
-    || (!!state.value && (selected.value !== 'other' || !!otherValue.value)),
+  () => !!form.value?.isValid
+    && (!props.prompt.validation.required || (!!state.value && (selected.value !== 'other' || !!otherValue.value))),
 );
 const localeOptions = computed(
   () => props.prompt.options[locale.value] ?? props.prompt.options.en,

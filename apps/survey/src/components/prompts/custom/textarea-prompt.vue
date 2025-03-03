@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form ref="form" @submit.prevent="action('next')">
+      <v-form ref="form" @submit.prevent="submit">
         <v-textarea
           v-model="state"
           hide-details="auto"
@@ -44,7 +44,7 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { t }, translate } = useI18n();
 const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
-const { form, inputTooLog } = useForm();
+const { form, inputTooLog, submit } = useForm({ action });
 
 const state = defineModel('modelValue', { type: String });
 const isValid = computed(() => !!form.value?.isValid && (!props.prompt.validation.required || !!state.value));

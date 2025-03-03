@@ -6,7 +6,7 @@
     <v-card-text class="pt-2">
       <v-row>
         <v-col cols="12" md="8">
-          <v-form ref="form" @submit.prevent="action('next')">
+          <v-form ref="form" @submit.prevent="submit">
             <component
               :is="prompt.custom ? 'v-combobox' : 'v-select'"
               v-model="state"
@@ -103,7 +103,7 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { t }, translatePath } = useI18n();
 const { action, params, type } = usePromptUtils(props, { emit });
-const { form, inputTooLog } = useForm();
+const { form, inputTooLog, submit } = useForm({ action });
 
 const state = defineModel('modelValue', { type: String });
 

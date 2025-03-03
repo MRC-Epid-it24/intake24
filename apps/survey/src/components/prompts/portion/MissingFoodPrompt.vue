@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-form ref="form" @submit.prevent="action('next')">
+    <v-form ref="form" @submit.prevent>
       <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
         <v-expansion-panel>
           <v-expansion-panel-title>

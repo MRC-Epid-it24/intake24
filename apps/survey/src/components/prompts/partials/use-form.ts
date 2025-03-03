@@ -5,7 +5,11 @@ import { useI18n } from '@intake24/i18n';
 
 export type RuleCallback = (value: string | null) => boolean | string;
 
-export function useForm() {
+export type UseFormProps = {
+  action?: (type: string, ...args: [id?: string, params?: object]) => void;
+};
+
+export function useForm({ action }: UseFormProps = {}) {
   const { i18n: { t } } = useI18n();
 
   const form = useTemplateRef<InstanceType<typeof VForm>>('form');
@@ -15,8 +19,17 @@ export function useForm() {
       (v?.length ?? 0) <= max || t('common.validation.tooLong', { max });
   };
 
+  async function submit() {
+    const { valid } = await form.value?.validate() ?? {};
+    if (!valid)
+      return;
+
+    action?.('next');
+  }
+
   return {
     form,
     inputTooLog,
+    submit,
   };
 }
