@@ -108,6 +108,7 @@ export type PortionSizeStates = {
     method: 'as-served';
     serving: SelectedAsServedImage | null;
     leftovers: SelectedAsServedImage | null;
+    quantity: number;
     linkedQuantity: number;
   };
   cereal: PortionSizeStateBase & {
@@ -135,7 +136,7 @@ export type PortionSizeStates = {
     fillLevel: number;
     leftoversLevel: number;
     leftovers: boolean;
-    count: number;
+    quantity: number;
   };
   'guide-image': PortionSizeStateBase & {
     method: 'guide-image';

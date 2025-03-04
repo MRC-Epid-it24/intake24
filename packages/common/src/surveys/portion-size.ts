@@ -34,6 +34,7 @@ export type StandardUnit = z.infer<typeof standardUnit>;
 export const asServedPortionSizeParameters = z.object({
   servingImageSet: z.string(),
   leftoversImageSet: z.string().nullish(),
+  multiple: z.boolean().optional(),
 });
 
 export const cerealPortionSizeParameters = z.object({

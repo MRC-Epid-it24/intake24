@@ -271,7 +271,7 @@
     "description": "<p>Was this <strong>{food}</strong> the same as the one you had before?</p>",
     "serving": "{amount} serving size",
     "leftovers": "Left about {amount}",
-    "count": "{count} servings",
+    "quantity": "{quantity} servings",
     "noLeftovers": {
       "drink": "Drank it all",
       "food": "Ate everything"
@@ -380,6 +380,7 @@
       "more": "I left more",
       "confirm": "I left that much"
     },
+    "quantity": "How many of these portions did you have?",
     "weightFactor": {
       "serving": {
         "more": "I had {whole} and {fraction}",
@@ -426,7 +427,7 @@
       "more": "I left more",
       "confirm": "I left that much"
     },
-    "count": "How many of these drinks did you have?"
+    "quantity": "How many of these drinks did you have?"
   },
   "guideImage": {
     "name": "Guide image",
