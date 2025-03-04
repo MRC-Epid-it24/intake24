@@ -2,18 +2,22 @@ import type csvParser from 'csv-parser';
 import { randomUUID } from 'node:crypto';
 
 import { createReadStream } from 'node:fs';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues } from 'lodash';
 import removeBOM from 'remove-bom-stream';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { Dictionary } from '@intake24/common/types';
 import { PackageWriter } from '../packager/package-writer';
+import { PkgGlobalCategory, PkgLocalCategory } from '../packager/types/categories';
 import { PkgGlobalFood, PkgLocalFood } from '../packager/types/foods';
-import { PkgLocale } from '../packager/types/locale';
 
 export interface GoustoLocaleOptions {
   sourcePath: string;
+  thumbnailDir: string;
   outputPath: string;
+  localeId: string;
 }
 
 interface GoustoRecipeRow {
@@ -42,17 +46,7 @@ interface GoustoRecipeData {
   primaryProteinSource: string;
 }
 
-const locale: PkgLocale = {
-  id: 'UK_Gousto',
-  localName: 'UK with Gousto recipe boxes',
-  englishName: 'UK with Gousto recipe boxes',
-  textDirection: 'ltr',
-  prototypeLocale: null,
-  respondentLanguage: 'en',
-  flagCode: 'gb',
-  adminLanguage: 'en',
-  foodIndexLanguageBackendId: 'en',
-};
+const thumbnailsPackageDirName = path.join ('images', 'thumbnail');
 
 async function readCSV(
   path: string,
@@ -127,17 +121,32 @@ function codeTransform(recipeId: string): string {
   return `G${recipeId.replace('-', '')}`;
 }
 
-function buildLocalFoods(recipeData: Dictionary<GoustoRecipeData>): PkgLocalFood[] {
+function buildLocalFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFileNames: string[], usedFileNames: Set<string>): PkgLocalFood[] {
   function buildLocalFood(recipeId: string, recipeData: GoustoRecipeData): PkgLocalFood {
     return {
       code: codeTransform(recipeId),
       associatedFoods: [],
       brandNames: [],
-      nutrientTableCodes: {},
-      portionSize: [],
+      nutrientTableCodes: {
+        FR_TEMP: 'FRPH1',
+      },
+      portionSize: [{
+        method: 'standard-portion',
+        conversionFactor: 1,
+        description: 'Standard portion',
+        units: [{
+          name: 'fraction',
+          weight: 100,
+          inlineEstimateIn: 'Gousto standard portions',
+          inlineHowMany: 'standard portions',
+          omitFoodDescription: false,
+        }],
+        useForRecipes: false,
+      }],
       alternativeNames: {},
       localDescription: recipeData.recipeTitle,
       tags: ['gousto-recipe'],
+      thumbnailPath: getThumbnailImagePath(thumbnailFileNames, recipeId, usedFileNames),
     };
   }
 
@@ -151,12 +160,84 @@ function buildGlobalFoods(recipeData: Dictionary<GoustoRecipeData>): PkgGlobalFo
       attributes: {},
       englishDescription: recipeData.recipeTitle,
       groupCode: 1,
-      parentCategories: [],
+      parentCategories: [makeCategoryCode(recipeData.primaryProteinSource)],
       version: randomUUID(),
     };
   }
 
   return Object.entries(recipeData).map(([recipeId, recipeData]) => buildGlobalFood(recipeId, recipeData));
+}
+
+function makeCategoryCode(proteinSource: string): string {
+  const source = proteinSource === 'None' ? 'Other' : proteinSource;
+  return `G_${source.replace(/\W+/, '').toLocaleUpperCase().substring(0, 6)}`;
+}
+
+function getProteinSources(recipeData: Dictionary<GoustoRecipeData>): string[] {
+  const proteinSources = new Set<string>();
+  Object.values(recipeData).forEach(recipe => proteinSources.add(recipe.primaryProteinSource === 'None' ? 'Other' : recipe.primaryProteinSource));
+  const array = [...proteinSources];
+  array.sort();
+  return array;
+}
+
+function buildGlobalCategories(proteinSources: string[]): PkgGlobalCategory[] {
+  const proteinCategories = proteinSources.map(s => ({
+    code: makeCategoryCode(s),
+    attributes: {},
+    englishDescription: s,
+    isHidden: false,
+    parentCategories: ['GOUSTO'],
+    version: randomUUID(),
+  }));
+
+  return [{
+    code: 'GOUSTO',
+    attributes: {},
+    englishDescription: 'Gousto recipes',
+    isHidden: false,
+    parentCategories: [],
+    version: randomUUID(),
+  }, ...proteinCategories];
+}
+
+function buildLocalCategories(proteinSources: string[]): PkgLocalCategory[] {
+  const proteinCategories = proteinSources.map(s => ({
+    localDescription: s,
+    portionSize: [],
+    code: makeCategoryCode(s),
+  }));
+
+  return [{
+    code: 'GOUSTO',
+    portionSize: [],
+    localDescription: 'Gousto recipes',
+  }, ...proteinCategories];
+}
+
+async function getThumbnailFileNames(thumbnailDir: string): Promise<string[]> {
+  const files = await fs.readdir(thumbnailDir);
+  const filteredFiles = files.filter(file => file !== '.' && file !== '..');
+  return filteredFiles;
+}
+
+function getThumbnailImagePath(fileNames: string[], recipeId: string, usedFileNames: Set<string>): string | undefined {
+  const fullImagePrefix = recipeId.replace(/^R-/, ''); // Remove 'R-' prefix
+  const shortImagePrefix = fullImagePrefix.replace(/-\d+$/, ''); // Remove '-X' suffix where X is a number
+
+  // Try full recipe ID first (e.g. 1234-2), then shortened ID (1234). Some files seem to not have the -X suffix
+  // but still match the recipe name.
+
+  const fileName = fileNames.find(file => file.startsWith(fullImagePrefix)) ?? fileNames.find(file => file.startsWith(shortImagePrefix));
+
+  if (fileName === undefined) {
+    console.warn(`Thumbnail image not found for recipe id ${recipeId}`);
+    return undefined;
+  }
+
+  usedFileNames.add(fileName);
+
+  return path.join(thumbnailsPackageDirName, fileName);
 }
 
 export default async (options: GoustoLocaleOptions): Promise<void> => {
@@ -166,19 +247,32 @@ export default async (options: GoustoLocaleOptions): Promise<void> => {
 
   const recipeRows = await readRecipeDropCSV(options.sourcePath);
 
+  const thumbnailFileNames = await getThumbnailFileNames(options.thumbnailDir);
+
   const recipeData = buildRecipeData(recipeRows);
+
+  const proteinSources = getProteinSources(recipeData);
+
+  const globalCategories = buildGlobalCategories(proteinSources);
+
+  const localCategories = buildLocalCategories(proteinSources);
 
   const globalFoods = buildGlobalFoods(recipeData);
 
-  const localFoods = buildLocalFoods(recipeData);
+  const usedThumbnailNames = new Set<string>();
+
+  const localFoods = buildLocalFoods(recipeData, thumbnailFileNames, usedThumbnailNames);
 
   const writer = new PackageWriter(logger, options.outputPath);
 
   await Promise.all([
-    writer.writeLocales([locale]),
+    writer.writeGlobalCategories(globalCategories),
+    writer.writeLocalCategories({
+      [options.localeId]: localCategories,
+    }),
     writer.writeLocalFoods(
       {
-        [locale.id]: localFoods,
+        [options.localeId]: localFoods,
       },
     ),
     writer.writeGlobalFoods(
@@ -186,9 +280,18 @@ export default async (options: GoustoLocaleOptions): Promise<void> => {
     ),
     writer.writeEnabledLocalFoods(
       {
-        [locale.id]: globalFoods.map(f => f.code),
+        [options.localeId]: globalFoods.map(f => f.code),
       },
     ),
     writer.writePackageInfo(),
   ]);
+
+  const packageThumbnailsPath = path.join(options.outputPath, thumbnailsPackageDirName);
+
+  fs.mkdir(packageThumbnailsPath, { recursive: true });
+
+  await Promise.all(
+    [...usedThumbnailNames]
+      .map(fileName => fs.copyFile(path.join(options.thumbnailDir, fileName), path.join(packageThumbnailsPath, fileName))),
+  );
 };
