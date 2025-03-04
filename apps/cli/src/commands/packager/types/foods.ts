@@ -117,4 +117,5 @@ export interface PkgLocalFood {
   portionSize: PkgPortionSizeMethod[];
   associatedFoods: PkgAssociatedFood[];
   brandNames: string[];
+  thumbnailPath?: string;
 }
