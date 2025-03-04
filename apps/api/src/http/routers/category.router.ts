@@ -14,6 +14,8 @@ export function category() {
         pick(req.query, ['page', 'limit', 'sort', 'search']),
       );
 
+      foods.data = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(localeId, foods.data);
+
       return { status: 200, body: foods };
     },
     contents: async ({ params, req }) => {
@@ -24,6 +26,8 @@ export function category() {
         code,
       );
 
+      categoryContents.foods = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(localeId, categoryContents.foods);
+
       return { status: 200, body: categoryContents };
     },
     rootContents: async ({ params, req }) => {
@@ -31,6 +35,8 @@ export function category() {
 
       const categoryContents
         = await req.scope.cradle.categoryContentsService.getRootCategories(localeId);
+
+      categoryContents.foods = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(localeId, categoryContents.foods);
 
       return { status: 200, body: categoryContents };
     },
