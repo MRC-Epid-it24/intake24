@@ -126,6 +126,7 @@ async function run() {
     .addArgument(new Argument('<package-file>', 'Input package file path'))
     .addOption(conflictResolutionOption)
     .addOption(specificModulesExecutionOption)
+    .option('--append', 'Append enabled foods')
     .action(async (version, inputFilePath, options) => {
       switch (version) {
         case 'v3':
@@ -242,6 +243,8 @@ async function run() {
     .description('Build Gousto locale')
     .requiredOption('-s, --source-path [source file path]', 'Source file path (recipe drop CSV)')
     .requiredOption('-o, --output-path [output path]', 'Output package directory')
+    .requiredOption('-l, --locale-id [locale ID]', 'Target locale ID')
+    .requiredOption('-t, --thumbnail-dir [locale ID]', 'Food thumbnail image directory path')
     .action(async (options) => {
       await buildGoustoLocaleCommand(options);
     });
