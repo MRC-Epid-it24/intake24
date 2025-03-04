@@ -55,6 +55,7 @@ export type ImporterSpecificModulesExecutionStrategy =
 export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
   modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
+  append: boolean;
 }
 
 export type availableModules = {
@@ -64,6 +65,7 @@ export type availableModules = {
 const defaultOptions: ImporterOptions = {
   onConflict: 'abort',
   modulesForExecution: ['all'],
+  append: false,
 };
 
 export class ImporterV4 {
@@ -101,6 +103,7 @@ export class ImporterV4 {
     this.inputFilePath = inputFilePath;
     this.options = {
       onConflict: options?.onConflict ?? defaultOptions.onConflict,
+      append: options?.append ?? defaultOptions.append,
       modulesForExecution:
         options
         && options.modulesForExecution !== undefined
@@ -737,6 +740,10 @@ export class ImporterV4 {
         throw new Error(message);
       }
     }
+
+    if (food.thumbnailPath !== undefined) {
+      await this.apiClient.foods.updateThumbnail(localeId, food.code, path.join(this.packageDirPath!, food.thumbnailPath));
+    }
   }
 
   private async importLocalFoods(): Promise<void> {
@@ -786,7 +793,23 @@ export class ImporterV4 {
     if (this.enabledLocalFoods !== undefined) {
       for (const [localeId, enabledFoods] of Object.entries(this.enabledLocalFoods)) {
         logger.info(`Updating enabled food codes for locale ${localeId}`);
-        await this.apiClient.foods.updateEnabledFoods(localeId, enabledFoods);
+
+        const uniqueCodes = new Set<string>();
+
+        if (this.options.append) {
+          const enabledFoodsResponse = await this.apiClient.foods.getEnabledFoods(localeId);
+          if (enabledFoodsResponse !== null) {
+            for (const code of enabledFoodsResponse.enabledFoods) {
+              uniqueCodes.add(code);
+            }
+          }
+        }
+
+        for (const code of enabledFoods) {
+          uniqueCodes.add(code);
+        }
+
+        await this.apiClient.foods.updateEnabledFoods(localeId, [...uniqueCodes]);
       }
     }
   }

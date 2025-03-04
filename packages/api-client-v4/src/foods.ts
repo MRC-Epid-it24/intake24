@@ -1,6 +1,7 @@
 import type { BaseClientV4 } from './base-client-v4';
 
 import type { CreateResult } from './create-response';
+import { FormData } from 'formdata-node';
 import type {
   CreateGlobalFoodRequest,
   CreateLocalFoodRequest,
@@ -9,6 +10,8 @@ import type {
   UpdateGlobalFoodRequest,
 } from '@intake24/common/types/http/admin';
 import { parseCreateResponse } from './create-response';
+
+import { fileFromPathWithType } from './form-data-helpers';
 
 export class FoodsApiV4 {
   private static readonly globalApiPath = '/api/admin/foods/global';
@@ -69,5 +72,18 @@ export class FoodsApiV4 {
     await this.baseClient.post<FoodEntry>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`, {
       enabledFoods,
     });
+  }
+
+  public async updateThumbnail(localeId: string, foodCode: string, thumbnailImagePath: string) {
+    const formData = new FormData();
+
+    const file = await fileFromPathWithType(thumbnailImagePath);
+
+    formData.set('image', file);
+
+    await this.baseClient.put(
+      `/api/admin/fdbs/${localeId}/${foodCode}/thumbnail`,
+      formData,
+    );
   }
 }
