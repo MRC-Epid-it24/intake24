@@ -35,7 +35,7 @@ export interface PackageInfo {
 }
 
 export class PackageWriter {
-  private static readonly version = '1.3';
+  private static readonly version = '1.4';
 
   private readonly outputDir: string;
   private readonly options: PackageWriterOptions;
