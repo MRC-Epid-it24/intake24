@@ -133,12 +133,10 @@ function buildLocalFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFile
       portionSize: [{
         method: 'standard-portion',
         conversionFactor: 1,
-        description: 'Standard portion',
+        description: 'use_a_standard_portion',
         units: [{
-          name: 'fraction',
+          name: 'gousto_standard_portion',
           weight: 100,
-          inlineEstimateIn: 'Gousto standard portions',
-          inlineHowMany: 'standard portions',
           omitFoodDescription: false,
         }],
         useForRecipes: false,
