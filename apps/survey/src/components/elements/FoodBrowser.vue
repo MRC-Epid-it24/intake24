@@ -84,7 +84,6 @@
           :search-count="searchCount"
           :search-term="searchTerm ?? undefined"
           :type="type"
-          :use-grid-layout="true"
           @category-selected="categorySelected"
           @food-selected="foodSelected"
         />
