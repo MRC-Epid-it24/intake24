@@ -5,22 +5,31 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form ref="form" @submit.prevent="submit">
+      <v-form ref="form" @submit.prevent>
         <v-label v-if="$t(`prompts.${type}.label`)">
           {{ $t(`prompts.${type}.label`) }}
         </v-label>
-        <v-checkbox-btn
+        <v-checkbox
           v-for="option in localeOptions"
           :key="option.value"
           v-model="selected"
+          density="comfortable"
           :disabled="disableOption(option.value)"
           hide-details="auto"
           :label="option.label"
+          :name="`option-${option.value}`"
           :value="option.value"
           @update:model-value="update(option)"
         />
         <div v-if="prompt.other" class="d-flex flex-row align-center">
-          <v-checkbox-btn v-model="otherEnabled" class="flex-grow-0" :disabled="disableOption(otherOutput)" hide-details />
+          <v-checkbox
+            v-model="otherEnabled"
+            class="flex-grow-0"
+            density="comfortable"
+            :disabled="disableOption(otherOutput)"
+            hide-details
+            name="other-control"
+          />
           <v-text-field
             v-model.trim="otherValue"
             hide-details="auto"
@@ -70,7 +79,7 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { locale } } = useI18n();
 const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
-const { form, inputTooLog, submit } = useForm({ action });
+const { form, inputTooLog } = useForm({ action });
 
 const otherEnabled = ref(false);
 const otherValue = ref('');

@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text class="pt-2">
-      <v-form ref="form" @submit.prevent="submit">
+      <v-form ref="form" @submit.prevent>
         <v-radio-group
           v-model="selected"
           hide-details="auto"
@@ -70,7 +70,7 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { locale } } = useI18n();
 const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
-const { form, inputTooLog, submit } = useForm({ action });
+const { form, inputTooLog } = useForm({ action });
 
 const otherValue = ref('');
 const otherRules = computed(() => [inputTooLog(256)]);
