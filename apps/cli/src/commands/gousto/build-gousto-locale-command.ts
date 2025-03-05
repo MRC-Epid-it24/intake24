@@ -220,13 +220,15 @@ async function getThumbnailFileNames(thumbnailDir: string): Promise<string[]> {
 }
 
 function getThumbnailImagePath(fileNames: string[], recipeId: string, usedFileNames: Set<string>): string | undefined {
-  const fullImagePrefix = recipeId.replace(/^R-/, ''); // Remove 'R-' prefix
-  const shortImagePrefix = fullImagePrefix.replace(/-\d+$/, ''); // Remove '-X' suffix where X is a number
+  const altPrefix = recipeId.replace(/^R-/, ''); // Remove 'R-' prefix
+  const alt2Prefix = altPrefix.replace(/-\d+$/, ''); // Remove '-X' suffix where X is a number
 
-  // Try full recipe ID first (e.g. 1234-2), then shortened ID (1234). Some files seem to not have the -X suffix
-  // but still match the recipe name.
+  // Try full recipe ID first (e.g. R-1234-2), then numerical prefix (1234-2), then shortened ID (1234).
+  // Some files seem to not have the -X suffix but still match the recipe name.
 
-  const fileName = fileNames.find(file => file.startsWith(fullImagePrefix)) ?? fileNames.find(file => file.startsWith(shortImagePrefix));
+  const fileName = fileNames.find(file => file.startsWith(recipeId))
+    ?? fileNames.find(file => file.startsWith(altPrefix))
+    ?? fileNames.find(file => file.startsWith(alt2Prefix));
 
   if (fileName === undefined) {
     console.warn(`Thumbnail image not found for recipe id ${recipeId}`);
