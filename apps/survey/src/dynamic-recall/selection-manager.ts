@@ -111,8 +111,22 @@ export default class SelectionManager {
     return undefined;
   }
 
+  private trySubsequentMeal(mealId: string): Selection | undefined {
+    const meals = this.store.meals;
+    const mealIndex = getMealIndexRequired(meals, mealId);
+
+    for (let i = mealIndex + 1; i < meals.length; i++) {
+      const mealId = meals[i].id;
+      const selection = makeMealSelection(mealId);
+
+      if (this.mealPromptsAvailable(mealId, selection))
+        return selection;
+    }
+    return undefined;
+  }
+
   firstAvailableSelection(): Selection {
-    return this.tryAnyFoodInAnyMeal() ?? this.tryAnyMeal() ?? { mode: 'auto', element: null };
+    return this.tryAnyMeal() ?? this.tryAnyFoodInAnyMeal() ?? { mode: 'auto', element: null };
   }
 
   trySubsequentLinkedFood(foodId: string): Selection | undefined {
@@ -145,7 +159,7 @@ export default class SelectionManager {
     if (nextLinkedOrParentSelection !== undefined)
       return nextLinkedOrParentSelection;
 
-    for (let i = 0; i < foodIndex.foodIndex + 1; ++i) {
+    for (let i = foodIndex.foodIndex + 1; i < meal.foods.length; ++i) {
       const nextFood = meal.foods[i];
       const nextFoodId = nextFood.id;
 
@@ -188,6 +202,7 @@ export default class SelectionManager {
 
           return (
             this.tryAnyFoodInMeal(mealId)
+            ?? this.trySubsequentMeal(mealId)
             ?? this.tryAnyFoodInSubsequentMeals(mealId)
             ?? this.firstAvailableSelection()
           );
@@ -202,6 +217,7 @@ export default class SelectionManager {
             this.trySubsequentFoodInMeal(foodId)
             ?? this.tryAnyFoodInMeal(mealId)
             ?? this.selectMealIfPromptsAvailable(mealId)
+            ?? this.trySubsequentMeal(mealId)
             ?? this.tryAnyFoodInSubsequentMeals(mealId)
             ?? this.firstAvailableSelection()
           );
