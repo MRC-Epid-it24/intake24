@@ -67,7 +67,7 @@
         sm="6"
         @click="foodSelected(food)"
       >
-        <v-card border class="h-100">
+        <v-card border class="h-100 food-thumbnail-card">
           <v-card-text>
             <v-img
               v-if="allowThumbnails && food.thumbnailImageUrl"
@@ -259,5 +259,8 @@ export default defineComponent({
 <style scoped>
 .border-bottom:not(:last-child) {
   border-bottom: 1px solid #eee;
+}
+.food-thumbnail-card {
+  cursor: pointer;
 }
 </style>
