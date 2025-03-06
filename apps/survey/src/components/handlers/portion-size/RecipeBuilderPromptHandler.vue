@@ -15,22 +15,17 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type {
-  FoodRecipeBuilderItemState,
-  Prompts,
-  PromptStates,
-  RecipeBuilderStepState,
-} from '@intake24/common/prompts';
-import type { EncodedFood, FoodFlag, MissingFood, PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { FoodRecipeBuilderItemState, PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
+import type { EncodedFood, FoodFlag, MissingFood } from '@intake24/common/surveys';
 import type { RecipeFoodStepsType } from '@intake24/common/types';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'recipe-builder-prompt'>());
+
+const emit = defineEmits(['action']);
 
 function initialPromptState(step: RecipeFoodStepsType): RecipeBuilderStepState {
   return {
@@ -46,130 +41,98 @@ function initialPromptState(step: RecipeFoodStepsType): RecipeBuilderStepState {
   };
 }
 
-export default defineComponent({
-  name: 'RecipeBuilderPromptHandler',
+const survey = useSurvey();
+const { recipeBuilder, localeId, surveySlug } = useFoodPromptUtils();
+const { meal } = useMealPromptUtils();
 
-  components: { RecipeBuilderPrompt },
+const recipeFood = recipeBuilder().template;
+const foodId = recipeBuilder().id;
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['recipe-builder-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+function getInitialState(): PromptStates['recipe-builder-prompt'] {
+  return {
+    recipe: recipeFood,
+    activeStep: 0,
+    recipeSteps: recipeFood.steps.map(step => initialPromptState(step)),
+  };
+}
 
-  emits: ['action'],
+const { state, update, clearStoredState } = usePromptHandlerStore(props, { emit }, getInitialState);
 
-  setup(props, ctx) {
-    const survey = useSurvey();
-    const { recipeBuilder, localeId, surveySlug } = useFoodPromptUtils();
-    const { meal } = useMealPromptUtils();
-
-    const recipeFood = recipeBuilder().template;
-    const foodId = recipeBuilder().id;
-
-    const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
-      recipe: recipeFood,
-      activeStep: 0,
-      recipeSteps: recipeFood.steps.map(step => initialPromptState(step)),
+async function addingIngredientsAsALinkedFood(ingredients: FoodRecipeBuilderItemState[][]) {
+  ingredients.forEach((stepIngredients) => {
+    stepIngredients.forEach((ingredient) => {
+      addLinkedFood(ingredient);
     });
+  });
+  commitAnswer();
+}
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
-
-    const addingIngredientsAsALinkedFood = async (ingredients: FoodRecipeBuilderItemState[][]) => {
-      ingredients.forEach((stepIngredients) => {
-        stepIngredients.forEach((ingredient) => {
-          addLinkedFood(ingredient);
-        });
-      });
-      commitAnswer();
+async function addLinkedFood(data: FoodRecipeBuilderItemState) {
+  let ingredientToAdd: EncodedFood | MissingFood;
+  if (data.type === 'missing') {
+    ingredientToAdd = {
+      id: data.id,
+      type: 'missing-food',
+      info: null,
+      searchTerm: data.name,
+      customPromptAnswers: {},
+      flags: [],
+      linkedFoods: [],
     };
+  }
+  else {
+    const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
+    const flags: FoodFlag[] = ['associated-foods-complete'];
+    if (hasOnePortionSizeMethod)
+      flags.push('portion-size-option-complete');
 
-    const addLinkedFood = async (data: FoodRecipeBuilderItemState) => {
-      let ingredientToAdd: EncodedFood | MissingFood;
-      if (data.type === 'missing') {
-        ingredientToAdd = {
-          id: data.id,
-          type: 'missing-food',
-          info: null,
-          searchTerm: data.name,
-          customPromptAnswers: {},
-          flags: [],
-          linkedFoods: [],
-        };
-      }
-      else {
-        const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
-        const flags: FoodFlag[] = ['associated-foods-complete'];
-        if (hasOnePortionSizeMethod)
-          flags.push('portion-size-option-complete');
-
-        ingredientToAdd = {
-          id: data.id,
-          type: 'encoded-food',
-          data: data.ingredient,
-          searchTerm: data.searchTerm ?? null,
-          flags,
-          portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
-          portionSize: null,
-          customPromptAnswers: {},
-          linkedFoods: [],
-        };
-      }
-
-      const newComponents = [];
-      const linkedFood = [];
-      const recipeParent = survey.selectedFoodOptional;
-      if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
-        newComponents.push(...recipeParent.components);
-        linkedFood.push(...recipeParent.linkedFoods);
-      }
-
-      // adding the new ingredient to existing component or creating a new one.
-      const componentIndex = newComponents[data.idx] !== undefined ? data.idx : -1;
-      if (componentIndex !== -1 && newComponents.length > 0)
-        newComponents[componentIndex].ingredients.push(data.id);
-      else
-        newComponents.push({ order: data.idx, ingredients: [data.id] });
-
-      survey.updateFood({
-        foodId,
-        update: { linkedFoods: [...linkedFood, ingredientToAdd], components: [...newComponents] },
-      });
+    ingredientToAdd = {
+      id: data.id,
+      type: 'encoded-food',
+      data: data.ingredient,
+      searchTerm: data.searchTerm ?? null,
+      flags,
+      portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
+      portionSize: null,
+      customPromptAnswers: {},
+      linkedFoods: [],
     };
+  }
 
-    const commitAnswer = () => {
-      survey.addFoodFlag(foodId, [
-        'portion-size-method-complete',
-        'recipe-builder-complete',
-        'associated-foods-complete',
-      ]);
-      clearStoredState();
-      ctx.emit('action', 'next');
-    };
+  const newComponents = [];
+  const linkedFood = [];
+  const recipeParent = survey.selectedFoodOptional;
+  if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
+    newComponents.push(...recipeParent.components);
+    linkedFood.push(...recipeParent.linkedFoods);
+  }
 
-    const action = async (type: string) => {
-      if (type === 'next')
-        commitAnswer();
-      else console.log('Unhandled action', type);
-    };
+  // adding the new ingredient to existing component or creating a new one.
+  const componentIndex = newComponents[data.idx] !== undefined ? data.idx : -1;
+  if (componentIndex !== -1 && newComponents.length > 0)
+    newComponents[componentIndex].ingredients.push(data.id);
+  else
+    newComponents.push({ order: data.idx, ingredients: [data.id] });
 
-    return {
-      recipeBuilder,
-      recipeFood,
-      meal,
-      state,
-      localeId,
-      surveySlug,
-      update,
-      action,
-      addLinkedFood,
-      addingIngredientsAsALinkedFood,
-    };
-  },
-});
+  survey.updateFood({
+    foodId,
+    update: { linkedFoods: [...linkedFood, ingredientToAdd], components: [...newComponents] },
+  });
+}
+
+function commitAnswer() {
+  survey.addFoodFlag(foodId, [
+    'portion-size-method-complete',
+    'recipe-builder-complete',
+    'associated-foods-complete',
+  ]);
+  clearStoredState();
+  emit('action', 'next');
+}
+
+async function action(type: string) {
+  if (type === 'next')
+    commitAnswer();
+  else console.log('Unhandled action', type);
+}
 </script>

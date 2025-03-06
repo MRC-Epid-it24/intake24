@@ -1,7 +1,5 @@
 <template>
-  <component
-    :is="prompt.component"
-    :key="prompt.id"
+  <redirect-prompt
     v-bind="{
       feedbackAvailable,
       feedbackEnabled,
@@ -15,57 +13,35 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
 import { RedirectPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps } from '../composables';
 
-export default defineComponent({
-  name: 'RedirectPromptHandler',
+const props = defineProps(createHandlerProps<'redirect-prompt'>());
 
-  components: { RedirectPrompt },
+const emit = defineEmits(['action']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['redirect-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const survey = useSurvey();
+const route = useRoute();
 
-  emits: ['action'],
+const feedbackAvailable = computed(() => survey.feedbackAvailable);
+const feedbackEnabled = computed(() => survey.feedbackEnabled);
+const followUpUrl = computed(() => {
+  const followUpUrl = survey.user?.followUpUrl ?? undefined;
+  if (!followUpUrl || typeof followUpUrl === 'string')
+    return followUpUrl;
 
-  setup(props, { emit }) {
-    const survey = useSurvey();
-    const route = useRoute();
-
-    const feedbackAvailable = computed(() => survey.feedbackAvailable);
-    const feedbackEnabled = computed(() => survey.feedbackEnabled);
-    const followUpUrl = computed(() => {
-      const followUpUrl = survey.user?.followUpUrl ?? undefined;
-      if (!followUpUrl || typeof followUpUrl === 'string')
-        return followUpUrl;
-
-      return followUpUrl[props.prompt.id];
-    });
-    const submissionId = computed(() => survey.data.id);
-    const surveyId = computed(() => route.params.surveyId);
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      emit('action', type, ...args);
-    };
-
-    return { action, feedbackAvailable, feedbackEnabled, followUpUrl, submissionId, surveyId };
-  },
+  return followUpUrl[props.prompt.id];
 });
+const submissionId = computed(() => survey.data.id);
+const surveyId = computed(() => route.params.surveyId.toString());
+
+function action(type: string, ...args: [id?: string, params?: object]) {
+  emit('action', type, ...args);
+}
 </script>
 
 <style scoped></style>

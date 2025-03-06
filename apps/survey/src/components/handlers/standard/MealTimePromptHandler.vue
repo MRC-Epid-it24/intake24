@@ -6,64 +6,41 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
-import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
+import { createHandlerProps, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
-export default defineComponent({
-  name: 'MealTimePromptHandler',
+defineProps(createHandlerProps<'meal-time-prompt'>());
 
-  components: { MealTimePrompt },
+const emit = defineEmits(['action']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['meal-time-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const { meal } = useMealPromptUtils();
+const survey = useSurvey();
 
-  emits: ['action'],
+const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
 
-  setup(props, ctx) {
-    const { meal } = useMealPromptUtils();
-    const survey = useSurvey();
+const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 
-    const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'next') {
+    commitAnswer();
+    emit('action', type);
+    return;
+  }
+  if (type === 'cancel') {
+    survey.deleteMeal(meal.value.id);
+    emit('action', 'next');
+    return;
+  }
 
-    const { state } = usePromptHandlerNoStore(ctx, getInitialState);
+  emit('action', type, ...args);
+}
 
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') {
-        commitAnswer();
-        ctx.emit('action', type);
-        return;
-      }
-      if (type === 'cancel') {
-        survey.deleteMeal(meal.value.id);
-        ctx.emit('action', 'next');
-        return;
-      }
-
-      ctx.emit('action', type, ...args);
-    };
-
-    const commitAnswer = () => {
-      survey.setMealTime(meal.value.id, state.value);
-    };
-
-    return { meal, state, action };
-  },
-});
+function commitAnswer() {
+  survey.setMealTime(meal.value.id, state.value);
+}
 </script>
 
 <style scoped></style>

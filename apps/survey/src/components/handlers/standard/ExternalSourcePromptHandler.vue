@@ -6,70 +6,47 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
+import type { PromptStates } from '@intake24/common/prompts';
 import { getSearchTerm } from '@intake24/common/surveys';
 import { ExternalSourcePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
+const props = defineProps(createHandlerProps<'external-source-prompt'>());
 
-export default defineComponent({
-  name: 'ExternalSourcePromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { ExternalSourcePrompt },
+const { food } = useFoodPromptUtils();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['external-source-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const getInitialState = computed<PromptStates['external-source-prompt']>(() => ({
+  searchTerm: getSearchTerm(food()),
+  type: undefined,
+  data: undefined,
+}));
 
-  emits: ['action'],
+const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 
-  setup(props, ctx) {
-    const { food } = useFoodPromptUtils();
-    const { meal } = useMealPromptUtils();
+function commitAnswer() {
+  const survey = useSurvey();
+  const foodEntry = food();
 
-    const getInitialState = computed<PromptStates['external-source-prompt']>(() => ({
-      searchTerm: getSearchTerm(food()),
-      type: undefined,
-      data: undefined,
-    }));
+  survey.updateFood({ foodId: foodEntry.id, update: {
+    external: { ...foodEntry.external, [props.prompt.source.type]: state.value },
+  } });
+}
 
-    const { state } = usePromptHandlerNoStore(ctx, getInitialState);
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (!['next', 'missing'].includes(type)) {
+    emit('action', type, ...args);
+    return;
+  }
 
-    const commitAnswer = () => {
-      const survey = useSurvey();
-      const foodEntry = food();
+  state.value.type = type === 'next' ? 'selected' : 'missing';
 
-      survey.updateFood({ foodId: foodEntry.id, update: {
-        external: { ...foodEntry.external, [props.prompt.source.type]: state.value },
-      } });
-    };
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (!['next', 'missing'].includes(type)) {
-        ctx.emit('action', type, ...args);
-        return;
-      }
-
-      state.value.type = type === 'next' ? 'selected' : 'missing';
-
-      commitAnswer();
-      ctx.emit('action', 'next');
-    };
-
-    return { action, food, meal, state };
-  },
-});
+  commitAnswer();
+  emit('action', 'next');
+}
 </script>

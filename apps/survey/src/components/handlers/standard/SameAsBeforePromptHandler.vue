@@ -6,82 +6,58 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent, onMounted } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { onMounted } from 'vue';
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 import { getEntityId } from '@intake24/survey/util';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils } from '../mixins';
+defineProps(createHandlerProps<'same-as-before-prompt'>());
 
-export default defineComponent({
-  name: 'SameAsBeforePromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { SameAsBeforePrompt },
+const { encodedFood } = useFoodPromptUtils();
+const { meal } = useMealPromptUtils();
+const {
+  id: foodId,
+  data: { code },
+} = encodedFood();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['same-as-before-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const survey = useSurvey();
 
-  emits: ['action'],
+const sabFood = useSameAsBefore().getItem(survey.localeId, code);
 
-  setup(props, { emit }) {
-    const { encodedFood } = useFoodPromptUtils();
-    const { meal } = useMealPromptUtils();
-    const {
-      id: foodId,
-      data: { code },
-    } = encodedFood();
-
-    const survey = useSurvey();
-
-    const sabFood = useSameAsBefore().getItem(survey.localeId, code);
-
-    const sabAction = (type: 'notSame' | 'same') => {
-      if (type === 'same' && sabFood) {
-        const { id, ...update } = sabFood.food;
-        survey.updateFood({
-          foodId,
-          update: {
-            ...update,
-            linkedFoods: update.linkedFoods.map(linkedFood => ({
-              ...linkedFood,
-              id: getEntityId(),
-            })),
-          },
-        });
-      }
-
-      survey.addFoodFlag(foodId, 'same-as-before-complete');
-      emit('action', 'next');
-    };
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (['notSame', 'same'].includes(type)) {
-        sabAction(type as 'notSame' | 'same');
-        return;
-      }
-
-      emit('action', type, ...args);
-    };
-
-    onMounted(() => {
-      if (!sabFood)
-        sabAction('notSame');
+function sabAction(type: 'notSame' | 'same') {
+  if (type === 'same' && sabFood) {
+    const { id, ...update } = sabFood.food;
+    survey.updateFood({
+      foodId,
+      update: {
+        ...update,
+        linkedFoods: update.linkedFoods.map(linkedFood => ({
+          ...linkedFood,
+          id: getEntityId(),
+        })),
+      },
     });
+  }
 
-    return { action, encodedFood, meal, sabFood };
-  },
+  survey.addFoodFlag(foodId, 'same-as-before-complete');
+  emit('action', 'next');
+}
+
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (['notSame', 'same'].includes(type)) {
+    sabAction(type as 'notSame' | 'same');
+    return;
+  }
+
+  emit('action', type, ...args);
+}
+
+onMounted(() => {
+  if (!sabFood)
+    sabAction('notSame');
 });
 </script>

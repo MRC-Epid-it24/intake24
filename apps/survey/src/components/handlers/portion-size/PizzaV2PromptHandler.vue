@@ -16,76 +16,40 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { PizzaV2Prompt } from '@intake24/survey/components/prompts';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'pizza-v2-prompt'>());
 
-export default defineComponent({
-  name: 'PizzaV2PromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { PizzaV2Prompt },
+const {
+  conversionFactor,
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  parameters,
+  parentFoodOptional: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'pizza-v2'>();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['pizza-v2-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['pizza-v2-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'pizza-v2',
+      size: null,
+      crust: null,
+      unit: null,
+      quantity: 1,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    confirmed: { size: false, crust: false, unit: false, quantity: false },
+  };
+}
 
-  emits: ['action'],
-
-  setup(props, ctx) {
-    const {
-      conversionFactor,
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      parameters,
-      parentFoodOptional: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'pizza-v2'>();
-    const { meal } = useMealPromptUtils();
-
-    const getInitialState = (): PromptStates['pizza-v2-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'pizza-v2',
-        size: null,
-        crust: null,
-        unit: null,
-        quantity: 1,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-      confirmed: { size: false, crust: false, unit: false, quantity: false },
-    });
-
-    const {
-      state,
-      actionPortionSize: action,
-      update,
-    } = usePromptHandlerStore(props, ctx, getInitialState);
-
-    return {
-      conversionFactor,
-      food,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

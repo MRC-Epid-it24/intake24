@@ -13,69 +13,42 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { MissingFoodPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'missing-food-prompt'>());
 
-export default defineComponent({
-  name: 'MissingFoodPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { MissingFoodPrompt },
+const survey = useSurvey();
+const { missingFood: food } = useFoodPromptUtils();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['missing-food-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['missing-food-prompt'] {
+  return {
+    info: food().info ?? {
+      name: food().searchTerm,
+      brand: null,
+      description: null,
+      leftovers: null,
+      portionSize: null,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: 0,
+    homemadePrompt: undefined,
+  };
+}
 
-  emits: ['action'],
+function commitAnswer() {
+  const { info } = state.value;
 
-  setup(props, ctx) {
-    const survey = useSurvey();
-    const { missingFood: food } = useFoodPromptUtils();
-    const { meal } = useMealPromptUtils();
+  survey.updateFood({ foodId: food().id, update: { info } });
+  survey.addFoodFlag(food().id, 'missing-food-complete');
 
-    const getInitialState = (): PromptStates['missing-food-prompt'] => ({
-      info: food().info ?? {
-        name: food().searchTerm,
-        brand: null,
-        description: null,
-        leftovers: null,
-        portionSize: null,
-      },
-      panel: 0,
-      homemadePrompt: undefined,
-    });
+  clearStoredState();
+}
 
-    const commitAnswer = () => {
-      const { info } = state.value;
-
-      survey.updateFood({ foodId: food().id, update: { info } });
-      survey.addFoodFlag(food().id, 'missing-food-complete');
-
-      clearStoredState();
-    };
-
-    const { state, action, update, clearStoredState } = usePromptHandlerStore(
-      props,
-      ctx,
-      getInitialState,
-      commitAnswer,
-    );
-
-    return { food, meal, state, action, update };
-  },
-});
+const { state, action, update, clearStoredState } = usePromptHandlerStore(props, { emit }, getInitialState, commitAnswer);
 </script>

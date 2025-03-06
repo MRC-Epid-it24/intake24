@@ -17,79 +17,42 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { StandardPortionPrompt } from '@intake24/survey/components/prompts';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'standard-portion-prompt'>());
 
-export default defineComponent({
-  name: 'StandardPortionPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { StandardPortionPrompt },
+const {
+  conversionFactor,
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  linkedParent,
+  linkedParentQuantity,
+  parameters,
+  parentFoodOptional: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'standard-portion'>();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['standard-portion-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['standard-portion-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'standard-portion',
+      unit: null,
+      quantity: 1,
+      linkedQuantity: linkedParentQuantity.value,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    quantityConfirmed: false,
+    linkedQuantityConfirmed: false,
+  };
+}
 
-  emits: ['action'],
-
-  setup(props, ctx) {
-    const {
-      conversionFactor,
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      linkedParent,
-      linkedParentQuantity,
-      parameters,
-      parentFoodOptional: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'standard-portion'>();
-    const { meal } = useMealPromptUtils();
-
-    const getInitialState = (): PromptStates['standard-portion-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'standard-portion',
-        unit: null,
-        quantity: 1,
-        linkedQuantity: linkedParentQuantity.value,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-      quantityConfirmed: false,
-      linkedQuantityConfirmed: false,
-    });
-
-    const {
-      state,
-      actionPortionSize: action,
-      update,
-    } = usePromptHandlerStore(props, ctx, getInitialState);
-
-    return {
-      conversionFactor,
-      food,
-      linkedParent,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

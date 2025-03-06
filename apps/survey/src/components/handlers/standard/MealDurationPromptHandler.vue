@@ -6,52 +6,28 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { MealDurationPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
-import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
+const props = defineProps(createHandlerProps<'meal-duration-prompt'>());
 
-export default defineComponent({
-  name: 'MealDurationPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { MealDurationPrompt },
+const { meal } = useMealPromptUtils();
+const survey = useSurvey();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['meal-duration-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const getInitialState = computed(
+  () => props.prompt.slider.current.value || props.prompt.slider.min.value || 0,
+);
 
-  emits: ['action'],
+function commitAnswer() {
+  survey.setMealDuration(meal.value.id, state.value);
+}
 
-  setup(props, ctx) {
-    const { meal } = useMealPromptUtils();
-    const survey = useSurvey();
-
-    const getInitialState = computed(
-      () => props.prompt.slider.current.value || props.prompt.slider.min.value || 0,
-    );
-
-    const commitAnswer = () => {
-      survey.setMealDuration(meal.value.id, state.value);
-    };
-
-    const { state, action } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
-
-    return { meal, state, action };
-  },
-});
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 </script>
 
 <style scoped></style>

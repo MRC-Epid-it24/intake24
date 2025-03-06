@@ -14,16 +14,10 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { ref } from 'vue';
-
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, PromptSection } from '@intake24/common/surveys';
 import { MultiPrompt } from '@intake24/survey/components/prompts';
-
-import { useCustomPromptHandler } from '../mixins';
-
-defineOptions({
-  name: 'MultiPromptHandler',
-});
+import { useCustomPromptHandler } from '../composables';
 
 const props = defineProps({
   prompt: {

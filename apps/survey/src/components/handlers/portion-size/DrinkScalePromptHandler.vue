@@ -15,91 +15,57 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
+import type { PromptStates } from '@intake24/common/prompts';
 import { DrinkScalePrompt } from '@intake24/survey/components/prompts';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'drink-scale-prompt'>());
 
-export default defineComponent({
-  name: 'DrinkScalePromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { DrinkScalePrompt },
+const {
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  parameters,
+  parentFoodOptional: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'drink-scale'>();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['drink-scale-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const currentValue = computed(() => {
+  if (!props.prompt.multiple)
+    return 1;
 
-  emits: ['action'],
-
-  setup(props, ctx) {
-    const {
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      parameters,
-      parentFoodOptional: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'drink-scale'>();
-
-    const currentValue = computed(() => {
-      if (!props.prompt.multiple)
-        return 1;
-
-      return (props.prompt.multiple.type === 'counter' ? props.prompt.multiple.current : props.prompt.multiple.current.value) ?? 1;
-    });
-
-    const getInitialState = (): PromptStates['drink-scale-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'drink-scale',
-        drinkwareId: '',
-        initialFillLevel: 0.9,
-        skipFillLevel: false,
-        imageUrl: '',
-        containerId: undefined,
-        containerIndex: undefined,
-        fillLevel: 0,
-        servingWeight: 0,
-        leftoversLevel: 0,
-        leftoversWeight: 0,
-        leftovers: false,
-        count: currentValue.value,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-      objectConfirmed: false,
-      quantityConfirmed: false,
-      leftoversConfirmed: false,
-      leftoversPrompt: undefined,
-      countConfirmed: false,
-    });
-
-    const {
-      state,
-      actionPortionSize: action,
-      update,
-    } = usePromptHandlerStore(props, ctx, getInitialState);
-    const { meal } = useMealPromptUtils();
-
-    return {
-      food,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
+  return (props.prompt.multiple.type === 'counter' ? props.prompt.multiple.current : props.prompt.multiple.current.value) ?? 1;
 });
+
+function getInitialState(): PromptStates['drink-scale-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'drink-scale',
+      drinkwareId: '',
+      initialFillLevel: 0.9,
+      skipFillLevel: false,
+      imageUrl: '',
+      containerId: undefined,
+      containerIndex: undefined,
+      fillLevel: 0,
+      servingWeight: 0,
+      leftoversLevel: 0,
+      leftoversWeight: 0,
+      leftovers: false,
+      count: currentValue.value,
+    },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    objectConfirmed: false,
+    quantityConfirmed: false,
+    leftoversConfirmed: false,
+    leftoversPrompt: undefined,
+    countConfirmed: false,
+  };
+}
+
+const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
+const { meal } = useMealPromptUtils();
 </script>

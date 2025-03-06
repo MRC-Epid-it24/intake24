@@ -9,201 +9,156 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
-import { defineComponent, ref } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState, MissingFood, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { ref } from 'vue';
+import type { EncodedFood, FoodState, MissingFood, RecipeBuilder } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils } from '../mixins';
+defineProps(createHandlerProps<'food-search-prompt'>());
 
-export default defineComponent({
-  name: 'FoodSearchPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { FoodSearchPrompt },
+function getSearchTerm(foodEntry: FoodState) {
+  switch (foodEntry.type) {
+    case 'encoded-food':
+    case 'missing-food':
+    case 'recipe-builder':
+      return foodEntry.searchTerm;
+    case 'free-text':
+      return foodEntry.description;
+  }
+}
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['food-search-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const { food, localeId, surveySlug, initializeRecipeComponents } = useFoodPromptUtils();
+const { meal } = useMealPromptUtils();
+const survey = useSurvey();
 
-  emits: ['action'],
+const foodData = ref<UserFoodData | undefined>(undefined);
+const searchTerm = ref(getSearchTerm(food()));
+const discardedFoodName = ref<string | null>(null);
 
-  setup(props, { emit }) {
-    function getSearchTerm(foodEntry: FoodState) {
-      switch (foodEntry.type) {
-        case 'encoded-food':
-        case 'missing-food':
-        case 'recipe-builder':
-          return foodEntry.searchTerm;
-        case 'free-text':
-          return foodEntry.description;
-      }
-    }
+const currentState = food();
 
-    const { food, localeId, surveySlug, initializeRecipeComponents } = useFoodPromptUtils();
-    const { meal } = useMealPromptUtils();
-    const survey = useSurvey();
+// Warn user if they try to replace an encoded food that already has some portion size
+// data associated with it by coming back to the food search prompt using the back or forward
+// buttons.
+//
+// TODO: make sure this cannot result in an invalid survey state some other way, for instance
+//       by invalidating custom prompt answers or associated food links.
 
-    const foodData = ref<UserFoodData | undefined>(undefined);
-    const searchTerm = ref(getSearchTerm(food()));
-    const discardedFoodName = ref<string | null>(null);
+if (
+  currentState.type === 'encoded-food'
+  && (currentState.portionSizeMethodIndex !== null || currentState.portionSize !== null)
+) {
+  discardedFoodName.value = currentState.data.localName;
+}
+else {
+  discardedFoodName.value = null;
+}
 
-    const currentState = food();
+function getFoodToReplace() {
+  const { id, customPromptAnswers, flags } = food();
 
-    // Warn user if they try to replace an encoded food that already has some portion size
-    // data associated with it by coming back to the food search prompt using the back or forward
-    // buttons.
-    //
-    // TODO: make sure this cannot result in an invalid survey state some other way, for instance
-    //       by invalidating custom prompt answers or associated food links.
+  // Remove appropriate flags if replacing existing not a "free-entry" food
+  return {
+    id,
+    customPromptAnswers,
+    flags: flags.filter(
+      flag =>
+        ![
+          'associated-foods-complete',
+          'missing-food-complete',
+          'portion-size-method-complete',
+          'portion-size-option-complete',
+          'recipe-builder-complete',
+          'same-as-before-complete',
+        ].includes(flag),
+    ),
+  };
+}
 
-    if (
-      currentState.type === 'encoded-food'
-      && (currentState.portionSizeMethodIndex !== null || currentState.portionSize !== null)
-    ) {
-      discardedFoodName.value = currentState.data.localName;
-    }
-    else {
-      discardedFoodName.value = null;
-    }
+function action(type: string, ...args: [id?: string, params?: object]) {
+  emit('action', type, ...args);
+}
 
-    const getFoodToReplace = () => {
-      const { id, customPromptAnswers, flags } = food();
+function foodSelected(data: UserFoodData) {
+  foodData.value = data;
+  commitAnswer();
+  action('next');
+};
 
-      // Remove appropriate flags if replacing existing not a "free-entry" food
-      return {
-        id,
-        customPromptAnswers,
-        flags: flags.filter(
-          flag =>
-            ![
-              'associated-foods-complete',
-              'missing-food-complete',
-              'portion-size-method-complete',
-              'portion-size-option-complete',
-              'recipe-builder-complete',
-              'same-as-before-complete',
-            ].includes(flag),
-        ),
-      };
-    };
+function foodMissing() {
+  const { id, customPromptAnswers, flags } = getFoodToReplace();
 
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      emit('action', type, ...args);
-    };
+  const newState: MissingFood = {
+    id,
+    type: 'missing-food',
+    info: null,
+    searchTerm: searchTerm.value,
+    customPromptAnswers,
+    flags,
+    linkedFoods: [],
+  };
 
-    return {
-      action,
-      food,
-      meal,
-      localeId,
-      surveySlug,
-      foodData,
-      searchParameters: survey.searchParameters,
-      searchTerm,
-      discardedFoodName,
-      getFoodToReplace,
-      initializeRecipeComponents,
-    };
-  },
+  survey.replaceFood({ foodId: id, food: newState });
+  action('next');
+};
 
-  methods: {
-    ...mapActions(useSurvey, ['replaceFood']),
+function recipeBuilder(recipeFood: RecipeFood) {
+  const { id, customPromptAnswers, flags } = getFoodToReplace();
+  const components = initializeRecipeComponents(
+    recipeFood.steps.map(step => step.order - 1),
+  );
 
-    foodSelected(foodData: UserFoodData) {
-      this.foodData = foodData;
-      this.commitAnswer();
-      this.action('next');
-    },
+  const newState: RecipeBuilder = {
+    id,
+    type: 'recipe-builder',
+    description: recipeFood.recipeWord,
+    searchTerm: searchTerm.value,
+    customPromptAnswers,
+    flags,
+    linkedFoods: [],
+    templateId: recipeFood.name,
+    template: recipeFood,
+    markedAsComplete: [],
+    components,
+  };
 
-    foodMissing() {
-      const { searchTerm } = this;
-      const { id, customPromptAnswers, flags } = this.getFoodToReplace();
+  survey.replaceFood({ foodId: id, food: newState });
+  action('next');
+};
 
-      const newState: MissingFood = {
-        id,
-        type: 'missing-food',
-        info: null,
-        searchTerm,
-        customPromptAnswers,
-        flags,
-        linkedFoods: [],
-      };
+function commitAnswer() {
+  if (foodData.value === undefined) {
+    console.warn('FoodSearchPromptHandler: foodData is undefined.');
+    return;
+  }
 
-      this.replaceFood({ foodId: id, food: newState });
+  const { id, customPromptAnswers, flags } = getFoodToReplace();
 
-      this.action('next');
-    },
+  // Assign portion size method if only one is available
+  const hasOnePortionSizeMethod = foodData.value.portionSizeMethods.length === 1;
+  if (hasOnePortionSizeMethod)
+    flags.push('portion-size-option-complete');
 
-    recipeBuilder(recipeFood: RecipeFood) {
-      const { searchTerm } = this;
-      const { id, customPromptAnswers, flags } = this.getFoodToReplace();
-      const components = this.initializeRecipeComponents(
-        recipeFood.steps.map(step => step.order - 1),
-      );
+  const newState: EncodedFood = {
+    id,
+    type: 'encoded-food',
+    data: foodData.value,
+    searchTerm: searchTerm.value || '',
+    portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
+    portionSize: null,
+    customPromptAnswers,
+    flags,
+    linkedFoods: [],
+  };
 
-      const newState: RecipeBuilder = {
-        id,
-        type: 'recipe-builder',
-        description: recipeFood.recipeWord,
-        searchTerm,
-        customPromptAnswers,
-        flags,
-        linkedFoods: [],
-        templateId: recipeFood.name,
-        template: recipeFood,
-        markedAsComplete: [],
-        components,
-      };
-
-      this.replaceFood({ foodId: id, food: newState });
-
-      this.action('next');
-    },
-
-    commitAnswer() {
-      const { foodData, searchTerm } = this;
-      if (foodData === undefined) {
-        console.warn('FoodSearchPromptHandler: foodData is undefined.');
-        return;
-      }
-
-      const { id, customPromptAnswers, flags } = this.getFoodToReplace();
-
-      // Assign portion size method if only one is available
-      const hasOnePortionSizeMethod = foodData.portionSizeMethods.length === 1;
-      if (hasOnePortionSizeMethod)
-        flags.push('portion-size-option-complete');
-
-      const newState: EncodedFood = {
-        id,
-        type: 'encoded-food',
-        data: foodData,
-        searchTerm: searchTerm || '',
-        portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
-        portionSize: null,
-        customPromptAnswers,
-        flags,
-        linkedFoods: [],
-      };
-
-      this.replaceFood({ foodId: id, food: newState });
-    },
-  },
-});
+  survey.replaceFood({ foodId: id, food: newState });
+};
 </script>
 
 <style scoped></style>

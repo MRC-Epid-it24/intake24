@@ -6,58 +6,32 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { RecallDatePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
 
-import { usePromptHandlerNoStore } from '../mixins';
+defineProps(createHandlerProps<'recall-date-prompt'>());
 
-export default defineComponent({
-  name: 'RecallDatePromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { RecallDatePrompt },
+const survey = useSurvey();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['recall-date-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const getInitialState = computed(() => survey.data.recallDate);
 
-  emits: ['action'],
+const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 
-  setup(props, ctx) {
-    const survey = useSurvey();
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'next')
+    commitAnswer();
 
-    const getInitialState = computed(
-      () => survey.data.recallDate,
-    );
+  emit('action', type, ...args);
+}
 
-    const { state } = usePromptHandlerNoStore(ctx, getInitialState);
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next')
-        commitAnswer();
-
-      ctx.emit('action', type, ...args);
-    };
-
-    const commitAnswer = () => {
-      survey.setRecallDate(state.value);
-    };
-
-    return { state, action };
-  },
-});
+function commitAnswer() {
+  survey.setRecallDate(state.value);
+}
 </script>
 
 <style scoped></style>

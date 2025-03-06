@@ -15,70 +15,35 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { DirectWeightPrompt } from '@intake24/survey/components/prompts';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'direct-weight-prompt'>());
 
-export default defineComponent({
-  name: 'DirectWeightPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { DirectWeightPrompt },
+const {
+  conversionFactor,
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  parameters,
+  portionSizeMethods,
+} = useFoodPromptUtils<'direct-weight'>();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['direct-weight-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['direct-weight-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'direct-weight',
+      quantity: null,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+  };
+}
 
-  emits: ['action'],
-
-  setup(props, ctx) {
-    const {
-      conversionFactor,
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      parameters,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'direct-weight'>();
-    const { meal } = useMealPromptUtils();
-
-    const getInitialState = (): PromptStates['direct-weight-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'direct-weight',
-        quantity: null,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-    });
-
-    const {
-      state,
-      actionPortionSize: action,
-      update,
-    } = usePromptHandlerStore(props, ctx, getInitialState);
-
-    return {
-      conversionFactor,
-      food,
-      meal,
-      parameters,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

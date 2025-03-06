@@ -15,80 +15,45 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { CerealPrompt } from '@intake24/survey/components/prompts';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'cereal-prompt'>());
 
-export default defineComponent({
-  name: 'CerealPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { CerealPrompt },
+const {
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  parameters,
+  parentFoodOptional: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'cereal'>();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['cereal-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['cereal-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'cereal',
+      imageUrl: null,
+      type: parameters.value.type,
+      bowl: null,
+      bowlId: undefined,
+      bowlIndex: undefined,
+      serving: null,
+      leftovers: null,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    bowlConfirmed: false,
+    servingImageConfirmed: false,
+    leftoversPrompt: undefined,
+    leftoversImageConfirmed: false,
+  };
+}
 
-  emits: ['action'],
-
-  setup(props, ctx) {
-    const {
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      parameters,
-      parentFoodOptional: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'cereal'>();
-    const { meal } = useMealPromptUtils();
-
-    const getInitialState = (): PromptStates['cereal-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'cereal',
-        imageUrl: null,
-        type: parameters.value.type,
-        bowl: null,
-        bowlId: undefined,
-        bowlIndex: undefined,
-        serving: null,
-        leftovers: null,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-      bowlConfirmed: false,
-      servingImageConfirmed: false,
-      leftoversPrompt: undefined,
-      leftoversImageConfirmed: false,
-    });
-
-    const {
-      state,
-      actionPortionSize: action,
-      update,
-    } = usePromptHandlerStore(props, ctx, getInitialState);
-
-    return {
-      food,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

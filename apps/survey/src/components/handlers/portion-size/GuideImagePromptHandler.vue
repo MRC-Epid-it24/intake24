@@ -17,82 +17,47 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { GuideImagePrompt } from '@intake24/survey/components/prompts';
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-export default defineComponent({
-  name: 'GuideImagePromptHandler',
+const props = defineProps(createHandlerProps<'guide-image-prompt'>());
 
-  components: { GuideImagePrompt },
+const emit = defineEmits(['action']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['guide-image-prompt']>,
-      required: true,
+const {
+  conversionFactor,
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  linkedParent,
+  linkedParentQuantity,
+  parameters,
+  parentFoodOptional: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'guide-image'>();
+const { meal } = useMealPromptUtils();
+
+function getInitialState(): PromptStates['guide-image-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'guide-image',
+      guideImageId: '',
+      imageUrl: null,
+      objectId: undefined,
+      objectIndex: undefined,
+      objectWeight: 0,
+      quantity: 1,
+      linkedQuantity: linkedParentQuantity.value,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    objectConfirmed: false,
+    quantityConfirmed: false,
+    linkedQuantityConfirmed: false,
+  };
+}
 
-  emits: ['action'],
-
-  setup(props, ctx) {
-    const {
-      conversionFactor,
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      linkedParent,
-      linkedParentQuantity,
-      parameters,
-      parentFoodOptional: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'guide-image'>();
-    const { meal } = useMealPromptUtils();
-
-    const getInitialState = (): PromptStates['guide-image-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'guide-image',
-        guideImageId: '',
-        imageUrl: null,
-        objectId: undefined,
-        objectIndex: undefined,
-        objectWeight: 0,
-        quantity: 1,
-        linkedQuantity: linkedParentQuantity.value,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-      objectConfirmed: false,
-      quantityConfirmed: false,
-      linkedQuantityConfirmed: false,
-    });
-
-    const {
-      state,
-      actionPortionSize: action,
-      update,
-    } = usePromptHandlerStore(props, ctx, getInitialState);
-
-    return {
-      conversionFactor,
-      food,
-      linkedParent,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

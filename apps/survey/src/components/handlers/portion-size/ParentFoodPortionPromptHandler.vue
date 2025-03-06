@@ -15,110 +15,74 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { ParentFoodPortionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'parent-food-portion-prompt'>());
 
-export default defineComponent({
-  name: 'ParentFoodPortionPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { ParentFoodPortionPrompt },
+const {
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  parameters,
+  parentEncodedFood: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'parent-food-portion'>();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['parent-food-portion-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['parent-food-portion-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'parent-food-portion',
+      portionIndex: null,
+      portionValue: null,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+  };
+}
 
-  emits: ['action'],
+function commitAnswer() {
+  const {
+    portionSize: { portionValue },
+  } = state.value;
 
-  setup(props, ctx) {
-    const {
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      parameters,
-      parentEncodedFood: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'parent-food-portion'>();
-    const { meal } = useMealPromptUtils();
+  if (!portionValue) {
+    console.warn(`Parent food portion is not set yet.`);
+    return;
+  }
 
-    const getInitialState = (): PromptStates['parent-food-portion-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'parent-food-portion',
-        portionIndex: null,
-        portionValue: null,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-    });
+  if (!parentFood.value)
+    throw new Error('Parent food portion prompt: parent food not found.');
 
-    const commitAnswer = () => {
-      const {
-        portionSize: { portionValue },
-      } = state.value;
+  if (
+    !parentFood.value.portionSize
+    || parentFood.value.portionSize.servingWeight === null
+    || parentFood.value.portionSize.leftoversWeight === null
+  ) {
+    throw new Error('Parent food portion prompt: Parent food missing portion size data');
+  }
 
-      if (!portionValue) {
-        console.warn(`Parent food portion is not set yet.`);
-        return;
-      }
+  const { servingWeight, leftoversWeight } = parentFood.value.portionSize;
 
-      if (!parentFood.value)
-        throw new Error('Parent food portion prompt: parent food not found.');
+  const portionSize = {
+    ...state.value.portionSize,
+    servingWeight: servingWeight * portionValue,
+    leftoversWeight: leftoversWeight * portionValue,
+  };
 
-      if (
-        !parentFood.value.portionSize
-        || parentFood.value.portionSize.servingWeight === null
-        || parentFood.value.portionSize.leftoversWeight === null
-      ) {
-        throw new Error('Parent food portion prompt: Parent food missing portion size data');
-      }
+  const survey = useSurvey();
 
-      const { servingWeight, leftoversWeight } = parentFood.value.portionSize;
+  survey.updateFood({ foodId: food().id, update: { portionSize } });
+  survey.addFoodFlag(food().id, 'portion-size-method-complete');
 
-      const portionSize = {
-        ...state.value.portionSize,
-        servingWeight: servingWeight * portionValue,
-        leftoversWeight: leftoversWeight * portionValue,
-      };
+  clearStoredState();
+}
 
-      const survey = useSurvey();
-
-      survey.updateFood({ foodId: food().id, update: { portionSize } });
-      survey.addFoodFlag(food().id, 'portion-size-method-complete');
-
-      clearStoredState();
-    };
-
-    const { state, action, update, clearStoredState } = usePromptHandlerStore(
-      props,
-      ctx,
-      getInitialState,
-      commitAnswer,
-    );
-
-    return {
-      food,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, action, update, clearStoredState } = usePromptHandlerStore(props, { emit }, getInitialState, commitAnswer);
 </script>

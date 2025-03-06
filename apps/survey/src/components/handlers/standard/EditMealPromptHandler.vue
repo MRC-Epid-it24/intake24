@@ -7,63 +7,34 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { EditMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'edit-meal-prompt'>());
 
-export default defineComponent({
-  name: 'EditMealPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { EditMealPrompt },
+const { meal } = useMealPromptUtils();
+const survey = useSurvey();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['edit-meal-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const getInitialState = (): PromptStates['edit-meal-prompt'] => meal.value.foods;
 
-  emits: ['action'],
+function commitAnswer() {
+  const mealId = meal.value.id;
 
-  setup(props, ctx) {
-    const { meal } = useMealPromptUtils();
-    const survey = useSurvey();
+  survey.setFoods({ mealId, foods: state.value });
+  survey.addMealFlag(mealId, 'free-entry-complete');
 
-    const getInitialState = (): PromptStates['edit-meal-prompt'] => meal.value.foods;
+  clearStoredState();
+}
 
-    const commitAnswer = () => {
-      const mealId = meal.value.id;
-
-      survey.setFoods({ mealId, foods: state.value });
-      survey.addMealFlag(mealId, 'free-entry-complete');
-
-      clearStoredState();
-    };
-
-    const { state, action, update, clearStoredState } = usePromptHandlerStore(
-      props,
-      ctx,
-      getInitialState,
-      commitAnswer,
-    );
-
-    return {
-      meal,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, action, update, clearStoredState } = usePromptHandlerStore(
+  props,
+  { emit },
+  getInitialState,
+  commitAnswer,
+);
 </script>

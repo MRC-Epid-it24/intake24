@@ -1,3 +1,4 @@
+export * from './create-handler-props';
 export * from './use-custom-prompt-handler';
 export * from './use-food-prompt-utils';
 export * from './use-meal-prompt-utils';

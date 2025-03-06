@@ -15,120 +15,84 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'milk-in-a-hot-drink-prompt'>());
 
-export default defineComponent({
-  name: 'MilkInAHotDrinkPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { MilkInAHotDrinkPrompt },
+const {
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  parameters,
+  parentEncodedFood: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'milk-in-a-hot-drink'>();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['milk-in-a-hot-drink-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['milk-in-a-hot-drink-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'milk-in-a-hot-drink',
+      milkPartIndex: null,
+      milkVolumePercentage: null,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+  };
+}
 
-  emits: ['action'],
+function commitAnswer() {
+  const {
+    portionSize: { milkVolumePercentage },
+  } = state.value;
 
-  setup(props, ctx) {
-    const {
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      parameters,
-      parentEncodedFood: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'milk-in-a-hot-drink'>();
-    const { meal } = useMealPromptUtils();
+  if (!milkVolumePercentage) {
+    console.warn(`Milk volume percentage is not set yet.`);
+    return;
+  }
 
-    const getInitialState = (): PromptStates['milk-in-a-hot-drink-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'milk-in-a-hot-drink',
-        milkPartIndex: null,
-        milkVolumePercentage: null,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-    });
+  if (!parentFood.value)
+    throw new Error('Milk in a hot drink prompt: parent food not found.');
 
-    const commitAnswer = () => {
-      const {
-        portionSize: { milkVolumePercentage },
-      } = state.value;
+  if (
+    !parentFood.value.portionSize
+    || parentFood.value.portionSize.servingWeight === null
+    || parentFood.value.portionSize.leftoversWeight === null
+  ) {
+    throw new Error('Milk in a hot drink prompt: Parent food missing portion size data');
+  }
 
-      if (!milkVolumePercentage) {
-        console.warn(`Milk volume percentage is not set yet.`);
-        return;
-      }
+  const { servingWeight, leftoversWeight } = parentFood.value.portionSize;
 
-      if (!parentFood.value)
-        throw new Error('Milk in a hot drink prompt: parent food not found.');
+  const drinkPortionSize = {
+    ...parentFood.value.portionSize,
+    servingWeight: servingWeight * (1 - milkVolumePercentage),
+    leftoversWeight: leftoversWeight * (1 - milkVolumePercentage),
+  };
 
-      if (
-        !parentFood.value.portionSize
-        || parentFood.value.portionSize.servingWeight === null
-        || parentFood.value.portionSize.leftoversWeight === null
-      ) {
-        throw new Error('Milk in a hot drink prompt: Parent food missing portion size data');
-      }
+  const milkPortionSize = {
+    ...state.value.portionSize,
+    servingWeight: servingWeight * milkVolumePercentage,
+    leftoversWeight: leftoversWeight * milkVolumePercentage,
+  };
 
-      const { servingWeight, leftoversWeight } = parentFood.value.portionSize;
+  const survey = useSurvey();
 
-      const drinkPortionSize = {
-        ...parentFood.value.portionSize,
-        servingWeight: servingWeight * (1 - milkVolumePercentage),
-        leftoversWeight: leftoversWeight * (1 - milkVolumePercentage),
-      };
+  survey.updateFood({ foodId: food().id, update: { portionSize: milkPortionSize } });
+  survey.updateFood({
+    foodId: parentFood.value.id,
+    update: { portionSize: drinkPortionSize },
+  });
+  survey.addFoodFlag(food().id, 'portion-size-method-complete');
 
-      const milkPortionSize = {
-        ...state.value.portionSize,
-        servingWeight: servingWeight * milkVolumePercentage,
-        leftoversWeight: leftoversWeight * milkVolumePercentage,
-      };
+  clearStoredState();
+}
 
-      const survey = useSurvey();
-
-      survey.updateFood({ foodId: food().id, update: { portionSize: milkPortionSize } });
-      survey.updateFood({
-        foodId: parentFood.value.id,
-        update: { portionSize: drinkPortionSize },
-      });
-      survey.addFoodFlag(food().id, 'portion-size-method-complete');
-
-      clearStoredState();
-    };
-
-    const { state, action, update, clearStoredState } = usePromptHandlerStore(
-      props,
-      ctx,
-      getInitialState,
-      commitAnswer,
-    );
-
-    return {
-      food,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, action, update, clearStoredState } = usePromptHandlerStore(props, { emit }, getInitialState, commitAnswer);
 </script>

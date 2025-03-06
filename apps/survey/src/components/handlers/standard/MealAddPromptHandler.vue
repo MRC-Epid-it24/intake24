@@ -6,69 +6,45 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { useI18n } from '@intake24/i18n';
 import { MealAddPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
 
-import { usePromptHandlerNoStore } from '../mixins';
+defineProps(createHandlerProps<'meal-add-prompt'>());
 
-export default defineComponent({
-  name: 'MealAddPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { MealAddPrompt },
+const getInitialState = computed<string | undefined>(() => undefined);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['meal-add-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
+const { i18n: { locale } } = useI18n();
+const survey = useSurvey();
 
-  emits: ['action'],
+const defaultMeals = computed(() => survey.defaultSchemeMeals?.map(({ name }) => name[locale.value] ?? name.en) ?? []);
+const meals = computed(() => survey.meals.map(({ name }) => (name[locale.value] ?? name.en).toLowerCase().trim()));
 
-  setup(props, ctx) {
-    const getInitialState = computed<string | undefined>(() => undefined);
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'next')
+    commitAnswer();
 
-    const { state } = usePromptHandlerNoStore(ctx, getInitialState);
-    const { i18n: { locale } } = useI18n();
-    const survey = useSurvey();
+  if (type === 'cancel') {
+    survey.setAutoSelection();
+    type = 'next';
+  }
 
-    const defaultMeals = computed(() => survey.defaultSchemeMeals?.map(({ name }) => name[locale.value] ?? name.en) ?? []);
-    const meals = computed(() => survey.meals.map(({ name }) => (name[locale.value] ?? name.en).toLowerCase().trim()));
+  emit('action', type, ...args);
+}
 
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next')
-        commitAnswer();
+function commitAnswer() {
+  if (!state.value) {
+    console.warn('MealAddPromptHandler: no meal selected');
+    survey.setAutoSelection();
+    return;
+  }
 
-      if (type === 'cancel') {
-        survey.setAutoSelection();
-        type = 'next';
-      }
-
-      ctx.emit('action', type, ...args);
-    };
-
-    const commitAnswer = () => {
-      if (!state.value) {
-        console.warn('MealAddPromptHandler: no meal selected');
-        survey.setAutoSelection();
-        return;
-      }
-
-      survey.addMeal({ name: { en: state.value, [locale.value]: state.value } }, locale.value);
-    };
-
-    return { state, action, defaultMeals, meals };
-  },
-});
+  survey.addMeal({ name: { en: state.value, [locale.value]: state.value } }, locale.value);
+}
 </script>

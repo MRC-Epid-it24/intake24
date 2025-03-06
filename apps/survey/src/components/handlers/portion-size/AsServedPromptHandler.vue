@@ -16,79 +16,43 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import type { PromptStates } from '@intake24/common/prompts';
 import { AsServedPrompt } from '@intake24/survey/components/prompts';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+const props = defineProps(createHandlerProps<'as-served-prompt'>());
 
-export default defineComponent({
-  name: 'AsServedPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { AsServedPrompt },
+const {
+  encodedFood: food,
+  encodedFoodPortionSizeData,
+  linkedParent,
+  linkedParentQuantity,
+  parameters,
+  parentFoodOptional: parentFood,
+  portionSizeMethods,
+} = useFoodPromptUtils<'as-served'>();
+const { meal } = useMealPromptUtils();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['as-served-prompt']>,
-      required: true,
+function getInitialState(): PromptStates['as-served-prompt'] {
+  return {
+    portionSize: encodedFoodPortionSizeData() ?? {
+      method: 'as-served',
+      serving: null,
+      leftovers: null,
+      linkedQuantity: linkedParentQuantity.value,
+      servingWeight: 0,
+      leftoversWeight: 0,
     },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    servingImageConfirmed: false,
+    leftoversPrompt: undefined,
+    leftoversImageConfirmed: false,
+    linkedQuantityConfirmed: false,
+  };
+}
 
-  emits: ['action'],
-
-  setup(props, ctx) {
-    const {
-      encodedFood: food,
-      encodedFoodPortionSizeData,
-      linkedParent,
-      linkedParentQuantity,
-      parameters,
-      parentFoodOptional: parentFood,
-      portionSizeMethods,
-    } = useFoodPromptUtils<'as-served'>();
-    const { meal } = useMealPromptUtils();
-
-    const getInitialState = (): PromptStates['as-served-prompt'] => ({
-      portionSize: encodedFoodPortionSizeData() ?? {
-        method: 'as-served',
-        serving: null,
-        leftovers: null,
-        linkedQuantity: linkedParentQuantity.value,
-        servingWeight: 0,
-        leftoversWeight: 0,
-      },
-      panel: food().portionSizeMethodIndex !== null ? 1 : 0,
-      servingImageConfirmed: false,
-      leftoversPrompt: undefined,
-      leftoversImageConfirmed: false,
-      linkedQuantityConfirmed: false,
-    });
-
-    const {
-      state,
-      actionPortionSize: action,
-      update,
-    } = usePromptHandlerStore(props, ctx, getInitialState);
-
-    return {
-      food,
-      linkedParent,
-      meal,
-      parameters,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-      update,
-    };
-  },
-});
+const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

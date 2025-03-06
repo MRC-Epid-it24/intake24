@@ -7,67 +7,46 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent, onMounted } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed, onMounted } from 'vue';
+import type { EncodedFood } from '@intake24/common/surveys';
 import { ReadyMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
-import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
+defineProps(createHandlerProps<'ready-meal-prompt'>());
 
-export default defineComponent({
-  name: 'ReadyMealPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { ReadyMealPrompt },
+const { meal } = useMealPromptUtils();
+const survey = useSurvey();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['ready-meal-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const alreadyAnswered = computed(() => meal.value.flags.includes('ready-meal-complete'));
 
-  setup(props, ctx) {
-    const { meal } = useMealPromptUtils();
-    const survey = useSurvey();
+const getInitialState = computed(() =>
+  (
+    meal.value.foods.filter(
+      food => food.type === 'encoded-food' && food.data.readyMealOption,
+    ) as EncodedFood[]
+  ).map(food => ({
+    id: food.id,
+    name: food.data.localName,
+    value: alreadyAnswered.value ? food.flags.includes('ready-meal') : undefined,
+  })),
+);
 
-    const alreadyAnswered = computed(() => meal.value.flags.includes('ready-meal-complete'));
+function commitAnswer() {
+  for (const food of state.value)
+    survey.setFoodFlag(food.id, 'ready-meal', !!food.value);
 
-    const getInitialState = computed(() =>
-      (
-        meal.value.foods.filter(
-          food => food.type === 'encoded-food' && food.data.readyMealOption,
-        ) as EncodedFood[]
-      ).map(food => ({
-        id: food.id,
-        name: food.data.localName,
-        value: alreadyAnswered.value ? food.flags.includes('ready-meal') : undefined,
-      })),
-    );
+  survey.addMealFlag(meal.value.id, 'ready-meal-complete');
+}
 
-    const commitAnswer = () => {
-      for (const food of state.value)
-        survey.setFoodFlag(food.id, 'ready-meal', !!food.value);
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 
-      survey.addMealFlag(meal.value.id, 'ready-meal-complete');
-    };
-
-    const { state, action } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
-
-    onMounted(() => {
-      if (!state.value.length)
-        action('next');
-    });
-
-    return { meal, state, action };
-  },
+onMounted(() => {
+  if (!state.value.length)
+    action('next');
 });
 </script>
 

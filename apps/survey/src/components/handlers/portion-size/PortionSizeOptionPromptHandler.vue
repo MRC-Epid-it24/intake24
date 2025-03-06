@@ -13,64 +13,36 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
+import type { EncodedFood } from '@intake24/common/surveys';
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
-import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
-export default defineComponent({
-  name: 'PortionSizeOptionPromptHandler',
+defineProps(createHandlerProps<'portion-size-option-prompt'>());
 
-  components: { PortionSizeOptionPrompt },
+const emit = defineEmits(['action']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['portion-size-option-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const survey = useSurvey();
+const { encodedFood, parentFoodOptional: parentFood, portionSizeMethods } = useFoodPromptUtils();
+const { meal } = useMealPromptUtils();
 
-  emits: ['action'],
+const food = encodedFood();
 
-  setup(props, ctx) {
-    const survey = useSurvey();
-    const { encodedFood, parentFoodOptional: parentFood, portionSizeMethods } = useFoodPromptUtils();
-    const { meal } = useMealPromptUtils();
+const getInitialState = computed(() => ({ option: food.portionSizeMethodIndex }));
 
-    const food = encodedFood();
+function commitAnswer() {
+  const update: Partial<Omit<EncodedFood, 'type'>> = { portionSizeMethodIndex: state.value.option };
 
-    const getInitialState = computed(() => ({ option: food.portionSizeMethodIndex }));
+  if (food.portionSizeMethodIndex !== null && food.portionSizeMethodIndex !== state.value.option
+  ) {
+    update.portionSize = null;
+  }
 
-    const commitAnswer = () => {
-      const update: Partial<Omit<EncodedFood, 'type'>> = { portionSizeMethodIndex: state.value.option };
+  survey.updateFood({ foodId: food.id, update });
+  survey.addFoodFlag(food.id, 'portion-size-option-complete');
+}
 
-      if (food.portionSizeMethodIndex !== null && food.portionSizeMethodIndex !== state.value.option
-      ) {
-        update.portionSize = null;
-      }
-
-      survey.updateFood({ foodId: food.id, update });
-      survey.addFoodFlag(food.id, 'portion-size-option-complete');
-    };
-
-    const { state, action } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
-
-    return {
-      food,
-      meal,
-      parentFood,
-      portionSizeMethods,
-      state,
-      action,
-    };
-  },
-});
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 </script>

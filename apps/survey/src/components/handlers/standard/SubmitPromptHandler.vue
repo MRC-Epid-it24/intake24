@@ -1,54 +1,30 @@
 <template>
-  <component
-    :is="prompt.component"
-    :key="prompt.id"
+  <submit-prompt
     v-bind="{ meals, prompt, section }"
     @action="action"
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { SubmitPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps } from '../composables';
 
-export default defineComponent({
-  name: 'SubmitPromptHandler',
+defineProps(createHandlerProps<'submit-prompt'>());
 
-  components: { SubmitPrompt },
+const emit = defineEmits(['action']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['submit-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const survey = useSurvey();
 
-  emits: ['action'],
+const meals = computed(() => survey.meals);
 
-  setup(props, { emit }) {
-    const survey = useSurvey();
+async function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'next')
+    await survey.submitRecall();
 
-    const meals = computed(() => survey.meals);
-
-    const action = async (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next')
-        await survey.submitRecall();
-
-      emit('action', type, ...args);
-    };
-
-    return { action, meals };
-  },
-});
+  emit('action', type, ...args);
+}
 </script>
 
 <style scoped></style>

@@ -7,59 +7,35 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
 import { ReviewConfirmPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps } from '../composables';
 
-export default defineComponent({
-  name: 'ReviewConfirmPromptHandler',
+defineProps(createHandlerProps<'review-confirm-prompt'>());
 
-  components: { ReviewConfirmPrompt },
+const emit = defineEmits(['action', 'food-context-menu', 'meal-context-menu']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['review-confirm-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const survey = useSurvey();
+const meals = computed(() => survey.meals);
 
-  emits: ['action', 'food-context-menu', 'meal-context-menu'],
+function action(type: string, ...args: [id?: string, params?: object]) {
+  emit('action', type, ...args);
+};
 
-  computed: {
-    ...mapState(useSurvey, ['meals']),
-  },
+/* async function submit() {
+  await survey.submitRecall();
+  emit('action', 'next');
+}; */
 
-  methods: {
-    ...mapActions(useSurvey, ['submitRecall']),
+function onMealClick(payload: { mealId: number }) {
+  emit('meal-context-menu', payload);
+};
 
-    action(type: string, ...args: [id?: string, params?: object]) {
-      this.$emit('action', type, ...args);
-    },
-
-    async submit() {
-      await this.submitRecall();
-      this.$emit('action', 'next');
-    },
-
-    onMealClick(payload: { mealId: number }) {
-      this.$emit('meal-context-menu', payload);
-    },
-
-    onFoodClick(payload: { foodId: number }) {
-      this.$emit('food-context-menu', payload);
-    },
-  },
-});
+function onFoodClick(payload: { foodId: number }) {
+  emit('food-context-menu', payload);
+};
 </script>
 
 <style scoped></style>

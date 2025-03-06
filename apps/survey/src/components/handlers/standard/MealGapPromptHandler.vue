@@ -2,63 +2,40 @@
   <meal-gap-prompt v-bind="{ meals, prompt, section }" @action="action" />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
 import { resolveMealGaps } from '@intake24/common/surveys';
 import { MealGapPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { createHandlerProps } from '../composables';
 
-export default defineComponent({
-  name: 'MealGapPromptHandler',
+const props = defineProps(createHandlerProps<'meal-gap-prompt'>());
 
-  components: { MealGapPrompt },
+const emit = defineEmits(['action']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['meal-gap-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const survey = useSurvey();
 
-  emits: ['action'],
+const meals = resolveMealGaps(survey.meals, props.prompt);
 
-  setup(props, { emit }) {
-    const survey = useSurvey();
+function commit() {
+  const [startMeal, endMeal] = meals;
 
-    const meals = resolveMealGaps(survey.meals, props.prompt);
+  if (startMeal && endMeal) {
+    survey.addMealFlag(startMeal.id, 'no-meals-between');
+    return;
+  }
 
-    const commit = () => {
-      const [startMeal, endMeal] = meals;
+  if (startMeal)
+    survey.addMealFlag(startMeal.id, 'no-meals-before');
+  if (endMeal)
+    survey.addMealFlag(endMeal.id, 'no-meals-after');
+}
 
-      if (startMeal && endMeal) {
-        survey.addMealFlag(startMeal.id, 'no-meals-between');
-        return;
-      }
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'next')
+    commit();
 
-      if (startMeal)
-        survey.addMealFlag(startMeal.id, 'no-meals-before');
-      if (endMeal)
-        survey.addMealFlag(endMeal.id, 'no-meals-after');
-    };
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next')
-        commit();
-
-      emit('action', type, ...args);
-    };
-
-    return { action, meals };
-  },
-});
+  emit('action', type, ...args);
+}
 </script>
 
 <style scoped></style>

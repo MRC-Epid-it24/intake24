@@ -5,115 +5,91 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent, onMounted } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed, onMounted } from 'vue';
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
+import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils } from '../composables';
 
-import { useFoodPromptUtils, useMealPromptUtils } from '../mixins';
+defineProps(createHandlerProps<'split-food-prompt'>());
 
-export default defineComponent({
-  name: 'SplitFoodPromptHandler',
+const emit = defineEmits(['action']);
 
-  components: { SplitFoodPrompt },
+const { freeTextFood, meals } = useFoodPromptUtils();
+const { meal } = useMealPromptUtils();
+const survey = useSurvey();
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['split-food-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const food = freeTextFood();
 
-  emits: ['action'],
+/* Temporary solution to V3 split lists
+*  TODO: server-side implementation for
+* - split words & lists
+* - force-split exception lists
+*/
+const suggestions = computed(() =>
+  food
+    .description
+    .split(/(?:,|&| and | with )+/i)
+    .map(item => item.trim()),
+);
 
-  setup(props, { emit }) {
-    const { freeTextFood, meals } = useFoodPromptUtils();
-    const { meal } = useMealPromptUtils();
-    const survey = useSurvey();
+const forceSplits = ['burger:chips', 'chips:fish'];
 
-    const food = freeTextFood();
+const forceSplit = computed(() => {
+  const check = [...suggestions.value].sort((a, b) => a.localeCompare(b)).join(':').toLowerCase();
+  return forceSplits.includes(check);
+});
 
-    /* Temporary solution to V3 split lists
-    *  TODO: server-side implementation for
-    * - split words & lists
-    * - force-split exception lists
-    */
-    const suggestions = computed(() =>
-      food
-        .description
-        .split(/(?:,|&| and | with )+/i)
-        .map(item => item.trim()),
-    );
+function single() {
+  survey.addFoodFlag(food.id, 'split-food-complete');
+  emit('action', 'next');
+}
 
-    const forceSplits = ['burger:chips', 'chips:fish'];
+function separate() {
+  const foodId = food.id;
+  const { foodIndex } = getFoodIndexRequired(meals.value, foodId);
 
-    const forceSplit = computed(() => {
-      const check = [...suggestions.value].sort((a, b) => a.localeCompare(b)).join(':').toLowerCase();
-      return forceSplits.includes(check);
+  const [first, ...rest] = suggestions.value;
+
+  rest.forEach((suggestion, idx) => {
+    survey.addFood({
+      mealId: meal.value.id,
+      food: {
+        id: getEntityId(),
+        type: 'free-text',
+        description: suggestion,
+        flags: ['split-food-complete'],
+        customPromptAnswers: {},
+        linkedFoods: [],
+      },
+      at: foodIndex + (idx + 1),
     });
+  });
 
-    const single = () => {
-      survey.addFoodFlag(food.id, 'split-food-complete');
-      emit('action', 'next');
-    };
+  survey.updateFood({ foodId, update: { description: first } });
+  survey.addFoodFlag(foodId, 'split-food-complete');
+  emit('action', 'next');
+}
 
-    const separate = () => {
-      const foodId = food.id;
-      const { foodIndex } = getFoodIndexRequired(meals.value, foodId);
+const splitActions = { single, separate };
 
-      const [first, ...rest] = suggestions.value;
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (['single', 'separate'].includes(type)) {
+    splitActions[type as 'single' | 'separate']();
+    return;
+  }
 
-      rest.forEach((suggestion, idx) => {
-        survey.addFood({
-          mealId: meal.value.id,
-          food: {
-            id: getEntityId(),
-            type: 'free-text',
-            description: suggestion,
-            flags: ['split-food-complete'],
-            customPromptAnswers: {},
-            linkedFoods: [],
-          },
-          at: foodIndex + (idx + 1),
-        });
-      });
+  emit('action', type, ...args);
+}
 
-      survey.updateFood({ foodId, update: { description: first } });
-      survey.addFoodFlag(foodId, 'split-food-complete');
-      emit('action', 'next');
-    };
+onMounted(() => {
+  if (forceSplit.value) {
+    separate();
+    return;
+  }
 
-    const splitActions = { single, separate };
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (['single', 'separate'].includes(type)) {
-        splitActions[type as 'single' | 'separate']();
-        return;
-      }
-
-      emit('action', type, ...args);
-    };
-
-    onMounted(() => {
-      if (forceSplit.value) {
-        separate();
-        return;
-      }
-
-      if (suggestions.value.length === 1)
-        single();
-    });
-
-    return { action, food, meal, separate, single, suggestions };
-  },
+  if (suggestions.value.length === 1)
+    single();
 });
 </script>

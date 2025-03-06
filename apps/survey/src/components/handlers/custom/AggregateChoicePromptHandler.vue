@@ -6,72 +6,49 @@
   />
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
-import type { Prompts } from '@intake24/common/prompts';
-import type { FoodState, PromptSection } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed } from 'vue';
+import type { FoodState } from '@intake24/common/surveys';
 import { AggregateChoicePrompt, filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
-
 import { useSurvey } from '@intake24/survey/stores';
-import { usePromptHandlerNoStore } from '../mixins';
+import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
 
-export default defineComponent({
-  name: 'AggregateChoicePromptHandler',
+const props = defineProps(createHandlerProps<'aggregate-choice-prompt'>());
 
-  components: { AggregateChoicePrompt },
+const emit = defineEmits(['action']);
 
-  props: {
-    prompt: {
-      type: Object as PropType<Prompts['aggregate-choice-prompt']>,
-      required: true,
-    },
-    section: {
-      type: String as PropType<PromptSection>,
-      required: true,
-    },
-  },
+const survey = useSurvey();
 
-  emits: ['action'],
+const filteredMeals = computed(() => filterMealsForAggregateChoicePrompt(survey, props.prompt));
 
-  setup(props, ctx) {
-    const survey = useSurvey();
+const getInitialState = computed(() =>
+  Object.fromEntries(filteredMeals.value.flatMap(meal => meal.foods.map(food => [food.id, food.customPromptAnswers[props.prompt.id]]))));
 
-    const filteredMeals = computed(() => filterMealsForAggregateChoicePrompt(survey, props.prompt));
+// TODO: use store for intermediate state
+const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 
-    const getInitialState = computed(() =>
-      Object.fromEntries(filteredMeals.value.flatMap(meal => meal.foods.map(food => [food.id, food.customPromptAnswers[props.prompt.id]]))));
+function commitAnswer() {
+  function commitAnswers(food: FoodState) {
+    const answer = state.value[food.id];
+    if (answer !== undefined)
+      food.customPromptAnswers[props.prompt.id] = answer;
 
-    // TODO: use store for intermediate state
-    const { state } = usePromptHandlerNoStore(ctx, getInitialState);
+    for (const linkedFood of food.linkedFoods) {
+      commitAnswers(linkedFood);
+    }
+  }
 
-    const commitAnswer = () => {
-      function commitAnswers(food: FoodState) {
-        const answer = state.value[food.id];
-        if (answer !== undefined)
-          food.customPromptAnswers[props.prompt.id] = answer;
+  survey.meals.forEach(meal => meal.foods.forEach(food => commitAnswers(food)));
+}
 
-        for (const linkedFood of food.linkedFoods) {
-          commitAnswers(linkedFood);
-        }
-      }
-
-      survey.meals.forEach(meal => meal.foods.forEach(food => commitAnswers(food)));
-    };
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') {
-        commitAnswer();
-        ctx.emit('action', type);
-        return;
-      }
-      ctx.emit('action', type, ...args);
-    };
-
-    return { state, action, filteredMeals };
-  },
-});
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'next') {
+    commitAnswer();
+    emit('action', type);
+    return;
+  }
+  emit('action', type, ...args);
+}
 </script>
 
 <style scoped></style>
