@@ -11,22 +11,12 @@ export function food() {
   return initServer().router(contract.food, {
     entry: async ({ params, req }) => {
       const { code, localeId } = params;
-      const { imagesBaseUrl } = req.scope.cradle;
 
       try {
         const response = await req.scope.cradle.cache.remember(
           `food-entry:${localeId}:${code}`,
           req.scope.cradle.cacheConfig.ttl,
-          async () => {
-            const data = await req.scope.cradle.foodDataService.getFoodData(localeId, code);
-
-            for (let i = 0; i < data.portionSizeMethods.length; ++i) {
-              data.portionSizeMethods[i].imageUrl
-                = `${imagesBaseUrl}/${data.portionSizeMethods[i].imageUrl}`;
-            }
-
-            return data;
-          },
+          async () => req.scope.cradle.foodDataService.getFoodData(localeId, code),
         );
 
         return { status: 200, body: response };
@@ -38,9 +28,9 @@ export function food() {
       }
     },
     categories: async ({ params, req }) => {
-      const { code } = params;
+      const { code, localeId } = params;
       const categories
-        = await req.scope.cradle.cachedParentCategoriesService.getFoodAllCategories(code);
+        = await req.scope.cradle.cachedParentCategoriesService.getFoodAllCategoryCodes(localeId, code);
 
       return { status: 200, body: categories };
     },
