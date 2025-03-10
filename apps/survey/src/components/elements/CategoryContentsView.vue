@@ -29,9 +29,6 @@
     >
       {{ i18n.refine }}
     </v-alert>
-    <div v-if="contents.subcategories.length" class="text-body-2 mt-2">
-      {{ i18n.relatedCategories }}
-    </div>
     <v-chip-group
       v-if="contents.subcategories.length"
       class="text-primary py-0"
