@@ -5516,12 +5516,14 @@
                         "additionalProperties": {
                           "oneOf": [
                             {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 2048
                             },
                             {
                               "type": "array",
                               "items": {
-                                "type": "string"
+                                "type": "string",
+                                "maxLength": 2048
                               }
                             },
                             {
@@ -5711,12 +5713,14 @@
                               "additionalProperties": {
                                 "oneOf": [
                                   {
-                                    "type": "string"
+                                    "type": "string",
+                                    "maxLength": 2048
                                   },
                                   {
                                     "type": "array",
                                     "items": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "maxLength": 2048
                                     }
                                   },
                                   {
@@ -5877,12 +5881,14 @@
                         "additionalProperties": {
                           "oneOf": [
                             {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 2048
                             },
                             {
                               "type": "array",
                               "items": {
-                                "type": "string"
+                                "type": "string",
+                                "maxLength": 2048
                               }
                             },
                             {
@@ -6072,12 +6078,14 @@
                               "additionalProperties": {
                                 "oneOf": [
                                   {
-                                    "type": "string"
+                                    "type": "string",
+                                    "maxLength": 2048
                                   },
                                   {
                                     "type": "array",
                                     "items": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "maxLength": 2048
                                     }
                                   },
                                   {
@@ -6428,12 +6436,14 @@
                         "additionalProperties": {
                           "oneOf": [
                             {
-                              "type": "string"
+                              "type": "string",
+                              "maxLength": 2048
                             },
                             {
                               "type": "array",
                               "items": {
-                                "type": "string"
+                                "type": "string",
+                                "maxLength": 2048
                               }
                             },
                             {
@@ -6623,12 +6633,14 @@
                               "additionalProperties": {
                                 "oneOf": [
                                   {
-                                    "type": "string"
+                                    "type": "string",
+                                    "maxLength": 2048
                                   },
                                   {
                                     "type": "array",
                                     "items": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "maxLength": 2048
                                     }
                                   },
                                   {
