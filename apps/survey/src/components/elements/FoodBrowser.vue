@@ -204,7 +204,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'food-selected', 'food-missing', 'recipe-builder', 'update:modelValue', 'food-skipped']);
+const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'recipeBuilder', 'update:modelValue', 'foodSkipped']);
 
 const goTo = useGoTo();
 
@@ -424,22 +424,22 @@ function categorySelected(category: CategoryHeader) {
 
 function foodSelected(food: FoodHeader) {
   closeInDialog();
-  emit('food-selected', { ...food, searchTerm: searchTerm.value });
+  emit('foodSelected', { ...food, searchTerm: searchTerm.value });
 }
 
 function foodMissing() {
   closeInDialog();
-  emit('food-missing', searchTerm.value);
+  emit('foodMissing', searchTerm.value);
 }
 
 function skipTheStep() {
   closeInDialog();
-  emit('food-skipped', null);
+  emit('foodSkipped', null);
 }
 
 function recipeBuilder(key: string) {
   closeInDialog();
-  emit('recipe-builder', recipeFoods.value.find(food => food.code === key));
+  emit('recipeBuilder', recipeFoods.value.find(food => food.code === key));
 }
 
 function navigateBack() {

@@ -48,7 +48,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['filter-set', 'filter-reset'],
+  emits: ['filterSet', 'filterReset'],
 
   setup(props, { emit }) {
     const { getFilter } = useResource();
@@ -65,10 +65,10 @@ export default defineComponent({
 
     const setFilter = () => {
       refreshItems();
-      emit('filter-set', filter.value);
+      emit('filterSet', filter.value);
     };
     const resetFilter = () => {
-      emit('filter-reset');
+      emit('filterReset');
     };
 
     watch(

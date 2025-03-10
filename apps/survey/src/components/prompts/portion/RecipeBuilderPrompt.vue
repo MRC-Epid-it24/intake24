@@ -142,7 +142,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'update:modelValue', 'add-food']);
+const emit = defineEmits(['action', 'update:modelValue', 'addFood']);
 
 const { translate } = useI18n();
 const { action } = usePromptUtils(props, { emit });
@@ -277,7 +277,7 @@ function updateStepsIngredients() {
   // initially been accepted and some foods were added
     .filter(step => step.confirmed !== 'no')
     .map(({ foods }) => foods);
-  emit('add-food', chosenIngredients);
+  emit('addFood', chosenIngredients);
 };
 
 function showFoodBrowser(step: RecipeBuilderStepState): boolean {

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "2025.1",
   "private": true,
-  "packageManager": "pnpm@9.15.5",
+  "packageManager": "pnpm@9.15.9",
   "description": "Dietary recall system",
   "author": "",
   "license": "Apache-2.0",
@@ -45,14 +45,14 @@
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.3.0",
-    "@types/node": "^22.13.4",
+    "@antfu/eslint-config": "^4.8.1",
+    "@types/node": "^22.13.10",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
     "conventional-changelog-cli": "^5.0.0",
-    "eslint": "^9.20.1",
+    "eslint": "^9.22.0",
     "eslint-plugin-format": "^1.0.1",
-    "eslint-plugin-vue": "^9.32.0",
+    "eslint-plugin-vue": "^10.0.0",
     "execa": "^9.5.2",
     "lint-staged": "^15.4.3",
     "picocolors": "^1.1.1",
@@ -60,7 +60,7 @@
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.11.1",
     "tsx": "^4.19.3",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged",

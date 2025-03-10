@@ -112,7 +112,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'category-selected'],
+  emits: ['foodSelected', 'categorySelected'],
 
   data() {
     return {
@@ -136,7 +136,7 @@ export default defineComponent({
 
   methods: {
     categorySelected(category: CategoryHeader): void {
-      this.$emit('category-selected', category);
+      this.$emit('categorySelected', category);
       sendGtmEvent({
         event: 'selectFoodCategory',
         scheme_prompts: 'foods',
@@ -149,7 +149,7 @@ export default defineComponent({
     },
 
     foodSelected(food: FoodHeader): void {
-      this.$emit('food-selected', food);
+      this.$emit('foodSelected', food);
       sendGtmEvent({
         event: 'selectFood',
         scheme_prompts: 'foods',

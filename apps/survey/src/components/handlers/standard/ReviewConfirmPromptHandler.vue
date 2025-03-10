@@ -15,7 +15,7 @@ import { createHandlerProps } from '../composables';
 
 defineProps(createHandlerProps<'review-confirm-prompt'>());
 
-const emit = defineEmits(['action', 'food-context-menu', 'meal-context-menu']);
+const emit = defineEmits(['action', 'foodContextMenu', 'mealContextMenu']);
 
 const survey = useSurvey();
 const meals = computed(() => survey.meals);
@@ -30,11 +30,11 @@ function action(type: string, ...args: [id?: string, params?: object]) {
 }; */
 
 function onMealClick(payload: { mealId: number }) {
-  emit('meal-context-menu', payload);
+  emit('mealContextMenu', payload);
 };
 
 function onFoodClick(payload: { foodId: number }) {
-  emit('food-context-menu', payload);
+  emit('foodContextMenu', payload);
 };
 </script>
 

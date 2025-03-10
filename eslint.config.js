@@ -53,11 +53,7 @@ export default await antfu({
     'vue/attributes-order': ['error', { alphabetical: true }],
     'vue/block-order': ['error', { order: [['script', 'template'], 'style'] }],
     'vue/component-name-in-template-casing': ['error', 'kebab-case'],
-    'vue/custom-event-name-casing': 'off',
     'vue/multi-word-component-names': 'warn',
-    'vue/no-unused-refs': 'off', // remove with Vue 3
-    'vue/no-setup-props-destructure': 'warn',
-    'vue/require-default-prop': 'off',
     'vue/valid-v-slot': ['error', { allowModifiers: true }],
   },
 });

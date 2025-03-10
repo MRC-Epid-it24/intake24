@@ -198,7 +198,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['close', 'update-steps'],
+  emits: ['close', 'updateSteps'],
 
   setup(props, { emit }) {
     const { translate } = useI18n();
@@ -217,7 +217,7 @@ export default defineComponent({
         `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`,
       );
 
-      emit('update-steps', items);
+      emit('updateSteps', items);
     };
 
     const addStep = () => {

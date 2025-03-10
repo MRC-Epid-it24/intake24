@@ -103,7 +103,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update:modelValue', 'lang-add', 'lang-remove'],
+  emits: ['update:modelValue', 'langAdd', 'langRemove'],
 
   setup(props, { emit }) {
     const selected = ref<number | undefined>(undefined);
@@ -140,7 +140,7 @@ export default defineComponent({
 
     const add = async (code: string) => {
       emit('update:modelValue', { ...props.modelValue, [code]: props.default });
-      emit('lang-add', code);
+      emit('langAdd', code);
     };
 
     const remove = () => {
@@ -150,7 +150,7 @@ export default defineComponent({
       const code = languages.value[selected.value];
       const { [code]: remove, ...rest } = props.modelValue;
       emit('update:modelValue', { ...rest });
-      emit('lang-remove', code);
+      emit('langRemove', code);
     };
 
     return {

@@ -41,7 +41,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'food-missing', 'food-selected', 'update:modelValue', 'recipe-builder']);
+const emit = defineEmits(['action', 'foodMissing', 'foodSelected', 'update:modelValue', 'recipeBuilder']);
 
 const { action } = usePromptUtils(props, { emit });
 
@@ -63,15 +63,15 @@ async function foodSelected(food: FoodHeader) {
   // Override it here with the selected name (which could be one of the
   // alternative food names or the main name).
   foodData.localName = food.name;
-  emit('food-selected', foodData);
+  emit('foodSelected', foodData);
 }
 
 function foodMissing(searchTerm?: string | null) {
-  emit('food-missing', searchTerm);
+  emit('foodMissing', searchTerm);
 }
 
 function recipeBuilder(recipeFood: RecipeFood) {
-  emit('recipe-builder', recipeFood);
+  emit('recipeBuilder', recipeFood);
 }
 </script>
 

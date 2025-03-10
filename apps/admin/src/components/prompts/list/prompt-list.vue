@@ -57,11 +57,11 @@
               templates,
             }"
             :move-sections="moveSections(prompt)"
-            @prompt:copy="copy"
-            @prompt:edit="edit"
-            @prompt:move="move"
-            @prompt:remove="remove"
-            @prompt:sync="sync"
+            @prompt-copy="copy"
+            @prompt-edit="edit"
+            @prompt-move="move"
+            @prompt-remove="remove"
+            @prompt-sync="sync"
           />
         </vue-draggable>
       </v-list>

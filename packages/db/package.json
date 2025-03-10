@@ -26,27 +26,27 @@
   },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "kysely": "^0.27.5",
+    "kysely": "^0.27.6",
     "lodash": "^4.17.21",
     "mariadb": "^3.4.0",
     "mssql": "^11.0.1",
-    "nanoid": "^3.3.8",
+    "nanoid": "^3.3.9",
     "pg": "^8.13.3",
     "pg-cursor": "^2.12.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
-    "sequelize": "^6.37.5",
+    "sequelize": "^6.37.6",
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
     "@simplewebauthn/server": "^13.1.1",
-    "@types/lodash": "^4.17.15",
-    "@types/node": "^22.13.4",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^22.13.10",
     "@types/pg": "^8.11.11",
     "@types/pg-cursor": "^2.7.2",
     "@types/validator": "^13.12.2",
-    "kysely-codegen": "^0.17.0",
+    "kysely-codegen": "^0.18.2",
     "sequelize-cli": "^6.6.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   }
 }

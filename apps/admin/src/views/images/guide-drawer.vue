@@ -167,7 +167,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['image-map-objects', 'guide-image-objects']);
+const emit = defineEmits(['imageMapObjects', 'guideImageObjects']);
 
 /* function distance([sourceX, sourceY]: number[], [targetX, targetY]: number[]) {
   return Math.sqrt((sourceX - targetX) ** 2 + (sourceY - targetY) ** 2);
@@ -227,11 +227,11 @@ const guideImageObjects = computed<GuideImageEntryObject[]>(() =>
 );
 
 function updateImageMapObjects() {
-  emit('image-map-objects', imageMapObjects.value);
+  emit('imageMapObjects', imageMapObjects.value);
 }
 
 function updateGuideImageObjects() {
-  emit('guide-image-objects', guideImageObjects.value);
+  emit('guideImageObjects', guideImageObjects.value);
 }
 
 const updateObjects = debounce(() => {

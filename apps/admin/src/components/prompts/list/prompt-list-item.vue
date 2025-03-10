@@ -149,7 +149,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['prompt:copy', 'prompt:edit', 'prompt:move', 'prompt:remove', 'prompt:sync']);
+const emit = defineEmits(['promptCopy', 'promptEdit', 'promptMove', 'promptRemove', 'promptSync']);
 
 const contextMenu = ref(false);
 const moveToSection = ref<string | null>(null);
@@ -164,19 +164,19 @@ const isInSyncWithTemplate = computed(() => !!template.value && deepEqual(props.
 
 function copy() {
   const { index, prompt } = props;
-  emit('prompt:copy', { index, prompt });
+  emit('promptCopy', { index, prompt });
 };
 
 function edit() {
   const { index, prompt } = props;
-  emit('prompt:edit', { index, prompt });
+  emit('promptEdit', { index, prompt });
 };
 
 function move() {
   if (!moveToSection.value)
     return;
 
-  emit('prompt:move', {
+  emit('promptMove', {
     section: moveToSection.value,
     index: props.index,
     prompt: copyObject(props.prompt),
@@ -191,14 +191,14 @@ function clearMoveToSection() {
 };
 
 function remove() {
-  emit('prompt:remove', props.index);
+  emit('promptRemove', props.index);
 };
 
 function sync() {
   if (!template.value || isInSyncWithTemplate.value)
     return;
 
-  emit('prompt:sync', {
+  emit('promptSync', {
     prompt: copyObject(template.value),
     index: props.index,
   });

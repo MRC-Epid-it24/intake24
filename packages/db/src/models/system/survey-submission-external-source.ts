@@ -70,14 +70,14 @@ export default class SurveySubmissionExternalSource extends BaseModel<
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get data(): CreationOptional<object> {
-    const val = this.getDataValue('data') as unknown;
-    return val ? JSON.parse(val as string) : null;
+  get data(): CreationOptional<object | null> {
+    const val = this.getDataValue('data') as unknown as string | null;
+    return val ? JSON.parse(val) : null;
   }
 
-  set data(value: object) {
+  set data(value: object | null) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('data', JSON.stringify(value ?? null));
+    this.setDataValue('data', value ? JSON.stringify(value) : null);
   }
 
   @BelongsTo(() => SurveySubmissionFood, { foreignKey: 'foodId', constraints: false })

@@ -73,17 +73,17 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'update:modelValue', 'action', 'meal-selected', 'food-selected']);
+const emit = defineEmits(['action', 'update:modelValue', 'action', 'mealSelected', 'foodSelected']);
 
 const { action } = usePromptUtils(props, { emit });
 const isValid = true;
 
 function chooseMeal(mealId: string, name: string, foods: FoodState[], entity: string) {
-  emit('meal-selected', { mealId, name, foods, entity });
+  emit('mealSelected', { mealId, name, foods, entity });
 };
 
 function chooseFood(foodId: string, name: string, entity: string) {
-  emit('food-selected', { foodId, name, entity });
+  emit('foodSelected', { foodId, name, entity });
 };
 
 function foodDisplayName(food: FoodState) {

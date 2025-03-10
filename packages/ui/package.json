@@ -22,8 +22,8 @@
     "@microsoft/clarity": "^1.0.0",
     "@pinia/plugin-debounce": "^1.0.1",
     "@pixelverse/strichjs-sdk": "^1.7.1",
-    "@vueuse/core": "^12.7.0",
-    "axios": "^1.7.9",
+    "@vueuse/core": "^12.8.2",
+    "axios": "^1.8.2",
     "echarts": "^5.6.0",
     "js-file-download": "^0.4.12",
     "jwt-decode": "^4.0.0",
@@ -35,17 +35,17 @@
     "vue": "^3.5.13",
     "vue-echarts": "^7.0.3",
     "vue-gtag": "^2.1.0",
-    "vue-i18n": "^11.1.1",
+    "vue-i18n": "^11.1.2",
     "vue-recaptcha": "^2.0.3",
     "vue-router": "^4.5.0",
-    "vuetify": "^3.7.13"
+    "vuetify": "^3.7.15"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.15",
-    "@types/node": "^22.13.4",
-    "type-fest": "^4.35.0",
-    "typescript": "^5.7.3",
-    "vite": "^6.1.1",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^22.13.10",
+    "type-fest": "^4.37.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.1",
     "vite-plugin-pwa": "^0.21.1",
     "workbox-window": "^7.3.0"
   }

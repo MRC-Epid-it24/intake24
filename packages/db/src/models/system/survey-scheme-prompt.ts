@@ -45,13 +45,12 @@ export default class SurveySchemePrompt extends BaseModel<
     type: DataType.TEXT({ length: 'long' }),
   })
   get prompt(): SinglePrompt {
-    const val = this.getDataValue('prompt') as unknown;
-    return val ? JSON.parse(val as string) : {};
+    return JSON.parse(this.getDataValue('prompt') as unknown as string);
   }
 
   set prompt(value: SinglePrompt) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('prompt', JSON.stringify(value ?? {}));
+    this.setDataValue('prompt', JSON.stringify(value));
   }
 
   @CreatedAt

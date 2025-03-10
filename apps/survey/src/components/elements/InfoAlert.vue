@@ -29,7 +29,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['alert-dismissed'],
+  emits: ['alertDismissed'],
 
   data() {
     return {
@@ -43,7 +43,7 @@ export default defineComponent({
         this.alert = true;
         setTimeout(() => {
           this.alert = false;
-          this.$emit('alert-dismissed');
+          this.$emit('alertDismissed');
         }, 5000);
       }
       else {
