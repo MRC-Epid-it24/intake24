@@ -204,7 +204,8 @@
   "foodSelection": {
     "name": "Select foods",
     "text": "",
-    "description": "<p>Select foods from the list below.</p>"
+    "description": "<p>Select foods from the list below.</p>",
+    "none": "None of the above"
   },
   "mealAdd": {
     "name": "Add Meal",
