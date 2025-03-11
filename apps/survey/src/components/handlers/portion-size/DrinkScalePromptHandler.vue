@@ -55,14 +55,14 @@ function getInitialState(): PromptStates['drink-scale-prompt'] {
       leftoversLevel: 0,
       leftoversWeight: 0,
       leftovers: false,
-      count: currentValue.value,
+      quantity: currentValue.value,
     },
     panel: food().portionSizeMethodIndex !== null ? 1 : 0,
     objectConfirmed: false,
-    quantityConfirmed: false,
+    volumeConfirmed: false,
     leftoversConfirmed: false,
     leftoversPrompt: undefined,
-    countConfirmed: false,
+    quantityConfirmed: false,
   };
 }
 

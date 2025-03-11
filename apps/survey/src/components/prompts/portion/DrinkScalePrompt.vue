@@ -53,16 +53,16 @@
             </template>
           </i18n-t>
           <template #actions>
-            <expansion-panel-actions :valid="quantityConfirmed">
+            <expansion-panel-actions :valid="volumeValid">
               <quantity-badge
                 v-if="prompt.badges"
                 :amount="
                   portionSize.servingWeight
-                    ? portionSize.servingWeight / portionSize.count
+                    ? portionSize.servingWeight / portionSize.quantity
                     : undefined
                 "
                 unit="ml"
-                :valid="quantityConfirmed"
+                :valid="volumeValid"
               />
             </expansion-panel-actions>
           </template>
@@ -74,12 +74,12 @@
             v-model="portionSize.fillLevel"
             :open="panel === 1"
             :scale="scale"
-            @confirm="confirmQuantity"
-            @update:model-value="updateQuantity"
+            @confirm="confirmVolume"
+            @update:model-value="updateVolume"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
-      <v-expansion-panel v-if="leftoversEnabled" :disabled="!quantityConfirmed">
+      <v-expansion-panel v-if="leftoversEnabled" :disabled="!volumeValid">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.leftovers.header`" tag="span">
             <template #food>
@@ -92,7 +92,7 @@
                 v-if="prompt.badges"
                 :amount="
                   portionSize.leftoversWeight
-                    ? portionSize.leftoversWeight / portionSize.count
+                    ? portionSize.leftoversWeight / portionSize.quantity
                     : undefined
                 "
                 unit="ml"
@@ -123,20 +123,20 @@
           </template>
         </v-expansion-panel-text>
       </v-expansion-panel>
-      <v-expansion-panel v-if="multipleEnabled" :disabled="!quantityConfirmed">
+      <v-expansion-panel v-if="multipleEnabled" :disabled="!volumeValid">
         <v-expansion-panel-title>
-          <i18n-t :keypath="`prompts.${type}.count`" tag="span">
+          <i18n-t :keypath="`prompts.${type}.quantity`" tag="span">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n-t>
           <template #actions>
-            <expansion-panel-actions :valid="countConfirmed">
+            <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="portionSize.count ?? undefined"
+                :amount="portionSize.quantity ?? undefined"
                 unit=""
-                :valid="leftoversConfirmed"
+                :valid="quantityValid"
               />
             </expansion-panel-actions>
           </template>
@@ -145,11 +145,11 @@
           <component
             :is="prompt.multiple.type"
             v-if="prompt.multiple"
-            v-model="portionSize.count"
-            v-model:confirmed="countConfirmed"
+            v-model="portionSize.quantity"
+            v-model:confirmed="quantityConfirmed"
             v-bind="multipleProps"
-            @update:confirmed="confirmCount"
-            @update:model-value="updateCount"
+            @update:confirmed="confirmQuantity"
+            @update:model-value="updateQuantity"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -313,41 +313,41 @@ export default defineComponent({
       );
     },
 
-    quantityValid() {
-      return this.quantityConfirmed;
+    volumeValid() {
+      return this.volumeConfirmed;
     },
 
     leftoversValid() {
       return this.leftoversConfirmed;
     },
 
-    countValid() {
+    quantityValid() {
       if (!this.prompt.multiple)
         return true;
 
-      return !this.prompt.multiple.confirm || this.countConfirmed;
+      return !this.prompt.multiple.confirm || this.quantityConfirmed;
     },
 
     validConditions(): boolean[] {
-      const conditions = [this.psmValid, this.objectValid, this.quantityValid];
+      const conditions = [this.psmValid, this.objectValid, this.volumeValid];
 
       if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
       if (this.multipleEnabled)
-        conditions.push(this.countValid);
+        conditions.push(this.quantityValid);
 
       return conditions;
     },
 
     nextStepConditions(): boolean[] {
-      const conditions = [this.psmValid, this.objectValid, this.quantityValid];
+      const conditions = [this.psmValid, this.objectValid, this.volumeValid];
 
       if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
       if (this.multipleEnabled)
-        conditions.push(this.countConfirmed);
+        conditions.push(this.quantityConfirmed);
 
       return conditions;
     },
@@ -393,7 +393,7 @@ export default defineComponent({
       this.portionSize.containerId = id;
       this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
 
-      this.clearQuantity();
+      this.clearVolume();
       this.clearLeftovers();
 
       this.portionSize.servingWeight = calculateVolume(drinkwareSetData.scales[idx], this.portionSize.fillLevel);
@@ -405,25 +405,25 @@ export default defineComponent({
       this.objectConfirmed = true;
 
       if (this.skipFillLevel)
-        this.quantityConfirmed = true;
+        this.volumeConfirmed = true;
 
       this.updatePanel();
       this.update();
     },
 
-    clearQuantity() {
+    clearVolume() {
       this.portionSize.fillLevel = this.portionSize.initialFillLevel;
-      this.quantityConfirmed = false;
+      this.volumeConfirmed = false;
     },
 
-    updateQuantity() {
-      this.quantityConfirmed = false;
+    updateVolume() {
+      this.volumeConfirmed = false;
       this.clearLeftovers();
       this.update();
     },
 
-    confirmQuantity() {
-      this.quantityConfirmed = true;
+    confirmVolume() {
+      this.volumeConfirmed = true;
       this.updatePanel();
       this.update();
     },
@@ -445,13 +445,13 @@ export default defineComponent({
       this.update();
     },
 
-    updateCount() {
-      this.countConfirmed = false;
+    updateQuantity() {
+      this.quantityConfirmed = false;
       this.update();
     },
 
-    confirmCount() {
-      this.countConfirmed = true;
+    confirmQuantity() {
+      this.quantityConfirmed = true;
       this.updatePanel();
       this.update();
     },
@@ -459,19 +459,19 @@ export default defineComponent({
     update() {
       if (this.scale) {
         this.portionSize.servingWeight
-          = calculateVolume(this.scale, this.portionSize.fillLevel) * this.portionSize.count;
+          = calculateVolume(this.scale, this.portionSize.fillLevel) * this.portionSize.quantity;
         this.portionSize.leftoversWeight
-          = calculateVolume(this.scale, this.portionSize.leftoversLevel) * this.portionSize.count;
+          = calculateVolume(this.scale, this.portionSize.leftoversLevel) * this.portionSize.quantity;
       }
 
       const state: PromptStates['drink-scale-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         objectConfirmed: this.objectConfirmed,
-        quantityConfirmed: this.quantityConfirmed,
+        volumeConfirmed: this.volumeConfirmed,
         leftoversConfirmed: this.leftoversConfirmed,
         leftoversPrompt: this.leftoversPrompt,
-        countConfirmed: this.countConfirmed,
+        quantityConfirmed: this.quantityConfirmed,
       };
 
       this.$emit('update:modelValue', state);

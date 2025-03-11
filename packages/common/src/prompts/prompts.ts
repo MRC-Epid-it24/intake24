@@ -217,6 +217,7 @@ const yesNoPrompt = baseCustomPrompt.extend({
 const asServedPrompt = basePortionPrompt.extend({
   component: z.literal('as-served-prompt'),
   leftovers: z.boolean(),
+  multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)),
 });
 
 const cerealPrompt = basePortionPrompt.extend({

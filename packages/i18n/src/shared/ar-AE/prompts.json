@@ -271,7 +271,7 @@
     "description": "<p>هل كانت <strong>{food}</strong> نفس الوجبة السابقة؟</p>",
     "serving": "{amount} الحصة الواحدة",
     "leftovers": "تبقى منها ما يقارب {amount}",
-    "count": "{count} الحصص",
+    "quantity": "{quantity} الحصص",
     "noLeftovers": {
       "drink": "شربته كله",
       "food": "أكلته كله"
@@ -380,6 +380,7 @@
       "more": "تركت كمية أكثر",
       "confirm": "تركت هذه الكمية"
     },
+    "quantity": "How many of these portions did you have?",
     "weightFactor": {
       "serving": {
         "more": "تناولت {whole} و {fraction}",
@@ -426,7 +427,7 @@
       "more": "تركت كمية أكثر",
       "confirm": "تركت هذه الكمية"
     },
-    "count": "كم عدد هذه المشروبات التي تناولتها؟"
+    "quantity": "كم عدد هذه المشروبات التي تناولتها؟"
   },
   "guideImage": {
     "name": "صورة الدليل",

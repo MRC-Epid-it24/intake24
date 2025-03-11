@@ -18,6 +18,13 @@
         resource="as-served-sets"
       />
     </v-col>
+    <v-col cols="12">
+      <v-switch
+        v-model="parameters.multiple"
+        hide-details="auto"
+        :label="$t('fdbs.portionSizes.methods.as-served.multiple')"
+      />
+    </v-col>
   </v-row>
 </template>
 

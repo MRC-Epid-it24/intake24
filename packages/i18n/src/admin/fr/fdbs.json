@@ -127,7 +127,8 @@
         "_": "Photos de portions",
         "servingImageSet": "Série de photos de portions",
         "leftoverImageSet": "Série de photos de restes",
-        "removeLeftoverImageSet": "Enlever la série de photos de restes"
+        "removeLeftoverImageSet": "Enlever la série de photos de restes",
+        "multiple": "Permettre la spécification de plusieurs éléments"
       },
       "cereal": {
         "_": "Céréales"

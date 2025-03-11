@@ -271,7 +271,7 @@
     "description": "<p>Adakah ini <strong>{food}</strong> sama seperti yang anda telah ambil sebelum ini?</p>",
     "serving": "{amount}saiz hidangan",
     "leftovers": "Berbaki kira-kira {amount}",
-    "count": "{count} servings",
+    "quantity": "{quantity} servings",
     "noLeftovers": {
       "drink": "Minum kesemuanya",
       "food": "Makan kesemuanya"
@@ -380,6 +380,7 @@
       "more": "Saya telah tinggalkan lebih banyak",
       "confirm": "Saya telah tinggalkan sebanyak itu"
     },
+    "quantity": "Berapa banyak bahagian ini telah anda ambil pada ketika ini?",
     "weightFactor": {
       "serving": {
         "more": "Saya telah mengambil {whole} dan {fraction}",
@@ -426,7 +427,7 @@
       "more": "Saya telah tinggalkan lebih banyak",
       "confirm": "Saya telah tinggalkan sebanyak itu"
     },
-    "count": "Berapa banyak minuman ini yang anda ambil pada ketika ini?"
+    "quantity": "Berapa banyak minuman ini yang anda ambil pada ketika ini?"
   },
   "guideImage": {
     "name": "Gambar panduan",
