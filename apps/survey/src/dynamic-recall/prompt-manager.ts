@@ -1,3 +1,4 @@
+import type { Dictionary } from 'vue-gtag';
 import type { SurveyState, SurveyStore } from '../stores';
 import type {
   ComponentType,
@@ -6,9 +7,10 @@ import type {
   NumberOfFoodsProperty,
   NumberOfMealsProperty,
   Prompt,
+  Prompts,
 } from '@intake24/common/prompts';
 import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
-import type { FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { CustomPromptAnswer, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
@@ -27,11 +29,12 @@ import {
   standardPortionComplete,
 } from '@intake24/common/util/portion-size-checks';
 import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import {
   addonFoodPromptCheck,
   findMeal,
+  flagPromptCompletionFlag,
   foodComplete,
   foodPortionSizeComplete,
   foodSearchComplete,
@@ -134,6 +137,43 @@ function showPrompt(state: SurveyState, prompt: Prompt, component: ComponentType
   return prompt.component === component;
 }
 
+function checkYesNoPromptConditions(prompt: Prompts['yes-no-prompt'], flags: string[], customPromptAnswers: Dictionary<CustomPromptAnswer>): boolean {
+  if (prompt.useFlag && prompt.flag) {
+    if (!flags.includes(flagPromptCompletionFlag(prompt.flag))) {
+      recallLog().promptCheck(
+        prompt.component,
+        true,
+        `Custom prompt ${prompt.flag} complete flag not set`,
+      );
+      return true;
+    }
+    else {
+      recallLog().promptCheck(
+        prompt.component,
+        false,
+        `Custom prompt answer ${prompt.flag} complete flag is set`,
+      );
+      return false;
+    }
+  }
+  else {
+    if (customPromptAnswers[prompt.id] === undefined) {
+      recallLog().promptCheck(
+        prompt.component,
+        true,
+        `Custom prompt answer ${prompt.id} is undefined`,
+      );
+      return true;
+    }
+    recallLog().promptCheck(
+      prompt.component,
+      false,
+      `Custom prompt answer ${prompt.id} is defined`,
+    );
+    return false;
+  }
+}
+
 function checkSurveyStandardConditions(surveyStore: SurveyStore, prompt: Prompt): boolean {
   const { component } = prompt;
 
@@ -177,6 +217,8 @@ function checkSurveyStandardConditions(surveyStore: SurveyStore, prompt: Prompt)
       const filteredMeals = filterMealsForAggregateChoicePrompt(surveyStore, prompt);
       return filteredMeals.some(meal => meal.foods.some(food => food.customPromptAnswers[prompt.id] === undefined));
     }
+    case 'yes-no-prompt':
+      return checkYesNoPromptConditions(prompt, surveyStore.data.flags, surveyStore.data.customPromptAnswers);
     default:
       return surveyStore.data.customPromptAnswers[prompt.id] === undefined;
   }
@@ -234,8 +276,19 @@ function checkMealStandardConditions(surveyStore: SurveyStore, mealState: MealSt
     case 'food-selection-prompt': {
       if (mealState.flags.includes(`${prompt.id}-complete`))
         return false;
-      return filterFoodsForFoodSelectionPrompt(surveyStore, mealState, prompt).length > 0;
+
+      const relevantFoods = filterFoodsForFoodSelectionPrompt(surveyStore, mealState, prompt);
+
+      if (prompt.useFlag && prompt.flag) {
+        // Use special flag instead of prompt ID for completion detection to support multiple prompts using the same flag
+        return relevantFoods.length > 0 && relevantFoods.some(food => !food.flags.includes(flagPromptCompletionFlag(prompt.flag!)));
+      }
+      else {
+        return relevantFoods.length > 0 && relevantFoods.some(food => food.customPromptAnswers[prompt.id] === undefined);
+      }
     }
+    case 'yes-no-prompt':
+      return checkYesNoPromptConditions(prompt, mealState.flags, mealState.customPromptAnswers);
     default:
       return mealState.customPromptAnswers[prompt.id] === undefined;
   }
@@ -691,6 +744,9 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
       recallLog().promptCheck(component, true, `Recipe food info not entered yet..`);
       return true;
     }
+
+    case 'yes-no-prompt':
+      return checkYesNoPromptConditions(prompt, foodState.flags, foodState.customPromptAnswers);
 
     default: {
       if (foodState.customPromptAnswers[prompt.id] === undefined) {
