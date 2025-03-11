@@ -6,9 +6,18 @@
           v-for="food in filteredFoods"
           :key="food.id"
           v-model="selected"
+          :disabled="selected.includes(foodSelectionNoneUuid)"
           hide-details="auto"
           :label="getFoodName(food)"
           :value="food.id"
+          @update:model-value="update()"
+        />
+        <v-checkbox-btn
+          :key="foodSelectionNoneUuid"
+          v-model="selected"
+          hide-details="auto"
+          :label="$t('prompts.foodSelection.none')"
+          :value="foodSelectionNoneUuid"
           @update:model-value="update()"
         />
       </v-form>
@@ -30,6 +39,7 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { Next, NextMobile } from '../../actions';
 import { BaseLayout, CardLayout, PanelLayout } from '../../layouts';
 import { createBasePromptProps } from '../../prompt-props';
+import { foodSelectionNoneUuid } from './food-selection';
 
 defineOptions({
   name: 'FoodSelectionPrompt',
@@ -60,7 +70,7 @@ const { action, getFoodName, customPromptLayout } = usePromptUtils(
 );
 
 const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
-const isValid = computed(() => true);
+const isValid = computed(() => props.modelValue?.length > 0);
 
 function update() {
   emit('update:modelValue', [...selected.value]);
