@@ -125,6 +125,7 @@ export const timePickerPrompt: Prompts['time-picker-prompt'] = copy({
 export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({
   ...basePrompt,
   component: 'yes-no-prompt',
+  useFlag: false,
   type: 'custom',
   id: 'yes-no-prompt',
   name: 'Yes / No prompt',
