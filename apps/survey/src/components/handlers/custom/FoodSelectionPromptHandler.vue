@@ -17,7 +17,8 @@ import type { FoodState, PromptSection } from '@intake24/common/surveys';
 import FoodSelectionPrompt from '@intake24/survey/components/prompts/custom/food-selection/food-selection-prompt.vue';
 
 import { useSurvey } from '@intake24/survey/stores';
-import { filterFoodsForFoodSelectionPrompt } from '../../prompts/custom/food-selection/food-selection';
+import { flagPromptCompletionFlag } from '@intake24/survey/util';
+import { filterFoodsForFoodSelectionPrompt, foodSelectionNoneUuid } from '../../prompts/custom/food-selection/food-selection';
 import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
 
 export default defineComponent({
@@ -52,7 +53,7 @@ export default defineComponent({
       }
     });
 
-    const filteredFoods = computed(() => filterFoodsForFoodSelectionPrompt(surveyStore, meal.value, props.prompt));
+    const relevantFoods = computed(() => filterFoodsForFoodSelectionPrompt(surveyStore, meal.value, props.prompt));
 
     const isFoodSelected = (food: FoodState): boolean => {
       if (props.prompt.useFlag) {
@@ -70,9 +71,11 @@ export default defineComponent({
 
     const commitAnswer = () => {
       function commitAnswers(food: FoodState) {
-        const selected = state.value.includes(food.id);
+        const selected = state.value.includes(food.id) && !state.value.includes(foodSelectionNoneUuid);
 
-        if (props.prompt.useFlag) {
+        if (props.prompt.useFlag && props.prompt.flag) {
+          surveyStore.addFoodFlag(food.id, flagPromptCompletionFlag(props.prompt.flag));
+
           if (parsedFlag.value !== undefined)
             surveyStore.setFoodFlag(food.id, parsedFlag.value, selected);
         }
@@ -97,7 +100,7 @@ export default defineComponent({
       ctx.emit('action', type, ...args);
     };
 
-    return { state, action, filteredFoods, meal };
+    return { state, action, filteredFoods: relevantFoods, meal };
   },
 });
 </script>
