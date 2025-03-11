@@ -202,6 +202,15 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         },
       };
     }
+    case 'as-served-prompt': {
+      return {
+        ...prompt,
+        version: 2,
+        useGraph: false,
+        conditions,
+        multiple: false,
+      };
+    }
     case 'drink-scale-prompt': {
       const { multiple, ...rest } = prompt;
       return {

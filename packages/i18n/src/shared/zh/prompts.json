@@ -271,7 +271,7 @@
     "description": "<p>这个 <strong>{food}</strong> 和您之前吃的一样吗？</p>",
     "serving": "{amount} 份量 ",
     "leftovers": "留下约  {amount}",
-    "count": "{count} servings",
+    "quantity": "{quantity} servings",
     "noLeftovers": {
       "drink": "我喝完了那饮料",
       "food": "我吃完那食物"
@@ -380,6 +380,7 @@
       "more": "我剩余的量更多",
       "confirm": "我剩余了这么多"
     },
+    "quantity": "How many of these portions did you have?",
     "weightFactor": {
       "serving": {
         "more": "我吃了{whole}和{fraction}",
@@ -426,7 +427,7 @@
       "more": "我剩余的量更多 ",
       "confirm": "我剩余了这么多 "
     },
-    "count": "How many of these drinks did you have?"
+    "quantity": "How many of these drinks did you have?"
   },
   "guideImage": {
     "name": "指南图片",

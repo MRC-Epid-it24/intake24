@@ -140,7 +140,8 @@
         "_": "As served",
         "servingImageSet": "Serving image set",
         "leftoverImageSet": "Leftover image set",
-        "removeLeftoverImageSet": "Remove leftover image set"
+        "removeLeftoverImageSet": "Remove leftover image set",
+        "multiple": "Allow specifying multiple items"
       },
       "cereal": {
         "_": "Cereal"

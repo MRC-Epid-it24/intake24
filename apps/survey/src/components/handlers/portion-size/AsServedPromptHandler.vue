@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import { AsServedPrompt } from '@intake24/survey/components/prompts';
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
@@ -36,6 +37,13 @@ const {
 } = useFoodPromptUtils<'as-served'>();
 const { meal } = useMealPromptUtils();
 
+const currentValue = computed(() => {
+  if (!props.prompt.multiple)
+    return 1;
+
+  return (props.prompt.multiple.type === 'counter' ? props.prompt.multiple.current : props.prompt.multiple.current.value) ?? 1;
+});
+
 function getInitialState(): PromptStates['as-served-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData() ?? {
@@ -45,12 +53,14 @@ function getInitialState(): PromptStates['as-served-prompt'] {
       linkedQuantity: linkedParentQuantity.value,
       servingWeight: 0,
       leftoversWeight: 0,
+      quantity: currentValue.value,
     },
     panel: food().portionSizeMethodIndex !== null ? 1 : 0,
     servingImageConfirmed: false,
     leftoversPrompt: undefined,
     leftoversImageConfirmed: false,
     linkedQuantityConfirmed: false,
+    quantityConfirmed: false,
   };
 }
 

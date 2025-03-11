@@ -377,7 +377,7 @@
       "labels": "Montrer les libellés",
       "pinchZoom": "Montrer PinchZoom pour mobile UI"
     },
-    "multiple": "Allow multiple items to be selected",
+    "multiple": "Autoriser de spécifier plusieurs éléments",
     "label": "Libellé de la liste d'options",
     "leftovers": "Autoriser les restes",
     "linkedQuantity": {
@@ -691,8 +691,7 @@
     },
     "drink-scale-prompt": {
       "title": "Quantification dans le verre",
-      "subtitle": "Choisir la méthode \"drink scale\" pour estimer la quantité de liquide consommmée",
-      "multiple": "Autoriser de spécifier plusieurs éléments"
+      "subtitle": "Choisir la méthode \"drink scale\" pour estimer la quantité de liquide consommmée"
     },
     "guide-image-prompt": {
       "title": "Photo étalon",

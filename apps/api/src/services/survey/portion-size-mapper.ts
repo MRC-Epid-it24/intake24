@@ -27,7 +27,7 @@ export function genericMapper<T extends keyof PortionSizeStates>(foodId: string,
 }
 
 export function asServedMapper(foodId: string, state: PortionSizeStates['as-served']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
-  const { leftoversWeight, servingWeight, serving, leftovers, linkedQuantity } = state;
+  const { leftoversWeight, servingWeight, serving, leftovers, linkedQuantity, quantity } = state;
 
   return [
     { name: 'leftovers', value: (!!leftovers).toString() },
@@ -40,6 +40,7 @@ export function asServedMapper(foodId: string, state: PortionSizeStates['as-serv
     { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
     { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
     { name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
+    { name: 'quantity', value: quantity.toString() },
   ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
 }
 
@@ -88,7 +89,6 @@ export function drinkScaleMapper(foodId: string, state: PortionSizeStates['drink
   const {
     containerId,
     containerIndex,
-    count,
     drinkwareId,
     fillLevel,
     imageUrl,
@@ -98,12 +98,13 @@ export function drinkScaleMapper(foodId: string, state: PortionSizeStates['drink
     leftoversLevel,
     servingWeight,
     skipFillLevel,
+    quantity,
   } = state;
 
   return [
     { name: 'containerId', value: containerId ?? '' },
     { name: 'containerIndex', value: containerIndex?.toString() ?? '' },
-    { name: 'count', value: count.toString() },
+    { name: 'quantity', value: quantity.toString() },
     { name: 'drinkware-id', value: drinkwareId },
     { name: 'fillLevel', value: fillLevel.toString() },
     { name: 'imageUrl', value: parseUrlPathname(imageUrl) },

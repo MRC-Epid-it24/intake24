@@ -15,6 +15,24 @@
           @update:model-value="update('leftovers', $event)"
         />
       </v-col>
+      <v-col>
+        <v-select
+          class="mt-4"
+          hide-details="auto"
+          :items="multipleItems"
+          :label="$t('survey-schemes.prompts.multiple')"
+          :model-value="typeof multiple === 'boolean' ? false : multiple.type"
+          variant="outlined"
+          @update:model-value="updateMultiple($event)"
+        />
+        <component
+          :is="multiple.type"
+          v-if="multiple"
+          class="mt-4"
+          :model-value="multiple"
+          @update:model-value="update('multiple', $event)"
+        />
+      </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>
@@ -22,15 +40,17 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-
 import type { Prompts } from '@intake24/common/prompts';
-
-import { basePrompt } from '../partials';
+import { drinkScalePrompt } from '@intake24/common/prompts';
+import { CounterSettings, SliderSettings, useBasePrompt, useMultiple } from '../partials';
 
 export default defineComponent({
   name: 'AsServedPrompt',
 
-  mixins: [basePrompt],
+  components: {
+    Counter: CounterSettings,
+    Slider: SliderSettings,
+  },
 
   props: {
     badges: {
@@ -41,6 +61,17 @@ export default defineComponent({
       type: Boolean as PropType<Prompts['as-served-prompt']['leftovers']>,
       required: true,
     },
+    multiple: {
+      type: [Boolean, Object] as PropType<Prompts['drink-scale-prompt']['multiple']>,
+      required: true,
+    },
+  },
+
+  setup(props, ctx) {
+    const { update } = useBasePrompt(props, ctx);
+    const { multipleItems, updateMultiple } = useMultiple(props, ctx);
+
+    return { drinkScalePrompt, multipleItems, update, updateMultiple };
   },
 });
 </script>

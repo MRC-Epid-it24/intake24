@@ -34,6 +34,7 @@ export type StandardUnit = z.infer<typeof standardUnit>;
 export const asServedPortionSizeParameters = z.object({
   servingImageSet: z.string(),
   leftoversImageSet: z.string().nullish(),
+  multiple: z.boolean().optional(),
 });
 
 export const cerealPortionSizeParameters = z.object({
@@ -221,6 +222,7 @@ const asServedPortionSizeState = portionSizeStateBase.extend({
   method: z.literal('as-served'),
   serving: selectedAsServedImage.nullable(),
   leftovers: selectedAsServedImage.nullable(),
+  quantity: z.number(),
   linkedQuantity: z.number(),
 });
 
@@ -249,7 +251,7 @@ const drinkScalePortionSizeState = portionSizeStateBase.extend({
   fillLevel: z.number(),
   leftoversLevel: z.number(),
   leftovers: z.boolean(),
-  count: z.number(),
+  quantity: z.number(),
 });
 const guideImagePortionSizeState = portionSizeStateBase.extend({
   method: z.literal('guide-image'),

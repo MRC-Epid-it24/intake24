@@ -61,6 +61,7 @@ export type PromptStates = {
     leftoversImageConfirmed: boolean;
     leftoversPrompt?: boolean;
     linkedQuantityConfirmed: boolean;
+    quantityConfirmed: boolean;
   };
   'cereal-prompt': {
     portionSize: PortionSizeStates['cereal'];
@@ -78,10 +79,10 @@ export type PromptStates = {
     portionSize: PortionSizeStates['drink-scale'];
     panel: number;
     objectConfirmed: boolean;
-    quantityConfirmed: boolean;
+    volumeConfirmed: boolean;
     leftoversConfirmed: boolean;
     leftoversPrompt?: boolean;
-    countConfirmed: boolean;
+    quantityConfirmed: boolean;
   };
   'guide-image-prompt': {
     portionSize: PortionSizeStates['guide-image'];

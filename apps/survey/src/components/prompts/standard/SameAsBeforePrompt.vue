@@ -23,11 +23,11 @@
             </template>
             <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="count > 1" class="ps-0" density="compact">
+          <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
             <template #prepend>
               <v-icon icon="fas fa-caret-right" />
             </template>
-            <v-list-item-title>{{ promptI18n.count }}</v-list-item-title>
+            <v-list-item-title>{{ promptI18n.quantity }}</v-list-item-title>
           </v-list-item>
         </v-list>
         <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
@@ -87,7 +87,6 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { computed, onMounted } from 'vue';
-import type { Prompt } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -117,14 +116,11 @@ const survey = useSurvey();
 const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
 const isValid = true;
 
-const foodCount = (food: EncodedFood) => food.portionSize?.method === 'drink-scale' ? food.portionSize.count : 1;
+const getQuantity = (food: EncodedFood) => food.portionSize && 'quantity' in food.portionSize ? (food.portionSize.quantity ?? 1) : 1;
 
-function foodAmount(food: EncodedFood) {
+function getPortionWeight(food: EncodedFood) {
   if (food.portionSize?.method === 'milk-in-a-hot-drink')
     return (food.portionSize?.milkVolumePercentage ?? 0) * 100;
-
-  if (food.portionSize?.method === 'standard-portion')
-    return food.portionSize?.quantity;
 
   const servingWeight = food.portionSize?.servingWeight ?? 0;
   const linkedServingWeight
@@ -136,10 +132,10 @@ function foodAmount(food: EncodedFood) {
           ) as EncodedFood | undefined
         )?.portionSize?.servingWeight ?? 0;
 
-  return Math.round((servingWeight + linkedServingWeight) / foodCount(food));
+  return Math.round((servingWeight + linkedServingWeight) / getQuantity(food));
 }
 
-function foodUnit(food: EncodedFood) {
+function getUnit(food: EncodedFood) {
   switch (food.portionSize?.method) {
     case 'drink-scale':
       return 'ml';
@@ -148,11 +144,11 @@ function foodUnit(food: EncodedFood) {
     case 'standard-portion':
       if (food.portionSize.unit) {
         if (food.portionSize.unit.inlineEstimateIn)
-          return food.portionSize.unit.inlineEstimateIn;
+          return `g (${food.portionSize.unit.inlineEstimateIn})`;
 
         const unit = standardUnitRefs.value[food.portionSize.unit.name]?.estimateIn;
         if (unit)
-          return translate(unit);
+          return `g (${translate(unit)})`;
       }
   }
 
@@ -169,21 +165,20 @@ const linkedFoods = computed(() =>
     if (food.type === 'recipe-builder')
       return { id, text: food.template.name ?? food.searchTerm };
 
-    const amount = Math.round(foodAmount(food));
-    const unit = foodUnit(food);
+    const amount = Math.round(getPortionWeight(food));
+    const unit = getUnit(food);
     return { id, text: `${translate(food.data.localName)} (${amount} ${unit})` };
   }),
 );
 
-const count = computed(() => foodCount(props.sabFood.food));
-const servingCount = computed(() => t(`prompts.${type.value}.count`, { count: foodCount(props.sabFood.food) }));
-
+const quantity = computed(() => getQuantity(props.sabFood.food));
 const serving = computed(() => {
-  const amount = foodAmount(props.sabFood.food);
-  const unit = foodUnit(props.sabFood.food);
+  const amount = getPortionWeight(props.sabFood.food);
+  const unit = getUnit(props.sabFood.food);
 
   return t(`prompts.${type.value}.serving`, { amount: `${amount} ${unit}` });
 });
+const servingQuantity = computed(() => t(`prompts.${type.value}.quantity`, { quantity: getQuantity(props.sabFood.food) }));
 
 const leftovers = computed(() => {
   const { leftoversWeight, servingWeight } = props.sabFood.food.portionSize ?? {};
@@ -196,7 +191,7 @@ const leftovers = computed(() => {
 });
 
 const leftoversEnabled = computed(() => {
-  const prompt: Prompt | undefined = survey.foodPrompts.find((item: Prompt) => item.component === `${props.sabFood.food.portionSize?.method}-prompt`);
+  const prompt = survey.foodPrompts.find(item => item.component === `${props.sabFood.food.portionSize?.method}-prompt`);
   return prompt && 'leftovers' in prompt && prompt.leftovers;
 });
 
@@ -204,8 +199,8 @@ const showLeftovers = computed(() => leftoversEnabled.value || !!props.sabFood.f
 
 const promptI18n = computed(() => ({
   serving: serving.value,
+  quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  count: servingCount.value,
   ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
 }));
 

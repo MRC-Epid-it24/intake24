@@ -271,7 +271,7 @@
     "description": "<p>Est-ce que l'aliment <strong>{food}</strong> était le même que celui consommé précédemment?</p>",
     "serving": "portion unitaire de {amount}",
     "leftovers": "restes de {amount}",
-    "count": "{count} portions",
+    "quantity": "{quantity} portions",
     "noLeftovers": {
       "drink": "Bu entièrement",
       "food": "Mangé entièrement"
@@ -380,6 +380,7 @@
       "more": "J'en ai laissé plus",
       "confirm": "J'en ai laissé autant"
     },
+    "quantity": "Combien en avez-vous consommé de cette même taille ?",
     "weightFactor": {
       "serving": {
         "more": "J'en ai consommé {whole} et {fraction}",
@@ -426,7 +427,7 @@
       "more": "J'en ai laissé plus",
       "confirm": "J'en ai laissé autant"
     },
-    "count": "Combien de verres identiques avez-vous bu à ce moment-là ?"
+    "quantity": "Combien de verres identiques avez-vous bu à ce moment-là ?"
   },
   "guideImage": {
     "name": "Guide photo",

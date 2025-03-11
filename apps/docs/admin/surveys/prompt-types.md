@@ -218,6 +218,11 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `leftovers` - show leftovers option
 
+- `multiple` - allow multiple items to be selected. When enabled, additional options are available:
+  - `false` - disable multiple selection
+  - `counter` - counter-style multiple selection
+  - `slider` - slider-style multiple selection
+
 ### Cereal prompt
 
 #### Options
@@ -246,7 +251,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
   - `image map labels` - show image map labels
   - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
-- `multiple` - allow multiple item to be selected. When enabled, additional options are available:
+- `multiple` - allow multiple items to be selected. When enabled, additional options are available:
   - `false` - disable multiple selection
   - `counter` - counter-style multiple selection
   - `slider` - slider-style multiple selection
@@ -261,20 +266,6 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 - `fraction` - use fractions
 
 #### Slider settings
-
-- `current` - current value settings
-  - `label` - label to be displayed
-  - `value` - current value
-  - `size` - droplet size (in `px`) of the label
-- `min` - minimum value settings
-  - `label` - label to be displayed at the start of the slider (min value) (use `{value}` to insert variable value into the label)
-  - `value` - minimum value
-- `max` - maximum value settings
-  - `label` - label to be displayed at the end of the slider (max value) (use `{value}` to insert variable value into the label)
-  - `value` - maximum value
-- `confirm` - require confirmation
-
-#### Slider options
 
 - `current` - current value settings
   - `label` - label to be displayed
@@ -438,6 +429,18 @@ Allows to embed youtube video with optional settings.
 - `autoContinue` - continue on video end
 - `autoplay` - autoplay video
 - `required` - video is required to be played in full to continue
+
+#### Carousel options
+
+Allows to present information in carousel/slide form.
+
+- `variant` - graphical presentation
+- `color` - carousel theme color
+- `required` - carousel is required to be walked through to continue
+- `items`
+  - `image (desktop)` - image URL for desktop layout
+  - `image (mobile)` - image URL for mobile layout
+  - `text` - Text content (rich text editor)
 
 ### No more information prompt
 
