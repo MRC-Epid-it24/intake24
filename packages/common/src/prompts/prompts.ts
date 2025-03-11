@@ -222,6 +222,8 @@ const timePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(timePicke
 
 const yesNoPrompt = baseCustomPrompt.extend({
   component: z.literal('yes-no-prompt'),
+  useFlag: z.boolean(),
+  flag: z.string().optional(),
 });
 
 // Portion size
