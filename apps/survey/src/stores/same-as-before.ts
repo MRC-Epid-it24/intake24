@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+import { portionSizeStates } from '@intake24/common/surveys';
 import type { EncodedFood } from '@intake24/common/surveys';
 
 import { useUser } from './user';
@@ -33,11 +34,20 @@ export const useSameAsBefore = defineStore('same-as-before', {
       if (item?.localeId !== localeId)
         return undefined;
 
-      if (item.food.data.sameAsBeforeOption)
-        return item;
+      if (!item.food.data.sameAsBeforeOption) {
+        this.removeItem(foodCode);
+        return undefined;
+      }
 
-      this.removeItem(foodCode);
-      return undefined;
+      if (item.food.portionSize) {
+        const { success } = portionSizeStates.shape[item.food.portionSize.method].safeParse(item.food.portionSize);
+        if (!success) {
+          this.removeItem(foodCode);
+          return undefined;
+        }
+      }
+
+      return item;
     },
 
     removeItem(foodCode: string) {

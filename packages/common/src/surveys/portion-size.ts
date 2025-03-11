@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { categoryLocaleOptionList, localeOptionList } from '../types/common';
 
 export const portionSizeMethods = [
@@ -19,7 +18,8 @@ export const portionSizeMethods = [
 
 export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
 
-export type CerealType = 'hoop' | 'flake' | 'rkris';
+export const cerealTypes = ['hoop', 'flake', 'rkris'] as const;
+export type CerealType = (typeof cerealTypes)[number];
 
 export const standardUnit = z.object({
   name: z.string(),
@@ -37,7 +37,7 @@ export const asServedPortionSizeParameters = z.object({
 });
 
 export const cerealPortionSizeParameters = z.object({
-  type: z.enum(['hoop', 'flake', 'rkris']),
+  type: z.enum(cerealTypes),
   imageMapLabels: z.boolean().optional(),
 });
 
@@ -194,3 +194,143 @@ export type PortionSizeMethod =
   | PizzaV2Psm
   | RecipeBuilderPsm
   | StandardPortionPsm;
+
+export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
+export type PizzaSize = (typeof pizzaSizes)[number];
+export const pizzaCrusts = ['classic', 'italian-thin', 'stuffed'] as const;
+export type PizzaCrust = (typeof pizzaCrusts)[number];
+
+export const pizzaUnits = ['slice', 'whole'] as const;
+export type PizzaUnit = (typeof pizzaUnits)[number];
+
+// Portion size states
+const portionSizeStateBase = z.object({
+  servingWeight: z.number().nullable(),
+  leftoversWeight: z.number().nullable(),
+});
+
+const selectedAsServedImage = z.object({
+  asServedSetId: z.string(),
+  imageUrl: z.string(),
+  index: z.number(),
+  weight: z.number(),
+});
+export type SelectedAsServedImage = z.infer<typeof selectedAsServedImage>;
+
+const asServedPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('as-served'),
+  serving: selectedAsServedImage.nullable(),
+  leftovers: selectedAsServedImage.nullable(),
+  linkedQuantity: z.number(),
+});
+
+const cerealPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('cereal'),
+  imageUrl: z.string().nullable(),
+  type: z.enum(cerealTypes),
+  bowl: z.string().nullable(),
+  bowlId: z.string().optional(),
+  bowlIndex: z.number().optional(),
+  serving: selectedAsServedImage.nullable(),
+  leftovers: selectedAsServedImage.nullable(),
+});
+const directWeightPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('direct-weight'),
+  quantity: z.number().nullable(),
+});
+const drinkScalePortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('drink-scale'),
+  drinkwareId: z.string(),
+  initialFillLevel: z.number(),
+  skipFillLevel: z.boolean(),
+  imageUrl: z.string(),
+  containerId: z.string().optional(),
+  containerIndex: z.number().optional(),
+  fillLevel: z.number(),
+  leftoversLevel: z.number(),
+  leftovers: z.boolean(),
+  count: z.number(),
+});
+const guideImagePortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('guide-image'),
+  guideImageId: z.string(),
+  imageUrl: z.string().nullable(),
+  objectId: z.string().optional(),
+  objectIndex: z.number().optional(),
+  objectWeight: z.number(),
+  quantity: z.number(),
+  linkedQuantity: z.number(),
+});
+const milkInHotDrinkPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('milk-in-a-hot-drink'),
+  milkPartIndex: z.number().nullable(),
+  milkVolumePercentage: z.number().nullable(),
+});
+const milkOnCerealPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('milk-on-cereal'),
+  imageUrl: z.string().nullable(),
+  bowl: z.string().nullable(),
+  bowlId: z.string().optional(),
+  bowlIndex: z.number().optional(),
+  milkLevelId: z.string().optional(),
+  milkLevelIndex: z.number().optional(),
+  milkLevelImage: z.string().nullable(),
+});
+const parentFoodPortionPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('parent-food-portion'),
+  portionIndex: z.number().nullable(),
+  portionValue: z.number().nullable(),
+});
+const pizzaPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('pizza'),
+  type: z.object({
+    id: z.string().optional(),
+    index: z.number().optional(),
+    image: z.string().nullable(),
+  }),
+  thickness: z.object({
+    id: z.string().optional(),
+    index: z.number().optional(),
+    image: z.string().nullable(),
+  }),
+  slice: z.object({
+    id: z.string().optional(),
+    index: z.number().optional(),
+    image: z.string().nullable(),
+    quantity: z.number(),
+  }),
+});
+const pizzaV2PortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('pizza-v2'),
+  size: z.enum(pizzaSizes).nullable(),
+  crust: z.enum(pizzaCrusts).nullable(),
+  unit: z.enum(pizzaUnits).nullable(),
+  quantity: z.number(),
+});
+const recipeBuilderPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('recipe-builder'),
+});
+const standardPortionPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('standard-portion'),
+  unit: standardUnit.nullable(),
+  quantity: z.number(),
+  linkedQuantity: z.number(),
+});
+
+export const portionSizeStates = z.object({
+  'as-served': asServedPortionSizeState,
+  cereal: cerealPortionSizeState,
+  'direct-weight': directWeightPortionSizeState,
+  'drink-scale': drinkScalePortionSizeState,
+  'guide-image': guideImagePortionSizeState,
+  'milk-in-a-hot-drink': milkInHotDrinkPortionSizeState,
+  'milk-on-cereal': milkOnCerealPortionSizeState,
+  'parent-food-portion': parentFoodPortionPortionSizeState,
+  pizza: pizzaPortionSizeState,
+  'pizza-v2': pizzaV2PortionSizeState,
+  'recipe-builder': recipeBuilderPortionSizeState,
+  'standard-portion': standardPortionPortionSizeState,
+});
+export type PortionSizeStates = z.infer<typeof portionSizeStates>;
+export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
+export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];

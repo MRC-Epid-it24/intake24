@@ -1,19 +1,11 @@
 import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
-
-import type { CerealType, StandardUnit } from '../surveys';
-
 import type { FoodType, RecipeFood } from '../types';
 import type { Dictionary, Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
+import type { PortionSizeState } from './portion-size';
 import { z } from 'zod';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 import { requiredLocaleTranslationWithLimit } from '../types/common';
-
-/*
-Not currently used:
-private static final String FLAG_CONFIRMED_NO_DRINKS = "confirmed-no-drinks";
-private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-complete";
-*/
 
 export const staticSurveyFlag = [
 ] as const;
@@ -75,147 +67,11 @@ export const customPromptAnswer = z.union([
 ]);
 export type CustomPromptAnswer = z.infer<typeof customPromptAnswer>;
 
-export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
-export type PizzaSize = (typeof pizzaSizes)[number];
-export const pizzaCrusts = ['classic', 'italian-thin', 'stuffed'] as const;
-export type PizzaCrust = (typeof pizzaCrusts)[number];
-
-export const pizzaUnits = ['slice', 'whole'] as const;
-export type PizzaUnit = (typeof pizzaUnits)[number];
-
-// Portion size states
-export interface PortionSizeStateBase {
-  servingWeight: number | null;
-  leftoversWeight: number | null;
-}
-
-export interface SelectedAsServedImage {
-  asServedSetId: string;
-  imageUrl: string;
-  index: number;
-  weight: number;
-}
-
-export interface SelectedGuideImageObject {
-  guideImageId: string;
-  imageUrl: string;
-  id: number;
-  weight: number;
-}
-
-export type PortionSizeStates = {
-  'as-served': PortionSizeStateBase & {
-    method: 'as-served';
-    serving: SelectedAsServedImage | null;
-    leftovers: SelectedAsServedImage | null;
-    linkedQuantity: number;
-  };
-  cereal: PortionSizeStateBase & {
-    method: 'cereal';
-    imageUrl: string | null;
-    type: CerealType;
-    bowl: string | null;
-    bowlId?: string;
-    bowlIndex?: number;
-    serving: SelectedAsServedImage | null;
-    leftovers: SelectedAsServedImage | null;
-  };
-  'direct-weight': PortionSizeStateBase & {
-    method: 'direct-weight';
-    quantity: number | null;
-  };
-  'drink-scale': PortionSizeStateBase & {
-    method: 'drink-scale';
-    drinkwareId: string;
-    initialFillLevel: number;
-    skipFillLevel: boolean;
-    imageUrl: string;
-    containerId?: string;
-    containerIndex?: number;
-    fillLevel: number;
-    leftoversLevel: number;
-    leftovers: boolean;
-    count: number;
-  };
-  'guide-image': PortionSizeStateBase & {
-    method: 'guide-image';
-    guideImageId: string;
-    imageUrl: string | null;
-    objectId?: string;
-    objectIndex?: number;
-    objectWeight: number;
-    quantity: number;
-    linkedQuantity: number;
-  };
-  'milk-in-a-hot-drink': PortionSizeStateBase & {
-    method: 'milk-in-a-hot-drink';
-    milkPartIndex: number | null;
-    milkVolumePercentage: number | null;
-  };
-  'milk-on-cereal': PortionSizeStateBase & {
-    method: 'milk-on-cereal';
-    imageUrl: string | null;
-    bowl: string | null;
-    bowlId?: string;
-    bowlIndex?: number;
-    milkLevelId?: string;
-    milkLevelIndex?: number;
-    milkLevelImage: string | null;
-  };
-  'parent-food-portion': PortionSizeStateBase & {
-    method: 'parent-food-portion';
-    portionIndex: number | null;
-    portionValue: number | null;
-  };
-  pizza: PortionSizeStateBase & {
-    method: 'pizza';
-    type: {
-      id?: string;
-      index?: number;
-      image: string | null;
-    };
-    thickness: {
-      id?: string;
-      index?: number;
-      image: string | null;
-    };
-    slice: {
-      id?: string;
-      index?: number;
-      image: string | null;
-      quantity: number;
-    };
-  };
-  'pizza-v2': PortionSizeStateBase & {
-    method: 'pizza-v2';
-    size: PizzaSize | null;
-    crust: PizzaCrust | null;
-    unit: PizzaUnit | null;
-    quantity: number;
-  };
-  'recipe-builder': PortionSizeStateBase & { method: 'recipe-builder' };
-  'standard-portion': PortionSizeStateBase & {
-    method: 'standard-portion';
-    unit: StandardUnit | null;
-    quantity: number;
-    linkedQuantity: number;
-  };
-};
-
-export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
-
 export const recipeBuilderComponent = z.object({
   order: z.number(),
   ingredients: z.string().array(),
 });
 export type RecipeBuilderComponent = z.infer<typeof recipeBuilderComponent>;
-
-export type RecipeBuilderLinkedFood = {
-  id: string;
-  linkedTo: string[];
-};
-
-export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
 
 export type ExternalSourceRecord = Record<ExternalSource, PromptStates['external-source-prompt'] | undefined>;
 
