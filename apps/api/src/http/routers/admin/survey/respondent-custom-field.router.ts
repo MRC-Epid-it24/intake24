@@ -1,8 +1,6 @@
 import { initServer } from '@ts-rest/express';
-
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { contract } from '@intake24/common/contracts';
 import { Survey, UserCustomField } from '@intake24/db';
 
@@ -57,7 +55,7 @@ export function respondentCustomField() {
 
         const entry = await UserCustomField.findOne({ attributes: ['id'], where: { userId, name: body.name } });
         if (entry)
-          throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'name' }), { path: 'name' });
+          throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
 
         const customField = await UserCustomField.create({ ...body, userId });
 

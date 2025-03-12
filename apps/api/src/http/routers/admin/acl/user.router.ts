@@ -1,43 +1,33 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
 import { col, fn, Op } from 'sequelize';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { userEntryResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { Permission, Role, User } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { userId, req }: { userId?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { userId }: { userId?: string } = {}) {
   const where: WhereOptions = userId ? { id: { [Op.ne]: userId } } : {};
 
   if (!(await unique({ model: User, condition: { field: 'email', value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'email' }), {
-      path: 'email',
-    });
+    throw ValidationError.from({ path: 'email', i18n: { type: 'unique._' } });
   }
 }
 
-async function dataCheck<T extends AppRoute | AppRouter>({ permissions, roles, req }: { permissions?: string[]; roles?: string[]; req: TsRestRequest<T> }) {
+async function dataCheck({ permissions, roles }: { permissions?: string[]; roles?: string[] }) {
   if (permissions) {
     const availablePermissions = await Permission.count({ where: { id: permissions } });
     if (availablePermissions !== permissions.length) {
-      throw new ValidationError(customTypeValidationMessage('exists._', { req, path: 'permissions' }), {
-        path: 'permissions',
-      });
+      throw ValidationError.from({ path: 'permissions', i18n: { type: 'exists._' } });
     }
   }
 
   if (roles) {
     const availableRoles = await Role.count({ where: { id: roles } });
     if (availableRoles !== roles.length) {
-      throw new ValidationError(customTypeValidationMessage('exists._', { req, path: 'roles' }), {
-        path: 'roles',
-      });
+      throw ValidationError.from({ path: 'roles', i18n: { type: 'exists._' } });
     }
   }
 }
@@ -61,8 +51,8 @@ export function user() {
       middleware: [permission('acl', 'users', 'users:create')],
       handler: async ({ body, req }) => {
         const { email, permissions, roles } = body;
-        await uniqueMiddleware(email, { req });
-        await dataCheck({ permissions, roles, req });
+        await uniqueMiddleware(email);
+        await dataCheck({ permissions, roles });
 
         const user = await req.scope.cradle.adminUserService.create(body);
 
@@ -102,8 +92,8 @@ export function user() {
       middleware: [permission('acl', 'users', 'users:edit')],
       handler: async ({ body, params: { userId }, req }) => {
         const { email, permissions, roles } = body;
-        await uniqueMiddleware(email, { userId, req });
-        await dataCheck({ permissions, roles, req });
+        await uniqueMiddleware(email, { userId });
+        await dataCheck({ permissions, roles });
 
         await req.scope.cradle.adminUserService.update(userId, body);
 

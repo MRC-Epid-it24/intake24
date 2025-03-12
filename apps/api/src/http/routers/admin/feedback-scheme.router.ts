@@ -1,16 +1,11 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-
-import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import path from 'node:path';
 import { initServer } from '@ts-rest/express';
 import fs from 'fs-extra';
 import { pick } from 'lodash';
 import { col, fn, Op } from 'sequelize';
-
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { feedbackSchemeResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
@@ -27,13 +22,11 @@ import {
 } from '@intake24/db';
 import type { PaginateOptions } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { feedbackSchemeId, req }: { feedbackSchemeId?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { feedbackSchemeId }: { feedbackSchemeId?: string } = {}) {
   const where: WhereOptions = feedbackSchemeId ? { id: { [Op.ne]: feedbackSchemeId } } : {};
 
   if (!(await unique({ model: FeedbackScheme, condition: { field: 'name', value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'name' }), {
-      path: 'name',
-    });
+    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
   }
 }
 
@@ -71,7 +64,7 @@ export function feedbackScheme() {
     store: {
       middleware: [permission('feedback-schemes', 'feedback-schemes:create')],
       handler: async ({ body, req }) => {
-        await uniqueMiddleware(body.name, { req });
+        await uniqueMiddleware(body.name);
 
         const feedbackScheme = await FeedbackScheme.create({ ...body, ownerId: req.scope.cradle.user.userId });
 
@@ -115,7 +108,7 @@ export function feedbackScheme() {
     patch: {
       middleware: [permission('feedback-schemes')],
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {
-        await uniqueMiddleware(body.name, { feedbackSchemeId, req });
+        await uniqueMiddleware(body.name, { feedbackSchemeId });
 
         const {
           aclService,
@@ -157,7 +150,7 @@ export function feedbackScheme() {
     put: {
       middleware: [permission('feedback-schemes')],
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {
-        await uniqueMiddleware(body.name, { feedbackSchemeId, req });
+        await uniqueMiddleware(body.name, { feedbackSchemeId });
 
         const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
           where: { id: feedbackSchemeId },
@@ -196,7 +189,7 @@ export function feedbackScheme() {
     copy: {
       middleware: [permission('feedback-schemes')],
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {
-        await uniqueMiddleware(body.name, { req });
+        await uniqueMiddleware(body.name);
 
         const {
           aclService,

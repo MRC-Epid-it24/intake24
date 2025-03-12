@@ -1,10 +1,6 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import { initServer } from '@ts-rest/express';
-
 import { ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
@@ -20,29 +16,25 @@ function toNutrientTypeResponse(nutrientType: FoodsNutrientType): NutrientTypeRe
   return { id, description, unitId, unit, kcalPerUnit: inKcal?.kcalPerUnit };
 }
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: string, req: TsRestRequest<T>) {
+async function uniqueMiddleware(value: string) {
   const [foodsNutrientType, systemNutrientType] = await Promise.all([
     unique({ model: FoodsNutrientType, condition: { field: 'id', value, ci: false } }),
     unique({ model: SystemNutrientType, condition: { field: 'id', value, ci: false } }),
   ]);
 
   if (!foodsNutrientType || !systemNutrientType) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
-      path: 'id',
-    });
+    throw ValidationError.from({ path: 'id', i18n: { type: 'unique._' } });
   }
 }
 
-async function unitIdMiddleware<T extends AppRoute | AppRouter>(unitId: string, req: TsRestRequest<T>) {
+async function unitIdMiddleware(unitId: string) {
   const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
     FoodsNutrientUnit.findByPk(unitId, { attributes: ['id'] }),
     SystemNutrientUnit.findByPk(unitId, { attributes: ['id'] }),
   ]);
 
   if (!foodsNutrientUnit || !systemNutrientUnit) {
-    throw new ValidationError(customTypeValidationMessage('exists._', { req, path: 'unitId' }), {
-      path: 'unitId',
-    });
+    throw ValidationError.from({ path: 'unitId', i18n: { type: 'exists._' } });
   }
 }
 
@@ -64,8 +56,8 @@ export function nutrientType() {
     store: {
       middleware: [permission('nutrient-types', 'nutrient-types:create')],
       handler: async ({ body, req }) => {
-        await uniqueMiddleware(body.id, req);
-        await unitIdMiddleware(body.unitId, req);
+        await uniqueMiddleware(body.id);
+        await unitIdMiddleware(body.unitId);
 
         const nutrientType = await req.scope.cradle.nutrientTypeService.createNutrientType(body);
 
@@ -92,7 +84,7 @@ export function nutrientType() {
     update: {
       middleware: [permission('nutrient-types', 'nutrient-types:edit')],
       handler: async ({ body, params: { nutrientTypeId }, req }) => {
-        await unitIdMiddleware(body.unitId, req);
+        await unitIdMiddleware(body.unitId);
 
         const nutrientType = await req.scope.cradle.nutrientTypeService.updateNutrientType(
           nutrientTypeId,

@@ -1,9 +1,7 @@
 import { initServer } from '@ts-rest/express';
 import { Op } from 'sequelize';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
@@ -234,9 +232,7 @@ export function securable(securable: ModelStatic<Securable>) {
         if (userId) {
           const user = User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } });
           if (!user) {
-            throw new ValidationError(customTypeValidationMessage('exists._', { req, path: 'userId' }), {
-              path: 'userId',
-            });
+            throw ValidationError.from({ path: 'userId', i18n: { type: 'exists._' } });
           }
         }
 

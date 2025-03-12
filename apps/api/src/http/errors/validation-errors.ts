@@ -21,6 +21,11 @@ export type StandardErrorCode = (typeof standardErrorCodes)[number] | ZodIssueCo
 
 export interface ExtendedFieldValidationError extends FieldValidationError {
   code: StandardErrorCode | null;
+  i18n?: {
+    type: string;
+    attr?: string;
+    params?: I18nParams;
+  };
 }
 
 export type ExtendedValidationError =
@@ -29,10 +34,10 @@ export type ExtendedValidationError =
   | UnknownFieldsError
   | ExtendedFieldValidationError;
 
-function getLocalisedTypeErrorMessage(
+export function getLocalisedTypeErrorMessage(
+  i18nService: I18nService,
   type: string,
   attributePath: string,
-  i18nService: I18nService,
   params: I18nParams = {},
 ): string {
   return i18nService.translate(`validation.types.${type}`, {
@@ -52,11 +57,7 @@ function createExtendedFieldValidationError(
       return {
         ...error,
         code: error.msg,
-        msg: getLocalisedTypeErrorMessage(
-          `${error.msg.replace('$', '')}._`,
-          error.path,
-          i18nService,
-        ),
+        msg: getLocalisedTypeErrorMessage(i18nService, `${error.msg.replace('$', '')}._`, error.path),
       };
     default:
       return {

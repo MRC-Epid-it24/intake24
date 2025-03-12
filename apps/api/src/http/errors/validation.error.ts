@@ -1,10 +1,15 @@
-import type { ExtendedFieldValidationError } from '../middleware';
-
+import type { ExtendedFieldValidationError } from './validation-errors';
 import { HttpStatusCode } from 'axios';
+import type { I18nService } from '@intake24/api/services';
+import { getLocalisedTypeErrorMessage } from './validation-errors';
 
 export default class ValidationError extends Error {
   public errors: { [name: string]: ExtendedFieldValidationError } = {};
   public code: HttpStatusCode = 400;
+
+  static from(error?: Partial<ExtendedFieldValidationError> | Partial<ExtendedFieldValidationError>[]) {
+    return new ValidationError('ValidationError', error);
+  }
 
   constructor(
     msg: string,
@@ -42,5 +47,18 @@ export default class ValidationError extends Error {
         this.code = 400;
         break;
     }
+  }
+
+  getErrors(i18nService: I18nService) {
+    return Object.entries(this.errors).reduce<Record<string, ExtendedFieldValidationError>>((acc, [key, error]) => {
+      const { i18n, ...rest } = error;
+
+      acc[key] = rest;
+
+      if (i18n)
+        acc[key].msg = getLocalisedTypeErrorMessage(i18nService, i18n.type, i18n.attr ?? rest.path, i18n.params);
+
+      return acc;
+    }, {});
   }
 }

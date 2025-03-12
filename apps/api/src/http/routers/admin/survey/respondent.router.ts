@@ -1,8 +1,6 @@
 import { initServer } from '@ts-rest/express';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
 import { atob } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
@@ -44,7 +42,7 @@ export function respondent() {
 
         const entry = await UserSurveyAlias.findOne({ attributes: ['id'], where: { surveyId, username: body.username } });
         if (entry)
-          throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'username' }), { path: 'username' });
+          throw ValidationError.from({ path: 'username', i18n: { type: 'unique._' } });
 
         const respondent = await req.scope.cradle.adminSurveyService.createRespondent(surveyId, body);
 

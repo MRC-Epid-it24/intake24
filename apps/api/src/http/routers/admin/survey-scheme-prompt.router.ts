@@ -1,12 +1,8 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
 import { col, fn, Op } from 'sequelize';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { contract } from '@intake24/common/contracts';
 import { isMealSection } from '@intake24/common/surveys';
 import {
@@ -14,7 +10,7 @@ import {
   SurveySchemePrompt,
 } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { surveySchemePromptId, req }: { surveySchemePromptId?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { surveySchemePromptId }: { surveySchemePromptId?: string } = {}) {
   const where: WhereOptions = surveySchemePromptId ? { id: { [Op.ne]: surveySchemePromptId } } : {};
 
   const prompts = await SurveySchemePrompt.findAll({
@@ -23,9 +19,7 @@ async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { su
   });
   const match = prompts.find(p => p.prompt.id === value.id);
   if (match) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'prompt' }), {
-      path: 'prompt',
-    });
+    throw ValidationError.from({ path: 'prompt', i18n: { type: 'unique._' } });
   }
 }
 
@@ -45,10 +39,10 @@ export function surveySchemePrompt() {
     },
     store: {
       middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:create')],
-      handler: async ({ body, req }) => {
+      handler: async ({ body }) => {
         const { prompt } = body;
 
-        await uniqueMiddleware(prompt, { req });
+        await uniqueMiddleware(prompt);
 
         const { id: promptId, name } = prompt;
         const schemePrompt = await SurveySchemePrompt.create({ promptId, name, prompt });
@@ -81,10 +75,10 @@ export function surveySchemePrompt() {
     },
     update: {
       middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:edit')],
-      handler: async ({ body, params: { surveySchemePromptId }, req }) => {
+      handler: async ({ body, params: { surveySchemePromptId } }) => {
         const { prompt } = body;
 
-        await uniqueMiddleware(prompt, { surveySchemePromptId, req });
+        await uniqueMiddleware(prompt, { surveySchemePromptId });
 
         const { id: promptId, name } = prompt;
         const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);

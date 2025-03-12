@@ -1,13 +1,9 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash';
 import { col, fn, Op } from 'sequelize';
-
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { surveySchemeResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
@@ -25,13 +21,11 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { surveySchemeId, req }: { surveySchemeId?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { surveySchemeId }: { surveySchemeId?: string } = {}) {
   const where: WhereOptions = surveySchemeId ? { id: { [Op.ne]: surveySchemeId } } : {};
 
   if (!(await unique({ model: SurveyScheme, condition: { field: 'name', value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'name' }), {
-      path: 'name',
-    });
+    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
   }
 }
 
@@ -69,7 +63,7 @@ export function surveyScheme() {
     store: {
       middleware: [permission('survey-schemes', 'survey-schemes:create')],
       handler: async ({ body, req }) => {
-        await uniqueMiddleware(body.name, { req });
+        await uniqueMiddleware(body.name);
 
         const surveyScheme = await SurveyScheme.create({ ...body, ownerId: req.scope.cradle.user.userId });
 
@@ -99,7 +93,7 @@ export function surveyScheme() {
     patch: {
       middleware: [permission('survey-schemes')],
       handler: async ({ body, params: { surveySchemeId }, req }) => {
-        await uniqueMiddleware(body.name, { surveySchemeId, req });
+        await uniqueMiddleware(body.name, { surveySchemeId });
 
         const {
           aclService,
@@ -141,7 +135,7 @@ export function surveyScheme() {
     put: {
       middleware: [permission('survey-schemes')],
       handler: async ({ body, params: { surveySchemeId }, req }) => {
-        await uniqueMiddleware(body.name, { surveySchemeId, req });
+        await uniqueMiddleware(body.name, { surveySchemeId });
 
         const surveyScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(SurveyScheme, 'edit', {
           where: { id: surveySchemeId },
@@ -176,7 +170,7 @@ export function surveyScheme() {
     copy: {
       middleware: [permission('survey-schemes')],
       handler: async ({ body, params: { surveySchemeId }, req }) => {
-        await uniqueMiddleware(body.name, { req });
+        await uniqueMiddleware(body.name);
 
         const {
           aclService,

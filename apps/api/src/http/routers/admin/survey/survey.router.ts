@@ -1,5 +1,4 @@
 import type { AppRoute, AppRouter } from '@ts-rest/core';
-
 import type { TsRestRequest } from '@ts-rest/express';
 import type { ModelStatic, WhereOptions } from 'sequelize';
 import path from 'node:path';
@@ -7,10 +6,8 @@ import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash';
 import multer from 'multer';
 import { col, fn, Op } from 'sequelize';
-
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
@@ -25,13 +22,11 @@ const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,
 };
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { surveyId, field = 'name', req }: { surveyId?: string; field?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { surveyId, field = 'name' }: { surveyId?: string; field?: string } = {}) {
   const where: WhereOptions = surveyId ? { id: { [Op.ne]: surveyId } } : {};
 
   if (!(await unique({ model: Survey, condition: { field, value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: field }), {
-      path: field,
-    });
+    throw ValidationError.from({ path: field, i18n: { type: 'unique._' } });
   }
 }
 
@@ -56,7 +51,7 @@ async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<R
       );
     }
     catch {
-      throw new ValidationError(customTypeValidationMessage('restricted._', { req, path: key }), { path: key, code: '$restricted' });
+      throw ValidationError.from({ code: '$restricted', path: key, i18n: { type: 'restricted._' } });
     }
   }
 }
@@ -108,8 +103,8 @@ export function survey() {
       middleware: [permission('surveys', 'surveys:create')],
       handler: async ({ body, req }) => {
         await Promise.all([
-          uniqueMiddleware(body.name, { req }),
-          uniqueMiddleware(body.slug, { req, field: 'slug' }),
+          uniqueMiddleware(body.name),
+          uniqueMiddleware(body.slug, { field: 'slug' }),
           checkVisibility(pick(body, ['feedbackSchemeId', 'localeId', 'surveySchemeId']), req),
         ]);
 
@@ -153,7 +148,7 @@ export function survey() {
           user: { userId },
         } = req.scope.cradle;
 
-        await uniqueMiddleware(body.name, { surveyId, req });
+        await uniqueMiddleware(body.name, { surveyId });
 
         const survey = await aclService.findAndCheckRecordAccess(Survey, 'edit', {
           where: { id: surveyId },
@@ -207,7 +202,7 @@ export function survey() {
     put: {
       middleware: [permission('surveys', 'surveys:edit')],
       handler: async ({ body, params: { surveyId }, req }) => {
-        await uniqueMiddleware(body.name, { surveyId, req });
+        await uniqueMiddleware(body.name, { surveyId });
 
         const survey = await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'edit', {
           where: { id: surveyId },
@@ -268,31 +263,15 @@ export function survey() {
         const { type } = body;
 
         if (jobRequiresFile(type)) {
-          if (!file) {
-            throw new ValidationError(
-              customTypeValidationMessage('file._', { req, path: 'params.file' }),
-              { path: 'params.file' },
-            );
-          }
+          if (!file)
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
 
           const res = multerFile.safeParse(file);
-          if (!res.success) {
-            throw new ValidationError(
-              customTypeValidationMessage('file._', { req, path: 'params.file' }),
-              { path: 'params.file' },
-            );
-          }
+          if (!res.success)
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
 
-          if (path.extname(res.data.originalname).toLowerCase() !== '.csv') {
-            throw new ValidationError(
-              customTypeValidationMessage(
-                'file.ext',
-                { req, path: 'params.file' },
-                { ext: 'CSV (comma-delimited)' },
-              ),
-              { path: 'params.file' },
-            );
-          }
+          if (path.extname(res.data.originalname).toLowerCase() !== '.csv')
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file.ext', params: { ext: 'CSV (comma-delimited)' } } });
 
           // @ts-expect-error not narrowed yet
           params.file = res.data.path;

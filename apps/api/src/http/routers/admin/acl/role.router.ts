@@ -1,24 +1,18 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
 import { col, fn, Op } from 'sequelize';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { roleEntryResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { Permission, Role, User } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { roleId, req }: { roleId?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { roleId }: { roleId?: string } = {}) {
   const where: WhereOptions = roleId ? { id: { [Op.ne]: roleId } } : {};
 
   if (!(await unique({ model: Role, condition: { field: 'name', value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'name' }), {
-      path: 'name',
-    });
+    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
   }
 }
 
@@ -39,7 +33,7 @@ export function role() {
     store: {
       middleware: [permission('acl', 'roles', 'roles:create')],
       handler: async ({ body, req }) => {
-        await uniqueMiddleware(body.name, { req });
+        await uniqueMiddleware(body.name);
 
         const { name, displayName, description, permissions } = body;
         const role = await Role.create({ name, displayName, description });

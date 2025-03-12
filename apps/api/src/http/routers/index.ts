@@ -1,16 +1,10 @@
 import type { Router } from 'express';
 import { createExpressEndpoints, initServer } from '@ts-rest/express';
 import passport from 'passport';
-
 import { contract } from '@intake24/common/contracts';
 import { FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
-
-import {
-  isAccountVerified,
-  isSurveyRespondent,
-  registerACLScope,
-  requestValidationErrorHandler,
-} from '../middleware';
+import { requestValidationErrorHandler } from '../errors';
+import { isAccountVerified, isSurveyRespondent, registerACLScope } from '../middleware';
 import admin from './admin';
 import { authentication } from './authentication.router';
 import { category } from './category.router';

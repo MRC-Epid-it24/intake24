@@ -1,13 +1,9 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
 import multer from 'multer';
 import { col, fn, Op } from 'sequelize';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { imageResponseCollection } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
@@ -15,14 +11,11 @@ import { contract } from '@intake24/common/contracts';
 import { imageMulterFile } from '@intake24/common/types/http/admin';
 import { ImageMap } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { imageMapId, req }: { imageMapId?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { imageMapId }: { imageMapId?: string } = {}) {
   const where: WhereOptions = imageMapId ? { id: { [Op.ne]: imageMapId } } : {};
 
   if (!(await unique({ model: ImageMap, condition: { field: 'id', value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
-      code: '$unique',
-      path: 'id',
-    });
+    throw ValidationError.from({ code: '$unique', path: 'id', i18n: { type: 'unique._' } });
   }
 }
 
@@ -51,15 +44,11 @@ export function imageMap() {
         upload.single('baseImage'),
       ],
       handler: async ({ body, file, req }) => {
-        await uniqueMiddleware(body.id, { req });
+        await uniqueMiddleware(body.id);
 
         const res = imageMulterFile.safeParse(file);
-        if (!res.success) {
-          throw new ValidationError(
-            customTypeValidationMessage('file._', { req, path: 'baseImage' }),
-            { path: 'baseImage' },
-          );
-        }
+        if (!res.success)
+          throw ValidationError.from({ path: 'baseImage', i18n: { type: 'file._' } });
 
         const { userId } = req.scope.cradle.user;
 
@@ -101,12 +90,8 @@ export function imageMap() {
         const { userId } = req.scope.cradle.user;
 
         const res = imageMulterFile.safeParse(file);
-        if (!res.success) {
-          throw new ValidationError(
-            customTypeValidationMessage('file._', { req, path: 'baseImage' }),
-            { path: 'baseImage' },
-          );
-        }
+        if (!res.success)
+          throw ValidationError.from({ path: 'baseImage', i18n: { type: 'file._' } });
 
         await req.scope.cradle.imageMapService.updateImage(imageMapId, res.data, userId);
         const imageMap = await req.scope.cradle.portionSizeService.getImageMap(imageMapId);

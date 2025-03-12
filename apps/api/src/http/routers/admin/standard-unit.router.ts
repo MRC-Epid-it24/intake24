@@ -1,11 +1,7 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import { initServer } from '@ts-rest/express';
 import { col, fn, literal, where } from 'sequelize';
-
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import {
@@ -28,11 +24,9 @@ async function getLocaleMap(code: string[]) {
   }, {});
 }
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { req }: { req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any) {
   if (!(await unique({ model: StandardUnit, condition: { field: 'id', value } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
-      path: 'id',
-    });
+    throw ValidationError.from({ path: 'id', i18n: { type: 'unique._' } });
   }
 }
 
@@ -52,8 +46,8 @@ export function standardUnit() {
     },
     store: {
       middleware: [permission('standard-units', 'standard-units:create')],
-      handler: async ({ body, req }) => {
-        await uniqueMiddleware(body.id, { req });
+      handler: async ({ body }) => {
+        await uniqueMiddleware(body.id);
 
         const standardUnit = await StandardUnit.create(body);
 

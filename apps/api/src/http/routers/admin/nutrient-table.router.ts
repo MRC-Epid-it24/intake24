@@ -1,25 +1,18 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-
-import type { TsRestRequest } from '@ts-rest/express';
 import path from 'node:path';
 import { initServer } from '@ts-rest/express';
 import multer from 'multer';
 import { col, fn } from 'sequelize';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { multerFile } from '@intake24/common/types/http';
 import { FoodsNutrientType, NutrientTable } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: string, req: TsRestRequest<T>) {
+async function uniqueMiddleware(value: string) {
   if (!(await unique({ model: NutrientTable, condition: { field: 'id', value } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'id' }), {
-      path: 'id',
-    });
+    throw ValidationError.from({ path: 'id', i18n: { type: 'unique._' } });
   }
 }
 
@@ -42,7 +35,7 @@ export function nutrientTable() {
     store: {
       middleware: [permission('nutrient-tables', 'nutrient-tables:create')],
       handler: async ({ body, req }) => {
-        await uniqueMiddleware(body.id, req);
+        await uniqueMiddleware(body.id);
 
         const nutrientTable = await req.scope.cradle.nutrientTableService.createTable(body);
 
@@ -93,29 +86,16 @@ export function nutrientTable() {
         const { userId } = req.scope.cradle.user;
 
         if (!file) {
-          throw new ValidationError(
-            customTypeValidationMessage('file._', { req, path: 'params.file' }),
-            { path: 'params.file' },
-          );
+          throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
         }
 
         const res = multerFile.safeParse(file);
         if (!res.success) {
-          throw new ValidationError(
-            customTypeValidationMessage('file._', { req, path: 'params.file' }),
-            { path: 'params.file' },
-          );
+          throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
         }
 
         if (path.extname(res.data.originalname).toLowerCase() !== '.csv') {
-          throw new ValidationError(
-            customTypeValidationMessage(
-              'file.ext',
-              { req, path: 'params.file' },
-              { ext: 'CSV (comma-delimited)' },
-            ),
-            { path: 'params.file' },
-          );
+          throw ValidationError.from({ path: 'params.file', i18n: { type: 'file.ext', params: { ext: 'CSV (comma-delimited)' } } });
         }
 
         const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });

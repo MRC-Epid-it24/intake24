@@ -1,9 +1,7 @@
 import { initServer } from '@ts-rest/express';
 import multer from 'multer';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { imageResponseCollection } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
@@ -43,12 +41,8 @@ export function asServedImage() {
         const { userId } = req.scope.cradle.user;
 
         const res = imageMulterFile.safeParse(file);
-        if (!res.success) {
-          throw new ValidationError(
-            customTypeValidationMessage('file._', { req, path: 'image' }),
-            { path: 'image' },
-          );
-        }
+        if (!res.success)
+          throw ValidationError.from({ path: 'image', i18n: { type: 'file._' } });
 
         const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
         if (!asServedSet)

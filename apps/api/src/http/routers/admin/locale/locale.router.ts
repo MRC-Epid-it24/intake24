@@ -1,5 +1,4 @@
 import type { AppRoute, AppRouter } from '@ts-rest/core';
-
 import type { TsRestRequest } from '@ts-rest/express';
 import type { ModelStatic, WhereOptions } from 'sequelize';
 import path from 'node:path';
@@ -7,11 +6,9 @@ import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash';
 import multer from 'multer';
 import { col, fn } from 'sequelize';
-
 import languageBackends from '@intake24/api/food-index/language-backends';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
@@ -21,14 +18,11 @@ import { multerFile } from '@intake24/common/types/http';
 import type { PaginateOptions } from '@intake24/db';
 import { FoodsLocale, Language, Op, securableScope, SystemLocale } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { localeId, field, req }: { localeId?: string; field: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { localeId, field }: { localeId?: string; field: string }) {
   const where: WhereOptions = localeId ? { id: { [Op.ne]: localeId } } : {};
 
   if (!(await unique({ model: SystemLocale, condition: { field, value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: field }), {
-      code: '$unique',
-      path: field,
-    });
+    throw ValidationError.from({ code: '$unique', path: field, i18n: { type: 'unique._' } });
   }
 }
 
@@ -53,7 +47,7 @@ async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<R
       );
     }
     catch {
-      throw new ValidationError(customTypeValidationMessage('restricted._', { req, path: key }), { path: key, code: '$restricted' });
+      throw ValidationError.from({ code: '$restricted', path: key, i18n: { type: 'restricted._' } });
     }
   }
 }
@@ -95,9 +89,9 @@ export function locale() {
       middleware: [permission('locales', 'locales:create')],
       handler: async ({ body, req }) => {
         await Promise.all([
-          uniqueMiddleware(body.code, { field: 'code', req }),
-          uniqueMiddleware(body.englishName, { field: 'englishName', req }),
-          uniqueMiddleware(body.localName, { field: 'localName', req }),
+          uniqueMiddleware(body.code, { field: 'code' }),
+          uniqueMiddleware(body.englishName, { field: 'englishName' }),
+          uniqueMiddleware(body.localName, { field: 'localName' }),
           checkVisibility(pick(body, ['respondentLanguageId', 'adminLanguageId', 'prototypeLocaleId']), req),
         ]);
 
@@ -159,8 +153,8 @@ export function locale() {
       middleware: [permission('locales')],
       handler: async ({ body, params: { localeId }, req }) => {
         await Promise.all([
-          uniqueMiddleware(body.englishName, { field: 'englishName', localeId, req }),
-          uniqueMiddleware(body.localName, { field: 'localName', localeId, req }),
+          uniqueMiddleware(body.englishName, { field: 'englishName', localeId }),
+          uniqueMiddleware(body.localName, { field: 'localName', localeId }),
           checkVisibility(pick(body, ['respondentLanguageId', 'adminLanguageId', 'prototypeLocaleId']), req),
         ]);
 
@@ -230,31 +224,15 @@ export function locale() {
         const { type } = body;
 
         if (jobRequiresFile(type)) {
-          if (!file) {
-            throw new ValidationError(
-              customTypeValidationMessage('file._', { req, path: 'params.file' }),
-              { path: 'params.file' },
-            );
-          }
+          if (!file)
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
 
           const res = multerFile.safeParse(file);
-          if (!res.success) {
-            throw new ValidationError(
-              customTypeValidationMessage('file._', { req, path: 'params.file' }),
-              { path: 'params.file' },
-            );
-          }
+          if (!res.success)
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
 
-          if (path.extname(res.data.originalname).toLowerCase() !== '.csv') {
-            throw new ValidationError(
-              customTypeValidationMessage(
-                'file.ext',
-                { req, path: 'params.file' },
-                { ext: 'CSV (comma-delimited)' },
-              ),
-              { path: 'params.file' },
-            );
-          }
+          if (path.extname(res.data.originalname).toLowerCase() !== '.csv')
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file.ext', params: { ext: 'CSV (comma-delimited)' } } });
 
           // @ts-expect-error not narrowed yet
           params.file = res.data.path;

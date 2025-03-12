@@ -1,10 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-
-import {
-  createExtendedValidationError,
-  getValidationHttpStatus,
-} from '@intake24/api/http/middleware/validation-errors';
+import { createExtendedValidationError, getValidationHttpStatus } from '@intake24/api/http/errors';
 
 export default (req: Request, res: Response, next: NextFunction): void => {
   const { i18nService } = req.scope.cradle;

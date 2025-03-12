@@ -2,21 +2,19 @@ import type { Express, NextFunction, Request, Response } from 'express';
 import { MulterError } from 'multer';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
-
 import type { Ops } from '@intake24/api/app';
 import { IndexNotReadyError } from '@intake24/api/food-index';
 import { DatabaseError } from '@intake24/db';
-
 import {
   ApplicationError,
   ConflictError,
   ForbiddenError,
   InternalServerError,
+  mapZodIssues,
   NotFoundError,
   UnauthorizedError,
   ValidationError,
 } from '../errors';
-import { mapZodIssues } from './validation-errors';
 
 export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -66,8 +64,8 @@ export default (app: Express, { logger }: Ops): void => {
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ValidationError) {
-      const { errors, message, code } = err;
-      res.status(code).json({ errors, message });
+      const { message, code } = err;
+      res.status(code).json({ errors: err.getErrors(req.scope.cradle.i18nService), message });
       return;
     }
     next(err);

@@ -1,23 +1,17 @@
-import type { AppRoute, AppRouter } from '@ts-rest/core';
-import type { TsRestRequest } from '@ts-rest/express';
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
 import { col, fn, Op } from 'sequelize';
-
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
-import { customTypeValidationMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { Task } from '@intake24/db';
 
-async function uniqueMiddleware<T extends AppRoute | AppRouter>(value: any, { taskId, req }: { taskId?: string; req: TsRestRequest<T> }) {
+async function uniqueMiddleware(value: any, { taskId }: { taskId?: string } = {}) {
   const where: WhereOptions = taskId ? { id: { [Op.ne]: taskId } } : {};
 
   if (!(await unique({ model: Task, condition: { field: 'name', value }, options: { where } }))) {
-    throw new ValidationError(customTypeValidationMessage('unique._', { req, path: 'name' }), {
-      path: 'name',
-    });
+    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
   }
 }
 
@@ -38,7 +32,7 @@ export function task() {
     store: {
       middleware: [permission('tasks', 'tasks:create')],
       handler: async ({ body, req }) => {
-        await uniqueMiddleware(body.name, { req });
+        await uniqueMiddleware(body.name);
 
         const task = await Task.create(body);
         await req.scope.cradle.scheduler.tasks.updateTaskInQueue(task);
@@ -61,7 +55,7 @@ export function task() {
     update: {
       middleware: [permission('tasks', 'tasks:edit')],
       handler: async ({ body, params: { taskId }, req }) => {
-        await uniqueMiddleware(body.name, { taskId, req });
+        await uniqueMiddleware(body.name, { taskId });
 
         const task = await Task.findByPk(taskId);
         if (!task)
