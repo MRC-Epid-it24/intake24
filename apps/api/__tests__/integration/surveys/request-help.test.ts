@@ -31,7 +31,7 @@ export default () => {
   });
 
   it('should return 400 for missing input data', async () => {
-    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'message'], {
+    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'message', 'email'], {
       bearer: 'respondent',
     });
   });
@@ -47,7 +47,7 @@ export default () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,
-      ['name', 'message', 'email', 'phoneCountry'],
+      ['name', 'email', 'phoneCountry'],
       {
         bearer: 'respondent',
         input: {
@@ -55,6 +55,23 @@ export default () => {
           email: 'notAnEmailAddress',
           phone: 'notAPhoneNumber',
           phoneCountry: 'notCountryCode',
+        },
+      },
+    );
+  });
+
+  it('should return 400 for invalid input data (phone)', async () => {
+    await suite.sharedTests.assertInvalidInput(
+      'post',
+      url,
+      ['phone'],
+      {
+        bearer: 'respondent',
+        input: {
+          name: 'John',
+          email: 'test@example.com',
+          phone: 'notAPhoneNumber',
+          phoneCountry: 'GB',
         },
       },
     );

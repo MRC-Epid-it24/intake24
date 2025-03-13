@@ -109,33 +109,25 @@ export type SurveyUserSessionResponse = z.infer<typeof surveyUserSessionResponse
 
 export const surveyHelpRequest = z
   .object({
-    name: z.string(),
+    name: z.string().nullish(),
     email: z.string().email().toLowerCase().nullish(),
     phone: z.string().nullish(),
     phoneCountry: z
       .string()
       .nullish()
       .refine(value => (value ? isIn(value, getSupportedRegionCodes()) : true)),
-    message: z.string().max(500),
+    message: z.string().max(500).nullish(),
   })
   .refine(
     (data) => {
-      if (!data.email && !data.phone)
-        return false;
+      if (!data.phone)
+        return true;
 
-      if (data.phone) {
-        if (!data.phoneCountry)
-          return false;
-
-        if (!parsePhoneNumber(data.phone, { regionCode: data.phoneCountry }).valid)
-          return false;
-      }
-
-      return true;
+      return parsePhoneNumber(data.phone, { regionCode: data.phoneCountry ?? undefined }).valid;
     },
     {
-      message: 'Valid email or phone is required',
-      path: ['email'],
+      message: 'Invalid phone format',
+      path: ['phone'],
     },
   )
   .transform((data) => {

@@ -1,20 +1,14 @@
+import type { ExtendedFieldValidationError } from '../errors';
 import { initServer } from '@ts-rest/express';
 import ms from 'ms';
-
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
-import { NotFoundError } from '@intake24/api/http/errors';
+import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import type { SinglePrompt } from '@intake24/common/prompts';
 import type { TokenPayload } from '@intake24/common/security';
-import type {
-  SurveyStatus,
-} from '@intake24/common/surveys';
-import {
-  flattenSchemeWithSection,
-  groupSchemeMultiPrompts,
-  isMealSection,
-} from '@intake24/common/surveys';
+import type { SurveyStatus } from '@intake24/common/surveys';
+import { flattenSchemeWithSection, groupSchemeMultiPrompts, isMealSection } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
 import { Survey } from '@intake24/db';
 
@@ -205,6 +199,29 @@ export function surveyRespondent() {
     },
     requestHelp: async ({ body, params: { slug: surveySlug }, req }) => {
       const { userId } = req.scope.cradle.user;
+
+      const survey = await Survey.findBySlug(surveySlug, {
+        attributes: ['id', 'surveySchemeOverrides'],
+        include: [{ association: 'surveyScheme', attributes: ['settings'] }],
+      });
+      if (!survey?.surveyScheme)
+        throw new NotFoundError();
+
+      const settings = { ...survey.surveyScheme.settings, ...survey.surveySchemeOverrides.settings };
+
+      const errors = settings.help.required.reduce<Partial<ExtendedFieldValidationError>[]>((acc, field) => {
+        if (field !== 'email|phone' && !body[field]) {
+          acc.push({ path: field, i18n: { type: 'string._' } });
+          return acc;
+        }
+
+        if (!body.email && !body.phone)
+          acc.push({ path: 'email', i18n: { type: 'string._', attr: 'email|phone' } });
+
+        return acc;
+      }, []);
+      if (errors.length)
+        throw ValidationError.from(errors);
 
       await req.scope.cradle.surveyService.requestHelp({ surveySlug, userId, ...body });
 
