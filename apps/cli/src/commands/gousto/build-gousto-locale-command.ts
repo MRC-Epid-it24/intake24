@@ -136,13 +136,13 @@ function buildLocalFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFile
         description: 'use_a_standard_portion',
         units: [{
           name: 'gousto_standard_portion',
-          weight: 100,
+          weight: 1,
           omitFoodDescription: false,
         }],
         useForRecipes: false,
       }],
       alternativeNames: {},
-      localDescription: recipeData.recipeTitle,
+      localDescription: `Gousto ${recipeData.recipeTitle}`,
       tags: ['gousto-recipe'],
       thumbnailPath: getThumbnailImagePath(thumbnailFileNames, recipeId, usedFileNames),
     };

@@ -13,6 +13,15 @@
       :rounded="dialog ? 'pill' : undefined"
       @focus="openInDialog"
     />
+    <v-switch
+      v-if="rootCategory && rootCategoryToggleable"
+      v-model="limitToRootCategory"
+      class="root-category-toggle"
+      dense
+      hide-details="auto"
+      :label="$t('prompts.foodSearch.rootCategoryToggle', { category: rootCategoryName })"
+    />
+    <v-alert v-if="rootCategory && !rootCategoryToggleable" class="mb-2 pa-2" :text="$t('prompts.foodSearch.rootCategory', { category: rootCategoryName })" type="info" />
     <template v-if="recipeBuilderToggle">
       <v-btn
         v-for="recipeBuilderFood in recipeBuilderFoods"
@@ -152,6 +161,7 @@ import type { RecipeFood } from '@intake24/common/types';
 import type {
   CategoryContents,
   CategoryHeader,
+
   FoodHeader,
   FoodSearchResponse,
 } from '@intake24/common/types/http';
@@ -180,6 +190,11 @@ const props = defineProps({
   },
   rootCategory: {
     type: String,
+  },
+  rootCategoryToggleable: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
   includeHidden: {
     type: Boolean,
@@ -234,6 +249,7 @@ const recipeBuilderToggle = ref(false);
 const tab = ref(0);
 const searchCount = ref(1);
 const percentScrolled = ref(0);
+const rootCategoryName = ref('...');
 
 function onScroll(event: Event) {
   if (event.target instanceof Document) {
@@ -294,6 +310,8 @@ const promptI18n = computed(() => {
     ),
   };
 });
+
+const limitToRootCategory = ref(true);
 
 const rootHeader = computed(() => ({
   code: props.rootCategory ?? '',
@@ -372,7 +390,7 @@ async function browseCategory(categoryCode: string | undefined, makeHistoryEntry
 }
 
 function browseRootCategory() {
-  browseCategory(props.rootCategory, true);
+  browseCategory(limitToRootCategory.value ? props.rootCategory : undefined, true);
 }
 
 async function recipeBuilderDetected(foods: FoodHeader[]) {
@@ -396,7 +414,7 @@ async function search() {
     if (props.surveySlug !== undefined) {
       searchResults.value = await foodsService.search(props.surveySlug, searchTerm.value, {
         recipe: false,
-        category: props.rootCategory,
+        category: limitToRootCategory.value ? props.rootCategory : undefined,
         hidden: props.includeHidden,
       });
       searchResults.value.foods = searchResults.value.foods.filter(
@@ -472,6 +490,10 @@ function navigateBack() {
 }
 
 onMounted(async () => {
+  if (props.rootCategory !== undefined) {
+    categoriesService.header(props.localeId, props.rootCategory).then(header => rootCategoryName.value = header.name);
+  }
+
   if (searchTerm.value) {
     await search();
     tab.value = 1;
@@ -482,7 +504,7 @@ onMounted(async () => {
 });
 
 watchDebounced(
-  searchTerm,
+  [searchTerm, limitToRootCategory],
   async () => {
     emit('update:modelValue', searchTerm.value ?? '');
 
@@ -507,4 +529,8 @@ watchDebounced(
 );
 </script>
 
-<style lang='scss'></style>
+<style lang='scss'>
+.root-category-toggle {
+  margin-top: -1em;
+}
+</style>
