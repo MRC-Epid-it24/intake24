@@ -68,7 +68,7 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
         {
           association: 'survey',
           attributes: ['id', 'slug', 'name', 'supportEmail'],
-          where: { slug: surveySlug },
+          where: { slug: { [UserSurveyAlias.op('ciEq')]: surveySlug } },
         },
       ],
     });

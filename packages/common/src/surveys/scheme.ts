@@ -1,17 +1,8 @@
 import type { Condition, Prompt, SinglePrompt } from '../prompts';
 import type { Meal } from './meals';
-
 import { isLocale } from 'validator';
 import { z } from 'zod';
-import {
-  basePrompt,
-
-  CurrentPromptVersion,
-
-  prompt,
-
-  singlePrompt,
-} from '../prompts';
+import { basePrompt, CurrentPromptVersion, prompt, singlePrompt } from '../prompts';
 
 export const schemeTypes = ['default'] as const;
 export type SchemeType = (typeof schemeTypes)[number];
@@ -19,11 +10,20 @@ export type SchemeType = (typeof schemeTypes)[number];
 export const recallFlows = ['1-pass', '2-pass'] as const;
 export type RecallFlow = (typeof recallFlows)[number];
 
+export const helpAvailableFields = ['name', 'email', 'phone', 'message'] as const;
+export type HelpAvailableField = (typeof helpAvailableFields)[number];
+export const helpRequiredFields = [...helpAvailableFields, 'email|phone'] as const;
+export type HelpRequiredField = (typeof helpRequiredFields)[number];
+
 export const schemeSettings = z.object({
   type: z.enum(schemeTypes),
   flow: z.enum(recallFlows),
   recallDate: z.coerce.number().int().nullable(),
   languages: z.string().refine(val => isLocale(val)).array(),
+  help: z.object({
+    available: z.enum(helpAvailableFields).array(),
+    required: z.enum(helpRequiredFields).array(),
+  }),
 });
 export type SchemeSettings = z.infer<typeof schemeSettings>;
 
@@ -32,6 +32,10 @@ export const defaultSchemeSettings: SchemeSettings = {
   flow: '2-pass',
   recallDate: null,
   languages: [],
+  help: {
+    available: ['name', 'email', 'phone', 'message'],
+    required: ['name', 'email|phone', 'message'],
+  },
 };
 
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;

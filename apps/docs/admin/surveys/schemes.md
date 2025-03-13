@@ -20,22 +20,50 @@ Edit tab allows to modify selected survey scheme.
 
 ### Settings
 
-- `Type` - Placeholder at the moment for future to allow to define various types of survey schemes
+#### Type
 
-- `Flow` - Recall flow, valid options are `1-pass` or `2-pass` (default)
+Placeholder at the moment for future to allow to define various types of survey schemes
 
-  - `1-pass` - Flow goes through each meal including foods portion size estimation in order to complete the meal
-  - `2-pass` - Flow goes through each meal two times
-    - first pass - Flow goes through each meal to collect meal info and foods (without portion size estimation)
-    - second pass - Flow goes through each meal to collect portion size estimation
+#### Flow
 
-- `Recall date offset` - Recall date offset in whole days
+Recall flow, valid options are `1-pass` or `2-pass` (default).
 
-  - `empty` - survey won't record recall date
-  - `integer` - survey records recall date with specified offset from start of survey (e.g. `-1` for yesterday)
-  - Respondent can override / nominate their own recall date if [`recall date prompt`](/admin/surveys/prompt-types#recall-date-prompt) is included in the scheme
+- `1-pass` - Flow goes through each meal including foods portion size estimation in order to complete the meal
+- `2-pass` - Flow goes through each meal two times
 
-- `Languages` - Languages participants can select to complete the survey in
+  - `first pass` - Flow goes through each meal to collect meal info and foods (without portion size estimation)
+  - `second pass` - Flow goes through each meal to collect portion size estimation
+
+#### Recall date offset
+
+Recall date offset in whole days.
+
+- `empty` - survey won't record recall date
+- `integer` - survey records recall date with specified offset from start of survey (e.g. `-1` for yesterday)
+- Respondent can override / nominate their own recall date if [`recall date prompt`](/admin/surveys/prompt-types#recall-date-prompt) is included in the scheme
+
+#### Languages
+
+Languages participants can select to complete the survey in.
+
+#### Help
+
+Help form configuration for the survey.
+
+- `available fields` - List of fields available in help form
+  - `name` - Name field
+  - `email` - Email field
+  - `phone` - Phone field
+  - `message` - Message field
+
+If no fields are selected, help form will be disabled.
+
+- `required fields` - List of required fields in help form
+  - `name` - Name field is required
+  - `email` - Email field is required
+  - `phone` - Phone field is required
+  - `email|phone` - Email or Phone field is required
+  - `message` - Message field is required
 
 ### Default meals
 

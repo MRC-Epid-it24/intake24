@@ -3,7 +3,12 @@ import orderBy from 'lodash/orderBy';
 import { actionTypes as actionTypeRefs, conditionOpCodes, layoutTypes } from '@intake24/common/prompts';
 import type { ConditionOpCode } from '@intake24/common/prompts';
 import { recordVisibilities } from '@intake24/common/security';
-import { recallFlows as recallFlowRefs, schemeTypes as schemeTypeRefs } from '@intake24/common/surveys';
+import {
+  helpAvailableFields as helpAvailableFieldRefs,
+  helpRequiredFields as helpRequiredFieldRefs,
+  recallFlows as recallFlowRefs,
+  schemeTypes as schemeTypeRefs,
+} from '@intake24/common/surveys';
 import { colors as themeColors, variants as themeVariants } from '@intake24/common/theme';
 import { textDirections as textDirectionRefs } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
@@ -75,11 +80,22 @@ export function useSelects() {
     title: t(`survey-schemes.settings.flows.${value}`),
   }));
 
+  const helpAvailableFields = helpAvailableFieldRefs.map(value => ({
+    value,
+    title: t(`survey-schemes.settings.help.${value}`),
+  }));
+  const helpRequiredFields = helpRequiredFieldRefs.map(value => ({
+    value,
+    title: t(`survey-schemes.settings.help.${value}`),
+  }));
+
   return {
     actions,
     colors,
     conditionOps,
     flags,
+    helpAvailableFields,
+    helpRequiredFields,
     layouts,
     orientations,
     recallFlows,
