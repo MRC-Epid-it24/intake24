@@ -50,8 +50,11 @@ export const staticFoodFlags = [
   'disable-general-associated-foods',
 ] as const;
 export type StaticFoodFlag = (typeof staticFoodFlags)[number];
-export const dynamicFoodFlag = z.custom<`${string}-acknowledged` | `${string}-complete` | `search-category:${string}`>((val) => {
-  return typeof val === 'string' && (val.startsWith('search-category') || /-(?:acknowledged|complete)$/.test(val));
+export const dynamicFoodFlag = z.custom<`${string}-acknowledged`
+  | `${string}-complete`
+  | `search-category:${string}`
+  | `search-category-toggle:${string}`>((val) => {
+  return typeof val === 'string' && (val.startsWith('search-category') || val.startsWith('search-category-toggle') || /-(?:acknowledged|complete)$/.test(val));
 });
 export type DynamicFoodFlag = z.infer<typeof dynamicFoodFlag>;
 export const foodFlags = z.union([z.enum(staticFoodFlags), dynamicFoodFlag, z.string()]);

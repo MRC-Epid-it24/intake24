@@ -40,5 +40,13 @@ export function category() {
 
       return { status: 200, body: categoryContents };
     },
+    header: async ({ params, req }) => {
+      const { localeId, code } = params;
+
+      const categoryHeader
+        = await req.scope.cradle.categoryContentsService.getCategoryHeader(localeId, null, code);
+
+      return { status: 200, body: categoryHeader };
+    },
   });
 }
