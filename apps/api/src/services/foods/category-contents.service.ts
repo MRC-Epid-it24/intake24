@@ -225,6 +225,7 @@ function categoryContentsService({
 
   return {
     getCategoryContents,
+    getCategoryHeader,
     getRootCategories,
     searchCategory,
   };
