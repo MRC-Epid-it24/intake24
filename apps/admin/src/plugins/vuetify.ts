@@ -59,15 +59,19 @@ export default createVuetify({
       },
     },
     VSelect: {
+      hideDetails: 'auto',
       variant: 'outlined',
     },
     VSwitch: {
+      hideDetails: 'auto',
       color: 'primary',
     },
     VTextField: {
+      hideDetails: 'auto',
       variant: 'outlined',
     },
     VTextarea: {
+      hideDetails: 'auto',
       variant: 'outlined',
     },
     VTimePicker: {

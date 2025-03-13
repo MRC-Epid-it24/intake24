@@ -144,11 +144,11 @@ export const SurveyFeedbackNotification = z.object({
 export const SurveyHelpRequestNotification = z.object({
   surveySlug: z.string(),
   userId: z.string(),
-  name: z.string(),
+  name: z.string().nullish(),
   email: z.string().nullish(),
   phone: z.string().nullish(),
   phoneCountry: z.string().nullish(),
-  message: z.string(),
+  message: z.string().nullish(),
 });
 export const SurveyNutrientsRecalculation = z.object({
   surveyId: z.string(),

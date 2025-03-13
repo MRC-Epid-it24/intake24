@@ -26,6 +26,16 @@
       "1-pass": "1-pass",
       "2-pass": "2-pass"
     },
+    "help": {
+      "_": "Help options",
+      "available": "Available fields",
+      "required": "Required fields",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "email|phone": "Email or phone",
+      "message": "Message"
+    },
     "recallDate": "Recall date offset",
     "languages": "Allowed languages"
   },

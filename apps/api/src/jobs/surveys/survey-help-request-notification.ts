@@ -48,9 +48,8 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
     const { survey, alias } = info;
 
     const to = await this.resolveRecipients(survey);
-
     if (!to.length) {
-      this.logger.warn(`SurveyHelpRequestNotification: no survey or global support users found.`);
+      this.logger.warn('No survey or global support users found.');
       return;
     }
 
@@ -68,16 +67,13 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
         {
           association: 'survey',
           attributes: ['id', 'slug', 'name', 'supportEmail'],
-          where: { slug: surveySlug },
+          where: { slug: { [UserSurveyAlias.op('ciEq')]: surveySlug } },
         },
       ],
     });
 
-    if (!alias || !alias.survey) {
-      this.logger.warn(
-        `SurveyHelpRequestNotification: could not find user alias for survey: ${surveySlug}, userId: ${userId}`,
-      );
-
+    if (!alias?.survey) {
+      this.logger.warn(`Could not find user alias for survey: ${surveySlug}, userId: ${userId}`);
       return null;
     }
 

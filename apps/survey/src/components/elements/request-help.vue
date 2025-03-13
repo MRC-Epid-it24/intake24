@@ -9,7 +9,6 @@
       <slot name="activator" v-bind="{ props }">
         <v-btn
           color="grey"
-          :disabled="disabled"
           :title="$t('common.help.title')"
           variant="flat"
           v-bind="props"
@@ -29,7 +28,7 @@
             {{ $t('common.help.text') }}
           </p>
           <v-row>
-            <v-col cols="12">
+            <v-col v-if="settings.available.includes('name')" cols="12">
               <v-text-field
                 v-model="form.name"
                 :error-messages="errors.get('name')"
@@ -39,7 +38,7 @@
                 prepend-inner-icon="fas fa-user"
               />
             </v-col>
-            <v-col cols="12">
+            <v-col v-if="settings.available.includes('email')" cols="12">
               <v-text-field
                 v-model="form.email"
                 :error-messages="errors.get('email')"
@@ -49,38 +48,40 @@
                 prepend-inner-icon="fas fa-envelope"
               />
             </v-col>
-            <v-col cols="4">
-              <v-autocomplete
-                v-model="form.phoneCountry"
-                hide-details="auto"
-                :items="regionCodes"
-                name="phoneCountry"
-                single-line
-              >
-                <template #item="{ props, item }">
-                  <v-list-item v-bind="props" :title="item.raw.text">
-                    <template #prepend>
-                      <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
-                  {{ item.raw.countryCode }}
-                </template>
-              </v-autocomplete>
-            </v-col>
-            <v-col cols>
-              <v-text-field
-                v-model="form.phone"
-                :error-messages="errors.get('phone')"
-                hide-details="auto"
-                :label="$t('common.phone')"
-                name="phone"
-                prepend-inner-icon="fas fa-phone"
-              />
-            </v-col>
-            <v-col cols="12">
+            <template v-if="settings.available.includes('phone')">
+              <v-col cols="4">
+                <v-autocomplete
+                  v-model="form.phoneCountry"
+                  hide-details="auto"
+                  :items="regionCodes"
+                  name="phoneCountry"
+                  single-line
+                >
+                  <template #item="{ props, item }">
+                    <v-list-item v-bind="props" :title="item.raw.text">
+                      <template #prepend>
+                        <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
+                      </template>
+                    </v-list-item>
+                  </template>
+                  <template #selection="{ item }">
+                    <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
+                    {{ item.raw.countryCode }}
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols>
+                <v-text-field
+                  v-model="form.phone"
+                  :error-messages="errors.get('phone')"
+                  hide-details="auto"
+                  :label="$t('common.phone')"
+                  name="phone"
+                  prepend-inner-icon="fas fa-phone"
+                />
+              </v-col>
+            </template>
+            <v-col v-if="settings.available.includes('message')" cols="12">
               <v-textarea
                 v-model="form.message"
                 :counter="500"
@@ -115,106 +116,92 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import type { PropType } from 'vue';
 import { getCountryCodeForRegionCode, getSupportedRegionCodes } from 'awesome-phonenumber';
 import axios, { HttpStatusCode } from 'axios';
-import { defineComponent, ref } from 'vue';
-
+import { ref } from 'vue';
+import type { SchemeSettings } from '@intake24/common/surveys';
 import type { SurveyHelpRequest } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-
 import { surveyService } from '../../services';
 import { useMessages } from '../../stores';
 
-export default defineComponent({
-  name: 'RequestHelp',
-
-  props: {
-    surveyId: {
-      type: String,
-      required: true,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  surveyId: {
+    type: String,
+    required: true,
   },
-
-  emits: ['cancel'],
-
-  setup(props, { emit }) {
-    const { i18n: { t } } = useI18n();
-
-    const regionCodes = getSupportedRegionCodes().map((code) => {
-      const countryCode = `+${getCountryCodeForRegionCode(code)}`;
-
-      return {
-        text: `${t(`flags.${code.toLowerCase()}`)} (${countryCode})`,
-        value: code,
-        countryCode,
-      };
-    });
-
-    const dialog = ref(false);
-    const errors = ref(new Errors());
-
-    const createForm = (): SurveyHelpRequest => ({
-      name: '',
-      email: '',
-      phone: '',
-      phoneCountry: window.navigator.language.split('-')[1] ?? 'GB',
-      message: '',
-    });
-
-    const form = ref(createForm());
-
-    const reset = () => {
-      form.value = createForm();
-    };
-
-    const close = () => {
-      dialog.value = false;
-    };
-
-    const cancel = () => {
-      close();
-      emit('cancel');
-    };
-
-    const requestHelp = async () => {
-      const { surveyId } = props;
-
-      try {
-        await surveyService.requestHelp(surveyId, form.value);
-        useMessages().info(t('common.help.sent'));
-        reset();
-        close();
-      }
-      catch (err) {
-        if (
-          axios.isAxiosError(err)
-          && err.response?.status === HttpStatusCode.BadRequest
-          && 'errors' in err.response.data
-        ) {
-          errors.value.record(err.response.data.errors);
-          return;
-        }
-
-        throw err;
-      }
-    };
-
-    return {
-      dialog,
-      createForm,
-      form,
-      errors,
-      cancel,
-      requestHelp,
-      getCountryCodeForRegionCode,
-      regionCodes,
-    };
+  settings: {
+    type: Object as PropType<SchemeSettings['help']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['cancel']);
+
+const { i18n: { t } } = useI18n();
+
+const regionCodes = getSupportedRegionCodes().map((code) => {
+  const countryCode = `+${getCountryCodeForRegionCode(code)}`;
+
+  return {
+    text: `${t(`flags.${code.toLowerCase()}`)} (${countryCode})`,
+    value: code,
+    countryCode,
+  };
+});
+
+const dialog = ref(false);
+const errors = ref(new Errors());
+
+function createForm(): SurveyHelpRequest {
+  return {
+    name: '',
+    email: '',
+    phone: '',
+    phoneCountry: window.navigator.language.split('-')[1] ?? 'GB',
+    message: '',
+  };
+}
+
+const form = ref(createForm());
+
+function reset() {
+  form.value = createForm();
+  errors.value.clear();
+}
+
+function close() {
+  reset();
+  dialog.value = false;
+}
+
+function cancel() {
+  close();
+  emit('cancel');
+}
+
+async function requestHelp() {
+  const { surveyId } = props;
+
+  try {
+    await surveyService.requestHelp(surveyId, form.value);
+    useMessages().info(t('common.help.sent'));
+    close();
+  }
+  catch (err) {
+    if (
+      axios.isAxiosError(err)
+      && err.response?.status === HttpStatusCode.BadRequest
+      && 'errors' in err.response.data
+    ) {
+      errors.value.record(err.response.data.errors);
+      return;
+    }
+
+    throw err;
+  }
+}
 </script>

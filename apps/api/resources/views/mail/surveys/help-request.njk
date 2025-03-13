@@ -13,7 +13,9 @@ Help with recall request
   <strong>Username:</strong> {{ username }}
 </p>
 <p>
+  {% if name %}
   <strong>Name:</strong> {{ name }}<br>
+  {% endif %}
   {% if email %}
   <strong>Email:</strong> {{ email }}<br>
   {% endif %}
@@ -22,7 +24,7 @@ Help with recall request
   {% endif %}
 </p>
 {% if message %}
-  <p>
+<p>
   <strong>Message:</strong><br>
   {{ message }}
 </p>
