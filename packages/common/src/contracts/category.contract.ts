@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core';
 
-import { categoryContents, categorySearch, paginationRequest } from '../types/http';
+import { categoryContents, categoryHeader, categorySearch, paginationRequest } from '../types/http';
 
 export const category = initContract().router({
   rootContents: {
@@ -21,6 +21,16 @@ export const category = initContract().router({
     summary: 'Category contents',
     description:
       'Get the category contents, i.e. foods and subcategories listed under the given category.',
+  },
+  header: {
+    method: 'GET',
+    path: '/category-header/:localeId/:code',
+    responses: {
+      200: categoryHeader,
+    },
+    summary: 'Category header',
+    description:
+      'Get the category header, useful if only the local name is required',
   },
   browse: {
     method: 'GET',
