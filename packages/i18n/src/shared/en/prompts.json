@@ -189,6 +189,8 @@
     "none": "No food results. Try refining your search.",
     "refine": "The search has found a lot of results. You can try refining your search.",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
+    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "I can't find my food",
       "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
