@@ -1586,6 +1586,9 @@
                                   "leftoversImageSet": {
                                     "type": "string",
                                     "nullable": true
+                                  },
+                                  "multiple": {
+                                    "type": "boolean"
                                   }
                                 },
                                 "required": [
