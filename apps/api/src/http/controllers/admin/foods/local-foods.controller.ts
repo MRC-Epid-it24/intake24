@@ -51,32 +51,9 @@ function localFoodsController({
     res.json(instance);
   };
 
-  const readEnabledFoods = async (req: Request, res: Response): Promise<void> => {
-    const { aclService } = req.scope.cradle;
-
-    if (!(await aclService.hasPermission('fdbs:read')))
-      throw new ForbiddenError();
-    const enabledFoods = await localFoodsService.readEnabledFoods(req.params.localeId);
-    res.status(HttpStatusCode.Ok);
-    res.json({ enabledFoods });
-  };
-
-  const updateEnabledFoods = async (req: Request, res: Response): Promise<void> => {
-    const { aclService } = req.scope.cradle;
-
-    if (!(await aclService.hasPermission('fdbs:edit')))
-      throw new ForbiddenError();
-    await localFoodsService.updateEnabledFoods(req.params.localeId, req.body.enabledFoods);
-    await cache.push('indexing-locales', req.params.localeId);
-    res.status(HttpStatusCode.Ok);
-    res.end();
-  };
-
   return {
     read,
     store,
-    readEnabledFoods,
-    updateEnabledFoods,
   };
 }
 
