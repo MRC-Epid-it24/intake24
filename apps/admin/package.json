@@ -24,7 +24,7 @@
     "@simplewebauthn/browser": "^13.1.0",
     "@tinymce/tinymce-vue": "^6.1.0",
     "@vueuse/core": "^12.8.2",
-    "axios": "^1.8.2",
+    "axios": "^1.8.3",
     "axios-retry": "^4.5.0",
     "cronstrue": "^2.56.0",
     "date-fns": "^4.1.0",
@@ -44,10 +44,10 @@
     "vue": "^3.5.13",
     "vue-dompurify-html": "^5.2.0",
     "vue-draggable-plus": "^0.6.0",
-    "vue-gtag": "^2.1.0",
+    "vue-gtag": "^2.1.1",
     "vue-i18n": "^11.1.2",
     "vue-router": "^4.5.0",
-    "vuetify": "^3.7.15"
+    "vuetify": "^3.7.16"
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^6.0.3",
@@ -64,9 +64,9 @@
     "sass": "^1.85.1",
     "typescript": "^5.8.2",
     "unplugin-vue-components": "^28.4.1",
-    "vite": "^6.2.1",
+    "vite": "^6.2.2",
     "vite-plugin-html": "^3.2.2",
-    "vite-plugin-mkcert": "^1.17.7",
+    "vite-plugin-mkcert": "^1.17.8",
     "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-vue-devtools": "^7.7.2",
     "vite-plugin-vuetify": "^2.1.0",
