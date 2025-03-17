@@ -16,23 +16,15 @@
   </v-sheet>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { FeedbackCardParameters } from '../cards-builder';
-
-import { defineComponent } from 'vue';
 import { PrintCard, ScreenCard } from './cards';
 
-export default defineComponent({
-  name: 'FeedbackCards',
-
-  components: { PrintCard, ScreenCard },
-
-  props: {
-    cards: {
-      type: Array as PropType<FeedbackCardParameters[]>,
-      required: true,
-    },
+defineProps({
+  cards: {
+    type: Array as PropType<FeedbackCardParameters[]>,
+    required: true,
   },
 });
 </script>

@@ -25,7 +25,7 @@
   </v-sheet>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { EChartsOption } from 'echarts';
 import type { PropType } from 'vue';
 import type { TopFoodData } from '../top-foods';
@@ -33,117 +33,103 @@ import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import Chart from 'vue-echarts';
 import { round } from '@intake24/common/util';
-
 import { useI18n } from '@intake24/i18n';
+
+const props = defineProps({
+  topFoods: {
+    type: Object as PropType<TopFoodData>,
+    required: true,
+  },
+});
 
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 
-export default defineComponent({
-  name: 'FeedbackTopFoods',
+const { i18n: { t }, translate } = useI18n();
 
-  components: { Chart },
+const charts = computed(() => {
+  const { colors } = props.topFoods;
 
-  props: {
-    topFoods: {
-      type: Object as PropType<TopFoodData>,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const { i18n: { t }, translate } = useI18n();
-
-    const charts = computed(() => {
-      const { colors } = props.topFoods;
-
-      const chartOptions: EChartsOption[] = props.topFoods.chartData.map((nutrient) => {
-        const { unit, data } = nutrient;
-        const id = nutrient.id.join(':');
-        const name = translate(nutrient.name);
-
-        return {
-          textStyle: {
-            fontFamily: `Rubik, sans-serif`,
-          },
-          id,
-          title: {
-            text: t('feedback.topFoods.chart', { nutrient: name }),
-            left: 'center',
-            textStyle: {
-              fontWeight: 'bolder',
-              fontSize: 18,
-            },
-          },
-          left: 'center',
-          tooltip: {
-            className: 'text-wrap',
-            trigger: 'item',
-            position: (point, params, dom, rect, { contentSize, viewSize }) => [
-              viewSize[0] / 2 - contentSize[0] / 2,
-              '40%',
-            ],
-            formatter: ({ seriesName, name: itemName, value, percent }: any) =>
-              `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
-                value,
-              )} ${unit} (${Math.round(percent ?? 0)}%)`,
-          },
-          series: [
-            {
-              id,
-              name,
-              type: 'pie',
-              radius: ['35%', '70%'],
-              color: colors,
-              data,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 0,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)',
-                },
-              },
-              itemStyle: {
-                borderRadius: 5,
-                borderColor: '#fff',
-                borderWidth: 2,
-              },
-              label: {
-                alignTo: 'edge',
-                formatter: ({ name: itemName, value, percent }) =>
-                  `${itemName} \n {times|${round(
-                    typeof value === 'number' ? value : 0,
-                  )} ${unit} (${Math.round(percent ?? 0)}%)}`,
-                minMargin: 5,
-                edgeDistance: 10,
-                lineHeight: 15,
-                rich: {
-                  times: {
-                    fontSize: 12,
-                    color: '#999',
-                  },
-                },
-              },
-              labelLine: {
-                length: 15,
-                length2: 0,
-                maxSurfaceAngle: 80,
-              },
-            },
-          ],
-        };
-      });
-
-      return chartOptions;
-    });
+  const chartOptions: EChartsOption[] = props.topFoods.chartData.map((nutrient) => {
+    const { unit, data } = nutrient;
+    const id = nutrient.id.join(':');
+    const name = translate(nutrient.name);
 
     return {
-      charts,
+      textStyle: {
+        fontFamily: `Rubik, sans-serif`,
+      },
+      id,
+      title: {
+        text: t('feedback.topFoods.chart', { nutrient: name }),
+        left: 'center',
+        textStyle: {
+          fontWeight: 'bolder',
+          fontSize: 18,
+        },
+      },
+      left: 'center',
+      tooltip: {
+        className: 'text-wrap',
+        trigger: 'item',
+        position: (point, params, dom, rect, { contentSize, viewSize }) => [
+          viewSize[0] / 2 - contentSize[0] / 2,
+          '40%',
+        ],
+        formatter: ({ seriesName, name: itemName, value, percent }: any) =>
+          `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
+            value,
+          )} ${unit} (${Math.round(percent ?? 0)}%)`,
+      },
+      series: [
+        {
+          id,
+          name,
+          type: 'pie',
+          radius: ['35%', '70%'],
+          color: colors,
+          data,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 0,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+          itemStyle: {
+            borderRadius: 5,
+            borderColor: '#fff',
+            borderWidth: 2,
+          },
+          label: {
+            alignTo: 'edge',
+            formatter: ({ name: itemName, value, percent }) =>
+              `${itemName} \n {times|${round(
+                typeof value === 'number' ? value : 0,
+              )} ${unit} (${Math.round(percent ?? 0)}%)}`,
+            minMargin: 5,
+            edgeDistance: 10,
+            lineHeight: 15,
+            rich: {
+              times: {
+                fontSize: 12,
+                color: '#999',
+              },
+            },
+          },
+          labelLine: {
+            length: 15,
+            length2: 0,
+            maxSurfaceAngle: 80,
+          },
+        },
+      ],
     };
-  },
+  });
+
+  return chartOptions;
 });
 </script>
 

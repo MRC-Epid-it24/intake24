@@ -40,85 +40,83 @@
   </v-col>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { UserDemographic } from '../classes';
+import { computed } from 'vue';
+import { useI18n } from '@intake24/i18n';
 
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'FeedbackUserInfo',
-
-  props: {
-    surveyId: {
-      type: String,
-      required: true,
-    },
-    userDemographic: {
-      type: Object as PropType<UserDemographic>,
-      required: true,
-    },
+const props = defineProps({
+  surveyId: {
+    type: String,
+    required: true,
   },
-
-  computed: {
-    ageAndSex(): string[] {
-      const items = [];
-      const { sex, birthdate } = this.userDemographic.physicalData;
-
-      if (sex !== null) {
-        items.push(
-          this.$t('feedback.physicalData.sex', {
-            sex: this.$t(`feedback.physicalData.sexes.${sex}`),
-          }),
-        );
-      }
-
-      if (birthdate !== null) {
-        items.push(
-          this.$t('feedback.physicalData.age', { age: this.userDemographic.getAge() }),
-        );
-      }
-
-      return items;
-    },
-    weightAndHeight(): string[] {
-      const items = [];
-      const { heightCm, weightKg } = this.userDemographic.physicalData;
-
-      if (heightCm !== null)
-        items.push(this.$t('feedback.physicalData.height', { height: heightCm }));
-
-      if (weightKg !== null)
-        items.push(this.$t('feedback.physicalData.weight', { weight: weightKg }));
-
-      return items;
-    },
-    physicalData() {
-      const { userDemographic } = this;
-      const items: string[] = [];
-
-      if (userDemographic.physicalActivityLevel)
-        items.push(userDemographic.physicalActivityLevel.name);
-
-      if (this.ageAndSex.length)
-        items.push(this.ageAndSex.join(' | '));
-
-      if (this.weightAndHeight.length)
-        items.push(this.weightAndHeight.join(' | '));
-
-      if (userDemographic.physicalData.weightTarget) {
-        items.push(
-          this.$t('feedback.physicalData.weightTarget', {
-            target: this.$t(
-              `feedback.physicalData.weightTargets.${userDemographic.physicalData.weightTarget}`,
-            ),
-          }),
-        );
-      }
-
-      return items;
-    },
+  userDemographic: {
+    type: Object as PropType<UserDemographic>,
+    required: true,
   },
+});
+
+const { i18n: { t } } = useI18n();
+
+const ageAndSex = computed(() => {
+  const items = [];
+  const { sex, birthdate } = props.userDemographic.physicalData;
+
+  if (sex !== null) {
+    items.push(
+      t('feedback.physicalData.sex', {
+        sex: t(`feedback.physicalData.sexes.${sex}`),
+      }),
+    );
+  }
+
+  if (birthdate !== null) {
+    items.push(
+      t('feedback.physicalData.age', { age: props.userDemographic.getAge() }),
+    );
+  }
+
+  return items;
+});
+
+const weightAndHeight = computed(() => {
+  const items = [];
+  const { heightCm, weightKg } = props.userDemographic.physicalData;
+
+  if (heightCm !== null)
+    items.push(t('feedback.physicalData.height', { height: heightCm }));
+
+  if (weightKg !== null)
+    items.push(t('feedback.physicalData.weight', { weight: weightKg }));
+
+  return items;
+});
+
+const physicalData = computed(() => {
+  const { userDemographic } = props;
+  const items: string[] = [];
+
+  if (userDemographic.physicalActivityLevel)
+    items.push(userDemographic.physicalActivityLevel.name);
+
+  if (ageAndSex.value.length)
+    items.push(ageAndSex.value.join(' | '));
+
+  if (weightAndHeight.value.length)
+    items.push(weightAndHeight.value.join(' | '));
+
+  if (userDemographic.physicalData.weightTarget) {
+    items.push(
+      t('feedback.physicalData.weightTarget', {
+        target: t(
+          `feedback.physicalData.weightTargets.${userDemographic.physicalData.weightTarget}`,
+        ),
+      }),
+    );
+  }
+
+  return items;
 });
 </script>
 

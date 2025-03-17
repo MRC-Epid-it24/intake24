@@ -13,34 +13,25 @@
   </v-sheet>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import type { FeedbackCustomSection } from '@intake24/common/feedback';
 import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'FeedbackCustomSection',
-
-  props: {
-    section: {
-      type: Object as PropType<FeedbackCustomSection>,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const { translate } = useI18n();
-
-    const data = computed(() => ({
-      title: translate(props.section.title),
-      content: translate(props.section.content),
-    }));
-
-    return { data };
+const props = defineProps({
+  section: {
+    type: Object as PropType<FeedbackCustomSection>,
+    required: true,
   },
 });
+
+const { translate } = useI18n();
+
+const data = computed(() => ({
+  title: translate(props.section.title),
+  content: translate(props.section.content),
+}));
 </script>
 
 <style lang="scss"></style>

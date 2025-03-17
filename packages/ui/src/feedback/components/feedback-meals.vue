@@ -47,172 +47,207 @@
   </v-sheet>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { EChartsOption } from 'echarts';
 import type { PropType } from 'vue';
+import type { NutrientChartData } from '../charts';
 import type { SurveyStats, SurveySubmission } from '../classes';
 import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
-import { computed, defineComponent, ref } from 'vue';
-
+import { computed, ref } from 'vue';
 import Chart from 'vue-echarts';
-import type { FeedbackMeals } from '@intake24/common/feedback';
+import type { FeedbackMealChart, FeedbackMeals, FeedbackMealTable } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
 import { round } from '@intake24/common/util';
-
 import { useI18n } from '@intake24/i18n';
-import { buildMealStats } from '../meal-stats';
+import { getNutrientUnit } from '@intake24/ui/util';
+
+interface FeedbackMealChartData extends FeedbackMealChart {
+  chartData: NutrientChartData[];
+}
+
+type MealTableFieldData = Record<string, string | number | null>;
+
+interface FeedbackMealTableData extends FeedbackMealTable {
+  tableData: MealTableFieldData[];
+}
+
+interface FeedbackMealsData extends Omit<FeedbackMeals, 'chart' | 'table'> {
+  chart: FeedbackMealChartData;
+  table: FeedbackMealTableData;
+}
+
+const props = defineProps({
+  config: {
+    type: Object as PropType<FeedbackMeals>,
+    required: true,
+  },
+  surveyStats: {
+    type: Object as PropType<SurveyStats>,
+    required: true,
+  },
+  nutrientTypes: {
+    type: Array as PropType<NutrientType[]>,
+    default: () => [],
+  },
+  submissions: {
+    type: Array as PropType<SurveySubmission[]>,
+    default: () => [],
+  },
+});
 
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 
-export default defineComponent({
-  name: 'FeedbackMeals',
+const { i18n: { t }, translate } = useI18n();
 
-  components: { Chart },
+const selected = ref(props.submissions.length ? props.submissions[0].id : null);
 
-  props: {
-    config: {
-      type: Object as PropType<FeedbackMeals>,
-      required: true,
-    },
-    surveyStats: {
-      type: Object as PropType<SurveyStats>,
-      required: true,
-    },
-    nutrientTypes: {
-      type: Array as PropType<NutrientType[]>,
-      default: () => [],
-    },
-    submissions: {
-      type: Array as PropType<SurveySubmission[]>,
-      default: () => [],
-    },
-  },
+const mealStats = computed<FeedbackMealsData>(() => {
+  const { chart, table } = props.config;
+  const meals = selected.value ? props.surveyStats.getMealStats(selected.value) : [];
 
-  setup(props) {
-    const { i18n: { t }, translate } = useI18n();
+  const chartData = chart.nutrients.map((nutrient) => {
+    const { id, name } = nutrient;
 
-    const selected = ref(props.submissions.length ? props.submissions[0].id : null);
+    const unit = getNutrientUnit(id, props.nutrientTypes);
 
-    const mealStats = computed(() =>
-      buildMealStats(
-        props.config,
-        selected.value ? props.surveyStats.getMealStats(selected.value) : [],
-        props.nutrientTypes,
-      ),
-    );
+    const data = meals.map(meal => ({
+      name: meal.name,
+      value: meal.stats.getGroupAverageIntake(id),
+    }));
 
-    const submissionItems = computed(() =>
-      props.submissions.map((item, idx) => ({
-        title: `${t('recall.submissions._')} ${idx + 1}  | ${new Date(
-          item.endTime,
-        ).toLocaleDateString()}`,
-        value: item.id,
-      })),
-    );
+    return { id, name, unit, data };
+  });
 
-    const headers = computed(() =>
-      mealStats.value.table.fields.map(({ header, fieldId }) => ({
-        title: translate(header),
-        key: fieldId,
-      })),
-    );
+  const tableData = meals.map((meal) => {
+    return table.fields.reduce<MealTableFieldData>((acc, field) => {
+      let resolvedValue: string | number | null = null;
+      const value = translate(field.value);
 
-    const charts = computed(() => {
-      const {
-        chart: { chartData, colors },
-      } = mealStats.value;
+      switch (field.type) {
+        case 'standard':
+          resolvedValue = meal[field.fieldId];
+          break;
+        case 'custom':
+          resolvedValue
+            = meal.customFields.find(item => item.name === field.fieldId)?.value ?? null;
+          break;
+        case 'nutrient':
+          resolvedValue = meal.stats.getGroupAverageIntake(field.types);
+          break;
+      }
 
-      const chartOptions: EChartsOption[] = chartData.map((item) => {
-        const { unit, data } = item;
-        const id = item.id.join(':');
-        const name = translate(item.name);
+      acc[field.fieldId]
+        = value && resolvedValue ? value.replace('{value}', resolvedValue.toString()) : resolvedValue;
 
-        return {
-          textStyle: {
-            fontFamily: `Rubik, sans-serif`,
-          },
-          id,
-          title: {
-            text: t('feedback.meals.chart', { nutrient: name }),
-            left: 'center',
-            textStyle: {
-              fontWeight: 'bolder',
-              fontSize: 18,
-            },
-          },
-          left: 'center',
-          tooltip: {
-            className: 'text-wrap',
-            trigger: 'item',
-            position: (point, params, dom, rect, { contentSize, viewSize }) => [
-              viewSize[0] / 2 - contentSize[0] / 2,
-              '40%',
-            ],
-            formatter: ({ seriesName, name: itemName, value, percent }: any) =>
-              `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
-                value,
-              )} ${unit} (${Math.round(percent ?? 0)}%)`,
-          },
-          series: [
-            {
-              id,
-              name,
-              type: 'pie',
-              radius: ['35%', '70%'],
-              color: colors,
-              data,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 0,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)',
-                },
-              },
-              itemStyle: {
-                borderRadius: 5,
-                borderColor: '#fff',
-                borderWidth: 2,
-              },
-              label: {
-                alignTo: 'edge',
-                formatter: ({ name: itemName, value, percent }) =>
-                  `${itemName} \n {times|${round(
-                    typeof value === 'number' ? value : 0,
-                  )} ${unit} (${Math.round(percent ?? 0)}%)}`,
-                minMargin: 5,
-                edgeDistance: 10,
-                lineHeight: 15,
-                rich: {
-                  times: {
-                    fontSize: 12,
-                    color: '#999',
-                  },
-                },
-              },
-              labelLine: {
-                length: 15,
-                length2: 0,
-                maxSurfaceAngle: 80,
-              },
-            },
-          ],
-        };
-      });
+      return acc;
+    }, {});
+  });
 
-      return chartOptions;
-    });
+  return { chart: { ...chart, chartData }, table: { ...table, tableData } };
+});
+
+const submissionItems = computed(() =>
+  props.submissions.map((item, idx) => ({
+    title: `${t('recall.submissions._')} ${idx + 1}  | ${new Date(
+      item.endTime,
+    ).toLocaleDateString()}`,
+    value: item.id,
+  })),
+);
+
+const headers = computed(() =>
+  mealStats.value.table.fields.map(({ header, fieldId }) => ({
+    title: translate(header),
+    key: fieldId,
+  })),
+);
+
+const charts = computed(() => {
+  const {
+    chart: { chartData, colors },
+  } = mealStats.value;
+
+  const chartOptions: EChartsOption[] = chartData.map((item) => {
+    const { unit, data } = item;
+    const id = item.id.join(':');
+    const name = translate(item.name);
 
     return {
-      charts,
-      headers,
-      mealStats,
-      selected,
-      submissionItems,
+      textStyle: {
+        fontFamily: `Rubik, sans-serif`,
+      },
+      id,
+      title: {
+        text: t('feedback.meals.chart', { nutrient: name }),
+        left: 'center',
+        textStyle: {
+          fontWeight: 'bolder',
+          fontSize: 18,
+        },
+      },
+      left: 'center',
+      tooltip: {
+        className: 'text-wrap',
+        trigger: 'item',
+        position: (point, params, dom, rect, { contentSize, viewSize }) => [
+          viewSize[0] / 2 - contentSize[0] / 2,
+          '40%',
+        ],
+        formatter: ({ seriesName, name: itemName, value, percent }: any) =>
+          `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
+            value,
+          )} ${unit} (${Math.round(percent ?? 0)}%)`,
+      },
+      series: [
+        {
+          id,
+          name,
+          type: 'pie',
+          radius: ['35%', '70%'],
+          color: colors,
+          data,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 0,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+          itemStyle: {
+            borderRadius: 5,
+            borderColor: '#fff',
+            borderWidth: 2,
+          },
+          label: {
+            alignTo: 'edge',
+            formatter: ({ name: itemName, value, percent }) =>
+              `${itemName} \n {times|${round(
+                typeof value === 'number' ? value : 0,
+              )} ${unit} (${Math.round(percent ?? 0)}%)}`,
+            minMargin: 5,
+            edgeDistance: 10,
+            lineHeight: 15,
+            rich: {
+              times: {
+                fontSize: 12,
+                color: '#999',
+              },
+            },
+          },
+          labelLine: {
+            length: 15,
+            length2: 0,
+            maxSurfaceAngle: 80,
+          },
+        },
+      ],
     };
-  },
+  });
+
+  return chartOptions;
 });
 </script>
 

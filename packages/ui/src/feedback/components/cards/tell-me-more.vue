@@ -68,41 +68,32 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { FeedbackDetails } from './use-card';
+import { computed, ref } from 'vue';
 
-import { computed, defineComponent, ref } from 'vue';
-
-export default defineComponent({
-  name: 'TellMeMore',
-
-  props: {
-    detail: {
-      type: Object as PropType<FeedbackDetails>,
-      required: true,
-    },
-    textColor: {
-      type: String,
-    },
+const props = defineProps({
+  detail: {
+    type: Object as PropType<FeedbackDetails>,
+    required: true,
   },
-
-  setup(props) {
-    const dialog = ref(false);
-
-    const isWhite = computed(() => ['#fff', '#ffffff', '#ffffffff'].includes(props.detail.color.toLowerCase()));
-
-    const open = () => {
-      dialog.value = true;
-    };
-
-    const close = () => {
-      dialog.value = false;
-    };
-
-    return { dialog, isWhite, open, close };
+  textColor: {
+    type: String,
   },
 });
+
+const dialog = ref(false);
+
+const isWhite = computed(() => ['#fff', '#ffffff', '#ffffffff'].includes(props.detail.color.toLowerCase()));
+
+function open() {
+  dialog.value = true;
+}
+
+function close() {
+  dialog.value = false;
+}
 </script>
 
 <style lang="scss" scoped>

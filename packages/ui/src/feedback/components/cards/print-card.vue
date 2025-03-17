@@ -35,34 +35,19 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
-
 import { useCard } from './use-card';
 
-export default defineComponent({
-  name: 'PrintCard',
-
-  props: {
-    parameters: {
-      type: Object as PropType<FeedbackCardParameters>,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const { backgroundImage, detail, formatOutput } = useCard(props);
-
-    return {
-      backgroundImage,
-      detail,
-      formatOutput,
-    };
+const props = defineProps({
+  parameters: {
+    type: Object as PropType<FeedbackCardParameters>,
+    required: true,
   },
 });
+
+const { backgroundImage, detail, formatOutput } = useCard(props);
 </script>
 
 <style lang="scss">
