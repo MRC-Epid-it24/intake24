@@ -121,11 +121,9 @@ import {
 import { usePromptUtils } from '@intake24/survey/composables';
 import { foodsService } from '@intake24/survey/services';
 import { getEntityId } from '@intake24/survey/util';
-import { Next, NextMobile } from '../actions';
 import { BaseLayout } from '../layouts';
+import { Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
-
-defineOptions({ name: 'RecipeBuilderPrompt' });
 
 const props = defineProps({
   ...createBasePromptProps<'recipe-builder-prompt', RecipeBuilder>(),
@@ -177,11 +175,7 @@ function removeFood({ foodIndex, index }: { foodIndex: number; index: number }) 
 };
 
 function update() {
-  emit('update:modelValue', {
-    recipeSteps: state.value.recipeSteps,
-    activeStep: state.value.activeStep,
-    recipe: state.value.recipe,
-  });
+  emit('update:modelValue', state.value);
 };
 
 function foodSelected(index: number, selectedFood: SelectedFoodRecipeBuilderItemState): void {
@@ -257,9 +251,8 @@ function updateActiveStep(index: unknown) {
   if (typeof index !== 'number')
     return;
 
-  const { recipeSteps } = state.value;
-  emit('update:modelValue', { activeStep: index, recipeSteps });
   state.value.activeStep = index;
+  update();
 };
 
 function onToggleStepAddMore(stepIndex: number) {

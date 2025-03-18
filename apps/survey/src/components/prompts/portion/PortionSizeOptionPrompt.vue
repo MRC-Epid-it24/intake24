@@ -18,8 +18,6 @@ import { CardLayout } from '../layouts';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
-defineOptions({ name: 'PortionSizeOptionPrompt' });
-
 const props = defineProps(createPortionPromptProps<'portion-size-option-prompt'>());
 
 const emit = defineEmits(['action', 'update:modelValue']);

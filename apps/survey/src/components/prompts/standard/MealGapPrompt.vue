@@ -54,8 +54,6 @@ import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({ name: 'MealGapPrompt' });
-
 const props = defineProps({
   ...createBasePromptProps<'meal-gap-prompt'>(),
   meals: {

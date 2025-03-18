@@ -2,17 +2,15 @@
   <standard-portion-prompt
     v-model="state"
     v-bind="{
-      conversionFactor,
       food: food(),
       linkedParent,
       meal,
-      parameters,
       parentFood,
       portionSizeMethods,
       prompt,
       section,
     }"
-    @action="action"
+    @action="actionPortionSize"
     @update:model-value="update"
   />
 </template>
@@ -27,12 +25,10 @@ const props = defineProps(createHandlerProps<'standard-portion-prompt'>());
 const emit = defineEmits(['action']);
 
 const {
-  conversionFactor,
   encodedFood: food,
   encodedFoodPortionSizeData,
   linkedParent,
   linkedParentQuantity,
-  parameters,
   parentFoodOptional: parentFood,
   portionSizeMethods,
 } = useFoodPromptUtils<'standard-portion'>();
@@ -54,5 +50,5 @@ function getInitialState(): PromptStates['standard-portion-prompt'] {
   };
 }
 
-const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
+const { state, actionPortionSize, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

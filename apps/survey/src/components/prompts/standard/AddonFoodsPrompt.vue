@@ -103,12 +103,9 @@ import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
-import { Next, NextMobile } from '../actions';
 import { CardLayout } from '../layouts';
-import { useStandardUnits } from '../partials';
+import { Next, NextMobile, useStandardUnits } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
-
-defineOptions({ name: 'AddonFoodsPrompt' });
 
 const props = defineProps({
   ...createBasePromptProps<'addon-foods-prompt'>(),

@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
+    <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel :readonly="portionSizeMethods.length === 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.method`" tag="span">
@@ -30,7 +30,7 @@
             <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="portionSize.quantity ?? undefined"
+                :amount="state.portionSize.quantity ?? undefined"
                 :valid="quantityValid"
               />
             </expansion-panel-actions>
@@ -40,7 +40,7 @@
           <v-row>
             <v-col cols="12" md="4">
               <v-text-field
-                v-model.number="portionSize.quantity"
+                v-model.number="state.portionSize.quantity"
                 hide-details="auto"
                 :label="$t('prompts.quantity._')"
                 name="quantity"
@@ -62,84 +62,49 @@
   </base-layout>
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
+<script lang="ts" setup>
 import isNumber from 'lodash/isNumber';
-import { defineComponent } from 'vue';
-import type { PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters } from '@intake24/common/surveys';
+import { computed, ref } from 'vue';
 import { copy } from '@intake24/common/util';
-import { QuantityBadge } from '../partials';
-import createBasePortion from './createBasePortion';
+import { ExpansionPanelActions } from '@intake24/survey/components/elements';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { BaseLayout } from '../layouts';
+import { Next, NextMobile, QuantityBadge, usePortionSizeMethod } from '../partials';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
 
-export default defineComponent({
-  name: 'DirectWeightPrompt',
-
-  components: { QuantityBadge },
-
-  mixins: [createBasePortion<'direct-weight-prompt'>()],
-
-  props: {
-    conversionFactor: {
-      type: Number,
-      required: true,
-    },
-    parameters: {
-      type: Object as PropType<PortionSizeParameters['direct-weight']>,
-      required: true,
-    },
-    max: {
-      type: Number,
-      default: 10000,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props) {
-    const validateInput = (value: any) => isNumber(value) && value > 0 && value < props.max;
-
-    return { validateInput };
-  },
-
-  data() {
-    return {
-      ...copy(this.modelValue),
-    };
-  },
-
-  computed: {
-    rules() {
-      return [
-        (value: any): boolean | string => this.validateInput(value),
-      ];
-    },
-    quantityValid() {
-      return this.validateInput(this.portionSize.quantity);
-    },
-
-    validConditions(): boolean[] {
-      const conditions = [this.psmValid, this.quantityValid];
-
-      return conditions;
-    },
-  },
-
-  methods: {
-    update() {
-      const { portionSize: { quantity } } = this;
-
-      this.portionSize.servingWeight = isNumber(quantity) ? quantity * this.conversionFactor : null;
-
-      const state: PromptStates['direct-weight-prompt'] = {
-        portionSize: this.portionSize,
-        panel: this.panel,
-      };
-
-      this.$emit('update:modelValue', state);
-    },
+const props = defineProps({
+  ...createPortionPromptProps<'direct-weight-prompt'>(),
+  max: {
+    type: Number,
+    default: 10000,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action, type } = usePromptUtils(props, { emit });
+const { conversionFactor, psmValid } = usePortionSizeMethod<'direct-weight'>(props);
+const { foodName } = useFoodUtils(props);
+
+const state = ref(copy(props.modelValue));
+
+const validateInput = (value: any) => isNumber(value) && value > 0 && value < props.max;
+
+const rules = computed(() => [
+  (value: any): boolean | string => validateInput(value),
+]);
+const quantityValid = computed(() => validateInput(state.value.portionSize.quantity));
+const validConditions = computed(() => [psmValid.value, quantityValid.value]);
+const isValid = computed(() => validConditions.value.every(condition => condition));
+
+function update() {
+  const { portionSize: { quantity } } = state.value;
+
+  state.value.portionSize.servingWeight = isNumber(quantity) ? quantity * conversionFactor.value : null;
+
+  emit('update:modelValue', state.value);
+};
 </script>
 
 <style lang="scss" scoped></style>

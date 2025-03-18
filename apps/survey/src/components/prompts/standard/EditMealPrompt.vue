@@ -103,12 +103,9 @@ import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
 import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
-import { Next, NextMobile } from '../actions';
 import { CardLayout } from '../layouts';
-import { EditableFoodList } from '../partials';
+import { EditableFoodList, Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
-
-defineOptions({ name: 'EditMealPrompt' });
 
 const props = defineProps({
   ...createBasePromptProps<'edit-meal-prompt'>(),

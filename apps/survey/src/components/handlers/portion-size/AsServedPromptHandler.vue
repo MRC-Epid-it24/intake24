@@ -6,12 +6,11 @@
       linkedParent,
       meal,
       parentFood,
-      parameters,
       portionSizeMethods,
       prompt,
       section,
     }"
-    @action="action"
+    @action="actionPortionSize"
     @update:model-value="update"
   />
 </template>
@@ -31,7 +30,6 @@ const {
   encodedFoodPortionSizeData,
   linkedParent,
   linkedParentQuantity,
-  parameters,
   parentFoodOptional: parentFood,
   portionSizeMethods,
 } = useFoodPromptUtils<'as-served'>();
@@ -64,5 +62,5 @@ function getInitialState(): PromptStates['as-served-prompt'] {
   };
 }
 
-const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
+const { state, actionPortionSize, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

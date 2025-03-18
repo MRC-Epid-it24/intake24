@@ -57,9 +57,8 @@ import { computed, ref, watch } from 'vue';
 import type { ListOption } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
-import { useForm } from '../partials';
+import { Next, NextMobile, useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({

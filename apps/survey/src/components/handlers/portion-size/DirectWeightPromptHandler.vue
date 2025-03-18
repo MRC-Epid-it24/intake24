@@ -2,15 +2,13 @@
   <direct-weight-prompt
     v-model="state"
     v-bind="{
-      conversionFactor,
       food: food(),
       meal,
-      parameters,
       portionSizeMethods,
       prompt,
       section,
     }"
-    @action="action"
+    @action="actionPortionSize"
     @update:model-value="update"
   />
 </template>
@@ -25,10 +23,8 @@ const props = defineProps(createHandlerProps<'direct-weight-prompt'>());
 const emit = defineEmits(['action']);
 
 const {
-  conversionFactor,
   encodedFood: food,
   encodedFoodPortionSizeData,
-  parameters,
   portionSizeMethods,
 } = useFoodPromptUtils<'direct-weight'>();
 const { meal } = useMealPromptUtils();
@@ -45,5 +41,5 @@ function getInitialState(): PromptStates['direct-weight-prompt'] {
   };
 }
 
-const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
+const { state, actionPortionSize, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

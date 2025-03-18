@@ -2,17 +2,15 @@
   <guide-image-prompt
     v-model="state"
     v-bind="{
-      conversionFactor,
       food: food(),
       linkedParent,
       meal,
-      parameters,
       parentFood,
       portionSizeMethods,
       prompt,
       section,
     }"
-    @action="action"
+    @action="actionPortionSize"
     @update:model-value="update"
   />
 </template>
@@ -27,12 +25,10 @@ const props = defineProps(createHandlerProps<'guide-image-prompt'>());
 const emit = defineEmits(['action']);
 
 const {
-  conversionFactor,
   encodedFood: food,
   encodedFoodPortionSizeData,
   linkedParent,
   linkedParentQuantity,
-  parameters,
   parentFoodOptional: parentFood,
   portionSizeMethods,
 } = useFoodPromptUtils<'guide-image'>();
@@ -59,5 +55,5 @@ function getInitialState(): PromptStates['guide-image-prompt'] {
   };
 }
 
-const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
+const { state, actionPortionSize, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 </script>

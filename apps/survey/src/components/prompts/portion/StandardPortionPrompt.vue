@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-if="standardUnitsLoaded" v-model="panel" :tile="$vuetify.display.mobile">
+    <v-expansion-panels v-if="standardUnitsLoaded" v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel :readonly="portionSizeMethods.length === 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.method`" tag="span">
@@ -31,7 +31,7 @@
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <v-radio-group v-model="portionSize.unit" @update:model-value="selectMethod">
+          <v-radio-group v-model="state.portionSize.unit" @update:model-value="selectMethod">
             <v-radio v-for="unit in parameters.units" :key="unit.name" :value="unit">
               <template #label>
                 <i18n-t :keypath="`prompts.${type}.estimateIn`">
@@ -47,14 +47,14 @@
       <v-expansion-panel :disabled="!unitValid">
         <v-expansion-panel-title>
           <i18n-t
-            v-if="portionSize.unit"
+            v-if="state.portionSize.unit"
             :keypath="`prompts.${type}.howMany.${
-              portionSize.unit.omitFoodDescription ? '_' : 'withFood'
+              state.portionSize.unit.omitFoodDescription ? '_' : 'withFood'
             }`"
             tag="span"
           >
             <template #unit>
-              {{ getStandardUnitHowMany(portionSize.unit) }}
+              {{ getStandardUnitHowMany(state.portionSize.unit) }}
             </template>
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
@@ -67,7 +67,7 @@
             <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="portionSize.quantity"
+                :amount="state.portionSize.quantity"
                 unit=""
                 :valid="quantityValid"
               />
@@ -76,8 +76,8 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <quantity-card
-            v-model="portionSize.quantity"
-            v-model:confirmed="quantityConfirmed"
+            v-model="state.portionSize.quantity"
+            v-model:confirmed="state.quantityConfirmed"
             @update:confirmed="confirmQuantity"
             @update:model-value="selectQuantity"
           />
@@ -86,8 +86,8 @@
       <linked-quantity
         v-if="linkedParent && !linkedParent.auto"
         v-bind="{ disabled: !quantityValid, food, linkedParent, prompt }"
-        v-model="portionSize.linkedQuantity"
-        v-model:confirmed="linkedQuantityConfirmed"
+        v-model="state.portionSize.linkedQuantity"
+        v-model:confirmed="state.linkedQuantityConfirmed"
         @update:confirmed="confirmLinkedQuantity"
         @update:model-value="selectLinkedQuantity"
       />
@@ -101,141 +101,98 @@
   </base-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { LinkedParent } from '../partials';
-
-import { defineComponent } from 'vue';
-import type { PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters } from '@intake24/common/surveys';
+import { computed, onMounted, ref } from 'vue';
 import { copy } from '@intake24/common/util';
+import { ExpansionPanelActions } from '@intake24/survey/components/elements';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { BaseLayout } from '../layouts';
+import { LinkedQuantity, Next, NextMobile, QuantityBadge, QuantityCard, usePanel, usePortionSizeMethod, useStandardUnits } from '../partials';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
 
-import { useFoodUtils } from '@intake24/survey/composables';
-import { LinkedQuantity, QuantityBadge, QuantityCard, useStandardUnits } from '../partials';
-import createBasePortion from './createBasePortion';
-
-export default defineComponent({
-  name: 'StandardPortionPrompt',
-
-  components: { LinkedQuantity, QuantityBadge, QuantityCard },
-
-  mixins: [createBasePortion<'standard-portion-prompt'>()],
-
-  props: {
-    conversionFactor: {
-      type: Number,
-      required: true,
-    },
-    linkedParent: {
-      type: Object as PropType<LinkedParent>,
-    },
-    parameters: {
-      type: Object as PropType<PortionSizeParameters['standard-portion']>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props) {
-    const { foodName } = useFoodUtils(props);
-    const {
-      resolveStandardUnits,
-      getStandardUnitEstimateIn,
-      getStandardUnitHowMany,
-      standardUnitsLoaded,
-    } = useStandardUnits();
-
-    return {
-      resolveStandardUnits,
-      getStandardUnitEstimateIn,
-      getStandardUnitHowMany,
-      foodName,
-      standardUnitsLoaded,
-    };
-  },
-
-  data() {
-    return {
-      ...copy(this.modelValue),
-    };
-  },
-
-  computed: {
-    unitValid() {
-      return !!this.portionSize.unit;
-    },
-
-    quantityValid() {
-      return this.quantityConfirmed;
-    },
-
-    validConditions(): boolean[] {
-      const conditions = [this.psmValid, this.unitValid, this.quantityValid];
-
-      if (this.linkedParent && !this.linkedParent.auto && this.linkedParent.categories.length)
-        conditions.push(this.linkedQuantityConfirmed);
-
-      return conditions;
-    },
-  },
-
-  async mounted() {
-    const names = this.parameters.units.filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined).map(({ name }) => name);
-
-    await this.resolveStandardUnits(names);
-
-    if (!this.portionSize.unit && this.parameters.units.length === 1) {
-      this.portionSize.unit = this.parameters.units[0];
-      this.selectMethod();
-    }
-  },
-
-  methods: {
-    selectMethod() {
-      this.clearErrors();
-      this.updatePanel();
-      this.update();
-    },
-
-    selectQuantity() {
-      this.update();
-    },
-
-    confirmQuantity() {
-      this.updatePanel();
-      this.update();
-    },
-
-    selectLinkedQuantity() {
-      this.update();
-    },
-
-    confirmLinkedQuantity() {
-      this.updatePanel();
-      this.update();
-    },
-
-    update() {
-      const { portionSize } = this;
-
-      this.portionSize.servingWeight
-        = (portionSize.unit?.weight ?? 0)
-          * portionSize.quantity
-          * this.conversionFactor
-          * this.portionSize.linkedQuantity;
-
-      const state: PromptStates['standard-portion-prompt'] = {
-        portionSize: this.portionSize,
-        panel: this.panel,
-        quantityConfirmed: this.quantityConfirmed,
-        linkedQuantityConfirmed: this.linkedQuantityConfirmed,
-      };
-
-      this.$emit('update:modelValue', state);
-    },
+const props = defineProps({
+  ...createPortionPromptProps<'standard-portion-prompt'>(),
+  linkedParent: {
+    type: Object as PropType<LinkedParent>,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { action, type } = usePromptUtils(props, { emit });
+const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'standard-portion'>(props);
+const { foodName } = useFoodUtils(props);
+const {
+  resolveStandardUnits,
+  getStandardUnitEstimateIn,
+  getStandardUnitHowMany,
+  standardUnitsLoaded,
+} = useStandardUnits();
+
+const state = ref(copy(props.modelValue));
+
+const unitValid = computed(() => !!state.value.portionSize.unit);
+const quantityValid = computed(() => state.value.quantityConfirmed);
+const validConditions = computed(() => {
+  const conditions = [psmValid.value, unitValid.value, quantityValid.value];
+
+  if (props.linkedParent && !props.linkedParent.auto && props.linkedParent.categories.length)
+    conditions.push(state.value.linkedQuantityConfirmed);
+
+  return conditions;
+});
+const isValid = computed(() => validConditions.value.every(condition => condition));
+
+const { updatePanel } = usePanel(state, validConditions);
+
+onMounted(async () => {
+  const names = parameters.value.units.filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined).map(({ name }) => name);
+
+  await resolveStandardUnits(names);
+
+  if (!state.value.portionSize.unit && parameters.value.units.length === 1) {
+    state.value.portionSize.unit = parameters.value.units[0];
+    selectMethod();
+  }
+});
+
+function selectMethod() {
+  updatePanel();
+  update();
+};
+
+function selectQuantity() {
+  update();
+};
+
+function confirmQuantity() {
+  updatePanel();
+  update();
+};
+
+function selectLinkedQuantity() {
+  update();
+};
+
+function confirmLinkedQuantity() {
+  updatePanel();
+  update();
+};
+
+function update() {
+  const { portionSize } = state.value;
+
+  state.value.portionSize.servingWeight
+        = (portionSize.unit?.weight ?? 0)
+          * portionSize.quantity
+          * conversionFactor.value
+          * portionSize.linkedQuantity;
+
+  emit('update:modelValue', state.value);
+};
 </script>
 
 <style lang="scss" scoped></style>

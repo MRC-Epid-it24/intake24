@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
+    <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel :readonly="portionSizeMethods.length === 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.method`" tag="span">
@@ -27,18 +27,18 @@
             </template>
           </i18n-t>
           <template #actions>
-            <expansion-panel-actions :valid="servingImageConfirmed">
+            <expansion-panel-actions :valid="state.servingImageConfirmed">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="portionSize.serving?.weight"
-                :valid="servingImageConfirmed"
+                :amount="state.portionSize.serving?.weight"
+                :valid="state.servingImageConfirmed"
               />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <as-served-selector
-            v-model="portionSize.serving"
+            v-model="state.portionSize.serving"
             :as-served-set-id="parameters.servingImageSet"
             @confirm="confirmServing"
             @update:model-value="updateServing"
@@ -47,7 +47,7 @@
       </v-expansion-panel>
       <v-expansion-panel
         v-if="leftoversEnabled && parameters.leftoversImageSet"
-        :disabled="!servingImageConfirmed"
+        :disabled="!state.servingImageConfirmed"
       >
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.leftovers.header`" tag="span">
@@ -56,27 +56,27 @@
             </template>
           </i18n-t>
           <template #actions>
-            <expansion-panel-actions :valid="leftoversPrompt === false || leftoversImageConfirmed">
+            <expansion-panel-actions :valid="state.leftoversPrompt === false || state.leftoversImageConfirmed">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="portionSize.leftovers?.weight"
-                :valid="leftoversImageConfirmed"
+                :amount="state.portionSize.leftovers?.weight"
+                :valid="state.leftoversImageConfirmed"
               />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory />
-          <template v-if="leftoversPrompt">
+          <yes-no-toggle v-model="state.leftoversPrompt" class="mb-4" mandatory />
+          <template v-if="state.leftoversPrompt">
             <i18n-t class="mb-4" :keypath="`prompts.${type}.leftovers.label`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n-t>
             <as-served-selector
-              v-model="portionSize.leftovers"
+              v-model="state.portionSize.leftovers"
               :as-served-set-id="parameters.leftoversImageSet"
-              :max-weight="portionSize.serving?.weight"
+              :max-weight="state.portionSize.serving?.weight"
               type="leftovers"
               @confirm="confirmLeftovers"
               @update:model-value="updateLeftovers"
@@ -95,7 +95,7 @@
             <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="portionSize.quantity ?? undefined"
+                :amount="state.portionSize.quantity ?? undefined"
                 unit=""
                 :valid="quantityValid"
               />
@@ -106,8 +106,8 @@
           <component
             :is="prompt.multiple.type"
             v-if="prompt.multiple"
-            v-model="portionSize.quantity"
-            v-model:confirmed="quantityConfirmed"
+            v-model="state.portionSize.quantity"
+            v-model:confirmed="state.quantityConfirmed"
             v-bind="multipleProps"
             @update:confirmed="confirmQuantity"
             @update:model-value="updateQuantity"
@@ -122,8 +122,8 @@
           linkedParent,
           prompt,
         }"
-        v-model="portionSize.linkedQuantity"
-        v-model:confirmed="linkedQuantityConfirmed"
+        v-model="state.portionSize.linkedQuantity"
+        v-model:confirmed="state.linkedQuantityConfirmed"
         @update:confirmed="confirmLinkedQuantity"
         @update:model-value="selectLinkedQuantity"
       />
@@ -137,201 +137,145 @@
   </base-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { LinkedParent } from '../partials';
-import { defineComponent } from 'vue';
-import type { PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters } from '@intake24/common/surveys';
+import { computed, ref, watch } from 'vue';
 import { copy } from '@intake24/common/util';
-import { YesNoToggle } from '@intake24/survey/components/elements';
-import { useFoodUtils } from '@intake24/survey/composables';
-import { AsServedSelector, LinkedQuantity, QuantityBadge, QuantityCard, QuantitySlider } from '../partials';
-import createBasePortion from './createBasePortion';
+import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { BaseLayout } from '../layouts';
+import { AsServedSelector, LinkedQuantity, Next, NextMobile, QuantityBadge, QuantityCard, QuantitySlider, useMultiple, usePanel, usePortionSizeMethod } from '../partials';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
 
-export default defineComponent({
-  name: 'AsServedPrompt',
-
+defineOptions({
   components: {
-    AsServedSelector,
-    LinkedQuantity,
-    QuantityBadge,
     Slider: QuantitySlider,
     Counter: QuantityCard,
-    YesNoToggle,
   },
+});
 
-  mixins: [createBasePortion<'as-served-prompt'>()],
-
-  props: {
-    linkedParent: {
-      type: Object as PropType<LinkedParent>,
-    },
-    parameters: {
-      type: Object as PropType<PortionSizeParameters['as-served']>,
-      required: true,
-    },
+const props = defineProps({
+  ...createPortionPromptProps<'as-served-prompt'>(),
+  linkedParent: {
+    type: Object as PropType<LinkedParent>,
   },
+});
 
-  emits: ['update:modelValue'],
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  setup(props) {
-    const { foodName } = useFoodUtils(props);
+const { action, type } = usePromptUtils(props, { emit });
+const { parameters, psmValid } = usePortionSizeMethod<'as-served'>(props);
+const { multipleProps, multipleEnabled } = useMultiple(props);
+const { foodName } = useFoodUtils(props);
 
-    return {
-      foodName,
-    };
-  },
+const state = ref(copy(props.modelValue));
 
-  data() {
-    return {
-      ...copy(this.modelValue),
-    };
-  },
+const leftoversEnabled = computed(() => props.prompt.leftovers && !!parameters.value.leftoversImageSet);
+const servingValid = computed(() => !!(state.value.portionSize.serving && state.value.servingImageConfirmed));
+const leftoversValid = computed(() => !!(state.value.portionSize.leftovers && state.value.leftoversImageConfirmed));
+const quantityValid = computed(() => {
+  if (!props.prompt.multiple)
+    return true;
 
-  computed: {
-    multipleProps() {
-      if (!this.prompt.multiple)
-        return undefined;
+  return !props.prompt.multiple.confirm || state.value.quantityConfirmed;
+});
+const nextStepConditions = computed(() => {
+  const conditions = [psmValid.value, servingValid.value];
 
-      const { type, ...rest } = this.prompt.multiple;
+  if (leftoversEnabled.value)
+    conditions.push(state.value.leftoversPrompt === false || leftoversValid.value);
 
-      return rest;
-    },
-    multipleEnabled(): boolean {
-      return !!this.prompt.multiple && !!this.parameters.multiple;
-    },
-    leftoversEnabled() {
-      return this.prompt.leftovers && !!this.parameters.leftoversImageSet;
-    },
-    servingValid(): boolean {
-      return !!(this.portionSize.serving && this.servingImageConfirmed);
-    },
-    leftoversValid(): boolean {
-      return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
-    },
-    quantityValid(): boolean {
-      if (!this.prompt.multiple)
-        return true;
+  if (multipleEnabled.value)
+    conditions.push(state.value.quantityConfirmed);
 
-      return !this.prompt.multiple.confirm || this.quantityConfirmed;
-    },
-    validConditions(): boolean[] {
-      const conditions = [this.psmValid, this.servingValid];
+  if (props.linkedParent && !props.linkedParent.auto && props.linkedParent.categories.length)
+    conditions.push(state.value.linkedQuantityConfirmed);
 
-      if (this.leftoversEnabled)
-        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
+  return conditions;
+});
+const validConditions = computed(() => {
+  const conditions = [psmValid.value, servingValid.value];
 
-      if (this.multipleEnabled)
-        conditions.push(this.quantityValid);
+  if (leftoversEnabled.value)
+    conditions.push(state.value.leftoversPrompt === false || leftoversValid.value);
 
-      if (this.linkedParent && !this.linkedParent.auto && this.linkedParent.categories.length)
-        conditions.push(this.linkedQuantityConfirmed);
+  if (multipleEnabled.value)
+    conditions.push(quantityValid.value);
 
-      return conditions;
-    },
-    nextStepConditions(): boolean[] {
-      const conditions = [this.psmValid, this.servingValid];
+  if (props.linkedParent && !props.linkedParent.auto && props.linkedParent.categories.length)
+    conditions.push(state.value.linkedQuantityConfirmed);
 
-      if (this.leftoversEnabled)
-        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
+  return conditions;
+});
+const isValid = computed(() => validConditions.value.every(condition => condition));
 
-      if (this.multipleEnabled)
-        conditions.push(this.quantityConfirmed);
+const { updatePanel } = usePanel(state, nextStepConditions);
 
-      if (this.linkedParent && !this.linkedParent.auto && this.linkedParent.categories.length)
-        conditions.push(this.linkedQuantityConfirmed);
+function updateServing() {
+  state.value.servingImageConfirmed = false;
+  clearLeftovers();
+  update();
+};
 
-      return conditions;
-    },
-  },
+function confirmServing() {
+  state.value.servingImageConfirmed = true;
+  updatePanel();
+  update();
+};
 
-  watch: {
-    leftoversPrompt() {
-      this.portionSize.leftovers = null;
+function clearLeftovers() {
+  state.value.portionSize.leftovers = null;
+  state.value.leftoversImageConfirmed = false;
+  state.value.leftoversPrompt = undefined;
+};
 
-      this.updatePanel();
-      this.update();
-    },
-  },
+function updateLeftovers() {
+  state.value.leftoversImageConfirmed = false;
+  update();
+};
 
-  methods: {
-    updateServing() {
-      this.servingImageConfirmed = false;
-      this.clearLeftovers();
+function confirmLeftovers() {
+  state.value.leftoversImageConfirmed = true;
+  updatePanel();
+  update();
+};
 
-      if (this.isValid)
-        this.clearErrors();
+function updateQuantity() {
+  state.value.quantityConfirmed = false;
+  update();
+};
 
-      this.update();
-    },
+function confirmQuantity() {
+  state.value.quantityConfirmed = true;
+  updatePanel();
+  update();
+};
 
-    confirmServing() {
-      this.servingImageConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
+function selectLinkedQuantity() {
+  update();
+};
 
-    clearLeftovers() {
-      this.portionSize.leftovers = null;
-      this.leftoversImageConfirmed = false;
-      this.leftoversPrompt = undefined;
-    },
+function confirmLinkedQuantity() {
+  updatePanel();
+  update();
+};
 
-    updateLeftovers() {
-      this.leftoversImageConfirmed = false;
+function update() {
+  state.value.portionSize.servingWeight
+        = (state.value.portionSize.serving?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
+  state.value.portionSize.leftoversWeight
+        = (state.value.portionSize.leftovers?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
 
-      if (this.isValid)
-        this.clearErrors();
+  emit('update:modelValue', state.value);
+};
 
-      this.update();
-    },
+watch(() => state.value.leftoversPrompt, () => {
+  state.value.portionSize.leftovers = null;
 
-    confirmLeftovers() {
-      this.leftoversImageConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
-
-    updateQuantity() {
-      this.quantityConfirmed = false;
-      this.update();
-    },
-
-    confirmQuantity() {
-      this.quantityConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
-
-    selectLinkedQuantity() {
-      this.update();
-    },
-
-    confirmLinkedQuantity() {
-      this.updatePanel();
-      this.update();
-    },
-
-    update() {
-      this.portionSize.servingWeight
-        = (this.portionSize.serving?.weight ?? 0) * this.portionSize.quantity * this.portionSize.linkedQuantity;
-      this.portionSize.leftoversWeight
-        = (this.portionSize.leftovers?.weight ?? 0) * this.portionSize.quantity * this.portionSize.linkedQuantity;
-
-      const state: PromptStates['as-served-prompt'] = {
-        portionSize: this.portionSize,
-        panel: this.panel,
-        servingImageConfirmed: this.servingImageConfirmed,
-        leftoversImageConfirmed: this.leftoversImageConfirmed,
-        leftoversPrompt: this.leftoversPrompt,
-        quantityConfirmed: this.quantityConfirmed,
-        linkedQuantityConfirmed: this.linkedQuantityConfirmed,
-      };
-
-      this.$emit('update:modelValue', state);
-    },
-  },
+  updatePanel();
+  update();
 });
 </script>
 

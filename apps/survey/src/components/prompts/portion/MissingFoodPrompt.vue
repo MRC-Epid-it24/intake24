@@ -1,7 +1,7 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-form ref="form" @submit.prevent>
-      <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
+      <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
         <v-expansion-panel>
           <v-expansion-panel-title>
             <i18n-t :keypath="`prompts.${type}.source`" tag="span">
@@ -15,29 +15,29 @@
           </v-expansion-panel-title>
           <v-expansion-panel-text>
             <div class="d-flex flex-column gr-4">
-              <yes-no-toggle v-model="homemadePrompt" class="align-self-start" mandatory />
-              <div v-if="homemadePrompt === true">
+              <yes-no-toggle v-model="state.homemadePrompt" class="align-self-start" mandatory />
+              <div v-if="state.homemadePrompt === true">
                 <i18n-t class="mb-2" :keypath="`prompts.${type}.homemade`" tag="div">
                   <template #food>
                     <span class="font-weight-medium">{{ foodName }}</span>
                   </template>
                 </i18n-t>
                 <v-textarea
-                  v-model="info.description"
+                  v-model="state.info.description"
                   hide-details="auto"
                   name="description"
                   :rules="textFieldRules"
                   @update:model-value="update"
                 />
               </div>
-              <div v-if="homemadePrompt === false">
+              <div v-if="state.homemadePrompt === false">
                 <i18n-t class="mb-2" :keypath="`prompts.${type}.purchased`" tag="div">
                   <template #food>
                     <span class="font-weight-medium">{{ foodName }}</span>
                   </template>
                 </i18n-t>
                 <v-text-field
-                  v-model="info.brand"
+                  v-model="state.info.brand"
                   class="mb-4"
                   hide-details="auto"
                   name="brand"
@@ -51,7 +51,7 @@
                 </i18n-t>
                 <component
                   :is="`${prompt.barcode.type}-input`"
-                  v-model:model-value="info.barcode"
+                  v-model:model-value="state.info.barcode"
                   hide-details="auto"
                   name="barcode"
                   :options="prompt.barcode"
@@ -60,7 +60,7 @@
                 />
               </div>
               <v-btn
-                v-if="homemadePrompt !== undefined"
+                v-if="state.homemadePrompt !== undefined"
                 :class="$vuetify.display.mobile ? 'align-self-stretch' : 'align-self-start'"
                 color="primary"
                 :disabled="!homemadeValid"
@@ -79,12 +79,12 @@
               </template>
             </i18n-t>
             <template #actions>
-              <expansion-panel-actions :valid="!!info.portionSize" />
+              <expansion-panel-actions :valid="!!state.info.portionSize" />
             </template>
           </v-expansion-panel-title>
           <v-expansion-panel-text>
             <v-textarea
-              v-model="info.portionSize"
+              v-model="state.info.portionSize"
               class="mb-4"
               hide-details="auto"
               name="portionSize"
@@ -112,87 +112,60 @@
   </base-layout>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-
-import type { PromptStates } from '@intake24/common/prompts';
+<script lang="ts" setup>
+import { computed, ref } from 'vue';
 import type { MissingFood } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
-import { YesNoToggle } from '@intake24/survey/components/elements';
+import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { barcodes } from '@intake24/ui';
+import { BaseLayout } from '../layouts';
+import { Next, NextMobile, useForm, usePanel } from '../partials';
+import { createPortionPromptProps } from '../prompt-props';
 
-import { useForm } from '../partials';
-import createBasePortion from './createBasePortion';
+defineOptions({ components: { ...barcodes } });
 
-export default defineComponent({
-  name: 'MissingFoodPrompt',
+const props = defineProps(createPortionPromptProps<'missing-food-prompt', MissingFood>());
 
-  components: { ...barcodes, YesNoToggle },
+const emit = defineEmits(['action', 'update:modelValue']);
 
-  mixins: [createBasePortion<'missing-food-prompt', MissingFood>()],
+const { action, type } = usePromptUtils(props, { emit });
+const { foodName } = useFoodUtils(props);
 
-  emits: ['update:modelValue'],
+const { form, inputTooLog } = useForm();
 
-  setup() {
-    const { form, inputTooLog } = useForm();
+const formErrors = computed(() => form.value?.errors ?? []);
+const barcodeRules = computed(() => [inputTooLog(128)]);
+const textFieldRules = computed(() => [inputTooLog(1024)]);
 
-    const formErrors = computed(() => form.value?.errors ?? []);
-    const barcodeRules = computed(() => [inputTooLog(128)]);
-    const textFieldRules = computed(() => [inputTooLog(1024)]);
-
-    return {
-      form,
-      formErrors,
-      barcodeRules,
-      textFieldRules,
-    };
-  },
-
-  data() {
-    return {
-      ...copy({
-        ...this.modelValue,
-        homemadePrompt:
-          !this.modelValue.info.description && !this.modelValue.info.brand
+const state = ref(copy({
+  ...props.modelValue,
+  homemadePrompt:
+          !props.modelValue.info.description && !props.modelValue.info.brand
             ? undefined
-            : !!this.modelValue.info.description,
-      }),
-    };
-  },
+            : !!props.modelValue.info.description,
+}));
 
-  computed: {
-    homemadeValid() {
-      return (
-        this.formErrors.every(error => typeof error !== 'string' && !['description', 'brand', 'barcode'].includes(error.id.toString()))
-        && ((this.homemadePrompt === true && !!this.info.description)
-          || (this.homemadePrompt === false && !!this.info.brand))
-      );
-    },
-    portionSizeValid() {
-      return !!this.info.portionSize
-        && this.formErrors.every(error => typeof error !== 'string' && !['portionSize'].includes(error.id.toString()));
-    },
-    validConditions(): boolean[] {
-      return [!!this.form?.isValid, this.homemadeValid, this.portionSizeValid];
-    },
-  },
+const homemadeValid = computed(() => (
+  formErrors.value.every(error => typeof error !== 'string' && !['description', 'brand', 'barcode'].includes(error.id.toString()))
+  && ((state.value.homemadePrompt === true && !!state.value.info.description)
+    || (state.value.homemadePrompt === false && !!state.value.info.brand))
+));
+const portionSizeValid = computed(() => !!state.value.info.portionSize
+  && formErrors.value.every(error => typeof error !== 'string' && !['portionSize'].includes(error.id.toString())));
 
-  methods: {
-    confirm() {
-      this.updatePanel();
-    },
+const validConditions = computed(() => [!!form.value?.isValid, homemadeValid.value, portionSizeValid.value]);
+const isValid = computed(() => validConditions.value.every(condition => condition));
 
-    update() {
-      const state: PromptStates['missing-food-prompt'] = {
-        info: this.info,
-        panel: this.panel,
-        homemadePrompt: this.homemadePrompt,
-      };
+const { updatePanel } = usePanel(state, validConditions);
 
-      this.$emit('update:modelValue', state);
-    },
-  },
-});
+function confirm() {
+  updatePanel();
+};
+
+function update() {
+  emit('update:modelValue', state.value);
+};
 </script>
 
 <style lang="scss" scoped></style>

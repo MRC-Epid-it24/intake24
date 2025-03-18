@@ -144,8 +144,8 @@
 <script lang="ts" setup>
 import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
-import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({

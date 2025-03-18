@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
+    <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel :readonly="portionSizeMethods.length === 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.method`" tag="span">
@@ -30,16 +30,15 @@
             </template>
           </i18n-t>
           <template #actions>
-            <expansion-panel-actions :valid="!!portionSize.milkVolumePercentage" />
+            <expansion-panel-actions :valid="!!state.portionSize.milkVolumePercentage" />
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <v-radio-group
-            v-model="portionSize.milkVolumePercentage"
-            :error="hasErrors"
+            v-model="state.portionSize.milkVolumePercentage"
             hide-details="auto"
             :inline="prompt.orientation === 'row'"
-            @update:model-value="clearErrors"
+            @update:model-value="updateMilk"
           >
             <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
               <template #label>
@@ -49,13 +48,12 @@
                   <quantity-badge
                     :amount="option.value * parentServing"
                     unit="ml"
-                    :valid="portionSize.milkVolumePercentage === option.value"
+                    :valid="state.portionSize.milkVolumePercentage === option.value"
                   />
                 </template>
               </template>
             </v-radio>
           </v-radio-group>
-          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error" />
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -68,96 +66,59 @@
   </base-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, PortionSizeParameters } from '@intake24/common/surveys';
+import { computed, ref } from 'vue';
+import type { EncodedFood } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
-import { useFoodUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/i18n';
+import { ExpansionPanelActions } from '@intake24/survey/components/elements';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { BaseLayout } from '../layouts';
+import { Next, NextMobile, QuantityBadge, usePanel, usePortionSizeMethod } from '../partials';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
 
-import { QuantityBadge } from '../partials';
-import createBasePortion from './createBasePortion';
-
-export default defineComponent({
-  name: 'MilkInAHotDrinkPrompt',
-
-  components: { QuantityBadge },
-
-  mixins: [createBasePortion<'milk-in-a-hot-drink-prompt'>()],
-
-  props: {
-    parameters: {
-      type: Object as PropType<PortionSizeParameters['milk-in-a-hot-drink']>,
-      required: true,
-    },
-    parentFood: {
-      type: Object as PropType<EncodedFood>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props) {
-    const { foodName, parentFoodName } = useFoodUtils(props);
-
-    return { foodName, parentFoodName };
-  },
-
-  data() {
-    return {
-      ...copy(this.modelValue),
-    };
-  },
-
-  computed: {
-    localeOptions() {
-      return (this.parameters.options[this.$i18n.locale] ?? this.parameters.options.en)
-        .map(item => ({ ...item, value: Number(item.value) }))
-        .filter(({ value }) => !Number.isNaN(value));
-    },
-
-    parentServing(): number {
-      return this.parentFood.portionSize?.servingWeight ?? 0;
-    },
-
-    milkValid(): boolean {
-      return (
-        this.portionSize.milkPartIndex !== null && this.portionSize.milkVolumePercentage !== null
-      );
-    },
-
-    validConditions(): boolean[] {
-      return [this.psmValid, this.milkValid];
-    },
-  },
-
-  watch: {
-    'portionSize.milkVolumePercentage': function (val) {
-      this.portionSize.milkPartIndex
-        = this.localeOptions.findIndex(option => option.value === val) ?? null;
-
-      this.updatePanel();
-      this.update();
-    },
-  },
-
-  methods: {
-    setErrors() {
-      this.errors = [];
-    },
-
-    update() {
-      const { portionSize, panel } = this;
-
-      const state: PromptStates['milk-in-a-hot-drink-prompt'] = { portionSize, panel };
-
-      this.$emit('update:modelValue', state);
-    },
+const props = defineProps({
+  ...createPortionPromptProps<'milk-in-a-hot-drink-prompt'>(),
+  parentFood: {
+    type: Object as PropType<EncodedFood>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['action', 'update:modelValue']);
+
+const { i18n: { locale } } = useI18n();
+const { action, type } = usePromptUtils(props, { emit });
+const { parameters, psmValid } = usePortionSizeMethod<'milk-in-a-hot-drink'>(props);
+const { foodName, parentFoodName } = useFoodUtils(props);
+
+const state = ref(copy(props.modelValue));
+
+const localeOptions = computed(() =>
+  (parameters.value.options[locale.value] ?? parameters.value.options.en)
+    .map(item => ({ ...item, value: Number(item.value) }))
+    .filter(({ value }) => !Number.isNaN(value)),
+);
+
+const parentServing = computed(() => props.parentFood.portionSize?.servingWeight ?? 0);
+const milkValid = computed(() => state.value.portionSize.milkPartIndex !== null && state.value.portionSize.milkVolumePercentage !== null);
+const validConditions = computed(() => [psmValid.value, milkValid.value]);
+const isValid = computed(() => validConditions.value.every(condition => condition));
+
+const { updatePanel } = usePanel(state, validConditions);
+
+function updateMilk(val: number | null) {
+  state.value.portionSize.milkPartIndex = localeOptions.value.findIndex(option => option.value === val) ?? null;
+
+  updatePanel();
+  update();
+}
+
+function update() {
+  emit('update:modelValue', state.value);
+};
 </script>
 
 <style lang="scss" scoped></style>

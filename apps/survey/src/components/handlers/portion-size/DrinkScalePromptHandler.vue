@@ -4,13 +4,12 @@
     v-bind="{
       food: food(),
       meal,
-      parameters,
       parentFood,
       portionSizeMethods,
       prompt,
       section,
     }"
-    @action="action"
+    @action="actionPortionSize"
     @update:model-value="update"
   />
 </template>
@@ -28,7 +27,6 @@ const emit = defineEmits(['action']);
 const {
   encodedFood: food,
   encodedFoodPortionSizeData,
-  parameters,
   parentFoodOptional: parentFood,
   portionSizeMethods,
 } = useFoodPromptUtils<'drink-scale'>();
@@ -66,6 +64,6 @@ function getInitialState(): PromptStates['drink-scale-prompt'] {
   };
 }
 
-const { state, actionPortionSize: action, update } = usePromptHandlerStore(props, { emit }, getInitialState);
+const { state, actionPortionSize, update } = usePromptHandlerStore(props, { emit }, getInitialState);
 const { meal } = useMealPromptUtils();
 </script>

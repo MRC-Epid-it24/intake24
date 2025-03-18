@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
+    <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel :readonly="portionSizeMethods.length === 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.method`" tag="span">
@@ -36,8 +36,8 @@
             v-bind="{
               config: prompt.imageMap,
               imageMapData: bowlImageMap,
-              id: portionSize.bowlId,
-              index: portionSize.bowlIndex,
+              id: state.portionSize.bowlId,
+              index: state.portionSize.bowlIndex,
               labels: bowlLabels,
             }"
             @confirm="confirmBowl"
@@ -64,8 +64,8 @@
             v-bind="{
               config: prompt.imageMap,
               imageMapData: milkLevelImageMap,
-              id: portionSize.milkLevelId,
-              index: portionSize.milkLevelIndex,
+              id: state.portionSize.milkLevelId,
+              index: state.portionSize.milkLevelIndex,
               labels: milkLevelLabels,
             }"
             @confirm="confirmMilk"
@@ -83,24 +83,30 @@
   </base-layout>
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, PortionSizeParameters } from '@intake24/common/surveys';
-import type { ImageMapResponse } from '@intake24/common/types/http';
+<script lang="ts" setup>
+import { computed, ref } from 'vue';
+import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
+import { ExpansionPanelActions } from '@intake24/survey/components/elements';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { BaseLayout } from '../layouts';
+import { ImageMapSelector, Next, NextMobile, QuantityBadge, useFetchImageData, usePanel, usePortionSizeMethod } from '../partials';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
 
-import { ImageMapSelector, QuantityBadge } from '../partials';
-import createBasePortion from './createBasePortion';
+const props = defineProps({
+  ...createPortionPromptProps<'milk-on-cereal-prompt'>(),
+  bowlImageMapId: {
+    type: String,
+    default: 'gbowl',
+  },
+});
+const emit = defineEmits(['action', 'update:modelValue']);
 
 const bowls = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
-
 type Bowl = (typeof bowls)[number];
-
 const milkDensity = 1.032;
-
 const volumeDefs: Record<Bowl, number[]> = {
   A: [52.3, 100.0, 172.0, 267.7, 389.3, 522.3],
   B: [62.7, 138.0, 249.0, 385.7],
@@ -109,206 +115,128 @@ const volumeDefs: Record<Bowl, number[]> = {
   E: [38.0, 103.7, 197.0, 305.7, 428.0, 559.3],
   F: [49.3, 104.7, 187.7, 295.3, 420.0, 570.3],
 };
+const milkLevelImageMapPrefix = 'milkbowl';
 
-export default defineComponent({
-  name: 'MilkOnCerealPrompt',
+const { translate } = useI18n();
+const { action, type } = usePromptUtils(props, { emit });
+const { parameters, psmValid } = usePortionSizeMethod<'milk-on-cereal'>(props);
+const { foodName } = useFoodUtils(props);
 
-  components: { ImageMapSelector, QuantityBadge },
+const state = ref(copy(props.modelValue));
 
-  mixins: [createBasePortion<'milk-on-cereal-prompt', EncodedFood>()],
+const bowlImageMapUrl = computed(() => `portion-sizes/image-maps/${props.bowlImageMapId}`);
+const { imageData: bowlImageMap } = useFetchImageData<ImageMapResponse>({
+  url: bowlImageMapUrl,
+  onFetch: (data) => {
+    state.value.portionSize.imageUrl = data.baseImageUrl;
 
-  props: {
-    bowlImageMapId: {
-      type: String,
-      default: 'gbowl',
-    },
-    parameters: {
-      type: Object as PropType<PortionSizeParameters['milk-on-cereal']>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  data() {
-    const milkLevelImageMapPrefix = 'milkbowl';
-
-    return {
-      bowls,
-      milkDensity,
-      volumeDefs,
-      milkLevelImageMapPrefix,
-
-      bowlImageMap: null as ImageMapResponse | null,
-      milkLevelImageMap: null as ImageMapResponse | null,
-
-      ...copy(this.modelValue),
-    };
-  },
-
-  computed: {
-    labelsEnabled() {
-      return this.prompt.imageMap.labels && !!this.parameters.imageMapLabels;
-    },
-
-    bowlLabels() {
-      if (!this.labelsEnabled || !this.bowlImageMap)
-        return [];
-
-      return this.bowlImageMap.objects.map(({ label }) => this.translate(label));
-    },
-
-    bowl() {
-      return this.portionSize.bowl ?? undefined;
-    },
-
-    milkLevelImageMapId(): string | undefined {
-      const { bowl, milkLevelImageMapPrefix } = this;
-      if (bowl === undefined)
-        return undefined;
-
-      return `${milkLevelImageMapPrefix}${bowl}`;
-    },
-
-    milkLevelLabels() {
-      if (!this.labelsEnabled || !this.milkLevelImageMap)
-        return [];
-
-      return this.milkLevelImageMap.objects.map(({ label }) => this.translate(label));
-    },
-
-    bowlValid() {
-      return !!(
-        this.portionSize.bowlId !== undefined
-        && this.portionSize.bowlIndex !== undefined
-        && this.portionSize.bowl
-        && this.bowlConfirmed
-      );
-    },
-
-    milkLevelWeight() {
-      if (!this.portionSize.bowl || this.portionSize.milkLevelIndex === undefined)
-        return undefined;
-
-      return (
-        volumeDefs[this.portionSize.bowl as Bowl][this.portionSize.milkLevelIndex]
-        * this.milkDensity
-      );
-    },
-
-    milkLevelValid() {
-      return (
-        this.portionSize.milkLevelId !== undefined
-        && this.portionSize.milkLevelIndex !== undefined
-        && this.milkLevelConfirmed
-      );
-    },
-
-    validConditions(): boolean[] {
-      return [this.psmValid, this.bowlValid, this.milkLevelValid];
-    },
-  },
-
-  watch: {
-    async milkLevelImageMapId(val) {
-      if (!val)
-        return;
-
-      await this.fetchMilkLevelImageMap();
-    },
-  },
-
-  async mounted() {
-    await Promise.all([this.fetchBowlImageMap(), this.fetchMilkLevelImageMap()]);
-    if (
-      this.parentFood?.type !== 'encoded-food'
-      || this.parentFood?.portionSize?.method !== 'cereal'
-    ) {
+    if (props.parentFood?.type !== 'encoded-food' || props.parentFood?.portionSize?.method !== 'cereal')
       return;
-    }
 
-    const { bowlIndex, bowlId } = this.parentFood.portionSize;
+    const { bowlIndex, bowlId } = props.parentFood.portionSize;
 
     if (bowlIndex !== undefined && bowlId !== undefined) {
-      this.selectBowl(bowlIndex, bowlId);
-      this.confirmBowl();
+      selectBowl(bowlIndex, bowlId);
+      confirmBowl();
     }
   },
+});
 
-  methods: {
-    async fetchBowlImageMap() {
-      const { data } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.bowlImageMapId}`,
-      );
+const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.imageMapLabels);
+const bowlLabels = computed(() => {
+  if (!labelsEnabled.value || !bowlImageMap.value)
+    return [];
 
-      this.bowlImageMap = { ...data };
-      this.portionSize.imageUrl = data.baseImageUrl;
-    },
+  return bowlImageMap.value.objects.map(({ label }) => translate(label));
+});
+const bowl = computed(() => state.value.portionSize.bowl ?? undefined);
+const milkLevelImageMapId = computed(() => {
+  if (bowl.value === undefined)
+    return undefined;
 
-    async fetchMilkLevelImageMap() {
-      if (!this.milkLevelImageMapId)
-        return;
+  return `${milkLevelImageMapPrefix}${bowl.value}`;
+});
 
-      const { data } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.milkLevelImageMapId}`,
-      );
-
-      this.milkLevelImageMap = { ...data };
-      this.portionSize.milkLevelImage = data.baseImageUrl;
-    },
-
-    selectBowl(idx: number, id: string) {
-      this.portionSize.bowlIndex = idx;
-      this.portionSize.bowlId = id;
-      this.portionSize.bowl = this.bowls[idx];
-      this.bowlConfirmed = false;
-      this.clearMilk();
-
-      this.update();
-    },
-
-    confirmBowl() {
-      this.bowlConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
-
-    clearMilk() {
-      this.portionSize.milkLevelId = undefined;
-      this.portionSize.milkLevelIndex = undefined;
-      this.milkLevelConfirmed = false;
-    },
-
-    selectMilk(idx: number, id: string) {
-      this.portionSize.milkLevelIndex = idx;
-      this.portionSize.milkLevelId = id;
-      this.milkLevelConfirmed = false;
-      this.update();
-    },
-
-    confirmMilk() {
-      this.milkLevelConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
-
-    update() {
-      const { milkLevelWeight } = this;
-
-      if (milkLevelWeight !== undefined)
-        this.portionSize.servingWeight = milkLevelWeight;
-
-      const state: PromptStates['milk-on-cereal-prompt'] = {
-        portionSize: this.portionSize,
-        panel: this.panel,
-        bowlConfirmed: this.bowlConfirmed,
-        milkLevelConfirmed: this.milkLevelConfirmed,
-      };
-
-      this.$emit('update:modelValue', state);
-    },
+const imageMapUrl = computed(() => milkLevelImageMapId.value ? `portion-sizes/image-maps/${milkLevelImageMapId.value}` : undefined);
+const { imageData: milkLevelImageMap } = useFetchImageData<ImageMapResponse>({
+  url: imageMapUrl,
+  onFetch: (data) => {
+    state.value.portionSize.milkLevelImage = data.baseImageUrl;
   },
 });
+
+const milkLevelLabels = computed(() => {
+  if (!labelsEnabled.value || !milkLevelImageMap.value)
+    return [];
+
+  return milkLevelImageMap.value.objects.map(({ label }) => translate(label));
+});
+
+const bowlValid = computed(() => !!(
+  state.value.portionSize.bowlId !== undefined
+  && state.value.portionSize.bowlIndex !== undefined
+  && state.value.portionSize.bowl
+  && state.value.bowlConfirmed
+));
+
+const milkLevelWeight = computed(() => {
+  if (!state.value.portionSize.bowl || state.value.portionSize.milkLevelIndex === undefined)
+    return undefined;
+
+  return (volumeDefs[state.value.portionSize.bowl as Bowl][state.value.portionSize.milkLevelIndex] * milkDensity);
+});
+
+const milkLevelValid = computed(() => (
+  state.value.portionSize.milkLevelId !== undefined
+  && state.value.portionSize.milkLevelIndex !== undefined
+  && state.value.milkLevelConfirmed
+));
+
+const validConditions = computed(() => [psmValid.value, bowlValid.value, milkLevelValid.value]);
+const isValid = computed(() => validConditions.value.every(condition => condition));
+
+const { updatePanel } = usePanel(state, validConditions);
+
+function selectBowl(idx: number, id: string) {
+  state.value.portionSize.bowlIndex = idx;
+  state.value.portionSize.bowlId = id;
+  state.value.portionSize.bowl = bowls[idx];
+  state.value.bowlConfirmed = false;
+  clearMilk();
+  update();
+};
+
+function confirmBowl() {
+  state.value.bowlConfirmed = true;
+  updatePanel();
+  update();
+};
+
+function clearMilk() {
+  state.value.portionSize.milkLevelId = undefined;
+  state.value.portionSize.milkLevelIndex = undefined;
+  state.value.milkLevelConfirmed = false;
+};
+
+function selectMilk(idx: number, id: string) {
+  state.value.portionSize.milkLevelIndex = idx;
+  state.value.portionSize.milkLevelId = id;
+  state.value.milkLevelConfirmed = false;
+  update();
+};
+
+function confirmMilk() {
+  state.value.milkLevelConfirmed = true;
+  updatePanel();
+  update();
+};
+
+function update() {
+  if (milkLevelWeight.value !== undefined)
+    state.value.portionSize.servingWeight = milkLevelWeight.value;
+
+  emit('update:modelValue', state.value);
+};
 </script>
 
 <style lang="scss" scoped></style>

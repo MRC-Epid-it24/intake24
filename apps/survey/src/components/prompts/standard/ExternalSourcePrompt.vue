@@ -34,15 +34,12 @@ import { computed } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
 import { BaseLayout } from '../layouts';
+import { Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 import externalSources from './external-sources';
 
-defineOptions({
-  name: 'ExternalSourcePrompt',
-  components: { ...externalSources },
-});
+defineOptions({ components: { ...externalSources } });
 
 const props = defineProps({
   ...createBasePromptProps<'external-source-prompt', FoodState>(),

@@ -214,11 +214,15 @@ const yesNoPrompt = baseCustomPrompt.extend({
 });
 
 // Portion size
-const asServedPrompt = basePortionPrompt.extend({
-  component: z.literal('as-served-prompt'),
-  leftovers: z.boolean(),
-  multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)),
-});
+export const hasMultiple = z.object({ multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)) });
+export type HasMultiple = z.infer<typeof hasMultiple>;
+
+const asServedPrompt = basePortionPrompt
+  .merge(hasMultiple)
+  .extend({
+    component: z.literal('as-served-prompt'),
+    leftovers: z.boolean(),
+  });
 
 const cerealPrompt = basePortionPrompt.extend({
   component: z.literal('cereal-prompt'),
@@ -230,12 +234,13 @@ const directWeightPrompt = basePortionPrompt.extend({
   component: z.literal('direct-weight-prompt'),
 });
 
-const drinkScalePrompt = basePortionPrompt.extend({
-  component: z.literal('drink-scale-prompt'),
-  imageMap,
-  leftovers: z.boolean(),
-  multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)),
-});
+const drinkScalePrompt = basePortionPrompt
+  .merge(hasMultiple)
+  .extend({
+    component: z.literal('drink-scale-prompt'),
+    imageMap,
+    leftovers: z.boolean(),
+  });
 
 const guideImagePrompt = basePortionPrompt.extend({
   component: z.literal('guide-image-prompt'),

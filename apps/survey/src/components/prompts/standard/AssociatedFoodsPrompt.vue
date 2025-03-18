@@ -188,14 +188,12 @@ import { getFoodDescription } from '@intake24/common/surveys';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
-import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFoodChooser.vue';
+import { MealFoodChooser } from '@intake24/survey/components/prompts/partials';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
-import { Next, NextMobile } from '../actions';
 import { BaseLayout } from '../layouts';
+import { Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
-
-defineOptions({ name: 'AssociatedFoodsPrompt' });
 
 const props = defineProps({
   ...createBasePromptProps<'associated-foods-prompt'>(),

@@ -27,8 +27,8 @@
 import type { PropType } from 'vue';
 import { computed } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
+import { Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({

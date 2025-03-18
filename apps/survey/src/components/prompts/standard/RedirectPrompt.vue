@@ -101,8 +101,6 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({ name: 'RedirectPrompt' });
-
 const props = defineProps({
   ...createBasePromptProps<'redirect-prompt'>(),
   feedbackAvailable: {

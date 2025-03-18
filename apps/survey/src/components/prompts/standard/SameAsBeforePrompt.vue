@@ -96,8 +96,6 @@ import { CardLayout } from '../layouts';
 import { useStandardUnits } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({ name: 'SameAsBeforePrompt' });
-
 const props = defineProps({
   ...createBasePromptProps<'same-as-before-prompt'>(),
   sabFood: {

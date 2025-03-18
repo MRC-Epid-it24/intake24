@@ -4,7 +4,6 @@
     v-bind="{
       food: food(),
       meal,
-      parameters,
       parentFood,
       portionSizeMethods,
       prompt,
@@ -28,7 +27,6 @@ const emit = defineEmits(['action']);
 const {
   encodedFood: food,
   encodedFoodPortionSizeData,
-  parameters,
   parentEncodedFood: parentFood,
   portionSizeMethods,
 } = useFoodPromptUtils<'parent-food-portion'>();

@@ -54,11 +54,9 @@ import { computed, onMounted } from 'vue';
 import type { MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
 import { CardLayout } from '../layouts';
+import { Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
-
-defineOptions({ name: 'MealDurationPrompt' });
 
 const props = defineProps({
   ...createBasePromptProps<'meal-duration-prompt'>(),

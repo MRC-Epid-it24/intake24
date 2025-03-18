@@ -20,12 +20,9 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
 import { CardLayout } from '../layouts';
-import { useDatePicker } from '../partials';
+import { Next, NextMobile, useDatePicker } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
-
-defineOptions({ name: 'RecallDatePrompt' });
 
 const props = defineProps({
   ...createBasePromptProps<'recall-date-prompt'>(),

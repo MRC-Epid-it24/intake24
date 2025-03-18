@@ -24,8 +24,6 @@ import { foodsService } from '@intake24/survey/services';
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({ name: 'FoodSearchPrompt' });
-
 const props = defineProps({
   ...createBasePromptProps<'food-search-prompt', FoodState>(),
   localeId: {

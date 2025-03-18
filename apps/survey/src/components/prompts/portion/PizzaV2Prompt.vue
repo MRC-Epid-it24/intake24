@@ -169,45 +169,34 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 // @ts-expect-error - virtual types
 import PizzaSlice from 'virtual:icons/fluent/food-pizza-24-filled';
 // @ts-expect-error - virtual types
 import PizzaWhole from 'virtual:icons/game-icons/full-pizza';
 import { computed, ref } from 'vue';
-import type { PortionSizeParameters } from '@intake24/common/surveys';
 import { pizzaCrusts, pizzaSizes, pizzaUnits } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
 import { BaseLayout } from '../layouts';
-import { QuantityCard, usePanel } from '../partials';
+import { Next, NextMobile, QuantityCard, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
 defineOptions({
-  name: 'PizzaV2Prompt',
   components: { PizzaSlice, PizzaWhole },
 });
 
 const props = defineProps({
   ...createPortionPromptProps<'pizza-v2-prompt'>(),
-  conversionFactor: {
-    type: Number,
-    required: true,
-  },
-  parameters: {
-    type: Object as PropType<PortionSizeParameters['pizza-v2']>,
-    required: true,
-  },
 });
 
 const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { t } } = useI18n();
 const { action, type } = usePromptUtils(props, { emit });
+const { conversionFactor, psmValid } = usePortionSizeMethod<'pizza-v2'>(props);
 const { foodName } = useFoodUtils(props);
 
 const baseWeight = 198;
@@ -224,7 +213,6 @@ const crustDefs = { classic: 1, 'italian-thin': 0.8, stuffed: 1.2 };
 
 const state = ref(copy(props.modelValue));
 
-const psmValid = computed(() => props.food.portionSizeMethodIndex !== null);
 const sizeValid = computed(() => state.value.confirmed.size);
 const crustValid = computed(() => state.value.confirmed.crust);
 const unitValid = computed(() => state.value.confirmed.unit);
@@ -268,7 +256,7 @@ function update() {
           = ((baseWeight * pizzaDefs[size!].multiplier * crustDefs[crust!])
             / (unit === 'slice' ? pizzaDefs[size!].slices : 1))
           * quantity
-          * props.conversionFactor;
+          * conversionFactor.value;
   }
 
   emit('update:modelValue', state.value);

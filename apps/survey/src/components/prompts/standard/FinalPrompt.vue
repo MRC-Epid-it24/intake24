@@ -59,8 +59,6 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({ name: 'FinalPrompt' });
-
 const props = defineProps({
   ...createBasePromptProps<'final-prompt'>(),
   feedbackAvailable: {

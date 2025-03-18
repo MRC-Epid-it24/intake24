@@ -82,10 +82,7 @@ import { CardLayout } from '../layouts';
 import { useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({
-  name: 'MealAddPrompt',
-  components: { VCombobox, VSelect },
-});
+defineOptions({ components: { VCombobox, VSelect } });
 
 const props = defineProps({
   ...createBasePromptProps<'meal-add-prompt'>(),

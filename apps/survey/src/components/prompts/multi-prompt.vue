@@ -35,9 +35,9 @@ import { computed, ref, useTemplateRef } from 'vue';
 import type { Prompt } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, FoodState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from './actions';
 import { customPrompts } from './custom';
 import { BaseLayout } from './layouts';
+import { Next, NextMobile } from './partials';
 import { createBasePromptProps } from './prompt-props';
 
 defineOptions({

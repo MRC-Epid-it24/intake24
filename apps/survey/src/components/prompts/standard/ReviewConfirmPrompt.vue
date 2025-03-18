@@ -63,8 +63,6 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({ name: 'ReviewConfirmPrompt' });
-
 const props = defineProps({
   ...createBasePromptProps<'review-confirm-prompt'>(),
   meals: {

@@ -50,7 +50,7 @@ export function createPortionPromptProps<P extends keyof Prompts & keyof PromptS
     },
     portionSizeMethods: {
       type: Array as PropType<(UserPortionSizeMethod & { index: number })[]>,
-      required: true,
+      default: () => [],
     },
   } as const;
 };

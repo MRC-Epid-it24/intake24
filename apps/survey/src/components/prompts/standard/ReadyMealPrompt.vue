@@ -29,11 +29,9 @@ import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../actions';
 import { CardLayout } from '../layouts';
+import { Next, NextMobile } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
-
-defineOptions({ name: 'ReadyMealPrompt' });
 
 const props = defineProps({
   ...createBasePromptProps<'ready-meal-prompt'>(),

@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :tile="$vuetify.display.mobile">
+    <v-expansion-panels v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel :readonly="portionSizeMethods.length === 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.method`" tag="span">
@@ -36,8 +36,8 @@
             v-bind="{
               config: prompt.imageMap,
               imageMapData,
-              id: portionSize.containerId,
-              index: portionSize.containerIndex,
+              id: state.portionSize.containerId,
+              index: state.portionSize.containerIndex,
               labels,
             }"
             @confirm="confirmObject"
@@ -57,8 +57,8 @@
               <quantity-badge
                 v-if="prompt.badges"
                 :amount="
-                  portionSize.servingWeight
-                    ? portionSize.servingWeight / portionSize.quantity
+                  state.portionSize.servingWeight
+                    ? state.portionSize.servingWeight / state.portionSize.quantity
                     : undefined
                 "
                 unit="ml"
@@ -71,8 +71,8 @@
           <component
             :is="scale.version === 1 ? 'drink-scale-panel' : 'drink-scale-v2-panel'"
             v-if="scale"
-            v-model="portionSize.fillLevel"
-            :open="panel === 1"
+            v-model="state.portionSize.fillLevel"
+            :open="state.panel === 1"
             :scale="scale"
             @confirm="confirmVolume"
             @update:model-value="updateVolume"
@@ -87,23 +87,23 @@
             </template>
           </i18n-t>
           <template #actions>
-            <expansion-panel-actions :valid="leftoversPrompt === false || leftoversConfirmed">
+            <expansion-panel-actions :valid="state.leftoversPrompt === false || state.leftoversConfirmed">
               <quantity-badge
                 v-if="prompt.badges"
                 :amount="
-                  portionSize.leftoversWeight
-                    ? portionSize.leftoversWeight / portionSize.quantity
+                  state.portionSize.leftoversWeight
+                    ? state.portionSize.leftoversWeight / state.portionSize.quantity
                     : undefined
                 "
                 unit="ml"
-                :valid="leftoversConfirmed"
+                :valid="state.leftoversConfirmed"
               />
             </expansion-panel-actions>
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory />
-          <template v-if="leftoversPrompt">
+          <yes-no-toggle v-model="state.leftoversPrompt" class="mb-4" mandatory />
+          <template v-if="state.leftoversPrompt">
             <i18n-t class="mb-4" :keypath="`prompts.${type}.leftovers.label`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
@@ -112,9 +112,9 @@
             <component
               :is="scale.version === 1 ? 'drink-scale-panel' : 'drink-scale-v2-panel'"
               v-if="scale"
-              v-model="portionSize.leftoversLevel"
-              :max-fill-level="portionSize.fillLevel"
-              :open="panel === 2"
+              v-model="state.portionSize.leftoversLevel"
+              :max-fill-level="state.portionSize.fillLevel"
+              :open="state.panel === 2"
               :scale="scale"
               type="leftovers"
               @confirm="confirmLeftovers"
@@ -134,7 +134,7 @@
             <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="portionSize.quantity ?? undefined"
+                :amount="state.portionSize.quantity ?? undefined"
                 unit=""
                 :valid="quantityValid"
               />
@@ -145,8 +145,8 @@
           <component
             :is="prompt.multiple.type"
             v-if="prompt.multiple"
-            v-model="portionSize.quantity"
-            v-model:confirmed="quantityConfirmed"
+            v-model="state.portionSize.quantity"
+            v-model:confirmed="state.quantityConfirmed"
             v-bind="multipleProps"
             @update:confirmed="confirmQuantity"
             @update:model-value="updateQuantity"
@@ -163,29 +163,32 @@
   </base-layout>
 </template>
 
-<script lang="ts">
-import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
-import type { PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters } from '@intake24/common/surveys';
+<script lang="ts" setup>
+import { computed, ref, watch } from 'vue';
 import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
 import type { DrinkwareScaleV2Response, DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
-import { YesNoToggle } from '@intake24/survey/components/elements';
-
-import {
-  calculateVolume as calculateVolumeLUT,
-  DrinkScalePanel,
-  DrinkScaleV2Panel,
-  getScaleBounds,
-  ImageMapSelector,
-  QuantityBadge,
-  QuantityCard,
-  QuantitySlider,
-} from '../partials';
+import { useI18n } from '@intake24/i18n';
+import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { BaseLayout } from '../layouts';
+import { calculateVolume as calculateVolumeLUT, DrinkScalePanel, DrinkScaleV2Panel, getScaleBounds, ImageMapSelector, Next, NextMobile, QuantityBadge, QuantityCard, QuantitySlider, useFetchImageData, useMultiple, usePanel, usePortionSizeMethod } from '../partials';
 import { calculateFillVolume, getSymmetryShape } from '../partials/drink-scale-cylindrical';
-import createBasePortion from './createBasePortion';
+import { createPortionPromptProps } from '../prompt-props';
+import { PortionSizeMethods } from './methods';
+
+defineOptions({
+  components: {
+    DrinkScalePanel,
+    DrinkScaleV2Panel,
+    Slider: QuantitySlider,
+    Counter: QuantityCard,
+  },
+});
+
+const props = defineProps(createPortionPromptProps<'drink-scale-prompt'>());
+
+const emit = defineEmits(['action', 'update:modelValue']);
 
 function calculateVolume(scale: DrinkwareScaleEntry | DrinkwareScaleV2Response, fillLevel: number): number {
   if (scale.version === 1)
@@ -207,276 +210,191 @@ function calculateVolume(scale: DrinkwareScaleEntry | DrinkwareScaleV2Response, 
   return (filledVolume * scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1]) / fullVolume;
 }
 
-export default defineComponent({
-  name: 'DrinkScalePrompt',
+const { translate } = useI18n();
+const { action, type } = usePromptUtils(props, { emit });
+const { parameters, psmValid } = usePortionSizeMethod<'drink-scale'>(props);
+const { multipleProps, multipleEnabled } = useMultiple(props);
+const { foodName } = useFoodUtils(props);
 
-  components: {
-    DrinkScalePanel,
-    DrinkScaleV2Panel,
-    ImageMapSelector,
-    QuantityBadge,
-    Slider: QuantitySlider,
-    Counter: QuantityCard,
-    YesNoToggle,
-  },
+const state = ref(copy(props.modelValue));
+state.value.portionSize.drinkwareId = parameters.value.drinkwareId;
+state.value.portionSize.initialFillLevel = parameters.value.initialFillLevel;
+state.value.portionSize.skipFillLevel = parameters.value.skipFillLevel;
 
-  mixins: [createBasePortion<'drink-scale-prompt'>()],
+if (!state.value.portionSize.fillLevel)
+  state.value.portionSize.fillLevel = state.value.portionSize.initialFillLevel;
 
-  props: {
-    parameters: {
-      type: Object as PropType<PortionSizeParameters['drink-scale']>,
-      required: true,
-    },
-  },
+const drinkwareSetUrl = computed(() => `portion-sizes/drinkware-sets/${parameters.value.drinkwareId}`);
+const { imageData: drinkwareSetData } = useFetchImageData<DrinkwareSetResponse>({ url: drinkwareSetUrl });
+const imageMapUrl = computed(() => drinkwareSetData.value ? `portion-sizes/image-maps/${drinkwareSetData.value.imageMapId}` : undefined);
+const { imageData: imageMapData } = useFetchImageData<ImageMapResponse>({ url: imageMapUrl });
 
-  emits: ['update:modelValue'],
+const leftoversEnabled = computed(() => props.prompt.leftovers);
+const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.imageMapLabels);
+const labels = computed(() => {
+  if (!labelsEnabled.value || !imageMapData.value)
+    return [];
 
-  data() {
-    const state = copy(this.modelValue);
-    state.portionSize.drinkwareId = this.parameters.drinkwareId;
-    state.portionSize.initialFillLevel = this.parameters.initialFillLevel;
-    state.portionSize.skipFillLevel = this.parameters.skipFillLevel;
+  return imageMapData.value.objects.map((object) => {
+    const scale = drinkwareSetData.value?.scales.find(
+      ({ choiceId }) => choiceId.toString() === object.id,
+    );
 
-    if (!state.portionSize.fillLevel)
-      state.portionSize.fillLevel = state.portionSize.initialFillLevel;
+    if (!scale)
+      return '';
 
-    return {
-      ...state,
-      drinkwareSetData: null as DrinkwareSetResponse | null,
-      imageMapData: null as ImageMapResponse | null,
-    };
-  },
+    const volume = scale.version === 1
+      ? scale.volumeSamples[scale.volumeSamples.length - 1]
+      : scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1];
 
-  computed: {
-    multipleProps() {
-      if (!this.prompt.multiple)
-        return undefined;
+    return (
+      translate(scale.label, { params: { volume } })
+      || translate(object.label, { params: { volume } })
+    );
+  });
+});
 
-      const { type, ...rest } = this.prompt.multiple;
+const scale = computed(() => {
+  const { containerId } = state.value.portionSize;
+  if (containerId === undefined)
+    return undefined;
 
-      return rest;
-    },
-    multipleEnabled(): boolean {
-      return !!this.prompt.multiple && !!this.parameters.multiple;
-    },
+  return drinkwareSetData.value?.scales.find(
+    scale => scale.choiceId.toString() === containerId,
+  );
+});
 
-    leftoversEnabled() {
-      return this.prompt.leftovers;
-    },
+const skipFillLevel = computed(() => parameters.value.skipFillLevel);
+const objectValid = computed(() => (
+  state.value.portionSize.containerId !== undefined
+  && state.value.portionSize.containerIndex !== undefined
+  && state.value.objectConfirmed
+));
+const volumeValid = computed(() => state.value.volumeConfirmed);
+const leftoversValid = computed(() => state.value.leftoversConfirmed);
+const quantityValid = computed(() => {
+  if (!props.prompt.multiple)
+    return true;
 
-    labelsEnabled() {
-      return this.prompt.imageMap.labels && !!this.parameters.imageMapLabels;
-    },
+  return !props.prompt.multiple.confirm || state.value.quantityConfirmed;
+});
+const validConditions = computed(() => {
+  const conditions = [psmValid.value, objectValid.value, volumeValid.value];
 
-    labels() {
-      if (!this.labelsEnabled || !this.imageMapData)
-        return [];
+  if (leftoversEnabled.value)
+    conditions.push(state.value.leftoversPrompt === false || leftoversValid.value);
 
-      return this.imageMapData.objects.map((object) => {
-        const scale = this.drinkwareSetData?.scales.find(
-          ({ choiceId }) => choiceId.toString() === object.id,
-        );
+  if (multipleEnabled.value)
+    conditions.push(quantityValid.value);
 
-        if (!scale)
-          return '';
+  return conditions;
+});
+const isValid = computed(() => validConditions.value.every(condition => condition));
 
-        const volume = scale.version === 1
-          ? scale.volumeSamples[scale.volumeSamples.length - 1]
-          : scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1];
+const nextStepConditions = computed(() => {
+  const conditions = [psmValid.value, objectValid.value, volumeValid.value];
 
-        return (
-          this.translate(scale.label, { params: { volume } })
-          || this.translate(object.label, { params: { volume } })
-        );
-      });
-    },
+  if (leftoversEnabled.value)
+    conditions.push(state.value.leftoversPrompt === false || leftoversValid.value);
 
-    scale() {
-      const { containerId } = this.portionSize;
-      if (containerId === undefined)
-        return undefined;
+  if (multipleEnabled.value)
+    conditions.push(state.value.quantityConfirmed);
 
-      return this.drinkwareSetData?.scales.find(
-        scale => scale.choiceId.toString() === containerId,
-      );
-    },
+  return conditions;
+});
 
-    skipFillLevel() {
-      return this.parameters.skipFillLevel;
-    },
+const { updatePanel } = usePanel(state, nextStepConditions);
 
-    objectValid() {
-      return (
-        this.portionSize.containerId !== undefined
-        && this.portionSize.containerIndex !== undefined
-        && this.objectConfirmed
-      );
-    },
+function selectObject(idx: number, id: string) {
+  if (!drinkwareSetData.value)
+    return;
 
-    volumeValid() {
-      return this.volumeConfirmed;
-    },
+  state.value.objectConfirmed = false;
 
-    leftoversValid() {
-      return this.leftoversConfirmed;
-    },
+  state.value.portionSize.containerIndex = idx;
+  state.value.portionSize.containerId = id;
+  state.value.portionSize.imageUrl = drinkwareSetData.value.scales[idx].baseImageUrl;
 
-    quantityValid() {
-      if (!this.prompt.multiple)
-        return true;
+  clearVolume();
+  clearLeftovers();
 
-      return !this.prompt.multiple.confirm || this.quantityConfirmed;
-    },
+  state.value.portionSize.servingWeight = calculateVolume(drinkwareSetData.value.scales[idx], state.value.portionSize.fillLevel);
 
-    validConditions(): boolean[] {
-      const conditions = [this.psmValid, this.objectValid, this.volumeValid];
+  update();
+};
 
-      if (this.leftoversEnabled)
-        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
+function confirmObject() {
+  state.value.objectConfirmed = true;
 
-      if (this.multipleEnabled)
-        conditions.push(this.quantityValid);
+  if (skipFillLevel.value)
+    state.value.volumeConfirmed = true;
 
-      return conditions;
-    },
+  updatePanel();
+  update();
+};
 
-    nextStepConditions(): boolean[] {
-      const conditions = [this.psmValid, this.objectValid, this.volumeValid];
+function clearVolume() {
+  state.value.portionSize.fillLevel = state.value.portionSize.initialFillLevel;
+  state.value.volumeConfirmed = false;
+};
 
-      if (this.leftoversEnabled)
-        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
+function updateVolume() {
+  state.value.volumeConfirmed = false;
+  clearLeftovers();
+  update();
+};
 
-      if (this.multipleEnabled)
-        conditions.push(this.quantityConfirmed);
+function confirmVolume() {
+  state.value.volumeConfirmed = true;
+  updatePanel();
+  update();
+};
 
-      return conditions;
-    },
-  },
+function clearLeftovers() {
+  state.value.portionSize.leftovers = false;
+  state.value.leftoversConfirmed = false;
+  state.value.leftoversPrompt = undefined;
+};
 
-  watch: {
-    leftoversPrompt(val: boolean) {
-      this.portionSize.leftovers = val;
-      this.portionSize.leftoversLevel = 0;
+function updateLeftovers() {
+  state.value.leftoversConfirmed = false;
+  update();
+};
 
-      this.updatePanel();
-      this.update();
-    },
-  },
+function confirmLeftovers() {
+  state.value.leftoversConfirmed = true;
+  updatePanel();
+  update();
+};
 
-  async mounted() {
-    await this.fetchDrinkScaleData();
-  },
+function updateQuantity() {
+  state.value.quantityConfirmed = false;
+  update();
+};
 
-  methods: {
-    async fetchDrinkScaleData() {
-      const { data: drinkwareSetData } = await this.$http.get<DrinkwareSetResponse>(
-        `portion-sizes/drinkware-sets/${this.parameters.drinkwareId}`,
-      );
+function confirmQuantity() {
+  state.value.quantityConfirmed = true;
+  updatePanel();
+  update();
+};
 
-      this.drinkwareSetData = { ...drinkwareSetData };
+function update() {
+  if (scale.value) {
+    state.value.portionSize.servingWeight
+          = calculateVolume(scale.value, state.value.portionSize.fillLevel) * state.value.portionSize.quantity;
+    state.value.portionSize.leftoversWeight
+          = calculateVolume(scale.value, state.value.portionSize.leftoversLevel) * state.value.portionSize.quantity;
+  }
 
-      const { data: imageMapData } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.drinkwareSetData.imageMapId}`,
-      );
+  emit('update:modelValue', state.value);
+};
 
-      this.imageMapData = { ...imageMapData };
-    },
+watch(() => state.value.leftoversPrompt, (val) => {
+  state.value.portionSize.leftovers = !!val;
+  state.value.portionSize.leftoversLevel = 0;
 
-    selectObject(idx: number, id: string) {
-      const { drinkwareSetData } = this;
-      if (!drinkwareSetData)
-        return;
-
-      this.objectConfirmed = false;
-
-      this.portionSize.containerIndex = idx;
-      this.portionSize.containerId = id;
-      this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
-
-      this.clearVolume();
-      this.clearLeftovers();
-
-      this.portionSize.servingWeight = calculateVolume(drinkwareSetData.scales[idx], this.portionSize.fillLevel);
-
-      this.update();
-    },
-
-    confirmObject() {
-      this.objectConfirmed = true;
-
-      if (this.skipFillLevel)
-        this.volumeConfirmed = true;
-
-      this.updatePanel();
-      this.update();
-    },
-
-    clearVolume() {
-      this.portionSize.fillLevel = this.portionSize.initialFillLevel;
-      this.volumeConfirmed = false;
-    },
-
-    updateVolume() {
-      this.volumeConfirmed = false;
-      this.clearLeftovers();
-      this.update();
-    },
-
-    confirmVolume() {
-      this.volumeConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
-
-    clearLeftovers() {
-      this.portionSize.leftovers = false;
-      this.leftoversConfirmed = false;
-      this.leftoversPrompt = undefined;
-    },
-
-    updateLeftovers() {
-      this.leftoversConfirmed = false;
-      this.update();
-    },
-
-    confirmLeftovers() {
-      this.leftoversConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
-
-    updateQuantity() {
-      this.quantityConfirmed = false;
-      this.update();
-    },
-
-    confirmQuantity() {
-      this.quantityConfirmed = true;
-      this.updatePanel();
-      this.update();
-    },
-
-    update() {
-      if (this.scale) {
-        this.portionSize.servingWeight
-          = calculateVolume(this.scale, this.portionSize.fillLevel) * this.portionSize.quantity;
-        this.portionSize.leftoversWeight
-          = calculateVolume(this.scale, this.portionSize.leftoversLevel) * this.portionSize.quantity;
-      }
-
-      const state: PromptStates['drink-scale-prompt'] = {
-        portionSize: this.portionSize,
-        panel: this.panel,
-        objectConfirmed: this.objectConfirmed,
-        volumeConfirmed: this.volumeConfirmed,
-        leftoversConfirmed: this.leftoversConfirmed,
-        leftoversPrompt: this.leftoversPrompt,
-        quantityConfirmed: this.quantityConfirmed,
-      };
-
-      this.$emit('update:modelValue', state);
-    },
-  },
+  updatePanel();
+  update();
 });
 </script>
 
