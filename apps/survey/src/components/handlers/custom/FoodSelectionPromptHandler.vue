@@ -19,7 +19,8 @@ import FoodSelectionPrompt from '@intake24/survey/components/prompts/custom/food
 import { useSurvey } from '@intake24/survey/stores';
 import { flagPromptCompletionFlag } from '@intake24/survey/util';
 import { filterFoodsForFoodSelectionPrompt, foodSelectionNoneUuid } from '../../prompts/custom/food-selection/food-selection';
-import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
+import { useMealPromptUtils } from '../composables/use-meal-prompt-utils';
+import { usePromptHandlerNoStore } from '../composables/use-prompt-handler-no-store';
 
 export default defineComponent({
   name: 'FoodSelectionPromptHandler',
