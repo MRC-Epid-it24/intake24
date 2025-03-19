@@ -2,7 +2,7 @@
   <recipe-builder-prompt
     v-model="state"
     v-bind="{
-      food: recipeBuilder(),
+      food: recipeBuilder,
       localeId,
       surveySlug,
       meal,
@@ -45,8 +45,8 @@ const survey = useSurvey();
 const { recipeBuilder, localeId, surveySlug } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 
-const recipeFood = recipeBuilder().template;
-const foodId = recipeBuilder().id;
+const recipeFood = recipeBuilder.value.template;
+const foodId = recipeBuilder.value.id;
 
 function getInitialState(): PromptStates['recipe-builder-prompt'] {
   return {

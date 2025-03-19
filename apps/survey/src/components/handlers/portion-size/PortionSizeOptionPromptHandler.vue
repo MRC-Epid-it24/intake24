@@ -28,7 +28,7 @@ const survey = useSurvey();
 const { encodedFood, parentFoodOptional: parentFood, portionSizeMethods } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 
-const food = encodedFood();
+const food = encodedFood.value;
 
 const getInitialState = computed(() => ({ option: food.portionSizeMethodIndex }));
 

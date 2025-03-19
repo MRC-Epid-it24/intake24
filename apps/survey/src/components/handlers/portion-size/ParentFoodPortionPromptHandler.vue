@@ -2,7 +2,7 @@
   <parent-food-portion-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       parentFood,
       portionSizeMethods,
@@ -34,14 +34,14 @@ const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['parent-food-portion-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'parent-food-portion',
       portionIndex: null,
       portionValue: null,
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
   };
 }
 
@@ -76,8 +76,8 @@ function commitAnswer() {
 
   const survey = useSurvey();
 
-  survey.updateFood({ foodId: food().id, update: { portionSize } });
-  survey.addFoodFlag(food().id, 'portion-size-method-complete');
+  survey.updateFood({ foodId: food.value.id, update: { portionSize } });
+  survey.addFoodFlag(food.value.id, 'portion-size-method-complete');
 
   clearStoredState();
 }

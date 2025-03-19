@@ -1,7 +1,7 @@
 <template>
   <same-as-before-prompt
     v-if="sabFood"
-    v-bind="{ food: encodedFood(), meal, prompt, sabFood, section }"
+    v-bind="{ food, meal, prompt, sabFood, section }"
     @action="action"
   />
 </template>
@@ -17,12 +17,12 @@ defineProps(createHandlerProps<'same-as-before-prompt'>());
 
 const emit = defineEmits(['action']);
 
-const { encodedFood } = useFoodPromptUtils();
+const { encodedFood: food } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 const {
   id: foodId,
   data: { code },
-} = encodedFood();
+} = food.value;
 
 const survey = useSurvey();
 

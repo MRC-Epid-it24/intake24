@@ -2,7 +2,7 @@
   <as-served-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       linkedParent,
       meal,
       parentFood,
@@ -44,7 +44,7 @@ const currentValue = computed(() => {
 
 function getInitialState(): PromptStates['as-served-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'as-served',
       serving: null,
       leftovers: null,
@@ -53,7 +53,7 @@ function getInitialState(): PromptStates['as-served-prompt'] {
       leftoversWeight: 0,
       quantity: currentValue.value,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
     servingImageConfirmed: false,
     leftoversPrompt: undefined,
     leftoversImageConfirmed: false,

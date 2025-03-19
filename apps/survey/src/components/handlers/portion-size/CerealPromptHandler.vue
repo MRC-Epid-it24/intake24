@@ -2,7 +2,7 @@
   <cereal-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       parentFood,
       portionSizeMethods,
@@ -33,7 +33,7 @@ const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['cereal-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'cereal',
       imageUrl: null,
       type: 'hoop',
@@ -45,7 +45,7 @@ function getInitialState(): PromptStates['cereal-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
     bowlConfirmed: false,
     servingImageConfirmed: false,
     leftoversPrompt: undefined,

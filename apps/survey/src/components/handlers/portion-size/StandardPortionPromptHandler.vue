@@ -2,7 +2,7 @@
   <standard-portion-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       linkedParent,
       meal,
       parentFood,
@@ -36,7 +36,7 @@ const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['standard-portion-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'standard-portion',
       unit: null,
       quantity: 1,
@@ -44,7 +44,7 @@ function getInitialState(): PromptStates['standard-portion-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
     quantityConfirmed: false,
     linkedQuantityConfirmed: false,
   };

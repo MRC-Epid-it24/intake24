@@ -2,7 +2,7 @@
   <associated-foods-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       localeId,
       surveySlug,
@@ -58,13 +58,13 @@ const survey = useSurvey();
 function getInitialState(): PromptStates['associated-foods-prompt'] {
   return {
     activePrompt: 0,
-    promptStates: food().data.associatedFoodPrompts.map(prompt =>
+    promptStates: food.value.data.associatedFoodPrompts.map(prompt =>
       initialPromptState(props.prompt.multiple && prompt.multiple),
     ),
   };
 }
 
-const associatedFoodPrompts = computed(() => food().data.associatedFoodPrompts);
+const associatedFoodPrompts = computed(() => food.value.data.associatedFoodPrompts);
 
 const { state, update, clearStoredStateById } = usePromptHandlerStore(props, { emit }, getInitialState);
 
@@ -145,7 +145,7 @@ async function commitAnswer() {
   const existingFoods: LinkAsMainExisting[] = [];
 
   state.value.promptStates.forEach((prompt, idx) => {
-    const promptDef = food().data.associatedFoodPrompts[idx];
+    const promptDef = food.value.data.associatedFoodPrompts[idx];
 
     if (prompt.mainFoodConfirmed) {
       prompt.foods.forEach((food) => {
@@ -174,7 +174,7 @@ async function commitAnswer() {
     }
   });
 
-  const foodId = food().id;
+  const foodId = food.value.id;
   const foodIndex = getFoodIndexRequired(meals.value, foodId);
   const mealIndex = foodIndex.mealIndex;
   const mealId = meals.value[mealIndex].id;

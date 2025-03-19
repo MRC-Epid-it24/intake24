@@ -2,7 +2,7 @@
   <associated-foods-prompt
     v-model="associatedFoodsPromptState"
     v-bind="{
-      food: food(),
+      food,
       meal,
       localeId,
       surveySlug,
@@ -115,7 +115,7 @@ async function commitAnswer() {
     });
   }
 
-  const foodId = food().id;
+  const foodId = food.value.id;
   const foodIndex = getFoodIndexRequired(meals.value, foodId);
   const mealIndex = foodIndex.mealIndex;
   const mealId = meals.value[mealIndex].id;

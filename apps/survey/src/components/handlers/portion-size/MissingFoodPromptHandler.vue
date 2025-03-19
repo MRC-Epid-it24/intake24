@@ -2,7 +2,7 @@
   <missing-food-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       prompt,
       section,
@@ -28,8 +28,8 @@ const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['missing-food-prompt'] {
   return {
-    info: food().info ?? {
-      name: food().searchTerm,
+    info: food.value.info ?? {
+      name: food.value.searchTerm,
       brand: null,
       description: null,
       leftovers: null,
@@ -43,8 +43,8 @@ function getInitialState(): PromptStates['missing-food-prompt'] {
 function commitAnswer() {
   const { info } = state.value;
 
-  survey.updateFood({ foodId: food().id, update: { info } });
-  survey.addFoodFlag(food().id, 'missing-food-complete');
+  survey.updateFood({ foodId: food.value.id, update: { info } });
+  survey.addFoodFlag(food.value.id, 'missing-food-complete');
 
   clearStoredState();
 }

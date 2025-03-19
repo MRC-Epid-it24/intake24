@@ -2,7 +2,7 @@
   <addon-foods-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       meals,
       localeId,
@@ -33,7 +33,7 @@ const survey = useSurvey();
 const meals = computed(() => {
   if (meal.value) {
     // Food-level prompt
-    const foodEntry = food();
+    const foodEntry = food.value;
     if (foodEntry?.id) {
       return [{
         ...meal.value,
@@ -114,7 +114,7 @@ function commitAnswer() {
     survey.addLinkedFoods(foodId, linkedFoods);
   }
 
-  const foodEntry = food();
+  const foodEntry = food.value;
   if (foodEntry?.id) {
     survey.addFoodFlag(foodEntry.id, `${props.prompt.id}-complete`);
   }

@@ -2,7 +2,7 @@
   <milk-in-a-hot-drink-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       parentFood,
       portionSizeMethods,
@@ -34,14 +34,14 @@ const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['milk-in-a-hot-drink-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'milk-in-a-hot-drink',
       milkPartIndex: null,
       milkVolumePercentage: null,
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
   };
 }
 
@@ -82,12 +82,12 @@ function commitAnswer() {
 
   const survey = useSurvey();
 
-  survey.updateFood({ foodId: food().id, update: { portionSize: milkPortionSize } });
+  survey.updateFood({ foodId: food.value.id, update: { portionSize: milkPortionSize } });
   survey.updateFood({
     foodId: parentFood.value.id,
     update: { portionSize: drinkPortionSize },
   });
-  survey.addFoodFlag(food().id, 'portion-size-method-complete');
+  survey.addFoodFlag(food.value.id, 'portion-size-method-complete');
 
   clearStoredState();
 }

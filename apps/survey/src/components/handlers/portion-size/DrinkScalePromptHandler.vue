@@ -2,7 +2,7 @@
   <drink-scale-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       parentFood,
       portionSizeMethods,
@@ -40,7 +40,7 @@ const currentValue = computed(() => {
 
 function getInitialState(): PromptStates['drink-scale-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'drink-scale',
       drinkwareId: '',
       initialFillLevel: 0.9,
@@ -55,7 +55,7 @@ function getInitialState(): PromptStates['drink-scale-prompt'] {
       leftovers: false,
       quantity: currentValue.value,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
     objectConfirmed: false,
     volumeConfirmed: false,
     leftoversConfirmed: false,

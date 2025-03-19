@@ -2,7 +2,7 @@
   <guide-image-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       linkedParent,
       meal,
       parentFood,
@@ -36,7 +36,7 @@ const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['guide-image-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'guide-image',
       guideImageId: '',
       imageUrl: null,
@@ -48,7 +48,7 @@ function getInitialState(): PromptStates['guide-image-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
     objectConfirmed: false,
     quantityConfirmed: false,
     linkedQuantityConfirmed: false,

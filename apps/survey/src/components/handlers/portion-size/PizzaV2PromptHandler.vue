@@ -2,7 +2,7 @@
   <pizza-v2-prompt
     v-model="state"
     v-bind="{
-      food: food(),
+      food,
       meal,
       parentFood,
       portionSizeMethods,
@@ -33,7 +33,7 @@ const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['pizza-v2-prompt'] {
   return {
-    portionSize: encodedFoodPortionSizeData() ?? {
+    portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'pizza-v2',
       size: null,
       crust: null,
@@ -42,7 +42,7 @@ function getInitialState(): PromptStates['pizza-v2-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food().portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
     confirmed: { size: false, crust: false, unit: false, quantity: false },
   };
 }

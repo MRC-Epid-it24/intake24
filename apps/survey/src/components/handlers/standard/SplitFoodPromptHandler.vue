@@ -20,7 +20,7 @@ const { freeTextFood, meals } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
-const food = freeTextFood();
+const food = freeTextFood.value;
 
 /* Temporary solution to V3 split lists
 *  TODO: server-side implementation for

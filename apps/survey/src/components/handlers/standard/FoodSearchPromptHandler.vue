@@ -1,6 +1,6 @@
 <template>
   <food-search-prompt
-    v-bind="{ discardedFoodName, food: food(), meal, localeId, surveySlug, prompt, section }"
+    v-bind="{ discardedFoodName, food, meal, localeId, surveySlug, prompt, section }"
     v-model="searchTerm"
     @action="action"
     @food-missing="foodMissing"
@@ -38,10 +38,10 @@ const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
 const foodData = ref<UserFoodData | undefined>(undefined);
-const searchTerm = ref(getSearchTerm(food()));
+const searchTerm = ref(getSearchTerm(food.value));
 const discardedFoodName = ref<string | null>(null);
 
-const currentState = food();
+const currentState = food.value;
 
 // Warn user if they try to replace an encoded food that already has some portion size
 // data associated with it by coming back to the food search prompt using the back or forward
@@ -61,7 +61,7 @@ else {
 }
 
 function getFoodToReplace() {
-  const { id, customPromptAnswers, flags } = food();
+  const { id, customPromptAnswers, flags } = food.value;
 
   // Remove appropriate flags if replacing existing not a "free-entry" food
   return {

@@ -1,18 +1,7 @@
 import type { LinkedParent } from '../../prompts/partials';
 import { computed } from 'vue';
-import type {
-  EncodedFood,
-  FoodState,
-  FreeTextFood,
-  MissingFood,
-  PortionSizeMethodId,
-  PortionSizeParameters,
-  PortionSizeStates,
-  RecipeBuilder,
-} from '@intake24/common/surveys';
-import type { LocaleTranslation } from '@intake24/common/types';
-import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
-
+import type { EncodedFood, PortionSizeMethodId, PortionSizeStates } from '@intake24/common/surveys';
+import type { UserFoodData } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
 const parentFoodRequiredPSMs: PortionSizeMethodId[] = [
@@ -55,95 +44,76 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     return parentFoodOptional.value;
   });
 
-  const food = (): FoodState => {
+  const food = computed(() => {
     if (foodOptional.value === undefined)
       throw new Error('This prompt requires a food to be selected');
 
     return foodOptional.value;
-  };
+  });
 
-  const encodedFood = (): EncodedFood => {
-    const foodEntry = food();
-
-    if (foodEntry.type !== 'encoded-food') {
-      console.log(foodEntry);
+  const encodedFood = computed(() => {
+    if (food.value.type !== 'encoded-food') {
+      console.log(food.value);
       throw new Error('This selected food must be an encoded food');
     }
 
-    return foodEntry;
-  };
+    return food.value;
+  });
 
   // TODO: should improve EncodedFood type to avoid this type assertion
-  const encodedFoodPortionSizeData = (): PortionSizeStates[T] | null => {
-    const foodEntry = encodedFood();
+  const encodedFoodPortionSizeData = computed<PortionSizeStates[T] | null>(() => encodedFood.value.portionSize as PortionSizeStates[T] | null);
 
-    return foodEntry.portionSize as PortionSizeStates[T] | null;
-  };
-
-  const encodedFoodOptional = (): EncodedFood | undefined => {
+  const encodedFoodOptional = computed(() => {
     if (foodOptional.value === undefined || foodOptional.value.type !== 'encoded-food')
       return undefined;
 
-    return encodedFood();
-  };
+    return encodedFood.value;
+  });
 
-  const freeTextFood = (): FreeTextFood => {
-    const foodEntry = food();
-
-    if (foodEntry.type !== 'free-text')
+  const freeTextFood = computed(() => {
+    if (food.value.type !== 'free-text')
       throw new Error('This selected food must be an free-text food');
 
-    return foodEntry;
-  };
+    return food.value;
+  });
 
-  const missingFood = (): MissingFood => {
-    const foodEntry = food();
-
-    if (foodEntry.type !== 'missing-food')
+  const missingFood = computed(() => {
+    if (food.value.type !== 'missing-food')
       throw new Error('This selected food must be an missing food');
 
-    return foodEntry;
-  };
+    return food.value;
+  });
 
-  const recipeBuilder = (): RecipeBuilder => {
-    const foodEntry = food();
-
-    if (foodEntry.type !== 'recipe-builder')
+  const recipeBuilder = computed(() => {
+    if (food.value.type !== 'recipe-builder')
       throw new Error('This selected food must be an Recipe Builder food');
 
-    return foodEntry;
-  };
+    return food.value;
+  });
 
-  const foodName = (): LocaleTranslation => ({ en: encodedFood().data.localName });
+  const foodName = computed(() => ({ en: encodedFood.value.data.localName }));
 
   const portionSizeMethods = computed(() =>
-    encodedFood().data.portionSizeMethods.map((item, index) => ({ ...item, index })).filter(
+    encodedFood.value.data.portionSizeMethods.map((item, index) => ({ ...item, index })).filter(
       item =>
         survey.registeredPortionSizeMethods.includes(item.method)
         && (!parentFoodRequiredPSMs.includes(item.method) || !!parentFood.value),
     ),
   );
 
-  const portionSize = (): UserPortionSizeMethod => {
-    const selectedFood = encodedFood();
-
+  const portionSize = computed(() => {
+    const selectedFood = encodedFood.value;
     if (selectedFood.portionSizeMethodIndex === null)
       throw new Error('This prompt requires a portion size option to be selected');
 
     return selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex];
-  };
-
-  const conversionFactor = computed(() => portionSize().conversionFactor);
-
-  const parameters = computed(
-    () => portionSize().parameters as unknown as PortionSizeParameters[T],
-  );
+  });
 
   const linkedQuantityCategories = (data: UserFoodData) =>
     survey.linkedQuantity?.parent.filter(cat => data.categories.includes(cat.code)) ?? [];
 
   const linkedParent = computed<LinkedParent | undefined>(() => {
-    const source = encodedFood().data.categories.find(cat =>
+    const source = encodedFood.value.data.categories.find(cat =>
       survey.linkedQuantity?.source.includes(cat),
     );
     if (!source)
@@ -212,7 +182,5 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     portionSize,
     portionSizeMethods,
     recipeBuilder,
-    conversionFactor,
-    parameters,
   };
 }

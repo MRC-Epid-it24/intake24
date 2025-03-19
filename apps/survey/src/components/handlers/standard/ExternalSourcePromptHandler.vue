@@ -1,6 +1,6 @@
 <template>
   <external-source-prompt
-    v-bind="{ food: food(), meal, prompt, section }"
+    v-bind="{ food, meal, prompt, section }"
     v-model="state"
     @action="action"
   />
@@ -22,7 +22,7 @@ const { food } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 
 const getInitialState = computed<PromptStates['external-source-prompt']>(() => ({
-  searchTerm: getSearchTerm(food()),
+  searchTerm: getSearchTerm(food.value),
   type: undefined,
   data: undefined,
 }));
@@ -31,7 +31,7 @@ const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 
 function commitAnswer() {
   const survey = useSurvey();
-  const foodEntry = food();
+  const foodEntry = food.value;
 
   survey.updateFood({ foodId: foodEntry.id, update: {
     external: { ...foodEntry.external, [props.prompt.source.type]: state.value },
