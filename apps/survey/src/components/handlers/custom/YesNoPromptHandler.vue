@@ -23,7 +23,8 @@ import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
 import { flagPromptCompletionFlag } from '@intake24/survey/util';
-import { useCustomPromptHandler, usePromptHandlerNoStore } from '../mixins';
+import { useCustomPromptHandler } from '../composables/use-custom-prompt-handler';
+import { usePromptHandlerNoStore } from '../composables/use-prompt-handler-no-store';
 
 defineOptions({
   name: 'YesNoPromptHandler',

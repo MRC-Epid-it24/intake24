@@ -6,7 +6,6 @@ import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { imageMulterFile } from '@intake24/common/types/http/admin/source-images';
 import { FoodLocal } from '@intake24/db';
-import { customTypeValidationMessage } from '../../requests/util';
 
 export function foodThumbnailImages() {
   const upload = multer({ dest: ioc.cradle.fsConfig.local.uploads });
@@ -23,25 +22,26 @@ export function foodThumbnailImages() {
         const {
           user,
           foodThumbnailImageService,
+          i18nService,
         } = req.scope.cradle;
 
         const res = imageMulterFile.safeParse(file);
 
         if (!res.success) {
+          // i18n helper functions expect Express req while req here is TsRestRequest
           throw new ValidationError(
-            customTypeValidationMessage('file._', { req, path: 'image' }),
-            { path: 'image' },
+            i18nService.translate('validation.types.file._', { attributePath: 'image' }),
           );
         }
 
         const foodLocal = await FoodLocal.findOne({ where: { localeId, foodCode } });
 
         if (foodLocal === null)
-          return { status: 404, body: undefined };
+          return { status: 404 as const, body: undefined };
 
         await foodThumbnailImageService.createImage(user.userId, foodLocal.id, res.data);
 
-        return { status: 200, body: undefined };
+        return { status: 200 as const, body: undefined };
       },
     },
   });
