@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-
+import { shallowRef } from 'vue';
 import type { ComponentType } from '@intake24/common/prompts';
 import type { Selection } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
@@ -16,21 +16,22 @@ export type RecallLogEntry = {
   prompts: RecallLogPrompt[];
 };
 
-export type RecallLogState = {
-  entries: RecallLogEntry[];
-};
+export const recallLog = defineStore('recall-log', () => {
+  const survey = useSurvey();
 
-export const recallLog = defineStore('recall-log', {
-  state: (): RecallLogState => ({
-    entries: [{ selection: copy(useSurvey().selection), prompts: [] }],
-  }),
-  actions: {
-    selectionChanged(selection: Selection) {
-      this.entries.push({ selection: copy(selection), prompts: [] });
-    },
+  const entries = shallowRef<RecallLogEntry[]>([{ selection: copy(survey.selection), prompts: [] }]);
 
-    promptCheck(type: ComponentType, applicable: boolean, reason: string) {
-      this.entries[this.entries.length - 1].prompts.push({ type, applicable, reason });
-    },
-  },
+  function selectionChanged(selection: Selection) {
+    entries.value.push({ selection: copy(selection), prompts: [] });
+  };
+
+  function promptCheck(type: ComponentType, applicable: boolean, reason: string) {
+    entries.value[entries.value.length - 1].prompts.push({ type, applicable, reason });
+  };
+
+  return {
+    entries,
+    selectionChanged,
+    promptCheck,
+  };
 });
