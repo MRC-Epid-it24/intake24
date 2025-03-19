@@ -36,8 +36,8 @@ import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
 import type { FoodState, MealState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { Next, NextMobile } from '../../actions';
 import { BaseLayout, CardLayout, PanelLayout } from '../../layouts';
+import { Next, NextMobile } from '../../partials';
 import { createBasePromptProps } from '../../prompt-props';
 import { foodSelectionNoneUuid } from './food-selection';
 
