@@ -72,7 +72,7 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
-        postgres-version: [15]
+        postgres-version: [17]
         redis-version: [7]
 
     services:
