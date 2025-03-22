@@ -4054,13 +4054,48 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           },
                           "required": [
                             "type",
                             "flow",
                             "recallDate",
-                            "languages"
+                            "languages",
+                            "help"
                           ]
                         },
                         "meals": {
@@ -5698,8 +5733,9 @@
                                       "no-meals-between",
                                       "no-meals-before",
                                       "ready-meal-complete",
-                                      "meal-time:hidden",
-                                      "meal-time:disabled"
+                                      "meal-time:confirmed",
+                                      "meal-time:disabled",
+                                      "meal-time:hidden"
                                     ]
                                   },
                                   {
@@ -6063,8 +6099,9 @@
                                       "no-meals-between",
                                       "no-meals-before",
                                       "ready-meal-complete",
-                                      "meal-time:hidden",
-                                      "meal-time:disabled"
+                                      "meal-time:confirmed",
+                                      "meal-time:disabled",
+                                      "meal-time:hidden"
                                     ]
                                   },
                                   {
@@ -6234,7 +6271,8 @@
                 "type": "object",
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "nullable": true
                   },
                   "email": {
                     "type": "string",
@@ -6251,13 +6289,10 @@
                   },
                   "message": {
                     "type": "string",
-                    "maxLength": 500
+                    "maxLength": 500,
+                    "nullable": true
                   }
-                },
-                "required": [
-                  "name",
-                  "message"
-                ]
+                }
               }
             }
           }
@@ -6618,8 +6653,9 @@
                                       "no-meals-between",
                                       "no-meals-before",
                                       "ready-meal-complete",
-                                      "meal-time:hidden",
-                                      "meal-time:disabled"
+                                      "meal-time:confirmed",
+                                      "meal-time:disabled",
+                                      "meal-time:hidden"
                                     ]
                                   },
                                   {
@@ -25719,7 +25755,8 @@
                                     "type": "string"
                                   },
                                   "name": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                   },
                                   "email": {
                                     "type": "string",
@@ -25734,14 +25771,13 @@
                                     "nullable": true
                                   },
                                   "message": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                   }
                                 },
                                 "required": [
                                   "surveySlug",
-                                  "userId",
-                                  "name",
-                                  "message"
+                                  "userId"
                                 ]
                               },
                               {
@@ -26500,7 +26536,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -26515,14 +26552,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -27345,7 +27381,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -27360,14 +27397,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -32049,7 +32085,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -32064,14 +32101,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -35226,7 +35262,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -35241,14 +35278,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -41380,6 +41416,40 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "help": {
+                            "type": "object",
+                            "properties": {
+                              "available": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "message"
+                                  ]
+                                }
+                              },
+                              "required": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "message",
+                                    "email|phone"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "available",
+                              "required"
+                            ]
                           }
                         }
                       }
@@ -41821,6 +41891,40 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           }
                         }
@@ -43185,13 +43289,48 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           },
                           "required": [
                             "type",
                             "flow",
                             "recallDate",
-                            "languages"
+                            "languages",
+                            "help"
                           ]
                         },
                         "prompts": {
@@ -43793,6 +43932,40 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           }
                         }
@@ -45157,13 +45330,48 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           },
                           "required": [
                             "type",
                             "flow",
                             "recallDate",
-                            "languages"
+                            "languages",
+                            "help"
                           ]
                         },
                         "prompts": {
@@ -45755,6 +45963,40 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "help": {
+                            "type": "object",
+                            "properties": {
+                              "available": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "message"
+                                  ]
+                                }
+                              },
+                              "required": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "message",
+                                    "email|phone"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "available",
+                              "required"
+                            ]
                           }
                         }
                       }
@@ -46185,6 +46427,40 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           }
                         }
@@ -47549,13 +47825,48 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           },
                           "required": [
                             "type",
                             "flow",
                             "recallDate",
-                            "languages"
+                            "languages",
+                            "help"
                           ]
                         },
                         "prompts": {
@@ -48147,6 +48458,40 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "help": {
+                            "type": "object",
+                            "properties": {
+                              "available": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "message"
+                                  ]
+                                }
+                              },
+                              "required": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "message",
+                                    "email|phone"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "available",
+                              "required"
+                            ]
                           }
                         }
                       }
@@ -48607,6 +48952,40 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           }
                         }
@@ -49971,13 +50350,48 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            "help": {
+                              "type": "object",
+                              "properties": {
+                                "available": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message"
+                                    ]
+                                  }
+                                },
+                                "required": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "name",
+                                      "email",
+                                      "phone",
+                                      "message",
+                                      "email|phone"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "available",
+                                "required"
+                              ]
                             }
                           },
                           "required": [
                             "type",
                             "flow",
                             "recallDate",
-                            "languages"
+                            "languages",
+                            "help"
                           ]
                         },
                         "prompts": {
@@ -51000,7 +51414,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -51015,14 +51430,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -53887,13 +54301,48 @@
                         "items": {
                           "type": "string"
                         }
+                      },
+                      "help": {
+                        "type": "object",
+                        "properties": {
+                          "available": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "name",
+                                "email",
+                                "phone",
+                                "message"
+                              ]
+                            }
+                          },
+                          "required": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "name",
+                                "email",
+                                "phone",
+                                "message",
+                                "email|phone"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "available",
+                          "required"
+                        ]
                       }
                     },
                     "required": [
                       "type",
                       "flow",
                       "recallDate",
-                      "languages"
+                      "languages",
+                      "help"
                     ]
                   },
                   "prompts": {
@@ -54083,13 +54532,48 @@
                           "items": {
                             "type": "string"
                           }
+                        },
+                        "help": {
+                          "type": "object",
+                          "properties": {
+                            "available": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message"
+                                ]
+                              }
+                            },
+                            "required": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message",
+                                  "email|phone"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "available",
+                            "required"
+                          ]
                         }
                       },
                       "required": [
                         "type",
                         "flow",
                         "recallDate",
-                        "languages"
+                        "languages",
+                        "help"
                       ]
                     },
                     "prompts": {
@@ -54417,13 +54901,48 @@
                           "items": {
                             "type": "string"
                           }
+                        },
+                        "help": {
+                          "type": "object",
+                          "properties": {
+                            "available": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message"
+                                ]
+                              }
+                            },
+                            "required": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message",
+                                  "email|phone"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "available",
+                            "required"
+                          ]
                         }
                       },
                       "required": [
                         "type",
                         "flow",
                         "recallDate",
-                        "languages"
+                        "languages",
+                        "help"
                       ]
                     },
                     "prompts": {
@@ -54713,13 +55232,48 @@
                         "items": {
                           "type": "string"
                         }
+                      },
+                      "help": {
+                        "type": "object",
+                        "properties": {
+                          "available": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "name",
+                                "email",
+                                "phone",
+                                "message"
+                              ]
+                            }
+                          },
+                          "required": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "name",
+                                "email",
+                                "phone",
+                                "message",
+                                "email|phone"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "available",
+                          "required"
+                        ]
                       }
                     },
                     "required": [
                       "type",
                       "flow",
                       "recallDate",
-                      "languages"
+                      "languages",
+                      "help"
                     ]
                   },
                   "prompts": {
@@ -54906,13 +55460,48 @@
                           "items": {
                             "type": "string"
                           }
+                        },
+                        "help": {
+                          "type": "object",
+                          "properties": {
+                            "available": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message"
+                                ]
+                              }
+                            },
+                            "required": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message",
+                                  "email|phone"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "available",
+                            "required"
+                          ]
                         }
                       },
                       "required": [
                         "type",
                         "flow",
                         "recallDate",
-                        "languages"
+                        "languages",
+                        "help"
                       ]
                     },
                     "prompts": {
@@ -55202,13 +55791,48 @@
                         "items": {
                           "type": "string"
                         }
+                      },
+                      "help": {
+                        "type": "object",
+                        "properties": {
+                          "available": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "name",
+                                "email",
+                                "phone",
+                                "message"
+                              ]
+                            }
+                          },
+                          "required": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "name",
+                                "email",
+                                "phone",
+                                "message",
+                                "email|phone"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "available",
+                          "required"
+                        ]
                       }
                     },
                     "required": [
                       "type",
                       "flow",
                       "recallDate",
-                      "languages"
+                      "languages",
+                      "help"
                     ]
                   },
                   "prompts": {
@@ -55403,13 +56027,48 @@
                           "items": {
                             "type": "string"
                           }
+                        },
+                        "help": {
+                          "type": "object",
+                          "properties": {
+                            "available": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message"
+                                ]
+                              }
+                            },
+                            "required": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message",
+                                  "email|phone"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "available",
+                            "required"
+                          ]
                         }
                       },
                       "required": [
                         "type",
                         "flow",
                         "recallDate",
-                        "languages"
+                        "languages",
+                        "help"
                       ]
                     },
                     "prompts": {
@@ -55752,13 +56411,48 @@
                           "items": {
                             "type": "string"
                           }
+                        },
+                        "help": {
+                          "type": "object",
+                          "properties": {
+                            "available": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message"
+                                ]
+                              }
+                            },
+                            "required": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "name",
+                                  "email",
+                                  "phone",
+                                  "message",
+                                  "email|phone"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "available",
+                            "required"
+                          ]
                         }
                       },
                       "required": [
                         "type",
                         "flow",
                         "recallDate",
-                        "languages"
+                        "languages",
+                        "help"
                       ]
                     },
                     "prompts": {
@@ -57715,7 +58409,8 @@
                                     "type": "string"
                                   },
                                   "name": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                   },
                                   "email": {
                                     "type": "string",
@@ -57730,14 +58425,13 @@
                                     "nullable": true
                                   },
                                   "message": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                   }
                                 },
                                 "required": [
                                   "surveySlug",
-                                  "userId",
-                                  "name",
-                                  "message"
+                                  "userId"
                                 ]
                               },
                               {
@@ -58382,7 +59076,8 @@
                             "type": "string"
                           },
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "email": {
                             "type": "string",
@@ -58397,14 +59092,13 @@
                             "nullable": true
                           },
                           "message": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           }
                         },
                         "required": [
                           "surveySlug",
-                          "userId",
-                          "name",
-                          "message"
+                          "userId"
                         ]
                       },
                       {
@@ -58994,7 +59688,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -59009,14 +59704,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -59634,7 +60328,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -59649,14 +60344,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -60317,7 +61011,8 @@
                             "type": "string"
                           },
                           "name": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "email": {
                             "type": "string",
@@ -60332,14 +61027,13 @@
                             "nullable": true
                           },
                           "message": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           }
                         },
                         "required": [
                           "surveySlug",
-                          "userId",
-                          "name",
-                          "message"
+                          "userId"
                         ]
                       },
                       {
@@ -60929,7 +61623,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -60944,14 +61639,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -61655,7 +62349,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -61670,14 +62365,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -62526,7 +63220,8 @@
                                     "type": "string"
                                   },
                                   "name": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                   },
                                   "email": {
                                     "type": "string",
@@ -62541,14 +63236,13 @@
                                     "nullable": true
                                   },
                                   "message": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                   }
                                 },
                                 "required": [
                                   "surveySlug",
-                                  "userId",
-                                  "name",
-                                  "message"
+                                  "userId"
                                 ]
                               },
                               {
@@ -63354,7 +64048,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -63369,14 +64064,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
@@ -64096,7 +64790,8 @@
                               "type": "string"
                             },
                             "name": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             },
                             "email": {
                               "type": "string",
@@ -64111,14 +64806,13 @@
                               "nullable": true
                             },
                             "message": {
-                              "type": "string"
+                              "type": "string",
+                              "nullable": true
                             }
                           },
                           "required": [
                             "surveySlug",
-                            "userId",
-                            "name",
-                            "message"
+                            "userId"
                           ]
                         },
                         {
