@@ -69,12 +69,29 @@ If no fields are selected, help form will be disabled.
 
 List of predefined meals that will appear at the start of the recall.
 
-Section allows to:
+Section allows to manage default meal list.
 
-- Create new meals with default time and localized name
-- Remove meals
+- Create / edit / remove / re-arrange meals with default properties
 - Load whole meal list from different scheme
 - Reset the list to default one
+
+#### Meal name
+
+Localized meal name can be set up for each language.
+
+#### Default time
+
+Default meal time which is pre-filled in the recall.
+
+#### Meal flags
+
+Meal can be assigned with two type of flags:
+
+- `standard flags` - flags that are used in the system with specific functionality
+  - `meal-time:confirmed` - meal time is pre-confirmed using `default time` and user is not asked to confirm it
+  - `meal-time:disabled` - meal time is not editable by user
+  - `meal-time:hidden` - meal time is hidden (not visible in meal list UI)
+- `custom flags` - flags that can be used for custom purposes, like prompt conditional logic
 
 ## Prompts
 

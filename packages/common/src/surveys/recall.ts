@@ -24,8 +24,9 @@ export const staticMealFlags = [
   'no-meals-between',
   'no-meals-before',
   'ready-meal-complete',
-  'meal-time:hidden',
+  'meal-time:confirmed',
   'meal-time:disabled',
+  'meal-time:hidden',
 ] as const;
 export type StaticMealFlag = (typeof staticMealFlags)[number];
 export const dynamicMealFlag = z.custom<`food-search:${string}` | `${string}-acknowledged` | `${string}-complete`>((val) => {

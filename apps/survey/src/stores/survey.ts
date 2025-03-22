@@ -87,7 +87,7 @@ export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass')
     id: getEntityId(),
     name,
     defaultTime,
-    time,
+    time: flags.includes('meal-time:confirmed') ? (time ?? defaultTime) : time,
     duration,
     flags,
     foods: [],
