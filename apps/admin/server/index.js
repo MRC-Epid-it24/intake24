@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 
 import path from 'node:path';
+
 import express from 'express';
-
 import helmet from 'helmet';
-import config from './config.js';
 
+import config from './config.js';
 import './dotenv.js';
 
 async function startApp() {

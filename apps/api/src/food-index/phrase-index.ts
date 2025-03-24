@@ -30,9 +30,11 @@ export interface LanguageBackend {
   name: string;
   languageCode: string;
   indexIgnore: string[];
-  phoneticEncoder: PhoneticEncoder | undefined;
-  transformer?: { getSemanticSimilarity: (query: string, phrase: string) => Promise<number> };
-
+  phoneticEncoder?: PhoneticEncoder;
+  transformer?: {
+    getSemanticSimilarity: (query: string, phrase: string) => Promise<number>;
+  };
+  minWordLength?: number;
   sanitiseDescription: (description: string) => string;
   stem: (word: string) => string;
   splitCompound: (word: string) => Array<string>;
@@ -91,11 +93,13 @@ export class PhraseIndex<K> {
 
   getWordList(phrase: string): Array<string> {
     const sanitised = this.languageBackend.sanitiseDescription(phrase.toLocaleLowerCase());
+    const minLength = this.languageBackend.minWordLength ?? 2;
+    console.log({ minLength });
 
     return (
       sanitised
         .split(/\s+/)
-        .filter(s => s.length > 1)
+        .filter(s => s.length >= 1)
         .filter(s => !this.languageBackend.indexIgnore.includes(s))
         // split compound words (e.g. for German and Nordic languages)
         .flatMap(s => this.languageBackend.splitCompound(s))

@@ -107,6 +107,7 @@ export default {
     'of',
     'to',
   ],
+  minWordLength: 1,
 
   // Use pinyin conversion for phonetic encoding
   phoneticEncoder: {
