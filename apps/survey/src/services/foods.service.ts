@@ -1,3 +1,4 @@
+import type { CancelToken } from 'axios';
 import type { RecipeFood } from '@intake24/common/types';
 import type { FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
 
@@ -7,6 +8,7 @@ export type SearchOptions = {
   recipe?: boolean;
   hidden?: boolean;
   category?: string;
+  cancelToken?: CancelToken;
 };
 
 export default {
@@ -15,8 +17,10 @@ export default {
     description: string,
     options: SearchOptions = {},
   ): Promise<FoodSearchResponse> => {
+    const { cancelToken, ...searchOptions } = options;
     const { data } = await http.get<FoodSearchResponse>(`surveys/${surveySlug}/search`, {
-      params: { description, ...options },
+      params: { description, ...searchOptions },
+      cancelToken,
     });
     return data;
   },

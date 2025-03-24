@@ -130,9 +130,11 @@
 </template>
 
 <script lang='ts' setup>
+import type { CancelTokenSource } from 'axios';
 import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/components';
 import { watchDebounced } from '@vueuse/core';
+import axios from 'axios';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import { useGoTo } from 'vuetify';
 import { VCard } from 'vuetify/components';
@@ -212,6 +214,8 @@ const { i18n: { t } } = useI18n();
 const searchTerm = ref(props.modelValue);
 const searchRef = ref<InstanceType<typeof VTextField>>();
 const searchResults = ref<FoodSearchResponse>({ foods: [], categories: [] });
+const currentCancelToken = ref<CancelTokenSource | null>(null);
+const searchCounter = ref(0);
 
 const navigationHistory = ref<('search' | CategoryHeader)[]>([]);
 const retryCode = ref(props.rootCategory);
@@ -359,6 +363,15 @@ async function search() {
   if (!searchTerm.value)
     return;
 
+  const currentSearchId = ++searchCounter.value;
+
+  if (currentCancelToken.value) {
+    currentCancelToken.value.cancel('New search initiated');
+    currentCancelToken.value = null;
+  }
+
+  currentCancelToken.value = axios.CancelToken.source();
+
   requestInProgress.value = true;
   recipeBuilderToggle.value = false;
   recipeBuilderFoods.value = [];
@@ -366,34 +379,44 @@ async function search() {
 
   try {
     if (props.surveySlug !== undefined) {
-      searchResults.value = await foodsService.search(props.surveySlug, searchTerm.value, {
+      const results = await foodsService.search(props.surveySlug, searchTerm.value, {
         recipe: false,
         category: props.rootCategory,
         hidden: props.includeHidden,
+        cancelToken: currentCancelToken.value.token,
       });
-      searchResults.value.foods = searchResults.value.foods.filter(
-        (food) => {
-          if (food.code.charAt(0) === '$') {
-            recipeBuilderFoods.value.push(food);
-            return false;
-          }
-          return true;
-        },
-      );
-      if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0)
-        await recipeBuilderDetected(recipeBuilderFoods.value);
-      requestFailed.value = false;
+
+      if (currentSearchId === searchCounter.value) {
+        searchResults.value = results;
+        searchResults.value.foods = searchResults.value.foods.filter(
+          (food) => {
+            if (food.code.charAt(0) === '$') {
+              recipeBuilderFoods.value.push(food);
+              return false;
+            }
+            return true;
+          },
+        );
+        if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0)
+          await recipeBuilderDetected(recipeBuilderFoods.value);
+        requestFailed.value = false;
+      }
     }
     else {
       console.error('Expected survey parameters to be loaded at this point');
       requestFailed.value = true;
     }
   }
-  catch {
-    requestFailed.value = true;
+  catch (error) {
+    if (currentSearchId === searchCounter.value && !axios.isCancel(error))
+      requestFailed.value = true;
   }
   finally {
-    requestInProgress.value = false;
+    if (currentSearchId === searchCounter.value) {
+      if (currentCancelToken.value)
+        currentCancelToken.value = null;
+      requestInProgress.value = false;
+    }
   }
 }
 
@@ -473,7 +496,7 @@ watchDebounced(
       await browseCategory(props.rootCategory, true);
     }
   },
-  { debounce: 500, maxWait: 2000 },
+  { debounce: 200, maxWait: 500 },
 );
 </script>
 
