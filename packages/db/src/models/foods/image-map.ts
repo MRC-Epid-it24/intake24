@@ -1,12 +1,14 @@
 import type {
   Attributes,
   CreationAttributes,
+  CreationOptional,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
+import type { LocaleTranslation } from '@intake24/common/types';
 import { DrinkwareSet, GuideImage, ImageMapObject, ProcessedImage } from '.';
 import BaseModel from '../model';
 
@@ -44,6 +46,20 @@ export default class ImageMap extends BaseModel<
     type: DataType.BIGINT,
   })
   declare baseImageId: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get label(): CreationOptional<LocaleTranslation> {
+    const val = this.getDataValue('label') as unknown as string | null;
+    return val ? JSON.parse(val) : {};
+  }
+
+  set label(value: LocaleTranslation) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
+  }
 
   @BelongsTo(() => ProcessedImage, 'baseImageId')
   declare baseImage?: NonAttribute<ProcessedImage>;

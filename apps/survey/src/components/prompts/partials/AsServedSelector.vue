@@ -1,27 +1,28 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-img :aspect-ratio="16 / 9" class="align-end" cover :src="image">
-        <template #placeholder>
-          <image-placeholder />
-        </template>
-        <v-row>
-          <v-col class="d-flex justify-end me-auto">
-            <v-chip
-              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
-              color="info"
-            >
-              {{ thumbnailWeight }}
-            </v-chip>
-          </v-col>
-        </v-row>
-        <as-served-weight-factor
-          v-bind="weightFactorProps"
-          @update:model-value="updateWeightFactor"
-        />
-      </v-img>
-    </v-row>
-    <v-row v-if="asServedData" class="mt-4">
+  <v-alert v-if="labels.image" class="mb-2 text-body-2" color="info" variant="tonal">
+    {{ labels.image }}
+  </v-alert>
+  <v-img :aspect-ratio="16 / 9" cover rounded :src="image">
+    <template #placeholder>
+      <image-placeholder />
+    </template>
+    <div class="label">
+      <slot name="label" />
+      <v-chip
+        v-if="label"
+        class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
+        color="info"
+      >
+        {{ label }}
+      </v-chip>
+    </div>
+    <as-served-weight-factor
+      v-bind="weightFactorProps"
+      @update:model-value="updateWeightFactor"
+    />
+  </v-img>
+  <v-container class="px-2">
+    <v-row v-if="asServedData">
       <v-col class="pa-1 rounded-lg" :class="{ 'border-primary-2': isLessWeightFactorActive }" cols="3" lg sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img cover :src="firstThumbnail" />
@@ -93,312 +94,280 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { WeightFactorProps } from './AsServedWeightFactor.vue';
-
-import { defineComponent, ref } from 'vue';
-import type { SelectedAsServedImage } from '@intake24/common/surveys';
+import { computed, ref } from 'vue';
+import type { Prompts } from '@intake24/common/prompts';
+import type { EncodedFood, SelectedAsServedImage } from '@intake24/common/surveys';
 import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
-
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 import AsServedWeightFactor from './AsServedWeightFactor.vue';
+import { useFetchImageData } from './use-fetch-image-data';
+import { useLabels } from './use-labels';
 
-export default defineComponent({
-  name: 'AsServedSelector',
-
-  components: { AsServedWeightFactor, ImagePlaceholder },
-
-  props: {
-    asServedSetId: {
-      type: String,
-      required: true,
-    },
-    maxWeight: {
-      type: Number,
-    },
-    type: {
-      type: String as PropType<'serving' | 'leftovers'>,
-      default: 'serving',
-    },
-    modelValue: {
-      type: Object as PropType<SelectedAsServedImage | null>,
-      default: null,
-    },
+const props = defineProps({
+  asServedSetId: {
+    type: String,
+    required: true,
   },
-
-  emits: ['confirm', 'update:modelValue'],
-
-  setup(props) {
-    const denominator = 4;
-    const objectIdx = ref<number | undefined>(undefined);
-    const asServedData = ref<AsServedSetResponse | null>(null);
-
-    const noWeightFactor = (weight: number): WeightFactorProps => ({
-      show: false,
-      type: props.type,
-      subType: 'less',
-      minNumerator: denominator,
-      maxNumerator: denominator,
-      denominator,
-      weight,
-      modelValue: denominator,
-    });
-
-    const lessWeightFactor = (
-      show: boolean,
-      weight: number,
-      modelValue?: number,
-    ): WeightFactorProps => ({
-      show,
-      type: props.type,
-      subType: 'less',
-      minNumerator: 1,
-      maxNumerator: denominator - 1,
-      denominator,
-      weight,
-      modelValue: modelValue ?? denominator - 1,
-    });
-
-    const moreWeightFactor = (show: boolean, weight: number, modelValue?: number): WeightFactorProps => {
-      let minNumerator = denominator + 1;
-      let maxNumerator = denominator * 5;
-
-      if (props.maxWeight) {
-        if ((minNumerator / denominator) * weight >= props.maxWeight) {
-          minNumerator = denominator;
-          maxNumerator = denominator;
-          modelValue = denominator;
-        }
-        else {
-          maxNumerator = denominator;
-
-          while (
-            ((maxNumerator + 1) / denominator) * weight < props.maxWeight
-            && maxNumerator <= denominator * 5
-          ) {
-            maxNumerator += 1;
-          }
-        }
-      }
-
-      return {
-        show,
-        type: props.type,
-        subType: 'more',
-        minNumerator,
-        maxNumerator,
-        denominator,
-        weight,
-        modelValue: modelValue ?? denominator + 1,
-      };
-    };
-
-    const weightFactorProps = ref(noWeightFactor(0));
-
-    return {
-      denominator,
-      objectIdx,
-      asServedData,
-      weightFactorProps,
-      noWeightFactor,
-      lessWeightFactor,
-      moreWeightFactor,
-    };
+  food: {
+    type: Object as PropType<EncodedFood>,
+    required: true,
   },
-
-  computed: {
-    image(): string {
-      if (this.objectIdx === undefined)
-        return '';
-
-      return this.asServedData?.images[this.objectIdx].mainImageUrl ?? '';
-    },
-    isLessWeightFactorActive(): boolean {
-      return this.weightFactorProps.show && this.weightFactorProps.subType === 'less';
-    },
-    isMoreWeightFactorActive(): boolean {
-      return this.weightFactorProps.show && this.weightFactorProps.subType === 'more';
-    },
-    thumbnailWeight(): string | null {
-      if (this.objectIdx === undefined || !this.asServedData)
-        return null;
-
-      return `${Math.round(this.asServedData.images[this.objectIdx].weight)}g`;
-    },
-    firstThumbnail(): string {
-      if (this.objectIdx === undefined)
-        return '';
-
-      return this.asServedData?.images[0].thumbnailUrl ?? '';
-    },
-    lastThumbnail(): string {
-      if (this.objectIdx === undefined || !this.asServedData)
-        return '';
-
-      return this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl;
-    },
-    showMoreWeightFactor(): boolean {
-      if (this.maxWeight === undefined)
-        return true;
-
-      if (this.objectIdx === undefined || !this.asServedData || !this.asServedData.images.length)
-        return false;
-
-      const { weight } = this.asServedData.images[this.asServedData.images.length - 1];
-
-      return ((this.denominator + 1) / this.denominator) * weight < this.maxWeight;
-    },
-    weightFactor(): number {
-      return this.weightFactorProps.modelValue / this.weightFactorProps.denominator;
-    },
+  maxWeight: {
+    type: Number,
   },
-
-  watch: {
-    async asServedSetId() {
-      await this.fetchAsServedImageData();
-    },
-    async maxWeight(val) {
-      if (!val)
-        return;
-
-      await this.fetchAsServedImageData();
-    },
+  prompt: {
+    type: Object as PropType<Prompts['as-served-prompt' | 'cereal-prompt']>,
+    required: true,
   },
-
-  async mounted() {
-    await this.fetchAsServedImageData();
+  type: {
+    type: String as PropType<'serving' | 'leftovers'>,
+    default: 'serving',
   },
-
-  methods: {
-    async fetchAsServedImageData() {
-      const { data } = await this.$http.get<AsServedSetResponse>(
-        `portion-sizes/as-served-sets/${this.asServedSetId}`,
-      );
-      this.asServedData = { ...data };
-      this.initSelection();
-    },
-
-    initSelection() {
-      if (!this.asServedData || this.objectIdx !== undefined)
-        return;
-
-      const { maxWeight } = this;
-
-      if (maxWeight) {
-        this.asServedData.images = this.asServedData.images.filter(
-          image => image.weight <= maxWeight,
-        );
-      }
-
-      if (this.modelValue?.index !== undefined)
-        this.setSelection(this.modelValue.index, true);
-      else this.setSelection(Math.floor(this.asServedData.images.length / 2));
-    },
-
-    initWeightFactor(asServedData: AsServedSetResponse, objectIdx: number) {
-      const objectWeight = asServedData.images[objectIdx].weight;
-      const initWeight = this.modelValue?.weight;
-
-      if (initWeight === undefined)
-        return;
-
-      const value = Math.round((initWeight / objectWeight) * this.denominator);
-
-      if (initWeight > objectWeight && objectIdx === asServedData.images.length - 1) {
-        this.weightFactorProps = this.moreWeightFactor(
-          true,
-          asServedData.images[objectIdx].weight,
-          value,
-        );
-
-        return;
-      }
-
-      if (initWeight < objectWeight && objectIdx === 0) {
-        this.weightFactorProps = this.lessWeightFactor(
-          true,
-          asServedData.images[objectIdx].weight,
-          value,
-        );
-
-        return;
-      }
-
-      this.noWeightFactor(asServedData.images[objectIdx].weight);
-    },
-
-    setSelection(objectIdx: number, init = false) {
-      const { asServedData } = this;
-      if (!asServedData)
-        return;
-
-      if (objectIdx >= asServedData.images.length) {
-        this.weightFactorProps = this.moreWeightFactor(
-          true,
-          asServedData.images[asServedData.images.length - 1].weight,
-        );
-        this.update();
-        return;
-      }
-
-      if (objectIdx < 0) {
-        this.weightFactorProps = this.lessWeightFactor(true, asServedData.images[0].weight);
-        this.update();
-        return;
-      }
-
-      this.objectIdx = objectIdx;
-
-      if (init)
-        this.initWeightFactor(asServedData, objectIdx);
-      else this.weightFactorProps = this.noWeightFactor(asServedData.images[objectIdx].weight);
-      this.update();
-    },
-
-    updateSelection(value: number) {
-      const { objectIdx } = this;
-      if (objectIdx === undefined)
-        return;
-
-      this.setSelection(objectIdx + value);
-    },
-
-    updateWeightFactor(value: number) {
-      this.weightFactorProps.modelValue = value;
-      this.update();
-    },
-
-    isSelected(idx: number) {
-      if (this.isLessWeightFactorActive || this.isMoreWeightFactorActive)
-        return false;
-
-      return idx === this.objectIdx;
-    },
-
-    update() {
-      const { objectIdx, asServedData, asServedSetId } = this;
-      if (objectIdx === undefined || !asServedData)
-        return;
-
-      const state: SelectedAsServedImage = {
-        asServedSetId,
-        index: objectIdx,
-        weight: asServedData.images[objectIdx].weight * this.weightFactor,
-        imageUrl: asServedData.images[objectIdx].mainImageUrl,
-      };
-
-      this.$emit('update:modelValue', state);
-    },
-
-    confirm() {
-      if (this.objectIdx === undefined)
-        return;
-
-      this.$emit('confirm');
-    },
+  modelValue: {
+    type: Object as PropType<SelectedAsServedImage | null>,
+    default: null,
   },
 });
+
+const emit = defineEmits(['confirm', 'update:modelValue']);
+
+const denominator = 4;
+const objectIdx = ref<number | undefined>(undefined);
+
+const { imageData: asServedData } = useFetchImageData<AsServedSetResponse>({
+  url: `portion-sizes/as-served-sets/${props.asServedSetId}`,
+  onFetch: () => {
+    initSelection();
+  },
+});
+const { labels } = useLabels(props, { type: 'asServed', data: asServedData });
+const label = computed(() => {
+  if (objectIdx.value === undefined || !asServedData.value)
+    return null;
+
+  return labels.value.objects.at(objectIdx.value);
+});
+
+function noWeightFactor(weight: number): WeightFactorProps {
+  return {
+    show: false,
+    type: props.type,
+    subType: 'less',
+    minNumerator: denominator,
+    maxNumerator: denominator,
+    denominator,
+    weight,
+    modelValue: denominator,
+  };
+}
+
+function lessWeightFactor(show: boolean, weight: number, modelValue?: number): WeightFactorProps {
+  return {
+    show,
+    type: props.type,
+    subType: 'less',
+    minNumerator: 1,
+    maxNumerator: denominator - 1,
+    denominator,
+    weight,
+    modelValue: modelValue ?? denominator - 1,
+  };
+}
+
+function moreWeightFactor(show: boolean, weight: number, modelValue?: number): WeightFactorProps {
+  let minNumerator = denominator + 1;
+  let maxNumerator = denominator * 5;
+
+  if (props.maxWeight) {
+    if ((minNumerator / denominator) * weight >= props.maxWeight) {
+      minNumerator = denominator;
+      maxNumerator = denominator;
+      modelValue = denominator;
+    }
+    else {
+      maxNumerator = denominator;
+
+      while (
+        ((maxNumerator + 1) / denominator) * weight < props.maxWeight
+        && maxNumerator <= denominator * 5
+      ) {
+        maxNumerator += 1;
+      }
+    }
+  }
+
+  return {
+    show,
+    type: props.type,
+    subType: 'more',
+    minNumerator,
+    maxNumerator,
+    denominator,
+    weight,
+    modelValue: modelValue ?? denominator + 1,
+  };
+}
+
+const weightFactorProps = ref(noWeightFactor(0));
+
+const image = computed(() => {
+  if (objectIdx.value === undefined)
+    return '';
+
+  return asServedData.value?.images[objectIdx.value].mainImageUrl ?? '';
+});
+const isLessWeightFactorActive = computed(() => weightFactorProps.value.show && weightFactorProps.value.subType === 'less');
+const isMoreWeightFactorActive = computed(() => weightFactorProps.value.show && weightFactorProps.value.subType === 'more');
+const firstThumbnail = computed(() => {
+  if (objectIdx.value === undefined)
+    return '';
+
+  return asServedData.value?.images[0].thumbnailUrl ?? '';
+});
+const lastThumbnail = computed(() => {
+  if (objectIdx.value === undefined || !asServedData.value)
+    return '';
+
+  return asServedData.value.images[asServedData.value.images.length - 1].thumbnailUrl;
+});
+const showMoreWeightFactor = computed(() => {
+  if (props.maxWeight === undefined)
+    return true;
+
+  if (objectIdx.value === undefined || !asServedData.value || !asServedData.value.images.length)
+    return false;
+
+  const { weight } = asServedData.value.images[asServedData.value.images.length - 1];
+
+  return ((denominator + 1) / denominator) * weight < props.maxWeight;
+});
+const weightFactor = computed(() => weightFactorProps.value.modelValue / weightFactorProps.value.denominator);
+
+function initSelection() {
+  if (!asServedData.value || objectIdx.value !== undefined)
+    return;
+
+  const { maxWeight } = props;
+
+  if (maxWeight) {
+    asServedData.value.images = asServedData.value.images.filter(
+      image => image.weight <= maxWeight,
+    );
+  }
+
+  if (props.modelValue?.index !== undefined)
+    setSelection(props.modelValue.index, true);
+  else setSelection(Math.floor(asServedData.value.images.length / 2));
+};
+
+function initWeightFactor(asServedData: AsServedSetResponse, objectIdx: number) {
+  const objectWeight = asServedData.images[objectIdx].weight;
+  const initWeight = props.modelValue?.weight;
+
+  if (initWeight === undefined)
+    return;
+
+  const value = Math.round((initWeight / objectWeight) * denominator);
+
+  if (initWeight > objectWeight && objectIdx === asServedData.images.length - 1) {
+    weightFactorProps.value = moreWeightFactor(
+      true,
+      asServedData.images[objectIdx].weight,
+      value,
+    );
+
+    return;
+  }
+
+  if (initWeight < objectWeight && objectIdx === 0) {
+    weightFactorProps.value = lessWeightFactor(
+      true,
+      asServedData.images[objectIdx].weight,
+      value,
+    );
+
+    return;
+  }
+
+  noWeightFactor(asServedData.images[objectIdx].weight);
+};
+
+function setSelection(idx: number, init = false) {
+  if (!asServedData.value)
+    return;
+
+  if (idx >= asServedData.value.images.length) {
+    weightFactorProps.value = moreWeightFactor(
+      true,
+      asServedData.value.images[asServedData.value.images.length - 1].weight,
+    );
+    update();
+    return;
+  }
+
+  if (idx < 0) {
+    weightFactorProps.value = lessWeightFactor(true, asServedData.value.images[0].weight);
+    update();
+    return;
+  }
+
+  objectIdx.value = idx;
+
+  if (init)
+    initWeightFactor(asServedData.value, idx);
+  else weightFactorProps.value = noWeightFactor(asServedData.value.images[idx].weight);
+  update();
+};
+
+function updateSelection(value: number) {
+  if (objectIdx.value === undefined)
+    return;
+
+  setSelection(objectIdx.value + value);
+};
+
+function updateWeightFactor(value: number) {
+  weightFactorProps.value.modelValue = value;
+  update();
+};
+
+function isSelected(idx: number) {
+  if (isLessWeightFactorActive.value || isMoreWeightFactorActive.value)
+    return false;
+
+  return idx === objectIdx.value;
+};
+
+function update() {
+  if (objectIdx.value === undefined || !asServedData.value)
+    return;
+
+  const state: SelectedAsServedImage = {
+    asServedSetId: props.asServedSetId,
+    index: objectIdx.value,
+    weight: asServedData.value.images[objectIdx.value].weight * weightFactor.value,
+    imageUrl: asServedData.value.images[objectIdx.value].mainImageUrl,
+  };
+
+  emit('update:modelValue', state);
+};
+
+function confirm() {
+  if (objectIdx.value === undefined)
+    return;
+
+  emit('confirm');
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+}
+</style>

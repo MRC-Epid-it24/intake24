@@ -10,6 +10,7 @@ export default () => {
   const input = {
     id: 'drinkwareSet_002',
     description: 'drinkwareSet_002_description',
+    label: { en: 'drinkwareSet_002_label' },
     imageMapId: 'imageMapForDrinkwareSet',
   };
 

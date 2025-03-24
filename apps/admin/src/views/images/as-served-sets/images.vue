@@ -4,37 +4,48 @@
     <v-row>
       <v-col v-for="image in images" :key="image.id" cols="12" md="4" sm="6">
         <v-card border flat min-height="200px">
+          <v-toolbar flat>
+            <v-icon icon="fas fa-image" start />
+            {{ $t(`as-served-sets.images._`) }}
+            <v-spacer />
+            <confirm-dialog
+              v-if="!disabled"
+              color="error"
+              icon
+              icon-left="$delete"
+              :label="$t('as-served-sets.images.delete')"
+              variant="text"
+              @confirm="removeImage(image.id)"
+            >
+              {{ $t('common.action.confirm.delete', { name: `${$t('as-served-sets.images._')} (${image.weight}g)` }) }}
+            </confirm-dialog>
+          </v-toolbar>
           <v-img :src="image.mainImageUrl" />
           <v-divider />
-          <v-card-text>
-            <v-row>
-              <v-col cols="9">
+          <v-card-text class="d-flex flex-column gr-4">
+            <v-text-field
+              v-model.number="image.weight"
+              :disabled="disabled"
+              :label="$t('as-served-sets.weight')"
+              :name="`description-${image.id}`"
+              @update:model-value="updateImages"
+            />
+            <language-selector
+              v-model="image.label"
+              border
+              :disabled="disabled"
+              :label="$t(`as-served-sets.images.label._`)"
+            >
+              <template v-for="lang in Object.keys(image.label)" :key="lang" #[`lang.${lang}`]>
                 <v-text-field
-                  v-model.number="image.weight"
-                  :disabled="disabled"
-                  hide-details="auto"
-                  :label="$t('as-served-sets.weight')"
-                  :name="`description-${image.id}`"
-                  variant="outlined"
+                  v-model="image.label[lang]"
+                  :hint="$t(`as-served-sets.images.label.hint`)"
+                  :label="$t(`as-served-sets.images.label._`)"
+                  persistent-hint
                   @update:model-value="updateImages"
                 />
-              </v-col>
-              <v-col align-self="center" class="d-flex justify-end" cols="3">
-                <confirm-dialog
-                  v-if="!disabled"
-                  color="error"
-                  icon
-                  icon-left="$delete"
-                  :label="$t('as-served-sets.images.delete')"
-                  @confirm="removeImage(image.id)"
-                >
-                  {{ $t('common.action.confirm.delete', { name: 'selected image' }) }}
-                  <template #activator="{ props }">
-                    <v-btn class="ml-auto" v-bind="props" color="error" icon="$delete" size="large" variant="text" />
-                  </template>
-                </confirm-dialog>
-              </v-col>
-            </v-row>
+              </template>
+            </language-selector>
           </v-card-text>
         </v-card>
       </v-col>
@@ -70,15 +81,17 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { ref, useTemplateRef } from 'vue';
-
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
+import type { LocaleTranslation } from '@intake24/common/types';
 import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 type AsServedImageForm = {
   image: File | null;
+  label: LocaleTranslation;
   weight: number;
 };
 
@@ -109,13 +122,14 @@ const loading = ref(false);
 const { data, post } = useForm<AsServedImageForm>({
   data: {
     image: null as File | null,
+    label: {},
     weight: 0,
   },
   config: { multipart: true },
 });
 
 function updateImages() {
-  const outputImages = images.value.map(({ id, weight }) => ({ id, weight }));
+  const outputImages = images.value.map(({ id, label, weight }) => ({ id, label, weight }));
   emit('images', outputImages);
 };
 

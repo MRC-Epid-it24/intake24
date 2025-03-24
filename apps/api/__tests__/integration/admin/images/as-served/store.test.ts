@@ -12,6 +12,7 @@ export default () => {
   const fileName = 'asServedSet_001.jpg';
   const id = 'asServedSet_001';
   const description = 'asServedSet_001_description';
+  const label = { en: 'asServedSet_001_label' };
 
   let filePath: string;
   let output: Omit<AsServedSetEntry, 'selectionImageUrl'>;
@@ -19,7 +20,7 @@ export default () => {
   beforeAll(async () => {
     filePath = suite.files.images.jpg;
 
-    output = { id, description, images: [] };
+    output = { id, description, label, images: [] };
   });
 
   it('missing authentication / authorization', async () => {
@@ -32,10 +33,7 @@ export default () => {
     });
 
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, [
-        'id',
-        'description',
-      ]);
+      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description']);
     });
 
     it('should return 400 for invalid input data', async () => {
@@ -44,11 +42,12 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('id', '../../asServedSet_001')
-        .field('description', []);
+        .field('description', [])
+        .field('label', true);
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
-      expect(body.errors).toContainAllKeys(['id', 'description']);
+      expect(body.errors).toContainAllKeys(['id', 'description', 'label']);
     });
 
     it('should return 400 for invalid input file', async () => {
@@ -72,6 +71,7 @@ export default () => {
         .set('Authorization', suite.bearer.user)
         .field('id', id)
         .field('description', description)
+        .field('label[en]', label.en)
         .attach('selectionImage', fs.createReadStream(filePath), fileName);
 
       expect(status).toBe(201);
@@ -85,6 +85,7 @@ export default () => {
         .set('Authorization', suite.bearer.user)
         .field('id', id)
         .field('description', description)
+        .field('label[en]', label.en)
         .attach('selectionImage', fs.createReadStream(filePath), fileName);
 
       expect(status).toBe(409);

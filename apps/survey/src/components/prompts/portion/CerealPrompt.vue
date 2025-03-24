@@ -65,7 +65,11 @@
           <as-served-selector
             v-if="servingImageSet"
             v-model="state.portionSize.serving"
-            :as-served-set-id="servingImageSet"
+            v-bind="{
+              food,
+              prompt,
+              asServedSetId: servingImageSet,
+            }"
             @confirm="confirmServing"
             @update:model-value="updateServing"
           />
@@ -98,10 +102,13 @@
             </i18n-t>
             <as-served-selector
               v-if="leftoverImageSet"
-              v-model="state.portionSize.leftovers"
-              :as-served-set-id="leftoverImageSet"
-              :max-weight="state.portionSize.serving?.weight"
-              type="leftovers"
+              v-bind="{
+                food,
+                prompt,
+                asServedSetId: leftoverImageSet,
+                maxWeight: state.portionSize.serving?.weight,
+                type: 'leftovers',
+              }"
               @confirm="confirmLeftovers"
               @update:model-value="updateLeftovers"
             />
@@ -154,8 +161,6 @@ const { imageData } = useFetchImageData<ImageMapResponse>({
   },
 });
 
-const leftoversEnabled = computed(() => props.prompt.leftovers && !!leftoverImageSet.value);
-
 const servingImageSet = computed(() => {
   const { portionSize: { bowlIndex, method } } = state.value;
   if (bowlIndex === undefined)
@@ -170,6 +175,7 @@ const leftoverImageSet = computed(() => {
 
   return `${method}_${parameters.value.type}${bowls[bowlIndex]}_leftovers`;
 });
+const leftoversEnabled = computed(() => props.prompt.leftovers && !!leftoverImageSet.value);
 
 const bowlValid = computed(() => !!(
   state.value.portionSize.bowlId !== undefined

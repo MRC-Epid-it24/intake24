@@ -11,9 +11,11 @@ export default () => {
   const fileName = 'imageMap_004.jpg';
   const id = 'imageMap_004';
   const description = 'imageMap_004_description';
+  const label = { en: 'imageMap_004_label' };
 
   const updateInput = {
     description: 'updated_imageMap_004_description',
+    label: { en: 'updated_imageMap_004_label' },
     objects: [
       {
         id: '0',
@@ -44,6 +46,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
+      .field('label[en]', label.en)
       .attach('baseImage', fs.createReadStream(suite.files.images.jpg), fileName);
 
     output = { ...body, ...updateInput };
@@ -63,9 +66,10 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'objects'], {
+      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'label', 'objects'], {
         input: {
           description: ['invalid description'],
+          label: 'notValidLabel',
           objects: 'notValidObjects',
         },
       });

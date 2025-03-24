@@ -7,7 +7,7 @@ import type { ImageMapResponse } from '@intake24/common/types/http';
 export type UseImageMapProps = {
   imageMapData: ImageMapResponse;
   index?: number;
-  labels: string[];
+  labels: { image: string; objects: string[] };
 };
 
 export function useImageMap(props: UseImageMapProps, width: Ref<number>) {
@@ -26,11 +26,11 @@ export function useImageMap(props: UseImageMapProps, width: Ref<number>) {
   );
 
   const label = computed(() => {
-    if (!props.labels.length || (hoverIndex.value === undefined && props.index === undefined))
+    if (!props.labels.objects.length || (hoverIndex.value === undefined && props.index === undefined))
       return undefined;
 
     const idx = hoverIndex.value ?? props.index;
-    return idx === undefined ? undefined : props.labels[idx];
+    return idx === undefined ? undefined : props.labels.objects[idx];
   });
 
   return {

@@ -121,14 +121,15 @@
     "description": "Description",
     "useForRecipes": "Utiliser pour les recettes",
     "conversionFactor": "Facteur de conversion",
+    "labels": "Libellés de la photo à curseur",
+    "multiple": "Permettre la spécification de plusieurs éléments",
     "methods": {
       "_": "Méthode de quantification",
       "as-served": {
         "_": "Photos de portions",
         "servingImageSet": "Série de photos de portions",
         "leftoverImageSet": "Série de photos de restes",
-        "removeLeftoverImageSet": "Enlever la série de photos de restes",
-        "multiple": "Permettre la spécification de plusieurs éléments"
+        "removeLeftoverImageSet": "Enlever la série de photos de restes"
       },
       "cereal": {
         "_": "Céréales"
@@ -140,20 +141,16 @@
         "_": "Quantification dans le verre",
         "drinkwareSet": "Série de verres",
         "initialLevel": "Initialiser la hauteur de remplissage",
-        "skipFillLevelPrompt": "Passer l'affichage du niveau de remplissage",
-        "imageMapLabels": "Libellés de la photo à curseur",
-        "multiple": "Permettre la spécification de plusieurs éléments"
+        "skipFillLevelPrompt": "Passer l'affichage du niveau de remplissage"
       },
       "guide-image": {
-        "_": "Photo étalon",
-        "imageMapLabels": "Libellés de la photo étalon"
+        "_": "Photo étalon"
       },
       "milk-in-a-hot-drink": {
         "_": "Lait dans une boisson chaude"
       },
       "milk-on-cereal": {
         "_": "Lait sur des céréales",
-        "imageMapLabels": "Libellés de la photo à curseur",
         "options": "Options de portion"
       },
       "parent-food-portion": {
@@ -161,8 +158,7 @@
         "options": "Options de portion"
       },
       "pizza": {
-        "_": "Pizza",
-        "imageMapLabels": "Libellés de l'image à curseur"
+        "_": "Pizza"
       },
       "pizza-v2": {
         "_": "Pizza V2"

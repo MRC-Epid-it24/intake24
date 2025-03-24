@@ -11,10 +11,12 @@ export default () => {
     id: 'guideImage_004',
     description: 'guideImage_004_description',
     imageMapId: 'imageMapForGuide',
+    label: { en: 'guideImage_004_label' },
   };
 
   const updateInput = {
-    description: 'guideImage_004_description',
+    description: 'updated_guideImage_004_description',
+    label: { en: 'updated_guideImage_004_label' },
     objects: [
       {
         id: '0',
@@ -47,6 +49,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .send({
         description: 'imageMapForGuide',
+        label: { en: 'imageMapForGuide' },
         objects: [
           {
             id: '0',
@@ -88,9 +91,10 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'objects'], {
+      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'label', 'objects'], {
         input: {
           description: ['invalid description'],
+          label: 'invalid label',
           objects: 'notValidObjects',
         },
       });

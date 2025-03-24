@@ -11,6 +11,7 @@ export default () => {
   const fileName = 'asServedSet_002.jpg';
   const id = 'asServedSet_002';
   const description = 'asServedSet_002_description';
+  const label = { en: 'asServedSet_002_label' };
 
   const url = `${baseUrl}/${id}`;
   const invalidUrl = `${baseUrl}/999999`;
@@ -24,6 +25,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
+      .field('label[en]', label.en)
       .attach('selectionImage', fs.createReadStream(suite.files.images.jpg), fileName);
 
     output = { ...body.data };

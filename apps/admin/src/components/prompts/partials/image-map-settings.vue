@@ -7,46 +7,43 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-card-text>
-      <v-switch
-        hide-details="auto"
-        :label="$t('survey-schemes.prompts.imageMap.labels')"
-        :model-value="imageMap.labels"
-        @update:model-value="update('labels', $event)"
+      <v-select
+        v-model="imageMap.labels"
+        :items="labels"
+        :label="$t('survey-schemes.prompts.imageMap.labels._')"
+        prepend-inner-icon="fas fa-tag"
       />
       <v-switch
+        v-model="imageMap.pinchZoom"
         hide-details="auto"
         :label="$t('survey-schemes.prompts.imageMap.pinchZoom')"
-        :model-value="imageMap.pinchZoom"
-        @update:model-value="update('pinchZoom', $event)"
       />
     </v-card-text>
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
+import { useVModel } from '@vueuse/core';
 import type { ImageMap } from '@intake24/common/prompts';
+import { useI18n } from '@intake24/i18n/index';
 
-export default defineComponent({
-  name: 'ImageMapSettings',
-
-  props: {
-    imageMap: {
-      type: Object as PropType<ImageMap>,
-      required: true,
-    },
-  },
-
-  emits: ['update:imageMap'],
-
-  methods: {
-    update(field: keyof ImageMap, value: boolean) {
-      this.$emit(`update:imageMap`, { ...this.imageMap, [field]: value });
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<ImageMap>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const { i18n: { t } } = useI18n();
+const imageMap = useVModel(props, 'modelValue', emit, { deep: true, passive: true });
+
+const labels = [true, false, null].map(value => ({
+  value,
+  title: t(`survey-schemes.prompts.imageMap.labels.${value}`),
+}));
 </script>
 
 <style lang="scss" scoped></style>

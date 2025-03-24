@@ -1,8 +1,11 @@
 <template>
   <v-row>
     <v-col cols="12">
+      <v-alert v-if="labels.image" class="mb-2 text-body-2" color="info" variant="tonal">
+        {{ labels.image }}
+      </v-alert>
       <div class="guide-drawer">
-        <v-img ref="img" :src="imageMapData.baseImageUrl">
+        <v-img ref="img" rounded :src="imageMapData.baseImageUrl">
           <template #placeholder>
             <image-placeholder />
           </template>
@@ -38,14 +41,15 @@
           </pinch-zoom-image-map-selector>
         </div>
         <div class="label">
-          <slot name="label" />
-          <v-chip
-            v-if="label"
-            class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
-            color="info"
-          >
-            {{ label }}
-          </v-chip>
+          <slot name="label">
+            <v-chip
+              v-if="label"
+              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
+              color="info"
+            >
+              {{ label }}
+            </v-chip>
+          </slot>
         </div>
         <svg ref="svg">
           <filter id="polygon-blur">
@@ -108,8 +112,8 @@ const props = defineProps({
     required: true,
   },
   labels: {
-    type: Array as PropType<string[]>,
-    default: () => [],
+    type: Object as PropType<{ image: string; objects: string[] }>,
+    default: () => ({ image: '', objects: [] }),
   },
 });
 

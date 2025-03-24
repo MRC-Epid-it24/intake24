@@ -133,6 +133,8 @@
     "description": "Description",
     "useForRecipes": "Use for recipes",
     "conversionFactor": "Conversion factor",
+    "labels": "Image map labels",
+    "multiple": "Allow specifying multiple items",
 
     "methods": {
       "_": "Estimation method",
@@ -140,8 +142,7 @@
         "_": "As served",
         "servingImageSet": "Serving image set",
         "leftoverImageSet": "Leftover image set",
-        "removeLeftoverImageSet": "Remove leftover image set",
-        "multiple": "Allow specifying multiple items"
+        "removeLeftoverImageSet": "Remove leftover image set"
       },
       "cereal": {
         "_": "Cereal"
@@ -153,20 +154,16 @@
         "_": "Drink scale",
         "drinkwareSet": "Drinkware set",
         "initialLevel": "Initial fill level",
-        "skipFillLevelPrompt": "Skip fill level prompt",
-        "imageMapLabels": "Image map labels",
-        "multiple": "Allow specifying multiple items"
+        "skipFillLevelPrompt": "Skip fill level prompt"
       },
       "guide-image": {
-        "_": "Guide image",
-        "imageMapLabels": "Image map labels"
+        "_": "Guide image"
       },
       "milk-in-a-hot-drink": {
         "_": "Milk in a hot drink"
       },
       "milk-on-cereal": {
         "_": "Milk on cereal",
-        "imageMapLabels": "Image map labels",
         "options": "Portion options"
       },
       "parent-food-portion": {
@@ -174,8 +171,7 @@
         "options": "Portion options"
       },
       "pizza": {
-        "_": "Pizza",
-        "imageMapLabels": "Image map labels"
+        "_": "Pizza"
       },
       "pizza-v2": {
         "_": "Pizza V2"

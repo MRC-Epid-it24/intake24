@@ -12,6 +12,7 @@ export default () => {
     id: 'guideImage_001',
     description: 'guideImage_001_description',
     imageMapId: 'imageMapForGuide',
+    label: { en: 'guideImage_001_label' },
   };
 
   let output: Omit<GuideImageEntry, 'baseImageUrl'>;
@@ -23,6 +24,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .field('id', 'imageMapForGuide')
       .field('description', 'imageMapForGuide')
+      .field('label[en]', 'imageMapForGuide')
       .attach('baseImage', fs.createReadStream(suite.files.images.jpg), 'imageMapForGuide.jpg');
 
     output = { ...input, objects: [] };
@@ -42,11 +44,12 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description'], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'label'], {
         input: {
           id: './guideImage_001',
           imageMapId: input.imageMapId,
           description: { key: 'invalidDescription' },
+          label: 'invalidLabel',
         },
       });
     });

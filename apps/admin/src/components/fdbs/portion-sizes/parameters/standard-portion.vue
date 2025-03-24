@@ -48,7 +48,6 @@
               <v-text-field
                 v-model.number="unit.weight"
                 density="compact"
-                hide-details="auto"
                 :name="`unit${idx}-weight`"
                 :rules="weightRules"
               />
@@ -57,7 +56,6 @@
               <v-switch
                 v-model="unit.omitFoodDescription"
                 class="mt-0"
-                hide-details="auto"
               />
             </td>
             <td>

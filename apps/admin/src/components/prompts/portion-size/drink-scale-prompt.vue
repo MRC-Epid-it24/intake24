@@ -33,7 +33,10 @@
         />
       </v-col>
       <v-col cols="12" md="6">
-        <image-map-settings :image-map="imageMap" @update:image-map="update('imageMap', $event)" />
+        <image-map-settings
+          :model-value="imageMap"
+          @update:model-value="update('imageMap', $event)"
+        />
       </v-col>
     </v-row>
   </v-tabs-window-item>

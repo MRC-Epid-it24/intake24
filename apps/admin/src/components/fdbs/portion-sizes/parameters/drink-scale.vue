@@ -23,22 +23,19 @@
     <v-col cols="12">
       <v-switch
         v-model="parameters.skipFillLevel"
-        hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.drink-scale.skipFillLevelPrompt')"
       />
     </v-col>
     <v-col cols="12">
       <v-switch
-        v-model="parameters.imageMapLabels"
-        hide-details="auto"
-        :label="$t('fdbs.portionSizes.methods.drink-scale.imageMapLabels')"
+        v-model="parameters.labels"
+        :label="$t('fdbs.portionSizes.labels')"
       />
     </v-col>
     <v-col cols="12">
       <v-switch
         v-model="parameters.multiple"
-        hide-details="auto"
-        :label="$t('fdbs.portionSizes.methods.drink-scale.multiple')"
+        :label="$t('fdbs.portionSizes.multiple')"
       />
     </v-col>
   </v-row>

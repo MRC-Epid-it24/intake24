@@ -96,11 +96,21 @@ import type { LinkedParent } from '../partials';
 import { computed, ref } from 'vue';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout } from '../layouts';
-import { ImageMapSelector, LinkedQuantity, Next, NextMobile, QuantityBadge, QuantityCard, useFetchImageData, usePanel, usePortionSizeMethod } from '../partials';
+import {
+  ImageMapSelector,
+  LinkedQuantity,
+  Next,
+  NextMobile,
+  QuantityBadge,
+  QuantityCard,
+  useFetchImageData,
+  useLabels,
+  usePanel,
+  usePortionSizeMethod,
+} from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
@@ -113,7 +123,6 @@ const props = defineProps({
 
 const emit = defineEmits(['action', 'update:modelValue']);
 
-const { translate } = useI18n();
 const { action, type } = usePromptUtils(props, { emit });
 const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'guide-image'>(props);
 const { foodName } = useFoodUtils(props);
@@ -128,25 +137,13 @@ const { imageData } = useFetchImageData<GuideImageResponse>({
   },
 });
 
-const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.imageMapLabels);
-const labels = computed(() => {
-  if (!labelsEnabled.value || !imageData.value)
-    return [];
+const { labels } = useLabels(props, { type: 'guideImage', data: imageData });
 
-  return imageData.value.imageMap.objects.map((object) => {
-    const { label, weight } = imageData.value!.objects[object.id];
-
-    return (
-      translate(label, { params: { food: foodName.value, weight } })
-      || translate(object.label, { params: { food: foodName.value, weight } })
-    );
-  });
-});
 const selectedFoodLabel = computed(() => {
-  if (!labels.value.length || state.value.portionSize.objectIndex === undefined)
+  if (!labels.value.objects.length || state.value.portionSize.objectIndex === undefined)
     return foodName.value;
 
-  return labels.value[state.value.portionSize.objectIndex] || foodName.value;
+  return labels.value.objects[state.value.portionSize.objectIndex] || foodName.value;
 });
 
 const objectValid = computed(() => (

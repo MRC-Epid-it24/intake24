@@ -31,7 +31,7 @@ export function imageResponseCollection(baseUrl: string) {
    * @returns {AsServedImageEntry}
    */
   const asServedImageEntryResponse = (item: AsServedImage): AsServedImageEntry => {
-    const { id, image, thumbnailImage, weight } = item;
+    const { id, image, label, thumbnailImage, weight } = item;
 
     if (!image || !thumbnailImage) {
       throw new InternalServerError(
@@ -41,6 +41,7 @@ export function imageResponseCollection(baseUrl: string) {
 
     return {
       id,
+      label,
       mainImageUrl: `${baseUrl}/${image.path}`,
       thumbnailUrl: `${baseUrl}/${thumbnailImage.path}`,
       weight,
@@ -76,7 +77,7 @@ export function imageResponseCollection(baseUrl: string) {
    * @returns {AsServedSetEntry}
    */
   const asServedSetEntryResponse = (item: AsServedSet): AsServedSetEntry => {
-    const { id, description, asServedImages: images, selectionImage } = item;
+    const { id, description, label, asServedImages: images, selectionImage } = item;
 
     if (!selectionImage || !images) {
       throw new InternalServerError(
@@ -87,6 +88,7 @@ export function imageResponseCollection(baseUrl: string) {
     return {
       id,
       description,
+      label,
       selectionImageUrl: `${baseUrl}/${selectionImage.path}`,
       images: images.map(asServedImageEntryResponse),
     };
@@ -174,7 +176,7 @@ export function imageResponseCollection(baseUrl: string) {
    * @returns {GuideImageEntry}
    */
   const guideEntryResponse = (item: GuideImage): GuideImageEntry => {
-    const { id, description, imageMapId, imageMap, objects: guideImageObjects } = item;
+    const { id, description, label, imageMapId, imageMap, objects: guideImageObjects } = item;
 
     if (!imageMap || !guideImageObjects) {
       throw new InternalServerError(
@@ -201,6 +203,7 @@ export function imageResponseCollection(baseUrl: string) {
     return {
       id,
       description,
+      label,
       imageMapId,
       baseImageUrl: `${baseUrl}/${baseImage.path}`,
       objects: guideObjects(imageMapObjects, objects),
@@ -236,7 +239,7 @@ export function imageResponseCollection(baseUrl: string) {
    * @returns {ImageMapEntry}
    */
   const mapEntryResponse = (item: ImageMap): ImageMapEntry => {
-    const { id, description, baseImage, objects } = item;
+    const { id, description, label, baseImage, objects } = item;
 
     if (!baseImage || !objects) {
       throw new InternalServerError(
@@ -247,6 +250,7 @@ export function imageResponseCollection(baseUrl: string) {
     return {
       id,
       description,
+      label,
       baseImageUrl: `${baseUrl}/${baseImage.path}`,
       objects: mapObjects(objects),
     };

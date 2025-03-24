@@ -14,8 +14,6 @@
           :model-value="leftovers"
           @update:model-value="update('leftovers', $event)"
         />
-      </v-col>
-      <v-col>
         <v-select
           class="mt-4"
           hide-details="auto"
@@ -33,6 +31,12 @@
           @update:model-value="update('multiple', $event)"
         />
       </v-col>
+      <v-col cols="12" md="6">
+        <image-map-settings
+          :model-value="imageMap"
+          @update:model-value="update('imageMap', $event)"
+        />
+      </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>
@@ -42,7 +46,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import { drinkScalePrompt } from '@intake24/common/prompts';
-import { CounterSettings, SliderSettings, useBasePrompt, useMultiple } from '../partials';
+import { CounterSettings, ImageMapSettings, SliderSettings, useBasePrompt, useMultiple } from '../partials';
 
 export default defineComponent({
   name: 'AsServedPrompt',
@@ -50,6 +54,7 @@ export default defineComponent({
   components: {
     Counter: CounterSettings,
     Slider: SliderSettings,
+    ImageMapSettings,
   },
 
   props: {
@@ -59,6 +64,10 @@ export default defineComponent({
     },
     leftovers: {
       type: Boolean as PropType<Prompts['as-served-prompt']['leftovers']>,
+      required: true,
+    },
+    imageMap: {
+      type: Object as PropType<Prompts['guide-image-prompt']['imageMap']>,
       required: true,
     },
     multiple: {

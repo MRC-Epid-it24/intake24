@@ -18,6 +18,7 @@ export * from './use-carousel';
 export * from './use-date-picker';
 export * from './use-fetch-image-data';
 export * from './use-form';
+export * from './use-labels';
 export * from './use-multiple';
 export * from './use-panels';
 export * from './use-portion-size-method';

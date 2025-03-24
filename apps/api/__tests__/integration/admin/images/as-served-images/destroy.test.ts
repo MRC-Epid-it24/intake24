@@ -9,6 +9,7 @@ export default () => {
   const permissions = ['as-served-sets', 'as-served-sets:delete'];
 
   const fileName = 'asServedImage_003.jpg';
+  const label = { en: 'asServedImage_003_label' };
   const weight = 10;
 
   let url: string;
@@ -20,6 +21,7 @@ export default () => {
       .post(baseUrl)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
+      .field('label[en]', label.en)
       .field('weight', weight)
       .attach('image', fs.createReadStream(suite.files.images.jpg), fileName);
 

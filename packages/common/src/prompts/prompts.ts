@@ -134,7 +134,7 @@ export const foodBrowser = z.object({
 export type FoodBrowser = z.infer<typeof foodBrowser>;
 
 export const imageMap = z.object({
-  labels: z.boolean(),
+  labels: z.boolean().nullable(),
   pinchZoom: z.boolean(),
 });
 export type ImageMap = z.infer<typeof imageMap>;
@@ -221,6 +221,7 @@ const asServedPrompt = basePortionPrompt
   .merge(hasMultiple)
   .extend({
     component: z.literal('as-served-prompt'),
+    imageMap,
     leftovers: z.boolean(),
   });
 

@@ -11,7 +11,7 @@ function guideImageService({
   processedImageService,
 }: Pick<IoC, 'portionSizeService' | 'processedImageService'>) {
   const create = async (input: CreateGuideImageInput): Promise<GuideImage> => {
-    const { id, description, imageMapId } = input;
+    const { id, description, label, imageMapId } = input;
 
     const imageMap = await ImageMap.findByPk(imageMapId, { include: ['baseImage'] });
     if (!imageMap || !imageMap.baseImage)
@@ -26,6 +26,7 @@ function guideImageService({
     const guideImage = await GuideImage.create({
       id,
       description,
+      label,
       imageMapId,
       selectionImageId: selectionImage.id,
     });
@@ -51,13 +52,13 @@ function guideImageService({
     guideImageId: string,
     input: UpdateGuideImageInput,
   ): Promise<GuideImage> => {
-    const { description, objects } = input;
+    const { description, label, objects } = input;
 
     const guideImage = await portionSizeService.getGuideImage(guideImageId);
     if (!guideImage.objects)
       throw new NotFoundError();
 
-    await guideImage.update({ description });
+    await guideImage.update({ description, label });
 
     for (const object of objects) {
       const { id, label, weight } = object;

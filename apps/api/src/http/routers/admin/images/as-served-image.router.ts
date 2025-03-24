@@ -37,7 +37,7 @@ export function asServedImage() {
         permission('as-served-sets', 'as-served-sets:create'),
         upload.single('image'),
       ],
-      handler: async ({ body: { weight }, file, params: { asServedSetId }, req }) => {
+      handler: async ({ body: { label, weight }, file, params: { asServedSetId }, req }) => {
         const { userId } = req.scope.cradle.user;
 
         const res = imageMulterFile.safeParse(file);
@@ -52,6 +52,7 @@ export function asServedImage() {
           id: asServedSetId,
           file: res.data,
           uploader: userId,
+          label,
           weight,
         });
         asServedImage = await req.scope.cradle.portionSizeService.getAsServedImage(asServedSetId, asServedImage.id);
