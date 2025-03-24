@@ -201,21 +201,27 @@ const imageMapIds = computed(() => ({
   slice: sliceImageMapId.value,
 }));
 
-const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.imageMapLabels);
+const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.labels);
 const imageMapLabels = computed(() => {
   if (!labelsEnabled.value) {
-    return { type: [], thickness: [], slice: [] };
+    return {
+      type: { image: '', objects: [] },
+      thickness: { image: '', objects: [] },
+      slice: { image: '', objects: [] },
+    };
   }
 
-  return Object.keys(imageMapIds.value).reduce<Record<PizzaImageMap, string[]>>(
+  return Object.keys(imageMapIds.value).reduce<Record<PizzaImageMap, { image: string; objects: string[] }>>(
     (acc, key) => {
       const pizzaType = key as PizzaImageMap;
 
-      acc[pizzaType]
-            = imageMaps.value[pizzaType]?.objects.map(({ label }) => translate(label)) ?? [];
+      acc[pizzaType] = {
+        image: translate(imageMaps.value[pizzaType]?.label) ?? '',
+        objects: imageMaps.value[pizzaType]?.objects.map(({ label }) => translate(label)) ?? [],
+      };
       return acc;
     },
-    {} as Record<PizzaImageMap, string[]>,
+    {} as Record<PizzaImageMap, { image: string; objects: string[] }>,
   );
 });
 

@@ -26,6 +26,7 @@ export default () => {
         .set('Authorization', suite.bearer.superuser)
         .field('id', 'asServedSetForImages')
         .field('description', 'asServedSetForImages')
+        .field('label[en]', 'asServedSetForImages')
         .attach(
           'selectionImage',
           fs.createReadStream(suite.files.images.jpg),
@@ -49,8 +50,8 @@ export default () => {
   describe('get /api/admin/images/drinkware-sets', drinkwareSets.browse);
   describe('post /api/admin/images/drinkware-sets', drinkwareSets.store);
   describe('get /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.read);
-  /* describe('PUT /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.update);
-  describe('DELETE /api/admin/images/guide-images/:drinkwareSetId', drinkwareSets.destroy); */
+  // describe('PUT /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.update);
+  // describe('DELETE /api/admin/images/guide-images/:drinkwareSetId', drinkwareSets.destroy);
 
   // Guided images
   describe('get /api/admin/images/guide-images', guideImages.browse);

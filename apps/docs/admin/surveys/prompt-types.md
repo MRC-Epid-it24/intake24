@@ -219,9 +219,15 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 - `leftovers` - show leftovers option
 
 - `multiple` - allow multiple items to be selected. When enabled, additional options are available:
+
   - `false` - disable multiple selection
   - `counter` - counter-style multiple selection
   - `slider` - slider-style multiple selection
+
+- `image map settings` - image map settings
+
+  - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
+  - `pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Cereal prompt
 
@@ -233,8 +239,8 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `image map settings` - image map settings
 
-  - `image map labels` - show image map labels
-  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+  - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
+  - `pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Direct weight prompt
 
@@ -248,8 +254,8 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `image map settings` - image map settings
 
-  - `image map labels` - show image map labels
-  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+  - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
+  - `pinchZoom` - show PinchZoom control for mobile UI labels
 
 - `multiple` - allow multiple items to be selected. When enabled, additional options are available:
   - `false` - disable multiple selection
@@ -295,8 +301,8 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
 
 - `image map settings` - image map settings
 
-  - `image map labels` - show image map labels
-  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+  - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
+  - `pinchZoom` - show PinchZoom control for mobile UI labels
 
 - `linked quantity settings`
   - Allows to trigger quantity selection prompt for linked parent food
@@ -321,8 +327,8 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
 
 - `image map settings` - image map settings
 
-  - `image map labels` - show image map labels
-  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+  - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
+  - `pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Parent food portion prompt
 
@@ -344,8 +350,8 @@ First iteration for pizza estimation
 
 - `image map settings` - image map settings
 
-  - `image map labels` - show image map labels
-  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+  - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
+  - `pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Pizza V2 prompt
 
@@ -355,8 +361,8 @@ Second iteration for pizza estimation
 
 - `image map settings` - image map settings
 
-  - `image map labels` - show image map labels
-  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+  - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
+  - `pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Portion size option prompt
 

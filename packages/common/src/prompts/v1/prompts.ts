@@ -217,6 +217,7 @@ const yesNoPrompt = baseCustomPrompt.extend({
 // Portion size
 const asServedPrompt = basePortionPrompt.extend({
   component: z.literal('as-served-prompt'),
+  imageMap,
   leftovers: z.boolean(),
 });
 

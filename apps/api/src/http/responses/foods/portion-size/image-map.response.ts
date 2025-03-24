@@ -32,7 +32,7 @@ export function imageMapsResponse(baseUrl: string) {
    * @returns {ImageMapResponse}
    */
   const imageResponse = (item: ImageMap): ImageMapResponse => {
-    const { id, description, baseImage, objects } = item;
+    const { id, description, label, baseImage, objects } = item;
 
     if (!baseImage || !objects)
       throw new InternalServerError('ImageMapResponse: not loaded relationships.');
@@ -40,6 +40,7 @@ export function imageMapsResponse(baseUrl: string) {
     return {
       id,
       description,
+      label,
       baseImageUrl: `${baseUrl}/${baseImage.path}`,
       objects: objects.map(objectResponse),
     };
@@ -52,7 +53,7 @@ export function imageMapsResponse(baseUrl: string) {
    * @returns {GuideImageResponse}
    */
   const guideResponse = (item: GuideImage): GuideImageResponse => {
-    const { id, description, imageMap, objects } = item;
+    const { id, description, label, imageMap, objects } = item;
 
     if (!imageMap || !objects)
       throw new InternalServerError('GuideImageResponse: not loaded relationships.');
@@ -60,6 +61,7 @@ export function imageMapsResponse(baseUrl: string) {
     return {
       id,
       description,
+      label,
       imageMap: imageResponse(imageMap),
       objects: objects.reduce<GuideImageResponse['objects']>(
         (acc, { imageMapObjectId, label, weight }) => {

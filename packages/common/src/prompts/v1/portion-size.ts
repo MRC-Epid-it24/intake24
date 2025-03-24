@@ -14,6 +14,7 @@ export const asServedPrompt: Prompts['as-served-prompt'] = copy({
   type: 'portion-size',
   id: 'as-served-prompt',
   name: 'As served',
+  imageMap,
   leftovers: false,
 });
 

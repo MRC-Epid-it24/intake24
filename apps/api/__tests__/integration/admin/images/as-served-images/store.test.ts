@@ -11,6 +11,7 @@ export default () => {
   const permissions = ['as-served-sets', 'as-served-sets:create'];
 
   const fileName = 'asServedImage_001.jpg';
+  const label = { en: 'asServedImage_001_label' };
   const weight = 10;
 
   let filePath: string;
@@ -36,6 +37,7 @@ export default () => {
         .post(invalidUrl)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
+        .field('label[en]', label.en)
         .field('weight', weight)
         .attach('image', fs.createReadStream(filePath), fileName);
 
@@ -51,12 +53,13 @@ export default () => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
+        .field('label', 1)
         .field('weight', 'notANumber')
         .field('image', 'notAFile');
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
-      expect(body.errors).toContainAllKeys(['weight']);
+      expect(body.errors).toContainAllKeys(['label', 'weight']);
     });
 
     it('should return 400 for invalid input file', async () => {
@@ -77,6 +80,7 @@ export default () => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
+        .field('label[en]', label.en)
         .field('weight', weight)
         .attach('image', fs.createReadStream(filePath), fileName);
 

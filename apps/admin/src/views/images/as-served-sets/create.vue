@@ -8,23 +8,19 @@
               <v-text-field
                 v-model="data.id"
                 :error-messages="errors.get('id')"
-                hide-details="auto"
                 :label="$t('as-served-sets.id')"
                 name="id"
                 prepend-inner-icon="$as-served-sets"
-                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-file-input
                 v-model="data.selectionImage"
                 :error-messages="errors.get('selectionImage')"
-                hide-details="auto"
                 :label="$t('as-served-sets.selectionImage')"
                 name="selectionImage"
                 prepend-icon=""
                 prepend-inner-icon="fas fa-paperclip"
-                variant="outlined"
                 @change="errors.clear('selectionImage')"
               />
             </v-col>
@@ -32,12 +28,25 @@
               <v-text-field
                 v-model="data.description"
                 :error-messages="errors.get('description')"
-                hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
                 prepend-inner-icon="$description"
-                variant="outlined"
               />
+            </v-col>
+            <v-col cols="12">
+              <language-selector
+                v-model="data.label"
+                border
+                :label="$t('common.label')"
+              >
+                <template v-for="lang in Object.keys(data.label)" :key="lang" #[`lang.${lang}`]>
+                  <v-text-field
+                    v-model="data.label[lang]"
+                    :error-messages="errors.get('label')"
+                    :label="$t('common.label')"
+                  />
+                </template>
+              </language-selector>
             </v-col>
           </v-row>
           <submit-footer :disabled="errors.any.value" />
@@ -51,17 +60,22 @@
 import { defineComponent } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import type { LocaleTranslation } from '@intake24/common/types';
 import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
 
 type CreateAsServedSetForm = {
   id: string | null;
   description: string | null;
+  label: LocaleTranslation;
   selectionImage: File | null;
 };
 
 export default defineComponent({
   name: 'CreateAsServedSetForm',
+
+  components: { LanguageSelector },
 
   mixins: [formMixin],
 
@@ -72,7 +86,7 @@ export default defineComponent({
       CreateAsServedSetForm,
       AsServedSetEntry
     >(props, {
-      data: { id: null, description: null, selectionImage: null },
+      data: { id: null, description: null, label: {}, selectionImage: null },
       config: { multipart: true },
     });
 

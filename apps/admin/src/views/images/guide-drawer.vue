@@ -1,6 +1,6 @@
 <template>
   <div class="guides-drawer">
-    <v-img ref="img" :src="entry.baseImageUrl" />
+    <v-img ref="img" rounded :src="entry.baseImageUrl" />
     <svg
       ref="svg"
       :style="svgCursor"
@@ -59,50 +59,37 @@
                   </confirm-dialog>
                 </v-toolbar>
                 <v-divider />
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="12">
+                <v-card-text class="d-flex flex-column gr-4">
+                  <v-text-field
+                    v-model.trim="object.description"
+                    :disabled="isGuideImage || disabled"
+                    :label="$t('common.description')"
+                    :name="`description-${object.id}`"
+                  />
+                  <v-text-field
+                    v-if="isGuideImage"
+                    v-model.number="object.weight"
+                    :disabled="isImageMap || disabled"
+                    :label="$t(`${resource}.objects.weight`)"
+                    :name="`weight-${object.id}`"
+                    prepend-inner-icon="fas fa-scale-balanced"
+                  />
+                  <language-selector
+                    v-model="object.label"
+                    border
+                    :disabled="disabled"
+                    :label="$t(`${resource}.objects.label._`)"
+                  >
+                    <template v-for="lang in Object.keys(object.label)" :key="lang" #[`lang.${lang}`]>
                       <v-text-field
-                        v-model.trim="object.description"
-                        :disabled="isGuideImage || disabled"
-                        hide-details="auto"
-                        :label="$t('common.description')"
-                        :name="`description-${object.id}`"
-                        variant="outlined"
-                      />
-                    </v-col>
-                    <v-col v-if="isGuideImage" cols="12">
-                      <v-text-field
-                        v-model.number="object.weight"
-                        :disabled="isImageMap || disabled"
-                        hide-details="auto"
-                        :label="$t(`${resource}.objects.weight`)"
-                        :name="`weight-${object.id}`"
-                        prepend-inner-icon="fas fa-scale-balanced"
-                        variant="outlined"
-                      />
-                    </v-col>
-                    <v-col cols="12">
-                      <language-selector
-                        v-model="object.label"
-                        border
-                        :disabled="disabled"
+                        v-model="object.label[lang]"
+                        :hint="isGuideImage ? $t(`${resource}.objects.label.hint`) : undefined"
                         :label="$t(`${resource}.objects.label._`)"
-                      >
-                        <template v-for="lang in Object.keys(object.label)" :key="lang" #[`lang.${lang}`]>
-                          <v-text-field
-                            v-model="object.label[lang]"
-                            hide-details="auto"
-                            :hint="isGuideImage ? $t(`${resource}.objects.label.hint`) : undefined"
-                            :label="$t(`${resource}.objects.label._`)"
-                            :persistent-hint="isGuideImage"
-                            variant="outlined"
-                            @update:model-value="updateObjects"
-                          />
-                        </template>
-                      </language-selector>
-                    </v-col>
-                  </v-row>
+                        :persistent-hint="isGuideImage"
+                        @update:model-value="updateObjects"
+                      />
+                    </template>
+                  </language-selector>
                 </v-card-text>
               </v-card>
             </v-item>
@@ -133,7 +120,6 @@ import { useElementSize, watchDebounced } from '@vueuse/core';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { computed, ref, useTemplateRef } from 'vue';
-
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { closestSegmentIndex } from '@intake24/admin/views/images/math-helpers';
 import type {

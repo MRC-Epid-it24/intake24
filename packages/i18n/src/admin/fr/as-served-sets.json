@@ -11,7 +11,11 @@
     "_": "Photo de portion",
     "title": "Photos de portion",
     "add": "Ajouter une photo de portion",
-    "delete": "Supprimer la photo de portion"
+    "delete": "Supprimer la photo de portion",
+    "label": {
+      "_": "Label",
+      "hint": "Use '{'{weight}'}' variable to include object weight."
+    }
   },
   "weight": "Poids"
 }

@@ -81,8 +81,8 @@ export default defineComponent({
       required: true,
     },
     labels: {
-      type: Array as PropType<string[]>,
-      default: () => [],
+      type: Object as PropType<{ image: string; objects: string[] }>,
+      default: () => ({ image: '', objects: [] }),
     },
     width: {
       type: Number,

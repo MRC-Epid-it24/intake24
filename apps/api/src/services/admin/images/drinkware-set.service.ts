@@ -101,7 +101,10 @@ function drinkwareSetService({
       );
 
     await translateSqlErrors(() =>
-      kyselyDb.foods.insertInto('drinkwareSets').values(input).execute(),
+      kyselyDb.foods
+        .insertInto('drinkwareSets')
+        .values({ ...input, label: JSON.stringify(input.label) })
+        .execute(),
     );
   };
 
@@ -149,6 +152,7 @@ function drinkwareSetService({
         .set({
           description: input.description,
           imageMapId: input.imageMapId,
+          label: JSON.stringify(input.label),
         })
         .where('drinkwareSets.id', '=', drinkwareSetId)
         .executeTakeFirst();
@@ -744,20 +748,22 @@ function drinkwareSetService({
 
     const sets = await kyselyDb.foods
       .selectFrom('drinkwareSets')
-      .select(['id', 'description', 'imageMapId'])
+      .select(['id', 'description', 'imageMapId', 'label'])
       .where('drinkwareSets.id', '=', drinkwareSetId)
       .execute();
 
-    if (sets.length === 0)
+    const set = sets.at(0);
+    if (!set)
       return undefined;
 
     const recordsV2 = await getDrinkScalesV2(drinkwareSetId);
     const recordsV1 = await getDrinkScalesV1(drinkwareSetId);
 
     return {
-      id: sets[0].id,
-      description: sets[0].description,
-      imageMapId: sets[0].imageMapId,
+      id: set.id,
+      description: set.description,
+      imageMapId: set.imageMapId,
+      label: set.label ? JSON.parse(set.label) : {},
       scales: mergeScales(recordsV1, recordsV2),
     };
   };

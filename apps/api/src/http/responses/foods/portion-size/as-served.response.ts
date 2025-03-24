@@ -4,12 +4,13 @@ import type { AsServedImage, AsServedSet } from '@intake24/db';
 
 export function asServedResponse(baseUrl: string) {
   const imageResponse = (item: AsServedImage): AsServedImageResponse => {
-    const { image, thumbnailImage, weight } = item;
+    const { image, label, thumbnailImage, weight } = item;
 
     if (!image || !thumbnailImage)
       throw new InternalServerError('AsServedImageResponse: not loaded relationships.');
 
     return {
+      label,
       mainImageUrl: `${baseUrl}/${image.path}`,
       thumbnailUrl: `${baseUrl}/${thumbnailImage.path}`,
       weight,
@@ -17,7 +18,7 @@ export function asServedResponse(baseUrl: string) {
   };
 
   const setResponse = (item: AsServedSet): AsServedSetResponse => {
-    const { id, description, selectionImage, asServedImages } = item;
+    const { id, description, label, selectionImage, asServedImages } = item;
 
     if (!selectionImage || !asServedImages)
       throw new InternalServerError('AsServedSetResponse: not loaded relationships.');
@@ -25,6 +26,7 @@ export function asServedResponse(baseUrl: string) {
     return {
       id,
       description,
+      label,
       selectionImageUrl: `${baseUrl}/${selectionImage.path}`,
       images: asServedImages.map(imageResponse),
     };

@@ -168,11 +168,26 @@ import { computed, ref, watch } from 'vue';
 import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
 import type { DrinkwareScaleV2Response, DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout } from '../layouts';
-import { calculateVolume as calculateVolumeLUT, DrinkScalePanel, DrinkScaleV2Panel, getScaleBounds, ImageMapSelector, Next, NextMobile, QuantityBadge, QuantityCard, QuantitySlider, useFetchImageData, useMultiple, usePanel, usePortionSizeMethod } from '../partials';
+import {
+  calculateVolume as calculateVolumeLUT,
+  DrinkScalePanel,
+  DrinkScaleV2Panel,
+  getScaleBounds,
+  ImageMapSelector,
+  Next,
+  NextMobile,
+  QuantityBadge,
+  QuantityCard,
+  QuantitySlider,
+  useFetchImageData,
+  useLabels,
+  useMultiple,
+  usePanel,
+  usePortionSizeMethod,
+} from '../partials';
 import { calculateFillVolume, getSymmetryShape } from '../partials/drink-scale-cylindrical';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
@@ -210,7 +225,6 @@ function calculateVolume(scale: DrinkwareScaleEntry | DrinkwareScaleV2Response, 
   return (filledVolume * scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1]) / fullVolume;
 }
 
-const { translate } = useI18n();
 const { action, type } = usePromptUtils(props, { emit });
 const { parameters, psmValid } = usePortionSizeMethod<'drink-scale'>(props);
 const { multipleProps, multipleEnabled } = useMultiple(props);
@@ -229,30 +243,10 @@ const { imageData: drinkwareSetData } = useFetchImageData<DrinkwareSetResponse>(
 const imageMapUrl = computed(() => drinkwareSetData.value ? `portion-sizes/image-maps/${drinkwareSetData.value.imageMapId}` : undefined);
 const { imageData: imageMapData } = useFetchImageData<ImageMapResponse>({ url: imageMapUrl });
 
+const labelData = computed(() => ({ drinkwareSet: drinkwareSetData.value, imageMap: imageMapData.value }));
+const { labels } = useLabels(props, { type: 'drinkScale', data: labelData });
+
 const leftoversEnabled = computed(() => props.prompt.leftovers);
-const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.imageMapLabels);
-const labels = computed(() => {
-  if (!labelsEnabled.value || !imageMapData.value)
-    return [];
-
-  return imageMapData.value.objects.map((object) => {
-    const scale = drinkwareSetData.value?.scales.find(
-      ({ choiceId }) => choiceId.toString() === object.id,
-    );
-
-    if (!scale)
-      return '';
-
-    const volume = scale.version === 1
-      ? scale.volumeSamples[scale.volumeSamples.length - 1]
-      : scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1];
-
-    return (
-      translate(scale.label, { params: { volume } })
-      || translate(object.label, { params: { volume } })
-    );
-  });
-});
 
 const scale = computed(() => {
   const { containerId } = state.value.portionSize;

@@ -11,6 +11,7 @@ export default () => {
   const input = {
     id: 'drinkwareSet_001',
     description: 'drinkwareSet_001_description',
+    label: { en: 'drinkwareSet_001_label' },
     imageMapId: 'imageMapForDrinkwareSet',
   };
 
@@ -23,6 +24,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .field('id', 'imageMapForDrinkwareSet')
       .field('description', 'imageMapForDrinkwareSet')
+      .field('label[en]', 'imageMapForDrinkwareSet')
       .attach(
         'baseImage',
         fs.createReadStream(suite.files.images.jpg),
@@ -46,11 +48,12 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description'], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'label'], {
         input: {
           id: './drinkwareSet_001',
           imageMapId: input.imageMapId,
           description: { key: 'invalidDescription' },
+          label: 'invalidLabel',
         },
       });
     });

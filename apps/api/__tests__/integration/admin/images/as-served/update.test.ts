@@ -11,9 +11,11 @@ export default () => {
   const fileName = 'asServedSet_004.jpg';
   const id = 'asServedSet_004';
   const description = 'asServedSet_004_description';
+  const label = { en: 'asServedSet_004_label' };
 
   let updateInput: Omit<AsServedSetEntry, 'id' | 'selectionImageUrl'> = {
     description: 'updated_asServedSet_004_description',
+    label: { en: 'updated_asServedSet_004_label' },
     images: [],
   };
 
@@ -29,6 +31,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
+      .field('label[en]', label.en)
       .attach('selectionImage', fs.createReadStream(suite.files.images.jpg), fileName);
 
     const images = [];
@@ -37,6 +40,7 @@ export default () => {
         .post(`${url}/images`)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.superuser)
+        .field('label[en]', `asServedImage_${weight}_label`)
         .field('weight', 10)
         .attach('image', fs.createReadStream(suite.files.images.jpg), fileName);
 
@@ -61,10 +65,11 @@ export default () => {
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'images'], {
+      await suite.sharedTests.assertInvalidInput('put', url, ['description', 'images', 'label'], {
         input: {
           description: ['invalid description'],
           images: 'notValidObjects',
+          label: 'invalid label',
         },
       });
     });

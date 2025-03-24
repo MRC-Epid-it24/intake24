@@ -1,12 +1,6 @@
-import type { ImageMap, Prompts } from './prompts';
-
+import type { Prompts } from './prompts';
 import { copy } from '@intake24/common/util';
 import { basePortionPrompt } from './base';
-
-const imageMap: ImageMap = {
-  labels: false,
-  pinchZoom: false,
-};
 
 export const asServedPrompt: Prompts['as-served-prompt'] = copy({
   ...basePortionPrompt,
@@ -14,6 +8,10 @@ export const asServedPrompt: Prompts['as-served-prompt'] = copy({
   type: 'portion-size',
   id: 'as-served-prompt',
   name: 'As served',
+  imageMap: {
+    labels: true,
+    pinchZoom: false,
+  },
   leftovers: false,
   multiple: false,
 });
@@ -24,7 +22,10 @@ export const cerealPrompt: Prompts['cereal-prompt'] = copy({
   type: 'portion-size',
   id: 'cereal-prompt',
   name: 'Cereal',
-  imageMap,
+  imageMap: {
+    labels: false,
+    pinchZoom: false,
+  },
   leftovers: false,
 });
 
@@ -42,7 +43,10 @@ export const drinkScalePrompt: Prompts['drink-scale-prompt'] = copy({
   type: 'portion-size',
   id: 'drink-scale-prompt',
   name: 'Drink Scale',
-  imageMap,
+  imageMap: {
+    labels: false,
+    pinchZoom: false,
+  },
   leftovers: false,
   multiple: false,
 });
@@ -53,7 +57,10 @@ export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({
   type: 'portion-size',
   id: 'guide-image-prompt',
   name: 'Guide image',
-  imageMap,
+  imageMap: {
+    labels: false,
+    pinchZoom: false,
+  },
   linkedQuantity: {
     auto: false,
     parent: [{ code: 'BRED' }],
@@ -76,7 +83,10 @@ export const milkOnCerealPrompt: Prompts['milk-on-cereal-prompt'] = copy({
   type: 'portion-size',
   id: 'milk-on-cereal-prompt',
   name: 'Milk on cereal',
-  imageMap,
+  imageMap: {
+    labels: false,
+    pinchZoom: false,
+  },
 });
 
 export const missingFoodPrompt: Prompts['missing-food-prompt'] = copy({
@@ -103,7 +113,10 @@ export const pizzaPrompt: Prompts['pizza-prompt'] = copy({
   type: 'portion-size',
   id: 'pizza-prompt',
   name: 'Pizza',
-  imageMap,
+  imageMap: {
+    labels: false,
+    pinchZoom: false,
+  },
 });
 
 export const pizzaV2Prompt: Prompts['pizza-v2-prompt'] = copy({
@@ -112,7 +125,10 @@ export const pizzaV2Prompt: Prompts['pizza-v2-prompt'] = copy({
   type: 'portion-size',
   id: 'pizza-v2-prompt',
   name: 'Pizza V2',
-  imageMap,
+  imageMap: {
+    labels: false,
+    pinchZoom: false,
+  },
 });
 
 export const portionSizeOptionPrompt: Prompts['portion-size-option-prompt'] = copy({

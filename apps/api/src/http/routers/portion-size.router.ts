@@ -12,6 +12,7 @@ function toSurveyResponse(entry: DrinkwareSetEntry): DrinkwareSetResponse {
   return {
     // description intentionally omitted
     id: entry.id,
+    label: entry.label,
     imageMapId: entry.imageMapId,
     scales: entry.scales.map((scale) => {
       switch (scale.version) {

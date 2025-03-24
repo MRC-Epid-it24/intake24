@@ -384,7 +384,12 @@
     },
     "imageMap": {
       "_": "Paramètres des photos à curseur",
-      "labels": "Montrer les libellés",
+      "labels": {
+        "_": "Montrer les libellés",
+        "true": "Always show labels",
+        "false": "Never show labels",
+        "null": "Portion size method setting"
+      },
       "pinchZoom": "Montrer PinchZoom pour mobile UI"
     },
     "multiple": "Autoriser de spécifier plusieurs éléments",

@@ -12,7 +12,11 @@
     "_": "As served image",
     "title": "As served images",
     "add": "Add as served image",
-    "delete": "Delete as served image"
+    "delete": "Delete as served image",
+    "label": {
+      "_": "Label",
+      "hint": "Use '{'{weight}'}' variable to include object weight."
+    }
   },
   "weight": "Weight"
 }

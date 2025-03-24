@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { localeTranslation } from '../../common';
 import { safeIdentifier } from '../generic';
 import { imageMapEntry, imageMapEntryObject } from './image-maps';
@@ -17,6 +16,7 @@ export const guideImageAttributes = z.object({
   id: safeIdentifier.max(32),
   description: z.string().min(1).max(128),
   imageMapId: z.string(),
+  label: localeTranslation,
   selectionImageId: z.string(),
 });
 export type GuideImageAttributes = z.infer<typeof guideImageAttributes>;
@@ -30,6 +30,8 @@ export const guideImageInputObject = guideImageEntryObject.pick({
   id: true,
   weight: true,
   label: true,
+}).partial({
+  label: true,
 });
 export type GuideImageInputObject = z.infer<typeof guideImageInputObject>;
 
@@ -37,11 +39,15 @@ export const createGuideImageInput = guideImageAttributes.pick({
   id: true,
   description: true,
   imageMapId: true,
+  label: true,
+}).partial({
+  label: true,
 });
 export type CreateGuideImageInput = z.infer<typeof createGuideImageInput>;
 
 export const updateGuideImageInput = createGuideImageInput.pick({
   description: true,
+  label: true,
 }).extend({
   objects: guideImageInputObject.array(),
 });

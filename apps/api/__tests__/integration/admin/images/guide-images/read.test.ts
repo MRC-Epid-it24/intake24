@@ -10,6 +10,7 @@ export default () => {
   const input = {
     id: 'guideImage_002',
     description: 'guideImage_002_description',
+    label: { en: 'guideImage_002_label' },
     imageMapId: 'imageMapForGuide',
   };
 

@@ -39,7 +39,11 @@
         <v-expansion-panel-text>
           <as-served-selector
             v-model="state.portionSize.serving"
-            :as-served-set-id="parameters.servingImageSet"
+            v-bind="{
+              food,
+              prompt,
+              asServedSetId: parameters.servingImageSet,
+            }"
             @confirm="confirmServing"
             @update:model-value="updateServing"
           />
@@ -75,9 +79,13 @@
             </i18n-t>
             <as-served-selector
               v-model="state.portionSize.leftovers"
-              :as-served-set-id="parameters.leftoversImageSet"
-              :max-weight="state.portionSize.serving?.weight"
-              type="leftovers"
+              v-bind="{
+                food,
+                prompt,
+                asServedSetId: parameters.leftoversImageSet,
+                maxWeight: state.portionSize.serving?.weight,
+                type: 'leftovers',
+              }"
               @confirm="confirmLeftovers"
               @update:model-value="updateLeftovers"
             />
@@ -145,7 +153,18 @@ import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout } from '../layouts';
-import { AsServedSelector, LinkedQuantity, Next, NextMobile, QuantityBadge, QuantityCard, QuantitySlider, useMultiple, usePanel, usePortionSizeMethod } from '../partials';
+import {
+  AsServedSelector,
+  LinkedQuantity,
+  Next,
+  NextMobile,
+  QuantityBadge,
+  QuantityCard,
+  QuantitySlider,
+  useMultiple,
+  usePanel,
+  usePortionSizeMethod,
+} from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 

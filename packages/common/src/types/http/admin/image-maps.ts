@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { localeTranslation } from '../../common';
 import { safeIdentifier } from '../generic';
 import { sourceFileInput } from './source-images';
@@ -27,6 +26,7 @@ export type ImageMapEntryObject = z.infer<typeof imageMapEntryObject>;
 export const imageMapAttributes = z.object({
   id: safeIdentifier.max(32),
   description: z.string().min(1).max(512),
+  label: localeTranslation,
   baseImageId: z.string(),
 });
 export type ImageMapAttributes = z.infer<typeof imageMapAttributes>;
@@ -34,6 +34,9 @@ export type ImageMapAttributes = z.infer<typeof imageMapAttributes>;
 export const createImageMapRequest = imageMapAttributes.pick({
   id: true,
   description: true,
+  label: true,
+}).partial({
+  label: true,
 }).extend({
   objects: imageMapEntryObject.array().default([]),
 });
@@ -47,6 +50,9 @@ export type CreateImageMapInput = z.infer<typeof createImageMapInput>;
 
 export const updateImageMapInput = createImageMapInput.pick({
   description: true,
+  label: true,
+}).partial({
+  label: true,
 }).extend({
   objects: imageMapEntryObject.array(),
 });
@@ -63,6 +69,7 @@ export type ImageMapListEntry = z.infer<typeof imageMapListEntry>;
 export const imageMapEntry = imageMapObjectAttributes.pick({
   id: true,
   description: true,
+  label: true,
 }).extend({
   baseImageUrl: z.string(),
   objects: imageMapEntryObject.array(),

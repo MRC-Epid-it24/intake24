@@ -84,17 +84,17 @@ export default class DrinkwareScale extends BaseModel<
   declare overlayImageUrl: string;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get label(): LocaleTranslation {
-    const val = this.getDataValue('label') as unknown;
-    return val ? JSON.parse(val as string) : {};
+  get label(): CreationOptional<LocaleTranslation> {
+    const val = this.getDataValue('label') as unknown as string | null;
+    return val ? JSON.parse(val) : {};
   }
 
   set label(value: LocaleTranslation) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('label', JSON.stringify(value ?? {}));
+    this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
   @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')

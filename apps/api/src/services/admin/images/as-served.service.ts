@@ -13,7 +13,7 @@ function asServedService({
   sourceImageService,
 }: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService'>) {
   const createImage = async (input: CreateAsServedImageInput): Promise<AsServedImage> => {
-    const { id, weight } = input;
+    const { id, label, weight } = input;
 
     const sourceImage = await sourceImageService.uploadSourceImage(input, 'as_served');
     const [image, thumbnailImage] = await processedImageService.createAsServedImages(id, sourceImage);
@@ -22,6 +22,7 @@ function asServedService({
       asServedSetId: id,
       imageId: image.id,
       thumbnailImageId: thumbnailImage.id,
+      label,
       weight,
     });
   };
@@ -44,36 +45,32 @@ function asServedService({
   };
 
   const createSet = async (input: CreateAsServedSetInput): Promise<AsServedSet> => {
-    const { id, description } = input;
+    const { id, description, label } = input;
 
     const sourceImage = await sourceImageService.uploadSourceImage(input, 'as_served');
-    const selectionImage = await processedImageService.createSelectionImage(
-      id,
-      sourceImage,
-      'as_served',
-    );
+    const selectionImage = await processedImageService.createSelectionImage(id, sourceImage, 'as_served');
 
-    return AsServedSet.create({ id, description, selectionImageId: selectionImage.id });
+    return AsServedSet.create({ id, description, label, selectionImageId: selectionImage.id });
   };
 
   const updateSet = async (
     asServedSetId: string,
     input: UpdateAsServedSetInput,
   ): Promise<AsServedSet> => {
-    const { description, images } = input;
+    const { description, label, images } = input;
 
     const asServedSet = await portionSizeService.getAsServedSet(asServedSetId);
     if (!asServedSet || !asServedSet.asServedImages)
       throw new NotFoundError();
 
-    await asServedSet.update({ description });
+    await asServedSet.update({ description, label });
 
     for (const image of images) {
       const match = asServedSet.asServedImages.find(item => item.id === image.id);
       if (!match)
         continue;
 
-      await match.update({ weight: image.weight });
+      await match.update({ label: image.label, weight: image.weight });
     }
 
     return portionSizeService.getAsServedSet(asServedSetId);

@@ -14,7 +14,7 @@ function imageMapService({
   db,
 }: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService' | 'db'>) {
   const create = async (input: CreateImageMapInput): Promise<ImageMap> => {
-    const { id, baseImage, description, objects, uploader } = input;
+    const { id, baseImage, description, label, objects, uploader } = input;
 
     const sourceImage = await sourceImageService.uploadSourceImage(
       { id, uploader, file: baseImage },
@@ -28,6 +28,7 @@ function imageMapService({
         {
           id,
           description,
+          label,
           baseImageId: processedBaseImage.id,
         },
         { transaction },
@@ -46,7 +47,7 @@ function imageMapService({
   };
 
   const update = async (imageMapId: string, input: UpdateImageMapInput): Promise<ImageMap> => {
-    const { description, objects } = input;
+    const { description, label, objects } = input;
 
     const imageMap = await portionSizeService.getImageMap(imageMapId);
     if (!imageMap.objects)
@@ -55,7 +56,7 @@ function imageMapService({
     const guideImages = await GuideImage.findAll({ attributes: ['id'], where: { imageMapId } });
     const guideImageIds = guideImages.map(({ id }) => id);
 
-    await imageMap.update({ description });
+    await imageMap.update({ description, label });
 
     const objectIds = objects.map(object => object.id);
     await ImageMapObject.destroy({ where: { imageMapId, id: { [Op.notIn]: objectIds } } });

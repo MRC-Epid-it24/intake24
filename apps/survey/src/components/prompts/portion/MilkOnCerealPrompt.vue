@@ -87,11 +87,19 @@
 import { computed, ref } from 'vue';
 import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout } from '../layouts';
-import { ImageMapSelector, Next, NextMobile, QuantityBadge, useFetchImageData, usePanel, usePortionSizeMethod } from '../partials';
+import {
+  ImageMapSelector,
+  Next,
+  NextMobile,
+  QuantityBadge,
+  useFetchImageData,
+  useLabels,
+  usePanel,
+  usePortionSizeMethod,
+} from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
@@ -117,9 +125,8 @@ const volumeDefs: Record<Bowl, number[]> = {
 };
 const milkLevelImageMapPrefix = 'milkbowl';
 
-const { translate } = useI18n();
 const { action, type } = usePromptUtils(props, { emit });
-const { parameters, psmValid } = usePortionSizeMethod<'milk-on-cereal'>(props);
+const { psmValid } = usePortionSizeMethod<'milk-on-cereal'>(props);
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
@@ -141,14 +148,8 @@ const { imageData: bowlImageMap } = useFetchImageData<ImageMapResponse>({
     }
   },
 });
+const { labels: bowlLabels } = useLabels(props, { type: 'imageMap', data: bowlImageMap });
 
-const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.imageMapLabels);
-const bowlLabels = computed(() => {
-  if (!labelsEnabled.value || !bowlImageMap.value)
-    return [];
-
-  return bowlImageMap.value.objects.map(({ label }) => translate(label));
-});
 const bowl = computed(() => state.value.portionSize.bowl ?? undefined);
 const milkLevelImageMapId = computed(() => {
   if (bowl.value === undefined)
@@ -156,7 +157,6 @@ const milkLevelImageMapId = computed(() => {
 
   return `${milkLevelImageMapPrefix}${bowl.value}`;
 });
-
 const imageMapUrl = computed(() => milkLevelImageMapId.value ? `portion-sizes/image-maps/${milkLevelImageMapId.value}` : undefined);
 const { imageData: milkLevelImageMap } = useFetchImageData<ImageMapResponse>({
   url: imageMapUrl,
@@ -164,13 +164,7 @@ const { imageData: milkLevelImageMap } = useFetchImageData<ImageMapResponse>({
     state.value.portionSize.milkLevelImage = data.baseImageUrl;
   },
 });
-
-const milkLevelLabels = computed(() => {
-  if (!labelsEnabled.value || !milkLevelImageMap.value)
-    return [];
-
-  return milkLevelImageMap.value.objects.map(({ label }) => translate(label));
-});
+const { labels: milkLevelLabels } = useLabels(props, { type: 'imageMap', data: milkLevelImageMap });
 
 const bowlValid = computed(() => !!(
   state.value.portionSize.bowlId !== undefined

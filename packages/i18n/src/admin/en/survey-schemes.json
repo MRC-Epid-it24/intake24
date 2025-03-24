@@ -388,7 +388,12 @@
     },
     "imageMap": {
       "_": "Image map settings",
-      "labels": "Show labels",
+      "labels": {
+        "_": "Labels",
+        "true": "Always show labels",
+        "false": "Never show labels",
+        "null": "Portion size method setting"
+      },
       "pinchZoom": "Show PinchZoom for mobile UI"
     },
     "multiple": "Allow multiple items to be selected",

@@ -88,7 +88,7 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     method: 'cereal',
     ...psmDefaultAttributes,
     description: 'use_an_image',
-    parameters: { type: 'hoop', imageMapLabels: false },
+    parameters: { type: 'hoop', labels: false },
   },
   {
     method: 'drink-scale',
@@ -98,7 +98,7 @@ export const psmDefaults: PortionSizeMethodItem[] = [
       drinkwareId: '',
       initialFillLevel: 0.9,
       skipFillLevel: false,
-      imageMapLabels: false,
+      labels: false,
       multiple: false,
     },
   },
@@ -106,7 +106,7 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     method: 'guide-image',
     ...psmDefaultAttributes,
     description: 'in_a_can',
-    parameters: { guideImageId: '', imageMapLabels: false },
+    parameters: { guideImageId: '', labels: false },
   },
   {
     method: 'milk-in-a-hot-drink',
@@ -118,7 +118,7 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     method: 'milk-on-cereal',
     ...psmDefaultAttributes,
     description: 'in_a_bowl',
-    parameters: { imageMapLabels: false },
+    parameters: { labels: false },
   },
   {
     method: 'standard-portion',
@@ -136,13 +136,13 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     method: 'pizza',
     ...psmDefaultAttributes,
     description: 'use_an_image',
-    parameters: { imageMapLabels: false },
+    parameters: { labels: false },
   },
   {
     method: 'pizza-v2',
     ...psmDefaultAttributes,
     description: 'use_an_image',
-    parameters: { imageMapLabels: false },
+    parameters: { labels: false },
   },
   {
     method: 'direct-weight',

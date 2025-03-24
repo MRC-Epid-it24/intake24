@@ -2,9 +2,8 @@
   <v-row>
     <v-col cols="12">
       <v-switch
-        v-model="parameters.imageMapLabels"
-        hide-details="auto"
-        :label="$t('fdbs.portionSizes.methods.milk-on-cereal.imageMapLabels')"
+        v-model="parameters.labels"
+        :label="$t('fdbs.portionSizes.labels')"
       />
     </v-col>
   </v-row>

@@ -80,6 +80,7 @@
   "displayName": "Libellé",
   "description": "Description",
   "id": "Identifiant",
+  "label": "Label",
   "type": "Type",
   "status": "Statut",
   "options": {

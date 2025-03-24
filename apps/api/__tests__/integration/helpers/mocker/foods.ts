@@ -48,6 +48,7 @@ async function asServedSet(asServedSetId?: string): Promise<CreateAsServedSetInp
   return {
     id,
     description: `${id}_description`,
+    label: { en: `${id}_label` },
     file: { originalname: `${id}.jpg`, path: filePath },
     uploader: 'admin',
   };

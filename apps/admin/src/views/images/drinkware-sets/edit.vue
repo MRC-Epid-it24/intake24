@@ -9,11 +9,9 @@
                 v-model="data.id"
                 disabled
                 :error-messages="errors.get('id')"
-                hide-details="auto"
                 :label="$t('drinkware-sets.id')"
                 name="id"
                 prepend-inner-icon="$drinkware-sets"
-                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -21,23 +19,36 @@
                 v-model="data.imageMapId"
                 disabled
                 :error-messages="errors.get('imageMapId')"
-                hide-details="auto"
                 :label="$t('image-maps._')"
                 name="imageMapId"
                 prepend-inner-icon="$image-maps"
-                variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="data.description"
                 :error-messages="errors.get('description')"
-                hide-details="auto"
                 :label="$t('common.description')"
                 name="description"
                 prepend-inner-icon="$description"
-                variant="outlined"
               />
+            </v-col>
+            <v-col cols="12">
+              <language-selector
+                v-if="data.label"
+                v-model="data.label"
+                border
+                :label="$t('common.label')"
+              >
+                <template v-for="lang in Object.keys(data.label)" :key="lang" #[`lang.${lang}`]>
+                  <v-text-field
+                    v-if="data.label"
+                    v-model="data.label[lang]"
+                    :error-messages="errors.get('label')"
+                    :label="$t('common.label')"
+                  />
+                </template>
+              </language-selector>
             </v-col>
           </v-row>
           <v-row>
@@ -72,9 +83,7 @@
                     <template v-for="lang in Object.keys(selectedScale.label)" :key="lang" #[`lang.${lang}`]>
                       <v-text-field
                         v-model="selectedScale.label[lang]"
-                        hide-details="auto"
                         :label="$t('guide-images.objects.label._')"
-                        variant="outlined"
                       />
                     </template>
                   </language-selector>
@@ -87,7 +96,6 @@
                 <v-card-title>{{ $t('drinkware-sets.selector.empty.title') }}</v-card-title>
                 <v-card-text>{{ $t('drinkware-sets.selector.empty.text') }}</v-card-text>
               </v-card>
-
               <!-- Object selected, but scale data is undefined -->
               <v-card v-if="selectedObjectId !== undefined && selectedScaleIndex === -1" flat>
                 <v-card-title>
@@ -95,9 +103,7 @@
                     fas fa-exclamation-circle
                   </v-icon>{{ $t('drinkware-sets.slidingScale.missing.title') }}
                 </v-card-title>
-
                 <v-card-text>{{ $t('drinkware-sets.slidingScale.missing.text') }}</v-card-text>
-
                 <v-expand-transition>
                   <v-card v-if="baseImagePreviewUrls[selectedObjectId]" flat>
                     <v-card-title>
@@ -113,18 +119,15 @@
                     </v-card-text>
                   </v-card>
                 </v-expand-transition>
-
                 <v-card flat>
                   <v-card-title>{{ $t('drinkware-sets.slidingScale.baseImageFile') }}</v-card-title>
                   <v-card-text>
                     <v-file-input
                       v-model="baseImageFiles[selectedObjectId]"
-                      hide-details="auto"
                       :label="$t('image-maps.baseImage')"
                       name="baseImage"
                       prepend-icon=""
                       prepend-inner-icon="fas fa-paperclip"
-                      variant="outlined"
                     />
                   </v-card-text>
                   <v-card-actions>
@@ -141,14 +144,12 @@
                   </v-card-actions>
                 </v-card>
               </v-card>
-
               <!-- Object selected and sliding scale is available  -->
               <div v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1">
                 <sliding-scale-editor
                   :scale-index="selectedScaleIndex"
                   @base-image-changed="onBaseImageChanged"
                 />
-
                 <v-card flat>
                   <v-card-title>
                     {{ $t('drinkware-sets.volumeMethod.title') }}
@@ -157,15 +158,12 @@
                     <v-select
                       v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1"
                       v-model="entry.scales[selectedScaleIndex].volumeMethod"
-                      hide-details="auto"
                       item-value="method"
                       :items="volumeMethodSelectList"
                       :label="$t('drinkware-sets.volumeMethod.title')"
-                      variant="outlined"
                     />
                   </v-card-text>
                 </v-card>
-
                 <volume-samples-table
                   class="mt-4"
                   :scale-index="selectedScaleIndex"
@@ -185,25 +183,25 @@
 <script lang="ts">
 import { mapValues } from 'lodash';
 import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
-
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import resources from '@intake24/admin/router/resources';
 import { httpService } from '@intake24/admin/services';
-import SlidingScaleEditor from '@intake24/admin/views/images/drinkware-sets/components/SlidingScaleEditor.vue';
-import VolumeSamplesTable from '@intake24/admin/views/images/drinkware-sets/components/VolumeSamplesTable.vue';
+import type { LocaleTranslation } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
-
 import DrinkwareObjectChooser from './components/DrinkwareObjectChooser.vue';
+import SlidingScaleEditor from './components/SlidingScaleEditor.vue';
+import VolumeSamplesTable from './components/VolumeSamplesTable.vue';
 
 type EditDrinkwareSetForm = {
   id: string | null;
   description: string | null;
   imageMapId: string | null;
+  label: LocaleTranslation;
   scales: UpdateDrinkwareScaleInput[];
   baseImage: Record<string, File>;
 };
@@ -231,7 +229,7 @@ export default defineComponent({
       submit: formSubmit,
     } = useEntryForm<EditDrinkwareSetForm, DrinkwareSetEntry>(props, {
       config: { multipart: true },
-      data: { id: null, imageMapId: null, description: null, scales: [], baseImage: {} },
+      data: { id: null, imageMapId: null, description: null, scales: [], baseImage: {}, label: {} },
     });
     const { data, errors } = form;
 

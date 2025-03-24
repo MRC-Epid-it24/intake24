@@ -1,8 +1,6 @@
 import type { Pagination } from '../generic';
-
 import { z } from 'zod';
-
-import { localeTranslation } from '@intake24/common/types';
+import { localeTranslation } from '../../common';
 import { safeIdentifier } from '../generic';
 
 export const drinkwareScaleVolumeMethod = ['lookUpTable', 'cylindrical'] as const;
@@ -12,6 +10,7 @@ export const drinkwareSetAttributes = z.object({
   id: safeIdentifier.max(32),
   description: z.string().min(1).max(128),
   imageMapId: z.string(),
+  label: localeTranslation,
 });
 export type DrinkwareSetAttributes = z.infer<typeof drinkwareSetAttributes>;
 
@@ -19,6 +18,9 @@ export const createDrinkwareSetInput = drinkwareSetAttributes.pick({
   id: true,
   description: true,
   imageMapId: true,
+  label: true,
+}).partial({
+  label: true,
 });
 export type CreateDrinkwareSetInput = z.infer<typeof createDrinkwareSetInput>;
 
@@ -102,6 +104,9 @@ export type UpdateDrinkwareScaleInput = z.infer<typeof updateDrinkwareScaleInput
 export const updateDrinkwareSetInput = drinkwareSetAttributes.pick({
   description: true,
   imageMapId: true,
+  label: true,
+}).partial({
+  label: true,
 }).extend({
   scales: updateDrinkwareScaleInput.array()
     .transform<Record<string, UpdateDrinkwareScaleInput>>(val =>

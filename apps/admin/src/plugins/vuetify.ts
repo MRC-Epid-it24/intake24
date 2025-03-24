@@ -40,6 +40,7 @@ export default createVuetify({
       },
     },
     VCombobox: {
+      hideDetails: 'auto',
       variant: 'outlined',
     },
     VDataTableServer: {
@@ -50,6 +51,7 @@ export default createVuetify({
       },
     },
     VFileInput: {
+      hideDetails: 'auto',
       variant: 'outlined',
     },
     VListItemAction: {

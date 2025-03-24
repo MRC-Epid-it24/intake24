@@ -11,6 +11,7 @@ export default () => {
   const fileName = 'imageMap_002.jpg';
   const id = 'imageMap_002';
   const description = 'imageMap_002_description';
+  const label = { en: 'imageMap_002_label' };
 
   const url = `${baseUrl}/${id}`;
   const invalidUrl = `${baseUrl}/999999`;
@@ -24,6 +25,7 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .field('id', id)
       .field('description', description)
+      .field('label[en]', label.en)
       .attach('baseImage', fs.createReadStream(suite.files.images.jpg), fileName);
 
     output = { ...body };

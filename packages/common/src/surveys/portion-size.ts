@@ -34,25 +34,26 @@ export type StandardUnit = z.infer<typeof standardUnit>;
 export const asServedPortionSizeParameters = z.object({
   servingImageSet: z.string(),
   leftoversImageSet: z.string().nullish(),
+  labels: z.boolean().optional(),
   multiple: z.boolean().optional(),
 });
 
 export const cerealPortionSizeParameters = z.object({
   type: z.enum(cerealTypes),
-  imageMapLabels: z.boolean().optional(),
+  labels: z.boolean().optional(),
 });
 
 export const drinkScalePortionSizeParameters = z.object({
   drinkwareId: z.string(),
   initialFillLevel: z.coerce.number(),
   skipFillLevel: z.boolean(),
-  imageMapLabels: z.boolean().optional(),
+  labels: z.boolean().optional(),
   multiple: z.boolean().optional(),
 });
 
 export const guideImagePortionSizeParameters = z.object({
   guideImageId: z.string(),
-  imageMapLabels: z.boolean().optional(),
+  labels: z.boolean().optional(),
 });
 
 export const milkInHotDrinkPortionSizeParameters = z.object({
@@ -60,7 +61,7 @@ export const milkInHotDrinkPortionSizeParameters = z.object({
 });
 
 export const milkOnCerealPortionSizeParameters = z.object({
-  imageMapLabels: z.boolean().optional(),
+  labels: z.boolean().optional(),
 });
 
 export const parentFoodPortionParameters = z.object({
@@ -68,11 +69,11 @@ export const parentFoodPortionParameters = z.object({
 });
 
 export const pizzaPortionSizeParameters = z.object({
-  imageMapLabels: z.boolean().optional(),
+  labels: z.boolean().optional(),
 });
 
 export const pizzaV2PortionSizeParameters = z.object({
-  imageMapLabels: z.boolean().optional(),
+  labels: z.boolean().optional(),
 });
 
 export const standardPortionSizeParameters = z.object({
