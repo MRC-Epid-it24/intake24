@@ -73,6 +73,7 @@ export const localeRefs = z.object({
   foodIndexLanguageBackends: z.object({
     id: z.string(),
     name: z.string(),
+    flagCode: z.string().optional(),
   }).array(),
   locales: localeListEntry.array(),
 });

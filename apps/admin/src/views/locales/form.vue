@@ -163,6 +163,8 @@
                 v-model="data.foodIndexLanguageBackendId"
                 :error-messages="errors.get('foodIndexLanguageBackendId')"
                 hide-details="auto"
+                item-title="title"
+                item-value="id"
                 :items="foodIndexLanguageBackends"
                 :label="$t('locales.foodIndex.languageBackend')"
                 name="foodIndexLanguageBackendId"
@@ -172,12 +174,12 @@
                 <template #item="{ item, props }">
                   <v-list-item v-bind="props" :title="item.raw.title">
                     <template #prepend>
-                      <span :class="`fi fi-${item.raw.value} mr-3`" />
+                      <span :class="`fi fi-${item.raw.languageFlagCode} mr-3`" />
                     </template>
                   </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.raw.value} mr-3`" />
+                  <span :class="`fi fi-${item.raw.languageFlagCode} mr-3`" />
                   {{ item.raw.title }}
                 </template>
               </v-select>
@@ -265,10 +267,11 @@ export default defineComponent({
   computed: {
     foodIndexLanguageBackends() {
       if (!this.refs.foodIndexLanguageBackends)
-        return [{ value: 'en', title: this.$t('common.none') }];
+        return [{ id: 'en', languageFlagCode: 'en', title: this.$t('common.none') }];
 
       return this.refs.foodIndexLanguageBackends.map(backend => ({
-        value: backend.id,
+        id: backend.id,
+        languageFlagCode: backend.flagCode ?? backend.id,
         title: backend.name,
       }));
     },

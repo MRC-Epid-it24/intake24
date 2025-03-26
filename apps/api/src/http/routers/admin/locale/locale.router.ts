@@ -120,9 +120,18 @@ export function locale() {
     refs: {
       middleware: [permission('locales')],
       handler: async () => {
+        const languageToFlagMap: Record<string, string> = {
+          en: 'gb', // English -> UK flag
+          fr: 'fr', // French -> France flag
+          zh: 'cn', // Chinese -> China flag
+          ta: 'in', // Tamil -> India flag
+          'ar-AE': 'ae', // Arabic (UAE) -> UAE flag
+        };
+
         const foodIndexLanguageBackends = Object.entries(languageBackends).map(([id, { name }]) => ({
           id,
           name,
+          flagCode: languageToFlagMap[id] || id,
         }));
 
         const locales = await SystemLocale.scope('list').findAll();
