@@ -94,12 +94,11 @@ export class PhraseIndex<K> {
   getWordList(phrase: string): Array<string> {
     const sanitised = this.languageBackend.sanitiseDescription(phrase.toLocaleLowerCase());
     const minLength = this.languageBackend.minWordLength ?? 2;
-    console.log({ minLength });
 
     return (
       sanitised
         .split(/\s+/)
-        .filter(s => s.length >= 1)
+        .filter(s => s.length >= minLength)
         .filter(s => !this.languageBackend.indexIgnore.includes(s))
         // split compound words (e.g. for German and Nordic languages)
         .flatMap(s => this.languageBackend.splitCompound(s))

@@ -1,10 +1,15 @@
+import NodeCache from 'node-cache';
 import nodejieba from 'nodejieba';
 import pinyin from 'pinyin';
 
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 import { getSemanticSimilarity } from './transformer';
 
-const sanitiseRegexp = /[.`,/\\\-+)(…，。、？！“”]/g;
+const sanitiseRegexp = /[.`,/\\\-+)(…，。、？！"]/g;
+
+const CACHE_TTL = 86400;
+const CACHE_CHECK_PERIOD = 1800;
+const CACHE_MAX_KEYS = 10000;
 
 /**
  * Generate n-grams (substrings) from a token.
@@ -86,7 +91,7 @@ export function processDescriptionForIndexing(description: string): string[] {
   return processedTokens;
 }
 
-const pinyinCache = new Map<string, string[]>();
+const pinyinCache = new NodeCache({ stdTTL: CACHE_TTL, checkperiod: CACHE_CHECK_PERIOD, maxKeys: CACHE_MAX_KEYS });
 
 export default {
   name: 'Mandarin',
@@ -112,8 +117,9 @@ export default {
   // Use pinyin conversion for phonetic encoding
   phoneticEncoder: {
     encode: (input: string): Array<string> => {
-      if (pinyinCache.has(input)) {
-        return pinyinCache.get(input)!;
+      const cached = pinyinCache.get<string[]>(input);
+      if (cached) {
+        return cached;
       }
       const result = pinyin(input, { style: pinyin.STYLE_NORMAL }).flat();
       pinyinCache.set(input, result);
