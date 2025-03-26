@@ -17,7 +17,26 @@ export default {
   },
 
   stem(word: string): string {
-    return PorterStemmer.stem(word);
+    if (word.length < 3)
+      return word;
+    return PorterStemmer.step5b(
+      PorterStemmer.step5a(
+        // PorterStemmer.step4( // V4-1488: step4 in the Porter algorithm is too aggressive for our use case (for example vegetable -> veget)
+        PorterStemmer.step3(
+          PorterStemmer.step2(
+            PorterStemmer.step1c(
+              PorterStemmer.step1b(
+                PorterStemmer.step1a(
+                  word.toLocaleLowerCase(),
+                ),
+              ),
+            ),
+          ),
+          // ),
+        ),
+      ),
+    )
+      .toString();
   },
 
   sanitiseDescription(description: string): string {
