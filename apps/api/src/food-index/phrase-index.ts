@@ -8,11 +8,11 @@ import type {
 } from '@intake24/api/food-index/dictionary';
 import { RichDictionary } from '@intake24/api/food-index/dictionary';
 import InterpretedPhrase from '@intake24/api/food-index/interpreted-phrase';
+
 import {
   countDistanceViolations,
   countOrderViolations,
 } from '@intake24/api/food-index/match-quality-helpers';
-
 import type { RecipeFoodsHeader } from '@intake24/common/types';
 
 const MAX_WORDS_PER_PHRASE = 10;
@@ -276,10 +276,13 @@ export class PhraseIndex<K> {
     phrase: InterpretedPhrase,
     maxCombinations: number,
     matchQualityParameters: MatchQualityParameters,
+    filter?: (key: K) => boolean,
   ): Array<PhraseMatchResult<K>> {
-    const matchedPhrases = phrase
+    const allMatchedPhrases = phrase
       .generateCombinations(maxCombinations)
       .flatMap(c => this.matchCombination(phrase, c, matchQualityParameters));
+
+    const matchedPhrases = filter ? allMatchedPhrases.filter(m => filter(this.phraseIndex[m.phraseIndex].key)) : allMatchedPhrases;
 
     if (matchedPhrases.length === 0)
       return [];
