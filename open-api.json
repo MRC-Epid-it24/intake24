@@ -1587,6 +1587,9 @@
                                     "type": "string",
                                     "nullable": true
                                   },
+                                  "labels": {
+                                    "type": "boolean"
+                                  },
                                   "multiple": {
                                     "type": "boolean"
                                   }
@@ -1606,7 +1609,7 @@
                                       "rkris"
                                     ]
                                   },
-                                  "imageMapLabels": {
+                                  "labels": {
                                     "type": "boolean"
                                   }
                                 },
@@ -1627,7 +1630,7 @@
                                   "skipFillLevel": {
                                     "type": "boolean"
                                   },
-                                  "imageMapLabels": {
+                                  "labels": {
                                     "type": "boolean"
                                   },
                                   "multiple": {
@@ -1646,7 +1649,7 @@
                                   "guideImageId": {
                                     "type": "string"
                                   },
-                                  "imageMapLabels": {
+                                  "labels": {
                                     "type": "boolean"
                                   }
                                 },
@@ -1734,7 +1737,7 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "imageMapLabels": {
+                                  "labels": {
                                     "type": "boolean"
                                   }
                                 }
@@ -1903,7 +1906,7 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "imageMapLabels": {
+                                  "labels": {
                                     "type": "boolean"
                                   }
                                 }
@@ -2796,6 +2799,13 @@
                       "description": {
                         "type": "string"
                       },
+                      "label": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
                       "selectionImageUrl": {
                         "type": "string"
                       },
@@ -2804,6 +2814,13 @@
                         "items": {
                           "type": "object",
                           "properties": {
+                            "label": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
                             "mainImageUrl": {
                               "type": "string"
                             },
@@ -2815,6 +2832,7 @@
                             }
                           },
                           "required": [
+                            "label",
                             "mainImageUrl",
                             "thumbnailUrl",
                             "weight"
@@ -2825,6 +2843,7 @@
                     "required": [
                       "id",
                       "description",
+                      "label",
                       "selectionImageUrl",
                       "images"
                     ]
@@ -2868,6 +2887,13 @@
                     "description": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "selectionImageUrl": {
                       "type": "string"
                     },
@@ -2876,6 +2902,13 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
                           "mainImageUrl": {
                             "type": "string"
                           },
@@ -2887,6 +2920,7 @@
                           }
                         },
                         "required": [
+                          "label",
                           "mainImageUrl",
                           "thumbnailUrl",
                           "weight"
@@ -2897,6 +2931,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "selectionImageUrl",
                     "images"
                   ]
@@ -2953,6 +2988,13 @@
                       },
                       "imageMapId": {
                         "type": "string"
+                      },
+                      "label": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": true
+                        }
                       },
                       "scales": {
                         "type": "array",
@@ -3083,6 +3125,7 @@
                     "required": [
                       "id",
                       "imageMapId",
+                      "label",
                       "scales"
                     ]
                   }
@@ -3127,6 +3170,13 @@
                     },
                     "imageMapId": {
                       "type": "string"
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
                     },
                     "scales": {
                       "type": "array",
@@ -3257,6 +3307,7 @@
                   "required": [
                     "id",
                     "imageMapId",
+                    "label",
                     "scales"
                   ]
                 }
@@ -3310,6 +3361,13 @@
                       "description": {
                         "type": "string"
                       },
+                      "label": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
                       "imageMap": {
                         "type": "object",
                         "properties": {
@@ -3318,6 +3376,13 @@
                           },
                           "description": {
                             "type": "string"
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
                           },
                           "baseImageUrl": {
                             "type": "string"
@@ -3363,6 +3428,7 @@
                         "required": [
                           "id",
                           "description",
+                          "label",
                           "baseImageUrl",
                           "objects"
                         ]
@@ -3393,6 +3459,7 @@
                     "required": [
                       "id",
                       "description",
+                      "label",
                       "imageMap",
                       "objects"
                     ]
@@ -3436,6 +3503,13 @@
                     "description": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "imageMap": {
                       "type": "object",
                       "properties": {
@@ -3444,6 +3518,13 @@
                         },
                         "description": {
                           "type": "string"
+                        },
+                        "label": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
                         },
                         "baseImageUrl": {
                           "type": "string"
@@ -3489,6 +3570,7 @@
                       "required": [
                         "id",
                         "description",
+                        "label",
                         "baseImageUrl",
                         "objects"
                       ]
@@ -3519,6 +3601,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "imageMap",
                     "objects"
                   ]
@@ -3573,6 +3656,13 @@
                       "description": {
                         "type": "string"
                       },
+                      "label": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
                       "baseImageUrl": {
                         "type": "string"
                       },
@@ -3617,6 +3707,7 @@
                     "required": [
                       "id",
                       "description",
+                      "label",
                       "baseImageUrl",
                       "objects"
                     ]
@@ -3659,6 +3750,13 @@
                     },
                     "description": {
                       "type": "string"
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
                     },
                     "baseImageUrl": {
                       "type": "string"
@@ -3704,6 +3802,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects"
                   ]
@@ -22536,6 +22635,13 @@
                           "id": {
                             "type": "string"
                           },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
                           "weight": {
                             "type": "number"
                           },
@@ -22548,6 +22654,7 @@
                         },
                         "required": [
                           "id",
+                          "label",
                           "weight",
                           "mainImageUrl",
                           "thumbnailUrl"
@@ -22626,6 +22733,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
                   "weight": {
                     "type": "number",
                     "nullable": true
@@ -22649,6 +22763,13 @@
                     "id": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "weight": {
                       "type": "number"
                     },
@@ -22661,6 +22782,7 @@
                   },
                   "required": [
                     "id",
+                    "label",
                     "weight",
                     "mainImageUrl",
                     "thumbnailUrl"
@@ -22741,6 +22863,13 @@
                     "id": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "weight": {
                       "type": "number"
                     },
@@ -22753,6 +22882,7 @@
                   },
                   "required": [
                     "id",
+                    "label",
                     "weight",
                     "mainImageUrl",
                     "thumbnailUrl"
@@ -22956,6 +23086,13 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 128
+                  },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
                   }
                 },
                 "required": [
@@ -22985,9 +23122,6 @@
                       "minLength": 1,
                       "maxLength": 128
                     },
-                    "selectionImageUrl": {
-                      "type": "string"
-                    },
                     "images": {
                       "type": "array",
                       "items": {
@@ -22995,6 +23129,13 @@
                         "properties": {
                           "id": {
                             "type": "string"
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
                           },
                           "weight": {
                             "type": "number"
@@ -23008,18 +23149,30 @@
                         },
                         "required": [
                           "id",
+                          "label",
                           "weight",
                           "mainImageUrl",
                           "thumbnailUrl"
                         ]
                       }
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "selectionImageUrl": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "id",
                     "description",
-                    "selectionImageUrl",
-                    "images"
+                    "images",
+                    "label",
+                    "selectionImageUrl"
                   ]
                 }
               }
@@ -23067,9 +23220,6 @@
                       "minLength": 1,
                       "maxLength": 128
                     },
-                    "selectionImageUrl": {
-                      "type": "string"
-                    },
                     "images": {
                       "type": "array",
                       "items": {
@@ -23077,6 +23227,13 @@
                         "properties": {
                           "id": {
                             "type": "string"
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
                           },
                           "weight": {
                             "type": "number"
@@ -23090,18 +23247,30 @@
                         },
                         "required": [
                           "id",
+                          "label",
                           "weight",
                           "mainImageUrl",
                           "thumbnailUrl"
                         ]
                       }
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "selectionImageUrl": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "id",
                     "description",
-                    "selectionImageUrl",
-                    "images"
+                    "images",
+                    "label",
+                    "selectionImageUrl"
                   ]
                 }
               }
@@ -23140,6 +23309,13 @@
                     "minLength": 1,
                     "maxLength": 128
                   },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
                   "images": {
                     "type": "array",
                     "items": {
@@ -23147,6 +23323,13 @@
                       "properties": {
                         "id": {
                           "type": "string"
+                        },
+                        "label": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
                         },
                         "weight": {
                           "type": "number"
@@ -23186,9 +23369,6 @@
                       "minLength": 1,
                       "maxLength": 128
                     },
-                    "selectionImageUrl": {
-                      "type": "string"
-                    },
                     "images": {
                       "type": "array",
                       "items": {
@@ -23196,6 +23376,13 @@
                         "properties": {
                           "id": {
                             "type": "string"
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
                           },
                           "weight": {
                             "type": "number"
@@ -23209,18 +23396,30 @@
                         },
                         "required": [
                           "id",
+                          "label",
                           "weight",
                           "mainImageUrl",
                           "thumbnailUrl"
                         ]
                       }
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "selectionImageUrl": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "id",
                     "description",
-                    "selectionImageUrl",
-                    "images"
+                    "images",
+                    "label",
+                    "selectionImageUrl"
                   ]
                 }
               }
@@ -23416,6 +23615,13 @@
                   },
                   "imageMapId": {
                     "type": "string"
+                  },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
                   }
                 },
                 "required": [
@@ -23448,6 +23654,13 @@
                     },
                     "imageMapId": {
                       "type": "string"
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
                     },
                     "scales": {
                       "type": "array",
@@ -23587,6 +23800,7 @@
                     "id",
                     "description",
                     "imageMapId",
+                    "label",
                     "scales"
                   ]
                 }
@@ -23638,6 +23852,13 @@
                     "imageMapId": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "scales": {
                       "type": "array",
                       "items": {
@@ -23776,6 +23997,7 @@
                     "id",
                     "description",
                     "imageMapId",
+                    "label",
                     "scales"
                   ]
                 }
@@ -23817,6 +24039,13 @@
                   },
                   "imageMapId": {
                     "type": "string"
+                  },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
                   },
                   "scales": {
                     "type": "array",
@@ -23892,6 +24121,13 @@
                     "imageMapId": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "scales": {
                       "type": "array",
                       "items": {
@@ -24030,6 +24266,7 @@
                     "id",
                     "description",
                     "imageMapId",
+                    "label",
                     "scales"
                   ]
                 }
@@ -24226,6 +24463,13 @@
                   },
                   "imageMapId": {
                     "type": "string"
+                  },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
                   }
                 },
                 "required": [
@@ -24250,6 +24494,13 @@
                     },
                     "description": {
                       "type": "string"
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
                     },
                     "baseImageUrl": {
                       "type": "string"
@@ -24305,6 +24556,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects",
                     "imageMapId"
@@ -24350,6 +24602,13 @@
                     "description": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "baseImageUrl": {
                       "type": "string"
                     },
@@ -24404,6 +24663,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects",
                     "imageMapId"
@@ -24445,6 +24705,13 @@
                     "minLength": 1,
                     "maxLength": 128
                   },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
                   "objects": {
                     "type": "array",
                     "items": {
@@ -24467,8 +24734,7 @@
                       },
                       "required": [
                         "id",
-                        "weight",
-                        "label"
+                        "weight"
                       ]
                     }
                   }
@@ -24494,6 +24760,13 @@
                     },
                     "description": {
                       "type": "string"
+                    },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
                     },
                     "baseImageUrl": {
                       "type": "string"
@@ -24549,6 +24822,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects",
                     "imageMapId"
@@ -24745,6 +25019,13 @@
                     "minLength": 1,
                     "maxLength": 512
                   },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
                   "objects": {
                     "default": [],
                     "type": "array",
@@ -24808,6 +25089,13 @@
                     "description": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "baseImageUrl": {
                       "type": "string"
                     },
@@ -24854,6 +25142,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects"
                   ]
@@ -24898,6 +25187,13 @@
                     "description": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "baseImageUrl": {
                       "type": "string"
                     },
@@ -24944,6 +25240,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects"
                   ]
@@ -24983,6 +25280,13 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 512
+                  },
+                  "label": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "nullable": true
+                    }
                   },
                   "objects": {
                     "type": "array",
@@ -25046,6 +25350,13 @@
                     "description": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "baseImageUrl": {
                       "type": "string"
                     },
@@ -25092,6 +25403,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects"
                   ]
@@ -25166,6 +25478,13 @@
                     "description": {
                       "type": "string"
                     },
+                    "label": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
                     "baseImageUrl": {
                       "type": "string"
                     },
@@ -25212,6 +25531,7 @@
                   "required": [
                     "id",
                     "description",
+                    "label",
                     "baseImageUrl",
                     "objects"
                   ]
