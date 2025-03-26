@@ -7,7 +7,7 @@ export default class Metaphone3Encoder implements PhoneticEncoder {
 
   constructor() {
     this.metaphone3 = new Metaphone3();
-    this.metaphone3.SetKeyLength(5);
+    this.metaphone3.SetKeyLength(10);
     this.metaphone3.SetEncodeExact(true);
     this.metaphone3.SetEncodeVowels(true);
   }
