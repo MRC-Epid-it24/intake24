@@ -10,7 +10,9 @@ async function getEmbedder() {
   env.cacheDir = './.cache';
   try {
     if (!embedderPromise) {
-      embedderPromise = pipeline('feature-extraction', zhModel);
+      embedderPromise = pipeline('feature-extraction', zhModel, {
+        dtype: 'int8',
+      });
     }
     return await embedderPromise;
   }

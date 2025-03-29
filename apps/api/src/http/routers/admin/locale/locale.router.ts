@@ -126,6 +126,7 @@ export function locale() {
           zh: 'cn', // Chinese -> China flag
           ta: 'in', // Tamil -> India flag
           'ar-AE': 'ae', // Arabic (UAE) -> UAE flag
+          ja: 'jp', // Japanese -> Japan flag
         };
 
         const foodIndexLanguageBackends = Object.entries(languageBackends).map(([id, { name }]) => ({

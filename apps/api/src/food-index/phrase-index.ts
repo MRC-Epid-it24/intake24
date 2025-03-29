@@ -32,7 +32,7 @@ export interface LanguageBackend {
   indexIgnore: string[];
   phoneticEncoder?: PhoneticEncoder;
   transformer?: {
-    getSemanticSimilarity: (query: string, phrase: string) => Promise<number>;
+    getSemanticSimilarity: (query: string, phrase: string) => Promise<number | null>;
   };
   minWordLength?: number;
   sanitiseDescription: (description: string) => string;
