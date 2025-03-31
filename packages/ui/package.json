@@ -45,7 +45,7 @@
     "type-fest": "^4.37.0",
     "typescript": "^5.8.2",
     "vite": "^6.2.2",
-    "vite-plugin-pwa": "^0.21.2",
+    "vite-plugin-pwa": "^1.0.0",
     "workbox-window": "^7.3.0"
   }
 }
