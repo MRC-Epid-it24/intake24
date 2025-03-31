@@ -5,8 +5,7 @@ import { logger } from '@intake24/common-backend';
 let embedderPromise: Promise<any> | null = null;
 // Using a multilingual model. A dedicated Japanese model could potentially offer better performance. (Currently, none that is optimized for Japanese and compatible withTransformers.js)
 // See: https://huggingface.co/models?language=ja&pipeline_tag=feature-extraction&sort=trending
-// const multilingualModel = 'WhereIsAI/UAE-Large-V1';
-const multilingualModel = 'Xenova/all-MiniLM-L6-v2';
+const multilingualModel = 'Supabase/gte-small';
 
 const embeddingCache = new NodeCache({
   stdTTL: 86400, // 1 day
@@ -24,7 +23,7 @@ async function getEmbedder() {
   try {
     logger.info(`Initializing feature extraction pipeline with model: ${multilingualModel}`);
     embedderPromise = pipeline('feature-extraction', multilingualModel, {
-      dtype: 'int8',
+      dtype: 'fp16',
     });
     const embedder = await embedderPromise;
     logger.info(`Pipeline initialized successfully.`);

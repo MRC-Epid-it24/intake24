@@ -3,6 +3,7 @@ import NodeCache from 'node-cache';
 import * as wanakana from 'wanakana';
 
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
+import { commonJapaneseFoods } from './food-dictionary';
 import { getSemanticSimilarity } from './transformer';
 
 const sanitiseRegexp = /[.`,/\\\-+)(…、。！？「」『』（）［］｛｝]/g;
@@ -51,19 +52,6 @@ const _tokenizerPromise: Promise<any> = new Promise((resolve) => {
   });
 });
 
-function generateNGrams(token: string, minGram = 2, maxGram = 3): string[] {
-  const ngrams: string[] = [];
-  if (token.length < minGram)
-    return ngrams;
-
-  for (let n = minGram; n <= Math.min(maxGram, token.length); n++) {
-    for (let i = 0; i <= token.length - n; i++) {
-      ngrams.push(token.substring(i, i + n));
-    }
-  }
-  return ngrams;
-}
-
 /**
  * Check if a token contains any Latin (English) characters
  */
@@ -84,13 +72,43 @@ function processDescriptionForIndexing(description: string): string[] {
     return description.split(/\s+/);
 
   const sanitized = description.replace(sanitiseRegexp, ' ');
-  const tokens = tokenizer.tokenize(sanitized);
 
+  // Check if the sanitized text matches any common food terms before tokenization
+  for (const [food, variants] of Object.entries(commonJapaneseFoods)) {
+    if (sanitized.includes(food) || variants.some(v => sanitized.includes(v))) {
+      return [food, ...variants];
+    }
+  }
+
+  const tokens = tokenizer.tokenize(sanitized);
   const processedTokens: string[] = [];
 
-  for (const token of tokens) {
+  // Process consecutive tokens to identify potential food compound words
+  let compoundCandidate = '';
+
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+
     if (token.surface_form.length <= 1 || stopWords.includes(token.surface_form))
       continue;
+
+    compoundCandidate += token.surface_form;
+
+    // Check if current compound candidate matches any food terms
+    const foodMatch = Object.entries(commonJapaneseFoods).find(
+      ([food, variants]) => food === compoundCandidate || variants.includes(compoundCandidate),
+    );
+
+    if (foodMatch) {
+      processedTokens.push(foodMatch[0]); // Add the canonical food name
+      compoundCandidate = '';
+      continue;
+    }
+
+    // If no match and token ends with a typical word boundary, reset compound
+    if (['。', '、', '！', '？', '　', ' '].includes(token.surface_form)) {
+      compoundCandidate = '';
+    }
 
     processedTokens.push(token.surface_form);
 
@@ -102,8 +120,6 @@ function processDescriptionForIndexing(description: string): string[] {
       if (hiragana !== token.surface_form)
         processedTokens.push(hiragana);
     }
-
-    processedTokens.push(...generateNGrams(token.surface_form));
   }
 
   return processedTokens;
@@ -120,28 +136,36 @@ function encodePhonetically(word: string): string[] {
   if (isLatinText(word))
     return [word.toLowerCase()];
 
-  // Convert to hiragana r phonetic matching
-  let phonetic = wanakana.toHiragana(word);
+  const results: string[] = [];
 
-  // Normalize common soundariations
-  phonetic = phonetic
-    // Normalize long vowels
-    .replace(/おう/g, 'おー')
-    .replace(/えい/g, 'えー')
-    // Handle voiced/unvoiced consonant variations
-    .replace(/([かきくけこ])/g, (match) => {
-      const voicedMap: Record<string, string> = {
-        か: 'が',
-        き: 'ぎ',
-        く: 'ぐ',
-        け: 'げ',
-        こ: 'ご',
-      };
+  // Add original form
+  results.push(word);
 
-      return voicedMap[match] || match;
-    });
+  // Convert to hiragana for phonetic matching
+  if (!wanakana.isHiragana(word)) {
+    const hiragana = wanakana.toHiragana(word);
+    results.push(hiragana);
+  }
 
-  return [phonetic];
+  // Handle common variations in Japanese food terminology
+  let normalized = wanakana.isHiragana(word) ? word : wanakana.toHiragana(word);
+
+  // Normalize long vowel marks to repeated vowels for better matching
+  normalized = normalized
+    .replace(/([あいうえお])ー/g, '$1$1')
+    // Handle common sound variations that shouldn't affect matching
+    .replace(/づ/g, 'ず')
+    .replace(/ぢ/g, 'じ');
+
+  if (normalized !== results[results.length - 1])
+    results.push(normalized);
+
+  // Add a version without small っ which is often pronunciation variation
+  if (normalized.includes('っ')) {
+    results.push(normalized.replace(/っ/g, ''));
+  }
+
+  return results;
 }
 
 export default {
