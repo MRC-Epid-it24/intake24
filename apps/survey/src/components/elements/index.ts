@@ -12,4 +12,5 @@ export { default as SelectedFoodList } from './SelectedFoodList.vue';
 export { default as SurveyRating } from './survey-rating.vue';
 export { default as SurveyProgressBar } from './SurveyProgressBar.vue';
 export { default as ValidInvalidIcon } from './ValidInvalidIcon.vue';
+export { default as YesNoChoice } from './YesNoChoice.vue';
 export { default as YesNoToggle } from './YesNoToggle.vue';
