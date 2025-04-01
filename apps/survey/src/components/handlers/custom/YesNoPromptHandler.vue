@@ -48,25 +48,29 @@ const { foodOptional, mealOptional }
       = useCustomPromptHandler(props);
 const survey = useSurvey();
 
+function getFlagInitialState(flag: string, flags: string[]): boolean | null {
+  return flags.includes(flagPromptCompletionFlag(flag)) ? flags.includes(flag) : null;
+}
+
 const getInitialState = computed(() => {
   if (survey.selection.element === null) {
     return (props.prompt.useFlag && props.prompt.flag)
-      ? survey.data.flags.includes(props.prompt.flag)
+      ? getFlagInitialState(props.prompt.flag, survey.data.flags)
       : survey.data.customPromptAnswers[props.prompt.id];
   }
   else {
     switch (survey.selection.element.type) {
       case 'food':
         return (props.prompt.useFlag && props.prompt.flag)
-          ? foodOptional.value!.flags.includes(props.prompt.flag) // No clever way to handle food/meal being null here
+          ? getFlagInitialState(props.prompt.flag, foodOptional.value!.flags) // No clever way to handle food/meal being null here
           : foodOptional.value!.customPromptAnswers[props.prompt.id];
       case 'meal':
         return (props.prompt.useFlag && props.prompt.flag)
-          ? mealOptional.value!.flags.includes(props.prompt.flag)
+          ? getFlagInitialState(props.prompt.flag, mealOptional.value!.flags)
           : mealOptional.value!.customPromptAnswers[props.prompt.id];
     }
   }
-  // ESLint complains about no return value, TS complains about unreachable code T_T
+  // ESLint complains about no return value, TSC complains about unreachable code T_T
   return false;
 });
 
@@ -79,6 +83,8 @@ function commitAnswer() {
       survey.addFlag(flagPromptCompletionFlag(props.prompt.flag));
       if (state.value)
         survey.addFlag(props.prompt.flag);
+      else
+        survey.removeFlag(props.prompt.flag);
     }
     else {
       survey.setCustomPromptAnswer({ promptId: props.prompt.id, answer: state.value });
@@ -91,6 +97,8 @@ function commitAnswer() {
           survey.addFoodFlag(foodOptional.value!.id, flagPromptCompletionFlag(props.prompt.flag));
           if (state.value)
             survey.addFoodFlag(foodOptional.value!.id, props.prompt.flag);
+          else
+            survey.removeFoodFlag(foodOptional.value!.id, props.prompt.flag);
         }
         else {
           survey.setFoodCustomPromptAnswer({ foodId: foodOptional.value!.id, promptId: props.prompt.id, answer: state.value });
@@ -101,6 +109,8 @@ function commitAnswer() {
           survey.addMealFlag(mealOptional.value!.id, flagPromptCompletionFlag(props.prompt.flag));
           if (state.value)
             survey.addMealFlag(mealOptional.value!.id, props.prompt.flag);
+          else
+            survey.removeMealFlag(mealOptional.value!.id, props.prompt.flag);
         }
         else {
           survey.setMealCustomPromptAnswer({ mealId: mealOptional.value!.id, promptId: props.prompt.id, answer: state.value });
