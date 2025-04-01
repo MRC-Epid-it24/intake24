@@ -116,6 +116,7 @@
       "energy": "Energy value",
       "flag": "Flag",
       "tag": "Tag",
+      "foodTopLevel": "Is top level",
       "foodCategory": "Food category",
       "numberOfFoods": "Number of foods",
       "numberOfMeals": "Number of meals",

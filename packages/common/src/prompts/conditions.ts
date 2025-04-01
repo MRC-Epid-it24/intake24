@@ -125,6 +125,10 @@ const foodCategoryProperty = valueProperty.extend({
   id: z.literal('foodCategory'),
 });
 
+const foodTopLevelProperty = booleanProperty.extend({
+  id: z.literal('foodTopLevel'),
+});
+
 const promptAnswerProperty = z.object({
   id: z.literal('promptAnswer'),
   type: z.literal('promptAnswer'),
@@ -220,6 +224,7 @@ export const mealProperties = z.discriminatedUnion('id', [
 
 export const foodProperties = z.discriminatedUnion('id', [
   ...commonProperties,
+  foodTopLevelProperty,
   foodCategoryProperty,
   tagProperty,
   foodCompletionProperty,
@@ -389,6 +394,10 @@ export const promptConditionDefaults: PromptConditionDefaults = {
   },
   food: {
     ...commonPropertyDefaults,
+    foodTopLevel: {
+      id: 'foodTopLevel',
+      ...booleanPropertyDefaults,
+    },
     foodCategory: {
       id: 'foodCategory',
       ...valuePropertyDefaults,
