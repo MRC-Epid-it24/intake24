@@ -39,6 +39,7 @@ import {
   foodPortionSizeComplete,
   foodSearchComplete,
   getFoodByIndex,
+  getFoodIndexInMeal,
   getFoodIndexRequired,
   getMealIndexForSelection,
   mealComplete,
@@ -977,6 +978,12 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
         answer: food.data.categories,
         value: condition.property.check.value,
       });
+    }
+    case 'foodTopLevel': {
+      const food = requireFood(condition.property.id);
+      const meal = requireMeal(condition.property.id);
+      const isTopLevel = getFoodIndexInMeal(meal, food.id)?.linkedFoodIndex === undefined;
+      return isTopLevel === condition.property.check.value;
     }
   }
   throw new Error(`Prompt condition didn't match any switch branches`);
