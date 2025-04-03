@@ -267,7 +267,14 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   if (foodInterpretedRecipeFoods.words.length > 0)
     recipeFoodsHeaders = await matchRecipeFoods(foodInterpretedRecipeFoods, query);
 
-  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
+  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters, (foodCode: string) => {
+    const acceptHidden = query.parameters.includeHidden || !localeIndex.parentCategoryIndex.isFoodHidden(foodCode);
+    const acceptCategory
+      = query.parameters.limitToCategory === undefined
+        || localeIndex.parentCategoryIndex.isFoodInCategory(foodCode, query.parameters.limitToCategory);
+
+    return acceptHidden && acceptCategory;
+  });
 
   const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
     query.parameters.description,
@@ -275,22 +282,15 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     'categories',
   );
 
-  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters);
+  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters, (categoryCode: string) => {
+    return (query.parameters.limitToCategory === undefined || localeIndex.parentCategoryIndex.isSubCategory(categoryCode, query.parameters.limitToCategory));
+  });
 
   if (query.parameters.enableRelevantCategories)
     categoryResults.push(...getRelevantCategories(localeIndex, foodResults, categoryResults, query.parameters.relevantCategoryDepth));
 
-  const filteredFoods = foodResults.filter((matchResult) => {
-    const acceptHidden = query.parameters.includeHidden || !localeIndex.parentCategoryIndex.isFoodHidden(matchResult.key);
-    const acceptCategory
-      = query.parameters.limitToCategory === undefined
-        || localeIndex.parentCategoryIndex.isFoodInCategory(matchResult.key, query.parameters.limitToCategory);
-
-    return acceptHidden && acceptCategory;
-  });
-
   const foods = await rankFoodResults(
-    filteredFoods,
+    foodResults,
     query.parameters.localeId,
     query.parameters.rankingAlgorithm,
     query.parameters.matchScoreWeight / 100.0,
@@ -298,12 +298,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     recipeFoodsHeaders,
   );
 
-  const filteredCategories = categoryResults.filter(
-    matchResult =>
-      (query.parameters.limitToCategory === undefined || localeIndex.parentCategoryIndex.isSubCategory(matchResult.key, query.parameters.limitToCategory)),
-  );
-
-  const categories = rankCategoryResults(filteredCategories);
+  const categories = rankCategoryResults(categoryResults);
 
   return {
     foods: foods.slice(0, query.parameters.limit),

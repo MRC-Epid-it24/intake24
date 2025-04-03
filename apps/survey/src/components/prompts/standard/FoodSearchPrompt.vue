@@ -2,7 +2,7 @@
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text>
       <food-browser
-        v-bind="{ localeId, surveySlug, prompt, section, rootCategory, modelValue }"
+        v-bind="{ localeId, surveySlug, prompt, section, rootCategory, rootCategoryToggleable, modelValue }"
         @food-missing="foodMissing"
         @food-selected="foodSelected"
         @recipe-builder="recipeBuilder"
@@ -45,14 +45,21 @@ const { action } = usePromptUtils(props, { emit });
 
 const isValid = true;
 const rootCategory = computed(() => {
-  const foodSearch = props.meal?.flags?.find(flag => flag.startsWith('food-search:'))?.split(':')[1];
+  const mealFlagCategory = props.meal?.flags?.find(flag => flag.startsWith('food-search:'))?.split(':')[1];
+  const foodFlagCategory = props.food?.flags?.find(flag => flag.startsWith('search-category:') || flag.startsWith('search-category-toggle:'))?.split(':')[1];
 
-  if (!foodSearch)
+  const category = foodFlagCategory ?? mealFlagCategory;
+
+  if (!category)
     return undefined;
 
-  const [foodsCategory, drinksCategory] = foodSearch.split('|');
+  const [foodsCategory, drinksCategory] = category.split('|');
 
-  return props.food?.flags.includes('is-drink') ? drinksCategory : foodsCategory;
+  return props.food?.flags.includes('is-drink') ? drinksCategory ?? foodsCategory : foodsCategory;
+});
+
+const rootCategoryToggleable = computed(() => {
+  return props.food?.flags?.find(flag => flag.startsWith('search-category-toggle:')) !== undefined;
 });
 
 async function foodSelected(food: FoodHeader) {

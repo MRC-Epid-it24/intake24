@@ -18,6 +18,7 @@ export const customComponentTypes = [
   'aggregate-choice-prompt',
   'info-prompt',
   'date-picker-prompt',
+  'food-selection-prompt',
   'time-picker-prompt',
   'checkbox-list-prompt',
   'multi-prompt',
@@ -130,6 +131,9 @@ export type AddonFoodTrigger = (typeof addonFoodTriggers)[number];
 
 export const foodBrowser = z.object({
   categoriesFirst: z.record(z.enum(['browse', 'search']), z.boolean()),
+  allowThumbnails: z.boolean(),
+  enableGrid: z.boolean(),
+  gridThreshold: z.number(),
 });
 export type FoodBrowser = z.infer<typeof foodBrowser>;
 
@@ -174,6 +178,13 @@ const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(datePicke
   component: z.literal('date-picker-prompt'),
 });
 
+const foodSelectionPrompt = baseCustomPrompt.extend({
+  component: z.literal('food-selection-prompt'),
+  foodFilter: condition.optional(),
+  useFlag: z.boolean(),
+  flag: z.string().optional(),
+});
+
 const infoPrompt = baseCustomPrompt.merge(hasVideo).extend({
   component: z.literal('info-prompt'),
   carousel: carousel.optional(),
@@ -211,6 +222,8 @@ const timePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(timePicke
 
 const yesNoPrompt = baseCustomPrompt.extend({
   component: z.literal('yes-no-prompt'),
+  useFlag: z.boolean(),
+  flag: z.string().optional(),
 });
 
 // Portion size
@@ -404,6 +417,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   checkboxListPrompt,
   datePickerPrompt,
   infoPrompt,
+  foodSelectionPrompt,
   noMoreInformationPrompt,
   radioListPrompt,
   selectPrompt,
@@ -462,6 +476,7 @@ export const prompts = z.object({
   'checkbox-list-prompt': checkboxListPrompt,
   'date-picker-prompt': datePickerPrompt,
   'info-prompt': infoPrompt,
+  'food-selection-prompt': foodSelectionPrompt,
   'multi-prompt': multiPrompt,
   'no-more-information-prompt': noMoreInformationPrompt,
   'radio-list-prompt': radioListPrompt,

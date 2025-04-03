@@ -1,5 +1,4 @@
 import { omit } from 'lodash';
-
 import type { Condition as ConditionV2 } from '@intake24/common/prompts/conditions';
 import type { Prompt as PromptV2, SinglePrompt as SinglePromptV2 } from '@intake24/common/prompts/prompts';
 import type { Condition as ConditionV1 } from '@intake24/common/prompts/v1/conditions';
@@ -246,12 +245,18 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         amPmToggle: false,
       };
     default:
+      // Type system infers that SinglePromptV1 component type cannot be, e.g., 'food-selection-prompt',
+      // but unable to infer that the component in the return type cannot be that and complains about
+      // missing fields.
+      //
+      // Since SinglePromptV1 component types are not going to be expanded, this typecast should be safe
+      // and should prevent it from complaining when more prompt types are added to SinglePromptV2.
       return {
         ...prompt,
         version: 2,
         useGraph: false,
         conditions,
-      };
+      } as SinglePromptV2;
   }
 }
 

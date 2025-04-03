@@ -68,10 +68,12 @@ export function usePromptUtils<
         build.item = foodName.value;
 
       build.food = foodName.value;
+      build.foodLowerCase = foodName.value.toLocaleLowerCase();
     }
 
     if (mealName.value) {
       build.mealName = mealName.value;
+      build.mealNameLowerCase = mealName.value.toLocaleLowerCase();
 
       if (mealTime.value) {
         build.mealTime = mealTime.value;

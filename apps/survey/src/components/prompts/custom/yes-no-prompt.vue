@@ -5,7 +5,7 @@
     @action="action"
   >
     <template #actions>
-      <yes-no-toggle v-model="state" />
+      <yes-no-choice v-model="state" />
     </template>
     <template #nav-actions>
       <v-btn color="primary" :title="$t('common.action.no')" variant="text" @click.stop="state = false">
@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { YesNoToggle } from '@intake24/survey/components/elements';
+import { YesNoChoice } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';

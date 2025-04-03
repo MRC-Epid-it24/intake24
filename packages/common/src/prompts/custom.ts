@@ -36,6 +36,16 @@ export const datePickerPrompt: Prompts['date-picker-prompt'] = copy({
   max: null,
 });
 
+export const foodSelectionPrompt: Prompts['food-selection-prompt'] = copy({
+  ...basePrompt,
+  component: 'food-selection-prompt',
+  type: 'custom',
+  id: 'food-selection-prompt',
+  name: 'Food selection prompt',
+  foodFilter: undefined,
+  useFlag: false,
+});
+
 export const infoPrompt: Prompts['info-prompt'] = copy({
   ...basePrompt,
   component: 'info-prompt',
@@ -115,6 +125,7 @@ export const timePickerPrompt: Prompts['time-picker-prompt'] = copy({
 export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({
   ...basePrompt,
   component: 'yes-no-prompt',
+  useFlag: false,
   type: 'custom',
   id: 'yes-no-prompt',
   name: 'Yes / No prompt',
@@ -124,6 +135,7 @@ export const customPrompts = [
   aggregateChoicePrompt,
   checkboxListPrompt,
   datePickerPrompt,
+  foodSelectionPrompt,
   infoPrompt,
   noMoreInformationPrompt,
   selectPrompt,
