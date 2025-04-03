@@ -97,7 +97,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     encodedFood.value.data.portionSizeMethods.map((item, index) => ({ ...item, index })).filter(
       item =>
         survey.registeredPortionSizeMethods.includes(item.method)
-        && (!parentFoodRequiredPSMs.includes(item.method) || !!parentFood.value),
+        && (!parentFoodRequiredPSMs.includes(item.method) || !!parentFoodOptional.value),
     ),
   );
 
