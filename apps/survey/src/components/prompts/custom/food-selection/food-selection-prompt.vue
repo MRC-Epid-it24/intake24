@@ -6,7 +6,6 @@
           v-for="food in filteredFoods"
           :key="food.id"
           v-model="selected"
-          :disabled="selected.includes(foodSelectionNoneUuid)"
           hide-details="auto"
           :label="getFoodName(food)"
           :value="food.id"
@@ -18,7 +17,7 @@
           hide-details="auto"
           :label="$t('prompts.foodSelection.none')"
           :value="foodSelectionNoneUuid"
-          @update:model-value="update()"
+          @update:model-value="updateNone()"
         />
       </v-form>
     </v-card-text>
@@ -73,6 +72,16 @@ const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
 const isValid = computed(() => props.modelValue?.length > 0);
 
 function update() {
+  if (selected.value.findIndex(id => id !== foodSelectionNoneUuid) > -1)
+    selected.value = selected.value.filter(id => id !== foodSelectionNoneUuid);
+
+  emit('update:modelValue', [...selected.value]);
+}
+
+function updateNone() {
+  if (selected.value.includes(foodSelectionNoneUuid))
+    selected.value = [foodSelectionNoneUuid];
+
   emit('update:modelValue', [...selected.value]);
 }
 
