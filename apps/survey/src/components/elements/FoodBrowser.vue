@@ -426,7 +426,7 @@ async function search() {
           return true;
         },
       );
-      if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0)
+      if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0 && (!props.rootCategory || !limitToRootCategory.value))
         await recipeBuilderDetected(recipeBuilderFoods.value);
       requestFailed.value = false;
     }
