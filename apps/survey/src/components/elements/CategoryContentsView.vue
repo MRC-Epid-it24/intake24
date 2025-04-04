@@ -48,8 +48,8 @@
     </v-chip-group>
     <v-btn
       v-if="contents.subcategories.length > threshold"
-      color="info"
-      variant="text"
+      color="primary"
+      variant="outlined"
       @click="showAll = !showAll"
     >
       {{ showAll ? i18n.showLess : i18n.showAll }}
