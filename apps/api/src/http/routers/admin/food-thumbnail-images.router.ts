@@ -22,16 +22,13 @@ export function foodThumbnailImages() {
         const {
           user,
           foodThumbnailImageService,
-          i18nService,
         } = req.scope.cradle;
 
         const res = imageMulterFile.safeParse(file);
 
         if (!res.success) {
           // i18n helper functions expect Express req while req here is TsRestRequest
-          throw new ValidationError(
-            i18nService.translate('validation.types.file._', { attributePath: 'image' }),
-          );
+          throw ValidationError.from({ path: 'image', i18n: { type: 'file._' } });
         }
 
         const foodLocal = await FoodLocal.findOne({ where: { localeId, foodCode } });
