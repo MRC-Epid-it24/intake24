@@ -45,12 +45,12 @@
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.10.2",
-    "@types/node": "^22.13.11",
+    "@antfu/eslint-config": "^4.11.0",
+    "@types/node": "^22.14.0",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
     "conventional-changelog-cli": "^5.0.0",
-    "eslint": "^9.23.0",
+    "eslint": "^9.24.0",
     "eslint-plugin-format": "^1.0.1",
     "eslint-plugin-vue": "^10.0.0",
     "execa": "^9.5.2",
@@ -60,7 +60,7 @@
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.12.1",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged",

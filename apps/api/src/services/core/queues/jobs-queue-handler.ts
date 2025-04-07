@@ -62,7 +62,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
       const worker = new Worker(this.name, this.processor, options);
 
       worker
-        .on('progress', async (job, progress: number | object) => {
+        .on('progress', async (job, progress) => {
           this.logger.debug(`${this.name}: ${job.name} | ${job.id} progress has been updated.`);
 
           const dbId = job.id?.replace('db-', '');
