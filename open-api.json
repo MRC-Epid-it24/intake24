@@ -1046,6 +1046,9 @@
                           "searchTerm": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "thumbnailImageUrl": {
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -1148,6 +1151,9 @@
                           "searchTerm": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "thumbnailImageUrl": {
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -1179,6 +1185,58 @@
                     "header",
                     "foods",
                     "subcategories"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/category-header/{localeId}/{code}": {
+      "get": {
+        "description": "Get the category header, useful if only the local name is required",
+        "summary": "Category header",
+        "tags": [
+          "default",
+          "category"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name"
                   ]
                 }
               }
@@ -1277,6 +1335,9 @@
                           "searchTerm": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "thumbnailImageUrl": {
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -1442,6 +1503,9 @@
                           "searchTerm": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "thumbnailImageUrl": {
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -2027,6 +2091,9 @@
                       "items": {
                         "type": "string"
                       }
+                    },
+                    "thumbnailImageUrl": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -7019,6 +7086,9 @@
                           "searchTerm": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "thumbnailImageUrl": {
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -22556,6 +22626,68 @@
         "responses": {
           "204": {
             "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/fdbs/{localeId}/{foodCode}/thumbnail": {
+      "put": {
+        "description": "Update food image thumbnail",
+        "summary": "Update food image thumbnail",
+        "tags": [
+          "default",
+          "admin",
+          "foodThumbnailImages"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "foodCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "404",
             "content": {
               "application/json": {
                 "schema": {}
