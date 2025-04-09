@@ -108,6 +108,13 @@ function dataExportService({
         ['submission', 'id', 'ASC'],
         ['hours', 'ASC'],
         ['minutes', 'ASC'],
+        ['name', 'ASC'],
+        /*
+        * Ensure order for pagination (offset/limit)
+        * - meal hours, minutes and name are not unique and same
+        * - todo: UUIDv4 is not ordered -> use UUIDv7
+        */
+        ['id', 'ASC'],
       ],
     };
 
