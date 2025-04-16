@@ -186,7 +186,7 @@ export default defineComponent({
     return {
       expanded: false,
       showAll: false,
-      threshold: 5,
+      threshold: 0,
       thumbnailExpanded: reactive<Record<string, boolean>>({}),
     };
   },
@@ -212,6 +212,17 @@ export default defineComponent({
         return false;
       else
         return Math.round(foodsWithThumbnailsCount * 100.0 / totalFoodCount) >= this.gridThreshold;
+    },
+  },
+
+  watch: {
+    'contents.foods.length': {
+      handler(newLength) {
+        if (newLength === 0) {
+          this.threshold = 5;
+        }
+      },
+      immediate: true,
     },
   },
 
