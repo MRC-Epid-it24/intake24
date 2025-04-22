@@ -219,7 +219,7 @@ export default defineComponent({
     'contents.foods.length': {
       handler(newLength) {
         if (newLength === 0) {
-          this.threshold = 5;
+          this.showAll = true;
         }
       },
       immediate: true,
