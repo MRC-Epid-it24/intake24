@@ -3,7 +3,7 @@ import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';
 /* eslint-disable ts/no-empty-object-type */
 import { Readable } from 'node:stream';
 import { snakeCase } from 'lodash';
-import { col, DataTypes, fn, Op } from 'sequelize';
+import { cast, col, DataTypes, fn, Op, where } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 
 import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
@@ -84,7 +84,7 @@ export default class Model<
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const operations = columns.map(column => ({ [column]: operation }));
+      const operations = columns.map(column => where(cast(col(snakeCase(column)), 'text'), operation));
       // @ts-expect-error where merge types (watch out what is being merged, might not cover all permutations)
       options.where = { [Op.and]: [options.where, { [Op.or]: operations }] };
     }
