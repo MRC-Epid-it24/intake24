@@ -202,7 +202,7 @@ export default defineComponent({
       config: { extractNestedKeys: true },
     });
 
-    const fetchCategoryOrFood = async (entryId: string) => {
+    const fetchCategoryOrFood = async (id: string, entryId: string) => {
       if (!entryId || entryId === 'no-category')
         return;
 
@@ -210,9 +210,7 @@ export default defineComponent({
       entry.value = null;
 
       try {
-        const { data } = await http.get<CategoryLocalEntry>(
-          `admin/fdbs/${props.id}/${type}/${entryId}`,
-        );
+        const { data } = await http.get<CategoryLocalEntry>(`admin/fdbs/${id}/${type}/${entryId}`);
 
         toForm(data);
         entry.value = data;
@@ -223,9 +221,7 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      const data = await put<CategoryLocalEntry>(
-        `admin/fdbs/${props.id}/${type}/${props.entryId}`,
-      );
+      const data = await put<CategoryLocalEntry>(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
       toForm(data);
 
       const { name, main: { name: englishName = 'record' } = {} } = data;
@@ -234,12 +230,12 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      await fetchCategoryOrFood(props.entryId);
+      await fetchCategoryOrFood(props.id, props.entryId);
     });
 
     onBeforeRouteUpdate(async (to, from, next) => {
       if (to.params.entryId !== from.params.entryId)
-        await fetchCategoryOrFood(to.params.entryId);
+        await fetchCategoryOrFood(to.params.id.toString(), to.params.entryId.toString());
 
       next();
     });
