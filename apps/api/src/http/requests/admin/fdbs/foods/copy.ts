@@ -1,4 +1,3 @@
-import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
 
 import {
@@ -27,7 +26,7 @@ export default validate(
       isLength: { options: { min: 1, max: 8 }, bail: true },
       custom: {
         options: async (value, meta): Promise<void> => {
-          const { localeId } = (meta.req as Request).params;
+          const { localeId } = meta.req.body;
 
           const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
           if (!locale)
@@ -44,6 +43,12 @@ export default validate(
             throw new Error(customTypeErrorMessage('unique._', meta));
         },
       },
+    },
+    localeId: {
+      in: ['body'],
+      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 8 }),
+      isString: { bail: true },
+      isLength: { options: { min: 1, max: 8 }, bail: true },
     },
   }),
 );

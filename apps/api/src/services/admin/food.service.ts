@@ -9,6 +9,7 @@ import { toSimpleName } from '@intake24/api/util';
 import type {
   FoodInput,
   FoodLocalCopyInput,
+  FoodLocalCopySource,
   FoodLocalInput,
 } from '@intake24/common/types/http/admin';
 import type { FindOptions, FoodLocalAttributes, PaginateQuery, Transaction } from '@intake24/db';
@@ -20,6 +21,7 @@ import {
   FoodLocalList,
   FoodPortionSizeMethod,
   Op,
+  SystemLocale,
 } from '@intake24/db';
 
 function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
@@ -44,8 +46,8 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     return FoodLocal.paginate({ query, transform: foodsResponse, ...options });
   };
 
-  const getFoodImpl = async (foodId: { id: string } | { foodCode: string }, localeCode?: string) => {
-    const where = localeCode ? { localeId: localeCode } : {};
+  const getFoodImpl = async (foodId: { id: string } | { foodCode: string }, localeCode: string) => {
+    const where = { localeId: localeCode };
 
     return FoodLocal.findOne({
       where: { ...where, ...foodId },
@@ -69,7 +71,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
           association: 'associatedFoods',
           required: false,
           separate: true,
-          where: { localeId: localeCode },
+          where,
           include: [{ association: 'associatedCategory' }, { association: 'associatedFood' }],
           order: [['orderBy', 'ASC']],
         },
@@ -83,9 +85,9 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     });
   };
 
-  const getFoodByCode = async (foodCode: string, localeCode?: string) => getFoodImpl({ foodCode }, localeCode);
+  const getFoodByCode = async (foodCode: string, localeCode: string) => getFoodImpl({ foodCode }, localeCode);
 
-  const getFood = async (foodLocalId: string, localeCode?: string) => getFoodImpl({ id: foodLocalId }, localeCode);
+  const getFood = async (foodLocalId: string, localeCode: string) => getFoodImpl({ id: foodLocalId }, localeCode);
 
   const updatePortionSizeMethods = async (
     foodLocalId: string,
@@ -262,25 +264,42 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     return (await getFood(foodLocalId, localeCode))!;
   };
 
-  const copyFood = async (foodLocalId: string, localeCode: string, input: FoodLocalCopyInput) => {
-    const sourceFoodLocal = await getFood(foodLocalId, localeCode);
+  const copyFood = async ({ foodId, localeId, localeCode }: FoodLocalCopySource, input: FoodLocalCopyInput) => {
+    const sourceFoodLocal = await getFood(foodId, localeCode);
     if (!sourceFoodLocal)
       throw new NotFoundError();
 
     const foodLocal = await db.foods.transaction(async (transaction) => {
-      const food = await Food.create(
+      let localeCode = sourceFoodLocal.localeId;
+      if (localeId !== input.localeId) {
+        const targetLocale = await SystemLocale.findByPk(input.localeId, { attributes: ['code'] });
+        if (!targetLocale)
+          throw new NotFoundError();
+
+        localeCode = targetLocale.code;
+      }
+
+      const [food, created] = await Food.findOrCreate(
         {
-          ...pick(sourceFoodLocal.main!, ['code', 'name', 'foodGroupId']),
-          ...input,
-          version: randomUUID(),
+          where: { code: input.code },
+          defaults: {
+            code: input.code,
+            name: input.name,
+            foodGroupId: sourceFoodLocal.main!.foodGroupId,
+            version: randomUUID(),
+          },
+          transaction,
         },
-        { transaction },
       );
+
       const foodLocal = await FoodLocal.create(
         {
-          ...pick(sourceFoodLocal, ['localeId', 'name', 'simpleName', 'altNames', 'tags']),
-          foodCode: food.code,
+          foodCode: input.code,
+          localeId: localeCode,
           name: input.name,
+          simpleName: toSimpleName(input.name),
+          altNames: sourceFoodLocal.altNames,
+          tags: sourceFoodLocal.tags,
           version: randomUUID(),
         },
         { transaction },
@@ -288,26 +307,28 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
       const promises: Promise<any>[] = [];
 
-      if (sourceFoodLocal.main?.attributes) {
-        promises.push(
-          FoodAttribute.create(
-            {
-              ...pick(sourceFoodLocal.main.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
-              foodCode: food.code,
-            },
-            { transaction },
-          ),
-        );
-      }
+      if (created) {
+        if (sourceFoodLocal.main?.attributes) {
+          promises.push(
+            FoodAttribute.create(
+              {
+                ...pick(sourceFoodLocal.main.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
+                foodCode: input.code,
+              },
+              { transaction },
+            ),
+          );
+        }
 
-      if (sourceFoodLocal.main?.locales?.length) {
-        const locales = sourceFoodLocal.main.locales.map(({ id }) => id);
-        promises.push(food.$set('locales', locales, { transaction }));
-      }
+        if (sourceFoodLocal.main?.locales?.length) {
+          const locales = sourceFoodLocal.main.locales.map(({ id }) => id);
+          promises.push(food.$set('locales', locales, { transaction }));
+        }
 
-      if (sourceFoodLocal.main?.parentCategories?.length) {
-        const categories = sourceFoodLocal.main.parentCategories.map(({ code }) => code);
-        promises.push(food.$set('parentCategories', categories, { transaction }));
+        if (sourceFoodLocal.main?.parentCategories?.length) {
+          const categories = sourceFoodLocal.main.parentCategories.map(({ code }) => code);
+          promises.push(food.$set('parentCategories', categories, { transaction }));
+        }
       }
 
       if (sourceFoodLocal.nutrientRecords?.length) {
@@ -326,7 +347,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
             'genericName',
             'orderBy',
           ]),
-          foodCode: food.code,
+          foodCode: foodLocal.foodCode,
           localeId: foodLocal.localeId,
         }));
         promises.push(AssociatedFood.bulkCreate(associatedFoods, { transaction }));
@@ -358,7 +379,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       return foodLocal;
     });
 
-    return (await getFood(foodLocal.id, localeCode))!;
+    return (await getFood(foodLocal.id, foodLocal.localeId))!;
   };
 
   const deleteFood = async (foodLocalId: string, localeCode: string) => {

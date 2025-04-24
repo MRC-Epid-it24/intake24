@@ -133,6 +133,7 @@ export default defineComponent({
       if (!('children' in category))
         return;
 
+      category.children = [];
       category.children.push(
         ...categories.map(item => ({
           ...item,

@@ -123,7 +123,7 @@
           :locale-id="id"
         />
       </v-form>
-      <div class="d-flex">
+      <div class="d-flex gc-2">
         <v-btn color="secondary" type="submit" variant="outlined" @click="submit">
           <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
         </v-btn>

@@ -153,7 +153,14 @@ function adminFoodController({
       where: { id: localeId },
     });
 
-    const foodLocal = await adminFoodService.copyFood(foodId, code, req.body);
+    if (localeId !== req.body.localeId) {
+      await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+        attributes: ['code'],
+        where: { id: req.body.localeId },
+      });
+    }
+
+    const foodLocal = await adminFoodService.copyFood({ foodId, localeId, localeCode: code }, req.body);
 
     res.json(foodLocal);
   };

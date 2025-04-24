@@ -21,6 +21,17 @@
         <v-card-text class="pa-6">
           <v-row>
             <v-col cols="12">
+              <select-resource
+                v-model="data.localeId"
+                :error-messages="errors.get('localeId')"
+                item-name="englishName"
+                :label="$t('locales._')"
+                name="localeId"
+                resource="locales"
+                @update:model-value="errors.clear('localeId')"
+              />
+            </v-col>
+            <v-col cols="12">
               <v-text-field
                 v-model="data.code"
                 :error-messages="errors.get('code')"
@@ -65,16 +76,18 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-
 import { useForm } from '@intake24/admin/composables';
-import type { FoodLocalCopyInput, SurveySchemeEntry } from '@intake24/common/types/http/admin';
+import type { FoodLocalCopyInput } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
+import { SelectResource } from '../dialogs';
 
 export type CopyEntityForm = FoodLocalCopyInput;
 
 export default defineComponent({
   name: 'CopyEntryDialog',
+
+  components: { SelectResource },
 
   props: {
     type: {
@@ -96,7 +109,7 @@ export default defineComponent({
     const router = useRouter();
 
     const { clearError, data, errors, post } = useForm<CopyEntityForm>({
-      data: { code: '', name: '' },
+      data: { localeId: props.localeId, code: '', name: '' },
     });
 
     const dialog = ref(false);
@@ -106,15 +119,15 @@ export default defineComponent({
     };
 
     const confirm = async () => {
-      const { type, localeId, entryId } = props;
-      const { name } = data.value;
-      const { id } = await post<SurveySchemeEntry>(
-        `admin/fdbs/${localeId}/${type}/${entryId}/copy`,
-      );
+      const { localeId, name } = data.value;
+      const { id } = await post<{ id: string; localeId: string }>(`admin/fdbs/${props.localeId}/${props.type}/${props.entryId}/copy`);
 
       close();
       useMessages().success(i18n.t('common.msg.created', { name }));
-      await router.push({ name: `fdbs-${type}`, params: { id: localeId, entryId: id } });
+      if (props.localeId !== localeId)
+        return;
+
+      await router.push({ name: `fdbs-${props.type}`, params: { id: localeId, entryId: id } });
     };
 
     return { clearError, close, confirm, data, errors, dialog };

@@ -1,10 +1,10 @@
 import type { Pagination } from '../generic';
-
 import type { AssociatedFood } from './associated-food';
+
 import { z } from 'zod';
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
-
 import type { UseInRecipeType } from '@intake24/common/types';
+
 import type {
   AssociatedFoodAttributes,
   AssociatedFoodCreationAttributes,
@@ -112,7 +112,14 @@ export type FoodLocalInput = {
   associatedFoods: AssociatedFoodCreationAttributes[];
 };
 
+export type FoodLocalCopySource = {
+  foodId: string;
+  localeId: string;
+  localeCode: string;
+};
+
 export type FoodLocalCopyInput = {
+  localeId: string;
   code: string;
   name: string;
 };
