@@ -119,9 +119,7 @@ export function locale() {
           name,
         }));
 
-        const locales = await SystemLocale.scope('list').findAll();
-
-        return { status: 200, body: { foodIndexLanguageBackends, locales } };
+        return { status: 200, body: { foodIndexLanguageBackends } };
       },
     },
     read: {

@@ -74,7 +74,6 @@ export const localeRefs = z.object({
     id: z.string(),
     name: z.string(),
   }).array(),
-  locales: localeListEntry.array(),
 });
 
 export type LocaleRefs = z.infer<typeof localeRefs>;
