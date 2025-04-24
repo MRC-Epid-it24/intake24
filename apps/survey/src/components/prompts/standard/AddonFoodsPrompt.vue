@@ -184,11 +184,11 @@ async function getAddonFoods() {
   );
 }
 
-async function update() {
+function update() {
   emit('update:modelValue', { foods: foods.value });
 };
 
-async function updatePortionSize(foodId: string, idx: number) {
+function updatePortionSize(foodId: string, idx: number) {
   const { portionSize: { unit, quantity, linkedQuantity }, data } = foods.value[foodId][idx];
 
   const conversionFactor = data?.code ? addonFoodUnits.value[data.code].conversionFactor : 1;
@@ -197,7 +197,7 @@ async function updatePortionSize(foodId: string, idx: number) {
   update();
 };
 
-async function updateConfirmed(foodId: string, idx: number, confirmed: boolean | null) {
+function updateConfirmed(foodId: string, idx: number, confirmed: boolean | null) {
   foods.value[foodId][idx].confirmed = !!confirmed;
 
   if (confirmed === false) {
@@ -209,7 +209,7 @@ async function updateConfirmed(foodId: string, idx: number, confirmed: boolean |
   updatePortionSize(foodId, idx);
 }
 
-async function updateFood(foodId: string, idx: number, data: UserFoodData | null) {
+function updateFood(foodId: string, idx: number, data: UserFoodData | null) {
   foods.value[foodId][idx].data = data;
   foods.value[foodId][idx].portionSize.unit = null;
 
@@ -219,11 +219,11 @@ async function updateFood(foodId: string, idx: number, data: UserFoodData | null
   updatePortionSize(foodId, idx);
 };
 
-async function updateUnit(foodId: string, idx: number) {
+function updateUnit(foodId: string, idx: number) {
   updatePortionSize(foodId, idx);
 };
 
-async function updateQuantity(foodId: string, idx: number) {
+function updateQuantity(foodId: string, idx: number) {
   updatePortionSize(foodId, idx);
 };
 

@@ -28,7 +28,7 @@ export function useStandardUnits() {
     return translate(item.inlineEstimateIn ?? standardUnitRefs.value[item.name]?.estimateIn ?? item.name);
   };
 
-  const resolveStandardUnits = async (names: string[]) => {
+  async function resolveStandardUnits(names: string[]) {
     if (!names.length) {
       usingStandardTranslations.value = false;
       return;
