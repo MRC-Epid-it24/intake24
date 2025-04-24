@@ -83,7 +83,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { useFetchList } from '@intake24/admin/composables';
 import { getResource } from '@intake24/admin/router/resources';
@@ -139,7 +139,7 @@ const emit = defineEmits(['clear', 'update:modelValue']);
 
 const selectedItemId = ref<string[]>(props.initialItem ? [props.initialItem[props.itemId]] : []);
 
-const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
+const { dialog, get, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
   `/admin/references/${props.resource}`,
 );
 
@@ -187,6 +187,26 @@ function confirm() {
   update();
   close();
 };
+
+async function fetchInitialEntry() {
+  if (props.initialItem || !props.modelValue)
+    return;
+
+  const id = typeof props.modelValue === 'string' ? props.modelValue : props.modelValue[props.itemId];
+  const data = await get(id);
+
+  const match = data.find(item => item[props.itemId] === id);
+  if (!match)
+    return;
+
+  items.value = [];
+  items.value.push(match);
+  selectedItemId.value = [match[props.itemId]];
+};
+
+onMounted(async () => {
+  await fetchInitialEntry();
+});
 
 watch(
   () => props.modelValue,
