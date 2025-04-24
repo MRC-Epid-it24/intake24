@@ -84,7 +84,7 @@ export default class Model<
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const operations = columns.map(column => where(cast(col(snakeCase(column)), 'text'), operation));
+      const operations = columns.map(column => where(cast(col(`${model.name}.${snakeCase(column)}`), 'text'), operation));
       // @ts-expect-error where merge types (watch out what is being merged, might not cover all permutations)
       options.where = { [Op.and]: [options.where, { [Op.or]: operations }] };
     }
