@@ -81,7 +81,7 @@ export function reference() {
 
         const paginateOptions: PaginateOptions<FeedbackScheme> = {
           query,
-          columns: ['name'],
+          columns: ['id', 'name'],
           order: [[fn('lower', col('FeedbackScheme.name')), 'ASC']],
         };
 
@@ -105,7 +105,7 @@ export function reference() {
         const foodGroups = await FoodGroup.paginate({
           query,
           attributes: ['id', 'name'],
-          columns: ['name'],
+          columns: ['id', 'name'],
           order: [['name', 'ASC']],
         });
 
@@ -164,7 +164,7 @@ export function reference() {
         const paginateOptions: PaginateOptions<Language> = {
           query,
           attributes: ['id', 'code', 'englishName', 'localName'],
-          columns: ['code', 'englishName', 'localName'],
+          columns: ['id', 'code', 'englishName', 'localName'],
           order: [[fn('lower', col('Language.code')), 'ASC']],
         };
 
@@ -193,7 +193,7 @@ export function reference() {
         const paginateOptions: PaginateOptions<SystemLocale> = {
           query,
           attributes: ['id', 'code', 'englishName', 'localName'],
-          columns: ['code', 'englishName', 'localName'],
+          columns: ['id', 'code', 'englishName', 'localName'],
           order: [[fn('lower', col('Locale.code')), 'ASC']],
         };
 
@@ -229,7 +229,7 @@ export function reference() {
       handler: async ({ params: { nutrientTableId }, query }) => {
         const nutrientTableRecords = await NutrientTableRecord.paginate({
           query,
-          columns: ['name', 'localName', 'nutrientTableRecordId'],
+          columns: ['id', 'name', 'localName', 'nutrientTableRecordId'],
           where: { nutrientTableId },
           order: [[fn('lower', col('NutrientTableRecord.name')), 'ASC']],
         });
@@ -246,7 +246,7 @@ export function reference() {
           const nutrientTypes = await FoodsNutrientType.paginate({
             query,
             attributes: ['id', 'description', 'unitId'],
-            columns: ['description'],
+            columns: ['id', 'description'],
             where: {
               id: {
                 [Op.in]: literal(`(
@@ -265,7 +265,7 @@ export function reference() {
         const nutrientTypes = await FoodsNutrientType.paginate({
           query,
           attributes: ['id', 'description', 'unitId'],
-          columns: ['description'],
+          columns: ['id', 'description'],
           order: [['id', 'ASC']],
         });
 
@@ -291,7 +291,7 @@ export function reference() {
         const surveys = await Survey.paginate({
           query,
           attributes: ['id', 'slug', 'name'],
-          columns: ['name'],
+          columns: ['id', 'name'],
           order: [[fn('lower', col('name')), 'ASC']],
         });
 
@@ -308,7 +308,7 @@ export function reference() {
 
         const paginateOptions: PaginateOptions<SurveyScheme> = {
           query,
-          columns: ['name'],
+          columns: ['id', 'name'],
           order: [[fn('lower', col('SurveyScheme.name')), 'ASC']],
         };
 
