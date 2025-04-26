@@ -194,6 +194,8 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       return foodLocal;
     });
 
+    await cache.push('indexing-locales', localeCode);
+
     return (await getFood(foodLocal.id, localeCode))!;
   };
 
@@ -254,31 +256,34 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         await Food.update({ code: input.main.code }, { where: { code: main.code }, transaction });
     });
 
-    await cache.forget([
-      `food-attributes:${input.main?.code}`,
-      `food-entry:${localeCode}:${input.main?.code}`,
-      `food-all-categories:${input.main?.code}`,
-      `food-parent-categories:${input.main?.code}`,
+    await Promise.all([
+      cache.forget([
+        `food-attributes:${input.main?.code}`,
+        `food-entry:${localeCode}:${input.main?.code}`,
+        `food-all-categories:${input.main?.code}`,
+        `food-parent-categories:${input.main?.code}`,
+      ]),
+      cache.push('indexing-locales', localeCode),
     ]);
 
     return (await getFood(foodLocalId, localeCode))!;
   };
 
-  const copyFood = async ({ foodId, localeId, localeCode }: FoodLocalCopySource, input: FoodLocalCopyInput) => {
-    const sourceFoodLocal = await getFood(foodId, localeCode);
+  const copyFood = async (source: FoodLocalCopySource, input: FoodLocalCopyInput) => {
+    const sourceFoodLocal = await getFood(source.foodId, source.localeCode);
     if (!sourceFoodLocal)
       throw new NotFoundError();
 
+    let localeCode = sourceFoodLocal.localeId;
+    if (source.localeId !== input.localeId) {
+      const targetLocale = await SystemLocale.findByPk(input.localeId, { attributes: ['code'] });
+      if (!targetLocale)
+        throw new NotFoundError();
+
+      localeCode = targetLocale.code;
+    }
+
     const foodLocal = await db.foods.transaction(async (transaction) => {
-      let localeCode = sourceFoodLocal.localeId;
-      if (localeId !== input.localeId) {
-        const targetLocale = await SystemLocale.findByPk(input.localeId, { attributes: ['code'] });
-        if (!targetLocale)
-          throw new NotFoundError();
-
-        localeCode = targetLocale.code;
-      }
-
       const [food, created] = await Food.findOrCreate(
         {
           where: { code: input.code },
@@ -307,6 +312,8 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
       const promises: Promise<any>[] = [];
 
+      promises.push(food.$add('locales', localeCode, { transaction }));
+
       if (created) {
         if (sourceFoodLocal.main?.attributes) {
           promises.push(
@@ -318,11 +325,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
               { transaction },
             ),
           );
-        }
-
-        if (sourceFoodLocal.main?.locales?.length) {
-          const locales = sourceFoodLocal.main.locales.map(({ id }) => id);
-          promises.push(food.$set('locales', locales, { transaction }));
         }
 
         if (sourceFoodLocal.main?.parentCategories?.length) {
@@ -378,6 +380,8 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
       return foodLocal;
     });
+
+    await cache.push('indexing-locales', localeCode);
 
     return (await getFood(foodLocal.id, foodLocal.localeId))!;
   };

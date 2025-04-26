@@ -15,8 +15,7 @@ import { FoodLocal, SystemLocale } from '@intake24/db';
 function adminFoodController({
   adminFoodService,
   cachedParentCategoriesService,
-  cache,
-}: Pick<IoC, 'adminFoodService' | 'cachedParentCategoriesService' | 'cache'>) {
+}: Pick<IoC, 'adminFoodService' | 'cachedParentCategoriesService'>) {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<FoodsResponse>,
@@ -50,7 +49,6 @@ function adminFoodController({
     });
 
     const foodLocal = await adminFoodService.createFood(code, req.body);
-    await cache.push('indexing-locales', localeId);
 
     res.json(foodLocal);
   };
@@ -118,8 +116,6 @@ function adminFoodController({
       code,
       canUpdateMain ? req.body : rest,
     );
-
-    await cache.push('indexing-locales', localeId);
 
     res.json(foodLocal);
   };
