@@ -97,6 +97,7 @@
     },
     "browse": "تصفح جميع الأطعمة",
     "search": "ابحث عن طعام",
+    "results": "Search results",
     "relatedCategories": "الفئات ذات الصلة/الفئات الفرعية",
     "showLess": "عرض أقل",
     "showAll": "عرض جميع الفئات ذات الصلة",
@@ -130,6 +131,7 @@
     },
     "browse": "تصفح جميع الأطعمة",
     "search": "ابحث عن طعام",
+    "results": "Search results",
     "root": "جميع فئات الطعام",
     "back": "العودة إلى '{category}'",
     "none": "لا توجد نتائج للطعام. حاول تحسين بحثك",
@@ -178,6 +180,7 @@
     "description": "<p>أدناه قائمة بالأطعمة من قاعدة بياناتنا التي تشبه \"<strong>{food}</strong>\".</p><p>،اختر العنصر الذي تناولته أو أقرب خيار متاح.</p>",
     "browse": "تصفح جميع الأطعمة",
     "search": "البحث عن الأطعمة",
+    "results": "Search results",
     "relatedCategories": "الفئات ذات الصلة/الفئات الفرعية ",
     "showLess": "عرض أقل",
     "showAll": "عرض جميع الفئات ذات الصلة",
@@ -188,7 +191,7 @@
     "pizza": "إذا كانت البيتزا التي تناولتها من مطعم أو طلبت كوجبة جاهزة، اختر هذا الخيار من القائمة",
     "missing": {
       "label": "لا أستطيع العثور على طعامي",
-      "الوصف": "<p>إذا لم تتمكن من العثور على طعامك في القائمة،, حاول إعادة صياغة الوصف في مربع البحث أعلاه.</p><p>Or اختر 'تصفح جميع الأطعمة' واستعرض فئات الطعام.</p><p>إذا لم تتمكن من العثور على طعامك، اختر 'الإبلاغ عن طعام مفقود'.</p>",
+      "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
       "report": "الإبلاغ عن طعام مفقود",
       "tryAgain": "حسنًا، دعني أحاول مرة أخرى"
     },
@@ -257,7 +260,10 @@
   "reviewConfirm": {
     "name": "مراجعة وتأكيد",
     "text": "",
-    "description": ""
+    "description": "",
+    "item": "Reviewed",
+    "meal": "I have reviewed all foods and drinks.",
+    "survey": "I have reviewed all meals and foods and drinks."
   },
   "sameAsBefore": {
     "name": "كالسابق",
@@ -279,12 +285,7 @@
     "name": "تقسيم الطعام",
     "text": "",
     "description": "يبدو أنك أدخلت أكثر من عنصر طعام في السطر",
-    "searchTerm": "مفاتيح البحث: {food}",
     "split": "هل هذه أطعمة منفصلة",
-    "singleSuggestion": "اختر 'ابقائه كطعام واحد' إذا كنت تقصد طعامًا واحدًا مثل شوربة الدجاج والخضروات",
-    "singleSuggestionEx": "اختر 'ابقائه كطعام واحد' إذا كنت تقصد طعامًا واحدًا مثل {food}.",
-    "separateSuggestion": "اختر 'فصل الأطعمة' للأطعمة مثل السمك والبطاطس",
-    "separateSuggestionEx": "اختر 'فصل الأطعمة' للأطعمة مثل {food}.",
     "separate": "فصل الأطعمة",
     "single": "ابقائه كطعام واحد"
   },
@@ -462,6 +463,7 @@
     "label": "أضف {searchTerm} الخاصة بك",
     "browse": "{category} الفئات",
     "search": "البحث عن الأطعمة",
+    "results": "Search results",
     "relatedCategories": "الفئات ذات الصلة و الفئات الفرعية",
     "showLess": "عرض أقل",
     "showAll": "عرض جميع الفئات المتعلقة",
