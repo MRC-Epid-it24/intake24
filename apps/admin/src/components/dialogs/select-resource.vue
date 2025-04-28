@@ -70,7 +70,7 @@
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="!selectedItemId"
+          :disabled="!selectedItemId.length"
           variant="text"
           @click.stop="confirm"
         >
@@ -148,15 +148,7 @@ if (props.initialItem)
 
 const itemIcon = computed(() => getResource(props.resource)?.icon ?? 'fas fa-list');
 const selectedItem = computed(() => selectedItemId.value.length ? items.value.find(item => item[props.itemId] === selectedItemId.value[0]) : undefined);
-const selectedItemName = computed(() => {
-  if (selectedItem.value)
-    return selectedItem.value[props.itemName];
-
-  if (props.initialItem)
-    return props.initialItem[props.itemName];
-
-  return props.modelValue;
-});
+const selectedItemName = computed(() => selectedItem.value ? selectedItem.value[props.itemName] : props.modelValue);
 
 function close() {
   dialog.value = false;
