@@ -57,9 +57,9 @@
                       :key="submission.id"
                       :value="submission.id"
                     >
-                      <template #prepend="{ isActive }">
+                      <template #prepend="{ isSelected, select }">
                         <v-list-item-action>
-                          <v-checkbox-btn :model-value="isActive " />
+                          <v-checkbox-btn :model-value="isSelected" @update:model-value="select" />
                         </v-list-item-action>
                       </template>
                       <v-list-item-title>

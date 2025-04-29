@@ -45,9 +45,9 @@
         <template v-if="items.length">
           <v-list v-model:selected="selected" class="list-border" density="compact" min-height="350px">
             <v-list-item v-for="item in items" :key="item.id" :value="item">
-              <template #prepend="{ isActive }">
+              <template #prepend="{ isSelected, select }">
                 <v-list-item-action class="mr-2">
-                  <v-checkbox-btn :model-value="isActive " />
+                  <v-checkbox-btn :model-value="isSelected" @update:model-value="select" />
                 </v-list-item-action>
                 <v-icon>fas fa-list</v-icon>
               </template>

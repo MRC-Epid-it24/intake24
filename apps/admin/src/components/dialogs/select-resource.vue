@@ -41,11 +41,16 @@
           @click:clear="clear"
         />
         <template v-if="items.length">
-          <v-list v-model:selected="selectedItemId" class="list-border" density="compact" min-height="350px">
+          <v-list
+            v-model:selected="selectedItemId"
+            class="list-border"
+            density="compact"
+            min-height="350px"
+          >
             <v-list-item v-for="item in items" :key="item[itemId]" :value="item[itemId]">
-              <template #prepend="{ isActive }">
+              <template #prepend="{ isSelected, select }">
                 <v-list-item-action class="mr-2">
-                  <v-checkbox-btn :model-value="isActive " />
+                  <v-checkbox-btn :model-value="isSelected" @update:model-value="select" />
                 </v-list-item-action>
                 <v-icon>{{ itemIcon }}</v-icon>
               </template>

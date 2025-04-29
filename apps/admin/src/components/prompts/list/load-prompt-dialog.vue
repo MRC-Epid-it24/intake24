@@ -43,9 +43,9 @@
         <template v-if="prompts.length">
           <v-list v-model:selected="selected" class="list-border" lines="two" min-height="350px">
             <v-list-item v-for="prompt in prompts" :key="prompt.id" :value="prompt">
-              <template #prepend="{ isActive }">
+              <template #prepend="{ isSelected, select }">
                 <v-list-item-action class="mr-2">
-                  <v-checkbox-btn :model-value="isActive " />
+                  <v-checkbox-btn :model-value="isSelected" @update:model-value="select" />
                 </v-list-item-action>
                 <v-icon>fas fa-question-circle</v-icon>
               </template>
