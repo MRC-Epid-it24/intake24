@@ -137,7 +137,13 @@ const props = defineProps({
 
 const emit = defineEmits(['clear', 'update:modelValue']);
 
-const selectedItemId = ref<string[]>(props.initialItem ? [props.initialItem[props.itemId]] : []);
+const selectedItemId = ref<string[]>(
+  props.initialItem
+    ? [props.initialItem[props.itemId]]
+    : props.modelValue
+      ? [typeof props.modelValue === 'string' ? props.modelValue : props.modelValue[props.itemId]]
+      : [],
+);
 
 const { dialog, get, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
   `/admin/references/${props.resource}`,
@@ -147,8 +153,8 @@ if (props.initialItem)
   items.value.push(props.initialItem);
 
 const itemIcon = computed(() => getResource(props.resource)?.icon ?? 'fas fa-list');
-const selectedItem = computed(() => selectedItemId.value.length ? items.value.find(item => item[props.itemId] === selectedItemId.value[0]) : undefined);
-const selectedItemName = computed(() => selectedItem.value ? selectedItem.value[props.itemName] : props.modelValue);
+const selectedItem = computed(() => items.value.find(item => item[props.itemId] === selectedItemId.value.at(0)));
+const selectedItemName = computed(() => selectedItem.value?.[props.itemName] ?? props.modelValue);
 
 function close() {
   dialog.value = false;
@@ -206,7 +212,12 @@ watch(
     if (val === selectedItemId.value.at(0))
       return;
 
-    selectedItemId.value = [];
+    if (!val) {
+      selectedItemId.value = [];
+      return;
+    }
+
+    selectedItemId.value = [typeof val === 'string' ? val : val[props.itemId]];
   },
 );
 </script>
