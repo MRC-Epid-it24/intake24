@@ -1621,7 +1621,8 @@
                               "pizza",
                               "pizza-v2",
                               "recipe-builder",
-                              "standard-portion"
+                              "standard-portion",
+                              "unknown"
                             ]
                           },
                           "description": {
@@ -1680,6 +1681,10 @@
                                 "required": [
                                   "type"
                                 ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {}
                               },
                               {
                                 "type": "object",
@@ -1978,6 +1983,18 @@
                               {
                                 "type": "object",
                                 "properties": {
+                                  "labels": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {}
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
                                   "units": {
                                     "type": "array",
                                     "items": {
@@ -2011,10 +2028,6 @@
                                 "required": [
                                   "units"
                                 ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {}
                               },
                               {
                                 "type": "object",
@@ -30482,49 +30495,10 @@
                           "name"
                         ]
                       }
-                    },
-                    "locales": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "code": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 16
-                          },
-                          "englishName": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 64
-                          },
-                          "localName": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 64
-                          },
-                          "countryFlagCode": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 16
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "code",
-                          "englishName",
-                          "localName",
-                          "countryFlagCode"
-                        ]
-                      }
                     }
                   },
                   "required": [
-                    "foodIndexLanguageBackends",
-                    "locales"
+                    "foodIndexLanguageBackends"
                   ]
                 }
               }
