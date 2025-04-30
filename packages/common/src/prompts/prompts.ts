@@ -79,6 +79,7 @@ export const portionSizeComponentTypes = [
   'standard-portion-prompt',
   'missing-food-prompt',
   'portion-size-option-prompt',
+  'unknown-prompt',
 ] as const;
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
@@ -304,6 +305,10 @@ const standardPortionPrompt = basePortionPrompt.extend({
   component: z.literal('standard-portion-prompt'),
 });
 
+const unknownPrompt = basePortionPrompt.extend({
+  component: z.literal('unknown-prompt'),
+});
+
 // Standard
 const addonFoodsPrompt = baseStandardPrompt.extend({
   component: z.literal('addon-foods-prompt'),
@@ -440,6 +445,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   portionSizeOptionPrompt,
   recipeBuilderPrompt,
   standardPortionPrompt,
+  unknownPrompt,
   // Standard
   addonFoodsPrompt,
   associatedFoodsPrompt,
@@ -500,6 +506,7 @@ export const prompts = z.object({
   'portion-size-option-prompt': portionSizeOptionPrompt,
   'recipe-builder-prompt': recipeBuilderPrompt,
   'standard-portion-prompt': standardPortionPrompt,
+  'unknown-prompt': unknownPrompt,
   // Standard
   'addon-foods-prompt': addonFoodsPrompt,
   'associated-foods-prompt': associatedFoodsPrompt,

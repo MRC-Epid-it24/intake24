@@ -33,6 +33,7 @@ const food = encodedFood.value;
 const getInitialState = computed(() => ({ option: food.portionSizeMethodIndex }));
 
 function commitAnswer() {
+  const flags = ['portion-size-option-complete'];
   const update: Partial<Omit<EncodedFood, 'type'>> = { portionSizeMethodIndex: state.value.option };
 
   if (food.portionSizeMethodIndex !== null && food.portionSizeMethodIndex !== state.value.option
@@ -40,8 +41,13 @@ function commitAnswer() {
     update.portionSize = null;
   }
 
+  if (portionSizeMethods.value?.find(item => item.index === state.value.option && item.method === 'unknown')) {
+    flags.push('portion-size-method-complete');
+    update.portionSize = { method: 'unknown', servingWeight: 0, leftoversWeight: 0 };
+  }
+
   survey.updateFood({ foodId: food.id, update });
-  survey.addFoodFlag(food.id, 'portion-size-option-complete');
+  survey.addFoodFlag(food.id, flags);
 }
 
 const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);

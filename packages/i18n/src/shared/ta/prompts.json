@@ -189,6 +189,8 @@
     "none": "No food results. Try refining your search.",
     "refine": "The search has found a lot of results. You can try refining your search.",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
+    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "I can't find my food",
       "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -200,6 +202,12 @@
       "messageUnsafe": "<p>You have already answered some questions about <strong>\"{discardedFoodName}\"</strong>!</p><p>If you change it to <strong>\"{selectedFoodName}\"</strong> now, you might have to answer some of those questions again.</p><p>Are you sure you would like to replace this food?</p>",
       "message": "You have already answered some questions about \"{discardedFoodName}\"! If you change it to \"{selectedFoodName}\" now, you might have to answer some of those questions again. Are you sure you would like to replace this food?"
     }
+  },
+  "foodSelection": {
+    "name": "Select foods",
+    "text": "",
+    "description": "<p>Select foods from the list below.</p>",
+    "none": "None of the above"
   },
   "mealAdd": {
     "name": "சாப்பாடு சேர்க்கவும்",
@@ -353,6 +361,7 @@
       "use_an_image": "படத்தைப் பயன்படுத்தவும்",
       "use_these_crisps_in_a_bag": "இந்த கிரிஸ்ப்ஸ்-ஐ ஒரு பையில் பயன்படுத்தவும்",
       "use_tortilla_chips_in_a_bowl": "ஒரு பாத்திரத்தில் டார்ட்டில்லா சிப்ஸைப் பயன்படுத்தவும்",
+      "unknown": "Unknown",
       "weight": "எடை/தொகுதியை உள்ளிடவும்"
     },
     "unknown": "தற்போது {food}க்கான பகுதி அளவை மதிப்பிடும் முறை இல்லை."
@@ -564,6 +573,12 @@
       "withFood": "உங்களிடம் {food} {unit} உண்டா?"
     },
     "confirm": "நான் அவ்வளவு எடுத்து கொண்டேன்"
+  },
+  "unknown": {
+    "name": "Unknown",
+    "text": "",
+    "description": "",
+    "method": "How do you want to estimate your portion?"
   },
   "aggregateChoice": {
     "name": "Aggregate food question",

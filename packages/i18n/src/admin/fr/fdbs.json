@@ -168,6 +168,9 @@
         "unit": "Unité",
         "weight": "Poids (g)",
         "omitFoodDescription": "Passer la description de l'aliment"
+      },
+      "unknown": {
+        "_": "Unknown"
       }
     }
   }

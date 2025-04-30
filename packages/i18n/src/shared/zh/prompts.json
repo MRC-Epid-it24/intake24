@@ -189,6 +189,8 @@
     "none": "没有食物结果。请尝试优化您的搜索。",
     "refine": "搜索已经找到了很多结果。您可以尝试优化搜索。",
     "pizza": "如果你的披萨来自外卖店或餐馆，请在列表中选择该选项。",
+    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "我找不到我的食物",
       "description": "<p>如果在列表中找不到您的食物，请尝试在上面的搜索文本框中重新表述描述，然后点击“再次搜索”。</p><p>或者点击“浏览所有食物”并探索食品类别。</p><p>如果您仍然找不到您的食物，请点击“报告缺失的食物。</p>",
@@ -200,6 +202,12 @@
       "messageUnsafe": "<p>您已经回答了一些关于 <strong>\"{discardedFoodName}\"</strong>的问题!</p><p>如果现在更改为 <strong>\"{selectedFoodName}\"</strong> 您可能需要重新回答其中一些问题。</p><p>您确定要替换这个食物吗？</p>",
       "message": "您已经回答了一些关于 \"{discardedFoodName}\"的问题! 如果现在更改为 \"{selectedFoodName}\" 您可能需要重新回答其中一些问题。您确定要替换这个食物吗？"
     }
+  },
+  "foodSelection": {
+    "name": "Select foods",
+    "text": "",
+    "description": "<p>Select foods from the list below.</p>",
+    "none": "None of the above"
   },
   "mealAdd": {
     "name": "添加餐食",
@@ -353,6 +361,7 @@
       "use_an_image": "使用一张图片",
       "use_these_crisps_in_a_bag": "使用袋装的薯",
       "use_tortilla_chips_in_a_bowl": "使用碗中的墨西哥玉米片",
+      "unknown": "Unknown",
       "weight": "输入重量/体积"
     },
     "unknown": "{food}没有当前的份量估计方法。"
@@ -564,6 +573,12 @@
       "withFood": "你吃了{unit}的{food}"
     },
     "confirm": "我吃了那么多"
+  },
+  "unknown": {
+    "name": "Unknown",
+    "text": "",
+    "description": "",
+    "method": "How do you want to estimate your portion?"
   },
   "aggregateChoice": {
     "name": "Aggregate food question",

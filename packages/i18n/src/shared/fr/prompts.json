@@ -189,6 +189,8 @@
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "pizza": " ",
+    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",
@@ -200,6 +202,12 @@
       "messageUnsafe": "<p>Vous avez déjà répondu à des questions sur <strong>\"{discardedFoodName}\"</strong>!</p><p>Si vous le remplacez par <strong>\"{selectedFoodName}\"</strong> maintenant, vous pourriez avoir à répondre à nouveau à ces questions.</p><p>Etes-vous sûr que vous souhaitez remplacer cet aliment ?</p>",
       "message": "Vous avez déjà répondu à des questions sur \"{discardedFoodName}\"! Si vous le remplacez par \"{selectedFoodName}\" maintenant, vous pourriez avoir à répondre à nouveau à ces questions. Etes_vous sûr que vous souhaitez remplacer cet aliment ?"
     }
+  },
+  "foodSelection": {
+    "name": "Select foods",
+    "text": "",
+    "description": "<p>Select foods from the list below.</p>",
+    "none": "None of the above"
   },
   "mealAdd": {
     "name": "Ajouter un repas",
@@ -353,6 +361,7 @@
       "use_an_image": "Utiliser une photo",
       "use_these_crisps_in_a_bag": "Utiliser ces chips dans un sachet",
       "use_tortilla_chips_in_a_bowl": "Utiliser des chips tortilla dans un bol",
+      "unknown": "Unknown",
       "weight": "Entrer le poids ou le volume"
     },
     "unknown": "Il n'y a actuellement aucune méthode d'estimation de la taille de portion pour {food}."
@@ -564,6 +573,12 @@
       "withFood": "{unit} de {food} avez-vous consommé ?"
     },
     "confirm": "J'en ai consommé cette quantité"
+  },
+  "unknown": {
+    "name": "Partie inconnue",
+    "text": "",
+    "description": "",
+    "method": "Comment souhaitez-vous estimer votre portion?"
   },
   "aggregateChoice": {
     "name": "Question agregée sur plusieurs aliments",

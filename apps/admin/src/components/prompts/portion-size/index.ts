@@ -12,6 +12,7 @@ import PizzaV2Prompt from './pizza-v2-prompt.vue';
 import PortionSizeOptionPrompt from './portion-size-option-prompt.vue';
 import RecipeBuilderPrompt from './recipe-builder-prompt.vue';
 import StandardPortionPrompt from './standard-portion-prompt.vue';
+import UnknownPrompt from './unknown-prompt.vue';
 
 export default {
   AsServedPrompt,
@@ -28,4 +29,5 @@ export default {
   PortionSizeOptionPrompt,
   RecipeBuilderPrompt,
   StandardPortionPrompt,
+  UnknownPrompt,
 };

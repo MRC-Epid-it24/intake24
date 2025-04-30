@@ -112,6 +112,7 @@
       "energy": "Energy value",
       "flag": "Flag",
       "tag": "Tag",
+      "foodTopLevel": "Is top level",
       "foodCategory": "Food category",
       "numberOfFoods": "Number of foods",
       "numberOfMeals": "Number of meals",
@@ -549,11 +550,21 @@
         "title": "Survey rating"
       }
     },
+    "food-selection-prompt": {
+      "title": "Food selection",
+      "subtitle": "Select foods from a meal using a checkbox list",
+      "filter": "Only ask for certain foods",
+      "useFlag": "Set a flag on selected foods instead of a custom prompt answer",
+      "flag": "Flag"
+    },
     "food-search-prompt": {
       "title": "Recherche dans la base de données alimentaire",
       "subtitle": "Choisissez un aliment dans la base de données qui correspond au mieux à la description",
       "allowBrowsing": "Permettre aux répondants de chercher leur aliment en naviguant librement dans les catégories alimentaires",
-      "dualLanguage": "Afficher des noms d'aliments supplémentaires dans une autre langue"
+      "dualLanguage": "Afficher des noms d'aliments supplémentaires dans une autre langue",
+      "allowThumbnails": "Show food thumbnail images if available",
+      "enableGrid": "Allow grid layout",
+      "gridThreshold": "Use grid layout if at least {percent}% of foods have thumbnails"
     },
     "meal-add-prompt": {
       "title": "Ajouter un repas",
@@ -686,7 +697,9 @@
     },
     "yes-no-prompt": {
       "title": "Choix OUI/NON",
-      "subtitle": "Demander de choisir oui ou non"
+      "subtitle": "Demander de choisir oui ou non",
+      "useFlag": "Set a flag instead of custom prompt answer",
+      "flag": "Flag"
     },
     "aggregate-choice-prompt": {
       "title": "Question agregée sur plusieurs aliments",
@@ -748,6 +761,10 @@
     "standard-portion-prompt": {
       "title": "Portion standard",
       "subtitle": "Choisir la méthode \"standard portion\" pour estimer la taille de la portion"
+    },
+    "unknown-prompt": {
+      "title": "Unknown",
+      "subtitle": "Unknown portion size"
     }
   },
   "theme": {

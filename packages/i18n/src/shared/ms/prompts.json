@@ -189,6 +189,8 @@
     "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
     "refine": "Terdapat banyak keputusan berdasarkan carian anda. Sila kecilkan carian anda.",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
+    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "Saya tidak jumpa makanan saya",
       "description": "<p>Kalau makanan yang dicari tiada dalam senarai, sila tukar penyataan dalam kotak carian di atas'.</p>",
@@ -200,6 +202,12 @@
       "messageUnsafe": "<p>Anda sudah menjawab beberapa soalan mengenai <strong>\"{discardedFoodName}\"</strong>!</p><p>Kalau anda tukarkan kepada <strong>\"{selectedFoodName}\"</strong> sekarang, anda mungkin perlu menjawab beberapa soalan itu sekali lagi.</p><p>Adakah anda mahu mengganti makanan ini?</p>",
       "message": "Anda sudah menjawab beberapa soalan mengenai \"{discardedFoodName}\"! Kalau anda tukarkan kepada \"{selectedFoodName}\" sekarang, anda mungkin perlu menjawab beberapa soalan itu sekali lagi. Adakah anda mahu mengganti makanan ini?"
     }
+  },
+  "foodSelection": {
+    "name": "Select foods",
+    "text": "",
+    "description": "<p>Select foods from the list below.</p>",
+    "none": "None of the above"
   },
   "mealAdd": {
     "name": "Tambah hidangan",
@@ -353,6 +361,7 @@
       "use_an_image": "Gunakan imej",
       "use_these_crisps_in_a_bag": "Gunakan kerepok ini di dalam pek",
       "use_tortilla_chips_in_a_bowl": "Gunakan kerepek tortilla dalam mangkuk",
+      "unknown": "Unknown",
       "weight": "Masukkan berat/isipadu"
     },
     "unknown": "Pada masa ini tiada kaedah anggaran saiz porsi untuk {food}."
@@ -564,6 +573,12 @@
       "withFood": "{unit} {food} yang anda ambil?"
     },
     "confirm": "Saya telah mengambil sebanyak itu"
+  },
+  "unknown": {
+    "name": "Unknown",
+    "text": "",
+    "description": "",
+    "method": "How do you want to estimate your portion?"
   },
   "aggregateChoice": {
     "name": "Aggregate food question",

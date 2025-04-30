@@ -189,6 +189,8 @@
     "none": "لا توجد نتائج للطعام. حاول تحسين بحثك",
     "refine": "لقد وجد البحث الكثير من النتائج. يمكنك محاولة تقنين بحثك",
     "pizza": "إذا كانت البيتزا التي تناولتها من مطعم أو طلبت كوجبة جاهزة، اختر هذا الخيار من القائمة",
+    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "لا أستطيع العثور على طعامي",
       "description": "<p>إذا لم تتمكن من العثور على طعامك في القائمة،, حاول إعادة صياغة الوصف في مربع البحث أعلاه.</p><p>Or اختر 'تصفح جميع الأطعمة' واستعرض فئات الطعام.</p><p>إذا لم تتمكن من العثور على طعامك، اختر 'الإبلاغ عن طعام مفقود'.</p>",
@@ -200,6 +202,12 @@
       "messageUnsafe": "<p>لقد أجبت بالفعل على بعض الأسئلة حول <strong>\"{discardedFoodName}\"</strong>!</p><p>إن قمت بتغييره إلى <strong>\"{selectedFoodName}\"</strong> قد تضطر للإجابة على بعض تلك الأسئلة مرة أخرى</p><p>هل أنت متأكد أنك تريد استبدال هذا الطعام؟</p>",
       "message": "لقد أجبت بالفعل على بعض الأسئلة حول \"{discardedFoodName}\"! إن قمت بتغييره إلى \"{selectedFoodName}\" قد تضطر للإجابة على بعض تلك الأسئلة مرة أخرى. هل أنت متأكد أنك تريد استبدال هذا الطعام؟"
     }
+  },
+  "foodSelection": {
+    "name": "Select foods",
+    "text": "",
+    "description": "<p>Select foods from the list below.</p>",
+    "none": "None of the above"
   },
   "mealAdd": {
     "name": "إضافة وجبة",
@@ -353,6 +361,7 @@
       "use_an_image": "استخدم صورة",
       "use_these_crisps_in_a_bag": "استخدم هذه الرقائق في كيس",
       "use_tortilla_chips_in_a_bowl": "استخدم رقائق التورتيلا في وعاء",
+      "unknown": "Unknown",
       "weight": "أدخل الوزن/الحجم"
     },
     "unknown": "لا توجد حاليًا طريقة لتقدير حجم الحصة لـ {food}."
@@ -564,6 +573,12 @@
       "withFood": "ما {unit} من {food} تناولته؟"
     },
     "confirm": "تناولت هذه الكمية"
+  },
+  "unknown": {
+    "name": "Unknown",
+    "text": "",
+    "description": "",
+    "method": "How do you want to estimate your portion?"
   },
   "aggregateChoice": {
     "name": "سؤال إجمالي عن الطعام",

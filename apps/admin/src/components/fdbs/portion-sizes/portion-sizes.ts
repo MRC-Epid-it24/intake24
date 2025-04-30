@@ -91,6 +91,12 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     parameters: { type: 'hoop', labels: false },
   },
   {
+    method: 'direct-weight',
+    ...psmDefaultAttributes,
+    description: 'weight',
+    parameters: {},
+  },
+  {
     method: 'drink-scale',
     ...psmDefaultAttributes,
     description: 'in_a_mug',
@@ -121,12 +127,6 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     parameters: { labels: false },
   },
   {
-    method: 'standard-portion',
-    ...psmDefaultAttributes,
-    description: 'use_a_standard_portion',
-    parameters: { units: [] },
-  },
-  {
     method: 'parent-food-portion',
     ...psmDefaultAttributes,
     description: 'use_a_standard_portion',
@@ -145,9 +145,15 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     parameters: { labels: false },
   },
   {
-    method: 'direct-weight',
+    method: 'standard-portion',
     ...psmDefaultAttributes,
-    description: 'weight',
+    description: 'use_a_standard_portion',
+    parameters: { units: [] },
+  },
+  {
+    method: 'unknown',
+    ...psmDefaultAttributes,
+    description: 'unknown',
     parameters: {},
   },
 ];

@@ -181,6 +181,9 @@
         "unit": "Unit",
         "weight": "Weight (g)",
         "omitFoodDescription": "Omit food description"
+      },
+      "unknown": {
+        "_": "Unknown"
       }
     }
   }

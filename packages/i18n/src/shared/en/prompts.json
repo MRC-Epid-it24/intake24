@@ -361,6 +361,7 @@
       "use_an_image": "Use an image",
       "use_these_crisps_in_a_bag": "Use these crisps in a bag",
       "use_tortilla_chips_in_a_bowl": "Use tortilla chips in a bowl",
+      "unknown": "Unknown",
       "weight": "Enter weight/volume"
     },
     "unknown": "There is currently no portion size estimation method for {food}."
@@ -572,6 +573,12 @@
       "withFood": "{unit} of {food} did you have?"
     },
     "confirm": "I had that many"
+  },
+  "unknown": {
+    "name": "Unknown",
+    "text": "",
+    "description": "",
+    "method": "How do you want to estimate your portion?"
   },
   "aggregateChoice": {
     "name": "Aggregate food question",

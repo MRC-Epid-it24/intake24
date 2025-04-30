@@ -380,6 +380,12 @@ Recipe builder prompt for foods with multiple ingredients, such as sandwiches, s
 
 ### Standard portion prompt
 
+Prompt to collect portion size based on standard units.
+
+### Unknown prompt
+
+Prompt to mark with food with unknown portion size.
+
 ## Custom prompts
 
 Prompts with customizable generic behavior. Custom prompts can be used multiple times per scheme as long as they are identified with scheme-unique [`Prompt ID`](/admin/surveys/prompt-editor#general).

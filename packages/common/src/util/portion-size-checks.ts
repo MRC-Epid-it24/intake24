@@ -239,6 +239,25 @@ export function recipeComplete(food: FoodState): boolean {
   return food.type === 'recipe-builder';
 }
 
+export function unknownComplete(food: FoodState): boolean {
+  if (
+    food.type !== 'encoded-food'
+    || !food.portionSize
+    || !food.flags.includes('portion-size-method-complete')
+  ) {
+    return false;
+  }
+
+  if (food.portionSize.method !== 'unknown') {
+    console.warn(
+      `Selected portion size method is "unknown" but portion size data is for ${food.portionSize.method}`,
+    );
+    return false;
+  }
+
+  return food.portionSize.servingWeight !== null;
+}
+
 export const portionSizeCompleteChecks = {
   'as-served': asServedComplete,
   cereal: cerealComplete,
@@ -250,8 +269,9 @@ export const portionSizeCompleteChecks = {
   'parent-food-portion': parentFoodPortionComplete,
   pizza: pizzaComplete,
   'pizza-v2': pizzaV2Complete,
-  'standard-portion': standardPortionComplete,
   'recipe-builder': recipeComplete,
+  'standard-portion': standardPortionComplete,
+  unknown: unknownComplete,
 };
 
 export function portionSizeComplete(food: FoodState): boolean {

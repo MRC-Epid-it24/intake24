@@ -144,6 +144,10 @@ export type PromptStates = {
     quantityConfirmed: boolean;
     linkedQuantityConfirmed: boolean;
   };
+  'unknown-prompt': {
+    portionSize: PortionSizeStates['unknown'];
+    panel: number;
+  };
   // Standard prompts
   'addon-foods-prompt': {
     foods: Record<string, {

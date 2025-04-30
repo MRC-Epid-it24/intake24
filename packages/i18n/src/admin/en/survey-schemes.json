@@ -765,6 +765,10 @@
     "standard-portion-prompt": {
       "title": "Standard portion",
       "subtitle": "Use the \"standard portion\" method to estimate the portion size"
+    },
+    "unknown-prompt": {
+      "title": "Unknown",
+      "subtitle": "Unknown portion size"
     }
   },
   "theme": {

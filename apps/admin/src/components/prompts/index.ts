@@ -221,4 +221,8 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['foods'],
   },
+  'unknown-prompt': {
+    tabs: [...tabs],
+    sections: ['foods'],
+  },
 };

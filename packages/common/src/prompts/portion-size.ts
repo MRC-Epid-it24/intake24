@@ -157,6 +157,14 @@ export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
   name: 'Standard portion',
 });
 
+export const unknownPrompt: Prompts['unknown-prompt'] = copy({
+  ...basePortionPrompt,
+  component: 'unknown-prompt',
+  type: 'portion-size',
+  id: 'unknown-prompt',
+  name: 'Unknown portion size',
+});
+
 export const portionSizePrompts = [
   asServedPrompt,
   cerealPrompt,
@@ -172,4 +180,5 @@ export const portionSizePrompts = [
   portionSizeOptionPrompt,
   recipeBuilderPrompt,
   standardPortionPrompt,
+  unknownPrompt,
 ];

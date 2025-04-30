@@ -12,6 +12,7 @@ import PizzaV2PromptHandler from './PizzaV2PromptHandler.vue';
 import PortionSizeOptionPromptHandler from './PortionSizeOptionPromptHandler.vue';
 import RecipeBuilderPromptHandler from './RecipeBuilderPromptHandler.vue';
 import StandardPortionPromptHandler from './StandardPortionPromptHandler.vue';
+import UnknownPromptHandler from './UnknownPromptHandler.vue';
 
 export default {
   AsServedPromptHandler,
@@ -28,4 +29,5 @@ export default {
   PortionSizeOptionPromptHandler,
   RecipeBuilderPromptHandler,
   StandardPortionPromptHandler,
+  UnknownPromptHandler,
 };

@@ -12,3 +12,4 @@ export { default as PizzaV2Prompt } from './PizzaV2Prompt.vue';
 export { default as PortionSizeOptionPrompt } from './PortionSizeOptionPrompt.vue';
 export { default as RecipeBuilderPrompt } from './RecipeBuilderPrompt.vue';
 export { default as StandardPortionPrompt } from './StandardPortionPrompt.vue';
+export { default as UnknownPrompt } from './UnknownPrompt.vue';

@@ -14,6 +14,7 @@ export const portionSizeMethods = [
   'pizza-v2',
   'recipe-builder',
   'standard-portion',
+  'unknown',
 ] as const;
 
 export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
@@ -42,6 +43,8 @@ export const cerealPortionSizeParameters = z.object({
   type: z.enum(cerealTypes),
   labels: z.boolean().optional(),
 });
+
+export const directWeightPortionSizeParameters = z.object({});
 
 export const drinkScalePortionSizeParameters = z.object({
   drinkwareId: z.string(),
@@ -76,26 +79,28 @@ export const pizzaV2PortionSizeParameters = z.object({
   labels: z.boolean().optional(),
 });
 
+export const recipeBuilderPortionSizeParameters = z.object({});
+
 export const standardPortionSizeParameters = z.object({
   units: standardUnit.array(),
 });
 
-export const directWeightPortionSizeParameters = z.object({});
-
-export const recipeBuilderPortionSizeParameters = z.object({});
+export const unknownPortionSizeParameters = z.object({});
 
 export const portionSizeParameter = z.union([
   asServedPortionSizeParameters,
   cerealPortionSizeParameters,
+  directWeightPortionSizeParameters,
   drinkScalePortionSizeParameters,
   guideImagePortionSizeParameters,
   milkInHotDrinkPortionSizeParameters,
   milkOnCerealPortionSizeParameters,
   parentFoodPortionParameters,
   pizzaPortionSizeParameters,
-  standardPortionSizeParameters,
-  directWeightPortionSizeParameters,
+  pizzaV2PortionSizeParameters,
   recipeBuilderPortionSizeParameters,
+  standardPortionSizeParameters,
+  unknownPortionSizeParameters,
 ]);
 
 export type PortionSizeParameter = z.infer<typeof portionSizeParameter>;
@@ -103,6 +108,7 @@ export type PortionSizeParameter = z.infer<typeof portionSizeParameter>;
 export const portionSizeParameters = z.object({
   'as-served': asServedPortionSizeParameters,
   cereal: cerealPortionSizeParameters,
+  'direct-weight': directWeightPortionSizeParameters,
   'drink-scale': drinkScalePortionSizeParameters,
   'guide-image': guideImagePortionSizeParameters,
   'milk-in-a-hot-drink': milkInHotDrinkPortionSizeParameters,
@@ -110,9 +116,9 @@ export const portionSizeParameters = z.object({
   'parent-food-portion': parentFoodPortionParameters,
   pizza: pizzaPortionSizeParameters,
   'pizza-v2': pizzaV2PortionSizeParameters,
-  'standard-portion': standardPortionSizeParameters,
-  'direct-weight': directWeightPortionSizeParameters,
   'recipe-builder': recipeBuilderPortionSizeParameters,
+  'standard-portion': standardPortionSizeParameters,
+  unknown: unknownPortionSizeParameters,
 });
 
 export type PortionSizeParameters = z.infer<typeof portionSizeParameters>;
@@ -183,6 +189,11 @@ export interface StandardPortionPsm extends PortionSizeMethodBase {
   parameters: PortionSizeParameters['standard-portion'];
 }
 
+export interface UnknownPortionPsm extends PortionSizeMethodBase {
+  method: 'unknown';
+  parameters: PortionSizeParameters['unknown'];
+}
+
 export type PortionSizeMethod =
   | AsServedPsm
   | CerealPsm
@@ -195,7 +206,8 @@ export type PortionSizeMethod =
   | PizzaPsm
   | PizzaV2Psm
   | RecipeBuilderPsm
-  | StandardPortionPsm;
+  | StandardPortionPsm
+  | UnknownPortionPsm;
 
 export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
 export type PizzaSize = (typeof pizzaSizes)[number];
@@ -319,6 +331,9 @@ const standardPortionPortionSizeState = portionSizeStateBase.extend({
   quantity: z.number(),
   linkedQuantity: z.number(),
 });
+const unknownPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('unknown'),
+});
 
 export const portionSizeStates = z.object({
   'as-served': asServedPortionSizeState,
@@ -333,6 +348,7 @@ export const portionSizeStates = z.object({
   'pizza-v2': pizzaV2PortionSizeState,
   'recipe-builder': recipeBuilderPortionSizeState,
   'standard-portion': standardPortionPortionSizeState,
+  unknown: unknownPortionSizeState,
 });
 export type PortionSizeStates = z.infer<typeof portionSizeStates>;
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];

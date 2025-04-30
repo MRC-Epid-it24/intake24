@@ -237,6 +237,15 @@ export function standardPortionMapper(foodId: string, state: PortionSizeStates['
   ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
 }
 
+export function unknownMapper(foodId: string, state: PortionSizeStates['unknown']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+  const { leftoversWeight, servingWeight } = state;
+
+  return [
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+}
+
 export const portionSizeMappers: Record<
   keyof PortionSizeStates,
   (...arg: any[]) => SurveySubmissionPortionSizeFieldCreationAttributes[]
@@ -253,6 +262,7 @@ export const portionSizeMappers: Record<
   'pizza-v2': pizzaV2PortionMapper,
   'recipe-builder': genericMapper,
   'standard-portion': standardPortionMapper,
+  unknown: unknownMapper,
 };
 
 export type PortionSizeMappers = typeof portionSizeMappers;

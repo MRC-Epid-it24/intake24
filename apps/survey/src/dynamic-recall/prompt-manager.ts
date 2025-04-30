@@ -27,6 +27,7 @@ import {
   portionSizeMethodSelected,
   recipeBuilderComplete,
   standardPortionComplete,
+  unknownComplete,
 } from '@intake24/common/util/portion-size-checks';
 import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 
@@ -651,6 +652,25 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
         portionSizeMethodSelected(foodState, 'standard-portion')
           ? 'Standard portion estimation already complete'
           : 'Standard portion estimation not selected',
+      );
+      return false;
+    }
+
+    case 'unknown-prompt': {
+      if (portionSizeMethodSelected(foodState, 'unknown') && !unknownComplete(foodState)) {
+        recallLog().promptCheck(
+          component,
+          true,
+          'Unknown estimation selected but not yet complete',
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        component,
+        false,
+        portionSizeMethodSelected(foodState, 'unknown')
+          ? 'Unknown estimation already complete'
+          : 'Unknown estimation not selected',
       );
       return false;
     }

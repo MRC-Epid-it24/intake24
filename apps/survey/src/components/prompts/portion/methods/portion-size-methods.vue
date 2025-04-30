@@ -23,7 +23,7 @@
               hover
               @click="toggle"
             >
-              <component :is="availableMethod.method" :method="availableMethod" />
+              <component :is="`${availableMethod.method}-method`" :method="availableMethod" />
               <v-card-actions
                 class="d-flex justify-end"
                 :class="{ 'bg-grey-lighten-4': !isSelected, 'bg-ternary': isSelected }"
@@ -52,6 +52,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+import PortionIcon from './icon.vue';
 import PortionImage from './image.vue';
 import PortionOptions from './options.vue';
 import StandardUnits from './standard-units.vue';
@@ -59,17 +60,18 @@ import StandardUnits from './standard-units.vue';
 defineOptions({
   name: 'PortionSizeMethods',
   components: {
-    'as-served': PortionImage,
-    cereal: PortionImage,
-    'direct-weight': PortionImage,
-    'drink-scale': PortionImage,
-    'guide-image': PortionImage,
-    'milk-on-cereal': PortionImage,
-    'milk-in-a-hot-drink': PortionOptions,
-    'parent-food-portion': PortionOptions,
-    pizza: PortionImage,
-    pizzaV2: PortionImage,
-    'standard-portion': StandardUnits,
+    'as-served-method': PortionImage,
+    'cereal-method': PortionImage,
+    'direct-weight-method': PortionImage,
+    'drink-scale-method': PortionImage,
+    'guide-image-method': PortionImage,
+    'milk-on-cereal-method': PortionImage,
+    'milk-in-a-hot-drink-method': PortionOptions,
+    'parent-food-portion-method': PortionOptions,
+    'pizza-method': PortionImage,
+    'pizzaV2-method': PortionImage,
+    'standard-portion-method': StandardUnits,
+    'unknown-method': PortionIcon,
   },
 });
 

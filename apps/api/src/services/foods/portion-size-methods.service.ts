@@ -184,6 +184,8 @@ function portionSizeMethodsService() {
       case 'cereal':
       case 'milk-on-cereal':
         return 'portion/cereal.jpg';
+      case 'unknown':
+        return '';
 
       default:
         throw new Error(
