@@ -22,7 +22,7 @@ export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustom
     !('validation' in prompt) || prompt.validation.required;
   const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
 
-  function getPromptAnswer(promptId: string, entity?: FoodState | MealState) {
+  function getPromptAnswer(promptId: string, entity?: FoodState | MealState): CustomPromptAnswer | undefined {
     if (entity)
       return entity.customPromptAnswers[promptId];
 
@@ -35,7 +35,7 @@ export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustom
     return survey.data.customPromptAnswers[promptId];
   };
 
-  function resolvePromptAnswer(prompt: Prompt, entity?: FoodState | MealState) {
+  function resolvePromptAnswer(prompt: Prompt, entity?: FoodState | MealState): CustomPromptAnswer | undefined {
     const answer = getPromptAnswer(prompt.id, entity);
     if (answer || !('options' in prompt))
       return answer;

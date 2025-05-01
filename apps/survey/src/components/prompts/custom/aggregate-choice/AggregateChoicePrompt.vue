@@ -104,7 +104,7 @@ defineOptions({
 const props = defineProps({
   ...createBasePromptProps<'aggregate-choice-prompt'>(),
   modelValue: {
-    type: Object as PropType<Record<string, CustomPromptAnswer>>,
+    type: Object as PropType<Record<string, CustomPromptAnswer | undefined>>,
     required: true,
   },
   filteredMeals: {
