@@ -168,8 +168,10 @@
             <tbody>
               <tr v-for="(nutrient, idx) in nutrients" :key="nutrient.nutrientTypeId">
                 <td class="py-2">
-                  <v-select
+                  <v-autocomplete
                     v-model="nutrient.nutrientTypeId"
+                    autocomplete="off"
+                    clearable
                     density="compact"
                     hide-details="auto"
                     item-title="description"
@@ -250,7 +252,9 @@ export function transformIn(data: NutrientTableEntry) {
       ...csvMapping,
       idColumnOffset: offsetToExcelColumn(idColumnOffset),
       descriptionColumnOffset: offsetToExcelColumn(descriptionColumnOffset),
-      localDescriptionColumnOffset: offsetToExcelColumn(localDescriptionColumnOffset),
+      localDescriptionColumnOffset: localDescriptionColumnOffset
+        ? offsetToExcelColumn(localDescriptionColumnOffset)
+        : null,
     },
     csvMappingFields: csvMappingFields.map(({ fieldName, columnOffset }) => ({
       fieldName,
