@@ -1753,6 +1753,9 @@
                                                 },
                                                 "exclusive": {
                                                   "type": "boolean"
+                                                },
+                                                "selected": {
+                                                  "type": "boolean"
                                                 }
                                               },
                                               "required": [
@@ -1786,6 +1789,9 @@
                                                 "nullable": true
                                               },
                                               "exclusive": {
+                                                "type": "boolean"
+                                              },
+                                              "selected": {
                                                 "type": "boolean"
                                               }
                                             },
@@ -1843,6 +1849,9 @@
                                                         },
                                                         "exclusive": {
                                                           "type": "boolean"
+                                                        },
+                                                        "selected": {
+                                                          "type": "boolean"
                                                         }
                                                       },
                                                       "required": [
@@ -1876,6 +1885,9 @@
                                                         "nullable": true
                                                       },
                                                       "exclusive": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "selected": {
                                                         "type": "boolean"
                                                       }
                                                     },
@@ -1919,6 +1931,9 @@
                                                       },
                                                       "exclusive": {
                                                         "type": "boolean"
+                                                      },
+                                                      "selected": {
+                                                        "type": "boolean"
                                                       }
                                                     },
                                                     "required": [
@@ -1952,6 +1967,9 @@
                                                       "nullable": true
                                                     },
                                                     "exclusive": {
+                                                      "type": "boolean"
+                                                    },
+                                                    "selected": {
                                                       "type": "boolean"
                                                     }
                                                   },
