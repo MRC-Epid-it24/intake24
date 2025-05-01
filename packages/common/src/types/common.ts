@@ -78,6 +78,7 @@ export function listOption<T extends z.ZodTypeAny = z.ZodString>(valueSchema?: T
     label: z.string().min(1).max(256),
     value: valueSchema ?? z.string().min(1).max(256),
     exclusive: z.boolean().optional(),
+    selected: z.boolean().optional(),
   });
 }
 

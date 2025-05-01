@@ -40,12 +40,21 @@
             :rules="optionValueRules"
             variant="outlined"
           />
-          <v-switch
-            v-if="exclusive"
-            v-model="option.exclusive"
-            hide-details="auto"
-            :label="$t('common.options.exclusive')"
-          />
+          <div class="d-flex flex-column flex-sm-row gc-6 px-2">
+            <v-switch
+              v-model="option.selected"
+              density="compact"
+              hide-details="auto"
+              :label="$t('common.options.selected')"
+            />
+            <v-switch
+              v-if="exclusive"
+              v-model="option.exclusive"
+              density="compact"
+              hide-details="auto"
+              :label="$t('common.options.exclusive')"
+            />
+          </div>
         </div>
         <template #append>
           <v-list-item-action>

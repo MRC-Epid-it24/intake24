@@ -1,7 +1,7 @@
 import type { Prompt, Prompts } from '@intake24/common/prompts';
-import type { CustomPromptAnswer, PromptSection } from '@intake24/common/surveys';
+import type { CustomPromptAnswer, FoodState, MealState, PromptSection } from '@intake24/common/surveys';
+import { useI18n } from '@intake24/i18n';
 import { useSurvey } from '@intake24/survey/stores';
-
 import { useFoodPromptUtils } from './use-food-prompt-utils';
 import { useMealPromptUtils } from './use-meal-prompt-utils';
 
@@ -13,6 +13,7 @@ export type UseCustomPromptHandlerProps<P extends keyof Prompts> = {
 };
 
 export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustomPromptHandlerProps<P>) {
+  const { i18n: { locale } } = useI18n();
   const { foodOptional } = useFoodPromptUtils();
   const { mealOptional } = useMealPromptUtils();
   const survey = useSurvey();
@@ -21,17 +22,35 @@ export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustom
     !('validation' in prompt) || prompt.validation.required;
   const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
 
-  const getPromptAnswer = (id: string) => {
+  function getPromptAnswer(promptId: string, entity?: FoodState | MealState) {
+    if (entity)
+      return entity.customPromptAnswers[promptId];
+
     if (foodOptional.value && ['foods'].includes(props.section))
-      return foodOptional.value.customPromptAnswers[id];
+      return foodOptional.value.customPromptAnswers[promptId];
 
     if (mealOptional.value && ['preFoods', 'postFoods'].includes(props.section))
-      return mealOptional.value.customPromptAnswers[id];
+      return mealOptional.value.customPromptAnswers[promptId];
 
-    return survey.data.customPromptAnswers[id];
+    return survey.data.customPromptAnswers[promptId];
   };
 
-  const commitPromptAnswer = (prompt: Prompt, promptAnswer?: CustomPromptAnswer) => {
+  function resolvePromptAnswer(prompt: Prompt, entity?: FoodState | MealState) {
+    const answer = getPromptAnswer(prompt.id, entity);
+    if (answer || !('options' in prompt))
+      return answer;
+
+    const values = (prompt.options[locale.value] ?? prompt.options.en).filter(o => o.selected).map(o => o.value);
+    if (!values.length)
+      return undefined;
+
+    if ('multiple' in prompt)
+      return prompt.multiple ? values : values.at(0);
+
+    return ['checkbox-list-prompt'].includes(prompt.component) ? values : values.at(0);
+  };
+
+  function commitPromptAnswer(prompt: Prompt, promptAnswer?: CustomPromptAnswer) {
     const promptId = prompt.id;
     const isInfo = isInfoPrompt(prompt);
 
@@ -88,7 +107,7 @@ export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustom
 
   return {
     commitPromptAnswer,
-    getPromptAnswer,
+    resolvePromptAnswer,
     foodOptional,
     isAnswerRequired,
     mealOptional,

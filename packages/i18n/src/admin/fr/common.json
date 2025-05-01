@@ -91,7 +91,8 @@
     "key": "Key",
     "label": "Libellé",
     "value": "Valeur",
-    "exclusive": "Exclusive"
+    "exclusive": "Exclusive",
+    "selected": "Selected"
   },
   "date": "Date",
   "expiredAt": "Expiré à",

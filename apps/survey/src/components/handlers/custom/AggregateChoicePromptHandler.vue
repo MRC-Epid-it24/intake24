@@ -11,18 +11,19 @@ import { computed } from 'vue';
 import type { FoodState } from '@intake24/common/surveys';
 import { AggregateChoicePrompt, filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 import { useSurvey } from '@intake24/survey/stores';
-import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
+import { createHandlerProps, useCustomPromptHandler, usePromptHandlerNoStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'aggregate-choice-prompt'>());
 
 const emit = defineEmits(['action']);
 
 const survey = useSurvey();
+const { resolvePromptAnswer } = useCustomPromptHandler(props);
 
 const filteredMeals = computed(() => filterMealsForAggregateChoicePrompt(survey, props.prompt));
 
 const getInitialState = computed(() =>
-  Object.fromEntries(filteredMeals.value.flatMap(meal => meal.foods.map(food => [food.id, food.customPromptAnswers[props.prompt.id]]))));
+  Object.fromEntries(filteredMeals.value.flatMap(meal => meal.foods.map(food => [food.id, resolvePromptAnswer(props.prompt, food)]))));
 
 // TODO: use store for intermediate state
 const { state } = usePromptHandlerNoStore({ emit }, getInitialState);

@@ -34,13 +34,13 @@ const emit = defineEmits(['action']);
 
 const infoPrompts = ['info-prompt'];
 
-const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional }
+const { commitPromptAnswer, resolvePromptAnswer, foodOptional, mealOptional }
       = useCustomPromptHandler(props);
 
 const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
 const state = ref<(CustomPromptAnswer | undefined)[]>(
   props.prompt.prompts.map(prompt =>
-    isInfoPrompt(prompt) ? 'next' : getPromptAnswer(prompt.id),
+    isInfoPrompt(prompt) ? 'next' : resolvePromptAnswer(prompt),
   ),
 );
 

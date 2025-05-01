@@ -94,7 +94,8 @@
     "key": "Key",
     "label": "Label",
     "value": "Value",
-    "exclusive": "Exclusive"
+    "exclusive": "Exclusive",
+    "selected": "Selected"
   },
 
   "date": "Date",

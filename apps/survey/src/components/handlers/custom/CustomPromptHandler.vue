@@ -28,13 +28,13 @@ const emit = defineEmits(['action']);
 
 const infoPrompts = ['info-prompt'];
 
-const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional }
+const { commitPromptAnswer, resolvePromptAnswer, foodOptional, mealOptional }
       = useCustomPromptHandler(props);
 const survey = useSurvey();
 
 const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
 const state = ref<CustomPromptAnswer | undefined>(
-  isInfoPrompt.value ? 'next' : getPromptAnswer(props.prompt.id),
+  isInfoPrompt.value ? 'next' : resolvePromptAnswer(props.prompt),
 );
 
 function commitAnswer() {

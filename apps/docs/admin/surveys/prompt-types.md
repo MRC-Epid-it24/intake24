@@ -400,6 +400,7 @@ Prompt to collect single option from a list of foods.
 
   - `label` - user-facing displayed label
   - `value` - value stored in database
+  - `selected` - flag to pre-select the option
 
 - `as only for specified foods` - conditions to limit the foods to which the prompt is applicable
 
@@ -414,6 +415,7 @@ Multi-select list of options.
   - `label` - user-facing displayed label
   - `value` - value stored in database
   - `exclusive` - exclusive flag - if selected, other options are deselected
+  - `selected` - flag to pre-select the option
 
 - `other` - `true` or `false` whether to show 'other' option, free-form text input
 - `min` - Minimum number of answers
@@ -470,6 +472,7 @@ Prompt to collect single or multiple option(s) from a list of options using sele
 
   - `label` - user-facing displayed label
   - `value` - value stored in database
+  - `selected` - flag to pre-select the option
 
 ### Slider prompt
 
@@ -497,6 +500,7 @@ Single-select list of options.
 
   - `label` - user-facing displayed label
   - `value` - value stored in database
+  - `selected` - flag to pre-select the option
 
 - `other` - `true` or `false` whether to show 'other' option, free-form text input
 
