@@ -11,6 +11,7 @@ import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image
 import pkg from '../package.json';
 
 import {
+  convertToPackage,
   extractCategories,
   findPortionImages,
   generateEnv,
@@ -26,6 +27,7 @@ import {
   conflictResolutionOptions,
   importerSpecificModulesExecutionOptions,
 } from './commands/packager/importer-v4';
+import { convertorTypeOptions } from './commands/packager/convert-to-package';
 
 async function run() {
   const program = new Command();
@@ -144,6 +146,29 @@ async function run() {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (localeId, options) => {
       await extractCategories(localeId, options);
+    });
+
+  const convertTypeOption = new Option('-t, --type [type]', 'Import type').choices(
+    convertorTypeOptions,
+  );
+
+  program
+    .command('convert-to-package')
+    .description('Convert legacy data to a portable format')
+    .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
+    .addArgument(new Argument('<input-file>', 'Input file path'))
+    .addArgument(new Argument('<output-path>', 'Output file path'))
+    .addOption(convertTypeOption)
+    .action(async (version, inputFilePath, outputFilePath, options) => {
+      switch (version) {
+        case 'v3':
+          throw new Error('Not implemented');
+        case 'v4':
+          await convertToPackage(version, inputFilePath, outputFilePath, options);
+          return;
+        default:
+          throw new Error(`Unexpected version option: ${version}`);
+      }
     });
 
   program
