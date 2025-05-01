@@ -2,6 +2,8 @@ import type { CreationAttributes, Transaction } from 'sequelize';
 
 import { randomUUID } from 'node:crypto';
 
+import fs from 'node:fs';
+
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
@@ -89,6 +91,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
   ) {
     const tableIds = new Set<string>();
     const recordIds = new Set<string>();
+    const missingRecords: string[] = [];
 
     Object.entries(nutrientTableReferences).forEach(([tableId, recordId]) => {
       tableIds.add(tableId);
@@ -113,22 +116,31 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       );
 
       if (record === undefined) {
-        throw new Error(
-          `Could not find food nutrient table record: ${nutrientTableId}/${nutrientTableRecordId}`,
-        );
+        const missingRef = `${nutrientTableId}/${nutrientTableRecordId}`;
+        missingRecords.push(missingRef);
+        console.warn(`Could not find food nutrient table record: ${missingRef}`);
+        return;
       }
 
       nutrientTableRecordIds.push(record.id);
     });
 
-    const creationAttributes = nutrientTableRecordIds.map(nutrientTableRecordId => ({
-      foodLocalId,
-      nutrientTableRecordId,
-    }));
+    // Log missing records to a file if any were found
+    if (missingRecords.length > 0) {
+      const logEntry = `${new Date().toISOString()}: Missing nutrient records for foodLocalId ${foodLocalId}: ${missingRecords.join(', ')}\n`;
+      await fs.promises.appendFile('missing-nutrient-records.log', logEntry);
+    }
 
-    await FoodNutrient.destroy({ where: { foodLocalId }, transaction });
+    // Only proceed with creating records if we found any valid ones
+    if (nutrientTableRecordIds.length > 0) {
+      const creationAttributes = nutrientTableRecordIds.map(nutrientTableRecordId => ({
+        foodLocalId,
+        nutrientTableRecordId,
+      }));
 
-    await FoodNutrient.bulkCreate(creationAttributes, { transaction });
+      await FoodNutrient.destroy({ where: { foodLocalId }, transaction });
+      await FoodNutrient.bulkCreate(creationAttributes, { transaction });
+    }
   }
 
   async function createImpl(

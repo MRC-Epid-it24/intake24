@@ -31,4 +31,8 @@ export class NutrientTablesApiV4 {
       records,
     });
   }
+
+  async getRecord(nutrientTableId: string, recordId: string) {
+    return await this.baseClient.getOptional(`/api/admin/references/nutrient-tables/${nutrientTableId}/records?search=${recordId}&limit=1`);
+  }
 }

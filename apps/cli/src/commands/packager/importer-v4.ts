@@ -685,11 +685,36 @@ export class ImporterV4 {
           const existing = await this.apiClient.foods.findGlobalFood(food.code);
 
           if (existing !== null) {
-            await this.apiClient.foods.updateGlobalFood(
-              food.code,
-              existing.version,
-              omit(foodEntry, 'code'),
-            );
+            try {
+              await this.apiClient.foods.updateGlobalFood(
+                food.code,
+                existing.version,
+                omit(foodEntry, 'code'),
+              );
+              logger.info(`Successfully updated global food "${food.code}"`);
+            }
+            catch (error) {
+              // Handle 404 errors by creating a new food entry
+              if (error instanceof Error && error.message.includes('404')) {
+                logger.warn(`Food "${food.code}" not found with version ${existing.version}, creating new entry`);
+                try {
+                  // Try to recreate the food
+                  await this.apiClient.foods.createGlobalFood(foodEntry);
+                  logger.info(`Successfully created global food "${food.code}" after update failure`);
+                }
+                catch (createError) {
+                  logger.error(`Failed to create global food "${food.code}" after update failure: ${createError instanceof Error ? createError.message : 'Unknown error'}`);
+                  throw createError;
+                }
+              }
+              else {
+                logger.error(`Failed to update global food "${food.code}": ${error instanceof Error ? error.message : 'Unknown error'}`);
+                throw error;
+              }
+            }
+          }
+          else {
+            logger.warn(`Food "${food.code}" not found, skipping update`);
           }
         }
       }
@@ -704,19 +729,42 @@ export class ImporterV4 {
   }
 
   private async importLocalFood(localeId: string, food: PkgLocalFood): Promise<void> {
+    // First check if the global food exists
+    const globalFood = await this.apiClient.foods.findGlobalFood(food.code);
+    if (!globalFood) {
+      const message = `Cannot import local food "${food.code}" for locale "${localeId}" because the corresponding global food does not exist. Please ensure you import global foods before local foods.`;
+      logger.error(message);
+      throw new Error(message);
+    }
+
     const createRequest = typeConverters.fromPackageLocalFood(food);
 
-    if (this.options.onConflict === 'skip' || this.options.onConflict === 'abort') {
-      const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
-        update: false,
-        return: false,
-      });
+    try {
+      if (this.options.onConflict === 'skip' || this.options.onConflict === 'abort') {
+        const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
+          update: false,
+          return: false,
+        });
 
-      if (result.type === 'conflict') {
-        if (this.options.onConflict === 'skip') {
-          logger.info(`Skipping local food "${food.code}" due to a conflict`);
+        if (result.type === 'conflict') {
+          if (this.options.onConflict === 'skip') {
+            logger.info(`Skipping local food "${food.code}" due to a conflict`);
+          }
+          else {
+            const message = `Failed to import local food "${food.code}" due to a conflict`;
+            logger.error(message);
+            logger.error(JSON.stringify(result.details, null, 2));
+            throw new Error(message);
+          }
         }
-        else {
+      }
+      else {
+        const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
+          update: true,
+          return: false,
+        });
+
+        if (result.type === 'conflict') {
           const message = `Failed to import local food "${food.code}" due to a conflict`;
           logger.error(message);
           logger.error(JSON.stringify(result.details, null, 2));
@@ -724,18 +772,14 @@ export class ImporterV4 {
         }
       }
     }
-    else {
-      const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
-        update: true,
-        return: false,
-      });
-
-      if (result.type === 'conflict') {
-        const message = `Failed to import local food "${food.code}" due to a conflict`;
+    catch (error) {
+      if (error instanceof Error && error.message.includes('food_locals_food_code_fk')) {
+        const message = `Failed to import local food "${food.code}" for locale "${localeId}". This is likely due to a missing global food record. Please ensure the global food exists before importing local foods.`;
         logger.error(message);
-        logger.error(JSON.stringify(result.details, null, 2));
         throw new Error(message);
       }
+
+      throw error;
     }
   }
 
