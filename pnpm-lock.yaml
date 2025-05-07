@@ -351,6 +351,9 @@ importers:
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
+      node-snowball:
+        specifier: ^0.8.0
+        version: 0.8.0
       nodejieba:
         specifier: ^3.4.4
         version: 3.4.4
@@ -405,6 +408,9 @@ importers:
       slugify:
         specifier: ^1.6.6
         version: 1.6.6
+      stopword:
+        specifier: ^3.1.4
+        version: 3.1.4
       talisman:
         specifier: ^1.1.4
         version: 1.1.4
@@ -499,6 +505,9 @@ importers:
       '@types/qrcode':
         specifier: ^1.5.5
         version: 1.5.5
+      '@types/stopword':
+        specifier: ^2.0.3
+        version: 2.0.3
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.2
@@ -2860,6 +2869,7 @@ packages:
   '@faker-js/faker@9.5.0':
     resolution: {integrity: sha512-3qbjLv+fzuuCg3umxc9/7YjrEXNaKwHgmig949nfyaTx8eL4FAsvFbu+1JcFUj1YAXofhaDn6JdEUBTYuk0Ssw==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0'}
+    deprecated: Please update to a newer version
 
   '@fast-csv/format@5.0.2':
     resolution: {integrity: sha512-fRYcWvI8vs0Zxa/8fXd/QlmQYWWkJqKZPAXM+vksnplb3owQFKTPPh9JqOtD0L3flQw/AZjjXdPkD7Kp/uHm8g==}
@@ -3077,8 +3087,8 @@ packages:
     resolution: {integrity: sha512-2kGiWoXaeV8HZlhU/Nml12oTbhv7j2ufsJ5vQaa0VTjzUmZVdd/nmKFRAOJ/FtjO90Qba5AnZDwsrY7ZND5udA==}
     engines: {node: '>= 16'}
 
-  '@intlify/shared@11.1.2':
-    resolution: {integrity: sha512-dF2iMMy8P9uKVHV/20LA1ulFLL+MKSbfMiixSmn6fpwqzvix38OIc7ebgnFbBqElvghZCW9ACtzKTGKsTGTWGA==}
+  '@intlify/shared@11.1.3':
+    resolution: {integrity: sha512-pTFBgqa/99JRA2H1qfyqv97MKWJrYngXBA/I0elZcYxvJgcCw3mApAoPW3mJ7vx3j+Ti0FyKUFZ4hWxdjKaxvA==}
     engines: {node: '>= 16'}
 
   '@intlify/shared@12.0.0-alpha.2':
@@ -4123,8 +4133,9 @@ packages:
   '@types/nodemailer@6.4.17':
     resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
 
-  '@types/nodemon@1.19.6':
-    resolution: {integrity: sha512-vjKuaQOLUA5EY2zkUmWG1ipXbKt9Wd+H/0SiIuHVeH4cHtt6509iRUGH9ZR0iqgUrtj3BrP9KqoTuV3ZCbQcYA==}
+  '@types/nodemon@3.1.1':
+    resolution: {integrity: sha512-q29nOOLwcTTPzp6VABHTybbLYdPF5aW6FZARvax8JGhYdQvLtZXX3z2MPP1KkaBDxVsNp7ehl2OSuTbIpsTihg==}
+    deprecated: This is a stub types definition. nodemon provides its own type definitions, so you do not need this installed.
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -4188,6 +4199,9 @@ packages:
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
+
+  '@types/stopword@2.0.3':
+    resolution: {integrity: sha512-hioMj0lOvISM+EDevf7ijG8EMbU+J3pj4SstCyfQC1t39uPYpAe7beSfBdU6c1d9jeECTQQtR3UJWtVoUO8Weg==}
 
   '@types/superagent@8.1.9':
     resolution: {integrity: sha512-pTVjI73witn+9ILmoJdajHGW2jkSaOzhiFYF1Rd3EQ94kymLqB9PjD9ISg7WaALC7+dCHT0FGe9T2LktLq/3GQ==}
@@ -5026,6 +5040,7 @@ packages:
   bson@6.10.2:
     resolution: {integrity: sha512-5afhLTjqDSA3akH56E+/2J6kTDuSIlBxyXPdQslj9hcIgOUE378xdOfZvC/9q3LifJNI6KR/juZ+d0NRNYBwXg==}
     engines: {node: '>=16.20.1'}
+    deprecated: a critical bug affecting only useBigInt64=true deserialization usage is fixed in bson@6.10.3
 
   buffer-alloc-unsafe@1.1.0:
     resolution: {integrity: sha512-TEM2iMIEQdJ2yjPJoSIsldnleVaAk1oW3DBVUykyOLsEsFmEc9kn+SFFPz+gl54KQNxlDnAwCXosOS9Okx2xAg==}
@@ -8320,6 +8335,9 @@ packages:
     resolution: {integrity: sha512-ywPWvcDMeH+z9gQq5qYHCCy+ethsk4goepZ45GLD63fOu0YcNecQxi64nDs3qluZB+murG3/D4dJ7+dGctcCQQ==}
     engines: {node: '>= 6.0.0'}
 
+  nan@2.22.2:
+    resolution: {integrity: sha512-DANghxFkS1plDdRsX0X9pm0Z6SJNN6gBdtXfanwoZ8hooC5gosGFSBGRYHUVPz1asKA/kMRqDRdHrluZ61SpBQ==}
+
   nanoid@3.3.8:
     resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -8410,6 +8428,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch-native@1.6.6:
     resolution: {integrity: sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ==}
@@ -8435,6 +8454,10 @@ packages:
 
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
+
+  node-snowball@0.8.0:
+    resolution: {integrity: sha512-Eew1ruT55ZPT7hYKJojdDAAAT+mTWrBT1WC6s/qeHPwFmZ2trjY/Tzm63QfE/RPrJgchOvnQYYosD9lf41SdfA==}
+    engines: {node: '>=18.0.0'}
 
   nodejieba@2.5.2:
     resolution: {integrity: sha512-ByskJvaBrQ2eV+5M0OeD80S5NKoGaHc9zi3Z/PTKl/95eac2YF8RmWduq9AknLpkQLrLAIcqurrtC6BzjpKwwg==}
@@ -9795,6 +9818,9 @@ packages:
   stoppable@1.1.0:
     resolution: {integrity: sha512-KXDYZ9dszj6bzvnEMRYvxgeTHU74QBFL54XKtP3nyMuJ81CFYtABZ3bAzL2EdFUaEwJOBOgENyFj3R7oTzDyyw==}
     engines: {node: '>=4', npm: '>=6'}
+
+  stopword@3.1.4:
+    resolution: {integrity: sha512-RiyU12FwHWX1i42gxhn5sywgpV5mptZTzbHKqKh5wVDWC2Uu+8vKbLv8xxeNa0p29vECbYGLXpDayo54n9+dsg==}
 
   stopwords-iso@1.1.0:
     resolution: {integrity: sha512-I6GPS/E0zyieHehMRPQcqkiBMJKGgLta+1hREixhoLPqEA0AlVFiC43dl8uPpmkkeRdDMzYRWFWk5/l9x7nmNg==}
@@ -13006,7 +13032,7 @@ snapshots:
 
   '@intlify/shared@11.1.1': {}
 
-  '@intlify/shared@11.1.2': {}
+  '@intlify/shared@11.1.3': {}
 
   '@intlify/shared@12.0.0-alpha.2': {}
 
@@ -13014,8 +13040,8 @@ snapshots:
     dependencies:
       '@eslint-community/eslint-utils': 4.4.1(eslint@9.20.1(jiti@2.4.2))
       '@intlify/bundle-utils': 10.0.0(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))
-      '@intlify/shared': 11.1.2
-      '@intlify/vue-i18n-extensions': 8.0.0(@intlify/shared@11.1.2)(@vue/compiler-dom@3.5.13)(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))(vue@3.5.13(typescript@5.7.3))
+      '@intlify/shared': 11.1.3
+      '@intlify/vue-i18n-extensions': 8.0.0(@intlify/shared@11.1.3)(@vue/compiler-dom@3.5.13)(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))(vue@3.5.13(typescript@5.7.3))
       '@rollup/pluginutils': 5.1.4(rollup@2.79.2)
       '@typescript-eslint/scope-manager': 8.24.0
       '@typescript-eslint/typescript-estree': 8.24.0(typescript@5.7.3)
@@ -13041,8 +13067,8 @@ snapshots:
     dependencies:
       '@eslint-community/eslint-utils': 4.4.1(eslint@9.20.1(jiti@2.4.2))
       '@intlify/bundle-utils': 10.0.0(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))
-      '@intlify/shared': 11.1.2
-      '@intlify/vue-i18n-extensions': 8.0.0(@intlify/shared@11.1.2)(@vue/compiler-dom@3.5.13)(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))(vue@3.5.13(typescript@5.7.3))
+      '@intlify/shared': 11.1.3
+      '@intlify/vue-i18n-extensions': 8.0.0(@intlify/shared@11.1.3)(@vue/compiler-dom@3.5.13)(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))(vue@3.5.13(typescript@5.7.3))
       '@rollup/pluginutils': 5.1.4(rollup@4.34.7)
       '@typescript-eslint/scope-manager': 8.24.0
       '@typescript-eslint/typescript-estree': 8.24.0(typescript@5.7.3)
@@ -13064,11 +13090,11 @@ snapshots:
       - supports-color
       - typescript
 
-  '@intlify/vue-i18n-extensions@8.0.0(@intlify/shared@11.1.2)(@vue/compiler-dom@3.5.13)(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))(vue@3.5.13(typescript@5.7.3))':
+  '@intlify/vue-i18n-extensions@8.0.0(@intlify/shared@11.1.3)(@vue/compiler-dom@3.5.13)(vue-i18n@11.1.1(vue@3.5.13(typescript@5.7.3)))(vue@3.5.13(typescript@5.7.3))':
     dependencies:
       '@babel/parser': 7.26.9
     optionalDependencies:
-      '@intlify/shared': 11.1.2
+      '@intlify/shared': 11.1.3
       '@vue/compiler-dom': 3.5.13
       vue: 3.5.13(typescript@5.7.3)
       vue-i18n: 11.1.1(vue@3.5.13(typescript@5.7.3))
@@ -14195,9 +14221,9 @@ snapshots:
     dependencies:
       '@types/node': 22.13.4
 
-  '@types/nodemon@1.19.6':
+  '@types/nodemon@3.1.1':
     dependencies:
-      '@types/node': 22.13.4
+      nodemon: 3.1.9
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -14273,6 +14299,8 @@ snapshots:
   '@types/sortablejs@1.15.8': {}
 
   '@types/stack-utils@2.0.3': {}
+
+  '@types/stopword@2.0.3': {}
 
   '@types/superagent@8.1.9':
     dependencies:
@@ -19179,6 +19207,8 @@ snapshots:
       type-is: 1.6.18
       xtend: 4.0.2
 
+  nan@2.22.2: {}
+
   nanoid@3.3.8: {}
 
   nanoid@5.0.9: {}
@@ -19292,6 +19322,10 @@ snapshots:
 
   node-releases@2.0.19: {}
 
+  node-snowball@0.8.0:
+    dependencies:
+      nan: 2.22.2
+
   nodejieba@2.5.2:
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.11
@@ -19313,7 +19347,7 @@ snapshots:
 
   nodemon-webpack-plugin@4.8.2(webpack@5.98.0):
     dependencies:
-      '@types/nodemon': 1.19.6
+      '@types/nodemon': 3.1.1
       nodemon: 3.0.1
       webpack: 5.98.0(webpack-cli@6.0.1)
 
@@ -20827,6 +20861,8 @@ snapshots:
   std-env@3.8.0: {}
 
   stoppable@1.1.0: {}
+
+  stopword@3.1.4: {}
 
   stopwords-iso@1.1.0: {}
 
