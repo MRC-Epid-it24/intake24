@@ -1,5 +1,5 @@
 import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, toRaw } from 'vue';
 import { useGoTo } from 'vuetify';
 
 import type {
@@ -8,9 +8,10 @@ import type {
   GenericActionType,
   MealActionType,
 } from '@intake24/common/prompts';
-import type { MealCreationState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { MealCreationState, MealSection, Selection, SurveyPromptSection, SurveyState } from '@intake24/common/surveys';
 import { isSelectionEqual } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
+import { copy } from '@intake24/common/util';
 import {
   customHandlers,
   portionSizeHandlers,
@@ -19,8 +20,12 @@ import {
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
 import { InfoAlert } from '../elements';
+
+interface RecallHistoryState {
+  name: string;
+  state: SurveyState;
+}
 
 export default defineComponent({
   name: 'RecallMixin',
@@ -44,6 +49,9 @@ export default defineComponent({
       hideCurrentPrompt: false,
       // This is only required to discern between back and forward history events
       currentPromptTimestamp: 0,
+      ignoreNextPopstate: false,
+      historyIndex: 0,
+      historyStates: [] as RecallHistoryState[],
     };
   },
 
@@ -136,6 +144,10 @@ export default defineComponent({
   },
 
   async mounted() {
+    history.pushState({ action: 'back' }, '');
+    history.pushState({ action: 'current' }, '');
+    history.pushState({ action: 'forward' }, '');
+    history.go(-1);
     addEventListener('popstate', this.onPopState);
     await this.nextPrompt();
   },
@@ -146,56 +158,72 @@ export default defineComponent({
 
   methods: {
     onPopState(event: PopStateEvent) {
-      if (this.hasFinished)
+      if (this.ignoreNextPopstate) {
+        this.ignoreNextPopstate = false;
         return;
-
-      function isValidSelection(meals: MealState[], selection: Selection): boolean {
-        if (
-          selection.element
-          && selection.element.type === 'meal'
-          && getMealIndex(meals, selection.element.mealId) === undefined
-        ) {
-          return false;
-        }
-
-        if (
-          selection.element
-          && selection.element.type === 'food'
-          && getFoodIndex(meals, selection.element.foodId) === undefined
-        ) {
-          return false;
-        }
-
-        return true;
       }
 
-      if (
-        event.state
-        && event.state.promptInstance
-        && event.state.selection
-        && event.state.timeStamp
-      ) {
-        const promptInstance = event.state.promptInstance as PromptInstance;
-        const selection = event.state.selection as Selection;
-        const timeStamp = event.state.timeStamp as number;
+      console.debug('popstate:', event.state.action);
+      console.debug('history states', this.historyStates);
 
-        if (isValidSelection(this.meals, selection)) {
-          this.setSelection(selection);
-          this.currentPrompt = promptInstance;
-          this.currentPromptTimestamp = timeStamp;
-        }
-        else if (this.currentPromptTimestamp > timeStamp) {
-          history.back();
+      if (event.state.action === 'back') {
+        console.debug(`<<< Back, current index ${this.historyIndex}, history length = ${this.historyStates.length}`);
+
+        if (this.historyIndex > 0) {
+          --this.historyIndex;
+          console.debug(`New index: ${this.historyIndex}`, this.historyStates[this.historyIndex].name);
+          this.survey.setState(this.historyStates[this.historyIndex].state);
+
+          console.debug(`New selection: ${JSON.stringify(this.historyStates[this.historyIndex].state.selection)}`);
+
+          this.ignoreNextPopstate = true;
+          history.go(1);
         }
         else {
-          history.forward();
+          // Let browser handle back
+          console.log('Browser back');
+          // history.go(-1);
+          this.ignoreNextPopstate = true;
+          history.go(1);
         }
       }
+      else if (event.state.action === 'forward') {
+        console.debug(`Forward >>>, current index ${this.historyIndex}, history length = ${this.historyStates.length}`);
+
+        if (this.historyIndex < this.historyStates.length - 1) {
+          ++this.historyIndex;
+          console.debug(`New index: ${this.historyIndex}, description: ${this.historyStates[this.historyIndex].name}`, this.historyStates[this.historyIndex].state);
+          this.survey.setState(this.historyStates[this.historyIndex].state);
+          this.ignoreNextPopstate = true;
+          history.go(-1);
+        }
+        else {
+          console.log('Browser forward');
+          // history.go(1);
+          this.ignoreNextPopstate = true;
+          history.go(-1);
+        }
+      }
+    },
+
+    createUndoState(name: string) {
+      if (this.historyIndex < this.historyStates.length) {
+        this.historyStates.splice(this.historyIndex + 1);
+      }
+
+      const currentState = copy(toRaw(this.survey.currentState));
+
+      this.historyStates.push({ name, state: currentState });
+      ++this.historyIndex;
+      console.log(`Pushed undo state "${name}", current index = ${this.historyIndex}`);
+      console.log(`Pushed selection ${JSON.stringify(currentState.selection)}`);
     },
 
     setSelection(newSelection: Selection) {
       if (isSelectionEqual(this.survey.data.selection, newSelection))
         return;
+
+      this.createUndoState(`Select ${JSON.stringify(newSelection)}`);
 
       // Prevent the currently active prompt from crashing if it expects a different selection type
       this.currentPrompt = null;
@@ -374,10 +402,12 @@ export default defineComponent({
         // Strip Vue reactivity wrappers
         const promptInstance = JSON.parse(JSON.stringify(this.currentPrompt));
         const selection = JSON.parse(JSON.stringify(this.selection));
-        const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
+        // const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
 
-        if (selection && promptInstance)
-          history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
+        if (selection && promptInstance) {
+          // console.log('pushState: ', { promptInstance, selection, timeStamp });
+          // history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
+        }
       }
     },
 
