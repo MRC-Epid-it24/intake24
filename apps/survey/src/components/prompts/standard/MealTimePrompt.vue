@@ -1,14 +1,24 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 time-picker">
-      <v-time-picker
-        v-model="state"
-        :allowed-minutes="allowedMinutes"
-        :ampm-in-title="prompt.amPmToggle"
-        class="pa-0 mx-auto"
-        :format="prompt.format"
-        :landscape="$vuetify.display.smAndUp"
-      />
+      <template v-if="useAnalog">
+        <analog-clock-picker
+          v-model="state"
+          :allowed-minutes="allowedMinutes"
+          class="mx-auto"
+          :format="prompt.format"
+        />
+      </template>
+      <template v-else>
+        <v-time-picker
+          v-model="state"
+          :allowed-minutes="allowedMinutes"
+          :ampm-in-title="prompt.amPmToggle"
+          class="pa-0 mx-auto"
+          :format="prompt.format"
+          :landscape="$vuetify.display.smAndUp"
+        />
+      </template>
     </v-card-text>
     <template #actions>
       <v-btn
@@ -60,7 +70,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { computed, defineAsyncComponent, defineComponent } from 'vue';
 
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
 import type { MealState, MealTime } from '@intake24/common/surveys';
@@ -70,6 +80,9 @@ import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealTimePrompt',
+  components: {
+    AnalogClockPicker: defineAsyncComponent(() => import('./AnalogClockPicker.vue')),
+  },
 
   mixins: [createBasePrompt<'meal-time-prompt'>()],
 
@@ -102,6 +115,7 @@ export default defineComponent({
       },
     });
     const isValid = computed(() => !!state.value);
+    const useAnalog = computed(() => !!props.prompt.useAnalog);
 
     return {
       action,
@@ -109,6 +123,7 @@ export default defineComponent({
       isValid,
       promptI18n,
       state,
+      useAnalog,
     };
   },
 });

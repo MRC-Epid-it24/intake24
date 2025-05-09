@@ -50,6 +50,11 @@
         hide-details="auto"
         :label="$t('survey-schemes.prompts.timePicker.amPmToggle')"
       />
+      <v-switch
+        v-model="useAnalog"
+        hide-details="auto"
+        :label="$t('survey-schemes.prompts.timePicker.useAnalog')"
+      />
     </v-card-text>
   </v-card>
 </template>
@@ -64,6 +69,7 @@ defineOptions({ name: 'TimerPickerSettings' });
 const allowedMinutes = defineModel('allowedMinutes', { type: Number as PropType<TimePicker['allowedMinutes']> });
 const amPmToggle = defineModel('amPmToggle', { type: Boolean as PropType<TimePicker['amPmToggle']> });
 const format = defineModel('format', { type: String as PropType<TimePicker['format']> });
+const useAnalog = defineModel('useAnalog', { type: Boolean as PropType<TimePicker['useAnalog']> });
 
 const { i18n } = useI18n();
 

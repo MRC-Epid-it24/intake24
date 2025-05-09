@@ -452,7 +452,8 @@
         "_": "Time format",
         "ampm": "AM/PM",
         "24hr": "24-hour"
-      }
+      },
+      "useAnalog": "Use analog clock"
     },
     "validation": {
       "required": "Prompt is required to be filled in",

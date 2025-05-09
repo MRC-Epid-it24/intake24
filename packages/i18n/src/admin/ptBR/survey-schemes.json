@@ -448,7 +448,8 @@
         "_": "Formato de hora",
         "ampm": "AM/PM",
         "24hr": "24 horas"
-      }
+      },
+      "useAnalog": "Utilizar clocher analógico"
     },
     "validation": {
       "required": "O prompt é obrigatório",

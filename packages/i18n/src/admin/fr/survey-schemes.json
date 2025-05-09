@@ -448,7 +448,8 @@
         "_": "Format de l'heure",
         "ampm": "AM/PM",
         "24hr": "24-heures"
-      }
+      },
+      "useAnalog": "Utiliser le clocher analogique"
     },
     "validation": {
       "required": "L'invite doit être remplie",

@@ -126,6 +126,7 @@ export const mealTimePrompt: Prompts['meal-time-prompt'] = copy({
   allowedMinutes: 5,
   amPmToggle: false,
   format: '24hr',
+  useAnalog: false,
 });
 
 export const readyMealPrompt: Prompts['ready-meal-prompt'] = copy({
