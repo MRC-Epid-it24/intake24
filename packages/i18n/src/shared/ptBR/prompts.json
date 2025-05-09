@@ -241,9 +241,9 @@
     "no": "Não consumi"
   },
   "recallDate": {
-    "name": "Data da recordação",
+    "name": "Data da recordatório",
     "text": "",
-    "description": "Selecione a data da recordação."
+    "description": "Selecione a data da recordatório."
   },
   "readyMeal": {
     "name": "Refeição pronta",

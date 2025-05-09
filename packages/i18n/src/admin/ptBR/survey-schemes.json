@@ -26,7 +26,7 @@
       "1-pass": "1 passagem",
       "2-pass": "2 passagens"
     },
-    "recallDate": "Deslocamento da data de recordação",
+    "recallDate": "Deslocamento da data de recordatório",
     "languages": "Idiomas permitidos"
   },
   "meals": {
@@ -93,7 +93,7 @@
       "title": "Objeto de condição",
       "food": "Alimento atual",
       "meal": "Refeição atual",
-      "survey": "Recordação atual"
+      "survey": "Recordatório atual"
     },
     "property": {
       "_": "Propriedade de condição",
@@ -107,7 +107,7 @@
       "numberOfMeals": "Número de refeições",
       "promptAnswer": "Resposta do prompt",
       "property": "Valor da propriedade",
-      "recallNumber": "Número de recordação",
+      "recallNumber": "Número do recordatório",
       "userField": "Campo do usuário",
       "mealCompletion": "Estado de conclusão",
       "foodCompletion": "Estado de conclusão"
@@ -256,12 +256,12 @@
     "remove": "Remover prompt",
     "section": "Seção de prompts",
     "preMeals": {
-      "title": "Prompts pré-recordação",
-      "subtitle": "Prompts gerais solicitados antes da recordação dietética, incluindo prompts pessoais e instruções iniciais."
+      "title": "Prompts pré-recordatório",
+      "subtitle": "Prompts gerais solicitados antes da recordatório dietética, incluindo prompts pessoais e instruções iniciais."
     },
     "postMeals": {
-      "title": "Prompts pós-recordação",
-      "subtitle": "Prompts gerais solicitados após a recordação dietética."
+      "title": "Prompts pós-recordatório",
+      "subtitle": "Prompts gerais solicitados após a recordatório dietética."
     },
     "submission": {
       "title": "Prompts de envio",
@@ -566,8 +566,8 @@
       "subtitle": "Perguntar sobre refeições prontas"
     },
     "recall-date-prompt": {
-      "title": "Data de recordação",
-      "subtitle": "Perguntar para indicar a data de recordação",
+      "title": "Data de recordatório",
+      "subtitle": "Perguntar para indicar a data de recordatório",
       "current": "Deslocamento da data atual",
       "min": "Número de dias antes de hoje que permite",
       "max": "Número de dias após hoje que permite"
@@ -608,7 +608,7 @@
     },
     "review-confirm-prompt": {
       "title": "Revisar e Confirmar",
-      "subtitle": "Revisar e confirmar conclusão e progresso da recordação"
+      "subtitle": "Revisar e confirmar conclusão e progresso da recordatório"
     },
     "same-as-before-prompt": {
       "title": "Mesmo de antes",
@@ -620,7 +620,7 @@
     },
     "submit-prompt": {
       "title": "Enviar",
-      "subtitle": "Confirmar conclusão e enviar recordação",
+      "subtitle": "Confirmar conclusão e enviar recordatório",
       "review": {
         "title": "Opções de revisão final",
         "subtitle": "Escolher a opção desejada para a página de revisão final.",

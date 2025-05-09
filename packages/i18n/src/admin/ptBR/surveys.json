@@ -88,7 +88,7 @@
       "sortingAlgorithmInfo": {
         "title": "Método de ordenação de alimentos",
         "p1": "Define como priorizar alimentos na lista de resultados.",
-        "popularity": "<strong>Popularidade (freqüência de relato)</strong> prioriza itens com maior frequência de relato, atualizada a cada envio de recordação, por localidade.",
+        "popularity": "<strong>Popularidade (freqüência de relato)</strong> prioriza itens com maior frequência de relato, atualizada a cada envio de recordatório, por localidade.",
         "globalPopularity": "<strong>Popularidade global</strong> é similar, mas usa dados globais; não é recomendado pois códigos de alimentos raramente são compartilhados entre localidades.",
         "predeterminedOrder": "<strong>Ordem predeterminada</strong> atribui uma prioridade fixa; permanece estática após upload."
       },

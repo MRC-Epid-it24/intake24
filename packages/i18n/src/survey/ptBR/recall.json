@@ -1,9 +1,9 @@
 {
-  "_": "Recordação",
-  "info": "Informações da recordação",
-  "none": "Nenhuma recordação em andamento no momento.",
-  "startedAt": "Recordação iniciada em: {startedAt}.",
-  "finishedAt": "Recordação finalizada em: {finishedAt}.",
+  "_": "Recordatório",
+  "info": "Informações da recordatório",
+  "none": "Nenhuma recordatório em andamento no momento.",
+  "startedAt": "Recordatório iniciada em: {startedAt}.",
+  "finishedAt": "Recordatório finalizada em: {finishedAt}.",
   "submittedAt": "Enviado em",
   "limitReached": {
     "daily": "Você atingiu o limite diário de recordações.",
@@ -11,32 +11,32 @@
   },
   "rating": {
     "_": "Avalie sua experiência",
-    "title": "Como você avaliaria a recordação?",
-    "comment": "Conte-nos mais sobre a avaliação que você deu à recordação",
+    "title": "Como você avaliaria a recordatório?",
+    "comment": "Conte-nos mais sobre a avaliação que você deu à recordatório",
     "send": "Enviar feedback",
     "sent": "Feedback enviado, obrigado!"
   },
   "survey": "Estudo: {name}",
   "submissions": {
-    "_": "Dia da recordação",
-    "title": "Dias de recordação",
+    "_": "Dia da recordatório",
+    "title": "Dias de recordatório",
     "all": "todos",
     "past": "Recordações anteriores",
     "none": "Você ainda não tem recordações anteriores.",
-    "count": "Número da recordação: {count}"
+    "count": "Número da recordatório: {count}"
   },
   "start": {
-    "_": "Iniciar recordação",
-    "another": "Iniciar outra recordação"
+    "_": "Iniciar recordatório",
+    "another": "Iniciar outra recordatório"
   },
   "continue": "Continuar",
   "abort": {
     "_": "Abortar",
-    "label": "Abortar recordação",
-    "confirm": "Abortar recordação atual?"
+    "label": "Abortar recordatório",
+    "confirm": "Abortar recordatório atual?"
   },
   "surveyInfo": {
-    "recall": "Recordação: {number}"
+    "recall": "Recordatório: {number}"
   },
   "menu": {
     "title": "Painel de revisão",
@@ -89,7 +89,7 @@
   "actions": {
     "feedback": "Feedback dietético",
     "next": "Continuar",
-    "submit": "Enviar recordação",
+    "submit": "Enviar recordatório",
     "addMeal": "Adicionar refeição",
     "deleteFood": "Excluir alimento",
     "deleteMeal": "Excluir refeição",
