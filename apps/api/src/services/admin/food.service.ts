@@ -23,6 +23,7 @@ import {
   Op,
   SystemLocale,
 } from '@intake24/db';
+import { CacheKey } from '../core/redis/cache';
 
 function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
@@ -208,6 +209,13 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     if (!main || !associatedFoods || !portionSizeMethods)
       throw new NotFoundError();
 
+    const foodCacheKeys: CacheKey[] = [
+      `food-attributes:${main.code}`,
+      `food-entry:${localeCode}:${main.code}`,
+      `food-all-categories:${main.code}`,
+      `food-parent-categories:${main.code}`,
+    ];
+
     await db.foods.transaction(async (transaction) => {
       const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
 
@@ -252,17 +260,19 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
       await Promise.all(promises);
 
-      if (input.main?.code && input.main.code !== main.code)
+      if (input.main?.code && input.main.code !== main.code) {
         await Food.update({ code: input.main.code }, { where: { code: main.code }, transaction });
+        foodCacheKeys.push(
+          `food-attributes:${input.main.code}`,
+          `food-entry:${localeCode}:${input.main.code}`,
+          `food-all-categories:${input.main.code}`,
+          `food-parent-categories:${input.main.code}`,
+        );
+      }
     });
 
     await Promise.all([
-      cache.forget([
-        `food-attributes:${input.main?.code}`,
-        `food-entry:${localeCode}:${input.main?.code}`,
-        `food-all-categories:${input.main?.code}`,
-        `food-parent-categories:${input.main?.code}`,
-      ]),
+      cache.forget(foodCacheKeys),
       cache.push('indexing-locales', localeCode),
     ]);
 

@@ -14,7 +14,7 @@ export type CategoryInput = Pick<CategoryAttributes, 'code' | 'name'> & {
 
 export type CategoryLocalInput = {
   name: string;
-  main: {
+  main?: {
     code: string;
     name: string;
     isHidden: boolean;

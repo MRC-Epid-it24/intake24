@@ -20,7 +20,6 @@ export type CacheKeyPrefix =
   | 'food-parent-categories'
   | 'survey-search-settings'
   | 'user-submissions';
-export type CacheKeyDoublePrefix = 'food-entry';
 export type CacheKey =
   | `${CacheKeyPrefix}:${string}`
   | `${CacheKeyPrefix}:${string}:${string}`
