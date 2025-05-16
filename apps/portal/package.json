@@ -54,7 +54,7 @@
     "laravel-vite-plugin": "^1.2.0",
     "nodemon": "^3.1.10",
     "nodemon-webpack-plugin": "^4.8.2",
-    "npm-run-all2": "^7.0.2",
+    "npm-run-all2": "^8.0.2",
     "resolve-url-loader": "^5.0.0",
     "rimraf": "^6.0.1",
     "sass": "^1.87.0",
