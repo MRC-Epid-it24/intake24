@@ -1,28 +1,20 @@
+import type { Request } from 'express';
 import type { ExtendedFieldValidationError } from '../errors';
 import { initServer } from '@ts-rest/express';
-import ms from 'ms';
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import type { SinglePrompt } from '@intake24/common/prompts';
-import type { TokenPayload } from '@intake24/common/security';
 import type { SurveyStatus } from '@intake24/common/surveys';
 import { flattenSchemeWithSection, groupSchemeMultiPrompts, isMealSection } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
 import { Survey } from '@intake24/db';
 
 export function surveyRespondent() {
-  const ratingRateLimiter = ioc.cradle.rateLimiter.createGenericMiddleware('rating', {
-    message: 'You have recently sent feedback.',
+  const ratingRateLimiter = ioc.cradle.rateLimiter.createMiddleware('rating', {
+    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.rating'),
     skipFailedRequests: true,
-    keyGenerator: (req) => {
-      const identifier = (req.user as TokenPayload | undefined)?.userId ?? req.ip;
-      const type = typeof req.body.type === 'string' ? `rating-${req.body.type}` : 'rating';
-      return `${type}:${identifier}`;
-    },
-    windowMs: ms('15m'),
-    limit: 1,
   });
   const cache = ioc.cradle.cache;
   const surveyService = ioc.cradle.surveyService;

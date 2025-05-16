@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import type { SurveyRatingRequest } from '@intake24/common/types/http';
 import { SurveySubmission } from '@intake24/db';
@@ -59,7 +60,11 @@ export default () => {
     );
   });
 
-  it('should return 200', async () => {
+  it('should return 200 (existing submission)', async () => {
     await suite.sharedTests.assertAcknowledged('post', url, { bearer: 'respondent', input });
+  });
+
+  it('should return 200 (job delayed submission)', async () => {
+    await suite.sharedTests.assertAcknowledged('post', url, { bearer: 'respondent', input: { ...input, submissionId: randomUUID() } });
   });
 };

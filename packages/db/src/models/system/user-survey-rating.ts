@@ -17,7 +17,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import { Survey, SurveySubmission, User } from '.';
+import { Survey, User } from '.';
 import BaseModel from '../model';
 
 @Scopes(() => ({
@@ -63,9 +63,7 @@ export default class UserSurveyRating extends BaseModel<
   @Column({
     allowNull: true,
     type: DataType.UUID,
-    unique: 'user_survey_rating',
   })
-  @ForeignKey(() => SurveySubmission)
   declare submissionId: CreationOptional<string | null>;
 
   @Column({
@@ -91,9 +89,6 @@ export default class UserSurveyRating extends BaseModel<
 
   @BelongsTo(() => Survey, 'surveyId')
   declare survey?: NonAttribute<Survey>;
-
-  @BelongsTo(() => SurveySubmission, 'submissionId')
-  declare submission?: NonAttribute<SurveySubmission>;
 }
 
 export type UserSurveyRatingAttributes = Attributes<UserSurveyRating>;

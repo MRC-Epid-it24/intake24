@@ -4,5 +4,6 @@
   "password": "Password reset link has been recently requested, try again later.",
   "verify": "Email verification link has been recently requested, try again later.",
   "generateUser": "New user has just been generated, try again later.",
-  "feedback": "You have recently requested the feedback output, try again later."
+  "feedback": "You have recently requested the feedback output, try again later.",
+  "rating": "You have recently sent feedback, try again later."
 }

@@ -9,7 +9,7 @@ export type RateLimit = {
 };
 
 export type RateLimits = Record<
-  'generic' | 'login' | 'password' | 'verify' | 'generateUser' | 'feedback',
+'generic' | 'login' | 'password' | 'verify' | 'generateUser' | 'feedback' | 'rating',
   Partial<Options>
 >;
 
@@ -48,6 +48,10 @@ const rateLimiterConfig: RateLimiterConfig = {
   feedback: {
     windowMs: ms(process.env.RATE_LIMITER_FEEDBACK_WINDOW || '1m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_FEEDBACK_LIMIT || '1', 10),
+  },
+  rating: {
+    windowMs: ms(process.env.RATE_LIMITER_RATING_WINDOW || '15m'),
+    limit: Number.parseInt(process.env.RATE_LIMITER_RATING_LIMIT || '1', 10),
   },
 };
 

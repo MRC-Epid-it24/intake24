@@ -156,3 +156,25 @@ Maximum number of requests that can be made within the specified time window.
 - dotenv var: `RATE_LIMITER_FEEDBACK_LIMIT`
 - type: `number`
 - default: `1`
+
+## Survey / feedback ratings
+
+Rate limit settings for `/api/surveys/:surveyId/rating`.
+
+### Window
+
+Time window to track the requests.
+
+- object-path: `feedback.windowMs`
+- dotenv var: `RATE_LIMITER_RATING_WINDOW`
+- type: `string`
+- default: `'15m'`
+
+### Limit
+
+Maximum number of requests that can be made within the specified time window.
+
+- object-path: `feedback.limit`
+- dotenv var: `RATE_LIMITER_RATING_LIMIT`
+- type: `number`
+- default: `1`
