@@ -40,6 +40,19 @@
             <v-list-item-title>{{ linkedFood.text }}</v-list-item-title>
           </v-list-item>
         </v-list>
+        <v-list v-if="customPromptAnswers.length" class="px-4" color="grey-lighten-4">
+          <v-list-subheader>Please select your preferences</v-list-subheader>
+          <v-divider />
+          <v-list-item v-for="(answer, index) in customPromptAnswers" :key="index" class="ps-0" density="compact">
+            <v-checkbox
+              v-model="options[index]"
+              class="custom-checkbox"
+              density="compact"
+              :label="String(answer)"
+              :value="answer"
+            />
+          </v-list-item>
+        </v-list>
       </v-card>
     </v-card-text>
     <template #actions>
@@ -63,7 +76,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import type { EncodedFood } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -82,6 +95,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['action', 'update:modelValue']);
+
+// Reactive state for "options"
+const options = ref<string[]>([]);
 
 const { i18n: { t }, translate } = useI18n();
 const { action, translatePrompt, type } = usePromptUtils(props, { emit });
@@ -146,11 +162,15 @@ const linkedFoods = computed(() =>
   }),
 );
 
+const customPromptAnswers = computed(() => {
+  const answers = props.sabFood.food.customPromptAnswers?.['sab-checkbox-list-prompt'];
+  return Array.isArray(answers) ? answers.map(answer => answer) : [];
+});
+
 const quantity = computed(() => getQuantity(props.sabFood.food));
 const serving = computed(() => {
   const amount = getPortionWeight(props.sabFood.food);
   const unit = getUnit(props.sabFood.food);
-
   return t(`prompts.${type.value}.serving`, { amount: `${amount} ${unit}` });
 });
 const servingQuantity = computed(() => t(`prompts.${type.value}.quantity`, { quantity: getQuantity(props.sabFood.food) }));
@@ -176,7 +196,7 @@ const promptI18n = computed(() => ({
   serving: serving.value,
   quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
+  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'some']),
 }));
 
 onMounted(async () => {
@@ -201,4 +221,10 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.custom-checkbox {
+  height: 30px; /* Adjust the height as needed */
+  line-height: 30px; /* Align the label vertically */
+  padding: 0; /* Remove extra padding */
+}
+</style>
