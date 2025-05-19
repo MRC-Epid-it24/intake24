@@ -243,6 +243,7 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         useGraph: false,
         conditions,
         amPmToggle: false,
+        ui: 'md-clock',
       };
     default:
       // Type system infers that SinglePromptV1 component type cannot be, e.g., 'food-selection-prompt',

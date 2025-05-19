@@ -120,6 +120,7 @@ export const timePickerPrompt: Prompts['time-picker-prompt'] = copy({
   allowedMinutes: 5,
   amPmToggle: false,
   format: '24hr',
+  ui: 'md-clock',
 });
 
 export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({

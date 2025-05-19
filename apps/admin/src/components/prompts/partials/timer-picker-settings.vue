@@ -8,6 +8,13 @@
     </v-toolbar>
     <v-card-text class="d-flex flex-column gr-6">
       <v-select
+        v-model="ui"
+        hide-details="auto"
+        :items="uiStyles"
+        :label="$t('survey-schemes.prompts.timePicker.ui._')"
+        variant="outlined"
+      />
+      <v-select
         v-model="allowedMinutes"
         hide-details="auto"
         :items="[1, 5, 10, 15, 20, 30]"
@@ -64,11 +71,17 @@ defineOptions({ name: 'TimerPickerSettings' });
 const allowedMinutes = defineModel('allowedMinutes', { type: Number as PropType<TimePicker['allowedMinutes']> });
 const amPmToggle = defineModel('amPmToggle', { type: Boolean as PropType<TimePicker['amPmToggle']> });
 const format = defineModel('format', { type: String as PropType<TimePicker['format']> });
+const ui = defineModel('ui', { type: String as PropType<TimePicker['ui']> });
 
 const { i18n } = useI18n();
 
 const formats = ['24hr', 'ampm'].map(item => ({
   title: i18n.t(`survey-schemes.prompts.timePicker.format.${item}`),
+  value: item,
+}));
+
+const uiStyles = ['digital', 'md-clock'].map(item => ({
+  title: i18n.t(`survey-schemes.prompts.timePicker.ui.${item}`),
   value: item,
 }));
 </script>
