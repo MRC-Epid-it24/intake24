@@ -474,6 +474,11 @@
         "_": "Format de l'heure",
         "ampm": "AM/PM",
         "24hr": "24-heures"
+      },
+      "ui": {
+        "_": "Time picker UI",
+        "digital": "Digital Picker",
+        "md-clock": "Material Design Clock"
       }
     },
     "validation": {
