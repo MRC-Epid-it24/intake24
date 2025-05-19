@@ -3,10 +3,11 @@
     <v-row>
       <v-col cols="12" md="6">
         <time-picker-settings
-          v-bind="{ allowedMinutes, amPmToggle, format }"
+          v-bind="{ allowedMinutes, amPmToggle, format, ui }"
           @update:allowed-minutes="update('allowedMinutes', $event)"
           @update:am-pm-toggle="update('amPmToggle', $event)"
           @update:format="update('format', $event)"
+          @update:ui="update('ui', $event)"
         />
       </v-col>
     </v-row>
@@ -31,6 +32,10 @@ const props = defineProps({
   },
   format: {
     type: String as PropType<Prompts['meal-time-prompt']['format']>,
+    required: true,
+  },
+  ui: {
+    type: String as PropType<Prompts['meal-time-prompt']['ui']>,
     required: true,
   },
 });
