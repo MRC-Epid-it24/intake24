@@ -1,13 +1,12 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-card-text class="pt-2 time-picker">
-      <v-time-picker
+    <v-card-text class="pt-2">
+      <component
+        :is="`time-picker-${prompt.ui}`"
         v-model="state"
         :allowed-minutes="allowedMinutes"
-        :ampm-in-title="prompt.amPmToggle"
-        class="pa-0 mx-auto"
+        :am-pm-toggle="prompt.amPmToggle"
         :format="prompt.format"
-        :landscape="$vuetify.display.smAndUp"
       />
     </v-card-text>
     <template #actions>
@@ -59,9 +58,14 @@ import type { PropType } from 'vue';
 import { computed } from 'vue';
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
 import type { MealState, MealTime } from '@intake24/common/surveys';
+import { timePickers } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
+
+defineOptions({
+  components: { ...timePickers },
+});
 
 const props = defineProps({
   ...createBasePromptProps<'meal-time-prompt'>(),
