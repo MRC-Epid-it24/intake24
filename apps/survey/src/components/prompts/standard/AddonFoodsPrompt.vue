@@ -197,8 +197,8 @@ function updatePortionSize(foodId: string, idx: number) {
   update();
 };
 
-function updateConfirmed(foodId: string, idx: number, confirmed: boolean | null) {
-  foods.value[foodId][idx].confirmed = !!confirmed;
+function updateConfirmed(foodId: string, idx: number, confirmed?: boolean | null) {
+  foods.value[foodId][idx].confirmed = typeof confirmed === 'boolean' ? confirmed : null;
 
   if (confirmed === false) {
     foods.value[foodId][idx].data = null;
