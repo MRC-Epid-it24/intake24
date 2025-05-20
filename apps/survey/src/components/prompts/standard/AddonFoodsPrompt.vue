@@ -65,7 +65,7 @@
               <v-select
                 v-model="addon.portionSize.quantity"
                 density="compact"
-                :disabled="addon.confirmed === false || !addon.data"
+                :disabled="addon.confirmed === false || !addon.data || addon.portionSize.unit?.name === 'unknown'"
                 hide-details="auto"
                 :items="[0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
                 :label="promptI18n.quantity"
@@ -158,8 +158,10 @@ const addonFoodUnits = computed(() => addonFoods.value.reduce<Record<string, { c
 }, {}));
 
 function isAddonFoodValid(food: PromptStates['addon-foods-prompt']['foods'][string][number]) {
-  return !!(food.confirmed === false
-    || (food.data && food.portionSize.unit && food.portionSize.quantity > 0));
+  const unitValid = (food.portionSize.unit && food.portionSize.quantity > 0)
+    || (food.portionSize.unit?.name === 'unknown' && food.portionSize.quantity === 0);
+
+  return !!(food.confirmed === false || (food.data && unitValid));
 };
 
 const isValid = computed(() => Object.values(foods.value).every(foods => foods.every(isAddonFoodValid)));
