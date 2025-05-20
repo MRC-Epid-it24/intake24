@@ -39,7 +39,7 @@ describe('input sanitation middleware', () => {
           message: { en: 'Invalid answer<iframe//src=jAva&Tab;script:alert(3)>' },
         },
         label: {
-          en: '<iframe src="https://www.youtube.com/embed/gdsgdf" width="640" height="360" frameborder="0" allowfullscreen="allowfullscreen"></iframe>',
+          en: '<iframe allowfullscreen="allowfullscreen" frameborder="0" height="360" width="640" src="https://www.youtube.com/embed/gdsgdf"></iframe>',
         },
         options: {
           en: [
