@@ -24,12 +24,17 @@ export const PortionSizeMethodTypes = [
   'pizza',
   'milk-in-a-hot-drink',
   'direct-weight',
+  'unknown',
 ] as const;
 
 export type PkgPortionSizeMethodType = (typeof PortionSizeMethodTypes)[number];
 
 export interface PkgDirectWeightPsm extends PkgPortionSizeMethodBase {
   method: 'direct-weight';
+}
+
+export interface PkgUnknownPsm extends PkgPortionSizeMethodBase {
+  method: 'unknown';
 }
 
 export interface PkgPortionSizeMethodBase {
@@ -43,6 +48,7 @@ export interface PkgAsServedPsm extends PkgPortionSizeMethodBase {
   method: 'as-served';
   servingImageSet: string;
   leftoversImageSet?: string;
+  multiple?: boolean;
 }
 
 export interface PkgGuideImagePsm extends PkgPortionSizeMethodBase {
@@ -88,16 +94,17 @@ export interface PkgMilkInHotDrinkPsm extends PkgPortionSizeMethodBase {
   method: 'milk-in-a-hot-drink';
 }
 
-export type PkgPortionSizeMethod
-  = | PkgAsServedPsm
-    | PkgGuideImagePsm
-    | PkgDrinkScalePsm
-    | PkgStandardPortionPsm
-    | PkgCerealPsm
-    | PkgMilkOnCerealPsm
-    | PkgPizzaPsm
-    | PkgMilkInHotDrinkPsm
-    | PkgDirectWeightPsm;
+export type PkgPortionSizeMethod =
+  | PkgAsServedPsm
+  | PkgGuideImagePsm
+  | PkgDrinkScalePsm
+  | PkgStandardPortionPsm
+  | PkgCerealPsm
+  | PkgMilkOnCerealPsm
+  | PkgPizzaPsm
+  | PkgMilkInHotDrinkPsm
+  | PkgDirectWeightPsm
+  | PkgUnknownPsm;
 
 export interface PkgAssociatedFood {
   foodCode?: string;

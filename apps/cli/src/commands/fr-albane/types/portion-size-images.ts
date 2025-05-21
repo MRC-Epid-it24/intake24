@@ -1,7 +1,9 @@
 export interface AlbanePortionSizeImage {
   owner: string;
   copyright: string;
+  copyrightV0: string;
   updateYear: string;
+  order: string;
   pictureId: string;
   name: string;
   portionId: string;
@@ -10,5 +12,6 @@ export interface AlbanePortionSizeImage {
   edible: string;
   weight: string;
   edibleWeight: string;
-  comment: string;
+  paperInstructions: string;
+  intake24Instructions: string;
 }

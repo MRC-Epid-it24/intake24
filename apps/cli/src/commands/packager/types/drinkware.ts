@@ -27,4 +27,5 @@ export interface PkgDrinkwareSet {
   description: string;
   selectionImageMapId: string;
   scales: Record<number, PkgDrinkScale>;
+  label?: Record<string, string>;
 }

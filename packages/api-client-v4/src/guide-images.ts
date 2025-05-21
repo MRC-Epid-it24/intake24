@@ -18,10 +18,12 @@ export class GuideImageApiV4 {
     id: string,
     description: string,
     imageMapId: string,
+    label?: Record<string, string>,
   ): Promise<GuideImage> {
     return this.baseClient.post<GuideImage>(GuideImageApiV4.apiPath, {
       id,
       description,
+      label,
       imageMapId,
     });
   }
@@ -30,10 +32,12 @@ export class GuideImageApiV4 {
     id: string,
     description: string,
     objects: GuideImageInputObject[],
+    label?: Record<string, string>,
   ): Promise<GuideImage> {
     return this.baseClient.put<GuideImage>(`${GuideImageApiV4.apiPath}/${id}`, {
       id,
       description,
+      label,
       objects,
     });
   }
