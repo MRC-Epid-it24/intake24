@@ -4,9 +4,11 @@ import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 
 import path from 'node:path';
+
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues, partition, sortBy, trim } from 'lodash';
 import removeBOM from 'remove-bom-stream';
+import * as XLSX from 'xlsx';
 
 import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
 import {
@@ -111,10 +113,18 @@ export class FrenchAlbaneLocaleBuilder {
     return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
   }
 
+  private readXLSX<T>(relativePath: string, options?: XLSX.Sheet2JSONOpts, sheetName?: string): T[] {
+    const filePath = path.join(this.sourceDirPath, relativePath);
+    const workbook = XLSX.readFile(filePath);
+    const name = sheetName ?? workbook.SheetNames[0];
+    const sheet = workbook.Sheets[name];
+    return XLSX.utils.sheet_to_json(sheet, options) as T[];
+  }
+
   private async readFoodCategories(): Promise<void> {
     this.foodCategories = {};
 
-    const categoryRecords = await this.readJSON<AlbaneFoodCategoryRow[]>('json/CATEGORIES_I24_FOOD.json');
+    const categoryRecords = this.readXLSX<AlbaneFoodCategoryRow>('CATEGORIES_I24_FOOD.xlsx');
 
     for (const row of categoryRecords) {
       const categoryCodes: string[] = [];
@@ -136,25 +146,23 @@ export class FrenchAlbaneLocaleBuilder {
     this.categoryNames = {};
     const missingTranslations: string[] = [];
 
-    await this.readCSV(
-      'CATEGORIES_I24_LIST.csv',
-      (data) => {
-        const trCol1 = data[1];
-        const trCol2 = data[3];
-        const trCol3 = data[5];
-        const catCode = data[7];
+    const rows = this.readXLSX<Record<number, string>>('CATEGORIES_I24_LIST.xlsx', { header: 1, range: 1 });
 
-        if (catCode) {
-          const translatedName = trCol1 || trCol2 || trCol3;
+    for (const row of rows) {
+      const trCol1 = row[1];
+      const trCol2 = row[3];
+      const trCol3 = row[5];
+      const catCode = row[7];
 
-          if (translatedName)
-            this.categoryNames![catCode] = translatedName;
-          else
-            missingTranslations.push(catCode);
-        }
-      },
-      { headers: false, skipLines: 1 },
-    );
+      if (catCode) {
+        const translatedName = trCol1 || trCol2 || trCol3;
+
+        if (translatedName)
+          this.categoryNames![catCode] = translatedName;
+        else
+          missingTranslations.push(catCode);
+      }
+    }
 
     if (missingTranslations.length > 0) {
       this.logger.warn(
@@ -179,9 +187,9 @@ export class FrenchAlbaneLocaleBuilder {
       return synonyms;
     }
 
-    this.sourceFoodRecords = await this.readJSON<AlbaneFoodListRow[]>('json/FDLIST.json');
+    this.sourceFoodRecords = this.readXLSX<AlbaneFoodListRow>('FDLIST_EN.xlsx');
 
-    const foodSynonymRecords = await this.readJSON<AlbaneAlternativeDescriptionRow[]>('json/ALTERNATIVE_FOOD_DESCRIPTION.json');
+    const foodSynonymRecords = this.readXLSX<AlbaneAlternativeDescriptionRow>('ALTERNATIVE_FOOD_DESCRIPTION.xlsx');
 
     this.foodSynonyms = Object.fromEntries(
       foodSynonymRecords.map(r => ([r.A_CODE, getSynonyms(r, 'A_')]) as [string, string[]]).filter(a => a[1].length > 0),
@@ -380,7 +388,7 @@ export class FrenchAlbaneLocaleBuilder {
   private async readAssociatedFoodPrompts(): Promise<void> {
     this.associatedFoodPrompts = {};
 
-    const afpRows = await this.readJSON<AlbaneAfpRow[]>('json/ASSOCIATED_FOOD_PROMPTS.json');
+    const afpRows = this.readXLSX<AlbaneAfpRow>('ASSOCIATED_FOOD_PROMPTS.xlsx', { header: ['code', 'label', 'categoryCode1', 'promptText1', 'categoryCode2', 'promptText2', 'categoryCode3', 'promptText3', 'genericName'], range: 1 });
 
     for (let i = 0; i < afpRows.length; i++) {
       const row = afpRows[i];
@@ -388,18 +396,18 @@ export class FrenchAlbaneLocaleBuilder {
       const prompts: PkgAssociatedFood[] = [];
 
       // Just sense checking
-      if (row.code.length === 0) {
+      if (!row.code) {
         logger.warn(`Food code column empty in row ${i + 1} of the associated food prompts file`);
         continue;
       }
 
-      if (row.genericName.length === 0) {
+      if (!row.genericName) {
         logger.warn(`Generic name column empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
         continue;
       }
 
-      if (row.categoryCode1.length > 0) {
-        if (row.promptText1.length === 0) {
+      if (row.categoryCode1) {
+        if (!row.promptText1) {
           logger.warn(`Category code defined but prompt text 1 column is empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
           continue;
         }
@@ -412,8 +420,8 @@ export class FrenchAlbaneLocaleBuilder {
         });
       }
 
-      if (row.categoryCode2.length > 0) {
-        if (row.promptText2.length === 0) {
+      if (row.categoryCode2) {
+        if (!row.promptText2) {
           logger.warn(`Category code defined but prompt text 2 column is empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
           continue;
         }
@@ -426,8 +434,8 @@ export class FrenchAlbaneLocaleBuilder {
         });
       }
 
-      if (row.categoryCode3.length > 0) {
-        if (row.promptText3.length === 0) {
+      if (row.categoryCode3) {
+        if (!row.promptText3) {
           logger.warn(`Category code defined but prompt text 3 column is empty in row ${i + 1} (Albane food code ${row.code}) of the associated food prompts file`);
           continue;
         }
@@ -446,7 +454,7 @@ export class FrenchAlbaneLocaleBuilder {
 
   private async readFacetFlags(): Promise<void> {
     const facetsRows
-      = (await this.readJSON<AlbaneFacetsRow[]>('json/FACETS.json'));
+      = this.readXLSX<AlbaneFacetsRow>('FACETS.xlsx');
 
     this.facetFlags = {};
 
@@ -480,30 +488,25 @@ export class FrenchAlbaneLocaleBuilder {
   private async readPortionSizeImages(): Promise<void> {
     this.portionSizeImages = [];
 
-    await this.readCSV(
-      path.join('List.Photos_HHM_Shapes_INCA3_v06082024.csv'),
-      (data) => {
-        if (data.fileName && data.pictureId)
-          this.portionSizeImages!.push(data);
-      },
-      {
-        headers: [
-          'owner',
-          'copyright',
-          'updateYear',
-          'pictureId',
-          'name',
-          'portionId',
-          'fileName',
-          'rawCooked',
-          'edible',
-          'weight',
-          'edibleWeight',
-          'comment',
-        ],
-        skipLines: 1,
-      },
-    );
+    const data = this.readXLSX<AlbanePortionSizeImage>('List.Photos_HHM_Shapes_Albane_instructions_envoiCambridge.xlsx', { header: [
+      'owner',
+      'copyright',
+      'updateYear',
+      'pictureId',
+      'name',
+      'portionId',
+      'fileName',
+      'rawCooked',
+      'edible',
+      'weight',
+      'edibleWeight',
+      'comment',
+    ], range: 1 });
+
+    for (const row of data) {
+      if (row.fileName && row.pictureId)
+        this.portionSizeImages!.push(row);
+    }
   }
 
   private async readStandardUnits(): Promise<Dictionary<PkgStandardPortionPsm>> {
@@ -527,15 +530,7 @@ export class FrenchAlbaneLocaleBuilder {
       });
     }
 
-    const standardUnitRows = new Array<AlbaneStandardUnitRow>();
-
-    await this.readCSV(
-      path.join('US.csv'),
-      (data) => {
-        if (data.A_CODE)
-          standardUnitRows.push(data);
-      },
-    );
+    const standardUnitRows = this.readXLSX<AlbaneStandardUnitRow>('US.xlsx').filter(row => !!row.A_CODE);
 
     const groupedStandardUnits = groupBy(standardUnitRows, row => row.A_CODE);
 
@@ -555,15 +550,7 @@ export class FrenchAlbaneLocaleBuilder {
       throw new Error('Household measures map must be built before calling this function');
 
     this.portionSizeMethods = {};
-    const quantificationRows = new Array<AlbaneQuantificationRow>();
-
-    await this.readCSV(
-      path.join('FDQUANT.csv'),
-      (data) => {
-        if (data.A_CODE)
-          quantificationRows.push(data);
-      },
-    );
+    const quantificationRows = this.readXLSX<AlbaneQuantificationRow>('FDQUANT.xlsx').filter(row => !!row.A_CODE);
 
     const standardUnits = await this.readStandardUnits();
 

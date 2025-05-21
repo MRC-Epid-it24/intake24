@@ -41,7 +41,8 @@
     "remove-bom-stream": "^2.0.0",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",
