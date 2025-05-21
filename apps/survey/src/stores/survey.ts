@@ -577,13 +577,13 @@ export const useSurvey = defineStore('survey', {
     },
 
     addMeal(data: MealCreationState, locale: string) {
-      const { time: mealTime, ...mealRest } = data;
+      const { time, ...mealRest } = data;
 
       const id = getEntityId();
       const { time: defaultMealTime, ...defaultMealRest } = this.defaultSchemeMeals?.find(item => item.name[locale] === data.name[locale]) ?? {};
-      const defaultTime = mealTime ?? toMealTime(defaultMealTime ?? '8:00');
+      const defaultTime = time ?? toMealTime(defaultMealTime ?? '8:00');
 
-      const meal = createMeal({ ...defaultMealRest, ...mealRest, defaultTime }, this.parameters?.surveyScheme.settings.flow);
+      const meal = createMeal({ ...defaultMealRest, ...mealRest, defaultTime, time }, this.parameters?.surveyScheme.settings.flow);
       this.data.meals.push(meal);
 
       this.sortMeals();
