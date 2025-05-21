@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises';
+import fs, { constants } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -27,6 +27,7 @@ import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nut
 import logger from '@intake24/common-backend/services/logger/logger';
 import { Dictionary } from '@intake24/common/types';
 
+import { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 import typeConverters from './types/v4-type-conversions';
 
 export type Logger = typeof logger;
@@ -34,6 +35,7 @@ export type Logger = typeof logger;
 export const conflictResolutionOptions = ['skip', 'overwrite', 'abort'] as const;
 export const importerSpecificModulesExecutionOptions = [
   'as-served-images',
+  'verify-as-served',
   'image-maps',
   'guide-images',
   'drinkware-sets',
@@ -45,6 +47,7 @@ export const importerSpecificModulesExecutionOptions = [
   'global-categories',
   'local-categories',
   'enabled-local-foods',
+  'image-labels',
   'all',
 ] as const;
 
@@ -56,6 +59,8 @@ export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
   modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
   append: boolean;
+  asServedIds?: string[];
+  foodIds?: string[];
 }
 
 export type availableModules = {
@@ -91,6 +96,7 @@ export class ImporterV4 {
   private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
   private imageMaps: Record<string, PkgImageMap> | undefined;
   private guideImages: Record<string, PkgGuideImage> | undefined;
+  private portionSizeImageLabels: PkgPortionSizeImageLabels | undefined;
 
   constructor(
     apiClient: ApiClientV4,
@@ -110,6 +116,8 @@ export class ImporterV4 {
         && options.modulesForExecution.length !== 0
           ? options.modulesForExecution
           : defaultOptions.modulesForExecution,
+      asServedIds: options?.asServedIds,
+      foodIds: options?.foodIds,
     };
   }
 
@@ -126,6 +134,10 @@ export class ImporterV4 {
     'as-served-images': async () => {
       await this.readAsServedSets();
       await this.importAsServedSets();
+    },
+    'verify-as-served': async () => {
+      await this.readAsServedSets();
+      await this.verifyAsServedImages();
     },
     'image-maps': async () => {
       await this.readImageMaps();
@@ -162,6 +174,10 @@ export class ImporterV4 {
     'drinkware-sets': async () => {
       await this.readDrinkwareSets();
       await this.importDrinkwareSets();
+    },
+    'image-labels': async () => {
+      await this.readPortionSizeImageLabels();
+      await this.importPortionSizeImageLabels();
     },
     all: async () => {
       await this.readPackage();
@@ -346,12 +362,14 @@ export class ImporterV4 {
         guideImageId,
         guideImage.description,
         guideImage.imageMapId,
+        guideImage.label,
       );
 
       await this.apiClient.portionSize.guideImages.update(
         guideImageId,
         guideImage.description,
         objects,
+        guideImage.label,
       );
     }
   }
@@ -405,6 +423,7 @@ export class ImporterV4 {
         setId,
         pkgSet.description,
         path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, selectionImagePath),
+        pkgSet.label,
       );
 
       switch (createResult.type) {
@@ -426,8 +445,7 @@ export class ImporterV4 {
         }
         case 'overwrite': {
           logger.debug(`Updating existing as served set: ${setId}`);
-          logger.debug(`Update operation not implemented`);
-          break;
+          await this.apiClient.portionSize.asServed.update(setId, pkgSet.description, pkgSet.label);
         }
       }
     }
@@ -511,6 +529,7 @@ export class ImporterV4 {
       id: setId,
       imageMapId: pkgSet.selectionImageMapId,
       description: pkgSet.description,
+      label: pkgSet.label,
     });
 
     if (createResult.type === 'conflict') {
@@ -534,13 +553,36 @@ export class ImporterV4 {
       id: setId,
       imageMapId: pkgSet.selectionImageMapId,
       description: pkgSet.description,
+      label: pkgSet.label,
     }, this.toScaleUpdateInput(pkgSet.scales));
   }
 
   private async importAsServedSets(): Promise<void> {
     if (this.asServedSets !== undefined) {
-      await this.batchImport(this.asServedSets, 'as served image set', 10, obj =>
+      await this.batchImport(this.asServedSets.filter(obj => !this.options.asServedIds || this.options.asServedIds.includes(obj.id)), 'as served image set', 10, obj =>
         this.importAsServedSet(obj));
+    }
+  }
+
+  private async verifyAsServedImages(): Promise<void> {
+    if (this.asServedSets !== undefined) {
+      for (const set of this.asServedSets) {
+        let setNamePrinted = false;
+        for (const image of set.images) {
+          const imagePath = path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, image.imagePath);
+          try {
+            await fs.access(imagePath, constants.F_OK);
+          }
+          catch {
+            if (!setNamePrinted) {
+              logger.error(`Set ${set.id} (${set.description}):`);
+              setNamePrinted = true;
+            }
+
+            logger.error(`  "${image.imagePath}" missing or not readable`);
+          }
+        }
+      }
     }
   }
 
@@ -701,7 +743,7 @@ export class ImporterV4 {
 
   private async importGlobalFoods(): Promise<void> {
     if (this.globalFoods !== undefined) {
-      await this.batchImport(this.globalFoods, 'global food record', 50, food =>
+      await this.batchImport(this.globalFoods.filter(food => !this.options.foodIds || this.options.foodIds.includes(food.code)), 'global food record', 50, food =>
         this.importGlobalFood(food));
     }
   }
@@ -750,7 +792,7 @@ export class ImporterV4 {
     if (this.localFoods !== undefined) {
       for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
         logger.info(`Importing local food record(s) for locale ${localeId}...`);
-        await this.batchImport(localFoods, 'local food record', 50, food =>
+        await this.batchImport(localFoods.filter(food => !this.options.foodIds || this.options.foodIds.includes(food.code)), 'local food record', 50, food =>
           this.importLocalFood(localeId, food));
       }
     }
@@ -848,6 +890,29 @@ export class ImporterV4 {
     }
   }
 
+  private async importAsServedLabel(setId: string, label: Record<string, string>): Promise<void> {
+    const set = await this.apiClient.portionSize.asServed.get(setId);
+    if (set === null)
+      throw new Error(`Failed to update as served set ${setId} because it doesn't exist`);
+    await this.apiClient.portionSize.asServed.update(setId, set.description, label);
+  }
+
+  private async importGuideImageLabel(id: string, label: Record<string, string>): Promise<void> {
+    const guideImage = await this.apiClient.portionSize.guideImages.get(id);
+    if (guideImage === null)
+      throw new Error(`Failed to update guide image ${id} because it doesn't exist`);
+
+    await this.apiClient.portionSize.guideImages.update(id, guideImage.description, [], label);
+  }
+
+  private async importPortionSizeImageLabels(): Promise<void> {
+    if (this.portionSizeImageLabels !== undefined) {
+      await this.batchImportRecord(this.portionSizeImageLabels.asServed, 'as served label', 50, (id, obj) => this.importAsServedLabel(id, obj));
+      await this.batchImportRecord(this.portionSizeImageLabels.guide, 'guide image label', 50, (id, obj) => this.importGuideImageLabel(id, obj));
+      // await this.batchImportRecord(this.portionSizeImageLabels.drinkware, 'drinkware set label', 50, (id, obj) => this.importDrinkwareSetLabel(id, obj));
+    }
+  }
+
   private async readJSON<T>(relativePath: string): Promise<T | undefined> {
     const filePath = path.join(this.packageDirPath!, relativePath);
     logger.debug(`Reading JSON file: ${filePath}`);
@@ -923,6 +988,13 @@ export class ImporterV4 {
     logger.info('Loading guide images');
     this.guideImages = await this.readJSON(
       path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.GUIDE_IMAGE_FILE_NAME),
+    );
+  }
+
+  private async readPortionSizeImageLabels(): Promise<void> {
+    logger.info('Loading portion size image labels');
+    this.portionSizeImageLabels = await this.readJSON(
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.PORTION_SIZE_IMAGE_LABELS_FILE_NAME),
     );
   }
 

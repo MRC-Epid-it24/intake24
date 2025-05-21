@@ -313,6 +313,7 @@ const standardPortionPrompt = basePortionPrompt.extend({
 
 const unknownPrompt = basePortionPrompt.extend({
   component: z.literal('unknown-prompt'),
+  defaultWeight: z.number().optional(),
 });
 
 // Standard

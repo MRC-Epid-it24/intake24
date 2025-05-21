@@ -144,6 +144,7 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string
         parameters: {
           servingImageSet: psm.servingImageSet,
           leftoversImageSet: psm.leftoversImageSet,
+          multiple: psm.multiple,
         },
       };
     case 'guide-image':
@@ -211,6 +212,12 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string
       return {
         ...baseFields,
         method: 'direct-weight',
+        parameters: {},
+      };
+    case 'unknown':
+      return {
+        ...baseFields,
+        method: 'unknown',
         parameters: {},
       };
   }
