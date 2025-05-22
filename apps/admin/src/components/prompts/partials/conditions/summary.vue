@@ -14,8 +14,8 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
 
+import { computed, defineComponent } from 'vue';
 import { opToIconMap } from '@intake24/admin/composables';
 import type {
   Condition,
@@ -65,6 +65,8 @@ export default defineComponent({
           return i18n.t(`survey-schemes.conditions.summary.mealCompletion.${condition.property.check.completionState}`, { object });
         case 'foodCompletion':
           return i18n.t(`survey-schemes.conditions.summary.foodCompletion.${condition.property.check.completionState}`, { object });
+        case 'externalSource':
+          return i18n.t(`survey-schemes.conditions.summary.externalSource`, { object, ...condition.property.check });
         default:
           throw new Error(`Unexpected condition property type: ${condition.property.type}`);
       }

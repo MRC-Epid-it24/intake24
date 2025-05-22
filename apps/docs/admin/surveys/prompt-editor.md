@@ -89,6 +89,7 @@ Conditions tab defines list of conditions that needs to be met to display the pr
 | ----------------- | ------------------------------------------------ | -------------------------------------------------------------------------- |
 | `Drinks`          | deprecated (use `Number of foods` with category) | Number of drinks (in `meal` or `survey`)                                   |
 | `Energy`          | active                                           | Total energy (`food` / `meal` / `survey`)                                  |
+| `ExternalSource`  | active                                           | Status of external source data collection for particular food              |
 | `Flag`            | active                                           | Whether `food` / `meal` / `survey` has a specific flag                     |
 | `Food category`   | active                                           | Whether `food` has the category assigned                                   |
 | `Food completion` | active                                           | Whether `food` is completed                                                |

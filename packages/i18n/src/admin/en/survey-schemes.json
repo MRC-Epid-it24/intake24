@@ -125,7 +125,8 @@
       "recallNumber": "Recall number",
       "userField": "User field",
       "mealCompletion": "Completion state",
-      "foodCompletion": "Completion state"
+      "foodCompletion": "Completion state",
+      "externalSource": "External source"
     },
     "foodCompletion": {
       "freeEntryComplete": "Free text entry complete",
@@ -167,6 +168,7 @@
         "portionSizeComplete": "<em><strong>portion size estimation</em></strong> &nbsp;for the&nbsp; <em><strong>{object}</strong></em> is complete",
         "complete": "<em><strong>associated food prompts</em></strong> &nbsp;for the&nbsp; <em><strong>{object}</strong></em> are complete"
       },
+      "externalSource": "<em><strong>External source ({provider})</strong></em> &nbsp;for&nbsp; <em><strong>{object}</strong></em> &nbsp;is&nbsp; <em><strong>{state}</strong></em>",
       "flag": {
         "set": "flag <em><strong>{id}</strong></em> &nbsp;set in&nbsp; <em><strong>{object}</strong></em>",
         "notSet": "flag <em><strong>{id}</strong></em> &nbsp;not set in&nbsp; <em><strong>{object}</strong></em>"
@@ -370,6 +372,14 @@
         "_": "Source",
         "title": "Sources",
         "open-food-facts": "Open Food Facts"
+      },
+      "states": {
+        "_": "State",
+        "title": "States",
+        "false": "Not done",
+        "true": "Done",
+        "selected": "Selected",
+        "missing": "Missing"
       },
       "countries": {
         "_": "Country",

@@ -1,7 +1,7 @@
 <template>
   <v-card border flat>
     <v-toolbar color="grey-lighten-4">
-      <v-icon icon="fas fa-barcode" start />
+      <v-icon end icon="fas fa-barcode" />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.barcodes.title') }}
       </v-toolbar-title>
