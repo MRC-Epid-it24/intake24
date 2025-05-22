@@ -1,6 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import { z } from 'zod';
 import { foodTypes } from '../types/foods';
+import { externalSources } from './external-sources';
 
 export const conditionOpCodes = ['eq', 'ne', 'setEq', 'in', 'notIn', 'gte', 'gt', 'lte', 'lt'] as const;
 export type ConditionOpCode = typeof conditionOpCodes[number];
@@ -75,7 +76,6 @@ export const conditionOps = {
 };
 
 export const foodCompletionStateOptions = ['freeEntryComplete', 'searchComplete', 'portionSizeComplete', 'complete'] as const;
-
 export type FoodCompletionState = typeof foodCompletionStateOptions[number];
 
 const valueCheck = z.object({
@@ -168,6 +168,15 @@ const foodCompletionProperty = z.object({
   }),
 });
 
+const externalSourceProperty = z.object({
+  id: z.literal('externalSource'),
+  type: z.literal('externalSource'),
+  check: z.object({
+    provider: z.enum(externalSources),
+    state: z.boolean().or(z.enum(['selected', 'missing'])),
+  }),
+});
+
 const numberOfMealsProperty = z.object({
   id: z.literal('numberOfMeals'),
   type: z.literal('entityValue'),
@@ -228,6 +237,7 @@ export const foodProperties = z.discriminatedUnion('id', [
   foodCategoryProperty,
   tagProperty,
   foodCompletionProperty,
+  externalSourceProperty,
 ]);
 
 const surveyCondition = z.object({ object: z.literal('survey'), orPrevious: z.boolean(), property: surveyProperties });
@@ -258,6 +268,8 @@ export type ValuePropertyCheck = z.infer<typeof valueCheck>;
 export type BooleanPropertyCheck = z.infer<typeof booleanProperty.shape.check>;
 export type EntityValuePropertyCheck = z.infer<typeof numberOfFoodsProperty.shape.check> | z.infer<typeof numberOfMealsProperty.shape.check>;
 export type MealCompletionPropertyCheck = z.infer<typeof mealCompletionProperty.shape.check>;
+export type FoodCompletionPropertyCheck = z.infer<typeof foodCompletionProperty.shape.check>;
+export type ExternalSourcePropertyCheck = z.infer<typeof externalSourceProperty.shape.check>;
 export type FlagPropertyCheck = z.infer<typeof flagProperty.shape.check>;
 export type TagPropertyCheck = z.infer<typeof tagProperty.shape.check>;
 export type PromptAnswerPropertyCheck = z.infer<typeof promptAnswerProperty.shape.check>;
@@ -394,6 +406,14 @@ export const promptConditionDefaults: PromptConditionDefaults = {
   },
   food: {
     ...commonPropertyDefaults,
+    externalSource: {
+      id: 'externalSource',
+      type: 'externalSource',
+      check: {
+        provider: 'open-food-facts',
+        state: true,
+      },
+    },
     foodTopLevel: {
       id: 'foodTopLevel',
       ...booleanPropertyDefaults,

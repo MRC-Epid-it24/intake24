@@ -18,7 +18,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import { foodCompletionStateOptions } from '@intake24/common/prompts';
-import type { MealCompletionPropertyCheck } from '@intake24/common/prompts';
+import type { FoodCompletionPropertyCheck } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
 import { useCheck } from './use-check';
 
@@ -27,7 +27,7 @@ export default defineComponent({
 
   props: {
     modelValue: {
-      type: Object as PropType<MealCompletionPropertyCheck>,
+      type: Object as PropType<FoodCompletionPropertyCheck>,
       required: true,
     },
   },

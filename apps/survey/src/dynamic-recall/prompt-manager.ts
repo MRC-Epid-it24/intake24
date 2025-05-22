@@ -29,8 +29,8 @@ import {
   standardPortionComplete,
   unknownComplete,
 } from '@intake24/common/util/portion-size-checks';
-import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 
+import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import {
   addonFoodPromptCheck,
@@ -985,6 +985,13 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       if (completionState === undefined)
         return false;
       return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
+    }
+    case 'externalSource': {
+      const food = requireFood(condition.property.id);
+      const { provider, state } = condition.property.check;
+      const extSourceState = (food.external ?? {})[provider];
+
+      return typeof state === 'boolean' ? !!extSourceState : extSourceState?.type === state;
     }
     case 'foodCompletion': {
       const completionState = getFoodCompletionState(requireFood(condition.property.id));
