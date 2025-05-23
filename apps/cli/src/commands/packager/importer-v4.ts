@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises';
+import fs, { constants } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -34,6 +34,7 @@ export type Logger = typeof logger;
 export const conflictResolutionOptions = ['skip', 'overwrite', 'abort'] as const;
 export const importerSpecificModulesExecutionOptions = [
   'as-served-images',
+  'verify-as-served',
   'image-maps',
   'guide-images',
   'drinkware-sets',
@@ -126,6 +127,10 @@ export class ImporterV4 {
     'as-served-images': async () => {
       await this.readAsServedSets();
       await this.importAsServedSets();
+    },
+    'verify-as-served': async () => {
+      await this.readAsServedSets();
+      await this.verifyAsServedImages();
     },
     'image-maps': async () => {
       await this.readImageMaps();
@@ -541,6 +546,28 @@ export class ImporterV4 {
     if (this.asServedSets !== undefined) {
       await this.batchImport(this.asServedSets, 'as served image set', 10, obj =>
         this.importAsServedSet(obj));
+    }
+  }
+
+  private async verifyAsServedImages(): Promise<void> {
+    if (this.asServedSets !== undefined) {
+      for (const set of this.asServedSets) {
+        let setNamePrinted = false;
+        for (const image of set.images) {
+          const imagePath = path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, image.imagePath);
+          try {
+            await fs.access(imagePath, constants.F_OK);
+          }
+          catch {
+            if (!setNamePrinted) {
+              logger.error(`Set ${set.id} (${set.description}):`);
+              setNamePrinted = true;
+            }
+
+            logger.error(`  "${image.imagePath}" missing or not readable`);
+          }
+        }
+      }
     }
   }
 

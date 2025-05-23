@@ -213,6 +213,12 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string
         method: 'direct-weight',
         parameters: {},
       };
+    case 'unknown':
+      return {
+        ...baseFields,
+        method: 'unknown',
+        parameters: {},
+      };
   }
 }
 

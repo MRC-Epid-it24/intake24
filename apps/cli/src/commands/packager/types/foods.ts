@@ -24,12 +24,17 @@ export const PortionSizeMethodTypes = [
   'pizza',
   'milk-in-a-hot-drink',
   'direct-weight',
+  'unknown',
 ] as const;
 
 export type PkgPortionSizeMethodType = (typeof PortionSizeMethodTypes)[number];
 
 export interface PkgDirectWeightPsm extends PkgPortionSizeMethodBase {
   method: 'direct-weight';
+}
+
+export interface PkgUnknownPsm extends PkgPortionSizeMethodBase {
+  method: 'unknown';
 }
 
 export interface PkgPortionSizeMethodBase {
@@ -97,7 +102,8 @@ export type PkgPortionSizeMethod =
   | PkgMilkOnCerealPsm
   | PkgPizzaPsm
   | PkgMilkInHotDrinkPsm
-  | PkgDirectWeightPsm;
+  | PkgDirectWeightPsm
+  | PkgUnknownPsm;
 
 export interface PkgAssociatedFood {
   foodCode?: string;
