@@ -16,15 +16,7 @@ export const addonFoodsPrompt: Prompts['addon-foods-prompt'] = copy({
   type: 'standard',
   id: 'addon-foods-prompt',
   name: 'Addon foods prompt',
-  lookup: {
-    type: 'category',
-    value: '',
-  },
-  multiple: false,
-  trigger: {
-    type: 'tag',
-    value: '',
-  },
+  addons: [],
 });
 
 export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({

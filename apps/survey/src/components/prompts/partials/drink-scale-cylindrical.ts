@@ -1,5 +1,6 @@
 import { Line, Point, Polygon } from '@flatten-js/core';
-import { chunk, sortBy } from 'lodash';
+import chunk from 'lodash/chunk';
+import sortBy from 'lodash/sortBy';
 
 /*
  Cylindrical symmetry volume esimation method.

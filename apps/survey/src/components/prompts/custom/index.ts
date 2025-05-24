@@ -10,7 +10,8 @@ import TextareaPrompt from './textarea-prompt.vue';
 import TimePickerPrompt from './time-picker-prompt.vue';
 import YesNoPrompt from './yes-no-prompt.vue';
 
-export * from './aggregate-choice';
+export { default as AggregateChoicePrompt } from './aggregate-choice-prompt.vue';
+export * from './food-selection';
 
 export const customPrompts = {
   CheckboxListPrompt,

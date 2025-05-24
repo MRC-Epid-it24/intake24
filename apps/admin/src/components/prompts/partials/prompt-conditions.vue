@@ -91,19 +91,15 @@
 <script lang='ts'>
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
-import { mapValues } from 'lodash';
+import mapValues from 'lodash/mapValues';
 import { computed, defineComponent, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
-
 import { withIdList } from '@intake24/admin/util';
 import {
-
   conditionObjectHasProperty,
-
   conditionObjectIds,
   getConditionDefaults,
   getDefaultConditionProperty,
-
   promptConditionDefaults,
 } from '@intake24/common/prompts';
 import type { Condition, ConditionObjectId, ObjectPropertyId } from '@intake24/common/prompts';
@@ -154,7 +150,7 @@ export default defineComponent({
           allowedObjects.push('food');
       }
 
-      return allowedObjects.map (object => ({ object, title: t(`survey-schemes.conditions.object.${object}`) }));
+      return allowedObjects.map(object => ({ object, title: t(`survey-schemes.conditions.object.${object}`) }));
     });
 
     const propertySelectList = computed(() => {

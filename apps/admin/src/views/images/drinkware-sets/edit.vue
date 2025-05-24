@@ -181,7 +181,7 @@
 </template>
 
 <script lang="ts">
-import { mapValues } from 'lodash';
+import mapValues from 'lodash/mapValues';
 import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';

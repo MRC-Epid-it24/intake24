@@ -1,5 +1,6 @@
 import type { Dictionary } from 'vue-gtag';
 import type { SurveyState, SurveyStore } from '../stores';
+import type { PromptInstance } from './dynamic-recall';
 import type {
   ComponentType,
   Condition,
@@ -13,6 +14,7 @@ import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@i
 import type { CustomPromptAnswer, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
+
 import {
   asServedComplete,
   cerealComplete,
@@ -29,11 +31,7 @@ import {
   standardPortionComplete,
   unknownComplete,
 } from '@intake24/common/util/portion-size-checks';
-import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
-
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import {
-  addonFoodPromptCheck,
   findMeal,
   flagPromptCompletionFlag,
   foodComplete,
@@ -53,8 +51,8 @@ import {
   surveyPortionSizeComplete,
   surveySearchComplete,
 } from '@intake24/survey/util';
-import { filterFoodsForFoodSelectionPrompt } from '../components/prompts/custom/food-selection/food-selection';
 import { recallLog } from '../stores';
+import { filterFoodsForFoodSelectionPrompt, filterMealsForAggregateChoicePrompt } from './filters';
 
 function foodEnergy(energy: number, food: FoodState): number {
   if (food.linkedFoods.length)

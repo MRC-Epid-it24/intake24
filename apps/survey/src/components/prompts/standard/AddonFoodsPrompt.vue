@@ -173,17 +173,17 @@ function getAddonFoodsUnits(foodId: string, idx: number) {
 
 async function getAddonFoods() {
   const foodCodes: string[] = [];
-  if (props.prompt.lookup.type === 'food') {
-    foodCodes.push(props.prompt.lookup.value);
-  }
-  else {
-    const contents = await categoriesService.contents(props.localeId, props.prompt.lookup.value);
-    foodCodes.push(...contents.foods.map(({ code }) => code));
+  for (const addon of props.prompt.addons) {
+    if (addon.entity === 'food') {
+      foodCodes.push(addon.code);
+    }
+    else {
+      const contents = await categoriesService.contents(props.localeId, addon.code);
+      foodCodes.push(...contents.foods.map(({ code }) => code));
+    }
   }
 
-  return await Promise.all(
-    foodCodes.map(code => foodsService.getData(props.localeId, code)),
-  );
+  return await Promise.all([...new Set(foodCodes)].map(code => foodsService.getData(props.localeId, code)));
 }
 
 function update() {
