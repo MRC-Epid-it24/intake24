@@ -37,9 +37,10 @@ const sabOptions = ref<SabOptions>({});
 function onSabOptionsUpdate(newSabOptions: SabOptions): void {
   console.debug('Received sabOptions from child:', newSabOptions);
   sabOptions.value = newSabOptions;
-  // Remove portion size if serving checkbox is false
+  // Remove portion size and portion size method if serving checkbox is false
   if (!sabOptions.value.serving && sabFood?.food?.portionSize) {
     sabFood.food.portionSize = null;
+    sabFood.food.portionSizeMethodIndex = null;
     console.debug('sabFood.food.portionSize cleared');
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
