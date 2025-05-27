@@ -66,10 +66,9 @@
 </template>
 
 <script lang="ts">
-import { flatten } from 'lodash';
 import chunk from 'lodash/chunk';
+import flatten from 'lodash/flatten';
 import { computed, defineComponent, ref, watch } from 'vue';
-
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 

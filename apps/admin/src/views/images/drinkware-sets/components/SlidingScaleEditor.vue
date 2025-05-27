@@ -163,14 +163,13 @@
 
 <script lang="ts" setup>
 import { useElementSize } from '@vueuse/core';
-import { flatten, uniqueId } from 'lodash';
 import chunk from 'lodash/chunk';
+import flatten from 'lodash/flatten';
+import uniqueId from 'lodash/uniqueId';
 import { computed, onMounted, ref, toRef, useTemplateRef, watch } from 'vue';
-
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
-
 import { closestSegmentIndex, closestVertexIndex } from '../../math-helpers';
 
 defineOptions({ name: 'SlidingScaleEditor' });
