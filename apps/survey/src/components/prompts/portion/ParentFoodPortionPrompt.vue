@@ -68,7 +68,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref, toRaw } from 'vue';
+import { computed, ref } from 'vue';
 import type { EncodedFood } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
@@ -127,7 +127,6 @@ function updatePortion(val: number | null) {
 }
 
 function update() {
-  console.log(toRaw(state.value.portionSize));
   emit('update:modelValue', state.value);
 };
 </script>

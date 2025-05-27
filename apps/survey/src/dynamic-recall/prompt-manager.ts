@@ -1,5 +1,6 @@
 import type { Dictionary } from 'vue-gtag';
 import type { SurveyState, SurveyStore } from '../stores';
+import type { PromptInstance } from './dynamic-recall';
 import type {
   ComponentType,
   Condition,
@@ -29,11 +30,7 @@ import {
   standardPortionComplete,
   unknownComplete,
 } from '@intake24/common/util/portion-size-checks';
-
-import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import {
-  addonFoodPromptCheck,
   findMeal,
   flagPromptCompletionFlag,
   foodComplete,
@@ -53,8 +50,9 @@ import {
   surveyPortionSizeComplete,
   surveySearchComplete,
 } from '@intake24/survey/util';
-import { filterFoodsForFoodSelectionPrompt } from '../components/prompts/custom/food-selection/food-selection';
+import { flattenFoods } from '@intake24/survey/util/meal-food';
 import { recallLog } from '../stores';
+import { filterFoodsForFoodSelectionPrompt, filterForAddonFoods, filterMealsForAggregateChoicePrompt } from './prompt-filters';
 
 function foodEnergy(energy: number, food: FoodState): number {
   if (food.linkedFoods.length)
@@ -180,8 +178,10 @@ function checkSurveyStandardConditions(surveyStore: SurveyStore, prompt: Prompt)
   const { component } = prompt;
 
   switch (component) {
-    case 'addon-foods-prompt':
-      return !surveyStore.data.flags.includes(`${prompt.id}-complete`) && surveyStore.data.meals.some(meal => meal.foods.some(addonFoodPromptCheck(prompt)));
+    case 'addon-foods-prompt': {
+      const addons = filterForAddonFoods(surveyStore, prompt);
+      return surveyStore.data.meals.some(meal => !!flattenFoods(meal.foods).filter(food => addons[meal.id][food.id].length).length);
+    }
     case 'info-prompt':
       return !surveyStore.data.flags.includes(`${prompt.id}-acknowledged`);
     case 'submit-prompt':
@@ -255,8 +255,10 @@ function checkMealStandardConditions(surveyStore: SurveyStore, mealState: MealSt
       return prompt.prompts.some(item =>
         checkMealStandardConditions(surveyStore, mealState, withSelection, item),
       );
-    case 'addon-foods-prompt':
-      return !mealState.flags.includes(`${prompt.id}-complete`) && mealState.foods.some(addonFoodPromptCheck(prompt));
+    case 'addon-foods-prompt': {
+      const addons = filterForAddonFoods(surveyStore, prompt, mealState);
+      return !!flattenFoods(mealState.foods).filter(food => addons[mealState.id][food.id].length).length;
+    }
     case 'no-more-information-prompt':
       if (selection.mode === 'manual') {
         recallLog().promptCheck(
@@ -295,7 +297,8 @@ function checkMealStandardConditions(surveyStore: SurveyStore, mealState: MealSt
       return mealState.customPromptAnswers[prompt.id] === undefined;
   }
 }
-function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodState, withSelection: Selection | null, prompt: Prompt): boolean {
+function checkFoodStandardConditions(surveyStore: SurveyStore, mealState: MealState, foodState: FoodState, withSelection: Selection | null, prompt: Prompt): boolean {
+  const surveyState = surveyStore.$state;
   const { component } = prompt;
   const selection = withSelection || surveyState.data.selection;
 
@@ -676,7 +679,8 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
     }
 
     case 'addon-foods-prompt': {
-      return !foodState.flags.includes(`${prompt.id}-complete`) && addonFoodPromptCheck(prompt)(foodState);
+      const addons = filterForAddonFoods(surveyStore, prompt, mealState);
+      return !!flattenFoods([foodState]).filter(food => addons[mealState.id][food.id].length).length;
     }
 
     case 'associated-foods-prompt': {
@@ -749,9 +753,7 @@ function checkFoodStandardConditions(surveyState: SurveyState, foodState: FoodSt
     }
 
     case 'multi-prompt':
-      return prompt.prompts.some(item =>
-        checkFoodStandardConditions(surveyState, foodState, withSelection, item),
-      );
+      return prompt.prompts.some(item => checkFoodStandardConditions(surveyStore, mealState, foodState, withSelection, item));
 
     case 'recipe-builder-prompt': {
       if (foodState.type !== 'recipe-builder')
@@ -1136,7 +1138,7 @@ export default class PromptManager {
 
     return this.scheme.prompts.meals[section].find(
       prompt =>
-        checkFoodStandardConditions(state, foodState, withSelection, prompt)
+        checkFoodStandardConditions(this.store, mealState, foodState, withSelection, prompt)
         && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
     );
   }
@@ -1150,7 +1152,7 @@ export default class PromptManager {
 
     const foodsPrompt = this.scheme.prompts.meals.foods.find(
       prompt =>
-        checkFoodStandardConditions(state, foodState, withSelection, prompt)
+        checkFoodStandardConditions(this.store, mealState, foodState, withSelection, prompt)
         && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
     );
 
@@ -1162,7 +1164,7 @@ export default class PromptManager {
 
     return this.scheme.prompts.meals.foodsDeferred.find(
       prompt =>
-        checkFoodStandardConditions(state, foodState, withSelection, prompt)
+        checkFoodStandardConditions(this.store, mealState, foodState, withSelection, prompt)
         && checkPromptCustomConditions(this.store, mealState, foodState, prompt),
     );
   }

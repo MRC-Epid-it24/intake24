@@ -127,8 +127,13 @@ export type BasePortionPrompt = z.infer<typeof basePortionPrompt>;
 export const baseStandardPrompt = basePrompt.extend({ type: z.literal('standard') });
 export type BaseStandardPrompt = z.infer<typeof baseStandardPrompt>;
 
-export const addonFoodTriggers = ['any', 'afp', 'category', 'food', 'tag'] as const;
-export type AddonFoodTrigger = (typeof addonFoodTriggers)[number];
+const addonFood = z.object({
+  id: z.string().min(1),
+  entity: z.enum(['category', 'food']),
+  code: z.string(),
+  filter: condition.array(),
+});
+export type AddonFood = z.infer<typeof addonFood>;
 
 export const foodBrowser = z.object({
   categoriesFirst: z.record(z.enum(['browse', 'search']), z.boolean()),
@@ -312,15 +317,7 @@ const unknownPrompt = basePortionPrompt.extend({
 // Standard
 const addonFoodsPrompt = baseStandardPrompt.extend({
   component: z.literal('addon-foods-prompt'),
-  lookup: z.object({
-    type: z.enum(['category', 'food']),
-    value: z.string(),
-  }),
-  multiple: z.boolean(),
-  trigger: z.object({
-    type: z.enum(addonFoodTriggers),
-    value: z.string().nullable(),
-  }),
+  addons: addonFood.array(),
 });
 
 const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({

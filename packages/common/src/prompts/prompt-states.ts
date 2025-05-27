@@ -8,6 +8,7 @@ import type {
   RequiredLocaleTranslation,
 } from '../types';
 import type { FoodHeader, UserFoodData } from '../types/http';
+import type { AddonFood } from './prompts';
 
 export type AssociatedFoodPromptItem = {
   confirmed?: 'yes' | 'no';
@@ -154,6 +155,7 @@ export type PromptStates = {
       confirmed: boolean | null;
       data: UserFoodData | null;
       portionSize: PortionSizeStates['standard-portion'];
+      addon: AddonFood;
     }[]>;
   };
   'associated-foods-prompt': {

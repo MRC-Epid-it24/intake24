@@ -1,5 +1,4 @@
-import type { AddonFoodTrigger, Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState, MealState, Selection, SurveyState } from '@intake24/common/surveys';
+import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 
@@ -73,18 +72,6 @@ export function findMeal(meals: MealState[], id: string): MealState {
   const mealIndex = getMealIndexRequired(meals, id);
 
   return meals[mealIndex];
-}
-
-const addonFoodTriggers: Record<AddonFoodTrigger, (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => boolean> = {
-  afp: () => false, // TODO: implement
-  any: () => true,
-  category: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => !!(prompt.trigger.value && food.data.categories.includes(prompt.trigger.value)),
-  food: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => food.data.code === prompt.trigger.value,
-  tag: (food: EncodedFood, prompt: Prompts['addon-foods-prompt']) => !!(prompt.trigger.value && food.data.tags.includes(prompt.trigger.value)),
-};
-
-export function addonFoodPromptCheck(prompt: Prompts['addon-foods-prompt']) {
-  return (food: FoodState) => food.type === 'encoded-food' && addonFoodTriggers[prompt.trigger.type](food, prompt);
 }
 
 export function foodPortionSizeComplete(food: FoodState) {

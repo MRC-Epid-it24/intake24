@@ -1,10 +1,13 @@
 export { default as BarcodeSettings } from './barcode-settings.vue';
 export { default as basePrompt } from './base-prompt';
 export { default as Carousel } from './carousel.vue';
+export { default as ConditionItem } from './condition-item.vue';
+export { default as ConditionList } from './condition-list.vue';
 export { default as CounterSettings } from './counter-settings.vue';
 export { default as ExternalSourceSettings } from './external-source-settings.vue';
 export { default as foodBrowserProps } from './food-browser-props-mixin';
 export { default as FoodBrowserSettings } from './food-browser-settings.vue';
+export { default as FoodFilter } from './food-filter.vue';
 export { default as ImageMapSettings } from './image-map-settings.vue';
 export { default as PromptActions } from './prompt-actions.vue';
 export { default as PromptConditions } from './prompt-conditions.vue';

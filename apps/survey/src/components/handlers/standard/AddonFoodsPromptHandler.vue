@@ -18,8 +18,9 @@ import { computed } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState, PortionSizeParameters } from '@intake24/common/surveys';
 import { AddonFoodsPrompt } from '@intake24/survey/components/prompts/standard';
+import { filterForAddonFoods } from '@intake24/survey/dynamic-recall/prompt-filters';
 import { useSurvey } from '@intake24/survey/stores';
-import { addonFoodPromptCheck, getEntityId } from '@intake24/survey/util';
+import { flattenFoods, getEntityId } from '@intake24/survey/util';
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'addon-foods-prompt'>());
@@ -30,35 +31,39 @@ const { encodedFoodOptional: food, localeId } = useFoodPromptUtils();
 const { mealOptional: meal } = useMealPromptUtils();
 const survey = useSurvey();
 
+const addons = computed(() => filterForAddonFoods(survey, props.prompt, meal.value));
+
 const meals = computed(() => {
-  if (meal.value) {
+  const mealEntry = meal.value;
+
+  if (mealEntry) {
     // Food-level prompt
     const foodEntry = food.value;
     if (foodEntry?.id) {
       return [{
-        ...meal.value,
-        foods: [foodEntry].filter(addonFoodPromptCheck(props.prompt)),
+        ...mealEntry,
+        foods: [foodEntry].filter(food => addons.value[mealEntry.id][food.id].length),
       }].filter(meal => meal.foods.length);
     }
 
     // Meal-level prompt
     return [{
-      ...meal.value,
-      foods: meal.value.foods.filter(addonFoodPromptCheck(props.prompt)),
+      ...mealEntry,
+      foods: flattenFoods(mealEntry.foods).filter(food => addons.value[mealEntry.id][food.id].length),
     }].filter(meal => meal.foods.length);
   }
 
   // Survey-level prompt
   return survey.meals.map(meal => ({
     ...meal,
-    foods: meal.foods.filter(addonFoodPromptCheck(props.prompt)),
+    foods: flattenFoods(meal.foods).filter(food => addons.value[meal.id][food.id].length),
   })).filter(meal => meal.foods.length);
 });
 
 const getInitialState = computed(() => ({
   foods: meals.value.reduce<PromptStates['addon-foods-prompt']['foods']>((acc, meal) => {
     meal.foods.forEach((food) => {
-      acc[food.id] = [{
+      acc[food.id] = addons.value[meal.id][food.id].map(addon => ({
         confirmed: null,
         data: null,
         portionSize: {
@@ -69,7 +74,8 @@ const getInitialState = computed(() => ({
           servingWeight: 0,
           leftoversWeight: 0,
         },
-      }];
+        addon,
+      }));
     });
     return acc;
   }, {}),
@@ -78,11 +84,9 @@ const getInitialState = computed(() => ({
 const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 
 function commitAnswer() {
-  const searchTerm = `addon-foods-prompt:${props.prompt.lookup.type}:${props.prompt.lookup.value}`;
-
   for (const [foodId, addons] of Object.entries(state.value.foods)) {
-    const linkedFoods = addons.reduce<FoodState[]>((acc, addon) => {
-      const { confirmed, data, portionSize } = addon;
+    const linkedFoods = addons.reduce<FoodState[]>((acc, addonFood) => {
+      const { confirmed, data, portionSize, addon } = addonFood;
       if (confirmed === undefined) {
         console.warn('AddonFoodsPromptHandler: not confirmed or no food data!');
         return acc;
@@ -90,6 +94,8 @@ function commitAnswer() {
 
       if (confirmed === false || !data)
         return acc;
+
+      const searchTerm = `addon-foods-prompt:${addon.entity}:${addon.entity}`;
 
       const portionSizeMethodIndex = data.portionSizeMethods.findIndex(psm =>
         psm.method === portionSize.method
@@ -112,17 +118,7 @@ function commitAnswer() {
     }, []);
 
     survey.addLinkedFoods(foodId, linkedFoods);
-  }
-
-  const foodEntry = food.value;
-  if (foodEntry?.id) {
-    survey.addFoodFlag(foodEntry.id, `${props.prompt.id}-complete`);
-  }
-  else if (meal.value) {
-    survey.addMealFlag(meal.value.id, `${props.prompt.id}-complete`);
-  }
-  else {
-    survey.addFlag(`${props.prompt.id}-complete`);
+    survey.addFoodFlag(foodId, `${props.prompt.id}-complete`);
   }
 }
 

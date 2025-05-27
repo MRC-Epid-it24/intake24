@@ -511,22 +511,11 @@
     "addon-foods-prompt": {
       "title": "Add-on foods",
       "subtitle": "Suggest foods typically consumed with this food",
-      "multiple": "Allow multiple foods to be selected",
-      "trigger": {
-        "_": "Trigger",
-        "type": "Type",
-        "value": "Value",
-        "any": "Any",
-        "afp": "Associated food prompt",
-        "category": "Category",
-        "food": "Food",
-        "tag": "Tag"
-      },
-      "lookup": {
-        "_": "Lookup",
-        "type": "Type",
-        "value": "Value"
-      }
+      "add": "Add add-on",
+      "remove": "Remove add-on",
+      "entity": "Entity",
+      "code": "Code",
+      "filter": "Only ask for certain foods"
     },
     "associated-foods-prompt": {
       "title": "Aliments associés",
@@ -713,7 +702,8 @@
     },
     "aggregate-choice-prompt": {
       "title": "Question agregée sur plusieurs aliments",
-      "subtitle": "Demander de choisir une option pour chaque aliment déclaré sur un seul écran"
+      "subtitle": "Demander de choisir une option pour chaque aliment déclaré sur un seul écran",
+      "filter": "Only ask for certain foods"
     },
     "as-served-prompt": {
       "title": "Photo de portions",

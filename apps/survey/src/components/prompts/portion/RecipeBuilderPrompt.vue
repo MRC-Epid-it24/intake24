@@ -264,7 +264,6 @@ function onConfirmToggleIngredients(index: number) {
 };
 
 function updateStepsIngredients() {
-  console.log('Updating Steps Ingredients');
   const chosenIngredients = state.value.recipeSteps
   // Ignore optional steps that have been rejected even if they had
   // initially been accepted and some foods were added

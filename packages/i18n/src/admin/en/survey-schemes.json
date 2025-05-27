@@ -515,22 +515,11 @@
     "addon-foods-prompt": {
       "title": "Add-on foods",
       "subtitle": "Suggest foods typically consumed with this food",
-      "multiple": "Allow multiple foods to be selected",
-      "trigger": {
-        "_": "Trigger",
-        "type": "Type",
-        "value": "Value",
-        "any": "Any",
-        "afp": "Associated food prompt",
-        "category": "Category",
-        "food": "Food",
-        "tag": "Tag"
-      },
-      "lookup": {
-        "_": "Lookup",
-        "type": "Type",
-        "value": "Value"
-      }
+      "add": "Add add-on",
+      "remove": "Remove add-on",
+      "entity": "Entity",
+      "code": "Code",
+      "filter": "Only ask for certain foods"
     },
     "associated-foods-prompt": {
       "title": "Associated foods (food-specific)",
@@ -717,7 +706,8 @@
     },
     "aggregate-choice-prompt": {
       "title": "Aggregate choice question",
-      "subtitle": "Ask to choose an option for every reported food in a single screen"
+      "subtitle": "Ask to choose an option for every reported food in a single screen",
+      "filter": "Only ask for certain foods"
     },
     "as-served-prompt": {
       "title": "As served portion size",
