@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid, sabOptions }" @action="action">
     <v-card-text class="pt-2 d-flex">
       <v-card border flat width="100%">
         <v-list class="px-4" color="grey-lighten-4">
@@ -26,13 +26,10 @@
             </v-list-item>
           </v-list-item>
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
-            <v-checkbox
-              v-model="sabOptions.noAddedFoods"
-              class="custom-checkbox"
-              density="compact"
-              :label="promptI18n.noAddedFoods"
-              :value="true"
-            />
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
+            <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
             <v-checkbox
@@ -127,7 +124,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'update:modelValue']);
+const emit = defineEmits(['action', 'update:modelValue', 'update:sabOptions']);
 
 // Reactive state for "options"
 const sabOptions = ref<Record<string, any>>({});
@@ -160,32 +157,13 @@ function getPortionWeight(food: EncodedFood) {
 }
 
 function onSame() {
-  console.log('onSame action triggered');
-  console.log('sabOptions.serving:', sabOptions.value.serving);
-  console.log('sabOptions.leftovers:', sabOptions.value.leftovers);
-  console.log('sabOptions.noAddedFoods:', sabOptions.value.noAddedFoods);
-  console.log('sabOptions.quantity:', sabOptions.value.quantity);
+  console.debug('onSame action triggered');
+  console.debug('sabOptions.serving:', sabOptions.value.serving);
+  console.debug('sabOptions.leftovers:', sabOptions.value.leftovers);
+  // console.debug('sabOptions.noAddedFoods:', sabOptions.value.noAddedFoods);
+  console.debug('sabOptions.quantity:', sabOptions.value.quantity);
 
-  // Clone sabFood and food to avoid mutating props directly
-  const updatedSabFood = { ...props.sabFood };
-  updatedSabFood.food = { ...props.sabFood.food };
-
-  // If sabOptions.value.serving is exactly false, set portionSize to null
-  if (sabOptions.value.serving === false) {
-    updatedSabFood.food.portionSize = null;
-
-    // Remove 'portion-size-option-complete' and 'portion-size-method-complete' from flags array
-    if (Array.isArray(updatedSabFood.food.flags)) {
-      updatedSabFood.food.flags = updatedSabFood.food.flags.filter(
-        (flag: string) =>
-          flag !== 'portion-size-option-complete'
-          && flag !== 'portion-size-method-complete',
-      );
-    }
-
-    // Emit the updated model value
-    emit('update:modelValue', updatedSabFood);
-  }
+  emit('update:sabOptions', { ...sabOptions.value }); // emit a copy to parent
   action('same');
 }
 
@@ -285,13 +263,14 @@ onMounted(async () => {
   sabOptions.value = {
     serving: true,
     leftovers: true,
-    noAddedFoods: true,
+    // noAddedFoods: true,
     quantity: true,
   };
-  if (sabOptions.value.linkedFoods) {
-    (sabOptions.value.linkedFoods as Array<{ id: string }>).forEach((linkedFood: { id: string }) => {
+  // Set each linked food checkbox to checked by default
+  if (props.sabFood.food.linkedFoods?.length) {
+    for (const linkedFood of props.sabFood.food.linkedFoods) {
       sabOptions.value[linkedFood.id] = true;
-    });
+    }
   }
 });
 </script>
