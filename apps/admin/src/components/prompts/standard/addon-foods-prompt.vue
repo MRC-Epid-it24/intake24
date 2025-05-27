@@ -13,7 +13,7 @@
             class="d-flex flex-column"
             handle=".drag-and-drop__handle"
           >
-            <v-tab v-for="(addon, idx) in addons" :key="idx" class="d-flex ga-3" :value="idx">
+            <v-tab v-for="(addon) in addons" :key="addon.id" class="d-flex ga-3" :value="addon.id">
               <v-icon class="drag-and-drop__handle" icon="$handle" start />
               {{ `${addon.entity}:${addon.code}` }}
             </v-tab>
@@ -21,7 +21,7 @@
         </v-tabs>
       </div>
       <v-tabs-window v-model="selected" class="flex-grow-1">
-        <v-tabs-window-item v-for="(addon, idx) in addons" :key="idx" :value="idx">
+        <v-tabs-window-item v-for="(addon, idx) in addons" :key="addon.id" :value="addon.id">
           <v-card border flat>
             <v-card-title>
               <v-icon icon="fas fa-location-arrow" start />
