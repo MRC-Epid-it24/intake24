@@ -990,10 +990,12 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
     }
     case 'externalSource': {
       const food = requireFood(condition.property.id);
-      const { provider, state } = condition.property.check;
+      const { provider, state, value } = condition.property.check;
       const extSourceState = (food.external ?? {})[provider];
 
-      return typeof state === 'boolean' ? !!extSourceState : extSourceState?.type === state;
+      const currentValue = typeof state === 'boolean' ? !!extSourceState : extSourceState?.type === state;
+
+      return currentValue === value;
     }
     case 'foodCompletion': {
       const completionState = getFoodCompletionState(requireFood(condition.property.id));

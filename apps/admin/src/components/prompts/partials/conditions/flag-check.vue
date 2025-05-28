@@ -8,39 +8,29 @@
         variant="outlined"
       />
     </v-col>
-    <v-col cols="12" md="6">
+    <v-col align-self="center" cols="12" md="6">
       <v-checkbox-btn
         v-model="currentValue.value"
-        :label="$t('survey-schemes.conditions.flag.showIfSet')"
+        :label="$t('survey-schemes.conditions.showIfSet')"
       />
     </v-col>
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import type { FlagPropertyCheck } from '@intake24/common/prompts';
 import { useCheck } from './use-check';
 
-export default defineComponent({
-  name: 'FlagPropertyCheck',
-
-  props: {
-    modelValue: {
-      type: Object as PropType<FlagPropertyCheck>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const { currentValue } = useCheck(props, { emit });
-
-    return { currentValue };
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<FlagPropertyCheck>,
+    required: true,
   },
 });
+const emit = defineEmits(['update:modelValue']);
+
+const { currentValue } = useCheck(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

@@ -9,30 +9,20 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import type { BooleanPropertyCheck } from '@intake24/common/prompts';
 import { useCheck } from './use-check';
 
-export default defineComponent({
-  name: 'BooleanPropertyCheck',
-
-  props: {
-    modelValue: {
-      type: Object as PropType<BooleanPropertyCheck>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const { currentValue } = useCheck(props, { emit });
-
-    return { currentValue };
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<BooleanPropertyCheck>,
+    required: true,
   },
 });
+const emit = defineEmits(['update:modelValue']);
+
+const { currentValue } = useCheck(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

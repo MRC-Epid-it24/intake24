@@ -174,6 +174,7 @@ const externalSourceProperty = z.object({
   check: z.object({
     provider: z.enum(externalSources),
     state: z.boolean().or(z.enum(['selected', 'missing'])),
+    value: z.boolean(),
   }),
 });
 
@@ -412,6 +413,7 @@ export const promptConditionDefaults: PromptConditionDefaults = {
       check: {
         provider: 'open-food-facts',
         state: true,
+        value: true,
       },
     },
     foodTopLevel: {

@@ -13,35 +13,25 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import { foodCompletionStateOptions } from '@intake24/common/prompts';
 import type { MealCompletionPropertyCheck } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
 import { useCheck } from './use-check';
 
-export default defineComponent({
-  name: 'MealCompletionPropertyCheck',
-
-  props: {
-    modelValue: {
-      type: Object as PropType<MealCompletionPropertyCheck>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const { i18n } = useI18n();
-    const { currentValue } = useCheck(props, { emit });
-
-    const completionStateSelectList = foodCompletionStateOptions.map(state => ({ state, title: i18n.t(`survey-schemes.conditions.foodCompletion.${state}`) }));
-
-    return { completionStateSelectList, currentValue };
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<MealCompletionPropertyCheck>,
+    required: true,
   },
 });
+const emit = defineEmits(['update:modelValue']);
+
+const { i18n } = useI18n();
+const { currentValue } = useCheck(props, { emit });
+
+const completionStateSelectList = foodCompletionStateOptions.map(state => ({ state, title: i18n.t(`survey-schemes.conditions.foodCompletion.${state}`) }));
 </script>
 
 <style lang="scss" scoped></style>

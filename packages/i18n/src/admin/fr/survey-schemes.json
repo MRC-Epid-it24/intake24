@@ -133,20 +133,17 @@
     "category": {
       "_": "Category",
       "id": "Category ID",
-      "includeIfSet": "Include if set",
-      "showIfSet": "Show if set"
+      "includeIfSet": "Include if set"
     },
     "flag": {
       "_": "Flag",
       "id": "Flag ID",
-      "includeIfSet": "Include if set",
-      "showIfSet": "Show if set"
+      "includeIfSet": "Include if set"
     },
     "tag": {
       "_": "Tag",
       "id": "Tag ID",
-      "includeIfSet": "Include if tagged",
-      "showIfSet": "Show if tagged"
+      "includeIfSet": "Include if tagged"
     },
     "summary": {
       "value": "<em><strong>{property}</strong></em> of <em><strong>{object}</strong></em>",
@@ -164,7 +161,7 @@
         "portionSizeComplete": "<em><strong>portion size estimation</em></strong> for the <em><strong>{object}</strong></em> is complete",
         "complete": "<em><strong>associated food prompts</em></strong> for the <em><strong>{object}</strong></em> are complete"
       },
-      "externalSource": "<em><strong>External source ({provider})</strong></em> &nbsp;for&nbsp; <em><strong>{object}</strong></em> &nbsp;is&nbsp; <em><strong>{state}</strong></em>",
+      "externalSource": "<em><strong>External source ({provider})</strong></em> &nbsp;for&nbsp; <em><strong>{object}</strong></em> &nbsp;{value}&nbsp; <em><strong>{state}</strong></em>",
       "flag": {
         "set": "flag <em><strong>{id}</strong></em> set in <em><strong>{object}</strong></em>",
         "notSet": "flag <em><strong>{id}</strong></em> not set in <em><strong>{object}</strong></em>"
@@ -199,7 +196,10 @@
     "value": "Condition sur la valeur",
     "showIf": "Montrer l'invite si: ",
     "showIfTrue": "Show if true",
-    "orPrevious": "Or previous"
+    "showIfSet": "Show if set",
+    "orPrevious": "Or previous",
+    "is": "is",
+    "isNot": "is not"
   },
   "data-export": {
     "_": "Export de données",
@@ -372,8 +372,8 @@
       "states": {
         "_": "State",
         "title": "States",
-        "false": "Not done",
-        "true": "Done",
+        "false": "Not present",
+        "true": "Present (@:survey-schemes.prompts.externalSources.states.selected or @:survey-schemes.prompts.externalSources.states.missing)",
         "selected": "Selected",
         "missing": "Missing"
       },

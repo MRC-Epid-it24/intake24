@@ -103,46 +103,37 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { VCombobox, VTextField } from 'vuetify/components';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import type { EntityValuePropertyCheck } from '@intake24/common/prompts';
 import { useCheck } from './use-check';
 
-export default defineComponent({
-  name: 'EntityValuePropertyCheck',
+defineOptions({
+  components: { VTextField, VCombobox },
+});
 
-  components: { SelectResource, VTextField, VCombobox },
-
-  props: {
-    modelValue: {
-      type: Object as PropType<EntityValuePropertyCheck>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
-
-    const updateEntity = (property: 'category' | 'tag' | 'flag', value: boolean | null) => {
-      if (currentValue.value.entity === 'food' || (currentValue.value.entity === 'meal' && property === 'flag')) {
-        if (value) {
-          currentValue.value[property] = { id: '', value: true };
-        }
-        else {
-          delete currentValue.value[property];
-        }
-      }
-    };
-
-    return { conditionOps, updateEntity, currentValue, comboOps };
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<EntityValuePropertyCheck>,
+    required: true,
   },
 });
+const emit = defineEmits(['update:modelValue']);
+
+const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
+
+function updateEntity(property: 'category' | 'tag' | 'flag', value: boolean | null) {
+  if (currentValue.value.entity === 'food' || (currentValue.value.entity === 'meal' && property === 'flag')) {
+    if (value) {
+      currentValue.value[property] = { id: '', value: true };
+    }
+    else {
+      delete currentValue.value[property];
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

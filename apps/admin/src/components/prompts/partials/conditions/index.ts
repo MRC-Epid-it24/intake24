@@ -1,5 +1,5 @@
 import BooleanPropertyCheck from './boolean-check.vue';
-import EntityValuePropertyCheck from './entitiy-value-check.vue';
+import EntityValuePropertyCheck from './entity-value-check.vue';
 import ExternalSourceCheck from './external-source-check.vue';
 import FlagPropertyCheck from './flag-check.vue';
 import FoodCompletionPropertyCheck from './food-completion-check.vue';

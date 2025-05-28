@@ -51,34 +51,25 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { VCombobox, VTextField } from 'vuetify/components';
 import type { PromptAnswerPropertyCheck } from '@intake24/common/prompts';
 import { useCheck } from './use-check';
 
-export default defineComponent({
-  name: 'PromptAnswerPropertyCheck',
-
+defineOptions({
   components: { VTextField, VCombobox },
+});
 
-  props: {
-    modelValue: {
-      type: Object as PropType<PromptAnswerPropertyCheck>,
-      required: true,
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
-
-    return { conditionOps, currentValue, comboOps };
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<PromptAnswerPropertyCheck>,
+    required: true,
   },
 });
+const emit = defineEmits(['update:modelValue']);
+
+const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>
