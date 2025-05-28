@@ -61,9 +61,6 @@
           <v-icon icon="fas fa-turn-up fa-flip-horizontal" start />
           {{ promptI18n.back }}
         </v-btn>
-        <v-list-subheader v-else class="font-weight-bold">
-          {{ promptI18n.browse }}
-        </v-list-subheader>
         <image-placeholder v-if="requestInProgress" class="my-6" />
         <category-contents-view
           v-if="currentCategoryContents && !requestInProgress"
