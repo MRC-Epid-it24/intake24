@@ -472,7 +472,7 @@
     "homemade": "Provide further details e.g. description of dish or ingredients.",
     "purchased": "Tell us where you purchased it from and the brand name if you know it.",
     "barcode": "If you are completing this on a mobile phone, scan the barcode on the food package.",
-    "portionSize": "How much did you eat? e.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ate all of it."
+    "portionSize": "How much did you eat? e.g. 1 pack, 2 teaspoons, 1 handful, 125 grams."
   },
   "recipeBuilder": {
     "name": "{food} recipe builder",
