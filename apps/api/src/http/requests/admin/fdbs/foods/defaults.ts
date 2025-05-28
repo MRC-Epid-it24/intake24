@@ -4,25 +4,10 @@ import type { Schema } from 'express-validator';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import type { FindOptions } from '@intake24/db';
-import { FoodGroup, FoodLocal, Op, SystemLocale } from '@intake24/db';
+import { Food, FoodGroup, Op, SystemLocale } from '@intake24/db';
 
 const defaults: Schema = {
-  name: {
-    in: ['body'],
-    errorMessage: typeErrorMessage('string.minMax', { min: 3, max: 256 }),
-    isString: true,
-    isEmpty: { negated: true },
-    isLength: { options: { min: 3, max: 256 } },
-  },
-  'main.name': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('string.minMax', { min: 3, max: 128 }),
-    isString: true,
-    isEmpty: { negated: true },
-    isLength: { options: { min: 3, max: 128 } },
-    optional: true,
-  },
-  'main.code': {
+  code: {
     in: ['body'],
     errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 8 }),
     isString: { bail: true },
@@ -37,19 +22,33 @@ const defaults: Schema = {
         if (!locale)
           throw new Error(customTypeErrorMessage('unique._', meta));
 
-        const options: FindOptions<FoodLocal> = {
+        const options: FindOptions<Food> = {
           where: foodId
             ? { localeId: locale.code, id: { [Op.ne]: foodId } }
             : { localeId: locale.code },
-          include: [{ association: 'main', attributes: [], required: true }],
         };
 
-        if (!(await unique({ model: FoodLocal, condition: { field: 'foodCode', value }, options })))
+        if (!(await unique({ model: Food, condition: { field: 'code', value }, options })))
           throw new Error(customTypeErrorMessage('unique._', meta));
       },
     },
   },
-  'main.foodGroupId': {
+  englishName: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string.minMax', { min: 3, max: 128 }),
+    isString: true,
+    isEmpty: { negated: true },
+    isLength: { options: { min: 3, max: 128 } },
+    optional: true,
+  },
+  name: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string.minMax', { min: 3, max: 256 }),
+    isString: true,
+    isEmpty: { negated: true },
+    isLength: { options: { min: 3, max: 256 } },
+  },
+  foodGroupId: {
     in: ['body'],
     errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },

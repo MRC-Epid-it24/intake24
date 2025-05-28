@@ -6,6 +6,7 @@ import { localeTranslation } from '@intake24/common/types';
 import { paginationMeta } from '../generic';
 
 export const categoryHeader = z.object({
+  id: z.string(),
   code: z.string(),
   name: z.string(),
 });
@@ -13,6 +14,7 @@ export const categoryHeader = z.object({
 export type CategoryHeader = z.infer<typeof categoryHeader>;
 
 export const foodHeader = z.object({
+  id: z.string(),
   code: z.string(),
   name: z.string(),
   searchTerm: z.string().nullish(),

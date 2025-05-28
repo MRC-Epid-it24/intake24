@@ -21,8 +21,8 @@ export default {
     return data;
   },
 
-  getData: async (localeId: string, foodCode: string): Promise<UserFoodData> => {
-    const { data } = await http.get<UserFoodData>(`foods/${localeId}/${foodCode}`);
+  getData: async (localeId: string, code: string): Promise<UserFoodData> => {
+    const { data } = await http.get<UserFoodData>(`foods/${localeId}/${code}`);
     return data;
   },
 
