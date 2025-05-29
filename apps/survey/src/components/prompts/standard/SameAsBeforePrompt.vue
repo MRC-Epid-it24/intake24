@@ -42,7 +42,7 @@
           </v-list-item>
         </v-list>
         <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
-          <v-list-subheader>hadwitdh-{{ promptI18n.hadWith }}</v-list-subheader>
+          <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
             <v-checkbox
