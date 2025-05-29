@@ -264,7 +264,7 @@ const promptI18n = computed(() => ({
   serving: serving.value,
   quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'some']),
+  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
 }));
 
 onMounted(async () => {
