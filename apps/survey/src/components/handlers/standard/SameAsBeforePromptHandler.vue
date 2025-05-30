@@ -54,15 +54,23 @@ function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
           flag !== 'portion-size-option-complete'
           && flag !== 'portion-size-method-complete',
       );
-      console.debug('Flags updated:', sabFood.food.flags);
+      console.debug('portion-size-option-complete and portion-size-method-complete flags removed:', sabFood.food.flags);
     }
   }
   if (sabFood?.food?.linkedFoods) {
     console.debug('Removing linked foods if is explicitly unchecked in SAB options');
+    const numberOfLinkedFood = sabFood.food.linkedFoods.length;
+
     sabFood.food.linkedFoods = sabFood.food.linkedFoods.filter(
       linkedFood => !(sabOptions[linkedFood.id] === false),
     );
     console.debug('Linked foods updated:', sabFood.food.linkedFoods);
+    if (sabFood.food.linkedFoods.length < numberOfLinkedFood && Array.isArray(sabFood.food.flags)) {
+      sabFood.food.flags = sabFood.food.flags.filter(
+        (flag: string) => flag !== 'associated-foods-complete',
+      );
+      console.debug('associated-foods-complete flag removed:', sabFood.food.flags);
+    }
   }
   if (sabOptions.customPromptAnswers === false && sabFood?.food?.customPromptAnswers) {
     sabFood.food.customPromptAnswers = {};
