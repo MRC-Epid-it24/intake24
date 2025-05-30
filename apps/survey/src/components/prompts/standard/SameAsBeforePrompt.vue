@@ -69,22 +69,25 @@
           <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
-            <v-radio-group
-              v-model="sabOptions[linkedFood.id]"
-              :hide-details="true"
-              :inline="true"
-              :label="linkedFood.text ? linkedFood.text : ''"
-            >
-              <v-radio
-                :label="$t('common.action.yes')"
-                :value="true"
-              />
-              <v-radio
-                :label="$t('common.action.no')"
-                :value="false"
-              />
-            </v-radio-group>
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
+            {{ linkedFood.text ? linkedFood.text : '' }}
           </v-list-item>
+          <v-radio-group
+            v-model="sabOptions.linkedFoods"
+            :hide-details="true"
+            :inline="true"
+          >
+            <v-radio
+              :label="$t('common.action.yes')"
+              :value="true"
+            />
+            <v-radio
+              :label="$t('common.action.no')"
+              :value="false"
+            />
+          </v-radio-group>
         </v-list>
         <v-list v-if="customPromptAnswers && Object.keys(customPromptAnswers).length > 0" class="px-4" color="grey-lighten-4">
           <div v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index">
@@ -331,13 +334,8 @@ onMounted(async () => {
     leftovers: true,
     quantity: true,
     customPromptAnswers: true,
+    linkedFoods: true,
   };
-  // Set each linked food checkbox to checked by default
-  if (props.sabFood.food.linkedFoods?.length) {
-    for (const linkedFood of props.sabFood.food.linkedFoods) {
-      sabOptions.value[linkedFood.id] = true;
-    }
-  }
 });
 </script>
 
