@@ -6,23 +6,39 @@
           <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
           <v-divider />
           <v-list-item class="ps-0" density="compact">
-            <v-checkbox
+            <v-radio-group
               v-model="sabOptions.serving"
-              class="custom-checkbox"
-              density="compact"
+              :hide-details="true"
+              :inline="true"
               :label="promptI18n.serving"
-              :value="true"
-            />
+            >
+              <v-radio
+                :label="$t('common.action.yes')"
+                :value="true"
+              />
+              <v-radio
+                :label="$t('common.action.no')"
+                :value="false"
+              />
+            </v-radio-group>
           </v-list-item>
           <v-list-item v-if="showLeftovers" class="ps-0" density="compact">
             <v-list-item class="ps-0" density="compact">
-              <v-checkbox
+              <v-radio-group
                 v-model="sabOptions.leftovers"
-                class="custom-checkbox"
-                density="compact"
+                :hide-details="true"
+                :inline="true"
                 :label="promptI18n.leftovers"
-                :value="true"
-              />
+              >
+                <v-radio
+                  :label="$t('common.action.yes')"
+                  :value="true"
+                />
+                <v-radio
+                  :label="$t('common.action.no')"
+                  :value="false"
+                />
+              </v-radio-group>
             </v-list-item>
           </v-list-item>
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
@@ -32,30 +48,46 @@
             <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
-            <v-checkbox
+            <v-radio-group
               v-model="sabOptions.quantity"
-              class="custom-checkbox"
-              density="compact"
+              :hide-details="true"
+              :inline="true"
               :label="promptI18n.quantity"
-              :value="true"
-            />
+            >
+              <v-radio
+                :label="$t('common.action.yes')"
+                :value="true"
+              />
+              <v-radio
+                :label="$t('common.action.no')"
+                :value="false"
+              />
+            </v-radio-group>
           </v-list-item>
         </v-list>
         <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
           <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
-            <v-checkbox
+            <v-radio-group
               v-model="sabOptions[linkedFood.id]"
-              class="custom-checkbox"
-              density="compact"
+              :hide-details="true"
+              :inline="true"
               :label="linkedFood.text ? linkedFood.text : ''"
-              :value="true"
-            />
+            >
+              <v-radio
+                :label="$t('common.action.yes')"
+                :value="true"
+              />
+              <v-radio
+                :label="$t('common.action.no')"
+                :value="false"
+              />
+            </v-radio-group>
           </v-list-item>
         </v-list>
         <v-list v-if="customPromptAnswers && Object.keys(customPromptAnswers).length > 0" class="px-4" color="grey-lighten-4">
-          <v-list v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index" class="px-4" color="grey-lighten-4">
+          <div v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index">
             <v-list-subheader>{{ promptNames[index] || '' }}</v-list-subheader>
             <v-divider />
             <v-list-item v-for="(answer, answerIdx) in customPromptAnswer" :key="answerIdx" class="ps-0" density="compact">
@@ -64,14 +96,21 @@
               </template>
               <v-list-item-title>{{ answer }}</v-list-item-title>
             </v-list-item>
-          </v-list>
-          <v-checkbox
+          </div>
+          <v-radio-group
             v-model="sabOptions.customPromptAnswers"
-            class="custom-checkbox"
-            density="compact"
-            :label="promptI18n.same"
-            :value="true"
-          />
+            :hide-details="true"
+            :inline="true"
+          >
+            <v-radio
+              :label="$t('common.action.yes')"
+              :value="true"
+            />
+            <v-radio
+              :label="$t('common.action.no')"
+              :value="false"
+            />
+          </v-radio-group>
         </v-list>
       </v-card>
     </v-card-text>
@@ -102,7 +141,7 @@
       <v-divider vertical />
       <v-btn color="primary" title="$t('common.action.yes')" variant="text" @click.stop="onSame">
         <span class="text-overline font-weight-medium">
-          {{ $t('common.action.yes') }}
+          {{ $t('common.action.continue') }}
         </span>
         <v-icon class="pb-1" icon="$yes" />
       </v-btn>
