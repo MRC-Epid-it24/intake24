@@ -32,32 +32,23 @@ const sabFood = useSameAsBefore().getItem(survey.localeId, code);
 function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
   console.debug('Received sabOptions from child:', sabOptions);
 
-  if (!sabOptions.serving && sabFood?.food?.portionSize) {
+  if (!sabOptions.portionSize && sabFood?.food?.portionSize) {
     sabFood.food.portionSizeMethodIndex = null;
-    console.debug('Portion method index is removed as SAB prompt serving size checkbox is explicitly set to false');
-    if (Array.isArray(sabFood.food.flags)) {
-      sabFood.food.flags = sabFood.food.flags.filter(
-        (flag: string) =>
-          flag !== 'portion-size-method-complete',
-      );
-      console.debug('portion-size-method-complete flag removed:', sabFood.food.flags);
-    }
-  }
-
-  if (!sabOptions.quantity && sabFood?.food?.portionSize) {
     sabFood.food.portionSize = null;
-    console.debug('Portion size is removed as SAB prompt quantity checkbox is explicitly set to false');
+
+    console.debug('PortionSize and Portion method index is removed as SAB prompt checkbox is explicitly set to false');
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
         (flag: string) =>
           flag !== 'portion-size-option-complete',
       );
-      console.debug('portion-size-option-complete flag removed:', sabFood.food.flags);
+      console.debug('portion-size-option-complete and portion-size-method-complete flag removed:', sabFood.food.flags);
     }
   }
 
   if (!sabOptions.linkedFoods && sabFood?.food?.linkedFoods) {
     sabFood.food.linkedFoods = [];
+    console.debug('Linked foods are removed as SAB prompt linked foods checkbox is explicitly set to false');
     console.debug('Linked foods are removed as SAB prompt linked foods checkbox is explicitly set to false');
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
