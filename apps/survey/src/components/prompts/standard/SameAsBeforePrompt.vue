@@ -6,53 +6,32 @@
           <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
           <v-divider />
           <v-list-item class="ps-0" density="compact">
-            <v-radio-group
-              v-model="sabOptions.serving"
-              :hide-details="true"
-              :inline="true"
-              :label="promptI18n.serving"
-            >
-              <v-radio
-                :label="$t('common.action.yes')"
-                :value="true"
-              />
-              <v-radio
-                :label="$t('common.action.no')"
-                :value="false"
-              />
-            </v-radio-group>
-          </v-list-item>
-          <v-list-item v-if="showLeftovers" class="ps-0" density="compact">
-            <v-list-item class="ps-0" density="compact">
-              <v-radio-group
-                v-model="sabOptions.leftovers"
-                :hide-details="true"
-                :inline="true"
-                :label="promptI18n.leftovers"
-              >
-                <v-radio
-                  :label="$t('common.action.yes')"
-                  :value="true"
-                />
-                <v-radio
-                  :label="$t('common.action.no')"
-                  :value="false"
-                />
-              </v-radio-group>
-            </v-list-item>
-          </v-list-item>
-          <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
             <template #prepend>
               <v-icon icon="fas fa-caret-right" />
             </template>
-            <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
+            <v-list-item-title>{{ promptI18n.serving }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
+            <v-list-item-title>
+              {{ promptI18n.quantity }}
+            </v-list-item-title>
+          </v-list-item>
+          <div v-if="showLeftovers" class="ps-0" density="compact">
+            <v-list-item class="ps-0" density="compact">
+              <template #prepend>
+                <v-icon icon="fas fa-caret-right" />
+              </template>
+              <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
+            </v-list-item>
+          </div>
+          <v-list-item class="ps-0" density="compact">
             <v-radio-group
-              v-model="sabOptions.quantity"
+              v-model="sabOptions.portionSize"
               :hide-details="true"
               :inline="true"
-              :label="promptI18n.quantity"
             >
               <v-radio
                 :label="$t('common.action.yes')"
@@ -65,15 +44,23 @@
             </v-radio-group>
           </v-list-item>
         </v-list>
-        <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
+        <v-list class="px-4" color="grey-lighten-4">
           <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
-          <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
+          <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
             <template #prepend>
               <v-icon icon="fas fa-caret-right" />
             </template>
-            {{ linkedFood.text ? linkedFood.text : '' }}
+            <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
           </v-list-item>
+          <template v-if="linkedFoods.length">
+            <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
+              <template #prepend>
+                <v-icon icon="fas fa-caret-right" />
+              </template>
+              {{ linkedFood.text ? linkedFood.text : '' }}
+            </v-list-item>
+          </template>
           <v-radio-group
             v-model="sabOptions.linkedFoods"
             :hide-details="true"
@@ -330,19 +317,9 @@ onMounted(async () => {
   await resolveStandardUnits(names);
   // Set default values for sabOptions
   sabOptions.value = {
-    serving: true,
-    leftovers: true,
-    quantity: true,
+    portionSize: true,
     customPromptAnswers: true,
     linkedFoods: true,
   };
 });
 </script>
-
-<style lang="scss" scoped>
-.custom-checkbox {
-  height: 30px; /* Adjust the height as needed */
-  line-height: 30px; /* Align the label vertically */
-  padding: 0; /* Remove extra padding */
-}
-</style>
