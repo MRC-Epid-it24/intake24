@@ -49,7 +49,6 @@ function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
   if (!sabOptions.linkedFoods && sabFood?.food?.linkedFoods) {
     sabFood.food.linkedFoods = [];
     console.debug('Linked foods are removed as SAB prompt linked foods checkbox is explicitly set to false');
-    console.debug('Linked foods are removed as SAB prompt linked foods checkbox is explicitly set to false');
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
         (flag: string) => flag !== 'associated-foods-complete',
