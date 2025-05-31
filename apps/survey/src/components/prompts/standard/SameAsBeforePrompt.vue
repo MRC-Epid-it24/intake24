@@ -24,21 +24,10 @@
           </v-list-item>
           <v-list-item v-if="showLeftovers" class="ps-0" density="compact">
             <v-list-item class="ps-0" density="compact">
-              <v-radio-group
-                v-model="sabOptions.leftovers"
-                :hide-details="true"
-                :inline="true"
-                :label="promptI18n.leftovers"
-              >
-                <v-radio
-                  :label="$t('common.action.yes')"
-                  :value="true"
-                />
-                <v-radio
-                  :label="$t('common.action.no')"
-                  :value="false"
-                />
-              </v-radio-group>
+              <template #prepend>
+                <v-icon icon="fas fa-caret-right" />
+              </template>
+              <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
             </v-list-item>
           </v-list-item>
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
@@ -338,7 +327,6 @@ onMounted(async () => {
   // Set default values for sabOptions
   sabOptions.value = {
     serving: true,
-    leftovers: true,
     quantity: true,
     customPromptAnswers: true,
     linkedFoods: true,
