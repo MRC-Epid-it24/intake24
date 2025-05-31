@@ -200,8 +200,6 @@ function getPortionWeight(food: EncodedFood) {
 
 function onSame() {
   console.debug('onSame action triggered');
-  console.debug('sabOptions:', sabOptions.value);
-
   emit('update:sabOptions', { ...sabOptions.value }); // emit a copy to parent
   action('same');
 }
@@ -267,7 +265,6 @@ const promptNames = computed(() => {
     console.debug('No prompt names found');
     return {};
   }
-  console.debug('Prompt names:', idNameMap);
   return idNameMap;
 });
 
