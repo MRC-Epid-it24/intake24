@@ -6,10 +6,13 @@
           <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
           <v-divider />
           <v-list-item class="ps-0" density="compact">
-            <template #prepend>
-              <v-icon icon="fas fa-caret-right" />
-            </template>
-            <v-list-item-title>{{ promptI18n.serving }}</v-list-item-title>
+            <v-checkbox
+              v-model="sabOptions.serving"
+              class="custom-checkbox"
+              density="compact"
+              :label="promptI18n.serving"
+              :value="true"
+            />
           </v-list-item>
           <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
             <template #prepend>
@@ -48,10 +51,13 @@
           <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
-            <template #prepend>
-              <v-icon icon="fas fa-caret-right" />
-            </template>
-            <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
+            <v-checkbox
+              v-model="sabOptions.noAddedFoods"
+              class="custom-checkbox"
+              density="compact"
+              :label="promptI18n.noAddedFoods"
+              :value="true"
+            />
           </v-list-item>
           <template v-if="linkedFoods.length">
             <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
@@ -193,8 +199,6 @@ function getPortionWeight(food: EncodedFood) {
 
 function onSame() {
   console.debug('onSame action triggered');
-  console.debug('sabOptions:', sabOptions.value);
-
   emit('update:sabOptions', { ...sabOptions.value }); // emit a copy to parent
   action('same');
 }
@@ -260,7 +264,6 @@ const promptNames = computed(() => {
     console.debug('No prompt names found');
     return {};
   }
-  console.debug('Prompt names:', idNameMap);
   return idNameMap;
 });
 
