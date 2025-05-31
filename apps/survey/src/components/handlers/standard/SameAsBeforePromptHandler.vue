@@ -31,36 +31,25 @@ const sabFood = useSameAsBefore().getItem(survey.localeId, code);
 
 function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
   console.debug('Received sabOptions from child:', sabOptions);
-  if (!sabOptions.serving && sabFood?.food?.portionSize) {
-    sabFood.food.portionSize = null;
+
+  if (!sabOptions.portionSize && sabFood?.food?.portionSize) {
     sabFood.food.portionSizeMethodIndex = null;
-    console.debug('Portion size and method are removed as SAB serving checkbox being false');
-
-    if (Array.isArray(sabFood.food.flags)) {
-      sabFood.food.flags = sabFood.food.flags.filter(
-        (flag: string) =>
-          flag !== 'portion-size-option-complete'
-          && flag !== 'portion-size-method-complete',
-      );
-      console.debug('Flags updated:', sabFood.food.flags);
-    }
-  }
-  if (!sabOptions.leftovers && sabFood?.food?.portionSize) {
-    console.debug('Removing portion size due to SAB leftovers checkbox being false');
     sabFood.food.portionSize = null;
+
+    console.debug('PortionSize and Portion method index is removed as SAB prompt checkbox is explicitly set to false');
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
         (flag: string) =>
           flag !== 'portion-size-option-complete'
           && flag !== 'portion-size-method-complete',
       );
-      console.debug('portion-size-option-complete and portion-size-method-complete flags removed:', sabFood.food.flags);
+      console.debug('portion-size-option-complete and portion-size-method-complete flag removed:', sabFood.food.flags);
     }
   }
-  if (!sabOptions.linkedFoods && sabFood?.food?.linkedFoods) {
-    console.debug('Removing linked foods if is explicitly unchecked in SAB options');
-    sabFood.food.linkedFoods = [];
 
+  if (!sabOptions.linkedFoods && sabFood?.food?.linkedFoods) {
+    sabFood.food.linkedFoods = [];
+    console.debug('Linked foods are removed as SAB prompt linked foods checkbox is explicitly set to false');
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
         (flag: string) => flag !== 'associated-foods-complete',
@@ -68,6 +57,7 @@ function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
       console.debug('associated-foods-complete flag removed:', sabFood.food.flags);
     }
   }
+
   if (sabOptions.customPromptAnswers === false && sabFood?.food?.customPromptAnswers) {
     sabFood.food.customPromptAnswers = {};
     console.debug('Custom prompt answers removed as SAB custom prompt answers checkbox is explicitly set to false');
