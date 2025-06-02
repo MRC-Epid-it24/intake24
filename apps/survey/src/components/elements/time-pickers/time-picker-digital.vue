@@ -16,7 +16,7 @@
           size="90"
           @click="openModal('hours')"
         >
-          {{ isAmPm ? time.hours < 12 ? time.hours : time.hours - 12 : padLabel(time.hours) }}
+          {{ isAmPm ? hoursToAmPm(time.hours) : padLabel(time.hours) }}
         </v-btn>
         <v-btn
           icon
@@ -56,7 +56,6 @@
           <v-icon icon="fas fa-chevron-down" size="45" />
         </v-btn>
       </div>
-
       <v-dialog
         v-model="modal"
         max-width="360"
@@ -168,10 +167,13 @@ const selection = computed(() => {
     minutes: props.allowedMinutes ? minutes.filter(props.allowedMinutes) : minutes,
   };
 });
-function hoursToAmPm(hours: number) {
+function hoursToAmPm(hours: number, withAmPm = false) {
+  if (!withAmPm)
+    return `${hours <= 12 ? hours : hours - 12}`;
+
   return `${hours <= 12 ? hours : hours - 12} ${hours < 12 ? 'am' : 'pm'}`;
 }
-const amPmHours = computed(() => selection.value.hours.map(hour => hoursToAmPm(hour)));
+const amPmHours = computed(() => selection.value.hours.map(hour => hoursToAmPm(hour, true)));
 
 function padLabel(val: number) {
   return val.toString().padStart(2, '0');
