@@ -36,6 +36,7 @@
                     hide-details="auto"
                     :items="['category', 'food']"
                     :label="$t('survey-schemes.prompts.addon-foods-prompt.entity')"
+                    :name="`entity.${addon.id}`"
                     variant="outlined"
                   />
                 </v-col>
@@ -44,8 +45,27 @@
                     v-model="addon.code"
                     hide-details="auto"
                     :label="$t('survey-schemes.prompts.addon-foods-prompt.code')"
+                    :name="`code.${addon.id}`"
                     variant="outlined"
                   />
+                </v-col>
+                <v-col>
+                  <language-selector
+                    v-model="addon.name"
+                    border
+                    :label="$t('survey-schemes.prompts.addon-foods-prompt.name')"
+                    required
+                  >
+                    <template v-for="lang in Object.keys(addon.name)" :key="lang" #[`lang.${lang}`]>
+                      <v-text-field
+                        v-model="addon.name[lang]"
+                        hide-details="auto"
+                        :label="$t('survey-schemes.prompts.addon-foods-prompt.name')"
+                        :name="`name.${addon.id}${lang}`"
+                        variant="outlined"
+                      />
+                    </template>
+                  </language-selector>
                 </v-col>
                 <v-col cols="12">
                   <condition-list v-model="addon.filter" prompt="addon-foods-prompt" />
@@ -71,6 +91,7 @@ import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { Prompts } from '@intake24/common/prompts';
 import { copy, randomString } from '@intake24/common/util';
 import { ConditionList, useBasePrompt } from '../partials';
@@ -106,6 +127,7 @@ function add() {
     id: randomString(6),
     entity: 'category',
     code: '',
+    name: {},
     filter: [],
   });
 

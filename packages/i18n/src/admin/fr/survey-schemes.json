@@ -513,6 +513,7 @@
       "subtitle": "Suggest foods typically consumed with this food",
       "add": "Add add-on",
       "remove": "Remove add-on",
+      "name": "Add-on name",
       "entity": "Entity",
       "code": "Code",
       "filter": "Only ask for certain foods"

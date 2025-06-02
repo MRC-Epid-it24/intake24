@@ -129,6 +129,7 @@ export type BaseStandardPrompt = z.infer<typeof baseStandardPrompt>;
 
 const addonFood = z.object({
   id: z.string().min(1),
+  name: localeTranslation,
   entity: z.enum(['category', 'food']),
   code: z.string(),
   filter: condition.array(),
