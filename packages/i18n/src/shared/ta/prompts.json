@@ -63,6 +63,15 @@
     "description": "",
     "validation": {
       "required": "இந்தப் புலம் நிரப்பப்பட வேண்டும்."
+    },
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "yesNo": {
@@ -246,7 +255,16 @@
     "text": "",
     "description": "<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>",
     "yes": "Around that time",
-    "no": "Did not have"
+    "no": "Did not have",
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
   },
   "recallDate": {
     "name": "Recall date",

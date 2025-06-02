@@ -2,29 +2,30 @@
   <v-time-picker
     v-model="state"
     :allowed-minutes="allowedMinutes"
-    :ampm-in-title="amPmToggle"
+    :ampm-in-title="prompt.amPmToggle"
     class="time-picker pa-0 mx-auto"
-    :format="format"
+    :format="prompt.format"
     :landscape="$vuetify.display.smAndUp"
   />
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+import { computed } from 'vue';
+import type { Prompts } from '@intake24/common/prompts';
 
-defineProps({
-  allowedMinutes: {
-    type: Function as PropType<(val: number) => boolean>,
-  },
-  amPmToggle: {
-    type: Boolean as PropType<boolean>,
-  },
-  format: {
-    type: String as PropType<'ampm' | '24hr'>,
+const props = defineProps({
+  prompt: {
+    type: Object as PropType<Prompts['meal-time-prompt' | 'time-picker-prompt']>,
+    required: true,
   },
 });
 
 const state = defineModel('modelValue', { type: String as PropType<string | null>, default: null });
+
+const allowedMinutes = computed(
+  () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
+);
 </script>
 
 <style lang="scss">

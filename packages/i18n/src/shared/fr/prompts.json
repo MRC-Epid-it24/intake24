@@ -63,6 +63,15 @@
     "description": "",
     "validation": {
       "required": "Ce champ doit être rempli."
+    },
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "yesNo": {
@@ -246,7 +255,16 @@
     "text": "",
     "description": "<p>Avez-vous pris un <strong>{meal}</strong>? Si oui, quelle heure était-il ?</p>",
     "yes": "A peu près cette heure",
-    "no": "Je n'en ai pas pris "
+    "no": "Je n'en ai pas pris ",
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
   },
   "recallDate": {
     "name": "Jour de l'enquête",

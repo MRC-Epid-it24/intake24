@@ -63,6 +63,15 @@
     "description": "",
     "validation": {
       "required": "必须填写此字段。"
+    },
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "yesNo": {
@@ -246,7 +255,16 @@
     "text": "",
     "description": "<p>您吃了 <strong>{meal}</strong>吗? 如果是的，这是什么时间？</p>",
     "yes": "大约那个时间",
-    "no": "我没有吃"
+    "no": "我没有吃",
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
   },
   "recallDate": {
     "name": "Recall date",

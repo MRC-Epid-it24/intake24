@@ -63,6 +63,15 @@
     "description": "",
     "validation": {
       "required": "Ruangan ini perlu diisi."
+    },
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "yesNo": {
@@ -246,7 +255,16 @@
     "text": "",
     "description": "<p>Adakah anda mengambil <strong>{meal}</strong>? Jika ya, bilakan anda mengambilnya?</p>",
     "yes": "Sekitar waktu tersebut",
-    "no": "Saya tidak mengambil {meal}"
+    "no": "Saya tidak mengambil {meal}",
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
   },
   "recallDate": {
     "name": "Recall date",

@@ -63,6 +63,15 @@
     "description": "",
     "validation": {
       "required": "يجب ملء هذا الحقل"
+    },
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "yesNo": {
@@ -246,7 +255,16 @@
     "text": "",
     "description": "<p>هل حصلت على <strong>{meal}</strong>? إذا كان الجواب. بنعم، في أي وقت كان؟</p>",
     "yes": "قرابة هذا الوقت",
-    "no": "لم أحصل "
+    "no": "لم أحصل ",
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
   },
   "recallDate": {
     "name": "تاريخ التذكر ",

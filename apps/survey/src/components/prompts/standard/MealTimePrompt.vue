@@ -4,9 +4,7 @@
       <component
         :is="`time-picker-${prompt.ui}`"
         v-model="state"
-        :allowed-minutes="allowedMinutes"
-        :am-pm-toggle="prompt.amPmToggle"
-        :format="prompt.format"
+        :prompt="prompt"
       />
     </v-card-text>
     <template #actions>
@@ -83,9 +81,6 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { action, translatePrompt } = usePromptUtils(props, { emit });
 
-const allowedMinutes = computed(
-  () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0,
-);
 const promptI18n = computed(() => translatePrompt(['no', 'yes']));
 const state = computed({
   get() {
