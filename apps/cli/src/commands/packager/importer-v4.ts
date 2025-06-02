@@ -57,6 +57,8 @@ export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
   modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
   append: boolean;
+  asServedIds?: string[];
+  foodIds?: string[];
 }
 
 export type availableModules = {
@@ -111,6 +113,8 @@ export class ImporterV4 {
         && options.modulesForExecution.length !== 0
           ? options.modulesForExecution
           : defaultOptions.modulesForExecution,
+      asServedIds: options?.asServedIds,
+      foodIds: options?.foodIds,
     };
   }
 
@@ -544,7 +548,7 @@ export class ImporterV4 {
 
   private async importAsServedSets(): Promise<void> {
     if (this.asServedSets !== undefined) {
-      await this.batchImport(this.asServedSets, 'as served image set', 10, obj =>
+      await this.batchImport(this.asServedSets.filter(obj => !this.options.asServedIds || this.options.asServedIds.includes(obj.id)), 'as served image set', 10, obj =>
         this.importAsServedSet(obj));
     }
   }
@@ -728,7 +732,7 @@ export class ImporterV4 {
 
   private async importGlobalFoods(): Promise<void> {
     if (this.globalFoods !== undefined) {
-      await this.batchImport(this.globalFoods, 'global food record', 50, food =>
+      await this.batchImport(this.globalFoods.filter(food => !this.options.foodIds || this.options.foodIds.includes(food.code)), 'global food record', 50, food =>
         this.importGlobalFood(food));
     }
   }
@@ -777,7 +781,7 @@ export class ImporterV4 {
     if (this.localFoods !== undefined) {
       for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
         logger.info(`Importing local food record(s) for locale ${localeId}...`);
-        await this.batchImport(localFoods, 'local food record', 50, food =>
+        await this.batchImport(localFoods.filter(food => !this.options.foodIds || this.options.foodIds.includes(food.code)), 'local food record', 50, food =>
           this.importLocalFood(localeId, food));
       }
     }

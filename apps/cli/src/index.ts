@@ -127,6 +127,8 @@ async function run() {
     .addOption(conflictResolutionOption)
     .addOption(specificModulesExecutionOption)
     .option('--append', 'Append enabled foods')
+    .option('--as-served-ids [as-served-ids...]', 'Only include as served sets with specified ids')
+    .option('--food-ids [food-ids...]', 'Only include foods with specified ids')
     .action(async (version, inputFilePath, options) => {
       switch (version) {
         case 'v3':

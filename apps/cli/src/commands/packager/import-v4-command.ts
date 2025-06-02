@@ -7,7 +7,8 @@ import { ImporterV4 } from '@intake24/cli/commands/packager/importer-v4';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 
 export interface PackageImportOptions {
-  asServed?: string[];
+  asServedIds?: string[];
+  foodIds?: string[];
   locale?: string[];
   onConflict?: ConflictResolutionStrategy;
   modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
@@ -30,6 +31,8 @@ export default async (
       options?.modulesForExecution !== undefined
         ? options.modulesForExecution
         : (['all'] as ImporterSpecificModulesExecutionStrategy[]),
+    asServedIds: options.asServedIds,
+    foodIds: options.foodIds,
   });
 
   await importer.import();
