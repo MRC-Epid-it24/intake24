@@ -13,7 +13,7 @@
       v-if="containsPizza"
       border="start"
       class="py-2"
-      icon="fas fa-bell"
+      icon="fas fa-lightbulb"
       rounded="lg"
       type="info"
     >
@@ -23,7 +23,7 @@
       v-if="contents.foods.length >= 50 && type === 'foodSearch'"
       border="start"
       class="py-2"
-      icon="fas fa-bell"
+      icon="fas fa-lightbulb"
       rounded="lg"
       type="info"
     >

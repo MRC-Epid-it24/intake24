@@ -113,7 +113,7 @@
     "root": "all food categories",
     "back": "返回到 '{category}'",
     "none": "没有食物结果。请尝试优化您的搜索。",
-    "refine": "The search has found a lot of results. You can try refining your search.",
+    "refine": "Getting lots of matches — try being more specific to find the right one.",
     "missing": {
       "label": "我找不到我的食物",
       "description": "<p>尝试浏览上面列出的食物类别来查找您的食物</p><p>如果您仍然找不到食物，请选择“报告找不到食物”.</p>",
@@ -506,7 +506,7 @@
     "root": "所有食物类别",
     "back": "返回' '{category}'",
     "none": "没有食物结果。请尝试优化您的搜索。",
-    "refine": "The search has found a lot of results. You can try refining your search.",
+    "refine": "Getting lots of matches — try being more specific to find the right one.",
     "optional": {
       "confirm": "Yes",
       "reject": "No",

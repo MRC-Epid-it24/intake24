@@ -113,7 +113,7 @@
     "root": "Semua kategori makanan",
     "back": "Pergi balik ke '{category}'",
     "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
-    "refine": "The search has found a lot of results. You can try refining your search.",
+    "refine": "Getting lots of matches — try being more specific to find the right one.",
     "missing": {
       "label": "Saya tidak jumpa makanan saya",
       "description": "<p>Sila layari kategori makanan di atas untuk mencari makanan anda.</p><p>Jika anda masih tidak dapat mencari makanan anda 'Laporkan makanan hilang'.</p>",
@@ -506,7 +506,7 @@
     "root": "Semua kategori makanan",
     "back": "Pergi balik ke '{category}'",
     "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
-    "refine": "The search has found a lot of results. You can try refining your search.",
+    "refine": "Getting lots of matches — try being more specific to find the right one.",
     "optional": {
       "confirm": "Yes",
       "reject": "No",
