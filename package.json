@@ -1,7 +1,7 @@
 {
   "name": "intake24",
   "type": "module",
-  "version": "2025.1",
+  "version": "2025.2",
   "private": true,
   "packageManager": "pnpm@10.11.0",
   "description": "Dietary recall system",
