@@ -35,12 +35,15 @@ function globalFoodsService({ db }: Pick<IoC, 'db'>) {
       if (affectedRows[0] !== 1)
         return null;
 
-      // Record exists, update associations
-      await FoodAttribute.update(
+      // Should be an upsert, but the Sequelize implementation is weird
+      await FoodAttribute.destroy({ where: { foodCode: globalFoodId }, transaction: t });
+
+      await FoodAttribute.create(
         {
           ...input.attributes,
+          foodCode: globalFoodId,
         },
-        { where: { foodCode: globalFoodId }, transaction: t },
+        { transaction: t },
       );
 
       await FoodCategory.destroy({ where: { foodCode: globalFoodId }, transaction: t });
