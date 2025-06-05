@@ -108,6 +108,7 @@ export class FrenchAlbaneLocaleBuilder {
   private reasonableAmount: Record<string, number> | undefined;
   private portionSizeImages: AlbanePortionSizeImage[] | undefined;
   private householdMeasuresMap: Record<string, string> | undefined;
+  private categoryTags: Record<string, Set<string>> | undefined;
 
   constructor(logger: Logger, options: FrenchLocaleOptions) {
     this.sourceDirPath = options.inputPath;
@@ -151,8 +152,27 @@ export class FrenchAlbaneLocaleBuilder {
     }
   }
 
-  private async readCategoryNames(): Promise<void> {
+  private async readCategoryList(): Promise<void> {
+    function readTags(str: string | undefined, existing: Set<string> | undefined): Set<string> {
+      const result = new Set<string>();
+
+      if (str !== undefined) {
+        for (const s of str.split(',')) {
+          const trimmed = s.trim();
+          if (trimmed.length > 0)
+            result.add(trimmed);
+        }
+      }
+
+      if (existing !== undefined) {
+        existing.forEach(tag => result.add(tag));
+      }
+
+      return result;
+    }
+
     this.categoryNames = {};
+    this.categoryTags = {};
     const missingTranslations: string[] = [];
 
     const rows = this.readXLSX<Record<number, string>>('CATEGORIES_I24_LIST.xlsx', { header: 1, range: 1 });
@@ -170,6 +190,8 @@ export class FrenchAlbaneLocaleBuilder {
           this.categoryNames![catCode] = translatedName;
         else
           missingTranslations.push(catCode);
+
+        this.categoryTags![catCode] = readTags(row[8], this.categoryTags![catCode]);
       }
     }
 
@@ -238,9 +260,16 @@ export class FrenchAlbaneLocaleBuilder {
     for (const row of this.sourceFoodRecords!) {
       const foodSynonyms = this.foodSynonyms![row.A_CODE];
       const alternativeNames = foodSynonyms === undefined ? undefined : { fr: foodSynonyms.map(s => s.substring(0, 128)) };
-      const facetFlags = this.facetFlags![row.A_CODE];
-
       const portionSizeMethods = this.portionSizeMethods![row.A_CODE];
+
+      const categoryTags = new Set<string>();
+
+      for (const categoryCode of this.foodCategories![row.A_CODE]) {
+        for (const tag of (this.categoryTags![categoryCode] ?? []))
+          categoryTags.add(tag);
+      }
+
+      const facetFlags = this.facetFlags![row.A_CODE];
 
       if (portionSizeMethods === undefined)
         throw new Error(`Quantification data missing for food ${row.A_CODE}`);
@@ -250,7 +279,7 @@ export class FrenchAlbaneLocaleBuilder {
         code: getIntake24FoodCode(row.A_CODE),
         localDescription: capitalize(row.A_LIBELLE.substring(0, 128)),
         alternativeNames,
-        tags: facetFlags,
+        tags: [...facetFlags, ...categoryTags],
         nutrientTableCodes: {
           FR_ALBANE: row.A_CODE,
         },
@@ -759,7 +788,7 @@ export class FrenchAlbaneLocaleBuilder {
   public async buildPackage(): Promise<void> {
     await this.readFoodList();
     await this.readFoodCategories();
-    await this.readCategoryNames();
+    await this.readCategoryList();
     await this.readAssociatedFoodPrompts();
     await this.readFacetFlags();
     await this.readPortionSizeImages();
