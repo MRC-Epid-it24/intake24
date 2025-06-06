@@ -16,6 +16,7 @@ import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-ma
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import type logger from '@intake24/common-backend/services/logger/logger';
+import { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 
 export type Logger = typeof logger;
 
@@ -183,6 +184,17 @@ export class PackageWriter {
     await this.writeJSON(
       nutrientTables,
       path.join(this.outputDir, PkgConstants.NUTRIENT_TABLES_FILE_NAME),
+    );
+  }
+
+  public async writePortionSizeImageLabels(labels: PkgPortionSizeImageLabels) {
+    await this.writeJSON(
+      labels,
+      path.join(
+        this.outputDir,
+        PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
+        PkgConstants.PORTION_SIZE_IMAGE_LABELS_FILE_NAME,
+      ),
     );
   }
 

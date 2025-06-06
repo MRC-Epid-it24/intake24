@@ -48,6 +48,7 @@ export interface PkgAsServedPsm extends PkgPortionSizeMethodBase {
   method: 'as-served';
   servingImageSet: string;
   leftoversImageSet?: string;
+  multiple?: boolean;
 }
 
 export interface PkgGuideImagePsm extends PkgPortionSizeMethodBase {

@@ -13,6 +13,7 @@ export class PkgConstants {
   public static readonly DRINKWARE_FILE_NAME = 'drinkware.json';
   public static readonly PACKAGE_INFO_FILE_NAME = 'package.json';
   public static readonly NUTRIENT_TABLES_FILE_NAME = 'nutrient-tables.json';
+  public static readonly PORTION_SIZE_IMAGE_LABELS_FILE_NAME = 'portion-size-image-labels.json';
 
   public static readonly CEREAL_BOWL_IMAGE_MAP = 'gbowl';
   public static readonly CEREAL_AS_SERVED_PREFIX = 'cereal_';

@@ -144,6 +144,7 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string
         parameters: {
           servingImageSet: psm.servingImageSet,
           leftoversImageSet: psm.leftoversImageSet,
+          multiple: psm.multiple,
         },
       };
     case 'guide-image':

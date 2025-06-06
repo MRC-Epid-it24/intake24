@@ -39,6 +39,7 @@ import { Dictionary } from '@intake24/common/types';
 import { capitalize } from '@intake24/common/util';
 
 import { PkgAsServedSet } from '../packager/types/as-served';
+import { PkgPortionSizeImageLabels } from '../packager/types/portion-size-image-labels';
 import { AlbanePortionSizeImage } from './types/portion-size-images';
 import { AlbaneQuantificationRow } from './types/quantification';
 
@@ -107,6 +108,7 @@ export class FrenchAlbaneLocaleBuilder {
   private portionSizeMethods: Record<string, PkgPortionSizeMethod[]> | undefined;
   private reasonableAmount: Record<string, number> | undefined;
   private portionSizeImages: AlbanePortionSizeImage[] | undefined;
+  private standardUnitLabels: Record<string, Record<string, string>> | undefined;
   private householdMeasuresMap: Record<string, string> | undefined;
   private categoryTags: Record<string, Set<string>> | undefined;
 
@@ -548,6 +550,23 @@ export class FrenchAlbaneLocaleBuilder {
       if (row.fileName && row.pictureId)
         this.portionSizeImages!.push(row);
     }
+
+    const standardUnitRows = this.readXLSX<Record<number, string>>('List.Photos_HHM_Shapes.xlsx', { header: 1, range: 1 }, 'Photo standard units');
+
+    this.standardUnitLabels = {};
+
+    for (const row of standardUnitRows) {
+      let id = row[5];
+      const label = row[15];
+
+      if (!id || !label)
+        continue;
+
+      if (/^\d+$/.test(id))
+        id = `ALBANE_${id}`;
+
+      this.standardUnitLabels[id] = { fr: label };
+    }
   }
 
   private async readStandardUnits(): Promise<Dictionary<PkgStandardPortionPsm>> {
@@ -683,6 +702,7 @@ export class FrenchAlbaneLocaleBuilder {
           useForRecipes: true,
           conversionFactor,
           servingImageSet: asServedId,
+          multiple: true,
         });
       }
 
@@ -753,6 +773,40 @@ export class FrenchAlbaneLocaleBuilder {
     });
   }
 
+  private buildPortionSizeImageLabels(): PkgPortionSizeImageLabels {
+    const asServedImagesById = groupBy(this.portionSizeImages!, record => record.pictureId);
+
+    const asServed: Record<string, Record<string, string>> = {};
+    const guide: Record<string, Record<string, string>> = {};
+    const drinkware: Record<string, Record<string, string>> = {};
+
+    for (const [id, images] of Object.entries(asServedImagesById)) {
+      if (!images[0].intake24Instructions)
+        continue;
+
+      const prefixedId = /^\d+$/.test(id) ? `ALBANE_${id}` : id;
+
+      asServed[prefixedId] = {
+        fr: images[0].intake24Instructions,
+      };
+    }
+
+    for (const [id, label] of Object.entries(this.standardUnitLabels!)) {
+      if (GUIDE_IMAGE_IDS.has(id))
+        guide[id] = label;
+      else if (DRINKWARE_IDS.has(id))
+        drinkware[id] = label;
+      else
+        asServed[id] = label;
+    }
+
+    return {
+      asServed,
+      guide,
+      drinkware,
+    };
+  }
+
   private buildHouseholdMeasuresMap() {
     this.householdMeasuresMap = {};
 
@@ -815,6 +869,8 @@ export class FrenchAlbaneLocaleBuilder {
 
     const asServedSets = this.buildAsServed();
 
+    const portionSizeImageLabels = this.buildPortionSizeImageLabels();
+
     const writer = new PackageWriter(this.logger, this.outputDirPath);
 
     await writer.writeLocales([locale]);
@@ -825,5 +881,6 @@ export class FrenchAlbaneLocaleBuilder {
     await writer.writeEnabledLocalFoods(enabledLocalFoods);
     await writer.writeNutrientTables([dummyNutrientTable]);
     await writer.writeAsServedSets(asServedSets);
+    await writer.writePortionSizeImageLabels(portionSizeImageLabels);
   }
 }
