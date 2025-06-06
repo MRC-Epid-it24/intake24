@@ -742,6 +742,7 @@ export class FrenchAlbaneLocaleBuilder {
       return {
         id: imageId.startsWith('ALBANE_') ? imageId : `ALBANE_${imageId}`,
         description: images[0].name,
+        label: images[0].intake24Instructions ? { fr: images[0].intake24Instructions } : undefined,
         selectionImagePath: '',
         images: images.map(image => ({
           imagePath: `Albane/${image.fileName}`,

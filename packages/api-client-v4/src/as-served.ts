@@ -20,6 +20,7 @@ export class AsServedApiV4 {
     id: string,
     description: string,
     selectionImageFilePath: string,
+    label?: Record<string, string | null>,
   ): Promise<CreateResult<AsServedSetEntry>> {
     const formData = new FormData();
 
@@ -27,6 +28,10 @@ export class AsServedApiV4 {
 
     formData.set('id', id);
     formData.set('description', description);
+
+    if (label !== undefined)
+      formData.set('label', JSON.stringify(label));
+
     formData.set('selectionImage', file);
 
     const response = await this.baseClient.postResponse<AsServedSetEntry>(
@@ -35,6 +40,21 @@ export class AsServedApiV4 {
     );
 
     return parseCreateResponse(response, this.baseClient.logger);
+  }
+
+  public async update(
+    id: string,
+    description: string,
+    label?: Record<string, string | null>,
+  ): Promise<AsServedSetEntry> {
+    return await this.baseClient.put<AsServedSetEntry>(
+      `${AsServedApiV4.apiPath}/${id}`,
+      {
+        description,
+        label,
+        images: [],
+      },
+    );
   }
 
   public async get(id: string): Promise<AsServedSetEntry | null> {

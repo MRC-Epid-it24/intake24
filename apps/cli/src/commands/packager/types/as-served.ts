@@ -9,4 +9,5 @@ export interface PkgAsServedSet {
   description: string;
   selectionImagePath: string;
   images: PkgAsServedImage[];
+  label?: Record<string, string>;
 }

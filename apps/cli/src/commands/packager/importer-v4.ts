@@ -355,12 +355,14 @@ export class ImporterV4 {
         guideImageId,
         guideImage.description,
         guideImage.imageMapId,
+        guideImage.label,
       );
 
       await this.apiClient.portionSize.guideImages.update(
         guideImageId,
         guideImage.description,
         objects,
+        guideImage.label,
       );
     }
   }
@@ -414,6 +416,7 @@ export class ImporterV4 {
         setId,
         pkgSet.description,
         path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, selectionImagePath),
+        pkgSet.label,
       );
 
       switch (createResult.type) {
@@ -435,8 +438,7 @@ export class ImporterV4 {
         }
         case 'overwrite': {
           logger.debug(`Updating existing as served set: ${setId}`);
-          logger.debug(`Update operation not implemented`);
-          break;
+          await this.apiClient.portionSize.asServed.update(setId, pkgSet.description, pkgSet.label);
         }
       }
     }
@@ -520,6 +522,7 @@ export class ImporterV4 {
       id: setId,
       imageMapId: pkgSet.selectionImageMapId,
       description: pkgSet.description,
+      label: pkgSet.label,
     });
 
     if (createResult.type === 'conflict') {
@@ -543,6 +546,7 @@ export class ImporterV4 {
       id: setId,
       imageMapId: pkgSet.selectionImageMapId,
       description: pkgSet.description,
+      label: pkgSet.label,
     }, this.toScaleUpdateInput(pkgSet.scales));
   }
 
