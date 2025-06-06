@@ -626,7 +626,7 @@ export class FrenchAlbaneLocaleBuilder {
 
       if (row.LISTE_photos) {
         const ids = row.LISTE_photos.split(',').map(s => s.trim());
-        const conversionFactors = row.VALEURS_conversion_photos.split(',').map(s => Number.parseFloat(s.trim()));
+        const conversionFactors = row.VALEURS_conversion_photo.split(',').map(s => Number.parseFloat(s.trim()));
 
         if (ids.length !== conversionFactors.length) {
           logger.error(`LISTE_photos has ${ids.length} values but VALUERS_conversion_photos has ${conversionFactors.length} values for food ${row.A_CODE}, they must have the same length`);
