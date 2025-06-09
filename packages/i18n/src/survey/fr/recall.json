@@ -72,7 +72,7 @@
     "meal": {
       "add": "Ajouter un repas",
       "delete": "Supprimer un repas",
-      "deleteConfirm": "Vous êtes sur le point de supprimer tout ce que vous avez consommé pour {item}.",
+      "deleteConfirm": "Vous êtes sur le point de supprimer tout ce que vous avez consommé {item}.",
       "editFoods": "Modifier / Ajouter des aliments",
       "editTime": "Modifier l'horaire"
     }
@@ -87,7 +87,7 @@
     "changeTime": "Modifier l'horaire"
   },
   "actions": {
-    "feedback": "Synthèse alimentaire",
+    "feedback": "Synthèse",
     "next": "Continuer",
     "submit": "Soumettre l'enquête",
     "addMeal": "Ajouter un repas",
@@ -99,18 +99,18 @@
     "nav": {
       "cancel": "Supprimer",
       "confirm": "Confirmer",
-      "feedback": "Synthèse alimentaire",
+      "feedback": "Synthèse",
       "next": "Continuer",
       "redirect": "Continuer",
       "remove": "Supprimer",
-      "review": "Vérifier",
+      "review": "Récap",
       "submit": "Soumettre",
       "addMeal": "Ajouter un repas",
       "deleteFood": "Supprimer un aliment",
-      "deleteMeal": "Supprimer un repas",
+      "deleteMeal": "Supprimer repas",
       "editFood": "Modifier un aliment",
       "editMeal": "Ajouter des aliments",
-      "mealTime": "Heure du repas"
+      "mealTime": "Heure repas"
     }
   }
 }

@@ -6,8 +6,8 @@
     "lowRecalls": "La synthèse des consommations sera disponible quand vous aurez soumis au moins {minRecalls} journées d'enquête.",
     "notAvailable": "La synthèse des consommations n'est pas disponible pour cette enquête."
   },
-  "title": "Synthèse des consommations à partir des journées d'enquête de {name} ",
-  "missingFoods": "Tous les aliments signalés comme manquants ne seront pas inclus dans le synthèse des consommations alimentaires",
+  "title": "Synthèse de vos consommations",
+  "missingFoods": "Tous les aliments signalés comme manquants ne seront pas inclus dans la synthèse des consommations alimentaires",
   "physicalData": {
     "title": "A propos de vous",
     "subtitle": "Afin que nous puissions vous communiquer les résultats de cette synthèse, veuillez renseigner les informations suivantes.",
@@ -54,7 +54,7 @@
     "print": "Imprimer"
   },
   "cards": {
-    "title": "Synthèse de vos consommations"
+    "title": "Sur les trois journées d'enquête"
   },
   "topFoods": {
     "title": "Aliments contribuant le plus à vos apports nutritionnels",

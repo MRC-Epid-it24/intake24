@@ -34,7 +34,7 @@
   "continue": "Continuer",
   "help": {
     "_": "Aide",
-    "title": "Demander de l'aide",
+    "title": "Envoyer le message",
     "text": "Saisissez votre message dans le formulaire ci-dessous et une de nos diététiciennes vous contactera dès que possible.",
     "sent": "Votre demande d'aide a été envoyée."
   },
