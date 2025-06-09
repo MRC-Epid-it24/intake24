@@ -55,5 +55,5 @@ export default class SurveySubmissionCustomField extends BaseModel<
 }
 
 export type SurveySubmissionCustomFieldAttributes = Attributes<SurveySubmissionCustomField>;
-export type SurveySubmissionCustomFieldCreationAttributes =
-  CreationAttributes<SurveySubmissionCustomField>;
+export type SurveySubmissionCustomFieldCreationAttributes
+  = CreationAttributes<SurveySubmissionCustomField>;

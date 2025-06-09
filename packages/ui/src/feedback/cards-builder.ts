@@ -21,10 +21,10 @@ export type NutrientGroupCardWithDemGroups = NutrientGroupCard & {
   demographicGroups: DemographicGroup[];
 };
 
-export type CardWithDemGroups =
-  | CharacterRules
-  | FiveADayCardWithDemGroups
-  | NutrientGroupCardWithDemGroups;
+export type CardWithDemGroups
+  = | CharacterRules
+    | FiveADayCardWithDemGroups
+    | NutrientGroupCardWithDemGroups;
 
 export interface FiveADayParameters extends FiveADayCard {
   portions: number;
@@ -37,10 +37,10 @@ export interface NutrientGroupParameters extends NutrientGroupCard {
   scaleSector: DemographicGroupScaleSector;
 }
 
-export type FeedbackCardParameters =
-  | CharacterParameters
-  | FiveADayParameters
-  | NutrientGroupParameters;
+export type FeedbackCardParameters
+  = | CharacterParameters
+    | FiveADayParameters
+    | NutrientGroupParameters;
 
 export type BuildCardOps = {
   foods: AggregateFoodStats[];

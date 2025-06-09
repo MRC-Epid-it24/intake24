@@ -5,5 +5,5 @@ export type I18nLanguageListEntry = Pick<
   'code' | 'englishName' | 'localName' | 'countryFlagCode' | 'textDirection'
 >;
 
-export type I18nLanguageEntry = I18nLanguageListEntry &
-  Pick<LanguageTranslationAttributes, 'messages'>;
+export type I18nLanguageEntry = I18nLanguageListEntry
+  & Pick<LanguageTranslationAttributes, 'messages'>;

@@ -194,20 +194,20 @@ export interface UnknownPortionPsm extends PortionSizeMethodBase {
   parameters: PortionSizeParameters['unknown'];
 }
 
-export type PortionSizeMethod =
-  | AsServedPsm
-  | CerealPsm
-  | DirectWeightPsm
-  | DrinkScalePsm
-  | GuideImagePsm
-  | MilkInHotDrinkPsm
-  | MilkOnCerealPsm
-  | ParentFoodPsm
-  | PizzaPsm
-  | PizzaV2Psm
-  | RecipeBuilderPsm
-  | StandardPortionPsm
-  | UnknownPortionPsm;
+export type PortionSizeMethod
+  = | AsServedPsm
+    | CerealPsm
+    | DirectWeightPsm
+    | DrinkScalePsm
+    | GuideImagePsm
+    | MilkInHotDrinkPsm
+    | MilkOnCerealPsm
+    | ParentFoodPsm
+    | PizzaPsm
+    | PizzaV2Psm
+    | RecipeBuilderPsm
+    | StandardPortionPsm
+    | UnknownPortionPsm;
 
 export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
 export type PizzaSize = (typeof pizzaSizes)[number];

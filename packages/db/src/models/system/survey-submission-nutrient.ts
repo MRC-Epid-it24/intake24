@@ -57,5 +57,5 @@ export default class SurveySubmissionNutrient extends BaseModel<
 }
 
 export type SurveySubmissionNutrientAttributes = Attributes<SurveySubmissionNutrient>;
-export type SurveySubmissionNutrientCreationAttributes =
-  CreationAttributes<SurveySubmissionNutrient>;
+export type SurveySubmissionNutrientCreationAttributes
+  = CreationAttributes<SurveySubmissionNutrient>;

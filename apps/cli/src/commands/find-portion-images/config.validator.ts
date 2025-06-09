@@ -53,8 +53,8 @@ export const ConfigSchema = {
   ],
   type: 'object',
 };
-export type ValidateFunction<T> = ((data: unknown) => data is T) &
-  Pick<AjvValidateFunction, 'errors'>;
+export type ValidateFunction<T> = ((data: unknown) => data is T)
+  & Pick<AjvValidateFunction, 'errors'>;
 export const isConfig = ajv.compile(ConfigSchema) as ValidateFunction<Config>;
 export default function validate(value: unknown): Config {
   if (isConfig(value))

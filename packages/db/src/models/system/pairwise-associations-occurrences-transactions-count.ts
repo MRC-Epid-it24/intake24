@@ -33,5 +33,5 @@ export default class PAOccurrenceTransactionCount extends BaseModel<
 }
 
 export type PAOccurrenceTransactionCountAttributes = Attributes<PAOccurrenceTransactionCount>;
-export type PAOccurrenceTransactionCountCreationAttributes =
-  CreationAttributes<PAOccurrenceTransactionCount>;
+export type PAOccurrenceTransactionCountCreationAttributes
+  = CreationAttributes<PAOccurrenceTransactionCount>;

@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 

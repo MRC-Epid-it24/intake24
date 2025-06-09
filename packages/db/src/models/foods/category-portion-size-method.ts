@@ -86,5 +86,5 @@ export default class CategoryPortionSizeMethod extends BaseModel<
 }
 
 export type CategoryPortionSizeMethodAttributes = Attributes<CategoryPortionSizeMethod>;
-export type CategoryPortionSizeMethodCreationAttributes =
-  CreationAttributes<CategoryPortionSizeMethod>;
+export type CategoryPortionSizeMethodCreationAttributes
+  = CreationAttributes<CategoryPortionSizeMethod>;

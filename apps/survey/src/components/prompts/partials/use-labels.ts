@@ -14,11 +14,11 @@ export type UseLabelsProps = {
   prompt: Prompt & { imageMap: ImageMap };
 };
 
-export type UseLabelsSource =
-  { type: 'imageMap'; data: Ref<ImageMapResponse | null> }
-  | { type: 'guideImage'; data: Ref<GuideImageResponse | null> }
-  | { type: 'asServed'; data: Ref<AsServedSetResponse | null> }
-  | { type: 'drinkScale'; data: Ref<{ drinkwareSet: DrinkwareSetResponse | null; imageMap: ImageMapResponse | null }> };
+export type UseLabelsSource
+  = { type: 'imageMap'; data: Ref<ImageMapResponse | null> }
+    | { type: 'guideImage'; data: Ref<GuideImageResponse | null> }
+    | { type: 'asServed'; data: Ref<AsServedSetResponse | null> }
+    | { type: 'drinkScale'; data: Ref<{ drinkwareSet: DrinkwareSetResponse | null; imageMap: ImageMapResponse | null }> };
 
 export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guide-image-prompt' | 'drink-scale-prompt'>(props: UseLabelsProps, source: UseLabelsSource) {
   const { translate } = useI18n();

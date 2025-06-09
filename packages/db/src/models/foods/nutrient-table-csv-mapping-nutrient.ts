@@ -59,5 +59,5 @@ export default class NutrientTableCsvMappingNutrient extends BaseModel<
 }
 
 export type NutrientTableCsvMappingNutrientAttributes = Attributes<NutrientTableCsvMappingNutrient>;
-export type NutrientTableCsvMappingNutrientCreationAttributes =
-  CreationAttributes<NutrientTableCsvMappingNutrient>;
+export type NutrientTableCsvMappingNutrientCreationAttributes
+  = CreationAttributes<NutrientTableCsvMappingNutrient>;

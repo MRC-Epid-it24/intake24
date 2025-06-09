@@ -28,11 +28,11 @@ export interface ExtendedFieldValidationError extends FieldValidationError {
   };
 }
 
-export type ExtendedValidationError =
-  | AlternativeValidationError
-  | GroupedAlternativeValidationError
-  | UnknownFieldsError
-  | ExtendedFieldValidationError;
+export type ExtendedValidationError
+  = | AlternativeValidationError
+    | GroupedAlternativeValidationError
+    | UnknownFieldsError
+    | ExtendedFieldValidationError;
 
 export function getLocalisedTypeErrorMessage(
   i18nService: I18nService,

@@ -52,7 +52,7 @@ export default class SurveySubmissionPortionSizeField extends BaseModel<
   declare food?: NonAttribute<SurveySubmissionFood>;
 }
 
-export type SurveySubmissionPortionSizeFieldAttributes =
-  Attributes<SurveySubmissionPortionSizeField>;
-export type SurveySubmissionPortionSizeFieldCreationAttributes =
-  CreationAttributes<SurveySubmissionPortionSizeField>;
+export type SurveySubmissionPortionSizeFieldAttributes
+  = Attributes<SurveySubmissionPortionSizeField>;
+export type SurveySubmissionPortionSizeFieldCreationAttributes
+  = CreationAttributes<SurveySubmissionPortionSizeField>;

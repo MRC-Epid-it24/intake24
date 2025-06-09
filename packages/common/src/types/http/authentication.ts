@@ -65,10 +65,10 @@ export type FIDOAuthenticationVerificationRequest = {
   response: AuthenticationResponseJSON;
 };
 
-export type MFAAuthenticationVerificationRequest =
-  | OTPAuthenticationVerificationRequest
-  | DuoAuthenticationVerificationRequest
-  | FIDOAuthenticationVerificationRequest;
+export type MFAAuthenticationVerificationRequest
+  = | OTPAuthenticationVerificationRequest
+    | DuoAuthenticationVerificationRequest
+    | FIDOAuthenticationVerificationRequest;
 
 export type MFAVerifyResponse = LoginResponse;
 

@@ -99,5 +99,5 @@ export default class SurveySubmissionMissingFood extends BaseModel<
 }
 
 export type SurveySubmissionMissingFoodAttributes = Attributes<SurveySubmissionMissingFood>;
-export type SurveySubmissionMissingFoodCreationAttributes =
-  CreationAttributes<SurveySubmissionMissingFood>;
+export type SurveySubmissionMissingFoodCreationAttributes
+  = CreationAttributes<SurveySubmissionMissingFood>;

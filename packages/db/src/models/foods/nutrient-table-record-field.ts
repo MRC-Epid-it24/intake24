@@ -53,5 +53,5 @@ export default class NutrientTableRecordField extends BaseModel<
 }
 
 export type NutrientTableRecordFieldAttributes = Attributes<NutrientTableRecordField>;
-export type NutrientTableRecordFieldCreationAttributes =
-  CreationAttributes<NutrientTableRecordField>;
+export type NutrientTableRecordFieldCreationAttributes
+  = CreationAttributes<NutrientTableRecordField>;

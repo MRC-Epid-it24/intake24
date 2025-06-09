@@ -174,12 +174,12 @@ export const selection = z.object({
 
 export type Selection = z.infer<typeof selection>;
 
-export type PromptAnswerResponse =
-  | FoodState[]
-  | string
-  | PortionSizeState
-  | null
-  | number;
+export type PromptAnswerResponse
+  = | FoodState[]
+    | string
+    | PortionSizeState
+    | null
+    | number;
 
 export interface PromptAnswer {
   response: PromptAnswerResponse;

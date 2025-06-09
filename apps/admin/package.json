@@ -22,7 +22,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@simplewebauthn/browser": "^13.1.0",
-    "@tinymce/tinymce-vue": "^6.1.0",
+    "@tinymce/tinymce-vue": "^6.2.0",
     "@vueuse/core": "^13.3.0",
     "axios": "^1.9.0",
     "axios-retry": "^4.5.0",
@@ -37,7 +37,7 @@
     "json-editor-vue": "^0.18.1",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.11",
-    "pinia": "^3.0.2",
+    "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.3.0",
     "pluralize": "^8.0.0",
     "tinymce": "^7.9.1",
@@ -47,14 +47,14 @@
     "vue-gtag": "^2.1.2",
     "vue-i18n": "^11.1.5",
     "vue-router": "^4.5.1",
-    "vuetify": "^3.8.7"
+    "vuetify": "^3.8.8"
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^6.0.8",
     "@tsconfig/node22": "^22.0.2",
     "@types/jsdom": "^21.1.7",
     "@types/lodash": "^4.17.17",
-    "@types/node": "^22.15.29",
+    "@types/node": "^22.15.30",
     "@types/pluralize": "^0.0.33",
     "@vite-pwa/assets-generator": "^1.0.0",
     "@vitejs/plugin-vue": "^5.2.4",
@@ -70,10 +70,10 @@
     "vite-plugin-pwa": "^1.0.0",
     "vite-plugin-vue-devtools": "^7.7.6",
     "vite-plugin-vuetify": "^2.1.1",
-    "vite-plugin-webfont-dl": "^3.10.4",
-    "vitest": "^3.2.0",
+    "vite-plugin-webfont-dl": "^3.10.5",
+    "vitest": "^3.2.2",
     "vue-tsc": "^2.2.10",
     "workbox-window": "^7.3.0",
-    "zod": "^3.25.48"
+    "zod": "^3.25.56"
   }
 }

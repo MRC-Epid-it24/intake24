@@ -47,10 +47,10 @@ export const standardComponentTypes = [
 
 export type StandardComponentType = (typeof standardComponentTypes)[number];
 
-export type PortionSizeComponentType =
-  | `${PortionSizeMethodId}-prompt`
-  | 'missing-food-prompt'
-  | 'portion-size-option-prompt';
+export type PortionSizeComponentType
+  = | `${PortionSizeMethodId}-prompt`
+    | 'missing-food-prompt'
+    | 'portion-size-option-prompt';
 
 /* export const portionSizeComponentTypes = [
   ...portionSizeMethods,

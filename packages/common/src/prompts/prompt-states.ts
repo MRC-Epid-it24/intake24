@@ -38,9 +38,9 @@ export type SelectedFoodRecipeBuilderItemState = FoodHeader & {
   ingredient: UserFoodData;
 };
 
-export type FoodRecipeBuilderItemState =
-  | MissingFoodRecipeBuilderItemState
-  | SelectedFoodRecipeBuilderItemState;
+export type FoodRecipeBuilderItemState
+  = | MissingFoodRecipeBuilderItemState
+    | SelectedFoodRecipeBuilderItemState;
 
 export type RecipeBuilderStepState = {
   confirmed?: 'yes' | 'no';

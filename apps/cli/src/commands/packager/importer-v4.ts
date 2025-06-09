@@ -49,8 +49,8 @@ export const importerSpecificModulesExecutionOptions = [
 ] as const;
 
 export type ConflictResolutionStrategy = (typeof conflictResolutionOptions)[number];
-export type ImporterSpecificModulesExecutionStrategy =
-  (typeof importerSpecificModulesExecutionOptions)[number];
+export type ImporterSpecificModulesExecutionStrategy
+  = (typeof importerSpecificModulesExecutionOptions)[number];
 
 export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
