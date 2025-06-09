@@ -68,7 +68,7 @@
     "morgan": "^1.10.0",
     "ms": "^2.1.3",
     "mssql": "^11.0.1",
-    "multer": "2.0.0",
+    "multer": "2.0.1",
     "natural": "^8.1.0",
     "negotiator": "^1.0.0",
     "node-cache": "^5.1.2",
