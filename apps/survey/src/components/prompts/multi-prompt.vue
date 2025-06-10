@@ -37,7 +37,7 @@ import type { CustomPromptAnswer, FoodState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { customPrompts } from './custom';
 import { BaseLayout } from './layouts';
-import { Next, NextMobile } from './partials';
+import { Next, NextMobile, useScrollToPanel } from './partials';
 import { createBasePromptProps } from './prompt-props';
 
 defineOptions({
@@ -59,6 +59,8 @@ const { action } = usePromptUtils(props, { emit });
 const promptRefs = useTemplateRef<InstanceType<CustomPrompts>[]>('promptRefs');
 
 const panel = ref<number | undefined>(0);
+useScrollToPanel(panel);
+
 const state = computed({
   get: () => props.modelValue,
   set: value => emit('update:modelValue', value),
