@@ -8,7 +8,10 @@ export default () => {
   const url = '/api/admin/auth/login';
 
   it('missing credentials should return 400 with errors', async () => {
-    const { status, body } = await request(suite.app).post(url).set('Accept', 'application/json');
+    const { status, body } = await request(suite.app)
+      .post(url)
+      .set('Accept', 'application/json')
+      .send({});
 
     expect(status).toBe(400);
     expect(body).toContainAllKeys(['errors', 'message']);

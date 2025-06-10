@@ -54,7 +54,7 @@ export function device() {
 
       await device.update({ preferred });
 
-      if (req.body.preferred === true) {
+      if (preferred === true) {
         await MFADevice.update(
           { preferred: false },
           { where: { id: { [Op.ne]: deviceId }, userId } },

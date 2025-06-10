@@ -13,7 +13,8 @@ export default () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
+      .set('Authorization', suite.bearer.respondent)
+      .send({});
 
     expect(status).toBe(400);
     expect(body).toContainAllKeys(['errors', 'message']);

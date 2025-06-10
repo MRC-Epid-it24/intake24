@@ -22,7 +22,7 @@ function sharedTests(suite: typeof Suite) {
   const defaultOptions: Options = { bearer: 'user' };
 
   const assertMissingAuthentication = async (method: Method, url: string, ops?: Options) => {
-    const { input, code = 401 } = { ...defaultOptions, ...ops };
+    const { code = 401, input = {} } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -32,7 +32,7 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertMissingAuthorization = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 403, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 403, input = {} } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
     if (bearer)
@@ -76,7 +76,7 @@ function sharedTests(suite: typeof Suite) {
     fields: string[],
     ops?: Options,
   ) => {
-    const { bearer, code = 400, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 400, input = {} } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -109,7 +109,7 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertMissingRecord = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 404, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 404, input = {} } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
