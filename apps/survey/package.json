@@ -34,6 +34,7 @@
     "dotenv": "^16.5.0",
     "dotenv-expand": "^12.0.2",
     "express": "^4.21.2",
+    "fast-equals": "^5.2.2",
     "flag-icons": "^7.5.0",
     "helmet": "^8.1.0",
     "lodash": "^4.17.21",

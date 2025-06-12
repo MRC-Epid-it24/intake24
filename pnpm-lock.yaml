@@ -840,6 +840,9 @@ importers:
       express:
         specifier: ^4.21.2
         version: 4.21.2
+      fast-equals:
+        specifier: ^5.2.2
+        version: 5.2.2
       flag-icons:
         specifier: ^7.5.0
         version: 7.5.0

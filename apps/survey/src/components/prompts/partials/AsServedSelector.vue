@@ -97,6 +97,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { WeightFactorProps } from './AsServedWeightFactor.vue';
+import { deepEqual } from 'fast-equals';
 import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, SelectedAsServedImage } from '@intake24/common/surveys';
@@ -351,6 +352,9 @@ function update() {
     weight: asServedData.value.images[objectIdx.value].weight * weightFactor.value,
     imageUrl: asServedData.value.images[objectIdx.value].mainImageUrl,
   };
+
+  if (deepEqual(props.modelValue, state))
+    return;
 
   emit('update:modelValue', state);
 };
