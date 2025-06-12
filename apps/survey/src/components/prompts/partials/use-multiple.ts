@@ -20,7 +20,15 @@ export function useMultiple<P extends 'as-served-prompt'>(props: UseMultipleProp
 
     return rest;
   });
-  const multipleEnabled = computed(() => !!props.prompt.multiple && !!parameters.value.multiple);
+  const multipleEnabled = computed(() => {
+    if (typeof props.prompt.multiple === 'boolean')
+      return props.prompt.multiple;
+
+    if (typeof props.prompt.multiple.strategy === 'boolean')
+      return props.prompt.multiple.strategy;
+
+    return !!parameters.value.multiple;
+  });
 
   return { multipleProps, multipleEnabled };
 }

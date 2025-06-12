@@ -401,13 +401,19 @@
       "_": "Image map settings",
       "labels": {
         "_": "Labels",
-        "true": "Always show labels",
-        "false": "Never show labels",
-        "null": "Portion size method setting"
+        "true": "Always ON",
+        "false": "Always OFF",
+        "null": "Portion size method"
       },
       "pinchZoom": "Show PinchZoom for mobile UI"
     },
-    "multiple": "Allow multiple items to be selected",
+    "multiple": {
+      "_": "Multiple items selection",
+      "strategy": "Selection strategy",
+      "true": "Always ON",
+      "false": "Always OFF",
+      "null": "Portion size method"
+    },
     "label": "Options list label",
     "leftovers": "Allow leftovers",
     "linkedQuantity": {

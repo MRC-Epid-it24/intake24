@@ -39,7 +39,7 @@
                     class="mb-4"
                     hide-details="auto"
                     :label="$t(`survey-schemes.prompts.slider.${item}.label`)"
-                    :model-value="slider[item].label"
+                    :model-value="!!slider[item].label"
                     @update:model-value="updateLabel(item, $event)"
                   />
                   <language-selector
@@ -74,7 +74,15 @@
         </v-col>
         <v-divider vertical />
         <v-col cols="12" md="6">
-          <v-card-text>
+          <v-card-text class="d-flex flex-column gr-4">
+            <v-select
+              v-if="!hide.includes('strategy')"
+              v-model="slider.strategy"
+              hide-details="auto"
+              :items="strategies"
+              :label="$t('survey-schemes.prompts.multiple.strategy')"
+              prepend-inner-icon="fas fa-chess-pawn"
+            />
             <v-text-field
               v-model.number="slider.step"
               hide-details="auto"
@@ -84,7 +92,7 @@
               variant="outlined"
             />
             <v-switch
-              v-if="!hideConfirm"
+              v-if="!hide.includes('confirm')"
               v-model="slider.confirm"
               hide-details="auto"
               :label="$t('survey-schemes.prompts.slider.confirm')"
@@ -96,54 +104,46 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
-
+import { useVModel } from '@vueuse/core';
+import { computed, ref } from 'vue';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { Slider } from '@intake24/common/prompts';
+import { useI18n } from '@intake24/i18n';
 
-export default defineComponent({
-  name: 'SliderSettings',
-
-  components: { LanguageSelector },
-
-  props: {
-    hideConfirm: {
-      type: Boolean as PropType<boolean>,
-    },
-    modelValue: {
-      type: Object as PropType<Slider>,
-      required: true,
-    },
+const props = defineProps({
+  hide: {
+    type: Array as PropType<(keyof Slider)[]>,
+    default: () => [],
   },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const tabs = ['current', 'min', 'max'] as const;
-    const tab = ref(tabs[0]);
-    const isNumber = computed(() => [
-      (value: string | null): boolean | string =>
-        !Number.isNaN(value) || 'Value needs to be a number.',
-    ]);
-
-    const slider = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        emit('update:modelValue', value);
-      },
-    });
-
-    const updateLabel = (key: keyof Pick<Slider, 'current' | 'min' | 'max'>, value: boolean) => {
-      slider.value[key].label = value ? { en: '' } : false;
-    };
-
-    return { isNumber, slider, updateLabel, tab, tabs };
+  modelValue: {
+    type: Object as PropType<Slider>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const { i18n: { t } } = useI18n();
+
+const tabs = ['current', 'min', 'max'] as const;
+const tab = ref(tabs[0]);
+const isNumber = computed(() => [
+  (value: string | null): boolean | string =>
+    !Number.isNaN(value) || 'Value needs to be a number.',
+]);
+
+const slider = useVModel(props, 'modelValue', emit, { deep: true, passive: true });
+
+function updateLabel(key: keyof Pick<Slider, 'current' | 'min' | 'max'>, value: boolean) {
+  slider.value[key].label = value ? { en: '' } : false;
+}
+
+const strategies = ([true, null] as const).map(value => ({
+  value,
+  title: t(`survey-schemes.prompts.multiple.${value}`),
+}));
 </script>
 
 <style lang="scss" scoped></style>

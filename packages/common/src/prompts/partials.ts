@@ -27,6 +27,7 @@ export const carouselDefaults: Carousel = {
 const counterValue = z.number().positive().multipleOf(0.25).nullish().transform(val => val ?? undefined);
 export const counter = z.object({
   type: z.literal('counter'),
+  strategy: z.literal(true).nullish(),
   current: counterValue,
   min: counterValue,
   max: counterValue,
@@ -38,6 +39,7 @@ export type Counter = z.infer<typeof counter>;
 
 export const counterDefaults: Counter = {
   type: 'counter',
+  strategy: null,
   min: 0.25,
   max: 30,
   current: 1,
@@ -61,6 +63,7 @@ export type SliderValue = z.infer<typeof sliderValue>;
 
 export const slider = z.object({
   type: z.literal('slider'),
+  strategy: z.literal(true).nullish(),
   current: sliderValue.extend({ size: z.number() }),
   min: sliderValue,
   max: sliderValue,
@@ -71,6 +74,7 @@ export type Slider = z.infer<typeof slider>;
 
 export const sliderDefaults: Slider = {
   type: 'slider',
+  strategy: null,
   min: { value: 1, label: false },
   max: { value: 10, label: false },
   current: { value: 1, label: false, size: 50 },

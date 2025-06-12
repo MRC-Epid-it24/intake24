@@ -14,11 +14,17 @@
           :model-value="leftovers"
           @update:model-value="update('leftovers', $event)"
         />
+        <image-map-settings
+          :model-value="imageMap"
+          @update:model-value="update('imageMap', $event)"
+        />
+      </v-col>
+      <v-col cols="12" md="6">
         <v-select
           class="mt-4"
           hide-details="auto"
           :items="multipleItems"
-          :label="$t('survey-schemes.prompts.multiple')"
+          :label="$t('survey-schemes.prompts.multiple._')"
           :model-value="typeof multiple === 'boolean' ? false : multiple.type"
           variant="outlined"
           @update:model-value="updateMultiple($event)"
@@ -29,12 +35,6 @@
           class="mt-4"
           :model-value="multiple"
           @update:model-value="update('multiple', $event)"
-        />
-      </v-col>
-      <v-col cols="12" md="6">
-        <image-map-settings
-          :model-value="imageMap"
-          @update:model-value="update('imageMap', $event)"
         />
       </v-col>
     </v-row>

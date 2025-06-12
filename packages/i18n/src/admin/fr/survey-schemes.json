@@ -397,13 +397,19 @@
       "_": "Paramètres des photos à curseur",
       "labels": {
         "_": "Montrer les libellés",
-        "true": "Always show labels",
-        "false": "Never show labels",
-        "null": "Portion size method setting"
+        "true": "Always ON",
+        "false": "Always OFF",
+        "null": "Méthode de quantification"
       },
       "pinchZoom": "Montrer PinchZoom pour mobile UI"
     },
-    "multiple": "Autoriser de spécifier plusieurs éléments",
+    "multiple": {
+      "_": "Sélection de plusieurs éléments",
+      "strategy": "Stratégie de sélection",
+      "true": "Always ON",
+      "false": "Always OFF",
+      "null": "Méthode de quantification"
+    },
     "label": "Libellé de la liste d'options",
     "leftovers": "Autoriser les restes",
     "linkedQuantity": {

@@ -6,10 +6,10 @@
         {{ $t('survey-schemes.prompts.counter.title') }}
       </v-toolbar-title>
     </v-toolbar>
-    <v-container>
-      <v-row>
-        <v-col cols="12" md="6">
-          <v-card-text>
+    <v-card-text>
+      <v-container>
+        <v-row>
+          <v-col cols="12" md="6">
             <v-text-field
               v-model.number="modelValue.current"
               hide-details="auto"
@@ -36,38 +36,43 @@
               :rules="isNumber"
               variant="outlined"
             />
-          </v-card-text>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-switch
-            v-model="modelValue.confirm"
-            hide-details="auto"
-            :label="$t('survey-schemes.prompts.counter.confirm')"
-          />
-          <v-switch
-            v-model="modelValue.whole"
-            hide-details="auto"
-            :label="$t('survey-schemes.prompts.counter.whole')"
-          />
-          <v-switch
-            v-model="modelValue.fraction"
-            hide-details="auto"
-            :label="$t('survey-schemes.prompts.counter.fraction')"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="modelValue.strategy"
+              hide-details="auto"
+              :items="strategies"
+              :label="$t('survey-schemes.prompts.multiple.strategy')"
+              prepend-inner-icon="fas fa-chess-pawn"
+            />
+            <v-switch
+              v-model="modelValue.confirm"
+              hide-details="auto"
+              :label="$t('survey-schemes.prompts.counter.confirm')"
+            />
+            <v-switch
+              v-model="modelValue.whole"
+              hide-details="auto"
+              :label="$t('survey-schemes.prompts.counter.whole')"
+            />
+            <v-switch
+              v-model="modelValue.fraction"
+              hide-details="auto"
+              :label="$t('survey-schemes.prompts.counter.fraction')"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
-
 import { computed } from 'vue';
 import type { Counter } from '@intake24/common/prompts';
-
-defineOptions({ name: 'CounterSettings' });
+import { useI18n } from '@intake24/i18n';
 
 const props = defineProps({
   modelValue: {
@@ -78,12 +83,19 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+const { i18n: { t } } = useI18n();
+
 const modelValue = useVModel(props, 'modelValue', emit, { deep: true, passive: true });
 
 const isNumber = computed(() => [
   (value: string | null): boolean | string =>
     !Number.isNaN(value) || 'Value needs to be a number.',
 ]);
+
+const strategies = ([true, null] as const).map(value => ({
+  value,
+  title: t(`survey-schemes.prompts.multiple.${value}`),
+}));
 </script>
 
 <style lang="scss" scoped></style>

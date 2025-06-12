@@ -19,7 +19,7 @@
           class="mt-4"
           hide-details="auto"
           :items="multipleItems"
-          :label="$t('survey-schemes.prompts.multiple')"
+          :label="$t('survey-schemes.prompts.multiple._')"
           :model-value="typeof multiple === 'boolean' ? false : multiple.type"
           variant="outlined"
           @update:model-value="updateMultiple($event)"

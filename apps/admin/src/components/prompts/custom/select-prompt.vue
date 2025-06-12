@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-switch
           hide-details="auto"
-          :label="$t('survey-schemes.prompts.multiple')"
+          :label="$t('survey-schemes.prompts.multiple._')"
           :model-value="multiple"
           @update:model-value="update('multiple', $event)"
         />
