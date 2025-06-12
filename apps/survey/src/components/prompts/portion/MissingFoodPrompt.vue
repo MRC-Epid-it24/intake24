@@ -106,9 +106,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </base-layout>
 </template>
 
@@ -120,7 +117,7 @@ import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { barcodes } from '@intake24/ui';
 import { BaseLayout } from '../layouts';
-import { Next, NextMobile, useForm, usePanel } from '../partials';
+import { Next, useForm, usePanel } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 
 defineOptions({ components: { ...barcodes } });

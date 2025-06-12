@@ -25,11 +25,7 @@
     <template #actions>
       <v-btn
         v-if="!meal.flags.includes('meal-time:disabled')"
-        class="px-4"
-        color="primary"
-        size="large"
         :title="$t('recall.actions.mealTime')"
-        variant="text"
         @click="action('mealTime', meal.id)"
       >
         <v-icon icon="fas fa-clock" start />
@@ -41,11 +37,7 @@
       >
         <template #activator="{ props }">
           <v-btn
-            class="px-4"
-            color="primary"
-            size="large"
             :title="$t('recall.actions.deleteMeal')"
-            variant="text"
             v-bind="props"
           >
             <v-icon icon="$delete" start />
@@ -60,39 +52,6 @@
       </confirm-dialog>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <v-btn
-        v-if="!meal.flags.includes('meal-time:disabled')"
-        color="primary"
-        :title="$t('recall.actions.nav.mealTime')"
-        variant="text"
-        @click.stop="action('mealTime', meal.id)"
-      >
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.mealTime') }}
-        </span>
-        <v-icon class="pb-1" icon="fas fa-clock" />
-      </v-btn>
-      <confirm-dialog
-        :label="$t('recall.menu.meal.delete')"
-        @confirm="action('deleteMeal', meal.id)"
-      >
-        <template #activator="{ props }">
-          <v-btn color="primary" variant="text" v-bind="props">
-            <span class="text-overline font-weight-medium">
-              {{ $t('recall.actions.nav.deleteMeal') }}
-            </span>
-            <v-icon class="pb-1" icon="$delete" />
-          </v-btn>
-        </template>
-        <i18n-t keypath="recall.menu.meal.deleteConfirm" tag="span">
-          <template #item>
-            <span class="font-weight-medium">{{ mealName }}</span>
-          </template>
-        </i18n-t>
-      </confirm-dialog>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </card-layout>
 </template>
 
@@ -104,7 +63,7 @@ import type { MealState } from '@intake24/common/surveys';
 import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
 import { CardLayout } from '../layouts';
-import { EditableFoodList, Next, NextMobile } from '../partials';
+import { EditableFoodList, Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 const props = defineProps({

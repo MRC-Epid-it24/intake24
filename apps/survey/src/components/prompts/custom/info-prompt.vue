@@ -7,9 +7,6 @@
     <template #actions>
       <next v-if="isValid" @click="updateAndAction('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile v-if="isValid" @click="updateAndAction('next')" />
-    </template>
     <v-carousel
       v-if="prompt.carousel"
       v-model="carousel"
@@ -75,7 +72,7 @@
 import { computed } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
-import { Next, NextMobile, useCarousel, useYoutubeVideo } from '../partials';
+import { Next, useCarousel, useYoutubeVideo } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({

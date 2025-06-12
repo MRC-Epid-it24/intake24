@@ -26,47 +26,20 @@
     </v-card-text>
     <template #actions>
       <v-btn
-        class="px-4"
-        color="primary"
         :disabled="!hasMeals"
-        size="large"
         :title="promptI18n.no"
-        variant="text"
         @click.stop="action('cancel')"
       >
         <v-icon icon="$cancel" start />
         {{ promptI18n.no }}
       </v-btn>
       <v-btn
-        class="px-4"
-        color="primary"
         :disabled="!isValid"
-        size="large"
         :title="promptI18n.yes"
         @click="action('next')"
       >
         <v-icon icon="$add" start />
         {{ promptI18n.yes }}
-      </v-btn>
-    </template>
-    <template #nav-actions>
-      <v-btn
-        color="primary"
-        :disabled="!hasMeals"
-        :title="promptI18n.no"
-        variant="text"
-        @click="action('cancel')"
-      >
-        <span class="text-overline font-weight-medium">
-          {{ promptI18n.no }}
-        </span>
-        <v-icon class="pb-1" icon="$cancel" />
-      </v-btn>
-      <v-btn color="primary" :disabled="!isValid" :title="promptI18n.yes" @click="action('next')">
-        <span class="text-overline font-weight-medium">
-          {{ promptI18n.yes }}
-        </span>
-        <v-icon class="pb-1" icon="$next" />
       </v-btn>
     </template>
   </card-layout>

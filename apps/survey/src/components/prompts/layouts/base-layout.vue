@@ -15,19 +15,16 @@
       </v-card>
     </slot>
     <slot />
-    <v-card-actions
-      v-if="!$vuetify.display.mobile || prompt.actions?.both"
+    <prompt-actions
       id="actions"
-      class="navigation pa-5 px-md-0 d-flex flex-column-reverse flex-md-row align-stretch flex-wrap ga-3"
+      class="navigation pa-4 px-md-0"
     >
       <template v-if="desktopActions.length">
         <v-btn
           v-for="item in desktopActions"
           :key="item.type"
-          class="px-4"
           :color="item.color ?? undefined"
           :disabled="item.type === 'next' && !isValid"
-          size="large"
           :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
           :variant="item.variant"
           @click="action(item.type, foodOrMealId, item.params)"
@@ -38,39 +35,10 @@
       <template v-else>
         <slot name="actions" />
       </template>
-    </v-card-actions>
+    </prompt-actions>
     <div v-if="$vuetify.display.mobile" id="actions" class="bottom-navigation">
       <div v-if="showSummary" class="bottom-navigation__summary">
         <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action" />
-      </div>
-      <div v-if="mobileActions.length || hasNavActionsSlot" class="bottom-navigation__actions">
-        <template v-if="mobileActions.length">
-          <template v-for="(item, idx) in mobileActions" :key="item.type">
-            <v-btn
-              :color="item.color ?? undefined"
-              :disabled="item.type === 'next' && !isValid"
-              :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
-              :value="item.type"
-              :variant="item.variant"
-              @click="action(item.type, foodOrMealId, item.params)"
-            >
-              <span class="text-overline font-weight-medium">
-                {{ translate(item.text) }}
-              </span>
-              <v-icon v-if="item.icon" class="pb-1">
-                {{ item.icon }}
-              </v-icon>
-            </v-btn>
-            <v-divider
-              v-if="idx + 1 < mobileActions.length"
-              :key="`div-${item.type}`"
-              vertical
-            />
-          </template>
-        </template>
-        <template v-else>
-          <slot name="nav-actions" />
-        </template>
       </div>
     </div>
   </div>
@@ -119,11 +87,9 @@ const {
   action,
   desktopActions,
   foodOrMealId,
-  hasNavActionsSlot,
   i18n,
   isInMultiPrompt,
   meals,
-  mobileActions,
   showSummary,
   translate,
 } = useLayout(props, { emit, slots });

@@ -162,9 +162,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </base-layout>
 </template>
 
@@ -180,7 +177,7 @@ import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout } from '../layouts';
-import { Next, NextMobile, QuantityCard, usePanel, usePortionSizeMethod } from '../partials';
+import { Next, QuantityCard, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 

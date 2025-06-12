@@ -1,5 +1,12 @@
 <template>
-  <v-btn class="px-4" :color="color" :disabled="disabled" size="large" :title="currentLabel">
+  <v-btn
+    class="px-4"
+    :color="color"
+    :disabled="disabled"
+    size="large"
+    :title="currentLabel"
+    variant="flat"
+  >
     <v-icon v-if="icon" start>
       {{ icon }}
     </v-icon>

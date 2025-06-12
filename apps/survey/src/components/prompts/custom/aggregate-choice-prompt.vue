@@ -79,9 +79,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </component>
 </template>
 
@@ -93,7 +90,7 @@ import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
-import { Next, NextMobile } from '../partials';
+import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({

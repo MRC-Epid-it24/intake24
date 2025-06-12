@@ -9,7 +9,6 @@ export { default as LinkedQuantity } from './LinkedQuantity.vue';
 export * from './LinkedQuantity.vue';
 export { default as MealFoodChooser } from './MealFoodChooser.vue';
 export { default as Next } from './Next.vue';
-export { default as NextMobile } from './NextMobile.vue';
 export { default as PinchZoomImageMapSelector } from './PinchZoomImageMapSelector.vue';
 export { default as QuantityBadge } from './QuantityBadge.vue';
 export { default as QuantityCard } from './QuantityCard.vue';

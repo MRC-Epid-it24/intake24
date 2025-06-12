@@ -5,41 +5,18 @@
     </template>
     <template #actions>
       <v-btn
-        class="px-4"
-        color="primary"
-        size="large"
         :title="promptI18n.yes"
-        variant="text"
         @click.stop="action('addMeal')"
       >
         <v-icon icon="$add" start />
         {{ promptI18n.yes }}
       </v-btn>
       <v-btn
-        class="px-4"
-        color="primary"
-        size="large"
         :title="promptI18n.no"
-        variant="text"
         @click.stop="action('next')"
       >
         <v-icon icon="$next" start />
         {{ promptI18n.no }}
-      </v-btn>
-    </template>
-    <template #nav-actions>
-      <v-btn color="primary" :title="promptI18n.yes" variant="text" @click.stop="action('addMeal')">
-        <span class="text-overline font-weight-medium">
-          {{ promptI18n.yes }}
-        </span>
-        <v-icon class="pb-1" icon="$add" />
-      </v-btn>
-      <v-divider vertical />
-      <v-btn color="primary" :title="promptI18n.no" variant="text" @click.stop="action('next')">
-        <span class="text-overline font-weight-medium">
-          {{ promptI18n.no }}
-        </span>
-        <v-icon class="pb-1" icon="$next" />
       </v-btn>
     </template>
   </card-layout>

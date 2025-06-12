@@ -1,4 +1,5 @@
 import { createVuetify } from 'vuetify';
+import { VCardActions } from 'vuetify/components/VCard';
 
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
@@ -12,7 +13,19 @@ export default createVuetify({
     VTimePicker,
   },
   directives,
+  aliases: {
+    PromptActions: VCardActions,
+  },
   defaults: {
+    PromptActions: {
+      class: ['d-flex', 'flex-row', 'align-stretch', 'flex-wrap', 'ga-3'],
+      VBtn: {
+        variant: 'tonal',
+        color: 'primary',
+        class: ['px-4', 'flex-grow-1', 'flex-md-grow-0', 'flex-shrink-1'],
+        size: 'large',
+      },
+    },
     VAutocomplete: {
       color: 'primary',
       variant: 'outlined',

@@ -3,11 +3,7 @@
     <component :is="prompt.source.type" v-bind="{ food, prompt, modelValue }" @update:model-value="select" />
     <template #actions>
       <v-btn
-        class="px-4"
-        color="primary"
-        size="large"
         :title="promptI18n.missing"
-        variant="outlined"
         @click="action('missing')"
       >
         <v-icon icon="$no" start />
@@ -15,15 +11,6 @@
       </v-btn>
       <v-spacer />
       <next v-if="modelValue.data" :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
-    </template>
-    <template #nav-actions>
-      <v-btn color="primary" :title="promptI18n.missing" variant="text" @click="action('missing')">
-        <span class="text-overline font-weight-medium">
-          {{ promptI18n.missing }}
-        </span>
-        <v-icon class="pb-1" icon="$no" />
-      </v-btn>
-      <next-mobile v-if="modelValue.data" :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -35,7 +22,7 @@ import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout } from '../layouts';
-import { Next, NextMobile } from '../partials';
+import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 import externalSources from './external-sources';
 

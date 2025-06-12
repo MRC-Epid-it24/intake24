@@ -11,9 +11,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </card-layout>
 </template>
 
@@ -21,7 +18,7 @@
 import type { PropType } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
-import { Next, NextMobile, useDatePicker } from '../partials';
+import { Next, useDatePicker } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 const props = defineProps({

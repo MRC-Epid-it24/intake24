@@ -38,9 +38,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </component>
 </template>
 
@@ -50,7 +47,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
-import { Next, NextMobile, useForm } from '../partials';
+import { Next, useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({

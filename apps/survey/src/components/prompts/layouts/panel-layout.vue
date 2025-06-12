@@ -11,19 +11,16 @@
           />
         </slot>
         <slot />
-        <v-card-actions
-          v-if="isInMultiPrompt || !$vuetify.display.mobile || prompt.actions?.both"
+        <prompt-actions
           id="actions"
-          class="navigation pa-0 d-flex flex-column-reverse flex-md-row align-stretch flex-wrap ga-3"
+          class="navigation pa-4 px-md-0"
         >
           <template v-if="desktopActions.length">
             <v-btn
               v-for="item in desktopActions"
               :key="item.type"
-              class="px-4"
               :color="item.color ?? undefined"
               :disabled="item.type === 'next' && !isValid"
-              size="large"
               :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
               :variant="item.variant"
               @click="action(item.type, foodOrMealId, item.params)"
@@ -37,7 +34,7 @@
           <template v-else>
             <slot name="actions" />
           </template>
-        </v-card-actions>
+        </prompt-actions>
       </v-card>
     </v-expansion-panel-text>
   </v-expansion-panel>
@@ -86,7 +83,6 @@ const {
   foodOrMealId,
   hasDefaultSlot,
   i18n,
-  isInMultiPrompt,
   translate,
 } = useLayout(props, { emit, slots });
 </script>

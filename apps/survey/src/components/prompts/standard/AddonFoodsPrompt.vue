@@ -94,9 +94,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </card-layout>
 </template>
 
@@ -111,7 +108,7 @@ import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 import { CardLayout } from '../layouts';
-import { Next, NextMobile, useStandardUnits } from '../partials';
+import { Next, useStandardUnits } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 const props = defineProps({

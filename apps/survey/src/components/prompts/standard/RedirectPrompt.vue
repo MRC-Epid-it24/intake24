@@ -19,24 +19,14 @@
         </v-card>
       </v-card-text>
       <template #actions>
-        <v-btn
-          class="px-4"
-          color="secondary"
-          size="large"
-          :to="{ name: 'survey-home', params: { surveyId } }"
-          variant="outlined"
-        >
+        <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
           <v-icon icon="$home" start />
           {{ $t('common.home') }}
         </v-btn>
         <v-btn
           v-if="feedbackEnabled"
-          class="px-4"
-          color="primary"
           :disabled="!feedbackAvailable"
-          size="large"
           :to="{ name: 'feedback-home', params: { surveyId } }"
-          variant="outlined"
         >
           <v-icon icon="$feedback" start />
           {{ $t('recall.actions.feedback') }}
@@ -44,46 +34,14 @@
         <template v-if="followUpUrl">
           <v-spacer />
           <v-btn
-            class="px-4"
-            color="primary"
             :href="followUpUrl"
-            size="large"
             :target="prompt.target"
             :title="promptI18n.goTo"
-            variant="outlined"
           >
             <v-icon icon="$redirect" start />
             {{ promptI18n.goTo }}
           </v-btn>
         </template>
-      </template>
-      <template #nav-actions>
-        <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
-          <span class="text-overline font-weight-medium">
-            {{ $t('common.home') }}
-          </span>
-          <v-icon class="pb-1" icon="$home" />
-        </v-btn>
-        <v-divider vertical />
-        <v-btn
-          v-if="feedbackEnabled"
-          color="primary"
-          :disabled="!feedbackAvailable"
-          :to="{ name: 'feedback-home', params: { surveyId } }"
-          variant="text"
-        >
-          <span class="text-overline font-weight-medium">
-            {{ $t('recall.actions.nav.feedback') }}
-          </span>
-          <v-icon class="pb-1" icon="$feedback" />
-        </v-btn>
-        <v-divider vertical />
-        <v-btn v-if="followUpUrl" color="primary" :href="followUpUrl" :target="prompt.target" variant="text">
-          <span class="text-overline font-weight-medium">
-            {{ promptI18n.goTo }}
-          </span>
-          <v-icon class="pb-1" icon="$redirect" />
-        </v-btn>
       </template>
     </card-layout>
     <survey-rating

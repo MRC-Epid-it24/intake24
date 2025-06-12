@@ -44,41 +44,18 @@
     </v-card-text>
     <template #actions>
       <v-btn
-        class="px-4"
-        color="primary"
-        size="large"
         :title="promptI18n.notSame"
-        variant="text"
         @click.stop="action('notSame')"
       >
         <v-icon icon="$no" start />
         {{ promptI18n.notSame }}
       </v-btn>
       <v-btn
-        class="px-4"
-        color="primary"
-        size="large"
         :title="promptI18n.same"
-        variant="text"
         @click.stop="action('same')"
       >
         <v-icon icon="$yes" start />
         {{ promptI18n.same }}
-      </v-btn>
-    </template>
-    <template #nav-actions>
-      <v-btn color="primary" :title="$t('common.action.no')" variant="text" @click.stop="action('notSame')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('common.action.no') }}
-        </span>
-        <v-icon class="pb-1" icon="$no" />
-      </v-btn>
-      <v-divider vertical />
-      <v-btn color="primary" title="$t('common.action.yes')" variant="text" @click.stop="action('same')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('common.action.yes') }}
-        </span>
-        <v-icon class="pb-1" icon="$yes" />
       </v-btn>
     </template>
   </card-layout>

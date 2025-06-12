@@ -7,21 +7,6 @@
     <template #actions>
       <yes-no-choice v-model="state" />
     </template>
-    <template #nav-actions>
-      <v-btn color="primary" :title="$t('common.action.no')" variant="text" @click.stop="state = false">
-        <span class="text-overline font-weight-medium">
-          {{ $t('common.action.no') }}
-        </span>
-        <v-icon class="pb-1" icon="$no" />
-      </v-btn>
-      <v-divider vertical />
-      <v-btn color="primary" :title="$t('common.action.yes')" variant="text" @click.stop="state = true">
-        <span class="text-overline font-weight-medium">
-          {{ $t('common.action.yes') }}
-        </span>
-        <v-icon class="pb-1" icon="$yes" />
-      </v-btn>
-    </template>
   </component>
 </template>
 

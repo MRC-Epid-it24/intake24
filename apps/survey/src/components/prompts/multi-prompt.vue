@@ -22,9 +22,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </base-layout>
 </template>
 
@@ -37,7 +34,7 @@ import type { CustomPromptAnswer, FoodState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { customPrompts } from './custom';
 import { BaseLayout } from './layouts';
-import { Next, NextMobile, useScrollToPanel } from './partials';
+import { Next, useScrollToPanel } from './partials';
 import { createBasePromptProps } from './prompt-props';
 
 defineOptions({

@@ -24,9 +24,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </component>
 </template>
 
@@ -36,7 +33,7 @@ import { computed, ref } from 'vue';
 import type { FoodState, MealState } from '@intake24/common/surveys';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { BaseLayout, CardLayout, PanelLayout } from '../../layouts';
-import { Next, NextMobile } from '../../partials';
+import { Next } from '../../partials';
 import { createBasePromptProps } from '../../prompt-props';
 import { foodSelectionNoneUuid } from './food-selection';
 

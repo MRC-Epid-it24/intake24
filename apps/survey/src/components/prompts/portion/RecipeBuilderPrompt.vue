@@ -93,9 +93,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="updateStepsIngredients" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="updateStepsIngredients" />
-    </template>
   </base-layout>
 </template>
 
@@ -122,7 +119,7 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { foodsService } from '@intake24/survey/services';
 import { getEntityId } from '@intake24/survey/util';
 import { BaseLayout } from '../layouts';
-import { Next, NextMobile } from '../partials';
+import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 const props = defineProps({

@@ -15,21 +15,9 @@
       @reviewed="updateReviewed('mobile', $event)"
     />
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')">
+      <next :disabled="!isValid && !isValidMobile" @click="action('next')">
         {{ $t('recall.actions.submit') }}
       </next>
-    </template>
-    <template #nav-actions>
-      <v-btn color="primary" variant="text" @click.stop="action('addMeal')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.addMeal') }}
-        </span>
-        <v-icon class="pb-1" icon="$add" />
-      </v-btn>
-      <v-divider vertical />
-      <next-mobile :disabled="!isValidMobile" @click="action('next')">
-        {{ $t('recall.actions.nav.submit') }}
-      </next-mobile>
     </template>
   </card-layout>
 </template>
@@ -43,7 +31,7 @@ import type { MealState } from '@intake24/common/surveys';
 import { ReviewMealList, ReviewMealListMobile } from '@intake24/survey/components/layouts';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
-import { Next, NextMobile } from '../partials';
+import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 const props = defineProps({

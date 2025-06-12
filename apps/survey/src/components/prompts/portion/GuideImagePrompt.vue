@@ -84,9 +84,6 @@
     <template #actions>
       <next :disabled="!isValid" @click="action('next')" />
     </template>
-    <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')" />
-    </template>
   </base-layout>
 </template>
 
@@ -103,7 +100,6 @@ import {
   ImageMapSelector,
   LinkedQuantity,
   Next,
-  NextMobile,
   QuantityBadge,
   QuantityCard,
   useFetchImageData,

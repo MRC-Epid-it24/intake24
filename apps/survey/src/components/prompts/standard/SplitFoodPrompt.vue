@@ -15,37 +15,16 @@
     </v-card-text>
     <template #actions>
       <v-btn
-        class="px-4"
-        color="primary"
-        size="large"
         :title="promptI18n.separate"
-        variant="flat"
         @click.stop="action('separate')"
       >
         {{ promptI18n.separate }}
       </v-btn>
       <v-btn
-        class="px-4"
-        color="primary"
-        size="large"
         :title="promptI18n.single"
-        variant="text"
         @click.stop="action('single')"
       >
         {{ promptI18n.single }}
-      </v-btn>
-    </template>
-    <template #nav-actions>
-      <v-btn color="primary" :title="promptI18n.separate" variant="flat" @click.stop="action('separate')">
-        <span class="text-overline font-weight-medium">
-          {{ promptI18n.separate }}
-        </span>
-      </v-btn>
-      <v-divider vertical />
-      <v-btn color="primary" :title="promptI18n.single" variant="text" @click.stop="action('single')">
-        <span class="text-overline font-weight-medium">
-          {{ promptI18n.single }}
-        </span>
       </v-btn>
     </template>
   </card-layout>
