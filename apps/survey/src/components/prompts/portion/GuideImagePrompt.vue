@@ -89,7 +89,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { LinkedParent } from '../partials';
+import type { LinkedParent } from '../../handlers/composables';
 import { computed, ref } from 'vue';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';

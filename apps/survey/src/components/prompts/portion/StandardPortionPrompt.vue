@@ -100,7 +100,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { LinkedParent } from '../partials';
+import type { LinkedParent } from '../../handlers/composables';
 import { computed, onMounted, ref } from 'vue';
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';

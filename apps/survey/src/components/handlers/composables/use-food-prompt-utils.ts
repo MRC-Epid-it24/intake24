@@ -1,8 +1,14 @@
-import type { LinkedParent } from '../../prompts/partials';
 import { computed } from 'vue';
+import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, PortionSizeMethodId, PortionSizeStates } from '@intake24/common/surveys';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
+
+export type LinkedParent = {
+  auto: boolean;
+  categories: Prompts['guide-image-prompt']['linkedQuantity']['parent'];
+  food: EncodedFood;
+};
 
 const parentFoodRequiredPSMs: PortionSizeMethodId[] = [
   'milk-in-a-hot-drink',

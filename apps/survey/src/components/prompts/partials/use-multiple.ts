@@ -1,4 +1,5 @@
 import type { Replace } from 'type-fest';
+import type { LinkedParent } from '../../handlers/composables';
 import { computed } from 'vue';
 import type { HasMultiple, Prompt } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/surveys';
@@ -6,6 +7,7 @@ import { usePortionSizeMethod } from './use-portion-size-method';
 
 export type UseMultipleProps = {
   food: EncodedFood;
+  linkedParent?: LinkedParent;
   prompt: Prompt & HasMultiple;
 };
 
@@ -20,7 +22,11 @@ export function useMultiple<P extends 'as-served-prompt'>(props: UseMultipleProp
 
     return rest;
   });
+
   const multipleEnabled = computed(() => {
+    if (props.linkedParent)
+      return false;
+
     if (typeof props.prompt.multiple === 'boolean')
       return props.prompt.multiple;
 
