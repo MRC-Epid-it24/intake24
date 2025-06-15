@@ -8,15 +8,12 @@ import type { UseInRecipeType } from '@intake24/common/types';
 import type {
   AssociatedFoodAttributes,
   AssociatedFoodCreationAttributes,
-  CategoryAttributes,
-  FoodAttributeAttributes,
-  FoodAttributes,
-  FoodLocalAttributes,
   FoodPortionSizeMethodAttributes,
-  FoodPortionSizeMethodCreationAttributes,
   FoodsLocaleAttributes,
   NutrientTableRecordAttributes,
 } from '@intake24/db';
+import { CategoryAttributes } from './categories';
+import { PortionSizeMethodAttributes } from './portion-size-methods';
 
 export type InheritableAttributes = {
   readyMealOption?: boolean;
@@ -35,91 +32,55 @@ export type CreateGlobalFoodRequest = {
 
 export type UpdateGlobalFoodRequest = Omit<CreateGlobalFoodRequest, 'code'>;
 
-export type CreateLocalFoodRequest = {
+export type CreateFoodRequest = {
   code: string;
+  englishName: string;
   name: string;
   altNames?: Record<string, string[]>;
+  foodGroupId: string;
   tags?: string[];
+  excludeTags?: string[];
+  parentCategories?: string[];
   nutrientTableCodes: Record<string, string>;
   portionSizeMethods: PortionSizeMethod[];
   associatedFoods: AssociatedFood[];
 };
 
-export type CreateLocalFoodRequestOptions = {
+export type CreateFoodRequestOptions = {
   update: boolean;
   return: boolean;
 };
 
-export type UpdateLocalFoodRequest = Omit<CreateLocalFoodRequest, 'code'>;
+export const foodAttributes = z.object({
+  id: z.string(),
+  code: z.string().min(1).max(32),
+  localeId: z.string().min(1).max(16),
+  englishName: z.string().min(1).max(256),
+  name: z.string().min(1).max(256),
+  simpleName: z.string().nullish(),
+  altNames: z.record(z.string().array()),
+  foodGroupId: z.string(),
+  tags: z.string().array(),
+  excludeTags: z.string().array(),
+  version: z.string().uuid(),
+});
+export type FoodAttributes = z.infer<typeof foodAttributes>;
 
-export type CreateGlobalCategoryRequest = {
+export type FoodInput = {
   code: string;
-  version?: string;
   name: string;
-  isHidden: boolean;
-  attributes: InheritableAttributes;
-  parentCategories?: string[];
-};
-
-export type UpdateGlobalCategoryRequest = Omit<CreateGlobalCategoryRequest, 'code' | 'version'>;
-
-export type GlobalCategoryEntry = {
-  code: string;
-  version: string;
-  name: string;
-  isHidden: boolean;
-  attributes: InheritableAttributes;
-  parentCategories: string[];
-};
-
-export type CreateLocalCategoryRequest = {
-  code: string;
-  version?: string;
-  name: string;
-  portionSizeMethods: PortionSizeMethod[];
-  tags?: string[];
-};
-
-export type UpdateLocalCategoryRequest = Omit<CreateLocalCategoryRequest, 'code' | 'version'>;
-
-export type LocalCategoryEntry = {
-  id: string;
-  categoryCode: string;
-  localeId: string;
-  version: string;
-  name: string;
-  portionSizeMethods: PortionSizeMethod[];
-};
-
-export type FoodInput = Pick<FoodAttributes, 'code' | 'name' | 'foodGroupId'> & {
-  parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
-};
-
-export type FoodLocalInput = {
-  name: string;
-  main?: {
-    code?: string;
-    name?: string;
-    foodGroupId?: string;
-    attributes?: FoodAttributeAttributes;
-    locales?: FoodsLocaleAttributes[];
-    parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
-  };
+  englishName: string;
+  foodGroupId: string;
+  parentCategories?: Pick<CategoryAttributes, 'id'>[];
   altNames?: Record<string, string[]>;
   tags?: string[];
+  excludeTags?: string[];
   nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
-  portionSizeMethods: FoodPortionSizeMethodCreationAttributes[];
+  portionSizeMethods: PortionSizeMethodAttributes[];
   associatedFoods: AssociatedFoodCreationAttributes[];
 };
 
-export type FoodLocalCopySource = {
-  foodId: string;
-  localeId: string;
-  localeCode: string;
-};
-
-export type FoodLocalCopyInput = {
-  localeId: string;
+export type FoodCopyInput = {
   code: string;
   name: string;
 };
@@ -146,13 +107,12 @@ export const foodGroupAttributes = z.object({
 export type FoodGroupAttributes = z.infer<typeof foodGroupAttributes>;
 
 export type FoodEntry = FoodAttributes & {
-  attributes?: FoodAttributeAttributes;
   foodGroup?: FoodGroupAttributes;
   parentCategories?: CategoryAttributes[];
   locales?: FoodsLocaleAttributes[];
 };
 
-export interface FoodLocalEntry extends FoodLocalAttributes {
+export interface FoodLocalEntry extends FoodAttributes {
   main?: FoodEntry;
   associatedFoods?: AssociatedFoodAttributes[];
   portionSizeMethods?: FoodPortionSizeMethodAttributes[];

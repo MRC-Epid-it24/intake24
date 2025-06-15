@@ -9,22 +9,23 @@ import { mapKeys } from '@intake24/common/util';
 
 import HasRedisClient from './redis-store';
 
-export type CacheKeyPrefix
-  = | typeof ACL_PERMISSIONS_KEY
-    | typeof ACL_ROLES_KEY
-    | 'category-all-categories'
-    | 'category-parent-categories'
-    | 'food-attributes'
-    | 'food-entry'
-    | 'food-all-categories'
-    | 'food-parent-categories'
-    | 'survey-search-settings'
-    | 'user-submissions';
-export type CacheKey
-  = | `${CacheKeyPrefix}:${string}`
-    | `${CacheKeyPrefix}:${string}:${string}`
-    | 'feedback-data'
-    | 'indexing-locales';
+export type CacheKeyPrefix =
+  | typeof ACL_PERMISSIONS_KEY
+  | typeof ACL_ROLES_KEY
+  | 'category-all-categories'
+  | 'category-all-category-codes'
+  | 'category-parent-categories'
+  | 'food-entry'
+  | 'food-all-categories'
+  | 'food-all-category-codes'
+  | 'food-parent-categories'
+  | 'survey-search-settings'
+  | 'user-submissions';
+export type CacheKey =
+  | `${CacheKeyPrefix}:${string}`
+  | `${CacheKeyPrefix}:${string}:${string}`
+  | 'feedback-data'
+  | 'indexing-locales';
 export type CacheValue = string | number | unknown[] | string[] | null | boolean | object;
 
 export default class Cache extends HasRedisClient {

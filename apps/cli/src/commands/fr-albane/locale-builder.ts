@@ -50,7 +50,6 @@ const locale: PkgLocale = {
   localName: 'France (Albane)',
   englishName: 'France (Albane)',
   textDirection: 'ltr',
-  prototypeLocale: null,
   respondentLanguage: 'fr',
   flagCode: 'fr',
   adminLanguage: 'fr',
@@ -302,7 +301,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Baby food and savoury snacks',
         parentCategories: ['19TODSFD'],
         version: '0fd3f027-6f2a-47f3-9838-7bb0037a4fd4',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRDEIN',
@@ -310,7 +309,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Baby desserts',
         parentCategories: ['19TODSFD'],
         version: '64f6bd7b-0f0b-41b6-ab20-afac96078a28',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRCEBI',
@@ -318,7 +317,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Baby cereals and biscuits',
         parentCategories: ['19TODSFD'],
         version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRLABO',
@@ -326,7 +325,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Baby milk and drinks',
         parentCategories: ['19TODSFD'],
         version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRLAMA',
@@ -334,7 +333,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Breast milk',
         parentCategories: ['FRLABO'],
         version: 'e309274c-12be-49d0-88e2-26744ce7f3c1',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRCIT',
@@ -342,7 +341,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Lemon juice for cooking',
         parentCategories: ['COND'],
         version: '0555155a-8073-4a00-b30c-26691082b7d1',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRHPME',
@@ -350,7 +349,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Chili oil',
         parentCategories: ['COND'],
         version: 'eeba6915-790e-42a6-be9d-2fd78ee80567',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRFSEL',
@@ -358,7 +357,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishDescription: 'Salt (for salt facet)',
         parentCategories: [],
         version: '3fa6db23-873a-4726-9a5e-501950692d49',
-        isHidden: true,
+        hidden: true,
       },
     ];
   }
