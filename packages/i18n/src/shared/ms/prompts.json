@@ -504,8 +504,8 @@
     "text": "",
     "description": "Anda tidak dapat mencari carian yang sesuai untuk \"{food}\". Sila terangkan secara terperinci berdasarkan soalan-soalan berikut, untuk membantu kami mengenalpasti makanan atau minuman tersebut.",
     "source": "Adakah ia masakan dirumah?",
-    "homemade": "Sila berikan butiran terperinci e.g maklumat hidangan atau senarai bahan-bahan yang digunakan.",
-    "purchased": "Di manakah makanan tersebut dibeli? Adakah ia mempunyai brands?",
+    "details": "Sila berikan butiran terperinci e.g maklumat hidangan atau senarai bahan-bahan yang digunakan.",
+    "brand": "Di manakah makanan tersebut dibeli? Adakah ia mempunyai brands?",
     "barcode": "Bolehkan anda menyertakan barkod makanan tersebut?",
     "portionSize": "Berapa banyak yang anda ambil? E.g. 1 pek, 2 sudu kecil, 1 genggam, 125 gram, ½ cawan etc."
   },
