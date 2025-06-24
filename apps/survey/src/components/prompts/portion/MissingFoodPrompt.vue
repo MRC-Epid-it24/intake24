@@ -15,23 +15,14 @@
           </v-expansion-panel-title>
           <v-expansion-panel-text>
             <div class="d-flex flex-column gr-4">
-              <yes-no-toggle v-model="state.homemadePrompt" class="align-self-start" mandatory />
-              <div v-if="state.homemadePrompt === true">
-                <i18n-t class="mb-2" :keypath="`prompts.${type}.homemade`" tag="div">
-                  <template #food>
-                    <span class="font-weight-medium">{{ foodName }}</span>
-                  </template>
-                </i18n-t>
-                <v-textarea
-                  v-model="state.info.description"
-                  hide-details="auto"
-                  name="description"
-                  :rules="textFieldRules"
-                  @update:model-value="update"
-                />
-              </div>
+              <yes-no-toggle
+                v-model="state.homemadePrompt"
+                class="align-self-start"
+                mandatory
+                @update:model-value="toggleHomemadePrompt"
+              />
               <div v-if="state.homemadePrompt === false">
-                <i18n-t class="mb-2" :keypath="`prompts.${type}.purchased`" tag="div">
+                <i18n-t class="mb-2" :keypath="`prompts.${type}.brand`" tag="div">
                   <template #food>
                     <span class="font-weight-medium">{{ foodName }}</span>
                   </template>
@@ -59,6 +50,18 @@
                   :rules="barcodeRules"
                 />
               </div>
+              <i18n-t :keypath="`prompts.${type}.details`" tag="div">
+                <template #food>
+                  <span class="font-weight-medium">{{ foodName }}</span>
+                </template>
+              </i18n-t>
+              <v-textarea
+                v-model="state.info.description"
+                hide-details="auto"
+                name="description"
+                :rules="textFieldRules"
+                @update:model-value="update"
+              />
               <v-btn
                 v-if="state.homemadePrompt !== undefined"
                 :class="$vuetify.display.mobile ? 'align-self-stretch' : 'align-self-start'"
@@ -140,13 +143,13 @@ const state = ref(copy({
   homemadePrompt:
           !props.modelValue.info.description && !props.modelValue.info.brand
             ? undefined
-            : !!props.modelValue.info.description,
+            : !props.modelValue.info.brand,
 }));
 
 const homemadeValid = computed(() => (
   formErrors.value.every(error => typeof error !== 'string' && !['description', 'brand', 'barcode'].includes(error.id.toString()))
   && ((state.value.homemadePrompt === true && !!state.value.info.description)
-    || (state.value.homemadePrompt === false && !!state.value.info.brand))
+    || (state.value.homemadePrompt === false && (!!state.value.info.brand || !!state.value.info.description)))
 ));
 const portionSizeValid = computed(() => !!state.value.info.portionSize
   && formErrors.value.every(error => typeof error !== 'string' && !['portionSize'].includes(error.id.toString())));
@@ -158,6 +161,15 @@ const { updatePanel } = usePanel(state, validConditions);
 
 function confirm() {
   updatePanel();
+};
+
+function toggleHomemadePrompt(value: boolean) {
+  if (value) {
+    state.value.info.brand = null;
+    state.value.info.barcode = null;
+  }
+
+  update();
 };
 
 function update() {

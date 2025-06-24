@@ -504,8 +504,8 @@
     "text": "",
     "description": "Vous avez mentionné que vous ne trouviez pas de bonne correspondance pour \"{food}\". Veuillez nous donner le plus de détails possibles dans les questions suivantes, afin de nous aider à identifier votre aliment ou votre boisson.",
     "source": "Etait-ce fait-maison?",
-    "homemade": "Donnez plus de détails, par exemple la description du plat ou des ingrédients.",
-    "purchased": "Où l'avez-vous acheté ? Le cas échéant, quelle était la marque de l'aliment ?",
+    "details": "Donnez plus de détails, par exemple la description du plat ou des ingrédients.",
+    "brand": "Où l'avez-vous acheté ? Le cas échéant, quelle était la marque de l'aliment ?",
     "barcode": "Pouvez-vous fournir le code-barres ?",
     "portionSize": "Quelle quantité avez-vous consommée ? Par ex. 1 sachet, 2 cuillères à café, 1 poignée, 125 grammes, 200 mL etc."
   },
