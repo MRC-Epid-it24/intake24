@@ -12,6 +12,7 @@
       <v-row>
         <v-col cols="12" md="8" sm="10">
           <food-search-hints
+            activator="manual"
             :hints="prompt.hints"
             mode="dialog"
             :model-value="newFood.description"
