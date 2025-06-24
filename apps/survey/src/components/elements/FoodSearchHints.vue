@@ -15,6 +15,8 @@
     <v-dialog
       max-width="450"
       :model-value="!!hint && props.mode === 'dialog'"
+      @keydown.enter="confirm"
+      @keydown.esc="review"
     >
       <v-card>
         <v-card-title class="font-weight-medium text-h4 text-uppercase text-center">
@@ -71,6 +73,10 @@ import type { FoodSearchHint } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
 
 const props = defineProps({
+  activator: {
+    type: String as PropType<'watch' | 'manual'>,
+    default: 'watch',
+  },
   mode: {
     type: String as PropType<'alert' | 'dialog'>,
     default: 'alert',
@@ -131,15 +137,17 @@ function review() {
   emit('review');
 }
 
-watchDebounced(
-  () => props.modelValue,
-  async () => {
-    checkForHints();
-  },
-  {
-    debounce: 500,
-    maxWait: 2000,
-    immediate: true,
-  },
-);
+if (props.activator === 'watch') {
+  watchDebounced(
+    () => props.modelValue,
+    async () => {
+      checkForHints();
+    },
+    {
+      debounce: 500,
+      maxWait: 2000,
+      immediate: true,
+    },
+  );
+}
 </script>
