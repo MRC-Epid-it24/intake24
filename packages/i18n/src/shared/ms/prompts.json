@@ -313,7 +313,16 @@
     "description": "",
     "wakeUp": "What time did you wake up?",
     "sleep": "What time did you go to sleep?",
-    "confirm": "Continue"
+    "confirm": "Continue",
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
   },
   "splitFood": {
     "name": "Pemisah makanan",
