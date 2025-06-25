@@ -156,6 +156,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['foods'],
   },
+  'sleep-schedule-prompt': {
+    tabs: [...tabs],
+    sections: ['preMeals'],
+  },
   'split-food-prompt': {
     tabs: [...tabs],
     sections: ['foods'],

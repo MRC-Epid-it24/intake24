@@ -215,6 +215,14 @@ function checkSurveyStandardConditions(surveyStore: SurveyStore, prompt: Prompt)
       return !surveyStore.data.recallDate;
     case 'review-confirm-prompt':
       return false;
+    case 'sleep-schedule-prompt':
+      if (!surveyStore.data.wakeUpTime || !surveyStore.data.sleepTime) {
+        recallLog().promptCheck('sleep-schedule-prompt', true, 'sleep schedule is undefined');
+        return true;
+      }
+
+      recallLog().promptCheck('sleep-schedule-prompt', false, 'sleep schedule is defined');
+      return false;
     case 'aggregate-choice-prompt': {
       const filteredMeals = filterMealsForAggregateChoicePrompt(surveyStore, prompt);
       return filteredMeals.some(meal => meal.foods.some(food => food.customPromptAnswers[prompt.id] === undefined));

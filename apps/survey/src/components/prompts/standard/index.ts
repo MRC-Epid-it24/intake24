@@ -15,5 +15,6 @@ export { default as RecallDatePrompt } from './RecallDatePrompt.vue';
 export { default as RedirectPrompt } from './RedirectPrompt.vue';
 export { default as ReviewConfirmPrompt } from './ReviewConfirmPrompt.vue';
 export { default as SameAsBeforePrompt } from './SameAsBeforePrompt.vue';
+export { default as SleepSchedulePrompt } from './SleepSchedulePrompt.vue';
 export { default as SplitFoodPrompt } from './SplitFoodPrompt.vue';
 export { default as SubmitPrompt } from './SubmitPrompt.vue';

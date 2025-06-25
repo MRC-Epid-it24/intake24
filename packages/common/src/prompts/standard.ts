@@ -2,6 +2,7 @@ import type { FoodBrowser, Prompts } from './prompts';
 
 import { copy } from '@intake24/common/util';
 import { basePrompt } from './base';
+import { timePickerDefaults } from './partials';
 
 export const foodBrowserDefaults: FoodBrowser = {
   categoriesFirst: { browse: false, search: false },
@@ -122,10 +123,7 @@ export const mealTimePrompt: Prompts['meal-time-prompt'] = copy({
   type: 'standard',
   id: 'meal-time-prompt',
   name: 'Meal Time prompt',
-  allowedMinutes: 5,
-  amPmToggle: false,
-  format: '24hr',
-  ui: 'md-clock',
+  ...timePickerDefaults,
 });
 
 export const readyMealPrompt: Prompts['ready-meal-prompt'] = copy({
@@ -174,6 +172,17 @@ export const sameAsBeforePrompt: Prompts['same-as-before-prompt'] = copy({
   type: 'standard',
   id: 'same-as-before-prompt',
   name: 'Same as before prompt',
+});
+
+export const sleepSchedulePrompt: Prompts['sleep-schedule-prompt'] = copy({
+  ...basePrompt,
+  component: 'sleep-schedule-prompt',
+  type: 'standard',
+  id: 'sleep-schedule-prompt',
+  name: 'Sleep schedule prompt',
+  ...timePickerDefaults,
+  wakeUpTime: '08:00',
+  sleepTime: '23:00',
 });
 
 export const splitFoodPrompt: Prompts['split-food-prompt'] = copy({
@@ -227,6 +236,7 @@ export const standardPrompts = [
   redirectPrompt,
   reviewConfirmPrompt,
   sameAsBeforePrompt,
+  sleepSchedulePrompt,
   splitFoodPrompt,
   submitPrompt,
 ];

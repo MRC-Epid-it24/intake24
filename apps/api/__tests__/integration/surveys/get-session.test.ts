@@ -68,6 +68,8 @@ export default () => {
           meals: [],
           customPromptAnswers: {},
           selection: { element: null, mode: 'auto' },
+          wakeUpTime: null,
+          sleepTime: null,
         },
       };
       await UserSurveySession.create(input);

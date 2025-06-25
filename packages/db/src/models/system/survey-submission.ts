@@ -80,6 +80,18 @@ export default class SurveySubmission extends BaseModel<
 
   @Column({
     allowNull: true,
+    type: DataType.TIME,
+  })
+  declare wakeUpTime: string | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.TIME,
+  })
+  declare sleepTime: string | null;
+
+  @Column({
+    allowNull: true,
     type: DataType.TEXT,
   })
   declare log: CreationOptional<string | null>;

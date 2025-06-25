@@ -1,7 +1,7 @@
 <template>
   <v-card border flat>
     <v-toolbar color="grey-lighten-4">
-      <v-icon end icon="fas fa-barcode" />
+      <v-icon end icon="fas fa-clock" />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.timePicker.title') }}
       </v-toolbar-title>
