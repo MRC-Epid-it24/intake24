@@ -28,8 +28,9 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { computed } from 'vue';
-import { fromMealTime, toMealTime } from '@intake24/common/surveys';
-import type { MealState, MealTime } from '@intake24/common/surveys';
+import type { MealState } from '@intake24/common/surveys';
+import { fromTime, toTime } from '@intake24/common/util';
+import type { Time } from '@intake24/common/util';
 import { timePickers } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
@@ -46,7 +47,7 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: Object as PropType<MealTime>,
+    type: Object as PropType<Time>,
     required: true,
   },
 });
@@ -58,10 +59,10 @@ const { action, translatePrompt } = usePromptUtils(props, { emit });
 const promptI18n = computed(() => translatePrompt(['no', 'yes']));
 const state = computed({
   get() {
-    return fromMealTime(props.modelValue);
+    return fromTime(props.modelValue);
   },
   set(value) {
-    emit('update:modelValue', toMealTime(value));
+    emit('update:modelValue', toTime(value));
   },
 });
 const isValid = computed(() => !!state.value);

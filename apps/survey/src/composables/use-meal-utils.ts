@@ -1,7 +1,6 @@
 import { computed } from 'vue';
-
-import { fromMealTime } from '@intake24/common/surveys';
 import type { MealState } from '@intake24/common/surveys';
+import { fromTime } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
 export type UseMealUtilsProps = {
@@ -16,7 +15,7 @@ export function useMealUtils(props: UseMealUtilsProps = {}) {
   const mealName = computed(() => (props.meal ? getMealName(props.meal) : undefined));
 
   const getMealTime = (mealState?: MealState) =>
-    mealState?.time ? fromMealTime(mealState.time) : undefined;
+    mealState?.time ? fromTime(mealState.time) : undefined;
 
   const mealTime = computed(() => getMealTime(props.meal));
 

@@ -655,6 +655,13 @@
       "title": "Same as before",
       "subtitle": "Ask if food was same as before"
     },
+    "sleep-schedule-prompt": {
+      "title": "Sleep schedule",
+      "subtitle": "Ask about wake-up and sleep times",
+      "schedule": "Sleep schedule",
+      "wakeUpTime": "Wake-up time",
+      "sleepTime": "Sleep time"
+    },
     "split-food-prompt": {
       "title": "Split food",
       "subtitle": "Ask for split food description"

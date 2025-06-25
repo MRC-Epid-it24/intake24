@@ -307,6 +307,23 @@
     "same": "Yes, I had the same",
     "notSame": "No, I had a different one"
   },
+  "sleepSchedule": {
+    "name": "Sleep schedule",
+    "text": "",
+    "description": "",
+    "wakeUp": "What time did you wake up?",
+    "sleep": "What time did you go to sleep?",
+    "confirm": "Continue",
+    "picker": {
+      "title": "Select time",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "24h": "24-hour",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
+  },
   "splitFood": {
     "name": "உணவை பிரிக்கவும் ",
     "text": "",

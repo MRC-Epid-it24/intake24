@@ -6,6 +6,7 @@ import type { PortionSizeState } from './portion-size';
 import { z } from 'zod';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 import { requiredLocaleTranslationWithLimit } from '../types/common';
+import { time } from '../util';
 
 export const staticSurveyFlag = [
 ] as const;
@@ -123,17 +124,11 @@ export interface RecipeBuilder extends AbstractFoodState {
 
 export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder;
 
-export const mealTime = z.object({
-  hours: z.number(),
-  minutes: z.number(),
-});
-export type MealTime = z.infer<typeof mealTime>;
-
 export const mealState = z.object({
   id: z.string(),
   name: requiredLocaleTranslationWithLimit({ max: 64 }),
-  defaultTime: mealTime,
-  time: mealTime.optional(),
+  defaultTime: time,
+  time: time.optional(),
   duration: z.number().nullable(),
   flags: mealFlag.array(),
   customPromptAnswers: z.record(z.string(), customPromptAnswer),
@@ -204,6 +199,8 @@ export const surveyState = z.object({
   customPromptAnswers: z.record(customPromptAnswer),
   selection,
   meals: mealState.array(),
+  wakeUpTime: z.string().time().nullable(),
+  sleepTime: z.string().time().nullable(),
 });
 
 export type SurveyState = z.infer<typeof surveyState>;

@@ -484,7 +484,7 @@ function surveySubmissionService({
     ];
 
     await db.system.transaction(async (transaction) => {
-      const { recallDate, startTime, endTime, userAgent } = state;
+      const { recallDate, startTime, endTime, userAgent, wakeUpTime, sleepTime } = state;
       const submissionTime = state.submissionTime ?? new Date();
       const id = state.id ?? randomUUID();
 
@@ -508,6 +508,8 @@ function surveySubmissionService({
           submissionTime,
           sessionId,
           userAgent,
+          wakeUpTime,
+          sleepTime,
         },
         { transaction },
       );

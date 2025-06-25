@@ -28,6 +28,8 @@ export default () => {
         mode: 'auto',
       },
       meals: [],
+      wakeUpTime: null,
+      sleepTime: null,
     };
 
     input = { session };

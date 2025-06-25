@@ -19,8 +19,9 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import { fromMealTime } from '@intake24/common/surveys';
-import type { MealState, MealTime } from '@intake24/common/surveys';
+import type { MealState } from '@intake24/common/surveys';
+import type { Time } from '@intake24/common/util';
+import { fromTime } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
@@ -35,10 +36,10 @@ export default defineComponent({
 
   setup() {
     const { translate } = useI18n();
-    const stringTime = (time: MealTime | undefined): string => {
+    const stringTime = (time: Time | undefined): string => {
       if (time === undefined)
         return '?';
-      return fromMealTime(time);
+      return fromTime(time);
     };
 
     const color = (item: MealState) => {

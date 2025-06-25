@@ -14,6 +14,7 @@ import RecallDatePrompt from './recall-date-prompt.vue';
 import RedirectPrompt from './redirect-prompt.vue';
 import ReviewConfirmPrompt from './review-confirm-prompt.vue';
 import SameAsBeforePrompt from './same-as-before-prompt.vue';
+import SleepSchedulePrompt from './sleep-schedule-prompt.vue';
 import SplitFoodPrompt from './split-food-prompt.vue';
 import SubmitPrompt from './submit-prompt.vue';
 
@@ -34,6 +35,7 @@ export default {
   RedirectPrompt,
   ReviewConfirmPrompt,
   SameAsBeforePrompt,
+  SleepSchedulePrompt,
   SplitFoodPrompt,
   SubmitPrompt,
 };

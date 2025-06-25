@@ -14,7 +14,6 @@ import type {
   MealCreationState,
   MealFlag,
   MealState,
-  MealTime,
   MissingFood,
   RecallFlow,
   RecipeBuilder,
@@ -22,8 +21,10 @@ import type {
   SessionSettings,
   SurveyFlag,
 } from '@intake24/common/surveys';
-import { sortMeals, toMealTime } from '@intake24/common/surveys';
+import { sortMeals } from '@intake24/common/surveys';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
+import type { Time } from '@intake24/common/util';
+import { toTime } from '@intake24/common/util';
 import { isSessionAgeValid, isSessionFixedPeriodValid } from '@intake24/common/util';
 import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
@@ -110,6 +111,8 @@ export function surveyInitialState(): CurrentSurveyState {
       mode: 'auto',
     },
     meals: [],
+    wakeUpTime: null,
+    sleepTime: null,
   };
 }
 
@@ -303,7 +306,7 @@ export const useSurvey = defineStore('survey', {
         schemeId: this.parameters.surveyScheme.id,
         startTime: new Date(),
         meals: this.parameters.surveyScheme.meals.map(({ name, time, flags }) =>
-          createMeal({ name, defaultTime: toMealTime(time), flags }, this.parameters?.surveyScheme.settings.flow)),
+          createMeal({ name, defaultTime: toTime(time), flags }, this.parameters?.surveyScheme.settings.flow)),
       });
 
       await this.startUserSession();
@@ -465,6 +468,11 @@ export const useSurvey = defineStore('survey', {
       this.data.recallDate = date;
     },
 
+    setSleepSchedule(data: Record<'wakeUp' | 'sleep', string | null>) {
+      this.data.wakeUpTime = data.wakeUp;
+      this.data.sleepTime = data.sleep;
+    },
+
     setCustomPromptAnswer(data: { promptId: string; answer: CustomPromptAnswer }) {
       this.data.customPromptAnswers = {
         ...this.data.customPromptAnswers,
@@ -495,7 +503,7 @@ export const useSurvey = defineStore('survey', {
     },
 
     sortMeals() {
-      this.data.meals.sort(sortMeals);
+      this.data.meals.sort(sortMeals(this.data.wakeUpTime));
     },
 
     setMealDuration(mealId: string, duration: number) {
@@ -504,7 +512,7 @@ export const useSurvey = defineStore('survey', {
       this.data.meals[mealIndex].duration = duration;
     },
 
-    setMealTime(mealId: string, time: MealTime) {
+    setMealTime(mealId: string, time: Time) {
       const mealIndex = getMealIndexRequired(this.data.meals, mealId);
 
       this.data.meals[mealIndex].time = time;
@@ -581,7 +589,7 @@ export const useSurvey = defineStore('survey', {
 
       const id = getEntityId();
       const { time: defaultMealTime, ...defaultMealRest } = this.defaultSchemeMeals?.find(item => item.name[locale] === data.name[locale]) ?? {};
-      const defaultTime = time ?? toMealTime(defaultMealTime ?? '8:00');
+      const defaultTime = time ?? toTime(defaultMealTime ?? '8:00');
 
       const meal = createMeal({ ...defaultMealRest, ...mealRest, defaultTime, time }, this.parameters?.surveyScheme.settings.flow);
       this.data.meals.push(meal);

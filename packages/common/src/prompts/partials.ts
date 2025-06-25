@@ -89,6 +89,12 @@ export const timePicker = z.object({
   ui: z.enum(['digital', 'md-clock']),
 });
 export type TimePicker = z.infer<typeof timePicker>;
+export const timePickerDefaults: TimePicker = {
+  format: '24hr',
+  amPmToggle: false,
+  allowedMinutes: 5,
+  ui: 'md-clock',
+};
 
 export const youtubeVideo = z.object({
   type: z.literal('youtube'),

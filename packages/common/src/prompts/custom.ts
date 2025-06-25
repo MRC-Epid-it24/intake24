@@ -1,7 +1,7 @@
 import type { Prompts } from './prompts';
-
 import { copy } from '@intake24/common/util';
 import { basePrompt, promptValidation } from './base';
+import { timePickerDefaults } from './partials';
 
 export const aggregateChoicePrompt: Prompts['aggregate-choice-prompt'] = copy({
   ...basePrompt,
@@ -117,10 +117,7 @@ export const timePickerPrompt: Prompts['time-picker-prompt'] = copy({
   type: 'custom',
   id: 'time-picker-prompt',
   name: 'Time picker prompt',
-  allowedMinutes: 5,
-  amPmToggle: false,
-  format: '24hr',
-  ui: 'md-clock',
+  ...timePickerDefaults,
 });
 
 export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({

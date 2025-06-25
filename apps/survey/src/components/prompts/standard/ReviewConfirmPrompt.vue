@@ -56,8 +56,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { fromMealTime } from '@intake24/common/surveys';
-import type { FoodState, MealState, MealTime } from '@intake24/common/surveys';
+import type { FoodState, MealState } from '@intake24/common/surveys';
+import { fromTime } from '@intake24/common/util';
+import type { Time } from '@intake24/common/util';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { CardLayout } from '../layouts';
@@ -94,8 +95,8 @@ function foodDisplayName(food: FoodState) {
     dispalyName = dispalyName.slice(0, 16).concat('...');
   return dispalyName;
 };
-function stringTime(time: MealTime): string {
-  return fromMealTime(time);
+function stringTime(time: Time): string {
+  return fromTime(time);
 };
 </script>
 
