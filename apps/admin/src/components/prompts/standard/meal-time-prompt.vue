@@ -15,30 +15,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-import type { Prompts } from '@intake24/common/prompts';
-import { TimePickerSettings, useBasePrompt } from '../partials';
+import { TimePickerSettings, timerPickerProps, useBasePrompt } from '../partials';
 
 defineOptions({ name: 'MealTimePrompt' });
 
-const props = defineProps({
-  allowedMinutes: {
-    type: Number as PropType<Prompts['meal-time-prompt']['allowedMinutes']>,
-    required: true,
-  },
-  amPmToggle: {
-    type: Boolean as PropType<Prompts['meal-time-prompt']['amPmToggle']>,
-    required: true,
-  },
-  format: {
-    type: String as PropType<Prompts['meal-time-prompt']['format']>,
-    required: true,
-  },
-  ui: {
-    type: String as PropType<Prompts['meal-time-prompt']['ui']>,
-    required: true,
-  },
-});
+const props = defineProps(timerPickerProps);
 
 const emit = defineEmits(['update:options']);
 

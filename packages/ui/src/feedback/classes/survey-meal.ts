@@ -1,5 +1,5 @@
-import { fromMealTime } from '@intake24/common/surveys';
 import type { SurveySubmissionMealEntry } from '@intake24/common/types/http';
+import { fromTime } from '@intake24/common/util';
 
 import SurveyFood from './survey-food';
 
@@ -29,7 +29,7 @@ export default class SurveyMeal {
     foods: SurveyFood[],
     missingFoods: SurveySubmissionMealEntry['missingFoods'],
   ) {
-    const time = fromMealTime({ hours, minutes });
+    const time = fromTime({ hours, minutes });
 
     this.name = name ?? `Meal ${time}`;
     this.hours = hours;

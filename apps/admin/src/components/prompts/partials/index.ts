@@ -16,6 +16,7 @@ export { default as PromptJson } from './prompt-json.vue';
 export { default as PromptValidation } from './prompt-validation.vue';
 export { default as selectListPrompt } from './select-list-prompt';
 export { default as SliderSettings } from './slider-settings.vue';
+export * from './timer-picker-props';
 export { default as TimePickerSettings } from './timer-picker-settings.vue';
 export * from './use-base-prompt';
 export * from './use-multiple';

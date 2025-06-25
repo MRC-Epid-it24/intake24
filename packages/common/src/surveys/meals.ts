@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { requiredLocaleTranslationWithLimit } from '../types';
 
 export const meal = z.object({

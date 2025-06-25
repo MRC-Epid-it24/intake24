@@ -176,6 +176,18 @@ Prompt to redirect user to external site with optional user identifier embedded 
 
 Prompt to detect foods that are the same as in the previous recalls / meals and offer to use the same portion-size estimation.
 
+### Sleep schedule prompt
+
+Prompt to collect sleep schedule information (wake-up time and bedtime).
+
+#### Options
+
+- `allowedMinutes` - allowed minutes for selection (`1`, `5`, `10`, `15`, `20`, `30`)
+
+- `format` - time format (`am/pm` or `24h`)
+
+- `AM/PM toggle` - `true` or `false` whether to show AM/PM toggle buttons
+
 ### Split food prompt
 
 Prompt to identify foods that can potentially be split into separate foods.

@@ -3,11 +3,10 @@ import { differenceInMinutes } from 'date-fns';
 import { orderBy } from 'lodash';
 import stringify from 'safe-stable-stringify';
 import { UAParser } from 'ua-parser-js';
-
 import { externalSources as externalSourceProviders } from '@intake24/common/prompts';
 import type { Prompt } from '@intake24/common/prompts';
-import { fromMealTime } from '@intake24/common/surveys';
 import type { ExportField as BaseExportField } from '@intake24/common/surveys';
+import { fromTime } from '@intake24/common/util';
 import type { SurveyScheme } from '@intake24/db';
 import {
   NutrientTableCsvMappingField,
@@ -172,6 +171,16 @@ function dataExportFields() {
       value: ({ food }: ExportRow) => food.meal?.submission?.submissionTime?.toISOString(),
     },
     {
+      id: 'wakeUpTime',
+      label: 'Wake-Up Time',
+      value: ({ food }: ExportRow) => food.meal?.submission?.wakeUpTime,
+    },
+    {
+      id: 'sleepTime',
+      label: 'Sleep Time',
+      value: ({ food }: ExportRow) => food.meal?.submission?.sleepTime,
+    },
+    {
       id: 'userAgent',
       label: 'User Agent',
       value: ({ food }: ExportRow) => UAParser(food.meal?.submission?.userAgent ?? undefined).ua,
@@ -244,7 +253,7 @@ function dataExportFields() {
       label: 'Meal time',
       value: ({ food }: ExportRow) =>
         food.meal
-          ? fromMealTime({ hours: food.meal.hours, minutes: food.meal.minutes })
+          ? fromTime({ hours: food.meal.hours, minutes: food.meal.minutes })
           : undefined,
     },
     { id: 'duration', label: 'Meal duration', value: ({ food }: ExportRow) => food.meal?.duration },

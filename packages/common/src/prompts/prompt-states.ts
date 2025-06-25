@@ -174,6 +174,13 @@ export type PromptStates = {
     data?: object;
   };
   'ready-meal-prompt': { id: string; name: string; value: boolean | undefined }[];
+  'sleep-schedule-prompt': {
+    panel: number;
+    schedule: {
+      wakeUp: string;
+      sleep: string;
+    };
+  };
 };
 
 export type PromptState = PromptStates[keyof PromptStates];

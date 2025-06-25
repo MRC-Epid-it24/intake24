@@ -651,6 +651,13 @@
       "title": "Comme précédemment",
       "subtitle": "Demander si l'aliment était tel que précédemment"
     },
+    "sleep-schedule-prompt": {
+      "title": "Sleep schedule",
+      "subtitle": "Ask about wake-up and sleep times",
+      "schedule": "Sleep schedule",
+      "wakeUpTime": "Wake-up time",
+      "sleepTime": "Sleep time"
+    },
     "split-food-prompt": {
       "title": "Séparer l'aliment",
       "subtitle": "Demander la description de la séparation d'aliments"

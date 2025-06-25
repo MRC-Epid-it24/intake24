@@ -1,5 +1,4 @@
 import type { PortionSizeMethodId } from '../surveys';
-
 import { z } from 'zod';
 import { barcodeScannerOptions } from '../barcodes';
 import { localeOptionList, localeTranslation } from '../types';
@@ -48,6 +47,7 @@ export const standardComponentTypes = [
   'redirect-prompt',
   'review-confirm-prompt',
   'same-as-before-prompt',
+  'sleep-schedule-prompt',
   'split-food-prompt',
   'submit-prompt',
 ] as const;
@@ -406,6 +406,12 @@ const sameAsBeforePrompt = baseStandardPrompt.extend({
   component: z.literal('same-as-before-prompt'),
 });
 
+const sleepSchedulePrompt = baseStandardPrompt.merge(timePicker).extend({
+  component: z.literal('sleep-schedule-prompt'),
+  wakeUpTime: z.string().time(),
+  sleepTime: z.string().time(),
+});
+
 const splitFoodPrompt = baseStandardPrompt.extend({
   component: z.literal('split-food-prompt'),
 });
@@ -462,6 +468,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   redirectPrompt,
   reviewConfirmPrompt,
   sameAsBeforePrompt,
+  sleepSchedulePrompt,
   splitFoodPrompt,
   submitPrompt,
 ]);
@@ -523,6 +530,7 @@ export const prompts = z.object({
   'redirect-prompt': redirectPrompt,
   'review-confirm-prompt': reviewConfirmPrompt,
   'same-as-before-prompt': sameAsBeforePrompt,
+  'sleep-schedule-prompt': sleepSchedulePrompt,
   'split-food-prompt': splitFoodPrompt,
   'submit-prompt': submitPrompt,
 });

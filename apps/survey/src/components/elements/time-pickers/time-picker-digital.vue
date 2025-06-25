@@ -151,7 +151,7 @@
 import type { PropType } from 'vue';
 import { computed, ref, watch } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
-import { fromMealTime, toMealTime } from '@intake24/common/surveys';
+import { fromTime, toTime } from '@intake24/common/util';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 const props = defineProps({
@@ -179,7 +179,7 @@ const promptI18n = computed(() => translatePrompt([
   'picker.pm',
 ]));
 
-const time = ref(toMealTime(props.modelValue ?? '00:00'));
+const time = ref(toTime(props.modelValue ?? '00:00'));
 const activeFormat = ref(props.prompt.format ?? '24hr');
 const isAmPm = computed(() => activeFormat.value === 'ampm');
 
@@ -260,7 +260,7 @@ function updateTime(el: 'hours' | 'minutes', val: number) {
 }
 
 watch(time, (val) => {
-  const time = fromMealTime(val);
+  const time = fromTime(val);
   emit('update:modelValue', time);
 }, { deep: true });
 </script>
