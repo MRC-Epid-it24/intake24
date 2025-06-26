@@ -40,7 +40,7 @@ export function useCard(props: UseCardProps) {
       return 'text-warning';
 
     if (['too_low', 'low', 'high', 'too_high'].includes(sentiment))
-      return 'text-danger';
+      return 'text-error';
 
     return undefined;
   }
