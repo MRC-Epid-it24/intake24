@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
+import { omit } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type {
   CreateGlobalFoodRequest,
@@ -9,12 +10,23 @@ import type {
 import { Category, Food, FoodAttribute, FoodCategory } from '@intake24/db';
 
 function globalFoodsService({ db }: Pick<IoC, 'db'>) {
-  const create = async (input: CreateGlobalFoodRequest): Promise<FoodEntry> => {
-    return await Food.create({
+  const create = async (input: CreateGlobalFoodRequest): Promise<FoodEntry> => await db.foods.transaction(async (t) => {
+    const food = await Food.create({
       version: randomUUID(),
-      ...input,
-    });
-  };
+      ...omit(input, 'parentCategories'),
+    }, { transaction: t });
+
+    const categoryEntries = input.parentCategories === undefined
+      ? []
+      : input.parentCategories.map(categoryCode => ({
+          foodCode: input.code,
+          categoryCode,
+        }));
+
+    await FoodCategory.bulkCreate(categoryEntries, { transaction: t });
+
+    return food;
+  });
 
   const update = async (
     globalFoodId: string,
