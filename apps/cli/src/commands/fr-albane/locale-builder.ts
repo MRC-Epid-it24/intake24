@@ -79,14 +79,16 @@ const dummyNutrientTable: PkgNutrientTable = {
 };
 
 // This is to differentiate references to guide images and as served images in FDQUANT file
-const GUIDE_IMAGE_IDS = new Set(['Gdk_herring', 'Gdk_french_pastry', 'Gdk_crispbread', 'Gdk_sweets', 'Gchocbites', 'Gcbar_unwrapped', 'Gcbar_wrapped', 'Gbhaji', 'Gdk_wienerbroed', 'Gdk_toerkager', 'AUSalccans', 'Gbeerbot', 'Gmusselpipi', 'Gmuffscone', 'Gapl', 'Gaero', 'AUSchocobar', 'AUSsauce', 'AUSsoftdrink', 'AUSallcans', 'AUSbeerbot', 'AUSbonti', 'AUScanfish', 'Gtwix', 'gpie', 'Gmkyb', 'Gmnst', 'Gmlky', 'Gskps', 'Gwalk', 'Gpopcans', 'Gswts', 'Gmeatcan', 'Gcdmc', 'Ggalx', 'Gcanfish', 'Gmnms', 'Gkbar', 'Gciderbot', 'Gsqrs', 'Gmco', 'Gmars', 'Gumrs', 'Gkitk', 'Gprin', 'Gdori', 'Galccans', 'Gdekr', 'Gmbut', 'Gpopbottle', 'Ghula', 'Gcbar', 'Gwcho', 'Gmmcp', 'Gquav', 'Gwinebottle', 'Gban', 'Gbcn', 'Gbisc', 'Gbur', 'Gcake', 'Gcbisc1', 'Gcbisc2', 'Gchckbrst', 'Gchckleg', 'Gchoc', 'Gchoc1', 'Gchoc2', 'GchocPre', 'Gchse', 'Gcri', 'Gcri1', 'Gcri2', 'Gdes', 'Gdou', 'Gdrnk', 'Gfjta', 'Gflap', 'Gfrk', 'Gham', 'Gice1', 'Gice2', 'Gmlk01', 'Gmlk02', 'Gmlk03', 'Gmlk04', 'Gmug', 'Gorg', 'Gpiesaus', 'Gpik', 'Gpiz', 'Gprs', 'Groll', 'Gshk1', 'Gshk2', 'Gsli', 'Gsquash1', 'AUSsweets', 'AUScbar2', 'AUScbar4', 'Old_Gwatbottle', 'Old_Gspn', 'Old_Gspns', 'ABS_Slices', 'Gsquash2', 'Gsquash4', 'Gswb', 'Gswt1', 'Gswt2', 'Gtom', 'Gtur', 'Gwaf', 'Gwrp', 'Gyog', 'Gyog2', 'Gyor', 'Gbeans', 'Gmalt', 'Gcdmb', 'Gtwfk', 'Gskit', 'Gsnck', 'Gpopcarton', 'Gbonti', 'Gcans', 'Gcra', 'Gfrazz', 'Gsaus', 'Gsquash3', 'AUSaero', 'AUSbisc', 'AUScandrink', 'AUScadmilk', 'AUScbar3', 'AUScblock', 'NDNS_painauchoc', 'NDNS_croissant', 'NDNS_chicken_thighs', 'NDNS_chicken_legs', 'NDNS_cream_cake', 'NDNS_choux_pastries', 'Cocospns', 'NDNS_current_Gcake_iced', 'NDNS_Gsli_toast', 'NewGyog', 'Gwatbottle', 'SAB_Guava', 'Gallcans', 'Old_Gallcans', 'NDNS_burgers', 'Gspns', 'NDNS_Gshk1', 'SAB_chapatti', 'SAB_fritter', 'NZ23_Hashbrowns', 'Gspn', 'NDNS_gspn', 'NDNS_gtom', 'NDNS_Gmuffin', 'NDNS_gbeerbot', 'NDNS_gbut', 'NDNS_gccans', 'NDNS_gorg', 'NDNS_gpopcan', 'NDNS_gwine', 'NDNS_gmalt', 'NDNS_Gwalk', 'NDNS_Ghula', 'NDNS_Gdori', 'NDNS_gsaus', 'NZ23_Inst_noodles', 'NZ23_Tkway_bowl_sm', 'NZ23_Tkway_bowl_med', 'NZ23_Tkway_bowl_poke', 'NZ23_Tkway_noodle', 'NZ23_Choc blocks', 'NZ23_Choc pieces', 'NZ23_Choc bars', 'NZ23_Toddler cans', 'NZ23_Toddler pouches', 'NZ23_Juice bottles', 'NZ23_Soft drink cans', 'NZ23_Soft drink bottles', 'NZ23_Energy drinks', 'NZ23_Yoghurt pouch', 'NZ23_Yoghurt pots', 'NZ23_Banana loaf', 'NZ23_Fritters', 'NZ23_Crisps', 'NZ23_Beer bottles', 'NZ23_Beer cans', 'NZ23_Quiche', 'NZ23_Pies', 'NZ23_Meatballs', 'NZ23_Soft cheese', 'ABS_Beef Steak', 'ABS_Chicken Breasts', 'ABS_Lamb Chops', 'ABS_Chocolate Bars', 'ABS_Potato', 'ABS_Sweet Biscuits', 'ABS_Drink Bottles', 'ABS_Flavoured Milks Small', 'ABS_Yoghurt Tub Large', 'ABS_Yoghurt Pouch', 'ABS_Canned Fish', 'ABS_Canned Food Small', 'ABS_Canned Food Large', 'ABS_Mixed Drinks Cans', 'ABS_Mixed Drinks Bottles', 'ABS_Cider', 'ABS_Wine', 'ABS_Soft Drinks Large', 'ABS_Water Small', 'ABS_Water Large', 'ABS_Chocolate Bags', 'ABS_Lolly Bags', 'ABS_Extruded Snacks', 'ABS_Schnitzels', 'ABS_Breads', 'ABS_Takeaway Containers Square', 'ABS_Takeaway Containers Rect', 'ABS_Vege Chips', 'ABS_Flavoured Milks Large', 'ABS_Bananas', 'ABS_Apples', 'ABS_Pears', 'ABS_Fruit Juice_Drinks Small', 'ABS_Bread_Baguettes', 'ALBANE_Charcuterie', 'ALBANE_French_Breads', 'ALBANE_Sliced_Breads', 'ALBANE_Cakes_Brioches', 'ALBANE_Crispbreads', 'ALBANE_Inst_noodles', 'ALBANE_SWICH_baguettes', 'ALBANE_SWICH_viennois', 'ALBANE_SWICH_Sliced_breads', 'ALBANE_SWICH_Sliced_breads_half', 'ALBANE_SWICH_wraps', 'ALBANE_Yoghurts', 'ALBANE_White_Cheeses', 'ALBANE_Desserts', 'ALBANE_Desserts_Creams', 'ALBANE_Mms']);
-const DRINKWARE_IDS = new Set(['takeaway_cups_cold', 'glasses_spirits', 'takeaway_cups_hot', 'glasses_soft', 'glasses_beer', 'NZ_cocktail_glasses', 'ABS_Glasses', 'ABS_Beer_Glasses', 'ABS_Wine_Glasses', 'ABS_Mugs', 'ABS_Plastic_Cups', 'NZ_Bowl', 'drinkwareSet_001', 'mugs', 'glasses_wine', 'gobelets', 'FR_Gobelet', 'FR_Vierres_Pied', 'FR_Baby_Bottles', 'FR_Mazagran', 'FR_Mugs', 'FR_Glasses', 'FR_Baby_Cups', 'FR_Ice_Cream_Glass', 'FR_Beer_Glasses', 'FR_Cocktail_Glasses', 'FR_Glasses_2', 'FR_Bowls', 'FR_Stemmed_Glasses', 'FR_Mugs_2', 'FR_Ramekins', 'FR_Plastic_Cups', 'FR_Verrines', 'FR_Shot_Glasses', 'FR_Stemmed_Glasses_Round', 'FR_Stemmed_Glasses_2', 'ALBANE_Small_bowl_1', 'ALBANE_Big_bowl_1', 'ALBANE_Big_bowl_2', 'ABS_DrinkBottles_Albanecopy']);
+const GUIDE_IMAGE_IDS = new Set(['Gdk_herring', 'Gdk_french_pastry', 'Gdk_crispbread', 'Gdk_sweets', 'Gchocbites', 'Gcbar_unwrapped', 'Gcbar_wrapped', 'Gbhaji', 'Gdk_wienerbroed', 'Gdk_toerkager', 'AUSalccans', 'Gbeerbot', 'Gmusselpipi', 'Gmuffscone', 'Gapl', 'Gaero', 'AUSchocobar', 'AUSsauce', 'AUSsoftdrink', 'AUSallcans', 'AUSbeerbot', 'AUSbonti', 'AUScanfish', 'Gtwix', 'gpie', 'Gmkyb', 'Gmnst', 'Gmlky', 'Gskps', 'Gwalk', 'Gpopcans', 'Gswts', 'Gmeatcan', 'Gcdmc', 'Ggalx', 'Gcanfish', 'Gmnms', 'Gkbar', 'Gciderbot', 'Gsqrs', 'Gmco', 'Gmars', 'Gumrs', 'Gkitk', 'Gprin', 'Gdori', 'Galccans', 'Gdekr', 'Gmbut', 'Gpopbottle', 'Ghula', 'Gcbar', 'Gwcho', 'Gmmcp', 'Gquav', 'Gwinebottle', 'Gban', 'Gbcn', 'Gbisc', 'Gbur', 'Gcake', 'Gcbisc1', 'Gcbisc2', 'Gchckbrst', 'Gchckleg', 'Gchoc', 'Gchoc1', 'Gchoc2', 'GchocPre', 'Gchse', 'Gcri', 'Gcri1', 'Gcri2', 'Gdes', 'Gdou', 'Gdrnk', 'Gfjta', 'Gflap', 'Gfrk', 'Gham', 'Gice1', 'Gice2', 'Gmlk01', 'Gmlk02', 'Gmlk03', 'Gmlk04', 'Gmug', 'Gorg', 'Gpiesaus', 'Gpik', 'Gpiz', 'Gprs', 'Groll', 'Gshk1', 'Gshk2', 'Gsli', 'Gsquash1', 'AUSsweets', 'AUScbar2', 'AUScbar4', 'Old_Gwatbottle', 'Old_Gspn', 'Old_Gspns', 'ABS_Slices', 'Gsquash2', 'Gsquash4', 'Gswb', 'Gswt1', 'Gswt2', 'Gtom', 'Gtur', 'Gwaf', 'Gwrp', 'Gyog', 'Gyog2', 'Gyor', 'Gbeans', 'Gmalt', 'Gcdmb', 'Gtwfk', 'Gskit', 'Gsnck', 'Gpopcarton', 'Gbonti', 'Gcans', 'Gcra', 'Gfrazz', 'Gsaus', 'Gsquash3', 'AUSaero', 'AUSbisc', 'AUScandrink', 'AUScadmilk', 'AUScbar3', 'AUScblock', 'NDNS_painauchoc', 'NDNS_croissant', 'NDNS_chicken_thighs', 'NDNS_chicken_legs', 'NDNS_cream_cake', 'NDNS_choux_pastries', 'Cocospns', 'NDNS_current_Gcake_iced', 'NDNS_Gsli_toast', 'NewGyog', 'Gwatbottle', 'SAB_Guava', 'Gallcans', 'Old_Gallcans', 'NDNS_burgers', 'Gspns', 'NDNS_Gshk1', 'SAB_chapatti', 'SAB_fritter', 'NZ23_Hashbrowns', 'Gspn', 'NDNS_gspn', 'NDNS_gtom', 'NDNS_Gmuffin', 'NDNS_gbeerbot', 'NDNS_gbut', 'NDNS_gccans', 'NDNS_gorg', 'NDNS_gpopcan', 'NDNS_gwine', 'NDNS_gmalt', 'NDNS_Gwalk', 'NDNS_Ghula', 'NDNS_Gdori', 'NDNS_gsaus', 'NZ23_Inst_noodles', 'NZ23_Tkway_bowl_sm', 'NZ23_Tkway_bowl_med', 'NZ23_Tkway_bowl_poke', 'NZ23_Tkway_noodle', 'NZ23_Choc blocks', 'NZ23_Choc pieces', 'NZ23_Choc bars', 'NZ23_Toddler cans', 'NZ23_Toddler pouches', 'NZ23_Juice bottles', 'NZ23_Soft drink cans', 'NZ23_Soft drink bottles', 'NZ23_Energy drinks', 'NZ23_Yoghurt pouch', 'NZ23_Yoghurt pots', 'NZ23_Banana loaf', 'NZ23_Fritters', 'NZ23_Crisps', 'NZ23_Beer bottles', 'NZ23_Beer cans', 'NZ23_Quiche', 'NZ23_Pies', 'NZ23_Meatballs', 'NZ23_Soft cheese', 'ABS_Beef Steak', 'ABS_Chicken Breasts', 'ABS_Lamb Chops', 'ABS_Chocolate Bars', 'ABS_Potato', 'ABS_Sweet Biscuits', 'ABS_Flavoured Milks Small', 'ABS_Yoghurt Tub Large', 'ABS_Yoghurt Pouch', 'ABS_Canned Fish', 'ABS_Canned Food Small', 'ABS_Canned Food Large', 'ABS_Mixed Drinks Cans', 'ABS_Mixed Drinks Bottles', 'ABS_Cider', 'ABS_Wine', 'ABS_Soft Drinks Large', 'ABS_Water Small', 'ABS_Water Large', 'ABS_Chocolate Bags', 'ABS_Lolly Bags', 'ABS_Extruded Snacks', 'ABS_Schnitzels', 'ABS_Breads', 'ABS_Takeaway Containers Square', 'ABS_Takeaway Containers Rect', 'ABS_Vege Chips', 'ABS_Flavoured Milks Large', 'ABS_Bananas', 'ABS_Apples', 'ABS_Pears', 'ABS_Fruit Juice_Drinks Small', 'ABS_Bread_Baguettes', 'ALBANE_Charcuterie', 'ALBANE_French_Breads', 'ALBANE_Sliced_Breads', 'ALBANE_Cakes_Brioches', 'ALBANE_Crispbreads', 'ALBANE_Inst_noodles', 'ALBANE_SWICH_baguettes', 'ALBANE_SWICH_viennois', 'ALBANE_SWICH_Sliced_breads', 'ALBANE_SWICH_Sliced_breads_half', 'ALBANE_SWICH_wraps', 'ALBANE_Yoghurts', 'ALBANE_White_Cheeses', 'ALBANE_Desserts', 'ALBANE_Desserts_Creams', 'ALBANE_Mms']);
+const DRINKWARE_IDS = new Set(['takeaway_cups_cold', 'glasses_spirits', 'takeaway_cups_hot', 'glasses_soft', 'glasses_beer', 'NZ_cocktail_glasses', 'ABS_Glasses', 'ABS_Beer_Glasses', 'ABS_Wine_Glasses', 'ABS_Mugs', 'ABS_Plastic_Cups', 'NZ_Bowl', 'drinkwareSet_001', 'mugs', 'glasses_wine', 'gobelets', 'FR_Gobelet', 'FR_Vierres_Pied', 'FR_Baby_Bottles', 'FR_Mazagran', 'FR_Mugs', 'FR_Glasses', 'FR_Baby_Cups', 'FR_Ice_Cream_Glass', 'FR_Beer_Glasses', 'FR_Cocktail_Glasses', 'FR_Glasses_2', 'FR_Bowls', 'FR_Stemmed_Glasses', 'FR_Mugs_2', 'FR_Ramekins', 'FR_Plastic_Cups', 'FR_Verrines', 'FR_Shot_Glasses', 'FR_Stemmed_Glasses_Round', 'FR_Stemmed_Glasses_2', 'ALBANE_Small_bowl_1', 'ALBANE_Big_bowl_1', 'ALBANE_Big_bowl_2', 'ABS_Drink Bottles', 'ABS_DrinkBottles_Albanecopy']);
 
 // Originally, List.Photos_HHM_Shapes.xlsx contained data only for the new Albane-specific images
 // Now it also contains descriptions of some of the images from other Intake24 locales (UK, ABS).
 //
 // These need to be ignored to avoid creating duplicates.
 const IGNORE_AS_SERVED = new Set(['ABS_Extruded_Cereal', 'popcorn', 'mixed_nuts', 'flaked_almonds', 'raisins', 'puffed_cereals', 'ABS_Vegemite', 'ABS_Nutella', 'butk', 'butter_spread', 'cream_cheese_spread', 'ABS_Peanut_Butter', 'ABS_Vegemite_2', 'jam', 'carrot_raw', 'mixed_peppers', 'cucumber', 'pumpkin', 'cabbage', 'peas', 'broccoli', 'NZ23_Bok_choy_cut', 'mix_veg_boiled', 'NDNS_bolognese_sauce', 'tomato_sauce', 'ABS_Gravy', 'sauce_dollop', 'NZ23_boilupsoup', 'potatoes_boiled', 'potatoes_mashed', 'rice', 'SAB_newvegrice1', 'NDNS_stirfry_noodles', 'paella', 'NDNS_lentil_curry', 'canned_fish', 'ABS_Fish_Fillets', 'chicken_sauce', 'NDNS_meat_stew', 'SAB_newvegcurry1', 'chicken_breast_slices', 'NZ23_Tofu_Cubes', 'ABS_White_Sauce', 'milk_pudding', 'NDNS_berries', 'apps', 'bans', 'NDNS_cheesecake', 'ice_cream']);
+
+const ALBANE_SALT_CODES = ['41033', '41150', '41151', '41152', '41153', '41154', '41155', '41156', '41157', '41174', '41191'];
 
 function getIntake24FoodCode(foodCode: string): string {
   return `24F${foodCode}`;
@@ -232,12 +234,10 @@ export class FrenchAlbaneLocaleBuilder {
   private buildGlobalFoods(): PkgGlobalFood[] {
     const globalFoods: PkgGlobalFood[] = [];
 
-    const saltCodes = ['41033', '41150', '41151', '41152', '41153', '41154', '41155', '41156', '41157', '41174'];
-
     for (const row of this.sourceFoodRecords!) {
       const categories = this.foodCategories![row.A_CODE];
 
-      if (saltCodes.includes(row.A_CODE))
+      if (ALBANE_SALT_CODES.includes(row.A_CODE))
         categories.push('FRFSEL');
 
       if (!categories)
@@ -581,13 +581,27 @@ export class FrenchAlbaneLocaleBuilder {
           );
         }
 
-        return {
-          name: `ALBANE_${row.A_CODE}_${row.US_NUM}`,
-          weight: Number.parseFloat(row.US_POIDS),
-          omitFoodDescription: true,
-          inlineEstimateIn: description,
-          inlineHowMany: `Combien de ${description}`,
-        };
+        const weight = Number.parseFloat(row.US_POIDS_FINAL);
+
+        if (Number.isNaN(weight))
+          throw new Error(`Failed to parse weight value: "${row.US_POIDS_FINAL}" for food id ${row.A_CODE}, standard unit number ${row.US_NUM} `);
+
+        if (ALBANE_SALT_CODES.includes(row.A_CODE) && row.US_LIBELLE.trim().toLowerCase() === 'quantité inconnue') {
+          return {
+            name: 'unknown',
+            weight,
+            omitFoodDescription: false,
+          };
+        }
+        else {
+          return {
+            name: `ALBANE_${row.A_CODE}_${row.US_NUM}`,
+            weight,
+            omitFoodDescription: true,
+            inlineEstimateIn: description,
+            inlineHowMany: `Combien de ${description}`,
+          };
+        }
       });
     }
 
@@ -620,9 +634,13 @@ export class FrenchAlbaneLocaleBuilder {
       const foodCode = row.A_CODE;
       const foodPortionSizeMethods = new Array<PkgPortionSizeMethod>();
 
-      const asServedSetIds = new Set<[string, number]>();
-      const guideImageIds = new Set<[string, number]>();
-      const drinkwareSetIds = new Set<[string, number]>();
+      const asServedSetIds = new Set<string>();
+      const guideImageIds = new Set<string>();
+      const drinkwareSetIds = new Set<string>();
+
+      const asServedConversionFactors: Record<string, number> = {};
+      const guideImageConversionFactors: Record<string, number> = {};
+      const drinkwareConversionFactors: Record<string, number> = {};
 
       if (row.LISTE_photos) {
         const ids = row.LISTE_photos.split(',').map(s => s.trim());
@@ -640,21 +658,27 @@ export class FrenchAlbaneLocaleBuilder {
           // List.Photos_HHM_Shapes_INCA3.xlsx
           // Replaced with new guide image FR_Bread_Slices
           if (id === '038') {
-            guideImageIds.add(['FR_Bread_Slices', conversionFactor]);
+            guideImageIds.add('FR_Bread_Slices');
+            guideImageConversionFactors.FR_Bread_Slices = conversionFactor;
           }
           // numerical ids refer to Albane photos converted to as-served in Intake24
           // with the ALBANE_ prefix
           else if (/^\d+$/.test(id)) {
-            asServedSetIds.add([`ALBANE_${id}`, conversionFactor]);
+            const i24id = `ALBANE_${id}`;
+            asServedSetIds.add(i24id);
+            asServedConversionFactors[i24id] = conversionFactor;
           }
           else if (GUIDE_IMAGE_IDS.has(id)) {
-            guideImageIds.add([id, conversionFactor]);
+            guideImageIds.add(id);
+            guideImageConversionFactors[id] = conversionFactor;
           }
           else if (DRINKWARE_IDS.has(id)) {
-            drinkwareSetIds.add([id, conversionFactor]);
+            drinkwareSetIds.add(id);
+            drinkwareConversionFactors[id] = conversionFactor;
           }
           else {
-            asServedSetIds.add([id, conversionFactor]);
+            asServedSetIds.add(id);
+            asServedConversionFactors[id] = conversionFactor;
           }
         }
       }
@@ -678,49 +702,58 @@ export class FrenchAlbaneLocaleBuilder {
           // images that are combined into sets in Intake24, and we don't want duplicates.
           if (/^H\d+$/.test(id)) {
             const drinkwareId = this.householdMeasuresMap[id];
-            if (drinkwareId === undefined)
+            if (drinkwareId === undefined) {
               throw new Error(`Unexpected household measure ID: ${id}, check FDQUANT for food code ${foodCode}`);
-            else
-              drinkwareSetIds.add([drinkwareId, conversionFactor]);
+            }
+            else {
+              drinkwareSetIds.add(drinkwareId);
+              drinkwareConversionFactors[drinkwareId] = conversionFactor;
+            }
           }
           else {
             // otherwise assume it's either an Intake24 guide image id or an Intake24 as served set
-            if (GUIDE_IMAGE_IDS.has(id))
-              guideImageIds.add([id, conversionFactor]);
-            else if (DRINKWARE_IDS.has(id))
-              drinkwareSetIds.add([id, conversionFactor]);
-            else
-              asServedSetIds.add([id, conversionFactor]);
+            if (GUIDE_IMAGE_IDS.has(id)) {
+              guideImageIds.add(id);
+              guideImageConversionFactors[id] = conversionFactor;
+            }
+            else if (DRINKWARE_IDS.has(id)) {
+              drinkwareSetIds.add(id);
+              drinkwareConversionFactors[id] = conversionFactor;
+            }
+            else {
+              asServedSetIds.add(id);
+              asServedConversionFactors[id] = conversionFactor;
+            }
           }
         }
       }
 
-      for (const [asServedId, conversionFactor] of [...asServedSetIds].sort()) {
+      for (const asServedId of [...asServedSetIds].sort()) {
         foodPortionSizeMethods.push({
           method: 'as-served',
           description: 'use_an_image',
           useForRecipes: true,
-          conversionFactor,
+          conversionFactor: asServedConversionFactors[asServedId],
           servingImageSet: asServedId,
           multiple: true,
         });
       }
 
-      for (const [guideImageId, conversionFactor] of [...guideImageIds].sort()) {
+      for (const guideImageId of [...guideImageIds].sort()) {
         foodPortionSizeMethods.push({
           method: 'guide-image',
           guideImageId,
           description: 'use_an_image',
           useForRecipes: true,
-          conversionFactor,
+          conversionFactor: guideImageConversionFactors[guideImageId],
         });
       }
 
       const pushToEndIds = ['FR_Baby_Bottles', 'FR_Baby_Cups'];
 
-      const [endIds, startIds] = partition([...drinkwareSetIds].sort(), id => pushToEndIds.includes(id[0]));
+      const [endIds, startIds] = partition([...drinkwareSetIds].sort(), id => pushToEndIds.includes(id));
 
-      for (const [drinkwareId, conversionFactor] of [...startIds, ...endIds]) {
+      for (const drinkwareId of [...startIds, ...endIds]) {
         foodPortionSizeMethods.push({
           method: 'drink-scale',
           drinkwareId,
@@ -728,7 +761,7 @@ export class FrenchAlbaneLocaleBuilder {
           skipFillLevel: false,
           description: 'use_an_image',
           useForRecipes: true,
-          conversionFactor,
+          conversionFactor: drinkwareConversionFactors[drinkwareId],
           multiple: true,
         });
       }
