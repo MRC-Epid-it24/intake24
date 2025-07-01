@@ -61,12 +61,11 @@ else {
 }
 
 function getFoodToReplace() {
-  const { id, customPromptAnswers, flags } = food.value;
+  const { id, flags } = food.value;
 
   // Remove appropriate flags if replacing existing not a "free-entry" food
   return {
     id,
-    customPromptAnswers,
     flags: flags.filter(
       flag =>
         ![
@@ -92,14 +91,14 @@ function foodSelected(data: UserFoodData) {
 };
 
 function foodMissing() {
-  const { id, customPromptAnswers, flags } = getFoodToReplace();
+  const { id, flags } = getFoodToReplace();
 
   const newState: MissingFood = {
     id,
     type: 'missing-food',
     info: null,
     searchTerm: searchTerm.value,
-    customPromptAnswers,
+    customPromptAnswers: {},
     flags,
     linkedFoods: [],
   };
@@ -109,7 +108,7 @@ function foodMissing() {
 };
 
 function recipeBuilder(recipeFood: RecipeFood) {
-  const { id, customPromptAnswers, flags } = getFoodToReplace();
+  const { id, flags } = getFoodToReplace();
   const components = initializeRecipeComponents(
     recipeFood.steps.map(step => step.order - 1),
   );
@@ -119,7 +118,7 @@ function recipeBuilder(recipeFood: RecipeFood) {
     type: 'recipe-builder',
     description: recipeFood.recipeWord,
     searchTerm: searchTerm.value,
-    customPromptAnswers,
+    customPromptAnswers: {},
     flags,
     linkedFoods: [],
     templateId: recipeFood.name,
@@ -138,12 +137,18 @@ function commitAnswer() {
     return;
   }
 
-  const { id, customPromptAnswers, flags } = getFoodToReplace();
+  const { id, flags } = getFoodToReplace();
 
   // Assign portion size method if only one is available
   const hasOnePortionSizeMethod = foodData.value.portionSizeMethods.length === 1;
   if (hasOnePortionSizeMethod)
     flags.push('portion-size-option-complete');
+
+  // V4-1393: Custom prompts may depend on the selected food via the conditions system,
+  // so transferring custom prompt answers is not valid in the general case.
+  //
+  // Flags are filtered in getFoodToReplace, which should make this safe, but additional flags
+  // may need to be filtered out.
 
   const newState: EncodedFood = {
     id,
@@ -152,7 +157,7 @@ function commitAnswer() {
     searchTerm: searchTerm.value || '',
     portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
     portionSize: null,
-    customPromptAnswers,
+    customPromptAnswers: {},
     flags,
     linkedFoods: [],
   };
