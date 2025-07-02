@@ -6003,6 +6003,14 @@
                             "foods"
                           ]
                         }
+                      },
+                      "wakeUpTime": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "sleepTime": {
+                        "type": "string",
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -6015,7 +6023,9 @@
                       "flags",
                       "customPromptAnswers",
                       "selection",
-                      "meals"
+                      "meals",
+                      "wakeUpTime",
+                      "sleepTime"
                     ]
                   }
                 },
@@ -6369,6 +6379,14 @@
                             "foods"
                           ]
                         }
+                      },
+                      "wakeUpTime": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "sleepTime": {
+                        "type": "string",
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -6381,7 +6399,9 @@
                       "flags",
                       "customPromptAnswers",
                       "selection",
-                      "meals"
+                      "meals",
+                      "wakeUpTime",
+                      "sleepTime"
                     ]
                   }
                 },
@@ -6923,6 +6943,14 @@
                             "foods"
                           ]
                         }
+                      },
+                      "wakeUpTime": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "sleepTime": {
+                        "type": "string",
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -6935,7 +6963,9 @@
                       "flags",
                       "customPromptAnswers",
                       "selection",
-                      "meals"
+                      "meals",
+                      "wakeUpTime",
+                      "sleepTime"
                     ]
                   }
                 },
