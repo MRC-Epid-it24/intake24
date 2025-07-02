@@ -170,7 +170,7 @@ const emit = defineEmits(['action', 'update:modelValue', 'update:sabOptions']);
 // Reactive state for "options"
 const sabOptions = ref<Record<string, any>>({});
 
-const { i18n: { t }, translate } = useI18n();
+const { i18n: { t, locale }, translate } = useI18n();
 const { action, translatePrompt, type } = usePromptUtils(props, { emit });
 const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
 const survey = useSurvey();
@@ -241,30 +241,38 @@ const linkedFoods = computed(() =>
 
 const customPromptAnswers = computed(() => {
   const answers = props.sabFood.food.customPromptAnswers;
-  if (!answers) {
-    console.debug('No custom prompt answers found');
+  if (!answers)
     return {};
-  }
-  // delete null attributes in answers
   const filteredAnswers = Object.fromEntries(
     Object.entries(answers).filter(([_, value]) => value !== null),
   );
-  return filteredAnswers;
+  const foods = survey.parameters?.surveyScheme.prompts.meals.foods;
+  if (!foods)
+    return {};
+
+  return Object.fromEntries(
+    Object.entries(filteredAnswers).map(([key, value]) => {
+      const prompt = foods.find(item => item.id === key);
+      const label = prompt && Array.isArray(value) && 'options' in prompt && prompt?.options?.[locale.value]
+        ? value.map(v =>
+            prompt.options[locale.value].find(option => option.value === v)?.label ?? v,
+          )
+        : [];
+      return [key, label];
+    }),
+  );
 });
 
 const promptNames = computed(() => {
-  const idNameMap = survey.parameters?.surveyScheme.prompts.meals.foods.reduce(
-    (acc: Record<string, string>, item: { id: string; name: string }) => {
-      acc[item.id] = item.name;
-      return acc;
-    },
-    {},
-  );
-  if (!idNameMap) {
-    console.debug('No prompt names found');
+  const foods = survey.parameters?.surveyScheme.prompts.meals.foods;
+  if (!foods) {
+    console.debug('No custom prompt names found');
     return {};
   }
-  return idNameMap;
+  return foods.reduce<Record<string, string>>((acc, item) => {
+    acc[item.id] = item.i18n?.name?.[locale.value] || item.i18n?.name?.en || '';
+    return acc;
+  }, {});
 });
 
 const quantity = computed(() => getQuantity(props.sabFood.food));
