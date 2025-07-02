@@ -259,8 +259,8 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
       connect-redis:
-        specifier: ^8.1.0
-        version: 8.1.0(express-session@1.18.1)
+        specifier: ^9.0.0
+        version: 9.0.0(express-session@1.18.1)(redis@4.7.1)
       cookie-parser:
         specifier: ^1.4.7
         version: 1.4.7
@@ -5196,11 +5196,12 @@ packages:
     resolution: {integrity: sha512-e54B99q/OUoH64zYYRf3HBP5z24G38h5D3qXu23JGRoigpX5Ss4r9ZnDk3g0Z8uQC2x2lPaJ+UlWBc1ZWBWdLg==}
     engines: {node: '>=0.8'}
 
-  connect-redis@8.1.0:
-    resolution: {integrity: sha512-Km0EYLDlmExF52UCss5gLGTtrukGC57G6WCC2aqEMft5Vr4xNWuM4tL+T97kWrw+vp40SXFteb6Xk/7MxgpwdA==}
+  connect-redis@9.0.0:
+    resolution: {integrity: sha512-QwzyvUePTMvEzG1hy45gZYw3X3YHrjmEdSkayURlcZft7hqadQ3X39wYkmCqblK2rGlw+XItELYt6GnyG6DEIQ==}
     engines: {node: '>=18'}
     peerDependencies:
       express-session: '>=1'
+      redis: '>=5'
 
   consola@2.15.3:
     resolution: {integrity: sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==}
@@ -5386,6 +5387,7 @@ packages:
 
   cronstrue@2.61.0:
     resolution: {integrity: sha512-ootN5bvXbIQI9rW94+QsXN5eROtXWwew6NkdGxIRpS/UFWRggL0G5Al7a9GTBFEsuvVhJ2K3CntIIVt7L2ILhA==}
+    deprecated: Non-backwards compatible Breaking changes
     hasBin: true
 
   cross-env@7.0.3:
@@ -8059,6 +8061,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch-native@1.6.6:
     resolution: {integrity: sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ==}
@@ -14990,9 +14993,10 @@ snapshots:
 
   connect-history-api-fallback@1.6.0: {}
 
-  connect-redis@8.1.0(express-session@1.18.1):
+  connect-redis@9.0.0(express-session@1.18.1)(redis@4.7.1):
     dependencies:
       express-session: 1.18.1
+      redis: 4.7.1
 
   consola@2.15.3: {}
 
