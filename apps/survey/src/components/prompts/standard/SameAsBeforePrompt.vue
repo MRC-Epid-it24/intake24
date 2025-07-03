@@ -2,19 +2,18 @@
   <card-layout v-bind="{ food, meal, prompt, section, isValid, sabOptions }" @action="action">
     <v-card-text class="pt-2 d-flex">
       <v-card v-if="showSABcard" class="border flat width=100%">
-        <v-list class="px-4" color="grey-lighten-4">
+        <v-list v-if="serving || quantity || showLeftovers" class="px-4" color="grey-lighten-4">
           <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
           <v-divider />
-          <v-list-item class="ps-0" density="compact">
-            <v-checkbox
-              v-model="sabOptions.serving"
-              class="custom-checkbox"
-              density="compact"
-              :label="promptI18n.serving"
-              :value="true"
-            />
+          <v-list-item v-if="serving" class="ps-0" density="compact">
+            <v-list-item-title>
+              {{ promptI18n.serving }}
+            </v-list-item-title>
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
           </v-list-item>
-          <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
+          <v-list-item v-if="quantity" class="ps-0" density="compact">
             <template #prepend>
               <v-icon icon="fas fa-caret-right" />
             </template>
@@ -51,13 +50,12 @@
           <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
-            <v-checkbox
-              v-model="sabOptions.noAddedFoods"
-              class="custom-checkbox"
-              density="compact"
-              :label="promptI18n.noAddedFoods"
-              :value="true"
-            />
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
+            <v-list-item-title>
+              {{ promptI18n.noAddedFoods }}
+            </v-list-item-title>
           </v-list-item>
           <template v-if="linkedFoods.length">
             <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
