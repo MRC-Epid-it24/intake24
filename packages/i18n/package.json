@@ -23,17 +23,17 @@
   "dependencies": {
     "dompurify": "^3.2.6",
     "lodash": "^4.17.21",
-    "vue": "^3.5.16",
-    "vue-i18n": "^11.1.5"
+    "vue": "^3.5.17",
+    "vue-i18n": "^11.1.9"
   },
   "devDependencies": {
     "@jest/types": "^29.6.3",
     "@types/jest": "^29.5.14",
-    "@types/lodash": "^4.17.17",
-    "@types/node": "^22.15.30",
+    "@types/lodash": "^4.17.20",
+    "@types/node": "^22.16.0",
     "jest": "^29.7.0",
     "jest-extended": "^6.0.0",
-    "ts-jest": "^29.3.4",
+    "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
   }
 }
