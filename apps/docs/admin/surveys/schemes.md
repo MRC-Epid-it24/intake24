@@ -30,7 +30,6 @@ Recall flow, valid options are `1-pass` or `2-pass` (default).
 
 - `1-pass` - Flow goes through each meal including foods portion size estimation in order to complete the meal
 - `2-pass` - Flow goes through each meal two times
-
   - `first pass` - Flow goes through each meal to collect meal info and foods (without portion size estimation)
   - `second pass` - Flow goes through each meal to collect portion size estimation
 

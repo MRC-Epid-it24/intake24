@@ -29,7 +29,6 @@ Edit tab allows to modify selected survey.
 - `Support email` - Email associated with the survey. `Help requests` are sent to this email unless there are users specifically assigned with `support` permission in security tab, in which case the the `help requests` are sent to those users.
 
 - `State` - Survey state
-
   - `Not started` - Respondent won't be allowed to complete a recall
   - `Active` - Respondent will be allowed to complete a recall
   - `Suspended` - Respondent won't be allowed to complete a recall
@@ -154,7 +153,6 @@ Expected JWT payload with claims:
 - `Store user session on server` - If enabled, user partial submission data are sent to server for store / retrieval. If disabled, user partial submission data are only stored locally in client browser.
 
 - `Session max age` - Session duration from start of the survey (`ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information), e.g.
-
   - `2h` - resets session after 2 hours from start of the survey
   - `1d` - resets session after 1 day from start of the survey
 

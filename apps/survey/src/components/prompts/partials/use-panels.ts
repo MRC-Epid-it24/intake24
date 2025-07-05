@@ -1,4 +1,5 @@
-import { computed, type ComputedRef, type MaybeRefOrGetter, type Ref, toValue, watch } from 'vue';
+import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue';
+import { computed, toValue, watch } from 'vue';
 import { useDisplay, useGoTo } from 'vuetify';
 import { isElementInViewport } from '@intake24/survey/util';
 

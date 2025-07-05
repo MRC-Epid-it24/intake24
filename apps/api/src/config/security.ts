@@ -5,7 +5,7 @@ import ms from 'ms';
 export type JwtTokenSettings = {
   secret: string;
   lifetime: string;
-  audience: string[];
+  audience: [string, ...string[]];
 };
 
 export type JwtFrontEndSettings = {

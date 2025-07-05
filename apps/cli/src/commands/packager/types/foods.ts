@@ -94,17 +94,17 @@ export interface PkgMilkInHotDrinkPsm extends PkgPortionSizeMethodBase {
   method: 'milk-in-a-hot-drink';
 }
 
-export type PkgPortionSizeMethod =
-  | PkgAsServedPsm
-  | PkgGuideImagePsm
-  | PkgDrinkScalePsm
-  | PkgStandardPortionPsm
-  | PkgCerealPsm
-  | PkgMilkOnCerealPsm
-  | PkgPizzaPsm
-  | PkgMilkInHotDrinkPsm
-  | PkgDirectWeightPsm
-  | PkgUnknownPsm;
+export type PkgPortionSizeMethod
+  = | PkgAsServedPsm
+    | PkgGuideImagePsm
+    | PkgDrinkScalePsm
+    | PkgStandardPortionPsm
+    | PkgCerealPsm
+    | PkgMilkOnCerealPsm
+    | PkgPizzaPsm
+    | PkgMilkInHotDrinkPsm
+    | PkgDirectWeightPsm
+    | PkgUnknownPsm;
 
 export interface PkgAssociatedFood {
   foodCode?: string;
