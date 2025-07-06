@@ -60960,9 +60960,12 @@
                           "type": "string"
                         },
                         "every": {
-                          "type": "string"
+                          "type": "number"
                         },
                         "next": {
+                          "type": "number"
+                        },
+                        "offset": {
                           "type": "number"
                         },
                         "template": {
@@ -62255,9 +62258,12 @@
                           "type": "string"
                         },
                         "every": {
-                          "type": "string"
+                          "type": "number"
                         },
                         "next": {
+                          "type": "number"
+                        },
+                        "offset": {
                           "type": "number"
                         },
                         "template": {
