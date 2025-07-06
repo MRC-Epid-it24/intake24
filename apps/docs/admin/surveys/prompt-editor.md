@@ -18,7 +18,6 @@ Top level toolbar has:
 General tab defines administrative fields
 
 - `Type` - Prompts are categorized to three types:
-
   - [custom prompts](/admin/surveys/prompt-types#custom-prompts)
   - [standard prompts](/admin/surveys/prompt-types#standard-prompts)
   - [portion size prompts](/admin/surveys/prompt-types#portion-size-prompts)

@@ -149,12 +149,10 @@ Prompt to redirect user to external site with optional user identifier embedded 
 - `rating` - 5-star rating with optional comment to be submitted after the recall
 
 - `url` - URL to redirect to
-
   - use `{identifier}` variable as a placeholder where the user identifier should be to inserted.
   - example: `https://example.com/?arg={identifier}`
 
 - `identifier` - identifier that should be embedded into the URL.
-
   - `userId` - internal intake24 user id
   - `username` - survey-unique respondent username
   - `urlAuthToken` - URL authentication token
@@ -162,7 +160,6 @@ Prompt to redirect user to external site with optional user identifier embedded 
     - Enter a `name` of the custom field to be looked up the `value`.
 
 - `target` - target window for redirection
-
   - `_blank` - open in a new window
   - `_self` - open in the same window
 
@@ -217,13 +214,11 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 - `leftovers` - show leftovers option
 
 - `multiple` - allow multiple items to be selected. When enabled, additional options are available:
-
   - `false` - disable multiple selection
   - `counter` - counter-style multiple selection
   - `slider` - slider-style multiple selection
 
 - `image map settings` - image map settings
-
   - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
   - `pinchZoom` - show PinchZoom control for mobile UI labels
 
@@ -236,7 +231,6 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 - `leftovers` - show leftovers option
 
 - `image map settings` - image map settings
-
   - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
   - `pinchZoom` - show PinchZoom control for mobile UI labels
 
@@ -251,7 +245,6 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 - `leftovers` - show leftovers option
 
 - `image map settings` - image map settings
-
   - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
   - `pinchZoom` - show PinchZoom control for mobile UI labels
 
@@ -298,7 +291,6 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
 - `badges` - show quantity badge on expansion panel header
 
 - `image map settings` - image map settings
-
   - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
   - `pinchZoom` - show PinchZoom control for mobile UI labels
 
@@ -324,7 +316,6 @@ Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slid
 - `badges` - show quantity badge on expansion panel header
 
 - `image map settings` - image map settings
-
   - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
   - `pinchZoom` - show PinchZoom control for mobile UI labels
 
@@ -347,7 +338,6 @@ First iteration for pizza estimation
 - `badges` - show quantity badge on expansion panel header
 
 - `image map settings` - image map settings
-
   - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
   - `pinchZoom` - show PinchZoom control for mobile UI labels
 
@@ -358,7 +348,6 @@ Second iteration for pizza estimation
 #### Options
 
 - `image map settings` - image map settings
-
   - `labels` - show image map labels (options are `always ON` / `always OFF` / `portion size method setting`)
   - `pinchZoom` - show PinchZoom control for mobile UI labels
 
@@ -395,7 +384,6 @@ Prompt to collect single option from a list of foods.
 #### Options
 
 - `options` - locale-specific list of options with properties:
-
   - `label` - user-facing displayed label
   - `value` - value stored in database
   - `selected` - flag to pre-select the option
@@ -409,7 +397,6 @@ Multi-select list of options.
 #### Options
 
 - `options` - locale-specific list of options with properties:
-
   - `label` - user-facing displayed label
   - `value` - value stored in database
   - `exclusive` - exclusive flag - if selected, other options are deselected
@@ -467,7 +454,6 @@ Prompt to collect single or multiple option(s) from a list of options using sele
 - `multiple` - `true` or `false` whether to allow multiple options to be selected
 
 - `options` - locale-specific list of options with properties:
-
   - `label` - user-facing displayed label
   - `value` - value stored in database
   - `selected` - flag to pre-select the option
@@ -495,7 +481,6 @@ Prompt to collect numeric information using slider.
 Single-select list of options.
 
 - `options` - locale-specific list of options with properties:
-
   - `label` - user-facing displayed label
   - `value` - value stored in database
   - `selected` - flag to pre-select the option

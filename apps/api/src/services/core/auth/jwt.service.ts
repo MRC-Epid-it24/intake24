@@ -1,4 +1,4 @@
-import type { Secret, SignOptions } from 'jsonwebtoken';
+import type { Secret, SignOptions, VerifyOptions } from 'jsonwebtoken';
 import jwt, { decode } from 'jsonwebtoken';
 
 import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
@@ -48,13 +48,13 @@ function jwtService({
    *
    * @param {string} token
    * @param {Secret} secret
-   * @param {SignOptions} [options]
+   * @param {VerifyOptions} [options]
    * @returns {Promise<TokenPayload>}
    */
   const verify = async <T = TokenPayload>(
     token: string,
     secret: Secret,
-    options: SignOptions = {},
+    options: VerifyOptions = {},
   ): Promise<T> =>
     new Promise((resolve, reject) => {
       const { issuer } = securityConfig.jwt;

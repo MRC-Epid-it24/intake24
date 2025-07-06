@@ -24,7 +24,6 @@ Edit tab allows modification of selected feedback scheme.
 - `Outputs` - List of outputs that are allowed / offered to user. Possible outputs are `print`, `download` and `email`.
 
 - Physical data fields - List of physical data inputs / identifiers, which are required to be collected for feedback calculation for some outputs:
-
   - `Sex` - required if feedback is sex specific
 
   - `Weight`, `Height`, `Physical activity level` and `Weight target` required if feedback is intended to provide an indication of whether energy/calorie intake is 'high' or 'low' etc.
@@ -34,7 +33,6 @@ Edit tab allows modification of selected feedback scheme.
   - `Birth date` required for age specific feedback
 
 - `Sections` - List of feedback sections included in feedback
-
   - `submissions` - shows submission history selection (section is always on the top)
 
   - `cards` – shows intake of selected nutrients, energy and foods
@@ -78,7 +76,6 @@ Meal per-day breakdown table with selected meal specific fields.
 List of columns to be displayed in meal per-day breakdown table. List can be re-ordered by drag & drop.
 
 1. There are common field properties for all field types:
-
    - `header` - localized column header name
 
    - `value` - localized field value
@@ -89,7 +86,6 @@ List of columns to be displayed in meal per-day breakdown table. List can be re-
    - `type` - field type, possible values standard, custom or nutrient
 
 2. Depending on selected field type, there are additional properties to be set:
-
    - `fieldId` - field id, which is used to match with meal specific field
 
 **Standard field IDs**
@@ -155,7 +151,6 @@ Allows selection of:
 - `Nutrient type`
 
 - `Nutrient rule type`: allows how nutrients are calculated and presents feedback based on consumption as follows:
-
   - `Energy divided by BMR`: energy intake divided by BMR, fitting to optimal intake (e.g. energy/calorie intake compared to recommendations)
   - `Percentage of energy`: contribution of the nutrient to energy intake (e.g. percent contribution of fat to total energy intake)
   - `Per unit of weight`: contribution of the nutrient per kg of body weight, fitting to optimal intake (e.g. protein intake per kg of body weight)

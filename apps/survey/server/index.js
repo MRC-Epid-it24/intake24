@@ -1,17 +1,15 @@
-import dotenv from 'dotenv';
-import dotenvExpand from 'dotenv-expand';
-
-const dotEnv = dotenv.config();
-dotenvExpand.expand(dotEnv);
-
 import fs from 'node:fs';
 import path from 'node:path';
-
 import { cspHashes } from '@vitejs/plugin-legacy';
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 import express from 'express';
 import helmet from 'helmet';
 
 import config from './config.js';
+
+const dotEnv = dotenv.config();
+dotenvExpand.expand(dotEnv);
 
 async function startApp() {
   const app = express();

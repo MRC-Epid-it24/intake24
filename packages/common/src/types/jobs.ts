@@ -15,8 +15,9 @@ export const repeatableBullJob = z.object({
   endDate: z.number().optional(),
   tz: z.string().optional(),
   pattern: z.string().optional(),
-  every: z.string().optional(),
+  every: z.number().optional(),
   next: z.number().optional(),
+  offset: z.number().optional(),
   template: z.object({
     data: z.any(),
     opts: z.any(),
