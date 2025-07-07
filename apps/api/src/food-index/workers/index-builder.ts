@@ -215,12 +215,27 @@ function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchRe
   const relevantCategories: Map<string, LocalCategoryData> = new Map<string, LocalCategoryData>();
 
   for (const foodCode of foodCodes) {
-    const transitiveParentCategories = index.parentCategoryIndex.getFoodTransitiveParentCategories(foodCode, transitiveLimit);
-    for (const [categoryCode, data] of transitiveParentCategories) {
+    const transitiveParentCategories = index.parentCategoryIndex.getFoodTransitiveParentCategories(foodCode);
+
+    for (const [categoryCode, category] of transitiveParentCategories) {
+      if (category.transitiveLevel > transitiveLimit)
+        continue;
+
       // Skip categories that have been matched by the search algorithm to prevent duplicates (for example, "Tap water"/"Water")
-      if (!categoryResults.some(result => result.key === categoryCode)) {
-        if (!relevantCategories.has(categoryCode))
-          relevantCategories.set(categoryCode, data);
+      if (categoryResults.some(result => result.key === categoryCode))
+        continue;
+
+      if (!relevantCategories.has(categoryCode))
+        relevantCategories.set(categoryCode, category.categoryData);
+
+      const siblingCategories = index.parentCategoryIndex.getSiblingCategories(category.categoryData.code);
+
+      for (const [siblingCategoryCode, siblingCategoryData] of siblingCategories) {
+        if (categoryResults.some(result => result.key === siblingCategoryCode))
+          continue;
+
+        if (!relevantCategories.has(siblingCategoryCode))
+          relevantCategories.set(siblingCategoryCode, siblingCategoryData);
       }
     }
   }

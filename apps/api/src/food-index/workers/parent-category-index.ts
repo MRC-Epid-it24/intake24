@@ -13,6 +13,7 @@ export class ParentCategoryIndex {
   private readonly categoryData: Map<string, LocalCategoryData>;
   private readonly foodTransitiveParentCategories: Map<string, Map<string, TransitiveParentCategory>>;
   private readonly categoryTransitiveParentCategories: Map<string, Map<string, TransitiveParentCategory>>;
+  private readonly siblingCategories: Map<string, Map<string, LocalCategoryData>>;
 
   public readonly nonEmptyCategories: Set<string>;
 
@@ -78,23 +79,19 @@ export class ParentCategoryIndex {
     return parentCategories.has(parentCategoryCode);
   }
 
-  public getFoodTransitiveParentCategories(foodCode: string, transitiveLimit?: number): Map<string, LocalCategoryData> {
-    const result = new Map<string, LocalCategoryData>();
-    const parentCategories = this.foodTransitiveParentCategories.get(foodCode);
-    if (parentCategories !== undefined) {
-      for (const [categoryCode, category] of parentCategories) {
-        if (transitiveLimit === undefined || category.transitiveLevel <= transitiveLimit)
-          result.set(categoryCode, category.categoryData);
-      }
-    }
-    return result;
+  public getFoodTransitiveParentCategories(foodCode: string): Map<string, TransitiveParentCategory> {
+    return this.foodTransitiveParentCategories.get(foodCode) ?? new Map();
+  }
+
+  public getSiblingCategories(categoryCode: string): Map<string, LocalCategoryData> {
+    return this.siblingCategories.get(categoryCode) ?? new Map();
   }
 
   // Some categories can have a local record (that is, a row in category_locals) but no local foods
   // having that category as parent, directly or transitively.
   //
   // Such categories must be omitted from search results.
-  private getNonEmptyCategories(localFoods: LocalFoodData[]): Set<string> {
+  private findNonEmptyCategories(localFoods: LocalFoodData[]): Set<string> {
     const nonEmptyCategories = new Set<string>();
 
     for (const food of localFoods) {
@@ -107,6 +104,42 @@ export class ParentCategoryIndex {
     }
 
     return nonEmptyCategories;
+  }
+
+  private buildSiblingCategoriesMap(): Map<string, Map<string, LocalCategoryData>> {
+    const subcategories: Map<string, Set<string>> = new Map();
+    const siblingCategories: Map<string, Set<string>> = new Map();
+
+    for (const [categoryCode, { parentCategories }] of this.categoryData.entries()) {
+      for (const parentCode of parentCategories) {
+        let subcategorySet = subcategories.get(parentCode);
+
+        if (subcategorySet === undefined) {
+          subcategorySet = new Set<string>();
+          subcategories.set(parentCode, subcategorySet);
+        }
+
+        subcategorySet.add(categoryCode);
+      }
+    }
+
+    for (const [categoryCode, { parentCategories }] of this.categoryData.entries()) {
+      const siblingSet = new Set<string>();
+      for (const parentCode of parentCategories) {
+        const children = subcategories.get(parentCode);
+
+        if (children !== undefined) {
+          for (const siblingCode of children) {
+            if (siblingCode !== categoryCode)
+              siblingSet.add(siblingCode);
+          }
+        }
+      }
+
+      siblingCategories.set(categoryCode, siblingSet);
+    }
+
+    return new Map([...siblingCategories.entries()].map(([categoryCode, siblingCategoryCodes]) => [categoryCode, this.attachCategoryData(siblingCategoryCodes)]));
   }
 
   public isCategoryHidden(categoryCode: string): boolean {
@@ -146,6 +179,7 @@ export class ParentCategoryIndex {
     this.categoryParentCategories = new Map(categories.map(category => [category.code, this.attachCategoryData(category.parentCategories)]));
     this.foodTransitiveParentCategories = new Map(foods.map(food => [food.code, this.addTransitiveParentCategories(this.foodParentCategories.get(food.code)!)]));
     this.categoryTransitiveParentCategories = new Map(categories.map(category => [category.code, this.addTransitiveParentCategories(this.categoryParentCategories.get(category.code)!)]));
-    this.nonEmptyCategories = this.getNonEmptyCategories(foods);
+    this.nonEmptyCategories = this.findNonEmptyCategories(foods);
+    this.siblingCategories = this.buildSiblingCategoriesMap();
   }
 }
