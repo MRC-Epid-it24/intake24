@@ -9,8 +9,10 @@
         <v-icon icon="$no" start />
         {{ promptI18n.missing }}
       </v-btn>
-      <v-spacer />
-      <next v-if="modelValue.data" :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
+      <template v-if="modelValue.data">
+        <v-spacer v-if="!$vuetify.display.mobile" />
+        <next :disabled="!isValid" :label="promptI18n.select" @click="action('next')" />
+      </template>
     </template>
   </base-layout>
 </template>
