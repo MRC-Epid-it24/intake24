@@ -190,6 +190,10 @@ export const useSurvey = defineStore('survey', {
       return this.feedbackEnabled && this.feedbackAvailable;
     },
     hasFlag: state => (flag: SurveyFlag) => state.data.flags.includes(flag),
+    hasMealFlag: state => (mealId: string, flag: MealFlag) =>
+      findMeal(state.data.meals, mealId).flags.includes(flag),
+    hasFoodFlag: state => (foodId: string, flag: FoodFlag) =>
+      findFood(state.data.meals, foodId).flags.includes(flag),
     registeredPortionSizeMethods(): string[] {
       return (
         this.foodPrompts
@@ -596,12 +600,6 @@ export const useSurvey = defineStore('survey', {
       return id;
     },
 
-    hasMealFlag(mealId: string, flag: MealFlag) {
-      const meal = findMeal(this.data.meals, mealId);
-
-      return meal.flags.includes(flag);
-    },
-
     addMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
       const meal = findMeal(this.data.meals, mealId);
       let flags = Array.isArray(flag) ? flag : [flag];
@@ -641,12 +639,6 @@ export const useSurvey = defineStore('survey', {
       const food = findFood(this.data.meals, data.foodId);
 
       food.customPromptAnswers[data.promptId] = data.answer;
-    },
-
-    hasFoodFlag(foodId: string, flag: FoodFlag) {
-      const food = findFood(this.data.meals, foodId);
-
-      return food.flags.includes(flag);
     },
 
     addFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
