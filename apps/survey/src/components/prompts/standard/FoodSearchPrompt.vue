@@ -55,7 +55,7 @@ const rootCategory = computed(() => {
 
   const [foodsCategory, drinksCategory] = category.split('|');
 
-  return props.food?.flags.includes('is-drink') ? drinksCategory ?? foodsCategory : foodsCategory;
+  return props.food?.flags.includes('is-drink') ? drinksCategory : foodsCategory;
 });
 
 const rootCategoryToggleable = computed(() => {
