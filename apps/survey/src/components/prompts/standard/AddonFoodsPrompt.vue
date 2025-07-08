@@ -20,8 +20,7 @@
           </template>
           <v-list-item v-for="food in meal.foods" :key="food.id" class="pb-2" :style="{ 'padding-inline-start': '16px !important' }">
             <v-list-item-title class="mt-2 mb-1">
-              <!-- @vue-expect-error TODO: improve type (encoded foods filtered in handler) -->
-              {{ food.data.localName }}
+              {{ getFoodDescription(food) }}
             </v-list-item-title>
             <div class="d-flex flex-column gr-2">
               <template v-for="(addon, idx) in foods[food.id]" :key="idx">
@@ -101,6 +100,7 @@
 import type { PropType } from 'vue';
 import { computed, onMounted, ref } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
+import { getFoodDescription } from '@intake24/common/surveys';
 import type { MealState, PortionSizeParameters, StandardUnit } from '@intake24/common/surveys';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
