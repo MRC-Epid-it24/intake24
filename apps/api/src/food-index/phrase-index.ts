@@ -23,6 +23,10 @@ export interface PhraseWithKey<K> {
   key: K;
 }
 
+export interface PhraseWithKeyAndSource<K> extends PhraseWithKey<K> {
+  isPrimaryName?: boolean; // true for primary names, false/undefined for alternative names
+}
+
 export type RecipeFoodTuple = [key: string, entry: RecipeFoodsHeader];
 
 export interface LanguageBackend {

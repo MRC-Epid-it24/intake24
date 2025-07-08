@@ -1,4 +1,5 @@
 import foodIndex from '@intake24/api/food-index';
+import { localeOptimizer } from '@intake24/api/food-index/locale-config/locale-optimizer';
 import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import type { IoC } from '@intake24/api/ioc';
@@ -14,7 +15,8 @@ function foodSearchService({
   foodThumbnailImageService,
   cache,
   cacheConfig,
-}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig'>) {
+  logger,
+}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig' | 'logger'>) {
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -41,7 +43,10 @@ function foodSearchService({
   };
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
-    const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
+    // Apply locale-specific search optimizations (replaces hardcoded Japanese logic)
+    const optimizedOptions = await localeOptimizer.applySearchOptimizations(localeId, options, logger);
+    const queryParameters = applyDefaultSearchQueryParameters(localeId, description, optimizedOptions);
+
     const results = await foodIndex.search(queryParameters);
     const attrs = await getInheritableAttributes(results.foods.map(r => r.code));
     const thumbnailImages = await foodThumbnailImageService.resolveImages(localeId, results.foods.map(foodHeader => foodHeader.code));

@@ -1,3 +1,4 @@
+import { localeOptimizer } from '@intake24/api/food-index/locale-config/locale-optimizer';
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
 import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
 import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
@@ -12,10 +13,10 @@ export type RankingData = {
   [foodCode: string]: number;
 };
 
-function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] {
+function noAlgorithmRanking(results: PhraseMatchResult<string>[], foodNames: Map<string, string>): FoodHeader[] {
   return results
     .sort((a, b) => a.quality - b.quality)
-    .map(result => ({ code: result.key, name: result.phrase }));
+    .map(result => ({ code: result.key, name: foodNames.get(result.key) || result.phrase }));
 }
 
 function mapValues<T1, T2>(obj: { [s: string]: T1 }, fn: (value: T1) => T2): { [s: string]: T2 } {
@@ -81,6 +82,7 @@ function applyRankingData(
   results: PhraseMatchResult<string>[],
   matchScoreWeight: number,
   logger: Logger,
+  foodNames: Map<string, string>,
 ): FoodHeader[] {
   const normalisedRankingData = normaliseRankingData(rankingData);
   const normalisedSearchResults = normaliseMatchCost(results);
@@ -98,7 +100,7 @@ function applyRankingData(
         = rankingScore * (1 - matchScoreWeight) + result.quality * matchScoreWeight;
 
       return {
-        header: { code: result.key, name: result.phrase },
+        header: { code: result.key, name: foodNames.get(result.key) || result.phrase },
         rankingScore: combinedScore,
       };
     });
@@ -135,17 +137,26 @@ export async function rankFoodResults(
   matchScoreWeight: number,
   logger: Logger,
   recipeFoodsHeaders: FoodHeader[],
+  foodNames: Map<string, string>,
 ): Promise<FoodHeader[]> {
   const foodCodes = results.map(result => result.key);
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
+  // Apply locale-specific primary name boost (replaces hardcoded Japanese logic)
+  const adjustedResults = await localeOptimizer.applyPrimaryNameBoost(
+    localeId,
+    results,
+    foodNames,
+    logger,
+  );
+
   if (rankingData !== null) {
     return recipeFoodsHeaders.concat(
-      applyRankingData(rankingData, results, matchScoreWeight, logger),
+      applyRankingData(rankingData, adjustedResults, matchScoreWeight, logger, foodNames),
     );
   }
   else {
-    return recipeFoodsHeaders.concat(noAlgorithmRanking(results));
+    return recipeFoodsHeaders.concat(noAlgorithmRanking(adjustedResults, foodNames));
   }
 }
 

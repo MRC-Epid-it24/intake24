@@ -6,7 +6,7 @@ import type InterpretedPhrase from '../interpreted-phrase';
 import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
 
 import LanguageBackends from '@intake24/api/food-index/language-backends';
-import type { PhraseMatchResult, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
+import type { PhraseMatchResult, PhraseWithKey, PhraseWithKeyAndSource } from '@intake24/api/food-index/phrase-index';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
@@ -15,6 +15,7 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import { logger as servicesLogger } from '@intake24/common-backend';
 import { Database, FoodsLocale, RecipeFood, SynonymSet } from '@intake24/db';
+import { localeOptimizer } from '@intake24/api/food-index/locale-config/locale-optimizer';
 
 import {
   fetchLocalCategories,
@@ -41,6 +42,7 @@ interface LocalFoodIndex {
   foodIndex: PhraseIndex<string>;
   categoryIndex: PhraseIndex<string>;
   parentCategoryIndex: ParentCategoryIndex;
+  foodNames: Map<string, string>;
 }
 
 interface FoodIndex {
@@ -123,18 +125,22 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 
   const localCategories = allLocalCategories.filter(category => parentCategoryIndex.nonEmptyCategories.has(category.code));
 
-  const foodDescriptions = new Array<PhraseWithKey<string>>();
+  const foodDescriptions = new Array<PhraseWithKeyAndSource<string>>();
 
   for (const food of localFoods) {
     if (!food.name)
       continue;
 
-    foodDescriptions.push({ phrase: food.name, key: food.code });
+    // Add primary name with source tracking
+    foodDescriptions.push({ phrase: food.name, key: food.code, isPrimaryName: true });
 
     const altNames = food.altNames[languageBackend.languageCode];
 
     if (altNames !== undefined) {
-      for (const name of altNames) foodDescriptions.push({ phrase: name, key: food.code });
+      // Add alternative names with source tracking
+      for (const name of altNames) {
+        foodDescriptions.push({ phrase: name, key: food.code, isPrimaryName: false });
+      }
     }
   }
 
@@ -161,10 +167,19 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     synonymSets,
   );
 
+  // Create a mapping from food codes to primary localized names
+  const foodNames = new Map<string, string>();
+  for (const food of localFoods) {
+    if (food.name) {
+      foodNames.set(food.code, food.name);
+    }
+  }
+
   return {
     foodIndex,
     categoryIndex,
     parentCategoryIndex,
+    foodNames,
   };
 }
 
@@ -276,6 +291,42 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     return acceptHidden && acceptCategory;
   });
 
+  // Deduplicate food results by food code, keeping the best match for each food
+  const deduplicatedFoodResults = Array.from(
+    foodResults.reduce((map, result) => {
+      const existing = map.get(result.key);
+      if (!existing || result.quality < existing.quality) {
+        map.set(result.key, result);
+      }
+      return map;
+    }, new Map<string, typeof foodResults[0]>()).values(),
+  );
+
+  // Locale-specific deduplication logging (replaces hardcoded Japanese logic)
+  const shouldLogDeduplication = await localeOptimizer.shouldLogDeduplication(query.parameters.localeId);
+  if (shouldLogDeduplication) {
+    if (deduplicatedFoodResults.length !== foodResults.length) {
+      logger.info(`${query.parameters.localeId} locale: Deduplicated ${foodResults.length} results to ${deduplicatedFoodResults.length} unique foods for query "${query.parameters.description}"`);
+
+      // Log duplicate food codes for debugging
+      const duplicates = foodResults.reduce((acc, result) => {
+        acc[result.key] = (acc[result.key] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      const duplicatedCodes = Object.entries(duplicates)
+        .filter(([_, count]) => count > 1)
+        .map(([code, count]) => `${code} (${count}x)`);
+
+      if (duplicatedCodes.length > 0) {
+        logger.info(`${query.parameters.localeId} locale: Duplicate food codes found: ${duplicatedCodes.join(', ')}`);
+      }
+    }
+    else {
+      logger.info(`${query.parameters.localeId} locale: No duplicates found for query "${query.parameters.description}" (${foodResults.length} results)`);
+    }
+  }
+
   const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
     query.parameters.description,
     spellingCorrectionParameters,
@@ -287,15 +338,16 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   });
 
   if (query.parameters.enableRelevantCategories)
-    categoryResults.push(...getRelevantCategories(localeIndex, foodResults, categoryResults, query.parameters.relevantCategoryDepth));
+    categoryResults.push(...getRelevantCategories(localeIndex, deduplicatedFoodResults, categoryResults, query.parameters.relevantCategoryDepth));
 
   const foods = await rankFoodResults(
-    foodResults,
+    deduplicatedFoodResults,
     query.parameters.localeId,
     query.parameters.rankingAlgorithm,
     query.parameters.matchScoreWeight / 100.0,
     logger,
     recipeFoodsHeaders,
+    localeIndex.foodNames,
   );
 
   const categories = rankCategoryResults(categoryResults);
