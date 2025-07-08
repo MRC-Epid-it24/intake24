@@ -7,7 +7,7 @@
             hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.categoryCode')"
             :model-value="categoryCode"
-            @change="update('categoryCode', $event)"
+            @update:model-value="update('categoryCode', $event)"
           />
         </v-col>
       </v-row>
