@@ -26,6 +26,22 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext
 
   const isPortionSizeComplete = computed(() => foodPortionSizeComplete(props.food));
 
+  const isCustomPromptComplete = computed(() => {
+    // If there are no custom prompts required for the food, mark as complete
+    if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
+      return true;
+    }
+
+    // Check if all custom prompt answers are not falsified objects
+    return Object.values(props.food.customPromptAnswers).every((answer) => {
+      // If answer is null, undefined, or an empty object, consider it incomplete
+      if (!answer || (typeof answer === 'object' && Object.keys(answer).length === 0)) {
+        return false;
+      }
+      return true;
+    });
+  });
+
   const menu = computed(() =>
     (
       [
@@ -54,5 +70,5 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext
     emit('action', type, id);
   };
 
-  return { action, foodName, isPortionSizeComplete, menu };
+  return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu };
 }
