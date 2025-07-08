@@ -51,7 +51,14 @@ function getInitialState(): PromptStates['general-associated-foods-prompt'] {
 
 const { state, update, clearStoredState } = usePromptHandlerStore(props, { emit }, getInitialState);
 
-const updateState = (state: PromptStates['associated-foods-prompt']) => update(state.promptStates[0]);
+function updateState(afpState: PromptStates['associated-foods-prompt']) {
+  // V4-1521: GAFP state is different from the underlying associatedFoodsPromptState,
+  // but usePromptHandlerStore expects state to be updated by the prompt component,
+  // which means state has to be handled explicitly.
+
+  state.value = afpState.promptStates[0];
+  update(afpState.promptStates[0]);
+}
 
 const associatedFoodsPromptState = computed<PromptStates['associated-foods-prompt']>(() => ({
   activePrompt: 0,
