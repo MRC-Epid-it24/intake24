@@ -13,6 +13,22 @@
           <v-tooltip location="bottom">
             <template #activator="{ props }">
               <v-icon
+                v-bind="props"
+                class="me-1"
+                :color="isCustomPromptComplete ? 'green-darken-2' : 'grey'"
+                :icon="isCustomPromptComplete ? '$ok' : '$question'"
+                size="small"
+              />
+            </template>
+            <span>
+              Custom Prompt is {{ isCustomPromptComplete ? 'complete.' : 'incomplete.' }}
+            </span>
+          </v-tooltip>
+          <!-- Food identification status tooltip -->
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <!-- Show question mark for free-text foods, checkmark for identified foods -->
+              <v-icon
                 v-if="food.type === 'free-text'"
                 v-bind="props"
                 class="me-1"
@@ -92,9 +108,9 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
 
-    return { action, foodName, isPortionSizeComplete, menu };
+    return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu };
   },
 });
 </script>
