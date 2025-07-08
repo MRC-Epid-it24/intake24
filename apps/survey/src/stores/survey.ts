@@ -24,8 +24,7 @@ import type {
 import { sortMeals } from '@intake24/common/surveys';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import type { Time } from '@intake24/common/util';
-import { toTime } from '@intake24/common/util';
-import { isSessionAgeValid, isSessionFixedPeriodValid } from '@intake24/common/util';
+import { isSessionAgeValid, isSessionFixedPeriodValid, toTime } from '@intake24/common/util';
 import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
@@ -190,6 +189,7 @@ export const useSurvey = defineStore('survey', {
     feedbackAllowed(): boolean {
       return this.feedbackEnabled && this.feedbackAvailable;
     },
+    hasFlag: state => (flag: SurveyFlag) => state.data.flags.includes(flag),
     registeredPortionSizeMethods(): string[] {
       return (
         this.foodPrompts
@@ -478,10 +478,6 @@ export const useSurvey = defineStore('survey', {
         ...this.data.customPromptAnswers,
         [data.promptId]: data.answer,
       };
-    },
-
-    hasFlag(flag: SurveyFlag) {
-      return this.data.flags.includes(flag);
     },
 
     addFlag(flag: SurveyFlag | SurveyFlag[]) {
