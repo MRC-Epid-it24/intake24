@@ -95,7 +95,7 @@ export class PhraseIndex<K> {
     return (
       sanitised
         .split(/\s+/)
-        .filter(s => s.length > 1)
+        .filter(s => s.length >= 1)
         .filter(s => !this.languageBackend.indexIgnore.includes(s))
         // split compound words (e.g. for German and Nordic languages)
         .flatMap(s => this.languageBackend.splitCompound(s))

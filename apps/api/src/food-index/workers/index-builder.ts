@@ -350,7 +350,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     localeIndex.foodNames,
   );
 
-  const categories = rankCategoryResults(categoryResults);
+  const categories = await rankCategoryResults(categoryResults, query.parameters.localeId, logger);
 
   return {
     foods: foods.slice(0, query.parameters.limit),

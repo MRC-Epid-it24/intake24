@@ -142,11 +142,17 @@ export async function rankFoodResults(
   const foodCodes = results.map(result => result.key);
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
-  // Apply locale-specific primary name boost (replaces hardcoded Japanese logic)
-  const adjustedResults = await localeOptimizer.applyPrimaryNameBoost(
+  // Apply locale-specific optimizations
+  const primaryNameBoostedResults = await localeOptimizer.applyPrimaryNameBoost(
     localeId,
     results,
     foodNames,
+    logger,
+  );
+
+  const adjustedResults = await localeOptimizer.applyPhoneticBoost(
+    localeId,
+    primaryNameBoostedResults,
     logger,
   );
 
@@ -160,8 +166,19 @@ export async function rankFoodResults(
   }
 }
 
-export function rankCategoryResults(results: PhraseMatchResult<string>[]): CategoryHeader[] {
-  return results
+export async function rankCategoryResults(
+  results: PhraseMatchResult<string>[],
+  localeId: string,
+  logger: Logger,
+): Promise<CategoryHeader[]> {
+  // Apply locale-specific category boosts
+  const adjustedResults = await localeOptimizer.applyCategoryBoost(
+    localeId,
+    results,
+    logger,
+  );
+
+  return adjustedResults
     .sort((a, b) => a.quality - b.quality)
     .map(result => ({ code: result.key, name: result.phrase }));
 }

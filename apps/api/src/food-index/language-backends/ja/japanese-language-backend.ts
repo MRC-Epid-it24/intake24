@@ -1,6 +1,8 @@
 import kuromoji from 'kuromoji';
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 
+import JapanesePhoneticEncoder from './japanese-phonetic-encoder';
+
 const sanitiseRegexp = /[。、・.,`/\\\-+)(（）「」『』【】〈〉《》〔〕［］｛｝等]|など/g;
 
 // Global tokenizer instance to avoid reloading dictionary
@@ -55,7 +57,7 @@ export default {
   name: 'Japanese',
   languageCode: 'ja',
   indexIgnore: ['と', 'の', 'に', 'を', 'は', 'が', 'で', 'や', 'も', 'から', 'まで', 'より', 'ため', 'など', 'という', 'として', 'について'],
-  phoneticEncoder: undefined,
+  phoneticEncoder: new JapanesePhoneticEncoder(),
 
   splitCompound(word: string): Array<string> {
     // For Japanese, we rely on morphological analysis for compound splitting

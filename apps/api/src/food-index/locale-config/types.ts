@@ -15,6 +15,15 @@ export interface SearchOptimizations {
 
   /** Enable deduplication logging for debugging */
   enableDeduplicationLogging?: boolean;
+
+  /** Fuzzy matching tolerance (0-1, higher = more lenient) */
+  fuzzyMatchingTolerance?: number;
+
+  /** Boost factor for phonetic matches (0-1, higher = stronger boost) */
+  phoneticBoostFactor?: number;
+
+  /** Category matching boost factor (0-1, higher = stronger boost) */
+  categoryMatchBoost?: number;
 }
 
 export interface LanguageVariants {

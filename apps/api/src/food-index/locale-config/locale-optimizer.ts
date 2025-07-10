@@ -141,6 +141,95 @@ export class LocaleOptimizer {
   }
 
   /**
+   * Apply phonetic matching boost for cross-script results
+   */
+  async applyPhoneticBoost(
+    localeId: string,
+    results: PhraseMatchResult<string>[],
+    logger: Logger,
+  ): Promise<PhraseMatchResult<string>[]> {
+    const config = await this.getLocaleConfig(localeId);
+
+    if (!config || !config.searchOptimizations.phoneticBoostFactor) {
+      return results;
+    }
+
+    const boostFactor = config.searchOptimizations.phoneticBoostFactor;
+
+    return results.map((result) => {
+      // Apply boost to results that likely came from phonetic/cross-script matching
+      // Detect Japanese phonetic conversions by checking for script differences
+      const hasJapaneseChars = /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(result.phrase);
+
+      if (hasJapaneseChars) {
+        const boostedQuality = result.quality * boostFactor;
+
+        logger.debug(
+          `Phonetic boost applied for ${localeId}: ${result.key} quality: ${result.quality} -> ${boostedQuality}`,
+        );
+
+        return {
+          ...result,
+          quality: boostedQuality,
+        };
+      }
+
+      return result;
+    });
+  }
+
+  /**
+   * Apply category-specific boost for better category matching
+   */
+  async applyCategoryBoost(
+    localeId: string,
+    results: PhraseMatchResult<string>[],
+    logger: Logger,
+  ): Promise<PhraseMatchResult<string>[]> {
+    const config = await this.getLocaleConfig(localeId);
+
+    if (!config || !config.searchOptimizations.categoryMatchBoost) {
+      return results;
+    }
+
+    const boostFactor = config.searchOptimizations.categoryMatchBoost;
+    const languageVariants = config.languageVariants || {};
+
+    return results.map((result) => {
+      const phrase = result.phrase.toLowerCase();
+
+      // Check if this result matches language variants (indicates good cross-script matching)
+      let isVariantMatch = false;
+      if (languageVariants[phrase]) {
+        isVariantMatch = true;
+      }
+
+      // Also check if any variant maps to this phrase
+      for (const [_term, variants] of Object.entries(languageVariants)) {
+        if (variants.some(variant => variant.toLowerCase() === phrase)) {
+          isVariantMatch = true;
+          break;
+        }
+      }
+
+      if (isVariantMatch) {
+        const boostedQuality = result.quality * boostFactor;
+
+        logger.debug(
+          `Category variant boost applied for ${localeId}: ${result.key} (${phrase}) quality: ${result.quality} -> ${boostedQuality}`,
+        );
+
+        return {
+          ...result,
+          quality: boostedQuality,
+        };
+      }
+
+      return result;
+    });
+  }
+
+  /**
    * Check if a locale has specific optimizations configured
    */
   async hasOptimizations(localeId: string): Promise<boolean> {
