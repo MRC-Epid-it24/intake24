@@ -99,7 +99,6 @@
                 <v-card-title>{{ $t('fdbs.associatedFoods.association') }}</v-card-title>
                 <select-resource
                   v-model="dialog.item.associatedCategoryCode"
-                  activator-class="mb-2"
                   :initial-item="dialog.item.associatedCategory"
                   item-id="code"
                   :label="$t('fdbs.categories._')"

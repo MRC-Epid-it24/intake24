@@ -3,18 +3,18 @@
     <template #activator="{ props }">
       <slot name="activator" v-bind="{ props }">
         <v-text-field
-          :class="activatorClass"
-          :clearable="clearable"
-          :disabled="disabled"
-          :error-messages="errorMessages"
-          hide-details="auto"
-          :label="label"
-          :model-value="selectedItemName"
-          :name="name"
-          :prepend-inner-icon="itemIcon"
+          v-bind="{
+            ...$attrs,
+            props,
+            clearable,
+            disabled,
+            errorMessages,
+            label,
+            modelValue: selectedItemName,
+            name,
+            prependInnerIcon: itemIcon,
+          }"
           readonly
-          variant="outlined"
-          v-bind="props"
           @click:clear="clearInput"
         />
       </slot>
@@ -95,12 +95,12 @@ import { getResource } from '@intake24/admin/router/resources';
 import type { Dictionary } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
-defineOptions({ name: 'SelectResourceDialog' });
+defineOptions({
+  name: 'SelectResourceDialog',
+  inheritAttrs: false,
+});
 
 const props = defineProps({
-  activatorClass: {
-    type: String,
-  },
   clearable: {
     type: Boolean,
   },

@@ -101,7 +101,6 @@
               <v-col cols="12" md="6">
                 <select-resource
                   v-model.trim="item.categoryCode"
-                  activator-class="mb-2"
                   item-id="code"
                   :label="$t('locales.recipe-foods.ingredientsCategory')"
                   name="ingredientsCategoryCode"
