@@ -76,7 +76,22 @@
                       :items="variants"
                       :label="$t('survey-schemes.theme.variants._')"
                       variant="outlined"
-                    />
+                    >
+                      <template #item="{ item, props }">
+                        <v-list-item v-bind="props" :title="item.title">
+                          <template #prepend>
+                            <v-btn
+                              class="me-4"
+                              color="primary"
+                              :title="item.title"
+                              :variant="item.value"
+                            >
+                              {{ $t('survey-schemes.actions._') }}
+                            </v-btn>
+                          </template>
+                        </v-list-item>
+                      </template>
+                    </v-select>
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-select
