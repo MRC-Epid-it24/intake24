@@ -102,13 +102,13 @@
           </v-row>
           <v-divider class="my-6" />
           <v-row>
-            <v-col cols="12" md>
+            <v-col cols="12" md="6">
               <div class="text-h5 mb-4">
                 {{ $t('surveys.search._') }}
               </div>
               <v-switch
                 v-model="data.searchSettings.collectData"
-                class="my-6"
+                class="my-2"
                 :error-messages="errors.get('searchSettings.collectData')"
                 hide-details="auto"
                 :label="$t('surveys.search.collectData')"
@@ -117,7 +117,6 @@
               />
               <v-slider
                 v-model.number="data.searchSettings.maxResults"
-                class="mt-7"
                 :error-messages="errors.get('searchSettings.maxResults')"
                 hide-details="auto"
                 :label="$t('surveys.search.maxResults')"
@@ -179,6 +178,8 @@
                   <v-list-subheader>{{ $t('surveys.search.matchQuality') }}</v-list-subheader>
                 </template>
               </v-slider>
+            </v-col>
+            <v-col cols="12" md="6">
               <div class="text-h6 mb-10 mt-4 underline">
                 <v-icon
                   class="mr-3"
@@ -235,6 +236,8 @@
                 step="1"
                 thumb-label="always"
               />
+            </v-col>
+            <v-col cols="12" md="6">
               <div class="text-h6 mb-4 mt-4 underline">
                 <v-icon
                   class="mr-3"
@@ -278,7 +281,7 @@
               />
               <v-switch
                 v-model="data.searchSettings.enablePhonetic"
-                class="my-6"
+                class="my-2"
                 :error-messages="errors.get('searchSettings.enablePhonetic')"
                 hide-details="auto"
                 :label="$t('surveys.search.enablePhonetic')"
@@ -312,6 +315,8 @@
                 variant="outlined"
                 @update:model-value="errors.clear('searchSettings.spellingCorrectionPreference')"
               />
+            </v-col>
+            <v-col cols="12" md="6">
               <div class="text-h6 mb-4 mt-4 underline">
                 <v-icon
                   class="mr-3"
@@ -346,27 +351,6 @@
             <v-col :cols="$vuetify.display.mdAndUp ? `auto` : '12'">
               <v-divider :vertical="$vuetify.display.mdAndUp" />
             </v-col>
-            <v-col cols="12" md>
-              <div class="text-h5 mb-4">
-                {{ $t('surveys.users._') }}
-              </div>
-              <v-switch
-                v-model="data.userPersonalIdentifiers"
-                :error-messages="errors.get('userPersonalIdentifiers')"
-                hide-details="auto"
-                :label="$t('surveys.users.personalIdentifiers')"
-                name="userPersonalIdentifiers"
-                @update:model-value="errors.clear('userPersonalIdentifiers')"
-              />
-              <v-switch
-                v-model="data.userCustomFields"
-                :error-messages="errors.get('userCustomFields')"
-                hide-details="auto"
-                :label="$t('surveys.users.customFields')"
-                name="userCustomFields"
-                @update:model-value="errors.clear('userCustomFields')"
-              />
-            </v-col>
           </v-row>
           <v-divider class="my-6" />
           <v-row>
@@ -376,7 +360,7 @@
               </div>
               <v-switch
                 v-model="data.authCaptcha"
-                class="my-6"
+                class="my-2"
                 :error-messages="errors.get('authCaptcha')"
                 hide-details="auto"
                 :label="$t('surveys.auth.captcha')"
@@ -456,7 +440,7 @@
               </div>
               <v-switch
                 v-model="data.allowGenUsers"
-                class="my-6"
+                class="my-2"
                 :error-messages="errors.get('allowGenUsers')"
                 hide-details="auto"
                 :label="$t('surveys.externalComm.allowGenUsers')"
@@ -510,7 +494,7 @@
               </div>
               <v-switch
                 v-model="data.session.store"
-                class="my-6"
+                class="my-2"
                 :error-messages="errors.get('session.store')"
                 hide-details="auto"
                 :label="$t('surveys.session.store')"
@@ -541,13 +525,35 @@
             </v-col>
           </v-row>
           <v-divider class="my-6" />
-          <div class="text-h5 mb-4">
-            {{ $t('surveys.feedback._') }}
-          </div>
           <v-row>
+            <v-col cols="12" md>
+              <div class="text-h5 mb-4">
+                {{ $t('surveys.users._') }}
+              </div>
+              <v-switch
+                v-model="data.userPersonalIdentifiers"
+                :error-messages="errors.get('userPersonalIdentifiers')"
+                hide-details="auto"
+                :label="$t('surveys.users.personalIdentifiers')"
+                name="userPersonalIdentifiers"
+                @update:model-value="errors.clear('userPersonalIdentifiers')"
+              />
+              <v-switch
+                v-model="data.userCustomFields"
+                :error-messages="errors.get('userCustomFields')"
+                hide-details="auto"
+                :label="$t('surveys.users.customFields')"
+                name="userCustomFields"
+                @update:model-value="errors.clear('userCustomFields')"
+              />
+            </v-col>
             <v-col cols="12" md="6">
+              <div class="text-h5 mb-4">
+                {{ $t('surveys.feedback._') }}
+              </div>
               <select-resource
                 v-model="data.feedbackSchemeId"
+                class="mb-4"
                 clearable
                 :error-messages="errors.get('feedbackSchemeId')"
                 :initial-item="entry.feedbackScheme"
@@ -556,8 +562,6 @@
                 resource="feedback-schemes"
                 @update:model-value="errors.clear('feedbackSchemeId')"
               />
-            </v-col>
-            <v-col cols="12" md="6">
               <v-text-field
                 v-model.number="data.numberOfSubmissionsForFeedback"
                 :disabled="!data.feedbackSchemeId"
