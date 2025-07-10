@@ -17,6 +17,23 @@
           <v-tooltip location="bottom">
             <template #activator="{ props }">
               <v-icon
+                v-bind="props"
+                class="me-1"
+                :color="isCustomPromptComplete ? 'green-darken-2' : 'grey'"
+                :icon="isCustomPromptComplete ? '$ok' : '$question'"
+                size="small"
+              >
+                $question
+              </v-icon>
+            </template>
+            <span>
+              Custom Prompt is {{ isCustomPromptComplete ? 'complete.' : 'incomplete.' }}
+            </span>
+          </v-tooltip>
+
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-icon
                 v-if="food.type === 'free-text'"
                 v-bind="props"
                 class="me-1"
@@ -103,7 +120,7 @@ export default defineComponent({
   emits: ['action', 'update:context-id'],
 
   setup(props, ctx) {
-    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
 
     const updateContextId = (id: string) => {
       ctx.emit('update:context-id', id);
@@ -113,6 +130,7 @@ export default defineComponent({
       action,
       foodName,
       isPortionSizeComplete,
+      isCustomPromptComplete,
       menu,
       updateContextId,
     };
