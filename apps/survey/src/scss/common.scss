@@ -2,15 +2,14 @@
 @use 'settings';
 @use 'variables';
 
-.v-application {
-  ul,
-  ol {
-    padding-left: settings.$spacer * 6;
-  }
+ul,
+ol {
+  padding-left: settings.$spacer * 6;
+  margin-bottom: settings.$spacer * 3;
+}
 
-  p {
-    margin-bottom: settings.$spacer * 3;
-  }
+p {
+  margin-bottom: settings.$spacer * 3;
 }
 
 .btn-truncate {
