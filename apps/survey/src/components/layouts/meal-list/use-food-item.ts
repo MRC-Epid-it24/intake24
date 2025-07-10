@@ -5,7 +5,8 @@ import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { foodComplete, foodPortionSizeComplete } from '@intake24/survey/util';
+import { useSurvey } from '@intake24/survey/stores';
+import { customPromptComplete, foodComplete, foodPortionSizeComplete } from '@intake24/survey/util';
 
 export type MenuItem = {
   name: string;
@@ -23,23 +24,12 @@ export type UseFoodItemProps = {
 export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
   const { i18n: { t } } = useI18n();
   const { foodName } = useFoodUtils(props);
+  const survey = useSurvey();
 
   const isPortionSizeComplete = computed(() => foodPortionSizeComplete(props.food));
 
   const isCustomPromptComplete = computed(() => {
-    // If there are no custom prompts required for the food, mark as complete
-    if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
-      return true;
-    }
-
-    // Check if all custom prompt answers are not falsified objects
-    return Object.values(props.food.customPromptAnswers).every((answer) => {
-      // If answer is null, undefined, or an empty object, consider it incomplete
-      if (!answer || (typeof answer === 'object' && Object.keys(answer).length === 0)) {
-        return false;
-      }
-      return true;
-    });
+    return customPromptComplete(props.food, survey.foodPrompts);
   });
 
   const menu = computed(() =>

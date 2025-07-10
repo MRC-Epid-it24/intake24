@@ -1,3 +1,4 @@
+import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
@@ -190,4 +191,36 @@ export function flattenFoods(foods: FoodState[]): FoodState[] {
   }
 
   return result;
+}
+
+export function customPromptComplete(food: FoodState, foodPrompts: Prompt[]): boolean {
+  // Get all required custom prompts for this food
+  const requiredCustomPrompts = foodPrompts.filter((prompt) => {
+    // Check if this prompt applies to the current food and is required
+    return prompt.component !== 'info-prompt'
+      && prompt.component !== 'no-more-information-prompt'
+      && prompt.type === 'custom' && (!('validation' in prompt) || prompt.validation.required);
+  });
+
+  // If no custom prompts are required, show OK
+  if (requiredCustomPrompts.length === 0) {
+    return true;
+  }
+
+  // If custom prompts are required but no answers exist at all, show question mark
+  if (!food.customPromptAnswers || Object.keys(food.customPromptAnswers).length === 0) {
+    return false;
+  }
+
+  // Check if all required custom prompts have been answered
+  return requiredCustomPrompts.every((prompt) => {
+    const answer = food.customPromptAnswers[prompt.id];
+    // If answer is missing, null, undefined, or an empty object, consider it incomplete
+    if (!answer || (typeof answer === 'object' && Object.keys(answer).length === 0)) {
+      console.debug(`Custom prompt ${prompt.id} is incomplete for food ${food.id}`);
+      return false;
+    }
+    console.debug(`Custom prompt ${prompt.id} is complete for food ${food.id}`);
+    return true;
+  });
 }
