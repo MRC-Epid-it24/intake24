@@ -9,8 +9,11 @@
       link
       @click="updateContextId(food.id)"
     >
-      <v-list-item-title class="text-body-2 text-wrap">
-        {{ foodName }}
+      <v-list-item-title class="text-body-2 text-wrap d-flex flex-column">
+        <span class="food-name">{{ foodName }}</span>
+        <span v-if="customPromptAnswerLabels" class="text-caption text-grey">
+          {{ customPromptAnswerLabels }}
+        </span>
       </v-list-item-title>
       <template #append>
         <v-list-item-action class="d-flex flex-row">
@@ -83,9 +86,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { FoodState, MealState } from '@intake24/common/surveys';
+import { useI18n } from '@intake24/i18n';
+import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodItem } from '../use-food-item';
 import ContextMenu from './context-menu.vue';
@@ -120,8 +125,42 @@ export default defineComponent({
   emits: ['action', 'update:context-id'],
 
   setup(props, ctx) {
+    const { i18n: { locale } } = useI18n();
+    const survey = useSurvey();
     const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
 
+    const customPromptAnswerLabels = computed(() => {
+      if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
+        return '';
+      }
+
+      const foodPrompts = survey.foodPrompts;
+      const answers: string[] = [];
+
+      Object.entries(props.food.customPromptAnswers).forEach(([promptId, answer]) => {
+        const prompt = foodPrompts.find(p => p.id === promptId);
+        let displayText = '';
+
+        // Handle different prompt types
+        if (prompt && 'options' in prompt && prompt.options) {
+          const options = prompt.options[locale.value] || prompt.options.en || [];
+
+          if (Array.isArray(answer)) {
+            // Multiple selection
+            const labels = answer.map(value =>
+              options.find(opt => opt.value === value)?.label || value,
+            );
+            displayText = labels.join(', ');
+          }
+          else {
+            // Single selection
+            displayText = options.find(opt => opt.value === answer)?.label || '';
+          }
+        }
+        answers.push(displayText);
+      });
+      return answers.join(', ');
+    });
     const updateContextId = (id: string) => {
       ctx.emit('update:context-id', id);
     };
@@ -132,6 +171,7 @@ export default defineComponent({
       isPortionSizeComplete,
       isCustomPromptComplete,
       menu,
+      customPromptAnswerLabels,
       updateContextId,
     };
   },
