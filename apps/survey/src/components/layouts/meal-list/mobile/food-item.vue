@@ -25,9 +25,7 @@
                 :color="isCustomPromptComplete ? 'green-darken-2' : 'grey'"
                 :icon="isCustomPromptComplete ? '$ok' : '$question'"
                 size="small"
-              >
-                $question
-              </v-icon>
+              />
             </template>
             <span>
               Custom Prompt is {{ isCustomPromptComplete ? 'complete.' : 'incomplete.' }}
@@ -37,30 +35,23 @@
           <v-tooltip location="bottom">
             <template #activator="{ props }">
               <v-icon
-                v-if="food.type === 'free-text'"
                 v-bind="props"
                 class="me-1"
-                color="grey"
+                :color="food.type === 'free-text' ? 'grey' : 'green-darken-2'"
+                :icon="food.type === 'free-text' ? '$question' : '$ok'"
                 size="small"
-              >
-                $question
-              </v-icon>
-              <v-icon v-else class="me-1" color="green-darken-2" size="small" v-bind="props">
-                $ok
-              </v-icon>
+              />
             </template>
             <span>{{ $t(`recall.menu.food.${food.type}._`) }}</span>
           </v-tooltip>
           <v-tooltip location="bottom">
             <template #activator="{ props }">
               <v-icon
-
-                :color="isPortionSizeComplete ? 'green darken-2' : undefined"
-                size="small"
                 v-bind="props"
-              >
-                {{ isPortionSizeComplete ? '$ok' : '$question' }}
-              </v-icon>
+                :color="isPortionSizeComplete ? 'green darken-2' : undefined"
+                :icon="isPortionSizeComplete ? '$ok' : '$question'"
+                size="small"
+              />
             </template>
             <span>
               {{

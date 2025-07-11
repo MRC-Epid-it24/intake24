@@ -29,7 +29,7 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext
   const isPortionSizeComplete = computed(() => foodPortionSizeComplete(props.food));
 
   const isCustomPromptComplete = computed(() => {
-    return customPromptComplete(props.food, survey.foodPrompts);
+    return customPromptComplete(survey, props.meal, props.food, survey.foodPrompts);
   });
 
   const menu = computed(() =>
