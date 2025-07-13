@@ -1,6 +1,7 @@
 import browse from './browse.test';
 import clearSession from './clear-session.test';
 import createUser from './create-user.test';
+import foodSearch from './food-search.test';
 import generateUser from './generate-user.test';
 import getSession from './get-session.test';
 import parameters from './parameters.test';
@@ -26,4 +27,5 @@ export default () => {
   // describe('POST /api/surveys/:slug/submission', submission);
   describe('post /api/surveys/:slug/rating', rating);
   describe('post /api/surveys/:slug/request-help', requestHelp);
+  describe('get /api/surveys/:slug/search', foodSearch);
 };

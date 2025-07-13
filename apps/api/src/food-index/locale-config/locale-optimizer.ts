@@ -1,11 +1,11 @@
 /**
  * Generic locale-specific search optimizer
- * Replaces hardcoded Japanese optimizations with configurable system
  */
 
 import type { LocaleConfigLoader, LocaleSearchConfig } from './types';
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
+import type { ExactMatchConfig, SemanticSearchConfig } from '@intake24/api/food-index/semantic';
 import type { Logger } from '@intake24/common-backend';
 import { defaultConfigLoader } from './config-loader';
 
@@ -19,7 +19,6 @@ export class LocaleOptimizer {
 
   /**
    * Apply locale-specific search parameter optimizations
-   * Replaces the hardcoded Japanese logic in food-search.service.ts
    */
   async applySearchOptimizations(
     localeId: string,
@@ -49,7 +48,6 @@ export class LocaleOptimizer {
 
   /**
    * Apply primary name boost for locale-specific ranking
-   * Replaces the hardcoded Japanese logic in ranking.ts
    */
   async applyPrimaryNameBoost(
     localeId: string,
@@ -108,7 +106,6 @@ export class LocaleOptimizer {
 
   /**
    * Check if deduplication logging should be enabled
-   * Replaces the hardcoded Japanese logic in index-builder.ts
    */
   async shouldLogDeduplication(localeId: string): Promise<boolean> {
     const config = await this.getLocaleConfig(localeId);
@@ -227,6 +224,65 @@ export class LocaleOptimizer {
 
       return result;
     });
+  }
+
+  /**
+   * Apply semantic similarity boost for cross-script and conceptual matches
+   */
+  async applySemanticBoost(
+    localeId: string,
+    results: PhraseMatchResult<string>[],
+    logger: Logger,
+  ): Promise<PhraseMatchResult<string>[]> {
+    const config = await this.getLocaleConfig(localeId);
+
+    if (!config || !config.searchOptimizations.semanticConfig?.enabled) {
+      return results;
+    }
+
+    const semanticConfig = config.searchOptimizations.semanticConfig;
+    const boostFactor = 1 - (semanticConfig.weight || 0.4); // Inverse of weight for quality boost
+
+    return results.map((result) => {
+      // Apply semantic boost to results that likely benefited from semantic matching
+      // This is a placeholder - in full implementation, this would check if the result
+      // came from semantic vs phonetic matching
+      const hasSemanticIndicators
+        = result.phrase.length > 3 // Longer phrases more likely to benefit from semantic
+        // eslint-disable-next-line no-control-regex
+          && /[^\u0000-\u007F]/.test(result.phrase); // Non-ASCII characters (Japanese, etc.)
+
+      if (hasSemanticIndicators) {
+        const boostedQuality = result.quality * boostFactor;
+
+        logger.debug(
+          `Semantic boost applied for ${localeId}: ${result.key} quality: ${result.quality} -> ${boostedQuality}`,
+        );
+
+        return {
+          ...result,
+          quality: boostedQuality,
+        };
+      }
+
+      return result;
+    });
+  }
+
+  /**
+   * Get semantic search configuration for a locale
+   */
+  async getSemanticConfig(localeId: string): Promise<SemanticSearchConfig | null> {
+    const config = await this.getLocaleConfig(localeId);
+    return config?.searchOptimizations.semanticConfig || null;
+  }
+
+  /**
+   * Get exact match configuration for a locale
+   */
+  async getExactMatchConfig(localeId: string): Promise<ExactMatchConfig | null> {
+    const config = await this.getLocaleConfig(localeId);
+    return config?.searchOptimizations.exactMatchConfig || null;
   }
 
   /**

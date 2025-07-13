@@ -45,7 +45,11 @@ function segmentJapaneseText(text: string): string[] {
         const pos = token.pos;
         return pos !== '助詞' && pos !== '助動詞' && pos !== '記号' && token.surface_form.length > 0;
       })
-      .map(token => token.basic_form || token.surface_form);
+      .map((token) => {
+        // Handle Kuromoji's '*' placeholder for missing basic forms
+        const basicForm = token.basic_form;
+        return (basicForm && basicForm !== '*') ? basicForm : token.surface_form;
+      });
   }
   catch {
     // Fallback to basic splitting if tokenization fails
@@ -74,7 +78,9 @@ export default {
       const tokens = tokenizerInstance.tokenize(word);
       if (tokens.length > 0) {
         // Return the basic form (dictionary form) of the first token
-        return tokens[0].basic_form || tokens[0].surface_form;
+        // Handle Kuromoji's '*' placeholder for missing basic forms
+        const basicForm = tokens[0].basic_form;
+        return (basicForm && basicForm !== '*') ? basicForm : tokens[0].surface_form;
       }
       return word;
     }

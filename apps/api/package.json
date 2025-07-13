@@ -75,6 +75,7 @@
     "negotiator": "^1.0.0",
     "node-cache": "^5.1.2",
     "nunjucks": "^3.2.4",
+    "openai": "^5.8.3",
     "otpauth": "^9.4.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",

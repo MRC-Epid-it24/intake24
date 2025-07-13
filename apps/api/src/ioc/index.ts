@@ -31,6 +31,7 @@ import type {
   DataExportService,
   DrinkwareSetService,
   DuoProvider,
+  EmbeddingLoaderService,
   FeedbackService,
   FIDOProvider,
   Filesystem,
@@ -40,6 +41,7 @@ import type {
   GlobalCategoriesService,
   GlobalFoodsService,
   GuideImageService,
+  HybridScorerService,
   I18nService,
   I18nStore,
   ImageMapService,
@@ -52,6 +54,7 @@ import type {
   NutrientTableService,
   NutrientTypeService,
   NutrientUnitService,
+  OpenAIEmbeddingService,
   OTPProvider,
   PopularityCountersService,
   PortionSizeMethodsService,
@@ -61,6 +64,7 @@ import type {
   Pusher,
   RateLimiter,
   Scheduler,
+  SemanticSearchService,
   Session,
   SignInService,
   SourceImageService,
@@ -157,6 +161,13 @@ export interface IoC extends Jobs {
   dataExportMapper: DataExportMapper;
   dataExportService: DataExportService;
 
+  // AI services
+  openAIEmbeddingService: OpenAIEmbeddingService;
+  embeddingLoaderService: EmbeddingLoaderService;
+  hybridScorerService: HybridScorerService;
+  semanticSearchService: SemanticSearchService;
+  embeddingConfig: Config['services']['embedding'];
+
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
   localFoodsService: LocalFoodsService;
@@ -229,6 +240,7 @@ function configureContainer() {
     sessionConfig: asValue(config.session),
     publisherConfig: asValue(config.publisher),
     subscriberConfig: asValue(config.subscriber),
+    embeddingConfig: asValue(config.services.embedding),
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
     imageProcessorConfig: asValue(config.imageProcessor),

@@ -302,7 +302,6 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     }, new Map<string, typeof foodResults[0]>()).values(),
   );
 
-  // Locale-specific deduplication logging (replaces hardcoded Japanese logic)
   const shouldLogDeduplication = await localeOptimizer.shouldLogDeduplication(query.parameters.localeId);
   if (shouldLogDeduplication) {
     if (deduplicatedFoodResults.length !== foodResults.length) {

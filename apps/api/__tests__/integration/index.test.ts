@@ -51,7 +51,6 @@ describe('api', () => {
   describe('/api/password', password);
   describe('/api/i18n', i18n);
   describe('/api/feedback', feedback);
-  // TODO: describe('/api/foods', foods);
   describe('/api/portion-sizes', portionSizes);
   describe('/api/subscriptions', subscriptions);
   describe('/api/surveys', surveys);

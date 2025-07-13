@@ -19,12 +19,30 @@ export default class JapanesePhoneticEncoder implements PhoneticEncoder {
   encode(input: string): Array<string> {
     const results = new Set<string>();
 
-    // Always include original input
+    // Phase 2: Smart preprocessing and normalization
+    const preprocessed = this.preprocessJapaneseText(input);
+
+    // Always include original input and preprocessed versions
     results.add(input.toLowerCase());
+    if (preprocessed !== input) {
+      results.add(preprocessed.toLowerCase());
+    }
+
+    // Apply base form extraction for better morphological matching
+    const baseForms = this.extractBaseForms(preprocessed);
+    baseForms.forEach(form => results.add(form.toLowerCase()));
 
     // Apply compound word splitting for better matching
-    const compoundParts = this.splitCompoundTerms(input);
+    const compoundParts = this.splitCompoundTerms(preprocessed);
     compoundParts.forEach(part => results.add(part.toLowerCase()));
+
+    // Handle honorific prefixes for traditional Japanese foods
+    const honorificVariants = this.handleHonorificPrefix(preprocessed);
+    honorificVariants.forEach(variant => results.add(variant.toLowerCase()));
+
+    // Generate reading-based variants for fuzzy matching
+    const readingVariants = this.generateReadingVariants(preprocessed);
+    readingVariants.forEach(variant => results.add(variant.toLowerCase()));
 
     // Convert kanji to kana first
     const kanaFromKanji = this.convertKanjiToKana(input);
@@ -89,6 +107,35 @@ export default class JapanesePhoneticEncoder implements PhoneticEncoder {
     });
 
     return Array.from(results);
+  }
+
+  /**
+   * Handle honorific prefixes in Japanese food terms
+   * Example: お寿司 → [お寿司, 寿司]
+   */
+  private handleHonorificPrefix(input: string): string[] {
+    const variants = new Set<string>();
+
+    // Handle お prefix (most common honorific for food)
+    if (input.startsWith('お')) {
+      const withoutPrefix = input.substring(1);
+      variants.add(withoutPrefix);
+
+      // Also try conversions on the base form
+      const kanaConversion = this.convertKanjiToKana(withoutPrefix);
+      if (kanaConversion !== withoutPrefix) {
+        variants.add(kanaConversion);
+      }
+    }
+    else {
+      // Generate honorific version for common traditional foods
+      const traditionalFoods = ['寿司', 'すし', '茶', 'ちゃ', '米', 'こめ', '箸', 'はし', '酒', 'さけ'];
+      if (traditionalFoods.some(food => input.includes(food))) {
+        variants.add(`お${input}`);
+      }
+    }
+
+    return Array.from(variants);
   }
 
   private buildHiraganaToKatakanaMap(): Map<string, string> {
@@ -293,6 +340,11 @@ export default class JapanesePhoneticEncoder implements PhoneticEncoder {
       // Popular dishes
       ['sushi', 'すし'],
       ['sushi', 'スシ'],
+      ['sushi', '寿司'],
+      ['sushi', '鮨'],
+      ['nigiri', 'にぎり'],
+      ['nigiri sushi', 'にぎり寿司'],
+      ['nigiri sushi', '握り寿司'],
       ['sashimi', 'さしみ'],
       ['sashimi', 'サシミ'],
       ['tempura', 'てんぷら'],
@@ -830,5 +882,257 @@ export default class JapanesePhoneticEncoder implements PhoneticEncoder {
     });
 
     return variants;
+  }
+
+  /**
+   * Phase 2: Smart text preprocessing and normalization
+   * Applies comprehensive Japanese text cleaning and standardization
+   */
+  private preprocessJapaneseText(input: string): string {
+    // 1. Unicode normalization (NFKC - canonical decomposition + canonical composition)
+    let processed = input.normalize('NFKC');
+
+    // 2. Full-width to half-width character normalization for ASCII
+    processed = processed.replace(/[\uFF01-\uFF5E]/g, (char) => {
+      return String.fromCharCode(char.charCodeAt(0) - 0xFEE0);
+    });
+
+    // 3. Half-width to full-width katakana conversion
+    processed = processed.replace(/[\uFF66-\uFF9F]/g, (char) => {
+      const halfToFullMap: { [key: string]: string } = {
+        ｱ: 'ア',
+        ｲ: 'イ',
+        ｳ: 'ウ',
+        ｴ: 'エ',
+        ｵ: 'オ',
+        ｶ: 'カ',
+        ｷ: 'キ',
+        ｸ: 'ク',
+        ｹ: 'ケ',
+        ｺ: 'コ',
+        ｻ: 'サ',
+        ｼ: 'シ',
+        ｽ: 'ス',
+        ｾ: 'セ',
+        ｿ: 'ソ',
+        ﾀ: 'タ',
+        ﾁ: 'チ',
+        ﾂ: 'ツ',
+        ﾃ: 'テ',
+        ﾄ: 'ト',
+        ﾅ: 'ナ',
+        ﾆ: 'ニ',
+        ﾇ: 'ヌ',
+        ﾈ: 'ネ',
+        ﾉ: 'ノ',
+        ﾊ: 'ハ',
+        ﾋ: 'ヒ',
+        ﾌ: 'フ',
+        ﾍ: 'ヘ',
+        ﾎ: 'ホ',
+        ﾏ: 'マ',
+        ﾐ: 'ミ',
+        ﾑ: 'ム',
+        ﾒ: 'メ',
+        ﾓ: 'モ',
+        ﾔ: 'ヤ',
+        ﾕ: 'ユ',
+        ﾖ: 'ヨ',
+        ﾗ: 'ラ',
+        ﾘ: 'リ',
+        ﾙ: 'ル',
+        ﾚ: 'レ',
+        ﾛ: 'ロ',
+        ﾜ: 'ワ',
+        ﾝ: 'ン',
+        ｦ: 'ヲ',
+        ｧ: 'ァ',
+        ｨ: 'ィ',
+        ｩ: 'ゥ',
+        ｪ: 'ェ',
+        ｫ: 'ォ',
+        ｬ: 'ャ',
+        ｭ: 'ュ',
+        ｮ: 'ョ',
+        ｯ: 'ッ',
+      };
+      return halfToFullMap[char] || char;
+    });
+
+    // 4. Standardize long vowel marks and repetition
+    processed = processed
+      .replace(/~/g, 'ー') // Convert tilde to long vowel mark
+      .replace(/〜/g, 'ー') // Convert wave dash to long vowel mark
+      .replace(/ー+/g, 'ー'); // Normalize multiple long vowel marks
+
+    // 5. Clean up spacing and punctuation
+    processed = processed
+      .replace(/\s+/g, '') // Remove all whitespace
+      .replace(/[・･]/g, '') // Remove middle dots
+      .replace(/[（）()]/g, '') // Remove parentheses
+      .replace(/[「」]/g, '') // Remove quotation marks
+      .replace(/[！!？?]/g, '') // Remove exclamation/question marks
+      .trim();
+
+    return processed;
+  }
+
+  /**
+   * Phase 2: Extract base forms of Japanese words
+   * Handles common inflections and conjugations
+   */
+  private extractBaseForms(input: string): string[] {
+    const baseForms = new Set<string>();
+
+    // Add original
+    baseForms.add(input);
+
+    // Handle common verb endings and convert to base forms
+    const verbEndings = [
+      { pattern: /します$/g, replacement: 'する' },
+      { pattern: /しました$/g, replacement: 'する' },
+      { pattern: /している$/g, replacement: 'する' },
+      { pattern: /ています$/g, replacement: 'る' },
+      { pattern: /ました$/g, replacement: 'る' },
+      { pattern: /ます$/g, replacement: 'る' },
+      { pattern: /だった$/g, replacement: 'だ' },
+      { pattern: /でした$/g, replacement: 'だ' },
+      { pattern: /です$/g, replacement: 'だ' },
+    ];
+
+    verbEndings.forEach(({ pattern, replacement }) => {
+      if (pattern.test(input)) {
+        const baseForm = input.replace(pattern, replacement);
+        if (baseForm !== input && baseForm.length > 0) {
+          baseForms.add(baseForm);
+        }
+      }
+    });
+
+    // Handle adjective endings
+    const adjectiveEndings = [
+      { pattern: /かった$/g, replacement: 'い' },
+      { pattern: /くない$/g, replacement: 'い' },
+      { pattern: /くなかった$/g, replacement: 'い' },
+      { pattern: /そう$/g, replacement: 'い' },
+    ];
+
+    adjectiveEndings.forEach(({ pattern, replacement }) => {
+      if (pattern.test(input)) {
+        const baseForm = input.replace(pattern, replacement);
+        if (baseForm !== input && baseForm.length > 0) {
+          baseForms.add(baseForm);
+        }
+      }
+    });
+
+    // Handle noun plural/modifier patterns
+    const nounPatterns = [
+      { pattern: /たち$/g, replacement: '' }, // Plural marker
+      { pattern: /ども$/g, replacement: '' }, // Humble plural
+      { pattern: /ら$/g, replacement: '' }, // Informal plural
+      { pattern: /の$/g, replacement: '' }, // Possessive particle
+      { pattern: /が$/g, replacement: '' }, // Subject particle
+      { pattern: /を$/g, replacement: '' }, // Object particle
+      { pattern: /に$/g, replacement: '' }, // Location particle
+      { pattern: /で$/g, replacement: '' }, // Location/method particle
+      { pattern: /から$/g, replacement: '' }, // From particle
+      { pattern: /まで$/g, replacement: '' }, // Until particle
+    ];
+
+    nounPatterns.forEach(({ pattern, replacement }) => {
+      if (pattern.test(input)) {
+        const baseForm = input.replace(pattern, replacement);
+        if (baseForm !== input && baseForm.length > 1) { // Keep at least 2 chars
+          baseForms.add(baseForm);
+        }
+      }
+    });
+
+    return Array.from(baseForms);
+  }
+
+  /**
+   * Phase 2: Generate reading-based variants for fuzzy matching
+   * Converts to phonetic representations for cross-script similarity
+   */
+  private generateReadingVariants(input: string): string[] {
+    const variants = new Set<string>();
+
+    // 1. Generate hiragana and katakana variants
+    const hiraganaVariant = this.convertKatakanaToHiragana(input);
+    const katakanaVariant = this.convertHiraganaToKatakana(input);
+
+    if (hiraganaVariant !== input)
+      variants.add(hiraganaVariant);
+    if (katakanaVariant !== input)
+      variants.add(katakanaVariant);
+
+    // 2. Generate romaji approximations for phonetic matching
+    const romajiVariant = this.convertToRomajiApprox(input);
+    if (romajiVariant !== input)
+      variants.add(romajiVariant);
+
+    // 3. Handle common phonetic variations
+    const phoneticVariations = [
+      // Long vowel variations
+      { from: /ー/g, to: 'u' },
+      { from: /う$/g, to: 'ー' },
+      { from: /ou/g, to: 'ō' },
+      { from: /oo/g, to: 'ō' },
+
+      // Consonant cluster variations
+      { from: /っ([kptcs])/g, to: '$1$1' }, // Small tsu + consonant
+      { from: /([kptcs])\1/g, to: 'っ$1' }, // Double consonant to small tsu
+
+      // Common misreadings
+      { from: /shi/g, to: 'si' },
+      { from: /chi/g, to: 'ti' },
+      { from: /tsu/g, to: 'tu' },
+      { from: /fu/g, to: 'hu' },
+      { from: /ji/g, to: 'zi' },
+      { from: /zu/g, to: 'du' },
+    ];
+
+    // Apply variations to all current variants
+    const currentVariants = Array.from(variants);
+    currentVariants.push(input);
+
+    currentVariants.forEach((variant) => {
+      phoneticVariations.forEach(({ from, to }) => {
+        const modified = variant.replace(from, to);
+        if (modified !== variant) {
+          variants.add(modified);
+        }
+      });
+    });
+
+    // 4. Generate regional dialect approximations
+    const dialectVariations = [
+      // Kansai-ben approximations
+      { from: /です/g, to: 'や' },
+      { from: /ません/g, to: 'へん' },
+      { from: /だ$/g, to: 'や' },
+
+      // Hokkaido-ben approximations
+      { from: /ている$/g, to: 'てる' },
+      { from: /だべ$/g, to: 'だ' },
+
+      // Common contractions
+      { from: /ている/g, to: 'てる' },
+      { from: /ては/g, to: 'ちゃ' },
+      { from: /では/g, to: 'じゃ' },
+    ];
+
+    currentVariants.forEach((variant) => {
+      dialectVariations.forEach(({ from, to }) => {
+        const modified = variant.replace(from, to);
+        if (modified !== variant) {
+          variants.add(modified);
+        }
+      });
+    });
+
+    return Array.from(variants);
   }
 }

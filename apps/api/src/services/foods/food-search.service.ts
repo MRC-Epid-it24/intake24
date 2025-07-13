@@ -16,7 +16,9 @@ function foodSearchService({
   cache,
   cacheConfig,
   logger,
-}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig' | 'logger'>) {
+  semanticSearchService,
+  hybridScorerService,
+}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig' | 'logger' | 'semanticSearchService' | 'hybridScorerService'>) {
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -43,22 +45,84 @@ function foodSearchService({
   };
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
-    // Apply locale-specific search optimizations (replaces hardcoded Japanese logic)
     const optimizedOptions = await localeOptimizer.applySearchOptimizations(localeId, options, logger);
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, optimizedOptions);
 
-    const results = await foodIndex.search(queryParameters);
-    const attrs = await getInheritableAttributes(results.foods.map(r => r.code));
-    const thumbnailImages = await foodThumbnailImageService.resolveImages(localeId, results.foods.map(foodHeader => foodHeader.code));
+    // Get phonetic search results from worker
+    const phoneticResults = await foodIndex.search(queryParameters);
+
+    // Get semantic search and exact match configurations for this locale
+    const semanticConfig = await localeOptimizer.getSemanticConfig(localeId);
+    const exactMatchConfig = await localeOptimizer.getExactMatchConfig(localeId);
+    let finalResults = phoneticResults;
+
+    // Apply semantic search if enabled
+    if (semanticConfig?.enabled && semanticSearchService && hybridScorerService) {
+      try {
+        logger.debug(`Applying semantic search for locale ${localeId}, query: "${description}"`);
+
+        // Perform semantic search
+        const semanticResults = await semanticSearchService.semanticSearch({
+          query: description,
+          localeId,
+          maxResults: semanticConfig.maxResults,
+          similarityThreshold: semanticConfig.similarityThreshold,
+        });
+
+        // Convert phonetic results to hybrid scorer format
+        const phoneticForHybrid = phoneticResults.foods.map(food => ({
+          key: food.code,
+          phrase: food.name,
+          quality: 1.0, // Normalized quality score
+          semanticScore: 0,
+          hybridScore: 0,
+          matchMethod: 'phonetic' as const,
+        }));
+
+        // Apply hybrid scoring with category boosting and exact match prioritization
+        const hybridResults = hybridScorerService.scoreHybridResults(
+          phoneticForHybrid,
+          semanticResults,
+          semanticConfig,
+          {
+            applyBoost: true,
+            searchQuery: description,
+            applyCategoryBoost: true,
+            exactMatchConfig: exactMatchConfig || undefined,
+          },
+        );
+
+        // Convert hybrid results back to food headers
+        const enhancedFoods = hybridResults.slice(0, phoneticResults.foods.length).map((result) => {
+          const originalFood = phoneticResults.foods.find(f => f.code === result.key);
+          return originalFood || { code: result.key, name: result.phrase };
+        });
+
+        finalResults = {
+          foods: enhancedFoods,
+          categories: phoneticResults.categories,
+        };
+
+        logger.debug(`Semantic search enhanced results: ${enhancedFoods.length} foods`);
+      }
+      catch (error) {
+        logger.error(`Semantic search failed for locale ${localeId}:`, error);
+        // Fall back to phonetic results
+        finalResults = phoneticResults;
+      }
+    }
+
+    const attrs = await getInheritableAttributes(finalResults.foods.map(r => r.code));
+    const thumbnailImages = await foodThumbnailImageService.resolveImages(localeId, finalResults.foods.map(foodHeader => foodHeader.code));
 
     const withFilteredIngredients = {
-      foods: results.foods.filter(header =>
+      foods: finalResults.foods.filter(header =>
         acceptForQuery(isRecipe, attrs[header.code]?.useInRecipes),
       ).map(header => ({
         ...header,
         thumbnailImageUrl: thumbnailImages[header.code],
       })),
-      categories: results.categories,
+      categories: finalResults.categories,
     };
 
     return withFilteredIngredients;

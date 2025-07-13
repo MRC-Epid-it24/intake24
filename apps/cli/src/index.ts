@@ -12,8 +12,10 @@ import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image
 import pkg from '../package.json';
 
 import {
+  embeddingStats,
   extractCategories,
   findPortionImages,
+  generateEmbeddings,
   generateEnv,
   generateKey,
   generateVapidKeys,
@@ -22,6 +24,7 @@ import {
   packageExportV4,
   packageImportV4,
   searchTest,
+  validateEmbeddings,
 } from './commands';
 import {
   conflictResolutionOptions,
@@ -236,6 +239,49 @@ async function run() {
     .requiredOption('--path <path>', 'Jsonl file path')
     .action(async (cmd) => {
       await searchTest(cmd);
+    });
+
+  // Embedding management commands
+  program
+    .command('generate-embeddings')
+    .description('Generate semantic embeddings for food items in a locale')
+    .requiredOption('-l, --locale-id <locale>', 'Locale ID (e.g., jp_JP_2024)')
+    .option('-b, --batch-size [size]', 'Batch size for processing', '50')
+    .option('--dry-run', 'Show what would be processed without making changes', false)
+    .option('--force', 'Regenerate existing embeddings', false)
+    .action(async (cmd) => {
+      await generateEmbeddings({
+        localeId: cmd.localeId,
+        batchSize: Number.parseInt(cmd.batchSize, 10),
+        dryRun: cmd.dryRun,
+        force: cmd.force,
+      });
+    });
+
+  program
+    .command('embedding-stats')
+    .description('Show embedding statistics')
+    .option('-l, --locale-id [locale]', 'Show stats for specific locale (omit for global stats)')
+    .option('--detailed', 'Show detailed statistics', false)
+    .action(async (cmd) => {
+      await embeddingStats({
+        localeId: cmd.localeId,
+        detailed: cmd.detailed,
+      });
+    });
+
+  program
+    .command('validate-embeddings')
+    .description('Validate embedding quality and consistency')
+    .requiredOption('-l, --locale-id <locale>', 'Locale ID to validate')
+    .option('-s, --sample-size [size]', 'Number of embeddings to validate', '100')
+    .option('--fix-errors', 'Automatically fix found errors', false)
+    .action(async (cmd) => {
+      await validateEmbeddings({
+        localeId: cmd.localeId,
+        sampleSize: Number.parseInt(cmd.sampleSize, 10),
+        fixErrors: cmd.fixErrors,
+      });
     });
 
   program

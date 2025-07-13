@@ -2,6 +2,8 @@ export * from './cached-parent-categories-service';
 export { default as cachedParentCategoriesService } from './cached-parent-categories-service';
 export * from './category-contents.service';
 export { default as categoryContentsService } from './category-contents.service';
+export * from './embedding-loader.service';
+export { default as embeddingLoaderService } from './embedding-loader.service';
 export * from './food-data.service';
 export { default as foodDataService } from './food-data.service';
 export * from './food-search.service';

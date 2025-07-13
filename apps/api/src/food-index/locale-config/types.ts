@@ -3,6 +3,8 @@
  * Supports linguistic and cultural nuances for different locales
  */
 
+import type { ExactMatchConfig, SemanticSearchConfig } from '@intake24/api/food-index/semantic';
+
 export interface SearchOptimizations {
   /** Weight for match quality vs popularity (0-100, higher = more quality focus) */
   matchScoreWeight?: number;
@@ -24,6 +26,12 @@ export interface SearchOptimizations {
 
   /** Category matching boost factor (0-1, higher = stronger boost) */
   categoryMatchBoost?: number;
+
+  /** Semantic search configuration */
+  semanticConfig?: SemanticSearchConfig;
+
+  /** Exact match prioritization configuration */
+  exactMatchConfig?: ExactMatchConfig;
 }
 
 export interface LanguageVariants {
