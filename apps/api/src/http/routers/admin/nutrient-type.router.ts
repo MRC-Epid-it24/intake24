@@ -45,7 +45,7 @@ export function nutrientType() {
       handler: async ({ query }) => {
         const nutrientTypes = await FoodsNutrientType.paginate({
           query,
-          columns: ['description'],
+          columns: ['id', 'description'],
           include: [{ association: 'unit', attributes: ['description'] }],
           order: [['id', 'ASC']],
         });
