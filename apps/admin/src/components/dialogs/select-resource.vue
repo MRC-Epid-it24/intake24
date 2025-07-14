@@ -5,7 +5,7 @@
         <v-text-field
           v-bind="{
             ...$attrs,
-            props,
+            ...props,
             clearable,
             disabled,
             errorMessages,
