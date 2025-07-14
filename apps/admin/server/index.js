@@ -11,9 +11,9 @@ import path from 'node:path';
 import express from 'express';
 import helmet from 'helmet';
 
-import config from './config.js';
-
 async function startApp() {
+  const { default: config } = await import('./config.js');
+
   const app = express();
 
   app.disable('x-powered-by');
