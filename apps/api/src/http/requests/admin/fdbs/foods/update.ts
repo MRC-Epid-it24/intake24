@@ -4,9 +4,7 @@ import { validate } from '@intake24/api/http/requests/util';
 
 import {
   associatedFoods,
-  attributes,
   categories,
-  locales,
   nutrients,
   portionSizeMethods,
   tags,
@@ -16,9 +14,7 @@ import defaults from './defaults';
 export default validate(
   checkSchema({
     ...defaults,
-    ...attributes,
-    'main.parentCategories': categories,
-    'main.locales': locales,
+    parentCategories: categories,
     ...nutrients,
     ...portionSizeMethods,
     ...associatedFoods,

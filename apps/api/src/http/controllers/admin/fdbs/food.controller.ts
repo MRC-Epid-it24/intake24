@@ -6,11 +6,10 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   FoodInput,
   FoodLocalEntry,
-  FoodLocalInput,
   FoodsResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { FoodLocal, SystemLocale } from '@intake24/db';
+import { SystemLocale } from '@intake24/db';
 
 function adminFoodController({
   adminFoodService,
@@ -48,9 +47,9 @@ function adminFoodController({
       where: { id: localeId },
     });
 
-    const foodLocal = await adminFoodService.createFood(code, req.body);
+    const food = await adminFoodService.createFood(code, req.body);
 
-    res.json(foodLocal);
+    res.json(food);
   };
 
   const read = async (
@@ -65,11 +64,11 @@ function adminFoodController({
       where: { id: localeId },
     });
 
-    const foodLocal = await adminFoodService.getFood(foodId, code);
-    if (!foodLocal)
+    const food = await adminFoodService.getFood(code, foodId);
+    if (!food)
       throw new NotFoundError();
 
-    res.json(foodLocal);
+    res.json(food);
   };
 
   const readByCode = async (
@@ -92,7 +91,7 @@ function adminFoodController({
   };
 
   const update = async (
-    req: Request<{ foodId: string; localeId: string }, any, FoodLocalInput>,
+    req: Request<{ foodId: string; localeId: string }, any, FoodInput>,
     res: Response<FoodLocalEntry>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
@@ -103,21 +102,9 @@ function adminFoodController({
       where: { id: localeId },
     });
 
-    const { main, ...rest } = req.body;
+    const food = await adminFoodService.updateFood(code, foodId, req.body);
 
-    const canUpdateMain = !!(
-      main?.code
-      && ((await aclService.hasPermission('locales:food-list'))
-        || (await FoodLocal.count({ where: { foodCode: main.code } })) === 1)
-    );
-
-    const foodLocal = await adminFoodService.updateFood(
-      foodId,
-      code,
-      canUpdateMain ? req.body : rest,
-    );
-
-    res.json(foodLocal);
+    res.json(food);
   };
 
   const destroy = async (
@@ -132,7 +119,7 @@ function adminFoodController({
       where: { id: localeId },
     });
 
-    await adminFoodService.deleteFood(foodId, code);
+    await adminFoodService.deleteFood(code, foodId);
 
     res.status(204).json();
   };
@@ -149,16 +136,9 @@ function adminFoodController({
       where: { id: localeId },
     });
 
-    if (localeId !== req.body.localeId) {
-      await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
-        attributes: ['code'],
-        where: { id: req.body.localeId },
-      });
-    }
+    const food = await adminFoodService.copyFood({ foodId, localeId, localeCode: code }, req.body);
 
-    const foodLocal = await adminFoodService.copyFood({ foodId, localeId, localeCode: code }, req.body);
-
-    res.json(foodLocal);
+    res.json(food);
   };
 
   const categories = async (
@@ -168,19 +148,12 @@ function adminFoodController({
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
       attributes: ['code'],
       where: { id: localeId },
     });
 
-    const foodLocal = await FoodLocal.findOne({
-      attributes: ['id', 'foodCode'],
-      where: { id: foodId, localeId: code },
-    });
-    if (!foodLocal)
-      throw new NotFoundError();
-
-    const categories = await cachedParentCategoriesService.getFoodAllCategories(foodLocal.foodCode);
+    const categories = await cachedParentCategoriesService.getFoodAllCategories(foodId);
 
     res.json({ categories });
   };

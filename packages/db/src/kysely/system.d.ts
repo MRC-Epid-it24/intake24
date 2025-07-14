@@ -121,7 +121,6 @@ export interface Locales {
   id: Generated<Int8>;
   localName: string;
   ownerId: Int8 | null;
-  prototypeLocaleId: string | null;
   respondentLanguageId: string;
   textDirection: Generated<string>;
   updatedAt: Timestamp;

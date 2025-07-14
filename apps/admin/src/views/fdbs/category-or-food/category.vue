@@ -5,56 +5,31 @@
         <v-card border class="mb-6" flat>
           <v-toolbar color="grey-lighten-4">
             <v-toolbar-title class="font-weight-medium">
-              {{ $t('fdbs.categories.global._') }}
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="data.main.code"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.code')"
-                  hide-details="auto"
-                  :label="$t('fdbs.categories.global.code')"
-                  name="main.code"
-                  variant="outlined"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="data.main.name"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.name')"
-                  hide-details="auto"
-                  :label="$t('fdbs.categories.global.name')"
-                  name="main.name"
-                  variant="outlined"
-                />
-              </v-col>
-              <v-col align-self="center" cols="12" md="6">
-                <v-switch
-                  v-model="data.main.isHidden"
-                  class="mt-0"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.isHidden')"
-                  hide-details="auto"
-                  :label="$t('fdbs.categories.global.isHidden')"
-                  name="main.isHidden"
-                  @update:model-value="errors.clear('allowGenUsers')"
-                />
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-        <v-card border class="mb-6" flat>
-          <v-toolbar color="grey-lighten-4">
-            <v-toolbar-title class="font-weight-medium">
               {{ $t('fdbs.categories.local._') }}
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="data.code"
+                  :error-messages="errors.get('code')"
+                  hide-details="auto"
+                  :label="$t('fdbs.categories.global.code')"
+                  name="code"
+                  variant="outlined"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="data.name"
+                  :error-messages="errors.get('englishName')"
+                  hide-details="auto"
+                  :label="$t('fdbs.categories.global.name')"
+                  name="englishName"
+                  variant="outlined"
+                />
+              </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="data.name"
@@ -65,8 +40,17 @@
                   variant="outlined"
                 />
               </v-col>
-            </v-row>
-            <v-row>
+              <v-col align-self="center" cols="12" md="6">
+                <v-switch
+                  v-model="data.hidden"
+                  class="mt-0"
+                  :error-messages="errors.get('hidden')"
+                  hide-details="auto"
+                  :label="$t('fdbs.categories.global.hidden')"
+                  name="hidden"
+                  @update:model-value="errors.clear('hidden')"
+                />
+              </v-col>
               <v-col cols="12">
                 <v-combobox
                   v-model="data.tags"
@@ -80,19 +64,25 @@
                   variant="outlined"
                 />
               </v-col>
+              <v-col cols="12">
+                <v-combobox
+                  v-model="data.excludeTags"
+                  chips
+                  closable-chips
+                  :error-messages="errors.get('excludeTags')"
+                  hide-details="auto"
+                  :label="$t('fdbs.categories.local.excludeTags')"
+                  multiple
+                  name="excludeTags"
+                  variant="outlined"
+                />
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
-        <attribute-list
-          v-model="data.main.attributes"
-          class="mb-6"
-          :disabled="!globalEdit"
-          :errors="errors"
-        />
         <category-list
-          v-model="data.main.parentCategories"
+          v-model="data.parentCategories"
           class="mb-6"
-          :disabled="!globalEdit"
           :errors="errors"
           :locale-id="id"
           outlined
@@ -126,16 +116,14 @@ import { onBeforeRouteUpdate } from 'vue-router';
 
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
-  AttributeList,
   CategoryList,
   CopyEntryDialog,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import { useUser } from '@intake24/admin/stores';
 import type {
-  CategoryLocalEntry,
+  CategoryEntry,
   FoodDatabaseRefs,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
@@ -146,7 +134,6 @@ export default defineComponent({
   name: 'CategoryEntry',
 
   components: {
-    AttributeList,
     CategoryList,
     ConfirmLeaveDialog,
     CopyEntryDialog,
@@ -167,14 +154,12 @@ export default defineComponent({
   setup(props) {
     const http = useHttp();
     const { i18n } = useI18n();
-    const user = useUser();
 
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);
 
     const loading = ref(false);
     const type = 'categories' as const;
-    const entry = ref<CategoryLocalEntry | null>(null);
-    const globalEdit = computed(() => user.can('locales:food-list'));
+    const entry = ref<CategoryEntry | null>(null);
     const isEntryLoaded = computed(() => !!entry.value);
 
     useEntry<LocaleEntry, FoodDatabaseRefs>(props);
@@ -183,20 +168,13 @@ export default defineComponent({
       LocaleEntry
     >(props, {
       data: {
+        code: '',
+        englishName: '',
         name: '',
-        main: {
-          name: '',
-          code: '',
-          isHidden: false,
-          attributes: {
-            readyMealOption: null,
-            reasonableAmount: null,
-            sameAsBeforeOption: null,
-            useInRecipes: null,
-          },
-          parentCategories: [],
-        },
+        hidden: false,
+        parentCategories: [],
         tags: [],
+        excludeTags: [],
         portionSizeMethods: [],
       },
       config: { extractNestedKeys: true },
@@ -210,7 +188,9 @@ export default defineComponent({
       entry.value = null;
 
       try {
-        const { data } = await http.get<CategoryLocalEntry>(`admin/fdbs/${id}/${type}/${entryId}`);
+        const { data } = await http.get<CategoryEntry>(
+          `admin/fdbs/${props.id}/${type}/${entryId}`,
+        );
 
         toForm(data);
         entry.value = data;
@@ -221,7 +201,9 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      const data = await put<CategoryLocalEntry>(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
+      const data = await put<CategoryEntry>(
+        `admin/fdbs/${props.id}/${type}/${props.entryId}`,
+      );
       toForm(data);
 
       const { name, main: { name: englishName = 'record' } = {} } = data;
@@ -250,7 +232,6 @@ export default defineComponent({
       originalEntry,
       routeLeave,
       toForm,
-      globalEdit,
       isEntryLoaded,
       submit,
       type,

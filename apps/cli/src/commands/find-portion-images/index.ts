@@ -13,7 +13,7 @@ import {
   Database,
   databaseConfig,
   Food,
-  FoodLocal,
+
   FoodNutrient,
   FoodPortionSizeMethod,
   FoodsNutrientType,
@@ -278,7 +278,7 @@ async function findPortionSizeImages(
     const currentBatch = await Food.findAll({
       include: [
         {
-          model: FoodLocal,
+          model: Food,
           as: 'locals',
           where: { localeId: config.locale },
           include: [

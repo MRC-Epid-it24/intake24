@@ -37,6 +37,7 @@ export const recipeFood = z.object({
 export type RecipeFood = z.infer<typeof recipeFood>;
 
 export const recipeFoodsHeader = z.object({
+  id: z.string(),
   code: z.string(),
   description: z.string(),
   name: z.string(),

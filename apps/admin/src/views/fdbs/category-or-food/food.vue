@@ -5,56 +5,31 @@
         <v-card border class="mb-6" flat>
           <v-toolbar color="grey-lighten-4">
             <v-toolbar-title class="font-weight-medium">
-              {{ $t('fdbs.foods.global._') }}
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="data.main.code"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.code')"
-                  hide-details="auto"
-                  :label="$t('fdbs.foods.global.code')"
-                  name="main.code"
-                  variant="outlined"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="data.main.name"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.name')"
-                  hide-details="auto"
-                  :label="$t('fdbs.foods.global.name')"
-                  name="main.name"
-                  variant="outlined"
-                />
-              </v-col>
-              <v-col cols="12">
-                <select-resource
-                  v-model="data.main.foodGroupId"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.foodGroupId')"
-                  :initial-item="entry?.main?.foodGroup"
-                  :label="$t('fdbs.foods.global.foodGroup')"
-                  name="main.foodGroup"
-                  resource="food-groups"
-                  @update:model-value="errors.clear('main.foodGroupId')"
-                />
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-        <v-card border class="mb-6" flat>
-          <v-toolbar color="grey-lighten-4">
-            <v-toolbar-title class="font-weight-medium">
               {{ $t('fdbs.foods.local._') }}
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="data.code"
+                  :error-messages="errors.get('code')"
+                  hide-details="auto"
+                  :label="$t('fdbs.foods.global.code')"
+                  name="code"
+                  variant="outlined"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="data.name"
+                  :error-messages="errors.get('englishName')"
+                  hide-details="auto"
+                  :label="$t('fdbs.foods.global.name')"
+                  name="englishName"
+                  variant="outlined"
+                />
+              </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="data.name"
@@ -65,8 +40,17 @@
                   variant="outlined"
                 />
               </v-col>
-            </v-row>
-            <v-row>
+              <v-col cols="12">
+                <select-resource
+                  v-model="data.foodGroupId"
+                  :error-messages="errors.get('foodGroupId')"
+                  :initial-item="entry?.foodGroup"
+                  :label="$t('fdbs.foods.global.foodGroup')"
+                  name="foodGroup"
+                  resource="food-groups"
+                  @update:model-value="errors.clear('foodGroupId')"
+                />
+              </v-col>
               <v-col cols="12">
                 <v-combobox
                   v-model="data.tags"
@@ -80,25 +64,25 @@
                   variant="outlined"
                 />
               </v-col>
+              <v-col cols="12">
+                <v-combobox
+                  v-model="data.excludeTags"
+                  chips
+                  closable-chips
+                  :error-messages="errors.get('excludeTags')"
+                  hide-details="auto"
+                  :label="$t('fdbs.foods.local.excludeTags')"
+                  multiple
+                  name="excludeTags"
+                  variant="outlined"
+                />
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
-        <locale-list
-          v-model="data.main.locales"
-          class="mb-6"
-          :disabled="!globalEdit"
-          :errors="errors"
-        />
-        <attribute-list
-          v-model="data.main.attributes"
-          class="mb-6"
-          :disabled="!globalEdit"
-          :errors="errors"
-        />
         <category-list
-          v-model="data.main.parentCategories"
+          v-model="data.parentCategories"
           class="mb-6"
-          :disabled="!globalEdit"
           :errors="errors"
           :locale-id="id"
           outlined
@@ -119,7 +103,7 @@
           v-model="data.associatedFoods"
           class="mb-6"
           :errors="errors"
-          :food-code="data.main.code"
+          :food-code="data.code"
           :locale-id="id"
         />
       </v-form>
@@ -155,20 +139,17 @@ import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
   AssociatedFoodList,
-  AttributeList,
   CategoryList,
   CopyEntryDialog,
-  LocaleList,
   NutrientList,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import { useUser } from '@intake24/admin/stores';
 import type {
   FoodDatabaseRefs,
+  FoodInput,
   FoodLocalEntry,
-  FoodLocalInput,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
@@ -180,12 +161,10 @@ export default defineComponent({
 
   components: {
     AssociatedFoodList,
-    AttributeList,
     CategoryList,
     ConfirmDialog,
     ConfirmLeaveDialog,
     CopyEntryDialog,
-    LocaleList,
     NutrientList,
     PortionSizeMethodList,
     SelectResource,
@@ -206,39 +185,28 @@ export default defineComponent({
     const http = useHttp();
     const router = useRouter();
     const { i18n } = useI18n();
-    const user = useUser();
 
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);
 
     const loading = ref(false);
     const type = 'foods' as const;
     const entry = ref<FoodLocalEntry | null>(null);
-    const globalEdit = computed(
-      () => user.can('locales:food-list') || entry.value?.main?.locales?.length === 1,
-    );
     const isEntryLoaded = computed(() => !!entry.value);
 
     const { refs } = useEntry<LocaleEntry, FoodDatabaseRefs>(props);
     const { clearError, form: { data, errors, put }, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
-      FoodLocalInput,
+      FoodInput,
       LocaleEntry
     >(props, {
       data: {
+        code: '',
+        englishName: '',
         name: '',
-        main: {
-          name: '',
-          code: '',
-          foodGroupId: '0',
-          attributes: {
-            readyMealOption: null,
-            reasonableAmount: null,
-            sameAsBeforeOption: null,
-            useInRecipes: null,
-          },
-          locales: [],
-          parentCategories: [],
-        },
+        foodGroupId: '0',
+        locales: [],
+        parentCategories: [],
         tags: [],
+        excludeTags: [],
         nutrientRecords: [],
         portionSizeMethods: [],
         associatedFoods: [],
@@ -312,7 +280,6 @@ export default defineComponent({
       originalEntry,
       routeLeave,
       toForm,
-      globalEdit,
       isEntryLoaded,
       remove,
       submit,

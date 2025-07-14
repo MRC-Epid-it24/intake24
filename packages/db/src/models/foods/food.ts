@@ -1,6 +1,7 @@
 import type {
   Attributes,
   CreationAttributes,
+  CreationOptional,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
@@ -11,29 +12,29 @@ import {
   Column,
   DataType,
   HasMany,
-  HasOne,
-  Scopes,
   Table,
 } from 'sequelize-typescript';
 
+import type {
+  FoodNutrientCreationAttributes,
+  FoodPortionSizeMethodCreationAttributes,
+} from '@intake24/db';
 import {
   AssociatedFood,
   Brand,
   Category,
-  FoodAttribute,
   FoodCategory,
   FoodGroup,
-  FoodLocal,
-  FoodLocalList,
-} from '.';
-import BaseModel from '../model';
-import FoodsLocale from './locale';
+  FoodNutrient,
+  FoodPortionSizeMethod,
+  FoodsLocale,
+} from '@intake24/db';
 
-@Scopes(() => ({
-  attributes: { include: [{ model: FoodAttribute }] },
-  locals: { include: [{ model: FoodLocal, as: 'locals' }] },
-  brand: { include: [{ model: Brand }] },
-}))
+import BaseModel from '../model';
+import NutrientTableRecord from './nutrient-table-record';
+
+export type AlternativeFoodNames = Record<string, string[]>;
+
 @Table({
   modelName: 'Food',
   tableName: 'foods',
@@ -41,19 +42,31 @@ import FoodsLocale from './locale';
   timestamps: false,
   underscored: true,
 })
-export default class Food extends BaseModel<InferAttributes<Food>, InferCreationAttributes<Food>> {
+export default class Food extends BaseModel<
+  InferAttributes<Food>,
+  InferCreationAttributes<Food> & {
+    portionSizeMethods?: FoodPortionSizeMethodCreationAttributes[];
+    nutrientMappings?: FoodNutrientCreationAttributes[];
+  }
+> {
+  @Column({
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataType.BIGINT,
+  })
+  declare id: CreationOptional<string>;
+
   @Column({
     allowNull: false,
-    primaryKey: true,
-    type: DataType.STRING(8),
+    type: DataType.STRING(36),
   })
   declare code: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128),
+    type: DataType.STRING(16),
   })
-  declare name: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
@@ -62,40 +75,100 @@ export default class Food extends BaseModel<InferAttributes<Food>, InferCreation
   declare foodGroupId: string;
 
   @Column({
+    allowNull: true,
+    type: DataType.STRING(256),
+  })
+  declare name: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(256),
+  })
+  declare simpleName: string | null;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(256),
+  })
+  declare englishName: string;
+
+  @Column({
+    allowNull: false,
+    defaultValue: '{}',
+    type: DataType.STRING(2048),
+    get(): AlternativeFoodNames {
+      const val = this.getDataValue('altNames') as unknown;
+      return val ? JSON.parse(val as string) : {};
+    },
+    set(value: AlternativeFoodNames) {
+      this.setDataValue('altNames', JSON.stringify(value ?? {}));
+    },
+  })
+  declare altNames: CreationOptional<AlternativeFoodNames>;
+
+  @Column({
+    allowNull: false,
+    defaultValue: '[]',
+    type: DataType.STRING(2048),
+    get(): string[] {
+      const val = this.getDataValue('tags') as unknown;
+      return val ? JSON.parse(val as string) : [];
+    },
+    set(value: string[]) {
+      this.setDataValue('tags', JSON.stringify(value ?? []));
+    },
+  })
+  declare tags: CreationOptional<string[]>;
+
+  @Column({
+    allowNull: false,
+    defaultValue: '[]',
+    type: DataType.STRING(2048),
+    get(): string[] {
+      const val = this.getDataValue('excludeTags') as unknown;
+      return val ? JSON.parse(val as string) : [];
+    },
+    set(value: string[]) {
+      this.setDataValue('excludeTags', JSON.stringify(value ?? []));
+    },
+  })
+  declare excludeTags: CreationOptional<string[]>;
+
+  @Column({
     allowNull: false,
     type: DataType.UUID,
   })
   declare version: string;
 
-  @HasOne(() => FoodAttribute, 'foodCode')
-  declare attributes?: NonAttribute<FoodAttribute>;
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  declare locale?: NonAttribute<FoodsLocale>;
 
-  @HasMany(() => AssociatedFood, 'foodCode')
+  @HasMany(() => AssociatedFood, 'foodId')
   declare associatedFoods?: NonAttribute<AssociatedFood[]>;
 
-  @HasMany(() => Brand, 'foodCode')
+  @HasMany(() => Brand, { foreignKey: 'foodCode', sourceKey: 'code' })
   declare brands?: NonAttribute<Brand[]>;
 
   @BelongsToMany(() => Category, () => FoodCategory)
   declare parentCategories?: NonAttribute<Category[]>;
 
-  @BelongsToMany(() => FoodsLocale, () => FoodLocalList, 'foodCode', 'localeId')
-  declare locales?: NonAttribute<FoodsLocale[]>;
-
-  @HasMany(() => FoodCategory, 'foodCode')
+  @HasMany(() => FoodCategory, 'foodId')
   declare parentCategoryMappings?: NonAttribute<FoodCategory[]>;
 
-  @HasMany(() => AssociatedFood, 'associatedFoodCode')
+  @HasMany(() => AssociatedFood, { foreignKey: 'associatedFoodCode', sourceKey: 'code' })
   declare foodAssociations?: NonAttribute<AssociatedFood[]>;
 
   @BelongsTo(() => FoodGroup, 'foodGroupId')
   declare foodGroup?: NonAttribute<FoodGroup>;
 
-  @HasMany(() => FoodLocal, 'foodCode')
-  declare locals?: NonAttribute<FoodLocal[]>;
+  @HasMany(() => FoodPortionSizeMethod, 'foodId')
+  declare portionSizeMethods?: NonAttribute<FoodPortionSizeMethod[]>;
 
-  @HasMany(() => FoodLocal, 'foodCode')
-  declare prototypeLocals?: NonAttribute<FoodLocal[]>;
+  @BelongsToMany(() => NutrientTableRecord, () => FoodNutrient)
+  declare nutrientRecords?: NonAttribute<NutrientTableRecord[]>;
+
+  @HasMany(() => FoodNutrient, 'foodId')
+  declare nutrientMappings?: NonAttribute<FoodNutrient[]>;
 }
 
 export type FoodAttributes = Attributes<Food>;

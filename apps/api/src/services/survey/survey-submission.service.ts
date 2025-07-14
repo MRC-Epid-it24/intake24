@@ -26,8 +26,8 @@ import type {
   SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/db';
 import {
+  Food,
   FoodGroup,
-  FoodLocal,
   Survey,
   SurveySubmission,
   SurveySubmissionCustomField,
@@ -70,7 +70,7 @@ export type CollectedNutrientInfo = {
   portionSizes: SurveySubmissionPortionSizeFieldCreationAttributes[];
 };
 
-export type FoodLocalMap = Record<string, FoodLocal>;
+export type FoodLocalMap = Record<string, Food>;
 export type FoodGroupMap = Record<string, FoodGroup>;
 
 export type FoodCodes = { foodCodes: string[]; groupCodes: string[] };
@@ -213,13 +213,10 @@ function surveySubmissionService({
           return collectedFoods;
         }
 
-        if (!foodRecord.main || !foodRecord.nutrientRecords || !foodGroupRecord.localGroups)
+        if (!foodRecord.nutrientRecords || !foodGroupRecord.localGroups)
           throw new Error('Submission: not loaded foodRecord/foodGroupRecord relationships');
 
-        const {
-          nutrientRecords,
-          main: { name: englishName },
-        } = foodRecord;
+        const { englishName, nutrientRecords } = foodRecord;
         const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
 
         if (!portionSize) {
@@ -281,7 +278,7 @@ function surveySubmissionService({
       return collectedData;
     }
 
-    if (!foodRecord.main || !foodRecord.nutrientRecords)
+    if (!foodRecord.nutrientRecords)
       throw new Error('Submission: not loaded foodRecord relationships');
 
     if (!portionSize) {
@@ -562,10 +559,9 @@ function surveySubmissionService({
       // Fetch food & group records
       // TODO: if food record not found, look for prototype?
       const [foodRecords, foodGroups] = await Promise.all([
-        FoodLocal.findAll({
-          where: { foodCode: foodCodes, localeId: localeCode },
+        Food.findAll({
+          where: { code: foodCodes, localeId: localeCode },
           include: [
-            { association: 'main' },
             {
               association: 'nutrientRecords',
               through: { attributes: [] },
@@ -581,8 +577,8 @@ function surveySubmissionService({
         }),
       ]);
 
-      const foodMap = foodRecords.reduce<Record<string, FoodLocal>>((acc, item) => {
-        acc[item.foodCode] = item;
+      const foodMap = foodRecords.reduce<Record<string, Food>>((acc, item) => {
+        acc[item.code] = item;
         return acc;
       }, {});
 

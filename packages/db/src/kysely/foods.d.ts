@@ -32,54 +32,26 @@ export interface AsServedSets {
 export interface AssociatedFoods {
   associatedCategoryCode: string | null;
   associatedFoodCode: string | null;
-  foodCode: string;
+  foodId: Int8;
   genericName: string;
   id: Generated<Int8>;
   linkAsMain: boolean;
-  localeId: string;
   multiple: boolean;
   orderBy: Int8;
   text: string;
 }
 
-export interface AttributeDefaults {
-  id: Generated<Int8>;
-  readyMealOption: boolean | null;
-  reasonableAmount: number | null;
-  sameAsBeforeOption: boolean | null;
-  useInRecipes: number | null;
-}
-
 export interface Brands {
-  foodCode: string;
+  foodId: Int8;
   id: Generated<Int8>;
-  localeId: string;
   name: string;
 }
 
 export interface Categories {
   code: string;
-  isHidden: boolean;
-  name: string;
-  version: string;
-}
-
-export interface CategoriesCategories {
-  categoryCode: string;
-  subcategoryCode: string;
-}
-
-export interface CategoryAttributes {
-  categoryCode: string;
-  id: Generated<Int8>;
-  readyMealOption: boolean | null;
-  reasonableAmount: number | null;
-  sameAsBeforeOption: boolean | null;
-  useInRecipes: number | null;
-}
-
-export interface CategoryLocals {
-  categoryCode: string;
+  englishName: string;
+  excludeTags: Generated<string>;
+  hidden: boolean;
   id: Generated<Int8>;
   localeId: string;
   name: string;
@@ -88,8 +60,13 @@ export interface CategoryLocals {
   version: string;
 }
 
+export interface CategoriesCategories {
+  categoryId: Int8;
+  subCategoryId: Int8;
+}
+
 export interface CategoryPortionSizeMethods {
-  categoryLocalId: Int8;
+  categoryId: Int8;
   conversionFactor: number;
   description: string;
   id: Generated<Int8>;
@@ -138,15 +115,6 @@ export interface DrinkwareVolumeSamples {
   volume: number;
 }
 
-export interface FoodAttributes {
-  foodCode: string;
-  id: Generated<Int8>;
-  readyMealOption: boolean | null;
-  reasonableAmount: number | null;
-  sameAsBeforeOption: boolean | null;
-  useInRecipes: number | null;
-}
-
 export interface FoodGroupLocals {
   foodGroupId: Int8;
   id: Generated<Int8>;
@@ -159,21 +127,10 @@ export interface FoodGroups {
   name: string;
 }
 
-export interface FoodLocals {
-  altNames: Generated<string>;
-  foodCode: string;
-  id: Generated<Int8>;
-  localeId: string;
-  name: string | null;
-  simpleName: string | null;
-  tags: Generated<string>;
-  version: string;
-}
-
 export interface FoodPortionSizeMethods {
   conversionFactor: number;
   description: string;
-  foodLocalId: Int8;
+  foodId: Int8;
   id: Generated<Int8>;
   method: string;
   orderBy: Int8;
@@ -182,38 +139,27 @@ export interface FoodPortionSizeMethods {
 }
 
 export interface Foods {
+  altNames: Generated<string>;
   code: string;
+  englishName: string;
+  excludeTags: Generated<string>;
   foodGroupId: Int8;
-  name: string;
+  id: Generated<Int8>;
+  localeId: string;
+  name: string | null;
+  simpleName: string | null;
+  tags: Generated<string>;
   version: string;
 }
 
 export interface FoodsCategories {
-  categoryCode: string;
-  foodCode: string;
-}
-
-export interface FoodsLocalLists {
-  foodCode: string;
-  localeId: string;
+  categoryId: Int8;
+  foodId: Int8;
 }
 
 export interface FoodsNutrients {
-  foodLocalId: Int8;
+  foodId: Int8;
   nutrientTableRecordId: Int8;
-}
-
-export interface FoodsRestrictions {
-  foodCode: string;
-  localeId: string;
-}
-
-export interface FoodThumbnailImages {
-  createdAt: Generated<Timestamp>;
-  foodLocalId: Int8;
-  id: Generated<Int8>;
-  imageId: Int8;
-  updatedAt: Generated<Timestamp>;
 }
 
 export interface GuideImageObjects {
@@ -257,7 +203,6 @@ export interface Locales {
   foodIndexLanguageBackendId: Generated<string>;
   id: string;
   localName: string;
-  prototypeLocaleId: string | null;
   respondentLanguageId: string;
   textDirection: Generated<string>;
 }
@@ -366,7 +311,7 @@ export interface RecipeFoods {
 }
 
 export interface RecipeFoodsSteps {
-  categoryCode: string | null;
+  categoryCode: string;
   code: string;
   createdAt: Timestamp;
   description: string;
@@ -429,28 +374,25 @@ export interface DB {
   asServedImages: AsServedImages;
   asServedSets: AsServedSets;
   associatedFoods: AssociatedFoods;
-  attributeDefaults: AttributeDefaults;
   brands: Brands;
   categories: Categories;
   categoriesCategories: CategoriesCategories;
-  categoryAttributes: CategoryAttributes;
-  categoryLocals: CategoryLocals;
   categoryPortionSizeMethods: CategoryPortionSizeMethods;
   drinkwareScales: DrinkwareScales;
   drinkwareScalesV2: DrinkwareScalesV2;
   drinkwareSets: DrinkwareSets;
   drinkwareVolumeSamples: DrinkwareVolumeSamples;
-  foodAttributes: FoodAttributes;
   foodGroupLocals: FoodGroupLocals;
   foodGroups: FoodGroups;
-  foodLocals: FoodLocals;
   foodPortionSizeMethods: FoodPortionSizeMethods;
   foods: Foods;
   foodsCategories: FoodsCategories;
-  foodsLocalLists: FoodsLocalLists;
   foodsNutrients: FoodsNutrients;
+<<<<<<< HEAD
   foodsRestrictions: FoodsRestrictions;
   foodThumbnailImages: FoodThumbnailImages;
+=======
+>>>>>>> 23a77d9cb (feat: food database changes (V4-1282))
   guideImageObjects: GuideImageObjects;
   guideImages: GuideImages;
   imageMapObjects: ImageMapObjects;
