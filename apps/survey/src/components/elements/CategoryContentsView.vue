@@ -181,6 +181,10 @@ export default defineComponent({
       type: Number as PropType<number>,
       default: 0,
     },
+    uxSessionId: {
+      type: String as PropType<string>,
+      required: true,
+    },
   },
 
   emits: ['foodSelected', 'categorySelected'],
@@ -225,10 +229,11 @@ export default defineComponent({
         event: 'selectFoodCategory',
         scheme_prompts: 'foods',
         food_category: category.name,
-        search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
+        uxSessionId: this.uxSessionId,
+
       });
     },
 
@@ -242,6 +247,7 @@ export default defineComponent({
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
+        uxSessionId: this.uxSessionId,
       });
     },
 

@@ -74,6 +74,7 @@
           :grid-threshold="prompt.gridThreshold"
           :i18n="promptI18n"
           :type="type"
+          :ux-session-id="uxSessionId"
           @category-selected="categorySelected"
           @food-selected="foodSelected"
         />
@@ -93,6 +94,7 @@
           :search-count="searchCount"
           :search-term="searchTerm ?? undefined"
           :type="type"
+          :ux-session-id="uxSessionId"
           @category-selected="categorySelected"
           @food-selected="foodSelected"
         />
@@ -168,6 +170,7 @@ import type {
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
+import { useSurvey } from '@intake24/survey/stores';
 
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
@@ -227,7 +230,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'recipeBuilder', 'update:modelValue', 'foodSkipped']);
-
+const survey = useSurvey();
+const uxSessionId = ref('');
 const goTo = useGoTo();
 
 const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
@@ -490,6 +494,8 @@ function navigateBack() {
 }
 
 onMounted(async () => {
+  uxSessionId.value = survey.data.uxSessionId || '';
+
   if (props.rootCategory !== undefined) {
     categoriesService.header(props.localeId, props.rootCategory).then(header => rootCategoryName.value = header.name);
   }
