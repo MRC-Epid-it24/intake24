@@ -117,6 +117,7 @@ export function usePromptUtils<
         meal: mealName.value,
         food: foodName.value,
         noninteraction: false,
+        uxSessionId: survey.data.uxSessionId,
       };
       if (type === 'cancel') {
         gtmEventParams.event = 'deleteMeal';
