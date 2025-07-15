@@ -23,7 +23,7 @@
     "bcryptjs": "^3.0.2",
     "html-to-text": "^9.0.5",
     "jsdom": "^26.1.0",
-    "nodemailer": "^7.0.4",
+    "nodemailer": "^7.0.5",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
@@ -32,7 +32,7 @@
     "@types/html-to-text": "^9.0.4",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.0.14",
     "@types/nodemailer": "^6.4.17",
     "jest": "^30.0.4",
     "jest-extended": "^6.0.0",
