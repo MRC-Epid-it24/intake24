@@ -30,7 +30,7 @@
     "@jest/types": "^30.0.1",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.0.14",
     "jest": "^30.0.4",
     "jest-extended": "^6.0.0",
     "ts-jest": "^29.4.0",
