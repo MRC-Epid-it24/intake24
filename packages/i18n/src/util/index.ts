@@ -112,6 +112,21 @@ export function sanitizeParams(content: Dictionary<string | number>) {
   }, {} as Dictionary<string>);
 }
 
+/**
+ * Maps complex locale codes to their database storage counterparts
+ *
+ * @param {string} localeCode
+ * @returns {string}
+ */
+function mapLocaleCode(localeCode: string): string {
+  // Map Japanese locale variants to database key
+  if (localeCode.startsWith('jp') || localeCode.startsWith('ja') || localeCode.includes('JP')) {
+    return 'ja';
+  }
+
+  return localeCode;
+}
+
 export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMessageSchema, 'en' | string>>) {
   return (
     content?: LocaleTranslation | RequiredLocaleTranslation | string,
@@ -127,7 +142,8 @@ export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMes
     if (typeof content === 'string')
       return replaceParams(content, params);
 
-    const localeContent = content ? content[locale.value] : undefined;
+    const mappedLocale = mapLocaleCode(locale.value);
+    const localeContent = content ? content[mappedLocale] : undefined;
     if (localeContent)
       return replaceParams(localeContent, params);
 

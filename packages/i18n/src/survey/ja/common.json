@@ -1,0 +1,84 @@
+{
+  "_": "Intake24",
+  "home": "ホーム",
+  "dashboard": "ダッシュボード",
+  "navigation": "ナビゲーション",
+  "welcome": {
+    "_": "Intake24へようこそ",
+    "subtitle": "Intake24は、複数パス24時間リコールに基づくオープンソースのコンピュータ化食事評価システムです。"
+  },
+  "login": {
+    "_": "サインイン",
+    "start": "始めましょう",
+    "subtitle": "ユーザー名とパスワードでサインイン",
+    "captcha": "キャプチャチャレンジを完了してください",
+    "back": "ログインに戻る",
+    "err": {
+      "captcha": "無効なキャプチャチャレンジレスポンスです。",
+      "credentials": "無効なユーザー名またはパスワードです。",
+      "token": "無効なアクセストークンです。",
+      "survey": "This survey ({surveyId}) doesn't look like to be a valid survey login URL."
+    }
+  },
+  "logout": {
+    "_": "Sign out",
+    "text": "Sign out of the application"
+  },
+  "username": "Username",
+  "name": "Name",
+  "email": "Email",
+  "emailConfirm": "Confirm email",
+  "password": "Password",
+  "phone": "Phone",
+  "message": "Message",
+  "continue": "Continue",
+  "help": {
+    "_": "Help",
+    "title": "Request help",
+    "text": "Complete the form below and one of our support staff will get in touch as soon as they can.",
+    "sent": "Your help request has been sent."
+  },
+  "app": {
+    "_": "App",
+    "info": "Application Information",
+    "build": "Build"
+  },
+  "clipboard": {
+    "_": "Copy to clipboard",
+    "copied": "Data copied to clipboard"
+  },
+  "sw": {
+    "check": "Content update is available",
+    "update": "Update"
+  },
+  "action": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "continue": "Continue",
+    "confirm": {
+      "_": "Confirm",
+      "title": "Do you want to continue?",
+      "delete": "Do you want to delete {name}?"
+    },
+    "ok": "OK",
+    "reload": "Reload",
+    "remove": "Remove",
+    "reset": "Reset",
+    "start": "Start",
+    "submit": "Submit",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "not": {
+    "provided": "Not provided",
+    "selected": "Not selected"
+  },
+  "errors": {
+    "500": "Something went wrong :(",
+    "retry": "Try again"
+  },
+  "validation": {
+    "tooLong": "Entered text is too long ({max} characters max)."
+  },
+  "noImagePlaceholder": "No image available"
+}

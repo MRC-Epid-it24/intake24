@@ -10,8 +10,7 @@
           v-for="(availableMethod) in portionSizeMethods"
           :key="availableMethod.index"
           cols="12"
-          md="4"
-          sm="6"
+          md="6"
         >
           <v-item v-slot="{ isSelected, toggle }" :value="availableMethod.index">
             <v-card

@@ -11,40 +11,100 @@ export type StandardUnitRefs = Record<
   { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
 >;
 
+// Global shared state to prevent race conditions
+const globalStandardUnitRefs = ref<StandardUnitRefs>({});
+const globalLoadingUnits = ref(false);
+const globalHasApiData = ref(false);
+
 export function useStandardUnits() {
   const http = useHttp();
   const { translate } = useI18n();
 
-  const standardUnitRefs = ref<StandardUnitRefs>({});
-  const usingStandardTranslations = ref(true);
+  // Use shared global state instead of instance state
+  const standardUnitRefs = globalStandardUnitRefs;
+  const loadingUnits = globalLoadingUnits;
+  const hasApiData = globalHasApiData;
 
-  const standardUnitsLoaded = computed(() => usingStandardTranslations.value ? !!Object.keys(standardUnitRefs.value).length : true);
+  const standardUnitsLoaded = computed(() => !loadingUnits.value && hasApiData.value);
 
   function getStandardUnitHowMany(item: StandardUnit) {
-    return translate(item.inlineHowMany ?? standardUnitRefs.value[item.name]?.howMany ?? item.name);
+    // Use inline translation if available, otherwise fetch from API response
+    if (item.inlineHowMany) {
+      return translate(item.inlineHowMany);
+    }
+
+    const apiTranslation = standardUnitRefs.value[item.name]?.howMany;
+    if (apiTranslation) {
+      return translate(apiTranslation);
+    }
+
+    // Last resort: use the unit name
+    return item.name;
   };
 
   function getStandardUnitEstimateIn(item: StandardUnit) {
-    return translate(item.inlineEstimateIn ?? standardUnitRefs.value[item.name]?.estimateIn ?? item.name);
+    // Use inline translation if available, otherwise fetch from API response
+    if (item.inlineEstimateIn) {
+      return translate(item.inlineEstimateIn);
+    }
+
+    const apiTranslation = standardUnitRefs.value[item.name]?.estimateIn;
+    if (apiTranslation) {
+      return translate(apiTranslation);
+    }
+
+    // Last resort: use the unit name
+    return item.name;
   };
 
   async function resolveStandardUnits(names: string[]) {
     if (!names.length) {
-      usingStandardTranslations.value = false;
+      hasApiData.value = true; // No API call needed, so we're "loaded"
       return;
     }
 
-    const { data } = await http.get<StandardUnitResponse[]>('portion-sizes/standard-units', {
-      params: { id: names },
-    });
+    // Check if we already have the data for all requested names
+    const missingNames = names.filter(name => !standardUnitRefs.value[name]);
+    if (missingNames.length === 0) {
+      hasApiData.value = true;
+      return;
+    }
 
-    standardUnitRefs.value = data.reduce<StandardUnitRefs>((acc, unit) => {
-      const { id, estimateIn, howMany } = unit;
+    // Prevent concurrent API calls
+    if (loadingUnits.value) {
+      // Wait for the ongoing call to complete
+      while (loadingUnits.value) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      return;
+    }
 
-      acc[id] = { estimateIn, howMany };
+    loadingUnits.value = true;
 
-      return acc;
-    }, {});
+    try {
+      const { data } = await http.get<StandardUnitResponse[]>('portion-sizes/standard-units', {
+        params: { id: missingNames },
+      });
+
+      // Merge new data with existing data
+      const newRefs = data.reduce<StandardUnitRefs>((acc, unit) => {
+        const { id, estimateIn, howMany } = unit;
+        acc[id] = { estimateIn, howMany };
+        return acc;
+      }, {});
+
+      // Update the global refs with new data
+      standardUnitRefs.value = { ...standardUnitRefs.value, ...newRefs };
+
+      hasApiData.value = true;
+    }
+    catch (error) {
+      console.error('Failed to fetch standard units:', error);
+      hasApiData.value = true; // Even on error, allow the component to render
+    }
+    finally {
+      loadingUnits.value = false;
+    }
   };
 
   return {

@@ -1,6 +1,12 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels v-if="standardUnitsLoaded" v-model="state.panel" :tile="$vuetify.display.mobile">
+    <div v-if="!standardUnitsLoaded" class="text-center py-4">
+      <v-progress-circular color="primary" indeterminate />
+      <p class="mt-2">
+        Loading portion sizes...
+      </p>
+    </div>
+    <v-expansion-panels v-else v-model="state.panel" :tile="$vuetify.display.mobile">
       <v-expansion-panel :readonly="portionSizeMethods.length === 1">
         <v-expansion-panel-title>
           <i18n-t :keypath="`prompts.${type}.method`" tag="span">
@@ -8,6 +14,7 @@
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n-t>
+
           <template #actions>
             <expansion-panel-actions :valid="psmValid" />
           </template>
@@ -149,7 +156,7 @@ const isValid = computed(() => validConditions.value.every(condition => conditio
 const { updatePanel } = usePanel(state, validConditions);
 
 onMounted(async () => {
-  const names = parameters.value.units.filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined).map(({ name }) => name);
+  const names = parameters.value.units.filter(unit => !unit.inlineHowMany || !unit.inlineEstimateIn).map(({ name }) => name);
 
   await resolveStandardUnits(names);
 
