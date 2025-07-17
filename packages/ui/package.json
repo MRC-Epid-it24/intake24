@@ -34,7 +34,7 @@
     "vue": "^3.5.17",
     "vue-echarts": "^7.0.3",
     "vue-gtag": "^2.1.2",
-    "vue-i18n": "^11.1.9",
+    "vue-i18n": "^11.1.10",
     "vue-recaptcha": "^2.0.3",
     "vue-router": "^4.5.1",
     "vuetify": "^3.9.0"
@@ -44,7 +44,7 @@
     "@types/node": "^24.0.14",
     "type-fest": "^4.41.0",
     "typescript": "^5.8.3",
-    "vite": "^7.0.4",
+    "vite": "^7.0.5",
     "vite-plugin-pwa": "^1.0.1",
     "workbox-window": "^7.3.0"
   }

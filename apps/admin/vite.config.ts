@@ -156,7 +156,7 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           cleanupOutdatedCaches: true,
-          globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
+          globPatterns: ['**/*.{css,js,html,svg,png,webp,ico,txt,woff,woff2,ttf}'],
           importScripts: ['js/web-push.js'],
           maximumFileSizeToCacheInBytes: 3500000,
         },
