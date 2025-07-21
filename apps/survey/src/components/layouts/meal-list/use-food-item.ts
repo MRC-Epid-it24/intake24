@@ -5,8 +5,7 @@ import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { useSurvey } from '@intake24/survey/stores';
-import { customPromptComplete, foodComplete, foodPortionSizeComplete } from '@intake24/survey/util';
+import { foodComplete, foodPortionSizeComplete } from '@intake24/survey/util';
 
 export type MenuItem = {
   name: string;
@@ -24,13 +23,8 @@ export type UseFoodItemProps = {
 export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
   const { i18n: { t } } = useI18n();
   const { foodName } = useFoodUtils(props);
-  const survey = useSurvey();
 
   const isPortionSizeComplete = computed(() => foodPortionSizeComplete(props.food));
-
-  const isCustomPromptComplete = computed(() => {
-    return customPromptComplete(survey, props.meal, props.food, survey.foodPrompts);
-  });
 
   const menu = computed(() =>
     (
@@ -60,5 +54,5 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext
     emit('action', type, id);
   };
 
-  return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu };
+  return { action, foodName, isPortionSizeComplete, menu };
 }

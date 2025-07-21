@@ -22,21 +22,6 @@
               <v-icon
                 v-bind="props"
                 class="me-1"
-                :color="isCustomPromptComplete ? 'green-darken-2' : 'grey'"
-                :icon="isCustomPromptComplete ? '$ok' : '$question'"
-                size="small"
-              />
-            </template>
-            <span>
-              Custom Prompt is {{ isCustomPromptComplete ? 'complete.' : 'incomplete.' }}
-            </span>
-          </v-tooltip>
-
-          <v-tooltip location="bottom">
-            <template #activator="{ props }">
-              <v-icon
-                v-bind="props"
-                class="me-1"
                 :color="food.type === 'free-text' ? 'grey' : 'green-darken-2'"
                 :icon="food.type === 'free-text' ? '$question' : '$ok'"
                 size="small"
@@ -118,7 +103,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { i18n: { locale } } = useI18n();
     const survey = useSurvey();
-    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
 
     const customPromptAnswerLabels = computed(() => {
       if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
@@ -160,7 +145,6 @@ export default defineComponent({
       action,
       foodName,
       isPortionSizeComplete,
-      isCustomPromptComplete,
       menu,
       customPromptAnswerLabels,
       updateContextId,

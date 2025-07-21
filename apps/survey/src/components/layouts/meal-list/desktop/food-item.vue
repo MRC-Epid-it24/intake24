@@ -13,20 +13,6 @@
       </v-list-item-title>
       <template #append>
         <v-list-item-action class="d-flex flex-row me-4">
-          <v-tooltip location="bottom">
-            <template #activator="{ props }">
-              <v-icon
-                v-bind="props"
-                class="me-1"
-                :color="isCustomPromptComplete ? 'green-darken-2' : 'grey'"
-                :icon="isCustomPromptComplete ? '$ok' : '$question'"
-                size="small"
-              />
-            </template>
-            <span>
-              Custom Prompt is {{ isCustomPromptComplete ? 'complete.' : 'incomplete.' }}
-            </span>
-          </v-tooltip>
           <!-- Food identification status tooltip -->
           <v-tooltip location="bottom">
             <template #activator="{ props }">
@@ -115,7 +101,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { i18n: { locale } } = useI18n();
     const survey = useSurvey();
-    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
 
     const customPromptAnswerLabels = computed(() => {
       if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
@@ -150,7 +136,7 @@ export default defineComponent({
       return answers.join(', ');
     });
 
-    return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels };
+    return { action, foodName, isPortionSizeComplete, menu, customPromptAnswerLabels };
   },
 });
 </script>
