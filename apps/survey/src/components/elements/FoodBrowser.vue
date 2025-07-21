@@ -74,6 +74,7 @@
           :grid-threshold="prompt.gridThreshold"
           :i18n="promptI18n"
           :type="type"
+          :user-id="userId"
           :ux-session-id="uxSessionId"
           @category-selected="categorySelected"
           @food-selected="foodSelected"
@@ -94,6 +95,7 @@
           :search-count="searchCount"
           :search-term="searchTerm ?? undefined"
           :type="type"
+          :user-id="userId"
           :ux-session-id="uxSessionId"
           @category-selected="categorySelected"
           @food-selected="foodSelected"
@@ -232,6 +234,7 @@ const props = defineProps({
 const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'recipeBuilder', 'update:modelValue', 'foodSkipped']);
 const survey = useSurvey();
 const uxSessionId = ref('');
+const userId = ref('');
 const goTo = useGoTo();
 
 const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
@@ -494,7 +497,9 @@ function navigateBack() {
 }
 
 onMounted(async () => {
-  uxSessionId.value = survey.data.uxSessionId || '';
+  uxSessionId.value = survey.data.uxSessionId;
+  userId.value = survey.user?.userId || '';
+  console.debug(`FoodBrowser mounted with uxSessionId: ${uxSessionId.value}, userId: ${userId.value}`);
 
   if (props.rootCategory !== undefined) {
     categoriesService.header(props.localeId, props.rootCategory).then(header => rootCategoryName.value = header.name);

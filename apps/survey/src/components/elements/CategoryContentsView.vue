@@ -185,6 +185,10 @@ export default defineComponent({
       type: String as PropType<string>,
       required: true,
     },
+    userId: {
+      type: String as PropType<string>,
+      required: true,
+    },
   },
 
   emits: ['foodSelected', 'categorySelected'],
@@ -233,7 +237,7 @@ export default defineComponent({
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
         uxSessionId: this.uxSessionId,
-
+        userId: this.userId,
       });
     },
 
@@ -248,6 +252,7 @@ export default defineComponent({
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
         uxSessionId: this.uxSessionId,
+        userId: this.userId,
       });
     },
 
