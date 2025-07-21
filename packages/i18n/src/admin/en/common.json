@@ -93,6 +93,7 @@
     "remove": "Remove option",
     "key": "Key",
     "label": "Label",
+    "shortLabel": "Short Label",
     "value": "Value",
     "exclusive": "Exclusive",
     "selected": "Selected"
