@@ -122,18 +122,18 @@ export default defineComponent({
           if (Array.isArray(answer)) {
             // Multiple selection
             const labels = answer.map(value =>
-              options.find(opt => opt.value === value)?.label || value,
+              options.find(opt => opt.value === value)?.shortLabel || options.find(opt => opt.value === value)?.label || value,
             );
             displayText = labels.join(', ');
           }
           else {
             // Single selection
-            displayText = options.find(opt => opt.value === answer)?.label || '';
+            displayText = options.find(opt => opt.value === answer)?.shortLabel || options.find(opt => opt.value === answer)?.label || '';
           }
         }
         answers.push(displayText);
       });
-      return answers.join(', ');
+      return answers.join('').trim() === '' ? '' : answers.join(', ');
     });
 
     return { action, foodName, isPortionSizeComplete, menu, customPromptAnswerLabels };
