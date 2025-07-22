@@ -33,7 +33,7 @@ export default defineConfig({
     },
     sidebar,
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/MRC-Epid-it24/intake24' },
+      { icon: 'github', link: 'https://github.com/intake24/intake24' },
     ],
   },
 

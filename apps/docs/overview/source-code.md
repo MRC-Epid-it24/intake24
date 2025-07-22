@@ -1,11 +1,11 @@
 # Source code
 
-Project is using `git` versioning system is hosted on [github](https://github.com/MRC-Epid-it24/intake24).
+Project is using `git` versioning system is hosted on [github](https://github.com/intake24/intake24).
 
 Clone the repository
 
 ```sh
-git clone https://github.com/MRC-Epid-it24/intake24
+git clone https://github.com/intake24/intake24
 ```
 
 ## Repository structure
@@ -58,9 +58,9 @@ pnpm install
 
 Commit messages are restricted to follow `conventional-changelog` convention, adapted from [Angular's commit convention](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
 
-Please see [`.github/commit-convention.md`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/commit-convention.md) for more details.
+Please see [`.github/commit-convention.md`](https://github.com/intake24/intake24/blob/master/.github/commit-convention.md) for more details.
 
-Please see [`scripts/verify-commit.ts`](https://github.com/MRC-Epid-it24/intake24/blob/master/scripts/verify-commit.ts) for implementation.
+Please see [`scripts/verify-commit.ts`](https://github.com/intake24/intake24/blob/master/scripts/verify-commit.ts) for implementation.
 
 ## Code style
 
@@ -78,14 +78,14 @@ Lint step also runs for each staged file, when changes are being committed (usin
 
 ## Renovate
 
-Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks repository for up-to-date dependencies and prepares PRs to be merged. Renovate job runs on weekly basis and can be configured through [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
+Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks repository for up-to-date dependencies and prepares PRs to be merged. Renovate job runs on weekly basis and can be configured through [`.github/renovate.json5`](https://github.com/intake24/intake24/blob/master/.github/renovate.json5) config file.
 
 ## Continuous integration
 
 ### Build
 
-[Main CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/ci.yml) action is triggered on any source code change and it runs lint / build / tests / steps for each of the components.
+[Main CI](https://github.com/intake24/intake24/blob/master/.github/workflows/ci.yml) action is triggered on any source code change and it runs lint / build / tests / steps for each of the components.
 
 ### Documentation
 
-[Docs CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/docs.yml) action is triggered on `docs` folder source code change and documentation site is automatically rebuilt and deployed to GitHub pages.
+[Docs CI](https://github.com/intake24/intake24/blob/master/.github/workflows/docs.yml) action is triggered on `docs` folder source code change and documentation site is automatically rebuilt and deployed to GitHub pages.

@@ -5,10 +5,10 @@ const https = require('node:https');
 const path = require('node:path');
 
 const adminUrl
-  = 'https://raw.githubusercontent.com/MRC-Epid-it24/admin-frontend/master/src/js/explorer/constants/standard-units-en.js';
+  = 'https://raw.githubusercontent.com/intake24/admin-frontend/master/src/js/explorer/constants/standard-units-en.js';
 
 const baseUrl
-  = 'https://raw.githubusercontent.com/MRC-Epid-it24/survey-frontend/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize';
+  = 'https://raw.githubusercontent.com/intake24/survey-frontend/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize';
 const baseFilename = 'StandardUnits_{locale}.properties';
 
 const locales = ['en', 'en_AU', 'en_NZ', 'ar', 'da', 'pt'];

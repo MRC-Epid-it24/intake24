@@ -7,7 +7,7 @@ Releases follow two standards:
 
 ## Prepare and release
 
-Run following command with clean git working directory to prepare and push release. See [`scripts/release.ts`](https://github.com/MRC-Epid-it24/intake24/blob/master/scripts/release.ts) for implementation details.
+Run following command with clean git working directory to prepare and push release. See [`scripts/release.ts`](https://github.com/intake24/intake24/blob/master/scripts/release.ts) for implementation details.
 
 ```sh
 pnpm release
@@ -25,4 +25,4 @@ Release command run following actions:
 
 ## Github release
 
-Once release has been pushed to github, [github release](https://github.com/MRC-Epid-it24/intake24/releases) needs to be created. Copy & paste generated changelog to github release description.
+Once release has been pushed to github, [github release](https://github.com/intake24/intake24/releases) needs to be created. Copy & paste generated changelog to github release description.

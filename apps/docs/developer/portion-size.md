@@ -22,7 +22,7 @@ between 2 and 5.
 If there is only one portion size estimation option associated with a food, this screen is not shown.
 
 See also the [get food data](/open-api.html#tag/food){target="blank"} API function and the
-[v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/ChoosePortionSizeMethodPrompt.java).
+[v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/ChoosePortionSizeMethodPrompt.java).
 
 ## As served
 
@@ -62,7 +62,7 @@ portion size is calculated as `(serving weight) - (leftovers weight)`.
   respondent.
 
 See also [get as served data](/open-api.html#tag/portionsize/GET/portion-sizes/as-served-sets/{id}){target="blank"} API function
-and the [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/AsServedPrompt2.java)
+and the [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/AsServedPrompt2.java)
 
 ## Guide image
 
@@ -95,7 +95,7 @@ identified as one of the more confusing ones and needs a redesign.
 `guide-image-id`: reference to a guide image definition
 
 See also [get guide image data](/open-api.html#tag/portionsize/GET/portion-sizes/guide-images/{id}){target="blank"} API function
-and the [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/GuidePrompt.java).
+and the [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/GuidePrompt.java).
 
 ## Drink scale
 
@@ -133,7 +133,7 @@ to the initial fill level reported in the previous step:
   standard, e.g. for takeaway cups.
 
 See also [get sliding scale data](/open-api.html#tag/portionsize/GET/portion-sizes/drinkware-sets/{id}){target="blank"} API function
-and the [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/DrinkScalePrompt.java).
+and the [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/DrinkScalePrompt.java).
 
 ## Standard portion
 
@@ -155,7 +155,7 @@ in 1/4 steps.
 
 There is no leftovers option for this estimation method.
 
-See also the [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/StandardUnitPrompt.java).
+See also the [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/prompts/simple/StandardUnitPrompt.java).
 
 ### Parameters
 
@@ -237,7 +237,7 @@ Finally, the respondent is asked how many slices (or pizzas) they had:
 
 ![Pizza quantity](../assets/img/portion-size/pizza-4.png)
 
-Please refer to [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize/PizzaPortionSizeScript.java)
+Please refer to [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize/PizzaPortionSizeScript.java)
 for the weight look up table based on these inputs.
 
 ### Parameters
@@ -262,7 +262,7 @@ These numbers can overridden in the survey scheme.
 
 No parameters.
 
-See also [v3 implementation](https://github.com/MRC-Epid-it24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/ProcessMilkInHotDrinks.java).
+See also [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/ProcessMilkInHotDrinks.java).
 
 ## Direct weight input
 

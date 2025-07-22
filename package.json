@@ -10,10 +10,10 @@
   "homepage": "https://docs.intake24.org",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MRC-Epid-it24/intake24.git"
+    "url": "git+https://github.com/intake24/intake24.git"
   },
   "bugs": {
-    "url": "https://github.com/MRC-Epid-it24/intake24/issues"
+    "url": "https://github.com/intake24/intake24/issues"
   },
   "keywords": [
     "Intake24",
