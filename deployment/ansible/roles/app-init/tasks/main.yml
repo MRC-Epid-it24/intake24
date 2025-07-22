@@ -9,7 +9,7 @@
   community.general.slack:
     channel: '{{ slack.channel }}'
     token: '{{ slack.token }}'
-    msg: '🚀 Deployment started | *Instance:* {{ instance }}, *Version (branch/tag):* <https://github.com/MRC-Epid-it24/intake24/tree/{{ git_version }}|{{ git_version }}>'
+    msg: '🚀 Deployment started | *Instance:* {{ instance }}, *Version (branch/tag):* <https://github.com/intake24/intake24/tree/{{ git_version }}|{{ git_version }}>'
 
 - name: '{{ app|upper }} | Create / check group'
   group:

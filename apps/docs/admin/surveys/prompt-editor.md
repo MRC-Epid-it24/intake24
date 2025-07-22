@@ -71,7 +71,7 @@ Actions tab defines list of actions to be performed when prompt is displayed.
 - `layout` - layout of where the button should be displayed (`desktop` or `mobile`)
 - `variant` - style variant (`elevated`, `outlined`, `text`)
 - `color` - color variant (`primary`, `secondary`, `success`, `warning`, `error`, color hex code)
-- `icon` - icon, [existing alias](https://github.com/MRC-Epid-it24/intake24/blob/master/apps/survey/src/plugins/vuetify.ts) or [FontAwesome](https://fontawesome.com/search?o=r&m=free) icon name
+- `icon` - icon, [existing alias](https://github.com/intake24/intake24/blob/master/apps/survey/src/plugins/vuetify.ts) or [FontAwesome](https://fontawesome.com/search?o=r&m=free) icon name
 - `text` - localized text to be displayed on the button
 - `label` - option localized label to be displayed on the button tooltip. If not specified, `text` is used instead.
 

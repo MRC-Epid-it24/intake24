@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "url": "https://github.com/intake24/intake24.git",
     "directory": "packages/common-backend"
   },
   "main": "src/index.ts",
@@ -28,13 +28,13 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "@jest/types": "^30.0.1",
+    "@jest/types": "^30.0.5",
     "@types/html-to-text": "^9.0.4",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^24.0.14",
+    "@types/node": "^24.1.0",
     "@types/nodemailer": "^6.4.17",
-    "jest": "^30.0.4",
+    "jest": "^30.0.5",
     "jest-extended": "^6.0.0",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"

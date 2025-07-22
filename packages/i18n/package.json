@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "url": "https://github.com/intake24/intake24.git",
     "directory": "packages/i18n"
   },
   "main": "src/index.ts",
@@ -27,11 +27,11 @@
     "vue-i18n": "^11.1.10"
   },
   "devDependencies": {
-    "@jest/types": "^30.0.1",
+    "@jest/types": "^30.0.5",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.0.14",
-    "jest": "^30.0.4",
+    "@types/node": "^24.1.0",
+    "jest": "^30.0.5",
     "jest-extended": "^6.0.0",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"

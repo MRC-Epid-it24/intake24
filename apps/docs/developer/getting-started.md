@@ -23,7 +23,7 @@ Steps to getting a local instance running
 Intake24 requires node.js version 16 or newer, please make sure to check your node.js version before continuing.
 :::
 
-Clone the [Intake24 version 4 repository on GitHub](https://github.com/MRC-Epid-it24/intake24).
+Clone the [Intake24 version 4 repository on GitHub](https://github.com/intake24/intake24).
 
 Follow the readme instructions in the root of the repository.
 

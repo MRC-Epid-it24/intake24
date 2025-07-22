@@ -26,7 +26,7 @@ These are defined as types, loaded as components (mapped into `Recall.vue`). Ren
 
 ### Source
 
-[Github](https://github.com/MRC-Epid-it24/intake24/tree/main/apps/survey)
+[Github](https://github.com/intake24/intake24/tree/main/apps/survey)
 
 ### Layout
 

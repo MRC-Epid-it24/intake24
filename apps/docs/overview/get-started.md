@@ -7,7 +7,7 @@ Section briefly describes how to configure, build and start the Intake24 compone
 Clone the repository
 
 ```sh
-git clone https://github.com/MRC-Epid-it24/intake24
+git clone https://github.com/intake24/intake24
 ```
 
 Repository is set as mono-repository with [workspaces](https://pnpm.io/workspaces) using [pnpm](https://pnpm.io).

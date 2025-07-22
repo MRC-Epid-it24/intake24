@@ -118,4 +118,4 @@ Intake24 can redirect respondent to 3<sup>rd</sup> party system upon survey reca
 
 Please note options described above are not exhaustive. It is a list of most used methods, for more details consult [API documentation](/api/).
 
-Not found the integration you're looking for? We appreciate that every system is a bit different, so we're happy to advise and where possible extend Intake24 to allow for seamless integration and wider adoption. Open an issue on [GitHub](https://github.com/MRC-Epid-it24/intake24/issues) and we will try to help.
+Not found the integration you're looking for? We appreciate that every system is a bit different, so we're happy to advise and where possible extend Intake24 to allow for seamless integration and wider adoption. Open an issue on [GitHub](https://github.com/intake24/intake24/issues) and we will try to help.

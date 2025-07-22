@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "url": "https://github.com/intake24/intake24.git",
     "directory": "packages/db"
   },
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "dotenv": "^17.2.0",
-    "kysely": "^0.28.2",
+    "kysely": "^0.28.3",
     "lodash": "^4.17.21",
     "mariadb": "^3.4.4",
     "mssql": "^11.0.1",
@@ -41,7 +41,7 @@
   "devDependencies": {
     "@simplewebauthn/server": "^13.1.2",
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.0.14",
+    "@types/node": "^24.1.0",
     "@types/pg": "^8.15.4",
     "@types/pg-cursor": "^2.7.2",
     "@types/validator": "^13.15.2",

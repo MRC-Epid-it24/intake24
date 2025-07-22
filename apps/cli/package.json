@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MRC-Epid-it24/intake24.git",
+    "url": "https://github.com/intake24/intake24.git",
     "directory": "apps/cli"
   },
   "main": "src/index.ts",
@@ -48,7 +48,7 @@
     "@types/decompress": "^4.2.7",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.0.14",
+    "@types/node": "^24.1.0",
     "@types/validator": "^13.15.2",
     "@types/web-push": "^3.6.4",
     "@types/webpack-env": "^1.18.8",
