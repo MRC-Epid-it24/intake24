@@ -22,7 +22,10 @@ hero:
       link: /overview/
     - theme: alt
       text: View on Github
-      link: https://github.com/MRC-Epid-it24/intake24
+      link: https://github.com/intake24/intake24
+    - theme: alt
+      text: Home
+      link: https://intake24.org
 
 features:
   - icon: 🎯
