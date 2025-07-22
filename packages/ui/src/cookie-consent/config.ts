@@ -1,8 +1,10 @@
-import type { CookieConsentConfig } from 'vanilla-cookieconsent';
+import type { CookieConsentConfig, Translation } from 'vanilla-cookieconsent';
 import type { PluginOptions } from 'vue-gtag';
 import { useGtm } from '@gtm-support/vue-gtm';
 import Clarity from '@microsoft/clarity';
+import get from 'lodash/get';
 import { bootstrap, optIn, optOut, setOptions } from 'vue-gtag';
+import { defaultMessages } from '@intake24/i18n';
 
 export function gTagConfig(): PluginOptions {
   return {
@@ -32,9 +34,19 @@ async function toggleGTM(enabled: boolean) {
 }
 async function toggleClarity(enabled: boolean) {
   console.debug('Clarity toggled to ', enabled);
+
+  if (!('clarity' in window))
+    return;
+
   Clarity.consent(enabled);
 }
-export function cookieConsentConfig(translations: CookieConsentConfig['language']['translations'] = {}): CookieConsentConfig {
+export function cookieConsentConfig(translations?: CookieConsentConfig['language']['translations']): CookieConsentConfig {
+  if (!translations) {
+    translations = {
+      en: get(defaultMessages.getMessages('en'), 'legal.cookies.consent') as Translation,
+    };
+  }
+
   return ({
     cookie: {
       name: 'it24_cc_consent',
