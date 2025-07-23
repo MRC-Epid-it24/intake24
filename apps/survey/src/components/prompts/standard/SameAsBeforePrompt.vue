@@ -119,7 +119,7 @@
               <v-divider />
               <v-list-item v-for="(answer, answerIdx) in customPromptAnswer" :key="answerIdx" class="ps-0" density="compact">
                 <template #prepend>
-                  <v-icon icon="fas fa-caret-right" />
+                  <v-icon icon="fas fa-check" />
                 </template>
                 <v-list-item-title>{{ answer }}</v-list-item-title>
               </v-list-item>
