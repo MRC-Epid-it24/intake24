@@ -125,6 +125,16 @@
               </v-list-item>
             </div>
           </v-list>
+          <v-list v-else class="px-4" color="grey-lighten-4">
+            <v-list-item class="ps-0" density="compact">
+              <template #prepend>
+                <v-icon icon="fas fa-caret-right" />
+              </template>
+              <v-list-item-title>
+                {{ promptI18n.none }}
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
         </v-list>
       </v-card>
     </v-card-text>
@@ -338,7 +348,7 @@ const promptI18n = computed(() => ({
   serving: serving.value,
   quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'details', 'hadQuantity', 'characteristics']),
+  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'details', 'hadQuantity', 'characteristics', 'none']),
 }));
 
 onMounted(async () => {
