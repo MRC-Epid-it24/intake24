@@ -25,7 +25,7 @@
             <v-tabs v-model="tab" bg-color="secondary">
               <v-tab
                 v-for="item in cardSettings[dialog.card.type].tabs" :key="item"
-                :tab-value="item"
+                :value="item"
               >
                 {{ $t(`feedback-schemes.cards.tabs.${item}`) }}
               </v-tab>

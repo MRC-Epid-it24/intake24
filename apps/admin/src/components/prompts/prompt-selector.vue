@@ -27,7 +27,7 @@
               <v-tab
                 v-for="item in promptSettings[dialog.prompt.component].tabs"
                 :key="item"
-                :tab-value="item"
+                :value="item"
               >
                 {{ item }}
               </v-tab>
@@ -260,7 +260,7 @@ export default defineComponent({
       prompts,
       groupedPrompts,
       promptSettings,
-      tab: 0,
+      tab: 'general',
       promptTypeTab: 0,
     };
   },

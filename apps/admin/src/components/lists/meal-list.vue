@@ -104,7 +104,7 @@
           <template #extension>
             <v-container fluid>
               <v-tabs v-model="tab" bg-color="secondary">
-                <v-tab v-for="item in ['general', 'json']" :key="item" :tab-value="item">
+                <v-tab v-for="item in ['general', 'json']" :key="item" :value="item">
                   {{ item }}
                 </v-tab>
               </v-tabs>

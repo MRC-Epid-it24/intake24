@@ -5,7 +5,7 @@
       {{ $t('survey-schemes.overrides.subtitle') }}
     </v-card-subtitle>
     <v-tabs v-model="tab" class="mt-4" grow>
-      <v-tab v-for="item in ['settings', 'prompts', 'meals']" :key="item" :tab-value="item">
+      <v-tab v-for="item in ['settings', 'prompts', 'meals']" :key="item" :value="item">
         {{ $t(`survey-schemes.${item}.title`) }}
       </v-tab>
     </v-tabs>

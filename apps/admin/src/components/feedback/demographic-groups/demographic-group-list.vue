@@ -104,7 +104,7 @@
           <template #extension>
             <v-container>
               <v-tabs v-model="tab" bg-color="secondary">
-                <v-tab v-for="item in ['general', 'sectors', 'json']" :key="item" :tab-value="item">
+                <v-tab v-for="item in ['general', 'sectors', 'json']" :key="item" :value="item">
                   {{ $t(`feedback-schemes.demographic-groups.tabs.${item}`) }}
                 </v-tab>
               </v-tabs>
