@@ -2,12 +2,12 @@
   <v-tabs-window-item key="content" value="content">
     <div class="d-flex flex-row">
       <v-tabs v-model="selectedKey" direction="vertical">
-        <v-tab v-for="key in keys" :key="key" class="justify-start">
+        <v-tab v-for="key in keys" :key="key" class="justify-start" :value="key">
           <v-icon icon="$languages" start />{{ key }}
         </v-tab>
       </v-tabs>
       <v-tabs-window v-model="selectedKey" class="flex-grow-1">
-        <v-tabs-window-item v-for="key in keys" :key="key" class="pl-3">
+        <v-tabs-window-item v-for="key in keys" :key="key" class="pl-3" :value="key">
           <v-card border flat>
             <v-toolbar color="grey-lighten-4">
               <v-toolbar-title>
@@ -109,7 +109,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['i18n:update']);
+const emit = defineEmits(['update:i18n']);
 
 const { i18n } = useI18n();
 const items = useVModel(props, 'i18n', emit);

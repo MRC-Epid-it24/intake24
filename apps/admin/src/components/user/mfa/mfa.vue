@@ -48,7 +48,7 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-tabs v-model="tab" bg-color="secondary" grow @update:model-value="clear">
-          <v-tab v-for="provider in providers" :key="provider">
+          <v-tab v-for="provider in providers" :key="provider" :value="provider">
             <v-icon :icon="`$${provider}`" start />
             {{ $t(`user.mfa.providers.${provider}._`) }}
           </v-tab>
