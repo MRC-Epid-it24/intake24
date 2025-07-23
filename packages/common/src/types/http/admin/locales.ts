@@ -12,8 +12,8 @@ import { owner } from './users';
 export const systemLocaleAttributes = z.object({
   id: z.string(),
   code: z.string().min(1).max(16),
-  englishName: z.string().min(1).max(64),
-  localName: z.string().min(1).max(64),
+  englishName: z.string().min(1).max(128),
+  localName: z.string().min(1).max(128),
   respondentLanguageId: languageAttributes.shape.code,
   adminLanguageId: languageAttributes.shape.code,
   countryFlagCode: z.string().min(1).max(16).refine(val => isLocale(val)),

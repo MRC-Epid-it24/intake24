@@ -32,13 +32,13 @@ export default class Locale extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(64),
+    type: DataType.STRING(128),
   })
   declare englishName: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(64),
+    type: DataType.STRING(128),
   })
   declare localName: string;
 

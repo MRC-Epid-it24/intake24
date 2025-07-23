@@ -31,7 +31,7 @@ export default class AsServedSet extends BaseModel<
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.STRING(32),
+    type: DataType.STRING(128),
   })
   declare id: string;
 

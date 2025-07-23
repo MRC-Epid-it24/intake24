@@ -33,7 +33,7 @@ export const asServedImageEntry = asServedImageAttributes.pick({
 export type AsServedImageEntry = z.infer<typeof asServedImageEntry>;
 
 export const asServedSetAttributes = z.object({
-  id: safeIdentifier.max(32),
+  id: safeIdentifier.max(128),
   description: z.string().min(1).max(128),
   selectionImageId: z.string(),
   label: localeTranslation,
