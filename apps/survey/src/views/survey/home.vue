@@ -369,7 +369,7 @@ export default defineComponent({
         scheme_prompts: 'preMeals',
         noninteraction: false,
         uxSessionId: survey.data.uxSessionId,
-        userId: survey.user?.userId || '',
+        uxUserId: survey.user?.userId || '',
       });
       submissions.value = await userService.submissions(props.surveyId);
     });

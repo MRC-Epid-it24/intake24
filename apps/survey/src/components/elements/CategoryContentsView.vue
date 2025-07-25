@@ -237,7 +237,7 @@ export default defineComponent({
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
         uxSessionId: this.uxSessionId,
-        userId: this.userId,
+        uxUserId: this.userId,
       });
     },
 
@@ -252,7 +252,7 @@ export default defineComponent({
         percent_scrolled: this.percentScrolled,
         noninteraction: false,
         uxSessionId: this.uxSessionId,
-        userId: this.userId,
+        uxUserId: this.userId,
       });
     },
 
