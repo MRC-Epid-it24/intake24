@@ -367,6 +367,7 @@
       "in_whole_fruit_vegetables": "Dalam bentuk sebiji buah/sayur",
       "in_wrapped_bars": "Dalam bentuk bar yang berbungkus",
       "milk_on_cereal": "Susu dalam bijirin",
+      "cereal": "Cereal",
       "on_a_knife": "Pada pisau",
       "on_a_plate": "Di atas pinggan",
       "slice_from_a_large_cake": "Potongan daripada sebiji kek besar",
@@ -379,6 +380,8 @@
       "use_an_image": "Gunakan imej",
       "use_these_crisps_in_a_bag": "Gunakan kerepok ini di dalam pek",
       "use_tortilla_chips_in_a_bowl": "Gunakan kerepek tortilla dalam mangkuk",
+      "use_a_drink_scale": "Use a drink scale",
+      "use_a_guide_image": "Use a guide image",
       "unknown": "Unknown",
       "weight": "Masukkan berat/isipadu"
     },

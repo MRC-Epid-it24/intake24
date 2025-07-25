@@ -367,6 +367,7 @@
       "in_whole_fruit_vegetables": "في الفواكه/الخضروات الكاملة",
       "in_wrapped_bars": "في ألواح مغلفة",
       "milk_on_cereal": "حليب على الحبوب",
+      "cereal": "Cereal",
       "on_a_knife": "على سكين",
       "on_a_plate": "على طبق",
       "slice_from_a_large_cake": "شريحة من كعكة كبيرة",
@@ -379,6 +380,8 @@
       "use_an_image": "استخدم صورة",
       "use_these_crisps_in_a_bag": "استخدم هذه الرقائق في كيس",
       "use_tortilla_chips_in_a_bowl": "استخدم رقائق التورتيلا في وعاء",
+      "use_a_drink_scale": "Use a drink scale",
+      "use_a_guide_image": "Use a guide image",
       "unknown": "Unknown",
       "weight": "أدخل الوزن/الحجم"
     },

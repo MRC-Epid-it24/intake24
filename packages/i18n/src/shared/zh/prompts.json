@@ -367,6 +367,7 @@
       "in_whole_fruit_vegetables": "整个水果/蔬菜装的",
       "in_wrapped_bars": "包装的棒形状的",
       "milk_on_cereal": "Milk on cereal",
+      "cereal": "Cereal",
       "on_a_knife": "涂抹在刀上",
       "on_a_plate": "盘子里的",
       "slice_from_a_large_cake": "从大蛋糕上切片的",
@@ -379,6 +380,8 @@
       "use_an_image": "使用一张图片",
       "use_these_crisps_in_a_bag": "使用袋装的薯",
       "use_tortilla_chips_in_a_bowl": "使用碗中的墨西哥玉米片",
+      "use_a_drink_scale": "Use a drink scale",
+      "use_a_guide_image": "Use a guide image",
       "unknown": "Unknown",
       "weight": "输入重量/体积"
     },

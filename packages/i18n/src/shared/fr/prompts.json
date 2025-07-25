@@ -367,6 +367,7 @@
       "in_whole_fruit_vegetables": "En fruits / légumes entiers",
       "in_wrapped_bars": "En barres emballées",
       "milk_on_cereal": "Lait sur des céréales",
+      "cereal": "Cereal",
       "on_a_knife": "Sur un couteau",
       "on_a_plate": "SUr une assiette",
       "slice_from_a_large_cake": "Tranche d'un gros gâteau",
@@ -379,6 +380,8 @@
       "use_an_image": "Utiliser une photo",
       "use_these_crisps_in_a_bag": "Utiliser ces chips dans un sachet",
       "use_tortilla_chips_in_a_bowl": "Utiliser des chips tortilla dans un bol",
+      "use_a_drink_scale": "Use a drink scale",
+      "use_a_guide_image": "Use a guide image",
       "unknown": "Unknown",
       "weight": "Entrer le poids ou le volume"
     },

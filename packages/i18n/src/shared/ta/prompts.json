@@ -367,6 +367,7 @@
       "in_whole_fruit_vegetables": "முழு பழங்கள் / காய்கறிகளில்",
       "in_wrapped_bars": "உறை இடுபட்ட பார்களில் ",
       "milk_on_cereal": "Milk on cereal",
+      "cereal": "Cereal",
       "on_a_knife": "ஒரு கத்தி மீது",
       "on_a_plate": "ஒரு தட்டில்",
       "slice_from_a_large_cake": "ஒரு பெரிய கேக்கில் இருந்து துண்டு",
@@ -379,6 +380,8 @@
       "use_an_image": "படத்தைப் பயன்படுத்தவும்",
       "use_these_crisps_in_a_bag": "இந்த கிரிஸ்ப்ஸ்-ஐ ஒரு பையில் பயன்படுத்தவும்",
       "use_tortilla_chips_in_a_bowl": "ஒரு பாத்திரத்தில் டார்ட்டில்லா சிப்ஸைப் பயன்படுத்தவும்",
+      "use_a_drink_scale": "Use a drink scale",
+      "use_a_guide_image": "Use a guide image",
       "unknown": "Unknown",
       "weight": "எடை/தொகுதியை உள்ளிடவும்"
     },
