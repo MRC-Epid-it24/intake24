@@ -45,12 +45,12 @@
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.17.0",
+    "@antfu/eslint-config": "^4.19.0",
     "@types/node": "^24.1.0",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
     "conventional-changelog-cli": "^5.0.0",
-    "eslint": "^9.31.0",
+    "eslint": "^9.32.0",
     "eslint-plugin-format": "^1.0.1",
     "eslint-plugin-vue": "^10.3.0",
     "execa": "^9.6.0",
