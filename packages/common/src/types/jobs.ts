@@ -113,6 +113,7 @@ export const resources = [
   'locales',
   'nutrient-types',
   'standard-units',
+  'surveys',
 ] as const;
 
 export const ResourceExport = z.object({
