@@ -18,7 +18,7 @@
       <span>{{ $t('common.nav.foods') }}</span>
     </v-btn>
     <v-btn
-      class="order-2 btn-review"
+      class="order-2 btn-review overflow-visible"
       :disabled
       :ripple="false"
       stacked

@@ -39,10 +39,10 @@
     "recall": "Jour d'enquête : {number}"
   },
   "menu": {
-    "title": "Panneau d'avancement",
+    "title": "Ma journée",
     "mealSuggested": "Ce repas est suggéré par le système mais vous n'avez pas encore confirmé que vous l'avez consommé",
     "food": {
-      "add": "Ajouter de la nourriture",
+      "add": "Ajouter un aliment",
       "delete": "Supprimer l'aliment",
       "deleteConfirm": "Souhaitez-vous supprimer {item}?",
       "change": "Changer l'aliment",

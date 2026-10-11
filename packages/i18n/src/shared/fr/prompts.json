@@ -206,8 +206,8 @@
     "name": "Ajouter un aliment",
     "text": "",
     "description": "",
-    "meal": "Quand l'avez-vous eu?",
-    "food": "Qu'est-ce que vous avez pris?"
+    "meal": "Quand l'avez-vous consommé?",
+    "food": "Qu'avez-vous consommé?"
   },
   "foodSearch": {
     "name": "Chercher un aliment",
