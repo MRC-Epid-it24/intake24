@@ -346,10 +346,9 @@ export function useRecall() {
           }
 
           survey.addFood({ mealId: id, food: foods });
-          survey.addMealFlag(id, 'free-entry-complete');
         }
         else {
-          survey.addMeal({ name, time, flags: ['free-entry-complete'], foods }, locale.value);
+          survey.addMeal({ name, time, foods }, locale.value);
         }
 
         await nextPrompt();
