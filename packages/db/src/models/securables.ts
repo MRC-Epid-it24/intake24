@@ -31,7 +31,7 @@ export function securableIncludes(userId: string): Includeable[] {
   ];
 }
 
-export function visibilityScope(userId: string, where: WhereOptions = {}): FindOptions {
+export function visibilityScope<T>(userId: string, where: WhereOptions<T> = {}): FindOptions {
   return {
     where: {
       ...where,
