@@ -26,7 +26,7 @@ export function useSelects() {
 
   const variants = themeVariants.map(value => ({
     value,
-    title: t(`survey-schemes.theme.variants.${value}`),
+    title: t(`common.theme.variants.${value}`),
   }));
 
   const colors = Object.entries(themeColors).map(([key, color]) => ({
@@ -51,7 +51,7 @@ export function useSelects() {
 
   const layouts = layoutTypes.map(value => ({
     value,
-    title: t(`survey-schemes.theme.layouts.${value}`),
+    title: t(`common.theme.layouts.${value}`),
   }));
 
   const orientations = ['column', 'row'].map(value => ({

@@ -1,5 +1,6 @@
 import type { Attributes, CreationAttributes, CreationOptional, InferAttributes, InferCreationAttributes, NonAttribute } from 'sequelize';
 
+import type { Variant } from '@intake24/common/theme';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { FoodBuilderStep, FoodBuilderType } from '@intake24/common/types/http/admin';
 
@@ -57,6 +58,12 @@ export default class FoodBuilder extends BaseModel<
     type: DataType.JSONB,
   })
   declare label: CreationOptional<LocaleTranslation>;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(32),
+  })
+  declare variant: Variant;
 
   @Column({
     allowNull: true,

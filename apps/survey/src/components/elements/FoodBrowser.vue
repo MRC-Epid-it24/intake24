@@ -51,7 +51,7 @@
             class="d-flex pa-4"
             :class="foodBuilders.exclusive.value ? 'flex-column align-center justify-center ga-4' : 'flex-row align-center ga-2'"
             color="primary"
-            variant="tonal"
+            :variant="builder.variant"
             @click.stop="foodBuilder(builder)"
           >
             <icon
@@ -60,7 +60,7 @@
               :icon="builder.icon"
               :width="foodBuilders.exclusive.value ? 100 : 30"
             />
-            <span class="text-headline-small font-weight-medium">
+            <span class="text-title-large font-weight-medium text-uppercase btn-builder">
               {{ foodBuilders.label(builder) }}
             </span>
           </v-card>
@@ -564,5 +564,9 @@ watchDebounced(
 <style lang='scss'>
 .root-category-toggle {
   margin-top: -1em;
+}
+
+.btn-builder {
+  letter-spacing: 0.07em;
 }
 </style>

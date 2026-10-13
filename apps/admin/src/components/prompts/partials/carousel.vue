@@ -20,14 +20,14 @@
           <v-select
             v-model="carousel.variant"
             :items="variants"
-            :label="$t('survey-schemes.theme.variants._')"
+            :label="$t('common.theme.variants._')"
           />
         </v-col>
         <v-col cols="12" md="6">
           <v-select
             v-model="carousel.color"
             :items="colors"
-            :label="$t('survey-schemes.theme.colors._')"
+            :label="$t('common.theme.colors._')"
           >
             <template #item="{ item, props }">
               <v-list-item v-bind="props" :title="item.title">
@@ -91,7 +91,7 @@
                       <v-text-field
                         v-model="slide.image.desktop"
                         append-inner-icon="$desktop"
-                        :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('survey-schemes.theme.layouts.desktop')})`"
+                        :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('common.theme.layouts.desktop')})`"
                         prepend-inner-icon="fas fa-image"
                       />
                     </v-col>
@@ -99,7 +99,7 @@
                       <v-text-field
                         v-model="slide.image.mobile"
                         append-inner-icon="$mobile"
-                        :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('survey-schemes.theme.layouts.mobile')})`"
+                        :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('common.theme.layouts.mobile')})`"
                         prepend-inner-icon="fas fa-image"
                       />
                     </v-col>

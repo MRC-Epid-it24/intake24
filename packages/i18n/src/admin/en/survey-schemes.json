@@ -817,27 +817,5 @@
       "subtitle": "Unknown portion size",
       "weight": "Weight (g)"
     }
-  },
-  "theme": {
-    "colors": {
-      "_": "Color",
-      "title": "Colors"
-    },
-    "layouts": {
-      "_": "Layout",
-      "title": "Layouts",
-      "desktop": "Desktop",
-      "mobile": "Mobile"
-    },
-    "variants": {
-      "_": "Variant",
-      "title": "Variants",
-      "elevated": "Elevated",
-      "flat": "Flat",
-      "outlined": "Outlined",
-      "plain": "Plain",
-      "tonal": "Tonal",
-      "text": "Text"
-    }
   }
 }

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { condition } from '@intake24/common/prompts';
+import { variants } from '@intake24/common/theme';
 
 import { localeOptionList, localeTranslation, requiredLocaleTranslation } from '../../common';
 import { synonymSetAttributes } from './locales';
@@ -100,6 +101,7 @@ export const foodBuilderAttributes = z.object({
   type: z.enum(foodBuilderTypes),
   name: z.string().min(1).max(256),
   label: localeTranslation,
+  variant: z.enum(variants),
   triggerWord: z.string().max(512),
   synonymSetId: z.string().nullable(),
   exclusive: z.boolean(),

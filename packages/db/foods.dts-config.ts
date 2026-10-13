@@ -13,6 +13,7 @@ export default defineConfig({
     LocaleTranslation: '@intake24/common/types#LocaleTranslation',
     LocaleTranslations: '@intake24/common/types#LocaleTranslations',
     RequiredLocaleTranslation: '@intake24/common/types#RequiredLocaleTranslation',
+    Variant: '@intake24/common/theme#Variant',
   },
   overrides: {
     columns: {
@@ -29,6 +30,7 @@ export default defineConfig({
       'drinkware_sets.label': 'LocaleTranslation | null',
       'food_attributes.use_in_recipes': 'UseInRecipeType | null',
       'food_builders.label': 'LocaleTranslation',
+      'food_builders.variant': 'Variant',
       'food_portion_size_methods.method': 'PortionSizeMethodId',
       'food_portion_size_methods.parameters': 'PortionSizeParameter',
       'foods.alt_names': 'Generated<LocaleTranslations>',

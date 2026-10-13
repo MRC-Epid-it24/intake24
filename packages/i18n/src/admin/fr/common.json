@@ -225,6 +225,28 @@
     "exists": "{item} existe déjà",
     "required": "{item} doit être renseigné"
   },
+  "theme": {
+    "colors": {
+      "_": "Couleur",
+      "title": "Couleurs"
+    },
+    "layouts": {
+      "_": "Mise en page",
+      "title": "Mises en pages",
+      "desktop": "Bureau",
+      "mobile": "Mobile"
+    },
+    "variants": {
+      "_": "Autre",
+      "title": "Autres",
+      "elevated": "Elevé",
+      "flat": "Flat",
+      "outlined": "Esquissé",
+      "plain": "Plain",
+      "tonal": "Tonal",
+      "text": "Texte"
+    }
+  },
   "file": {
     "csv": "Fichier CSV à importer"
   }
