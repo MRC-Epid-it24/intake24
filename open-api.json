@@ -3483,6 +3483,17 @@
                         "type": "string",
                         "maxLength": 64
                       },
+                      "variant": {
+                        "type": "string",
+                        "enum": [
+                          "flat",
+                          "text",
+                          "elevated",
+                          "tonal",
+                          "outlined",
+                          "plain"
+                        ]
+                      },
                       "exclusive": {
                         "type": "boolean"
                       },
@@ -3511,6 +3522,7 @@
                       "name",
                       "label",
                       "icon",
+                      "variant",
                       "exclusive",
                       "triggerWord",
                       "steps"
@@ -3591,6 +3603,17 @@
                       "type": "string",
                       "maxLength": 64
                     },
+                    "variant": {
+                      "type": "string",
+                      "enum": [
+                        "flat",
+                        "text",
+                        "elevated",
+                        "tonal",
+                        "outlined",
+                        "plain"
+                      ]
+                    },
                     "exclusive": {
                       "type": "boolean"
                     },
@@ -3619,6 +3642,7 @@
                     "name",
                     "label",
                     "icon",
+                    "variant",
                     "exclusive",
                     "triggerWord",
                     "steps"
@@ -45630,7 +45654,8 @@
                                       "languages",
                                       "locales",
                                       "nutrient-types",
-                                      "standard-units"
+                                      "standard-units",
+                                      "surveys"
                                     ]
                                   }
                                 },
@@ -46704,7 +46729,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -47850,7 +47876,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -52544,7 +52571,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -53231,6 +53259,17 @@
                           "type": "string"
                         }
                       },
+                      "variant": {
+                        "type": "string",
+                        "enum": [
+                          "flat",
+                          "text",
+                          "elevated",
+                          "tonal",
+                          "outlined",
+                          "plain"
+                        ]
+                      },
                       "triggerWord": {
                         "type": "string",
                         "maxLength": 512
@@ -53252,6 +53291,7 @@
                       "type",
                       "name",
                       "label",
+                      "variant",
                       "triggerWord",
                       "synonymSetId",
                       "exclusive",
@@ -53313,17 +53353,20 @@
                     "label": {
                       "$ref": "#/definitions/__schema6"
                     },
-                    "triggerWord": {
+                    "variant": {
                       "$ref": "#/definitions/__schema7"
                     },
-                    "synonymSetId": {
+                    "triggerWord": {
                       "$ref": "#/definitions/__schema8"
                     },
-                    "exclusive": {
+                    "synonymSetId": {
                       "$ref": "#/definitions/__schema9"
                     },
-                    "steps": {
+                    "exclusive": {
                       "$ref": "#/definitions/__schema10"
+                    },
+                    "steps": {
+                      "$ref": "#/definitions/__schema11"
                     }
                   },
                   "required": [
@@ -53333,6 +53376,7 @@
                     "type",
                     "name",
                     "label",
+                    "variant",
                     "triggerWord",
                     "synonymSetId",
                     "exclusive",
@@ -53380,16 +53424,27 @@
                   },
                   "__schema7": {
                     "type": "string",
-                    "maxLength": 512
+                    "enum": [
+                      "flat",
+                      "text",
+                      "elevated",
+                      "tonal",
+                      "outlined",
+                      "plain"
+                    ]
                   },
                   "__schema8": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "__schema9": {
                     "nullable": true,
                     "type": "string"
                   },
-                  "__schema9": {
+                  "__schema10": {
                     "type": "boolean"
                   },
-                  "__schema10": {}
+                  "__schema11": {}
                 }
               }
             }
@@ -53442,6 +53497,17 @@
                           "type": "string"
                         }
                       },
+                      "variant": {
+                        "type": "string",
+                        "enum": [
+                          "flat",
+                          "text",
+                          "elevated",
+                          "tonal",
+                          "outlined",
+                          "plain"
+                        ]
+                      },
                       "triggerWord": {
                         "type": "string",
                         "maxLength": 512
@@ -53463,6 +53529,7 @@
                       "type",
                       "name",
                       "label",
+                      "variant",
                       "triggerWord",
                       "synonymSetId",
                       "exclusive",
@@ -56586,7 +56653,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -136414,7 +136482,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -295693,7 +295762,8 @@
                                       "languages",
                                       "locales",
                                       "nutrient-types",
-                                      "standard-units"
+                                      "standard-units",
+                                      "surveys"
                                     ]
                                   }
                                 },
@@ -296760,7 +296830,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -297697,7 +297768,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -298767,7 +298839,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -299780,7 +299853,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -300963,7 +301037,8 @@
                                       "languages",
                                       "locales",
                                       "nutrient-types",
-                                      "standard-units"
+                                      "standard-units",
+                                      "surveys"
                                     ]
                                   }
                                 },
@@ -301676,7 +301751,8 @@
                               "languages",
                               "locales",
                               "nutrient-types",
-                              "standard-units"
+                              "standard-units",
+                              "surveys"
                             ]
                           }
                         },
@@ -302295,7 +302371,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
@@ -303326,7 +303403,8 @@
                                 "languages",
                                 "locales",
                                 "nutrient-types",
-                                "standard-units"
+                                "standard-units",
+                                "surveys"
                               ]
                             }
                           },
