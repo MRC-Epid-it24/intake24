@@ -1,9 +1,10 @@
 import type { ResourceOps } from './resource';
+import type { UnwrapAII } from '@intake24/common/types';
 
 import { Readable } from 'node:stream';
 
 import { Transform } from '@json2csv/node';
-import { sql } from 'kysely';
+import { format } from 'date-fns';
 
 export async function surveys({ kyselyDb }: ResourceOps) {
   const { total } = await kyselyDb.system.selectFrom('surveys').select(({ fn }) => [fn.count<number>('id').as('total')]).executeTakeFirstOrThrow();
@@ -11,33 +12,36 @@ export async function surveys({ kyselyDb }: ResourceOps) {
     .selectFrom('surveys')
     .innerJoin('locales', 'locales.id', 'surveys.localeId')
     .innerJoin('surveySchemes', 'surveySchemes.id', 'surveys.surveySchemeId')
-    .leftJoin('userSurveyAliases', 'userSurveyAliases.surveyId', 'surveys.id')
-    .leftJoin(
-      eb => eb
-        .selectFrom('surveySubmissions')
-        .select(({ fn }) => ['surveyId', fn.count<number>('id').as('submissions')])
-        .groupBy('surveySubmissions.surveyId')
-        .as('ssb'),
-      join => join
-        .onRef('ssb.surveyId', '=', 'surveys.id'),
-    )
-    .select(({ fn }) => [
+    .leftJoin('feedbackSchemes', 'feedbackSchemes.id', 'surveys.feedbackSchemeId')
+    .leftJoin('faqs', 'faqs.id', 'surveys.faqId')
+    .select(({ fn, selectFrom }) => [
       'surveys.id',
+      'surveys.slug',
+      'surveys.name',
       'surveys.startDate',
       'surveys.endDate',
+      'surveys.state',
+      'surveys.supportEmail',
+      'surveys.userPersonalIdentifiers',
+      'surveys.userCustomFields',
+      'surveys.localeId',
       'locales.code as localeCode',
       'locales.localName as localeName',
-      'surveySchemes.name as scheme',
-      'surveys.supportEmail',
-      fn.count<number>('userSurveyAliases.id').as('surveyUsers'),
-      sql<number>`coalesce(${sql.ref('ssb.submissions')}, 0)`.as('submissions'),
+      'surveys.surveySchemeId',
+      'surveySchemes.name as schemeName',
+      'surveys.feedbackSchemeId',
+      'feedbackSchemes.name as feedbackSchemeName',
+      'surveys.faqId',
+      'faqs.name as faqName',
+      selectFrom('userSurveyAliases as usa')
+        .select(fn.count<number>('id').as('count'))
+        .whereRef('surveys.id', '=', 'usa.surveyId')
+        .as('respondents'),
+      selectFrom('surveySubmissions as ss')
+        .select(fn.count<number>('id').as('count'))
+        .whereRef('surveys.id', '=', 'ss.surveyId')
+        .as('submissions'),
     ])
-    .groupBy('surveys.id')
-    .groupBy('locales.code')
-    .groupBy('locales.localName')
-    .groupBy('surveySchemes.name')
-    .groupBy('userSurveyAliases.surveyId')
-    .groupBy('ssb.submissions')
     .orderBy('surveys.id')
     .stream();
   const records = Readable.from(cursor);
@@ -46,13 +50,24 @@ export async function surveys({ kyselyDb }: ResourceOps) {
     {
       fields: [
         'id',
-        'startDate',
-        'endDate',
+        'slug',
+        'name',
+        { label: 'startDate', value: (item: UnwrapAII<typeof cursor>) => format(item.startDate, 'yyyy-MM-dd HH:mm:ss') },
+        { label: 'endDate', value: (item: UnwrapAII<typeof cursor>) => format(item.endDate, 'yyyy-MM-dd HH:mm:ss') },
+        'state',
+        'supportEmail',
+        'userPersonalIdentifiers',
+        'userCustomFields',
+        'localeId',
         'localeCode',
         'localeName',
-        'scheme',
-        'supportEmail',
-        'surveyUsers',
+        'surveySchemeId',
+        'surveySchemeName',
+        'feedbackSchemeId',
+        'feedbackSchemeName',
+        'faqId',
+        'faqName',
+        'respondents',
         'submissions',
       ],
       withBOM: true,

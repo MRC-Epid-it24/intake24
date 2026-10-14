@@ -1,5 +1,5 @@
 import type { ResourceOps } from './resource';
-import type { LocaleTranslation, UnwrapAII } from '@intake24/common/types';
+import type { UnwrapAII } from '@intake24/common/types';
 
 import { Readable } from 'node:stream';
 
@@ -51,7 +51,7 @@ export async function drinkwareVolumes({ kyselyDb, params: { language = ['en'] }
         'label',
         ...language.map(lang => ({
           label: `label.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => row.label ? (row.label as LocaleTranslation)[lang] : undefined,
+          value: (row: UnwrapAII<typeof cursor>) => row.label ? (row.label)[lang] : undefined,
         })),
       ],
       withBOM: true,
