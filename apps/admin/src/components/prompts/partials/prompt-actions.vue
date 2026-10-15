@@ -64,7 +64,7 @@
                       v-model="action.layout"
                       hide-details="auto"
                       :items="layouts"
-                      :label="$t('survey-schemes.theme.layouts._')"
+                      :label="$t('common.theme.layouts._')"
                       multiple
                       variant="outlined"
                     />
@@ -74,7 +74,7 @@
                       v-model="action.variant"
                       hide-details="auto"
                       :items="variants"
-                      :label="$t('survey-schemes.theme.variants._')"
+                      :label="$t('common.theme.variants._')"
                       variant="outlined"
                     >
                       <template #item="{ item, props }">
@@ -98,7 +98,7 @@
                       v-model="action.color"
                       hide-details="auto"
                       :items="colors"
-                      :label="$t('survey-schemes.theme.colors._')"
+                      :label="$t('common.theme.colors._')"
                       variant="outlined"
                     >
                       <template #item="{ item, props }">

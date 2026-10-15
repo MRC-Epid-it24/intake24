@@ -106,7 +106,7 @@ export function reference() {
 
         const faqs = await FAQ.paginate({
           ...paginateOptions,
-          ...visibilityScope(userId),
+          ...visibilityScope(userId, paginateOptions.where),
           subQuery: false,
         });
 
@@ -132,7 +132,7 @@ export function reference() {
 
         const feedbackSchemes = await FeedbackScheme.paginate({
           ...paginateOptions,
-          ...visibilityScope(userId),
+          ...visibilityScope(userId, paginateOptions.where),
           subQuery: false,
         });
 
@@ -204,7 +204,7 @@ export function reference() {
 
         const languages = await Language.paginate({
           ...paginateOptions,
-          ...visibilityScope(userId),
+          ...visibilityScope(userId, paginateOptions.where),
           subQuery: false,
         });
 
@@ -231,7 +231,7 @@ export function reference() {
 
         const locales = await SystemLocale.paginate({
           ...paginateOptions,
-          ...visibilityScope(userId),
+          ...visibilityScope(userId, paginateOptions.where),
           subQuery: false,
         });
 
@@ -349,7 +349,7 @@ export function reference() {
 
         const surveySchemes = await SurveyScheme.paginate({
           ...paginateOptions,
-          ...visibilityScope(userId),
+          ...visibilityScope(userId, paginateOptions.where),
           subQuery: false,
         });
 

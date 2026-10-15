@@ -117,6 +117,7 @@ function foodDataService({ cachedParentCategoriesService, imagesBaseUrl }: Pick<
         'type',
         'name',
         'label',
+        'variant',
         'triggerWord',
         'synonymSetId',
         'exclusive',

@@ -113,6 +113,7 @@ export const resources = [
   'locales',
   'nutrient-types',
   'standard-units',
+  'surveys',
 ] as const;
 
 export const ResourceExport = z.object({
@@ -168,7 +169,7 @@ export const SurveyHelpRequestNotification = z.object({
   surveySlug: z.string(),
   userId: z.string(),
   name: z.string().nullish(),
-  email: z.string().nullish(),
+  email: z.email().toLowerCase().nullish(),
   phone: z.string().nullish(),
   phoneCountry: z.string().nullish(),
   message: z.string().nullish(),
@@ -199,11 +200,11 @@ export const SurveySubmission = z.object({
   state: z.any(),
 });
 export const UserEmailVerificationNotification = z.object({
-  email: z.email(),
+  email: z.email().toLowerCase(),
   userAgent: z.string().optional(),
 });
 export const UserPasswordResetNotification = z.object({
-  email: z.string(),
+  email: z.email().toLowerCase(),
   userAgent: z.string().optional(),
 });
 export const PackageVerification = z.object({

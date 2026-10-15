@@ -130,6 +130,28 @@
                   />
                 </v-col>
                 <v-col cols="12" md="6">
+                  <v-select
+                    v-model="dialog.item.variant"
+                    :items="variants"
+                    :label="$t('common.theme.variants._')"
+                  >
+                    <template #item="{ item, props }">
+                      <v-list-item v-bind="props" :title="item.title">
+                        <template #prepend>
+                          <v-btn
+                            class="me-4"
+                            color="primary"
+                            :title="item.title"
+                            :variant="item.value"
+                          >
+                            {{ dialog.item.name }}
+                          </v-btn>
+                        </template>
+                      </v-list-item>
+                    </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="12">
                   <v-switch
                     v-model="dialog.item.exclusive"
                     :error-messages="errors.get(`${dialog.index}.exclusive`)"
@@ -273,7 +295,7 @@ import type { FoodBuilderRequest, SynonymSetAttributes } from '@intake24/common/
 import { computed, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import { useListWithDialog } from '@intake24/admin/composables';
+import { useListWithDialog, useSelects } from '@intake24/admin/composables';
 import { foodBuilderTypes, foodStepDefaults, foodStepTypes } from '@intake24/common/types/http/admin';
 import { copy, randomString } from '@intake24/common/util';
 import { ConfirmDialog, SelectIcon, useI18n } from '@intake24/ui';
@@ -309,6 +331,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const { i18n, translate } = useI18n();
+const { variants } = useSelects();
 
 function newItem(): FoodBuilderRequest {
   return {

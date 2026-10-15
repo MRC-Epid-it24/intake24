@@ -9,6 +9,7 @@ export const foodBuilder = foodBuilderAttributes.pick({
   name: true,
   label: true,
   icon: true,
+  variant: true,
   exclusive: true,
   triggerWord: true,
   steps: true,

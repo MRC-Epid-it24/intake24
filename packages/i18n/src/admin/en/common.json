@@ -240,7 +240,28 @@
     "exists": "{item} already exists",
     "required": "{item} must be filled in"
   },
-
+  "theme": {
+    "colors": {
+      "_": "Color",
+      "title": "Colors"
+    },
+    "layouts": {
+      "_": "Layout",
+      "title": "Layouts",
+      "desktop": "Desktop",
+      "mobile": "Mobile"
+    },
+    "variants": {
+      "_": "Variant",
+      "title": "Variants",
+      "elevated": "Elevated",
+      "flat": "Flat",
+      "outlined": "Outlined",
+      "plain": "Plain",
+      "tonal": "Tonal",
+      "text": "Text"
+    }
+  },
   "file": {
     "csv": "CSV file to upload"
   }

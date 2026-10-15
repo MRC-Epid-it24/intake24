@@ -1,5 +1,5 @@
 import type { ResourceOps } from './resource';
-import type { LocaleTranslation, UnwrapAII } from '@intake24/common/types';
+import type { UnwrapAII } from '@intake24/common/types';
 
 import { Readable } from 'node:stream';
 
@@ -53,7 +53,7 @@ export async function guideImageObjects({ config, kyselyDb, params: { language =
         'weight',
         ...language.map(lang => ({
           label: `label.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => row.label ? (row.label as LocaleTranslation)[lang] : undefined,
+          value: (row: UnwrapAII<typeof cursor>) => row.label ? (row.label)[lang] : undefined,
         })),
         'guideImageId',
         'guideImageDescription',
@@ -61,7 +61,7 @@ export async function guideImageObjects({ config, kyselyDb, params: { language =
         'imageMapObjectDescription',
         ...language.map(lang => ({
           label: `imageMapObjectLabel.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => row.imageMapObjectLabel ? (row.imageMapObjectLabel as LocaleTranslation)[lang] : undefined,
+          value: (row: UnwrapAII<typeof cursor>) => row.imageMapObjectLabel ? (row.imageMapObjectLabel)[lang] : undefined,
         })),
         'imageMapObjectNavigationIndex',
         'imageMapId',

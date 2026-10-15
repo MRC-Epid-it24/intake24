@@ -6,6 +6,7 @@
 import type { ColumnType } from 'kysely';
 
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
+import type { Variant } from '@intake24/common/theme';
 import type { LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation, UseInRecipeType } from '@intake24/common/types';
 
 export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
@@ -182,6 +183,7 @@ export interface FoodBuilders {
   triggerWord: string;
   type: EnumFoodBuildersType;
   updatedAt: Timestamp;
+  variant: Variant;
 }
 
 export interface FoodPortionSizeMethods {

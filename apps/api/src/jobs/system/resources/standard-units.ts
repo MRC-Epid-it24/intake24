@@ -1,5 +1,5 @@
 import type { ResourceOps } from './resource';
-import type { RequiredLocaleTranslation, UnwrapAII } from '@intake24/common/types';
+import type { UnwrapAII } from '@intake24/common/types';
 
 import { Readable } from 'node:stream';
 
@@ -18,11 +18,11 @@ export async function standardUnits({ kyselyDb, params: { language = ['en'] } }:
         'name',
         ...language.map(lang => ({
           label: `estimateIn.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => (row.estimateIn as RequiredLocaleTranslation)[lang],
+          value: (row: UnwrapAII<typeof cursor>) => (row.estimateIn)[lang],
         })),
         ...language.map(lang => ({
           label: `howMany.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => (row.howMany as RequiredLocaleTranslation)[lang],
+          value: (row: UnwrapAII<typeof cursor>) => (row.howMany)[lang],
         })),
         'createdAt',
         'updatedAt',
