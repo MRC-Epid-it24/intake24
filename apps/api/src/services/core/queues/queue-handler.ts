@@ -1,4 +1,4 @@
-import type { Job, Queue, QueueBaseOptions, Worker } from 'bullmq';
+import type { Job, Queue, Worker } from 'bullmq';
 
 import type { QueueConfig } from '@intake24/api/config';
 import type { Logger } from '@intake24/common-backend';
@@ -45,7 +45,7 @@ export abstract class QueueHandler<T = any> {
     this.queueEvents = new QueueHandlerEventEmitter<T>();
   }
 
-  protected getOptions(): QueueBaseOptions {
+  protected getOptions() {
     const { keyPrefix, ...connection } = this.config.redis;
 
     return { connection, prefix: keyPrefix };
