@@ -28,7 +28,7 @@ export async function surveys({ kyselyDb }: ResourceOps) {
       'locales.code as localeCode',
       'locales.localName as localeName',
       'surveys.surveySchemeId',
-      'surveySchemes.name as schemeName',
+      'surveySchemes.name as surveySchemeName',
       'surveys.feedbackSchemeId',
       'feedbackSchemes.name as feedbackSchemeName',
       'surveys.faqId',
