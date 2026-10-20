@@ -9,10 +9,12 @@ import type {
 
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 
+import { batchGenerator } from '@intake24/api/util';
 import {
   NutrientTable,
   NutrientTableRecord,
@@ -20,7 +22,7 @@ import {
   NutrientTableRecordNutrient,
 } from '@intake24/db';
 
-import StreamLockJob from '../stream-lock-job';
+import BaseJob from '../job';
 
 export type CSVRow = string[];
 
@@ -30,12 +32,10 @@ export type Mappings = {
   nutrients: NutrientTableCsvMappingNutrient[];
 };
 
-export default class NutrientTableDataImport extends StreamLockJob<'NutrientTableDataImport'> {
+export default class NutrientTableDataImport extends BaseJob<'NutrientTableDataImport'> {
   readonly name = 'NutrientTableDataImport';
 
   private file!: string;
-
-  private content: CSVRow[] = [];
 
   private mappings!: Mappings;
 
@@ -80,20 +80,11 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
     };
 
     await this.validate();
-
     await this.import();
 
     this.logger.debug('Job finished.');
   }
 
-  /**
-   * Read CSV file and validate in chunks
-   *
-   * @private
-   * @param {number} [chunk]
-   * @returns {Promise<void>}
-   * @memberof NutrientTableDataImport
-   */
   private async validate(/* chunk = 500 */): Promise<void> {
     return new Promise((resolve, reject) => {
       const stream = createReadStream(this.file).pipe(
@@ -130,52 +121,23 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
     });
   }
 
-  /**
-   * Read CSV file and import in chunks
-   *
-   * @private
-   * @param {number} [chunk]
-   * @returns {Promise<void>}
-   * @memberof NutrientTableDataImport
-   */
   private async import(chunk = 100): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const stream = createReadStream(this.file).pipe(
-        parse({
-          headers: false,
-          trim: true,
-          skipLines: this.mappings.mapping.rowOffset,
-        }),
-      );
-
-      stream
-        .on('data', (row: CSVRow) => {
-          this.content.push(row);
-
-          if (chunk > 0 && this.content.length === chunk) {
-            stream.pause();
-            this.importChunk()
-              .then(() => {
-                stream.resume();
-              })
-              .catch((err) => {
-                stream.destroy(err);
-                reject(err);
-              });
-          }
-        })
-        .on('end', async () => {
-          await this.waitForUnlock();
-
-          this.importChunk()
-            .then(() => resolve())
-            .catch((err) => {
-              stream.destroy(err);
-              reject(err);
-            });
-        })
-        .on('error', err => reject(err));
+    const readStream = createReadStream(this.file);
+    const csvStream = parse({
+      headers: false,
+      trim: true,
+      skipLines: this.mappings.mapping.rowOffset,
     });
+
+    await pipeline(
+      readStream,
+      csvStream,
+      async (source: AsyncIterable<CSVRow>) => {
+        for await (const batch of batchGenerator(source, chunk)) {
+          await this.importChunk(batch);
+        }
+      },
+    );
   }
 
   /**
@@ -185,12 +147,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
    * @returns {Promise<void>}
    * @memberof NutrientTableDataImport
    */
-  private async importChunk(): Promise<void> {
-    if (!this.content.length)
-      return;
-
-    this.lock();
-
+  private async importChunk(data: CSVRow[]): Promise<void> {
     const { nutrientTableId } = this.params;
     const {
       mapping: { idColumnOffset, descriptionColumnOffset, localDescriptionColumnOffset },
@@ -198,7 +155,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
       fields,
     } = this.mappings;
 
-    for (const record of this.content) {
+    for (const record of data) {
       const nutrientRecordInput = {
         nutrientTableId,
         nutrientTableRecordId: record[idColumnOffset],
@@ -238,10 +195,6 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
       }
     }
 
-    await this.incrementProgress(this.content.length);
-
-    this.content = [];
-
-    this.unlock();
+    await this.incrementProgress(data.length);
   }
 }

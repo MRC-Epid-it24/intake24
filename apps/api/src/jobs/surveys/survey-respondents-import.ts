@@ -5,16 +5,18 @@ import type { CustomField } from '@intake24/common/types';
 
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
 
+import { batchGenerator } from '@intake24/api/util';
 import { strongPasswordOptional } from '@intake24/common/security';
 import { User, UserSurveyAlias } from '@intake24/db';
 
-import StreamLockJob from '../stream-lock-job';
+import BaseJob from '../job';
 
 const csvRow = z.intersection(
   z.object({
@@ -26,17 +28,14 @@ const csvRow = z.intersection(
   }),
   z.record(z.string(), z.string().transform(val => val || undefined)),
 );
-
 export type CSVRow = z.infer<typeof csvRow>;
 
-export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespondentsImport'> {
+export default class SurveyRespondentsImport extends BaseJob<'SurveyRespondentsImport'> {
   readonly name = 'SurveyRespondentsImport';
 
   private readonly adminSurveyService;
 
   private file!: string;
-
-  private content: CSVRow[] = [];
 
   constructor({ logger, adminSurveyService }: Pick<IoC, 'logger' | 'adminSurveyService'>) {
     super({ logger });
@@ -64,74 +63,30 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
       throw new Error(`Missing file (${this.file}).`);
 
     await this.validate();
-
     await this.import();
 
     this.logger.debug('Job finished.');
   }
 
-  /**
-   * Read CSV file and validate in chunks
-   *
-   * @private
-   * @param {number} [chunk]
-   * @returns {Promise<void>}
-   * @memberof SurveyRespondentsImport
-   */
-  private async validate(chunk = 100): Promise<void> {
-    return new Promise((resolve, reject) => {
-      let offset = 0;
-      const stream = createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
+  private async validate(chunk = 5): Promise<void> {
+    let totalProcessed = 0;
+    const readStream = createReadStream(this.file);
+    const csvStream = parse({ headers: true, trim: true });
 
-      stream
-        .on('data', (row: CSVRow) => {
-          this.content.push(row);
-
-          if (chunk > 0 && this.content.length === chunk) {
-            stream.pause();
-            this.validateChunk(offset)
-              .then(() => {
-                stream.resume();
-                offset += chunk;
-              })
-              .catch((err) => {
-                stream.destroy(err);
-                reject(err);
-              });
-          }
-        })
-        .on('end', async (records: number) => {
-          this.initProgress(records);
-          await this.waitForUnlock();
-
-          this.validateChunk(offset)
-            .then(() => resolve())
-            .catch((err) => {
-              stream.destroy(err);
-              reject(err);
-            });
-        })
-        .on('error', err => reject(err));
-    });
+    await pipeline(
+      readStream,
+      csvStream,
+      async (source: AsyncIterable<CSVRow>) => {
+        for await (const batch of batchGenerator(source, chunk)) {
+          await this.validateChunk(batch, totalProcessed);
+          totalProcessed += batch.length;
+        }
+      },
+    );
   }
 
-  /**
-   * Chunk validator. It validates:
-   * - presence of required fields
-   * - username / survey alias uniqueness within survey
-   * - email uniqueness within system
-   *
-   * @private
-   * @returns {Promise<void>}
-   * @memberof SurveyRespondentsImport
-   */
-  private async validateChunk(offset: number): Promise<void> {
-    if (!this.content.length)
-      return;
-
-    this.lock();
-
-    const result = csvRow.array().safeParse(this.content);
+  private async validateChunk(data: CSVRow[], offset: number): Promise<void> {
+    const result = csvRow.array().safeParse(data);
 
     if (!result.success) {
       throw fromError({
@@ -164,67 +119,25 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
         throw new Error(`Following emails already exist in system: ${existingUsers.join(', ')}`);
       }
     }
-
-    this.content = [];
-    this.unlock();
   }
 
-  /**
-   * Read CSV file and import in chunks
-   *
-   * @private
-   * @param {number} [chunk]
-   * @returns {Promise<void>}
-   * @memberof SurveyRespondentsImport
-   */
   private async import(chunk = 100): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const stream = createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
+    const readStream = createReadStream(this.file);
+    const csvStream = parse({ headers: true, trim: true });
 
-      stream
-        .on('data', (row: CSVRow) => {
-          this.content.push(row);
-
-          if (chunk > 0 && this.content.length === chunk) {
-            stream.pause();
-            this.importChunk()
-              .then(() => {
-                stream.resume();
-              })
-              .catch((err) => {
-                stream.destroy(err);
-                reject(err);
-              });
-          }
-        })
-        .on('end', async () => {
-          await this.waitForUnlock();
-
-          this.importChunk()
-            .then(() => resolve())
-            .catch((err) => {
-              stream.destroy(err);
-              reject(err);
-            });
-        })
-        .on('error', err => reject(err));
-    });
+    await pipeline(
+      readStream,
+      csvStream,
+      async (source: AsyncIterable<CSVRow>) => {
+        for await (const batch of batchGenerator(source, chunk)) {
+          await this.importChunk(batch);
+        }
+      },
+    );
   }
 
-  /**
-   * Chunk importer
-   *
-   * @private
-   * @returns {Promise<void>}
-   * @memberof SurveyRespondentsImport
-   */
-  private async importChunk(): Promise<void> {
-    if (!this.content.length)
-      return;
-
-    this.lock();
-
-    const records = this.content.map((item) => {
+  private async importChunk(data: CSVRow[]): Promise<void> {
+    const records = data.map((item) => {
       const { username, password, name, email, phone, ...rest } = item;
 
       const customFields = Object.keys(rest).reduce<CustomField[]>((acc, key) => {
@@ -246,10 +159,6 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
     });
 
     await this.adminSurveyService.createRespondents(this.params.surveyId, records);
-
-    await this.incrementProgress(this.content.length);
-
-    this.content = [];
-    this.unlock();
+    await this.incrementProgress(data.length);
   }
 }

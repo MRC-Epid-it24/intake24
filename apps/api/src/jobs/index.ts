@@ -14,7 +14,6 @@ import user from './user';
 export * from './job';
 export { default as Job } from './job';
 export { default as NotificationJob } from './notification-job';
-export { default as StreamLockJob } from './stream-lock-job';
 
 const jobs = {
   ...feedbackSchemes,
